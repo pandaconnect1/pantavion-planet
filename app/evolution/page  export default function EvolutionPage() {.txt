@@ -1,0 +1,27 @@
+export default function EvolutionPage() {
+  return (
+    <main
+export default function EvolutionPage() {
+  return (
+    <main     export default function EvolutionPage() {
+  return (
+    <main style={{
+      minHeight: "100vh",
+      background: "#041633",
+      color: "white",
+      padding: "40px"
+    }}>
+      <h1 style={{ fontSize: "32px", marginBottom: "20px" }}>
+        Pantavion Evolution Layer
+      </h1>
+
+      <p>
+        Kernel Intelligence • Tech Radar • Evolution Engine
+      </p>
+
+      <div style={{ marginTop: "30px" }}>
+        Page is working
+      </div>
+    </main>
+  );
+}
