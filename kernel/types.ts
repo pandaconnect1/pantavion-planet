@@ -1,422 +1,459 @@
-﻿export type KernelId = string;
+﻿export type ISODateString = string;
+export type UUID = string;
 
-export type InputModality =
-  | "text"
-  | "voice"
-  | "audio"
-  | "image"
-  | "video"
-  | "pdf"
-  | "doc"
-  | "screenshot"
-  | "diagram"
-  | "mixed";
+export type PriorityBand =
+  | "CRITICAL"
+  | "HIGH"
+  | "MEDIUM"
+  | "LOW"
+  | "BACKGROUND";
 
-export type KernelScope =
-  | "session"
-  | "thread"
-  | "workspace"
-  | "project"
-  | "user"
-  | "system"
-  | "admin";
-
-export type TruthZone =
-  | "verified"
-  | "likely"
-  | "uncertain"
-  | "speculative"
-  | "unsafe";
-
-export type MemoryClass =
-  | "ephemeral"
-  | "session"
-  | "thread"
-  | "workspace"
-  | "project"
-  | "preference"
-  | "strategic_durable"
-  | "restricted"
-  | "admin";
-
-export type PrivacyClass =
-  | "public"
-  | "internal"
-  | "private"
-  | "restricted"
-  | "admin";
-
-export type SignalType =
-  | "urgency"
-  | "risk"
-  | "opportunity"
-  | "contradiction"
-  | "dependency"
-  | "missing_information"
-  | "escalation_needed"
-  | "new_strategic_thread"
-  | "learning_need"
-  | "workspace_recommendation"
-  | "capability_recommendation"
-  | "verification_needed"
-  | "governance_concern"
-  | "user_intent_shift";
-
-export type PriorityBand = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW" | "BACKGROUND";
-export type KernelPriority = PriorityBand | Lowercase<PriorityBand>;
+export type PriorityBandLoose = PriorityBand | Lowercase<PriorityBand>;
 
 export type RadarRing =
-  | "core_immediate"
-  | "active_near"
-  | "monitored"
-  | "peripheral"
+  | "immediate"
+  | "active"
+  | "watch"
+  | "queued"
   | "archived";
 
-export type ExecutionMode = "dry_run" | "commit";
+export type KernelScope =
+  | "identity"
+  | "memory"
+  | "signals"
+  | "planning"
+  | "execution"
+  | "continuity"
+  | "voice"
+  | "chat"
+  | "people"
+  | "pulse"
+  | "compass"
+  | "mind"
+  | "create"
+  | "safety"
+  | "admin"
+  | "governance"
+  | "global"
+  | string;
 
-export type PlanStatus = "draft" | "ready" | "running" | "completed" | "failed";
+export type KernelOutputType =
+  | "analysis"
+  | "summary"
+  | "completion"
+  | "plan"
+  | "action"
+  | "memory"
+  | "signal"
+  | "status"
+  | "error"
+  | string;
 
-export type PlanStepStatus =
+export type KernelTaskStatus =
   | "pending"
   | "running"
   | "completed"
-  | "blocked"
   | "failed"
-  | "skipped";
+  | "blocked"
+  | "cancelled"
+  | string;
 
-export type PlanStepKind =
-  | "capture"
+export type KernelExecutionStatus =
+  | "queued"
+  | "running"
+  | "completed"
+  | "failed"
+  | "cancelled"
+  | string;
+
+export type KernelHealthStatus =
+  | "healthy"
+  | "degraded"
+  | "critical"
+  | "unknown"
+  | string;
+
+export type KernelSignalKind =
+  | "risk"
+  | "opportunity"
+  | "goal"
   | "memory"
-  | "signal"
-  | "plan"
-  | "respond"
-  | "review"
-  | "execute"
-  | "clarify"
-  | "governance";
+  | "continuity"
+  | "priority"
+  | "gap"
+  | "governance"
+  | "voice"
+  | "social"
+  | "system"
+  | string;
 
-export type CapabilityFamily =
-  | "assistants_reasoning"
-  | "research_knowledge"
-  | "writing_communication"
-  | "coding_app_building"
-  | "data_analytics"
-  | "design_image"
-  | "video_media"
-  | "audio_voice"
-  | "productivity_memory"
-  | "automation_integrations"
-  | "learning_mastery"
-  | "reference_cheatsheets"
-  | "architecture_systems"
-  | "signal_intelligence"
-  | "security_governance";
-
-export interface KernelActor {
-  id: string;
-  type: "user" | "system" | "admin" | "service";
-  name: string;
-  email?: string;
-  permissions: string[];
+export interface KernelBaseEntity {
+  id: UUID;
+  createdAt: ISODateString;
+  updatedAt?: ISODateString;
 }
 
-export interface KernelContext {
-  sessionId: string;
+export interface KernelSession extends KernelBaseEntity {
+  id: string;
+  project?: string;
   threadId?: string;
-  workspaceId?: string;
-  projectId?: string;
+  userId?: string;
+  title?: string;
   locale?: string;
   timezone?: string;
-  tags: string[];
+  status?: string;
+  updatedAt: ISODateString;
 }
 
-export interface IntakePacket {
-  id: KernelId;
-  createdAt: string;
-  modality: InputModality;
-  raw: string;
-  normalizedText: string;
-  language: string;
-  intent: string;
-  entities: string[];
-  urgencyHint: number;
-  confidence: number;
-  truthZone: TruthZone;
-  scope: KernelScope;
-  metadata: Record<string, unknown>;
-}
-
-export interface MemoryEntry {
-  id: KernelId;
-  createdAt: string;
-  updatedAt: string;
-  scope: KernelScope;
-  memoryClass: MemoryClass;
-  privacyClass: PrivacyClass;
-  truthZone: TruthZone;
-  content: string;
-  summary: string;
-  keywords: string[];
-  sourceIntakeId?: string;
-  relevance: number;
-  eligibleScopes: KernelScope[];
-  metadata: Record<string, unknown>;
-}
-
-export type MemoryEntryDraft =
-  Omit<MemoryEntry, "id" | "createdAt" | "updatedAt"> &
-  Partial<Pick<MemoryEntry, "id" | "createdAt" | "updatedAt">>;
-
-export interface SignalEntry {
-  id: KernelId;
-  createdAt: string;
-  type: SignalType;
-  label: string;
-  reason: string;
-  sourceIntakeId: string;
-  score: number;
-  confidence: number;
-  band: PriorityBand;
-  ring: RadarRing;
-  truthZone: TruthZone;
-  metadata: Record<string, unknown>;
-}
-
-export interface PriorityState {
-  score: number;
-  band: PriorityBand;
-  ring: RadarRing;
-  topSignalIds: string[];
-  updatedAt: string;
-}
-
-export interface PlanStep {
-  id: KernelId;
-  kind: PlanStepKind;
-  title: string;
-  description: string;
-  status: PlanStepStatus;
-  requiresApproval: boolean;
-  metadata: Record<string, unknown>;
-}
-
-export interface Plan {
-  id: KernelId;
-  createdAt: string;
-  updatedAt: string;
-  goal: string;
-  summary: string;
-  sourceIntakeId?: string;
-  status: PlanStatus;
-  priorityBand: PriorityBand;
-  steps: PlanStep[];
-  notes: string[];
-  fallbackPaths: string[];
-  approvalRequired: boolean;
-  confidence: number;
-}
-
-export interface ExecutionStepResult {
-  stepId: KernelId;
-  status: PlanStepStatus;
-  message: string;
-  output?: string;
-}
-
-export interface ExecutionRecord {
-  id: KernelId;
-  planId: KernelId;
-  mode: ExecutionMode;
-  status: "running" | "completed" | "failed" | "blocked";
-  startedAt: string;
-  finishedAt?: string;
-  stepResults: ExecutionStepResult[];
-  summary: string;
-  error?: string;
-}
-
-export interface AuditEntry {
-  id: KernelId;
-  createdAt: string;
-  level: "info" | "warn" | "error";
-  action: string;
-  message: string;
-  refs: string[];
-  metadata: Record<string, unknown>;
+export interface KernelCounters {
+  intake: number;
+  memory: number;
+  signals: number;
+  plans: number;
+  tasks: number;
+  executions: number;
+  outputs: number;
+  audits: number;
+  [key: string]: number;
 }
 
 export interface KernelHealth {
-  status: "healthy" | "degraded" | "error";
-  degradedReason?: string;
-  lastUpdated: string;
-  counters: {
-    intakes: number;
-    memories: number;
-    signals: number;
-    plans: number;
-    executions: number;
-  };
+  status: KernelHealthStatus;
+  score?: number;
+  counters: KernelCounters;
+  notes?: string[];
+  lastCheckedAt?: ISODateString;
+  [key: string]: unknown;
 }
 
-export interface KernelOutput {
-  id: KernelId;
-  createdAt: string;
-  type: "analysis" | "completion" | "run" | "state";
+export interface KernelPriorities {
+  band: PriorityBandLoose;
+  ring: RadarRing;
+  score?: number;
+  reasons?: string[];
+  recommendedActions?: string[];
+  [key: string]: unknown;
+}
+
+export interface KernelGoal extends KernelBaseEntity {
   title: string;
-  content: string;
-  truthZone: TruthZone;
-  relatedIds: string[];
+  description?: string;
+  status?: string;
+  priority?: PriorityBandLoose;
+  owner?: string;
+  targetAt?: ISODateString;
+  scope?: KernelScope;
+  metadata?: Record<string, unknown>;
 }
 
-export interface CapabilityProfile {
+export interface KernelContinuity {
+  activeGoals: KernelGoal[];
+  nextActions?: string[];
+  blockers?: string[];
+  assumptions?: string[];
+  lastThreadSummary?: string;
+  [key: string]: unknown;
+}
+
+export interface KernelCapability {
   id: string;
-  family: CapabilityFamily;
+  key?: string;
   name: string;
-  description: string;
-  inputModalities: InputModality[];
-  outputModalities: InputModality[];
-  allowedScopes: KernelScope[];
-  trustZoneFloor: TruthZone;
-  orchestrationEligible: boolean;
-  metadata: Record<string, unknown>;
+  description?: string;
+  enabled?: boolean;
+  status?: string;
+  scopes?: KernelScope[];
+  metadata?: Record<string, unknown>;
 }
 
-export interface ClassificationResult {
-  family: CapabilityFamily;
-  confidence: number;
-  recommendedCapabilityIds: string[];
+export interface KernelCapabilities {
+  enabled: string[];
+  recommended: string[];
+  available?: KernelCapability[];
+  disabled?: string[];
+  [key: string]: unknown;
 }
 
-export interface KernelEvolutionSnapshot {
-  generatedAt: string;
-  maturity: "baseline" | "expanding" | "orchestrating" | "colossus";
-  activeGoalCount: number;
-  memoryCount: number;
-  signalCount: number;
-  planCount: number;
-  executionCount: number;
-  recommendedNextMoves: string[];
+export interface KernelIntakeEntry extends KernelBaseEntity {
+  source: string;
+  type?: string;
+  content?: string;
+  summary?: string;
+  tags?: string[];
+  scopes?: KernelScope[];
+  metadata?: Record<string, unknown>;
 }
 
-export interface KernelState {
-  session: {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    mode: "active" | "idle";
-  };
-  actor: KernelActor;
-  context: KernelContext;
-  intake: IntakePacket[];
-  inputs: IntakePacket[];
-  memory: {
-    entries: MemoryEntry[];
-    indexKeywords: string[];
-    lastUpdated: string;
-  };
-  continuity: {
-    activeGoals: string[];
-    lockedBaselines: string[];
-    openThreads: string[];
-    preferences: string[];
-  };
-  signals: SignalEntry[];
-  priorities: PriorityState;
-  plans: Plan[];
-  tasks: PlanStep[];
-  executions: ExecutionRecord[];
-  capabilities: {
-    enabled: string[];
-    recommended: string[];
-  };
-  policies: {
-    safeMode: boolean;
-    truthFloor: TruthZone;
-    privacyMode: "balanced" | "strict";
-    requireApprovalForCommit: boolean;
-  };
-  audit: AuditEntry[];
-  health: KernelHealth;
-  outputs: KernelOutput[];
+export interface MemorySourceRef {
+  sourceType?: string;
+  sourceId?: string;
+  sourceIntakeId?: string;
+  sourceUrl?: string;
+  [key: string]: unknown;
+}
+
+export interface MemoryRecord extends KernelBaseEntity {
+  title?: string;
+  content: string;
+  summary?: string;
+  relevance?: number;
+  keywords?: string[];
+  tags?: string[];
+  eligibleScopes?: KernelScope[];
+  sourceIntakeId?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface KernelMemoryStore {
+  entries: MemoryRecord[];
+  lastUpdatedAt?: ISODateString;
+  [key: string]: unknown;
+}
+
+export interface KernelSignal extends KernelBaseEntity {
+  name: string;
+  description?: string;
+  kind?: KernelSignalKind;
+  score?: number;
+  priority?: PriorityBandLoose;
+  ring?: RadarRing;
+  reasons?: string[];
+  scopes?: KernelScope[];
+  promoted?: boolean;
+  metadata?: Record<string, unknown>;
+}
+
+export interface KernelPlanStep {
+  id: string;
+  title: string;
+  description?: string;
+  status?: KernelTaskStatus;
+  owner?: string;
+  dueAt?: ISODateString;
+  metadata?: Record<string, unknown>;
+}
+
+export interface KernelPlan extends KernelBaseEntity {
+  title: string;
+  description?: string;
+  objective?: string;
+  priority?: PriorityBandLoose;
+  steps: KernelPlanStep[];
+  status?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface KernelTask extends KernelBaseEntity {
+  title: string;
+  description?: string;
+  status: KernelTaskStatus;
+  priority?: PriorityBandLoose;
+  scope?: KernelScope;
+  linkedPlanId?: string;
+  linkedSignalId?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface KernelExecution extends KernelBaseEntity {
+  action: string;
+  status: KernelExecutionStatus;
+  input?: Record<string, unknown>;
+  output?: Record<string, unknown>;
+  error?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface KernelOutput extends KernelBaseEntity {
+  type: KernelOutputType;
+  title?: string;
+  content?: string;
+  summary?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface AuditEntry extends KernelBaseEntity {
+  actor?: string;
+  action: string;
+  target?: string;
+  status?: string;
+  details?: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface KernelStateSummary {
   sessionId: string;
-  status: KernelHealth["status"];
-  counts: KernelHealth["counters"];
-  priorityBand: PriorityBand;
+  status: KernelHealthStatus;
+  counts: KernelCounters;
+  priorityBand: PriorityBandLoose;
   radarRing: RadarRing;
   activeGoalCount: number;
   recommendedCapabilities: string[];
   lastPlanId?: string;
-  lastOutputType?: KernelOutput["type"];
-  updatedAt: string;
+  lastOutputType?: string;
+  updatedAt: ISODateString;
 }
 
-export interface KernelIntakeRequest {
-  raw?: string;
-  text?: string;
-  modality?: InputModality;
-  scope?: KernelScope;
-  truthZone?: TruthZone;
+export interface KernelModuleState {
+  id: string;
+  name?: string;
+  enabled?: boolean;
+  status?: string;
   metadata?: Record<string, unknown>;
-  context?: Partial<KernelContext>;
-  actor?: Partial<KernelActor>;
 }
 
-export interface KernelAnalyzeRequest extends KernelIntakeRequest {}
+export interface KernelState {
+  session: KernelSession;
+  health: KernelHealth;
+  priorities: KernelPriorities;
+  continuity: KernelContinuity;
+  capabilities: KernelCapabilities;
+
+  intake: KernelIntakeEntry[];
+  memory: KernelMemoryStore;
+  signals: KernelSignal[];
+  plans: KernelPlan[];
+  tasks: KernelTask[];
+  executions: KernelExecution[];
+  outputs: KernelOutput[];
+  audit: AuditEntry[];
+
+  modules?: KernelModuleState[];
+
+  [key: string]: unknown;
+}
+
+export interface KernelAnalyzeRequest {
+  input?: string;
+  content?: string;
+  source?: string;
+  mode?: string;
+  metadata?: Record<string, unknown>;
+}
 
 export interface KernelCompleteRequest {
   prompt?: string;
-  planId?: string;
-  includeAudit?: boolean;
+  goal?: string;
+  context?: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface KernelRunRequest {
-  planId?: string;
-  mode?: ExecutionMode;
+  action?: string;
+  input?: Record<string, unknown>;
+  dryRun?: boolean;
+  metadata?: Record<string, unknown>;
 }
 
-export interface KernelIntakeResult {
+export interface KernelApiResponse<T = unknown> {
   ok: boolean;
-  packet: IntakePacket;
-  recommendedCapabilities: string[];
-  summary: string;
+  message?: string;
+  data?: T;
+  error?: string;
+  summary?: KernelStateSummary;
 }
 
-export interface KernelAnalysisResult {
-  ok: boolean;
-  packet: IntakePacket;
-  memories: MemoryEntry[];
-  signals: SignalEntry[];
-  priority: PriorityState;
-  plan: Plan;
-  output: KernelOutput;
-}
+export const PRIORITY_BANDS: PriorityBand[] = [
+  "CRITICAL",
+  "HIGH",
+  "MEDIUM",
+  "LOW",
+  "BACKGROUND",
+];
 
-export interface KernelCompletionResult {
-  ok: boolean;
-  output: KernelOutput;
-  plan?: Plan;
-  auditSummary?: string;
-}
+export const RADAR_RINGS: RadarRing[] = [
+  "immediate",
+  "active",
+  "watch",
+  "queued",
+  "archived",
+];
 
-export interface KernelRunResult {
-  ok: boolean;
-  execution: ExecutionRecord;
-  output: KernelOutput;
-  plan: Plan;
-}
-
-export const nowIso = (): string => new Date().toISOString();
-
-export const createKernelId = (prefix: string = "pk"): string => {
-  const cryptoRef = globalThis.crypto as { randomUUID?: () => string } | undefined;
-  const raw = cryptoRef?.randomUUID ? cryptoRef.randomUUID() : Math.random().toString(36).slice(2, 12);
-  return prefix + "_" + raw.replace(/-/g, "");
+export const DEFAULT_COUNTERS: KernelCounters = {
+  intake: 0,
+  memory: 0,
+  signals: 0,
+  plans: 0,
+  tasks: 0,
+  executions: 0,
+  outputs: 0,
+  audits: 0,
 };
 
-export const clamp = (value: number, min: number, max: number): number =>
-  Math.max(min, Math.min(max, value));
+export const createEmptyKernelState = (): KernelState => {
+  const now = new Date().toISOString();
 
+  return {
+    session: {
+      id: "kernel-session",
+      createdAt: now,
+      updatedAt: now,
+      status: "active",
+      locale: "el-CY",
+      timezone: "Asia/Nicosia",
+    },
+    health: {
+      status: "healthy",
+      score: 1,
+      counters: { ...DEFAULT_COUNTERS },
+      notes: [],
+      lastCheckedAt: now,
+    },
+    priorities: {
+      band: "BACKGROUND",
+      ring: "archived",
+      score: 0,
+      reasons: [],
+      recommendedActions: [],
+    },
+    continuity: {
+      activeGoals: [],
+      nextActions: [],
+      blockers: [],
+      assumptions: [],
+      lastThreadSummary: "",
+    },
+    capabilities: {
+      enabled: [],
+      recommended: [],
+      available: [],
+      disabled: [],
+    },
+    intake: [],
+    memory: {
+      entries: [],
+      lastUpdatedAt: now,
+    },
+    signals: [],
+    plans: [],
+    tasks: [],
+    executions: [],
+    outputs: [],
+    audit: [],
+    modules: [],
+  };
+};
 
+export const createMemoryStore = (): KernelMemoryStore => ({
+  entries: [],
+  lastUpdatedAt: new Date().toISOString(),
+});
+
+export const normalizePriorityBand = (value: unknown): PriorityBandLoose => {
+  const raw = String(value ?? "BACKGROUND").trim().toUpperCase();
+
+  if (raw === "CRITICAL") return "CRITICAL";
+  if (raw === "HIGH") return "HIGH";
+  if (raw === "MEDIUM") return "MEDIUM";
+  if (raw === "LOW") return "LOW";
+  return "BACKGROUND";
+};
+
+export const normalizeRadarRing = (value: unknown): RadarRing => {
+  const raw = String(value ?? "archived").trim().toLowerCase();
+
+  if (raw === "immediate") return "immediate";
+  if (raw === "active") return "active";
+  if (raw === "watch") return "watch";
+  if (raw === "queued") return "queued";
+  return "archived";
+};
