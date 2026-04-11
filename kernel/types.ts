@@ -9,6 +9,7 @@ export type PriorityBand =
   | "BACKGROUND";
 
 export type PriorityBandLoose = PriorityBand | Lowercase<PriorityBand>;
+export type KernelPriority = PriorityBandLoose;
 
 export type RadarRing =
   | "immediate"
@@ -178,6 +179,8 @@ export interface KernelIntakeEntry extends KernelBaseEntity {
   source: string;
   type?: string;
   content?: string;
+  input?: string;
+  text?: string;
   summary?: string;
   tags?: string[];
   scopes?: KernelScope[];
@@ -325,6 +328,16 @@ export interface KernelState {
 export interface KernelAnalyzeRequest {
   input?: string;
   content?: string;
+  text?: string;
+  source?: string;
+  mode?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface KernelIntakeRequest {
+  input?: string;
+  content?: string;
+  text?: string;
   source?: string;
   mode?: string;
   metadata?: Record<string, unknown>;
@@ -379,8 +392,18 @@ export const DEFAULT_COUNTERS: KernelCounters = {
   audits: 0,
 };
 
+export const nowIso = (): ISODateString => new Date().toISOString();
+export const createKernelId = (prefix: string = "kernel"): UUID => {
+  return ${prefix}--;
+};
+
+export const createMemoryStore = (): KernelMemoryStore => ({
+  entries: [],
+  lastUpdatedAt: nowIso(),
+});
+
 export const createEmptyKernelState = (): KernelState => {
-  const now = new Date().toISOString();
+  const now = nowIso();
 
   return {
     session: {
@@ -433,11 +456,6 @@ export const createEmptyKernelState = (): KernelState => {
   };
 };
 
-export const createMemoryStore = (): KernelMemoryStore => ({
-  entries: [],
-  lastUpdatedAt: new Date().toISOString(),
-});
-
 export const normalizePriorityBand = (value: unknown): PriorityBandLoose => {
   const raw = String(value ?? "BACKGROUND").trim().toUpperCase();
 
@@ -457,3 +475,4 @@ export const normalizeRadarRing = (value: unknown): RadarRing => {
   if (raw === "queued") return "queued";
   return "archived";
 };
+
