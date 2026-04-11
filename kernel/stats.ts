@@ -12,6 +12,10 @@ export interface KernelStats {
   planner: number;
   tasksDone: number;
   radar: string;
+  signals: number;
+  audit: number;
+  tasksQueued: number;
+  healthyModules: number;
 
   priorityBand: PriorityBand | Lowercase<PriorityBand>;
   radarRing: RadarRing;
@@ -38,17 +42,21 @@ export const buildKernelStateSummary = (state: KernelState): KernelStateSummary 
   };
 };
 
-export const getKernelStats = (state: any): KernelStats => {
-  const intakeCount = Array.isArray(state?.intake) ? state.intake.length : 0;
-  const memoryCount = Array.isArray(state?.memory?.entries) ? state.memory.entries.length : 0;
-  const signalCount = Array.isArray(state?.signals) ? state.signals.length : 0;
-  const planCount = Array.isArray(state?.plans) ? state.plans.length : 0;
-  const taskCount = Array.isArray(state?.tasks) ? state.tasks.length : 0;
-  const executionCount = Array.isArray(state?.executions) ? state.executions.length : 0;
+const countArray = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
 
-  const completedTasks = Array.isArray(state?.tasks)
-    ? state.tasks.filter((task: any) => task?.status === "completed").length
-    : 0;
+export const getKernelStats = (state: any): KernelStats => {
+  const intake = Array.isArray(state?.intake) ? state.intake : [];
+  const memoryEntries = Array.isArray(state?.memory?.entries) ? state.memory.entries : [];
+  const signals = Array.isArray(state?.signals) ? state.signals : [];
+  const plans = Array.isArray(state?.plans) ? state.plans : [];
+  const tasks = Array.isArray(state?.tasks) ? state.tasks : [];
+  const executions = Array.isArray(state?.executions) ? state.executions : [];
+  const audit = Array.isArray(state?.audit) ? state.audit : [];
+
+  const tasksDone = tasks.filter((task: any) => task?.status === "completed").length;
+  const tasksQueued = tasks.filter((task: any) =>
+    ["pending", "running", "blocked"].includes(String(task?.status ?? "pending"))
+  ).length;
 
   const radarRing =
     typeof state?.priorities?.ring === "string"
@@ -60,18 +68,33 @@ export const getKernelStats = (state: any): KernelStats => {
       ? state.priorities.band
       : "BACKGROUND";
 
-  return {
-    intakeCount,
-    memoryCount,
-    signalCount,
-    planCount,
-    taskCount,
-    executionCount,
+  const healthyModules = Array.isArray(state?.modules)
+    ? state.modules.filter((mod: any) => {
+        if (!mod || typeof mod !== "object") return false;
+        if (mod.enabled === false) return false;
+        if (typeof mod.status === "string" && mod.status.toLowerCase() === "unhealthy") return false;
+        return true;
+      }).length
+    : Array.isArray(state?.capabilities?.enabled)
+    ? state.capabilities.enabled.length
+    : 0;
 
-    memory: memoryCount,
-    planner: planCount,
-    tasksDone: completedTasks,
+  return {
+    intakeCount: intake.length,
+    memoryCount: memoryEntries.length,
+    signalCount: signals.length,
+    planCount: plans.length,
+    taskCount: tasks.length,
+    executionCount: executions.length,
+
+    memory: memoryEntries.length,
+    planner: plans.length,
+    tasksDone,
     radar: radarRing,
+    signals: signals.length,
+    audit: audit.length,
+    tasksQueued,
+    healthyModules,
 
     priorityBand,
     radarRing,
@@ -79,9 +102,7 @@ export const getKernelStats = (state: any): KernelStats => {
       typeof state?.health?.status === "string"
         ? state.health.status
         : "healthy",
-    activeGoalCount: Array.isArray(state?.continuity?.activeGoals)
-      ? state.continuity.activeGoals.length
-      : 0,
+    activeGoalCount: countArray(state?.continuity?.activeGoals),
     recommendedCapabilities: Array.isArray(state?.capabilities?.recommended)
       ? state.capabilities.recommended.filter((x: unknown) => typeof x === "string")
       : [],
