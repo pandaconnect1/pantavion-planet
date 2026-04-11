@@ -89,7 +89,7 @@ export const createMemoryStore = (store: KernelStore): KernelMemoryStore => {
         keywords: uniqueStrings(entry.keywords),
         sourceIntakeId: entry.sourceIntakeId,
         relevance: entry.relevance,
-        eligibleScopes: uniqueStrings(entry.eligibleScopes),
+        eligibleScopes: uniqueStrings(entry.eligibleScopes) as any,
         metadata: entry.metadata,
       };
 
@@ -258,4 +258,5 @@ export const addMemoryEntry = (state: any, entry: any): any => {
 
   return next;
 };
+
 
