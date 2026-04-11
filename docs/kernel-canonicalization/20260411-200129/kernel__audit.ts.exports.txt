@@ -1,0 +1,4 @@
+﻿export const createAuditEntry = (
+export const appendAuditEntries = (
+export const buildAuditSummary = (state: KernelState, limit: number = 12): string => {
+export const addAuditEntry = (state: any, entry: any): any => {

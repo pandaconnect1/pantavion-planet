@@ -1,0 +1,6 @@
+﻿export const createInitialKernelState = (actorPatch?: Partial<KernelActor>): KernelState => {
+export class KernelStore {
+export const createKernelStore = (initialState?: KernelState): KernelStore =>
+export const loadKernelState = (): any => {
+export const saveKernelState = (state: any): any => {
+export const resetKernelState = (): any => {

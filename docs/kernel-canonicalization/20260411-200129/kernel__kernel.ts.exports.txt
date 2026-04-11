@@ -1,0 +1,2 @@
+﻿export class PantavionKernel {
+export const pantavionKernel = new PantavionKernel();

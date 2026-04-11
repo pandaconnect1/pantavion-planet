@@ -1,0 +1,5 @@
+﻿export interface MemoryRecallOptions {
+export interface KernelMemoryStore {
+export const createMemoryStore = (store: KernelStore): KernelMemoryStore => {
+export const buildMemoryCandidatesFromIntake = (
+export const addMemoryEntry = (state: any, entry: any): any => {

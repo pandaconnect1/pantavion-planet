@@ -1,0 +1,45 @@
+﻿export type KernelId = string;
+export type InputModality =
+export type KernelScope =
+export type TruthZone =
+export type MemoryClass =
+export type PrivacyClass =
+export type SignalType =
+export type PriorityBand = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW" | "BACKGROUND";
+export type KernelPriority = PriorityBand | Lowercase<PriorityBand>;
+export type RadarRing =
+export type ExecutionMode = "dry_run" | "commit";
+export type PlanStatus = "draft" | "ready" | "running" | "completed" | "failed";
+export type PlanStepStatus =
+export type PlanStepKind =
+export type CapabilityFamily =
+export interface KernelActor {
+export interface KernelContext {
+export interface IntakePacket {
+export interface MemoryEntry {
+export type MemoryEntryDraft =
+export interface SignalEntry {
+export interface PriorityState {
+export interface PlanStep {
+export interface Plan {
+export interface ExecutionStepResult {
+export interface ExecutionRecord {
+export interface AuditEntry {
+export interface KernelHealth {
+export interface KernelOutput {
+export interface CapabilityProfile {
+export interface ClassificationResult {
+export interface KernelEvolutionSnapshot {
+export interface KernelState {
+export interface KernelStateSummary {
+export interface KernelIntakeRequest {
+export interface KernelAnalyzeRequest extends KernelIntakeRequest {}
+export interface KernelCompleteRequest {
+export interface KernelRunRequest {
+export interface KernelIntakeResult {
+export interface KernelAnalysisResult {
+export interface KernelCompletionResult {
+export interface KernelRunResult {
+export const nowIso = (): string => new Date().toISOString();
+export const createKernelId = (prefix: string = "pk"): string => {
+export const clamp = (value: number, min: number, max: number): number =>
