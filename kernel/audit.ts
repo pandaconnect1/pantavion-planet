@@ -65,3 +65,19 @@ export const addAuditEntry = (state: any, entry: any): any => {
   return next;
 };
 
+/**
+ * PATCH 4
+ * Compatibility bridge from legacy kernel/audit.ts to canonical-audit.ts
+ * Additive only: exports only missing canonical audit symbols.
+ */
+export type {
+  CanonicalAuditEntry,
+  CanonicalAuditInput,
+} from "./canonical-audit";
+export {
+  createCanonicalAuditEntry,
+  formatCanonicalAuditEntry,
+  formatCanonicalAuditRecent,
+  appendCanonicalAuditEntry,
+} from "./canonical-audit";
+
