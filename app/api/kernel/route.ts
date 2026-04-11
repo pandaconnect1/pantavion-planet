@@ -1,28 +1,19 @@
 ﻿import { NextResponse } from "next/server";
-import { getKernelState } from "../../../src/kernel/executor";
+import { pantavionKernel } from "@/kernel/kernel";
+import type { KernelAnalyzeRequest } from "@/kernel/types";
 
-export async function GET() {
-  try {
-    const state = await getKernelState();
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-    return NextResponse.json({
-      ok: true,
-      state: {
-        memoryCount: Object.keys(state.memory).length,
-        registryCount: Object.keys(state.registry).length,
-        planCount: state.plans.length,
-        runCount: state.runs.length,
-        eventCount: state.eventCount,
-        lastUpdatedAt: state.lastUpdatedAt,
-      },
-    });
-  } catch (error) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: error instanceof Error ? error.message : "Unknown kernel route error",
-      },
-      { status: 500 },
-    );
-  }
+export async function GET(): Promise<NextResponse> {
+  return NextResponse.json({
+    ok: true,
+    summary: pantavionKernel.getStateSummary(),
+  });
+}
+
+export async function POST(request: Request): Promise<NextResponse> {
+  const body = (await request.json()) as KernelAnalyzeRequest;
+  const result = pantavionKernel.analyze(body);
+  return NextResponse.json(result);
 }

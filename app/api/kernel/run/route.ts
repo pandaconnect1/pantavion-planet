@@ -1,31 +1,12 @@
-﻿import { NextRequest, NextResponse } from "next/server";
-import { executeKernel } from "../../../../core/kernel-orchestrator";
+﻿import { NextResponse } from "next/server";
+import { pantavionKernel } from "@/kernel/kernel";
+import type { KernelRunRequest } from "@/kernel/types";
 
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-    const input = String(body?.input ?? "").trim();
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-    if (!input) {
-      return NextResponse.json(
-        { ok: false, error: "Missing input" },
-        { status: 400 }
-      );
-    }
-
-    const result = await executeKernel(input);
-
-    return NextResponse.json({
-      ok: true,
-      result
-    });
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Unknown kernel run error";
-
-    return NextResponse.json(
-      { ok: false, error: message },
-      { status: 500 }
-    );
-  }
+export async function POST(request: Request): Promise<NextResponse> {
+  const body = (await request.json()) as KernelRunRequest;
+  const result = pantavionKernel.run(body);
+  return NextResponse.json(result);
 }

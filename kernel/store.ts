@@ -1,163 +1,181 @@
-﻿import type {
-  KernelState,
-  ModuleEntry,
-  CapabilityEntry,
-  SignalEntry,
-} from "./types";
+﻿import type { KernelActor, KernelState } from "./types";
+import { createKernelId, nowIso } from "./types";
 
-export const KERNEL_STORAGE_KEY = "pantavion.kernel.v2";
+const cloneJson = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
-function now() {
-  return new Date().toISOString();
-}
+const DEFAULT_ACTOR: KernelActor = {
+  id: "system",
+  type: "system",
+  name: "Pantavion Kernel",
+  permissions: ["kernel:full"],
+};
 
-function id(prefix: string) {
-  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
-    return `${prefix}-${crypto.randomUUID()}`;
-  }
-  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-}
-
-function baseModules(t: string): ModuleEntry[] {
-  return [
-    { key: "memory", title: "Memory", state: "active", health: "green", runs: 1, changes: 0, errors: 0, lastRunAt: t },
-    { key: "planner", title: "Planner", state: "active", health: "green", runs: 1, changes: 0, errors: 0, lastRunAt: t },
-    { key: "runner", title: "Runner", state: "idle", health: "yellow", runs: 0, changes: 0, errors: 0 },
-    { key: "registry", title: "Capability Registry", state: "active", health: "green", runs: 1, changes: 0, errors: 0, lastRunAt: t },
-    { key: "intelligence", title: "Intelligence", state: "active", health: "yellow", runs: 1, changes: 0, errors: 0, lastRunAt: t },
-    { key: "radar", title: "Tech Radar", state: "idle", health: "yellow", runs: 0, changes: 0, errors: 0 },
-    { key: "evolution", title: "Evolution", state: "idle", health: "yellow", runs: 0, changes: 0, errors: 0 },
-    { key: "audit", title: "Audit", state: "active", health: "green", runs: 1, changes: 0, errors: 0, lastRunAt: t },
-  ];
-}
-
-function baseCapabilities(t: string): CapabilityEntry[] {
-  return [
-    { id: id("cap"), key: "kernel.memory", title: "Persistent Memory", owner: "kernel", maturity: "prototype", status: "healthy", createdAt: t },
-    { id: id("cap"), key: "kernel.planner", title: "Planner Core", owner: "kernel", maturity: "prototype", status: "healthy", createdAt: t },
-    { id: id("cap"), key: "kernel.runner", title: "Deterministic Runner", owner: "kernel", maturity: "prototype", status: "healthy", createdAt: t },
-    { id: id("cap"), key: "kernel.registry", title: "Capability Registry", owner: "kernel", maturity: "seed", status: "building", createdAt: t },
-    { id: id("cap"), key: "kernel.intelligence", title: "Intelligence Registry", owner: "kernel", maturity: "seed", status: "building", createdAt: t },
-    { id: id("cap"), key: "kernel.evolution", title: "Evolution Engine", owner: "kernel", maturity: "seed", status: "building", createdAt: t },
-  ];
-}
-
-function baseSignals(t: string): SignalEntry[] {
-  return [
-    {
-      id: id("sig"),
-      name: "Governed memory classes",
-      category: "memory",
-      description: "Directive, decision, context, fact, signal.",
-      impact: 5,
-      confidence: 5,
-      urgency: 4,
-      createdAt: t,
-    },
-    {
-      id: id("sig"),
-      name: "Deterministic planner to runner flow",
-      category: "runner",
-      description: "Planner items should become queued tasks and then executed cleanly.",
-      impact: 5,
-      confidence: 4,
-      urgency: 5,
-      createdAt: t,
-    },
-    {
-      id: id("sig"),
-      name: "Radar scoring before adoption",
-      category: "radar",
-      description: "All new ideas should pass through scoring before entering core direction.",
-      impact: 4,
-      confidence: 4,
-      urgency: 4,
-      createdAt: t,
-    },
-  ];
-}
-
-export function createKernelState(): KernelState {
-  const t = now();
+export const createInitialKernelState = (actorPatch?: Partial<KernelActor>): KernelState => {
+  const now = nowIso();
 
   return {
-    version: 2,
-    updatedAt: t,
-    memory: [
-      {
-        id: id("mem"),
-        text: "Pantavion is Kernel App / Builder Brain first.",
-        tags: ["direction", "kernel", "builder-brain"],
-        kind: "directive",
-        createdAt: t,
-      },
-      {
-        id: id("mem"),
-        text: "Core target: persistent memory, planner, registry, runner, audit, intelligence, radar, evolution.",
-        tags: ["core", "target"],
-        kind: "directive",
-        createdAt: t,
-      },
-    ],
-    planner: [
-      {
-        id: id("plan"),
-        title: "Build Kernel Spine",
-        detail: "Lock stable governed kernel modules before large Pantavion surfaces.",
-        priority: "critical",
-        domain: "kernel.spine",
-        status: "planned",
-        createdAt: t,
-      },
-    ],
+    session: {
+      id: createKernelId("session"),
+      createdAt: now,
+      updatedAt: now,
+      mode: "active",
+    },
+    actor: {
+      ...DEFAULT_ACTOR,
+      ...actorPatch,
+      permissions: actorPatch?.permissions ?? DEFAULT_ACTOR.permissions,
+    },
+    context: {
+      sessionId: createKernelId("ctx"),
+      locale: "el-CY",
+      timezone: "Europe/Nicosia",
+      tags: ["pantavion", "kernel"],
+    },
+    intake: [],
+    inputs: [],
+    memory: {
+      entries: [],
+      indexKeywords: [],
+      lastUpdated: now,
+    },
+    continuity: {
+      activeGoals: [],
+      lockedBaselines: [
+        "Pantavion Kernel = canonical governed intelligence core",
+        "Kernel-first doctrine",
+        "Compact full-file architecture doctrine",
+        "Multimodal, governed, anti-fragile evolution doctrine",
+      ],
+      openThreads: [],
+      preferences: [
+        "full files only",
+        "terminal-ready commands only",
+        "compact architecture",
+        "kernel first",
+      ],
+    },
+    signals: [],
+    priorities: {
+      score: 0,
+      band: "BACKGROUND",
+      ring: "archived",
+      topSignalIds: [],
+      updatedAt: now,
+    },
+    plans: [],
     tasks: [],
-    signals: baseSignals(t),
-    radar: [],
-    audit: [
-      {
-        id: id("audit"),
-        action: "kernel.bootstrap",
-        entity: "kernel",
-        message: "Pantavion Kernel v2 initialized.",
-        createdAt: t,
+    executions: [],
+    capabilities: {
+      enabled: [
+        "kernel.analyze",
+        "kernel.complete",
+        "kernel.intake",
+        "kernel.run",
+        "kernel.state",
+      ],
+      recommended: [],
+    },
+    policies: {
+      safeMode: true,
+      truthFloor: "uncertain",
+      privacyMode: "balanced",
+      requireApprovalForCommit: true,
+    },
+    audit: [],
+    health: {
+      status: "healthy",
+      lastUpdated: now,
+      counters: {
+        intakes: 0,
+        memories: 0,
+        signals: 0,
+        plans: 0,
+        executions: 0,
       },
-    ],
-    modules: baseModules(t),
-    capabilities: baseCapabilities(t),
+    },
+    outputs: [],
   };
-}
+};
 
-export function loadKernelState(): KernelState {
-  if (typeof window === "undefined") return createKernelState();
+export class KernelStore {
+  private state: KernelState;
 
-  try {
-    const raw = window.localStorage.getItem(KERNEL_STORAGE_KEY);
-    if (!raw) return createKernelState();
-    return JSON.parse(raw) as KernelState;
-  } catch {
-    return createKernelState();
+  constructor(initialState?: KernelState) {
+    this.state = cloneJson(initialState ?? createInitialKernelState());
+  }
+
+  snapshot(): KernelState {
+    return cloneJson(this.state);
+  }
+
+  replace(nextState: KernelState): KernelState {
+    this.state = cloneJson(nextState);
+    return this.snapshot();
+  }
+
+  mutate(mutator: (draft: KernelState) => void): KernelState {
+    const draft = cloneJson(this.state);
+    mutator(draft);
+
+    draft.session.updatedAt = nowIso();
+    draft.memory.lastUpdated = nowIso();
+    draft.health.lastUpdated = nowIso();
+    draft.health.counters = {
+      intakes: draft.intake.length,
+      memories: draft.memory.entries.length,
+      signals: draft.signals.length,
+      plans: draft.plans.length,
+      executions: draft.executions.length,
+    };
+
+    this.state = draft;
+    return this.snapshot();
   }
 }
 
-export function saveKernelState(state: KernelState) {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(
-    KERNEL_STORAGE_KEY,
-    JSON.stringify({
-      ...state,
-      updatedAt: now(),
-    })
-  );
-}
+export const createKernelStore = (initialState?: KernelState): KernelStore =>
+  new KernelStore(initialState);
 
-export function resetKernelState() {
-  return createKernelState();
-}
+/* PANTAVION_LEGACY_STORE_COMPAT */
+const LEGACY_KERNEL_STATE_KEY = "pantavion.kernel.state";
 
-export function makeId(prefix: string) {
-  return id(prefix);
-}
+export const loadKernelState = (): any => {
+  const fallback = createInitialKernelState();
 
-export function nowIso() {
-  return now();
-}
+  if (typeof window === "undefined") {
+    return fallback;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(LEGACY_KERNEL_STATE_KEY);
+    if (!raw) return fallback;
+
+    const parsed = JSON.parse(raw);
+    return parsed ?? fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+export const saveKernelState = (state: any): any => {
+  if (typeof window !== "undefined") {
+    try {
+      window.localStorage.setItem(LEGACY_KERNEL_STATE_KEY, JSON.stringify(state));
+    } catch {}
+  }
+
+  return state;
+};
+
+export const resetKernelState = (): any => {
+  const next = createInitialKernelState();
+
+  if (typeof window !== "undefined") {
+    try {
+      window.localStorage.setItem(LEGACY_KERNEL_STATE_KEY, JSON.stringify(next));
+    } catch {}
+  }
+
+  return next;
+};
+

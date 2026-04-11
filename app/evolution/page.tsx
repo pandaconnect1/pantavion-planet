@@ -36,7 +36,7 @@ export default function EvolutionPage() {
   const [plannerDetail, setPlannerDetail] = useState("");
   const [signalName, setSignalName] = useState("");
   const [signalDescription, setSignalDescription] = useState("");
-  const [priority, setPriority] = useState<KernelPriority>("high");
+  const [priority, setPriority] = useState<KernelPriority>("HIGH");
 
   useEffect(() => {
     saveKernelState(state);
@@ -176,7 +176,7 @@ export default function EvolutionPage() {
                   );
                   setPlannerTitle("");
                   setPlannerDetail("");
-                  setPriority("high");
+                  setPriority("HIGH" as KernelPriority);
                 }}
                 className="mt-3 rounded-2xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm font-medium text-cyan-200"
               >
@@ -353,5 +353,6 @@ export default function EvolutionPage() {
     </main>
   );
 }
+
 
 

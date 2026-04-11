@@ -1,46 +1,68 @@
-﻿import type { KernelState } from "./types";
-import { addAuditEntry } from "./audit";
-import { queuePlannedWork } from "./planner";
-import { addTaskEntry, executeNextTask } from "./runner";
-import { promoteTopSignal } from "./intelligence";
-import { nowIso } from "./store";
+﻿import type { KernelEvolutionSnapshot, KernelState } from "./types";
+import { nowIso } from "./types";
 
-export function runEvolutionCycle(state: KernelState): KernelState {
-  let next = state;
+export const buildKernelEvolutionSnapshot = (
+  state: KernelState
+): KernelEvolutionSnapshot => {
+  const maturity: KernelEvolutionSnapshot["maturity"] =
+    state.executions.length >= 10
+      ? "colossus"
+      : state.plans.length >= 5
+      ? "orchestrating"
+      : state.signals.length >= 3
+      ? "expanding"
+      : "baseline";
 
-  const planned = next.planner.find((p) => p.status === "planned");
-  const hasQueuedTask = next.tasks.some((t) => t.status === "queued");
+  return {
+    generatedAt: nowIso(),
+    maturity,
+    activeGoalCount: state.continuity.activeGoals.length,
+    memoryCount: state.memory.entries.length,
+    signalCount: state.signals.length,
+    planCount: state.plans.length,
+    executionCount: state.executions.length,
+    recommendedNextMoves: [
+      "Canonicalize kernel paths and route imports.",
+      "Extend multimodal intake beyond text.",
+      "Attach capability registry and workspace routing.",
+      "Harden audit, policy gating, and degraded-mode behavior.",
+    ],
+  };
+};
 
-  if (planned && !hasQueuedTask) {
-    next = queuePlannedWork(next);
-    next = addTaskEntry(next, {
-      title: `Planner: ${planned.title}`,
-      area: planned.domain,
-      priority: planned.priority,
-    });
-    next = addAuditEntry(next, "planner.queued", planned.id, `Queued planner item: ${planned.title}`);
-  }
+/* PANTAVION_LEGACY_EVOLUTION_COMPAT */
+const cloneEvolutionCompat = <T>(value: T): T =>
+  JSON.parse(JSON.stringify(value)) as T;
 
-  next = executeNextTask(next);
-  next = promoteTopSignal(next);
+export const runEvolutionCycle = (state: any): any => {
+  const next = cloneEvolutionCompat(state ?? {});
 
-  next = {
-    ...next,
-    modules: next.modules.map((m) =>
-      m.key === "evolution"
-        ? {
-            ...m,
-            state: "active",
-            health: "green",
-            runs: m.runs + 1,
-            changes: m.changes + 1,
-            lastRunAt: nowIso(),
-          }
-        : m
-    ),
+  next.health = next.health ?? {};
+  next.health.status = next.health.status ?? "healthy";
+  next.health.lastUpdated = nowIso();
+  next.health.counters = next.health.counters ?? {
+    intakes: Array.isArray(next.intake) ? next.intake.length : 0,
+    memories: Array.isArray(next.memory?.entries) ? next.memory.entries.length : 0,
+    signals: Array.isArray(next.signals) ? next.signals.length : 0,
+    plans: Array.isArray(next.plans) ? next.plans.length : 0,
+    executions: Array.isArray(next.executions) ? next.executions.length : 0,
   };
 
-  next = addAuditEntry(next, "evolution.run", "kernel", "Ran evolution cycle.");
+  next.continuity = next.continuity ?? {};
+  next.continuity.activeGoals = Array.isArray(next.continuity.activeGoals)
+    ? next.continuity.activeGoals
+    : [];
+  next.continuity.lockedBaselines = Array.isArray(next.continuity.lockedBaselines)
+    ? next.continuity.lockedBaselines
+    : [];
+  next.continuity.openThreads = Array.isArray(next.continuity.openThreads)
+    ? next.continuity.openThreads
+    : [];
+  next.continuity.preferences = Array.isArray(next.continuity.preferences)
+    ? next.continuity.preferences
+    : [];
+
+  next.evolution = buildKernelEvolutionSnapshot(next as KernelState);
 
   return next;
-}
+};

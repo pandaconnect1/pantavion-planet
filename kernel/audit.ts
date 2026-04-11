@@ -1,34 +1,67 @@
-﻿import type { KernelState } from "./types";
-import { makeId, nowIso } from "./store";
+﻿import type { AuditEntry, KernelState } from "./types";
+import { createKernelId, nowIso } from "./types";
 
-export function addAuditEntry(
-  state: KernelState,
+export const createAuditEntry = (
   action: string,
-  entity: string,
-  message: string
-): KernelState {
-  return {
-    ...state,
-    audit: [
-      {
-        id: makeId("audit"),
-        action,
-        entity,
-        message,
-        createdAt: nowIso(),
-      },
-      ...state.audit,
-    ].slice(0, 300),
-    modules: state.modules.map((m) =>
-      m.key === "audit"
-        ? {
-            ...m,
-            state: "active",
-            health: "green",
-            changes: m.changes + 1,
-            lastRunAt: nowIso(),
-          }
-        : m
-    ),
-  };
-}
+  message: string,
+  level: AuditEntry["level"] = "info",
+  refs: string[] = [],
+  metadata: Record<string, unknown> = {}
+): AuditEntry => ({
+  id: createKernelId("audit"),
+  createdAt: nowIso(),
+  level,
+  action,
+  message,
+  refs,
+  metadata,
+});
+
+export const appendAuditEntries = (
+  state: KernelState,
+  entries: AuditEntry[]
+): AuditEntry[] => {
+  state.audit.push(...entries);
+  return state.audit;
+};
+
+export const buildAuditSummary = (state: KernelState, limit: number = 12): string => {
+  const recent = state.audit.slice(-limit);
+  if (recent.length === 0) return "No audit activity recorded yet.";
+
+  return recent
+    .map((entry) => {
+      return "[" + entry.level.toUpperCase() + "] " + entry.action + " — " + entry.message;
+    })
+    .join("\n");
+};
+
+/* PANTAVION_LEGACY_AUDIT_COMPAT */
+const cloneAuditCompat = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+
+export const addAuditEntry = (state: any, entry: any): any => {
+  const next = cloneAuditCompat(state ?? {});
+  next.audit = Array.isArray(next.audit) ? next.audit : [];
+
+  const normalized =
+    entry && typeof entry === "object"
+      ? {
+          id: entry.id ?? createKernelId("audit"),
+          createdAt: entry.createdAt ?? nowIso(),
+          level: entry.level ?? "info",
+          action: entry.action ?? "legacy.audit",
+          message:
+            entry.message ??
+            entry.content ??
+            entry.label ??
+            entry.title ??
+            "Legacy audit entry",
+          refs: Array.isArray(entry.refs) ? entry.refs : [],
+          metadata: entry.metadata ?? {},
+        }
+      : createAuditEntry("legacy.audit", String(entry ?? "Legacy audit entry"), "info", []);
+
+  next.audit.push(normalized);
+  return next;
+};
+

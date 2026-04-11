@@ -1,25 +1,22 @@
 ﻿import { NextResponse } from "next/server";
-import { readKernelState } from "../../../../core/kernel-store";
-import { KERNEL_CONSTITUTION } from "../../../../core/kernel-constitution";
-import { KERNEL_CAPABILITIES } from "../../../../core/kernel-capabilities";
+import { pantavionKernel } from "@/kernel/kernel";
 
-export async function GET() {
-  try {
-    const state = await readKernelState();
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
+export async function GET(request: Request): Promise<NextResponse> {
+  const url = new URL(request.url);
+  const full = url.searchParams.get("full");
+
+  if (full === "1") {
     return NextResponse.json({
       ok: true,
-      constitution: KERNEL_CONSTITUTION,
-      capabilities: KERNEL_CAPABILITIES,
-      state
+      state: pantavionKernel.getState(),
     });
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Unknown kernel state error";
-
-    return NextResponse.json(
-      { ok: false, error: message },
-      { status: 500 }
-    );
   }
+
+  return NextResponse.json({
+    ok: true,
+    summary: pantavionKernel.getStateSummary(),
+  });
 }

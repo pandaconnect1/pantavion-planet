@@ -1,74 +1,136 @@
-﻿import type { KernelState, KernelPriority } from "./types";
-import { makeId, nowIso } from "./store";
+﻿import type {
+  ExecutionMode,
+  ExecutionRecord,
+  KernelOutput,
+  KernelState,
+  Plan,
+  PlanStep,
+} from "./types";
+import { createKernelId, nowIso } from "./types";
 
-function bumpRunnerModule(state: KernelState, success = true): KernelState {
-  return {
-    ...state,
-    modules: state.modules.map((m) =>
-      m.key === "runner"
-        ? {
-            ...m,
-            state: "active",
-            health: success ? "green" : "red",
-            runs: m.runs + 1,
-            changes: m.changes + 1,
-            errors: success ? m.errors : m.errors + 1,
-            lastRunAt: nowIso(),
-          }
-        : m
-    ),
-  };
+export interface ExecutionRunResult {
+  updatedPlan: Plan;
+  record: ExecutionRecord;
+  output: KernelOutput;
 }
 
-export function addTaskEntry(
-  state: KernelState,
-  input: {
-    title: string;
-    area: string;
-    priority: KernelPriority;
+const completeStep = (
+  step: PlanStep,
+  mode: ExecutionMode
+): { next: PlanStep; message: string; output?: string } => {
+  if (mode === "dry_run" && (step.kind === "execute" || step.requiresApproval)) {
+    return {
+      next: { ...step, status: "blocked" },
+      message: "Blocked in dry-run mode or waiting for approval.",
+    };
   }
-): KernelState {
-  const next: KernelState = {
-    ...state,
-    tasks: [
-      {
-        id: makeId("task"),
-        title: input.title.trim(),
-        area: input.area.trim(),
-        priority: input.priority,
-        status: "queued",
-        createdAt: nowIso(),
-      },
-      ...state.tasks,
-    ].slice(0, 200),
+
+  return {
+    next: { ...step, status: "completed" },
+    message: "Step completed successfully.",
+    output: step.description,
+  };
+};
+
+export const runPlan = (
+  plan: Plan,
+  state: KernelState,
+  mode: ExecutionMode = "dry_run"
+): ExecutionRunResult => {
+  const startedAt = nowIso();
+  const stepResults: ExecutionRecord["stepResults"] = [];
+
+  const updatedSteps = plan.steps.map((currentStep) => {
+    const result = completeStep(currentStep, mode);
+    stepResults.push({
+      stepId: currentStep.id,
+      status: result.next.status,
+      message: result.message,
+      output: result.output,
+    });
+    return result.next;
+  });
+
+  const blockedCount = stepResults.filter((result) => result.status === "blocked").length;
+  const failedCount = stepResults.filter((result) => result.status === "failed").length;
+
+  const status: ExecutionRecord["status"] =
+    failedCount > 0 ? "failed" : blockedCount > 0 ? "blocked" : "completed";
+
+  const finishedAt = nowIso();
+  const updatedPlan: Plan = {
+    ...plan,
+    updatedAt: finishedAt,
+    status: status === "completed" ? "completed" : status === "failed" ? "failed" : "running",
+    steps: updatedSteps,
   };
 
-  return bumpRunnerModule(next);
-}
-
-export function executeNextTask(state: KernelState): KernelState {
-  const nextTask = state.tasks.find((t) => t.status === "queued");
-  if (!nextTask) return state;
-
-  const next: KernelState = {
-    ...state,
-    tasks: state.tasks.map((t) =>
-      t.id === nextTask.id
-        ? {
-            ...t,
-            status: "done",
-            startedAt: nowIso(),
-            endedAt: nowIso(),
-            result: `Executed cleanly for ${t.area}`,
-          }
-        : t
-    ),
-    planner: state.planner.map((p) =>
-      `Planner: ${p.title}` === nextTask.title && p.status !== "done"
-        ? { ...p, status: "done" }
-        : p
-    ),
+  const record: ExecutionRecord = {
+    id: createKernelId("exec"),
+    planId: plan.id,
+    mode,
+    status,
+    startedAt,
+    finishedAt,
+    stepResults,
+    summary:
+      mode === "dry_run"
+        ? "Dry-run execution completed. No committed external side effects were performed."
+        : "Commit execution completed under canonical kernel control.",
+    error: failedCount > 0 ? "One or more plan steps failed." : undefined,
   };
 
-  return bumpRunnerModule(next);
-}
+  const latestMemoryCount = state.memory.entries.length;
+  const latestSignalCount = state.signals.length;
+
+  const output: KernelOutput = {
+    id: createKernelId("out"),
+    createdAt: finishedAt,
+    type: "run",
+    title: mode === "dry_run" ? "Kernel dry-run result" : "Kernel commit result",
+    content: [
+      "Plan executed by Pantavion Kernel Runner.",
+      "Mode: " + mode,
+      "Plan Goal: " + plan.goal,
+      "Plan Status: " + updatedPlan.status,
+      "Step Results: " + stepResults.length,
+      "Blocked Steps: " + blockedCount,
+      "Memory Count: " + latestMemoryCount,
+      "Signal Count: " + latestSignalCount,
+      record.summary,
+    ].join("\n"),
+    truthZone: "likely",
+    relatedIds: [plan.id, record.id],
+  };
+
+  return {
+    updatedPlan,
+    record,
+    output,
+  };
+};
+
+/* PANTAVION_LEGACY_RUNNER_COMPAT */
+const cloneRunnerCompat = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+
+export const addTaskEntry = (state: any, task: any): any => {
+  const next = cloneRunnerCompat(state ?? {});
+  next.tasks = Array.isArray(next.tasks) ? next.tasks : [];
+
+  const normalized = {
+    id: task?.id ?? createKernelId("step"),
+    kind: task?.kind ?? "execute",
+    title: task?.title ?? task?.label ?? "Legacy task entry",
+    description:
+      task?.description ??
+      task?.summary ??
+      "Legacy task entry added for compatibility with app/evolution/page.tsx",
+    status: task?.status ?? "pending",
+    requiresApproval: Boolean(task?.requiresApproval ?? false),
+    metadata: task?.metadata ?? {},
+  };
+
+  next.tasks.push(normalized);
+  return next;
+};
+
