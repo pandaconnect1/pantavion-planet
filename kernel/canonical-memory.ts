@@ -80,14 +80,17 @@ export const attachCanonicalMemoryAudit = (
   action: string,
   message: string
 ): CanonicalKernelAuditEntry[] => {
-  return [
-    ...audit,
-    {
-      action,
-      message,
-      createdAtIso: new Date().toISOString(),
-    } as CanonicalKernelAuditEntry,
-  ];
+  const entry: CanonicalKernelAuditEntry = {
+    id: `mem-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    level: "info",
+    action,
+    message,
+    createdAt: new Date().toISOString(),
+    refs: [],
+    metadata: {},
+  };
+
+  return [...audit, entry];
 };
 
 export const projectCanonicalMemoryIntoKernelState = (
@@ -99,3 +102,4 @@ export const projectCanonicalMemoryIntoKernelState = (
     memorySummary: summarizeCanonicalMemory(memory),
   };
 };
+
