@@ -1,0 +1,290 @@
+[
+  {
+    "id": "mission_boqc9oyv",
+    "createdAt": "2026-04-08T16:48:05.565Z",
+    "mission": {
+      "id": "mission_boqc9oyv",
+      "title": "Build website from intent",
+      "intent": "build_website",
+      "modality": "text",
+      "source": "user",
+      "summary": "Build website generator inside Pantavion",
+      "strategicMode": "build"
+    },
+    "status": "ready_for_publish",
+    "verifier": {
+      "checks": {
+        "specificationPresent": true,
+        "architecturePresent": true,
+        "executionPathPresent": true,
+        "publishGateDefined": true,
+        "gapsDetected": false
+      },
+      "missing": [],
+      "verdict": "ready_for_publish"
+    },
+    "finalDecision": "Mission \"Build website from intent\" is structurally complete and ready for execution/publish gate.",
+    "taskGraph": [
+      {
+        "id": "spec",
+        "type": "spec",
+        "title": "Create complete specification",
+        "dependsOn": [],
+        "required": true,
+        "output": "specification.md",
+        "status": "pending"
+      },
+      {
+        "id": "architecture",
+        "type": "architecture",
+        "title": "Create architecture design",
+        "dependsOn": [
+          "spec"
+        ],
+        "required": true,
+        "output": "architecture.json",
+        "status": "pending"
+      },
+      {
+        "id": "verification",
+        "type": "verification",
+        "title": "Run completion verification",
+        "dependsOn": [],
+        "required": true,
+        "output": "verification-report.json",
+        "status": "pending"
+      },
+      {
+        "id": "data_model",
+        "type": "data_model",
+        "title": "Define data model",
+        "dependsOn": [
+          "spec",
+          "architecture"
+        ],
+        "required": true,
+        "output": "data-model.json",
+        "status": "pending"
+      },
+      {
+        "id": "ui",
+        "type": "ui",
+        "title": "Create UI surface",
+        "dependsOn": [
+          "spec",
+          "architecture"
+        ],
+        "required": true,
+        "output": "ui.tsx",
+        "status": "pending"
+      },
+      {
+        "id": "backend",
+        "type": "backend",
+        "title": "Create backend logic",
+        "dependsOn": [
+          "spec",
+          "architecture",
+          "data_model"
+        ],
+        "required": true,
+        "output": "backend.ts",
+        "status": "pending"
+      }
+    ],
+    "missing": [],
+    "repairs": []
+  },
+  {
+    "id": "mission_vsh152jx",
+    "createdAt": "2026-04-08T16:57:54.211Z",
+    "mission": {
+      "id": "mission_vsh152jx",
+      "title": "Build website from intent",
+      "intent": "build_website",
+      "modality": "text",
+      "source": "user",
+      "summary": "Build website generator inside Pantavion",
+      "strategicMode": "build"
+    },
+    "status": "ready_for_publish",
+    "verifier": {
+      "checks": {
+        "specificationPresent": true,
+        "architecturePresent": true,
+        "executionPathPresent": true,
+        "publishGateDefined": true,
+        "gapsDetected": false
+      },
+      "missing": [],
+      "verdict": "ready_for_publish"
+    },
+    "finalDecision": "Mission \"Build website from intent\" is structurally complete and ready for execution/publish gate.",
+    "taskGraph": [
+      {
+        "id": "spec",
+        "type": "spec",
+        "title": "Create complete specification",
+        "dependsOn": [],
+        "required": true,
+        "output": "specification.md",
+        "status": "pending"
+      },
+      {
+        "id": "architecture",
+        "type": "architecture",
+        "title": "Create architecture design",
+        "dependsOn": [
+          "spec"
+        ],
+        "required": true,
+        "output": "architecture.json",
+        "status": "pending"
+      },
+      {
+        "id": "verification",
+        "type": "verification",
+        "title": "Run completion verification",
+        "dependsOn": [],
+        "required": true,
+        "output": "verification-report.json",
+        "status": "pending"
+      },
+      {
+        "id": "data_model",
+        "type": "data_model",
+        "title": "Define data model",
+        "dependsOn": [
+          "spec",
+          "architecture"
+        ],
+        "required": true,
+        "output": "data-model.json",
+        "status": "pending"
+      },
+      {
+        "id": "ui",
+        "type": "ui",
+        "title": "Create UI surface",
+        "dependsOn": [
+          "spec",
+          "architecture"
+        ],
+        "required": true,
+        "output": "ui.tsx",
+        "status": "pending"
+      },
+      {
+        "id": "backend",
+        "type": "backend",
+        "title": "Create backend logic",
+        "dependsOn": [
+          "spec",
+          "architecture",
+          "data_model"
+        ],
+        "required": true,
+        "output": "backend.ts",
+        "status": "pending"
+      }
+    ],
+    "missing": [],
+    "repairs": []
+  },
+  {
+    "id": "mission_itbppg8e",
+    "createdAt": "2026-04-08T17:04:44.955Z",
+    "mission": {
+      "id": "mission_itbppg8e",
+      "title": "Build website from intent",
+      "intent": "build_website",
+      "modality": "text",
+      "source": "user",
+      "summary": "Build website generator inside Pantavion",
+      "strategicMode": "build"
+    },
+    "status": "ready_for_publish",
+    "verifier": {
+      "checks": {
+        "specificationPresent": true,
+        "architecturePresent": true,
+        "executionPathPresent": true,
+        "publishGateDefined": true,
+        "gapsDetected": false
+      },
+      "missing": [],
+      "verdict": "ready_for_publish"
+    },
+    "finalDecision": "Mission \"Build website from intent\" is structurally complete and ready for execution/publish gate.",
+    "taskGraph": [
+      {
+        "id": "spec",
+        "type": "spec",
+        "title": "Create complete specification",
+        "dependsOn": [],
+        "required": true,
+        "output": "specification.md",
+        "status": "pending"
+      },
+      {
+        "id": "architecture",
+        "type": "architecture",
+        "title": "Create architecture design",
+        "dependsOn": [
+          "spec"
+        ],
+        "required": true,
+        "output": "architecture.json",
+        "status": "pending"
+      },
+      {
+        "id": "verification",
+        "type": "verification",
+        "title": "Run completion verification",
+        "dependsOn": [],
+        "required": true,
+        "output": "verification-report.json",
+        "status": "pending"
+      },
+      {
+        "id": "data_model",
+        "type": "data_model",
+        "title": "Define data model",
+        "dependsOn": [
+          "spec",
+          "architecture"
+        ],
+        "required": true,
+        "output": "data-model.json",
+        "status": "pending"
+      },
+      {
+        "id": "ui",
+        "type": "ui",
+        "title": "Create UI surface",
+        "dependsOn": [
+          "spec",
+          "architecture"
+        ],
+        "required": true,
+        "output": "ui.tsx",
+        "status": "pending"
+      },
+      {
+        "id": "backend",
+        "type": "backend",
+        "title": "Create backend logic",
+        "dependsOn": [
+          "spec",
+          "architecture",
+          "data_model"
+        ],
+        "required": true,
+        "output": "backend.ts",
+        "status": "pending"
+      }
+    ],
+    "missing": [],
+    "repairs": []
+  }
+]

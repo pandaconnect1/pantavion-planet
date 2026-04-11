@@ -1,41 +1,28 @@
 ﻿import { NextResponse } from "next/server";
-import { pantavionKernel } from "@/kernel/kernel";
-
-export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-
-    const result = await pantavionKernel.process({
-      title: typeof body?.title === "string" ? body.title : "",
-      text: typeof body?.text === "string" ? body.text : "",
-      kind: body?.kind,
-      attachments: Array.isArray(body?.attachments) ? body.attachments : [],
-      metadata: body?.metadata && typeof body.metadata === "object" ? body.metadata : {}
-    });
-
-    return NextResponse.json({ ok: true, result });
-  } catch (error) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: error instanceof Error ? error.message : "Unknown kernel error"
-      },
-      { status: 500 }
-    );
-  }
-}
+import { getKernelState } from "../../../src/kernel/executor";
 
 export async function GET() {
   try {
-    const memory = pantavionKernel.exportMemory();
-    return NextResponse.json({ ok: true, memory });
+    const state = await getKernelState();
+
+    return NextResponse.json({
+      ok: true,
+      state: {
+        memoryCount: Object.keys(state.memory).length,
+        registryCount: Object.keys(state.registry).length,
+        planCount: state.plans.length,
+        runCount: state.runs.length,
+        eventCount: state.eventCount,
+        lastUpdatedAt: state.lastUpdatedAt,
+      },
+    });
   } catch (error) {
     return NextResponse.json(
       {
         ok: false,
-        error: error instanceof Error ? error.message : "Unknown memory error"
+        error: error instanceof Error ? error.message : "Unknown kernel route error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

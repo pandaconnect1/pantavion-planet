@@ -17,6 +17,7 @@
   moduleTargets: string[];
   nativeCandidates: string[];
   connectorCandidates: string[];
+  userSegments: string[];
   geographyScope: "global" | "regional";
   languageScope: "multilingual" | "single-language" | "expandable";
   sourcePattern: string;
@@ -25,279 +26,241 @@
 
 export const pantavionSignalSeeds: PantavionSignalSeed[] = [
   {
-    id: "freelance-income-strategy",
+    id: "freelance-income-systems",
     title: "Freelance income systems",
     domain: "business",
     category: "income-strategy",
     summary:
-      "Frameworks around positioning, offer design, visibility, client trust, boundaries, execution rhythm and turning skills into consistent income.",
+      "Positioning, offers, client acquisition, pricing, trust, execution rhythm and converting skills into recurring income.",
     userNeeds: [
       "find clients",
-      "improve positioning",
-      "increase income consistency",
-      "package offers",
-      "weekly execution discipline"
+      "increase income",
+      "price offers",
+      "build service business",
+      "client pipeline"
     ],
     monetizationPaths: [
       "professional subscriptions",
       "service marketplace",
       "freelancer toolkits",
-      "coaching templates",
-      "client acquisition workflows"
+      "proposal systems"
     ],
     moduleTargets: ["Compass", "People", "Mind", "Create", "Tools Hub"],
     nativeCandidates: [
       "offer builder",
-      "positioning workspace",
+      "pricing workspace",
       "client pipeline board",
-      "pricing assistant",
-      "proposal templates"
+      "proposal generator"
     ],
-    connectorCandidates: [
-      "calendar",
-      "payments",
-      "CRM",
-      "invoicing",
-      "email automation"
-    ],
+    connectorCandidates: ["calendar", "payments", "crm", "email", "invoicing"],
+    userSegments: ["freelancers", "solopreneurs", "consultants", "small-business owners"],
     geographyScope: "global",
     languageScope: "multilingual",
-    sourcePattern: "infographic / creator-business strategy",
+    sourcePattern: "business infographic / creator strategy",
     priority: "high"
   },
   {
-    id: "voice-agents-sales-ops",
+    id: "voice-agents",
     title: "Voice agents and AI call handling",
     domain: "voice",
     category: "voice-agents",
     summary:
-      "AI voice bots, outbound and inbound call handling, qualification flows, sales scaling and 24/7 phone automation.",
+      "Inbound and outbound voice automation, multilingual call handling, lead qualification, support, scheduling and telephony intelligence.",
     userNeeds: [
-      "handle calls at scale",
-      "qualify leads automatically",
-      "multilingual voice support",
+      "handle calls",
+      "book appointments",
+      "qualify leads",
       "reduce support load",
-      "increase business conversion"
+      "multilingual voice support"
     ],
     monetizationPaths: [
       "voice subscriptions",
-      "per-minute voice revenue",
+      "per-minute usage",
       "business automation plans",
-      "enterprise call workflows"
+      "enterprise workflows"
     ],
-    moduleTargets: ["Voice", "Compass", "Tools Hub", "Business Layer"],
+    moduleTargets: ["Voice", "Compass", "Business Layer", "Tools Hub"],
     nativeCandidates: [
       "voice agent builder",
       "call flow router",
-      "multilingual lead qualifier",
+      "lead qualification engine",
       "voice transcript intelligence"
     ],
-    connectorCandidates: [
-      "telephony providers",
-      "CRM",
-      "calendar",
-      "ticketing",
-      "analytics"
-    ],
+    connectorCandidates: ["telephony", "crm", "calendar", "helpdesk", "analytics"],
+    userSegments: ["businesses", "sales teams", "support teams", "operators"],
     geographyScope: "global",
     languageScope: "multilingual",
     sourcePattern: "voice AI promo / sales automation",
     priority: "critical"
   },
   {
-    id: "ai-tools-catalogs",
+    id: "ai-tools-discovery",
     title: "AI tools catalogs and discovery maps",
     domain: "tools",
     category: "tool-discovery",
     summary:
-      "Lists of AI tools grouped by category such as writing, design, research, coding, automation, productivity and marketing.",
+      "Discovery, comparison and structured mapping of AI tools across writing, coding, design, research, automation and productivity.",
     userNeeds: [
-      "discover useful tools",
-      "compare tools by category",
-      "find best-fit stack",
+      "find best tools",
+      "compare tools",
+      "build workflows",
       "avoid tool chaos",
-      "learn what to use for each goal"
+      "discover categories"
     ],
     monetizationPaths: [
       "tool marketplace",
       "premium discovery filters",
-      "affiliate-safe partnerships",
       "workflow bundles",
-      "sponsored governed placements"
+      "governed sponsored placements"
     ],
     moduleTargets: ["Tools Hub", "Mind", "Create", "PantaLearn"],
     nativeCandidates: [
       "tool comparison engine",
-      "goal-based recommendations",
-      "stack builder",
+      "stack recommender",
+      "goal-based tool search",
       "workflow starter kits"
     ],
-    connectorCandidates: [
-      "OpenAI",
-      "Anthropic",
-      "Google",
-      "Canva",
-      "Notion",
-      "n8n",
-      "Zapier"
-    ],
+    connectorCandidates: ["openai", "anthropic", "google", "canva", "notion", "zapier", "n8n"],
+    userSegments: ["creators", "builders", "students", "professionals"],
     geographyScope: "global",
     languageScope: "multilingual",
-    sourcePattern: "tool list / creator carousel / AI ecosystem map",
+    sourcePattern: "AI tools map / marketplace / carousel",
     priority: "critical"
   },
   {
     id: "company-operating-systems",
     title: "Company operating systems and execution frameworks",
     domain: "business",
-    category: "management-frameworks",
+    category: "business-framework",
     summary:
-      "Business operating systems like EOS, OKRs, RACI, scorecards and structured execution frameworks for companies and teams.",
+      "OKRs, scorecards, RACI, operating cadence, accountability frameworks and structured company execution systems.",
     userNeeds: [
       "run teams better",
-      "align strategy with execution",
-      "improve accountability",
-      "track business health",
-      "clarify roles and priorities"
+      "align strategy",
+      "track performance",
+      "clarify ownership",
+      "improve execution"
     ],
     monetizationPaths: [
-      "business workspaces",
       "team subscriptions",
-      "execution dashboards",
+      "business workspaces",
+      "operating system templates",
       "consulting packages"
     ],
     moduleTargets: ["Compass", "Mind", "Business Layer", "Tools Hub"],
     nativeCandidates: [
-      "OKR workspace",
-      "RACI planner",
-      "scorecard dashboards",
-      "team operating system templates"
+      "okr workspace",
+      "scorecard dashboard",
+      "raci planner",
+      "team operating system board"
     ],
-    connectorCandidates: [
-      "spreadsheets",
-      "project management",
-      "calendar",
-      "docs",
-      "BI tools"
-    ],
+    connectorCandidates: ["spreadsheets", "project-management", "docs", "calendar", "bi-tools"],
+    userSegments: ["companies", "managers", "operators", "founders"],
     geographyScope: "global",
     languageScope: "expandable",
-    sourcePattern: "management framework infographic",
+    sourcePattern: "management framework chart",
     priority: "high"
   },
   {
-    id: "software-idea-to-build",
+    id: "software-build-systems",
     title: "Software idea to product execution",
     domain: "software",
     category: "app-building",
     summary:
-      "User demand around turning software ideas into apps, prototypes, product specs and implementation workflows.",
+      "Transforming ideas into product specs, code, schemas, deployments, admin panels and complete software systems.",
     userNeeds: [
-      "validate product ideas",
-      "turn concepts into apps",
-      "get specs and code",
-      "prototype quickly",
-      "move from idea to execution"
+      "build app",
+      "generate code",
+      "create architecture",
+      "move idea to product",
+      "ship faster"
     ],
     monetizationPaths: [
-      "build workspaces",
+      "builder workspaces",
       "app generator plans",
       "prototype subscriptions",
       "service marketplace"
     ],
-    moduleTargets: ["Create", "Tools Hub", "Mind", "Kernel"],
+    moduleTargets: ["Create", "Kernel", "Mind", "Tools Hub"],
     nativeCandidates: [
       "blueprint engine",
       "spec generator",
-      "app planning workspace",
+      "schema generator",
       "build readiness scoring"
     ],
-    connectorCandidates: [
-      "GitHub",
-      "Vercel",
-      "Figma",
-      "DB providers",
-      "cloud services"
-    ],
+    connectorCandidates: ["github", "vercel", "figma", "postgres", "cloud providers"],
+    userSegments: ["developers", "founders", "agencies", "product teams"],
     geographyScope: "global",
     languageScope: "multilingual",
-    sourcePattern: "app-building ad / software idea funnel",
+    sourcePattern: "app builder funnel / software workflow",
     priority: "critical"
   },
   {
-    id: "data-science-learning-map",
-    title: "Data science and AI learning maps",
-    domain: "data",
+    id: "guided-mastery-learning",
+    title: "Guided mastery and learning maps",
+    domain: "learning",
     category: "guided-mastery",
     summary:
-      "Structured maps for Python, SQL, statistics, EDA, ML, deep learning, NLP and generative AI learning progression.",
+      "Structured learning paths for AI, software, data science, productivity and career growth.",
     userNeeds: [
-      "learn in the right order",
-      "understand career paths",
-      "master fundamentals",
-      "build practical projects",
-      "connect study to income"
+      "learn correctly",
+      "follow roadmap",
+      "improve skills",
+      "prepare for work",
+      "connect learning to income"
     ],
     monetizationPaths: [
       "learning subscriptions",
-      "premium pathways",
-      "certification surfaces",
-      "career maps",
+      "certification",
+      "career tracks",
       "mentor matching"
     ],
     moduleTargets: ["PantaLearn", "Mind", "People", "Tools Hub"],
     nativeCandidates: [
       "learning path engine",
-      "skill graph",
-      "weak-spot detector",
+      "skills graph",
       "guided drills",
       "career-to-income maps"
     ],
-    connectorCandidates: [
-      "docs",
-      "notebooks",
-      "video platforms",
-      "assessment tools"
-    ],
+    connectorCandidates: ["course platforms", "assessment tools", "docs", "video tools"],
+    userSegments: ["students", "career switchers", "professionals", "creators"],
     geographyScope: "global",
     languageScope: "multilingual",
-    sourcePattern: "education roadmap / career learning infographic",
+    sourcePattern: "learning roadmap / education infographic",
     priority: "high"
   },
   {
-    id: "ai-certification-bundles",
-    title: "AI certification bundles and category-based tool packs",
-    domain: "learning",
-    category: "certification-and-bundles",
+    id: "data-science-ml-maps",
+    title: "Data science and ML maps",
+    domain: "data",
+    category: "data-ml-map",
     summary:
-      "Collections of tools grouped by writing, design, coding, research, automation and job search around certification or guided mastery funnels.",
+      "Python, SQL, EDA, statistics, ML, deep learning, MLOps and data career maps.",
     userNeeds: [
-      "learn categories of tools",
-      "prove competence",
-      "follow curated bundles",
-      "reduce tool overwhelm"
+      "learn python",
+      "learn sql",
+      "understand ml",
+      "follow data path",
+      "build practical projects"
     ],
     monetizationPaths: [
-      "certification fees",
-      "premium curricula",
-      "bundle memberships",
-      "partner marketplaces"
+      "premium pathways",
+      "certification",
+      "project packs",
+      "career maps"
     ],
-    moduleTargets: ["PantaLearn", "Tools Hub", "Mind"],
+    moduleTargets: ["PantaLearn", "Mind", "Tools Hub", "Create"],
     nativeCandidates: [
-      "bundle builder",
-      "tool track certification",
-      "guided category maps"
+      "data path planner",
+      "ml roadmap engine",
+      "skill gap scanner",
+      "project progression map"
     ],
-    connectorCandidates: [
-      "course systems",
-      "assessment engines",
-      "docs",
-      "community platforms"
-    ],
+    connectorCandidates: ["notebooks", "datasets", "assessment tools", "course systems"],
+    userSegments: ["students", "data analysts", "data scientists", "ml engineers"],
     geographyScope: "global",
     languageScope: "multilingual",
-    sourcePattern: "AI category poster / certification funnel",
-    priority: "medium"
+    sourcePattern: "data roadmap / ml path infographic",
+    priority: "high"
   }
 ];

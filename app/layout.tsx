@@ -1,9 +1,9 @@
-﻿import type { Metadata } from "next";
 import "./globals.css";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Pantavion Planet",
-  description: "Pantavion Planet - Global human network, knowledge infrastructure and intelligence layer.",
+  description: "Pantavion Kernel OS",
 };
 
 export default function RootLayout({
@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="el">
+    <html lang="en">
       <body>{children}</body>
     </html>
   );
