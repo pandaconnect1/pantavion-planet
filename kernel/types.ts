@@ -419,4 +419,21 @@ export const createKernelId = (prefix: string = "pk"): string => {
 export const clamp = (value: number, min: number, max: number): number =>
   Math.max(min, Math.min(max, value));
 
+/**
+ * PATCH 3
+ * Compatibility bridge from legacy kernel/types.ts to canonical-types.ts
+ * Additive only: exports only missing shared symbols.
+ */
+export type {
+  AuditLevel,
+  KernelSignalRecord,
+} from "./canonical-types";
+export {
+  KernelPriorities,
+  KernelScopes,
+  AuditLevels,
+  normalizeKernelPriority,
+  normalizeAuditLevel,
+  normalizeKernelScopes,
+} from "./canonical-types";
 
