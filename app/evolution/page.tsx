@@ -89,7 +89,7 @@ export default function EvolutionPage() {
           {box("Signals", stats.signals)}
           {box("Audit", stats.audit)}
           {box("Queued Tasks", stats.tasksQueued)}
-          {box("Healthy Modules", `${stats.healthyModules}/${state.modules.length}`)}
+          {box("Healthy Modules", `${stats.healthyModules}/${Array.isArray((state as any)?.capabilities?.enabled) ? (state as any).capabilities.enabled.length : stats.healthyModules}`)}
         </div>
 
         <div className="mt-6 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
@@ -353,6 +353,7 @@ export default function EvolutionPage() {
     </main>
   );
 }
+
 
 
 
