@@ -394,7 +394,7 @@ export const DEFAULT_COUNTERS: KernelCounters = {
 
 export const nowIso = (): ISODateString => new Date().toISOString();
 export const createKernelId = (prefix: string = "kernel"): UUID => {
-  return ${prefix}--;
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 };
 
 export const createMemoryStore = (): KernelMemoryStore => ({
@@ -475,4 +475,7 @@ export const normalizeRadarRing = (value: unknown): RadarRing => {
   if (raw === "queued") return "queued";
   return "archived";
 };
-
+export const clamp = (value: number, min: number, max: number): number => {
+  const safe = Number.isFinite(value) ? value : min;
+  return Math.min(Math.max(safe, min), max);
+};

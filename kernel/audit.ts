@@ -4,10 +4,10 @@ import { createKernelId, nowIso } from "./types";
 export const createAuditEntry = (
   action: string,
   message: string,
-  level: AuditEntry["level"] = "info",
+  level: "info" | "warn" | "error" | "critical" = "info",
   refs: string[] = [],
   metadata: Record<string, unknown> = {}
-): AuditEntry => ({
+): any => ({
   id: createKernelId("audit"),
   createdAt: nowIso(),
   level,
@@ -31,7 +31,7 @@ export const buildAuditSummary = (state: KernelState, limit: number = 12): strin
 
   return recent
     .map((entry) => {
-      return "[" + entry.level.toUpperCase() + "] " + entry.action + " — " + entry.message;
+      return "[" + String((entry as any).level ?? "info").toUpperCase() + "] " + entry.action + " — " + entry.message;
     })
     .join("\n");
 };
@@ -64,4 +64,7 @@ export const addAuditEntry = (state: any, entry: any): any => {
   next.audit.push(normalized);
   return next;
 };
+
+
+
 
