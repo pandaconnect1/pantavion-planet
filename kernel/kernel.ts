@@ -15,7 +15,6 @@ import type {
   KernelCompleteRequest,
   KernelCompletionResult,
   KernelContext,
-  KernelId,
   KernelIntakeRequest,
   KernelIntakeResult,
   KernelOutput,
@@ -66,7 +65,7 @@ const inferUrgency = (text: string): number => {
   const lower = text.toLowerCase();
   let value = 0.2;
   if (lower.includes("urgent") || lower.includes("asap") || lower.includes("critical")) value += 0.55;
-  if (lower.includes("τώρα") || lower.includes("αμέσως")) value += 0.55;
+  if (lower.includes("τώρα") || lower.includes("άμεσα")) value += 0.55;
   return clamp(value, 0, 1);
 };
 
@@ -413,3 +412,17 @@ export class PantavionKernel {
 }
 
 export const pantavionKernel = new PantavionKernel();
+
+export {
+  canonicalKernelRuntime,
+  createCanonicalKernelRuntime,
+  getCanonicalKernelRuntime,
+} from "./canonical-runtime";
+
+export type {
+  CanonicalAuditModule,
+  CanonicalKernelRuntime,
+  CanonicalKernelRuntimeHealth,
+  CanonicalMemoryModule,
+  CanonicalStoreModule,
+} from "./canonical-runtime";
