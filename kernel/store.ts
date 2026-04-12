@@ -139,17 +139,37 @@ export const createKernelStore = (initialState?: KernelState): KernelStore =>
 /* PANTAVION_LEGACY_STORE_COMPAT */
 const LEGACY_KERNEL_STATE_KEY = "pantavion.kernel.state";
 
-export const loadKernelState = (): any => {
-  const fallback = createInitialKernelState();
+const isBrowser = (): boolean => typeof window !== "undefined";
 
-  if (typeof window === "undefined") {
+const readLegacyKernelStateRaw = (): string | null => {
+  if (!isBrowser()) return null;
+
+  try {
+    return window.localStorage.getItem(LEGACY_KERNEL_STATE_KEY);
+  } catch {
+    return null;
+  }
+};
+
+const writeLegacyKernelStateRaw = (value: unknown): void => {
+  if (!isBrowser()) return;
+
+  try {
+    window.localStorage.setItem(LEGACY_KERNEL_STATE_KEY, JSON.stringify(value));
+  } catch {}
+};
+
+const createLegacyKernelFallback = (): KernelState => createInitialKernelState();
+
+export const loadKernelState = (): any => {
+  const fallback = createLegacyKernelFallback();
+  const raw = readLegacyKernelStateRaw();
+
+  if (!raw) {
     return fallback;
   }
 
   try {
-    const raw = window.localStorage.getItem(LEGACY_KERNEL_STATE_KEY);
-    if (!raw) return fallback;
-
     const parsed = JSON.parse(raw);
     return parsed ?? fallback;
   } catch {
@@ -158,24 +178,12 @@ export const loadKernelState = (): any => {
 };
 
 export const saveKernelState = (state: any): any => {
-  if (typeof window !== "undefined") {
-    try {
-      window.localStorage.setItem(LEGACY_KERNEL_STATE_KEY, JSON.stringify(state));
-    } catch {}
-  }
-
+  writeLegacyKernelStateRaw(state);
   return state;
 };
 
 export const resetKernelState = (): any => {
-  const next = createInitialKernelState();
-
-  if (typeof window !== "undefined") {
-    try {
-      window.localStorage.setItem(LEGACY_KERNEL_STATE_KEY, JSON.stringify(next));
-    } catch {}
-  }
-
+  const next = createLegacyKernelFallback();
+  writeLegacyKernelStateRaw(next);
   return next;
 };
-
