@@ -137,6 +137,31 @@ type KernelRouteMode =
   | "orchestrator"
   | "general";
 
+type DeviceClass =
+  | "mobile"
+  | "tablet"
+  | "laptop"
+  | "desktop"
+  | "unknown";
+
+type ExecutionProfile =
+  | "compact"
+  | "balanced"
+  | "full";
+
+type NetworkMode =
+  | "online"
+  | "degraded"
+  | "offline"
+  | "unknown";
+
+type MultimodalChannel =
+  | "text"
+  | "image"
+  | "document"
+  | "voice"
+  | "video";
+
 interface KernelCapabilityDirective {
   capabilityId: string;
   reason: string;
@@ -159,6 +184,15 @@ interface KernelRouteDecision {
   capabilityIds: string[];
 }
 
+interface KernelDeviceContextSnapshot {
+  deviceClass: DeviceClass;
+  inputModes: string[];
+  executionProfile: ExecutionProfile;
+  networkMode: NetworkMode;
+  multimodalChannels: MultimodalChannel[];
+  crossDeviceSafe: boolean;
+}
+
 interface KernelOrchestrationBrief {
   query: string;
   intent: string;
@@ -168,8 +202,153 @@ interface KernelOrchestrationBrief {
   directives: KernelCapabilityDirective[];
   memories: KernelMemoryInsight[];
   routeDecision: KernelRouteDecision;
+  device: KernelDeviceContextSnapshot;
   confidence: number;
 }
+
+const getRequestMetadata = (req: KernelIntakeRequest): Record<string, unknown> => {
+  if (!req.metadata || typeof req.metadata !== "object" || Array.isArray(req.metadata)) {
+    return {};
+  }
+
+  return req.metadata as Record<string, unknown>;
+};
+
+const normalizeStringList = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return uniqueStrings(
+      value
+        .filter((item): item is string => typeof item === "string")
+        .map((item) => item.trim())
+        .filter(Boolean)
+    );
+  }
+
+  if (typeof value === "string") {
+    return uniqueStrings(
+      value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean)
+    );
+  }
+
+  return [];
+};
+
+const inferDeviceClass = (req: KernelIntakeRequest): DeviceClass => {
+  const metadata = getRequestMetadata(req);
+  const explicit = metadata.deviceClass;
+
+  if (
+    explicit === "mobile" ||
+    explicit === "tablet" ||
+    explicit === "laptop" ||
+    explicit === "desktop"
+  ) {
+    return explicit;
+  }
+
+  const userAgent = String(metadata.userAgent ?? "").toLowerCase();
+
+  if (userAgent.includes("ipad") || userAgent.includes("tablet")) return "tablet";
+  if (userAgent.includes("iphone") || userAgent.includes("android") || userAgent.includes("mobile")) return "mobile";
+  if (userAgent.includes("macbook") || userAgent.includes("laptop")) return "laptop";
+  if (userAgent.includes("windows") || userAgent.includes("macintosh") || userAgent.includes("linux")) return "desktop";
+
+  return "unknown";
+};
+
+const inferNetworkMode = (req: KernelIntakeRequest): NetworkMode => {
+  const metadata = getRequestMetadata(req);
+  const explicit = metadata.networkMode;
+
+  if (
+    explicit === "online" ||
+    explicit === "degraded" ||
+    explicit === "offline" ||
+    explicit === "unknown"
+  ) {
+    return explicit;
+  }
+
+  const quality = String(metadata.networkQuality ?? "").toLowerCase();
+
+  if (quality === "offline") return "offline";
+  if (quality === "poor" || quality === "low" || quality === "degraded") return "degraded";
+  if (quality === "good" || quality === "strong" || quality === "online") return "online";
+
+  return "unknown";
+};
+
+const inferInputModes = (req: KernelIntakeRequest, modality: InputModality): string[] => {
+  const metadata = getRequestMetadata(req);
+  const explicitModes = normalizeStringList(metadata.inputModes);
+
+  if (explicitModes.length > 0) {
+    return explicitModes;
+  }
+
+  const modes = ["text"];
+
+  if (modality === "text") modes.push("keyboard");
+  if (modality === "voice") modes.push("voice");
+  if (modality === "image") modes.push("camera");
+  if (modality === "document") modes.push("document");
+  if (modality === "video") modes.push("video");
+
+  const deviceClass = inferDeviceClass(req);
+  if (deviceClass === "mobile" || deviceClass === "tablet") {
+    modes.push("touch");
+  } else if (deviceClass === "laptop" || deviceClass === "desktop") {
+    modes.push("pointer");
+  }
+
+  return uniqueStrings(modes);
+};
+
+const inferMultimodalChannels = (req: KernelIntakeRequest, modality: InputModality): MultimodalChannel[] => {
+  const metadata = getRequestMetadata(req);
+  const explicitChannels = normalizeStringList(metadata.multimodalChannels).filter(
+    (channel): channel is MultimodalChannel =>
+      channel === "text" ||
+      channel === "image" ||
+      channel === "document" ||
+      channel === "voice" ||
+      channel === "video"
+  );
+
+  if (explicitChannels.length > 0) {
+    return explicitChannels;
+  }
+
+  const channels: MultimodalChannel[] = ["text"];
+
+  if (modality === "image") channels.push("image");
+  if (modality === "document") channels.push("document");
+  if (modality === "voice") channels.push("voice");
+  if (modality === "video") channels.push("video");
+
+  return uniqueStrings(channels);
+};
+
+const inferExecutionProfile = (
+  req: KernelIntakeRequest,
+  deviceClass: DeviceClass,
+  networkMode: NetworkMode
+): ExecutionProfile => {
+  const metadata = getRequestMetadata(req);
+  const explicit = metadata.executionProfile;
+
+  if (explicit === "compact" || explicit === "balanced" || explicit === "full") {
+    return explicit;
+  }
+
+  if (networkMode === "offline" || networkMode === "degraded") return "compact";
+  if (deviceClass === "mobile" || deviceClass === "tablet") return "balanced";
+  if (deviceClass === "laptop" || deviceClass === "desktop") return "full";
+  return "balanced";
+};
 
 export class PantavionKernel {
   private readonly store: KernelStore;
@@ -194,6 +373,7 @@ export class PantavionKernel {
     const scope = inferScope(req, contextPatch);
     const modality = inferModality(req);
     const truthZone = inferTruthZone(req);
+    const metadata = getRequestMetadata(req);
 
     return {
       id: createKernelId("intake"),
@@ -208,8 +388,38 @@ export class PantavionKernel {
       confidence: raw.length > 0 ? 0.86 : 0.2,
       truthZone,
       scope,
-      metadata: req.metadata ?? {},
+      metadata,
     };
+  }
+
+  private buildDeviceContextSnapshot(
+    req: KernelIntakeRequest,
+    packet: IntakePacket
+  ): KernelDeviceContextSnapshot {
+    const deviceClass = inferDeviceClass(req);
+    const networkMode = inferNetworkMode(req);
+    const multimodalChannels = inferMultimodalChannels(req, packet.modality);
+    const inputModes = inferInputModes(req, packet.modality);
+    const executionProfile = inferExecutionProfile(req, deviceClass, networkMode);
+
+    return {
+      deviceClass,
+      inputModes,
+      executionProfile,
+      networkMode,
+      multimodalChannels,
+      crossDeviceSafe: true,
+    };
+  }
+
+  private formatDeviceSummary(device: KernelDeviceContextSnapshot): string {
+    return [
+      "Device Class: " + device.deviceClass,
+      "Execution Profile: " + device.executionProfile,
+      "Network Mode: " + device.networkMode,
+      "Input Modes: " + device.inputModes.join(", "),
+      "Multimodal Channels: " + device.multimodalChannels.join(", "),
+    ].join(" | ");
   }
 
   private recallMemoryPool(packet: IntakePacket): MemoryEntry[] {
@@ -299,7 +509,8 @@ export class PantavionKernel {
   private decideRouteMode(
     packet: IntakePacket,
     directives: KernelCapabilityDirective[],
-    insights: KernelMemoryInsight[]
+    insights: KernelMemoryInsight[],
+    device: KernelDeviceContextSnapshot
   ): KernelRouteDecision {
     const lower = packet.normalizedText.toLowerCase();
     const capabilityIds = directives.slice(0, 5).map((directive) => directive.capabilityId);
@@ -348,6 +559,12 @@ export class PantavionKernel {
       confidence = 0.76;
     }
 
+    if (device.executionProfile === "compact" && mode === "builder") {
+      mode = "orchestrator";
+      reason = "builder intent detected on constrained device/network profile";
+      confidence = clamp(confidence - 0.05, 0, 1);
+    }
+
     if (directives.length >= 4 && insights.length >= 2) {
       mode = mode === "general" ? "orchestrator" : mode;
       confidence = clamp(confidence + 0.08, 0, 1);
@@ -364,18 +581,21 @@ export class PantavionKernel {
   private buildOrchestrationBrief(
     packet: IntakePacket,
     recalledMemories: MemoryEntry[],
-    classification: KernelClassification
+    classification: KernelClassification,
+    device: KernelDeviceContextSnapshot
   ): KernelOrchestrationBrief {
     const directives = this.buildCapabilityDirectives(packet.normalizedText, classification);
     const memories = this.buildMemoryInsights(packet, recalledMemories);
-    const routeDecision = this.decideRouteMode(packet, directives, memories);
+    const routeDecision = this.decideRouteMode(packet, directives, memories, device);
 
     const confidence = clamp(
-      packet.confidence * 0.35 +
-        (directives.length > 0 ? 0.18 : 0.04) +
-        (memories.length > 0 ? 0.18 : 0.04) +
-        routeDecision.confidence * 0.19 +
-        (classification.recommendedCapabilityIds.length > 0 ? 0.1 : 0),
+      packet.confidence * 0.3 +
+        (directives.length > 0 ? 0.16 : 0.04) +
+        (memories.length > 0 ? 0.16 : 0.04) +
+        routeDecision.confidence * 0.18 +
+        (classification.recommendedCapabilityIds.length > 0 ? 0.08 : 0) +
+        (device.crossDeviceSafe ? 0.08 : 0) +
+        (device.multimodalChannels.length > 1 ? 0.08 : 0),
       0,
       1
     );
@@ -389,6 +609,7 @@ export class PantavionKernel {
       directives,
       memories,
       routeDecision,
+      device,
       confidence,
     };
   }
@@ -401,6 +622,8 @@ export class PantavionKernel {
   }
 
   private stagePacket(packet: IntakePacket, req: KernelIntakeRequest): KernelState {
+    const deviceClass = inferDeviceClass(req);
+
     return this.store.mutate((state) => {
       state.actor = mergeActor(state.actor, req.actor);
       state.context = mergeContext(
@@ -410,6 +633,11 @@ export class PantavionKernel {
         },
         req.context
       );
+      state.context.tags = uniqueStrings([
+        ...(state.context.tags ?? []),
+        "device:" + deviceClass,
+        "modality:" + packet.modality,
+      ]);
       state.intake.push(packet);
       state.inputs.push(packet);
       state.capabilities.recommended = recommendCapabilitiesForText(packet.normalizedText);
@@ -425,14 +653,21 @@ export class PantavionKernel {
 
   intake(req: KernelIntakeRequest): KernelIntakeResult {
     const packet = this.buildPacket(req);
+    const device = this.buildDeviceContextSnapshot(req, packet);
     const state = this.stagePacket(packet, req);
     appendAuditEntries(state, [
       createAuditEntry(
         "kernel.intake",
-        "Canonical intake packet stored.",
+        "Canonical intake packet stored with device-aware context.",
         "info",
         [packet.id],
-        { scope: packet.scope, modality: packet.modality }
+        {
+          scope: packet.scope,
+          modality: packet.modality,
+          deviceClass: device.deviceClass,
+          executionProfile: device.executionProfile,
+          multimodalChannels: device.multimodalChannels,
+        }
       ),
     ]);
     this.store.replace(state);
@@ -447,6 +682,7 @@ export class PantavionKernel {
 
   analyze(req: KernelAnalyzeRequest): KernelAnalysisResult {
     const packet = this.buildPacket(req);
+    const device = this.buildDeviceContextSnapshot(req, packet);
     const staged = this.stagePacket(packet, req);
 
     const recalledMemories = this.recallMemoryPool(packet);
@@ -469,7 +705,7 @@ export class PantavionKernel {
     ].slice(-40));
 
     const classification = classifyKernelInput(packet.normalizedText);
-    const orchestration = this.buildOrchestrationBrief(packet, memoryContext, classification);
+    const orchestration = this.buildOrchestrationBrief(packet, memoryContext, classification, device);
     const plan = buildPlanFromAnalysis({
       state: snapshotAfterMemory,
       packet,
@@ -489,6 +725,7 @@ export class PantavionKernel {
         "Language: " + packet.language,
         "Route Mode: " + orchestration.routeDecision.mode,
         "Route Reason: " + orchestration.routeDecision.reason,
+        "Device: " + this.formatDeviceSummary(orchestration.device),
         "Recommended Capabilities: " + this.formatDirectiveSummary(orchestration.directives),
         "Top Priority Band: " + priority.band,
         "Signal Count: " + signals.length,
@@ -523,7 +760,7 @@ export class PantavionKernel {
       appendAuditEntries(state, [
         createAuditEntry(
           "kernel.analyze",
-          "Kernel analysis completed with hierarchical retrieval and routing.",
+          "Kernel analysis completed with device-aware multimodal orchestration.",
           "info",
           [packet.id, plan.id, output.id],
           {
@@ -534,6 +771,10 @@ export class PantavionKernel {
             routeMode: orchestration.routeDecision.mode,
             routeConfidence: orchestration.routeDecision.confidence,
             orchestrationConfidence: orchestration.confidence,
+            deviceClass: orchestration.device.deviceClass,
+            executionProfile: orchestration.device.executionProfile,
+            networkMode: orchestration.device.networkMode,
+            multimodalChannels: orchestration.device.multimodalChannels,
             priorityBand: priority.band,
           }
         ),
