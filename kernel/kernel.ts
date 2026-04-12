@@ -290,12 +290,13 @@ const inferInputModes = (req: KernelIntakeRequest, modality: InputModality): str
   }
 
   const modes = ["text"];
+  const modalityValue = String(modality);
 
-  if (modality === "text") modes.push("keyboard");
-  if (modality === "voice") modes.push("voice");
-  if (modality === "image") modes.push("camera");
-  if (modality === "document") modes.push("document");
-  if (modality === "video") modes.push("video");
+  if (modalityValue === "text") modes.push("keyboard");
+  if (modalityValue === "voice") modes.push("voice");
+  if (modalityValue === "image") modes.push("camera");
+  if (modalityValue === "document") modes.push("document");
+  if (modalityValue === "video") modes.push("video");
 
   const deviceClass = inferDeviceClass(req);
   if (deviceClass === "mobile" || deviceClass === "tablet") {
@@ -323,11 +324,12 @@ const inferMultimodalChannels = (req: KernelIntakeRequest, modality: InputModali
   }
 
   const channels: MultimodalChannel[] = ["text"];
+  const modalityValue = String(modality);
 
-  if (modality === "image") channels.push("image");
-  if (modality === "document") channels.push("document");
-  if (modality === "voice") channels.push("voice");
-  if (modality === "video") channels.push("video");
+  if (modalityValue === "image") channels.push("image");
+  if (modalityValue === "document") channels.push("document");
+  if (modalityValue === "voice") channels.push("voice");
+  if (modalityValue === "video") channels.push("video");
 
   return uniqueStrings(channels);
 };
@@ -951,3 +953,4 @@ export type {
   CanonicalMemoryModule,
   CanonicalStoreModule,
 } from "./canonical-runtime";
+
