@@ -1,4 +1,4 @@
-﻿import { KernelStore } from "./store";
+﻿import type { KernelStore } from "./store";
 import type {
   KernelContext,
   KernelScope,
@@ -31,22 +31,22 @@ const STOP_WORDS = new Set([
   "into",
   "pantavion",
   "kernel",
-  "του",
-  "της",
-  "των",
-  "στο",
-  "στη",
-  "στην",
-  "και",
-  "να",
-  "το",
-  "τα",
-  "τις",
-  "των",
-  "μια",
-  "ένα",
-  "εναι",
-  "είναι",
+  "t??",
+  "t??",
+  "t??",
+  "st?",
+  "st?",
+  "st??",
+  "?a?",
+  "?a",
+  "t?",
+  "ta",
+  "t??",
+  "t??",
+  "µ?a",
+  "??a",
+  "e?a?",
+  "e??a?",
 ]);
 
 const normalizeKeywords = (text: string): string[] => {
@@ -72,40 +72,40 @@ const inferRelevance = (text: string): number => {
 const uniqueStrings = (values: string[]): string[] => Array.from(new Set(values));
 
 export const createMemoryStore = (store: KernelStore): KernelMemoryStore => {
+  const addEntry = (entry: MemoryEntryDraft): MemoryEntry => {
+    const now = nowIso();
+
+    const finalEntry: MemoryEntry = {
+      id: entry.id ?? createKernelId("mem"),
+      createdAt: entry.createdAt ?? now,
+      updatedAt: entry.updatedAt ?? now,
+      scope: entry.scope,
+      memoryClass: entry.memoryClass,
+      privacyClass: entry.privacyClass,
+      truthZone: entry.truthZone,
+      content: entry.content,
+      summary: entry.summary,
+      keywords: uniqueStrings(entry.keywords),
+      sourceIntakeId: entry.sourceIntakeId,
+      relevance: entry.relevance,
+      eligibleScopes: uniqueStrings(entry.eligibleScopes) as any,
+      metadata: entry.metadata,
+    };
+
+    store.mutate((state) => {
+      state.memory.entries.push(finalEntry);
+      state.memory.indexKeywords = uniqueStrings(
+        state.memory.entries.flatMap((memory) => memory.keywords)
+      ).slice(0, 1000);
+    });
+
+    return finalEntry;
+  };
+
   return {
-    addEntry: (entry: MemoryEntryDraft): MemoryEntry => {
-      const now = nowIso();
+    addEntry,
 
-      const finalEntry: MemoryEntry = {
-        id: entry.id ?? createKernelId("mem"),
-        createdAt: entry.createdAt ?? now,
-        updatedAt: entry.updatedAt ?? now,
-        scope: entry.scope,
-        memoryClass: entry.memoryClass,
-        privacyClass: entry.privacyClass,
-        truthZone: entry.truthZone,
-        content: entry.content,
-        summary: entry.summary,
-        keywords: uniqueStrings(entry.keywords),
-        sourceIntakeId: entry.sourceIntakeId,
-        relevance: entry.relevance,
-        eligibleScopes: uniqueStrings(entry.eligibleScopes) as any,
-        metadata: entry.metadata,
-      };
-
-      store.mutate((state) => {
-        state.memory.entries.push(finalEntry);
-        state.memory.indexKeywords = uniqueStrings(
-          state.memory.entries.flatMap((memory) => memory.keywords)
-        ).slice(0, 1000);
-      });
-
-      return finalEntry;
-    },
-
-    bulkAdd: (entries: MemoryEntryDraft[]): MemoryEntry[] => entries.map((entry) => {
-      return createMemoryStore(store).addEntry(entry);
-    }),
+    bulkAdd: (entries: MemoryEntryDraft[]): MemoryEntry[] => entries.map(addEntry),
 
     recall: (query: string, options?: MemoryRecallOptions): MemoryEntry[] => {
       const state = store.snapshot();
@@ -258,5 +258,3 @@ export const addMemoryEntry = (state: any, entry: any): any => {
 
   return next;
 };
-
-
