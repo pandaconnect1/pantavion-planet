@@ -331,7 +331,7 @@ const inferMultimodalChannels = (req: KernelIntakeRequest, modality: InputModali
   if (modalityValue === "voice") channels.push("voice");
   if (modalityValue === "video") channels.push("video");
 
-  return uniqueStrings(channels);
+  return Array.from(new Set(channels));
 };
 
 const inferExecutionProfile = (
@@ -953,4 +953,5 @@ export type {
   CanonicalMemoryModule,
   CanonicalStoreModule,
 } from "./canonical-runtime";
+
 
