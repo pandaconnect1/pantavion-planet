@@ -31,10 +31,12 @@ import type {
 import { clamp, createKernelId, nowIso } from "./types";
 
 const INTENT_PATTERNS: Array<{ intent: string; words: string[] }> = [
-  { intent: "build", words: ["build", "create", "generate", "implement", "code", "kernel"] },
-  { intent: "analyze", words: ["analyze", "review", "inspect", "evaluate", "signal"] },
+  { intent: "build", words: ["build", "create", "generate", "implement", "code", "kernel", "website", "app"] },
+  { intent: "analyze", words: ["analyze", "review", "inspect", "evaluate", "signal", "audit"] },
   { intent: "learn", words: ["learn", "course", "roadmap", "teach", "explain"] },
   { intent: "compare", words: ["compare", "vs", "better", "best", "difference"] },
+  { intent: "research", words: ["research", "search", "find", "sources", "evidence", "study", "investigate"] },
+  { intent: "design", words: ["design", "ui", "ux", "layout", "brand", "designer"] },
 ];
 
 const uniqueStrings = (values: string[]): string[] => Array.from(new Set(values));
@@ -99,7 +101,41 @@ const mergeContext = (base: KernelContext, patch?: Partial<KernelContext>): Kern
   tags: uniqueStrings([...(base.tags ?? []), ...(patch?.tags ?? [])]),
 });
 
+const parseIsoToMillis = (value?: string): number => {
+  if (!value) return 0;
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const getScopeRecallOrder = (scope: KernelScope): KernelScope[] => {
+  switch (scope) {
+    case "project":
+      return ["project", "workspace", "thread", "session"];
+    case "workspace":
+      return ["workspace", "thread", "session"];
+    case "thread":
+      return ["thread", "session", "workspace"];
+    default:
+      return ["session", "thread", "workspace"];
+  }
+};
+
+const getScopeWeight = (currentScope: KernelScope, memoryScope: KernelScope): number => {
+  const order = getScopeRecallOrder(currentScope);
+  const index = order.indexOf(memoryScope);
+  if (index === -1) return 0.35;
+  return clamp(1 - index * 0.18, 0.4, 1);
+};
+
 type KernelClassification = ReturnType<typeof classifyKernelInput>;
+
+type KernelRouteMode =
+  | "builder"
+  | "researcher"
+  | "analyst"
+  | "designer"
+  | "orchestrator"
+  | "general";
 
 interface KernelCapabilityDirective {
   capabilityId: string;
@@ -112,6 +148,15 @@ interface KernelMemoryInsight {
   summary: string;
   relevance: number;
   scope: KernelScope;
+  recencyScore: number;
+  totalScore: number;
+}
+
+interface KernelRouteDecision {
+  mode: KernelRouteMode;
+  reason: string;
+  confidence: number;
+  capabilityIds: string[];
 }
 
 interface KernelOrchestrationBrief {
@@ -122,6 +167,7 @@ interface KernelOrchestrationBrief {
   scope: KernelScope;
   directives: KernelCapabilityDirective[];
   memories: KernelMemoryInsight[];
+  routeDecision: KernelRouteDecision;
   confidence: number;
 }
 
@@ -166,6 +212,22 @@ export class PantavionKernel {
     };
   }
 
+  private recallMemoryPool(packet: IntakePacket): MemoryEntry[] {
+    const order = getScopeRecallOrder(packet.scope);
+    const pools = order.flatMap((scope) =>
+      this.memory.recall(packet.normalizedText, { scope, limit: 6 })
+    );
+
+    const merged = new Map<string, MemoryEntry>();
+    pools.forEach((entry) => {
+      if (!merged.has(entry.id)) {
+        merged.set(entry.id, entry);
+      }
+    });
+
+    return Array.from(merged.values());
+  }
+
   private buildCapabilityDirectives(
     normalizedText: string,
     classification: KernelClassification
@@ -174,7 +236,7 @@ export class PantavionKernel {
       (capabilityId, index) => ({
         capabilityId,
         reason: "registry recommendation",
-        score: clamp(0.9 - index * 0.08, 0.35, 0.9),
+        score: clamp(0.92 - index * 0.08, 0.35, 0.92),
       })
     );
 
@@ -182,7 +244,7 @@ export class PantavionKernel {
       (capabilityId, index) => ({
         capabilityId,
         reason: "classifier recommendation",
-        score: clamp(0.86 - index * 0.07, 0.35, 0.86),
+        score: clamp(0.88 - index * 0.07, 0.35, 0.88),
       })
     );
 
@@ -207,19 +269,96 @@ export class PantavionKernel {
 
     return Array.from(merged.values())
       .sort((left, right) => right.score - left.score)
+      .slice(0, 10);
+  }
+
+  private buildMemoryInsights(packet: IntakePacket, entries: MemoryEntry[]): KernelMemoryInsight[] {
+    const now = Date.now();
+
+    return entries
+      .map((entry) => {
+        const ageMs = Math.max(0, now - parseIsoToMillis(entry.updatedAt ?? entry.createdAt));
+        const ageDays = ageMs / 86400000;
+        const recencyScore = clamp(1 - ageDays / 30, 0.15, 1);
+        const scopeWeight = getScopeWeight(packet.scope, entry.scope);
+        const totalScore = clamp(entry.relevance * 0.55 + scopeWeight * 0.25 + recencyScore * 0.2, 0, 1);
+
+        return {
+          id: entry.id,
+          summary: entry.summary,
+          relevance: entry.relevance,
+          scope: entry.scope,
+          recencyScore,
+          totalScore,
+        };
+      })
+      .sort((left, right) => right.totalScore - left.totalScore)
       .slice(0, 8);
   }
 
-  private buildMemoryInsights(entries: MemoryEntry[]): KernelMemoryInsight[] {
-    return entries
-      .map((entry) => ({
-        id: entry.id,
-        summary: entry.summary,
-        relevance: entry.relevance,
-        scope: entry.scope,
-      }))
-      .sort((left, right) => right.relevance - left.relevance)
-      .slice(0, 6);
+  private decideRouteMode(
+    packet: IntakePacket,
+    directives: KernelCapabilityDirective[],
+    insights: KernelMemoryInsight[]
+  ): KernelRouteDecision {
+    const lower = packet.normalizedText.toLowerCase();
+    const capabilityIds = directives.slice(0, 5).map((directive) => directive.capabilityId);
+
+    let mode: KernelRouteMode = "general";
+    let reason = "general kernel handling";
+    let confidence = 0.52;
+
+    if (
+      packet.intent === "build" ||
+      lower.includes("website") ||
+      lower.includes("app") ||
+      lower.includes("code")
+    ) {
+      mode = "builder";
+      reason = "build intent and implementation signals detected";
+      confidence = 0.82;
+    } else if (
+      packet.intent === "research" ||
+      lower.includes("research") ||
+      lower.includes("search") ||
+      lower.includes("sources") ||
+      lower.includes("evidence")
+    ) {
+      mode = "researcher";
+      reason = "research/search evidence intent detected";
+      confidence = 0.8;
+    } else if (
+      packet.intent === "analyze" ||
+      lower.includes("evaluate") ||
+      lower.includes("inspect") ||
+      lower.includes("compare")
+    ) {
+      mode = "analyst";
+      reason = "analysis/evaluation intent detected";
+      confidence = 0.78;
+    } else if (
+      packet.intent === "design" ||
+      lower.includes("design") ||
+      lower.includes("ui") ||
+      lower.includes("ux") ||
+      lower.includes("designer")
+    ) {
+      mode = "designer";
+      reason = "design intent detected";
+      confidence = 0.76;
+    }
+
+    if (directives.length >= 4 && insights.length >= 2) {
+      mode = mode === "general" ? "orchestrator" : mode;
+      confidence = clamp(confidence + 0.08, 0, 1);
+    }
+
+    return {
+      mode,
+      reason,
+      confidence,
+      capabilityIds,
+    };
   }
 
   private buildOrchestrationBrief(
@@ -228,13 +367,15 @@ export class PantavionKernel {
     classification: KernelClassification
   ): KernelOrchestrationBrief {
     const directives = this.buildCapabilityDirectives(packet.normalizedText, classification);
-    const memories = this.buildMemoryInsights(recalledMemories);
+    const memories = this.buildMemoryInsights(packet, recalledMemories);
+    const routeDecision = this.decideRouteMode(packet, directives, memories);
 
     const confidence = clamp(
-      packet.confidence * 0.45 +
-        (directives.length > 0 ? 0.22 : 0.05) +
-        (memories.length > 0 ? 0.18 : 0.05) +
-        (classification.recommendedCapabilityIds.length > 0 ? 0.15 : 0),
+      packet.confidence * 0.35 +
+        (directives.length > 0 ? 0.18 : 0.04) +
+        (memories.length > 0 ? 0.18 : 0.04) +
+        routeDecision.confidence * 0.19 +
+        (classification.recommendedCapabilityIds.length > 0 ? 0.1 : 0),
       0,
       1
     );
@@ -247,6 +388,7 @@ export class PantavionKernel {
       scope: packet.scope,
       directives,
       memories,
+      routeDecision,
       confidence,
     };
   }
@@ -307,10 +449,7 @@ export class PantavionKernel {
     const packet = this.buildPacket(req);
     const staged = this.stagePacket(packet, req);
 
-    const recalledMemories = this.memory.recall(packet.normalizedText, {
-      scope: packet.scope,
-      limit: 6,
-    });
+    const recalledMemories = this.recallMemoryPool(packet);
 
     const memoryCandidates = buildMemoryCandidatesFromIntake(
       packet.normalizedText,
@@ -348,6 +487,8 @@ export class PantavionKernel {
         "Intent: " + packet.intent,
         "Scope: " + packet.scope,
         "Language: " + packet.language,
+        "Route Mode: " + orchestration.routeDecision.mode,
+        "Route Reason: " + orchestration.routeDecision.reason,
         "Recommended Capabilities: " + this.formatDirectiveSummary(orchestration.directives),
         "Top Priority Band: " + priority.band,
         "Signal Count: " + signals.length,
@@ -382,7 +523,7 @@ export class PantavionKernel {
       appendAuditEntries(state, [
         createAuditEntry(
           "kernel.analyze",
-          "Kernel analysis completed with orchestration briefing.",
+          "Kernel analysis completed with hierarchical retrieval and routing.",
           "info",
           [packet.id, plan.id, output.id],
           {
@@ -390,6 +531,8 @@ export class PantavionKernel {
             recalledMemoryCount: recalledMemories.length,
             storedMemoryCount: storedMemories.length,
             directiveCount: orchestration.directives.length,
+            routeMode: orchestration.routeDecision.mode,
+            routeConfidence: orchestration.routeDecision.confidence,
             orchestrationConfidence: orchestration.confidence,
             priorityBand: priority.band,
           }
