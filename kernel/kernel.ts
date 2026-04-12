@@ -23,6 +23,7 @@ import type {
   KernelScope,
   KernelState,
   KernelStateSummary,
+  MemoryEntry,
   TruthZone,
   IntakePacket,
   Plan,
@@ -98,6 +99,32 @@ const mergeContext = (base: KernelContext, patch?: Partial<KernelContext>): Kern
   tags: uniqueStrings([...(base.tags ?? []), ...(patch?.tags ?? [])]),
 });
 
+type KernelClassification = ReturnType<typeof classifyKernelInput>;
+
+interface KernelCapabilityDirective {
+  capabilityId: string;
+  reason: string;
+  score: number;
+}
+
+interface KernelMemoryInsight {
+  id: string;
+  summary: string;
+  relevance: number;
+  scope: KernelScope;
+}
+
+interface KernelOrchestrationBrief {
+  query: string;
+  intent: string;
+  language: string;
+  truthZone: TruthZone;
+  scope: KernelScope;
+  directives: KernelCapabilityDirective[];
+  memories: KernelMemoryInsight[];
+  confidence: number;
+}
+
 export class PantavionKernel {
   private readonly store: KernelStore;
   private readonly memory: KernelMemoryStore;
@@ -137,6 +164,98 @@ export class PantavionKernel {
       scope,
       metadata: req.metadata ?? {},
     };
+  }
+
+  private buildCapabilityDirectives(
+    normalizedText: string,
+    classification: KernelClassification
+  ): KernelCapabilityDirective[] {
+    const registryDirectives: KernelCapabilityDirective[] = recommendCapabilitiesForText(normalizedText).map(
+      (capabilityId, index) => ({
+        capabilityId,
+        reason: "registry recommendation",
+        score: clamp(0.9 - index * 0.08, 0.35, 0.9),
+      })
+    );
+
+    const classifierDirectives: KernelCapabilityDirective[] = classification.recommendedCapabilityIds.map(
+      (capabilityId, index) => ({
+        capabilityId,
+        reason: "classifier recommendation",
+        score: clamp(0.86 - index * 0.07, 0.35, 0.86),
+      })
+    );
+
+    const merged = new Map<string, KernelCapabilityDirective>();
+
+    [...registryDirectives, ...classifierDirectives].forEach((directive) => {
+      const existing = merged.get(directive.capabilityId);
+
+      if (!existing) {
+        merged.set(directive.capabilityId, directive);
+        return;
+      }
+
+      const reasons = uniqueStrings([existing.reason, directive.reason]).join("; ");
+
+      merged.set(directive.capabilityId, {
+        capabilityId: directive.capabilityId,
+        reason: reasons,
+        score: Math.max(existing.score, directive.score),
+      });
+    });
+
+    return Array.from(merged.values())
+      .sort((left, right) => right.score - left.score)
+      .slice(0, 8);
+  }
+
+  private buildMemoryInsights(entries: MemoryEntry[]): KernelMemoryInsight[] {
+    return entries
+      .map((entry) => ({
+        id: entry.id,
+        summary: entry.summary,
+        relevance: entry.relevance,
+        scope: entry.scope,
+      }))
+      .sort((left, right) => right.relevance - left.relevance)
+      .slice(0, 6);
+  }
+
+  private buildOrchestrationBrief(
+    packet: IntakePacket,
+    recalledMemories: MemoryEntry[],
+    classification: KernelClassification
+  ): KernelOrchestrationBrief {
+    const directives = this.buildCapabilityDirectives(packet.normalizedText, classification);
+    const memories = this.buildMemoryInsights(recalledMemories);
+
+    const confidence = clamp(
+      packet.confidence * 0.45 +
+        (directives.length > 0 ? 0.22 : 0.05) +
+        (memories.length > 0 ? 0.18 : 0.05) +
+        (classification.recommendedCapabilityIds.length > 0 ? 0.15 : 0),
+      0,
+      1
+    );
+
+    return {
+      query: packet.normalizedText,
+      intent: packet.intent,
+      language: packet.language,
+      truthZone: packet.truthZone,
+      scope: packet.scope,
+      directives,
+      memories,
+      confidence,
+    };
+  }
+
+  private formatDirectiveSummary(directives: KernelCapabilityDirective[]): string {
+    if (directives.length === 0) return "none";
+    return directives
+      .map((directive) => directive.capabilityId + " (" + directive.score.toFixed(2) + ")")
+      .join(", ");
   }
 
   private stagePacket(packet: IntakePacket, req: KernelIntakeRequest): KernelState {
@@ -188,6 +307,11 @@ export class PantavionKernel {
     const packet = this.buildPacket(req);
     const staged = this.stagePacket(packet, req);
 
+    const recalledMemories = this.memory.recall(packet.normalizedText, {
+      scope: packet.scope,
+      limit: 6,
+    });
+
     const memoryCandidates = buildMemoryCandidatesFromIntake(
       packet.normalizedText,
       staged.context,
@@ -196,15 +320,17 @@ export class PantavionKernel {
       packet.id
     );
 
-    const memories = this.memory.bulkAdd(memoryCandidates);
+    const storedMemories = this.memory.bulkAdd(memoryCandidates);
+    const memoryContext = [...recalledMemories, ...storedMemories];
     const snapshotAfterMemory = this.store.snapshot();
-    const signals = deriveSignalsFromIntake(packet, memories);
+    const signals = deriveSignalsFromIntake(packet, memoryContext);
     const priority = buildPriorityState([
       ...snapshotAfterMemory.signals,
       ...signals,
     ].slice(-40));
 
     const classification = classifyKernelInput(packet.normalizedText);
+    const orchestration = this.buildOrchestrationBrief(packet, memoryContext, classification);
     const plan = buildPlanFromAnalysis({
       state: snapshotAfterMemory,
       packet,
@@ -222,14 +348,24 @@ export class PantavionKernel {
         "Intent: " + packet.intent,
         "Scope: " + packet.scope,
         "Language: " + packet.language,
-        "Recommended Capabilities: " + classification.recommendedCapabilityIds.join(", "),
+        "Recommended Capabilities: " + this.formatDirectiveSummary(orchestration.directives),
         "Top Priority Band: " + priority.band,
         "Signal Count: " + signals.length,
-        "Memory Count Added: " + memories.length,
+        "Memory Recall Count: " + recalledMemories.length,
+        "Memory Count Added: " + storedMemories.length,
+        "Orchestration Confidence: " + orchestration.confidence.toFixed(2),
         "Plan Goal: " + plan.goal,
+        orchestration.memories[0]
+          ? "Top Memory: " + orchestration.memories[0].summary
+          : "Top Memory: none",
       ].join("\n"),
       truthZone: packet.truthZone,
-      relatedIds: [packet.id, plan.id, ...signals.map((signal) => signal.id)],
+      relatedIds: [
+        packet.id,
+        plan.id,
+        ...signals.map((signal) => signal.id),
+        ...orchestration.memories.map((memory) => memory.id),
+      ],
     };
 
     const nextState = this.store.mutate((state) => {
@@ -241,17 +377,20 @@ export class PantavionKernel {
       state.continuity.activeGoals = uniqueStrings([...state.continuity.activeGoals, plan.goal]);
       state.capabilities.recommended = uniqueStrings([
         ...state.capabilities.recommended,
-        ...classification.recommendedCapabilityIds,
+        ...orchestration.directives.map((directive) => directive.capabilityId),
       ]);
       appendAuditEntries(state, [
         createAuditEntry(
           "kernel.analyze",
-          "Kernel analysis completed.",
+          "Kernel analysis completed with orchestration briefing.",
           "info",
-          [packet.id, plan.id],
+          [packet.id, plan.id, output.id],
           {
             signalCount: signals.length,
-            memoryCount: memories.length,
+            recalledMemoryCount: recalledMemories.length,
+            storedMemoryCount: storedMemories.length,
+            directiveCount: orchestration.directives.length,
+            orchestrationConfidence: orchestration.confidence,
             priorityBand: priority.band,
           }
         ),
@@ -263,7 +402,7 @@ export class PantavionKernel {
     return {
       ok: true,
       packet,
-      memories,
+      memories: storedMemories,
       signals,
       priority,
       plan,
@@ -287,6 +426,8 @@ export class PantavionKernel {
       "Priority Band: " + state.priorities.band,
       "Recommended Capabilities: " + state.capabilities.recommended.join(", "),
       latestOutput ? "Last Output Type: " + latestOutput.type : "Last Output Type: none",
+      "Open Goal Count: " + state.continuity.activeGoals.length,
+      "Memory Count: " + state.memory.entries.length,
     ];
 
     if (req.prompt) {
