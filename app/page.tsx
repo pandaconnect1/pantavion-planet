@@ -331,7 +331,78 @@ export default function HomePage() {
         </section>
 
 
-        <footer className="mt-6 rounded-3xl border border-white/10 bg-[#0a1728] px-5 py-4">
+        
+      <section className="rounded-[2rem] border border-[#d4af37]/25 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.16),transparent_34%),linear-gradient(135deg,rgba(8,18,32,0.95),rgba(2,6,23,0.98))] p-5 shadow-2xl shadow-black/30 md:p-7">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div className="max-w-3xl">
+            <div className="mb-3 inline-flex rounded-full border border-[#d4af37]/35 bg-[#d4af37]/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.28em] text-[#f5d56a]">
+              PantaAI Center
+            </div>
+
+            <h2 className="text-2xl font-black tracking-tight text-white md:text-4xl">
+              One organized AI gateway — not scattered tools.
+            </h2>
+
+            <p className="mt-4 text-sm leading-7 text-slate-200 md:text-base">
+              Pantavion gathers AI assistants, research systems, builders, design engines,
+              writing tools, learning paths, memory, automation, data analysis, business support,
+              voice translation and secure work actions into one governed center. The user asks for
+              a result; the Prime Kernel finds the right capability family behind the surface.
+            </p>
+          </div>
+
+          <div className="grid gap-3 text-sm text-slate-200 sm:grid-cols-2 lg:w-[34rem]">
+            {[
+              "Ask and plan with AI",
+              "Build apps and websites",
+              "Research with evidence",
+              "Create images, media and documents",
+              "Write, summarize and translate",
+              "Automate workflows and tasks",
+              "Learn with guided mastery",
+              "Analyze data and business decisions",
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3"
+              >
+                <span className="mr-2 text-[#d4af37]">◆</span>
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <div className="rounded-2xl border border-sky-300/15 bg-sky-300/[0.04] p-4">
+            <h3 className="text-sm font-black uppercase tracking-[0.22em] text-sky-200">
+              Public surface
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-slate-300">
+              The user sees clear buttons such as AI, Build, Research, Create, Learn, Voice and Work.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-[#d4af37]/20 bg-[#d4af37]/[0.06] p-4">
+            <h3 className="text-sm font-black uppercase tracking-[0.22em] text-[#f5d56a]">
+              Prime Kernel
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-slate-300">
+              The kernel maps intent to capability families, routes safely, checks truth, memory and access.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-emerald-300/15 bg-emerald-300/[0.04] p-4">
+            <h3 className="text-sm font-black uppercase tracking-[0.22em] text-emerald-200">
+              Result first
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-slate-300">
+              Pantavion focuses on outcomes: answer, build, learn, automate, create, verify or execute.
+            </p>
+          </div>
+        </div>
+      </section>
+<footer className="mt-6 rounded-3xl border border-white/10 bg-[#0a1728] px-5 py-4">
           <div className="flex flex-col gap-3 text-sm text-slate-300 md:flex-row md:items-center md:justify-between">
             <div>Pantavion surface v1 — calm, clear, accessible, multilingual, and cross-device ready.</div>
             <div className="flex flex-wrap gap-3 text-slate-400">
@@ -359,4 +430,5 @@ export default function HomePage() {
     </main>
   );
 }
+
 
