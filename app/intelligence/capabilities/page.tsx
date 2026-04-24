@@ -1,53 +1,67 @@
 ﻿// app/intelligence/capabilities/page.tsx
 
 import {
-  getPantaAICapabilityIndexSummary,
-  getPantaAIPublicCapabilityFamilies,
-} from "../../../core/intelligence/panta-ai-capability-index";
+  getPantaAIActionSummary,
+  getPantaAIActionSurfaces,
+} from "../../../core/intelligence/panta-ai-action-engine";
 
 export default function PantaAICapabilitiesPage() {
-  const summary = getPantaAICapabilityIndexSummary();
-  const families = getPantaAIPublicCapabilityFamilies();
+  const summary = getPantaAIActionSummary();
+  const surfaces = getPantaAIActionSurfaces();
 
   return (
     <main className="min-h-screen bg-[#020617] text-white">
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-8 md:px-8 md:py-12">
-        <header className="rounded-[2rem] border border-[#d4af37]/35 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.18),transparent_34%),linear-gradient(135deg,#061528,#020617_68%)] p-6 md:p-8">
+        <header className="rounded-[2rem] border border-[#d4af37]/35 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.2),transparent_35%),linear-gradient(135deg,#061528,#020617_72%)] p-6 md:p-8">
           <div className="mb-4 inline-flex rounded-full border border-[#d4af37]/40 bg-[#d4af37]/10 px-4 py-2 text-xs font-black uppercase tracking-[0.28em] text-[#f5d56a]">
-            PantaAI Capability Index
+            PantaAI Real Action Layer
           </div>
 
           <h1 className="text-4xl font-black tracking-tight md:text-6xl">
-            Everything gathered, nothing scattered.
+            One AI button. Infinite governed work.
           </h1>
 
           <p className="mt-4 max-w-5xl text-base leading-8 text-slate-200 md:text-lg">
-            Pantavion organizes AI assistants, research, coding, builders, design, media,
-            notes, learning, automation, data, business, finance-aware guidance, voice and
-            defensive security into governed capability families. External tools are treated
-            as legal references or integration candidates, not copied products.
+            This is not a static tool directory. Each capability is now connected
+            to a real Pantavion action engine that can classify the user goal,
+            select the capability family, create a kernel action packet, apply
+            safety boundaries and return an execution route.
           </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="/intelligence"
+              className="rounded-full bg-[#d4af37] px-5 py-3 text-sm font-black text-[#020617]"
+            >
+              Open PantaAI Center
+            </a>
+            <a
+              href="/api/intelligence/actions"
+              className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white"
+            >
+              View action API
+            </a>
+          </div>
         </header>
 
         <section className="grid gap-4 md:grid-cols-5">
-          <Metric label="Families" value={summary.familyCount} />
-          <Metric label="Visible" value={summary.publicVisibleCount} />
+          <Metric label="Capabilities" value={summary.visibleCapabilityCount} />
+          <Metric label="Public ready" value={summary.publicReadyCount} />
           <Metric label="Restricted" value={summary.restrictedCount} />
           <Metric label="Admin-only" value={summary.adminOnlyCount} />
-          <Metric label="References" value={summary.referenceEcosystemCount} />
+          <Metric label="Kernel lanes" value={summary.kernelLanes.length} />
         </section>
 
         <section className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-5 md:p-6">
-          <h2 className="text-2xl font-black">Legal operating model</h2>
-
+          <h2 className="text-2xl font-black">Implementation contract</h2>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             {[
-              "Pantavion-native capability layer first.",
-              "Official APIs, partner routes or user-approved workflows only.",
-              "No cloning, no unauthorized scraping, no bypassing terms.",
-              "Public simplicity; internal capability depth.",
-              "Tool names are references, not dependency chains.",
-              "Prime Kernel decides routing, access, truth and safety.",
+              "The user sees work families, not scattered tools.",
+              "Pantavion uses lawful references and legal integrations only.",
+              "The Prime Kernel owns routing, truth, safety and access.",
+              "Each capability has detail route, API route and action packet.",
+              "Restricted/cyber/security work never becomes casual misuse.",
+              "The same PantaAI button can expand forever without UI chaos.",
             ].map((item) => (
               <div
                 key={item}
@@ -60,74 +74,71 @@ export default function PantaAICapabilitiesPage() {
           </div>
         </section>
 
-        <section className="grid gap-5">
-          <div>
-            <h2 className="text-2xl font-black">Public capability families</h2>
-            <p className="mt-2 max-w-4xl text-sm leading-7 text-slate-300">
-              These are the visible or semi-visible user-facing families. Behind each one,
-              the Prime Kernel can route to internal capabilities, safe providers, memory,
-              evidence, creation, build, automation or review paths.
-            </p>
-          </div>
+        <section className="grid gap-5 lg:grid-cols-2">
+          {surfaces.map((surface) => (
+            <article
+              key={surface.key}
+              className="rounded-[2rem] border border-white/10 bg-[#071426] p-5 shadow-xl shadow-black/20"
+            >
+              <div className="flex flex-wrap gap-2">
+                <Badge>{surface.kernelLane}</Badge>
+                <Badge>{surface.actionMode}</Badge>
+                <Badge>{surface.accessMode}</Badge>
+                <Badge>{surface.truthMode}</Badge>
+              </div>
 
-          <div className="grid gap-5 lg:grid-cols-2">
-            {families.map((family) => (
-              <article
-                key={family.key}
-                className="rounded-[2rem] border border-white/10 bg-[#071426] p-5 shadow-xl shadow-black/20"
-              >
+              <h3 className="mt-4 text-2xl font-black">{surface.title}</h3>
+              <p className="mt-2 text-sm font-semibold text-[#f5d56a]">
+                {surface.subtitle}
+              </p>
+
+              <p className="mt-3 text-sm leading-7 text-slate-300">
+                {surface.explanation}
+              </p>
+
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                <InfoBlock title="User can ask" items={surface.examples.slice(0, 4)} />
+                <InfoBlock title="Pantavion does" items={surface.whatItDoes.slice(0, 4)} />
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-sky-300/15 bg-sky-300/[0.04] p-4">
+                <h4 className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-sky-200">
+                  Internal capability families
+                </h4>
                 <div className="flex flex-wrap gap-2">
-                  <Badge>{family.area}</Badge>
-                  <Badge>{family.truthMode}</Badge>
-                  <Badge>{family.access}</Badge>
+                  {surface.internalCapabilityFamilies.slice(0, 8).map((family) => (
+                    <span
+                      key={`${surface.key}-${family}`}
+                      className="rounded-full border border-sky-200/15 bg-sky-200/10 px-3 py-1 text-xs text-sky-100"
+                    >
+                      {family}
+                    </span>
+                  ))}
                 </div>
+              </div>
 
-                <h3 className="mt-4 text-2xl font-black">{family.publicName}</h3>
-
-                <p className="mt-3 text-sm leading-7 text-slate-300">
-                  {family.publicExplanation}
-                </p>
-
-                <div className="mt-5 grid gap-4 md:grid-cols-2">
-                  <Block title="User can ask" items={family.userCanAsk.slice(0, 4)} />
-                  <Block title="Pantavion does" items={family.pantavionDoes.slice(0, 4)} />
-                </div>
-
-                <div className="mt-4 rounded-2xl border border-sky-300/15 bg-sky-300/[0.04] p-4">
-                  <h4 className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-sky-200">
-                    Reference ecosystems
-                  </h4>
-
-                  <div className="flex flex-wrap gap-2">
-                    {family.referenceEcosystems.slice(0, 7).map((reference) => (
-                      <span
-                        key={`${family.key}-${reference.name}`}
-                        className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200"
-                        title={reference.purposeInsidePantavion}
-                      >
-                        {reference.name}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-4 rounded-2xl border border-amber-300/15 bg-amber-300/[0.04] p-4">
-                  <h4 className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-amber-200">
-                    Boundaries
-                  </h4>
-
-                  <ul className="space-y-2 text-sm leading-6 text-slate-300">
-                    {family.legalBoundaries.slice(0, 2).map((item) => (
-                      <li key={item} className="flex gap-2">
-                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-300" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            ))}
-          </div>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <a
+                  href={surface.detailRoute}
+                  className="rounded-full bg-[#d4af37] px-4 py-2 text-sm font-black text-[#020617]"
+                >
+                  View details
+                </a>
+                <a
+                  href={surface.defaultRoute}
+                  className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-bold text-white"
+                >
+                  Start via Kernel
+                </a>
+                <a
+                  href={surface.actionApiRoute}
+                  className="rounded-full border border-sky-200/20 bg-sky-200/10 px-4 py-2 text-sm font-bold text-sky-100"
+                >
+                  API packet
+                </a>
+              </div>
+            </article>
+          ))}
         </section>
       </section>
     </main>
@@ -153,7 +164,7 @@ function Badge({ children }: { children: string }) {
   );
 }
 
-function Block({ title, items }: { title: string; items: string[] }) {
+function InfoBlock({ title, items }: { title: string; items: string[] }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
       <h4 className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-slate-300">
