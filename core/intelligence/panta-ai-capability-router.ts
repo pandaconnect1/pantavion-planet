@@ -1,649 +1,451 @@
-﻿// core/intelligence/panta-ai-capability-router.ts
-
-import {
-  getPantaAIVisibleSurfaceCards,
-  type PantaAIVisibleCard,
-  type PantaAIAccessMode,
-  type PantaAITruthMode,
-} from "../public-surface/panta-ai-visible-surface";
-
-export type PantaAIUserAccess =
-  | "anonymous"
-  | "signed-in"
-  | "verified"
-  | "admin";
-
-export type PantaAIRouteDisposition =
-  | "allow"
-  | "sign-in-required"
-  | "review-required"
-  | "admin-required"
-  | "deny";
-
-export type PantaAIExecutionMode =
+﻿export type PantaAIActionKind =
   | "answer"
+  | "write"
   | "research"
-  | "create"
-  | "build"
-  | "analyze"
-  | "automate"
-  | "learn"
+  | "summarize"
   | "translate"
-  | "secure-review";
+  | "code"
+  | "image"
+  | "video"
+  | "slides"
+  | "notes"
+  | "memory"
+  | "plan"
+  | "data"
+  | "finance"
+  | "security"
+  | "health"
+  | "legal"
+  | "unknown";
 
-export interface PantaAIRouteInput {
-  query: string;
-  userAccess?: PantaAIUserAccess;
-  preferredCardKey?: string;
+export type PantaAITruthMode =
+  | "deterministic"
+  | "verified-required"
+  | "generative-assisted"
+  | "restricted";
+
+export type PantaAIAccessMode =
+  | "public"
+  | "signed-in"
+  | "restricted"
+  | "admin-only";
+
+export interface PantaAIExecuteInput {
+  action?: string;
+  task?: string;
+  userText?: string;
   locale?: string;
-  source?: "home" | "intelligence" | "api" | "kernel" | "unknown";
-  metadata?: Record<string, unknown>;
+  userId?: string;
+  context?: Record<string, unknown>;
 }
 
-export interface PantaAICapabilityRoute {
-  cardKey: string;
+export interface PantaAIExecutionResult {
+  kind: "text" | "structured" | "blocked";
   title: string;
-  executionMode: PantaAIExecutionMode;
+  content: string;
+  sections: {
+    title: string;
+    items: string[];
+  }[];
+}
+
+export interface PantaAIExecutionPacket {
+  accepted: boolean;
+  actionKind: PantaAIActionKind;
+  capabilityFamily: string;
+  route: string;
   accessMode: PantaAIAccessMode;
   truthMode: PantaAITruthMode;
-  internalCapabilityFamilies: string[];
+  providerStrategy: string;
   safetyBoundaries: string[];
-  publicRoute: string;
-  kernelRoute: string;
-  orchestrationPath: string[];
+  nextSteps: string[];
+  warnings: string[];
+  result: PantaAIExecutionResult;
+  createdAt: string;
 }
 
-export interface PantaAIRouteDecision {
-  disposition: PantaAIRouteDisposition;
-  confidence: number;
-  reason: string;
-  selected: PantaAICapabilityRoute | null;
-  alternatives: PantaAICapabilityRoute[];
-  requiredAction: string[];
-  auditTags: string[];
+export interface PantaAIActionDefinition {
+  key: PantaAIActionKind;
+  title: string;
+  capabilityFamily: string;
+  accessMode: PantaAIAccessMode;
+  truthMode: PantaAITruthMode;
+  examples: string[];
 }
 
-export interface PantaAIRoutingSnapshot {
-  generatedAt: string;
-  cardCount: number;
-  publicRouteCount: number;
-  signedInRouteCount: number;
-  restrictedRouteCount: number;
-  adminOnlyRouteCount: number;
-  executionModes: PantaAIExecutionMode[];
-  capabilityFamilies: string[];
-  routes: PantaAICapabilityRoute[];
+export const PANTA_AI_ACTIONS: PantaAIActionDefinition[] = [
+  {
+    key: "answer",
+    title: "General AI answer",
+    capabilityFamily: "general-assistance",
+    accessMode: "public",
+    truthMode: "generative-assisted",
+    examples: ["Explain something", "Compare two ideas", "Help me decide"],
+  },
+  {
+    key: "write",
+    title: "Writing and drafting",
+    capabilityFamily: "content-creation",
+    accessMode: "public",
+    truthMode: "generative-assisted",
+    examples: ["Write email", "Create post", "Improve text"],
+  },
+  {
+    key: "research",
+    title: "Deep research",
+    capabilityFamily: "verified-knowledge",
+    accessMode: "signed-in",
+    truthMode: "verified-required",
+    examples: ["Research market", "Compare tools", "Find evidence"],
+  },
+  {
+    key: "summarize",
+    title: "Summarization",
+    capabilityFamily: "knowledge-compression",
+    accessMode: "public",
+    truthMode: "deterministic",
+    examples: ["Summarize article", "Extract points", "Make brief"],
+  },
+  {
+    key: "translate",
+    title: "Translation",
+    capabilityFamily: "language",
+    accessMode: "public",
+    truthMode: "generative-assisted",
+    examples: ["Translate text", "Detect language", "Rewrite bilingual"],
+  },
+  {
+    key: "code",
+    title: "Code assistant",
+    capabilityFamily: "software-building",
+    accessMode: "signed-in",
+    truthMode: "deterministic",
+    examples: ["Fix bug", "Create component", "Explain error"],
+  },
+  {
+    key: "image",
+    title: "Image creation",
+    capabilityFamily: "visual-generation",
+    accessMode: "signed-in",
+    truthMode: "generative-assisted",
+    examples: ["Create logo", "Generate mockup", "Edit image"],
+  },
+  {
+    key: "video",
+    title: "Video creation",
+    capabilityFamily: "video-generation",
+    accessMode: "signed-in",
+    truthMode: "generative-assisted",
+    examples: ["Create reel", "Storyboard", "Script video"],
+  },
+  {
+    key: "slides",
+    title: "Presentations",
+    capabilityFamily: "presentation-building",
+    accessMode: "signed-in",
+    truthMode: "generative-assisted",
+    examples: ["Make deck", "Pitch summary", "Investor slides"],
+  },
+  {
+    key: "notes",
+    title: "Notes and knowledge",
+    capabilityFamily: "personal-knowledge",
+    accessMode: "signed-in",
+    truthMode: "deterministic",
+    examples: ["Organize notes", "Make checklist", "Create archive"],
+  },
+  {
+    key: "memory",
+    title: "Memory and continuity",
+    capabilityFamily: "continuity",
+    accessMode: "signed-in",
+    truthMode: "restricted",
+    examples: ["Remember project", "Restore context", "Track decision"],
+  },
+  {
+    key: "plan",
+    title: "Planning",
+    capabilityFamily: "execution-planning",
+    accessMode: "public",
+    truthMode: "deterministic",
+    examples: ["Make roadmap", "Break task", "Prioritize work"],
+  },
+  {
+    key: "data",
+    title: "Data analysis",
+    capabilityFamily: "analysis",
+    accessMode: "signed-in",
+    truthMode: "verified-required",
+    examples: ["Analyze CSV", "Find pattern", "Explain chart"],
+  },
+  {
+    key: "finance",
+    title: "Finance-aware guidance",
+    capabilityFamily: "finance-aware-reasoning",
+    accessMode: "signed-in",
+    truthMode: "verified-required",
+    examples: ["Budget plan", "Pricing model", "Cost analysis"],
+  },
+  {
+    key: "security",
+    title: "Security and safety",
+    capabilityFamily: "defensive-security",
+    accessMode: "restricted",
+    truthMode: "restricted",
+    examples: ["Security checklist", "Incident response", "Risk review"],
+  },
+  {
+    key: "health",
+    title: "Health information",
+    capabilityFamily: "health-information",
+    accessMode: "restricted",
+    truthMode: "verified-required",
+    examples: ["Explain symptoms", "Prepare doctor questions", "Health summary"],
+  },
+  {
+    key: "legal",
+    title: "Legal information",
+    capabilityFamily: "legal-information",
+    accessMode: "restricted",
+    truthMode: "verified-required",
+    examples: ["Explain clause", "Prepare questions", "Policy summary"],
+  },
+];
+
+export function getPantaAIActions(): PantaAIActionDefinition[] {
+  return PANTA_AI_ACTIONS.map((item) => ({ ...item, examples: [...item.examples] }));
 }
 
-const EXECUTION_MODE_BY_CARD: Record<string, PantaAIExecutionMode> = {
-  "ai-assistant": "answer",
-  "deep-research": "research",
-  "writing-content": "create",
-  "coding-build": "build",
-  "app-website-builder": "build",
-  "design-image": "create",
-  "video-audio": "create",
-  presentations: "create",
-  "automation-workflows": "automate",
-  "notes-memory": "analyze",
-  "data-analytics": "analyze",
-  "learning-mastery": "learn",
-  "business-strategy": "research",
-  "finance-guidance": "analyze",
-  "health-knowledge": "research",
-  "security-defense": "secure-review",
-  "voice-translation": "translate",
-};
+export function executePantaAIAction(input: PantaAIExecuteInput): PantaAIExecutionPacket {
+  const text = normalizeText([input.action, input.task, input.userText].filter(Boolean).join(" "));
+  const actionKind = inferActionKind(input.action, text);
+  const definition = PANTA_AI_ACTIONS.find((item) => item.key === actionKind) ?? PANTA_AI_ACTIONS[0];
 
-const CARD_KEYWORDS: Record<string, string[]> = {
-  "ai-assistant": [
-    "ask",
-    "assistant",
-    "help",
-    "question",
-    "answer",
-    "plan",
-    "idea",
-    "general",
-    "organize",
-    "guide",
-  ],
-  "deep-research": [
-    "research",
-    "source",
-    "sources",
-    "verify",
-    "evidence",
-    "market",
-    "competitor",
-    "compare",
-    "study",
-    "investigate",
-  ],
-  "writing-content": [
-    "write",
-    "rewrite",
-    "post",
-    "email",
-    "article",
-    "script",
-    "copy",
-    "text",
-    "content",
-  ],
-  "coding-build": [
-    "code",
-    "typescript",
-    "next",
-    "react",
-    "debug",
-    "build",
-    "repo",
-    "file",
-    "tsc",
-    "terminal",
-  ],
-  "app-website-builder": [
-    "app",
-    "website",
-    "site",
-    "landing",
-    "dashboard",
-    "module",
-    "builder",
-    "product",
-    "frontend",
-  ],
-  "design-image": [
-    "design",
-    "image",
-    "logo",
-    "brand",
-    "ui",
-    "visual",
-    "mockup",
-    "color",
-    "icon",
-  ],
-  "video-audio": [
-    "video",
-    "audio",
-    "voiceover",
-    "clip",
-    "reel",
-    "podcast",
-    "media",
-    "sound",
-  ],
-  presentations: [
-    "presentation",
-    "slides",
-    "deck",
-    "pitch",
-    "summary",
-    "report",
-    "gamma",
-  ],
-  "automation-workflows": [
-    "automation",
-    "workflow",
-    "trigger",
-    "zapier",
-    "agent",
-    "repeat",
-    "task",
-    "pipeline",
-  ],
-  "notes-memory": [
-    "notes",
-    "memory",
-    "obsidian",
-    "meeting",
-    "recall",
-    "continuity",
-    "notebook",
-  ],
-  "data-analytics": [
-    "data",
-    "analytics",
-    "table",
-    "spreadsheet",
-    "chart",
-    "dashboard",
-    "bi",
-    "rose",
-  ],
-  "learning-mastery": [
-    "learn",
-    "course",
-    "study",
-    "lesson",
-    "quiz",
-    "practice",
-    "mastery",
-    "education",
-  ],
-  "business-strategy": [
-    "business",
-    "strategy",
-    "pricing",
-    "market",
-    "growth",
-    "startup",
-    "operations",
-  ],
-  "finance-guidance": [
-    "finance",
-    "budget",
-    "cost",
-    "money",
-    "pricing",
-    "subscription",
-    "revenue",
-  ],
-  "health-knowledge": [
-    "health",
-    "doctor",
-    "medical",
-    "symptom",
-    "medicine",
-    "hospital",
-    "care",
-  ],
-  "security-defense": [
-    "security",
-    "defense",
-    "audit",
-    "incident",
-    "breach",
-    "cyber",
-    "privacy",
-    "safe",
-  ],
-  "voice-translation": [
-    "voice",
-    "translate",
-    "translation",
-    "language",
-    "interpreter",
-    "speech",
-    "speak",
-  ],
-};
-
-export function resolvePantaAIRoute(
-  input: PantaAIRouteInput
-): PantaAIRouteDecision {
-  const userAccess = input.userAccess ?? "anonymous";
-  const cards = getPantaAIVisibleSurfaceCards();
-
-  const selectedCard =
-    findPreferredCard(cards, input.preferredCardKey) ??
-    rankCardsByQuery(cards, input.query)[0]?.card ??
-    null;
-
-  if (!selectedCard) {
-    return {
-      disposition: "deny",
-      confidence: 0,
-      reason: "No PantaAI capability card could be resolved.",
-      selected: null,
-      alternatives: [],
-      requiredAction: ["Ask the user for a clearer task or intent."],
-      auditTags: ["panta-ai-routing", "unresolved"],
-    };
-  }
-
-  const selectedRoute = buildCapabilityRoute(selectedCard);
-  const alternatives = rankCardsByQuery(cards, input.query)
-    .filter((item) => item.card.key !== selectedCard.key)
-    .slice(0, 3)
-    .map((item) => buildCapabilityRoute(item.card));
-
-  const accessDisposition = resolveAccessDisposition(
-    selectedCard.accessMode,
-    userAccess
-  );
-
-  const requiredAction = buildRequiredActions(
-    accessDisposition,
-    selectedCard,
-    selectedRoute
-  );
+  const warnings = buildWarnings(definition, input);
+  const accepted = definition.accessMode !== "admin-only";
 
   return {
-    disposition: accessDisposition,
-    confidence: computeRouteConfidence(input.query, selectedCard),
-    reason: buildRouteReason(selectedCard, selectedRoute, accessDisposition),
-    selected: selectedRoute,
-    alternatives,
-    requiredAction,
-    auditTags: [
-      "panta-ai-routing",
-      `card:${selectedCard.key}`,
-      `mode:${selectedRoute.executionMode}`,
-      `truth:${selectedCard.truthMode}`,
-      `access:${selectedCard.accessMode}`,
-    ],
+    accepted,
+    actionKind,
+    capabilityFamily: definition.capabilityFamily,
+    route: `panta-ai.${definition.capabilityFamily}.${definition.key}`,
+    accessMode: definition.accessMode,
+    truthMode: definition.truthMode,
+    providerStrategy: buildProviderStrategy(definition),
+    safetyBoundaries: buildSafetyBoundaries(definition),
+    nextSteps: buildNextSteps(definition),
+    warnings,
+    result: accepted
+      ? buildResult(definition, input)
+      : {
+          kind: "blocked",
+          title: "Action blocked",
+          content: "This action requires admin-only governance before execution.",
+          sections: [],
+        },
+    createdAt: new Date().toISOString(),
   };
 }
 
-export function getPantaAIRoutingSnapshot(): PantaAIRoutingSnapshot {
-  const routes = getPantaAIVisibleSurfaceCards().map((card) =>
-    buildCapabilityRoute(card)
-  );
+function inferActionKind(action: unknown, text: string): PantaAIActionKind {
+  const explicit = typeof action === "string" ? action.toLowerCase().trim() : "";
 
-  const capabilityFamilies = Array.from(
-    new Set(routes.flatMap((route) => route.internalCapabilityFamilies))
-  ).sort();
+  if (isActionKind(explicit)) return explicit;
 
-  const executionModes = Array.from(
-    new Set(routes.map((route) => route.executionMode))
-  ).sort();
-
-  return {
-    generatedAt: new Date().toISOString(),
-    cardCount: routes.length,
-    publicRouteCount: routes.filter((route) => route.accessMode === "public")
-      .length,
-    signedInRouteCount: routes.filter(
-      (route) => route.accessMode === "signed-in"
-    ).length,
-    restrictedRouteCount: routes.filter(
-      (route) => route.accessMode === "restricted"
-    ).length,
-    adminOnlyRouteCount: routes.filter(
-      (route) => route.accessMode === "admin-only"
-    ).length,
-    executionModes,
-    capabilityFamilies,
-    routes,
-  };
-}
-
-export function buildCapabilityRoute(
-  card: PantaAIVisibleCard
-): PantaAICapabilityRoute {
-  const executionMode =
-    EXECUTION_MODE_BY_CARD[card.key] ?? inferExecutionMode(card);
-
-  return {
-    cardKey: card.key,
-    title: card.title,
-    executionMode,
-    accessMode: card.accessMode,
-    truthMode: card.truthMode,
-    internalCapabilityFamilies: [...card.internalCapabilityFamilies],
-    safetyBoundaries: [...card.safetyBoundaries],
-    publicRoute: card.route,
-    kernelRoute: kernelRouteForExecutionMode(executionMode),
-    orchestrationPath: buildOrchestrationPath(card, executionMode),
-  };
-}
-
-function findPreferredCard(
-  cards: PantaAIVisibleCard[],
-  preferredCardKey?: string
-): PantaAIVisibleCard | null {
-  if (!preferredCardKey) {
-    return null;
-  }
-
-  return cards.find((card) => card.key === preferredCardKey) ?? null;
-}
-
-function rankCardsByQuery(
-  cards: PantaAIVisibleCard[],
-  query: string
-): { card: PantaAIVisibleCard; score: number }[] {
-  const normalizedQuery = normalizeSearchText(query);
-  const queryTokens = tokenize(normalizedQuery);
-
-  return cards
-    .map((card) => ({
-      card,
-      score: scoreCard(card, normalizedQuery, queryTokens),
-    }))
-    .filter((item) => item.score > 0)
-    .sort((left, right) => right.score - left.score);
-}
-
-function scoreCard(
-  card: PantaAIVisibleCard,
-  normalizedQuery: string,
-  queryTokens: string[]
-): number {
-  const keywords = CARD_KEYWORDS[card.key] ?? [];
-  const searchable = normalizeSearchText(
-    [
-      card.key,
-      card.title,
-      card.subtitle,
-      card.publicExplanation,
-      card.whatItDoes.join(" "),
-      card.whenToUseIt.join(" "),
-      card.internalCapabilityFamilies.join(" "),
-      keywords.join(" "),
-    ].join(" ")
-  );
-
-  let score = 0;
-
-  for (const keyword of keywords) {
-    if (normalizedQuery.includes(keyword)) {
-      score += 8;
-    }
-  }
-
-  for (const token of queryTokens) {
-    if (searchable.includes(token)) {
-      score += token.length > 4 ? 3 : 1;
-    }
-  }
-
-  if (normalizedQuery.includes(card.key)) {
-    score += 20;
-  }
-
-  return score;
-}
-
-function resolveAccessDisposition(
-  accessMode: PantaAIAccessMode,
-  userAccess: PantaAIUserAccess
-): PantaAIRouteDisposition {
-  if (accessMode === "public") {
-    return "allow";
-  }
-
-  if (accessMode === "signed-in") {
-    return userAccess === "anonymous" ? "sign-in-required" : "allow";
-  }
-
-  if (accessMode === "restricted") {
-    return userAccess === "admin" || userAccess === "verified"
-      ? "review-required"
-      : "sign-in-required";
-  }
-
-  if (accessMode === "admin-only") {
-    return userAccess === "admin" ? "review-required" : "admin-required";
-  }
-
-  return "deny";
-}
-
-function buildRequiredActions(
-  disposition: PantaAIRouteDisposition,
-  card: PantaAIVisibleCard,
-  route: PantaAICapabilityRoute
-): string[] {
-  const actions: string[] = [];
-
-  if (disposition === "sign-in-required") {
-    actions.push("Require signed-in user before execution.");
-  }
-
-  if (disposition === "review-required") {
-    actions.push("Create approval or review packet before execution.");
-  }
-
-  if (disposition === "admin-required") {
-    actions.push("Route to admin-only capability gate.");
-  }
-
-  if (card.truthMode === "verified") {
-    actions.push("Attach evidence and source verification before final answer.");
-  }
-
-  if (card.truthMode === "restricted") {
-    actions.push("Apply restricted safety policy and audit logging.");
-  }
-
-  if (route.safetyBoundaries.length > 0) {
-    actions.push("Apply card safety boundaries.");
-  }
-
-  if (actions.length === 0) {
-    actions.push("Proceed through Prime Kernel route.");
-  }
-
-  return actions;
-}
-
-function buildRouteReason(
-  card: PantaAIVisibleCard,
-  route: PantaAICapabilityRoute,
-  disposition: PantaAIRouteDisposition
-): string {
-  return [
-    `Resolved visible surface "${card.title}" to execution mode "${route.executionMode}".`,
-    `Access disposition is "${disposition}".`,
-    `Kernel route is "${route.kernelRoute}".`,
-  ].join(" ");
-}
-
-function computeRouteConfidence(
-  query: string,
-  card: PantaAIVisibleCard
-): number {
-  const ranked = rankCardsByQuery([card], query);
-  const score = ranked[0]?.score ?? 0;
-
-  if (score >= 30) {
-    return 0.94;
-  }
-
-  if (score >= 18) {
-    return 0.86;
-  }
-
-  if (score >= 8) {
-    return 0.74;
-  }
-
-  return 0.62;
-}
-
-function inferExecutionMode(card: PantaAIVisibleCard): PantaAIExecutionMode {
-  if (card.truthMode === "verified") {
-    return "research";
-  }
-
-  if (card.truthMode === "creative") {
-    return "create";
-  }
-
-  if (card.truthMode === "restricted") {
-    return "secure-review";
-  }
+  if (hasAny(text, ["research", "verify", "evidence", "source"])) return "research";
+  if (hasAny(text, ["write", "draft", "email", "post", "rewrite"])) return "write";
+  if (hasAny(text, ["summary", "summarize", "synopsis"])) return "summarize";
+  if (hasAny(text, ["translate", "translation", "language"])) return "translate";
+  if (hasAny(text, ["code", "typescript", "react", "bug", "error"])) return "code";
+  if (hasAny(text, ["image", "logo", "photo", "picture"])) return "image";
+  if (hasAny(text, ["video", "reel", "movie", "clip"])) return "video";
+  if (hasAny(text, ["slides", "presentation", "deck", "pitch"])) return "slides";
+  if (hasAny(text, ["notes", "obsidian", "notebook", "archive"])) return "notes";
+  if (hasAny(text, ["memory", "remember", "continuity"])) return "memory";
+  if (hasAny(text, ["plan", "roadmap", "steps", "schedule"])) return "plan";
+  if (hasAny(text, ["data", "csv", "table", "chart"])) return "data";
+  if (hasAny(text, ["finance", "budget", "price", "pricing", "bank"])) return "finance";
+  if (hasAny(text, ["security", "safe", "breach", "risk"])) return "security";
+  if (hasAny(text, ["health", "doctor", "medical", "symptom"])) return "health";
+  if (hasAny(text, ["legal", "law", "contract", "gdpr"])) return "legal";
 
   return "answer";
 }
 
-function kernelRouteForExecutionMode(mode: PantaAIExecutionMode): string {
-  switch (mode) {
-    case "research":
-      return "/api/kernel/analyze";
-    case "create":
-      return "/api/kernel/intake";
-    case "build":
-      return "/api/kernel/run";
-    case "analyze":
-      return "/api/kernel/analyze";
-    case "automate":
-      return "/api/kernel/run";
-    case "learn":
-      return "/api/kernel/intake";
-    case "translate":
-      return "/api/kernel/intake";
-    case "secure-review":
-      return "/api/kernel/analyze";
-    case "answer":
-    default:
-      return "/api/kernel";
-  }
+function isActionKind(value: string): value is PantaAIActionKind {
+  return PANTA_AI_ACTIONS.some((item) => item.key === value);
 }
 
-function buildOrchestrationPath(
-  card: PantaAIVisibleCard,
-  mode: PantaAIExecutionMode
-): string[] {
+function buildProviderStrategy(definition: PantaAIActionDefinition): string {
+  if (definition.truthMode === "verified-required") {
+    return "Pantavion-first reasoning with official sources, verified connectors, or licensed provider APIs only.";
+  }
+
+  if (definition.accessMode === "restricted") {
+    return "Pantavion governed execution with human review, audit trail, and no unsafe provider delegation.";
+  }
+
+  return "Pantavion-native execution first; external tools only through legal APIs, user-owned export/import, or approved partnerships.";
+}
+
+function buildSafetyBoundaries(definition: PantaAIActionDefinition): string[] {
   const base = [
-    "intent-resolution",
-    "visible-surface-selection",
-    "capability-family-mapping",
-    "truth-zone-check",
-    "access-policy-check",
-    "safety-boundary-check",
+    "No impersonation of external brands or tools.",
+    "No scraping or unauthorized data extraction.",
+    "No unsafe use of user private data.",
+    "Every external provider must use official API, user authorization, or partnership route.",
   ];
 
-  switch (mode) {
-    case "research":
-      base.push("evidence-routing", "source-verification", "synthesis");
-      break;
-    case "create":
-      base.push("creative-brief", "asset-or-content-generation", "review");
-      break;
-    case "build":
-      base.push("build-plan", "repo-safety-gate", "implementation-validation");
-      break;
-    case "analyze":
-      base.push("data-or-memory-analysis", "insight-extraction", "summary");
-      break;
-    case "automate":
-      base.push("workflow-plan", "state-machine", "fallback-policy");
-      break;
-    case "learn":
-      base.push("level-detection", "guided-path", "practice-feedback");
-      break;
-    case "translate":
-      base.push("language-detection", "translation-adaptation", "delivery");
-      break;
-    case "secure-review":
-      base.push("restricted-policy", "audit-log", "admin-review");
-      break;
-    case "answer":
-    default:
-      base.push("answer-plan", "response-generation");
-      break;
+  if (definition.key === "health") {
+    base.push("Health output is informational and must not replace a qualified clinician.");
   }
 
-  base.push(...card.internalCapabilityFamilies.slice(0, 3));
-  return Array.from(new Set(base));
+  if (definition.key === "legal") {
+    base.push("Legal output is informational and must not replace a qualified lawyer.");
+  }
+
+  if (definition.key === "security") {
+    base.push("Security actions must remain defensive, auditable, and permission-bound.");
+  }
+
+  return base;
 }
 
-function normalizeSearchText(value: string): string {
-  return value.toLowerCase().replace(/[^a-z0-9α-ωάέήίόύώϊϋΐΰ\s-]/gi, " ");
+function buildNextSteps(definition: PantaAIActionDefinition): string[] {
+  switch (definition.key) {
+    case "research":
+      return ["Collect sources", "Score credibility", "Extract claims", "Return cited answer"];
+    case "write":
+      return ["Detect format", "Draft content", "Offer tone variants", "Prepare final copy"];
+    case "code":
+      return ["Classify stack", "Locate files", "Generate patch", "Run typecheck/build"];
+    case "image":
+    case "video":
+      return ["Collect creative brief", "Apply rights/safety checks", "Route to approved generation pipeline"];
+    case "slides":
+      return ["Build outline", "Create slide structure", "Generate export-ready deck"];
+    case "memory":
+      return ["Classify memory type", "Request consent when needed", "Store only governed long-term facts"];
+    default:
+      return ["Classify request", "Select capability", "Execute safe result", "Return structured output"];
+  }
 }
 
-function tokenize(value: string): string[] {
-  return Array.from(
-    new Set(
-      normalizeSearchText(value)
-        .split(/\s+/)
-        .map((item) => item.trim())
-        .filter((item) => item.length >= 3)
-    )
-  );
+function buildWarnings(definition: PantaAIActionDefinition, input: PantaAIExecuteInput): string[] {
+  const warnings: string[] = [];
+
+  if (definition.accessMode !== "public" && !input.userId) {
+    warnings.push(`This capability is ${definition.accessMode}; production should require identity/session validation.`);
+  }
+
+  if (definition.truthMode === "verified-required") {
+    warnings.push("Verified mode requires sources before final factual claims.");
+  }
+
+  if (definition.key === "memory") {
+    warnings.push("Memory actions require explicit user consent and reversible storage policy.");
+  }
+
+  return warnings;
+}
+
+function buildResult(
+  definition: PantaAIActionDefinition,
+  input: PantaAIExecuteInput,
+): PantaAIExecutionResult {
+  const raw = typeof input.userText === "string" ? input.userText.trim() : "";
+  const task = typeof input.task === "string" ? input.task.trim() : "";
+  const subject = raw || task || "No detailed task provided.";
+
+  switch (definition.key) {
+    case "write":
+      return {
+        kind: "structured",
+        title: "Draft generated",
+        content: `Draft basis: ${subject}`,
+        sections: [
+          { title: "Output", items: [`Clear draft prepared from: ${subject}`] },
+          { title: "Next", items: ["Choose tone", "Review facts", "Finalize"] },
+        ],
+      };
+
+    case "summarize":
+      return {
+        kind: "structured",
+        title: "Summary generated",
+        content: summarize(subject),
+        sections: [
+          { title: "Key points", items: summarizeBullets(subject) },
+          { title: "Next", items: ["Verify missing context", "Expand if needed"] },
+        ],
+      };
+
+    case "plan":
+      return {
+        kind: "structured",
+        title: "Execution plan",
+        content: `Plan created for: ${subject}`,
+        sections: [
+          { title: "Sequence", items: ["Define goal", "Break into tasks", "Assign priority", "Execute", "Audit result"] },
+          { title: "Control", items: ["Track owner", "Track deadline", "Track risk"] },
+        ],
+      };
+
+    case "research":
+      return {
+        kind: "structured",
+        title: "Research packet prepared",
+        content: `Research request classified: ${subject}`,
+        sections: [
+          { title: "Research method", items: ["Find primary sources", "Cross-check facts", "Separate claim from opinion", "Return citations"] },
+          { title: "Truth mode", items: ["Verified-required", "No unsupported claims"] },
+        ],
+      };
+
+    case "code":
+      return {
+        kind: "structured",
+        title: "Code task packet",
+        content: `Code request classified: ${subject}`,
+        sections: [
+          { title: "Build path", items: ["Inspect files", "Patch minimally", "Run typecheck", "Run build", "Commit"] },
+          { title: "Safety", items: ["No blind overwrite", "Preserve working tree", "Rollback if build fails"] },
+        ],
+      };
+
+    default:
+      return {
+        kind: "structured",
+        title: definition.title,
+        content: `Pantavion routed this task to ${definition.capabilityFamily}.`,
+        sections: [
+          { title: "Task", items: [subject] },
+          { title: "Execution", items: buildNextSteps(definition) },
+        ],
+      };
+  }
+}
+
+function summarize(value: string): string {
+  const clean = value.replace(/\s+/g, " ").trim();
+  if (clean.length <= 240) return clean;
+  return `${clean.slice(0, 240)}...`;
+}
+
+function summarizeBullets(value: string): string[] {
+  const parts = value
+    .split(/[.!?]/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .slice(0, 4);
+
+  return parts.length > 0 ? parts : ["No enough text to extract bullets."];
+}
+
+function normalizeText(value: string): string {
+  return value.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+function hasAny(text: string, fragments: string[]): boolean {
+  return fragments.some((fragment) => text.includes(fragment));
 }
