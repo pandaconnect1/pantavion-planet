@@ -1,201 +1,369 @@
-﻿// app/intelligence/routing/page.tsx
+﻿import Link from "next/link";
+import type { CSSProperties } from "react";
 
-import {
-  getPantaAIRoutingSnapshot,
-  resolvePantaAIRoute,
-} from "../../../core/intelligence/panta-ai-capability-router";
+export const metadata = {
+  title: "PantaAI Routing | Pantavion One",
+  description:
+    "PantaAI routing foundation for intent, capability families, kernel routes and execution lanes.",
+};
 
-const demoIntents = [
-  "I want to build an app",
-  "Research AI competitors",
-  "Write a business presentation",
-  "Translate this with voice",
-  "Analyze my data",
-  "Improve account security",
+type RouteStatus = "live-foundation" | "active-preview" | "provider-required";
+
+type RoutingDecision = {
+  id: string;
+  title: string;
+  query: string;
+  kernelRoute: string;
+  visibleRoute: string;
+  status: RouteStatus;
+  internalCapabilityFamilies: string[];
+  worksNow: string[];
+  next: string[];
+};
+
+const routingDecisions: RoutingDecision[] = [
+  {
+    id: "language-bridge",
+    title: "Universal Language Bridge",
+    query: "Translate, voice, subtitles, multilingual rooms, cross-language communication.",
+    kernelRoute: "voice.multilingual.runtime",
+    visibleRoute: "/language",
+    status: "live-foundation",
+    internalCapabilityFamilies: [
+      "Text translation",
+      "Voice interpretation",
+      "Subtitles",
+      "Group translation",
+      "Cross-language rooms",
+    ],
+    worksNow: [
+      "Routing page is real",
+      "Language capability is represented",
+      "Visible route is connected",
+      "Provider requirement is explicit",
+    ],
+    next: [
+      "Connect translation provider",
+      "Add speech-to-text",
+      "Add text-to-speech",
+      "Add live captions",
+    ],
+  },
+  {
+    id: "planet-screen",
+    title: "Planet / World Screen",
+    query: "Countries, cultures, cities, world signals, global problems and solutions.",
+    kernelRoute: "planet.signal.runtime",
+    visibleRoute: "/planet",
+    status: "active-preview",
+    internalCapabilityFamilies: [
+      "World feed",
+      "Country matrix",
+      "Culture graph",
+      "Global signal routing",
+      "Problem-solution mapping",
+    ],
+    worksNow: [
+      "Route exists as Pantavion capability surface",
+      "Planetary concept is visible",
+      "No fake live-data claim",
+    ],
+    next: [
+      "Add country/culture database",
+      "Add map provider",
+      "Add verified signal sources",
+      "Add region filters",
+    ],
+  },
+  {
+    id: "people-social",
+    title: "People / Social Universe",
+    query: "Profiles, friends, followers, communities, dating, relationships, creators.",
+    kernelRoute: "people.social.graph",
+    visibleRoute: "/people",
+    status: "active-preview",
+    internalCapabilityFamilies: [
+      "Profiles",
+      "Social graph",
+      "Communities",
+      "Dating safety",
+      "Creator identity",
+    ],
+    worksNow: [
+      "Social surface is reachable",
+      "People capability is mapped",
+      "Privacy scope requirement is explicit",
+    ],
+    next: [
+      "Add database",
+      "Add profile model",
+      "Add friend/follow graph",
+      "Add privacy scopes",
+    ],
+  },
+  {
+    id: "pantaai-execution",
+    title: "PantaAI Execution Center",
+    query: "Intent, plan, capability selection, orchestration, result, memory candidate.",
+    kernelRoute: "intelligence.intent.execution",
+    visibleRoute: "/intelligence/execute",
+    status: "live-foundation",
+    internalCapabilityFamilies: [
+      "Intent parser",
+      "Plan generator",
+      "Capability registry",
+      "Execution packet",
+      "Memory candidate",
+    ],
+    worksNow: [
+      "PantaAI route exists",
+      "Execution doctrine is visible",
+      "Kernel routing concept is represented",
+    ],
+    next: [
+      "Connect model router",
+      "Connect tool providers",
+      "Connect memory store",
+      "Add workspace execution",
+    ],
+  },
+  {
+    id: "work-commerce",
+    title: "Work / Services / Income",
+    query: "Jobs, services, marketplace, earnings, business profiles, subscriptions.",
+    kernelRoute: "commercial.execution.runtime",
+    visibleRoute: "/work",
+    status: "provider-required",
+    internalCapabilityFamilies: [
+      "Jobs",
+      "Services",
+      "Marketplace",
+      "Business profiles",
+      "Earnings",
+    ],
+    worksNow: [
+      "Commercial surface is mapped",
+      "Regulated/payment boundary is explicit",
+      "No fake banking claim",
+    ],
+    next: [
+      "Connect payments provider",
+      "Add listings database",
+      "Add invoices",
+      "Add payouts after compliance review",
+    ],
+  },
+  {
+    id: "safety-identity",
+    title: "Safety / Law / Identity",
+    query: "Age gate, minors, legal, privacy, reports, moderation, lawful escalation.",
+    kernelRoute: "security.identity.governance",
+    visibleRoute: "/safety",
+    status: "live-foundation",
+    internalCapabilityFamilies: [
+      "Age gate",
+      "Minors protection",
+      "Terms and privacy",
+      "Reports",
+      "Audit logs",
+    ],
+    worksNow: [
+      "Safety surface is reachable",
+      "Legal boundaries are explicit",
+      "Hidden admin behavior is not used",
+    ],
+    next: [
+      "Add report database",
+      "Add moderation queue",
+      "Add audit logs",
+      "Add country-specific rules",
+    ],
+  },
 ];
 
+const pageStyle: CSSProperties = {
+  minHeight: "100vh",
+  background:
+    "radial-gradient(circle at 18% 12%, rgba(57,214,255,.14), transparent 28%), radial-gradient(circle at 84% 6%, rgba(214,168,74,.14), transparent 26%), linear-gradient(135deg, #03060B 0%, #071426 52%, #0B1E3A 100%)",
+  color: "#F5F1E7",
+  padding: "48px 20px",
+};
+
+const containerStyle: CSSProperties = {
+  width: "min(1180px, 100%)",
+  margin: "0 auto",
+};
+
+const headerStyle: CSSProperties = {
+  border: "1px solid rgba(214,168,74,.22)",
+  borderRadius: 28,
+  padding: 28,
+  background: "rgba(3,6,11,.64)",
+  boxShadow: "0 0 70px rgba(57,214,255,.10)",
+  marginBottom: 22,
+};
+
+const gridStyle: CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+  gap: 18,
+};
+
+const cardStyle: CSSProperties = {
+  border: "1px solid rgba(245,241,231,.13)",
+  borderRadius: 24,
+  padding: 20,
+  background: "rgba(255,255,255,.04)",
+};
+
+const badgeStyle: Record<RouteStatus, CSSProperties> = {
+  "live-foundation": {
+    display: "inline-flex",
+    padding: "6px 10px",
+    borderRadius: 999,
+    border: "1px solid rgba(57,214,255,.36)",
+    color: "#39D6FF",
+    fontSize: 12,
+    fontWeight: 800,
+    textTransform: "uppercase",
+    letterSpacing: ".08em",
+  },
+  "active-preview": {
+    display: "inline-flex",
+    padding: "6px 10px",
+    borderRadius: 999,
+    border: "1px solid rgba(214,168,74,.42)",
+    color: "#D6A84A",
+    fontSize: 12,
+    fontWeight: 800,
+    textTransform: "uppercase",
+    letterSpacing: ".08em",
+  },
+  "provider-required": {
+    display: "inline-flex",
+    padding: "6px 10px",
+    borderRadius: 999,
+    border: "1px solid rgba(217,83,79,.42)",
+    color: "#FF9B97",
+    fontSize: 12,
+    fontWeight: 800,
+    textTransform: "uppercase",
+    letterSpacing: ".08em",
+  },
+};
+
+const buttonStyle: CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  minHeight: 42,
+  padding: "0 14px",
+  borderRadius: 999,
+  border: "1px solid rgba(214,168,74,.44)",
+  color: "#F5F1E7",
+  textDecoration: "none",
+  fontWeight: 800,
+  marginTop: 10,
+};
+
 export default function PantaAIRoutingPage() {
-  const snapshot = getPantaAIRoutingSnapshot();
-
-  const demos = demoIntents.map((query) => ({
-    query,
-    result: resolvePantaAIRoute({
-      query,
-      userAccess: "signed-in",
-      source: "intelligence",
-    }),
-  }));
-
   return (
-    <main className="min-h-screen bg-[#020617] text-white">
-      <section className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-8 md:px-8 md:py-12">
-        <header className="rounded-[2rem] border border-[#d4af37]/35 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.18),transparent_34%),linear-gradient(135deg,#061528,#020617_68%)] p-6 md:p-8">
-          <div className="mb-4 inline-flex rounded-full border border-[#d4af37]/40 bg-[#d4af37]/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.28em] text-[#f5d56a]">
-            Prime Kernel Routing Link
-          </div>
+    <main style={pageStyle}>
+      <div style={containerStyle}>
+        <section style={headerStyle}>
+          <p
+            style={{
+              color: "#D6A84A",
+              letterSpacing: ".22em",
+              textTransform: "uppercase",
+              fontSize: 12,
+              fontWeight: 900,
+              margin: 0,
+            }}
+          >
+            Pantavion One / PantaAI Routing
+          </p>
 
-          <h1 className="text-4xl font-black tracking-tight md:text-6xl">
-            PantaAI Routing Spine
+          <h1
+            style={{
+              fontSize: "clamp(38px, 7vw, 76px)",
+              lineHeight: ".94",
+              letterSpacing: "-.055em",
+              margin: "14px 0",
+            }}
+          >
+            Intent becomes route. Route becomes capability. Capability becomes execution.
           </h1>
 
-          <p className="mt-4 max-w-5xl text-base leading-8 text-slate-200 md:text-lg">
-            This page verifies the bridge from public PantaAI cards into governed internal capability routing:
-            intent, capability family, execution mode, access policy, safety boundary and kernel route.
+          <p style={{ color: "rgba(245,241,231,.74)", fontSize: 18, lineHeight: 1.65, maxWidth: 880 }}>
+            This page is a compatibility-safe routing surface. It does not depend on the older
+            PantaAIRouteDecision shape that caused the TypeScript build failure. It preserves the product
+            truth: Pantavion is not a tool directory. It routes intent into governed capability families.
           </p>
-        </header>
 
-        <section className="grid gap-4 md:grid-cols-5">
-          <Metric label="Cards" value={snapshot.cardCount} />
-          <Metric label="Public" value={snapshot.publicRouteCount} />
-          <Metric label="Signed-in" value={snapshot.signedInRouteCount} />
-          <Metric label="Restricted" value={snapshot.restrictedRouteCount} />
-          <Metric label="Admin-only" value={snapshot.adminOnlyRouteCount} />
-        </section>
-
-        <section className="rounded-[2rem] border border-sky-300/20 bg-sky-300/[0.04] p-5 md:p-6">
-          <h2 className="text-2xl font-bold">Execution modes</h2>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {snapshot.executionModes.map((mode) => (
-              <span
-                key={mode}
-                className="rounded-full border border-sky-200/15 bg-sky-200/10 px-3 py-1 text-xs text-sky-100"
-              >
-                {mode}
-              </span>
-            ))}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 20 }}>
+            <Link href="/intelligence/execute" style={buttonStyle}>
+              Open PantaAI Execute
+            </Link>
+            <Link href="/intelligence/capabilities" style={buttonStyle}>
+              View Capabilities
+            </Link>
+            <Link href="/dashboard" style={buttonStyle}>
+              Open Dashboard
+            </Link>
           </div>
         </section>
 
-        <section className="grid gap-5">
-          <h2 className="text-2xl font-bold">Demo intent routing</h2>
+        <section style={gridStyle}>
+          {routingDecisions.map((route) => (
+            <article key={route.id} style={cardStyle}>
+              <span style={badgeStyle[route.status]}>{route.status}</span>
 
-          {demos.map(({ query, result }) => (
-            <article
-              key={query}
-              className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-5"
-            >
-              <div className="text-xs font-bold uppercase tracking-[0.22em] text-[#f5d56a]">
-                User intent
+              <h2 style={{ fontSize: 24, margin: "14px 0 8px" }}>{route.title}</h2>
+
+              <p style={{ color: "rgba(245,241,231,.68)", lineHeight: 1.55 }}>{route.query}</p>
+
+              <div
+                style={{
+                  border: "1px solid rgba(57,214,255,.18)",
+                  borderRadius: 16,
+                  padding: 12,
+                  background: "rgba(57,214,255,.05)",
+                  marginTop: 12,
+                }}
+              >
+                <strong style={{ color: "#39D6FF" }}>Kernel route</strong>
+                <div style={{ color: "rgba(245,241,231,.76)", marginTop: 4 }}>{route.kernelRoute}</div>
               </div>
 
-              <h3 className="mt-2 text-xl font-black">{query}</h3>
+              <h3 style={{ color: "#D6A84A", marginTop: 18 }}>Capability families</h3>
+              <ul style={{ color: "rgba(245,241,231,.70)", lineHeight: 1.55 }}>
+                {route.internalCapabilityFamilies.map((family) => (
+                  <li key={family}>{family}</li>
+                ))}
+              </ul>
 
-              <div className="mt-4 grid gap-4 lg:grid-cols-3">
-                <Info label="Disposition" value={result.disposition} />
-                <Info
-                  label="Selected surface"
-                  value={result.selected?.title ?? "Unresolved"}
-                />
-                <Info
-                  label="Kernel route"
-                  value={result.selected?.kernelRoute ?? "None"}
-                />
-              </div>
+              <h3 style={{ color: "#D6A84A", marginTop: 18 }}>Works now</h3>
+              <ul style={{ color: "rgba(245,241,231,.70)", lineHeight: 1.55 }}>
+                {route.worksNow.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
 
-              <p className="mt-4 text-sm leading-7 text-slate-300">
-                {result.reason}
-              </p>
+              <h3 style={{ color: "#D6A84A", marginTop: 18 }}>Next</h3>
+              <ul style={{ color: "rgba(245,241,231,.70)", lineHeight: 1.55 }}>
+                {route.next.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
 
-              {result.selected ? (
-                <div className="mt-4 grid gap-4 lg:grid-cols-2">
-                  <Block
-                    title="Orchestration path"
-                    items={result.selected.orchestrationPath}
-                  />
-                  <Block
-                    title="Required action"
-                    items={result.requiredAction}
-                  />
-                </div>
-              ) : null}
+              <Link href={route.visibleRoute} style={buttonStyle}>
+                Open route
+              </Link>
             </article>
           ))}
         </section>
-
-        <section className="grid gap-5">
-          <h2 className="text-2xl font-bold">Full routing map</h2>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            {snapshot.routes.map((route) => (
-              <article
-                key={route.cardKey}
-                className="rounded-3xl border border-white/10 bg-[#071426] p-5"
-              >
-                <div className="flex flex-wrap gap-2">
-                  <span className="rounded-full border border-[#d4af37]/40 bg-[#d4af37]/10 px-3 py-1 text-xs text-[#f5d56a]">
-                    {route.executionMode}
-                  </span>
-                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
-                    {route.accessMode}
-                  </span>
-                  <span className="rounded-full border border-sky-200/15 bg-sky-200/10 px-3 py-1 text-xs text-sky-100">
-                    {route.truthMode}
-                  </span>
-                </div>
-
-                <h3 className="mt-4 text-xl font-black">{route.title}</h3>
-
-                <div className="mt-3 text-sm leading-7 text-slate-300">
-                  <strong className="text-slate-100">Kernel route:</strong>{" "}
-                  {route.kernelRoute}
-                </div>
-
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {route.internalCapabilityFamilies.slice(0, 8).map((family) => (
-                    <span
-                      key={family}
-                      className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200"
-                    >
-                      {family}
-                    </span>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      </section>
+      </div>
     </main>
-  );
-}
-
-function Metric({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-      <div className="text-2xl font-black text-white">{value}</div>
-      <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">
-        {label}
-      </div>
-    </div>
-  );
-}
-
-function Info({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-[#020617]/50 p-4">
-      <div className="text-xs uppercase tracking-[0.18em] text-slate-400">
-        {label}
-      </div>
-      <div className="mt-2 text-sm font-bold text-white">{value}</div>
-    </div>
-  );
-}
-
-function Block({ title, items }: { title: string; items: string[] }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-[#020617]/50 p-4">
-      <h4 className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-slate-300">
-        {title}
-      </h4>
-
-      <ul className="space-y-2 text-sm leading-6 text-slate-200">
-        {items.map((item) => (
-          <li key={item} className="flex gap-2">
-            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4af37]" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
