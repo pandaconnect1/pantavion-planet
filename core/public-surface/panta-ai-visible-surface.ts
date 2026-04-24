@@ -1,659 +1,1058 @@
-﻿export type PantaAIVisibleAccessMode =
+﻿// core/public-surface/panta-ai-visible-surface.ts
+
+export type PantaAIAccessMode =
   | "public"
   | "signed-in"
   | "restricted"
   | "admin-only";
 
-export type PantaAIVisibleCard = {
+export type PantaAITruthMode =
+  | "deterministic"
+  | "verified"
+  | "assisted"
+  | "creative"
+  | "restricted";
+
+export interface PantaAIWorkAction {
+  title: string;
+  userCanAsk: string;
+  explanation: string;
+  expectedResult: string;
+}
+
+export interface PantaAIVisibleCard {
   key: string;
   title: string;
   subtitle: string;
   publicExplanation: string;
   whatItDoes: string[];
   whenToUseIt: string[];
-  exampleUserRequests: string[];
+  workActions: PantaAIWorkAction[];
+  referenceSignals: string[];
   internalCapabilityFamilies: string[];
-  accessMode: PantaAIVisibleAccessMode;
   safetyBoundaries: string[];
   expectedResult: string[];
-};
+  accessMode: PantaAIAccessMode;
+  truthMode: PantaAITruthMode;
+  kernelRole: string;
+  route: string;
+}
 
-export type PantaAIVisibleSurfaceSummary = {
+export interface PantaAIVisibleSurfaceSummary {
   title: string;
   subtitle: string;
   mission: string;
+  doctrine: string[];
   cardCount: number;
   publicCount: number;
   signedInCount: number;
   restrictedCount: number;
   adminOnlyCount: number;
   capabilityFamilies: string[];
-};
+}
 
 const PANTAAI_VISIBLE_CARDS: PantaAIVisibleCard[] = [
   {
     key: "ai-assistant",
     title: "AI Assistant",
-    subtitle: "One intelligent entry point for daily questions, plans and decisions.",
+    subtitle: "Κεντρικός βοηθός σκέψης, απάντησης, οργάνωσης και εκτέλεσης.",
     publicExplanation:
-      "Use this when you do not know which tool or workflow you need. Pantavion reads the goal, classifies the request and routes it to the right capability family.",
+      "Ο χρήστης δεν χρειάζεται να ψάχνει ποιο εργαλείο να ανοίξει. Γράφει τι θέλει και το PantaAI μετατρέπει την πρόθεση σε καθαρή απάντηση, σχέδιο ή επόμενο βήμα.",
     whatItDoes: [
-      "Understands user intent instead of only reading keywords.",
-      "Turns vague requests into structured next steps.",
-      "Routes work to research, writing, building, learning, planning or creation paths.",
-      "Keeps the experience simple while the Prime Kernel handles complexity behind the surface."
+      "Καταλαβαίνει πρόθεση, στόχο, περιορισμούς και επίπεδο χρήστη.",
+      "Δίνει απάντηση, πλάνο, λίστα ενεργειών ή οργανωμένο workflow.",
+      "Συνδέει την ερώτηση με μνήμη, γνώση, έρευνα, δημιουργία ή εκτέλεση.",
+      "Μειώνει τη σύγχυση από πολλά διαφορετικά AI εργαλεία."
     ],
     whenToUseIt: [
-      "When the user wants a general answer.",
-      "When the user needs a plan.",
-      "When the user is unsure which capability to use.",
-      "When the request crosses multiple domains."
+      "Όταν ο χρήστης δεν ξέρει από πού να αρχίσει.",
+      "Όταν χρειάζεται άμεση καθοδήγηση.",
+      "Όταν θέλει να μετατρέψει μια ιδέα σε πρακτικό πλάνο."
     ],
-    exampleUserRequests: [
-      "Help me organize my day.",
-      "Explain this in simple words.",
-      "Tell me what I should do next.",
-      "Find the best way to solve this."
+    workActions: [
+      {
+        title: "Μετέτρεψε ιδέα σε πλάνο",
+        userCanAsk: "Θέλω να ξεκινήσω μια online υπηρεσία αλλά δεν ξέρω από πού.",
+        explanation: "Το PantaAI σπάει την ιδέα σε στόχο, κοινό, βήματα, εργαλεία, κόστος και προτεραιότητες.",
+        expectedResult: "Καθαρό action plan με βήματα πρώτης εβδομάδας."
+      },
+      {
+        title: "Εξήγησε δύσκολο θέμα",
+        userCanAsk: "Εξήγησέ μου απλά τι είναι knowledge graph.",
+        explanation: "Προσαρμόζει την απάντηση στο επίπεδο του χρήστη.",
+        expectedResult: "Κατανοητή εξήγηση με παραδείγματα."
+      },
+      {
+        title: "Οργάνωσε απόφαση",
+        userCanAsk: "Να πάω σε Vercel ή AWS για το project;",
+        explanation: "Συγκρίνει επιλογές, ρίσκα, κόστος και τεχνική δυσκολία.",
+        expectedResult: "Σύσταση με λόγους και tradeoffs."
+      }
+    ],
+    referenceSignals: [
+      "ChatGPT-style assistants",
+      "Claude-style long-context reasoning",
+      "Gemini-style multimodal assistance"
     ],
     internalCapabilityFamilies: [
       "intent-resolution",
-      "answer-strategy",
-      "planning",
-      "memory-continuity",
+      "answer-planning",
+      "memory-aware-response",
+      "workflow-suggestion",
       "kernel-routing"
     ],
-    accessMode: "public",
     safetyBoundaries: [
-      "No hidden authority over user decisions.",
-      "High-risk advice routes to safer guidance and review paths.",
-      "Truth zone must be visible internally."
+      "Δεν αποφασίζει μόνο του για legal, billing, identity, age, security ή restricted actions.",
+      "Δηλώνει αβεβαιότητα όταν δεν υπάρχει αρκετή πληροφορία.",
+      "Δεν παρουσιάζει generative output σαν verified truth."
     ],
     expectedResult: [
-      "Clear answer.",
-      "Structured next steps.",
-      "Recommended Pantavion path."
-    ]
+      "Γρήγορη κατανόηση.",
+      "Καθαρό πλάνο.",
+      "Σωστό επόμενο βήμα."
+    ],
+    accessMode: "public",
+    truthMode: "assisted",
+    kernelRole: "Prime Kernel routes simple questions to answer mode and complex goals to workflow mode.",
+    route: "/intelligence"
   },
   {
     key: "deep-research",
     title: "Deep Research",
-    subtitle: "Evidence-aware research, comparison and synthesis.",
+    subtitle: "Έρευνα με πηγές, σύγκριση, τεκμηρίωση και συμπέρασμα.",
     publicExplanation:
-      "Use this for serious research, market intelligence, academic synthesis, competitor analysis and evidence-backed decisions.",
+      "Ενότητα για σοβαρή έρευνα όπου ο χρήστης χρειάζεται όχι απλή απάντηση, αλλά πηγές, αντιπαραβολή, αμφιβολίες και καθαρή τελική εικόνα.",
     whatItDoes: [
-      "Breaks a research question into subquestions.",
-      "Collects and compares sources.",
-      "Separates verified information from generative reasoning.",
-      "Produces summaries, reports, tables and action recommendations."
+      "Συλλέγει και οργανώνει πληροφορίες από αξιόπιστες πηγές.",
+      "Ξεχωρίζει επίσημες, υψηλής ποιότητας, αδύναμες και χαμηλής εμπιστοσύνης πηγές.",
+      "Δίνει συμπέρασμα με επιφυλάξεις όπου χρειάζεται.",
+      "Μπορεί να τροφοδοτήσει Mind, Learn, Business, Health Knowledge και Strategy."
     ],
     whenToUseIt: [
-      "When accuracy matters.",
-      "When comparing companies, technologies or markets.",
-      "When preparing decisions, reports or strategy.",
-      "When the answer must not be superficial."
+      "Όταν η απάντηση πρέπει να είναι τεκμηριωμένη.",
+      "Όταν υπάρχουν πολλές απόψεις ή ανταγωνιστικές πληροφορίες.",
+      "Όταν ο χρήστης παίρνει σοβαρή απόφαση."
     ],
-    exampleUserRequests: [
-      "Compare these AI tools.",
-      "Research the market for this product.",
-      "Summarize this topic with evidence.",
-      "Find what competitors have and what Pantavion still lacks."
+    workActions: [
+      {
+        title: "Έρευνα αγοράς",
+        userCanAsk: "Βρες τι κάνουν οι μεγάλες AI πλατφόρμες και πού έχουν κενά.",
+        explanation: "Οργανώνει εταιρείες, δυνατότητες, πλεονεκτήματα, αδυναμίες και ευκαιρίες για Pantavion.",
+        expectedResult: "Research brief με πίνακα ανταγωνισμού και gap analysis."
+      },
+      {
+        title: "Evidence pack",
+        userCanAsk: "Μάζεψε πηγές για αυτό το θέμα και βγάλε συμπέρασμα.",
+        explanation: "Διαχωρίζει facts, claims, sources και uncertainty.",
+        expectedResult: "Τεκμηριωμένη αναφορά με καθαρές ενδείξεις."
+      },
+      {
+        title: "Σύγκριση λύσεων",
+        userCanAsk: "Σύγκρινε NotebookLM, Obsidian και δικό μας memory model.",
+        explanation: "Μετατρέπει εξωτερικά παραδείγματα σε capability families.",
+        expectedResult: "Ανάλυση build / integrate / ignore / improve."
+      }
+    ],
+    referenceSignals: [
+      "NotebookLM-style source notebooks",
+      "Perplexity-style answer with sources",
+      "academic search and citation tools"
     ],
     internalCapabilityFamilies: [
-      "research-retrieval",
-      "evidence-scoring",
-      "source-comparison",
-      "market-intelligence",
-      "truth-governance"
+      "source-evaluation",
+      "evidence-comparison",
+      "research-synthesis",
+      "citation-awareness",
+      "trust-scoring"
+    ],
+    safetyBoundaries: [
+      "Χρειάζεται web/source verification για πρόσφατα ή μεταβλητά facts.",
+      "Δεν εμφανίζει αβέβαιες πληροφορίες σαν βεβαιότητα.",
+      "Δεν αντιγράφει copyrighted material."
+    ],
+    expectedResult: [
+      "Έρευνα με ποιότητα.",
+      "Πηγές και συμπέρασμα.",
+      "Ανταγωνιστική κατανόηση."
     ],
     accessMode: "signed-in",
-    safetyBoundaries: [
-      "Unverified claims must not be promoted as facts.",
-      "Sources and confidence should be tracked.",
-      "High-stakes domains require stronger caution."
-    ],
-    expectedResult: [
-      "Evidence summary.",
-      "Gap analysis.",
-      "Strategic recommendation."
-    ]
+    truthMode: "verified",
+    kernelRole: "Prime Kernel upgrades this route from answer mode to verified research mode when evidence is required.",
+    route: "/intelligence"
   },
   {
-    key: "writing",
-    title: "Writing",
-    subtitle: "Professional writing for messages, documents, scripts and public text.",
+    key: "writing-content",
+    title: "Writing / Content",
+    subtitle: "Κείμενα, άρθρα, posts, emails, scripts και structured documents.",
     publicExplanation:
-      "Use this for emails, articles, product descriptions, speeches, posts, reports, summaries and rewrites.",
+      "Ο χρήστης γράφει τι θέλει να πετύχει και το PantaAI δημιουργεί κείμενο με στόχο, ύφος, κοινό και δομή.",
     whatItDoes: [
-      "Drafts text from user intent.",
-      "Improves clarity, tone and structure.",
-      "Creates multiple versions for different audiences.",
-      "Transforms rough notes into polished documents."
+      "Γράφει ή βελτιώνει κείμενα.",
+      "Μετατρέπει πρόχειρες ιδέες σε καθαρό κείμενο.",
+      "Προσαρμόζει ύφος για επαγγελματικό, δημόσιο, δημιουργικό ή απλό λόγο.",
+      "Μπορεί να παράγει outline, draft, rewrite, summary και final copy."
     ],
     whenToUseIt: [
-      "When the user needs professional text.",
-      "When rough notes need structure.",
-      "When tone or language must be improved.",
-      "When content must be adapted for another audience."
+      "Για άρθρα, posts, emails, proposals, scripts, landing copy.",
+      "Όταν ο χρήστης έχει ιδέα αλλά όχι καθαρή διατύπωση.",
+      "Όταν χρειάζεται μετάφραση ή επαγγελματικό polish."
     ],
-    exampleUserRequests: [
-      "Write this professionally.",
-      "Make this shorter and clearer.",
-      "Create a product description.",
-      "Turn my notes into a formal document."
+    workActions: [
+      {
+        title: "Γράψε επαγγελματικό κείμενο",
+        userCanAsk: "Γράψε μου παρουσίαση για το Pantavion.",
+        explanation: "Οργανώνει κεντρικό μήνυμα, κοινό, ύφος και call to action.",
+        expectedResult: "Καθαρό επαγγελματικό draft."
+      },
+      {
+        title: "Βελτίωσε υπάρχον κείμενο",
+        userCanAsk: "Κάνε αυτό πιο δυνατό και πιο καθαρό.",
+        explanation: "Κρατά την πρόθεση αλλά διορθώνει δομή, ακρίβεια και ροή.",
+        expectedResult: "Πιο καθαρό και ισχυρό κείμενο."
+      },
+      {
+        title: "Πολυγλωσσικό content",
+        userCanAsk: "Κάνε το στα ελληνικά και αγγλικά.",
+        explanation: "Μεταφράζει με προσαρμογή νοήματος, όχι μηχανική λέξη προς λέξη.",
+        expectedResult: "Δίγλωσσο περιεχόμενο έτοιμο για χρήση."
+      }
+    ],
+    referenceSignals: [
+      "AI writing assistants",
+      "copywriting tools",
+      "document editors"
     ],
     internalCapabilityFamilies: [
-      "text-generation",
-      "editing",
-      "translation",
-      "summarization",
+      "draft-generation",
+      "rewrite-polish",
+      "tone-control",
+      "translation-adaptation",
       "document-structuring"
     ],
-    accessMode: "public",
     safetyBoundaries: [
-      "No fake credentials or fabricated claims.",
-      "Sensitive documents require privacy-aware handling.",
-      "Legal or medical text must stay bounded."
+      "Δεν παράγει παραπλανητικό ή ψεύτικο περιεχόμενο ως γεγονός.",
+      "Σε legal, medical, financial κείμενα κρατά σαφή όρια.",
+      "Δεν υποκαθιστά επίσημη επαγγελματική ευθύνη."
     ],
     expectedResult: [
-      "Polished text.",
-      "Alternative versions.",
-      "Ready-to-use draft."
-    ]
+      "Κείμενο με καθαρό σκοπό.",
+      "Σωστό ύφος.",
+      "Έτοιμη χρήση ή επεξεργασία."
+    ],
+    accessMode: "public",
+    truthMode: "creative",
+    kernelRole: "Prime Kernel routes writing to creative mode unless factual verification is requested.",
+    route: "/intelligence"
   },
   {
     key: "coding-build",
     title: "Coding / Build",
-    subtitle: "Apps, websites, code, debugging and software planning.",
+    subtitle: "Κώδικας, αρχιτεκτονική, debugging, refactor και implementation plans.",
     publicExplanation:
-      "Use this when the user wants to build software, fix code, create a website, design a feature or understand a technical system.",
+      "Ενότητα για ανάπτυξη λογισμικού με καθαρές οδηγίες, πλήρη αρχεία, ασφαλές patching και τεχνική συνέπεια.",
     whatItDoes: [
-      "Turns product intent into technical structure.",
-      "Creates code-ready plans and implementation steps.",
-      "Explains errors and repair paths.",
-      "Supports app, website, API and workflow construction."
+      "Γράφει πλήρη αρχεία και όχι αποσπασματικά snippets όταν ζητείται.",
+      "Δίνει file-by-file implementation plan.",
+      "Βοηθά σε TypeScript, React, Next.js, APIs, schemas, state και testing.",
+      "Προστατεύει από terminal paste errors με full write blocks."
     ],
     whenToUseIt: [
-      "When building a website.",
-      "When creating an app.",
-      "When debugging code.",
-      "When translating a product idea into architecture."
+      "Όταν χτίζεται νέο feature.",
+      "Όταν υπάρχουν errors σε build ή typecheck.",
+      "Όταν χρειάζεται ασφαλές patch χωρίς να χαλάσει το repo."
     ],
-    exampleUserRequests: [
-      "Build me a landing page.",
-      "Fix this TypeScript error.",
-      "Create the folder structure.",
-      "Turn this feature into code."
+    workActions: [
+      {
+        title: "Διόρθωση build errors",
+        userCanAsk: "Έχω κόκκινα errors στο TypeScript.",
+        explanation: "Αναλύει error output, εντοπίζει αιτία και δίνει ασφαλές patch.",
+        expectedResult: "Πράσινο tsc και build."
+      },
+      {
+        title: "Full-file implementation",
+        userCanAsk: "Δώσε μου ολόκληρο το αρχείο σωστά.",
+        explanation: "Παράγει πλήρες αρχείο ή ένα terminal-ready write block.",
+        expectedResult: "Copy-paste ασφαλής υλοποίηση."
+      },
+      {
+        title: "Architecture refactor",
+        userCanAsk: "Πώς να το δέσω σωστά με Kernel;",
+        explanation: "Συνδέει types, runtime, registry, policy και UI.",
+        expectedResult: "Σταθερή αρχιτεκτονική χωρίς σκόρπια modules."
+      }
+    ],
+    referenceSignals: [
+      "GitHub Copilot-style coding help",
+      "Cursor-style coding workflows",
+      "agentic coding tools"
     ],
     internalCapabilityFamilies: [
       "code-generation",
-      "debugging",
-      "architecture-planning",
-      "frontend-build",
-      "backend-design",
-      "execution-kernel"
+      "repo-triage",
+      "typecheck-debugging",
+      "patch-planning",
+      "safe-terminal-blocks"
     ],
-    accessMode: "signed-in",
     safetyBoundaries: [
-      "No malware or abuse code.",
-      "Security tools remain defensive-first.",
-      "Production changes require controlled review."
+      "Δεν προτείνει τυφλά half-patches.",
+      "Δεν γράφει raw TypeScript line-by-line στο terminal.",
+      "Δεν αλλάζει security-critical code χωρίς review path."
     ],
     expectedResult: [
-      "Working code path.",
-      "Build steps.",
-      "Debug explanation."
-    ]
+      "Καθαρός κώδικας.",
+      "Buildable patch.",
+      "Ελάχιστο ρίσκο σπασίματος."
+    ],
+    accessMode: "signed-in",
+    truthMode: "deterministic",
+    kernelRole: "Prime Kernel routes code work through build mode, validation gates and repository safety rules.",
+    route: "/intelligence"
+  },
+  {
+    key: "app-website-builder",
+    title: "App / Website Builder",
+    subtitle: "Μετατροπή ανάγκης σε app, site, module ή workflow.",
+    publicExplanation:
+      "Ο χρήστης περιγράφει τι θέλει να φτιάξει και το Pantavion το μετατρέπει σε blueprint, σελίδες, components, flows και τεχνική ακολουθία.",
+    whatItDoes: [
+      "Παίρνει μια ιδέα και την κάνει product blueprint.",
+      "Ορίζει pages, components, user flows, data model και acceptance criteria.",
+      "Μπορεί να δημιουργήσει landing page, dashboard, service page ή app skeleton.",
+      "Συνδέεται με Create, Business, Coding και Automation."
+    ],
+    whenToUseIt: [
+      "Όταν ο χρήστης θέλει app ή website αλλά δεν ξέρει τεχνικά.",
+      "Όταν μια επιχείρηση χρειάζεται online παρουσία.",
+      "Όταν μια ιδέα πρέπει να γίνει υλοποιήσιμο προϊόν."
+    ],
+    workActions: [
+      {
+        title: "Φτιάξε website plan",
+        userCanAsk: "Θέλω ιστοσελίδα για την επιχείρησή μου.",
+        explanation: "Ορίζει δομή, σελίδες, περιεχόμενο, design και launch checklist.",
+        expectedResult: "Website blueprint και πρώτο implementation plan."
+      },
+      {
+        title: "Φτιάξε app module",
+        userCanAsk: "Θέλω module για κρατήσεις.",
+        explanation: "Ορίζει actors, states, data, UI και integration boundaries.",
+        expectedResult: "Module spec έτοιμο για build."
+      },
+      {
+        title: "Μετέτρεψε τίτλο σε σύστημα",
+        userCanAsk: "Φτιάξε service marketplace.",
+        explanation: "Σπάει τον τίτλο σε capabilities, workflows και governance.",
+        expectedResult: "Σοβαρό product/system blueprint."
+      }
+    ],
+    referenceSignals: [
+      "no-code builders",
+      "AI app generators",
+      "website builders"
+    ],
+    internalCapabilityFamilies: [
+      "blueprint-generation",
+      "page-architecture",
+      "flow-design",
+      "component-planning",
+      "acceptance-criteria"
+    ],
+    safetyBoundaries: [
+      "Δεν υπόσχεται production-ready backend χωρίς validation.",
+      "Δεν παρακάμπτει privacy, payments, age gates ή legal rules.",
+      "Δεν εκθέτει internal tools σαν ανεξέλεγκτο marketplace."
+    ],
+    expectedResult: [
+      "Blueprint.",
+      "Σελίδες και flows.",
+      "Build-ready direction."
+    ],
+    accessMode: "signed-in",
+    truthMode: "assisted",
+    kernelRole: "Prime Kernel converts user intent into blueprint object and build sequence.",
+    route: "/intelligence"
   },
   {
     key: "design-image",
     title: "Design / Image",
-    subtitle: "Visual identity, image creation, editing and design direction.",
+    subtitle: "Brand, UI, εικόνες, οπτική ταυτότητα και δημιουργικά assets.",
     publicExplanation:
-      "Use this for logos, brand systems, mockups, visual concepts, image prompts, layout direction and creative identity.",
+      "Ενότητα για σχεδιασμό εικόνας, brand direction, UI concepts και visual production χωρίς να χαθεί η ταυτότητα του Pantavion.",
     whatItDoes: [
-      "Creates design direction from brand intent.",
-      "Organizes colors, shapes, hierarchy and visual meaning.",
-      "Supports image generation and image editing workflows.",
-      "Connects visual output with Pantavion identity rules."
+      "Ορίζει design direction, χρώματα, ύφος και visual hierarchy.",
+      "Δημιουργεί image prompts, UI mockup logic και brand usage rules.",
+      "Βοηθά σε logos, icons, hero sections, banners, social assets.",
+      "Συνδέει αισθητική με product identity."
     ],
     whenToUseIt: [
-      "When designing a logo.",
-      "When creating brand assets.",
-      "When preparing product visuals.",
-      "When improving image direction."
+      "Όταν χρειάζεται brand ή visual direction.",
+      "Όταν ο χρήστης θέλει εικόνα ή mockup.",
+      "Όταν πρέπει να κρατηθεί consistent design system."
     ],
-    exampleUserRequests: [
-      "Create a premium logo direction.",
-      "Design an app icon.",
-      "Make this image more futuristic.",
-      "Create a visual system for this product."
+    workActions: [
+      {
+        title: "Brand direction",
+        userCanAsk: "Φτιάξε premium blue-gold identity.",
+        explanation: "Ορίζει χρώματα, σχήματα, χρήση, απαγορεύσεις και layout logic.",
+        expectedResult: "Brand guide direction."
+      },
+      {
+        title: "Image generation brief",
+        userCanAsk: "Θέλω 3D orb logo για Pantavion.",
+        explanation: "Μετατρέπει την ανάγκη σε ακριβές visual prompt και constraints.",
+        expectedResult: "Καθαρή εικόνα/brief για generation."
+      },
+      {
+        title: "UI polish",
+        userCanAsk: "Κάνε αυτή τη σελίδα πιο premium.",
+        explanation: "Προτείνει spacing, typography, contrast, hierarchy και card structure.",
+        expectedResult: "Πιο επαγγελματικό UI."
+      }
+    ],
+    referenceSignals: [
+      "Affinity-style professional design",
+      "AI image tools",
+      "UI design systems"
     ],
     internalCapabilityFamilies: [
-      "image-generation",
-      "image-editing",
-      "brand-design",
-      "ui-design",
-      "visual-identity"
+      "brand-system",
+      "prompt-to-image-brief",
+      "ui-polish",
+      "asset-generation",
+      "visual-consistency"
     ],
-    accessMode: "signed-in",
     safetyBoundaries: [
-      "Do not copy protected brand identity.",
-      "Respect user-provided design constraints.",
-      "Avoid misleading or harmful visual content."
+      "Δεν αντιγράφει ξένο brand ή λογότυπο.",
+      "Δεν χρησιμοποιεί protected likeness χωρίς άδεια.",
+      "Κρατά ξεκάθαρα Pantavion-owned design language."
     ],
     expectedResult: [
-      "Visual direction.",
-      "Prompt-ready output.",
-      "Design-ready structure."
-    ]
+      "Καθαρή visual direction.",
+      "Χρήσιμα assets.",
+      "Συνεπής ταυτότητα."
+    ],
+    accessMode: "public",
+    truthMode: "creative",
+    kernelRole: "Prime Kernel routes visual work to creative capability families with brand constraints.",
+    route: "/intelligence"
   },
   {
     key: "video-audio",
     title: "Video / Audio",
-    subtitle: "Media creation, voice, clips, narration and audio workflows.",
+    subtitle: "Σενάρια, voice, clips, παρουσιάσεις, audio identity και media workflows.",
     publicExplanation:
-      "Use this for video scripts, voiceovers, audio ideas, clips, narration, podcast planning and future media generation workflows.",
+      "Ενότητα για παραγωγή multimedia με οργανωμένο τρόπο: ιδέα, script, storyboard, voice, cut, distribution.",
     whatItDoes: [
-      "Creates video and audio concepts.",
-      "Builds scripts, storyboards and production plans.",
-      "Supports voice and narration workflows.",
-      "Prepares content for creator and business use."
+      "Φτιάχνει scripts για βίντεο, reels, explainers και promos.",
+      "Οργανώνει audio, voiceover, TTS direction και spoken summaries.",
+      "Σχεδιάζει video workflow από ιδέα μέχρι export.",
+      "Συνδέει Create, Marketing, Learning και Audio."
     ],
     whenToUseIt: [
-      "When creating a video.",
-      "When planning a podcast.",
-      "When preparing a voiceover.",
-      "When turning an idea into media."
+      "Όταν ο χρήστης θέλει video ή audio περιεχόμενο.",
+      "Όταν χρειάζεται script ή storyboard.",
+      "Όταν πρέπει να επαναχρησιμοποιηθεί υλικό σε πολλά formats."
     ],
-    exampleUserRequests: [
-      "Create a short video script.",
-      "Plan a podcast episode.",
-      "Make this into a voiceover.",
-      "Turn this idea into a reel."
+    workActions: [
+      {
+        title: "Video script",
+        userCanAsk: "Γράψε μου script για παρουσίαση Pantavion.",
+        explanation: "Δημιουργεί hook, δομή, σκηνές, voiceover και CTA.",
+        expectedResult: "Έτοιμο script."
+      },
+      {
+        title: "Clip repurposing",
+        userCanAsk: "Κάνε αυτό το κείμενο σε 5 μικρά reels.",
+        explanation: "Σπάει περιεχόμενο σε μικρά format με τίτλους και captions.",
+        expectedResult: "Πλάνο μικρών clips."
+      },
+      {
+        title: "Audio bulletin",
+        userCanAsk: "Κάνε το σαν ραδιοφωνική περίληψη.",
+        explanation: "Μετατρέπει κείμενο σε spoken format.",
+        expectedResult: "Audio-ready κείμενο."
+      }
+    ],
+    referenceSignals: [
+      "Higgsfield-style video generation signals",
+      "TTS and voice platforms",
+      "clip repurposing tools"
     ],
     internalCapabilityFamilies: [
-      "video-generation",
-      "audio-generation",
-      "voice-synthesis",
+      "script-generation",
       "storyboarding",
-      "media-planning"
+      "voice-direction",
+      "audio-summary",
+      "media-workflow"
     ],
-    accessMode: "signed-in",
     safetyBoundaries: [
-      "Synthetic media must follow consent and disclosure rules.",
-      "No impersonation or deceptive voice use.",
-      "Sensitive media routes to review."
+      "Δεν δημιουργεί παραπλανητικά deepfakes.",
+      "Δεν μιμείται πραγματικό πρόσωπο χωρίς άδεια.",
+      "Κρατά watermark/provenance rules όπου χρειάζεται."
     ],
     expectedResult: [
       "Script.",
       "Storyboard.",
-      "Production-ready plan."
-    ]
+      "Media production path."
+    ],
+    accessMode: "signed-in",
+    truthMode: "creative",
+    kernelRole: "Prime Kernel routes media work through Create and media safety boundaries.",
+    route: "/intelligence"
   },
   {
     key: "presentations",
     title: "Presentations",
-    subtitle: "Slides, pitch decks, reports and visual storytelling.",
+    subtitle: "Decks, pitch, reports, slides και executive summaries.",
     publicExplanation:
-      "Use this when the user needs a pitch, business deck, training material, report presentation or structured visual story.",
+      "Ο χρήστης δίνει θέμα και στόχο και παίρνει δομή παρουσίασης με slides, headlines, narrative και speaking notes.",
     whatItDoes: [
-      "Turns content into slide structure.",
-      "Creates deck outlines and speaker notes.",
-      "Organizes arguments visually.",
-      "Supports export-ready presentation workflows."
+      "Δημιουργεί pitch decks, reports και executive summaries.",
+      "Ορίζει slide order, message hierarchy και visual direction.",
+      "Συμπυκνώνει έρευνα ή στρατηγική σε παρουσιάσιμη μορφή.",
+      "Συνδέεται με Business, Research, Design και Writing."
     ],
     whenToUseIt: [
-      "When pitching an idea.",
-      "When presenting research.",
-      "When preparing training material.",
-      "When creating a business or investor deck."
+      "Για επενδυτές, συνεργάτες, δημόσια παρουσίαση ή εσωτερικό report.",
+      "Όταν μια ιδέα πρέπει να παρουσιαστεί καθαρά.",
+      "Όταν χρειάζεται γρήγορο structured deck."
     ],
-    exampleUserRequests: [
-      "Make this into slides.",
-      "Create a pitch deck.",
-      "Turn my report into a presentation.",
-      "Build a 10-slide structure."
+    workActions: [
+      {
+        title: "Pitch deck outline",
+        userCanAsk: "Φτιάξε pitch deck για Pantavion.",
+        explanation: "Ορίζει πρόβλημα, λύση, αγορά, προϊόν, moat, roadmap και ask.",
+        expectedResult: "Deck outline 10-12 slides."
+      },
+      {
+        title: "Executive summary",
+        userCanAsk: "Κάνε αυτή την ανάλυση σε executive summary.",
+        explanation: "Κρατά μόνο τα κρίσιμα για απόφαση.",
+        expectedResult: "Σύντομη και καθαρή σύνοψη."
+      },
+      {
+        title: "Slide narrative",
+        userCanAsk: "Βάλε τη σωστή σειρά στα slides.",
+        explanation: "Φτιάχνει narrative arc και sequence.",
+        expectedResult: "Παρουσίαση με ροή."
+      }
+    ],
+    referenceSignals: [
+      "Gamma-style presentation generation",
+      "deck builders",
+      "business reporting tools"
     ],
     internalCapabilityFamilies: [
-      "presentation-generation",
-      "visual-storytelling",
-      "business-communication",
-      "document-to-deck"
+      "deck-structure",
+      "slide-narrative",
+      "executive-summary",
+      "visual-brief",
+      "speaking-notes"
     ],
-    accessMode: "signed-in",
     safetyBoundaries: [
-      "No fabricated metrics.",
-      "Sensitive company data must stay scoped.",
-      "Claims require verification when presented as facts."
+      "Δεν παρουσιάζει projections σαν εγγυημένα facts.",
+      "Χρειάζεται verification για market, financial ή legal claims.",
+      "Δεν αντιγράφει copyrighted deck templates."
     ],
     expectedResult: [
-      "Slide outline.",
       "Deck structure.",
-      "Speaker-ready content."
-    ]
-  },
-  {
-    key: "business-strategy",
-    title: "Business / Strategy",
-    subtitle: "Planning, pricing, operations, positioning and execution.",
-    publicExplanation:
-      "Use this for business ideas, pricing, market positioning, launch plans, operations, product strategy and execution discipline.",
-    whatItDoes: [
-      "Turns business goals into plans.",
-      "Builds pricing, positioning and go-to-market paths.",
-      "Identifies risks and missing pieces.",
-      "Creates execution checklists."
-    ],
-    whenToUseIt: [
-      "When starting a business.",
-      "When pricing a service.",
-      "When planning a launch.",
-      "When organizing operations."
-    ],
-    exampleUserRequests: [
-      "Help me price this service.",
-      "Create a launch plan.",
-      "Find the risks in this business.",
-      "Make a strategy for this product."
-    ],
-    internalCapabilityFamilies: [
-      "business-planning",
-      "pricing-support",
-      "market-analysis",
-      "operations-planning",
-      "strategy-execution"
+      "Slide titles.",
+      "Speaking notes."
     ],
     accessMode: "signed-in",
-    safetyBoundaries: [
-      "Financial guidance must not pretend to be regulated advice.",
-      "Market assumptions should be clearly marked.",
-      "High-risk decisions require user approval."
-    ],
-    expectedResult: [
-      "Business plan.",
-      "Pricing direction.",
-      "Execution roadmap."
-    ]
-  },
-  {
-    key: "learning-mastery",
-    title: "Learning / Mastery",
-    subtitle: "Guided learning paths from beginner to professional.",
-    publicExplanation:
-      "Use this when the user wants to learn a skill, understand a subject, prepare for a role or build mastery over time.",
-    whatItDoes: [
-      "Creates step-by-step learning paths.",
-      "Adapts difficulty to the user.",
-      "Explains concepts clearly.",
-      "Creates drills, quizzes and practice paths."
-    ],
-    whenToUseIt: [
-      "When learning a new skill.",
-      "When preparing for work or study.",
-      "When moving from beginner to advanced.",
-      "When the user needs structured progress."
-    ],
-    exampleUserRequests: [
-      "Teach me cybersecurity from zero.",
-      "Make a learning path for data analysis.",
-      "Explain this like I am a beginner.",
-      "Give me practice exercises."
-    ],
-    internalCapabilityFamilies: [
-      "guided-mastery",
-      "curriculum-generation",
-      "skill-tree",
-      "practice-drills",
-      "assessment"
-    ],
-    accessMode: "public",
-    safetyBoundaries: [
-      "High-stakes domains require safe boundaries.",
-      "No unsafe training for misuse.",
-      "Learning claims should be honest and progressive."
-    ],
-    expectedResult: [
-      "Learning path.",
-      "Practice plan.",
-      "Skill progression."
-    ]
+    truthMode: "assisted",
+    kernelRole: "Prime Kernel converts research or strategy into presentation workflow.",
+    route: "/intelligence"
   },
   {
     key: "automation-workflows",
     title: "Automation / Workflows",
-    subtitle: "Turn repeated tasks into governed workflows.",
+    subtitle: "Από πρόθεση σε βήματα, tasks, triggers και monitored execution.",
     publicExplanation:
-      "Use this when the user wants to automate work, connect steps, reduce manual tasks or create repeatable execution flows.",
+      "Ενότητα για να σταματήσει ο χρήστης να κάνει τα ίδια χειροκίνητα. Το Pantavion οργανώνει επαναλαμβανόμενες εργασίες σε workflow.",
     whatItDoes: [
-      "Finds repeated tasks.",
-      "Converts steps into workflows.",
-      "Plans triggers, checks and outputs.",
-      "Routes execution through safe orchestration."
+      "Μετατρέπει διαδικασίες σε βήματα.",
+      "Ορίζει triggers, inputs, outputs, retries και failure handling.",
+      "Σχεδιάζει automation χωρίς χαοτικό tool exposure.",
+      "Συνδέεται με execution state machine και Prime Kernel."
     ],
     whenToUseIt: [
-      "When work repeats often.",
-      "When tasks need to be connected.",
-      "When a process needs tracking.",
-      "When the user wants execution instead of only advice."
+      "Όταν μια εργασία επαναλαμβάνεται.",
+      "Όταν χρειάζεται συντονισμός πολλών βημάτων.",
+      "Όταν ο χρήστης θέλει αποτέλεσμα, όχι λίστα εργαλείων."
     ],
-    exampleUserRequests: [
-      "Automate this workflow.",
-      "Make a repeatable process.",
-      "Create a checklist that runs every week.",
-      "Connect these steps into one flow."
+    workActions: [
+      {
+        title: "Workflow design",
+        userCanAsk: "Κάνε μου workflow για leads.",
+        explanation: "Ορίζει capture, qualification, follow-up και tracking.",
+        expectedResult: "Workflow blueprint."
+      },
+      {
+        title: "Task sequence",
+        userCanAsk: "Σπάσε αυτό σε βήματα εκτέλεσης.",
+        explanation: "Μετατρέπει στόχο σε executable task chain.",
+        expectedResult: "Task list με dependencies."
+      },
+      {
+        title: "Failure handling",
+        userCanAsk: "Τι γίνεται αν αποτύχει ένα βήμα;",
+        explanation: "Προσθέτει fallback, retry, manual review και rollback.",
+        expectedResult: "Ανθεκτικό workflow."
+      }
+    ],
+    referenceSignals: [
+      "Zapier-style automation",
+      "agent workflows",
+      "task orchestration systems"
     ],
     internalCapabilityFamilies: [
-      "workflow-orchestration",
-      "task-state-machine",
-      "automation-planning",
-      "execution-tracking",
-      "fallback-routing"
+      "workflow-modeling",
+      "trigger-design",
+      "state-machine",
+      "retry-fallback",
+      "execution-tracking"
     ],
-    accessMode: "signed-in",
     safetyBoundaries: [
-      "Automation requires permission boundaries.",
-      "Destructive actions need confirmation.",
-      "External tool execution must be governed."
+      "Δεν εκτελεί χρήματα, νομικές πράξεις, identity changes ή destructive actions χωρίς approval.",
+      "Κάθε automation πρέπει να έχει audit και rollback όπου χρειάζεται.",
+      "High-risk workflows μπαίνουν σε restricted review."
     ],
     expectedResult: [
-      "Workflow design.",
-      "Execution steps.",
-      "Automation plan."
-    ]
+      "Workflow.",
+      "Execution states.",
+      "Fallback logic."
+    ],
+    accessMode: "signed-in",
+    truthMode: "deterministic",
+    kernelRole: "Prime Kernel turns intent into plan, plan into capability sequence, and sequence into governed execution.",
+    route: "/intelligence"
   },
   {
     key: "notes-memory",
     title: "Notes / Memory",
-    subtitle: "Meetings, notes, summaries, recall and continuity.",
+    subtitle: "Σημειώσεις, meeting intelligence, project memory και continuity.",
     publicExplanation:
-      "Use this for notes, meeting summaries, personal knowledge, project memory and long-term continuity.",
+      "Ενότητα που κρατά οργανωμένη συνέχεια. Δεν πετά απλά σημειώσεις σε λίστα, τις συνδέει με projects, αποφάσεις και επόμενες κινήσεις.",
     whatItDoes: [
-      "Captures notes and decisions.",
-      "Summarizes meetings and documents.",
-      "Links memory to projects and tasks.",
-      "Keeps continuity across time."
+      "Συνοψίζει σημειώσεις, meetings και νήματα.",
+      "Βγάζει αποφάσεις, εκκρεμότητες, risks και next steps.",
+      "Συνδέει μνήμη με project, χρήστη, workflow και timeline.",
+      "Προστατεύει sensitive memory με retention και scope."
     ],
     whenToUseIt: [
-      "When summarizing a meeting.",
-      "When organizing notes.",
-      "When tracking decisions.",
-      "When recovering context."
+      "Όταν δεν πρέπει να χαθεί συνέχεια.",
+      "Για meetings, project notes, research notes και προσωπική οργάνωση.",
+      "Όταν ο χρήστης θέλει δεύτερο εγκέφαλο."
     ],
-    exampleUserRequests: [
-      "Summarize this meeting.",
-      "Remember the decision from today.",
-      "Organize these notes.",
-      "Show me what we decided before."
+    workActions: [
+      {
+        title: "Meeting summary",
+        userCanAsk: "Κάνε σύνοψη της συνάντησης.",
+        explanation: "Εντοπίζει αποφάσεις, tasks, owners και deadlines.",
+        expectedResult: "Meeting brief."
+      },
+      {
+        title: "Project memory",
+        userCanAsk: "Θύμισε μου τι έχουμε κλειδώσει για Pantavion.",
+        explanation: "Φέρνει continuity από decisions, doctrines και architecture.",
+        expectedResult: "Project recovery summary."
+      },
+      {
+        title: "Action extraction",
+        userCanAsk: "Βγάλε τι πρέπει να κάνω μετά.",
+        explanation: "Μετατρέπει σημειώσεις σε next steps.",
+        expectedResult: "Λίστα ενεργειών."
+      }
+    ],
+    referenceSignals: [
+      "Obsidian-style knowledge base",
+      "meeting assistants",
+      "personal memory systems"
     ],
     internalCapabilityFamilies: [
-      "meeting-intelligence",
-      "semantic-memory",
-      "decision-ledger",
+      "memory-classification",
+      "thread-summary",
+      "decision-extraction",
       "continuity-recall",
-      "project-memory"
+      "retention-policy"
     ],
-    accessMode: "signed-in",
     safetyBoundaries: [
-      "Memory must be consent-aware.",
-      "Sensitive notes require scope and retention rules.",
-      "Generated memory cannot override verified records."
+      "Sensitive memory δεν γίνεται public.",
+      "Long-term memory θέλει σαφή κλάση, provenance και retention.",
+      "Ο χρήστης πρέπει να μπορεί να διορθώσει ή να διαγράψει."
     ],
     expectedResult: [
-      "Summary.",
-      "Action items.",
-      "Recall-ready memory object."
-    ]
+      "Συνέχεια.",
+      "Οργανωμένη μνήμη.",
+      "Recoverable decisions."
+    ],
+    accessMode: "signed-in",
+    truthMode: "verified",
+    kernelRole: "Prime Kernel governs what becomes memory, what stays session-only and what requires review.",
+    route: "/intelligence"
   },
   {
     key: "data-analytics",
     title: "Data / Analytics",
-    subtitle: "Tables, reports, dashboards, insights and data reasoning.",
+    subtitle: "Πίνακες, καθαρισμός, insights, charts, BI και data reasoning.",
     publicExplanation:
-      "Use this for CSVs, reports, business metrics, dashboards, data cleaning, summaries and analytics planning.",
+      "Ενότητα για δεδομένα. Ο χρήστης ανεβάζει ή περιγράφει δεδομένα και παίρνει καθαρισμό, ανάλυση, ερμηνεία και επόμενες αποφάσεις.",
     whatItDoes: [
-      "Reads structured data.",
-      "Finds trends and anomalies.",
-      "Creates summaries and dashboards.",
-      "Explains what the data means."
+      "Καθαρίζει και οργανώνει datasets.",
+      "Βρίσκει patterns, outliers, trends και risks.",
+      "Δημιουργεί πίνακες, charts, summaries και BI-style insights.",
+      "Συνδέεται με Business, Research και Finance guidance."
     ],
     whenToUseIt: [
-      "When analyzing a spreadsheet.",
-      "When building a report.",
-      "When tracking performance.",
-      "When looking for patterns."
+      "Όταν υπάρχουν αριθμοί ή πίνακες.",
+      "Όταν ο χρήστης θέλει απόφαση από δεδομένα.",
+      "Όταν χρειάζεται report ή dashboard logic."
     ],
-    exampleUserRequests: [
-      "Analyze this data.",
-      "Find the trend.",
-      "Create a dashboard plan.",
-      "Explain these numbers."
+    workActions: [
+      {
+        title: "Analyze data",
+        userCanAsk: "Ανάλυσε αυτόν τον πίνακα πωλήσεων.",
+        explanation: "Βγάζει τάσεις, κενά και σημαντικές μετρήσεις.",
+        expectedResult: "Data summary με insights."
+      },
+      {
+        title: "Create chart plan",
+        userCanAsk: "Τι γραφήματα χρειάζονται εδώ;",
+        explanation: "Επιλέγει σωστή απεικόνιση για κάθε ερώτηση.",
+        expectedResult: "Chart plan."
+      },
+      {
+        title: "BI report",
+        userCanAsk: "Κάνε executive report από αυτά τα δεδομένα.",
+        explanation: "Συμπυκνώνει μετρήσεις σε decision-ready report.",
+        expectedResult: "BI-style summary."
+      }
+    ],
+    referenceSignals: [
+      "Rose AI-style data analysis signals",
+      "BI tools",
+      "notebook analytics"
     ],
     internalCapabilityFamilies: [
-      "data-analysis",
-      "dashboarding",
-      "reporting",
-      "statistical-reasoning",
-      "business-intelligence"
+      "data-cleaning",
+      "analytics-reasoning",
+      "chart-planning",
+      "bi-summary",
+      "dataset-quality-check"
+    ],
+    safetyBoundaries: [
+      "Δεν επινοεί δεδομένα που δεν υπάρχουν.",
+      "Δηλώνει sample limits και uncertainty.",
+      "Sensitive datasets χρειάζονται privacy handling."
+    ],
+    expectedResult: [
+      "Καθαρή ανάλυση.",
+      "Insights.",
+      "Decision-ready report."
     ],
     accessMode: "signed-in",
-    safetyBoundaries: [
-      "Private data must stay scoped.",
-      "Financial or medical data requires caution.",
-      "Data uncertainty must be visible."
-    ],
-    expectedResult: [
-      "Insight summary.",
-      "Tables or charts plan.",
-      "Decision support."
-    ]
+    truthMode: "verified",
+    kernelRole: "Prime Kernel routes data tasks to deterministic or verified analysis mode depending on source quality.",
+    route: "/intelligence"
   },
   {
-    key: "health-knowledge",
-    title: "Health Knowledge",
-    subtitle: "Safe health information, preparation and explanation.",
+    key: "learning-mastery",
+    title: "Learning / Mastery",
+    subtitle: "Μάθηση με επίπεδα, practice, quizzes και πραγματική πρόοδο.",
     publicExplanation:
-      "Use this for health knowledge, appointment preparation, symptom explanation, medical document summaries and safe education.",
+      "Δεν δίνει απλώς λίστα με links. Χτίζει path από αρχάριο σε προχωρημένο με πρακτική, έλεγχο και επανάληψη.",
     whatItDoes: [
-      "Explains health topics clearly.",
-      "Prepares questions for doctors.",
-      "Summarizes medical documents when provided.",
-      "Routes urgent or dangerous cases away from casual AI use."
+      "Ορίζει learning path ανά στόχο και επίπεδο.",
+      "Δίνει μαθήματα, πρακτική, drills, quizzes και progress checkpoints.",
+      "Συνδέει μάθηση με πραγματικές εφαρμογές.",
+      "Προσαρμόζεται σε γλώσσα, ηλικία και ρυθμό χρήστη."
     ],
     whenToUseIt: [
-      "When understanding medical information.",
-      "When preparing for a doctor visit.",
-      "When summarizing health documents.",
-      "When learning about health safely."
+      "Όταν ο χρήστης θέλει να μάθει δεξιότητα.",
+      "Όταν χρειάζεται structured path αντί για τυχαία videos.",
+      "Για σχολείο, καριέρα, τεχνικά skills, γλώσσες και mastery."
     ],
-    exampleUserRequests: [
-      "Explain this diagnosis in simple terms.",
-      "Prepare questions for my doctor.",
-      "Summarize this medical note.",
-      "Tell me when this needs urgent help."
+    workActions: [
+      {
+        title: "Learning path",
+        userCanAsk: "Θέλω να μάθω cybersecurity από το μηδέν.",
+        explanation: "Ορίζει beginner, intermediate, advanced path με ασφαλή όρια.",
+        expectedResult: "Study roadmap."
+      },
+      {
+        title: "Practice drills",
+        userCanAsk: "Δώσε μου ασκήσεις για να εξασκηθώ.",
+        explanation: "Παράγει ασκήσεις ανά επίπεδο.",
+        expectedResult: "Practice set."
+      },
+      {
+        title: "Quiz me",
+        userCanAsk: "Κάνε μου τεστ σε αυτά που έμαθα.",
+        explanation: "Ελέγχει κατανόηση και προτείνει επανάληψη.",
+        expectedResult: "Quiz και feedback."
+      }
+    ],
+    referenceSignals: [
+      "learning platforms",
+      "roadmap systems",
+      "AI tutor tools"
     ],
     internalCapabilityFamilies: [
-      "health-knowledge-compression",
-      "medical-document-summary",
-      "safety-triage",
-      "doctor-preparation"
+      "mastery-path",
+      "lesson-generation",
+      "practice-drills",
+      "quiz-feedback",
+      "progress-memory"
     ],
-    accessMode: "restricted",
     safetyBoundaries: [
-      "No replacement for a doctor.",
-      "Emergency symptoms must route to urgent care guidance.",
-      "No diagnosis certainty without clinical authority."
+      "High-risk domains έχουν safe curriculum.",
+      "Δεν παρέχει οδηγίες επιβλαβούς χρήσης.",
+      "Για minors εφαρμόζονται age-safe defaults."
     ],
     expectedResult: [
-      "Safe explanation.",
-      "Doctor questions.",
-      "Urgency guidance."
-    ]
+      "Learning roadmap.",
+      "Practice.",
+      "Progress tracking."
+    ],
+    accessMode: "public",
+    truthMode: "assisted",
+    kernelRole: "Prime Kernel routes learning into Guided Mastery with memory-aware progress.",
+    route: "/intelligence"
+  },
+  {
+    key: "business-strategy",
+    title: "Business / Strategy",
+    subtitle: "Σχέδια, positioning, operations, pricing, execution και growth.",
+    publicExplanation:
+      "Ενότητα για επιχειρηματική καθαρότητα. Ο χρήστης παίρνει στρατηγική, business plan, execution steps και risk analysis.",
+    whatItDoes: [
+      "Διαμορφώνει business model, positioning και go-to-market.",
+      "Ορίζει pricing, operations, workflows και growth paths.",
+      "Συγκρίνει επιλογές με κόστος, ρίσκο και δυσκολία.",
+      "Συνδέεται με Create, Data, Finance και Automation."
+    ],
+    whenToUseIt: [
+      "Όταν ο χρήστης θέλει να ξεκινήσει ή να βελτιώσει επιχείρηση.",
+      "Όταν χρειάζεται πλάνο εκτέλεσης.",
+      "Όταν πρέπει να ληφθεί επιχειρηματική απόφαση."
+    ],
+    workActions: [
+      {
+        title: "Business plan",
+        userCanAsk: "Φτιάξε business plan για αυτό.",
+        explanation: "Ορίζει αγορά, πελάτη, προσφορά, κόστος, κανάλια και βήματα.",
+        expectedResult: "Business plan v1."
+      },
+      {
+        title: "Pricing support",
+        userCanAsk: "Τι τιμές να βάλω;",
+        explanation: "Συγκρίνει value, cost, tiers και market logic.",
+        expectedResult: "Pricing model."
+      },
+      {
+        title: "Execution plan",
+        userCanAsk: "Τι κάνω τις επόμενες 30 μέρες;",
+        explanation: "Μετατρέπει στρατηγική σε weekly execution.",
+        expectedResult: "30-day action plan."
+      }
+    ],
+    referenceSignals: [
+      "strategy frameworks",
+      "business planning tools",
+      "operations playbooks"
+    ],
+    internalCapabilityFamilies: [
+      "business-modeling",
+      "pricing-support",
+      "market-positioning",
+      "execution-planning",
+      "operations-workflow"
+    ],
+    safetyBoundaries: [
+      "Δεν υπόσχεται έσοδα.",
+      "Finance/legal/tax topics χρειάζονται επαγγελματικό έλεγχο.",
+      "Δεν κάνει deceptive marketing."
+    ],
+    expectedResult: [
+      "Στρατηγική.",
+      "Πλάνο εκτέλεσης.",
+      "Καθαρή απόφαση."
+    ],
+    accessMode: "signed-in",
+    truthMode: "assisted",
+    kernelRole: "Prime Kernel turns business intent into plan, capability needs and execution sequence.",
+    route: "/intelligence"
   },
   {
     key: "finance-guidance",
     title: "Finance-Aware Guidance",
-    subtitle: "Budgeting, cost awareness, pricing and business finance context.",
+    subtitle: "Budget, κόστος, επιλογές, σύγκριση και οικονομική οργάνωση.",
     publicExplanation:
-      "Use this for budgets, pricing, cost planning, subscription decisions, business estimates and financial organization.",
+      "Βοηθά τον χρήστη να σκέφτεται οικονομικά πιο καθαρά χωρίς να παριστάνει τον οικονομικό σύμβουλο.",
     whatItDoes: [
-      "Organizes budgets and costs.",
-      "Supports pricing logic.",
-      "Compares options and tradeoffs.",
-      "Explains financial choices in plain language."
+      "Οργανώνει budget και κόστος.",
+      "Συγκρίνει επιλογές με οικονομική επίπτωση.",
+      "Βοηθά σε business pricing, savings logic και planning.",
+      "Επισημαίνει ρίσκα και σημεία που θέλουν ειδικό."
     ],
     whenToUseIt: [
-      "When planning a budget.",
-      "When pricing a service.",
-      "When comparing costs.",
-      "When organizing business expenses."
+      "Όταν ο χρήστης θέλει να υπολογίσει κόστος.",
+      "Όταν πρέπει να διαλέξει οικονομική διαδρομή.",
+      "Όταν χρειάζεται budget για project ή επιχείρηση."
     ],
-    exampleUserRequests: [
-      "Help me plan this budget.",
-      "Compare these costs.",
-      "Create a pricing model.",
-      "Show me where money is going."
+    workActions: [
+      {
+        title: "Project budget",
+        userCanAsk: "Πόσο μπορεί να κοστίσει αυτό το project;",
+        explanation: "Σπάει το κόστος σε hosting, tools, development, operations και maintenance.",
+        expectedResult: "Budget estimate με assumptions."
+      },
+      {
+        title: "Cost comparison",
+        userCanAsk: "Σύγκρινε Vercel, AWS και άλλες επιλογές κόστους.",
+        explanation: "Συγκρίνει αρχικό κόστος, scaling και complexity.",
+        expectedResult: "Decision table."
+      },
+      {
+        title: "Pricing model",
+        userCanAsk: "Πώς να τιμολογήσω το προϊόν;",
+        explanation: "Προτείνει tiers, quotas και value framing.",
+        expectedResult: "Pricing draft."
+      }
+    ],
+    referenceSignals: [
+      "budget planners",
+      "financial modeling tools",
+      "market cost estimators"
     ],
     internalCapabilityFamilies: [
       "budget-planning",
+      "cost-comparison",
       "pricing-support",
-      "cost-analysis",
-      "financial-organization"
+      "financial-risk-flags",
+      "usage-cost-modeling"
     ],
-    accessMode: "signed-in",
     safetyBoundaries: [
-      "No regulated investment advice.",
-      "Risk must be clear.",
-      "User keeps final decision authority."
+      "Δεν δίνει προσωπική επενδυτική συμβουλή.",
+      "Δεν υπόσχεται αποδόσεις.",
+      "Υψηλού ρίσκου οικονομικές αποφάσεις θέλουν ειδικό."
     ],
     expectedResult: [
-      "Budget structure.",
-      "Cost comparison.",
-      "Pricing direction."
-    ]
+      "Οικονομική καθαρότητα.",
+      "Κόστος και tradeoffs.",
+      "Ασφαλέστερη απόφαση."
+    ],
+    accessMode: "signed-in",
+    truthMode: "assisted",
+    kernelRole: "Prime Kernel routes finance-aware tasks through caution and assumption tracking.",
+    route: "/intelligence"
+  },
+  {
+    key: "health-knowledge",
+    title: "Health Knowledge",
+    subtitle: "Κατανόηση υγείας, συμπύκνωση γνώσης και προετοιμασία ερωτήσεων.",
+    publicExplanation:
+      "Βοηθά τον χρήστη να καταλάβει πληροφορίες υγείας και να προετοιμαστεί για συζήτηση με ειδικό. Δεν κάνει διάγνωση.",
+    whatItDoes: [
+      "Εξηγεί ιατρικούς όρους σε απλή γλώσσα.",
+      "Συνοψίζει πληροφορίες και οργανώνει ερωτήσεις για γιατρό.",
+      "Ξεχωρίζει γενική γνώση από προσωπική ιατρική απόφαση.",
+      "Μπορεί να υποστηρίξει health knowledge libraries με αυστηρά όρια."
+    ],
+    whenToUseIt: [
+      "Όταν ο χρήστης θέλει να καταλάβει ένα ιατρικό θέμα.",
+      "Όταν πρέπει να οργανώσει ερωτήσεις πριν από ραντεβού.",
+      "Όταν χρειάζεται health education, όχι διάγνωση."
+    ],
+    workActions: [
+      {
+        title: "Explain medical term",
+        userCanAsk: "Τι σημαίνει αυτός ο όρος;",
+        explanation: "Εξηγεί με απλά λόγια και δηλώνει όρια.",
+        expectedResult: "Κατανοητή γενική εξήγηση."
+      },
+      {
+        title: "Doctor questions",
+        userCanAsk: "Τι να ρωτήσω τον γιατρό μου;",
+        explanation: "Οργανώνει ερωτήσεις, συμπτώματα και ιστορικό προς συζήτηση.",
+        expectedResult: "Λίστα ερωτήσεων."
+      },
+      {
+        title: "Health article summary",
+        userCanAsk: "Σύνοψη αυτού του άρθρου υγείας.",
+        explanation: "Συνοψίζει χωρίς να μετατρέπει τη σύνοψη σε διάγνωση.",
+        expectedResult: "Ασφαλής περίληψη."
+      }
+    ],
+    referenceSignals: [
+      "medical knowledge bases",
+      "health education tools",
+      "research summarizers"
+    ],
+    internalCapabilityFamilies: [
+      "health-explanation",
+      "medical-summary",
+      "question-preparation",
+      "risk-escalation",
+      "source-sensitive-answering"
+    ],
+    safetyBoundaries: [
+      "Δεν κάνει διάγνωση.",
+      "Δεν αντικαθιστά γιατρό.",
+      "Σε επείγοντα περιστατικά οδηγεί σε άμεση επαγγελματική βοήθεια."
+    ],
+    expectedResult: [
+      "Κατανόηση.",
+      "Σωστές ερωτήσεις.",
+      "Ασφαλή όρια."
+    ],
+    accessMode: "public",
+    truthMode: "verified",
+    kernelRole: "Prime Kernel treats health as high-sensitivity knowledge with strict safety language.",
+    route: "/intelligence"
   },
   {
     key: "security-defense",
     title: "Security / Defense",
-    subtitle: "Defensive cyber support, safety checks and audit-ready guidance.",
+    subtitle: "Αμυντική ασφάλεια, audits, checklists και incident readiness.",
     publicExplanation:
-      "Use this for defensive security, account safety, incident preparation, checklists, audits and protection planning.",
+      "Η ασφάλεια στο Pantavion είναι defensive-first. Ο απλός χρήστης παίρνει προστασία, awareness και checklists. Ευαίσθητες δυνατότητες μένουν restricted ή admin-only.",
     whatItDoes: [
-      "Creates defensive checklists.",
-      "Explains risks and safe posture.",
-      "Supports incident response planning.",
-      "Routes restricted cyber requests to controlled paths."
+      "Δίνει αμυντικά security checklists.",
+      "Βοηθά σε privacy, account safety, phishing awareness και incident preparation.",
+      "Υποστηρίζει internal/admin defensive workflows.",
+      "Καταγράφει audit, policy και restricted boundaries."
     ],
     whenToUseIt: [
-      "When improving account security.",
-      "When preparing a security checklist.",
-      "When responding to a suspected incident.",
-      "When auditing defensive readiness."
+      "Όταν ο χρήστης θέλει να προστατεύσει λογαριασμό ή project.",
+      "Όταν μια ομάδα χρειάζεται readiness checklist.",
+      "Όταν υπάρχει security concern που πρέπει να δρομολογηθεί σωστά."
     ],
-    exampleUserRequests: [
-      "Create a security checklist.",
-      "Help me secure my account.",
-      "Prepare an incident response plan.",
-      "Review this security posture."
+    workActions: [
+      {
+        title: "Account safety",
+        userCanAsk: "Πώς προστατεύω τον λογαριασμό μου;",
+        explanation: "Δίνει πρακτικά defensive steps.",
+        expectedResult: "Security checklist."
+      },
+      {
+        title: "Project security review",
+        userCanAsk: "Έλεγξε τι λείπει από την ασφάλεια του project.",
+        explanation: "Εντοπίζει auth, secrets, logging, permissions και deployment risks.",
+        expectedResult: "Security gap report."
+      },
+      {
+        title: "Incident readiness",
+        userCanAsk: "Τι κάνω αν γίνει breach;",
+        explanation: "Δίνει containment, communication, evidence and recovery steps.",
+        expectedResult: "Incident response outline."
+      }
+    ],
+    referenceSignals: [
+      "defensive cyber tools",
+      "SIEM/logging systems",
+      "security audit frameworks"
     ],
     internalCapabilityFamilies: [
       "defensive-security",
@@ -662,73 +1061,93 @@ const PANTAAI_VISIBLE_CARDS: PantaAIVisibleCard[] = [
       "incident-response",
       "restricted-admin-security"
     ],
-    accessMode: "restricted",
     safetyBoundaries: [
       "No offensive misuse.",
-      "No stealth, credential theft or exploit guidance.",
-      "Restricted and admin-only flows must be audit-logged."
+      "Restricted tools are not exposed casually.",
+      "Admin-only security actions require audit and approval."
     ],
     expectedResult: [
-      "Defensive checklist.",
-      "Risk posture.",
-      "Safe incident response steps."
-    ]
+      "Προστασία.",
+      "Audit readiness.",
+      "Clear defensive path."
+    ],
+    accessMode: "restricted",
+    truthMode: "restricted",
+    kernelRole: "Prime Kernel gates cyber/security capabilities through defensive, restricted and admin-only policy.",
+    route: "/intelligence"
   },
   {
-    key: "app-website-builder",
-    title: "App / Website Builder",
-    subtitle: "From idea to page, app, workflow or product structure.",
+    key: "voice-translation",
+    title: "Voice / Translation",
+    subtitle: "Ζωντανή γλωσσική γέφυρα για ανθρώπους, ταξίδια, εργασία και βοήθεια.",
     publicExplanation:
-      "Use this when the user wants Pantavion to help build an app, website, service, landing page, workflow or product concept.",
+      "Το Pantavion πρέπει να σπάει τα γλωσσικά σύνορα. Η ενότητα οργανώνει spoken translation, text translation και show-to-human communication surfaces.",
     whatItDoes: [
-      "Turns ideas into product structure.",
-      "Defines pages, components, data models and flows.",
-      "Creates implementation-ready plans.",
-      "Connects build work to the Prime Kernel."
+      "Μεταφράζει νόημα σε άλλη γλώσσα.",
+      "Υποστηρίζει ταξίδι, εργασία, εξυπηρέτηση και καθημερινή επικοινωνία.",
+      "Συνδέεται με Voice runtime, locale policy και accessibility.",
+      "Μπορεί να λειτουργεί ως πρακτικός διερμηνέας."
     ],
     whenToUseIt: [
-      "When creating a new website.",
-      "When building an app.",
-      "When turning a title into a product.",
-      "When planning a service or workflow."
+      "Όταν δύο άνθρωποι δεν μιλούν την ίδια γλώσσα.",
+      "Σε ταξίδι, γιατρό, δημόσια υπηρεσία ή εργασία.",
+      "Όταν χρειάζεται άμεση κατανόηση."
     ],
-    exampleUserRequests: [
-      "Build me a website for this idea.",
-      "Turn this service into an app.",
-      "Create the homepage structure.",
-      "Make a full product plan."
+    workActions: [
+      {
+        title: "Translate phrase",
+        userCanAsk: "Πες αυτό στα αγγλικά.",
+        explanation: "Μεταφράζει με σωστό νόημα και ύφος.",
+        expectedResult: "Καθαρή μετάφραση."
+      },
+      {
+        title: "Show-to-driver",
+        userCanAsk: "Γράψε αυτό για να το δείξω σε ταξιτζή.",
+        explanation: "Δημιουργεί πρακτική φράση για πραγματική χρήση.",
+        expectedResult: "Έτοιμο μήνυμα."
+      },
+      {
+        title: "Meeting translation plan",
+        userCanAsk: "Πώς να οργανώσω πολύγλωσσο meeting;",
+        explanation: "Ορίζει γλώσσες, ροή, summaries και notes.",
+        expectedResult: "Multilingual communication plan."
+      }
+    ],
+    referenceSignals: [
+      "speech-to-text systems",
+      "text-to-speech systems",
+      "translation engines"
     ],
     internalCapabilityFamilies: [
-      "app-builder",
-      "website-builder",
-      "workflow-blueprint",
-      "product-architecture",
-      "kernel-build-supervision"
+      "language-detection",
+      "translation-adaptation",
+      "voice-runtime",
+      "locale-policy",
+      "accessibility"
     ],
-    accessMode: "signed-in",
     safetyBoundaries: [
-      "Generated build plans must respect policy and identity boundaries.",
-      "Production deployment needs review.",
-      "External services require legal and provider-compliant integration."
+      "Δεν υπόσχεται τέλεια μετάφραση σε legal/medical contexts χωρίς review.",
+      "Ευαίσθητα δεδομένα φωνής έχουν retention limits.",
+      "Raw audio δεν κρατιέται by default."
     ],
     expectedResult: [
-      "Product blueprint.",
-      "Page structure.",
-      "Implementation path."
-    ]
+      "Κατανόηση.",
+      "Άμεση χρήση.",
+      "Πολυγλωσσική γέφυρα."
+    ],
+    accessMode: "public",
+    truthMode: "assisted",
+    kernelRole: "Prime Kernel routes language tasks to voice/runtime and locale policy layers.",
+    route: "/intelligence"
   }
 ];
 
+function cloneValue<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value)) as T;
+}
+
 function cloneCard(card: PantaAIVisibleCard): PantaAIVisibleCard {
-  return {
-    ...card,
-    whatItDoes: [...card.whatItDoes],
-    whenToUseIt: [...card.whenToUseIt],
-    exampleUserRequests: [...card.exampleUserRequests],
-    internalCapabilityFamilies: [...card.internalCapabilityFamilies],
-    safetyBoundaries: [...card.safetyBoundaries],
-    expectedResult: [...card.expectedResult]
-  };
+  return cloneValue(card);
 }
 
 export function getPantaAIVisibleSurfaceCards(): PantaAIVisibleCard[] {
@@ -750,9 +1169,18 @@ export function getPantaAIVisibleSurfaceSummary(): PantaAIVisibleSurfaceSummary 
 
   return {
     title: "PantaAI Center",
-    subtitle: "One organized place for AI, creation, research, work, learning, automation and execution.",
+    subtitle:
+      "One organized place for AI, creation, research, work, learning, automation and execution.",
     mission:
       "The PantaAI Center prevents tool chaos by turning scattered AI tools and services into governed Pantavion capability families.",
+    doctrine: [
+      "Public simplicity, internal complexity.",
+      "Capabilities, not tool chaos.",
+      "Legal inspiration and evaluation, not cloning.",
+      "Result-first: intent to plan to capability to orchestration to execution.",
+      "Truth zoning, memory sovereignty and safety boundaries stay active.",
+      "Public cards explain what the user can do; Prime Kernel decides how it is routed internally."
+    ],
     cardCount: cards.length,
     publicCount: cards.filter((card) => card.accessMode === "public").length,
     signedInCount: cards.filter((card) => card.accessMode === "signed-in").length,

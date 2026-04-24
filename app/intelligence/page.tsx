@@ -1,54 +1,24 @@
-﻿import {
+﻿// app/intelligence/page.tsx
+
+import {
   getPantaAIVisibleSurfaceCards,
   getPantaAIVisibleSurfaceSummary
 } from "../../core/public-surface/panta-ai-visible-surface";
 
-export const metadata = {
-  title: "PantaAI Center | Pantavion",
-  description:
-    "The unified Pantavion AI capability center for research, creation, work, learning, automation and execution."
+const accessLabel: Record<string, string> = {
+  public: "Public",
+  "signed-in": "Signed-in",
+  restricted: "Restricted",
+  "admin-only": "Admin-only"
 };
 
-function AccessBadge({ accessMode }: { accessMode: string }) {
-  const label =
-    accessMode === "public"
-      ? "Public"
-      : accessMode === "signed-in"
-        ? "Signed-in"
-        : accessMode === "restricted"
-          ? "Restricted"
-          : "Admin-only";
-
-  return (
-    <span className="rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-200">
-      {label}
-    </span>
-  );
-}
-
-function SectionList({
-  title,
-  items
-}: {
-  title: string;
-  items: string[];
-}) {
-  return (
-    <div>
-      <h4 className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-sky-200/80">
-        {title}
-      </h4>
-      <ul className="space-y-1 text-sm leading-6 text-slate-200/85">
-        {items.map((item) => (
-          <li key={item} className="flex gap-2">
-            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-300" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+const truthLabel: Record<string, string> = {
+  deterministic: "Deterministic",
+  verified: "Verified",
+  assisted: "AI-assisted",
+  creative: "Creative",
+  restricted: "Restricted"
+};
 
 export default function IntelligencePage() {
   const summary = getPantaAIVisibleSurfaceSummary();
@@ -56,156 +26,202 @@ export default function IntelligencePage() {
 
   return (
     <main className="min-h-screen bg-[#020617] text-white">
-      <section className="relative overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_top,_rgba(212,175,55,0.2),_transparent_34%),linear-gradient(135deg,_#020617,_#0a1f44_52%,_#020617)] px-6 py-12 md:px-10 lg:px-16">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-6 inline-flex rounded-full border border-amber-300/25 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-amber-200">
-            Pantavion Prime Intelligence
+      <section className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-8 md:px-8 md:py-12">
+        <header className="rounded-[2rem] border border-[#d4af37]/35 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.18),transparent_34%),linear-gradient(135deg,#061528,#020617_68%)] p-6 shadow-[0_0_60px_rgba(212,175,55,0.12)] md:p-8">
+          <div className="mb-4 inline-flex rounded-full border border-[#d4af37]/40 bg-[#d4af37]/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.28em] text-[#f5d56a]">
+            Pantavion Prime Kernel Surface
           </div>
 
-          <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+          <div className="grid gap-6 lg:grid-cols-[1.4fr_0.8fr] lg:items-end">
             <div>
-              <h1 className="max-w-4xl text-4xl font-black tracking-tight text-white md:text-6xl">
+              <h1 className="text-4xl font-black tracking-tight md:text-6xl">
                 {summary.title}
               </h1>
-              <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-200">
+
+              <p className="mt-4 max-w-4xl text-base leading-8 text-slate-200 md:text-lg">
                 {summary.subtitle}
               </p>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">
+
+              <p className="mt-4 max-w-4xl text-sm leading-7 text-slate-300 md:text-base">
                 {summary.mission}
               </p>
-
-              <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div className="text-3xl font-black text-amber-200">
-                    {summary.cardCount}
-                  </div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-300">
-                    Capability cards
-                  </div>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div className="text-3xl font-black text-sky-200">
-                    {summary.publicCount}
-                  </div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-300">
-                    Public entry points
-                  </div>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div className="text-3xl font-black text-emerald-200">
-                    {summary.signedInCount}
-                  </div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-300">
-                    Signed-in workflows
-                  </div>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div className="text-3xl font-black text-rose-200">
-                    {summary.restrictedCount + summary.adminOnlyCount}
-                  </div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-300">
-                    Governed paths
-                  </div>
-                </div>
-              </div>
             </div>
 
-            <div className="rounded-[2rem] border border-amber-300/25 bg-black/30 p-6 shadow-2xl shadow-amber-950/30">
-              <div className="rounded-[1.5rem] border border-white/10 bg-[#07111f]/90 p-6">
-                <div className="mx-auto flex h-48 w-48 items-center justify-center rounded-full border border-amber-300/30 bg-[radial-gradient(circle,_rgba(255,215,0,0.28),_rgba(14,165,233,0.18)_38%,_rgba(2,6,23,1)_72%)] shadow-[0_0_70px_rgba(212,175,55,0.2)]">
-                  <div className="flex h-28 w-28 rotate-45 items-center justify-center border border-amber-200/70 bg-[#020617] shadow-[0_0_40px_rgba(212,175,55,0.35)]">
-                    <div className="-rotate-45 text-center">
-                      <div className="text-xs font-bold uppercase tracking-[0.32em] text-amber-200">
-                        Panta
-                      </div>
-                      <div className="text-2xl font-black text-white">AI</div>
-                    </div>
-                  </div>
-                </div>
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <div className="text-xs font-bold uppercase tracking-[0.24em] text-[#f5d56a]">
+                Surface Status
+              </div>
 
-                <p className="mt-6 text-center text-sm leading-6 text-slate-300">
-                  One center. Many capabilities. No scattered tool chaos.
-                </p>
+              <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                <Metric label="Cards" value={summary.cardCount} />
+                <Metric label="Public" value={summary.publicCount} />
+                <Metric label="Signed-in" value={summary.signedInCount} />
+                <Metric label="Restricted" value={summary.restrictedCount} />
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </header>
 
-      <section className="mx-auto max-w-7xl px-6 py-10 md:px-10 lg:px-16">
-        <div className="mb-8">
-          <h2 className="text-2xl font-black text-white md:text-3xl">
-            What the user can do here
-          </h2>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">
-            Each card is a public Pantavion surface. Behind it, the Prime Kernel,
-            Prime AI Orchestrator, policy gates, memory and capability registries
-            decide the safe execution path.
-          </p>
-        </div>
+        <section className="grid gap-4 md:grid-cols-2">
+          {summary.doctrine.map((item) => (
+            <div
+              key={item}
+              className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 text-sm leading-7 text-slate-200"
+            >
+              {item}
+            </div>
+          ))}
+        </section>
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          {cards.map((card) => (
+        <section className="rounded-[2rem] border border-sky-300/20 bg-sky-300/[0.04] p-5 md:p-6">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight">
+                Όλα μαζεμένα σε μία οργανωμένη επιφάνεια
+              </h2>
+              <p className="mt-2 max-w-4xl text-sm leading-7 text-slate-300">
+                Το Pantavion μπορεί να απορροφά νόμιμα ιδέες, πρότυπα εργασίας και capability families από όλο το παγκόσμιο AI οικοσύστημα,
+                αλλά να τα προσφέρει με δικό του τρόπο: καθαρά, ασφαλή, ενιαία, χωρίς tool chaos και χωρίς να αντιγράφει ξένες πλατφόρμες.
+              </p>
+            </div>
+
+            <a
+              href="/"
+              className="inline-flex items-center justify-center rounded-2xl border border-[#d4af37]/50 bg-[#d4af37] px-5 py-3 text-sm font-bold text-[#061528] transition hover:bg-[#f5d56a]"
+            >
+              Επιστροφή στην αρχική
+            </a>
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {summary.capabilityFamilies.slice(0, 24).map((family) => (
+              <span
+                key={family}
+                className="rounded-full border border-sky-200/15 bg-sky-200/10 px-3 py-1 text-xs text-sky-100"
+              >
+                {family}
+              </span>
+            ))}
+          </div>
+        </section>
+
+        <section className="grid gap-5">
+          {cards.map((card, index) => (
             <article
               key={card.key}
-              className="rounded-[1.5rem] border border-white/10 bg-[#07111f] p-6 shadow-xl shadow-black/25"
+              className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#071426] shadow-[0_0_40px_rgba(15,23,42,0.35)]"
             >
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div>
-                  <h3 className="text-2xl font-black text-white">
+              <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
+                <div className="border-b border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.14),transparent_34%),linear-gradient(145deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-5 md:p-6 lg:border-b-0 lg:border-r">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full border border-[#d4af37]/40 bg-[#d4af37]/10 px-3 py-1 text-xs font-bold text-[#f5d56a]">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
+                      {accessLabel[card.accessMode]}
+                    </span>
+                    <span className="rounded-full border border-sky-200/15 bg-sky-200/10 px-3 py-1 text-xs text-sky-100">
+                      {truthLabel[card.truthMode]}
+                    </span>
+                  </div>
+
+                  <h2 className="mt-5 text-2xl font-black tracking-tight md:text-3xl">
                     {card.title}
-                  </h3>
-                  <p className="mt-2 text-sm font-semibold text-amber-200">
+                  </h2>
+
+                  <p className="mt-2 text-sm font-semibold text-[#f5d56a]">
                     {card.subtitle}
                   </p>
+
+                  <p className="mt-4 text-sm leading-7 text-slate-300">
+                    {card.publicExplanation}
+                  </p>
+
+                  <div className="mt-5 rounded-2xl border border-[#d4af37]/20 bg-[#d4af37]/5 p-4">
+                    <h3 className="text-xs font-bold uppercase tracking-[0.22em] text-[#f5d56a]">
+                      Prime Kernel Role
+                    </h3>
+                    <p className="mt-2 text-sm leading-7 text-slate-200">
+                      {card.kernelRole}
+                    </p>
+                  </div>
                 </div>
-                <AccessBadge accessMode={card.accessMode} />
-              </div>
 
-              <p className="mt-5 text-sm leading-6 text-slate-300">
-                {card.publicExplanation}
-              </p>
+                <div className="grid gap-4 p-5 md:p-6">
+                  <InfoBlock title="Τι κάνει" items={card.whatItDoes} />
+                  <InfoBlock title="Πότε το χρησιμοποιώ" items={card.whenToUseIt} />
 
-              <div className="mt-6 grid gap-6 md:grid-cols-2">
-                <SectionList title="What it does" items={card.whatItDoes} />
-                <SectionList title="When to use it" items={card.whenToUseIt} />
-                <SectionList title="Example requests" items={card.exampleUserRequests} />
-                <SectionList title="Expected result" items={card.expectedResult} />
-              </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                    <h3 className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-slate-300">
+                      Παραδείγματα εργασιών
+                    </h3>
 
-              <div className="mt-6 rounded-2xl border border-sky-300/15 bg-sky-300/5 p-4">
-                <h4 className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-sky-200">
-                  Internal capability families
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {card.internalCapabilityFamilies.map((family) => (
-                    <span
-                      key={family}
-                      className="rounded-full border border-sky-200/15 bg-sky-200/10 px-3 py-1 text-xs text-sky-100"
-                    >
-                      {family}
-                    </span>
-                  ))}
+                    <div className="grid gap-3">
+                      {card.workActions.map((action) => (
+                        <div
+                          key={action.title}
+                          className="rounded-2xl border border-white/10 bg-[#020617]/60 p-4"
+                        >
+                          <div className="font-bold text-white">{action.title}</div>
+                          <div className="mt-2 text-sm leading-6 text-sky-100">
+                            Χρήστης: {action.userCanAsk}
+                          </div>
+                          <div className="mt-2 text-sm leading-6 text-slate-300">
+                            {action.explanation}
+                          </div>
+                          <div className="mt-2 text-sm font-semibold text-[#f5d56a]">
+                            Αποτέλεσμα: {action.expectedResult}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4 xl:grid-cols-2">
+                    <InfoBlock title="Internal capability families" items={card.internalCapabilityFamilies} />
+                    <InfoBlock title="Safety boundaries" items={card.safetyBoundaries} />
+                  </div>
+
+                  <div className="grid gap-4 xl:grid-cols-2">
+                    <InfoBlock title="Reference signals" items={card.referenceSignals} />
+                    <InfoBlock title="Expected result" items={card.expectedResult} />
+                  </div>
                 </div>
-              </div>
-
-              <div className="mt-4 rounded-2xl border border-amber-300/15 bg-amber-300/5 p-4">
-                <h4 className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-amber-200">
-                  Safety boundaries
-                </h4>
-                <ul className="space-y-1 text-sm leading-6 text-slate-200/85">
-                  {card.safetyBoundaries.map((item) => (
-                    <li key={item} className="flex gap-2">
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-300" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
             </article>
           ))}
-        </div>
+        </section>
       </section>
     </main>
+  );
+}
+
+function Metric({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+      <div className="text-2xl font-black text-white">{value}</div>
+      <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">
+        {label}
+      </div>
+    </div>
+  );
+}
+
+function InfoBlock({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+      <h3 className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-slate-300">
+        {title}
+      </h3>
+
+      <ul className="space-y-2 text-sm leading-6 text-slate-200">
+        {items.map((item) => (
+          <li key={item} className="flex gap-2">
+            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4af37]" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
