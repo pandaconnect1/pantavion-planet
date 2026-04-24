@@ -280,6 +280,56 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        <section
+          id="pantaai-center-gateway"
+          className="rounded-3xl border border-[#d4af37]/35 bg-[#061528]/95 p-5 shadow-[0_0_45px_rgba(212,175,55,0.12)]"
+        >
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-3xl">
+              <div className="mb-2 inline-flex rounded-full border border-[#d4af37]/40 bg-[#d4af37]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-[#f5d56a]">
+                PantaAI Center
+              </div>
+
+              <h2 className="text-2xl font-bold tracking-tight text-white md:text-3xl">
+                Όλη η τεχνητή νοημοσύνη, η έρευνα, η δημιουργία και η εκτέλεση σε ένα οργανωμένο κέντρο.
+              </h2>
+
+              <p className="mt-3 text-sm leading-7 text-slate-200 md:text-base">
+                Το Pantavion δεν εμφανίζει χαοτικό κατάλογο εργαλείων. Ο χρήστης μπαίνει σε μία ενιαία επιφάνεια και βρίσκει καθαρά τι μπορεί να κάνει:
+                έρευνα, γράψιμο, κώδικα, εφαρμογές, ιστοσελίδες, εικόνα, βίντεο, ήχο, παρουσιάσεις, μάθηση, επιχειρησιακό σχεδιασμό,
+                αυτοματισμούς, σημειώσεις, μνήμη, δεδομένα, οικονομική καθοδήγηση, υγεία γνώσης και αμυντική ασφάλεια.
+              </p>
+            </div>
+
+            <a
+              href="/intelligence"
+              className="inline-flex shrink-0 items-center justify-center rounded-2xl border border-[#f5d56a]/50 bg-[#d4af37] px-5 py-4 text-sm font-bold text-[#061528] shadow-[0_0_30px_rgba(212,175,55,0.28)] transition hover:bg-[#f5d56a]"
+            >
+              Άνοιγμα PantaAI Center
+            </a>
+          </div>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              'AI Assistant',
+              'Deep Research',
+              'Create / Media',
+              'Build Apps & Websites',
+              'Learn / Mastery',
+              'Business / Strategy',
+              'Automation / Workflows',
+              'Memory / Notes',
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-100"
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </section>
+
 
         <footer className="mt-6 rounded-3xl border border-white/10 bg-[#0a1728] px-5 py-4">
           <div className="flex flex-col gap-3 text-sm text-slate-300 md:flex-row md:items-center md:justify-between">
@@ -309,3 +359,4 @@ export default function HomePage() {
     </main>
   );
 }
+
