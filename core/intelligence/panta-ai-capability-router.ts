@@ -449,3 +449,68 @@ function normalizeText(value: string): string {
 function hasAny(text: string, fragments: string[]): boolean {
   return fragments.some((fragment) => text.includes(fragment));
 }
+
+export interface PantaAIRouteDecision {
+  route: string;
+  actionKind: PantaAIActionKind;
+  capabilityFamily: string;
+  accessMode: PantaAIAccessMode;
+  truthMode: PantaAITruthMode;
+  providerStrategy: string;
+  safetyBoundaries: string[];
+  nextSteps: string[];
+}
+
+export interface PantaAIRoutingSnapshot {
+  title: string;
+  routeCount: number;
+  publicCount: number;
+  signedInCount: number;
+  restrictedCount: number;
+  adminOnlyCount: number;
+  capabilityFamilies: string[];
+  routes: PantaAIRouteDecision[];
+  generatedAt: string;
+}
+
+export function resolvePantaAIRoute(input: PantaAIExecuteInput): PantaAIRouteDecision {
+  const packet = executePantaAIAction(input);
+
+  return {
+    route: packet.route,
+    actionKind: packet.actionKind,
+    capabilityFamily: packet.capabilityFamily,
+    accessMode: packet.accessMode,
+    truthMode: packet.truthMode,
+    providerStrategy: packet.providerStrategy,
+    safetyBoundaries: [...packet.safetyBoundaries],
+    nextSteps: [...packet.nextSteps],
+  };
+}
+
+export function getPantaAIRoutingSnapshot(): PantaAIRoutingSnapshot {
+  const routes = getPantaAIActions().map((action) =>
+    resolvePantaAIRoute({
+      action: action.key,
+      task: action.title,
+      userText: action.examples.join(" "),
+      locale: "en",
+    }),
+  );
+
+  const capabilityFamilies = Array.from(
+    new Set(routes.map((route) => route.capabilityFamily)),
+  ).sort();
+
+  return {
+    title: "PantaAI Prime Routing Snapshot",
+    routeCount: routes.length,
+    publicCount: routes.filter((route) => route.accessMode === "public").length,
+    signedInCount: routes.filter((route) => route.accessMode === "signed-in").length,
+    restrictedCount: routes.filter((route) => route.accessMode === "restricted").length,
+    adminOnlyCount: routes.filter((route) => route.accessMode === "admin-only").length,
+    capabilityFamilies,
+    routes,
+    generatedAt: new Date().toISOString(),
+  };
+}
