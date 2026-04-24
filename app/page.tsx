@@ -1,135 +1,311 @@
-﻿export default function HomePage() {
+﻿// app/page.tsx
+
+const primaryActions = [
+  {
+    title: 'Translate',
+    description: 'Live, offline, natural, and official translation flows for everyday and travel use.',
+  },
+  {
+    title: 'Chat',
+    description: 'Clean communication space for people, families, work, and trusted connections.',
+  },
+  {
+    title: 'Services',
+    description: 'Access practical services, workflows, and guided actions from one calm surface.',
+  },
+  {
+    title: 'Safety',
+    description: 'Protected access to urgent help, continuity, and trusted support paths.',
+  },
+];
+
+const userModes = [
+  'Everyday',
+  'Family',
+  'Professional',
+  'Elite',
+  'Accessibility',
+  'Travel',
+];
+
+const sections = [
+  'People',
+  'Chat',
+  'Voice',
+  'Translate',
+  'Work',
+  'Media',
+  'Safety',
+  'Profile',
+];
+
+const languages = ['EL', 'EN', 'AR', 'TR', 'RU', 'FR', 'DE', 'ES', 'HI', 'ZH'];
+
+const accessibility = [
+  'Text Size',
+  'Contrast',
+  'Reduced Motion',
+  'Simplified Mode',
+  'Captions',
+  'Voice Assist',
+];
+
+const continuityItems = [
+  'Continue across phone, tablet, laptop, and new devices',
+  'Restore settings, memory, and recent activity after device change',
+  'Keep offline translator packs ready for travel and low-network situations',
+];
+
+export default function HomePage() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#03060D] text-white">
-      <section className="relative isolate min-h-screen">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(20,73,160,0.35),_transparent_35%),radial-gradient(circle_at_bottom,_rgba(201,163,95,0.10),_transparent_28%)]" />
-        <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:42px_42px]" />
+    <main className="min-h-screen bg-[#05101c] text-white">
+      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 pb-24 pt-4 sm:px-6 sm:pt-5 lg:px-8 lg:pb-10">
+        <header className="sticky top-0 z-30 mb-5 rounded-2xl border border-white/10 bg-[#081525]/90 px-4 py-3 backdrop-blur md:px-5">
+          <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.26em] text-cyan-300/75">
+                  Pantavion
+                </div>
+                <div className="mt-1 text-lg font-semibold leading-tight text-white sm:text-[1.45rem]">
+                  Human-First Platform Surface
+                </div>
+              </div>
 
-        <div className="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col px-6 py-8 md:px-10 lg:px-12">
-          <header className="mb-10 flex items-center justify-between">
-            <div>
-              <div className="text-[11px] uppercase tracking-[0.45em] text-[#C9A35F]">
-                Pantavion Planet
-              </div>
-              <div className="mt-2 text-sm text-[#8EA3C7]">
-                Global Human Network · Knowledge Infrastructure · Intelligence Layer
-              </div>
+              <button className="rounded-xl border border-white/10 px-3 py-2 text-sm text-slate-200 xl:hidden">
+                Menu
+              </button>
             </div>
 
-            <div className="rounded-full border border-[#C9A35F]/30 bg-[#0B1730]/80 px-4 py-2 text-xs uppercase tracking-[0.25em] text-[#E0BC74]">
-              Foundation v0.1
-            </div>
-          </header>
-
-          <div className="grid flex-1 items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-            <div className="relative">
-              <div className="relative mx-auto flex h-[520px] w-full max-w-[640px] items-center justify-center">
-                <div className="absolute h-[440px] w-[440px] rotate-45 rounded-[42px] border border-[#173764] bg-[linear-gradient(180deg,#08101F_0%,#091A31_34%,#0A2A59_100%)] shadow-[0_0_120px_rgba(5,24,56,0.9)]" />
-
-                <div className="absolute h-[356px] w-[356px] rotate-45 rounded-[34px] border-[10px] border-[#C9A35F] bg-[linear-gradient(180deg,#07101E_0%,#0A2550_100%)] shadow-[0_0_28px_rgba(201,163,95,0.30),0_0_70px_rgba(21,74,173,0.28)]" />
-
-                <div className="absolute h-[270px] w-[270px] rotate-45 rounded-[26px] border border-[#E0BC74]/65 bg-[linear-gradient(180deg,#0A1730_0%,#0B2D60_100%)] shadow-[inset_0_0_30px_rgba(255,255,255,0.04)]" />
-
-                <div className="absolute h-[510px] w-[510px] rotate-45 rounded-[48px] border border-[#C9A35F]/12" />
-                <div className="absolute left-[8%] top-[19%] h-24 w-24 rounded-full bg-[#E0BC74]/18 blur-2xl" />
-                <div className="absolute bottom-[17%] right-[11%] h-28 w-28 rounded-full bg-[#2E7CF6]/18 blur-2xl" />
-
-                <div className="relative z-10 max-w-[280px] text-center">
-                  <div className="text-[13px] uppercase tracking-[0.45em] text-[#8EA3C7]">
-                    Pantavion One
-                  </div>
-                  <h1 className="mt-5 text-4xl font-semibold tracking-[0.14em] text-[#E6C27B] md:text-5xl">
-                    PANTAVION
-                  </h1>
-                  <div className="mx-auto mt-5 h-px w-28 bg-gradient-to-r from-transparent via-[#E0BC74] to-transparent" />
-                  <p className="mt-6 text-sm leading-7 text-[#D7E1F2]">
-                    Here We Are One. For All Humanity.
-                  </p>
-                  <p className="mt-4 text-xs leading-6 text-[#8EA3C7]">
-                    Human-first platform with memory, voice translation, knowledge,
-                    workspaces, trust and global continuity.
-                  </p>
-                </div>
-              </div>
+            <div className="hidden items-center gap-1 xl:flex">
+              {['Home', 'Translate', 'People', 'Chat', 'Voice', 'Work'].map((item) => (
+                <button
+                  key={item}
+                  className="rounded-xl px-3 py-2 text-[15px] text-slate-300 transition hover:bg-white/5 hover:text-white"
+                >
+                  {item}
+                </button>
+              ))}
             </div>
 
-            <div className="space-y-6">
-              <div className="rounded-[28px] border border-[#1B3354] bg-[linear-gradient(180deg,rgba(8,18,35,0.94)_0%,rgba(7,23,48,0.92)_100%)] p-7 shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
-                <div className="text-[11px] uppercase tracking-[0.38em] text-[#C9A35F]">
-                  Pantavion Direction
-                </div>
-                <h2 className="mt-4 text-3xl font-semibold leading-tight text-white md:text-4xl">
-                  A premium black, blue and gold foundation.
-                </h2>
-                <p className="mt-5 text-sm leading-7 text-[#C3CFE0]">
-                  This is the first clean visual shell for Pantavion Planet. From now on,
-                  we build directly inside the repo with stable files, not loose drafts.
-                </p>
-
-                <div className="mt-7 flex flex-wrap gap-3">
-                  <button className="rounded-2xl border border-[#E0BC74]/70 bg-[linear-gradient(180deg,#E0BC74_0%,#B8893F_100%)] px-5 py-3 text-sm font-semibold text-[#07111F] shadow-[0_0_22px_rgba(201,163,95,0.25)] transition hover:brightness-110">
-                    Enter Pantavion
-                  </button>
-
-                  <button className="rounded-2xl border border-[#284A78] bg-[#0A1830] px-5 py-3 text-sm font-medium text-[#D9E3F4] transition hover:bg-[#102243]">
-                    Voice · Live Translator
-                  </button>
-                </div>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-[24px] border border-[#183154] bg-[#081321]/90 p-5">
-                  <div className="text-xs uppercase tracking-[0.32em] text-[#C9A35F]">
-                    Locked Core
-                  </div>
-                  <ul className="mt-4 space-y-2 text-sm leading-6 text-[#D3DDF0]">
-                    <li>• One identity</li>
-                    <li>• One continuity</li>
-                    <li>• One memory spine</li>
-                    <li>• One governed ecosystem</li>
-                  </ul>
-                </div>
-
-                <div className="rounded-[24px] border border-[#183154] bg-[#081321]/90 p-5">
-                  <div className="text-xs uppercase tracking-[0.32em] text-[#C9A35F]">
-                    Voice Spine
-                  </div>
-                  <ul className="mt-4 space-y-2 text-sm leading-6 text-[#D3DDF0]">
-                    <li>• STT / TTS</li>
-                    <li>• Auto language detect</li>
-                    <li>• Bidirectional translation</li>
-                    <li>• Fallback / continuity</li>
-                  </ul>
-                </div>
-
-                <div className="rounded-[24px] border border-[#183154] bg-[#081321]/90 p-5">
-                  <div className="text-xs uppercase tracking-[0.32em] text-[#C9A35F]">
-                    Global Kernel
-                  </div>
-                  <ul className="mt-4 space-y-2 text-sm leading-6 text-[#D3DDF0]">
-                    <li>• Intake</li>
-                    <li>• Classification</li>
-                    <li>• Gap detection</li>
-                    <li>• Execution routing</li>
-                  </ul>
-                </div>
-
-                <div className="rounded-[24px] border border-[#183154] bg-[#081321]/90 p-5">
-                  <div className="text-xs uppercase tracking-[0.32em] text-[#C9A35F]">
-                    Build Order
-                  </div>
-                  <ul className="mt-4 space-y-2 text-sm leading-6 text-[#D3DDF0]">
-                    <li>• Homepage shell</li>
-                    <li>• Kernel files</li>
-                    <li>• Input / output panels</li>
-                    <li>• Memory panel</li>
-                  </ul>
-                </div>
-              </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <button className="rounded-xl border border-cyan-400/20 bg-cyan-400/10 px-3 py-2 text-sm text-cyan-200">
+                Language
+              </button>
+              <button className="rounded-xl border border-white/10 px-3 py-2 text-sm text-slate-200">
+                Accessibility
+              </button>
+              <button className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-slate-950">
+                Continue
+              </button>
             </div>
           </div>
+        </header>
+
+        <section className="grid gap-4 lg:grid-cols-[1.18fr_0.82fr] lg:gap-5">
+          <div className="rounded-3xl border border-white/10 bg-[linear-gradient(135deg,rgba(10,35,64,0.96),rgba(8,20,36,0.98),rgba(10,57,87,0.88))] p-5 sm:p-6 lg:p-7">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-300/80">
+              One platform for all humanity
+            </div>
+
+            <h1 className="mt-4 max-w-2xl text-[2.35rem] font-semibold leading-[1.08] text-white sm:text-[3rem] lg:text-[3.55rem]">
+              Clean, calm, professional access to people, language, services, and continuity.
+            </h1>
+
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
+              Pantavion is designed to feel easy, trustworthy, accessible, and memorable across all
+              ages, all user categories, and all devices, without visual fatigue or surface chaos.
+            </p>
+
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <button className="rounded-2xl bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950">
+                Open Pantavion
+              </button>
+              <button className="rounded-2xl border border-white/10 px-5 py-3 text-sm font-medium text-white">
+                Start Translation
+              </button>
+              <button className="rounded-2xl border border-white/10 px-5 py-3 text-sm font-medium text-white">
+                Explore Sections
+              </button>
+            </div>
+
+            <div className="mt-5 flex flex-wrap gap-2">
+              {userModes.map((mode) => (
+                <span
+                  key={mode}
+                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-200"
+                >
+                  {mode}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <aside className="grid gap-4">
+            <div className="rounded-3xl border border-white/10 bg-[#0a1728] p-5 sm:p-6">
+              <div className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+                Fixed Languages
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {languages.map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1.5 text-xs text-cyan-200"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-white/10 bg-[#0a1728] p-5 sm:p-6">
+              <div className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+                Accessibility
+              </div>
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                {accessibility.map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-2xl border border-white/8 bg-white/5 px-3 py-3 text-sm text-slate-200"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section className="mt-6">
+          <div className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+            Primary Actions
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {primaryActions.map((item) => (
+              <article
+                key={item.title}
+                className="flex min-h-[226px] flex-col rounded-3xl border border-white/10 bg-[#0a1728] p-5 transition hover:border-cyan-300/20 hover:bg-[#0c1b2f]"
+              >
+                <div className="text-[1.08rem] font-semibold text-white">{item.title}</div>
+                <p className="mt-4 text-sm leading-8 text-slate-300">{item.description}</p>
+                <div className="mt-auto pt-5">
+                  <button className="rounded-2xl border border-white/10 px-4 py-2 text-sm text-white">
+                    Open
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-6 grid gap-4 lg:grid-cols-[1.02fr_0.98fr]">
+          <div className="rounded-3xl border border-white/10 bg-[#0a1728] p-5 sm:p-6">
+            <div className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+              Pantavion Sections
+            </div>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {sections.map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-white/8 bg-white/5 px-4 py-4 text-sm font-medium text-slate-100"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-cyan-400/10 bg-[linear-gradient(135deg,rgba(7,38,62,0.94),rgba(7,26,46,0.98))] p-5 sm:p-6">
+            <div className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300/80">
+              Translator Core
+            </div>
+            <h2 className="mt-3 max-w-xl text-2xl font-semibold leading-tight text-white sm:text-[2.05rem]">
+              Natural, official, offline, and two-way translation.
+            </h2>
+            <p className="mt-4 text-sm leading-8 text-slate-300">
+              Built for travel, real life, work, and emergencies, with room for regional style,
+              official language, and downloaded packs for offline use.
+            </p>
+
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {['Natural Dialect Mode', 'Official Language Mode', 'Offline Packs', 'Bidirectional Voice'].map(
+                (item) => (
+                  <div
+                    key={item}
+                    className="rounded-2xl border border-cyan-400/10 bg-[#0b1727] px-4 py-4 text-sm text-slate-100"
+                  >
+                    {item}
+                  </div>
+                ),
+              )}
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-6 grid gap-4 lg:grid-cols-[1fr_1fr]">
+          <div className="rounded-3xl border border-white/10 bg-[#0a1728] p-5 sm:p-6">
+            <div className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+              Cross-Device Continuity
+            </div>
+            <div className="mt-4 grid gap-3">
+              {continuityItems.map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-white/8 bg-white/5 px-4 py-4 text-sm leading-7 text-slate-200"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-[#0a1728] p-5 sm:p-6">
+            <div className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+              Trust and Comfort
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {[
+                'Balanced spacing without large or tiny gaps',
+                'Professional and accessible contrast',
+                'Simple structure for all age groups',
+                'Mobile-safe layout with clear actions',
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-white/8 bg-white/5 px-4 py-4 text-sm leading-7 text-slate-200"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <footer className="mt-6 rounded-3xl border border-white/10 bg-[#0a1728] px-5 py-4">
+          <div className="flex flex-col gap-3 text-sm text-slate-300 md:flex-row md:items-center md:justify-between">
+            <div>Pantavion surface v1 — calm, clear, accessible, multilingual, and cross-device ready.</div>
+            <div className="flex flex-wrap gap-3 text-slate-400">
+              <span>Language</span>
+              <span>Accessibility</span>
+              <span>Safety</span>
+              <span>Continuity</span>
+            </div>
+          </div>
+        </footer>
+      </div>
+
+      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-[#081220]/95 px-3 py-2 backdrop-blur lg:hidden">
+        <div className="mx-auto grid max-w-7xl grid-cols-5 gap-2">
+          {['Home', 'Translate', 'Chat', 'Work', 'Profile'].map((item) => (
+            <button
+              key={item}
+              className="rounded-xl px-2 py-3 text-center text-[11px] font-medium text-slate-200"
+            >
+              {item}
+            </button>
+          ))}
         </div>
-      </section>
+      </nav>
     </main>
   );
 }

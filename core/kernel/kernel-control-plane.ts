@@ -1,0 +1,287 @@
+﻿// core/kernel/kernel-control-plane.ts
+
+import { pantavionFoundation } from './kernel-bootstrap';
+import {
+  runPantavionFoundationSmoke,
+  type PantavionFoundationSmokeResult,
+} from './kernel-foundation-smoke';
+import {
+  runPantavionKernelIntegration,
+  type PantavionKernelIntegrationRunnerOutput,
+} from './kernel-integration-runner';
+import {
+  runPantavionUsageHarness,
+  type PantavionUsageHarnessOutput,
+} from './kernel-usage-harness';
+
+import {
+  evaluateResilience,
+  getResilienceSnapshot,
+} from '../runtime/resilience-runtime';
+import { getProtocolGatewayStats } from '../protocol/protocol-gateway';
+
+export type PantavionControlPlaneMode =
+  | 'bootstrap'
+  | 'operational'
+  | 'degraded'
+  | 'restricted';
+
+export type PantavionControlPlanePhaseKey =
+  | 'foundation-boot'
+  | 'foundation-smoke'
+  | 'integration-runner'
+  | 'usage-harness'
+  | 'resilience-review';
+
+export type PantavionControlPlanePhaseStatus =
+  | 'pending'
+  | 'running'
+  | 'completed'
+  | 'failed';
+
+export interface PantavionControlPlaneMetadata {
+  [key: string]: unknown;
+}
+
+export interface PantavionControlPlanePhaseRecord {
+  phaseKey: PantavionControlPlanePhaseKey;
+  title: string;
+  status: PantavionControlPlanePhaseStatus;
+  startedAt?: string;
+  completedAt?: string;
+  details?: string;
+}
+
+export interface PantavionKernelControlPlaneRun {
+  runId: string;
+  startedAt: string;
+  completedAt?: string;
+  mode: PantavionControlPlaneMode;
+  phases: PantavionControlPlanePhaseRecord[];
+  bootSnapshot: ReturnType<typeof pantavionFoundation.getSnapshot>;
+  smoke: PantavionFoundationSmokeResult;
+  integration: PantavionKernelIntegrationRunnerOutput;
+  usage: PantavionUsageHarnessOutput;
+  resilienceMode: ReturnType<typeof getResilienceSnapshot>['mode'];
+  gatewayStats: ReturnType<typeof getProtocolGatewayStats>;
+  metadata: PantavionControlPlaneMetadata;
+}
+
+function nowIso(): string {
+  return new Date().toISOString();
+}
+
+function safeText(value: unknown, fallback = ''): string {
+  return typeof value === 'string' && value.trim().length > 0 ? value.trim() : fallback;
+}
+
+function createId(prefix: string): string {
+  const random = Math.random().toString(36).slice(2, 10);
+  return `${prefix}_${Date.now().toString(36)}_${random}`;
+}
+
+function createPhase(
+  phaseKey: PantavionControlPlanePhaseKey,
+  title: string,
+): PantavionControlPlanePhaseRecord {
+  return {
+    phaseKey,
+    title,
+    status: 'pending',
+  };
+}
+
+function startPhase(
+  phase: PantavionControlPlanePhaseRecord,
+  details?: string,
+): void {
+  phase.status = 'running';
+  phase.startedAt = phase.startedAt ?? nowIso();
+  phase.details = safeText(details) || phase.details;
+}
+
+function completePhase(
+  phase: PantavionControlPlanePhaseRecord,
+  details?: string,
+): void {
+  phase.status = 'completed';
+  phase.completedAt = nowIso();
+  phase.details = safeText(details) || phase.details;
+}
+
+function failPhase(
+  phase: PantavionControlPlanePhaseRecord,
+  details?: string,
+): void {
+  phase.status = 'failed';
+  phase.completedAt = nowIso();
+  phase.details = safeText(details) || phase.details;
+}
+
+function deriveControlPlaneMode(input: {
+  resilienceMode: ReturnType<typeof getResilienceSnapshot>['mode'];
+  integration: PantavionKernelIntegrationRunnerOutput;
+  usage: PantavionUsageHarnessOutput;
+}): PantavionControlPlaneMode {
+  if (
+    input.resilienceMode === 'critical' ||
+    input.resilienceMode === 'emergency'
+  ) {
+    return 'restricted';
+  }
+
+  if (input.resilienceMode === 'degraded' || input.resilienceMode === 'offline-buffered') {
+    return 'degraded';
+  }
+
+  const hasBlockedPolicy = input.usage.policyChecks.some((check) => !check.allowed);
+  if (hasBlockedPolicy) {
+    return 'degraded';
+  }
+
+  if (
+    input.integration.smoke.workspace.taskStatus === 'completed' &&
+    input.integration.smoke.voice.turnStatus === 'completed'
+  ) {
+    return 'operational';
+  }
+
+  return 'bootstrap';
+}
+
+export class PantavionKernelControlPlane {
+  private lastRun: PantavionKernelControlPlaneRun | null = null;
+
+  getLastRun(): PantavionKernelControlPlaneRun | null {
+    return this.lastRun;
+  }
+
+  async runFullCycle(
+    metadata: PantavionControlPlaneMetadata = {},
+  ): Promise<PantavionKernelControlPlaneRun> {
+    const phases: PantavionControlPlanePhaseRecord[] = [
+      createPhase('foundation-boot', 'Foundation Boot'),
+      createPhase('foundation-smoke', 'Foundation Smoke'),
+      createPhase('integration-runner', 'Integration Runner'),
+      createPhase('usage-harness', 'Usage Harness'),
+      createPhase('resilience-review', 'Resilience Review'),
+    ];
+
+    const bootPhase = phases[0];
+    const smokePhase = phases[1];
+    const integrationPhase = phases[2];
+    const usagePhase = phases[3];
+    const resiliencePhase = phases[4];
+
+    const startedAt = nowIso();
+    const runId = createId('cpr');
+    const bootSnapshot = pantavionFoundation.getSnapshot();
+
+    startPhase(bootPhase, 'Foundation snapshot captured.');
+    completePhase(
+      bootPhase,
+      `Actors=${bootSnapshot.actorIds.length}, adapters=${bootSnapshot.protocolAdapterKeys.length}.`,
+    );
+
+    let smoke!: PantavionFoundationSmokeResult;
+    let integration!: PantavionKernelIntegrationRunnerOutput;
+    let usage!: PantavionUsageHarnessOutput;
+    let resilienceMode: ReturnType<typeof getResilienceSnapshot>['mode'] = 'normal';
+
+    try {
+      startPhase(smokePhase, 'Running foundation smoke.');
+      smoke = await runPantavionFoundationSmoke();
+      completePhase(
+        smokePhase,
+        `kernel=${smoke.kernel.recommendationStatus}, workspace=${smoke.workspace.taskStatus}, voice=${smoke.voice.turnStatus}.`,
+      );
+
+      startPhase(integrationPhase, 'Running integration runner.');
+      integration = await runPantavionKernelIntegration();
+      completePhase(
+        integrationPhase,
+        `admission=${integration.admission.record.decision}, protocolAdapters=${integration.protocolAdapterCount}.`,
+      );
+
+      startPhase(usagePhase, 'Running usage harness.');
+      usage = await runPantavionUsageHarness();
+      completePhase(
+        usagePhase,
+        `taxonomyNodes=${usage.taxonomyNodeCount}, registryEntries=${usage.capabilityRegistryEntryCount}.`,
+      );
+
+      startPhase(resiliencePhase, 'Evaluating resilience.');
+      resilienceMode = evaluateResilience({
+        requestedServices: [
+          'kernel',
+          'protocol-gateway',
+          'workspace-runtime',
+          'voice-runtime',
+          'kernel-bootstrap',
+        ],
+        requiresRealtime: true,
+        requiresWorkspaceContinuity: true,
+        requiresVoiceContinuity: true,
+        identity: pantavionFoundation.resolveIdentity({
+          actorId: pantavionFoundation.actors.adminRoot.id,
+          actorType: 'human',
+          role: 'admin-operator',
+          scopes: ['global'],
+          requestedOperation: 'control plane resilience review',
+          requestedSensitivity: 'internal',
+        }),
+      }).mode;
+      completePhase(resiliencePhase, `resilienceMode=${resilienceMode}.`);
+    } catch (error) {
+      const message = safeText((error as Error)?.message, 'Unknown control plane error.');
+
+      const runningPhase = phases.find((phase) => phase.status === 'running');
+      if (runningPhase) {
+        failPhase(runningPhase, message);
+      }
+
+      throw error;
+    }
+
+    const gatewayStats = getProtocolGatewayStats();
+
+    const run: PantavionKernelControlPlaneRun = {
+      runId,
+      startedAt,
+      completedAt: nowIso(),
+      mode: deriveControlPlaneMode({
+        resilienceMode,
+        integration,
+        usage,
+      }),
+      phases,
+      bootSnapshot,
+      smoke,
+      integration,
+      usage,
+      resilienceMode,
+      gatewayStats,
+      metadata,
+    };
+
+    this.lastRun = run;
+    return run;
+  }
+}
+
+export function createKernelControlPlane(): PantavionKernelControlPlane {
+  return new PantavionKernelControlPlane();
+}
+
+export const kernelControlPlane = createKernelControlPlane();
+
+export async function runKernelControlPlane(
+  metadata: PantavionControlPlaneMetadata = {},
+): Promise<PantavionKernelControlPlaneRun> {
+  return kernelControlPlane.runFullCycle(metadata);
+}
+
+export function getKernelControlPlaneLastRun(): PantavionKernelControlPlaneRun | null {
+  return kernelControlPlane.getLastRun();
+}
+
