@@ -2,10 +2,10 @@
 import { surfaces } from "@/core/public/pantavion-public-surfaces";
 
 export const metadata = {
-  title: "Radio | Pantavion One",
-  description: "Pantavion internet radio and media network.",
+  title: "Minors Protection | Pantavion One",
+  description: "Age-aware protection foundation.",
 };
 
 export default function Page() {
-  return <SurfacePage surface={surfaces.radio} />;
+  return <SurfacePage surface={surfaces.minors} />;
 }
