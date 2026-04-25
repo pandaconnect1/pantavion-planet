@@ -1,8 +1,4 @@
-import { primeKernelLaw } from "./prime-kernel-law";
-import { pantavionAccessModel } from "./pantavion-access-model";
-import { pantavionCompetitiveIntelligenceLayer } from "./competitive-intelligence-layer";
-import { pantavionSosInterpreter } from "./sos-interpreter";
-import { masterEcosystemDoctrine } from "./master-ecosystem-doctrine";
+﻿import { masterEcosystemDoctrine } from "./master-ecosystem-doctrine";
 import { capabilityRegistry } from "./capability-registry";
 import { routeRegistry } from "./route-registry";
 import { riskRegistry } from "./risk-registry";
@@ -21,10 +17,6 @@ import { minorsProtectionArchitecture } from "./minors-protection-architecture";
 import { securityHackerApiChecklist } from "./security-hacker-api-checklist";
 
 export const kernelGapRegistry = [
-  primeKernelLaw,
-  pantavionAccessModel,
-  pantavionCompetitiveIntelligenceLayer,
-  pantavionSosInterpreter,
   masterEcosystemDoctrine,
   capabilityRegistry,
   routeRegistry,
@@ -46,7 +38,7 @@ export const kernelGapRegistry = [
 
 export const kernelGapSummary = {
   total: kernelGapRegistry.length,
-  status: "prime-law-ai-sos-interpreter-master-lock",
+  status: "master-lock-foundation",
   nextRequiredAction:
-    "SOS+Interpreter is locked as a mandatory Red-Zone life-safety foundation. Continue with route audit, legal expansion, offline emergency data schema, emergency-circle setup and provider-required labeling."
+    "Keep premium visual baseline, run route audit, then connect Stripe only after release gates pass."
 } as const;
