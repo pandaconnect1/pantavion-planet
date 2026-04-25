@@ -68,9 +68,9 @@ export function createCanonicalKernelState(
     signals: Array.isArray(input.signals) ? input.signals : [],
     audit: Array.isArray(input.audit) ? input.audit : [],
     memory: {
-      entries: Array.isArray(input.memory?.entries) ? input.memory.entries : [],
+      entries: Array.isArray(input.memory?.entries) ? input.memory?.entries : [],
       lastUpdatedAt:
-        typeof input.memory?.lastUpdatedAt === "string" && input.memory.lastUpdatedAt.trim()
+        typeof input.memory?.lastUpdatedAt === "string" && input.memory?.lastUpdatedAt.trim()
           ? input.memory.lastUpdatedAt
           : null,
     },
@@ -169,3 +169,4 @@ export function summarizeCanonicalKernelState(state: CanonicalKernelState) {
     updatedAt: state.updatedAt,
   };
 }
+
