@@ -1,14 +1,26 @@
-﻿import type { MetadataRoute } from "next";
-import { allPublicPaths } from "@/core/public/pantavion-public-surfaces";
+import type { MetadataRoute } from "next";
+import { pantavionPublicIndexableRoutes } from "@/core/pantavion/public-indexing-policy";
+
+const fallbackSiteUrl = "https://pantavion-planet.vercel.app";
+
+function getSiteUrl() {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL || fallbackSiteUrl;
+
+  try {
+    return new URL(raw).origin;
+  } catch {
+    return fallbackSiteUrl;
+  }
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const site = process.env.NEXT_PUBLIC_SITE_URL || "https://pantavion-planet.vercel.app";
+  const siteUrl = getSiteUrl();
   const now = new Date();
 
-  return allPublicPaths.map((path) => ({
-    url: new URL(path, site).toString(),
+  return pantavionPublicIndexableRoutes.map((route) => ({
+    url: siteUrl + route,
     lastModified: now,
-    changeFrequency: path === "/" ? "daily" : "weekly",
-    priority: path === "/" ? 1 : 0.7,
+    changeFrequency: route === "/" ? "daily" : "weekly",
+    priority: route === "/" ? 1 : route === "/readiness" || route === "/deep-audit" ? 0.9 : 0.7
   }));
 }

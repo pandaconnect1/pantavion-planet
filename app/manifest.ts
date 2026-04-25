@@ -1,21 +1,24 @@
-﻿import type { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Pantavion One",
     short_name: "Pantavion",
-    description:
-      "One living platform for AI execution, communication, social connection, work, media, services and global language access.",
+    description: "Pantavion is a governed global ecosystem for communication, safety, knowledge, work and AI-assisted execution.",
     start_url: "/",
+    scope: "/",
     display: "standalone",
-    background_color: "#06111f",
-    theme_color: "#06111f",
+    orientation: "portrait-primary",
+    background_color: "#020712",
+    theme_color: "#071a2d",
+    categories: ["social", "productivity", "education", "utilities"],
     icons: [
       {
-        src: "/pantavion-orb.svg",
-        sizes: "512x512",
+        src: "/pantavion-icon.svg",
+        sizes: "any",
         type: "image/svg+xml",
-      },
-    ],
+        purpose: "any maskable"
+      }
+    ]
   };
 }
