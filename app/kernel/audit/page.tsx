@@ -62,8 +62,8 @@ export default function KernelAuditPage() {
         </p>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 16, marginTop: 38 }}>
-          {kernelGapRegistry.map((gap) => (
-            <article key={gap.id} style={card}>
+          {kernelGapRegistry.map((gap, index) => (
+            <article key={`${gap.title}-${index}`} style={card}>
               <span style={badge}>{gap.priority}</span>
               <h2 style={{ margin: "18px 0 10px", fontSize: 25 }}>{gap.title}</h2>
               <p style={{ color: "#f3c454", fontWeight: 900 }}>{gap.status}</p>
@@ -80,4 +80,5 @@ export default function KernelAuditPage() {
     </main>
   );
 }
+
 
