@@ -4,8 +4,30 @@ import { kernelGapRegistry, kernelGapSummary } from "@/core/pantavion/kernel-gap
 export const metadata = {
   title: "Kernel Audit | Pantavion One",
   description:
-    "Pantavion kernel gap audit covering doctrine, routes, risk, import law, translation, market, media, adult, elite, release gates, SEO, reports, minors and security."
+    "Pantavion kernel gap audit covering doctrine, access, intelligence, routes, risk, import law, translation, market, media, adult, elite, release gates, SEO, reports, minors and security."
 };
+
+type AuditRecord = {
+  id: string;
+  title: string;
+  status: string;
+  priority: string;
+  summary: string;
+  gates?: readonly string[];
+  executionDoctrine?: readonly string[];
+  boundaries?: readonly string[];
+  billingBoundaries?: readonly string[];
+  requiredOutputs?: readonly string[];
+};
+
+function getAuditGates(gap: AuditRecord): readonly string[] {
+  if (Array.isArray(gap.gates)) return gap.gates;
+  if (Array.isArray(gap.executionDoctrine)) return gap.executionDoctrine;
+  if (Array.isArray(gap.boundaries)) return gap.boundaries;
+  if (Array.isArray(gap.billingBoundaries)) return gap.billingBoundaries;
+  if (Array.isArray(gap.requiredOutputs)) return gap.requiredOutputs;
+  return ["Registered foundation. Detailed gates pending classification."];
+}
 
 const shell = {
   minHeight: "100vh",
@@ -42,6 +64,8 @@ const badge = {
 };
 
 export default function KernelAuditPage() {
+  const gaps = kernelGapRegistry as readonly AuditRecord[];
+
   return (
     <main style={shell}>
       <section style={wrap}>
@@ -62,14 +86,14 @@ export default function KernelAuditPage() {
         </p>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 16, marginTop: 38 }}>
-          {kernelGapRegistry.map((gap) => (
+          {gaps.map((gap) => (
             <article key={gap.id} style={card}>
               <span style={badge}>{gap.priority}</span>
               <h2 style={{ margin: "18px 0 10px", fontSize: 25 }}>{gap.title}</h2>
               <p style={{ color: "#f3c454", fontWeight: 900 }}>{gap.status}</p>
               <p style={{ color: "#c7d4df", lineHeight: 1.65 }}>{gap.summary}</p>
               <ul style={{ color: "#fff7e8", lineHeight: 1.65, paddingLeft: 20 }}>
-                {gap.gates.slice(0, 5).map((gate) => (
+                {getAuditGates(gap).slice(0, 5).map((gate) => (
                   <li key={gate}>{gate}</li>
                 ))}
               </ul>
