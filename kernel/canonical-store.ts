@@ -68,11 +68,8 @@ export function createCanonicalKernelState(
     signals: Array.isArray(input.signals) ? input.signals : [],
     audit: Array.isArray(input.audit) ? input.audit : [],
     memory: {
-      entries: Array.isArray(input.memory?.entries) ? input.memory?.entries : [],
-      lastUpdatedAt:
-        typeof input.memory?.lastUpdatedAt === "string" && input.memory?.lastUpdatedAt.trim()
-          ? input.memory.lastUpdatedAt
-          : null,
+      entries: Array.isArray(input.memory?.entries) ? (input.memory?.entries ?? []) : [],
+      lastUpdatedAt: typeof input.memory?.lastUpdatedAt === "string" && input.memory?.lastUpdatedAt.trim() ? (input.memory?.lastUpdatedAt ?? null) : null,
     },
     planner: {
       tasksQueued:
