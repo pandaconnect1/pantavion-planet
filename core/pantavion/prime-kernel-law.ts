@@ -8,17 +8,7 @@
   command:
     "If the capability exists, the Kernel routes and executes it. If it does not exist, the Kernel creates a governed creation path. If it is restricted, unsafe, illegal, regulated or provider-dependent, the Kernel classifies the barrier, explains the status, creates the lawful next step and preserves continuity.",
   greekCommand:
-    "ανένα αίτημα, route, δυνατότητα, ενότητα, κουμπί, ανάγκη χρήστη, ρίσκο, σφάλμα, αποτυχία, ερώτηση ή ελλείπουσα λειτουργία δεν επιτρέπεται να μένει νεκρό, κενό, σιωπηλό, ατελείωτο ή αταξινόμητο.",
-  gates: [
-    "No request may remain unanswered.",
-    "No route may remain dead.",
-    "No visible button may remain empty or fake.",
-    "No missing capability may remain unclassified.",
-    "No restricted request may be faked as complete.",
-    "No illegal or unsafe request may bypass safety boundaries.",
-    "Every gap must become a governed creation path.",
-    "Every user must receive a result, safe answer, creation plan, boundary, provider requirement, human review path or founder/operator report."
-  ],
+    "Κανένα αίτημα, route, δυνατότητα, ενότητα, κουμπί, ανάγκη χρήστη, ρίσκο, σφάλμα, αποτυχία, ερώτηση ή ελλείπουσα λειτουργία δεν επιτρέπεται να μένει νεκρό, κενό, σιωπηλό, ατελείωτο ή αταξινόμητο.",
   responseStates: [
     "Live Result",
     "Safe Answer",
