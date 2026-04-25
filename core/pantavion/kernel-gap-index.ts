@@ -1,6 +1,9 @@
-﻿import { primeKernelLaw } from "./prime-kernel-law";
+import { primeKernelLaw } from "./prime-kernel-law";
+import { pantavionMasterArchitectureBaseline } from "./master-architecture-baseline";
 import { pantavionAccessModel } from "./pantavion-access-model";
 import { pantavionCompetitiveIntelligenceLayer } from "./competitive-intelligence-layer";
+import { pantavionAiFeatureRegister } from "./ai-feature-register";
+import { pantavionSosInterpreter } from "./sos-interpreter";
 import { masterEcosystemDoctrine } from "./master-ecosystem-doctrine";
 import { capabilityRegistry } from "./capability-registry";
 import { routeRegistry } from "./route-registry";
@@ -21,8 +24,11 @@ import { securityHackerApiChecklist } from "./security-hacker-api-checklist";
 
 export const kernelGapRegistry = [
   primeKernelLaw,
+  pantavionMasterArchitectureBaseline,
   pantavionAccessModel,
   pantavionCompetitiveIntelligenceLayer,
+  pantavionAiFeatureRegister,
+  pantavionSosInterpreter,
   masterEcosystemDoctrine,
   capabilityRegistry,
   routeRegistry,
@@ -44,7 +50,7 @@ export const kernelGapRegistry = [
 
 export const kernelGapSummary = {
   total: kernelGapRegistry.length,
-  status: "prime-law-access-model-competitive-intelligence-master-lock",
+  status: "master-architecture-ai-sos-foundation-lock",
   nextRequiredAction:
-    "Prime Kernel Law, Access Model and Competitive Intelligence Layer are mandatory first-level foundations. Continue with route audit, visual unification, legal expansion and Stripe-safe product setup."
+    "Master Architecture, AI Feature Register and SOS+Interpreter are locked. Continue with visual unification, legal expansion, Stripe-safe products, no-dead-button audit and custom domain readiness."
 } as const;
