@@ -7,3 +7,6 @@ coverage
 *.log
 .vercel
 .env*.local
+
+.pantavion-backups/
+tsconfig.tsbuildinfo
