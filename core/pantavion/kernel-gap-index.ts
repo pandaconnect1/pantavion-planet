@@ -1,4 +1,6 @@
 ﻿import { primeKernelLaw } from "./prime-kernel-law";
+import { pantavionAccessModel } from "./pantavion-access-model";
+import { pantavionCompetitiveIntelligenceLayer } from "./competitive-intelligence-layer";
 import { masterEcosystemDoctrine } from "./master-ecosystem-doctrine";
 import { capabilityRegistry } from "./capability-registry";
 import { routeRegistry } from "./route-registry";
@@ -19,6 +21,8 @@ import { securityHackerApiChecklist } from "./security-hacker-api-checklist";
 
 export const kernelGapRegistry = [
   primeKernelLaw,
+  pantavionAccessModel,
+  pantavionCompetitiveIntelligenceLayer,
   masterEcosystemDoctrine,
   capabilityRegistry,
   routeRegistry,
@@ -40,7 +44,7 @@ export const kernelGapRegistry = [
 
 export const kernelGapSummary = {
   total: kernelGapRegistry.length,
-  status: "prime-law-master-lock-foundation",
+  status: "prime-law-access-model-competitive-intelligence-master-lock",
   nextRequiredAction:
-    "Prime Kernel Law is now first. Keep premium visual baseline, run route audit, then connect Stripe only after release gates pass."
+    "Prime Kernel Law, Access Model and Competitive Intelligence Layer are mandatory first-level foundations. Continue with route audit, visual unification, legal expansion and Stripe-safe product setup."
 } as const;
