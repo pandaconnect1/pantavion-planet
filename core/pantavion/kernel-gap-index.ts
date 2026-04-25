@@ -1,5 +1,16 @@
 import { primeKernelLaw } from "./prime-kernel-law";
 import { pantavionMasterArchitectureBaseline } from "./master-architecture-baseline";
+import { productFamilyTaxonomy } from "./product-family-taxonomy";
+import { routeStatusRegistry } from "./route-status-registry";
+import { productionReadinessGates } from "./production-readiness-gates";
+import { deepAuditLedger } from "./deep-audit-ledger";
+import { globalJurisdictionMatrix } from "./global-jurisdiction-matrix";
+import { noDeadSurfacePolicy } from "./no-dead-surface-policy";
+import { securityControlLedger } from "./security-control-ledger";
+import { translationSafetyLedger } from "./translation-safety-ledger";
+import { importWorldConsentMatrix } from "./import-world-consent-matrix";
+import { realBackendClaimsRegistry } from "./real-backend-claims-registry";
+import { aiSovereigntyRoadmap } from "./ai-sovereignty-roadmap";
 import { pantavionAccessModel } from "./pantavion-access-model";
 import { pantavionCompetitiveIntelligenceLayer } from "./competitive-intelligence-layer";
 import { pantavionAiFeatureRegister } from "./ai-feature-register";
@@ -25,6 +36,17 @@ import { securityHackerApiChecklist } from "./security-hacker-api-checklist";
 export const kernelGapRegistry = [
   primeKernelLaw,
   pantavionMasterArchitectureBaseline,
+  productFamilyTaxonomy,
+  routeStatusRegistry,
+  productionReadinessGates,
+  deepAuditLedger,
+  globalJurisdictionMatrix,
+  noDeadSurfacePolicy,
+  securityControlLedger,
+  translationSafetyLedger,
+  importWorldConsentMatrix,
+  realBackendClaimsRegistry,
+  aiSovereigntyRoadmap,
   pantavionAccessModel,
   pantavionCompetitiveIntelligenceLayer,
   pantavionAiFeatureRegister,
@@ -50,7 +72,7 @@ export const kernelGapRegistry = [
 
 export const kernelGapSummary = {
   total: kernelGapRegistry.length,
-  status: "master-architecture-ai-sos-foundation-lock",
+  status: "deep-audit-gate-v1-lock",
   nextRequiredAction:
-    "Master Architecture, AI Feature Register and SOS+Interpreter are locked. Continue with visual unification, legal expansion, Stripe-safe products, no-dead-button audit and custom domain readiness."
+    "Deep Audit Gate v1 is locked. Continue with Stripe Readiness Gate, No Dead Buttons Real Navigation Audit, Legal Center Expansion and Core v2 Execution Engine."
 } as const;
