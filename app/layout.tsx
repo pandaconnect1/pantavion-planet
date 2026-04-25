@@ -2,7 +2,7 @@
 import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
-  title: "Pantavion One",
+  title: "Pantavion Planet",
   description:
     "One living platform for AI execution, communication, social connection, work, media, services and global language access.",
   applicationName: "Pantavion One",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL || "https://pantavion-planet.vercel.app"
   ),
   openGraph: {
-    title: "Pantavion One",
+    title: "Pantavion Planet",
     description:
       "AI execution, communication, social connection, work, media, services and global language access inside one living platform.",
     type: "website",
@@ -35,3 +35,4 @@ export default function RootLayout({
     </html>
   );
 }
+

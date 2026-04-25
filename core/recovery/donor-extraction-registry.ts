@@ -25,13 +25,13 @@ function cloneValue<T>(value: T): T {
 
 const DONOR_REPOSITORIES: PantavionDonorRepositoryRecord[] = [
   {
-    projectKey: 'pantavion-one-clean-ui',
+    projectKey: 'pantavion-planet-ui',
     urgency: 'critical',
     extractionFocus: ['ui-fragments', 'surface-patterns', 'theme-candidates', 'components', 'brand-candidates'],
     notes: ['Primary UI donor.'],
   },
   {
-    projectKey: 'pantavion-one-clean',
+    projectKey: 'pantavion-planet',
     urgency: 'high',
     extractionFocus: ['clean-layouts', 'surface-structure', 'routing-shapes', 'product-copy'],
     notes: ['Primary clean structure donor.'],
@@ -67,3 +67,4 @@ export function getDonorRepositorySnapshot(): PantavionDonorRepositorySnapshot {
 }
 
 export default listDonorRepositories;
+

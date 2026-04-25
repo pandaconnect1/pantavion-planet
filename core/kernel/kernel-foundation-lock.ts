@@ -33,7 +33,7 @@ export interface PantavionFoundationLockedPath {
 export interface PantavionKernelFoundationLock {
   generatedAt: string;
   status: PantavionFoundationLockStatus;
-  activeProject: 'pantavion-one-clean';
+  activeProject: 'pantavion-planet';
   authoritativeBuildPath: PantavionFoundationLockedPath[];
   manifest: PantavionKernelBootstrapManifest;
   taxonomy: PantavionKernelTaxonomySnapshot;
@@ -150,7 +150,7 @@ export function buildKernelFoundationLock(): PantavionKernelFoundationLock {
   const lock: PantavionKernelFoundationLock = {
     generatedAt: nowIso(),
     status: 'locked-with-hardening-ahead',
-    activeProject: 'pantavion-one-clean',
+    activeProject: 'pantavion-planet',
     authoritativeBuildPath: buildAuthoritativeBuildPath(),
     manifest,
     taxonomy,
@@ -169,3 +169,4 @@ export function renderKernelFoundationLock(): string {
 }
 
 export default buildKernelFoundationLock;
+

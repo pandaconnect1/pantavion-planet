@@ -69,7 +69,7 @@ export default function KernelAuditPage() {
               <p style={{ color: "#f3c454", fontWeight: 900 }}>{gap.status}</p>
               <p style={{ color: "#c7d4df", lineHeight: 1.65 }}>{gap.summary}</p>
               <ul style={{ color: "#fff7e8", lineHeight: 1.65, paddingLeft: 20 }}>
-                {gap.gates.slice(0, 5).map((gate) => (
+                {(((gap as any).gates ?? []) as string[]).slice(0, 5).map((gate: string) => (
                   <li key={gate}>{gate}</li>
                 ))}
               </ul>
@@ -80,3 +80,4 @@ export default function KernelAuditPage() {
     </main>
   );
 }
+

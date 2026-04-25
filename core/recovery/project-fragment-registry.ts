@@ -38,21 +38,21 @@ const PROJECT_FRAGMENTS: PantavionProjectFragmentRecord[] = [
     notes: ['Current live project on Vercel.'],
   },
   {
-    projectKey: 'pantavion-one-clean-ui',
+    projectKey: 'pantavion-planet-ui',
     role: 'candidate-ui',
     importance: 'critical',
     likelyContains: ['ui-fragments', 'themes', 'home-surface', 'components'],
     notes: ['Likely source for cleaner Pantavion UI fragments.'],
   },
   {
-    projectKey: 'pantavion-one-clean',
+    projectKey: 'pantavion-planet',
     role: 'candidate-clean',
     importance: 'high',
     likelyContains: ['cleaner-architecture', 'older-surface-ideas', 'layouts'],
     notes: ['Likely source for cleaner baseline product structure.'],
   },
   {
-    projectKey: 'pantavion-one-clean-98it',
+    projectKey: 'pantavion-planet-98it',
     role: 'candidate-clean',
     importance: 'medium',
     likelyContains: ['experimental-clean-fragment', 'forked-surface-variants'],
@@ -118,4 +118,5 @@ export function getProjectFragmentSnapshot(): PantavionProjectFragmentSnapshot {
 }
 
 export default listProjectFragments;
+
 

@@ -4,7 +4,7 @@
  * PantaAI Center Public Surface Spec
  *
  * Purpose:
- * - Gives Pantavion one clean public AI surface.
+ * - Gives Pantavion Planet public AI surface.
  * - Avoids chaotic tool zoo.
  * - Converts external AI/tool market patterns into lawful Pantavion capability families.
  * - Keeps the user experience simple while the Prime Kernel handles orchestration internally.
@@ -738,3 +738,4 @@ export function isPantaAIPublicCard(key: string): boolean {
   const card = PANTA_AI_PUBLIC_SURFACE_SPEC.cards.find((item) => item.key === key);
   return Boolean(card && card.accessMode === 'public');
 }
+

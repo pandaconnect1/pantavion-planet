@@ -42,7 +42,7 @@ const TRIAGE_POLICIES: PantavionRepositoryTriagePolicyRecord[] = [
     notes: ['Canonical repo from now on.', 'All future integration lands here.'],
   },
   {
-    projectKey: 'pantavion-one-clean-ui',
+    projectKey: 'pantavion-planet-ui',
     disposition: 'migrate-donor',
     urgency: 'critical',
     extractionFocus: ['ui-fragments', 'surface-patterns', 'theme-candidates', 'components'],
@@ -50,7 +50,7 @@ const TRIAGE_POLICIES: PantavionRepositoryTriagePolicyRecord[] = [
     notes: ['Highest-value likely UI donor.'],
   },
   {
-    projectKey: 'pantavion-one-clean',
+    projectKey: 'pantavion-planet',
     disposition: 'migrate-donor',
     urgency: 'high',
     extractionFocus: ['clean-architecture', 'layouts', 'surface-structure', 'older-product-ideas'],
@@ -58,7 +58,7 @@ const TRIAGE_POLICIES: PantavionRepositoryTriagePolicyRecord[] = [
     notes: ['High-value clean donor.'],
   },
   {
-    projectKey: 'pantavion-one-clean-98it',
+    projectKey: 'pantavion-planet-98it',
     disposition: 'archive-after-recovery',
     urgency: 'medium',
     extractionFocus: ['variant-fragments', 'experimental-clean-ui'],
@@ -133,3 +133,4 @@ export function getRepositoryTriagePolicySnapshot(): PantavionRepositoryTriagePo
 }
 
 export default listRepositoryTriagePolicies;
+
