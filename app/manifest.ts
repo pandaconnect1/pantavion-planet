@@ -1,4 +1,4 @@
-import type { MetadataRoute } from "next";
+﻿import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -17,8 +17,9 @@ export default function manifest(): MetadataRoute.Manifest {
         src: "/pantavion-icon.svg",
         sizes: "any",
         type: "image/svg+xml",
-        purpose: "any maskable"
+        purpose: "maskable"
       }
     ]
   };
 }
+
