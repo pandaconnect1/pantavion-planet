@@ -1,0 +1,5 @@
+[33m7fa7ab2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Stabilize live kernel and signal map surfaces
+[33mb9fabc2[m Add Pantavion production readiness classification
+[33mf1f36eb[m Finalize canonical memory entries type safety
+[33m9cee136[m Fix canonical memory type safety for Vercel build
+[33ma2cd238[m Fix canonical memory type safety for production build

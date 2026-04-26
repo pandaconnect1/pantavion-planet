@@ -1,0 +1,5 @@
+[33m65a5cf0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Add Stripe readiness gate
+[33mbe2ee87[m Add SEO discoverability foundation
+[33mfb7390e[m Fix GitHub Actions optional AWS secret checks
+[33m49b5afa[m Normalize backend claims registry
+[33m379718c[m Fix manifest icon purpose type

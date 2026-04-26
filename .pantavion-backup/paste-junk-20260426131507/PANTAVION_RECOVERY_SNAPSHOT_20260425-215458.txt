@@ -1,0 +1,513 @@
+﻿=== PANTAVION MASTER RECOVERY SNAPSHOT ===
+
+--- DATE ---
+25/04/2026 21:54:59
+
+--- ROOT ---
+C:/Users/gnkkm/pantavion-planet
+
+--- BRANCH ---
+main
+
+--- STATUS ---
+ M app/layout.tsx
+ M core/intelligence/panta-ai-public-surface-spec.ts
+ M core/kernel/kernel-foundation-lock.ts
+ M core/recovery/donor-extraction-registry.ts
+ M core/recovery/project-fragment-registry.ts
+ M core/recovery/repository-triage-registry.ts
+ M package-lock.json
+ M package.json
+?? PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt
+?? tsconfig.tsbuildinfo
+
+--- RECENT COMMITS ---
+* 1759d65 (HEAD -> main, origin/main, origin/HEAD, backup-before-identity-normalization-20260425-213753) Fix kernel audit gate compatibility
+* 526308a Add Pantavion access model and competitive intelligence layer
+* d651538 Register Prime Kernel Law in kernel audit
+* ca8ecda Add Pantavion Prime Kernel Law
+* 8c00e71 Lock Pantavion master ecosystem and kernel audit foundations
+* 74be9ca Fix Pantavion production visual system
+* 82817c6 Complete Pantavion public launch foundation
+* fd6a9e4 Launch Pantavion public foundation surfaces
+* 10ed666 Fix kernel run client crash with stable server page
+* 346aec8 Stabilize live kernel and signal map surfaces
+* 2528056 (origin/kernel-canonicalization-20260411-200129, kernel-canonicalization-20260411-200129) Fix PantaAI routing page type compatibility
+* 43455d8 Merge main build fixes into preview branch
+* 500b59a Restore PantaAI routing compatibility exports
+* 5aa3a82 Implement PantaAI real execution center
+* e417c12 Implement real PantaAI action engine and kernel admission
+* 90cc482 Expand PantaAI capability index
+* a69997a Explain PantaAI gateway on home
+* 8087f56 Link PantaAI visible surface to Prime Kernel routing
+* eddc943 Deepen PantaAI work actions surface
+* dff908b Expose PantaAI gateway on home
+* 781d330 Expose visible PantaAI center surface
+* 0461d68 Add PantaAI public capability surface and prime AI orchestration
+* e3e6a07 Checkpoint: verified Pantavion Prime Kernel foundation
+* c67f9aa Fix multimodal channel typing in kernel
+* ea79565 Fix device-aware modality typing in kernel
+* ae36ed1 Add device-aware kernel context and multimodal intake contract
+* 7514e24 Deepen kernel retrieval and routing flow
+* 135428b Add memory-aware kernel orchestration flow
+* 7cb3ee7 Isolate legacy store persistence path
+* e16333a Tighten memory store dependency boundary
+* fd0deb4 Align kernel routes with canonical runtime access
+* f6be9c9 Add canonical runtime export bridge
+* b836dc5 Add canonical kernel runtime composition layer
+* 0b4dd01 Fix canonical memory audit entry compatibility
+* b3c6279 Patch 7 add canonical memory layer
+* 3ff9681 Patch 6 align kernel store with canonical compatibility bridge
+* f594eca Patch 5 add canonical store layer
+* 26dc5c8 Patch 4 align kernel audit with canonical compatibility bridge
+* 85f00e7 Patch 3 align kernel types with canonical compatibility bridge
+* 3ee79d6 Patch 2 add canonical audit layer
+
+--- FILE TREE APP CORE PUBLIC ---
+
+FullName                                                                                         
+--------                                                                                         
+C:\Users\gnkkm\pantavion-planet\app\acceptable-use                                               
+C:\Users\gnkkm\pantavion-planet\app\access-model                                                 
+C:\Users\gnkkm\pantavion-planet\app\ads                                                          
+C:\Users\gnkkm\pantavion-planet\app\adult-connect                                                
+C:\Users\gnkkm\pantavion-planet\app\api                                                          
+C:\Users\gnkkm\pantavion-planet\app\auth                                                         
+C:\Users\gnkkm\pantavion-planet\app\build-services                                               
+C:\Users\gnkkm\pantavion-planet\app\commercial                                                   
+C:\Users\gnkkm\pantavion-planet\app\connect                                                      
+C:\Users\gnkkm\pantavion-planet\app\contact                                                      
+C:\Users\gnkkm\pantavion-planet\app\cookies                                                      
+C:\Users\gnkkm\pantavion-planet\app\dashboard                                                    
+C:\Users\gnkkm\pantavion-planet\app\download                                                     
+C:\Users\gnkkm\pantavion-planet\app\ecosystem                                                    
+C:\Users\gnkkm\pantavion-planet\app\elite                                                        
+C:\Users\gnkkm\pantavion-planet\app\evolution                                                    
+C:\Users\gnkkm\pantavion-planet\app\founding-access                                              
+C:\Users\gnkkm\pantavion-planet\app\governance                                                   
+C:\Users\gnkkm\pantavion-planet\app\import-world                                                 
+C:\Users\gnkkm\pantavion-planet\app\inspector                                                    
+C:\Users\gnkkm\pantavion-planet\app\intelligence                                                 
+C:\Users\gnkkm\pantavion-planet\app\kernel                                                       
+C:\Users\gnkkm\pantavion-planet\app\language                                                     
+C:\Users\gnkkm\pantavion-planet\app\legal                                                        
+C:\Users\gnkkm\pantavion-planet\app\market                                                       
+C:\Users\gnkkm\pantavion-planet\app\media                                                        
+C:\Users\gnkkm\pantavion-planet\app\memory                                                       
+C:\Users\gnkkm\pantavion-planet\app\messages                                                     
+C:\Users\gnkkm\pantavion-planet\app\minors                                                       
+C:\Users\gnkkm\pantavion-planet\app\pantavion                                                    
+C:\Users\gnkkm\pantavion-planet\app\pricing                                                      
+C:\Users\gnkkm\pantavion-planet\app\privacy                                                      
+C:\Users\gnkkm\pantavion-planet\app\radio                                                        
+C:\Users\gnkkm\pantavion-planet\app\refund-policy                                                
+C:\Users\gnkkm\pantavion-planet\app\safety                                                       
+C:\Users\gnkkm\pantavion-planet\app\security                                                     
+C:\Users\gnkkm\pantavion-planet\app\services                                                     
+C:\Users\gnkkm\pantavion-planet\app\signals                                                      
+C:\Users\gnkkm\pantavion-planet\app\studio                                                       
+C:\Users\gnkkm\pantavion-planet\app\terms                                                        
+C:\Users\gnkkm\pantavion-planet\app\work                                                         
+C:\Users\gnkkm\pantavion-planet\app\[...route]                                                   
+C:\Users\gnkkm\pantavion-planet\app\_pantavion                                                   
+C:\Users\gnkkm\pantavion-planet\app\favicon.ico                                                  
+C:\Users\gnkkm\pantavion-planet\app\globals.css                                                  
+C:\Users\gnkkm\pantavion-planet\app\layout.tsx                                                   
+C:\Users\gnkkm\pantavion-planet\app\manifest.ts                                                  
+C:\Users\gnkkm\pantavion-planet\app\not-found.tsx                                                
+C:\Users\gnkkm\pantavion-planet\app\page.tsx                                                     
+C:\Users\gnkkm\pantavion-planet\app\robots.ts                                                    
+C:\Users\gnkkm\pantavion-planet\app\sitemap.ts                                                   
+C:\Users\gnkkm\pantavion-planet\app\acceptable-use\page.tsx                                      
+C:\Users\gnkkm\pantavion-planet\app\access-model\page.tsx                                        
+C:\Users\gnkkm\pantavion-planet\app\ads\page.tsx                                                 
+C:\Users\gnkkm\pantavion-planet\app\adult-connect\page.tsx                                       
+C:\Users\gnkkm\pantavion-planet\app\api\health                                                   
+C:\Users\gnkkm\pantavion-planet\app\api\intelligence                                             
+C:\Users\gnkkm\pantavion-planet\app\api\kernel                                                   
+C:\Users\gnkkm\pantavion-planet\app\api\signals                                                  
+C:\Users\gnkkm\pantavion-planet\app\api\translate                                                
+C:\Users\gnkkm\pantavion-planet\app\api\intelligence\actions                                     
+C:\Users\gnkkm\pantavion-planet\app\api\intelligence\execute                                     
+C:\Users\gnkkm\pantavion-planet\app\api\intelligence\actions\route.ts                            
+C:\Users\gnkkm\pantavion-planet\app\api\intelligence\execute\route.ts                            
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\account                                           
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\analyze                                           
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\boot                                              
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\complete                                          
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\diagnostics                                       
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\intake                                            
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\memory                                            
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\run                                               
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\state                                             
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\route.ts                                          
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\analyze\route.ts                                  
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\complete\route.ts                                 
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\intake\route.ts                                   
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\run\route.ts                                      
+C:\Users\gnkkm\pantavion-planet\app\api\kernel\state\route.ts                                    
+C:\Users\gnkkm\pantavion-planet\app\api\signals\route.ts                                         
+C:\Users\gnkkm\pantavion-planet\app\api\translate\text                                           
+C:\Users\gnkkm\pantavion-planet\app\api\translate\text\route.ts                                  
+C:\Users\gnkkm\pantavion-planet\app\auth\login                                                   
+C:\Users\gnkkm\pantavion-planet\app\auth\register                                                
+C:\Users\gnkkm\pantavion-planet\app\auth\login\LoginClient.tsx                                   
+C:\Users\gnkkm\pantavion-planet\app\auth\login\page.tsx                                          
+C:\Users\gnkkm\pantavion-planet\app\auth\register\page.tsx                                       
+C:\Users\gnkkm\pantavion-planet\app\auth\register\RegisterClient.tsx                             
+C:\Users\gnkkm\pantavion-planet\app\build-services\page.tsx                                      
+C:\Users\gnkkm\pantavion-planet\app\commercial\page.tsx                                          
+C:\Users\gnkkm\pantavion-planet\app\connect\page.tsx                                             
+C:\Users\gnkkm\pantavion-planet\app\contact\page.tsx                                             
+C:\Users\gnkkm\pantavion-planet\app\cookies\page.tsx                                             
+C:\Users\gnkkm\pantavion-planet\app\dashboard\page.tsx                                           
+C:\Users\gnkkm\pantavion-planet\app\download\page.tsx                                            
+C:\Users\gnkkm\pantavion-planet\app\ecosystem\page.tsx                                           
+C:\Users\gnkkm\pantavion-planet\app\elite\page.tsx                                               
+C:\Users\gnkkm\pantavion-planet\app\evolution\page  export default function EvolutionPage() {.txt
+C:\Users\gnkkm\pantavion-planet\app\evolution\page.tsx                                           
+C:\Users\gnkkm\pantavion-planet\app\founding-access\page.tsx                                     
+C:\Users\gnkkm\pantavion-planet\app\governance\page.tsx                                          
+C:\Users\gnkkm\pantavion-planet\app\import-world\page.tsx                                        
+C:\Users\gnkkm\pantavion-planet\app\inspector\page.tsx                                           
+C:\Users\gnkkm\pantavion-planet\app\intelligence\capabilities                                    
+C:\Users\gnkkm\pantavion-planet\app\intelligence\competitive                                     
+C:\Users\gnkkm\pantavion-planet\app\intelligence\execute                                         
+C:\Users\gnkkm\pantavion-planet\app\intelligence\routing                                         
+C:\Users\gnkkm\pantavion-planet\app\intelligence\page.tsx                                        
+C:\Users\gnkkm\pantavion-planet\app\intelligence\capabilities\page.tsx                           
+C:\Users\gnkkm\pantavion-planet\app\intelligence\competitive\page.tsx                            
+C:\Users\gnkkm\pantavion-planet\app\intelligence\execute\page.tsx                                
+C:\Users\gnkkm\pantavion-planet\app\intelligence\execute\PantaAIExecuteClient.tsx                
+C:\Users\gnkkm\pantavion-planet\app\intelligence\routing\page.tsx                                
+C:\Users\gnkkm\pantavion-planet\app\kernel\audit                                                 
+C:\Users\gnkkm\pantavion-planet\app\kernel\intake                                                
+C:\Users\gnkkm\pantavion-planet\app\kernel\prime-law                                             
+C:\Users\gnkkm\pantavion-planet\app\kernel\run                                                   
+C:\Users\gnkkm\pantavion-planet\app\kernel\page.tsx                                              
+C:\Users\gnkkm\pantavion-planet\app\kernel\audit\page.tsx                                        
+C:\Users\gnkkm\pantavion-planet\app\kernel\intake\page.tsx                                       
+C:\Users\gnkkm\pantavion-planet\app\kernel\prime-law\page.tsx                                    
+C:\Users\gnkkm\pantavion-planet\app\kernel\run\page.tsx                                          
+C:\Users\gnkkm\pantavion-planet\app\kernel\run\page.tsx.broken.backup                            
+C:\Users\gnkkm\pantavion-planet\app\language\LanguageClient.tsx                                  
+C:\Users\gnkkm\pantavion-planet\app\language\page.tsx                                            
+C:\Users\gnkkm\pantavion-planet\app\legal\page.tsx                                               
+C:\Users\gnkkm\pantavion-planet\app\market\page.tsx                                              
+C:\Users\gnkkm\pantavion-planet\app\media\page.tsx                                               
+C:\Users\gnkkm\pantavion-planet\app\memory\page.tsx                                              
+C:\Users\gnkkm\pantavion-planet\app\messages\page.tsx                                            
+C:\Users\gnkkm\pantavion-planet\app\minors\page.tsx                                              
+C:\Users\gnkkm\pantavion-planet\app\pricing\page.tsx                                             
+C:\Users\gnkkm\pantavion-planet\app\privacy\page.tsx                                             
+C:\Users\gnkkm\pantavion-planet\app\radio\page.tsx                                               
+C:\Users\gnkkm\pantavion-planet\app\refund-policy\page.tsx                                       
+C:\Users\gnkkm\pantavion-planet\app\safety\page.tsx                                              
+C:\Users\gnkkm\pantavion-planet\app\security\page.tsx                                            
+C:\Users\gnkkm\pantavion-planet\app\services\page.tsx                                            
+C:\Users\gnkkm\pantavion-planet\app\signals\page.tsx                                             
+C:\Users\gnkkm\pantavion-planet\app\studio\page.tsx                                              
+C:\Users\gnkkm\pantavion-planet\app\terms\page.tsx                                               
+C:\Users\gnkkm\pantavion-planet\app\work\page.tsx                                                
+C:\Users\gnkkm\pantavion-planet\app\_pantavion\locale.ts                                         
+C:\Users\gnkkm\pantavion-planet\app\_pantavion\role.ts                                           
+C:\Users\gnkkm\pantavion-planet\app\_pantavion\ui.tsx                                            
+
+
+
+
+FullName                                                                                    
+--------                                                                                    
+C:\Users\gnkkm\pantavion-planet\core\admin                                                  
+C:\Users\gnkkm\pantavion-planet\core\app                                                    
+C:\Users\gnkkm\pantavion-planet\core\canonical                                              
+C:\Users\gnkkm\pantavion-planet\core\commercial                                             
+C:\Users\gnkkm\pantavion-planet\core\continuity                                             
+C:\Users\gnkkm\pantavion-planet\core\governance                                             
+C:\Users\gnkkm\pantavion-planet\core\i18n                                                   
+C:\Users\gnkkm\pantavion-planet\core\identity                                               
+C:\Users\gnkkm\pantavion-planet\core\inspector                                              
+C:\Users\gnkkm\pantavion-planet\core\intake                                                 
+C:\Users\gnkkm\pantavion-planet\core\intelligence                                           
+C:\Users\gnkkm\pantavion-planet\core\kernel                                                 
+C:\Users\gnkkm\pantavion-planet\core\memory                                                 
+C:\Users\gnkkm\pantavion-planet\core\pantavion                                              
+C:\Users\gnkkm\pantavion-planet\core\platform                                               
+C:\Users\gnkkm\pantavion-planet\core\protocol                                               
+C:\Users\gnkkm\pantavion-planet\core\public                                                 
+C:\Users\gnkkm\pantavion-planet\core\public-surface                                         
+C:\Users\gnkkm\pantavion-planet\core\recovery                                               
+C:\Users\gnkkm\pantavion-planet\core\registry                                               
+C:\Users\gnkkm\pantavion-planet\core\runtime                                                
+C:\Users\gnkkm\pantavion-planet\core\security                                               
+C:\Users\gnkkm\pantavion-planet\core\storage                                                
+C:\Users\gnkkm\pantavion-planet\core\kernel-capabilities.ts                                 
+C:\Users\gnkkm\pantavion-planet\core\kernel-constitution.ts                                 
+C:\Users\gnkkm\pantavion-planet\core\kernel-orchestrator.ts                                 
+C:\Users\gnkkm\pantavion-planet\core\kernel-planner.ts                                      
+C:\Users\gnkkm\pantavion-planet\core\kernel-store.ts                                        
+C:\Users\gnkkm\pantavion-planet\core\kernel-types.ts                                        
+C:\Users\gnkkm\pantavion-planet\core\pantavion-capabilities.ts                              
+C:\Users\gnkkm\pantavion-planet\core\pantavion-constitution.ts                              
+C:\Users\gnkkm\pantavion-planet\core\pantavion-evolution-engine.ts                          
+C:\Users\gnkkm\pantavion-planet\core\pantavion-intelligence-registry.ts                     
+C:\Users\gnkkm\pantavion-planet\core\pantavion-kernel-completion.ts                         
+C:\Users\gnkkm\pantavion-planet\core\pantavion-kernel-executor.ts                           
+C:\Users\gnkkm\pantavion-planet\core\pantavion-kernel-foundation.ts                         
+C:\Users\gnkkm\pantavion-planet\core\pantavion-kernel-intake.ts                             
+C:\Users\gnkkm\pantavion-planet\core\pantavion-kernel-intelligence.ts                       
+C:\Users\gnkkm\pantavion-planet\core\pantavion-kernel-ledger.ts                             
+C:\Users\gnkkm\pantavion-planet\core\pantavion-kernel.ts                                    
+C:\Users\gnkkm\pantavion-planet\core\pantavion-memory.ts                                    
+C:\Users\gnkkm\pantavion-planet\core\pantavion-planner.ts                                   
+C:\Users\gnkkm\pantavion-planet\core\pantavion-runner.ts                                    
+C:\Users\gnkkm\pantavion-planet\core\pantavion-signal-seeds.ts                              
+C:\Users\gnkkm\pantavion-planet\core\pantavion-tech-radar.ts                                
+C:\Users\gnkkm\pantavion-planet\core\admin\admin-alerts.ts                                  
+C:\Users\gnkkm\pantavion-planet\core\app\app-auth-role-session-integration-wave.ts          
+C:\Users\gnkkm\pantavion-planet\core\app\app-role-registry.ts                               
+C:\Users\gnkkm\pantavion-planet\core\app\app-route-guard.ts                                 
+C:\Users\gnkkm\pantavion-planet\core\app\app-session-registry.ts                            
+C:\Users\gnkkm\pantavion-planet\core\app\deploy-readiness-gate.ts                           
+C:\Users\gnkkm\pantavion-planet\core\app\deployment-environment-registry.ts                 
+C:\Users\gnkkm\pantavion-planet\core\app\observability-signal-registry.ts                   
+C:\Users\gnkkm\pantavion-planet\core\app\product-surface-registry.ts                        
+C:\Users\gnkkm\pantavion-planet\core\app\public-surface-access-gate.ts                      
+C:\Users\gnkkm\pantavion-planet\core\app\secret-runtime-binding-registry.ts                 
+C:\Users\gnkkm\pantavion-planet\core\app\secrets-deploy-observability-integration-wave.ts   
+C:\Users\gnkkm\pantavion-planet\core\app\tenant-data-access-storage-isolation-wave.ts       
+C:\Users\gnkkm\pantavion-planet\core\app\tenant-export-access-guard.ts                      
+C:\Users\gnkkm\pantavion-planet\core\app\tenant-storage-partition-registry.ts               
+C:\Users\gnkkm\pantavion-planet\core\app\tenant-storage-read-write-guard.ts                 
+C:\Users\gnkkm\pantavion-planet\core\app\vercel-product-connection-public-surface-wave.ts   
+C:\Users\gnkkm\pantavion-planet\core\app\vercel-public-deploy-gate.ts                       
+C:\Users\gnkkm\pantavion-planet\core\canonical\canonical-registry.ts                        
+C:\Users\gnkkm\pantavion-planet\core\commercial\billing-rail-registry.ts                    
+C:\Users\gnkkm\pantavion-planet\core\commercial\commercial-billing-rail-wave.ts             
+C:\Users\gnkkm\pantavion-planet\core\commercial\payment-event-ledger.ts                     
+C:\Users\gnkkm\pantavion-planet\core\commercial\payout-readiness-registry.ts                
+C:\Users\gnkkm\pantavion-planet\core\commercial\revenue-ledger.ts                           
+C:\Users\gnkkm\pantavion-planet\core\commercial\subscription-registry.ts                    
+C:\Users\gnkkm\pantavion-planet\core\continuity\cloud-continuity-store.ts                   
+C:\Users\gnkkm\pantavion-planet\core\continuity\conflict-resolution-policy.ts               
+C:\Users\gnkkm\pantavion-planet\core\continuity\cross-device-continuity-wave.ts             
+C:\Users\gnkkm\pantavion-planet\core\continuity\identity-registry.ts                        
+C:\Users\gnkkm\pantavion-planet\core\continuity\local-secure-cache-registry.ts              
+C:\Users\gnkkm\pantavion-planet\core\continuity\offline-pack-registry.ts                    
+C:\Users\gnkkm\pantavion-planet\core\continuity\restore-recovery-policy.ts                  
+C:\Users\gnkkm\pantavion-planet\core\continuity\session-handoff-policy.ts                   
+C:\Users\gnkkm\pantavion-planet\core\continuity\sync-state-registry.ts                      
+C:\Users\gnkkm\pantavion-planet\core\continuity\trusted-device-registry.ts                  
+C:\Users\gnkkm\pantavion-planet\core\governance\cultural-adaptation-overlay-registry.ts     
+C:\Users\gnkkm\pantavion-planet\core\governance\founder-human-final-authority-policy.ts     
+C:\Users\gnkkm\pantavion-planet\core\governance\founder-human-final-authority-registry.ts   
+C:\Users\gnkkm\pantavion-planet\core\governance\founder-human-final-authority-wave.ts       
+C:\Users\gnkkm\pantavion-planet\core\governance\global-governance-closure-wave.ts           
+C:\Users\gnkkm\pantavion-planet\core\governance\global-jurisdiction-compliance-registry.ts  
+C:\Users\gnkkm\pantavion-planet\core\governance\legal-safe-adaptation-governance-registry.ts
+C:\Users\gnkkm\pantavion-planet\core\governance\legal-safe-adaptation-policy.ts             
+C:\Users\gnkkm\pantavion-planet\core\i18n\languages.ts                                      
+C:\Users\gnkkm\pantavion-planet\core\identity\delegation-model.ts                           
+C:\Users\gnkkm\pantavion-planet\core\identity\identity-model.ts                             
+C:\Users\gnkkm\pantavion-planet\core\inspector\commercial-visibility-inspector.ts           
+C:\Users\gnkkm\pantavion-planet\core\inspector\intelligence-visibility-inspector.ts         
+C:\Users\gnkkm\pantavion-planet\core\inspector\kernel-visibility-inspector.ts               
+C:\Users\gnkkm\pantavion-planet\core\inspector\memory-visibility-inspector.ts               
+C:\Users\gnkkm\pantavion-planet\core\inspector\visibility-inspector-surface.ts              
+C:\Users\gnkkm\pantavion-planet\core\intake\ai-category-registry.ts                         
+C:\Users\gnkkm\pantavion-planet\core\intake\app-category-registry.ts                        
+C:\Users\gnkkm\pantavion-planet\core\intake\brand-asset-registry.ts                         
+C:\Users\gnkkm\pantavion-planet\core\intake\device-capability-registry.ts                   
+C:\Users\gnkkm\pantavion-planet\core\intake\kernel-intake-expansion-wave.ts                 
+C:\Users\gnkkm\pantavion-planet\core\intake\locale-priority-matrix.ts                       
+C:\Users\gnkkm\pantavion-planet\core\intake\media-intake-registry.ts                        
+C:\Users\gnkkm\pantavion-planet\core\intake\project-lineage-registry.ts                     
+C:\Users\gnkkm\pantavion-planet\core\intake\service-category-registry.ts                    
+C:\Users\gnkkm\pantavion-planet\core\intake\surface-category-registry.ts                    
+C:\Users\gnkkm\pantavion-planet\core\intake\tool-capability-registry.ts                     
+C:\Users\gnkkm\pantavion-planet\core\intake\user-category-registry.ts                       
+C:\Users\gnkkm\pantavion-planet\core\intake\vision-directive-registry.ts                    
+C:\Users\gnkkm\pantavion-planet\core\intelligence\ai-authority-registry-wave.ts             
+C:\Users\gnkkm\pantavion-planet\core\intelligence\ai-capability-authority.ts                
+C:\Users\gnkkm\pantavion-planet\core\intelligence\ai-governance-profile.ts                  
+C:\Users\gnkkm\pantavion-planet\core\intelligence\ai-locale-authority.ts                    
+C:\Users\gnkkm\pantavion-planet\core\intelligence\ai-provider-registry.ts                   
+C:\Users\gnkkm\pantavion-planet\core\intelligence\global-capability-intake-registry.ts      
+C:\Users\gnkkm\pantavion-planet\core\intelligence\panta-ai-action-engine.ts                 
+C:\Users\gnkkm\pantavion-planet\core\intelligence\panta-ai-capability-index.ts              
+C:\Users\gnkkm\pantavion-planet\core\intelligence\panta-ai-capability-router.ts             
+C:\Users\gnkkm\pantavion-planet\core\intelligence\panta-ai-kernel-admission.ts              
+C:\Users\gnkkm\pantavion-planet\core\intelligence\panta-ai-public-surface-spec.ts           
+C:\Users\gnkkm\pantavion-planet\core\intelligence\pantaai-engine.ts                         
+C:\Users\gnkkm\pantavion-planet\core\intelligence\prime-ai-orchestrator.ts                  
+C:\Users\gnkkm\pantavion-planet\core\kernel\derivative-kernel-registry.ts                   
+C:\Users\gnkkm\pantavion-planet\core\kernel\final-closure-audit-policy.ts                   
+C:\Users\gnkkm\pantavion-planet\core\kernel\final-closure-audit-wave.ts                     
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-admission-policy.ts                      
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-admission.ts                             
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-artifact-summary.ts                      
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-bootstrap-command-pack.ts                
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-bootstrap-manifest.ts                    
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-bootstrap.ts                             
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-command-surface.ts                       
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-constitution-regeneration-wave.ts        
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-constitution-registry.ts                 
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-control-plane.ts                         
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-control-plane.ts.bak                     
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-entrypoint.ts                            
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-evolution-proposal-log.ts                
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-exported-runner.ts                       
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-final-audit.ts                           
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-final-closure-report.ts                  
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-foundation-lock.ts                       
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-foundation-report.ts                     
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-foundation-smoke.ts                      
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-foundation-smoke.ts.bak                  
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-gap-matrix.ts                            
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-integration-runner.ts                    
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-json-export.ts                           
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-lineage-snapshot.ts                      
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-one-shot-runner.ts                       
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-ops-report.ts                            
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-printable-foundation-pack.ts             
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-priority-queue.ts                        
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-readiness-report.ts                      
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-readiness-report.ts.bak                  
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-real-runner.ts                           
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-regeneration-policy.ts                   
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-run-artifact.ts                          
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-saved-export.ts                          
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-script-surface.ts                        
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-taxonomy.ts                              
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-terminal-runner.ts                       
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel-usage-harness.ts                         
+C:\Users\gnkkm\pantavion-planet\core\kernel\kernel.ts                                       
+C:\Users\gnkkm\pantavion-planet\core\memory\background-preparation-queue.ts                 
+C:\Users\gnkkm\pantavion-planet\core\memory\cognitive-memory-stratification-wave.ts         
+C:\Users\gnkkm\pantavion-planet\core\memory\commitment-registry.ts                          
+C:\Users\gnkkm\pantavion-planet\core\memory\continuity-recall-policy.ts                     
+C:\Users\gnkkm\pantavion-planet\core\memory\episodic-memory-store.ts                        
+C:\Users\gnkkm\pantavion-planet\core\memory\fact-registry.ts                                
+C:\Users\gnkkm\pantavion-planet\core\memory\long-horizon-memory-store.ts                    
+C:\Users\gnkkm\pantavion-planet\core\memory\memory-event-log.ts                             
+C:\Users\gnkkm\pantavion-planet\core\memory\memory-thread-kernel.ts                         
+C:\Users\gnkkm\pantavion-planet\core\memory\predictive-planning-memory-store.ts             
+C:\Users\gnkkm\pantavion-planet\core\memory\reminder-scheduler.ts                           
+C:\Users\gnkkm\pantavion-planet\core\memory\semantic-memory-store.ts                        
+C:\Users\gnkkm\pantavion-planet\core\memory\thread-registry.ts                              
+C:\Users\gnkkm\pantavion-planet\core\memory\working-memory-store.ts                         
+C:\Users\gnkkm\pantavion-planet\core\pantavion\abuse-reporting-flows.ts                     
+C:\Users\gnkkm\pantavion-planet\core\pantavion\adult-restricted-policy.ts                   
+C:\Users\gnkkm\pantavion-planet\core\pantavion\capability-registry.ts                       
+C:\Users\gnkkm\pantavion-planet\core\pantavion\competitive-intelligence-layer.ts            
+C:\Users\gnkkm\pantavion-planet\core\pantavion\custom-domain-checklist.ts                   
+C:\Users\gnkkm\pantavion-planet\core\pantavion\elite-secure-channels-policy.ts              
+C:\Users\gnkkm\pantavion-planet\core\pantavion\import-world-legal-matrix.ts                 
+C:\Users\gnkkm\pantavion-planet\core\pantavion\kernel-gap-index.ts                          
+C:\Users\gnkkm\pantavion-planet\core\pantavion\marketplace-taxonomy.ts                      
+C:\Users\gnkkm\pantavion-planet\core\pantavion\master-ecosystem-doctrine.ts                 
+C:\Users\gnkkm\pantavion-planet\core\pantavion\media-radio-rights-policy.ts                 
+C:\Users\gnkkm\pantavion-planet\core\pantavion\minors-protection-architecture.ts            
+C:\Users\gnkkm\pantavion-planet\core\pantavion\no-dead-button-policy.ts                     
+C:\Users\gnkkm\pantavion-planet\core\pantavion\pantavion-access-model.ts                    
+C:\Users\gnkkm\pantavion-planet\core\pantavion\prime-kernel-law.ts                          
+C:\Users\gnkkm\pantavion-planet\core\pantavion\production-seo-metadata.ts                   
+C:\Users\gnkkm\pantavion-planet\core\pantavion\release-gates-before-stripe.ts               
+C:\Users\gnkkm\pantavion-planet\core\pantavion\risk-registry.ts                             
+C:\Users\gnkkm\pantavion-planet\core\pantavion\route-registry.ts                            
+C:\Users\gnkkm\pantavion-planet\core\pantavion\security-hacker-api-checklist.ts             
+C:\Users\gnkkm\pantavion-planet\core\pantavion\translation-confidence-model.ts              
+C:\Users\gnkkm\pantavion-planet\core\platform\pantavion-registry.ts                         
+C:\Users\gnkkm\pantavion-planet\core\protocol\canonical-routing-truth-wave.ts               
+C:\Users\gnkkm\pantavion-planet\core\protocol\canonical-routing-truth.ts                    
+C:\Users\gnkkm\pantavion-planet\core\protocol\direct-dispatch-promotion-mini-wave.ts        
+C:\Users\gnkkm\pantavion-planet\core\protocol\direct-dispatch-promotion-policy.ts           
+C:\Users\gnkkm\pantavion-planet\core\protocol\external-provider-bridge-orchestrator.ts      
+C:\Users\gnkkm\pantavion-planet\core\protocol\external-provider-endpoint-registry.ts        
+C:\Users\gnkkm\pantavion-planet\core\protocol\external-provider-session-store.ts            
+C:\Users\gnkkm\pantavion-planet\core\protocol\external-routing-promotion-mini-wave.ts       
+C:\Users\gnkkm\pantavion-planet\core\protocol\external-routing-promotion-policy.ts          
+C:\Users\gnkkm\pantavion-planet\core\protocol\fallback-bypass-enforcement-mini-wave.ts      
+C:\Users\gnkkm\pantavion-planet\core\protocol\fallback-bypass-enforcement-policy.ts         
+C:\Users\gnkkm\pantavion-planet\core\protocol\internal-provider-adapters.ts                 
+C:\Users\gnkkm\pantavion-planet\core\protocol\primary-lane-cutover-mini-wave.ts             
+C:\Users\gnkkm\pantavion-planet\core\protocol\primary-lane-cutover-policy.ts                
+C:\Users\gnkkm\pantavion-planet\core\protocol\protocol-gateway.ts                           
+C:\Users\gnkkm\pantavion-planet\core\protocol\protocol-types.ts                             
+C:\Users\gnkkm\pantavion-planet\core\protocol\provider-adapter-registry.ts                  
+C:\Users\gnkkm\pantavion-planet\core\protocol\provider-capability-map.ts                    
+C:\Users\gnkkm\pantavion-planet\core\protocol\provider-dispatch-orchestrator.ts             
+C:\Users\gnkkm\pantavion-planet\core\protocol\provider-fallback-policy.ts                   
+C:\Users\gnkkm\pantavion-planet\core\protocol\provider-health-registry.ts                   
+C:\Users\gnkkm\pantavion-planet\core\protocol\real-external-provider-bridge.ts              
+C:\Users\gnkkm\pantavion-planet\core\protocol\route-authority-registry.ts                   
+C:\Users\gnkkm\pantavion-planet\core\protocol\route-decision-trace.ts                       
+C:\Users\gnkkm\pantavion-planet\core\protocol\route-selector-hardening-mini-wave.ts         
+C:\Users\gnkkm\pantavion-planet\core\protocol\route-selector-hardening-policy.ts            
+C:\Users\gnkkm\pantavion-planet\core\public\pantavion-public-surfaces.ts                    
+C:\Users\gnkkm\pantavion-planet\core\public-surface\human-first-homepage-spec.ts            
+C:\Users\gnkkm\pantavion-planet\core\public-surface\human-first-homepage-wave.ts            
+C:\Users\gnkkm\pantavion-planet\core\public-surface\panta-ai-public-surface-spec.ts         
+C:\Users\gnkkm\pantavion-planet\core\public-surface\panta-ai-visible-surface.ts             
+C:\Users\gnkkm\pantavion-planet\core\recovery\donor-extraction-registry.ts                  
+C:\Users\gnkkm\pantavion-planet\core\recovery\donor-extraction-wave.ts                      
+C:\Users\gnkkm\pantavion-planet\core\recovery\project-fragment-registry.ts                  
+C:\Users\gnkkm\pantavion-planet\core\recovery\project-recovery-audit-wave.ts                
+C:\Users\gnkkm\pantavion-planet\core\recovery\repository-triage-plan-wave.ts                
+C:\Users\gnkkm\pantavion-planet\core\recovery\repository-triage-registry.ts                 
+C:\Users\gnkkm\pantavion-planet\core\registry\capability-family-registry.ts                 
+C:\Users\gnkkm\pantavion-planet\core\registry\capability-registry.ts                        
+C:\Users\gnkkm\pantavion-planet\core\runtime\durable-execution.ts                           
+C:\Users\gnkkm\pantavion-planet\core\runtime\resilience-runtime.ts                          
+C:\Users\gnkkm\pantavion-planet\core\runtime\runtime-execution-supervisor.ts                
+C:\Users\gnkkm\pantavion-planet\core\runtime\runtime-hardening-orchestrator.ts              
+C:\Users\gnkkm\pantavion-planet\core\runtime\runtime-hardening-policy.ts                    
+C:\Users\gnkkm\pantavion-planet\core\runtime\runtime-health-matrix.ts                       
+C:\Users\gnkkm\pantavion-planet\core\runtime\runtime-scenario-registry.ts                   
+C:\Users\gnkkm\pantavion-planet\core\runtime\voice-geo-locale-registry.ts                   
+C:\Users\gnkkm\pantavion-planet\core\runtime\voice-hardening-policy.ts                      
+C:\Users\gnkkm\pantavion-planet\core\runtime\voice-language-backbone.ts                     
+C:\Users\gnkkm\pantavion-planet\core\runtime\voice-multilingual-policy.ts                   
+C:\Users\gnkkm\pantavion-planet\core\runtime\voice-runtime-hardening-mini-wave.ts           
+C:\Users\gnkkm\pantavion-planet\core\runtime\voice-runtime-supervisor.ts                    
+C:\Users\gnkkm\pantavion-planet\core\runtime\voice-runtime.ts                               
+C:\Users\gnkkm\pantavion-planet\core\runtime\workspace-runtime.ts                           
+C:\Users\gnkkm\pantavion-planet\core\security\audit-append-only-writer.ts                   
+C:\Users\gnkkm\pantavion-planet\core\security\audit-integrity-policy.ts                     
+C:\Users\gnkkm\pantavion-planet\core\security\auth-identity-security-registry.ts            
+C:\Users\gnkkm\pantavion-planet\core\security\auth-session-enforcement.ts                   
+C:\Users\gnkkm\pantavion-planet\core\security\authorization-policy-registry.ts              
+C:\Users\gnkkm\pantavion-planet\core\security\incident-lockdown-hooks.ts                    
+C:\Users\gnkkm\pantavion-planet\core\security\incident-recovery-policy.ts                   
+C:\Users\gnkkm\pantavion-planet\core\security\permission-gate.ts                            
+C:\Users\gnkkm\pantavion-planet\core\security\prompt-tool-execution-guard.ts                
+C:\Users\gnkkm\pantavion-planet\core\security\prompt-tool-security-policy.ts                
+C:\Users\gnkkm\pantavion-planet\core\security\runtime-abuse-protection-policy.ts            
+C:\Users\gnkkm\pantavion-planet\core\security\secret-boundary-enforcer.ts                   
+C:\Users\gnkkm\pantavion-planet\core\security\secrets-key-management-policy.ts              
+C:\Users\gnkkm\pantavion-planet\core\security\security-enforcement-wave.ts                  
+C:\Users\gnkkm\pantavion-planet\core\security\security-hardening-closure-wave.ts            
+C:\Users\gnkkm\pantavion-planet\core\security\security-policy.ts                            
+C:\Users\gnkkm\pantavion-planet\core\security\tenant-access-enforcer.ts                     
+C:\Users\gnkkm\pantavion-planet\core\security\tenant-isolation-policy.ts                    
+C:\Users\gnkkm\pantavion-planet\core\storage\kernel-admission-store.ts                      
+C:\Users\gnkkm\pantavion-planet\core\storage\kernel-artifact-store.ts                       
+C:\Users\gnkkm\pantavion-planet\core\storage\kernel-persistence-orchestrator.ts             
+C:\Users\gnkkm\pantavion-planet\core\storage\kernel-report-store.ts                         
+C:\Users\gnkkm\pantavion-planet\core\storage\kernel-state-store.ts                          
+
+
+
+
+FullName                                                   
+--------                                                   
+C:\Users\gnkkm\pantavion-planet\public\file.svg            
+C:\Users\gnkkm\pantavion-planet\public\globe.svg           
+C:\Users\gnkkm\pantavion-planet\public\manifest.webmanifest
+C:\Users\gnkkm\pantavion-planet\public\next.svg            
+C:\Users\gnkkm\pantavion-planet\public\pantavion-orb.svg   
+C:\Users\gnkkm\pantavion-planet\public\vercel.svg          
+C:\Users\gnkkm\pantavion-planet\public\window.svg          
+
+
+
