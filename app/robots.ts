@@ -1,30 +1,23 @@
-import type { MetadataRoute } from "next";
-import { pantavionPrivateNoIndexRoutes } from "@/core/pantavion/public-indexing-policy";
+﻿import type { MetadataRoute } from "next";
 
-const fallbackSiteUrl = "https://pantavion-planet.vercel.app";
-
-function getSiteUrl() {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL || fallbackSiteUrl;
-
-  try {
-    return new URL(raw).origin;
-  } catch {
-    return fallbackSiteUrl;
-  }
-}
+const siteUrl = "https://pantavion-planet.vercel.app";
 
 export default function robots(): MetadataRoute.Robots {
-  const siteUrl = getSiteUrl();
-
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: [...pantavionPrivateNoIndexRoutes]
-      }
+        disallow: [
+          "/api/",
+          "/admin/",
+          "/operator/",
+          "/internal/",
+          "/private/",
+        ],
+      },
     ],
-    sitemap: siteUrl + "/sitemap.xml",
-    host: siteUrl
+    sitemap: `${siteUrl}/sitemap.xml`,
+    host: siteUrl,
   };
 }

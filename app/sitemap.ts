@@ -1,26 +1,53 @@
-import type { MetadataRoute } from "next";
-import { pantavionPublicIndexableRoutes } from "@/core/pantavion/public-indexing-policy";
+﻿import type { MetadataRoute } from "next";
 
-const fallbackSiteUrl = "https://pantavion-planet.vercel.app";
+const siteUrl = "https://pantavion-planet.vercel.app";
 
-function getSiteUrl() {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL || fallbackSiteUrl;
-
-  try {
-    return new URL(raw).origin;
-  } catch {
-    return fallbackSiteUrl;
-  }
-}
+const publicRoutes = [
+  {
+    path: "/",
+    priority: 1.0,
+  },
+  {
+    path: "/readiness",
+    priority: 0.8,
+  },
+  {
+    path: "/architecture",
+    priority: 0.8,
+  },
+  {
+    path: "/kernel/audit",
+    priority: 0.7,
+  },
+  {
+    path: "/ai-feature-register",
+    priority: 0.7,
+  },
+  {
+    path: "/sos-interpreter",
+    priority: 0.7,
+  },
+  {
+    path: "/access-model",
+    priority: 0.7,
+  },
+  {
+    path: "/deep-audit",
+    priority: 0.7,
+  },
+  {
+    path: "/backend-claims",
+    priority: 0.6,
+  },
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = getSiteUrl();
   const now = new Date();
 
-  return pantavionPublicIndexableRoutes.map((route) => ({
-    url: siteUrl + route,
+  return publicRoutes.map((route) => ({
+    url: `${siteUrl}${route.path}`,
     lastModified: now,
-    changeFrequency: route === "/" ? "daily" : "weekly",
-    priority: route === "/" ? 1 : route === "/readiness" || route === "/deep-audit" ? 0.9 : 0.7
+    changeFrequency: "weekly",
+    priority: route.priority,
   }));
 }
