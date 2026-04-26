@@ -117,7 +117,7 @@ export const kernelCompletionItems: KernelCompletionItem[] = [
     id: "communication-owned-system",
     domain: "communication",
     title: "Pantavion Communication System",
-    status: "backend_required",
+    status: "foundation",
     risk: "critical",
     whyItMatters:
       "Pantavion cannot depend forever on WhatsApp, Viber, Telegram, SMS or email if the goal is a sovereign communication ecosystem.",
