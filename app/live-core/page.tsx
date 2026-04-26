@@ -1,158 +1,94 @@
-﻿import Link from "next/link";
-import {
-  getPantavionLiveSummary,
-  type PantavionLiveStatus,
-} from "@/core/pantavion/live-backend-contract";
+﻿import { getLiveBackendContract } from "../../core/pantavion/live-backend-contract";
 
-const badgeClass: Record<PantavionLiveStatus, string> = {
-  operational: "border-emerald-400/40 bg-emerald-400/10 text-emerald-200",
-  foundation: "border-sky-400/40 bg-sky-400/10 text-sky-200",
-  blocked: "border-amber-400/40 bg-amber-400/10 text-amber-200",
-  legal_review: "border-purple-400/40 bg-purple-400/10 text-purple-200",
-  security_review: "border-red-400/40 bg-red-400/10 text-red-200",
-};
+export const dynamic = "force-dynamic";
 
 export default function LiveCorePage() {
-  const summary = getPantavionLiveSummary();
+  const contract = getLiveBackendContract();
 
   return (
-    <main className="min-h-screen bg-[#05070c] text-[#f6ead1]">
-      <section className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-12">
-        <header className="rounded-[2rem] border border-[#d9a441]/25 bg-[#08111f]/90 p-8 shadow-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.4em] text-[#d9a441]">
-            Pantavion Live Core Spine
-          </p>
+    <main
+      style={{
+        minHeight: "100vh",
+        padding: "56px",
+        background:
+          "radial-gradient(circle at 70% 20%, rgba(211, 160, 86, 0.18), transparent 35%), linear-gradient(135deg, #050812, #07111f 45%, #02040a)",
+        color: "#f6ead6",
+        fontFamily:
+          "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+      }}
+    >
+      <section style={{ maxWidth: 1120, margin: "0 auto" }}>
+        <p style={{ color: "#d3a056", letterSpacing: 4, textTransform: "uppercase" }}>
+          Pantavion Live Core
+        </p>
 
-          <h1 className="mt-4 max-w-5xl text-4xl font-black tracking-tight md:text-6xl">
-            From static routes to truthful live operation.
-          </h1>
+        <h1 style={{ fontSize: 56, lineHeight: 1.02, margin: "18px 0" }}>
+          Real backend spine is now separated from static surfaces.
+        </h1>
 
-          <p className="mt-5 max-w-4xl text-base leading-8 text-[#c9b99a] md:text-lg">
-            This page is the operational truth gate. It shows what is live, what is foundation,
-            what is blocked, and what must not be claimed publicly before real infrastructure exists.
-          </p>
+        <p style={{ maxWidth: 820, color: "#cbbda5", fontSize: 18, lineHeight: 1.7 }}>
+          This page verifies the Pantavion-owned live API foundation: health,
+          kernel status, local PantaAI execution, guarded admission, SOS,
+          contacts, and messaging routes.
+        </p>
 
-          <div className="mt-8 grid gap-4 md:grid-cols-4">
-            <div className="rounded-2xl border border-[#d9a441]/20 bg-black/25 p-5">
-              <p className="text-xs uppercase tracking-[0.25em] text-[#d9a441]">Version</p>
-              <p className="mt-2 font-mono text-sm">{summary.version}</p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+            gap: 16,
+            marginTop: 34,
+          }}
+        >
+          <Card title="Backend Routes" value={`${contract.summary.backendConnectedRoutes}/${contract.summary.totalRoutes}`} />
+          <Card title="Guarded Routes" value={String(contract.summary.guardedRoutes)} />
+          <Card title="Third-party AI Visible" value={String(contract.summary.thirdPartyAiVisibleToUser)} />
+          <Card title="Owned Kernel Execution" value={String(contract.summary.ownedKernelExecution)} />
+        </div>
+
+        <h2 style={{ marginTop: 44, color: "#d3a056" }}>Live Route Contract</h2>
+
+        <div style={{ display: "grid", gap: 12, marginTop: 16 }}>
+          {contract.liveRoutes.map((route) => (
+            <div
+              key={route.id}
+              style={{
+                border: "1px solid rgba(211,160,86,0.24)",
+                borderRadius: 18,
+                padding: 18,
+                background: "rgba(255,255,255,0.035)",
+              }}
+            >
+              <strong>{route.method} {route.path}</strong>
+              <p style={{ margin: "8px 0", color: "#cbbda5" }}>{route.description}</p>
+              <small style={{ color: "#d3a056" }}>
+                readiness: {route.readiness} | third-party: {route.thirdPartyDependency}
+              </small>
             </div>
-
-            <div className="rounded-2xl border border-[#d9a441]/20 bg-black/25 p-5">
-              <p className="text-xs uppercase tracking-[0.25em] text-[#d9a441]">Storage</p>
-              <p className="mt-2 font-mono text-sm">{summary.storageMode}</p>
-            </div>
-
-            <div className="rounded-2xl border border-[#d9a441]/20 bg-black/25 p-5">
-              <p className="text-xs uppercase tracking-[0.25em] text-[#d9a441]">Persistence</p>
-              <p className="mt-2 font-mono text-sm">
-                {summary.persistentStorage ? "configured" : "blocked until database"}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-[#d9a441]/20 bg-black/25 p-5">
-              <p className="text-xs uppercase tracking-[0.25em] text-[#d9a441]">Rule</p>
-              <p className="mt-2 text-sm">No fake-live claims.</p>
-            </div>
-          </div>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/api/health"
-              className="rounded-full bg-[#d9a441] px-5 py-3 text-sm font-bold text-black"
-            >
-              Health API
-            </Link>
-
-            <Link
-              href="/api/kernel/status"
-              className="rounded-full border border-[#d9a441]/40 px-5 py-3 text-sm font-bold text-[#f6ead1]"
-            >
-              Kernel Status API
-            </Link>
-
-            <Link
-              href="/api/pantai/execute"
-              className="rounded-full border border-[#d9a441]/40 px-5 py-3 text-sm font-bold text-[#f6ead1]"
-            >
-              PantaAI Execute API
-            </Link>
-
-            <Link
-              href="/deep-audit"
-              className="rounded-full border border-[#d9a441]/40 px-5 py-3 text-sm font-bold text-[#f6ead1]"
-            >
-              Deep Audit
-            </Link>
-          </div>
-        </header>
-
-        <section className="grid gap-5">
-          {summary.capabilities.map((item) => (
-            <article
-              key={item.id}
-              className="rounded-[1.5rem] border border-[#d9a441]/20 bg-[#09111d]/85 p-6"
-            >
-              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                <div>
-                  <p className="font-mono text-xs uppercase tracking-[0.25em] text-[#d9a441]">
-                    {item.surface}
-                  </p>
-                  <h2 className="mt-2 text-2xl font-black">{item.name}</h2>
-                </div>
-
-                <span
-                  className={`w-fit rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] ${badgeClass[item.status]}`}
-                >
-                  {item.status}
-                </span>
-              </div>
-
-              <div className="mt-6 grid gap-4 md:grid-cols-3">
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-emerald-200">
-                    Allowed claim
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-[#d9ccb2]">
-                    {item.allowedClaim}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-red-200">
-                    Blocked claim
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-[#d9ccb2]">
-                    {item.blockedClaim}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#d9a441]">
-                    Next action
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-[#d9ccb2]">
-                    {item.nextAction}
-                  </p>
-                </div>
-              </div>
-
-              {item.requires.length > 0 ? (
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {item.requires.map((need) => (
-                    <span
-                      key={need}
-                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-[#cab98f]"
-                    >
-                      {need}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-            </article>
           ))}
-        </section>
+        </div>
       </section>
     </main>
+  );
+}
+
+function Card(props: { title: string; value: string }) {
+  return (
+    <div
+      style={{
+        border: "1px solid rgba(211,160,86,0.28)",
+        borderRadius: 22,
+        padding: 22,
+        background: "rgba(255,255,255,0.045)",
+        boxShadow: "0 20px 60px rgba(0,0,0,0.25)",
+      }}
+    >
+      <div style={{ color: "#cbbda5", fontSize: 13, letterSpacing: 2, textTransform: "uppercase" }}>
+        {props.title}
+      </div>
+      <div style={{ color: "#f6ead6", fontSize: 28, fontWeight: 800, marginTop: 8 }}>
+        {props.value}
+      </div>
+    </div>
   );
 }

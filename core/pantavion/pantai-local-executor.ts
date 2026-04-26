@@ -1,253 +1,117 @@
-﻿export type PantaAIIntent =
-  | "build_platform"
-  | "audit_security"
-  | "build_sos"
-  | "build_translation"
-  | "build_messaging"
-  | "build_commerce"
-  | "unknown";
+﻿import type {
+  PantaiExecutionRequest,
+  PantaiExecutionResult,
+} from "./live-backend-contract";
 
-export type PantaAIStep = {
-  order: number;
-  title: string;
-  capability: string;
-  action: string;
-  status: "planned" | "ready" | "blocked";
-  reason?: string;
-};
+function cleanInput(input: unknown): string {
+  if (typeof input !== "string") return "";
+  return input.trim().slice(0, 1000);
+}
 
-export type PantaAIExecutionResult = {
-  ok: true;
-  provider: "pantavion_local_kernel_v1";
-  externalProviderUsed: false;
-  input: string;
-  intent: PantaAIIntent;
-  plan: PantaAIStep[];
-  warnings: string[];
-};
-
-function detectIntent(input: string): PantaAIIntent {
+function detectIntent(input: string): string {
   const text = input.toLowerCase();
 
-  if (text.includes("sos") || text.includes("emergency") || text.includes("safety")) {
-    return "build_sos";
-  }
+  if (!text) return "empty_request";
+  if (text.includes("sos") || text.includes("emergency") || text.includes("help")) return "sos_flow";
+  if (text.includes("contact") || text.includes("epaf") || text.includes("import")) return "contact_import";
+  if (text.includes("message") || text.includes("chat") || text.includes("send")) return "communication";
+  if (text.includes("ai") || text.includes("kernel") || text.includes("panta")) return "pantai_execution";
+  if (text.includes("stripe") || text.includes("payment") || text.includes("money")) return "commercial_gate";
+  if (text.includes("legal") || text.includes("law") || text.includes("privacy")) return "legal_gate";
 
-  if (
-    text.includes("translation") ||
-    text.includes("translate") ||
-    text.includes("language") ||
-    text.includes("interpreter")
-  ) {
-    return "build_translation";
-  }
-
-  if (
-    text.includes("message") ||
-    text.includes("chat") ||
-    text.includes("viber") ||
-    text.includes("whatsapp")
-  ) {
-    return "build_messaging";
-  }
-
-  if (
-    text.includes("stripe") ||
-    text.includes("payment") ||
-    text.includes("commerce") ||
-    text.includes("market")
-  ) {
-    return "build_commerce";
-  }
-
-  if (
-    text.includes("security") ||
-    text.includes("legal") ||
-    text.includes("audit") ||
-    text.includes("risk")
-  ) {
-    return "audit_security";
-  }
-
-  if (
-    text.includes("build") ||
-    text.includes("platform") ||
-    text.includes("kernel") ||
-    text.includes("pantavion")
-  ) {
-    return "build_platform";
-  }
-
-  return "unknown";
+  return "general_execution";
 }
 
-function planForIntent(intent: PantaAIIntent): PantaAIStep[] {
+function buildPlan(intent: string): string[] {
   switch (intent) {
-    case "build_platform":
+    case "sos_flow":
       return [
-        {
-          order: 1,
-          title: "Create live backend spine",
-          capability: "kernel_runtime",
-          action: "Expose health, status, and execution endpoints.",
-          status: "ready",
-        },
-        {
-          order: 2,
-          title: "Add persistent identity store",
-          capability: "identity_storage",
-          action: "Connect database-backed users, profiles, consent, and sessions.",
-          status: "blocked",
-          reason: "Persistent database is required.",
-        },
-        {
-          order: 3,
-          title: "Activate no-dead-surface audit",
-          capability: "truth_governance",
-          action:
-            "Every visible button must map to route, action, disabled state, or beta state.",
-          status: "planned",
-        },
+        "Validate emergency consent and identity state",
+        "Collect best available location or fallback location",
+        "Build emergency packet",
+        "Dispatch only to trusted contacts or approved responder routes",
+        "Record audit event when database exists",
       ];
-
-    case "audit_security":
+    case "contact_import":
       return [
-        {
-          order: 1,
-          title: "Classify public claims",
-          capability: "claims_registry",
-          action:
-            "Mark each module as operational, foundation, blocked, legal_review, or security_review.",
-          status: "ready",
-        },
-        {
-          order: 2,
-          title: "Enforce jurisdiction gate",
-          capability: "global_policy",
-          action:
-            "Apply country and region rules for minors, content, commerce, privacy, and emergency use.",
-          status: "planned",
-        },
+        "Require explicit user consent",
+        "Accept only user-provided contacts or official connector export",
+        "Never scrape third-party apps or messages",
+        "Normalize contacts into Pantavion contact schema",
+        "Store only after auth and database are active",
       ];
-
-    case "build_sos":
+    case "communication":
       return [
-        {
-          order: 1,
-          title: "Validate emergency packet",
-          capability: "sos_packet",
-          action:
-            "Require trigger, timestamp, location if available, consent, and emergency status.",
-          status: "ready",
-        },
-        {
-          order: 2,
-          title: "Dispatch to trusted contacts",
-          capability: "trusted_contacts",
-          action: "Send packet to verified user-selected contacts.",
-          status: "blocked",
-          reason: "Contact store and delivery transport are required.",
-        },
-        {
-          order: 3,
-          title: "Authority opt-in",
-          capability: "authority_network",
-          action:
-            "Route to official authority nodes only after lawful institutional onboarding.",
-          status: "blocked",
-          reason: "Legal agreements and official responder portal required.",
-        },
+        "Validate sender identity",
+        "Validate recipient and consent scope",
+        "Create Pantavion message envelope",
+        "Apply abuse and rate-limit checks",
+        "Send through Pantavion-owned messaging layer when storage is active",
       ];
-
-    case "build_translation":
+    case "pantai_execution":
       return [
-        {
-          order: 1,
-          title: "Create assistive translation layer",
-          capability: "translation_assist",
-          action:
-            "Support language detection, phrase packs, confidence labels, and emergency disclaimers.",
-          status: "planned",
-        },
-        {
-          order: 2,
-          title: "Block perfect-translation claim",
-          capability: "translation_safety",
-          action:
-            "Never claim certified 100 percent translation until formally verified.",
-          status: "ready",
-        },
+        "Parse user intent locally",
+        "Select Pantavion-owned capability",
+        "Generate deterministic plan",
+        "Execute safe local action",
+        "Return result without exposing third-party AI providers",
       ];
-
-    case "build_messaging":
+    case "commercial_gate":
       return [
-        {
-          order: 1,
-          title: "Create own messaging endpoint",
-          capability: "pantavion_messages",
-          action:
-            "Validate message payloads and enforce identity/storage requirement.",
-          status: "ready",
-        },
-        {
-          order: 2,
-          title: "Add message persistence",
-          capability: "message_store",
-          action: "Store messages, delivery states, and abuse signals.",
-          status: "blocked",
-          reason: "Auth and database required.",
-        },
+        "Block live payments until commercial policy is complete",
+        "Use hosted checkout only when approved",
+        "Never handle raw card data",
+        "Block marketplace payouts until KYC/KYB model exists",
       ];
-
-    case "build_commerce":
+    case "legal_gate":
       return [
-        {
-          order: 1,
-          title: "Keep live payments blocked",
-          capability: "commercial_gate",
-          action:
-            "Do not enable Stripe or payments before legal/commercial readiness.",
-          status: "ready",
-        },
-        {
-          order: 2,
-          title: "Define marketplace restrictions",
-          capability: "restricted_goods",
-          action:
-            "Block weapons, drugs, adult services, counterfeit goods, scams, and high-risk goods.",
-          status: "planned",
-        },
+        "Route to jurisdiction and policy review",
+        "Check privacy, minors, restricted content, and safety class",
+        "Block risky operation until legal gate passes",
       ];
-
     default:
       return [
-        {
-          order: 1,
-          title: "Clarify intent",
-          capability: "intent_parser",
-          action:
-            "Map the user request to a known Pantavion capability before execution.",
-          status: "planned",
-        },
+        "Parse request",
+        "Classify capability family",
+        "Generate first safe execution plan",
+        "Return guarded result",
       ];
   }
 }
 
-export function executePantaAILocally(input: string): PantaAIExecutionResult {
-  const trimmed = input.trim();
-  const intent = detectIntent(trimmed);
+export function executePantaiLocal(request: PantaiExecutionRequest): PantaiExecutionResult {
+  const input = cleanInput(request.input);
+  const intent = detectIntent(input);
+  const plan = buildPlan(intent);
+
+  const execution = plan.map((step, index) => {
+    return `Step ${index + 1}: ${step}`;
+  });
+
+  const warnings: string[] = [];
+
+  if (!input) {
+    warnings.push("No input was provided. Returning baseline kernel readiness flow.");
+  }
+
+  warnings.push("This endpoint is Pantavion-owned local execution. It does not call OpenAI, Claude, Gemini, or external AI providers.");
+  warnings.push("Persistent memory, accounts, messaging, SOS dispatch, and contact import still require database and auth gates.");
 
   return {
     ok: true,
-    provider: "pantavion_local_kernel_v1",
-    externalProviderUsed: false,
-    input: trimmed,
+    engine: "pantavion-local-kernel",
+    provider: "pantavion-owned",
     intent,
-    plan: planForIntent(intent),
-    warnings: [
-      "This is Pantavion local deterministic execution, not OpenAI, Claude, or Gemini.",
-      "No third-party model receives this request in this local kernel endpoint.",
-      "Future model adapters must be hidden, audited, replaceable, and governed by the Pantavion Kernel.",
+    plan,
+    execution,
+    warnings,
+    nextRequiredInfrastructure: [
+      "PostgreSQL or owned database layer",
+      "Auth/account system",
+      "Persistent memory tables",
+      "Consent ledger",
+      "Audit/event ledger",
+      "Rate limiting and abuse protection",
     ],
   };
 }

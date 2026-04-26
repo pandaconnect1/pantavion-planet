@@ -1,166 +1,197 @@
-﻿export type PantavionLiveStatus =
-  | "operational"
-  | "foundation"
-  | "blocked"
-  | "legal_review"
-  | "security_review";
+﻿export const PANTAVION_LIVE_BACKEND_CONTRACT_VERSION = "1.0.0";
 
-export type PantavionStorageMode =
-  | "blocked_no_persistent_storage"
-  | "ephemeral_development_only"
-  | "managed_database_required"
-  | "self_hosted_database_ready_future";
+export type LiveReadiness =
+  | "live_foundation"
+  | "backend_connected"
+  | "blocked_until_database"
+  | "blocked_until_auth"
+  | "blocked_until_legal_review";
 
-export type PantavionLiveCapability = {
+export type LiveRouteContract = {
   id: string;
-  name: string;
-  surface: string;
-  status: PantavionLiveStatus;
-  publicClaim: string;
-  allowedClaim: string;
-  blockedClaim: string;
-  requires: string[];
-  nextAction: string;
+  path: string;
+  method: "GET" | "POST";
+  readiness: LiveReadiness;
+  description: string;
+  thirdPartyDependency: "none" | "optional" | "blocked";
 };
 
-export function getPantavionStorageMode(): PantavionStorageMode {
-  const configured = process.env.PANTAVION_STORAGE_MODE;
+export type KernelCapability = {
+  id: string;
+  name: string;
+  ownedByPantavion: boolean;
+  status:
+    | "internal_foundation"
+    | "internal_execution"
+    | "needs_database"
+    | "needs_auth"
+    | "needs_legal_review";
+  notes: string;
+};
 
-  if (configured === "managed_database_required") return "managed_database_required";
-  if (configured === "self_hosted_database_ready_future") return "self_hosted_database_ready_future";
-  if (configured === "ephemeral_development_only") return "ephemeral_development_only";
+export type PantaiExecutionRequest = {
+  input?: string;
+  mode?: "plan" | "execute";
+  userId?: string;
+};
 
-  if (process.env.NODE_ENV !== "production") return "ephemeral_development_only";
+export type PantaiExecutionResult = {
+  ok: boolean;
+  engine: "pantavion-local-kernel";
+  provider: "pantavion-owned";
+  intent: string;
+  plan: string[];
+  execution: string[];
+  warnings: string[];
+  nextRequiredInfrastructure: string[];
+};
 
-  return "blocked_no_persistent_storage";
-}
-
-export function hasPersistentStorage(): boolean {
-  const mode = getPantavionStorageMode();
-
-  return (
-    mode === "managed_database_required" ||
-    mode === "self_hosted_database_ready_future"
-  );
-}
-
-export const pantavionLiveBackendCapabilities: PantavionLiveCapability[] = [
+export const liveRoutes: LiveRouteContract[] = [
   {
-    id: "health_api",
-    name: "Pantavion Health API",
-    surface: "/api/health",
-    status: "operational",
-    publicClaim: "Live operational health endpoint.",
-    allowedClaim: "Pantavion has a real backend health/status endpoint.",
-    blockedClaim: "This does not prove the whole ecosystem is complete.",
-    requires: [],
-    nextAction: "Keep as live uptime signal.",
+    id: "health",
+    path: "/api/health",
+    method: "GET",
+    readiness: "backend_connected",
+    description: "Basic live backend health check.",
+    thirdPartyDependency: "none",
   },
   {
-    id: "kernel_status_api",
-    name: "Kernel Status API",
-    surface: "/api/kernel/status",
-    status: "operational",
-    publicClaim: "Live kernel status endpoint.",
-    allowedClaim: "Pantavion exposes truthful module states.",
-    blockedClaim: "Do not claim all modules are fully production-operational.",
-    requires: [],
-    nextAction: "Connect to admin dashboard later.",
+    id: "kernel-status",
+    path: "/api/kernel/status",
+    method: "GET",
+    readiness: "backend_connected",
+    description: "Pantavion Kernel status and sovereignty check.",
+    thirdPartyDependency: "none",
   },
   {
-    id: "pantai_local_execute",
-    name: "PantaAI Local Execution Endpoint",
-    surface: "/api/pantai/execute",
-    status: "operational",
-    publicClaim: "Internal deterministic Pantavion execution kernel v1.",
-    allowedClaim:
-      "Pantavion can parse intent, generate a plan, map capabilities, and return execution steps without exposing third-party AI brands.",
-    blockedClaim: "Do not claim frontier own LLM training yet.",
-    requires: ["memory store", "tool execution sandbox", "future own model training"],
-    nextAction: "Add persistence, memory, adapters, and tool execution.",
+    id: "pantai-execute",
+    path: "/api/pantai/execute",
+    method: "POST",
+    readiness: "backend_connected",
+    description: "Local Pantavion execution endpoint without OpenAI, Claude, Gemini, or external AI provider.",
+    thirdPartyDependency: "none",
   },
   {
-    id: "admission_api",
-    name: "Admission / Waitlist API",
-    surface: "/api/admission",
-    status: "blocked",
-    publicClaim:
-      "Production-safe admission endpoint exists but persistent storage is required before public collection.",
-    allowedClaim:
-      "Pantavion validates admission data and blocks fake-live storage in production.",
-    blockedClaim: "Do not claim production user storage until database is connected.",
-    requires: ["persistent database", "consent record", "retention policy"],
-    nextAction: "Connect PostgreSQL or self-hosted database adapter.",
+    id: "admission",
+    path: "/api/admission",
+    method: "POST",
+    readiness: "blocked_until_auth",
+    description: "Future account/admission gate. Currently guarded until real auth and database exist.",
+    thirdPartyDependency: "none",
   },
   {
-    id: "contacts_import_api",
-    name: "Consent-Based Contact Import API",
-    surface: "/api/contacts/import",
-    status: "blocked",
-    publicClaim: "Consent-gated contact import endpoint exists.",
-    allowedClaim:
-      "Pantavion accepts only user-provided contacts with explicit consent.",
-    blockedClaim:
-      "Never scrape WhatsApp, Viber, Telegram, email, SMS, or third-party accounts.",
-    requires: ["persistent database", "OAuth/export matrix", "regional consent rules"],
-    nextAction: "Add import matrix and trusted connector adapters.",
+    id: "sos-dispatch",
+    path: "/api/sos/dispatch",
+    method: "POST",
+    readiness: "blocked_until_auth",
+    description: "Future SOS dispatch endpoint. Guarded until auth, emergency contacts, consent, and audit storage exist.",
+    thirdPartyDependency: "none",
   },
   {
-    id: "sos_dispatch_api",
-    name: "SOS Dispatch API",
-    surface: "/api/sos/dispatch",
-    status: "foundation",
-    publicClaim: "Emergency packet validation endpoint exists.",
-    allowedClaim:
-      "Pantavion can validate SOS packet structure and classify dispatch readiness.",
-    blockedClaim:
-      "Do not claim authority dispatch, SMS dispatch, or rescue dispatch until lawful responder/authority/provider agreements exist.",
-    requires: ["trusted contacts", "delivery transport", "audit logs", "authority opt-in"],
-    nextAction: "Add trusted-contact dispatch and audit storage.",
+    id: "contacts-import",
+    path: "/api/contacts/import",
+    method: "POST",
+    readiness: "blocked_until_auth",
+    description: "Future legal contact import endpoint. Guarded until consent, auth, and storage exist.",
+    thirdPartyDependency: "none",
   },
   {
-    id: "messages_api",
-    name: "Internal Messaging API",
-    surface: "/api/messages/send",
-    status: "blocked",
-    publicClaim:
-      "Messaging endpoint exists but production messaging requires identity and storage.",
-    allowedClaim:
-      "Pantavion has the controlled entry point for own messaging.",
-    blockedClaim:
-      "Do not claim WhatsApp/Viber-equivalent messaging until identity, storage, delivery, encryption, and abuse controls exist.",
-    requires: ["auth", "user profiles", "message store", "delivery receipts", "abuse controls"],
-    nextAction: "Build Pantavion identity and message store.",
+    id: "messages-send",
+    path: "/api/messages/send",
+    method: "POST",
+    readiness: "blocked_until_auth",
+    description: "Future Pantavion-owned messaging endpoint. Guarded until auth, user identity, abuse prevention, and storage exist.",
+    thirdPartyDependency: "none",
   },
 ];
 
-export function getPantavionLiveSummary() {
-  const storageMode = getPantavionStorageMode();
+export const kernelCapabilities: KernelCapability[] = [
+  {
+    id: "intent-parser",
+    name: "Intent Parser",
+    ownedByPantavion: true,
+    status: "internal_execution",
+    notes: "Local deterministic intent parsing is active. Future AI model training can replace or augment this layer.",
+  },
+  {
+    id: "plan-generator",
+    name: "Plan Generator",
+    ownedByPantavion: true,
+    status: "internal_execution",
+    notes: "Local plan generation is active for baseline execution flows.",
+  },
+  {
+    id: "capability-router",
+    name: "Capability Router",
+    ownedByPantavion: true,
+    status: "internal_foundation",
+    notes: "Routes user goals to Pantavion-owned capability families.",
+  },
+  {
+    id: "memory-core",
+    name: "Memory Core",
+    ownedByPantavion: true,
+    status: "needs_database",
+    notes: "Requires database before persistent memory claims.",
+  },
+  {
+    id: "identity-core",
+    name: "Identity Core",
+    ownedByPantavion: true,
+    status: "needs_auth",
+    notes: "Requires real auth/account system before live user claims.",
+  },
+  {
+    id: "sos-core",
+    name: "SOS Core",
+    ownedByPantavion: true,
+    status: "needs_auth",
+    notes: "Requires emergency contacts, consent, audit trail, and storage before live dispatch claims.",
+  },
+];
+
+export function getLiveBackendContract() {
+  const live = liveRoutes.filter((route) => route.readiness === "backend_connected");
+  const blocked = liveRoutes.filter((route) => route.readiness !== "backend_connected");
 
   return {
-    product: "Pantavion",
-    version: "live-core-spine-v1",
-    generatedAt: new Date().toISOString(),
-    environment: process.env.NODE_ENV || "unknown",
-    storageMode,
-    persistentStorage: hasPersistentStorage(),
-    doctrine:
-      "No fake-live claims. Every surface must be operational, foundation, blocked, legal_review, or security_review.",
-    rule:
-      "Pantavion-owned systems first. Third-party providers, when unavoidable, are temporary hidden adapters, never the public identity.",
-    capabilities: pantavionLiveBackendCapabilities,
+    version: PANTAVION_LIVE_BACKEND_CONTRACT_VERSION,
+    project: "Pantavion",
+    principle: "Pantavion Kernel first. Third-party AI providers are not visible to users and are not strategic dependencies.",
+    liveRoutes,
+    kernelCapabilities,
+    summary: {
+      totalRoutes: liveRoutes.length,
+      backendConnectedRoutes: live.length,
+      guardedRoutes: blocked.length,
+      thirdPartyAiVisibleToUser: false,
+      ownedKernelExecution: true,
+      databaseRequiredNext: true,
+      authRequiredNext: true,
+    },
   };
 }
 
-export function blockedBecauseNoPersistentStorage(moduleName: string) {
+export function buildKernelStatus() {
   return {
-    ok: false,
-    module: moduleName,
-    status: "blocked_no_persistent_storage",
-    message:
-      "Production persistence is not configured. Pantavion refuses fake-live storage claims.",
-    storageMode: getPantavionStorageMode(),
-    required:
-      "Connect managed PostgreSQL now or self-hosted PostgreSQL/Neo4j later. Until then production writes stay blocked.",
+    ok: true,
+    kernel: "Pantavion Kernel",
+    version: PANTAVION_LIVE_BACKEND_CONTRACT_VERSION,
+    sovereignty: {
+      userVisibleAiBrand: "PantaAI / Pantavion Kernel",
+      openAiVisible: false,
+      claudeVisible: false,
+      geminiVisible: false,
+      thirdPartyProviders: "not used in this local live-core patch",
+    },
+    capabilities: kernelCapabilities,
+    nextCriticalGates: [
+      "real database",
+      "real auth/account",
+      "persistent memory",
+      "contact consent ledger",
+      "SOS audit storage",
+      "abuse/rate-limit enforcement",
+    ],
   };
 }
