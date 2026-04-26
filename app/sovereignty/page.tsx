@@ -1,105 +1,311 @@
-﻿import {
-  PANTAVION_SOVEREIGNTY_LEDGER,
-  SOVEREIGNTY_STATUS_LABELS,
-  getPantavionSovereigntySummary,
-} from "@/core/pantavion/sovereignty-ledger";
+﻿import type { CSSProperties } from "react";
+import Link from "next/link";
+import {
+  getPantavionBlockedProviders,
+  getPantavionCriticalProviderRisks,
+  getPantavionNearOwnedTargets,
+  getPantavionSovereigntyCounts,
+  pantavionOwnedSystemTargets,
+  pantavionProviderDependencies,
+  pantavionSovereigntyDoctrine
+} from "@/core/pantavion/provider-sovereignty-ledger";
 
-export default function SovereigntyPage() {
-  const summary = getPantavionSovereigntySummary();
+export const metadata = {
+  title: "Provider Sovereignty | Pantavion One",
+  description:
+    "Pantavion provider independence, AI sovereignty, cost-reduction and ownership transition ledger."
+};
 
+const shell: CSSProperties = {
+  minHeight: "100vh",
+  color: "#fff7e8",
+  background:
+    "radial-gradient(circle at 78% 12%, rgba(232,185,79,.18), transparent 32rem), radial-gradient(circle at 10% 18%, rgba(57,214,255,.12), transparent 34rem), linear-gradient(135deg,#020712,#06111f 52%,#071a2d)",
+  padding: "56px 20px"
+};
+
+const wrap: CSSProperties = {
+  width: "min(1180px, calc(100% - 20px))",
+  margin: "0 auto"
+};
+
+const card: CSSProperties = {
+  border: "1px solid rgba(255,255,255,.12)",
+  borderRadius: 28,
+  padding: 24,
+  background: "rgba(7,18,33,.76)",
+  boxShadow: "0 24px 80px rgba(0,0,0,.25)"
+};
+
+const grid: CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
+  gap: 14
+};
+
+const badge: CSSProperties = {
+  display: "inline-flex",
+  padding: "6px 10px",
+  borderRadius: 999,
+  background: "rgba(57,214,255,.12)",
+  color: "#dffbff",
+  border: "1px solid rgba(57,214,255,.35)",
+  fontWeight: 900,
+  fontSize: 12,
+  textTransform: "uppercase",
+  letterSpacing: ".1em"
+};
+
+const gold: CSSProperties = {
+  color: "#f3c454",
+  fontWeight: 900,
+  letterSpacing: ".22em",
+  fontSize: 12,
+  textTransform: "uppercase"
+};
+
+const softText: CSSProperties = {
+  color: "#c7d4df",
+  lineHeight: 1.7
+};
+
+const statusTone: Record<string, { label: string; style: CSSProperties }> = {
+  pantavion_owned: {
+    label: "Pantavion owned",
+    style: {
+      background: "rgba(44,255,172,.12)",
+      color: "#baffdf",
+      border: "1px solid rgba(44,255,172,.35)"
+    }
+  },
+  allowed_temporary_bridge: {
+    label: "Temporary bridge",
+    style: {
+      background: "rgba(57,214,255,.12)",
+      color: "#dffbff",
+      border: "1px solid rgba(57,214,255,.35)"
+    }
+  },
+  foundation_only: {
+    label: "Foundation only",
+    style: {
+      background: "rgba(243,196,84,.12)",
+      color: "#ffe6a3",
+      border: "1px solid rgba(243,196,84,.35)"
+    }
+  },
+  blocked_until_gate: {
+    label: "Blocked until gate",
+    style: {
+      background: "rgba(255,107,107,.12)",
+      color: "#ffd0d0",
+      border: "1px solid rgba(255,107,107,.35)"
+    }
+  },
+  banned: {
+    label: "Banned",
+    style: {
+      background: "rgba(255,255,255,.08)",
+      color: "#ffffff",
+      border: "1px solid rgba(255,255,255,.18)"
+    }
+  }
+};
+
+function StatusBadge({ status }: { status: string }) {
+  const tone = statusTone[status] ?? statusTone.foundation_only;
   return (
-    <main style={{ minHeight: "100vh", background: "#050711", color: "#f6e7b8", padding: "48px 20px" }}>
-      <section style={{ maxWidth: "1180px", margin: "0 auto" }}>
-        <p style={{ margin: "0 0 12px", color: "#d6ad60", letterSpacing: "0.16em", textTransform: "uppercase", fontSize: "12px" }}>
-          Pantavion Sovereign Infrastructure
-        </p>
-
-        <h1 style={{ margin: "0 0 16px", fontSize: "clamp(36px, 6vw, 72px)", lineHeight: 0.95 }}>
-          Sovereignty & Independence Ledger
-        </h1>
-
-        <p style={{ maxWidth: "940px", color: "#c9d3e7", fontSize: "18px", lineHeight: 1.7 }}>
-          Pantavion is not a third-party wrapper. Core systems must be Pantavion-owned:
-          AI, maps, messaging, translation, SOS, memory, monitoring, imports and commercial truth.
-          Third parties are only bridges, fallbacks, regulated processors or optional premium lanes.
-        </p>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "14px", marginTop: "28px" }}>
-          <Metric label="Systems" value={summary.total} />
-          <Metric label="Owned core" value={summary.ownedCore} />
-          <Metric label="Critical" value={summary.critical} />
-          <Metric label="Third-party core blocked" value={summary.thirdPartyCoreBlocked} />
-        </div>
-
-        <div style={{ marginTop: "28px", border: "1px solid rgba(255,96,96,0.45)", borderRadius: "22px", padding: "20px", background: "rgba(255,96,96,0.08)" }}>
-          <strong style={{ color: "#ffd1d1" }}>Kernel rule: third-party core lock-in is blocked.</strong>
-          <p style={{ margin: "8px 0 0", color: "#f3c7c7", lineHeight: 1.6 }}>
-            Pantavion must sell its own systems, not buy core capability from others. External providers cannot become the operating core.
-          </p>
-        </div>
-
-        <div style={{ marginTop: "34px", display: "grid", gap: "16px" }}>
-          {PANTAVION_SOVEREIGNTY_LEDGER.map((record) => (
-            <article
-              key={record.id}
-              style={{
-                border: "1px solid rgba(214,173,96,0.28)",
-                borderRadius: "22px",
-                padding: "22px",
-                background: "linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
-                boxShadow: "0 18px 60px rgba(0,0,0,0.25)",
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
-                <div>
-                  <h2 style={{ margin: 0, fontSize: "24px", color: "#fff7da" }}>{record.name}</h2>
-                  <p style={{ margin: "8px 0 0", color: "#94a3b8" }}>{record.family}</p>
-                </div>
-
-                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                  <Badge text={SOVEREIGNTY_STATUS_LABELS[record.status]} />
-                  <Badge text={`${record.risk.toUpperCase()} RISK`} />
-                  <Badge text={record.thirdPartyCoreBlocked ? "THIRD-PARTY CORE BLOCKED" : "GATED EXTERNAL COST"} />
-                </div>
-              </div>
-
-              <GridBlock title="Owned target" text={record.ownedTarget} />
-              <GridBlock title="Build now" text={record.buildNow} />
-              <GridBlock title="Fallback rule" text={record.fallbackRule} />
-              <GridBlock title="Blocked dependency" text={record.blockedDependency} />
-              <GridBlock title="Next step" text={record.nextStep} />
-            </article>
-          ))}
-        </div>
-      </section>
-    </main>
-  );
-}
-
-function Metric({ label, value }: { label: string; value: number }) {
-  return (
-    <div style={{ border: "1px solid rgba(214,173,96,0.26)", borderRadius: "20px", padding: "18px", background: "rgba(255,255,255,0.045)" }}>
-      <p style={{ margin: 0, color: "#94a3b8", fontSize: "13px" }}>{label}</p>
-      <strong style={{ display: "block", marginTop: "8px", color: "#fff7da", fontSize: "32px" }}>{value}</strong>
-    </div>
-  );
-}
-
-function Badge({ text }: { text: string }) {
-  return (
-    <span style={{ border: "1px solid rgba(214,173,96,0.35)", borderRadius: "999px", padding: "7px 10px", color: "#f6e7b8", background: "rgba(214,173,96,0.1)", fontSize: "12px", whiteSpace: "nowrap" }}>
-      {text}
+    <span
+      style={{
+        ...badge,
+        ...tone.style
+      }}
+    >
+      {tone.label}
     </span>
   );
 }
 
-function GridBlock({ title, text }: { title: string; text: string }) {
+export default function SovereigntyPage() {
+  const counts = getPantavionSovereigntyCounts();
+  const blocked = getPantavionBlockedProviders();
+  const critical = getPantavionCriticalProviderRisks();
+  const nearTargets = getPantavionNearOwnedTargets();
+
   return (
-    <div style={{ marginTop: "16px" }}>
-      <h3 style={{ margin: "0 0 6px", color: "#d6ad60", fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.12em" }}>
-        {title}
-      </h3>
-      <p style={{ margin: 0, color: "#c9d3e7", lineHeight: 1.7 }}>{text}</p>
-    </div>
+    <main style={shell}>
+      <section style={wrap}>
+        <Link
+          href="/"
+          style={{
+            color: "#f3c454",
+            textDecoration: "none",
+            fontWeight: 900
+          }}
+        >
+          ← Pantavion Home
+        </Link>
+
+        <p style={{ ...gold, marginTop: 34 }}>Sovereignty Gate</p>
+
+        <h1
+          style={{
+            margin: 0,
+            fontSize: "clamp(42px,7vw,86px)",
+            lineHeight: .94,
+            letterSpacing: "-.06em"
+          }}
+        >
+          Pantavion Kernel first. Providers never own the brain.
+        </h1>
+
+        <p
+          style={{
+            ...softText,
+            maxWidth: 980,
+            fontSize: 20,
+            marginTop: 22
+          }}
+        >
+          This ledger protects Pantavion from strategic provider dependence.
+          OpenAI, Claude, Gemini, Stripe, maps, SMS, email and other services
+          can only exist as governed, replaceable bridges. The user sees
+          PantaAI and Pantavion Kernel — not third-party brands as the brain.
+        </p>
+
+        <section style={{ marginTop: 32, ...card }}>
+          <span style={badge}>Supreme Rule</span>
+          <h2 style={{ fontSize: 34, marginBottom: 10 }}>
+            {pantavionSovereigntyDoctrine.title}
+          </h2>
+          <p style={{ ...softText, fontSize: 19 }}>
+            {pantavionSovereigntyDoctrine.supremeRule}
+          </p>
+          <p style={{ ...softText }}>
+            {pantavionSovereigntyDoctrine.dataFirewallRule}
+          </p>
+        </section>
+
+        <section style={{ marginTop: 24, ...grid }}>
+          <article style={card}>
+            <p style={gold}>Total dependencies</p>
+            <h2 style={{ fontSize: 46, margin: 0 }}>{counts.total}</h2>
+            <p style={softText}>Tracked third-party or infrastructure surfaces.</p>
+          </article>
+
+          <article style={card}>
+            <p style={gold}>Temporary bridges</p>
+            <h2 style={{ fontSize: 46, margin: 0 }}>
+              {counts.allowed_temporary_bridge}
+            </h2>
+            <p style={softText}>Allowed only through hidden, replaceable adapters.</p>
+          </article>
+
+          <article style={card}>
+            <p style={gold}>Blocked gates</p>
+            <h2 style={{ fontSize: 46, margin: 0 }}>
+              {counts.blocked_until_gate}
+            </h2>
+            <p style={softText}>Cannot go live before legal, cost or safety review.</p>
+          </article>
+
+          <article style={card}>
+            <p style={gold}>Near-owned targets</p>
+            <h2 style={{ fontSize: 46, margin: 0 }}>{nearTargets.length}</h2>
+            <p style={softText}>Systems the Kernel must build first.</p>
+          </article>
+        </section>
+
+        <section style={{ marginTop: 34 }}>
+          <h2 style={{ fontSize: 42 }}>Provider Dependency Ledger</h2>
+          <div style={grid}>
+            {pantavionProviderDependencies.map((item) => (
+              <article key={item.id} style={card}>
+                <StatusBadge status={item.currentStatus} />
+                <h3 style={{ fontSize: 25, marginBottom: 8 }}>{item.name}</h3>
+                <p style={softText}>{item.currentRole}</p>
+
+                <p style={gold}>Public surface</p>
+                <p style={{ color: "#fff7e8", lineHeight: 1.6 }}>
+                  {item.publicName}
+                </p>
+
+                <p style={gold}>Sovereignty target</p>
+                <p style={softText}>{item.sovereigntyTarget}</p>
+
+                <p style={gold}>Blocked data</p>
+                <ul style={{ color: "#ffd0d0", lineHeight: 1.7, paddingLeft: 20 }}>
+                  {item.blockedData.slice(0, 5).map((entry) => (
+                    <li key={entry}>{entry}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section style={{ marginTop: 34, ...card }}>
+          <span style={badge}>Build Direction</span>
+          <h2 style={{ fontSize: 42, marginBottom: 12 }}>
+            Pantavion-owned systems to build
+          </h2>
+
+          <div style={grid}>
+            {pantavionOwnedSystemTargets.map((target) => (
+              <article
+                key={target.id}
+                style={{
+                  border: "1px solid rgba(255,255,255,.10)",
+                  borderRadius: 22,
+                  padding: 18,
+                  background: "rgba(255,255,255,.045)"
+                }}
+              >
+                <p style={gold}>{target.phase}</p>
+                <h3 style={{ fontSize: 24, margin: "8px 0" }}>
+                  {target.name}
+                </h3>
+                <p style={softText}>{target.description}</p>
+                <p style={{ color: "#f3c454", fontWeight: 900 }}>
+                  Owner: {target.kernelOwner}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section style={{ marginTop: 34, ...grid }}>
+          <article style={card}>
+            <span style={badge}>Critical risks</span>
+            <h2>{critical.length} critical dependencies</h2>
+            <p style={softText}>
+              These are not failures. They are Kernel priorities that must be
+              reduced, replaced or tightly governed.
+            </p>
+          </article>
+
+          <article style={card}>
+            <span style={badge}>Blocked before launch</span>
+            <h2>{blocked.length} blocked surfaces</h2>
+            <p style={softText}>
+              Payments, SMS and surveillance-style analytics stay blocked until
+              their legal, safety and cost gates pass.
+            </p>
+          </article>
+        </section>
+
+        <section style={{ marginTop: 34, ...card }}>
+          <p style={gold}>Locked claim</p>
+          <h2 style={{ fontSize: 34 }}>
+            Pantavion is not a wrapper. It is a sovereign execution ecosystem.
+          </h2>
+          <p style={{ ...softText, fontSize: 18 }}>
+            Providers may help temporarily, but they do not own the user
+            experience, the memory, the Kernel, the graph, the communication
+            layer, the interpreter, the roadmap or the strategic intelligence.
+          </p>
+        </section>
+      </section>
+    </main>
   );
 }
