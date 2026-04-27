@@ -62,47 +62,32 @@ export default function HomePage() {
       }}>
 
         {/* Orb */}
-        <div style={{ position: "relative", marginBottom: 56 }}>
+        <div style={{ position: "relative", marginBottom: 56, width: 340, height: 340 }}>
+          {/* Outer orbit rings */}
+          <div style={{ position: "absolute", inset: -80, borderRadius: "50%", border: "1px solid rgba(212,168,67,0.35)", animation: "spin 25s linear infinite" }} />
+          <div style={{ position: "absolute", inset: -55, borderRadius: "50%", border: "1px solid rgba(74,158,255,0.25)", animation: "spin 18s linear infinite reverse" }} />
+          <div style={{ position: "absolute", inset: -30, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.12)", animation: "spin 40s linear infinite" }} />
+
+          {/* Planet */}
           <div style={{
-            width: 280, height: 280,
+            position: "absolute", inset: 0,
             borderRadius: "50%",
-            background: "radial-gradient(circle at 38% 32%, #d4a843 0%, #4a9eff 45%, #1a3a8f 72%, #020508 100%)",
-            boxShadow: "0 0 140px rgba(74,158,255,0.35), 0 0 80px rgba(212,168,67,0.25), 0 0 40px rgba(212,168,67,0.15)",
+            background: "radial-gradient(circle at 35% 30%, #e8c060 0%, #4a9eff 35%, #1a3a8f 65%, #040d1f 100%)",
+            boxShadow: "0 0 160px rgba(74,158,255,0.45), 0 0 80px rgba(212,168,67,0.3), inset 0 0 60px rgba(0,0,20,0.5)",
             animation: "pulse 4s ease-in-out infinite",
-            position: "relative",
           }}>
-            {[0.2, 0.38, 0.55].map((inset, i) => (
-              <div key={i} style={{
-                position: "absolute",
-                inset: `${inset * 100}%`,
-                borderRadius: "50%",
-                border: `1px solid rgba(255,255,255,${0.12 - i * 0.03})`,
-              }} />
-            ))}
+            {/* Inner ring lines on planet */}
+            <div style={{ position: "absolute", inset: "12%", borderRadius: "50%", border: "1.5px solid rgba(255,255,255,0.18)" }} />
+            <div style={{ position: "absolute", inset: "28%", borderRadius: "50%", border: "1.5px solid rgba(255,255,255,0.13)" }} />
+            <div style={{ position: "absolute", inset: "44%", borderRadius: "50%", border: "1px solid rgba(255,255,255,0.10)" }} />
+            {/* Core light */}
             <div style={{
-              position: "absolute",
-              inset: "42%",
+              position: "absolute", inset: "40%",
               borderRadius: "50%",
-              background: "rgba(255,255,255,0.95)",
-              boxShadow: "0 0 40px rgba(255,255,255,0.9)",
+              background: "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.6) 50%, transparent 100%)",
+              boxShadow: "0 0 50px rgba(255,255,255,1), 0 0 20px rgba(255,255,255,0.8)",
             }} />
           </div>
-
-          {/* Orbit ring */}
-          <div style={{
-            position: "absolute",
-            inset: -40,
-            borderRadius: "50%",
-            border: "1px solid rgba(212,168,67,0.15)",
-            animation: "spin 20s linear infinite",
-          }} />
-          <div style={{
-            position: "absolute",
-            inset: -70,
-            borderRadius: "50%",
-            border: "1px solid rgba(74,158,255,0.1)",
-            animation: "spin 35s linear infinite reverse",
-          }} />
         </div>
 
         {/* Label */}
@@ -209,3 +194,4 @@ export default function HomePage() {
     </main>
   );
 }
+
