@@ -60,7 +60,15 @@ export default function HomePage() {
         {/* Right: Planet Image */}
         <div style={{ position:"relative", height:"100%", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:12 }}>
           <div style={{ position:"relative", width:"100%", maxWidth:520, aspectRatio:"1/1" }}>
-            <Image src="/hero-planet.png" alt="Pantavion Planet" fill style={{ objectFit:"contain" }} priority />
+            <div style={{ width:"100%", height:"100%", position:"relative", display:"flex", alignItems:"center", justifyContent:"center" }}>
+              <div style={{ width:420, height:420, borderRadius:"50%", background:"radial-gradient(circle at 35% 35%, #1a3a6b 0%, #071426 60%, #000 100%)", boxShadow:"0 0 80px 20px rgba(100,160,255,0.18), 0 0 200px 60px rgba(30,80,180,0.10), inset 0 0 60px 10px rgba(200,160,80,0.08)", position:"relative", overflow:"hidden" }}>
+                <div style={{ position:"absolute", inset:0, borderRadius:"50%", background:"conic-gradient(from 0deg, transparent 0%, rgba(212,168,67,0.08) 20%, transparent 40%)", animation:"spin 12s linear infinite" }} />
+                <div style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)", width:80, height:80, borderRadius:"50%", background:"radial-gradient(circle, #fff 0%, #d4a843 40%, transparent 70%)", boxShadow:"0 0 40px 10px rgba(212,168,67,0.5)" }} />
+                <div style={{ position:"absolute", inset:20, borderRadius:"50%", border:"1px solid rgba(100,160,255,0.15)" }} />
+                <div style={{ position:"absolute", inset:60, borderRadius:"50%", border:"1px solid rgba(100,160,255,0.10)" }} />
+                <div style={{ position:"absolute", inset:100, borderRadius:"50%", border:"1px solid rgba(100,160,255,0.08)" }} />
+              </div>
+            </div>
           </div>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, width:"100%", maxWidth:440 }}>
             {[["Planet","World screen"],["Language","Text bridge live"],["PantaAI","Intent execution"],["Safety","Legal routes"]].map(([label,sub]) => (
@@ -75,3 +83,4 @@ export default function HomePage() {
     </main>
   );
 }
+
