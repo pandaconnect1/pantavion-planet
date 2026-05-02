@@ -17,3 +17,5 @@ _local_backups/
 *.corrupted.backup
 pantavion-build-errors.txt
 pantavion-git-status.txt
+.next/
+node_modules/

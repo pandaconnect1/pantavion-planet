@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useEffect } from 'react'
 import { useLocationEngine } from '@/app/shared/location/useLocationEngine'
@@ -6,11 +6,7 @@ import { useSosStore } from './sos.store'
 import { dispatchSos } from './sos.api'
 
 export default function SOSPage() {
-  const { location, status, error, start, stop } = useLocationEngine({
-    enableHighAccuracy: true,
-    timeout: 10000,
-    maximumAge: 0,
-  })
+  const { location, status, error, start, stop } = useLocationEngine()
 
   const {
     isActive,
