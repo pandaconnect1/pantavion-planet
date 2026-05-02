@@ -10,3 +10,10 @@ coverage
 
 .pantavion-backups/
 tsconfig.tsbuildinfo
+# Pantavion local safety backups
+backup/
+_local_backups/
+*.backup-before-clean
+*.corrupted.backup
+pantavion-build-errors.txt
+pantavion-git-status.txt

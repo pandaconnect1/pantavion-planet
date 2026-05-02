@@ -2,24 +2,28 @@
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Pantavion One",
-    short_name: "Pantavion",
-    description: "Pantavion is a governed global ecosystem for communication, safety, knowledge, work and AI-assisted execution.",
-    start_url: "/",
+    name: "Pantavion LifeShield Emergency System",
+    short_name: "LifeShield",
+    description:
+      "Pantavion emergency layer for phones, tablets, desktops, PWA, offline identity, and truth-governed rescue workflows.",
+    start_url: "/pantavion/emergency",
     scope: "/",
     display: "standalone",
-    orientation: "portrait-primary",
-    background_color: "#020712",
-    theme_color: "#071a2d",
-    categories: ["social", "productivity", "education", "utilities"],
+    background_color: "#050816",
+    theme_color: "#050816",
+    orientation: "any",
+    categories: ["utilities", "health", "safety", "productivity"],
     icons: [
       {
-        src: "/pantavion-icon.svg",
-        sizes: "any",
-        type: "image/svg+xml",
-        purpose: "maskable"
-      }
-    ]
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        src: "/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
   };
 }
-
