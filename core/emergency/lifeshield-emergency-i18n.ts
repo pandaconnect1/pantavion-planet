@@ -1,16 +1,10 @@
-﻿export type EmergencyLanguage =
-  | "en"
-  | "el"
-  | "es"
-  | "fr"
-  | "de"
-  | "it"
-  | "pt"
-  | "ar"
-  | "tr"
-  | "ru"
-  | "zh"
-  | "ja";
+﻿import {
+  globalEmergencyLanguages,
+  normalizeGlobalEmergencyLanguage,
+  type GlobalEmergencyLanguage,
+} from "./global-emergency-languages";
+
+export type EmergencyLanguage = GlobalEmergencyLanguage;
 
 export type EmergencyCopy = {
   badge: string;
@@ -50,20 +44,7 @@ export type EmergencyCopy = {
   betaNotice: string;
 };
 
-export const emergencyLanguages: { code: EmergencyLanguage; label: string }[] = [
-  { code: "en", label: "English" },
-  { code: "el", label: "Ελληνικά" },
-  { code: "es", label: "Español" },
-  { code: "fr", label: "Français" },
-  { code: "de", label: "Deutsch" },
-  { code: "it", label: "Italiano" },
-  { code: "pt", label: "Português" },
-  { code: "ar", label: "العربية" },
-  { code: "tr", label: "Türkçe" },
-  { code: "ru", label: "Русский" },
-  { code: "zh", label: "中文" },
-  { code: "ja", label: "日本語" },
-];
+export const emergencyLanguages = globalEmergencyLanguages;
 
 export function normalizeEmergencyLanguage(language?: string | null): EmergencyLanguage {
   const value = (language ?? "en").toLowerCase();
@@ -125,7 +106,7 @@ const englishCopy: EmergencyCopy = {
     "This page is a real route. Features marked hardware/institution required are not fake buttons; they are locked roadmap surfaces until the required device, certification, or agreement exists.",
 };
 
-export const emergencyCopy: Record<EmergencyLanguage, Partial<EmergencyCopy>> = {
+export const emergencyCopy: Partial<Record<EmergencyLanguage, Partial<EmergencyCopy>>> & { en: EmergencyCopy } = {
   en: englishCopy,
   el: {
     badge: "Pantavion LifeShield",
@@ -181,7 +162,7 @@ export const emergencyCopy: Record<EmergencyLanguage, Partial<EmergencyCopy>> = 
 };
 
 export function getEmergencyCopy(language: EmergencyLanguage): EmergencyCopy {
-  return { ...englishCopy, ...emergencyCopy[language] };
+  return { ...englishCopy, ...(emergencyCopy[language] ?? {}) };
 }
 
 export const emergencyActionRoutes: {
