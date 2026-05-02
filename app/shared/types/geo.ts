@@ -6,12 +6,12 @@ export type GeoLocation = {
 }
 
 export type LocationStatus =
-  | 'idle'
-  | 'requesting'
-  | 'tracking'
-  | 'denied'
-  | 'unsupported'
-  | 'error'
+  | "idle"
+  | "requesting"
+  | "tracking"
+  | "denied"
+  | "unsupported"
+  | "error"
 
 export type LocationError = {
   code: number
