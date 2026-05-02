@@ -1,25 +1,18 @@
-﻿import type { GeoLocation } from '@/app/shared/types/geo'
+﻿import type {
+  PantavionSosDispatchResult,
+  PantavionSosPacket,
+} from "@/types/pantavion-sos";
 
-export type SosDispatchPayload = {
-  sessionId: string
-  status: 'active' | 'updating' | 'resolved' | 'cancelled'
-  sentAt: number
-  location: GeoLocation
-  isFallback: boolean
-}
-
-export async function dispatchSos(payload: SosDispatchPayload) {
-  const res = await fetch('/api/sos/dispatch', {
-    method: 'POST',
+export async function dispatchSos(
+  packet: PantavionSosPacket
+): Promise<PantavionSosDispatchResult> {
+  const response = await fetch("/api/sos/dispatch", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload),
-  })
+    body: JSON.stringify(packet),
+  });
 
-  if (!res.ok) {
-    throw new Error(`SOS dispatch failed: ${res.status}`)
-  }
-
-  return res.json()
+  return (await response.json()) as PantavionSosDispatchResult;
 }

@@ -1,14 +1,11 @@
 ﻿import { NextResponse } from "next/server";
-
 export const dynamic = "force-dynamic";
-
 export async function GET() {
   return NextResponse.json({
     ok: true,
-    service: "Pantavion",
+    service: "pantavion-planet",
     route: "/api/health",
-    status: "live",
-    thirdPartyAiUsed: false,
-    timestamp: new Date().toISOString(),
+    status: "healthy",
+    timestamp: new Date().toISOString()
   });
 }
