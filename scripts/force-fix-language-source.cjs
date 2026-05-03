@@ -9,7 +9,10 @@ function write(path, content) {
 }
 
 let registry = fs.readFileSync(registryPath, "utf8");
-registry = registry.replace('{ code: "el", label: "λληνικά" }', '{ code: "el", label: "λληνικά" }');
+registry = registry.replace(
+  /\{ code: "el", label: "[^"]*" \}/,
+  `{ code: "el", label: "${greekLabel}" }`
+);
 write(registryPath, registry);
 
 let patchScript = fs.readFileSync(patchScriptPath, "utf8");

@@ -5,7 +5,7 @@ const i18nPath = "core/emergency/lifeshield-emergency-i18n.ts";
 const sosPath = "app/sos/page.tsx";
 
 const languages = [
-  ["en", "English"], ["el", "λληνικά"], ["es", "Español"], ["fr", "Français"],
+  ["en", "English"], ["el", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac"], ["es", "Español"], ["fr", "Français"],
   ["de", "Deutsch"], ["it", "Italiano"], ["pt", "Português"], ["ar", "العربية"],
   ["tr", "Türkçe"], ["ru", "Русский"], ["zh", "中文"], ["ja", "日本語"],
   ["hi", "हिन्दी"], ["bn", "বাংলা"], ["ur", "اردو"], ["fa", "فارسی"],

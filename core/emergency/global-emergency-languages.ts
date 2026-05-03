@@ -1,6 +1,6 @@
 export const globalEmergencyLanguages = [
   { code: "en", label: "English" },
-  { code: "el", label: "λληνικά" },
+  { code: "el", label: "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac" },
   { code: "es", label: "Español" },
   { code: "fr", label: "Français" },
   { code: "de", label: "Deutsch" },
