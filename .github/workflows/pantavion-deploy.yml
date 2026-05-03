@@ -21,10 +21,6 @@ jobs:
   validate:
     name: Validate Build
     runs-on: ubuntu-latest
-    env:
-      AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
 
     steps:
       - name: Checkout
@@ -39,111 +35,128 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint (if present)
+      - name: Lint if present
         run: npm run lint --if-present
 
-      - name: Typecheck (if present)
+      - name: Typecheck if present
         run: npm run typecheck --if-present
 
-      - name: Tests (if present)
+      - name: Pantavion AI audit if present
+        run: npm run audit:pantavion --if-present
+
+      - name: Tests if present
         run: npm test --if-present
 
       - name: Build
         run: npm run build
 
   deploy_preview_vercel:
-    name: Deploy Preview to Vercel
+    name: Optional Deploy Preview to Vercel
     needs: validate
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
+
     env:
-      AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
     steps:
+      - name: Skip Vercel preview if secrets are missing
+        if: ${{ env.VERCEL_TOKEN == '' || env.VERCEL_ORG_ID == '' || env.VERCEL_PROJECT_ID == '' }}
+        run: |
+          echo "Skipping Vercel preview deploy because Vercel secrets are not configured."
+          echo "The build is still validated. Vercel Git integration may deploy separately."
+
       - name: Checkout
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
         uses: actions/checkout@v4
 
       - name: Setup Node
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
       - name: Install dependencies
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
         run: npm ci
 
       - name: Install Vercel CLI
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
         run: npm install --global vercel@latest
 
       - name: Pull Vercel preview env
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
+        run: vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
 
       - name: Build preview
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
+        run: vercel build --token=$VERCEL_TOKEN
 
       - name: Deploy preview
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
+        run: vercel deploy --prebuilt --token=$VERCEL_TOKEN
 
   deploy_production:
-    name: Deploy Production to Vercel + Optional AWS
+    name: Optional Deploy Production to Vercel + AWS
     needs: validate
     if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') }}
     runs-on: ubuntu-latest
+
     env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+      AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
 
     permissions:
       id-token: write
       contents: read
 
     steps:
+      - name: Skip Vercel production if secrets are missing
+        if: ${{ env.VERCEL_TOKEN == '' || env.VERCEL_ORG_ID == '' || env.VERCEL_PROJECT_ID == '' }}
+        run: |
+          echo "Skipping Vercel production deploy because Vercel secrets are not configured."
+          echo "The build is still validated. Vercel Git integration may deploy production separately."
+
       - name: Checkout
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
         uses: actions/checkout@v4
 
       - name: Setup Node
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
       - name: Install dependencies
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
         run: npm ci
 
       - name: Install Vercel CLI
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
         run: npm install --global vercel@latest
 
       - name: Pull Vercel production env
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
+        run: vercel pull --yes --environment=production --token=$VERCEL_TOKEN
 
       - name: Build production
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
+        run: vercel build --prod --token=$VERCEL_TOKEN
 
       - name: Deploy production
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
+        run: vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
 
-      - name: Configure AWS credentials (optional)
+      - name: Configure AWS credentials optional
         if: ${{ env.AWS_ROLE_TO_ASSUME != '' && env.AWS_REGION != '' }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -152,10 +165,6 @@ jobs:
 
       - name: Optional AWS sync
         if: ${{ env.AWS_REGION != '' && env.AWS_S3_BUCKET != '' }}
-        env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
         run: |
           echo "Checking optional AWS deployment hooks..."
 
@@ -168,10 +177,7 @@ jobs:
 
           if [ -n "$AWS_CLOUDFRONT_DISTRIBUTION_ID" ]; then
             echo "Creating CloudFront invalidation..."
-            aws cloudfront create-invalidation \
-              --distribution-id "$AWS_CLOUDFRONT_DISTRIBUTION_ID" \
-              --paths "/*"
+            aws cloudfront create-invalidation --distribution-id "$AWS_CLOUDFRONT_DISTRIBUTION_ID" --paths "/*"
           else
             echo "Skipping CloudFront invalidation."
           fi
-
