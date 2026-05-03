@@ -32,7 +32,8 @@ const requiredPaths = [
   { file: "core/emergency/sos-gap-ledger.ts", reason: "SOS gaps must stay tracked in the repo" },
   { file: "core/emergency/sos-provider-roadmap.ts", reason: "SOS provider roadmap must stay tracked in the repo" },
   { file: "core/emergency/sos-alert-policy.ts", reason: "SOS alert policy must stay tracked in the repo" },
-  { file: "core/emergency/sos-competitive-synthesis.ts", reason: "SOS competitive synthesis map must stay tracked in the repo" }
+  { file: "core/emergency/sos-competitive-synthesis.ts", reason: "SOS competitive synthesis map must stay tracked in the repo" },
+  { file: "core/memory/pantavion-continuity-thread-memory.ts", reason: "Pantavion continuity/thread memory framework must stay tracked in the repo" }
 ];
 
 const requiredContent = [
@@ -66,7 +67,14 @@ const requiredContent = [
   { file: "core/emergency/sos-competitive-synthesis.ts", text: "what3words-location-pattern", reason: "Precise location pattern must remain tracked without copying provider system" },
   { file: "core/emergency/sos-competitive-synthesis.ts", text: "secure-messaging-emergency-channel-pattern", reason: "Messaging emergency channel pattern must remain tracked" },
   { file: "core/emergency/sos-competitive-synthesis.ts", text: "ai-companion-life-journal-pattern", reason: "AI companion/journal pattern must remain tracked safely" },
-  { file: "core/emergency/sos-competitive-synthesis.ts", text: "getPantavionOwnedSosOpportunitySummary", reason: "Pantavion-owned synthesis summary must remain tracked" }
+  { file: "core/emergency/sos-competitive-synthesis.ts", text: "getPantavionOwnedSosOpportunitySummary", reason: "Pantavion-owned synthesis summary must remain tracked" },
+  { file: "app/sos/elder/page.tsx", text: "pantavion_global_language_v1", reason: "Elder Safe Mode must use global language memory key" },
+  { file: "app/sos/elder/page.tsx", text: "languageOptions", reason: "Elder Safe Mode must keep language selection options" },
+  { file: "core/memory/pantavion-continuity-thread-memory.ts", text: "pantavionContinuityThreadMemoryRules", reason: "Continuity/thread memory rules must remain tracked" },
+  { file: "core/memory/pantavion-continuity-thread-memory.ts", text: "topic-thread-retrieval", reason: "Topic-related thread retrieval doctrine must remain tracked" },
+  { file: "core/memory/pantavion-continuity-thread-memory.ts", text: "language-never-forgotten", reason: "Language must not be forgotten in critical flows" },
+  { file: "core/memory/pantavion-continuity-thread-memory.ts", text: "founder-approval-before-automation", reason: "Founder approval gate must remain tracked for future autonomous execution" },
+  { file: "core/memory/pantavion-continuity-thread-memory.ts", text: "pantavionThreadReaderFutureContract", reason: "Future related-thread reader contract must remain tracked" }
 ];
 
 function walk(dir) {

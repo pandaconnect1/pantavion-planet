@@ -1,16 +1,141 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type ElderHistoryItem = {
   id: string;
-  mode: "sos" | "ai-note";
+  mode: "sos" | "ai-note" | "language";
   text: string;
   createdAt: string;
 };
 
+type ElderLanguage = {
+  code: string;
+  label: string;
+  nativeLabel: string;
+  direction: "ltr" | "rtl";
+  sos: string;
+  help: string;
+  aiFriend: string;
+  notePlaceholder: string;
+};
+
 const historyKey = "pantavion_elder_safety_history_v1";
+const globalLanguageKey = "pantavion_global_language_v1";
+
+const languageOptions: ElderLanguage[] = [
+  {
+    code: "el",
+    label: "Greek",
+    nativeLabel: "Ελληνικά",
+    direction: "ltr",
+    sos: "SOS",
+    help: "Βοήθεια / Μετάφραση",
+    aiFriend: "AI Φίλος",
+    notePlaceholder:
+      "Π.χ. σήμερα ζαλίστηκα, ένιωσα μόνος/η ή θέλω να μιλήσω στα παιδιά μου...",
+  },
+  {
+    code: "en",
+    label: "English",
+    nativeLabel: "English",
+    direction: "ltr",
+    sos: "SOS",
+    help: "Help / Translation",
+    aiFriend: "AI Friend",
+    notePlaceholder:
+      "Example: today I felt dizzy, lonely, or I want to speak with my family...",
+  },
+  {
+    code: "tr",
+    label: "Turkish",
+    nativeLabel: "Türkçe",
+    direction: "ltr",
+    sos: "SOS",
+    help: "Yardım / Çeviri",
+    aiFriend: "AI Arkadaş",
+    notePlaceholder:
+      "Örn. bugün başım döndü, yalnız hissettim veya ailemle konuşmak istiyorum...",
+  },
+  {
+    code: "ar",
+    label: "Arabic",
+    nativeLabel: "العربية",
+    direction: "rtl",
+    sos: "SOS",
+    help: "مساعدة / ترجمة",
+    aiFriend: "صديق AI",
+    notePlaceholder:
+      "مثال: شعرت اليوم بالدوار أو الوحدة أو أريد التحدث مع عائلتي...",
+  },
+  {
+    code: "fr",
+    label: "French",
+    nativeLabel: "Français",
+    direction: "ltr",
+    sos: "SOS",
+    help: "Aide / Traduction",
+    aiFriend: "Ami AI",
+    notePlaceholder:
+      "Exemple : aujourd'hui je me suis senti étourdi, seul, ou je veux parler à ma famille...",
+  },
+  {
+    code: "de",
+    label: "German",
+    nativeLabel: "Deutsch",
+    direction: "ltr",
+    sos: "SOS",
+    help: "Hilfe / Übersetzung",
+    aiFriend: "AI Freund",
+    notePlaceholder:
+      "Beispiel: Heute war mir schwindlig, ich fühlte mich allein oder möchte mit meiner Familie sprechen...",
+  },
+  {
+    code: "es",
+    label: "Spanish",
+    nativeLabel: "Español",
+    direction: "ltr",
+    sos: "SOS",
+    help: "Ayuda / Traducción",
+    aiFriend: "Amigo AI",
+    notePlaceholder:
+      "Ejemplo: hoy me sentí mareado, solo, o quiero hablar con mi familia...",
+  },
+  {
+    code: "it",
+    label: "Italian",
+    nativeLabel: "Italiano",
+    direction: "ltr",
+    sos: "SOS",
+    help: "Aiuto / Traduzione",
+    aiFriend: "Amico AI",
+    notePlaceholder:
+      "Esempio: oggi mi sono sentito stordito, solo, o voglio parlare con la mia famiglia...",
+  },
+  {
+    code: "ro",
+    label: "Romanian",
+    nativeLabel: "Română",
+    direction: "ltr",
+    sos: "SOS",
+    help: "Ajutor / Traducere",
+    aiFriend: "Prieten AI",
+    notePlaceholder:
+      "Exemplu: astăzi m-am simțit amețit, singur sau vreau să vorbesc cu familia mea...",
+  },
+  {
+    code: "ru",
+    label: "Russian",
+    nativeLabel: "Русский",
+    direction: "ltr",
+    sos: "SOS",
+    help: "Помощь / Перевод",
+    aiFriend: "AI друг",
+    notePlaceholder:
+      "Например: сегодня у меня кружилась голова, я чувствовал себя одиноко или хочу поговорить с семьей...",
+  },
+];
 
 function formatDateTime(value: string) {
   return new Date(value).toLocaleString("el-GR", {
@@ -35,6 +160,25 @@ function readHistory(): ElderHistoryItem[] {
 function saveHistory(items: ElderHistoryItem[]) {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(historyKey, JSON.stringify(items.slice(0, 12)));
+}
+
+function readLanguageCode() {
+  if (typeof window === "undefined") return "el";
+
+  const saved = window.localStorage.getItem(globalLanguageKey);
+  if (saved && languageOptions.some((language) => language.code === saved)) {
+    return saved;
+  }
+
+  const browserLanguage = window.navigator.language?.slice(0, 2).toLowerCase();
+  if (
+    browserLanguage &&
+    languageOptions.some((language) => language.code === browserLanguage)
+  ) {
+    return browserLanguage;
+  }
+
+  return "el";
 }
 
 function createSiren() {
@@ -73,15 +217,45 @@ export default function ElderSafeModePage() {
   const [history, setHistory] = useState<ElderHistoryItem[]>([]);
   const [note, setNote] = useState("");
   const [lastAction, setLastAction] = useState("");
+  const [languageCode, setLanguageCode] = useState("el");
+
+  const selectedLanguage = useMemo(
+    () =>
+      languageOptions.find((language) => language.code === languageCode) ??
+      languageOptions[0],
+    [languageCode]
+  );
 
   useEffect(() => {
     setHistory(readHistory());
+    setLanguageCode(readLanguageCode());
   }, []);
 
   function addHistoryItem(item: ElderHistoryItem) {
     const next = [item, ...history].slice(0, 12);
     setHistory(next);
     saveHistory(next);
+  }
+
+  function changeLanguage(nextCode: string) {
+    const nextLanguage =
+      languageOptions.find((language) => language.code === nextCode) ??
+      languageOptions[0];
+
+    setLanguageCode(nextLanguage.code);
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(globalLanguageKey, nextLanguage.code);
+    }
+
+    addHistoryItem({
+      id: `language-${Date.now()}`,
+      mode: "language",
+      text: `Η γλώσσα της ειδικής οθόνης άλλαξε σε ${nextLanguage.nativeLabel}.`,
+      createdAt: new Date().toISOString(),
+    });
+
+    setLastAction(`Η γλώσσα αποθηκεύτηκε ως ${nextLanguage.nativeLabel}.`);
   }
 
   function activateLocalSos() {
@@ -128,7 +302,11 @@ export default function ElderSafeModePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#06111f] px-4 py-6 text-white">
+    <main
+      className="min-h-screen bg-[#06111f] px-4 py-6 text-white"
+      dir={selectedLanguage.direction}
+      lang={selectedLanguage.code}
+    >
       <section className="mx-auto flex w-full max-w-3xl flex-col gap-5">
         <div className="rounded-[2rem] border border-white/15 bg-[#091a31] p-5 shadow-2xl">
           <p className="mb-3 text-sm font-black uppercase tracking-[0.35em] text-yellow-300">
@@ -139,8 +317,35 @@ export default function ElderSafeModePage() {
           </h1>
           <p className="mt-4 text-lg leading-8 text-white/85">
             Για ηλικιωμένους, ανθρώπους που ζουν μόνοι και χρήστες που χρειάζονται
-            μεγάλα κουμπιά, καθαρή φωνή, απλή βοήθεια και λιγότερη σύγχυση.
+            μεγάλα κουμπιά, καθαρή φωνή, απλή βοήθεια, επιλογή γλώσσας και
+            λιγότερη σύγχυση.
           </p>
+
+          <div className="mt-5 rounded-3xl border border-yellow-300/40 bg-yellow-300/10 p-4">
+            <label
+              htmlFor="elder-language"
+              className="block text-xl font-black text-yellow-100"
+            >
+              Γλώσσα / Language
+            </label>
+            <select
+              id="elder-language"
+              value={languageCode}
+              onChange={(event) => changeLanguage(event.target.value)}
+              className="mt-3 w-full rounded-2xl border-4 border-yellow-200 bg-white px-4 py-5 text-2xl font-black text-[#091a31] outline-none focus:ring-8 focus:ring-yellow-300"
+            >
+              {languageOptions.map((language) => (
+                <option key={language.code} value={language.code}>
+                  {language.nativeLabel} - {language.label}
+                </option>
+              ))}
+            </select>
+            <p className="mt-3 text-base font-bold leading-7 text-yellow-100">
+              Η επιλογή αποθηκεύεται με global Pantavion key, ώστε να μην
+              ξαναχάνεται ανάμεσα σε SOS / μετάφραση / AI φίλο.
+            </p>
+          </div>
+
           <div className="mt-5 rounded-2xl border border-yellow-300/40 bg-yellow-300/10 p-4 text-base font-bold leading-7 text-yellow-100">
             Το κόκκινο SOS είναι για άμεσο κίνδυνο. Δεν υπόσχεται αυτόματη κρατική
             αποστολή, ασθενοφόρο ή δορυφορική διάσωση χωρίς πιστοποιημένο πάροχο.
@@ -157,7 +362,7 @@ export default function ElderSafeModePage() {
             className="mt-4 w-full rounded-[2rem] bg-red-100 px-6 py-12 text-center text-7xl font-black text-red-800 shadow-2xl transition hover:scale-[1.01] focus:outline-none focus:ring-8 focus:ring-white"
             aria-label="SOS άμεση βοήθεια"
           >
-            SOS
+            {selectedLanguage.sos}
           </button>
           <p className="mt-4 text-2xl font-black leading-9 text-white">
             Ένα πάτημα: δυνατή ειδοποίηση στη συσκευή και καταγραφή ώρας.
@@ -197,7 +402,7 @@ export default function ElderSafeModePage() {
             href="/sos-interpreter"
             className="mt-5 block rounded-[2rem] bg-orange-950 px-6 py-8 text-center text-3xl font-black text-orange-100 shadow-xl"
           >
-            ΒΟΗΘΕΙΑ / ΜΕΤΑΦΡΑΣΗ
+            {selectedLanguage.help}
           </Link>
         </section>
 
@@ -219,7 +424,7 @@ export default function ElderSafeModePage() {
           <textarea
             value={note}
             onChange={(event) => setNote(event.target.value)}
-            placeholder="Π.χ. σήμερα ζαλίστηκα, ένιωσα μόνος/η ή θέλω να μιλήσω στα παιδιά μου..."
+            placeholder={selectedLanguage.notePlaceholder}
             className="mt-3 min-h-36 w-full rounded-3xl border-4 border-green-200 bg-white p-5 text-2xl font-bold leading-9 text-green-950 outline-none focus:ring-8 focus:ring-green-200"
           />
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -235,7 +440,7 @@ export default function ElderSafeModePage() {
               disabled
               className="rounded-2xl border-2 border-green-950/40 px-5 py-6 text-2xl font-black text-green-950/70"
             >
-              AI Φωνή: επόμενο στάδιο
+              {selectedLanguage.aiFriend}: επόμενο στάδιο
             </button>
           </div>
           <p className="mt-4 text-lg font-bold leading-8 text-green-950">
@@ -250,7 +455,7 @@ export default function ElderSafeModePage() {
             <div>
               <h2 className="text-3xl font-black">Τοπικό ιστορικό</h2>
               <p className="mt-2 text-lg text-white/75">
-                Αποθηκεύεται στη συσκευή με ημερομηνία και ώρα.
+                Αποθηκεύεται στη συσκευή με ημερομηνία, ώρα και συνέχεια ροής.
               </p>
             </div>
             <button
@@ -276,8 +481,12 @@ export default function ElderSafeModePage() {
                   className="rounded-2xl border border-white/15 bg-[#071426] p-4"
                 >
                   <p className="text-sm font-black uppercase tracking-[0.2em] text-yellow-300">
-                    {item.mode === "sos" ? "SOS" : "Σημείωση"} ·{" "}
-                    {formatDateTime(item.createdAt)}
+                    {item.mode === "sos"
+                      ? "SOS"
+                      : item.mode === "language"
+                        ? "Γλώσσα"
+                        : "Σημείωση"}{" "}
+                    · {formatDateTime(item.createdAt)}
                   </p>
                   <p className="mt-2 text-lg font-bold leading-8 text-white/90">
                     {item.text}
@@ -293,12 +502,13 @@ export default function ElderSafeModePage() {
         </section>
 
         <div className="rounded-[2rem] border border-white/15 bg-[#091a31] p-5">
-          <h2 className="text-2xl font-black">Κανόνες προστασίας</h2>
+          <h2 className="text-2xl font-black">Κανόνες προστασίας και συνέχειας</h2>
           <ul className="mt-4 space-y-3 text-lg font-bold leading-8 text-white/85">
             <li>• Ο φροντιστής δεν παίρνει αυτόματη πρόσβαση στο πράσινο ιστορικό.</li>
             <li>• Η οικογένεια βλέπει μόνο ό,τι επιτρέψει ο χρήστης ή νόμιμος guardian κανόνας.</li>
             <li>• Το πορτοκαλί βοηθά στη ζωντανή συνεννόηση, όχι στην ανάγνωση προσωπικών αρχείων.</li>
-            <li>• Το κόκκινο είναι για κίνδυνο, με ξεκάθαρα όρια provider/legal/infrastructure.</li>
+            <li>• Η γλώσσα, τοπικό ιστορικό και οι σημειώσεις κρατούν συνέχεια μέσα στη συσκευή.</li>
+            <li>• Το Pantavion θα χτίζεται με μνήμη ροής, όχι με ξεχασμένα αποκομμένα νήματα.</li>
           </ul>
         </div>
       </section>
