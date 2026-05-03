@@ -27,7 +27,7 @@ export default function EmergencyFeaturePage({
   const [language, setLanguage] = useState<EmergencyLanguage>("en");
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("pantavion-emergency-language");
+    const stored = window.localStorage.getItem("pantavion-language");
     const detected = normalizeEmergencyLanguage(stored || window.navigator.language);
     setLanguage(detected);
   }, []);
@@ -36,7 +36,7 @@ export default function EmergencyFeaturePage({
 
   function changeLanguage(value: EmergencyLanguage) {
     setLanguage(value);
-    window.localStorage.setItem("pantavion-emergency-language", value);
+    window.localStorage.setItem("pantavion-language", value);
   }
 
   const statusText = String(copy[status] ?? copy.futureRoadmap);

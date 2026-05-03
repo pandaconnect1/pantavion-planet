@@ -26,7 +26,7 @@ export default function PantavionEmergencyPage() {
   const [language, setLanguage] = useState<EmergencyLanguage>("en");
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("pantavion-emergency-language");
+    const stored = window.localStorage.getItem("pantavion-language");
     const detected = normalizeEmergencyLanguage(stored || window.navigator.language);
     setLanguage(detected);
   }, []);
@@ -35,7 +35,7 @@ export default function PantavionEmergencyPage() {
 
   function changeLanguage(value: EmergencyLanguage) {
     setLanguage(value);
-    window.localStorage.setItem("pantavion-emergency-language", value);
+    window.localStorage.setItem("pantavion-language", value);
   }
 
   return (

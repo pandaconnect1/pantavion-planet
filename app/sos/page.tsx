@@ -213,7 +213,7 @@ export default function SOSPage() {
   const copy = getCopy(language);
 
   useEffect(() => {
-    const storedLanguage = window.localStorage.getItem("pantavion-emergency-language");
+    const storedLanguage = window.localStorage.getItem("pantavion-language");
     const detected = normalizeEmergencyLanguage(
       storedLanguage || window.navigator.language
     );
@@ -268,7 +268,7 @@ export default function SOSPage() {
 
   function changeLanguage(next: EmergencyLanguage) {
     setLanguage(next);
-    window.localStorage.setItem("pantavion-emergency-language", next);
+    window.localStorage.setItem("pantavion-language", next);
     addLog("ok", "Language changed to " + next + ".");
   }
 
