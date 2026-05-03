@@ -46,22 +46,10 @@ export type EmergencyCopy = {
 
 export const emergencyLanguages = globalEmergencyLanguages;
 
-export function normalizeEmergencyLanguage(language?: string | null): EmergencyLanguage {
-  const value = (language ?? "en").toLowerCase();
-
-  if (value.startsWith("el")) return "el";
-  if (value.startsWith("es")) return "es";
-  if (value.startsWith("fr")) return "fr";
-  if (value.startsWith("de")) return "de";
-  if (value.startsWith("it")) return "it";
-  if (value.startsWith("pt")) return "pt";
-  if (value.startsWith("ar")) return "ar";
-  if (value.startsWith("tr")) return "tr";
-  if (value.startsWith("ru")) return "ru";
-  if (value.startsWith("zh")) return "zh";
-  if (value.startsWith("ja")) return "ja";
-
-  return "en";
+export function normalizeEmergencyLanguage(
+  language?: string | null
+): EmergencyLanguage {
+  return normalizeGlobalEmergencyLanguage(language);
 }
 
 const englishCopy: EmergencyCopy = {
