@@ -353,47 +353,79 @@ const navItems = [
   { label: "SOS", href: "/sos" },
 ];
 
+const navCopy: Record<string, Record<string, string>> = {
+  el: {
+    Planet: "Πλανήτης",
+    Language: "Γλώσσα",
+    People: "Άνθρωποι",
+    Media: "Media",
+    PantaAI: "PantaAI",
+    Work: "Εργασία",
+    Safety: "Ασφάλεια",
+    SOS: "SOS",
+  },
+  en: {
+    Planet: "Planet",
+    Language: "Language",
+    People: "People",
+    Media: "Media",
+    PantaAI: "PantaAI",
+    Work: "Work",
+    Safety: "Safety",
+    SOS: "SOS",
+  },
+};
+
+function labelFor(label: string, lang: string) {
+  return navCopy[lang]?.[label] ?? navCopy.en[label] ?? label;
+}
+
+function detailFor(detail: string | { el: string; en: string }, lang: string) {
+  if (typeof detail === "string") return detail;
+  return lang === "el" ? detail.el : detail.en;
+}
+
 const emergencyCards = [
   {
     key: "liveSos",
     href: "/sos",
-    detail: "Real browser/PWA emergency command center",
+    detail: { el: "Πραγματικό browser/PWA κέντρο έκτακτης ανάγκης", en: "Real browser/PWA emergency command center" },
     tone: "red",
   },
   {
     key: "lifeShield",
     href: "/pantavion/emergency",
-    detail: "Emergency profile, device support and offline doctrine",
+    detail: { el: "Emergency profile, υποστήριξη συσκευής και offline δόγμα", en: "Emergency profile, device support and offline doctrine" },
     tone: "dark",
   },
   {
     key: "guardianMode",
     href: "/pantavion/emergency/guardian",
-    detail: "Before travel, driving, child safety, hunting or isolation",
+    detail: { el: "Πριν από ταξίδι, οδήγηση, παιδί, κυνήγι ή απομόνωση", en: "Before travel, driving, child safety, hunting or isolation" },
     tone: "gold",
   },
   {
     key: "evidence",
     href: "/pantavion/emergency/evidence",
-    detail: "Photo, video and audio capture with permission boundaries",
+    detail: { el: "Φωτογραφία, βίντεο και ήχος με όρια συγκατάθεσης", en: "Photo, video and audio capture with permission boundaries" },
     tone: "dark",
   },
   {
     key: "offgrid",
     href: "/pantavion/emergency/extreme-offgrid",
-    detail: "Remote area, disaster, no-signal and satellite-aware doctrine",
+    detail: { el: "Απομακρυσμένη περιοχή, καταστροφή, χωρίς σήμα και satellite-aware δόγμα", en: "Remote area, disaster, no-signal and satellite-aware doctrine" },
     tone: "dark",
   },
   {
     key: "partners",
     href: "/pantavion/emergency/partners",
-    detail: "Countries, agencies, rescue teams and providers can request review",
+    detail: { el: "Χώρες, υπηρεσίες, ομάδες διάσωσης και πάροχοι μπορούν να ζητήσουν έλεγχο σύνδεσης", en: "Countries, agencies, rescue teams and providers can request review" },
     tone: "dark",
   },
   {
     key: "scenarios",
     href: "/pantavion/emergency/scenarios",
-    detail: "When and how to use SOS before and during real danger",
+    detail: { el: "Πότε και πώς χρησιμοποιείται το SOS πριν και κατά τη διάρκεια πραγματικού κινδύνου", en: "When and how to use SOS before and during real danger" },
     tone: "dark",
   },
 ];
@@ -404,13 +436,13 @@ export default function HomePage() {
   const t = copy[lang] ?? copy.en;
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("pantavion-home-language");
+    const saved = window.localStorage.getItem("pantavion-language");
     if (saved) setLang(saved);
   }, []);
 
   function changeLanguage(value: string) {
     setLang(value);
-    window.localStorage.setItem("pantavion-home-language", value);
+    window.localStorage.setItem("pantavion-language", value);
   }
 
   return (
@@ -424,7 +456,7 @@ export default function HomePage() {
         <nav className="desktopNav" aria-label="Main navigation">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href}>
-              {item.label}
+              {labelFor(item.label, lang)}
             </Link>
           ))}
         </nav>
@@ -438,7 +470,7 @@ export default function HomePage() {
           >
             {languageOptions.map((item) => (
               <option key={item.code} value={item.code}>
-                {item.label}
+                {labelFor(item.label, lang)}
               </option>
             ))}
           </select>
@@ -462,7 +494,7 @@ export default function HomePage() {
         <section className="mobileMenu" aria-label="Mobile menu">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
-              {item.label}
+              {labelFor(item.label, lang)}
             </Link>
           ))}
 
@@ -527,7 +559,7 @@ export default function HomePage() {
             className={`featureCard ${card.tone}`}
           >
             <h3>{String(t[card.key as keyof Copy])}</h3>
-            <p>{card.detail}</p>
+            <p>{detailFor(card.detail, lang)}</p>
           </Link>
         ))}
 
@@ -554,7 +586,7 @@ export default function HomePage() {
         </article>
 
         <article className="languageBox">
-          <h2>Global language selector</h2>
+          <h2>{lang === "el" ? "Παγκόσμια επιλογή γλώσσας" : "Global language selector"}</h2>
           <p>{t.languageNotice}</p>
         </article>
       </section>

@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "audit:pantavion": "node scripts/pantavion-ai-integrity-check.cjs"
   },
   "dependencies": {
     "next": "15.5.14",
@@ -21,4 +22,4 @@
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2"
   }
-}
+}\n
