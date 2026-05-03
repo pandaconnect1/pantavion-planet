@@ -41,6 +41,11 @@ export type EmergencyCopy = {
   multiSignalButton: string;
   safepulseButton: string;
   networkButton: string;
+  guardianButton: string;
+  evidenceButton: string;
+  scenariosButton: string;
+  extremeOffgridButton: string;
+  partnersButton: string;
   betaNotice: string;
 };
 
@@ -90,6 +95,11 @@ const englishCopy: EmergencyCopy = {
   multiSignalButton: "Multi-Signal SOS",
   safepulseButton: "SafePulse",
   networkButton: "Global Network",
+    guardianButton: "Guardian Mode",
+    evidenceButton: "Evidence Capsule",
+    scenariosButton: "δηγός εναρίων",
+    extremeOffgridButton: "Extreme Off-grid",
+    partnersButton: "πίσημοι υνεργάτες",
   betaNotice:
     "This page is a real route. Features marked hardware/institution required are not fake buttons; they are locked roadmap surfaces until the required device, certification, or agreement exists.",
 };
