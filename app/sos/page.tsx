@@ -694,6 +694,13 @@ export default function SOSPage() {
               ← {copy.back}
             </Link>
 
+            <Link
+              href="/sos/contacts"
+              className="rounded-full border border-red-300/40 px-4 py-2 text-sm font-semibold text-red-100 hover:bg-red-500/10"
+            >
+              Trusted contacts
+            </Link>
+
             <div className="flex flex-wrap items-center gap-3">
               <label className="flex items-center gap-2 text-sm text-slate-200">
                 <span>{copy.language}</span>
