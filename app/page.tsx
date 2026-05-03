@@ -350,6 +350,7 @@ const navItems = [
   { label: "PantaAI", href: "/pantaai" },
   { label: "Work", href: "/work" },
   { label: "Safety", href: "/safety" },
+  { label: "Feedback", href: "/feedback" },
   { label: "SOS", href: "/sos" },
 ];
 
@@ -362,6 +363,7 @@ const navCopy: Record<string, Record<string, string>> = {
     PantaAI: "PantaAI",
     Work: "Εργασία",
     Safety: "Ασφάλεια",
+    Feedback: "Γνώμη",
     SOS: "SOS",
   },
   en: {
@@ -372,6 +374,7 @@ const navCopy: Record<string, Record<string, string>> = {
     PantaAI: "PantaAI",
     Work: "Work",
     Safety: "Safety",
+    Feedback: "Feedback",
     SOS: "SOS",
   },
 };
