@@ -15,7 +15,7 @@ export default function HomePage() {
   const t = T[lang];
 
   return (
-    <main style={{ height:"100vh", overflow:"hidden", background:"#040c18", color:"white", fontFamily:"system-ui,sans-serif", display:"flex", flexDirection:"column" }}>
+    <main style={{ minHeight:"100svh", overflowX:"hidden", overflowY:"auto", background:"#040c18", color:"white", fontFamily:"system-ui,sans-serif", display:"flex", flexDirection:"column" }}>
 
       {/* Navbar */}
       <nav style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"14px 36px", borderBottom:"1px solid rgba(255,255,255,0.07)", background:"rgba(4,8,18,0.95)", flexShrink:0, zIndex:10 }}>
@@ -24,8 +24,8 @@ export default function HomePage() {
           <span style={{ fontWeight:900, fontSize:16, color:"white", letterSpacing:"0.02em" }}>pantavion.com</span>
         </div>
         <div style={{ display:"flex", gap:5 }}>
-          {["Planet","Language","People","Media","PantaAI","Work","Safety","Dashboard"].map(item => (
-            <Link key={item} href={`/${item.toLowerCase()}`} style={{ padding:"5px 13px", borderRadius:999, border:"1px solid rgba(255,255,255,0.15)", fontSize:12, fontWeight:600, color:"white", textDecoration:"none" }}>{item}</Link>
+          {["Planet","Language","People","Media","PantaAI","Work","Safety","SOS","Dashboard"].map(item => (
+            <Link key={item} href={item==="SOS" ? "/sos" : `/${item.toLowerCase()}`} style={{ padding:"5px 13px", borderRadius:999, border:"1px solid rgba(255,255,255,0.15)", fontSize:12, fontWeight:600, color:"white", textDecoration:"none" }}>{item}</Link>
           ))}
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:4 }}>
@@ -52,7 +52,7 @@ export default function HomePage() {
           <p style={{ fontSize:15, lineHeight:1.75, color:"#8899bb", maxWidth:460, marginBottom:28 }}>{t.sub}</p>
           <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
             <Link href="/pricing" style={{ padding:"12px 26px", borderRadius:999, background:"linear-gradient(135deg,#d4a843,#f0c866)", color:"#0a0600", fontWeight:900, fontSize:14, textDecoration:"none", boxShadow:"0 6px 28px rgba(212,168,67,0.4)" }}>{t.cta1} →</Link>
-            <Link href="/language" style={{ padding:"12px 22px", borderRadius:999, border:"1.5px solid rgba(255,255,255,0.22)", color:"white", fontWeight:700, fontSize:13, textDecoration:"none" }}>{t.cta2}</Link>
+            <Link href="/sos" style={{ padding:"12px 24px", borderRadius:999, background:"linear-gradient(135deg,#ff2f2f,#b80f19)", color:"white", fontWeight:900, fontSize:14, textDecoration:"none", boxShadow:"0 8px 28px rgba(255,30,40,0.35)" }}>Open Live SOS 🚨</Link><Link href="/language" style={{ padding:"12px 22px", borderRadius:999, border:"1.5px solid rgba(255,255,255,0.22)", color:"white", fontWeight:700, fontSize:13, textDecoration:"none" }}>{t.cta2}</Link>
             <Link href="/ai" style={{ padding:"12px 22px", borderRadius:999, border:"1.5px solid rgba(255,255,255,0.22)", color:"white", fontWeight:700, fontSize:13, textDecoration:"none" }}>{t.cta3}</Link>
           </div>
         </div>
@@ -71,7 +71,7 @@ export default function HomePage() {
             </div>
           </div>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, width:"100%", maxWidth:440 }}>
-            {[["Planet","World screen"],["Language","Text bridge live"],["PantaAI","Intent execution"],["Safety","Legal routes"]].map(([label,sub]) => (
+            {[["Planet","World screen"],["Language","Text bridge live"],["PantaAI","Intent execution"],["Safety","Legal routes"],["SOS","Live emergency"]].map(([label,sub]) => (
               <div key={label} style={{ padding:"10px 14px", background:"rgba(255,255,255,0.04)", borderRadius:12, border:"1px solid rgba(255,255,255,0.08)" }}>
                 <div style={{ fontWeight:700, fontSize:13, color:"#d4a843" }}>{label}</div>
                 <div style={{ fontSize:11, color:"#667788", marginTop:2 }}>{sub}</div>
@@ -80,7 +80,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-    </main>
+    <style jsx global>{`@media (max-width: 800px){main{height:auto!important;min-height:100svh!important;overflow-x:hidden!important;overflow-y:auto!important}nav{display:flex!important;align-items:center!important;gap:10px!important;overflow-x:auto!important;padding:12px 14px!important;justify-content:flex-start!important}nav>div:nth-child(2){overflow-x:auto!important;min-width:max-content!important}nav>div:nth-child(3){display:none!important}section{display:flex!important;flex-direction:column!important;padding:32px 20px 56px!important;gap:22px!important;align-items:flex-start!important}h1{font-size:46px!important;line-height:1.06!important}.cta-mobile-sos{display:flex!important}a[href="/sos"]{border-color:rgba(255,60,60,.85)!important}.pantavion-mobile-emergency{display:block!important}}`}</style></main>
   );
 }
 
