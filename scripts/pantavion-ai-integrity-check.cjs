@@ -74,7 +74,15 @@ const requiredContent = [
   { file: "core/memory/pantavion-continuity-thread-memory.ts", text: "topic-thread-retrieval", reason: "Topic-related thread retrieval doctrine must remain tracked" },
   { file: "core/memory/pantavion-continuity-thread-memory.ts", text: "language-never-forgotten", reason: "Language must not be forgotten in critical flows" },
   { file: "core/memory/pantavion-continuity-thread-memory.ts", text: "founder-approval-before-automation", reason: "Founder approval gate must remain tracked for future autonomous execution" },
-  { file: "core/memory/pantavion-continuity-thread-memory.ts", text: "pantavionThreadReaderFutureContract", reason: "Future related-thread reader contract must remain tracked" }
+  { file: "core/memory/pantavion-continuity-thread-memory.ts", text: "pantavionThreadReaderFutureContract", reason: "Future related-thread reader contract must remain tracked" },
+  { file: "app/sos/elder/page.tsx", text: "elderTranslations", reason: "Elder Safe Mode must keep full translation dictionary" },
+  { file: "app/sos/elder/page.tsx", text: "ElderLanguageCode", reason: "Elder Safe Mode must keep typed language codes" },
+  { file: "app/sos/elder/page.tsx", text: "languageHelp", reason: "Elder language help copy must be translated through dictionary" },
+  { file: "app/sos/elder/page.tsx", text: "emergencyBoundary", reason: "Elder SOS boundary must be translated through dictionary" },
+  { file: "app/sos/elder/page.tsx", text: "redKicker", reason: "Red SOS section must be translated through dictionary" },
+  { file: "app/sos/elder/page.tsx", text: "orangeKicker", reason: "Orange translation section must be translated through dictionary" },
+  { file: "app/sos/elder/page.tsx", text: "greenKicker", reason: "Green AI friend section must be translated through dictionary" },
+  { file: "app/sos/elder/page.tsx", text: "rulesTitle", reason: "Protection rules must be translated through dictionary" }
 ];
 
 function walk(dir) {
