@@ -12,6 +12,8 @@ type ElderHistoryItem = {
   createdAt: string;
 };
 
+type ElderTranslationMode = "auto" | "manual";
+
 type ElderLanguageCode =
   | "el"
   | "en"
@@ -82,6 +84,7 @@ type ElderTranslation = {
 
 const historyKey = "pantavion_elder_safety_history_v1";
 const globalLanguageKey = "pantavion_global_language_v1";
+const translationModeKey = "pantavion_elder_translation_mode_v1";
 const helperLanguageKey = "pantavion_helper_language_v1";
 
 const languageOptions: ElderLanguage[] = [
@@ -805,6 +808,13 @@ function readHelperLanguageCode(): ElderLanguageCode {
   return "en";
 }
 
+function readTranslationMode(): ElderTranslationMode {
+  if (typeof window === "undefined") return "auto";
+
+  const saved = window.localStorage.getItem(translationModeKey);
+  return saved === "manual" ? "manual" : "auto";
+}
+
 function createSiren() {
   if (typeof window === "undefined") return;
 
@@ -844,6 +854,10 @@ export default function ElderSafeModePage() {
   const [languageCode, setLanguageCode] = useState<ElderLanguageCode>("el");
   const [helperLanguageCode, setHelperLanguageCode] =
     useState<ElderLanguageCode>("en");
+  const [translationMode, setTranslationMode] =
+    useState<ElderTranslationMode>("auto");
+  const [helperLanguageCode, setHelperLanguageCode] =
+    useState<ElderLanguageCode>("en");
 
   const selectedLanguage = useMemo(
     () =>
@@ -864,6 +878,8 @@ export default function ElderSafeModePage() {
   useEffect(() => {
     setHistory(readHistory());
     setLanguageCode(readLanguageCode());
+    setHelperLanguageCode(readHelperLanguageCode());
+    setTranslationMode(readTranslationMode());
     setHelperLanguageCode(readHelperLanguageCode());
   }, []);
 
@@ -920,6 +936,42 @@ export default function ElderSafeModePage() {
     setLastAction(
       `Η δεύτερη γλώσσα αποθηκεύτηκε ως ${nextLanguageMeta.nativeLabel}.`
     );
+  }
+
+  function changeTranslationMode(nextMode: ElderTranslationMode) {
+    setTranslationMode(nextMode);
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(translationModeKey, nextMode);
+    }
+
+    setLastAction(
+      nextMode === "auto"
+        ? "Η πορτοκαλί μετάφραση θα ανοίγει με αυτόματη αναγνώριση ομιλίας."
+        : "Η πορτοκαλί μετάφραση θα χρησιμοποιεί χειροκίνητη δεύτερη γλώσσα."
+    );
+  }
+
+  function changeHelperLanguage(nextCode: string) {
+    const nextLanguage = isSupportedLanguage(nextCode) ? nextCode : "en";
+    const nextLanguageMeta =
+      languageOptions.find((language) => language.code === nextLanguage) ??
+      languageOptions[1];
+
+    setHelperLanguageCode(nextLanguage);
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(helperLanguageKey, nextLanguage);
+    }
+
+    addHistoryItem({
+      id: `helper-language-${Date.now()}`,
+      mode: "language",
+      text: `Helper/counterparty language changed to ${nextLanguageMeta.nativeLabel}.`,
+      createdAt: new Date().toISOString(),
+    });
+
+    setLastAction(`Η δεύτερη γλώσσα αποθηκεύτηκε ως ${nextLanguageMeta.nativeLabel}.`);
   }
 
   function activateLocalSos() {
@@ -1074,6 +1126,78 @@ export default function ElderSafeModePage() {
           <p className="mt-3 text-xl font-bold leading-9 text-orange-950">
             {t.orangeBody}
           </p>
+
+          <div
+            data-pantavion-elder-auto-speech-mode="true"
+            className="mt-4 rounded-2xl border-4 border-orange-100 bg-white/85 p-4 text-orange-950"
+          >
+            <p className="text-lg font-black">Translation mode</p>
+
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => changeTranslationMode("auto")}
+                className={`rounded-2xl px-4 py-5 text-xl font-black ${
+                  translationMode === "auto"
+                    ? "bg-orange-950 text-orange-100"
+                    : "border-4 border-orange-300 bg-white text-orange-950"
+                }`}
+              >
+                Auto speech language detection
+              </button>
+
+              <button
+                type="button"
+                onClick={() => changeTranslationMode("manual")}
+                className={`rounded-2xl px-4 py-5 text-xl font-black ${
+                  translationMode === "manual"
+                    ? "bg-orange-950 text-orange-100"
+                    : "border-4 border-orange-300 bg-white text-orange-950"
+                }`}
+              >
+                Manual second language backup
+              </button>
+            </div>
+
+            {translationMode === "auto" ? (
+              <div className="mt-4 rounded-2xl border-4 border-green-300 bg-green-50 p-4">
+                <p className="text-2xl font-black">
+                  {selectedLanguage.nativeLabel} ↔ auto-detect speech
+                </p>
+                <p className="mt-2 text-base font-bold leading-7">
+                  Default mode: the elder speaks naturally. The other person
+                  speaks naturally. Real live recognition requires a future
+                  speech/translation provider, microphone consent and privacy controls.
+                </p>
+              </div>
+            ) : (
+              <div className="mt-4 rounded-2xl border-4 border-orange-300 bg-orange-50 p-4">
+                <label
+                  htmlFor="elder-helper-language"
+                  className="block text-xl font-black"
+                >
+                  Helper / counterparty language
+                </label>
+
+                <select
+                  id="elder-helper-language"
+                  value={helperLanguageCode}
+                  onChange={(event) => changeHelperLanguage(event.target.value)}
+                  className="mt-3 w-full rounded-2xl border-4 border-orange-300 bg-white px-4 py-5 text-2xl font-black text-[#091a31] outline-none focus:ring-8 focus:ring-orange-300"
+                >
+                  {languageOptions.map((language) => (
+                    <option key={language.code} value={language.code}>
+                      {language.nativeLabel} - {language.label}
+                    </option>
+                  ))}
+                </select>
+
+                <p className="mt-3 text-2xl font-black">
+                  {selectedLanguage.nativeLabel} → {selectedHelperLanguage.nativeLabel}
+                </p>
+              </div>
+            )}
+          </div>
 
           <div className="mt-4 rounded-2xl border-4 border-orange-100 bg-white/80 p-4 text-orange-950">
             <p className="text-lg font-black">Γλώσσες συνομιλίας</p>
