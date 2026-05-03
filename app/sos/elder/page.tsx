@@ -82,6 +82,7 @@ type ElderTranslation = {
 
 const historyKey = "pantavion_elder_safety_history_v1";
 const globalLanguageKey = "pantavion_global_language_v1";
+const helperLanguageKey = "pantavion_helper_language_v1";
 
 const languageOptions: ElderLanguage[] = [
   { code: "el", label: "Greek", nativeLabel: "Ελληνικά", direction: "ltr" },
@@ -793,6 +794,17 @@ function readLanguageCode(): ElderLanguageCode {
   return "el";
 }
 
+function readHelperLanguageCode(): ElderLanguageCode {
+  if (typeof window === "undefined") return "en";
+
+  const saved = window.localStorage.getItem(helperLanguageKey);
+  if (saved && isSupportedLanguage(saved)) {
+    return saved;
+  }
+
+  return "en";
+}
+
 function createSiren() {
   if (typeof window === "undefined") return;
 
@@ -830,6 +842,8 @@ export default function ElderSafeModePage() {
   const [note, setNote] = useState("");
   const [lastAction, setLastAction] = useState("");
   const [languageCode, setLanguageCode] = useState<ElderLanguageCode>("el");
+  const [helperLanguageCode, setHelperLanguageCode] =
+    useState<ElderLanguageCode>("en");
 
   const selectedLanguage = useMemo(
     () =>
@@ -838,11 +852,19 @@ export default function ElderSafeModePage() {
     [languageCode]
   );
 
+  const selectedHelperLanguage = useMemo(
+    () =>
+      languageOptions.find((language) => language.code === helperLanguageCode) ??
+      languageOptions[1],
+    [helperLanguageCode]
+  );
+
   const t = elderTranslations[languageCode];
 
   useEffect(() => {
     setHistory(readHistory());
     setLanguageCode(readLanguageCode());
+    setHelperLanguageCode(readHelperLanguageCode());
   }, []);
 
   function addHistoryItem(item: ElderHistoryItem) {
@@ -873,6 +895,30 @@ export default function ElderSafeModePage() {
 
     setLastAction(
       `${nextTranslation.languageSavedPrefix} ${nextLanguageMeta.nativeLabel}${nextTranslation.languageSavedSuffix}`
+    );
+  }
+
+  function changeHelperLanguage(nextCode: string) {
+    const nextLanguage = isSupportedLanguage(nextCode) ? nextCode : "en";
+    const nextLanguageMeta =
+      languageOptions.find((language) => language.code === nextLanguage) ??
+      languageOptions[1];
+
+    setHelperLanguageCode(nextLanguage);
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(helperLanguageKey, nextLanguage);
+    }
+
+    addHistoryItem({
+      id: `helper-language-${Date.now()}`,
+      mode: "language",
+      text: `Η γλώσσα συνομιλητή / οικιακής βοηθού άλλαξε σε ${nextLanguageMeta.nativeLabel}.`,
+      createdAt: new Date().toISOString(),
+    });
+
+    setLastAction(
+      `Η δεύτερη γλώσσα αποθηκεύτηκε ως ${nextLanguageMeta.nativeLabel}.`
     );
   }
 
@@ -949,6 +995,33 @@ export default function ElderSafeModePage() {
                 </option>
               ))}
             </select>
+
+            <div className="mt-5 rounded-2xl border border-orange-300/40 bg-orange-300/10 p-4">
+              <label
+                htmlFor="elder-helper-language"
+                className="block text-xl font-black text-orange-100"
+              >
+                Γλώσσα οικιακής βοηθού / συνομιλητή
+              </label>
+              <select
+                id="elder-helper-language"
+                value={helperLanguageCode}
+                onChange={(event) => changeHelperLanguage(event.target.value)}
+                className="mt-3 w-full rounded-2xl border-4 border-orange-200 bg-white px-4 py-5 text-2xl font-black text-[#091a31] outline-none focus:ring-8 focus:ring-orange-300"
+              >
+                {languageOptions.map((language) => (
+                  <option key={language.code} value={language.code}>
+                    {language.nativeLabel} - {language.label}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-3 text-base font-bold leading-7 text-orange-100">
+                Αυτή είναι η δεύτερη γλώσσα για την πορτοκαλί βοήθεια /
+                μετάφραση με οικιακή βοηθό, νοσηλευτή, γιατρό, ταξί,
+                υπηρεσία ή άλλο άνθρωπο.
+              </p>
+            </div>
+
             <p className="mt-3 text-base font-bold leading-7 text-yellow-100">
               {t.languageHelp}
             </p>
@@ -1001,8 +1074,20 @@ export default function ElderSafeModePage() {
           <p className="mt-3 text-xl font-bold leading-9 text-orange-950">
             {t.orangeBody}
           </p>
+
+          <div className="mt-4 rounded-2xl border-4 border-orange-100 bg-white/80 p-4 text-orange-950">
+            <p className="text-lg font-black">Γλώσσες συνομιλίας</p>
+            <p className="mt-2 text-3xl font-black">
+              {selectedLanguage.nativeLabel} → {selectedHelperLanguage.nativeLabel}
+            </p>
+            <p className="mt-2 text-base font-bold leading-7">
+              Η πρώτη είναι του χρήστη. Η δεύτερη είναι του ανθρώπου που μιλά
+              μαζί του.
+            </p>
+          </div>
+
           <Link
-            href="/sos-interpreter"
+            href={`/sos-interpreter?from=${languageCode}&to=${helperLanguageCode}`}
             className="mt-5 block rounded-[2rem] bg-orange-950 px-6 py-8 text-center text-3xl font-black text-orange-100 shadow-xl"
           >
             {t.orangeButton}
