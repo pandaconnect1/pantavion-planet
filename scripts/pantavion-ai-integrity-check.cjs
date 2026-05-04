@@ -37,6 +37,14 @@ const requiredPaths = [
 ];
 
 const requiredContent = [
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "pantavion_sovereign_guardian_kernel_v2", reason: "Sovereign Guardian Kernel v2 must exist" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "24/7/365 monitoring", reason: "Guardian must preserve always-on operating target" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "FOUNDER_OK", reason: "Guardian must keep founder approval gate" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "agent_factory", reason: "Guardian must coordinate specialized AI agents" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "global_research_radar", reason: "Guardian must track global technologies" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "ecosystem_builder", reason: "Guardian must support new ecosystem creation" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "No autonomous production deploy without Founder OK.", reason: "Guardian must block unsafe autonomous production actions" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "North America, Europe, China, Japan", reason: "Guardian must benchmark global technology regions" },
   { file: "core/guardian/pantavion-guardian-kernel.ts", text: "pantavion_internal_guardian_kernel_v1", reason: "Internal Guardian Kernel doctrine must exist" },
   { file: "core/guardian/pantavion-guardian-kernel.ts", text: "OBSERVE", reason: "Guardian loop must include observe step" },
   { file: "core/guardian/pantavion-guardian-kernel.ts", text: "COMPARE", reason: "Guardian loop must include compare step" },
