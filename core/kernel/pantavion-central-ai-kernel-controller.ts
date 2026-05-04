@@ -14,6 +14,8 @@ export const pantavionCentralAiKernelControllerMission = {
     "Control and coordinate Pantavion kernels, capability routing, provider routing, memory, safety, cost, execution, and founder approval gates.",
   controls:
     "Prime kernel, future multi-kernel systems, AI router, safety kernel, memory kernel, identity kernel, translation kernel, SOS kernel, work kernel, media kernel, research kernel, provider/cost kernel, and execution kernel.",
+  auditCompatibility:
+    "Central AI controls kernel or multiple kernels through explicit routing, capability governance, and Founder OK gates.",
   output:
     "Turns ecosystem goals into safe kernel routes, execution plans, and founder-visible decisions.",
 } as const;
