@@ -1,4 +1,4 @@
-﻿import {
+import {
   globalEmergencyLanguages,
   normalizeGlobalEmergencyLanguage,
   type GlobalEmergencyLanguage,
@@ -97,9 +97,9 @@ const englishCopy: EmergencyCopy = {
   networkButton: "Global Network",
     guardianButton: "Guardian Mode",
     evidenceButton: "Evidence Capsule",
-    scenariosButton: "δηγός εναρίων",
+    scenariosButton: "Scenario guide",
     extremeOffgridButton: "Extreme Off-grid",
-    partnersButton: "πίσημοι υνεργάτες",
+    partnersButton: "Official partners",
   betaNotice:
     "This page is a real route. Features marked hardware/institution required are not fake buttons; they are locked roadmap surfaces until the required device, certification, or agreement exists.",
 };

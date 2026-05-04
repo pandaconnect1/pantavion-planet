@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -213,7 +213,7 @@ export default function SOSPage() {
   const copy = getCopy(language);
 
   useEffect(() => {
-    const storedLanguage = window.localStorage.getItem("pantavion-language");
+    const storedLanguage = window.localStorage.getItem("pantavion_global_language_v1");
     const detected = normalizeEmergencyLanguage(
       storedLanguage || window.navigator.language
     );
@@ -268,7 +268,7 @@ export default function SOSPage() {
 
   function changeLanguage(next: EmergencyLanguage) {
     setLanguage(next);
-    window.localStorage.setItem("pantavion-language", next);
+    window.localStorage.setItem("pantavion_global_language_v1", next);
     addLog("ok", "Language changed to " + next + ".");
   }
 

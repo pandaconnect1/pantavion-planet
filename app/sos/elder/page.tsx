@@ -1,7 +1,13 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import {
+  globalEmergencyLanguages,
+  normalizeGlobalEmergencyLanguage,
+  type GlobalEmergencyLanguage,
+  type GlobalEmergencyLanguageMeta,
+} from "@/core/emergency/global-emergency-languages";
 
 type ElderHistoryMode = "sos" | "ai-note" | "language";
 
@@ -12,24 +18,9 @@ type ElderHistoryItem = {
   createdAt: string;
 };
 
-type ElderLanguageCode =
-  | "el"
-  | "en"
-  | "tr"
-  | "ar"
-  | "fr"
-  | "de"
-  | "es"
-  | "it"
-  | "ro"
-  | "ru";
+type ElderLanguageCode = GlobalEmergencyLanguage;
 
-type ElderLanguage = {
-  code: ElderLanguageCode;
-  label: string;
-  nativeLabel: string;
-  direction: "ltr" | "rtl";
-};
+type ElderLanguage = GlobalEmergencyLanguageMeta;
 
 type ElderTranslation = {
   pageBadge: string;
@@ -84,22 +75,11 @@ const historyKey = "pantavion_elder_safety_history_v1";
 const globalLanguageKey = "pantavion_global_language_v1";
 const helperLanguageKey = "pantavion_helper_language_v1";
 
-const languageOptions: ElderLanguage[] = [
-  { code: "el", label: "Greek", nativeLabel: "Ελληνικά", direction: "ltr" },
-  { code: "en", label: "English", nativeLabel: "English", direction: "ltr" },
-  { code: "tr", label: "Turkish", nativeLabel: "Türkçe", direction: "ltr" },
-  { code: "ar", label: "Arabic", nativeLabel: "العربية", direction: "rtl" },
-  { code: "fr", label: "French", nativeLabel: "Français", direction: "ltr" },
-  { code: "de", label: "German", nativeLabel: "Deutsch", direction: "ltr" },
-  { code: "es", label: "Spanish", nativeLabel: "Español", direction: "ltr" },
-  { code: "it", label: "Italian", nativeLabel: "Italiano", direction: "ltr" },
-  { code: "ro", label: "Romanian", nativeLabel: "Română", direction: "ltr" },
-  { code: "ru", label: "Russian", nativeLabel: "Русский", direction: "ltr" },
-];
+const languageOptions: readonly ElderLanguage[] = globalEmergencyLanguages;
 
-const elderTranslations: Record<ElderLanguageCode, ElderTranslation> = {
+const elderTranslations: Partial<Record<ElderLanguageCode, ElderTranslation>> & { en: ElderTranslation; el: ElderTranslation } = {
   el: {
-    pageBadge: "Pantavion Elder Safe Mode",
+    pageBadge: "σφαλής λειτουργία ηλικιωμένου Pantavion",
     pageTitle: "Απλή οθόνη προστασίας.",
     pageIntro:
       "Για ηλικιωμένους, ανθρώπους που ζουν μόνοι και χρήστες που χρειάζονται μεγάλα κουμπιά, καθαρή φωνή, απλή βοήθεια, επιλογή γλώσσας και λιγότερη σύγχυση.",
@@ -859,7 +839,7 @@ export default function ElderSafeModePage() {
     [helperLanguageCode]
   );
 
-  const t = elderTranslations[languageCode];
+  const t = elderTranslations[languageCode] ?? elderTranslations.en;
 
   useEffect(() => {
     setHistory(readHistory());

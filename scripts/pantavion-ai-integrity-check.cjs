@@ -208,6 +208,49 @@ for (const item of requiredContent) {
   }
 }
 
+const worldLanguageFile = path.join(root, "core/emergency/global-emergency-languages.ts");
+if (!fs.existsSync(worldLanguageFile)) {
+  failures.push({
+    file: "core/emergency/global-emergency-languages.ts",
+    text: "missing world language catalog",
+    reason: "SOS must preserve full world language menu for six-continent use"
+  });
+} else {
+  const worldLanguageContent = fs.readFileSync(worldLanguageFile, "utf8");
+  const languageCodeCount = (worldLanguageContent.match(/code:\\s*"/g) || []).length;
+
+  if (languageCodeCount < 180) {
+    failures.push({
+      file: "core/emergency/global-emergency-languages.ts",
+      text: "pantavion_world_language_catalog_minimum_180",
+      reason: "SOS language catalog must not shrink below 180 languages"
+    });
+  }
+}
+
+const elderSafeModeFile = path.join(root, "app/sos/elder/page.tsx");
+if (fs.existsSync(elderSafeModeFile)) {
+  const elderSafeModeContent = fs.readFileSync(elderSafeModeFile, "utf8");
+
+  if (!elderSafeModeContent.includes("globalEmergencyLanguages")) {
+    failures.push({
+      file: "app/sos/elder/page.tsx",
+      text: "globalEmergencyLanguages",
+      reason: "Elder Safe Mode must use full world language catalog"
+    });
+  }
+
+  const helperStateCount = (elderSafeModeContent.match(/const \\[helperLanguageCode, setHelperLanguageCode\\]/g) || []).length;
+
+  if (helperStateCount > 1) {
+    failures.push({
+      file: "app/sos/elder/page.tsx",
+      text: "helperLanguageCode duplicate state",
+      reason: "Elder Safe Mode must not redeclare helper language state"
+    });
+  }
+}
+
 console.log("\nPANTAVION AI READINESS AUDIT");
 console.log("Checked files:", files.length);
 
