@@ -8,6 +8,9 @@
 export const pantavionSosGuardianExecutionBridgeId =
   "pantavion_sos_guardian_execution_bridge_v1";
 
+export const pantavionSosCentralAiBridgeAuditMarker =
+  "CENTRAL_AI";
+
 export const pantavionSosAiBridgeRoles = {
   internalGuardianAI:
     "Observes SOS requirements, audits routes, checks legal/provider gaps, prepares patches, and reports risks.",
