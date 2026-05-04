@@ -37,6 +37,23 @@ const requiredPaths = [
 ];
 
 const requiredContent = [
+  { file: "core/emergency/sos-completion-master-ledger.ts", text: "pantavion_sos_completion_master_ledger_v1", reason: "SOS completion master ledger must exist" },
+  { file: "core/emergency/sos-completion-master-ledger.ts", text: "red_one_action_sos", reason: "Red one-action SOS pillar must remain tracked" },
+  { file: "core/emergency/sos-red-orange-green-model.ts", text: "pantavion_sos_red_orange_green_model_v1", reason: "Red/orange/green SOS model must exist" },
+  { file: "core/emergency/sos-red-orange-green-model.ts", text: "Automatic speech language detection", reason: "Orange must default toward automatic speech language detection" },
+  { file: "core/emergency/sos-red-orange-green-model.ts", text: "elder-helper-language", reason: "Manual helper language backup marker must remain tracked" },
+  { file: "core/emergency/sos-emergency-circle-contract.ts", text: "pantavion_emergency_circle_contract_v1", reason: "Emergency Circle contract must exist" },
+  { file: "core/emergency/sos-emergency-circle-contract.ts", text: "Trusted contacts do not automatically receive green private journal history.", reason: "Emergency Circle must protect green journal privacy" },
+  { file: "core/emergency/sos-protected-users-policy.ts", text: "pantavion_sos_protected_users_policy_v1", reason: "Protected users SOS policy must exist" },
+  { file: "core/emergency/sos-protected-users-policy.ts", text: "elders", reason: "Elder protected-user context must remain tracked" },
+  { file: "core/emergency/sos-offgrid-identity-pack.ts", text: "pantavion_offgrid_sos_identity_pack_v1", reason: "Off-grid SOS identity pack doctrine must exist" },
+  { file: "core/emergency/sos-offgrid-identity-pack.ts", text: "satellite_supported_provider_pending", reason: "Satellite-supported state must remain provider-gated" },
+  { file: "core/emergency/sos-provider-readiness.ts", text: "pantavion_sos_provider_readiness_v1", reason: "SOS provider readiness doctrine must exist" },
+  { file: "core/emergency/sos-provider-readiness.ts", text: "blocked_until_contracts", reason: "Authority integrations must remain blocked until contracts" },
+  { file: "core/admin/sos-admin-operations.ts", text: "pantavion_sos_admin_operations_v1", reason: "SOS admin operations doctrine must exist" },
+  { file: "core/admin/sos-admin-operations.ts", text: "private_journal_access_blocked_by_default", reason: "Admin operations must protect private journal access" },
+  { file: "app/sos/readiness/page.tsx", text: "Pantavion SOS Readiness", reason: "SOS readiness route must exist" },
+  { file: "app/sos/page.tsx", text: "href=\"/sos/readiness\"", reason: "Live SOS page must link to readiness route" },
   { file: "core/ai/pantavion-ai-layer-separation.ts", text: "pantavion_ai_layer_separation_contract_v1", reason: "AI layers must be explicitly separated" },
   { file: "core/ai/pantavion-ai-layer-separation.ts", text: "Guardian AI is not Central AI", reason: "Guardian and Central AI must not be confused" },
   { file: "core/ai/pantavion-ai-layer-separation.ts", text: "Public PantaAI", reason: "Public AI layer must be distinct" },

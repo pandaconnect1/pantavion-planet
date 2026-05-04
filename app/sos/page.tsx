@@ -701,6 +701,13 @@ export default function SOSPage() {
               Trusted contacts
             </Link>
 
+            <Link
+              href="/sos/readiness"
+              className="rounded-full border border-yellow-300/40 px-4 py-2 text-sm font-semibold text-yellow-100 hover:bg-yellow-300/10"
+            >
+              SOS readiness
+            </Link>
+
             <div className="flex flex-wrap items-center gap-3">
               <label className="flex items-center gap-2 text-sm text-slate-200">
                 <span>{copy.language}</span>
