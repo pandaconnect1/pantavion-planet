@@ -21,6 +21,9 @@
 export const pantavionGuardianKernelId =
   "pantavion_sovereign_guardian_kernel_v2";
 
+export const pantavionInternalGuardianKernelCompatibilityId =
+  "pantavion_internal_guardian_kernel_v1";
+
 export const pantavionGuardianPrimeDirective =
   "Protect, improve, build, audit, and advance Pantavion as a sovereign planetary ecosystem while keeping the founder as final authority.";
 
@@ -75,6 +78,8 @@ export const pantavionGuardianAlwaysOnDoctrine = {
     "Future active target is continuous 24/7/365 monitoring, research, gap detection, proposal generation, audit reporting, and upgrade planning.",
   currentBoundary:
     "Until real hosted automation exists, this doctrine must be implemented through explicit scripts, jobs, providers, queues, dashboards, and approval flows.",
+  compatibilityTarget:
+    "The earlier Guardian audit marker is preserved as 24/7 monitoring while the newer doctrine keeps the stronger 24/7/365 monitoring target.",
   reporting:
     "The Guardian reports status to founder: what was observed, what is missing, what changed, what failed, what passed, risks, cost notes, legal notes, provider notes, and next recommended action.",
 } as const;
