@@ -37,6 +37,20 @@ const requiredPaths = [
 ];
 
 const requiredContent = [
+  { file: "core/emergency/sos-action-execution-contract.ts", text: "pantavion_sos_action_execution_contract_v1", reason: "SOS action execution contract must exist" },
+  { file: "core/emergency/sos-action-execution-contract.ts", text: "provider_pending", reason: "SOS actions must expose provider-pending state" },
+  { file: "core/emergency/sos-provider-dispatch-contract.ts", text: "pantavion_sos_provider_dispatch_contract_v1", reason: "SOS provider dispatch contract must exist" },
+  { file: "core/emergency/sos-provider-dispatch-contract.ts", text: "No official authority dispatch claim", reason: "SOS provider dispatch must block false authority claims" },
+  { file: "core/emergency/sos-offgrid-runtime-queue.ts", text: "pantavion_sos_offgrid_runtime_queue_v1", reason: "SOS off-grid runtime queue must exist" },
+  { file: "core/emergency/sos-offgrid-runtime-queue.ts", text: "Local queue is not guaranteed delivery.", reason: "Off-grid queue limitation must remain explicit" },
+  { file: "core/emergency/sos-guardian-execution-bridge.ts", text: "pantavion_sos_guardian_execution_bridge_v1", reason: "SOS Guardian execution bridge must exist" },
+  { file: "core/emergency/sos-guardian-execution-bridge.ts", text: "CENTRAL_AI", reason: "SOS bridge must connect to central AI concept through role text" },
+  { file: "core/emergency/sos-product-completion-roadmap.ts", text: "pantavion_sos_product_completion_roadmap_v1", reason: "SOS product completion roadmap must exist" },
+  { file: "core/admin/sos-admin-readiness-queue.ts", text: "pantavion_sos_admin_readiness_queue_v1", reason: "SOS admin readiness queue must exist" },
+  { file: "app/sos/providers/page.tsx", text: "SOS Provider Readiness", reason: "SOS providers route must exist" },
+  { file: "app/sos/admin-readiness/page.tsx", text: "SOS Admin Readiness", reason: "SOS admin readiness route must exist" },
+  { file: "app/sos/readiness/page.tsx", text: "href=\"/sos/providers\"", reason: "SOS readiness page must link to provider readiness" },
+  { file: "app/sos/page.tsx", text: "href=\"/sos/admin-readiness\"", reason: "Live SOS page must link to admin readiness" },
   { file: "core/emergency/sos-completion-master-ledger.ts", text: "pantavion_sos_completion_master_ledger_v1", reason: "SOS completion master ledger must exist" },
   { file: "core/emergency/sos-completion-master-ledger.ts", text: "red_one_action_sos", reason: "Red one-action SOS pillar must remain tracked" },
   { file: "core/emergency/sos-red-orange-green-model.ts", text: "pantavion_sos_red_orange_green_model_v1", reason: "Red/orange/green SOS model must exist" },

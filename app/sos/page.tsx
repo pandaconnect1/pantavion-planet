@@ -708,6 +708,20 @@ export default function SOSPage() {
               SOS readiness
             </Link>
 
+            <Link
+              href="/sos/providers"
+              className="rounded-full border border-cyan-300/40 px-4 py-2 text-sm font-semibold text-cyan-100 hover:bg-cyan-500/10"
+            >
+              SOS providers
+            </Link>
+
+            <Link
+              href="/sos/admin-readiness"
+              className="rounded-full border border-red-300/40 px-4 py-2 text-sm font-semibold text-red-100 hover:bg-red-500/10"
+            >
+              SOS admin readiness
+            </Link>
+
             <div className="flex flex-wrap items-center gap-3">
               <label className="flex items-center gap-2 text-sm text-slate-200">
                 <span>{copy.language}</span>

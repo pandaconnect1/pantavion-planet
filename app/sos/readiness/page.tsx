@@ -60,6 +60,15 @@ export default function SosReadinessPage() {
           </div>
         </div>
 
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/sos/providers" className="rounded-full border border-cyan-300/40 px-5 py-3 text-sm font-black text-cyan-100">
+            Provider readiness
+          </Link>
+          <Link href="/sos/admin-readiness" className="rounded-full border border-red-300/40 px-5 py-3 text-sm font-black text-red-100">
+            Admin readiness
+          </Link>
+        </div>
+
         <p className="mt-8 rounded-3xl border border-yellow-300/30 bg-black/30 p-5 text-sm leading-7 text-yellow-100">
           Boundary: Pantavion SOS is provider-ready and locally useful, but official
           authority integrations, satellite-supported services, paid delivery
