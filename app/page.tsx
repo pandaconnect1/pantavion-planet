@@ -351,7 +351,6 @@ const navItems = [
   { label: "Work", href: "/work" },
   { label: "Safety", href: "/safety" },
   { label: "Feedback", href: "/feedback" },
-  { label: "Elder SOS", href: "/sos/elder" },
   { label: "SOS", href: "/sos" },
 ];
 
@@ -451,28 +450,6 @@ export default function HomePage() {
 
   return (
     <main className="pantavionHome">
-      <Link
-        href="/sos/elder"
-        data-pantavion-elder-home-entry="true"
-        style={{
-          position: "fixed",
-          right: 16,
-          top: 88,
-          zIndex: 80,
-          border: "1px solid rgba(253, 224, 71, 0.75)",
-          borderRadius: 999,
-          background: "rgba(8, 20, 38, 0.96)",
-          color: "#fde68a",
-          padding: "12px 18px",
-          fontWeight: 900,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          boxShadow: "0 18px 50px rgba(0,0,0,0.45)"
-        }}
-        aria-label="Open Pantavion Elder Safe Mode"
-      >
-        Elder SOS
-      </Link>
       <header className="topbar">
         <Link href="/" className="brand" aria-label="Pantavion home">
           <span className="brandOrb" />

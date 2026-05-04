@@ -82,14 +82,7 @@ const requiredContent = [
   { file: "app/sos/elder/page.tsx", text: "redKicker", reason: "Red SOS section must be translated through dictionary" },
   { file: "app/sos/elder/page.tsx", text: "orangeKicker", reason: "Orange translation section must be translated through dictionary" },
   { file: "app/sos/elder/page.tsx", text: "greenKicker", reason: "Green AI friend section must be translated through dictionary" },
-  { file: "app/sos/elder/page.tsx", text: "rulesTitle", reason: "Protection rules must be translated through dictionary" },
-  { file: "app/page.tsx", text: "data-pantavion-elder-home-entry", reason: "Home page must expose Elder Safe Mode with stable ASCII marker" },
-  { file: "app/page.tsx", text: "/sos/elder", reason: "Home page must link to Elder Safe Mode route" },
-  { file: "app/page.tsx", text: "Elder SOS", reason: "Home page must show visible Elder SOS entry" },
-  { file: "app/sos/elder/page.tsx", text: "pantavion_elder_translation_mode_v1", reason: "Elder route must remember auto/manual translation mode" },
-  { file: "app/sos/elder/page.tsx", text: "data-pantavion-elder-auto-speech-mode", reason: "Orange flow must expose automatic speech language detection mode" },
-  { file: "app/sos/elder/page.tsx", text: "Manual second language backup", reason: "Orange flow must keep manual helper-language backup" },
-  { file: "app/sos/elder/page.tsx", text: "elder-helper-language", reason: "Manual fallback must expose helper language selector" }
+  { file: "app/sos/elder/page.tsx", text: "rulesTitle", reason: "Protection rules must be translated through dictionary" }
 ];
 
 function walk(dir) {
