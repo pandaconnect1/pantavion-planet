@@ -37,6 +37,15 @@ const requiredPaths = [
 ];
 
 const requiredContent = [
+  { file: "core/ai/pantavion-ai-layer-separation.ts", text: "pantavion_ai_layer_separation_contract_v1", reason: "AI layers must be explicitly separated" },
+  { file: "core/ai/pantavion-ai-layer-separation.ts", text: "Guardian AI is not Central AI", reason: "Guardian and Central AI must not be confused" },
+  { file: "core/ai/pantavion-ai-layer-separation.ts", text: "Public PantaAI", reason: "Public AI layer must be distinct" },
+  { file: "core/kernel/pantavion-central-ai-kernel-controller.ts", text: "pantavion_central_ai_kernel_controller_v1", reason: "Central AI Kernel Controller must exist" },
+  { file: "core/kernel/pantavion-central-ai-kernel-controller.ts", text: "kernel or multiple kernels", reason: "Central AI must control kernel or multi-kernel routing" },
+  { file: "core/ai/pantaai-sovereign-public-ai.ts", text: "pantaai_sovereign_public_ai_v1", reason: "Public / Pure PantaAI must exist" },
+  { file: "core/ai/pantaai-sovereign-public-ai.ts", text: "modern AI assistants", reason: "PantaAI must map current AI capability categories" },
+  { file: "core/ai/pantaai-global-ai-research-doctrine.ts", text: "pantaai_global_ai_research_doctrine_v1", reason: "Legal global AI research doctrine must exist" },
+  { file: "core/ai/pantaai-global-ai-research-doctrine.ts", text: "Pantavion-owned technology", reason: "Research must become Pantavion-owned technology" },
   { file: "core/guardian/pantavion-guardian-kernel.ts", text: "pantaai_prime_sovereign_ai_v1", reason: "PantaAI Prime central sovereign AI doctrine must exist" },
   { file: "core/guardian/pantavion-guardian-kernel.ts", text: "PantaAI Prime", reason: "Pantavion must define its own central AI layer" },
   { file: "core/guardian/pantavion-guardian-kernel.ts", text: "provider-agnostic central AI", reason: "PantaAI Prime must not be locked to one AI provider" },
