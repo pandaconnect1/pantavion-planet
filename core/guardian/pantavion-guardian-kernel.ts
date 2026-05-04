@@ -217,3 +217,157 @@ export function getPantavionGuardianKernelSummary() {
     worldClassStandard: pantavionGuardianWorldClassStandard,
   };
 }
+
+
+/**
+ * PantaAI Prime / Pantavion Sovereign AI
+ *
+ * This is the Pantavion-owned central AI doctrine.
+ * It is designed to cover, route, combine, and improve across the useful
+ * capability classes of today's AI systems without copying any provider,
+ * brand, model, interface, claim, or protected implementation.
+ *
+ * Role:
+ * - act as the clean central AI layer of Pantavion;
+ * - coordinate many models, agents, tools, workflows, and user-side AI layers;
+ * - fill gaps left by external AI providers;
+ * - give Pantavion its own advantage through orchestration, memory, safety,
+ *   product context, founder doctrine, and ecosystem execution.
+ *
+ * Boundary:
+ * This doctrine does not claim that Pantavion already owns a frontier model.
+ * It defines the architecture target: a provider-agnostic central AI that can
+ * use, compare, route, and eventually train/build Pantavion-owned intelligence
+ * layers under legal, technical, cost, safety, and founder approval controls.
+ */
+
+export const pantaAiPrimeId = "pantaai_prime_sovereign_ai_v1";
+
+export const pantaAiPrimeMission = {
+  name: "PantaAI Prime",
+  identity:
+    "Pantavion-owned central AI layer for reasoning, creation, execution, orchestration, memory, research, agents, tools, and ecosystem-building.",
+  purpose:
+    "Cover the useful capability surface of modern AI systems, detect their gaps, combine their strengths, and turn them into Pantavion-owned execution workflows.",
+  advantage:
+    "Pantavion advantage comes from orchestration, context, memory, governance, user consent, capability routing, cost control, safety gates, and product-specific execution.",
+  founderControl:
+    "The founder remains final authority for strategic, production, legal, emergency, billing, provider, identity, and irreversible actions.",
+} as const;
+
+export const pantaAiPrimeCapabilitySurface = [
+  {
+    id: "general_reasoning",
+    name: "General Reasoning",
+    goal:
+      "Answer, plan, compare, explain, reason, and decompose complex goals across Pantavion.",
+  },
+  {
+    id: "coding_and_system_building",
+    name: "Coding and System Building",
+    goal:
+      "Build apps, modules, agents, scripts, APIs, dashboards, automations, tests, and internal tools with audit/build gates.",
+  },
+  {
+    id: "research_and_discovery",
+    name: "Research and Discovery",
+    goal:
+      "Track new technologies, providers, AI methods, infrastructure patterns, safety practices, and strategic opportunities.",
+  },
+  {
+    id: "multimodal_creation",
+    name: "Multimodal Creation",
+    goal:
+      "Coordinate text, image, audio, voice, video, design, documents, presentations, interfaces, and future media pipelines.",
+  },
+  {
+    id: "translation_and_communication",
+    name: "Translation and Communication",
+    goal:
+      "Support bidirectional multilingual voice, text, subtitle, video, and assistive communication flows.",
+  },
+  {
+    id: "memory_and_context",
+    name: "Memory and Context",
+    goal:
+      "Maintain continuity across founder requirements, user preferences, project history, audits, routes, capabilities, and decisions.",
+  },
+  {
+    id: "agent_orchestration",
+    name: "Agent Orchestration",
+    goal:
+      "Coordinate specialized AI workers, user AIs, provider agents, tool agents, monitors, reviewers, and future nano/humanoid/robotic technology interfaces.",
+  },
+  {
+    id: "safety_and_governance",
+    name: "Safety and Governance",
+    goal:
+      "Apply legal, privacy, consent, protected-user, emergency, billing, provider, and infrastructure boundaries before action.",
+  },
+  {
+    id: "ecosystem_generation",
+    name: "Ecosystem Generation",
+    goal:
+      "Help build not only features but full governed ecosystems: social, work, education, SOS, marketplace, media, AI, research, and communication systems.",
+  },
+] as const;
+
+export const pantaAiPrimeProviderDoctrine = {
+  providerAgnostic:
+    "PantaAI Prime can route across external AI providers, open models, internal models, tool APIs, local models, and future Pantavion-owned models.",
+  noProviderLockIn:
+    "No single AI provider should own Pantavion's intelligence layer. Providers are replaceable capability sources.",
+  gapCoverage:
+    "When one model/provider is weak, expensive, unavailable, unsafe, outdated, or legally risky, PantaAI Prime should route, combine, or replace with better options.",
+  ownModelRoadmap:
+    "Pantavion may later train, fine-tune, distill, host, or build its own models where legal, affordable, useful, and founder-approved.",
+} as const;
+
+export const pantaAiPrimeHierarchy = {
+  founder:
+    "Final strategic authority.",
+  pantaAiPrime:
+    "Central sovereign AI layer that receives goals, coordinates Guardian Kernel, providers, agents, memory, tools, and workflows.",
+  guardianKernel:
+    "Internal control-room AI that observes, diagnoses, audits, proposes, and coordinates safe execution.",
+  capabilityKernels:
+    "Specialized Pantavion kernels for identity, memory, safety, AI routing, translation, SOS, social graph, work, research, media, providers, and cost control.",
+  subAgents:
+    "Thousands or millions of future specialized AI workers, user AIs, task agents, reviewers, testers, researchers, builders, and provider adapters.",
+  toolsAndApps:
+    "Concrete applications, dashboards, scripts, workflows, integrations, and user-visible product surfaces.",
+} as const;
+
+export const pantaAiPrimeWorldCoverageDoctrine = {
+  benchmark:
+    "Continuously compare against the useful capability classes of leading AI systems and technology ecosystems worldwide.",
+  regions:
+    "North America, Europe, China, Japan, Korea, India, Russia, Middle East, Africa, South America, Oceania, and future strategic regions.",
+  standard:
+    "Aim for global-colossus standards in architecture, reliability, speed, safety, UX, research, execution, and governance while preserving Pantavion-owned originality.",
+  notCopying:
+    "Pantavion must not copy competitor names, logos, protected UI, model claims, benchmarks, private data, or proprietary workflows.",
+} as const;
+
+export const pantaAiPrimeExecutionRules = [
+  "One user intent should become a plan, capability route, tool/agent execution, verified result, and memory update.",
+  "Public UX stays simple; internal orchestration may be deep.",
+  "Every visible action must be real, disabled, or clearly beta.",
+  "High-risk actions require Founder OK.",
+  "Provider cost, privacy, safety, legality, and reliability must be checked before activation.",
+  "PantaAI Prime should improve Pantavion itself, not only answer questions.",
+  "PantaAI Prime should help discover missing features, broken flows, weak architecture, market opportunities, and new technologies.",
+  "PantaAI Prime should support building new apps, tools, agents, and ecosystems under audit/build/deploy gates.",
+] as const;
+
+export function getPantaAiPrimeSummary() {
+  return {
+    id: pantaAiPrimeId,
+    mission: pantaAiPrimeMission,
+    capabilitySurface: pantaAiPrimeCapabilitySurface,
+    providerDoctrine: pantaAiPrimeProviderDoctrine,
+    hierarchy: pantaAiPrimeHierarchy,
+    worldCoverage: pantaAiPrimeWorldCoverageDoctrine,
+    executionRules: pantaAiPrimeExecutionRules,
+  };
+}

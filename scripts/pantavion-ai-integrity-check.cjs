@@ -37,6 +37,13 @@ const requiredPaths = [
 ];
 
 const requiredContent = [
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "pantaai_prime_sovereign_ai_v1", reason: "PantaAI Prime central sovereign AI doctrine must exist" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "PantaAI Prime", reason: "Pantavion must define its own central AI layer" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "provider-agnostic central AI", reason: "PantaAI Prime must not be locked to one AI provider" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "agent_orchestration", reason: "PantaAI Prime must coordinate agents and future user AI layers" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "gapCoverage", reason: "PantaAI Prime must cover provider/model gaps" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "ownModelRoadmap", reason: "Pantavion must preserve path toward owned AI models" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "global-colossus standards", reason: "PantaAI Prime must preserve world-class benchmark target" },
   { file: "core/guardian/pantavion-guardian-kernel.ts", text: "pantavion_sovereign_guardian_kernel_v2", reason: "Sovereign Guardian Kernel v2 must exist" },
   { file: "core/guardian/pantavion-guardian-kernel.ts", text: "24/7/365 monitoring", reason: "Guardian must preserve always-on operating target" },
   { file: "core/guardian/pantavion-guardian-kernel.ts", text: "FOUNDER_OK", reason: "Guardian must keep founder approval gate" },
