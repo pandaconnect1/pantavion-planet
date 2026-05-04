@@ -37,6 +37,16 @@ const requiredPaths = [
 ];
 
 const requiredContent = [
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "pantavion_internal_guardian_kernel_v1", reason: "Internal Guardian Kernel doctrine must exist" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "OBSERVE", reason: "Guardian loop must include observe step" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "COMPARE", reason: "Guardian loop must include compare step" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "DIAGNOSE", reason: "Guardian loop must include diagnose step" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "FOUNDER_OK", reason: "Guardian must require founder approval gate" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "PATCH", reason: "Guardian loop must include patch preparation" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "BUILD", reason: "Guardian loop must include build validation" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "AUDIT", reason: "Guardian loop must include audit validation" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "DEPLOY", reason: "Guardian loop must include deploy gate" },
+  { file: "core/guardian/pantavion-guardian-kernel.ts", text: "24/7 monitoring", reason: "Guardian doctrine must preserve always-on future target" },
   { file: "app/sos/page.tsx", text: 'href="/sos/contacts"', reason: "Live SOS must link to trusted contacts" },
 
   { file: "core/emergency/sos-gap-ledger.ts", text: "backend-sms-alerts", reason: "SMS gap must remain tracked" },
