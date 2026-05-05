@@ -858,7 +858,7 @@ export default function ElderSafeModePage() {
     const nextLanguageMeta =
       languageOptions.find((language) => language.code === nextLanguage) ??
       languageOptions[0];
-    const nextTranslation = elderTranslations[nextLanguage];
+    const nextTranslation = elderTranslations[nextLanguage] ?? elderTranslations.en;
 
     setLanguageCode(nextLanguage);
 
