@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import type {
   PantavionSosDispatchResult,
   PantavionSosPacket,
@@ -40,14 +40,7 @@ export async function POST(request: NextRequest) {
     const webhookUrl = process.env.PANTAVION_SOS_WEBHOOK_URL;
 
     if (!webhookUrl) {
-      console.log("[Pantavion SOS] Internal API received SOS packet:", {
-        id: packet.id,
-        createdAt: packet.createdAt,
-        location: packet.location,
-        profileName: packet.profile.fullName,
-      });
-
-      return NextResponse.json<PantavionSosDispatchResult>({
+return NextResponse.json<PantavionSosDispatchResult>({
         ok: true,
         delivery: "internal-api",
         message:
@@ -86,7 +79,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json<PantavionSosDispatchResult>({
       ok: true,
       delivery: "webhook",
-      message: "SOS dispatched to the configured Pantavion emergency webhook.",
+      message: "SOS packet delivered to the configured Pantavion emergency channel.",
       receivedAt,
     });
   } catch {
