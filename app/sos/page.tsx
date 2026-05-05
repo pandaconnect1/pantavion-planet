@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 
@@ -143,6 +143,23 @@ export default function PantavionSosPage() {
             <pre style={styles.pre}>{message}</pre>
           </div>
         </section>
+      </section>
+    
+      <section aria-label="SOS readiness and trusted contact routes" className="mt-8 rounded-3xl border border-white/10 bg-white/[0.04] p-5">
+        <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#f4c86a]">
+          SOS readiness
+        </p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <a href="/sos/admin-readiness" className="rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white">
+            Admin readiness
+          </a>
+          <a href="/sos/readiness" className="rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white">
+            SOS readiness
+          </a>
+          <a href="/sos/contacts" className="rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white">
+            Trusted contacts
+          </a>
+        </div>
       </section>
     </main>
   );

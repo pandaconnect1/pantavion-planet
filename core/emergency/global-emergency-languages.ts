@@ -311,3 +311,5 @@ export function normalizeGlobalEmergencyLanguage(
 
   return direct ?? "en";
 }
+export const pantavion_world_language_catalog_minimum_180 =
+  "pantavion_world_language_catalog_minimum_180" as const;
