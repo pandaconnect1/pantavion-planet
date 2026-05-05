@@ -1,30 +1,28 @@
 ﻿import type { MetadataRoute } from "next";
 
-const siteUrl = "https://pantavion-planet.vercel.app";
+const siteUrl = "https://pantavion.com";
 
-const publicRoutes = [
-  { path: "/", priority: 1.0 },
-  { path: "/readiness", priority: 0.8 },
-  { path: "/architecture", priority: 0.8 },
-  { path: "/kernel/audit", priority: 0.7 },
-  { path: "/kernel/hardening", priority: 0.7 },
-  { path: "/no-dead-surfaces", priority: 0.7 },
-  { path: "/ai-feature-register", priority: 0.7 },
-  { path: "/sos-interpreter", priority: 0.7 },
-  { path: "/access-model", priority: 0.7 },
-  { path: "/deep-audit", priority: 0.7 },
-  { path: "/backend-claims", priority: 0.6 },
-  { path: "/stripe-readiness", priority: 0.6 },
-  { path: "/sovereignty", priority: 0.7 },
+const routes = [
+  "",
+  "/sos",
+  "/translate",
+  "/panta-ai",
+  "/life-connector",
+  "/communication",
+  "/advertise",
+  "/newspaper",
+  "/discovery",
+  "/product-status",
+  "/terms",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  return publicRoutes.map((route) => ({
-    url: `${siteUrl}${route.path}`,
+  return routes.map((route) => ({
+    url: `${siteUrl}${route}`,
     lastModified: now,
-    changeFrequency: "weekly",
-    priority: route.priority,
+    changeFrequency: route === "" ? "daily" : "weekly",
+    priority: route === "" ? 1 : 0.8,
   }));
 }
