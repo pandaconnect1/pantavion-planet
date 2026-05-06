@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { CSSProperties } from "react";
 
 const primaryActions = [
@@ -140,6 +140,12 @@ export default function HomePage() {
   return (
     <main style={styles.shell}>
       <section style={styles.hero}>
+        <div style={styles.languageNotice}>
+          <strong>Global language spine</strong>
+          <span>
+            Pantavion language is not SOS-only and not English/Greek-only. The Universal Interpreter, SOS language layer, and global UI preference are separate systems connected by <code>pantavion-global-language</code>.
+          </span>
+        </div>
         <p style={styles.kicker}>Pantavion Planet</p>
         <h1 style={styles.title}>The planet in one living screen.</h1>
         <p style={styles.subtitle}>
@@ -168,7 +174,7 @@ export default function HomePage() {
         </div>
 
         <div style={styles.truthBar}>
-          <span>PANTAVION_PUBLIC_GATEWAY_V1</span>
+          <span>PANTAVION_PUBLIC_GATEWAY_V1 PANTAVION_HOMEPAGE_USES_GLOBAL_LANGUAGE_CATALOG PANTAVION_7000_NATURAL_LANGUAGES_DOCTRINE PANTAVION_EMERGENCY_LANGUAGE_LAYER_SEPARATE</span>
           <span>No fake dispatch claims</span>
           <span>No intrusive ads in core UI</span>
           <span>Provider-required labels respected</span>
