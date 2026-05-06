@@ -1,7 +1,7 @@
-﻿export const metadata = {
-  title: "PantaAI | Public, Personal and Guardian AI",
+export const metadata = {
+  title: "PantaAI | Public, Personal and Internal Guardian Kernel",
   description:
-    "PantaAI truth page: public AI, personal AI and internal Guardian AI are separate layers with provider, database, privacy and audit requirements.",
+    "PantaAI truth page: public AI, personal AI and internal Internal Guardian Kernel are separate layers with provider, database, privacy and audit requirements.",
 };
 
 const layers = [
@@ -16,9 +16,9 @@ const layers = [
     text: "Each user assistant needs auth, profile, age role, language, country, consent, memory policy and provider routing before being live.",
   },
   {
-    title: "Guardian AI",
+    title: "Internal Guardian Kernel",
     status: "Audit-runner-required",
-    text: "Guardian AI must check broken routes, dead buttons, debug text, unsafe SOS claims, language mismatch and missing requirements before auto-actions.",
+    text: "Internal Guardian Kernel must check broken routes, dead buttons, debug text, unsafe SOS claims, language mismatch and missing requirements before auto-actions.",
   },
 ];
 
@@ -27,12 +27,12 @@ export default function PantaAIPage() {
     <main className="min-h-screen bg-[#06111f] px-6 py-12 text-white">
       <section className="mx-auto max-w-6xl">
         <p className="mb-3 text-sm font-semibold uppercase tracking-[0.35em] text-[#f4c86a]">
-          PANTAVION_AI_TRUTH_SURFACE_V1
+          PANTAVION_AI_TRUTH_SURFACE_V1 | PANTAVION_AI_COMMAND_CENTER_V1
         </p>
         <h1 className="max-w-5xl text-4xl font-bold md:text-6xl">PantaAI is not one chatbot.</h1>
         <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-200">
           PantaAI has three different layers: public AI for visitors, personal AI for users,
-          and internal Guardian AI for audits. Anything not connected to provider/auth/database
+          and internal Internal Guardian Kernel for audits. Anything not connected to provider/auth/database
           must be shown as required, not fake-live.
         </p>
 
