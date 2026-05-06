@@ -13,16 +13,16 @@ const forbidden = [
   { text: "next integrations", reason: "internal roadmap text must not appear live" },
   { text: "pantavion-home-language", reason: "language must be global, not homepage-only" },
   { text: "pantavion-emergency-language", reason: "language must be global, not emergency-only" },
-  { text: "LLHNIKA", reason: "Greek language label must be Ελληνικά" },
+  { text: "LLHNIKA", reason: "Greek language label must be Î•Î»Î»Î·Î½Î¹ÎºÎ¬" },
   { text: "guaranteed satellite rescue", reason: "No satellite guarantee claim without certified provider/hardware/legal coverage" },
   { text: "automatic ambulance dispatch", reason: "No ambulance dispatch claim without certified provider agreement" },
   { text: "automatic police dispatch", reason: "No police dispatch claim without certified provider agreement" },
   { text: "we dispatch emergency services", reason: "Official dispatch claims require certified partner and legal approval" },
   { text: "unlimited SOS SMS", reason: "Paid provider features require cost limits and abuse protection" },
   { text: "AI doctor", reason: "AI companion must not be marketed as a doctor" },
-  { text: "AI γιατρός", reason: "AI companion must not be marketed as a doctor" },
+  { text: "AI Î³Î¹Î±Ï„ÏÏŒÏ‚", reason: "AI companion must not be marketed as a doctor" },
   { text: "caregiver can see everything", reason: "Caregiver must not receive automatic access to private companion history" },
-  { text: "φροντιστής βλέπει τα πάντα", reason: "Caregiver must not receive automatic access to private companion history" }
+  { text: "Ï†ÏÎ¿Î½Ï„Î¹ÏƒÏ„Î®Ï‚ Î²Î»Î­Ï€ÎµÎ¹ Ï„Î± Ï€Î¬Î½Ï„Î±", reason: "Caregiver must not receive automatic access to private companion history" }
 ];
 
 const requiredPaths = [
@@ -217,7 +217,7 @@ if (!fs.existsSync(worldLanguageFile)) {
   });
 } else {
   const worldLanguageContent = fs.readFileSync(worldLanguageFile, "utf8");
-  const languageCodeCount = (worldLanguageContent.match(/code:\\s*"/g) || []).length;
+  const languageCodeCount = (worldLanguageContent.match(/code:\s*"/g) || []).length;
 
   if (languageCodeCount < 180) {
     failures.push({
