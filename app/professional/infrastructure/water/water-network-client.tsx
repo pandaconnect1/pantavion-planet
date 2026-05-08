@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 
@@ -52,17 +52,37 @@ function collectPositions(feature: GeoJsonFeature): number[][] {
 }
 
 function getBounds(features: GeoJsonFeature[]): Bounds | null {
-  const positions = features.flatMap(collectPositions).filter((position) => {
-    return Number.isFinite(position[0]) && Number.isFinite(position[1]);
-  });
+  let minLon = Number.POSITIVE_INFINITY;
+  let maxLon = Number.NEGATIVE_INFINITY;
+  let minLat = Number.POSITIVE_INFINITY;
+  let maxLat = Number.NEGATIVE_INFINITY;
+  let found = false;
 
-  if (positions.length === 0) return null;
+  for (const feature of features) {
+    const positions = collectPositions(feature);
+
+    for (const position of positions) {
+      const lon = position[0];
+      const lat = position[1];
+
+      if (!Number.isFinite(lon) || !Number.isFinite(lat)) continue;
+
+      if (lon < minLon) minLon = lon;
+      if (lon > maxLon) maxLon = lon;
+      if (lat < minLat) minLat = lat;
+      if (lat > maxLat) maxLat = lat;
+
+      found = true;
+    }
+  }
+
+  if (!found) return null;
 
   return {
-    minLon: Math.min(...positions.map((position) => position[0])),
-    maxLon: Math.max(...positions.map((position) => position[0])),
-    minLat: Math.min(...positions.map((position) => position[1])),
-    maxLat: Math.max(...positions.map((position) => position[1])),
+    minLon,
+    maxLon,
+    minLat,
+    maxLat,
   };
 }
 
