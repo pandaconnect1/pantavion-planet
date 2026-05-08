@@ -2,72 +2,75 @@ import type { CSSProperties } from "react";
 import WaterNetworkClient from "./water-network-client";
 
 
+
 const layerGroups = [
   {
-    title: "Official network",
+    title: "\u0395\u03c0\u03af\u03c3\u03b7\u03bc\u03bf \u03b4\u03af\u03ba\u03c4\u03c5\u03bf",
     items: [
-      "Official water network",
-      "Central mains",
-      "Pipes",
-      "Valves",
-      "Service connections",
-      "Meters where available",
-      "Fittings where available",
+      "\u0394\u03af\u03ba\u03c4\u03c5\u03bf \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2",
+      "\u039a\u03b5\u03bd\u03c4\u03c1\u03b9\u03ba\u03bf\u03af \u03b1\u03b3\u03c9\u03b3\u03bf\u03af",
+      "\u03a3\u03c9\u03bb\u03ae\u03bd\u03b5\u03c2",
+      "\u0392\u03ac\u03bd\u03b5\u03c2",
+      "\u03a0\u03b1\u03c1\u03bf\u03c7\u03ad\u03c2",
+      "\u039c\u03b5\u03c4\u03c1\u03b7\u03c4\u03ad\u03c2 \u03cc\u03c0\u03bf\u03c5 \u03c5\u03c0\u03ac\u03c1\u03c7\u03bf\u03c5\u03bd",
+      "\u0395\u03be\u03b1\u03c1\u03c4\u03ae\u03bc\u03b1\u03c4\u03b1 \u03cc\u03c0\u03bf\u03c5 \u03c5\u03c0\u03ac\u03c1\u03c7\u03bf\u03c5\u03bd",
     ],
   },
   {
-    title: "Pantavion operational layers",
+    title: "\u039b\u03b5\u03b9\u03c4\u03bf\u03c5\u03c1\u03b3\u03b9\u03ba\u03ac \u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03b1 Pantavion",
     items: [
-      "Pending Pantavion edits",
-      "Approved Pantavion edits",
-      "As-built evidence",
-      "Old / replaced network",
-      "Faults and assigned jobs",
-      "Technical address points",
+      "\u0395\u03ba\u03ba\u03c1\u03b5\u03bc\u03b5\u03af\u03c2 \u03c3\u03b7\u03bc\u03b5\u03b9\u03ce\u03c3\u03b5\u03b9\u03c2",
+      "\u0395\u03b3\u03ba\u03b5\u03ba\u03c1\u03b9\u03bc\u03ad\u03bd\u03b5\u03c2 \u03b1\u03bb\u03bb\u03b1\u03b3\u03ad\u03c2",
+      "\u03a6\u03c9\u03c4\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b5\u03c2 / as-built \u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03b1",
+      "\u03a0\u03b1\u03bb\u03b9\u03cc \u03ae \u03b1\u03bd\u03c4\u03b9\u03ba\u03b1\u03c4\u03b5\u03c3\u03c4\u03b7\u03bc\u03ad\u03bd\u03bf \u03b4\u03af\u03ba\u03c4\u03c5\u03bf",
+      "\u0392\u03bb\u03ac\u03b2\u03b5\u03c2 \u03ba\u03b1\u03b9 \u03b5\u03c1\u03b3\u03b1\u03c3\u03af\u03b5\u03c2 \u03c3\u03c5\u03bd\u03b5\u03c1\u03b3\u03b5\u03af\u03c9\u03bd",
+      "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ac \u03c3\u03b7\u03bc\u03b5\u03af\u03b1 \u03b4\u03b9\u03b5\u03c5\u03b8\u03cd\u03bd\u03c3\u03b5\u03c9\u03bd",
     ],
   },
   {
-    title: "Field intelligence",
+    title: "\u03a0\u03b5\u03b4\u03af\u03bf / \u03c3\u03c5\u03bd\u03b5\u03c1\u03b3\u03b5\u03af\u03bf",
     items: [
-      "GPS / current location",
-      "GSM / cell approximate location",
-      "Take me there",
-      "Offline area cache",
-      "Sync status",
-      "Low-data mode",
+      "GPS / \u03c4\u03c1\u03ad\u03c7\u03bf\u03c5\u03c3\u03b1 \u03b8\u03ad\u03c3\u03b7",
+      "GSM / \u03ba\u03b1\u03c4\u03ac \u03c0\u03c1\u03bf\u03c3\u03ad\u03b3\u03b3\u03b9\u03c3\u03b7 \u03b8\u03ad\u03c3\u03b7",
+      "\u03a0\u03ae\u03b3\u03b1\u03b9\u03bd\u03ad \u03bc\u03b5 \u03c3\u03c4\u03bf \u03c3\u03b7\u03bc\u03b5\u03af\u03bf",
+      "Offline \u03b1\u03c0\u03bf\u03b8\u03ae\u03ba\u03b5\u03c5\u03c3\u03b7 \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae\u03c2",
+      "\u039a\u03b1\u03c4\u03ac\u03c3\u03c4\u03b1\u03c3\u03b7 \u03c3\u03c5\u03b3\u03c7\u03c1\u03bf\u03bd\u03b9\u03c3\u03bc\u03bf\u03cd",
+      "\u0395\u03bb\u03b1\u03c6\u03c1\u03b9\u03ac \u03bb\u03b5\u03b9\u03c4\u03bf\u03c5\u03c1\u03b3\u03af\u03b1 \u03b4\u03b5\u03b4\u03bf\u03bc\u03ad\u03bd\u03c9\u03bd",
     ],
   },
 ];
 
+
 const phaseOneChecks = [
-  "Private real KMZ/KML/GIS import only",
-  "Original source file remains locked",
-  "No raw network download for normal users",
-  "Mobile, tablet and desktop map-first view",
-  "Search by road, area, coordinates and asset ID",
-  "Technical Address support for missing roads/numbers",
-  "Asset tap opens technical evidence window",
-  "Access, views and sensitive actions are audit logged",
+  "\u0399\u03b4\u03b9\u03c9\u03c4\u03b9\u03ba\u03ae \u03b5\u03b9\u03c3\u03b1\u03b3\u03c9\u03b3\u03ae \u03c0\u03c1\u03b1\u03b3\u03bc\u03b1\u03c4\u03b9\u03ba\u03bf\u03cd KMZ/KML/GIS",
+  "\u03a4\u03bf \u03b1\u03c5\u03b8\u03b5\u03bd\u03c4\u03b9\u03ba\u03cc \u03b1\u03c1\u03c7\u03b5\u03af\u03bf \u03bc\u03ad\u03bd\u03b5\u03b9 \u03ba\u03bb\u03b5\u03b9\u03b4\u03c9\u03bc\u03ad\u03bd\u03bf",
+  "\u039a\u03b1\u03bc\u03af\u03b1 \u03b4\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u03bb\u03ae\u03c8\u03b7 \u03c4\u03bf\u03c5 \u03b1\u03c1\u03c7\u03b9\u03ba\u03bf\u03cd \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5",
+  "\u03a0\u03c1\u03bf\u03b2\u03bf\u03bb\u03ae \u03c0\u03c1\u03ce\u03c4\u03b1 \u03b3\u03b9\u03b1 \u03ba\u03b9\u03bd\u03b7\u03c4\u03cc, tablet \u03ba\u03b1\u03b9 PC",
+  "\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7 \u03bc\u03b5 \u03bf\u03b4\u03cc, \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae, \u03c3\u03c5\u03bd\u03c4\u03b5\u03c4\u03b1\u03b3\u03bc\u03ad\u03bd\u03b5\u03c2 \u03ba\u03b1\u03b9 asset ID",
+  "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03b4\u03b9\u03b5\u03cd\u03b8\u03c5\u03bd\u03c3\u03b7 \u03b3\u03b9\u03b1 \u03b4\u03c1\u03cc\u03bc\u03bf\u03c5\u03c2/\u03b1\u03c1\u03b9\u03b8\u03bc\u03bf\u03cd\u03c2 \u03c0\u03bf\u03c5 \u03bb\u03b5\u03af\u03c0\u03bf\u03c5\u03bd",
+  "\u03a0\u03ac\u03c4\u03b7\u03bc\u03b1 \u03c3\u03b5 \u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03bf \u03b1\u03bd\u03bf\u03af\u03b3\u03b5\u03b9 \u03c4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ac \u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03b1",
+  "\u039a\u03b1\u03c4\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 \u03ba\u03b1\u03b9 \u03b5\u03c5\u03b1\u03af\u03c3\u03b8\u03b7\u03c4\u03c9\u03bd \u03b5\u03bd\u03b5\u03c1\u03b3\u03b5\u03b9\u03ce\u03bd",
 ];
+
 
 const assetCards = [
   {
     id: "VAL-000245",
-    type: "Valve",
-    detail: "ÃƒÅ½Ã‚Â¦110 / active / connected to PIPE-003812",
-    status: "Example asset card",
+    type: "\u0392\u03ac\u03bd\u03b1",
+    detail: "\u03a6110 / \u03b5\u03bd\u03b5\u03c1\u03b3\u03ae / \u03c3\u03cd\u03bd\u03b4\u03b5\u03c3\u03b7 \u03bc\u03b5 PIPE-003812",
+    status: "\u03a0\u03b1\u03c1\u03ac\u03b4\u03b5\u03b9\u03b3\u03bc\u03b1 \u03ba\u03b1\u03c1\u03c4\u03ad\u03bb\u03b1\u03c2 \u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03bf\u03c5",
   },
   {
     id: "PIPE-003812",
-    type: "Pipe",
-    detail: "UPVC / ÃƒÅ½Ã‚Â¦110 / depth when available / official layer",
-    status: "Example asset card",
+    type: "\u0391\u03b3\u03c9\u03b3\u03cc\u03c2",
+    detail: "UPVC / \u03a6110 / \u03b2\u03ac\u03b8\u03bf\u03c2 \u03cc\u03c4\u03b1\u03bd \u03c5\u03c0\u03ac\u03c1\u03c7\u03b5\u03b9 / \u03b5\u03c0\u03af\u03c3\u03b7\u03bc\u03bf layer",
+    status: "\u03a0\u03b1\u03c1\u03ac\u03b4\u03b5\u03b9\u03b3\u03bc\u03b1 \u03ba\u03b1\u03c1\u03c4\u03ad\u03bb\u03b1\u03c2 \u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03bf\u03c5",
   },
   {
     id: "CONN-000291",
-    type: "Service connection",
-    detail: "Technical address ready when public address is missing",
-    status: "Example asset card",
+    type: "\u03a0\u03b1\u03c1\u03bf\u03c7\u03ae",
+    detail: "\u0388\u03c4\u03bf\u03b9\u03bc\u03b7 \u03c4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03b4\u03b9\u03b5\u03cd\u03b8\u03c5\u03bd\u03c3\u03b7 \u03cc\u03c4\u03b1\u03bd \u03bb\u03b5\u03af\u03c0\u03b5\u03b9 \u03b4\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u03b4\u03b9\u03b5\u03cd\u03b8\u03c5\u03bd\u03c3\u03b7",
+    status: "\u03a0\u03b1\u03c1\u03ac\u03b4\u03b5\u03b9\u03b3\u03bc\u03b1 \u03ba\u03b1\u03c1\u03c4\u03ad\u03bb\u03b1\u03c2 \u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03bf\u03c5",
   },
 ];
 
@@ -75,41 +78,37 @@ export default function WaterInfrastructurePage() {
   return (
     <main style={styles.shell}>
       <section style={styles.hero}>
-        <div style={styles.lockBadge}>PROTECTED PROFESSIONAL MODULE Ãƒâ€šÃ‚Â· PHASE 1A SHELL</div>
-        <p style={styles.kicker}>Pantavion Professional Infrastructure</p>
-        <h1 style={styles.title}>Water Network Control</h1>
-        <p style={styles.subtitle}>
-          Map-first protected workspace for the real water network: pipes,
-          valves, service connections, technical addresses, location support,
-          field evidence and future private KMZ/KML/GIS imports.
-        </p>
+        <div style={styles.lockBadge}>{"\u03a0\u03a1\u039f\u03a3\u03a4\u0391\u03a4\u0395\u03a5\u039c\u0395\u039d\u0397 \u0395\u03a0\u0391\u0393\u0393\u0395\u039b\u039c\u0391\u03a4\u0399\u039a\u0397 \u0395\u039d\u039f\u03a4\u0397\u03a4\u0391 \u00b7 \u0394\u0399\u039a\u03a4\u03a5\u039f \u03a5\u0394\u03a1\u0395\u03a5\u03a3\u0397\u03a3"}</div>
+        <p style={styles.kicker}>{"Pantavion \u03b5\u03c0\u03b1\u03b3\u03b3\u03b5\u03bb\u03bc\u03b1\u03c4\u03b9\u03ba\u03ae \u03c5\u03c0\u03bf\u03b4\u03bf\u03bc\u03ae"}</p>
+        <h1 style={styles.title}>{"\u0388\u03bb\u03b5\u03b3\u03c7\u03bf\u03c2 \u0394\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5 \u038e\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2"}</h1>
+        <p style={styles.subtitle}>{"\u03a0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c4\u03b5\u03c5\u03bc\u03ad\u03bd\u03bf\u03c2 \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03b5\u03c1\u03b3\u03b1\u03c3\u03af\u03b1\u03c2 \u03b3\u03b9\u03b1 \u03c0\u03c1\u03b1\u03b3\u03bc\u03b1\u03c4\u03b9\u03ba\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2: \u03b1\u03b3\u03c9\u03b3\u03bf\u03af, \u03b2\u03ac\u03bd\u03b5\u03c2, \u03c0\u03b1\u03c1\u03bf\u03c7\u03ad\u03c2, \u03c4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ad\u03c2 \u03b4\u03b9\u03b5\u03c5\u03b8\u03cd\u03bd\u03c3\u03b5\u03b9\u03c2, \u03b8\u03ad\u03c3\u03b7 \u03c3\u03c5\u03bd\u03b5\u03c1\u03b3\u03b5\u03af\u03bf\u03c5, \u03c6\u03c9\u03c4\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b5\u03c2 \u03ba\u03b1\u03b9 \u03b9\u03b4\u03b9\u03c9\u03c4\u03b9\u03ba\u03ae \u03b5\u03b9\u03c3\u03b1\u03b3\u03c9\u03b3\u03ae KMZ/KML/GIS."}</p>
 
         <div style={styles.securityStrip}>
-          <span>No raw KMZ/KML download</span>
-          <span>Private storage only</span>
-          <span>Role-based access</span>
-          <span>Audit-ready</span>
-          <span>Mobile-first</span>
+          <span>{"\u039a\u03b1\u03bc\u03af\u03b1 \u03b4\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u03bb\u03ae\u03c8\u03b7 KMZ/KML"}</span>
+          <span>{"\u039c\u03cc\u03bd\u03bf \u03b9\u03b4\u03b9\u03c9\u03c4\u03b9\u03ba\u03ae \u03b1\u03c0\u03bf\u03b8\u03ae\u03ba\u03b5\u03c5\u03c3\u03b7"}</span>
+          <span>{"\u03a0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7 \u03bc\u03b5 \u03c1\u03cc\u03bb\u03bf\u03c5\u03c2"}</span>
+          <span>{"\u039a\u03b1\u03c4\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae \u03b5\u03bd\u03b5\u03c1\u03b3\u03b5\u03b9\u03ce\u03bd"}</span>
+          <span>{"\u03a0\u03c1\u03ce\u03c4\u03b1 \u03b3\u03b9\u03b1 \u03ba\u03b9\u03bd\u03b7\u03c4\u03cc"}</span>
         </div>
       </section>
 
       <section style={styles.mapWorkspace} aria-label="Protected water network map shell">
         <aside style={styles.leftPanel}>
           <div style={styles.panelBlock}>
-            <p style={styles.panelLabel}>Search / locate</p>
+            <p style={styles.panelLabel}>{"\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7 / \u03b5\u03bd\u03c4\u03bf\u03c0\u03b9\u03c3\u03bc\u03cc\u03c2"}</p>
             <div style={styles.searchBox}>
-              Road, area, coordinates, asset ID, valve ID, pipe ID...
+              {"\u039f\u03b4\u03cc\u03c2, \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae, \u03c3\u03c5\u03bd\u03c4\u03b5\u03c4\u03b1\u03b3\u03bc\u03ad\u03bd\u03b5\u03c2, asset ID, \u03b2\u03ac\u03bd\u03b1, \u03b1\u03b3\u03c9\u03b3\u03cc\u03c2..."}
             </div>
             <div style={styles.buttonGrid}>
-              <button style={styles.goldButton}>Search</button>
-              <button style={styles.darkButton}>Current location</button>
-              <button style={styles.darkButton}>Take me there</button>
-              <button style={styles.darkButton}>Manual point</button>
+              <button style={styles.goldButton}>{"\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7"}</button>
+              <button style={styles.darkButton}>{"\u03a4\u03c1\u03ad\u03c7\u03bf\u03c5\u03c3\u03b1 \u03b8\u03ad\u03c3\u03b7"}</button>
+              <button style={styles.darkButton}>{"\u03a0\u03ae\u03b3\u03b1\u03b9\u03bd\u03ad \u03bc\u03b5"}</button>
+              <button style={styles.darkButton}>{"\u03a7\u03b5\u03b9\u03c1\u03bf\u03ba\u03af\u03bd\u03b7\u03c4\u03bf \u03c3\u03b7\u03bc\u03b5\u03af\u03bf"}</button>
             </div>
           </div>
 
           <div style={styles.panelBlock}>
-            <p style={styles.panelLabel}>Layer control</p>
+            <p style={styles.panelLabel}>{"\u0388\u03bb\u03b5\u03b3\u03c7\u03bf\u03c2 layers"}</p>
             {layerGroups.map((group) => (
               <div key={group.title} style={styles.layerGroup}>
                 <h2 style={styles.layerTitle}>{group.title}</h2>
@@ -127,10 +126,10 @@ export default function WaterInfrastructurePage() {
         <section style={styles.mapPanel}>
           <div style={styles.mapTopBar}>
             <div>
-              <p style={styles.mapLabel}>Live protected map area</p>
-              <h2 style={styles.mapTitle}>Real network layer loads here after private import</h2>
+              <p style={styles.mapLabel}>{"\u03a0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c4\u03b5\u03c5\u03bc\u03ad\u03bd\u03bf\u03c2 \u03b6\u03c9\u03bd\u03c4\u03b1\u03bd\u03cc\u03c2 \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2"}</p>
+              <h2 style={styles.mapTitle}>{"\u03a4\u03bf \u03c0\u03c1\u03b1\u03b3\u03bc\u03b1\u03c4\u03b9\u03ba\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03c6\u03bf\u03c1\u03c4\u03ce\u03bd\u03b5\u03b9 \u03b5\u03b4\u03ce \u03b1\u03c0\u03cc \u03b9\u03b4\u03b9\u03c9\u03c4\u03b9\u03ba\u03ae \u03b5\u03b9\u03c3\u03b1\u03b3\u03c9\u03b3\u03ae"}</h2>
             </div>
-            <div style={styles.mapStatus}>OFFICIAL DATA NOT LOADED</div>
+            <div style={styles.mapStatus}>{"\u0399\u0394\u0399\u03a9\u03a4\u0399\u039a\u039f LAYER / \u03a0\u03a1\u039f\u03a3 \u0395\u039b\u0395\u0393\u03a7\u039f"}</div>
           </div>
 
           <WaterNetworkClient />
@@ -145,15 +144,14 @@ export default function WaterInfrastructurePage() {
 
         <aside style={styles.rightPanel}>
           <div style={styles.panelBlock}>
-            <p style={styles.panelLabel}>Selected asset</p>
+            <p style={styles.panelLabel}>{"\u0395\u03c0\u03b9\u03bb\u03b5\u03b3\u03bc\u03ad\u03bd\u03bf \u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03bf"}</p>
             <div style={styles.assetEmpty}>
-              Tap a pipe, valve, service connection or meter to open the
-              technical evidence window.
+              {"\u03a0\u03ac\u03c4\u03b1 \u03c3\u03b5 \u03b1\u03b3\u03c9\u03b3\u03cc, \u03b2\u03ac\u03bd\u03b1, \u03c0\u03b1\u03c1\u03bf\u03c7\u03ae \u03ae \u03bc\u03b5\u03c4\u03c1\u03b7\u03c4\u03ae \u03b3\u03b9\u03b1 \u03bd\u03b1 \u03b1\u03bd\u03bf\u03af\u03be\u03b5\u03b9 \u03c4\u03bf \u03c4\u03b5\u03c7\u03bd\u03b9\u03ba\u03cc \u03c0\u03b1\u03c1\u03ac\u03b8\u03c5\u03c1\u03bf."}
             </div>
           </div>
 
           <div style={styles.panelBlock}>
-            <p style={styles.panelLabel}>Example asset records</p>
+            <p style={styles.panelLabel}>{"\u03a0\u03b1\u03c1\u03b1\u03b4\u03b5\u03af\u03b3\u03bc\u03b1\u03c4\u03b1 \u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03c9\u03bd"}</p>
             {assetCards.map((asset) => (
               <div key={asset.id} style={styles.assetCard}>
                 <div style={styles.assetTop}>
@@ -167,7 +165,7 @@ export default function WaterInfrastructurePage() {
           </div>
 
           <div style={styles.panelBlock}>
-            <p style={styles.panelLabel}>Phase 1 acceptance</p>
+            <p style={styles.panelLabel}>{"\u0388\u03bb\u03b5\u03b3\u03c7\u03bf\u03c2 \u03c0\u03c1\u03ce\u03c4\u03b7\u03c2 \u03c6\u03ac\u03c3\u03b7\u03c2"}</p>
             <ul style={styles.checkList}>
               {phaseOneChecks.map((check) => (
                 <li key={check}>{check}</li>
@@ -179,14 +177,11 @@ export default function WaterInfrastructurePage() {
 
       <section style={styles.doctrine}>
         <div>
-          <p style={styles.kicker}>Production rule</p>
-          <h2 style={styles.sectionTitle}>The map works first. Everything else follows.</h2>
+          <p style={styles.kicker}>{"\u039a\u03b1\u03bd\u03cc\u03bd\u03b1\u03c2 \u03c0\u03b1\u03c1\u03b1\u03b3\u03c9\u03b3\u03ae\u03c2"}</p>
+          <h2 style={styles.sectionTitle}>{"\u03a0\u03c1\u03ce\u03c4\u03b1 \u03b4\u03bf\u03c5\u03bb\u03b5\u03cd\u03b5\u03b9 \u03bf \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2. \u039c\u03b5\u03c4\u03ac \u03cc\u03bb\u03b1 \u03c4\u03b1 \u03c5\u03c0\u03cc\u03bb\u03bf\u03b9\u03c0\u03b1."}</h2>
         </div>
         <p style={styles.sectionText}>
-          This route is a protected Phase 1A shell. It does not expose real
-          water-network data. The next production step is a private import and
-          conversion pipeline that transforms real KMZ/KML/GIS files into
-          optimized protected map layers.
+          {"\u0397 \u03b5\u03bd\u03cc\u03c4\u03b7\u03c4\u03b1 \u03b5\u03af\u03bd\u03b1\u03b9 \u03c0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c4\u03b5\u03c5\u03bc\u03ad\u03bd\u03b7. \u03a4\u03bf \u03b1\u03c5\u03b8\u03b5\u03bd\u03c4\u03b9\u03ba\u03cc KMZ/KML \u03b4\u03b5\u03bd \u03b5\u03ba\u03c4\u03af\u03b8\u03b5\u03c4\u03b1\u03b9 \u03b4\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1. \u03a4\u03bf Pantavion \u03b4\u03b5\u03af\u03c7\u03bd\u03b5\u03b9 \u03bc\u03cc\u03bd\u03bf \u03b5\u03c0\u03b5\u03be\u03b5\u03c1\u03b3\u03b1\u03c3\u03bc\u03ad\u03bd\u03bf \u03b9\u03b4\u03b9\u03c9\u03c4\u03b9\u03ba\u03cc layer, \u03ce\u03c3\u03c4\u03b5 \u03bf \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03bd\u03b1 \u03b4\u03bf\u03c5\u03bb\u03b5\u03cd\u03b5\u03b9 \u03b3\u03c1\u03ae\u03b3\u03bf\u03c1\u03b1 \u03c3\u03b5 PC, tablet \u03ba\u03b1\u03b9 \u03ba\u03b9\u03bd\u03b7\u03c4\u03cc."}
         </p>
       </section>
     </main>
@@ -246,8 +241,8 @@ const styles: Record<string, CSSProperties> = {
   mapWorkspace: {
     maxWidth: 1480,
     margin: "0 auto",
-    display: "grid",
-    gridTemplateColumns: "300px minmax(0, 1fr) 330px",
+    display: "flex",
+    flexWrap: "wrap",
     gap: 14,
     alignItems: "stretch",
   },
@@ -255,11 +250,15 @@ const styles: Record<string, CSSProperties> = {
     display: "flex",
     flexDirection: "column",
     gap: 14,
+    flex: "1 1 260px",
+    maxWidth: 340,
   },
   rightPanel: {
     display: "flex",
     flexDirection: "column",
     gap: 14,
+    flex: "1 1 280px",
+    maxWidth: 360,
   },
   panelBlock: {
     padding: 16,
@@ -324,7 +323,9 @@ const styles: Record<string, CSSProperties> = {
     padding: "5px 0",
   },
   mapPanel: {
-    minHeight: 690,
+    flex: "3 1 520px",
+    minWidth: 0,
+    minHeight: 620,
     borderRadius: 30,
     overflow: "hidden",
     background: "rgba(8,16,32,.92)",

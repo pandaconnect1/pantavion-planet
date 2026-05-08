@@ -1,5 +1,6 @@
-"use client";
+﻿"use client";
 
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 
 type GeoJsonFeature = {
@@ -30,25 +31,83 @@ type Bounds = {
   maxLat: number;
 };
 
+const MAX_RENDER_FEATURES = 900;
+const MAX_POINTS_PER_LINE = 180;
+const MAX_POINTS_PER_POLYGON = 220;
+
+const el = {
+  privateLayer: "\u0399\u0394\u0399\u03A9\u03A4\u0399\u039A\u039F \u0395\u03A0\u0395\u039E\u0395\u03A1\u0393\u0391\u03A3\u039C\u0395\u039D\u039F LAYER \u0394\u0399\u039A\u03A4\u03A5\u039F\u03A5",
+  loadingTitle: "\u03A6\u03BF\u03C1\u03C4\u03CE\u03BD\u03B5\u03B9 \u03C4\u03BF \u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03CC \u03B4\u03AF\u03BA\u03C4\u03C5\u03BF...",
+  waitingTitle: "\u0391\u03BD\u03B1\u03BC\u03BF\u03BD\u03AE \u03B3\u03B9\u03B1 \u03BC\u03B5\u03C4\u03B1\u03C4\u03C1\u03BF\u03C0\u03AE KML/KMZ",
+  noSource: "\u0394\u03B5\u03BD \u03AD\u03C7\u03B5\u03B9 \u03C6\u03BF\u03C1\u03C4\u03C9\u03B8\u03B5\u03AF \u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03CC \u03B1\u03C1\u03C7\u03B5\u03AF\u03BF",
+  active: "\u0395\u039D\u0395\u03A1\u0393\u039F \u0399\u0394\u0399\u03A9\u03A4\u0399\u039A\u039F LAYER",
+  mobileSafe: "\u0395\u039B\u0391\u03A6\u03A1\u0399\u0391 \u03A0\u03A1\u039F\u0392\u039F\u039B\u0397 \u039A\u0399\u039D\u0397\u03A4\u039F\u03A5",
+  emptyTitle: "\u0394\u03B5\u03BD \u03C6\u03B1\u03AF\u03BD\u03B5\u03C4\u03B1\u03B9 \u03B1\u03BA\u03CC\u03BC\u03B1 \u03B5\u03C0\u03B5\u03BE\u03B5\u03C1\u03B3\u03B1\u03C3\u03BC\u03AD\u03BD\u03BF \u03B4\u03AF\u03BA\u03C4\u03C5\u03BF.",
+  emptyText: "\u0392\u03AC\u03BB\u03B5 \u03C0\u03C1\u03B1\u03B3\u03BC\u03B1\u03C4\u03B9\u03BA\u03CC .kml \u03AE .kmz \u03C3\u03C4\u03BF private-infrastructure/water-network/original/ \u03BA\u03B1\u03B9 \u03C4\u03C1\u03AD\u03BE\u03B5: node scripts/pantavion-water-kml-to-geojson.cjs",
+  rawNo: "\u03A0\u03C1\u03C9\u03C4\u03CC\u03C4\u03C5\u03C0\u03BF \u03B1\u03C1\u03C7\u03B5\u03AF\u03BF \u03B5\u03BA\u03C4\u03B5\u03B8\u03B5\u03B9\u03BC\u03AD\u03BD\u03BF: \u03CC\u03C7\u03B9",
+  publicNo: "Public folder: \u03CC\u03C7\u03B9",
+  sourcePrivate: "\u03A0\u03B7\u03B3\u03AE: \u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03CC processed GeoJSON",
+  selectedAsset: "\u0395\u03C0\u03B9\u03BB\u03B5\u03B3\u03BC\u03AD\u03BD\u03BF \u03C3\u03B7\u03BC\u03B5\u03AF\u03BF",
+  tapAsset: "\u03A0\u03AC\u03C4\u03B1 \u03C3\u03B5 \u03B1\u03B3\u03C9\u03B3\u03CC, \u03B2\u03AC\u03BD\u03B1, \u03C0\u03B1\u03C1\u03BF\u03C7\u03AE, \u03BC\u03B5\u03C4\u03C1\u03B7\u03C4\u03AE \u03AE \u03C0\u03B5\u03C1\u03B9\u03BF\u03C7\u03AE.",
+  type: "\u03A4\u03CD\u03C0\u03BF\u03C2",
+  status: "\u039A\u03B1\u03C4\u03AC\u03C3\u03C4\u03B1\u03C3\u03B7",
+  rendered: "\u0395\u03BC\u03C6\u03AC\u03BD\u03B9\u03C3\u03B7",
+  from: "\u03B1\u03C0\u03CC",
+  features: "\u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03B1",
+  error: "\u0391\u03B4\u03C5\u03BD\u03B1\u03BC\u03AF\u03B1 \u03C6\u03CC\u03C1\u03C4\u03C9\u03C3\u03B7\u03C2 \u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03BF\u03CD layer \u03CD\u03B4\u03C1\u03B5\u03C5\u03C3\u03B7\u03C2.",
+};
+
+function isFinitePosition(position: unknown): position is number[] {
+  return (
+    Array.isArray(position) &&
+    Number.isFinite(position[0]) &&
+    Number.isFinite(position[1])
+  );
+}
+
 function collectPositions(feature: GeoJsonFeature): number[][] {
   const geometry = feature.geometry;
   if (!geometry) return [];
 
   const coords = geometry.coordinates;
 
-  if (geometry.type === "Point" && Array.isArray(coords)) {
-    return [coords as number[]];
+  if (geometry.type === "Point" && isFinitePosition(coords)) {
+    return [coords];
   }
 
   if (geometry.type === "LineString" && Array.isArray(coords)) {
-    return coords as number[][];
+    return coords.filter(isFinitePosition);
   }
 
   if (geometry.type === "Polygon" && Array.isArray(coords)) {
-    return (coords as number[][][]).flat();
+    const positions: number[][] = [];
+
+    for (const ring of coords) {
+      if (!Array.isArray(ring)) continue;
+
+      for (const position of ring) {
+        if (isFinitePosition(position)) positions.push(position);
+      }
+    }
+
+    return positions;
   }
 
   return [];
+}
+
+function samplePositions(positions: number[][], maxPoints: number): number[][] {
+  if (positions.length <= maxPoints) return positions;
+  if (maxPoints <= 2) return [positions[0], positions[positions.length - 1]];
+
+  const sampled: number[][] = [];
+  const step = (positions.length - 1) / (maxPoints - 1);
+
+  for (let index = 0; index < maxPoints; index += 1) {
+    sampled.push(positions[Math.round(index * step)]);
+  }
+
+  return sampled;
 }
 
 function getBounds(features: GeoJsonFeature[]): Bounds | null {
@@ -103,17 +162,20 @@ function getAssetType(feature: GeoJsonFeature) {
 }
 
 function getName(feature: GeoJsonFeature, index: number) {
-  return String(feature.properties?.name || feature.properties?.pantavionId || `Asset ${index + 1}`);
+  return String(
+    feature.properties?.name ||
+      feature.properties?.pantavionId ||
+      `Asset ${index + 1}`
+  );
 }
 
-function linePath(feature: GeoJsonFeature, bounds: Bounds) {
-  const points = collectPositions(feature).map((position) => project(position, bounds));
-  return points.map((point) => `${point.x},${point.y}`).join(" ");
-}
-
-function polygonPath(feature: GeoJsonFeature, bounds: Bounds) {
-  const points = collectPositions(feature).map((position) => project(position, bounds));
-  return points.map((point) => `${point.x},${point.y}`).join(" ");
+function pointsToSvg(points: number[][], bounds: Bounds) {
+  return points
+    .map((position) => {
+      const point = project(position, bounds);
+      return `${point.x.toFixed(2)},${point.y.toFixed(2)}`;
+    })
+    .join(" ");
 }
 
 export default function WaterNetworkClient() {
@@ -134,7 +196,7 @@ export default function WaterNetworkClient() {
       })
       .catch(() => {
         if (!active) return;
-        setError("Unable to load private processed water-network layer.");
+        setError(el.error);
       });
 
     return () => {
@@ -144,55 +206,70 @@ export default function WaterNetworkClient() {
 
   const features = data?.features || [];
   const bounds = useMemo(() => getBounds(features), [features]);
-  const sourceFile = data?.pantavion?.sourceFile || "No private source loaded";
+
+  const renderFeatures = useMemo(() => {
+    return features.slice(0, MAX_RENDER_FEATURES);
+  }, [features]);
+
+  const sourceFile = data?.pantavion?.sourceFile || el.noSource;
   const status = data?.pantavion?.status || "loading";
+  const hasFeatures = features.length > 0;
 
   return (
     <div style={styles.wrap}>
       <div style={styles.top}>
         <div>
-          <p style={styles.label}>Private processed network layer</p>
+          <p style={styles.label}>{el.privateLayer}</p>
           <h3 style={styles.title}>
-            {features.length > 0 ? `${features.length} assets/features loaded` : "Waiting for private KML/KMZ conversion"}
+            {!data
+              ? el.loadingTitle
+              : hasFeatures
+                ? `${el.rendered} ${renderFeatures.length} ${el.from} ${features.length} ${el.features}`
+                : el.waitingTitle}
           </h3>
           <p style={styles.meta}>{sourceFile}</p>
         </div>
-        <span style={features.length > 0 ? styles.goodBadge : styles.warnBadge}>
-          {features.length > 0 ? "PRIVATE LAYER ACTIVE" : status}
+        <span style={hasFeatures ? styles.goodBadge : styles.warnBadge}>
+          {hasFeatures ? el.mobileSafe : status}
         </span>
       </div>
 
       <div style={styles.map}>
         {!bounds && (
           <div style={styles.empty}>
-            <strong>No real processed network visible yet.</strong>
-            <span>
-              Place a real .kml or .kmz file in private-infrastructure/water-network/original/
-              and run: node scripts/pantavion-water-kml-to-geojson.cjs
-            </span>
+            <strong>{el.emptyTitle}</strong>
+            <span>{el.emptyText}</span>
             {error ? <span>{error}</span> : null}
           </div>
         )}
 
         {bounds && (
-          <svg viewBox="0 0 1000 620" style={styles.svg} role="img" aria-label="Private processed water network">
+          <svg
+            viewBox="0 0 1000 620"
+            style={styles.svg}
+            role="img"
+            aria-label="Private processed water network"
+          >
             <rect x="0" y="0" width="1000" height="620" fill="rgba(2,4,11,.35)" />
 
-            {features.map((feature, index) => {
+            {renderFeatures.map((feature, index) => {
               const geometryType = feature.geometry?.type;
               const assetType = getAssetType(feature);
+              const positions = collectPositions(feature);
 
               if (geometryType === "LineString") {
+                const sampled = samplePositions(positions, MAX_POINTS_PER_LINE);
+
                 return (
                   <polyline
                     key={String(feature.properties?.pantavionId || index)}
-                    points={linePath(feature, bounds)}
+                    points={pointsToSvg(sampled, bounds)}
                     fill="none"
                     stroke={assetType === "central_main" ? "#fff1ad" : "#f6c85f"}
-                    strokeWidth={assetType === "central_main" ? 7 : 4}
+                    strokeWidth={assetType === "central_main" ? 6 : 3}
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    opacity={0.92}
+                    opacity={0.88}
                     onClick={() => setSelected(feature)}
                     style={{ cursor: "pointer" }}
                   />
@@ -200,10 +277,12 @@ export default function WaterNetworkClient() {
               }
 
               if (geometryType === "Polygon") {
+                const sampled = samplePositions(positions, MAX_POINTS_PER_POLYGON);
+
                 return (
                   <polygon
                     key={String(feature.properties?.pantavionId || index)}
-                    points={polygonPath(feature, bounds)}
+                    points={pointsToSvg(sampled, bounds)}
                     fill="rgba(246,200,95,.12)"
                     stroke="#f6c85f"
                     strokeWidth="2"
@@ -214,7 +293,7 @@ export default function WaterNetworkClient() {
               }
 
               if (geometryType === "Point") {
-                const position = collectPositions(feature)[0];
+                const position = positions[0];
                 if (!position) return null;
                 const point = project(position, bounds);
 
@@ -224,8 +303,14 @@ export default function WaterNetworkClient() {
                     onClick={() => setSelected(feature)}
                     style={{ cursor: "pointer" }}
                   >
-                    <circle cx={point.x} cy={point.y} r="10" fill="#f6c85f" />
-                    <text x={point.x + 14} y={point.y + 5} fill="#fff8e7" fontSize="18" fontWeight="700">
+                    <circle cx={point.x} cy={point.y} r="8" fill="#f6c85f" />
+                    <text
+                      x={point.x + 12}
+                      y={point.y + 5}
+                      fill="#fff8e7"
+                      fontSize="16"
+                      fontWeight="700"
+                    >
                       {assetType === "valve" ? "V" : assetType === "meter" ? "M" : "P"}
                     </text>
                   </g>
@@ -239,33 +324,38 @@ export default function WaterNetworkClient() {
       </div>
 
       <div style={styles.footer}>
-        <span>Raw file exposed: no</span>
-        <span>Public folder: no</span>
-        <span>Source: private processed GeoJSON</span>
+        <span>{el.rawNo}</span>
+        <span>{el.publicNo}</span>
+        <span>{el.sourcePrivate}</span>
+        {hasFeatures ? <span>{el.active}</span> : null}
       </div>
 
       <div style={styles.selected}>
-        <strong>Selected asset</strong>
+        <strong>{el.selectedAsset}</strong>
         {selected ? (
           <div style={styles.selectedBody}>
             <span>{getName(selected, 0)}</span>
-            <span>Type: {getAssetType(selected)}</span>
+            <span>
+              {el.type}: {getAssetType(selected)}
+            </span>
             <span>ID: {String(selected.properties?.pantavionId || "unknown")}</span>
-            <span>Status: {String(selected.properties?.officialStatus || "pending")}</span>
+            <span>
+              {el.status}: {String(selected.properties?.officialStatus || "pending")}
+            </span>
           </div>
         ) : (
-          <span>Tap/click a real processed pipe, valve, service connection, meter or area.</span>
+          <span>{el.tapAsset}</span>
         )}
       </div>
     </div>
   );
 }
 
-const styles: Record<string, React.CSSProperties> = {
+const styles: Record<string, CSSProperties> = {
   wrap: {
     display: "flex",
     flexDirection: "column",
-    minHeight: 560,
+    minHeight: 500,
     background: "linear-gradient(135deg, rgba(16,35,68,.9), rgba(5,12,24,.96))",
   },
   top: {
@@ -318,7 +408,7 @@ const styles: Record<string, React.CSSProperties> = {
   map: {
     position: "relative",
     flex: 1,
-    minHeight: 410,
+    minHeight: 360,
     overflow: "hidden",
     backgroundImage:
       "linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px)",
@@ -327,7 +417,7 @@ const styles: Record<string, React.CSSProperties> = {
   svg: {
     width: "100%",
     height: "100%",
-    minHeight: 410,
+    minHeight: 360,
     display: "block",
   },
   empty: {
