@@ -52,13 +52,13 @@ const assetCards = [
   {
     id: "VAL-000245",
     type: "Valve",
-    detail: "Î¦110 / active / connected to PIPE-003812",
+    detail: "ÃŽÂ¦110 / active / connected to PIPE-003812",
     status: "Example asset card",
   },
   {
     id: "PIPE-003812",
     type: "Pipe",
-    detail: "UPVC / Î¦110 / depth when available / official layer",
+    detail: "UPVC / ÃŽÂ¦110 / depth when available / official layer",
     status: "Example asset card",
   },
   {
@@ -73,7 +73,7 @@ export default function WaterInfrastructurePage() {
   return (
     <main style={styles.shell}>
       <section style={styles.hero}>
-        <div style={styles.lockBadge}>PROTECTED PROFESSIONAL MODULE Â· PHASE 1A SHELL</div>
+        <div style={styles.lockBadge}>PROTECTED PROFESSIONAL MODULE Ã‚Â· PHASE 1A SHELL</div>
         <p style={styles.kicker}>Pantavion Professional Infrastructure</p>
         <h1 style={styles.title}>Water Network Control</h1>
         <p style={styles.subtitle}>
