@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
@@ -31,38 +31,24 @@ type Bounds = {
   maxLat: number;
 };
 
-const MAX_RENDER_FEATURES = 900;
-const MAX_POINTS_PER_LINE = 180;
-const MAX_POINTS_PER_POLYGON = 220;
-
-const el = {
-  privateLayer: "\u0399\u0394\u0399\u03A9\u03A4\u0399\u039A\u039F \u0395\u03A0\u0395\u039E\u0395\u03A1\u0393\u0391\u03A3\u039C\u0395\u039D\u039F LAYER \u0394\u0399\u039A\u03A4\u03A5\u039F\u03A5",
-  loadingTitle: "\u03A6\u03BF\u03C1\u03C4\u03CE\u03BD\u03B5\u03B9 \u03C4\u03BF \u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03CC \u03B4\u03AF\u03BA\u03C4\u03C5\u03BF...",
-  waitingTitle: "\u0391\u03BD\u03B1\u03BC\u03BF\u03BD\u03AE \u03B3\u03B9\u03B1 \u03BC\u03B5\u03C4\u03B1\u03C4\u03C1\u03BF\u03C0\u03AE KML/KMZ",
-  noSource: "\u0394\u03B5\u03BD \u03AD\u03C7\u03B5\u03B9 \u03C6\u03BF\u03C1\u03C4\u03C9\u03B8\u03B5\u03AF \u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03CC \u03B1\u03C1\u03C7\u03B5\u03AF\u03BF",
-  active: "\u0395\u039D\u0395\u03A1\u0393\u039F \u0399\u0394\u0399\u03A9\u03A4\u0399\u039A\u039F LAYER",
-  mobileSafe: "\u0395\u039B\u0391\u03A6\u03A1\u0399\u0391 \u03A0\u03A1\u039F\u0392\u039F\u039B\u0397 \u039A\u0399\u039D\u0397\u03A4\u039F\u03A5",
-  emptyTitle: "\u0394\u03B5\u03BD \u03C6\u03B1\u03AF\u03BD\u03B5\u03C4\u03B1\u03B9 \u03B1\u03BA\u03CC\u03BC\u03B1 \u03B5\u03C0\u03B5\u03BE\u03B5\u03C1\u03B3\u03B1\u03C3\u03BC\u03AD\u03BD\u03BF \u03B4\u03AF\u03BA\u03C4\u03C5\u03BF.",
-  emptyText: "\u0392\u03AC\u03BB\u03B5 \u03C0\u03C1\u03B1\u03B3\u03BC\u03B1\u03C4\u03B9\u03BA\u03CC .kml \u03AE .kmz \u03C3\u03C4\u03BF private-infrastructure/water-network/original/ \u03BA\u03B1\u03B9 \u03C4\u03C1\u03AD\u03BE\u03B5: node scripts/pantavion-water-kml-to-geojson.cjs",
-  rawNo: "\u03A0\u03C1\u03C9\u03C4\u03CC\u03C4\u03C5\u03C0\u03BF \u03B1\u03C1\u03C7\u03B5\u03AF\u03BF \u03B5\u03BA\u03C4\u03B5\u03B8\u03B5\u03B9\u03BC\u03AD\u03BD\u03BF: \u03CC\u03C7\u03B9",
-  publicNo: "Public folder: \u03CC\u03C7\u03B9",
-  sourcePrivate: "\u03A0\u03B7\u03B3\u03AE: \u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03CC processed GeoJSON",
-  selectedAsset: "\u0395\u03C0\u03B9\u03BB\u03B5\u03B3\u03BC\u03AD\u03BD\u03BF \u03C3\u03B7\u03BC\u03B5\u03AF\u03BF",
-  tapAsset: "\u03A0\u03AC\u03C4\u03B1 \u03C3\u03B5 \u03B1\u03B3\u03C9\u03B3\u03CC, \u03B2\u03AC\u03BD\u03B1, \u03C0\u03B1\u03C1\u03BF\u03C7\u03AE, \u03BC\u03B5\u03C4\u03C1\u03B7\u03C4\u03AE \u03AE \u03C0\u03B5\u03C1\u03B9\u03BF\u03C7\u03AE.",
-  type: "\u03A4\u03CD\u03C0\u03BF\u03C2",
-  status: "\u039A\u03B1\u03C4\u03AC\u03C3\u03C4\u03B1\u03C3\u03B7",
-  rendered: "\u0395\u03BC\u03C6\u03AC\u03BD\u03B9\u03C3\u03B7",
-  from: "\u03B1\u03C0\u03CC",
-  features: "\u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03B1",
-  error: "\u0391\u03B4\u03C5\u03BD\u03B1\u03BC\u03AF\u03B1 \u03C6\u03CC\u03C1\u03C4\u03C9\u03C3\u03B7\u03C2 \u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03BF\u03CD layer \u03CD\u03B4\u03C1\u03B5\u03C5\u03C3\u03B7\u03C2.",
+type WorldPoint = {
+  x: number;
+  y: number;
 };
 
+const MAP_WIDTH = 1000;
+const MAP_HEIGHT = 620;
+const TILE_SIZE = 256;
+const MAX_RENDER_FEATURES = 1600;
+const MAX_POINTS_PER_LINE = 160;
+const MAX_POINTS_PER_POLYGON = 180;
+
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, value));
+}
+
 function isFinitePosition(position: unknown): position is number[] {
-  return (
-    Array.isArray(position) &&
-    Number.isFinite(position[0]) &&
-    Number.isFinite(position[1])
-  );
+  return Array.isArray(position) && Number.isFinite(position[0]) && Number.isFinite(position[1]);
 }
 
 function collectPositions(feature: GeoJsonFeature): number[][] {
@@ -71,9 +57,7 @@ function collectPositions(feature: GeoJsonFeature): number[][] {
 
   const coords = geometry.coordinates;
 
-  if (geometry.type === "Point" && isFinitePosition(coords)) {
-    return [coords];
-  }
+  if (geometry.type === "Point" && isFinitePosition(coords)) return [coords];
 
   if (geometry.type === "LineString" && Array.isArray(coords)) {
     return coords.filter(isFinitePosition);
@@ -84,7 +68,6 @@ function collectPositions(feature: GeoJsonFeature): number[][] {
 
     for (const ring of coords) {
       if (!Array.isArray(ring)) continue;
-
       for (const position of ring) {
         if (isFinitePosition(position)) positions.push(position);
       }
@@ -118,9 +101,7 @@ function getBounds(features: GeoJsonFeature[]): Bounds | null {
   let found = false;
 
   for (const feature of features) {
-    const positions = collectPositions(feature);
-
-    for (const position of positions) {
+    for (const position of collectPositions(feature)) {
       const lon = position[0];
       const lat = position[1];
 
@@ -137,24 +118,39 @@ function getBounds(features: GeoJsonFeature[]): Bounds | null {
 
   if (!found) return null;
 
+  return { minLon, maxLon, minLat, maxLat };
+}
+
+function lonLatToWorld(lon: number, lat: number, zoom: number): WorldPoint {
+  const scale = TILE_SIZE * Math.pow(2, zoom);
+  const safeLat = clamp(lat, -85.05112878, 85.05112878);
+  const sinLat = Math.sin((safeLat * Math.PI) / 180);
+
   return {
-    minLon,
-    maxLon,
-    minLat,
-    maxLat,
+    x: ((lon + 180) / 360) * scale,
+    y: (0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI)) * scale,
   };
 }
 
-function project(position: number[], bounds: Bounds) {
-  const width = 1000;
-  const height = 620;
-  const lonSpan = bounds.maxLon - bounds.minLon || 0.000001;
-  const latSpan = bounds.maxLat - bounds.minLat || 0.000001;
+function chooseZoom(bounds: Bounds) {
+  for (let zoom = 19; zoom >= 7; zoom -= 1) {
+    const topLeft = lonLatToWorld(bounds.minLon, bounds.maxLat, zoom);
+    const bottomRight = lonLatToWorld(bounds.maxLon, bounds.minLat, zoom);
 
-  const x = ((position[0] - bounds.minLon) / lonSpan) * width;
-  const y = height - ((position[1] - bounds.minLat) / latSpan) * height;
+    const width = Math.abs(bottomRight.x - topLeft.x);
+    const height = Math.abs(bottomRight.y - topLeft.y);
 
-  return { x, y };
+    if (width <= MAP_WIDTH * 0.78 && height <= MAP_HEIGHT * 0.78) return zoom;
+  }
+
+  return 7;
+}
+
+function getCenter(bounds: Bounds) {
+  return {
+    lon: (bounds.minLon + bounds.maxLon) / 2,
+    lat: (bounds.minLat + bounds.maxLat) / 2,
+  };
 }
 
 function getAssetType(feature: GeoJsonFeature) {
@@ -162,33 +158,73 @@ function getAssetType(feature: GeoJsonFeature) {
 }
 
 function getName(feature: GeoJsonFeature, index: number) {
-  return String(
-    feature.properties?.name ||
-      feature.properties?.pantavionId ||
-      `Asset ${index + 1}`
-  );
+  return String(feature.properties?.name || feature.properties?.pantavionId || `Στοιχείο ${index + 1}`);
 }
 
-function pointsToSvg(points: number[][], bounds: Bounds) {
+function getSortedRenderableFeatures(features: GeoJsonFeature[]) {
+  return [...features]
+    .sort((a, b) => {
+      const order: Record<string, number> = { LineString: 0, Polygon: 1, Point: 2 };
+      return (order[a.geometry?.type || ""] ?? 9) - (order[b.geometry?.type || ""] ?? 9);
+    })
+    .slice(0, MAX_RENDER_FEATURES);
+}
+
+function projectToViewport(position: number[], centerWorld: WorldPoint, zoom: number) {
+  const world = lonLatToWorld(position[0], position[1], zoom);
+
+  return {
+    x: MAP_WIDTH / 2 + (world.x - centerWorld.x),
+    y: MAP_HEIGHT / 2 + (world.y - centerWorld.y),
+  };
+}
+
+function pointsToSvg(points: number[][], centerWorld: WorldPoint, zoom: number) {
   return points
     .map((position) => {
-      const point = project(position, bounds);
+      const point = projectToViewport(position, centerWorld, zoom);
       return `${point.x.toFixed(2)},${point.y.toFixed(2)}`;
     })
     .join(" ");
+}
+
+function getTiles(centerWorld: WorldPoint) {
+  const left = centerWorld.x - MAP_WIDTH / 2;
+  const top = centerWorld.y - MAP_HEIGHT / 2;
+  const right = centerWorld.x + MAP_WIDTH / 2;
+  const bottom = centerWorld.y + MAP_HEIGHT / 2;
+
+  const minTileX = Math.floor(left / TILE_SIZE);
+  const maxTileX = Math.floor(right / TILE_SIZE);
+  const minTileY = Math.floor(top / TILE_SIZE);
+  const maxTileY = Math.floor(bottom / TILE_SIZE);
+
+  const tiles: { x: number; y: number; left: number; top: number }[] = [];
+
+  for (let tileX = minTileX; tileX <= maxTileX; tileX += 1) {
+    for (let tileY = minTileY; tileY <= maxTileY; tileY += 1) {
+      tiles.push({
+        x: tileX,
+        y: tileY,
+        left: tileX * TILE_SIZE - left,
+        top: tileY * TILE_SIZE - top,
+      });
+    }
+  }
+
+  return tiles;
 }
 
 export default function WaterNetworkClient() {
   const [data, setData] = useState<GeoJsonCollection | null>(null);
   const [selected, setSelected] = useState<GeoJsonFeature | null>(null);
   const [error, setError] = useState("");
+  const [zoomDelta, setZoomDelta] = useState(0);
 
   useEffect(() => {
     let active = true;
 
-    fetch("/api/professional/infrastructure/water/network", {
-      cache: "no-store",
-    })
+    fetch("/api/professional/infrastructure/water/network", { cache: "no-store" })
       .then((response) => response.json())
       .then((json: GeoJsonCollection) => {
         if (!active) return;
@@ -196,7 +232,7 @@ export default function WaterNetworkClient() {
       })
       .catch(() => {
         if (!active) return;
-        setError(el.error);
+        setError("Αδυναμία φόρτωσης ιδιωτικού layer ύδρευσης.");
       });
 
     return () => {
@@ -207,144 +243,171 @@ export default function WaterNetworkClient() {
   const features = data?.features || [];
   const bounds = useMemo(() => getBounds(features), [features]);
 
-  const renderFeatures = useMemo(() => {
-    return features.slice(0, MAX_RENDER_FEATURES);
-  }, [features]);
+  const mapModel = useMemo(() => {
+    if (!bounds) return null;
 
-  const sourceFile = data?.pantavion?.sourceFile || el.noSource;
-  const status = data?.pantavion?.status || "loading";
+    const center = getCenter(bounds);
+    const baseZoom = chooseZoom(bounds);
+    const zoom = clamp(baseZoom + zoomDelta, 6, 20);
+    const centerWorld = lonLatToWorld(center.lon, center.lat, zoom);
+    const tiles = getTiles(centerWorld);
+
+    return { center, zoom, centerWorld, tiles };
+  }, [bounds, zoomDelta]);
+
+  const renderFeatures = useMemo(() => getSortedRenderableFeatures(features), [features]);
+
+  const sourceFile = data?.pantavion?.sourceFile || "Δεν έχει φορτωθεί ιδιωτικό αρχείο";
   const hasFeatures = features.length > 0;
 
   return (
     <div style={styles.wrap}>
       <div style={styles.top}>
         <div>
-          <p style={styles.label}>{el.privateLayer}</p>
+          <p style={styles.label}>ΧΑΡΤΗΣ ΔΡΟΜΩΝ + ΙΔΙΩΤΙΚΟ LAYER ΥΔΡΕΥΣΗΣ</p>
           <h3 style={styles.title}>
             {!data
-              ? el.loadingTitle
+              ? "Φορτώνει το ιδιωτικό δίκτυο..."
               : hasFeatures
-                ? `${el.rendered} ${renderFeatures.length} ${el.from} ${features.length} ${el.features}`
-                : el.waitingTitle}
+                ? `Εμφάνιση ${renderFeatures.length} από ${features.length} στοιχεία`
+                : "Αναμονή για μετατροπή KML/KMZ"}
           </h3>
           <p style={styles.meta}>{sourceFile}</p>
         </div>
-        <span style={hasFeatures ? styles.goodBadge : styles.warnBadge}>
-          {hasFeatures ? el.mobileSafe : status}
-        </span>
+
+        <div style={styles.actions}>
+          <button style={styles.smallButton} onClick={() => setZoomDelta((value) => value + 1)}>
+            +
+          </button>
+          <button style={styles.smallButton} onClick={() => setZoomDelta((value) => value - 1)}>
+            -
+          </button>
+          <button style={styles.resetButton} onClick={() => setZoomDelta(0)}>
+            Κέντρο
+          </button>
+        </div>
       </div>
 
       <div style={styles.map}>
-        {!bounds && (
+        {!mapModel && (
           <div style={styles.empty}>
-            <strong>{el.emptyTitle}</strong>
-            <span>{el.emptyText}</span>
+            <strong>Δεν φαίνεται ακόμα επεξεργασμένο δίκτυο.</strong>
+            <span>
+              Βάλε πραγματικό .kml ή .kmz στο private-infrastructure/water-network/original/
+              και τρέξε: node scripts/pantavion-water-kml-to-geojson.cjs
+            </span>
             {error ? <span>{error}</span> : null}
           </div>
         )}
 
-        {bounds && (
-          <svg
-            viewBox="0 0 1000 620"
-            style={styles.svg}
-            role="img"
-            aria-label="Private processed water network"
-          >
-            <rect x="0" y="0" width="1000" height="620" fill="rgba(2,4,11,.35)" />
+        {mapModel && (
+          <>
+            <div style={styles.tileLayer}>
+              {mapModel.tiles.map((tile) => (
+                <img
+                  key={`${mapModel.zoom}-${tile.x}-${tile.y}`}
+                  src={`https://tile.openstreetmap.org/${mapModel.zoom}/${tile.x}/${tile.y}.png`}
+                  alt=""
+                  draggable={false}
+                  style={{
+                    position: "absolute",
+                    width: TILE_SIZE,
+                    height: TILE_SIZE,
+                    left: tile.left,
+                    top: tile.top,
+                    opacity: 0.82,
+                  }}
+                />
+              ))}
+            </div>
 
-            {renderFeatures.map((feature, index) => {
-              const geometryType = feature.geometry?.type;
-              const assetType = getAssetType(feature);
-              const positions = collectPositions(feature);
+            <svg viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`} style={styles.svg} role="img" aria-label="Δίκτυο ύδρευσης πάνω σε χάρτη">
+              <rect x="0" y="0" width={MAP_WIDTH} height={MAP_HEIGHT} fill="rgba(2,4,11,.18)" />
 
-              if (geometryType === "LineString") {
-                const sampled = samplePositions(positions, MAX_POINTS_PER_LINE);
+              {renderFeatures.map((feature, index) => {
+                const geometryType = feature.geometry?.type;
+                const assetType = getAssetType(feature);
+                const positions = collectPositions(feature);
 
-                return (
-                  <polyline
-                    key={String(feature.properties?.pantavionId || index)}
-                    points={pointsToSvg(sampled, bounds)}
-                    fill="none"
-                    stroke={assetType === "central_main" ? "#fff1ad" : "#f6c85f"}
-                    strokeWidth={assetType === "central_main" ? 6 : 3}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    opacity={0.88}
-                    onClick={() => setSelected(feature)}
-                    style={{ cursor: "pointer" }}
-                  />
-                );
-              }
+                if (geometryType === "LineString") {
+                  const sampled = samplePositions(positions, MAX_POINTS_PER_LINE);
 
-              if (geometryType === "Polygon") {
-                const sampled = samplePositions(positions, MAX_POINTS_PER_POLYGON);
+                  return (
+                    <polyline
+                      key={String(feature.properties?.pantavionId || index)}
+                      points={pointsToSvg(sampled, mapModel.centerWorld, mapModel.zoom)}
+                      fill="none"
+                      stroke={assetType === "central_main" ? "#fff1ad" : "#f6c85f"}
+                      strokeWidth={assetType === "central_main" ? 5 : 3}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      opacity={0.92}
+                      onClick={() => setSelected(feature)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  );
+                }
 
-                return (
-                  <polygon
-                    key={String(feature.properties?.pantavionId || index)}
-                    points={pointsToSvg(sampled, bounds)}
-                    fill="rgba(246,200,95,.12)"
-                    stroke="#f6c85f"
-                    strokeWidth="2"
-                    onClick={() => setSelected(feature)}
-                    style={{ cursor: "pointer" }}
-                  />
-                );
-              }
+                if (geometryType === "Polygon") {
+                  const sampled = samplePositions(positions, MAX_POINTS_PER_POLYGON);
 
-              if (geometryType === "Point") {
-                const position = positions[0];
-                if (!position) return null;
-                const point = project(position, bounds);
+                  return (
+                    <polygon
+                      key={String(feature.properties?.pantavionId || index)}
+                      points={pointsToSvg(sampled, mapModel.centerWorld, mapModel.zoom)}
+                      fill="rgba(246,200,95,.14)"
+                      stroke="#f6c85f"
+                      strokeWidth="2"
+                      onClick={() => setSelected(feature)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  );
+                }
 
-                return (
-                  <g
-                    key={String(feature.properties?.pantavionId || index)}
-                    onClick={() => setSelected(feature)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <circle cx={point.x} cy={point.y} r="8" fill="#f6c85f" />
-                    <text
-                      x={point.x + 12}
-                      y={point.y + 5}
-                      fill="#fff8e7"
-                      fontSize="16"
-                      fontWeight="700"
+                if (geometryType === "Point") {
+                  const position = positions[0];
+                  if (!position) return null;
+                  const point = projectToViewport(position, mapModel.centerWorld, mapModel.zoom);
+
+                  return (
+                    <g
+                      key={String(feature.properties?.pantavionId || index)}
+                      onClick={() => setSelected(feature)}
+                      style={{ cursor: "pointer" }}
                     >
-                      {assetType === "valve" ? "V" : assetType === "meter" ? "M" : "P"}
-                    </text>
-                  </g>
-                );
-              }
+                      <circle cx={point.x} cy={point.y} r="7" fill="#f6c85f" stroke="#071020" strokeWidth="2" />
+                    </g>
+                  );
+                }
 
-              return null;
-            })}
-          </svg>
+                return null;
+              })}
+            </svg>
+
+            <div style={styles.mapBadge}>
+              Ζωντανός χάρτης δρόμων · zoom {mapModel.zoom} · ιδιωτικό δίκτυο
+            </div>
+          </>
         )}
       </div>
 
       <div style={styles.footer}>
-        <span>{el.rawNo}</span>
-        <span>{el.publicNo}</span>
-        <span>{el.sourcePrivate}</span>
-        {hasFeatures ? <span>{el.active}</span> : null}
+        <span>Πρωτότυπο KMZ/KML εκτεθειμένο: όχι</span>
+        <span>Public folder: όχι</span>
+        <span>Πηγή: ιδιωτικό processed GeoJSON</span>
       </div>
 
       <div style={styles.selected}>
-        <strong>{el.selectedAsset}</strong>
+        <strong>Επιλεγμένο στοιχείο</strong>
         {selected ? (
           <div style={styles.selectedBody}>
             <span>{getName(selected, 0)}</span>
-            <span>
-              {el.type}: {getAssetType(selected)}
-            </span>
+            <span>Τύπος: {getAssetType(selected)}</span>
             <span>ID: {String(selected.properties?.pantavionId || "unknown")}</span>
-            <span>
-              {el.status}: {String(selected.properties?.officialStatus || "pending")}
-            </span>
+            <span>Κατάσταση: {String(selected.properties?.officialStatus || "pending")}</span>
           </div>
         ) : (
-          <span>{el.tapAsset}</span>
+          <span>Πάτα πάνω σε αγωγό, βάνα, παροχή, μετρητή ή περιοχή.</span>
         )}
       </div>
     </div>
@@ -355,8 +418,8 @@ const styles: Record<string, CSSProperties> = {
   wrap: {
     display: "flex",
     flexDirection: "column",
-    minHeight: 500,
-    background: "linear-gradient(135deg, rgba(16,35,68,.9), rgba(5,12,24,.96))",
+    minHeight: 560,
+    background: "linear-gradient(135deg, rgba(16,35,68,.92), rgba(5,12,24,.97))",
   },
   top: {
     display: "flex",
@@ -383,42 +446,61 @@ const styles: Record<string, CSSProperties> = {
     color: "#d8e0f4",
     fontSize: 12,
   },
-  goodBadge: {
-    height: "fit-content",
-    padding: "8px 10px",
-    borderRadius: 999,
-    background: "rgba(69,255,172,.1)",
-    border: "1px solid rgba(69,255,172,.36)",
-    color: "#9cffd2",
-    fontSize: 11,
-    fontWeight: 1000,
-    whiteSpace: "nowrap",
+  actions: {
+    display: "flex",
+    gap: 8,
+    alignItems: "flex-start",
   },
-  warnBadge: {
-    height: "fit-content",
-    padding: "8px 10px",
-    borderRadius: 999,
-    background: "rgba(255,180,72,.1)",
-    border: "1px solid rgba(255,180,72,.36)",
-    color: "#ffd89a",
-    fontSize: 11,
+  smallButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    border: "1px solid rgba(246,200,95,.35)",
+    background: "rgba(255,255,255,.06)",
+    color: "#fff8e7",
     fontWeight: 1000,
-    whiteSpace: "nowrap",
+    fontSize: 18,
+  },
+  resetButton: {
+    height: 36,
+    borderRadius: 12,
+    border: "1px solid rgba(246,200,95,.35)",
+    background: "#f6c85f",
+    color: "#071020",
+    fontWeight: 1000,
+    padding: "0 12px",
   },
   map: {
     position: "relative",
     flex: 1,
-    minHeight: 360,
+    minHeight: 430,
     overflow: "hidden",
-    backgroundImage:
-      "linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px)",
-    backgroundSize: "44px 44px",
+    background: "#071020",
+  },
+  tileLayer: {
+    position: "absolute",
+    inset: 0,
+    overflow: "hidden",
+    filter: "saturate(.75) contrast(.92) brightness(.76)",
   },
   svg: {
+    position: "relative",
     width: "100%",
     height: "100%",
-    minHeight: 360,
+    minHeight: 430,
     display: "block",
+  },
+  mapBadge: {
+    position: "absolute",
+    left: 14,
+    bottom: 14,
+    padding: "8px 10px",
+    borderRadius: 999,
+    background: "rgba(2,4,11,.82)",
+    border: "1px solid rgba(246,200,95,.32)",
+    color: "#fff8e7",
+    fontSize: 12,
+    fontWeight: 900,
   },
   empty: {
     position: "absolute",
