@@ -3,6 +3,10 @@ import type { CSSProperties } from "react";
 
 const primaryActions = [
   {
+    label: "Water Network",
+    href: "/professional/infrastructure/water",
+    tone: "blue",
+  },  {
     label: "Open Universal Interpreter",
     href: "/translate",
     tone: "gold",
@@ -82,6 +86,13 @@ const publicModules = [
     status: "Work layer",
     marker: "PANTAVION_WORK_LAYER_V1",
     text: "Work, income, productivity, business workflows, and future AI-assisted professional execution.",
+  },
+  {
+    title: "Professional Infrastructure / Water Network",
+    href: "/professional/infrastructure/water",
+    status: "Protected professional module",
+    marker: "PANTAVION_PROFESSIONAL_WATER_NETWORK_PHASE_1B",
+    text: "Protected map-first workspace for real water-network operations. Real KMZ/KML/GIS files stay private, never public, and are shown only through protected optimized map layers.",
   },
   {
     title: "Pricing",
