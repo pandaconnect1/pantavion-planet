@@ -1,4 +1,4 @@
-﻿import type { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 
 const layerGroups = [
   {
@@ -131,25 +131,7 @@ export default function WaterInfrastructurePage() {
             <div style={styles.mapStatus}>OFFICIAL DATA NOT LOADED</div>
           </div>
 
-          <div style={styles.fakeMap}>
-            <div style={styles.gridOverlay} />
-            <div style={{ ...styles.pipeLine, ...styles.pipeMain }} />
-            <div style={{ ...styles.pipeLine, ...styles.pipeSecondary }} />
-            <div style={{ ...styles.pipeLine, ...styles.pipeBranch }} />
-
-            <div style={{ ...styles.assetPoint, left: "26%", top: "44%" }}>V</div>
-            <div style={{ ...styles.assetPoint, left: "53%", top: "35%" }}>P</div>
-            <div style={{ ...styles.assetPoint, left: "68%", top: "60%" }}>C</div>
-            <div style={{ ...styles.locationPulse, left: "42%", top: "58%" }} />
-
-            <div style={styles.mapNotice}>
-              <strong>Protected preview shell</strong>
-              <span>
-                This screen is ready for optimized private map layers. Real
-                infrastructure files must never be placed in GitHub or /public.
-              </span>
-            </div>
-          </div>
+          <WaterNetworkClient />
 
           <div style={styles.mapFooter}>
             <span>GPS: waiting</span>
