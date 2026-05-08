@@ -1,4 +1,4 @@
-﻿const fs = require("fs");
+const fs = require("fs");
 const path = require("path");
 const os = require("os");
 const crypto = require("crypto");
@@ -136,24 +136,28 @@ function parsePlacemark(placemark, index, sourceFile) {
 
 function readKmlFromKmz(kmzPath) {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "pantavion-kmz-"));
+  const zipPath = path.join(tmpDir, "source.zip");
 
-  if (process.platform === "win32") {
-    const psCommand = [
-      "Expand-Archive",
-      "-LiteralPath",
-      `"${kmzPath.replace(/"/g, '""')}"`,
-      "-DestinationPath",
-      `"${tmpDir.replace(/"/g, '""')}"`,
-      "-Force",
-    ].join(" ");
+  fs.copyFileSync(kmzPath, zipPath);
 
-    childProcess.execFileSync("powershell.exe", ["-NoProfile", "-Command", psCommand], {
-      stdio: "pipe",
-    });
-  } else {
-    childProcess.execFileSync("unzip", ["-q", kmzPath, "-d", tmpDir], {
-      stdio: "pipe",
-    });
+  try {
+    if (process.platform === "win32") {
+      const safeZip = zipPath.replace(/"/g, '""');
+      const safeTmp = tmpDir.replace(/"/g, '""');
+      const psCommand = `Expand-Archive -LiteralPath "${safeZip}" -DestinationPath "${safeTmp}" -Force`;
+
+      childProcess.execFileSync("powershell.exe", ["-NoProfile", "-Command", psCommand], {
+        stdio: "pipe",
+      });
+    } else {
+      childProcess.execFileSync("unzip", ["-q", zipPath, "-d", tmpDir], {
+        stdio: "pipe",
+      });
+    }
+  } catch (error) {
+    const stderr = error && error.stderr ? Buffer.from(error.stderr).toString("utf8") : "";
+    const message = stderr || (error && error.message ? error.message : "Unknown KMZ extraction error");
+    throw new Error(`Unable to extract KMZ private source. The file may be damaged or not a valid KMZ/ZIP container. ${message}`);
   }
 
   const kmlFiles = [];
@@ -173,7 +177,6 @@ function readKmlFromKmz(kmzPath) {
 
   return fs.readFileSync(kmlFiles[0], "utf8");
 }
-
 function findSourceFile() {
   ensureDir(ORIGINAL_DIR);
 
