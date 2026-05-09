@@ -50,6 +50,20 @@ type WorldPoint = {
   y: number;
 };
 
+type ViewState = {
+  zoomDelta: number;
+  panX: number;
+  panY: number;
+};
+
+type DragState = {
+  pointerId: number;
+  startX: number;
+  startY: number;
+  basePanX: number;
+  basePanY: number;
+};
+
 const MAP_WIDTH = 1200;
 const MAP_HEIGHT = 720;
 const TILE_SIZE = 256;
@@ -60,6 +74,9 @@ const copy = {
   input: "\u0393\u03c1\u03ac\u03c8\u03b5 \u03bf\u03b4\u03cc \u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae",
   search: "\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7",
   locate: "\u0392\u03c1\u03b5\u03c2 \u03c4\u03b7 \u03b8\u03ad\u03c3\u03b7 \u03bc\u03bf\u03c5",
+  zoomIn: "+",
+  zoomOut: "-",
+  reset: "Reset",
   loading: "\u03a6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b7 \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5 \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2...",
   loaded: "\u03a4\u03bf \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2 \u03c6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b5.",
   loadFailed: "\u0394\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b5 \u03c4\u03bf \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2.",
@@ -125,7 +142,7 @@ function extractPartsFromGeometry(geometry: Geometry | undefined, feature: Featu
   }
 
   if (type === "MultiPoint" && Array.isArray(coords)) {
-    return coords.filter(isPosition).map((point) => ({ kind: "point", points: [point], feature }));
+    return coords.filter(isPosition).map((point): Part => ({ kind: "point", points: [point], feature }));
   }
 
   if (type === "LineString" && Array.isArray(coords)) {
@@ -138,7 +155,7 @@ function extractPartsFromGeometry(geometry: Geometry | undefined, feature: Featu
       .filter(Array.isArray)
       .map((line) => line.filter(isPosition))
       .filter((points) => points.length >= 2)
-      .map((points) => ({ kind: "line", points, feature }));
+      .map((points): Part => ({ kind: "line", points, feature }));
   }
 
   if (type === "Polygon" && Array.isArray(coords)) {
@@ -146,7 +163,7 @@ function extractPartsFromGeometry(geometry: Geometry | undefined, feature: Featu
       .filter(Array.isArray)
       .map((ring) => ring.filter(isPosition))
       .filter((points) => points.length >= 3)
-      .map((points) => ({ kind: "polygon", points, feature }));
+      .map((points): Part => ({ kind: "polygon", points, feature }));
   }
 
   if (type === "MultiPolygon" && Array.isArray(coords)) {
@@ -298,6 +315,8 @@ export default function WaterNetworkClient() {
   const [manualCenter, setManualCenter] = useState<Center | null>(null);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState(copy.loading);
+  const [view, setView] = useState<ViewState>({ zoomDelta: 0, panX: 0, panY: 0 });
+  const [drag, setDrag] = useState<DragState | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -329,12 +348,29 @@ export default function WaterNetworkClient() {
     if (!bounds) return null;
 
     const center = manualCenter || getBoundsCenter(bounds);
-    const zoom = manualCenter?.zoom || (manualCenter ? 17 : chooseZoom(bounds));
-    const centerWorld = lonLatToWorld(center.lon, center.lat, zoom);
+    const baseZoom = manualCenter?.zoom || chooseZoom(bounds);
+    const zoom = clamp(baseZoom + view.zoomDelta, 9, 20);
+    const baseCenterWorld = lonLatToWorld(center.lon, center.lat, zoom);
+    const centerWorld = {
+      x: baseCenterWorld.x - view.panX,
+      y: baseCenterWorld.y - view.panY,
+    };
     const tiles = getTiles(centerWorld, zoom);
 
     return { center, centerWorld, zoom, tiles };
-  }, [bounds, manualCenter]);
+  }, [bounds, manualCenter, view]);
+
+  function resetView() {
+    setManualCenter(null);
+    setView({ zoomDelta: 0, panX: 0, panY: 0 });
+  }
+
+  function changeZoom(delta: number) {
+    setView((current) => ({
+      ...current,
+      zoomDelta: clamp(current.zoomDelta + delta, -8, 8),
+    }));
+  }
 
   async function searchAddress(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -349,8 +385,9 @@ export default function WaterNetworkClient() {
     setStatus(copy.searching);
 
     try {
+      const searchText = text.toLowerCase().includes("cyprus") ? text : `${text}, Cyprus`;
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(text)}`
+        `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(searchText)}`
       );
       const results = (await response.json()) as { lon: string; lat: string; display_name: string }[];
 
@@ -363,8 +400,9 @@ export default function WaterNetworkClient() {
         lon: Number(results[0].lon),
         lat: Number(results[0].lat),
         label: results[0].display_name,
-        zoom: 17,
+        zoom: 18,
       });
+      setView({ zoomDelta: 0, panX: 0, panY: 0 });
       setStatus(copy.searchDone);
     } catch {
       setStatus(copy.searchFailed);
@@ -385,8 +423,9 @@ export default function WaterNetworkClient() {
           lon: position.coords.longitude,
           lat: position.coords.latitude,
           label: copy.currentLocation,
-          zoom: 17,
+          zoom: 18,
         });
+        setView({ zoomDelta: 0, panX: 0, panY: 0 });
         setStatus(copy.locationDone);
       },
       () => {
@@ -416,6 +455,18 @@ export default function WaterNetworkClient() {
         <button type="button" style={styles.button} onClick={locateUser}>
           {copy.locate}
         </button>
+
+        <button type="button" style={styles.smallButton} onClick={() => changeZoom(1)}>
+          {copy.zoomIn}
+        </button>
+
+        <button type="button" style={styles.smallButton} onClick={() => changeZoom(-1)}>
+          {copy.zoomOut}
+        </button>
+
+        <button type="button" style={styles.smallButton} onClick={resetView}>
+          {copy.reset}
+        </button>
       </form>
 
       <div style={styles.status}>
@@ -426,7 +477,37 @@ export default function WaterNetworkClient() {
         </span>
       </div>
 
-      <div style={styles.map}>
+      <div
+        style={styles.map}
+        onWheel={(event) => {
+          event.preventDefault();
+          changeZoom(event.deltaY < 0 ? 1 : -1);
+        }}
+        onPointerDown={(event) => {
+          event.currentTarget.setPointerCapture(event.pointerId);
+          setDrag({
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+            basePanX: view.panX,
+            basePanY: view.panY,
+          });
+        }}
+        onPointerMove={(event) => {
+          if (!drag || drag.pointerId !== event.pointerId) return;
+
+          const dx = event.clientX - drag.startX;
+          const dy = event.clientY - drag.startY;
+
+          setView((current) => ({
+            ...current,
+            panX: drag.basePanX + dx,
+            panY: drag.basePanY + dy,
+          }));
+        }}
+        onPointerUp={() => setDrag(null)}
+        onPointerCancel={() => setDrag(null)}
+      >
         {!model ? (
           <div style={styles.empty}>
             <strong>{copy.noMap}</strong>
@@ -492,7 +573,7 @@ export default function WaterNetworkClient() {
                     points={pointsToSvg(sampled, model.centerWorld, model.zoom)}
                     fill="none"
                     stroke="#ffd15c"
-                    strokeWidth="3.2"
+                    strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     opacity="0.95"
@@ -536,29 +617,41 @@ const styles: Record<string, CSSProperties> = {
   },
   controls: {
     display: "grid",
-    gridTemplateColumns: "minmax(220px, 1fr) auto auto",
-    gap: 10,
-    padding: 14,
+    gridTemplateColumns: "minmax(220px, 1fr) auto auto auto auto auto",
+    gap: 8,
+    padding: 10,
     borderBottom: "1px solid rgba(246,200,95,.22)",
   },
   input: {
-    minHeight: 46,
-    borderRadius: 14,
+    minHeight: 40,
+    borderRadius: 12,
     border: "1px solid rgba(246,200,95,.35)",
     background: "#071020",
     color: "#fff8e7",
-    padding: "0 14px",
-    fontSize: 16,
+    padding: "0 12px",
+    fontSize: 15,
     outline: "none",
   },
   button: {
-    minHeight: 46,
-    borderRadius: 14,
+    minHeight: 40,
+    borderRadius: 12,
     border: "1px solid rgba(246,200,95,.45)",
     background: "rgba(246,200,95,.14)",
     color: "#fff8e7",
-    padding: "0 16px",
-    fontSize: 15,
+    padding: "0 13px",
+    fontSize: 14,
+    fontWeight: 900,
+    cursor: "pointer",
+    whiteSpace: "nowrap",
+  },
+  smallButton: {
+    minHeight: 40,
+    borderRadius: 12,
+    border: "1px solid rgba(246,200,95,.38)",
+    background: "rgba(246,200,95,.1)",
+    color: "#fff8e7",
+    padding: "0 10px",
+    fontSize: 14,
     fontWeight: 900,
     cursor: "pointer",
     whiteSpace: "nowrap",
@@ -567,17 +660,19 @@ const styles: Record<string, CSSProperties> = {
     display: "flex",
     flexWrap: "wrap",
     gap: 12,
-    padding: "10px 14px",
+    padding: "8px 12px",
     borderBottom: "1px solid rgba(246,200,95,.14)",
     color: "#d8e0f4",
-    fontSize: 14,
+    fontSize: 13,
   },
   map: {
     position: "relative",
-    height: "calc(100vh - 245px)",
-    minHeight: 520,
+    height: "calc(100vh - 210px)",
+    minHeight: 470,
     overflow: "hidden",
     background: "#0a1324",
+    touchAction: "none",
+    cursor: "grab",
   },
   tiles: {
     position: "absolute",
@@ -604,10 +699,10 @@ const styles: Record<string, CSSProperties> = {
   },
   mapLabel: {
     position: "absolute",
-    left: 14,
-    bottom: 14,
+    left: 12,
+    bottom: 12,
     maxWidth: "70%",
-    padding: "8px 11px",
+    padding: "7px 10px",
     borderRadius: 999,
     background: "rgba(2,4,11,.84)",
     border: "1px solid rgba(246,200,95,.32)",
@@ -622,7 +717,7 @@ const styles: Record<string, CSSProperties> = {
     display: "flex",
     flexWrap: "wrap",
     gap: 12,
-    padding: "12px 18px",
+    padding: "9px 12px",
     borderTop: "1px solid rgba(246,200,95,.18)",
     color: "#d8e0f4",
     fontSize: 13,

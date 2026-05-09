@@ -1,26 +1,27 @@
 {
-    "name":  "pantavion-planet",
-    "version":  "1.0.0",
-    "private":  true,
-    "scripts":  {
-                    "dev":  "next dev",
-                    "build":  "next build",
-                    "start":  "next start",
-                    "audit:pantavion":  "node scripts/pantavion-master-audit.cjs"
-                },
-    "dependencies":  {
-                         "@vercel/analytics":  "^2.0.1",
-                         "next":  "15.5.14",
-                         "react":  "18.2.0",
-                         "react-dom":  "18.2.0",
-                         "zustand":  "^5.0.12"
-                     },
-    "devDependencies":  {
-                            "@types/node":  "24.10.2",
-                            "@types/react":  "19.2.7",
-                            "autoprefixer":  "10.4.16",
-                            "postcss":  "8.4.31",
-                            "tailwindcss":  "3.3.3",
-                            "typescript":  "5.2.2"
-                        }
+  "name": "pantavion-planet",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "audit:pantavion": "node scripts/pantavion-master-audit.cjs",
+    "audit:water": "node scripts/pantavion-water-kernel-gate.cjs"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1",
+    "next": "15.5.14",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.2",
+    "@types/react": "19.2.7",
+    "autoprefixer": "10.4.16",
+    "postcss": "8.4.31",
+    "tailwindcss": "3.3.3",
+    "typescript": "5.2.2"
+  }
 }
