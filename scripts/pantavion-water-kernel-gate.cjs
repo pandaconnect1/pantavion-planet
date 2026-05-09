@@ -26,6 +26,21 @@ const sourceTruthScanFiles = [
   "app/professional/infrastructure/water/water-network-client.tsx",
 ];
 
+const dataTruthReportPath = "docs/requirements/pantavion-water-data-truth-report.md";
+
+const requiredDataTruthReportMarkers = [
+  "Google Earth KMZ file is the reference truth",
+  "The water network must remain intact",
+  "mobile file is allowed only as temporary preview/diagnostic material",
+  "5000 features is temporary",
+  "It is not final truth",
+  "Full private master source from the reference KMZ",
+  "No data loss",
+  "bbox, vector tiles, PMTiles, MBTiles, PostGIS",
+  "No data pipeline change without founder approval",
+];
+
+
 const forbiddenFinalTruthClaims = [
   {
     label: "mobile/preview/sample/subset/5000 described as final/full/master/complete truth",
@@ -74,7 +89,7 @@ function pass(message) {
   console.log("[PASS] " + message);
 }
 
-console.log("=== Pantavion Water Kernel Gate v2 ===");
+console.log("=== Pantavion Water Kernel Gate v3 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -130,6 +145,22 @@ function scanPublicGeodata(dir) {
 
 scanPublicGeodata(publicDir);
 
+
+console.log("=== Data Truth Report Enforcement v3 ===");
+
+if (!exists(dataTruthReportPath)) {
+  fail("Data Truth Report missing: " + dataTruthReportPath);
+} else {
+  const report = fs.readFileSync(path.join(root, dataTruthReportPath), "utf8");
+
+  for (const marker of requiredDataTruthReportMarkers) {
+    if (report.includes(marker)) {
+      pass("Data Truth Report marker present: " + marker);
+    } else {
+      fail("Data Truth Report marker missing: " + marker);
+    }
+  }
+}
 
 console.log("=== Source Truth Claim Scan v2 ===");
 
