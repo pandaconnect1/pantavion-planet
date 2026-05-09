@@ -6,9 +6,9 @@ export default function WaterInfrastructurePage() {
     <main style={styles.shell}>
       <header style={styles.header}>
         <p style={styles.kicker}>PANTAVION WATER INFRASTRUCTURE</p>
-        <h1 style={styles.title}>ίκτυο Ύδρευσης</h1>
+        <h1 style={styles.title}>Δίκτυο Ύδρευσης</h1>
         <p style={styles.subtitle}>
-          ράψε οδό ή περιοχή, ή πάτησε εντοπισμό θέσης.  χάρτης ανοίγει στο σημείο
+          Γράψε οδό ή περιοχή, ή πάτησε εντοπισμό θέσης. Ο χάρτης ανοίγει στο σημείο
           και εμφανίζει το ιδιωτικό δίκτυο ύδρευσης πάνω στον χάρτη.
         </p>
       </header>

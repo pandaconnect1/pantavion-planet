@@ -202,7 +202,7 @@ function getBoundsCenter(bounds: Bounds): Center {
   return {
     lon: (bounds.minLon + bounds.maxLon) / 2,
     lat: (bounds.minLat + bounds.maxLat) / 2,
-    label: "έντρο δικτύου",
+    label: "Κέντρο δικτύου",
   };
 }
 
@@ -260,7 +260,7 @@ function getName(feature: Feature) {
       feature.properties?.NAME ||
       feature.properties?.pantavionId ||
       feature.properties?.id ||
-      "τοιχείο δικτύου"
+      "Στοιχείο δικτύου"
   );
 }
 
@@ -269,7 +269,7 @@ export default function WaterNetworkClient() {
   const [selected, setSelected] = useState<Feature | null>(null);
   const [manualCenter, setManualCenter] = useState<Center | null>(null);
   const [query, setQuery] = useState("");
-  const [status, setStatus] = useState("όρτωση δικτύου ύδρευσης...");
+  const [status, setStatus] = useState("Φόρτωση δικτύου ύδρευσης...");
 
   useEffect(() => {
     let active = true;
@@ -281,11 +281,11 @@ export default function WaterNetworkClient() {
       .then((json: Collection) => {
         if (!active) return;
         setData(json);
-        setStatus("ο δίκτυο ύδρευσης φορτώθηκε.");
+        setStatus("Το δίκτυο ύδρευσης φορτώθηκε.");
       })
       .catch(() => {
         if (!active) return;
-        setStatus("εν φορτώθηκε το δίκτυο ύδρευσης.");
+        setStatus("Δεν φορτώθηκε το δίκτυο ύδρευσης.");
       });
 
     return () => {
@@ -314,11 +314,11 @@ export default function WaterNetworkClient() {
     const text = query.trim();
 
     if (!text) {
-      setStatus("ράψε οδό ή περιοχή.");
+      setStatus("ΓΓράψε οδό ή περιοχή.");
       return;
     }
 
-    setStatus("ναζήτηση οδού...");
+    setStatus("Αναζήτηση οδού...");
 
     try {
       const response = await fetch(
@@ -327,7 +327,7 @@ export default function WaterNetworkClient() {
       const results = (await response.json()) as { lon: string; lat: string; display_name: string }[];
 
       if (!results.length) {
-        setStatus("εν βρέθηκε η οδός ή η περιοχή.");
+        setStatus("Δεν βρέθηκε η οδός ή η περιοχή.");
         return;
       }
 
@@ -336,31 +336,31 @@ export default function WaterNetworkClient() {
         lat: Number(results[0].lat),
         label: results[0].display_name,
       });
-      setStatus(" χάρτης μετακινήθηκε στην οδό/περιοχή.");
+      setStatus("Ο χάρτης μετακινήθηκε στην οδό/περιοχή.");
     } catch {
-      setStatus(" αναζήτηση δεν ολοκληρώθηκε.");
+      setStatus("Η αναζήτηση δεν ολοκληρώθηκε.");
     }
   }
 
   function locateUser() {
     if (!navigator.geolocation) {
-      setStatus(" browser δεν υποστηρίζει εντοπισμό θέσης.");
+      setStatus("Ο browser δεν υποστηρίζει εντοπισμό θέσης.");
       return;
     }
 
-    setStatus("ντοπισμός θέσης...");
+    setStatus("Εντοπισμός θέσης...");
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setManualCenter({
           lon: position.coords.longitude,
           lat: position.coords.latitude,
-          label: " τρέχουσα θέση μου",
+          label: "Η τρέχουσα θέση μου",
         });
-        setStatus(" χάρτης μετακινήθηκε στη θέση σου.");
+        setStatus("Ο χάρτης μετακινήθηκε στη θέση σου.");
       },
       () => {
-        setStatus("εν επιτράπηκε ή δεν βρέθηκε η θέση σου.");
+        setStatus("Δεν επιτράπηκε ή δεν βρέθηκε η θέση σου.");
       },
       { enableHighAccuracy: true, timeout: 12000 }
     );
@@ -375,7 +375,7 @@ export default function WaterNetworkClient() {
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="ράψε οδό ή περιοχή"
+          placeholder="Γράψε οδό ή περιοχή"
           style={styles.input}
         />
 
@@ -389,10 +389,10 @@ export default function WaterNetworkClient() {
       </form>
 
       <div style={styles.status}>
-        <strong>ίκτυο ύδρευσης</strong>
+        <strong>Δίκτυο ύδρευσης</strong>
         <span>{status}</span>
         <span>
-          ροβολή: {shown} από {total} στοιχεία δικτύου
+          Προβολή: {shown} από {total} στοιχεία δικτύου
         </span>
       </div>
 
@@ -491,7 +491,7 @@ export default function WaterNetworkClient() {
       <footer style={styles.footer}>
         <span>KMZ/KML δημόσια λήψη: όχι</span>
         <span>Mock χρήστες: όχι</span>
-        <span>πιλογή: {selected ? getName(selected) : "καμία"}</span>
+        <span>Επιλογή: {selected ? getName(selected) : "καμία"}</span>
       </footer>
     </div>
   );
