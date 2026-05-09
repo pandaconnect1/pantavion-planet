@@ -1,4 +1,4 @@
-﻿const fs = require("fs");
+const fs = require("fs");
 const path = require("path");
 
 const root = process.cwd();
@@ -13,6 +13,7 @@ const requiredFiles = [
   "docs/requirements/pantavion-water-serving-architecture-decision.md",
   "core/infrastructure/water/water-serving-contract.ts",
   "core/infrastructure/water/controlled-water-serving-scaffold.ts",
+  "app/api/professional/infrastructure/water/serving/readiness/route.ts",
 ];
 
 const forbiddenRootFiles = [
@@ -180,7 +181,7 @@ function enforceMarkers(title, relativePath, markers) {
   }
 }
 
-console.log("=== Pantavion Water Kernel Gate v8 ===");
+console.log("=== Pantavion Water Kernel Gate v9 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -240,6 +241,33 @@ enforceMarkers("=== Serving Architecture Decision Enforcement v8 ===", servingAr
 enforceMarkers("=== Serving Contract Enforcement v8 ===", servingContractRelativePath, servingContractRequiredMarkers);
 enforceMarkers("=== Controlled Serving Scaffold Enforcement v8 ===", controlledServingScaffoldRelativePath, controlledServingRequiredMarkers);
 
+
+console.log("=== Serving Readiness Route Enforcement v9 ===");
+const servingReadinessRouteRelativePath = "app/api/professional/infrastructure/water/serving/readiness/route.ts";
+
+if (exists(servingReadinessRouteRelativePath)) {
+  const servingReadinessRoute = read(servingReadinessRouteRelativePath);
+
+  const servingReadinessRouteRequiredMarkers = [
+    "water-serving-readiness-route-v1",
+    "productionServingStatus: \"blocked\"",
+    "rendererStatus: \"blocked\"",
+    "mayReturnRawMaster: false",
+    "mayReturnCompleteNetwork: false",
+    "No water network data is returned by this route.",
+    "Founder/admin approval is required before production activation",
+    "spatialServingReady: false",
+    "accessControlReady: false"
+  ];
+
+  for (const marker of servingReadinessRouteRequiredMarkers) {
+    if (servingReadinessRoute.includes(marker)) {
+      pass("Serving Readiness Route marker present: " + marker);
+    } else {
+      fail("Serving Readiness Route marker missing: " + marker);
+    }
+  }
+}
 console.log("=== Source Truth Claim Scan v8 ===");
 
 for (const file of sourceTruthScanFiles) {
