@@ -103,7 +103,11 @@ export default function WaterInfrastructurePage() {
 const styles: Record<string, CSSProperties> = {
   shell: {
     minHeight: "100vh",
-    padding: 24,
+    boxSizing: "border-box",
+    overflowX: "hidden",
+    boxSizing: "border-box",
+    overflowX: "hidden",
+    padding: "32px 28px 32px 52px",
     background: "radial-gradient(circle at top, #172b55 0, #071020 48%, #02040b 100%)",
     color: "#fff8e7",
     fontFamily: "Arial, sans-serif",
@@ -199,7 +203,7 @@ const styles: Record<string, CSSProperties> = {
     gap: 9,
   },
   layerItem: {
-    padding: "9px 10px",
+    padding: "11px 16px",
     borderRadius: 12,
     background: "rgba(255,255,255,.045)",
     color: "#d8e0f4",
@@ -208,7 +212,7 @@ const styles: Record<string, CSSProperties> = {
   },
   ruleList: {
     margin: 0,
-    paddingLeft: 18,
+    paddingLeft: 28,
     color: "#d8e0f4",
     lineHeight: 1.55,
   },
@@ -218,3 +222,5 @@ const styles: Record<string, CSSProperties> = {
     lineHeight: 1.55,
   },
 };
+
+
