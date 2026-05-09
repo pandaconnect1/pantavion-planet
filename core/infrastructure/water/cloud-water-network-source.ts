@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "fs";
+﻿import { existsSync, readFileSync } from "fs";
 import path from "path";
 
 export type WaterGeometry = {
@@ -35,14 +35,6 @@ const localMobilePath = path.join(
   "water-network-mobile.geojson"
 );
 
-const localMobilePath = path.join(
-  process.cwd(),
-  "data",
-  "water-network-private",
-  "mobile",
-  "water-network-mobile.geojson"
-);
-
 const localProcessedPath = path.join(
   process.cwd(),
   "data",
@@ -57,7 +49,7 @@ export const emptyWaterNetworkCollection: WaterCollection = {
   pantavion: {
     status: "no_private_processed_layer",
     message:
-      "Δεν υπάρχει ακόμα ενεργό παραγωγικό private cloud layer ύδρευσης. Το Pantavion.com δεν μπορεί να διαβάσει τοπικά αρχεία από PC. Ρύθμισε PANTAVION_WATER_NETWORK_GEOJSON_URL σε private cloud/object storage.",
+      "Δεν υπάρχει ακόμα ενεργό production private cloud layer ύδρευσης. Το Pantavion.com δεν μπορεί να διαβάσει τοπικά αρχεία από PC. Για production πρέπει να ρυθμιστεί PANTAVION_WATER_NETWORK_GEOJSON_URL σε private cloud/object storage και να γίνει redeploy.",
     rawFileExposed: false,
     publicFolder: false,
     authorityOwner: "Γιώργος",
@@ -95,7 +87,7 @@ async function readCloudCollection(): Promise<WaterNetworkSourceResult | null> {
       return {
         collection: emptyWaterNetworkCollection,
         sourceMode: "error",
-        sourceLabel: "production cloud private GeoJSON",
+        sourceLabel: "production private cloud GeoJSON",
         sourceConfigured: true,
         errorMessage: `Cloud source returned HTTP ${response.status}`,
       };
@@ -107,14 +99,14 @@ async function readCloudCollection(): Promise<WaterNetworkSourceResult | null> {
     return {
       collection,
       sourceMode: "production_cloud",
-      sourceLabel: "production cloud private GeoJSON",
+      sourceLabel: "production private cloud GeoJSON",
       sourceConfigured: true,
     };
   } catch (error) {
     return {
       collection: emptyWaterNetworkCollection,
       sourceMode: "error",
-      sourceLabel: "production cloud private GeoJSON",
+      sourceLabel: "production private cloud GeoJSON",
       sourceConfigured: true,
       errorMessage: error instanceof Error ? error.message : "Unknown cloud read error",
     };
@@ -122,19 +114,22 @@ async function readCloudCollection(): Promise<WaterNetworkSourceResult | null> {
 }
 
 function readLocalCollection(): WaterNetworkSourceResult {
-  const preferredLocalPath = existsSync(localMobilePath) ? localMobilePath : localProcessedPath;
-  const preferredLocalLabel = existsSync(localMobilePath)
-    ? "local private mobile GeoJSON"
-    : "local private processed GeoJSON";
+  const hasMobile = existsSync(localMobilePath);
+  const hasProcessed = existsSync(localProcessedPath);
 
-  if (!existsSync(preferredLocalPath)) {
+  if (!hasMobile && !hasProcessed) {
     return {
       collection: emptyWaterNetworkCollection,
       sourceMode: "missing",
-      sourceLabel: "missing local/private and missing production cloud source",
+      sourceLabel: "missing production cloud source and missing local private GeoJSON",
       sourceConfigured: false,
     };
   }
+
+  const preferredLocalPath = hasMobile ? localMobilePath : localProcessedPath;
+  const preferredLocalLabel = hasMobile
+    ? "local private mobile GeoJSON preview"
+    : "local private processed GeoJSON fallback";
 
   try {
     const collection = parseCollection(readFileSync(preferredLocalPath, "utf8"));

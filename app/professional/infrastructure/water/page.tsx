@@ -1,43 +1,49 @@
-import type { CSSProperties } from "react";
+﻿import type { CSSProperties } from "react";
 import WaterNetworkClient from "./water-network-client";
 import FounderApprovalQueue from "./founder-approval-queue";
 import PantaAIWaterSentinel from "./pantaai-water-sentinel";
 
 const officialLayers = [
-  "�Z�?~�Z³Ï�?��Z³�Z¿�Z¯ Ï�Z´Ï�ZµÏ�?�Ï�'�Z·Ï�?s",
-  "�Zš�Zµ�Z½Ï�?zÏ�Z¹�Zº�Z¿�Z¯ �Z±�Z³Ï�?��Z³�Z¿�Z¯",
-  "�Z�?T�Z¬�Z½�ZµÏ�?s",
-  "�Z �Z±Ï�Z¿Ï�?��Z­Ï�?s",
-  "�Z�"�ZµÏ�?zÏ�Z·Ï�?z�Z­Ï�?s Ï�'Ï�,��Z¿Ï�?� Ï�?�Ï�,��Z¬ÏÏ�?��Z¿Ï�?��Z½",
-  "�Z�?��Z¾�Z±ÏÏ�?z�Z®�Z¼�Z±Ï�?z�Z±",
-  "�Z �Z±�Z»�Z±�Z¹Ï�' / �Z±�Z½Ï�?z�Z¹�Zº�Z±Ï�?z�ZµÏ�'Ï�?z�Z·�Z¼�Z­�Z½�Z¿ �Z´�Z¯�ZºÏ�?zÏ�?��Z¿",
-  "�Z£�Z·�Z¼�Zµ�Z¯�Z± Ï�?z�ZµÏ�?��Z½�Z¹�Zº�Z®Ï�?s �Z´�Z¹�ZµÏ�Z¸Ï�?��Z½Ï�'�Z·Ï�?s",
+  "γωγοί ύδρευσης",
+  "εντρικοί αγωγοί",
+  "εξαμενές",
+  "αροχές",
+  "ετρητές και τεχνικά σημεία",
+  "δροληψίες",
+  "αλαιά / ανενεργά τμήματα δικτύου",
+  "ημεία τεχνικής διεύθυνσης",
 ];
 
 const fieldRules = [
-  "�ZŸ Ï�?��Z¬ÏÏ�?z�Z·Ï�?s �Zµ�Z¯�Z½�Z±�Z¹ �Z· Ï�,�ÏÏŽÏ�?z�Z· �Z»�Zµ�Z¹Ï�?z�Z¿Ï�?�Ï�Z³�Z¯�Z±.",
-  "�Z�?" �Zº�Z¯�Z½�Z·Ï�'�Z· �Z³�Z¯�Z½�ZµÏ�?z�Z±�Z¹ �Z¼�Zµ �Z±Ï�?��Z®, Ï�'ÏÏÏ�'�Z¹�Z¼�Z¿ �Zº�Z±�Z¹ Ï�?�Ï�?�Ï�'�Z¹�Zº�Z® Ï�,��Z»�Z¿�Z®�Z³�Z·Ï�'�Z·.",
-  "�Z¤�Z¿ Ï�,�Ï�Z±�Z³�Z¼�Z±Ï�?z�Z¹�ZºÏ�' KMZ/KML �Z´�Zµ�Z½ �Zµ�ZºÏ�?z�Z¯�Z¸�ZµÏ�?z�Z±�Z¹ �Z´�Z·�Z¼Ï�'Ï�'�Z¹�Z±.",
-  "�Zš�Z¬�Z¸�Zµ �ZµÏ�?��Z±�Z¯Ï�'�Z¸�Z·Ï�?z�Z· Ï�,�ÏÏ�'Ï�'�Z²�Z±Ï�'�Z· �Zµ�Z³�ZºÏ�Z¯�Z½�ZµÏ�?z�Z±�Z¹ �Z±Ï�,�Ï�' Ï�?z�Z·�Z½ �Z�?~ÏÏ�?��Z®.",
-  "�Z¤�Z¿ �Z»�Z¿�Z³�Z¹Ï�'Ï�?z�Z®Ï�Z¹�Z¿, �Z· �Z±Ï�,��Z¿�Z¸�Z®�Zº�Z· �Zº�Z±�Z¹ Ï�?z�Z± Ï�'Ï�?��Z½�ZµÏ�Z³�Zµ�Z¯�Z± �Z¸�Z± Ï�'Ï�?��Z½�Z´�Zµ�Z¸�Z¿Ï�Z½ Ï�'�Zµ �ZµÏ�,�Ï�'�Z¼�Zµ�Z½�Z± Ï�'Ï�?z�Z¬�Z´�Z¹�Z±.",
+  " χάρτης είναι η πρώτη λειτουργία.",
+  " κίνηση γίνεται με απλή, γρήγορη και φυσική πλοήγηση.",
+  "ο πραγματικό KMZ/KML δεν εκτίθεται δημόσια.",
+  "άθε ευαίσθητη πρόσβαση εγκρίνεται από την ρχή.",
+  "ο λογιστήριο, η αποθήκη και τα συνεργεία θα συνδεθούν σε επόμενα στάδια.",
 ];
 
 export default function WaterInfrastructurePage() {
   return (
     <main style={styles.shell}>
       <section style={styles.hero}>
-        <div style={styles.lockBadge}>�Z �Z¡�ZŸ�Z£�Z¤�Z�?~�Z¤�Z�?��Z¥�Z�"�Z�?��Z�Z�?" �Z�?��Z �Z�?~�Z�?o�Z�?o�Z�?��Z�?��Z�"�Z�?~�Z¤�Z�"��Zš�Z�?" �Z�?��Z�ZŸ�Z¤�Z�?"�Z¤�Z�?~ �,· �Z¥�Z�?��Z¡�Z�?��Z¥�Z£�Z�?"</div>
-        <p style={styles.kicker}>Pantavion �ZµÏ�,��Z±�Z³�Z³�Zµ�Z»�Z¼�Z±Ï�?z�Z¹�Zº�Z® Ï�?�Ï�,��Z¿�Z´�Z¿�Z¼�Z®</p>
-        <h1 style={styles.title}>�Z�?�Z»�Zµ�Z³Ï�?��Z¿Ï�?s �Z�?��Z¹�ZºÏ�?zÏ�Z¿Ï�?� �ZŽ�Z´Ï�ZµÏ�?�Ï�'�Z·Ï�?s</h1>
+        <div style={styles.lockBadge}>
+             
+        </div>
+
+        <p style={styles.kicker}>Pantavion επαγγελματική υποδομή</p>
+
+        <h1 style={styles.title}>Έλεγχος ικτύου Ύδρευσης</h1>
+
         <p style={styles.subtitle}>
-          �Z Ï�Z±�Z³�Z¼�Z±Ï�?z�Z¹�ZºÏ�'Ï�?s Ï�?��Z¬ÏÏ�?z�Z·Ï�?s �ZµÏ�Z³�Z±Ï�'�Z¯�Z±Ï�?s �Z³�Z¹�Z± �Z±�Z³Ï�?��Z³�Z¿ÏÏ�?s, �Z²�Z¬�Z½�ZµÏ�?s, Ï�,��Z±Ï�Z¿Ï�?��Z­Ï�?s, Ï�?z�ZµÏ�?��Z½�Z¹�Zº�Z­Ï�?s �Z´�Z¹�ZµÏ�?��Z¸Ï�Z½Ï�'�Zµ�Z¹Ï�?s,
-          �Z²�Z»�Z¬�Z²�ZµÏ�?s, Ï�?�Ï�?�Ï�?z�Z¿�Z³Ï�Z±Ï�?��Z¯�ZµÏ�?s, Ï�'Ï�?��Z½�ZµÏ�Z³�Zµ�Z¯�Z± �Zº�Z±�Z¹ �Zµ�Z»�Zµ�Z³Ï�?�Ï�'�Z¼�Zµ�Z½�Z· Ï�,�ÏÏ�'Ï�'�Z²�Z±Ï�'�Z·.
+          ραγματικός χάρτης εργασίας για αγωγούς, βάνες, παροχές, τεχνικές διευθύνσεις,
+          βλάβες, φωτογραφίες, συνεργεία και ελεγχόμενη πρόσβαση.  παραγωγή στο
+          Pantavion.com χρειάζεται ιδιωτικό cloud source και όχι τοπικό αρχείο από PC.
         </p>
 
         <div style={styles.securityStrip}>
-          <span>�Zš�Z±�Z¼�Z¯�Z± �Z´�Z·�Z¼Ï�'Ï�'�Z¹�Z± �Z»�Z®Ï�?�Z· KMZ/KML</span>
-          <span>�Z�"��Z´�Z¹Ï�?�Ï�?z�Z¹�Zº�Z® �Z±Ï�,��Z¿�Z¸�Z®�Zº�ZµÏ�?�Ï�'�Z·</span>
-          <span>�Z�?�Z³�ZºÏ�Z¹Ï�'�Z· �Z±Ï�,�Ï�' �Z�?o�Z¹ÏŽÏ�Z³�Z¿</span>
+          <span>αμία δημόσια λήψη KMZ/KML</span>
+          <span>διωτική αποθήκευση</span>
+          <span>Έγκριση από ρχή / ιώργο</span>
           <span>Audit-ready</span>
           <span>Mobile-first</span>
         </div>
@@ -46,7 +52,8 @@ export default function WaterInfrastructurePage() {
       <section style={styles.workspace}>
         <aside style={styles.leftPanel}>
           <section style={styles.panel}>
-            <p style={styles.panelLabel}>�Z�?�Ï�,��Z¯Ï�,��Zµ�Z´�Z± �Z´�Z¹�ZºÏ�?zÏ�Z¿Ï�?�</p>
+            <p style={styles.panelLabel}>πίπεδα δικτύου</p>
+
             <div style={styles.layerList}>
               {officialLayers.map((layer) => (
                 <span key={layer} style={styles.layerItem}>
@@ -57,7 +64,8 @@ export default function WaterInfrastructurePage() {
           </section>
 
           <section style={styles.panel}>
-            <p style={styles.panelLabel}>�Zš�Z±�Z½Ï�'�Z½�ZµÏ�?s Ï�,��Zµ�Z´�Z¯�Z¿Ï�?�</p>
+            <p style={styles.panelLabel}>ανόνες πεδίου</p>
+
             <ul style={styles.ruleList}>
               {fieldRules.map((rule) => (
                 <li key={rule}>{rule}</li>
@@ -76,11 +84,14 @@ export default function WaterInfrastructurePage() {
           <PantaAIWaterSentinel />
 
           <section style={styles.panel}>
-            <p style={styles.panelLabel}>�Z¤�ZµÏ�?��Z½�Z¹�ZºÏ�' �Z±Ï�,��Z¿Ï�?z�Z­�Z»�ZµÏ�'�Z¼�Z±</p>
+            <p style={styles.panelLabel}>εχνικό αποτέλεσμα</p>
+
             <p style={styles.panelText}>
-              �Z¤�Z¿ module Ï�,�Ï�Z­Ï�,��Zµ�Z¹ �Z½�Z± �Z±�Z½�Z¿�Z¯�Z³�Zµ�Z¹ �Z³Ï�Z®�Z³�Z¿Ï�Z± Ï�'�Zµ PC, tablet �Zº�Z±�Z¹ �Zº�Z¹�Z½�Z·Ï�?zÏ�'. �Z�?" Ï�,��Z»�Z®Ï�Z·Ï�?s Ï�,��Z±Ï�Z±�Z³Ï�?��Z³�Z®
-              Ï�?�Ï�Zµ�Z¹�Z¬�Z¶�ZµÏ�?z�Z±�Z¹ Ï�'Ï�?z�Z· Ï�'Ï�?��Z½�Z­Ï�?��Zµ�Z¹�Z± vector tiles, Ï�,�Ï�Z±�Z³�Z¼�Z±Ï�?z�Z¹�ZºÏ�' auth, audit log, offline cache �Zº�Z±�Z¹
-              �Zº�Z±Ï�?z�Z±Ï�?�ÏŽÏ�Z·Ï�'�Z· �ZµÏ�Z³�Z±Ï�'�Z¹ÏŽ�Z½ �Z¼�Zµ Ï�?�Ï�?�Ï�?z�Z¿�Z³Ï�Z±Ï�?��Z¯�ZµÏ�?s.
+              ο module πρέπει να ανοίγει γρήγορα σε PC, tablet και κινητό. οπικά
+              πρέπει να προτιμά το mobile GeoJSON preview. το Pantavion.com πρέπει
+              να χρησιμοποιεί private cloud/object storage μέσω
+              PANTAVION_WATER_NETWORK_GEOJSON_URL. ο πλήρες αρχείο 152 MB δεν πρέπει
+              να φορτώνεται στο κινητό ως τελική λύση.
             </p>
           </section>
         </aside>
