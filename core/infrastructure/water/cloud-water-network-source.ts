@@ -49,10 +49,10 @@ export const emptyWaterNetworkCollection: WaterCollection = {
   pantavion: {
     status: "no_private_processed_layer",
     message:
-      "Δεν υπάρχει ακόμα ενεργό production private cloud layer ύδρευσης. Το Pantavion.com δεν μπορεί να διαβάσει τοπικά αρχεία από PC. Για production πρέπει να ρυθμιστεί PANTAVION_WATER_NETWORK_GEOJSON_URL σε private cloud/object storage και να γίνει redeploy.",
+      "Î”ÎµÎ½ Ï…Ï€Î¬ÏÏ‡ÎµÎ¹ Î±ÎºÏŒÎ¼Î± ÎµÎ½ÎµÏÎ³ÏŒ production private cloud layer ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚. Î¤Î¿ Pantavion.com Î´ÎµÎ½ Î¼Ï€Î¿ÏÎµÎ¯ Î½Î± Î´Î¹Î±Î²Î¬ÏƒÎµÎ¹ Ï„Î¿Ï€Î¹ÎºÎ¬ Î±ÏÏ‡ÎµÎ¯Î± Î±Ï€ÏŒ PC. Î“Î¹Î± production Ï€ÏÎ­Ï€ÎµÎ¹ Î½Î± ÏÏ…Î¸Î¼Î¹ÏƒÏ„ÎµÎ¯ PANTAVION_WATER_NETWORK_GEOJSON_URL ÏƒÎµ private cloud/object storage ÎºÎ±Î¹ Î½Î± Î³Î¯Î½ÎµÎ¹ redeploy.",
     rawFileExposed: false,
     publicFolder: false,
-    authorityOwner: "Γιώργος",
+    authorityOwner: "Î“Î¹ÏŽÏÎ³Î¿Ï‚",
   },
 };
 
@@ -69,33 +69,29 @@ function parseCollection(raw: string): WaterCollection {
 
 async function readCloudCollection(): Promise<WaterNetworkSourceResult | null> {
   const url = process.env.PANTAVION_WATER_NETWORK_GEOJSON_URL;
-  const bearerToken =
+  const token =
     process.env.PANTAVION_WATER_NETWORK_GEOJSON_BEARER_TOKEN ||
     process.env.BLOB_READ_WRITE_TOKEN;
 
   if (!url) return null;
 
   try {
-    const response = await fetch(url, {
-      cache: "no-store",
-      headers: bearerToken
-        ? {
-            Authorization: `Bearer ${bearerToken}`,
-          }
-        : undefined,
+    const result = await get(url, {
+      access: "private",
+      token,
     });
 
-    if (!response.ok) {
+    if (!result || result.statusCode !== 200) {
       return {
         collection: emptyWaterNetworkCollection,
         sourceMode: "error",
         sourceLabel: "production private cloud GeoJSON",
         sourceConfigured: true,
-        errorMessage: `Cloud source returned HTTP ${response.status}`,
+        errorMessage: `Private Blob source returned HTTP ${result?.statusCode || "unknown"}`,
       };
     }
 
-    const raw = await response.text();
+    const raw = await result.blob.text();
     const collection = parseCollection(raw);
 
     return {
@@ -110,7 +106,7 @@ async function readCloudCollection(): Promise<WaterNetworkSourceResult | null> {
       sourceMode: "error",
       sourceLabel: "production private cloud GeoJSON",
       sourceConfigured: true,
-      errorMessage: error instanceof Error ? error.message : "Unknown cloud read error",
+      errorMessage: error instanceof Error ? error.message : "Unknown private Blob read error",
     };
   }
 }
