@@ -1,4 +1,4 @@
-﻿import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import path from "path";
 
 export type WaterGeometry = {
@@ -69,7 +69,9 @@ function parseCollection(raw: string): WaterCollection {
 
 async function readCloudCollection(): Promise<WaterNetworkSourceResult | null> {
   const url = process.env.PANTAVION_WATER_NETWORK_GEOJSON_URL;
-  const bearerToken = process.env.PANTAVION_WATER_NETWORK_GEOJSON_BEARER_TOKEN;
+  const bearerToken =
+    process.env.PANTAVION_WATER_NETWORK_GEOJSON_BEARER_TOKEN ||
+    process.env.BLOB_READ_WRITE_TOKEN;
 
   if (!url) return null;
 
