@@ -1,7 +1,8 @@
 ﻿"use client";
 
 import type { CSSProperties, FormEvent } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type * as Leaflet from "leaflet";
 
 type Geometry = {
   type?: string;
@@ -12,7 +13,7 @@ type Geometry = {
 type Feature = {
   type?: string;
   geometry?: Geometry;
-  properties?: Record<string, unknown>;
+  properties?: Record<string, unknown> | null;
 };
 
 type Collection = {
@@ -22,306 +23,665 @@ type Collection = {
     featureCount?: number;
     returnedFeatureCount?: number;
     message?: string;
+    sourceMode?: string;
+    sourceLabel?: string;
   };
 };
 
-type Bounds = {
-  minLon: number;
-  maxLon: number;
-  minLat: number;
-  maxLat: number;
-};
+type AssetKind =
+  | "pipe"
+  | "proposed"
+  | "valve"
+  | "hydrant"
+  | "fitting"
+  | "connection"
+  | "symbol"
+  | "other";
 
-type Part = {
-  kind: "line" | "polygon" | "point";
-  points: number[][];
-  feature: Feature;
-};
-
-type Center = {
-  lon: number;
-  lat: number;
-  label: string;
-  zoom?: number;
-};
-
-type WorldPoint = {
-  x: number;
-  y: number;
-};
-
-type ViewState = {
-  zoomDelta: number;
-  panX: number;
-  panY: number;
-};
-
-type DragState = {
-  pointerId: number;
-  startX: number;
-  startY: number;
-  basePanX: number;
-  basePanY: number;
-};
-
-const MAP_WIDTH = 1200;
-const MAP_HEIGHT = 720;
-const TILE_SIZE = 256;
 const REQUEST_LIMIT = 5000;
-const MAX_POINTS = 140;
+const DEFAULT_CENTER: Leaflet.LatLngExpression = [34.707, 33.05];
+const DEFAULT_ZOOM = 13;
 
 const copy = {
-  input: "\u0393\u03c1\u03ac\u03c8\u03b5 \u03bf\u03b4\u03cc \u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae",
-  search: "\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7",
-  locate: "\u0392\u03c1\u03b5\u03c2 \u03c4\u03b7 \u03b8\u03ad\u03c3\u03b7 \u03bc\u03bf\u03c5",
-  zoomIn: "+",
-  zoomOut: "-",
+  input: "ράψε οδό ή περιοχή",
+  search: "ναζήτηση",
+  locate: "ρες τη θέση μου",
   reset: "Reset",
-  loading: "\u03a6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b7 \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5 \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2...",
-  loaded: "\u03a4\u03bf \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2 \u03c6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b5.",
-  loadFailed: "\u0394\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b5 \u03c4\u03bf \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2.",
-  writeAddress: "\u0393\u03c1\u03ac\u03c8\u03b5 \u03bf\u03b4\u03cc \u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae.",
-  searching: "\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7 \u03bf\u03b4\u03bf\u03cd...",
-  notFound: "\u0394\u03b5\u03bd \u03b2\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03b7 \u03bf\u03b4\u03cc\u03c2 \u03ae \u03b7 \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae.",
-  searchDone: "\u039f \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03bc\u03b5\u03c4\u03b1\u03ba\u03b9\u03bd\u03ae\u03b8\u03b7\u03ba\u03b5 \u03c3\u03c4\u03b7\u03bd \u03bf\u03b4\u03cc \u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae.",
-  searchFailed: "\u0397 \u03b1\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7 \u03b4\u03b5\u03bd \u03bf\u03bb\u03bf\u03ba\u03bb\u03b7\u03c1\u03ce\u03b8\u03b7\u03ba\u03b5.",
-  noGeo: "\u039f browser \u03b4\u03b5\u03bd \u03c5\u03c0\u03bf\u03c3\u03c4\u03b7\u03c1\u03af\u03b6\u03b5\u03b9 \u03b5\u03bd\u03c4\u03bf\u03c0\u03b9\u03c3\u03bc\u03cc \u03b8\u03ad\u03c3\u03b7\u03c2.",
-  locating: "\u0395\u03bd\u03c4\u03bf\u03c0\u03b9\u03c3\u03bc\u03cc\u03c2 \u03b8\u03ad\u03c3\u03b7\u03c2...",
-  locationDone: "\u039f \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03bc\u03b5\u03c4\u03b1\u03ba\u03b9\u03bd\u03ae\u03b8\u03b7\u03ba\u03b5 \u03c3\u03c4\u03b7 \u03b8\u03ad\u03c3\u03b7 \u03c3\u03bf\u03c5.",
-  locationFailed: "\u0394\u03b5\u03bd \u03b5\u03c0\u03b9\u03c4\u03c1\u03ac\u03c0\u03b7\u03ba\u03b5 \u03ae \u03b4\u03b5\u03bd \u03b2\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03b7 \u03b8\u03ad\u03c3\u03b7 \u03c3\u03bf\u03c5.",
-  currentLocation: "\u0397 \u03c4\u03c1\u03ad\u03c7\u03bf\u03c5\u03c3\u03b1 \u03b8\u03ad\u03c3\u03b7 \u03bc\u03bf\u03c5",
-  networkCenter: "\u039a\u03ad\u03bd\u03c4\u03c1\u03bf \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5",
-  network: "\u0394\u03af\u03ba\u03c4\u03c5\u03bf \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2",
-  shown: "\u03a0\u03c1\u03bf\u03b2\u03bf\u03bb\u03ae",
-  from: "\u03b1\u03c0\u03cc",
-  items: "\u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03b1 \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5",
-  noMap: "\u0394\u03b5\u03bd \u03b5\u03bc\u03c6\u03b1\u03bd\u03af\u03c3\u03c4\u03b7\u03ba\u03b5 \u03c4\u03bf \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2.",
-  checkSource: "\u0388\u03bb\u03b5\u03b3\u03be\u03b5 \u03c4\u03bf \u03b1\u03c1\u03c7\u03b9\u03ba\u03cc \u03b1\u03c1\u03c7\u03b5\u03af\u03bf \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5.",
-  selected: "\u0395\u03c0\u03b9\u03bb\u03b5\u03b3\u03bc\u03ad\u03bd\u03bf",
-  none: "\u03ba\u03b1\u03bc\u03af\u03b1 \u03b5\u03c0\u03b9\u03bb\u03bf\u03b3\u03ae",
-  item: "\u03a3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03bf \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5",
-  protectedText: "\u0399\u03b4\u03b9\u03c9\u03c4\u03b9\u03ba\u03cc \u03b1\u03c1\u03c7\u03b5\u03af\u03bf \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5: \u03c0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c4\u03b5\u03c5\u03bc\u03ad\u03bd\u03bf",
+  loading: "όρτωση πραγματικού δικτύου ύδρευσης...",
+  loaded: "ο δίκτυο ύδρευσης φορτώθηκε.",
+  loadFailed: "εν φορτώθηκε το δίκτυο ύδρευσης.",
+  writeAddress: "ράψε οδό ή περιοχή.",
+  searching: "ναζήτηση οδού...",
+  notFound: "εν βρέθηκε η οδός ή η περιοχή.",
+  searchDone: " χάρτης μετακινήθηκε στην οδό ή περιοχή.",
+  searchFailed: " αναζήτηση δεν ολοκληρώθηκε.",
+  noGeo: " browser δεν υποστηρίζει εντοπισμό θέσης.",
+  locating: "ντοπισμός θέσης...",
+  locationDone: " χάρτης μετακινήθηκε στη θέση σου.",
+  locationFailed: "εν επιτράπηκε ή δεν βρέθηκε η θέση σου.",
+  network: "ίκτυο ύδρευσης",
+  shown: "ροβολή",
+  from: "από",
+  items: "στοιχεία δικτύου",
+  selected: "πιλεγμένο",
+  none: "καμία επιλογή",
+  protectedText: "διωτικό αρχείο δικτύου: προστατευμένο",
+  satellite: "Satellite βάση όπως Google Earth",
+  pipe: "ωλήνες / δίκτυο",
+  proposed: "ροτεινόμενο / κύριο",
+  valve: "άνες",
+  hydrant: "δροστόμια",
+  fitting: "Fittings",
+  connection: "υνδέσεις",
+  symbol: "ύμβολα",
+  other: "Άλλα",
 };
 
-function clamp(value: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, value));
+const kindLabels: Record<AssetKind, string> = {
+  pipe: copy.pipe,
+  proposed: copy.proposed,
+  valve: copy.valve,
+  hydrant: copy.hydrant,
+  fitting: copy.fitting,
+  connection: copy.connection,
+  symbol: copy.symbol,
+  other: copy.other,
+};
+
+const fallbackColors: Record<AssetKind, string> = {
+  pipe: "#ff3434",
+  proposed: "#35ff78",
+  valve: "#00e5ff",
+  hydrant: "#2577ff",
+  fitting: "#ff38d4",
+  connection: "#ffcf33",
+  symbol: "#8d5cff",
+  other: "#ffffff",
+};
+
+const leafletCss = `
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #08111f;
+  font-family: Arial, sans-serif;
+  cursor: grab;
+}
+.leaflet-container:active {
+  cursor: grabbing;
+}
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-tile-container,
+.leaflet-pane > svg,
+.leaflet-pane > canvas,
+.leaflet-zoom-box,
+.leaflet-image-layer,
+.leaflet-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.leaflet-tile {
+  border: 0;
+  visibility: hidden;
+}
+.leaflet-tile-loaded {
+  visibility: inherit;
+}
+.leaflet-pane {
+  z-index: 400;
+}
+.leaflet-tile-pane {
+  z-index: 200;
+}
+.leaflet-overlay-pane {
+  z-index: 400;
+}
+.leaflet-shadow-pane {
+  z-index: 500;
+}
+.leaflet-marker-pane {
+  z-index: 600;
+}
+.leaflet-tooltip-pane {
+  z-index: 650;
+}
+.leaflet-popup-pane {
+  z-index: 700;
+}
+.leaflet-control-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 800;
+}
+.leaflet-top,
+.leaflet-bottom {
+  position: absolute;
+  z-index: 1000;
+  pointer-events: none;
+}
+.leaflet-top {
+  top: 10px;
+}
+.leaflet-right {
+  right: 10px;
+}
+.leaflet-left {
+  left: 10px;
+}
+.leaflet-bottom {
+  bottom: 10px;
+}
+.leaflet-control {
+  position: relative;
+  z-index: 1000;
+  pointer-events: auto;
+}
+.leaflet-bar {
+  border: 1px solid rgba(246, 200, 95, .5);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(5, 12, 24, .82);
+  box-shadow: 0 10px 25px rgba(0,0,0,.35);
+}
+.leaflet-bar a {
+  display: block;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  text-decoration: none;
+  color: #fff8e7;
+  font-weight: 900;
+  border-bottom: 1px solid rgba(246, 200, 95, .28);
+}
+.leaflet-bar a:last-child {
+  border-bottom: 0;
+}
+.leaflet-popup {
+  position: absolute;
+  text-align: left;
+  margin-bottom: 16px;
+}
+.leaflet-popup-content-wrapper {
+  background: rgba(5, 12, 24, .96);
+  color: #fff8e7;
+  border: 1px solid rgba(246,200,95,.42);
+  border-radius: 14px;
+  box-shadow: 0 14px 35px rgba(0,0,0,.45);
+}
+.leaflet-popup-content {
+  margin: 10px 12px;
+  min-width: 190px;
+  max-width: 280px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.leaflet-popup-tip-container {
+  position: absolute;
+  left: 50%;
+  margin-left: -10px;
+  width: 20px;
+  height: 10px;
+  overflow: hidden;
+}
+.leaflet-popup-tip {
+  width: 14px;
+  height: 14px;
+  padding: 1px;
+  margin: -8px auto 0;
+  transform: rotate(45deg);
+  background: rgba(5, 12, 24, .96);
+  border: 1px solid rgba(246,200,95,.42);
+}
+.leaflet-popup-close-button {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  color: #fff8e7;
+  text-decoration: none;
+  font-weight: 900;
+}
+.leaflet-interactive {
+  cursor: pointer;
+}
+`;
+
+function asString(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
 }
 
-function isPosition(value: unknown): value is number[] {
-  return (
-    Array.isArray(value) &&
-    Number.isFinite(value[0]) &&
-    Number.isFinite(value[1]) &&
-    Math.abs(value[0]) <= 180 &&
-    Math.abs(value[1]) <= 90
-  );
+function escapeHtml(value: unknown) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
-function samplePoints(points: number[][], max: number) {
-  if (points.length <= max) return points;
-  if (max <= 2) return [points[0], points[points.length - 1]];
+function parseKmlColor(value: string) {
+  const clean = value.replace("#", "").trim();
 
-  const output: number[][] = [];
-  const step = (points.length - 1) / (max - 1);
-
-  for (let index = 0; index < max; index += 1) {
-    output.push(points[Math.round(index * step)]);
+  if (/^[0-9a-fA-F]{6}$/.test(clean)) {
+    return `#${clean}`;
   }
 
-  return output;
-}
-
-function extractPartsFromGeometry(geometry: Geometry | undefined, feature: Feature): Part[] {
-  if (!geometry) return [];
-
-  const type = geometry.type || "";
-  const coords = geometry.coordinates;
-
-  if (type === "Point" && isPosition(coords)) {
-    return [{ kind: "point", points: [coords], feature }];
+  if (/^[0-9a-fA-F]{8}$/.test(clean)) {
+    const blue = clean.slice(2, 4);
+    const green = clean.slice(4, 6);
+    const red = clean.slice(6, 8);
+    return `#${red}${green}${blue}`;
   }
 
-  if (type === "MultiPoint" && Array.isArray(coords)) {
-    return coords.filter(isPosition).map((point): Part => ({ kind: "point", points: [point], feature }));
-  }
-
-  if (type === "LineString" && Array.isArray(coords)) {
-    const points = coords.filter(isPosition);
-    return points.length >= 2 ? [{ kind: "line", points, feature }] : [];
-  }
-
-  if (type === "MultiLineString" && Array.isArray(coords)) {
-    return coords
-      .filter(Array.isArray)
-      .map((line) => line.filter(isPosition))
-      .filter((points) => points.length >= 2)
-      .map((points): Part => ({ kind: "line", points, feature }));
-  }
-
-  if (type === "Polygon" && Array.isArray(coords)) {
-    return coords
-      .filter(Array.isArray)
-      .map((ring) => ring.filter(isPosition))
-      .filter((points) => points.length >= 3)
-      .map((points): Part => ({ kind: "polygon", points, feature }));
-  }
-
-  if (type === "MultiPolygon" && Array.isArray(coords)) {
-    const parts: Part[] = [];
-
-    for (const polygon of coords) {
-      if (!Array.isArray(polygon)) continue;
-
-      for (const ring of polygon) {
-        if (!Array.isArray(ring)) continue;
-
-        const points = ring.filter(isPosition);
-        if (points.length >= 3) parts.push({ kind: "polygon", points, feature });
-      }
-    }
-
-    return parts;
-  }
-
-  if (type === "GeometryCollection" && Array.isArray(geometry.geometries)) {
-    return geometry.geometries.flatMap((child) => extractPartsFromGeometry(child, feature));
-  }
-
-  return [];
+  return "";
 }
 
-function getAllParts(features: Feature[]) {
-  return features.flatMap((feature) => extractPartsFromGeometry(feature.geometry, feature));
+function textOfProperties(properties: Record<string, unknown>) {
+  return Object.entries(properties)
+    .map(([key, value]) => `${key}:${String(value ?? "")}`)
+    .join(" ")
+    .toLowerCase();
 }
 
-function getBounds(parts: Part[]): Bounds | null {
-  let minLon = Number.POSITIVE_INFINITY;
-  let maxLon = Number.NEGATIVE_INFINITY;
-  let minLat = Number.POSITIVE_INFINITY;
-  let maxLat = Number.NEGATIVE_INFINITY;
-  let found = false;
+function getKind(properties: Record<string, unknown>): AssetKind {
+  const direct =
+    asString(properties.pantavionAssetType) ||
+    asString(properties.assetType) ||
+    asString(properties.asset_type) ||
+    asString(properties.kind) ||
+    asString(properties.category) ||
+    asString(properties.type);
 
-  for (const part of parts) {
-    for (const point of part.points) {
-      const lon = point[0];
-      const lat = point[1];
+  const text = `${direct} ${textOfProperties(properties)}`.toLowerCase();
 
-      if (!Number.isFinite(lon) || !Number.isFinite(lat)) continue;
-
-      minLon = Math.min(minLon, lon);
-      maxLon = Math.max(maxLon, lon);
-      minLat = Math.min(minLat, lat);
-      maxLat = Math.max(maxLat, lat);
-      found = true;
-    }
+  if (
+    text.includes("valve") ||
+    text.includes("vana") ||
+    text.includes("βάνα") ||
+    text.includes("βαν") ||
+    text.includes("δικλείδα")
+  ) {
+    return "valve";
   }
 
-  return found ? { minLon, maxLon, minLat, maxLat } : null;
-}
-
-function lonLatToWorld(lon: number, lat: number, zoom: number): WorldPoint {
-  const scale = TILE_SIZE * Math.pow(2, zoom);
-  const safeLat = clamp(lat, -85.05112878, 85.05112878);
-  const sinLat = Math.sin((safeLat * Math.PI) / 180);
-
-  return {
-    x: ((lon + 180) / 360) * scale,
-    y: (0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI)) * scale,
-  };
-}
-
-function chooseZoom(bounds: Bounds) {
-  for (let zoom = 17; zoom >= 9; zoom -= 1) {
-    const a = lonLatToWorld(bounds.minLon, bounds.maxLat, zoom);
-    const b = lonLatToWorld(bounds.maxLon, bounds.minLat, zoom);
-    const width = Math.abs(b.x - a.x);
-    const height = Math.abs(b.y - a.y);
-
-    if (width <= MAP_WIDTH * 0.88 && height <= MAP_HEIGHT * 0.88) return zoom;
+  if (
+    text.includes("hydrant") ||
+    text.includes("fire") ||
+    text.includes("υδροστόμιο") ||
+    text.includes("πυροσβεσ")
+  ) {
+    return "hydrant";
   }
 
-  return 13;
-}
-
-function getBoundsCenter(bounds: Bounds): Center {
-  return {
-    lon: (bounds.minLon + bounds.maxLon) / 2,
-    lat: (bounds.minLat + bounds.maxLat) / 2,
-    label: copy.networkCenter,
-  };
-}
-
-function project(point: number[], centerWorld: WorldPoint, zoom: number) {
-  const world = lonLatToWorld(point[0], point[1], zoom);
-
-  return {
-    x: MAP_WIDTH / 2 + (world.x - centerWorld.x),
-    y: MAP_HEIGHT / 2 + (world.y - centerWorld.y),
-  };
-}
-
-function pointsToSvg(points: number[][], centerWorld: WorldPoint, zoom: number) {
-  return points
-    .map((point) => {
-      const projected = project(point, centerWorld, zoom);
-      return `${projected.x.toFixed(2)},${projected.y.toFixed(2)}`;
-    })
-    .join(" ");
-}
-
-function getTiles(centerWorld: WorldPoint, zoom: number) {
-  const left = centerWorld.x - MAP_WIDTH / 2;
-  const top = centerWorld.y - MAP_HEIGHT / 2;
-  const right = centerWorld.x + MAP_WIDTH / 2;
-  const bottom = centerWorld.y + MAP_HEIGHT / 2;
-
-  const minTileX = Math.floor(left / TILE_SIZE);
-  const maxTileX = Math.floor(right / TILE_SIZE);
-  const minTileY = Math.floor(top / TILE_SIZE);
-  const maxTileY = Math.floor(bottom / TILE_SIZE);
-  const tileCount = Math.pow(2, zoom);
-  const tiles: { x: number; y: number; left: number; top: number }[] = [];
-
-  for (let tileX = minTileX; tileX <= maxTileX; tileX += 1) {
-    for (let tileY = minTileY; tileY <= maxTileY; tileY += 1) {
-      if (tileY < 0 || tileY >= tileCount) continue;
-
-      tiles.push({
-        x: ((tileX % tileCount) + tileCount) % tileCount,
-        y: tileY,
-        left: tileX * TILE_SIZE - left,
-        top: tileY * TILE_SIZE - top,
-      });
-    }
+  if (
+    text.includes("fitting") ||
+    text.includes("coupling") ||
+    text.includes("elbow") ||
+    text.includes("tee") ||
+    text.includes("ταυ") ||
+    text.includes("εξάρτημα")
+  ) {
+    return "fitting";
   }
 
-  return tiles;
+  if (
+    text.includes("connection") ||
+    text.includes("service") ||
+    text.includes("σύνδεση") ||
+    text.includes("παροχή")
+  ) {
+    return "connection";
+  }
+
+  if (
+    text.includes("proposed") ||
+    text.includes("proposal") ||
+    text.includes("future") ||
+    text.includes("προτειν")
+  ) {
+    return "proposed";
+  }
+
+  if (
+    text.includes("symbol") ||
+    text.includes("σημείο") ||
+    text.includes("marker")
+  ) {
+    return "symbol";
+  }
+
+  if (
+    text.includes("pipe") ||
+    text.includes("polyline") ||
+    text.includes("line") ||
+    text.includes("σωλήν") ||
+    text.includes("δίκτυο")
+  ) {
+    return "pipe";
+  }
+
+  return "other";
 }
 
-function getName(feature: Feature) {
+function getFeatureColor(properties: Record<string, unknown>, kind: AssetKind) {
+  const direct =
+    asString(properties.pantavionColor) ||
+    asString(properties.stroke) ||
+    asString(properties["stroke-color"]) ||
+    asString(properties.color) ||
+    asString(properties.Color) ||
+    asString(properties.kmlColor);
+
+  const parsed = direct ? parseKmlColor(direct) : "";
+  return parsed || fallbackColors[kind];
+}
+
+function getFeatureName(feature: GeoJSON.Feature) {
+  const properties = (feature.properties || {}) as Record<string, unknown>;
+
   return String(
-    feature.properties?.name ||
-      feature.properties?.Name ||
-      feature.properties?.NAME ||
-      feature.properties?.pantavionId ||
-      feature.properties?.id ||
-      copy.item
+    properties.name ||
+      properties.Name ||
+      properties.NAME ||
+      properties.pantavionId ||
+      properties.id ||
+      properties.description ||
+      copy.network
   );
+}
+
+function popupHtml(feature: GeoJSON.Feature) {
+  const properties = (feature.properties || {}) as Record<string, unknown>;
+  const kind = getKind(properties);
+  const name = getFeatureName(feature);
+
+  const usefulRows = Object.entries(properties)
+    .filter(([key, value]) => {
+      if (value === null || value === undefined || value === "") return false;
+      return [
+        "diameter",
+        "Diameter",
+        "DIAMETER",
+        "material",
+        "Material",
+        "MATERIAL",
+        "pressure",
+        "Pressure",
+        "status",
+        "Status",
+        "pantavionId",
+        "styleUrl",
+      ].includes(key);
+    })
+    .slice(0, 6)
+    .map(
+      ([key, value]) =>
+        `<div><strong>${escapeHtml(key)}:</strong> ${escapeHtml(value)}</div>`
+    )
+    .join("");
+
+  return `
+    <div>
+      <div style="font-weight:900;color:#f6c85f;margin-bottom:5px">${escapeHtml(name)}</div>
+      <div><strong>ύπος:</strong> ${escapeHtml(kindLabels[kind])}</div>
+      ${usefulRows}
+    </div>
+  `;
+}
+
+function pathStyle(feature?: GeoJSON.Feature): Leaflet.PathOptions {
+  const properties = (feature?.properties || {}) as Record<string, unknown>;
+  const kind = getKind(properties);
+  const color = getFeatureColor(properties, kind);
+
+  return {
+    color,
+    weight: kind === "proposed" ? 4 : kind === "pipe" ? 2.4 : 3.2,
+    opacity: 0.96,
+    fillColor: color,
+    fillOpacity: kind === "pipe" || kind === "proposed" ? 0.12 : 0.82,
+    dashArray: kind === "proposed" ? "8 6" : undefined,
+  };
+}
+
+function pointRadius(kind: AssetKind) {
+  if (kind === "valve") return 5.5;
+  if (kind === "hydrant") return 6;
+  if (kind === "fitting") return 5;
+  if (kind === "connection") return 4.5;
+  if (kind === "symbol") return 5;
+  return 4;
+}
+
+function transliterateGreek(input: string) {
+  const map: Record<string, string> = {
+    : "A",
+    : "V",
+    : "G",
+    : "D",
+    : "E",
+    : "Z",
+    : "I",
+    : "Th",
+    : "I",
+    : "K",
+    : "L",
+    : "M",
+    : "N",
+    : "X",
+    : "O",
+    : "P",
+    : "R",
+    : "S",
+    : "T",
+    : "Y",
+    : "F",
+    : "Ch",
+    Ψ: "Ps",
+    : "O",
+    Ά: "A",
+    Έ: "E",
+    Ή: "I",
+    Ί: "I",
+    Ό: "O",
+    Ύ: "Y",
+    Ώ: "O",
+    Ϊ: "I",
+    Ϋ: "Y",
+    α: "a",
+    β: "v",
+    γ: "g",
+    δ: "d",
+    ε: "e",
+    ζ: "z",
+    η: "i",
+    θ: "th",
+    ι: "i",
+    κ: "k",
+    λ: "l",
+    μ: "m",
+    ν: "n",
+    ξ: "x",
+    ο: "o",
+    π: "p",
+    ρ: "r",
+    σ: "s",
+    ς: "s",
+    τ: "t",
+    υ: "y",
+    φ: "f",
+    χ: "ch",
+    ψ: "ps",
+    ω: "o",
+    ά: "a",
+    έ: "e",
+    ή: "i",
+    ί: "i",
+    ό: "o",
+    ύ: "y",
+    ώ: "o",
+    ϊ: "i",
+    ϋ: "y",
+    ΐ: "i",
+    ΰ: "y",
+  };
+
+  return input
+    .split("")
+    .map((char) => map[char] || char)
+    .join("");
+}
+
+function buildSearchCandidates(input: string) {
+  const clean = input.trim();
+  const latin = transliterateGreek(clean);
+
+  return Array.from(
+    new Set([
+      clean,
+      `${clean}, ερμασόγεια, εμεσός, ύπρος`,
+      `${clean}, Germasogeia, Limassol, Cyprus`,
+      `${clean}, Lemesos, Cyprus`,
+      `${clean}, Cyprus`,
+      latin,
+      `${latin}, Germasogeia, Limassol, Cyprus`,
+      `${latin}, Lemesos, Cyprus`,
+    ])
+  ).filter(Boolean);
+}
+
+async function geocodeCyprus(input: string) {
+  const candidates = buildSearchCandidates(input);
+
+  for (const candidate of candidates) {
+    const url = new URL("https://nominatim.openstreetmap.org/search");
+    url.searchParams.set("format", "json");
+    url.searchParams.set("limit", "1");
+    url.searchParams.set("addressdetails", "1");
+    url.searchParams.set("countrycodes", "cy");
+    url.searchParams.set("accept-language", "el,en");
+    url.searchParams.set("q", candidate);
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) continue;
+
+    const results = (await response.json()) as {
+      lon: string;
+      lat: string;
+      display_name: string;
+    }[];
+
+    const first = results[0];
+    if (!first) continue;
+
+    const lon = Number(first.lon);
+    const lat = Number(first.lat);
+
+    if (Number.isFinite(lon) && Number.isFinite(lat)) {
+      return {
+        lon,
+        lat,
+        label: first.display_name,
+      };
+    }
+  }
+
+  return null;
 }
 
 export default function WaterNetworkClient() {
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const leafletRef = useRef<typeof Leaflet | null>(null);
+  const mapRef = useRef<Leaflet.Map | null>(null);
+  const networkLayerRef = useRef<Leaflet.GeoJSON | null>(null);
+  const searchMarkerRef = useRef<Leaflet.Layer | null>(null);
+  const locationMarkerRef = useRef<Leaflet.Layer | null>(null);
+
   const [data, setData] = useState<Collection | null>(null);
-  const [selected, setSelected] = useState<Feature | null>(null);
-  const [manualCenter, setManualCenter] = useState<Center | null>(null);
+  const [selectedName, setSelectedName] = useState(copy.none);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState(copy.loading);
-  const [view, setView] = useState<ViewState>({ zoomDelta: 0, panX: 0, panY: 0 });
-  const [drag, setDrag] = useState<DragState | null>(null);
+  const [mapReady, setMapReady] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function bootMap() {
+      const leaflet = await import("leaflet");
+      if (cancelled || !mapContainerRef.current || mapRef.current) return;
+
+      leafletRef.current = leaflet;
+
+      const map = leaflet.map(mapContainerRef.current, {
+        center: DEFAULT_CENTER,
+        zoom: DEFAULT_ZOOM,
+        zoomControl: true,
+        attributionControl: false,
+        preferCanvas: true,
+      });
+
+      leaflet
+        .tileLayer(
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          {
+            maxZoom: 20,
+            attribution: "Tiles © Esri",
+          }
+        )
+        .addTo(map);
+
+      leaflet
+        .tileLayer(
+          "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+          {
+            maxZoom: 20,
+            opacity: 0.78,
+            attribution: "Labels © Esri",
+          }
+        )
+        .addTo(map);
+
+      mapRef.current = map;
+
+      window.setTimeout(() => {
+        map.invalidateSize();
+        setMapReady(true);
+      }, 80);
+    }
+
+    bootMap();
+
+    return () => {
+      cancelled = true;
+      mapRef.current?.remove();
+      mapRef.current = null;
+      networkLayerRef.current = null;
+      searchMarkerRef.current = null;
+      locationMarkerRef.current = null;
+    };
+  }, []);
 
   useEffect(() => {
     let active = true;
 
-    fetch(`/api/professional/infrastructure/water/network?limit=${REQUEST_LIMIT}`, {
+    fetch(`/api/professional/infrastructure/water/network?limit=${REQUEST_LIMIT}&t=${Date.now()}`, {
       cache: "no-store",
     })
       .then((response) => response.json())
@@ -340,36 +700,97 @@ export default function WaterNetworkClient() {
     };
   }, []);
 
-  const features = data?.features || [];
-  const parts = useMemo(() => getAllParts(features), [features]);
-  const bounds = useMemo(() => getBounds(parts), [parts]);
+  useEffect(() => {
+    const leaflet = leafletRef.current;
+    const map = mapRef.current;
 
-  const model = useMemo(() => {
-    if (!bounds) return null;
+    if (!leaflet || !map || !mapReady || !data?.features?.length) return;
 
-    const center = manualCenter || getBoundsCenter(bounds);
-    const baseZoom = manualCenter?.zoom || chooseZoom(bounds);
-    const zoom = clamp(baseZoom + view.zoomDelta, 9, 20);
-    const baseCenterWorld = lonLatToWorld(center.lon, center.lat, zoom);
-    const centerWorld = {
-      x: baseCenterWorld.x - view.panX,
-      y: baseCenterWorld.y - view.panY,
+    if (networkLayerRef.current) {
+      networkLayerRef.current.removeFrom(map);
+      networkLayerRef.current = null;
+    }
+
+    const networkLayer = leaflet.geoJSON(data as GeoJSON.GeoJsonObject, {
+      style: (feature?: GeoJSON.Feature) => pathStyle(feature),
+      pointToLayer: (feature: GeoJSON.Feature, latlng: Leaflet.LatLng) => {
+        const properties = (feature.properties || {}) as Record<string, unknown>;
+        const kind = getKind(properties);
+        const color = getFeatureColor(properties, kind);
+
+        return leaflet.circleMarker(latlng, {
+          radius: pointRadius(kind),
+          color: "#071020",
+          weight: 1.6,
+          fillColor: color,
+          fillOpacity: 0.96,
+        });
+      },
+      onEachFeature: (feature: GeoJSON.Feature, layer: Leaflet.Layer) => {
+        layer.bindPopup(popupHtml(feature));
+
+        layer.on("click", () => {
+          setSelectedName(getFeatureName(feature));
+        });
+      },
+    });
+
+    networkLayer.addTo(map);
+    networkLayerRef.current = networkLayer;
+
+    const bounds = networkLayer.getBounds();
+
+    if (bounds.isValid()) {
+      map.invalidateSize();
+      map.fitBounds(bounds.pad(0.08), {
+        animate: false,
+        maxZoom: 18,
+      });
+    }
+
+    return () => {
+      networkLayer.removeFrom(map);
     };
-    const tiles = getTiles(centerWorld, zoom);
+  }, [data, mapReady]);
 
-    return { center, centerWorld, zoom, tiles };
-  }, [bounds, manualCenter, view]);
+  const features = data?.features || [];
+
+  const counts = useMemo(() => {
+    const result: Record<AssetKind, number> = {
+      pipe: 0,
+      proposed: 0,
+      valve: 0,
+      hydrant: 0,
+      fitting: 0,
+      connection: 0,
+      symbol: 0,
+      other: 0,
+    };
+
+    for (const feature of features) {
+      result[getKind((feature.properties || {}) as Record<string, unknown>)] += 1;
+    }
+
+    return result;
+  }, [features]);
+
+  const total = data?.pantavion?.featureCount || features.length;
+  const shown = data?.pantavion?.returnedFeatureCount || features.length;
 
   function resetView() {
-    setManualCenter(null);
-    setView({ zoomDelta: 0, panX: 0, panY: 0 });
-  }
+    const map = mapRef.current;
+    const layer = networkLayerRef.current;
 
-  function changeZoom(delta: number) {
-    setView((current) => ({
-      ...current,
-      zoomDelta: clamp(current.zoomDelta + delta, -8, 8),
-    }));
+    if (!map || !layer) return;
+
+    const bounds = layer.getBounds();
+    if (bounds.isValid()) {
+      map.invalidateSize();
+      map.fitBounds(bounds.pad(0.08), {
+        animate: true,
+        maxZoom: 18,
+      });
+    }
   }
 
   async function searchAddress(event: FormEvent<HTMLFormElement>) {
@@ -385,24 +806,35 @@ export default function WaterNetworkClient() {
     setStatus(copy.searching);
 
     try {
-      const searchText = text.toLowerCase().includes("cyprus") ? text : `${text}, Cyprus`;
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(searchText)}`
-      );
-      const results = (await response.json()) as { lon: string; lat: string; display_name: string }[];
+      const result = await geocodeCyprus(text);
+      const map = mapRef.current;
+      const leaflet = leafletRef.current;
 
-      if (!results.length) {
+      if (!result || !map || !leaflet) {
         setStatus(copy.notFound);
         return;
       }
 
-      setManualCenter({
-        lon: Number(results[0].lon),
-        lat: Number(results[0].lat),
-        label: results[0].display_name,
-        zoom: 18,
+      if (searchMarkerRef.current) {
+        searchMarkerRef.current.removeFrom(map);
+      }
+
+      searchMarkerRef.current = leaflet
+        .circleMarker([result.lat, result.lon], {
+          radius: 8,
+          color: "#071020",
+          weight: 2,
+          fillColor: "#45ffac",
+          fillOpacity: 0.96,
+        })
+        .addTo(map)
+        .bindPopup(`<strong>${escapeHtml(result.label)}</strong>`)
+        .openPopup();
+
+      map.setView([result.lat, result.lon], 18, {
+        animate: true,
       });
-      setView({ zoomDelta: 0, panX: 0, panY: 0 });
+
       setStatus(copy.searchDone);
     } catch {
       setStatus(copy.searchFailed);
@@ -410,7 +842,10 @@ export default function WaterNetworkClient() {
   }
 
   function locateUser() {
-    if (!navigator.geolocation) {
+    const map = mapRef.current;
+    const leaflet = leafletRef.current;
+
+    if (!navigator.geolocation || !map || !leaflet) {
       setStatus(copy.noGeo);
       return;
     }
@@ -419,27 +854,46 @@ export default function WaterNetworkClient() {
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setManualCenter({
-          lon: position.coords.longitude,
-          lat: position.coords.latitude,
-          label: copy.currentLocation,
-          zoom: 18,
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        if (locationMarkerRef.current) {
+          locationMarkerRef.current.removeFrom(map);
+        }
+
+        locationMarkerRef.current = leaflet
+          .circleMarker([lat, lon], {
+            radius: 8,
+            color: "#071020",
+            weight: 2,
+            fillColor: "#45ffac",
+            fillOpacity: 0.96,
+          })
+          .addTo(map)
+          .bindPopup("<strong> τρέχουσα θέση μου</strong>")
+          .openPopup();
+
+        map.setView([lat, lon], 18, {
+          animate: true,
         });
-        setView({ zoomDelta: 0, panX: 0, panY: 0 });
+
         setStatus(copy.locationDone);
       },
       () => {
         setStatus(copy.locationFailed);
       },
-      { enableHighAccuracy: true, timeout: 12000 }
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 10000,
+      }
     );
   }
 
-  const total = data?.pantavion?.featureCount || features.length;
-  const shown = data?.pantavion?.returnedFeatureCount || features.length;
-
   return (
     <div style={styles.wrap}>
+      <style>{leafletCss}</style>
+
       <form style={styles.controls} onSubmit={searchAddress}>
         <input
           value={query}
@@ -456,14 +910,6 @@ export default function WaterNetworkClient() {
           {copy.locate}
         </button>
 
-        <button type="button" style={styles.smallButton} onClick={() => changeZoom(1)}>
-          {copy.zoomIn}
-        </button>
-
-        <button type="button" style={styles.smallButton} onClick={() => changeZoom(-1)}>
-          {copy.zoomOut}
-        </button>
-
         <button type="button" style={styles.smallButton} onClick={resetView}>
           {copy.reset}
         </button>
@@ -475,134 +921,35 @@ export default function WaterNetworkClient() {
         <span>
           {copy.shown}: {shown} {copy.from} {total} {copy.items}
         </span>
+        <span>{copy.satellite}</span>
       </div>
 
-      <div
-        style={styles.map}
-        onWheel={(event) => {
-          event.preventDefault();
-          changeZoom(event.deltaY < 0 ? 1 : -1);
-        }}
-        onPointerDown={(event) => {
-          event.currentTarget.setPointerCapture(event.pointerId);
-          setDrag({
-            pointerId: event.pointerId,
-            startX: event.clientX,
-            startY: event.clientY,
-            basePanX: view.panX,
-            basePanY: view.panY,
-          });
-        }}
-        onPointerMove={(event) => {
-          if (!drag || drag.pointerId !== event.pointerId) return;
+      <div style={styles.mapShell}>
+        <div ref={mapContainerRef} style={styles.map} />
 
-          const dx = event.clientX - drag.startX;
-          const dy = event.clientY - drag.startY;
+        <aside style={styles.legend}>
+          <strong style={styles.legendTitle}>Legend</strong>
 
-          setView((current) => ({
-            ...current,
-            panX: drag.basePanX + dx,
-            panY: drag.basePanY + dy,
-          }));
-        }}
-        onPointerUp={() => setDrag(null)}
-        onPointerCancel={() => setDrag(null)}
-      >
-        {!model ? (
-          <div style={styles.empty}>
-            <strong>{copy.noMap}</strong>
-            <span>{data?.pantavion?.message || copy.checkSource}</span>
-          </div>
-        ) : (
-          <>
-            <div style={styles.tiles}>
-              {model.tiles.map((tile) => (
-                <img
-                  key={`${model.zoom}-${tile.x}-${tile.y}-${tile.left}-${tile.top}`}
-                  src={`https://tile.openstreetmap.org/${model.zoom}/${tile.x}/${tile.y}.png`}
-                  alt=""
-                  draggable={false}
-                  style={{
-                    position: "absolute",
-                    width: TILE_SIZE,
-                    height: TILE_SIZE,
-                    left: tile.left,
-                    top: tile.top,
-                  }}
-                />
-              ))}
+          {(Object.keys(kindLabels) as AssetKind[]).map((kind) => (
+            <div key={kind} style={styles.legendRow}>
+              <span
+                style={{
+                  ...styles.legendSwatch,
+                  background: fallbackColors[kind],
+                }}
+              />
+              <span>
+                {kindLabels[kind]}: {counts[kind]}
+              </span>
             </div>
-
-            <svg viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`} style={styles.svg}>
-              {parts.map((part, index) => {
-                if (part.kind === "point") {
-                  const point = project(part.points[0], model.centerWorld, model.zoom);
-
-                  return (
-                    <circle
-                      key={`point-${index}`}
-                      cx={point.x}
-                      cy={point.y}
-                      r="5"
-                      fill="#ffd15c"
-                      stroke="#071020"
-                      strokeWidth="2"
-                      onClick={() => setSelected(part.feature)}
-                    />
-                  );
-                }
-
-                const sampled = samplePoints(part.points, MAX_POINTS);
-
-                if (part.kind === "polygon") {
-                  return (
-                    <polygon
-                      key={`polygon-${index}`}
-                      points={pointsToSvg(sampled, model.centerWorld, model.zoom)}
-                      fill="rgba(255,209,92,.10)"
-                      stroke="#ffd15c"
-                      strokeWidth="2"
-                      onClick={() => setSelected(part.feature)}
-                    />
-                  );
-                }
-
-                return (
-                  <polyline
-                    key={`line-${index}`}
-                    points={pointsToSvg(sampled, model.centerWorld, model.zoom)}
-                    fill="none"
-                    stroke="#ffd15c"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    opacity="0.95"
-                    onClick={() => setSelected(part.feature)}
-                  />
-                );
-              })}
-
-              {manualCenter && (
-                <circle
-                  cx={MAP_WIDTH / 2}
-                  cy={MAP_HEIGHT / 2}
-                  r="8"
-                  fill="#45ffac"
-                  stroke="#071020"
-                  strokeWidth="3"
-                />
-              )}
-            </svg>
-
-            <div style={styles.mapLabel}>{model.center.label}</div>
-          </>
-        )}
+          ))}
+        </aside>
       </div>
 
       <footer style={styles.footer}>
         <span>{copy.protectedText}</span>
         <span>
-          {copy.selected}: {selected ? getName(selected) : copy.none}
+          {copy.selected}: {selectedName}
         </span>
       </footer>
     </div>
@@ -617,7 +964,7 @@ const styles: Record<string, CSSProperties> = {
   },
   controls: {
     display: "grid",
-    gridTemplateColumns: "minmax(220px, 1fr) auto auto auto auto auto",
+    gridTemplateColumns: "minmax(220px, 1fr) auto auto auto",
     gap: 8,
     padding: 10,
     borderBottom: "1px solid rgba(246,200,95,.22)",
@@ -650,7 +997,7 @@ const styles: Record<string, CSSProperties> = {
     border: "1px solid rgba(246,200,95,.38)",
     background: "rgba(246,200,95,.1)",
     color: "#fff8e7",
-    padding: "0 10px",
+    padding: "0 12px",
     fontSize: 14,
     fontWeight: 900,
     cursor: "pointer",
@@ -665,61 +1012,62 @@ const styles: Record<string, CSSProperties> = {
     color: "#d8e0f4",
     fontSize: 13,
   },
-  map: {
+  mapShell: {
     position: "relative",
     height: "calc(100vh - 210px)",
-    minHeight: 470,
-    overflow: "hidden",
-    background: "#0a1324",
-    touchAction: "none",
-    cursor: "grab",
+    minHeight: 540,
+    background: "#08111f",
   },
-  tiles: {
-    position: "absolute",
-    inset: 0,
-  },
-  svg: {
-    position: "absolute",
-    inset: 0,
+  map: {
     width: "100%",
     height: "100%",
-    cursor: "pointer",
   },
-  empty: {
+  legend: {
     position: "absolute",
-    inset: 20,
-    display: "grid",
-    placeContent: "center",
-    gap: 10,
-    textAlign: "center",
-    background: "rgba(2,4,11,.72)",
-    border: "1px solid rgba(246,200,95,.26)",
-    borderRadius: 18,
-    color: "#d8e0f4",
-  },
-  mapLabel: {
-    position: "absolute",
-    left: 12,
+    right: 12,
     bottom: 12,
-    maxWidth: "70%",
-    padding: "7px 10px",
-    borderRadius: 999,
-    background: "rgba(2,4,11,.84)",
-    border: "1px solid rgba(246,200,95,.32)",
-    color: "#fff8e7",
+    width: 245,
+    maxWidth: "calc(100% - 24px)",
+    padding: 12,
+    borderRadius: 16,
+    border: "1px solid rgba(246,200,95,.38)",
+    background: "rgba(5,12,24,.84)",
+    boxShadow: "0 14px 30px rgba(0,0,0,.34)",
+    backdropFilter: "blur(8px)",
+    zIndex: 900,
     fontSize: 12,
-    fontWeight: 900,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
+  },
+  legendTitle: {
+    display: "block",
+    marginBottom: 8,
+    color: "#f6c85f",
+    fontSize: 12,
+    letterSpacing: 1,
+    textTransform: "uppercase",
+  },
+  legendRow: {
+    display: "grid",
+    gridTemplateColumns: "14px 1fr",
+    alignItems: "center",
+    gap: 8,
+    marginTop: 6,
+    color: "#fff8e7",
+  },
+  legendSwatch: {
+    width: 12,
+    height: 12,
+    borderRadius: 999,
+    border: "1px solid rgba(255,255,255,.75)",
+    boxShadow: "0 0 0 2px rgba(0,0,0,.25)",
   },
   footer: {
     display: "flex",
     flexWrap: "wrap",
-    gap: 12,
+    justifyContent: "space-between",
+    gap: 10,
     padding: "9px 12px",
-    borderTop: "1px solid rgba(246,200,95,.18)",
     color: "#d8e0f4",
-    fontSize: 13,
+    fontSize: 12,
+    borderTop: "1px solid rgba(246,200,95,.16)",
   },
 };
