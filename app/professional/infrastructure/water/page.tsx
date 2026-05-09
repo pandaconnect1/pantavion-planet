@@ -1,42 +1,43 @@
 import type { CSSProperties } from "react";
 import WaterNetworkClient from "./water-network-client";
 import FounderApprovalQueue from "./founder-approval-queue";
+import PantaAIWaterSentinel from "./pantaai-water-sentinel";
 
 const officialLayers = [
-  "Αγωγοί ύδρευσης",
-  "Κεντρικοί αγωγοί",
-  "Βάνες",
-  "Παροχές",
-  "Μετρητές όπου υπάρχουν",
-  "Εξαρτήματα",
-  "Παλαιό / αντικατεστημένο δίκτυο",
-  "Σημεία τεχνικής διεύθυνσης",
+  "Î‘Î³Ï‰Î³Î¿Î¯ ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚",
+  "ÎšÎµÎ½Ï„ÏÎ¹ÎºÎ¿Î¯ Î±Î³Ï‰Î³Î¿Î¯",
+  "Î’Î¬Î½ÎµÏ‚",
+  "Î Î±ÏÎ¿Ï‡Î­Ï‚",
+  "ÎœÎµÏ„ÏÎ·Ï„Î­Ï‚ ÏŒÏ€Î¿Ï… Ï…Ï€Î¬ÏÏ‡Î¿Ï…Î½",
+  "Î•Î¾Î±ÏÏ„Î®Î¼Î±Ï„Î±",
+  "Î Î±Î»Î±Î¹ÏŒ / Î±Î½Ï„Î¹ÎºÎ±Ï„ÎµÏƒÏ„Î·Î¼Î­Î½Î¿ Î´Î¯ÎºÏ„Ï…Î¿",
+  "Î£Î·Î¼ÎµÎ¯Î± Ï„ÎµÏ‡Î½Î¹ÎºÎ®Ï‚ Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·Ï‚",
 ];
 
 const fieldRules = [
-  "Ο χάρτης είναι η πρώτη λειτουργία.",
-  "Η κίνηση γίνεται με αφή, σύρσιμο και φυσική πλοήγηση.",
-  "Το πραγματικό KMZ/KML δεν εκτίθεται δημόσια.",
-  "Κάθε ευαίσθητη πρόσβαση εγκρίνεται από την Αρχή.",
-  "Το λογιστήριο, η αποθήκη και τα συνεργεία θα συνδεθούν σε επόμενα στάδια.",
+  "ÎŸ Ï‡Î¬ÏÏ„Î·Ï‚ ÎµÎ¯Î½Î±Î¹ Î· Ï€ÏÏŽÏ„Î· Î»ÎµÎ¹Ï„Î¿Ï…ÏÎ³Î¯Î±.",
+  "Î— ÎºÎ¯Î½Î·ÏƒÎ· Î³Î¯Î½ÎµÏ„Î±Î¹ Î¼Îµ Î±Ï†Î®, ÏƒÏÏÏƒÎ¹Î¼Î¿ ÎºÎ±Î¹ Ï†Ï…ÏƒÎ¹ÎºÎ® Ï€Î»Î¿Î®Î³Î·ÏƒÎ·.",
+  "Î¤Î¿ Ï€ÏÎ±Î³Î¼Î±Ï„Î¹ÎºÏŒ KMZ/KML Î´ÎµÎ½ ÎµÎºÏ„Î¯Î¸ÎµÏ„Î±Î¹ Î´Î·Î¼ÏŒÏƒÎ¹Î±.",
+  "ÎšÎ¬Î¸Îµ ÎµÏ…Î±Î¯ÏƒÎ¸Î·Ï„Î· Ï€ÏÏŒÏƒÎ²Î±ÏƒÎ· ÎµÎ³ÎºÏÎ¯Î½ÎµÏ„Î±Î¹ Î±Ï€ÏŒ Ï„Î·Î½ Î‘ÏÏ‡Î®.",
+  "Î¤Î¿ Î»Î¿Î³Î¹ÏƒÏ„Î®ÏÎ¹Î¿, Î· Î±Ï€Î¿Î¸Î®ÎºÎ· ÎºÎ±Î¹ Ï„Î± ÏƒÏ…Î½ÎµÏÎ³ÎµÎ¯Î± Î¸Î± ÏƒÏ…Î½Î´ÎµÎ¸Î¿ÏÎ½ ÏƒÎµ ÎµÏ€ÏŒÎ¼ÎµÎ½Î± ÏƒÏ„Î¬Î´Î¹Î±.",
 ];
 
 export default function WaterInfrastructurePage() {
   return (
     <main style={styles.shell}>
       <section style={styles.hero}>
-        <div style={styles.lockBadge}>ΠΡΟΣΤΑΤΕΥΜΕΝΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗ ΕΝΟΤΗΤΑ · ΥΔΡΕΥΣΗ</div>
-        <p style={styles.kicker}>Pantavion επαγγελματική υποδομή</p>
-        <h1 style={styles.title}>Έλεγχος Δικτύου Ύδρευσης</h1>
+        <div style={styles.lockBadge}>Î Î¡ÎŸÎ£Î¤Î‘Î¤Î•Î¥ÎœÎ•ÎÎ— Î•Î Î‘Î“Î“Î•Î›ÎœÎ‘Î¤Î™ÎšÎ— Î•ÎÎŸÎ¤Î—Î¤Î‘ Â· Î¥Î”Î¡Î•Î¥Î£Î—</div>
+        <p style={styles.kicker}>Pantavion ÎµÏ€Î±Î³Î³ÎµÎ»Î¼Î±Ï„Î¹ÎºÎ® Ï…Ï€Î¿Î´Î¿Î¼Î®</p>
+        <h1 style={styles.title}>ÎˆÎ»ÎµÎ³Ï‡Î¿Ï‚ Î”Î¹ÎºÏ„ÏÎ¿Ï… ÎŽÎ´ÏÎµÏ…ÏƒÎ·Ï‚</h1>
         <p style={styles.subtitle}>
-          Πραγματικός χάρτης εργασίας για αγωγούς, βάνες, παροχές, τεχνικές διευθύνσεις,
-          βλάβες, φωτογραφίες, συνεργεία και ελεγχόμενη πρόσβαση.
+          Î ÏÎ±Î³Î¼Î±Ï„Î¹ÎºÏŒÏ‚ Ï‡Î¬ÏÏ„Î·Ï‚ ÎµÏÎ³Î±ÏƒÎ¯Î±Ï‚ Î³Î¹Î± Î±Î³Ï‰Î³Î¿ÏÏ‚, Î²Î¬Î½ÎµÏ‚, Ï€Î±ÏÎ¿Ï‡Î­Ï‚, Ï„ÎµÏ‡Î½Î¹ÎºÎ­Ï‚ Î´Î¹ÎµÏ…Î¸ÏÎ½ÏƒÎµÎ¹Ï‚,
+          Î²Î»Î¬Î²ÎµÏ‚, Ï†Ï‰Ï„Î¿Î³ÏÎ±Ï†Î¯ÎµÏ‚, ÏƒÏ…Î½ÎµÏÎ³ÎµÎ¯Î± ÎºÎ±Î¹ ÎµÎ»ÎµÎ³Ï‡ÏŒÎ¼ÎµÎ½Î· Ï€ÏÏŒÏƒÎ²Î±ÏƒÎ·.
         </p>
 
         <div style={styles.securityStrip}>
-          <span>Καμία δημόσια λήψη KMZ/KML</span>
-          <span>Ιδιωτική αποθήκευση</span>
-          <span>Έγκριση από Γιώργο</span>
+          <span>ÎšÎ±Î¼Î¯Î± Î´Î·Î¼ÏŒÏƒÎ¹Î± Î»Î®ÏˆÎ· KMZ/KML</span>
+          <span>Î™Î´Î¹Ï‰Ï„Î¹ÎºÎ® Î±Ï€Î¿Î¸Î®ÎºÎµÏ…ÏƒÎ·</span>
+          <span>ÎˆÎ³ÎºÏÎ¹ÏƒÎ· Î±Ï€ÏŒ Î“Î¹ÏŽÏÎ³Î¿</span>
           <span>Audit-ready</span>
           <span>Mobile-first</span>
         </div>
@@ -45,7 +46,7 @@ export default function WaterInfrastructurePage() {
       <section style={styles.workspace}>
         <aside style={styles.leftPanel}>
           <section style={styles.panel}>
-            <p style={styles.panelLabel}>Επίπεδα δικτύου</p>
+            <p style={styles.panelLabel}>Î•Ï€Î¯Ï€ÎµÎ´Î± Î´Î¹ÎºÏ„ÏÎ¿Ï…</p>
             <div style={styles.layerList}>
               {officialLayers.map((layer) => (
                 <span key={layer} style={styles.layerItem}>
@@ -56,7 +57,7 @@ export default function WaterInfrastructurePage() {
           </section>
 
           <section style={styles.panel}>
-            <p style={styles.panelLabel}>Κανόνες πεδίου</p>
+            <p style={styles.panelLabel}>ÎšÎ±Î½ÏŒÎ½ÎµÏ‚ Ï€ÎµÎ´Î¯Î¿Ï…</p>
             <ul style={styles.ruleList}>
               {fieldRules.map((rule) => (
                 <li key={rule}>{rule}</li>
@@ -72,12 +73,14 @@ export default function WaterInfrastructurePage() {
         <aside style={styles.rightPanel}>
           <FounderApprovalQueue />
 
+          <PantaAIWaterSentinel />
+
           <section style={styles.panel}>
-            <p style={styles.panelLabel}>Τεχνικό αποτέλεσμα</p>
+            <p style={styles.panelLabel}>Î¤ÎµÏ‡Î½Î¹ÎºÏŒ Î±Ï€Î¿Ï„Î­Î»ÎµÏƒÎ¼Î±</p>
             <p style={styles.panelText}>
-              Το module πρέπει να ανοίγει γρήγορα σε PC, tablet και κινητό. Η πλήρης παραγωγή
-              χρειάζεται στη συνέχεια vector tiles, πραγματικό auth, audit log, offline cache και
-              καταχώρηση εργασιών με φωτογραφίες.
+              Î¤Î¿ module Ï€ÏÎ­Ï€ÎµÎ¹ Î½Î± Î±Î½Î¿Î¯Î³ÎµÎ¹ Î³ÏÎ®Î³Î¿ÏÎ± ÏƒÎµ PC, tablet ÎºÎ±Î¹ ÎºÎ¹Î½Î·Ï„ÏŒ. Î— Ï€Î»Î®ÏÎ·Ï‚ Ï€Î±ÏÎ±Î³Ï‰Î³Î®
+              Ï‡ÏÎµÎ¹Î¬Î¶ÎµÏ„Î±Î¹ ÏƒÏ„Î· ÏƒÏ…Î½Î­Ï‡ÎµÎ¹Î± vector tiles, Ï€ÏÎ±Î³Î¼Î±Ï„Î¹ÎºÏŒ auth, audit log, offline cache ÎºÎ±Î¹
+              ÎºÎ±Ï„Î±Ï‡ÏŽÏÎ·ÏƒÎ· ÎµÏÎ³Î±ÏƒÎ¹ÏŽÎ½ Î¼Îµ Ï†Ï‰Ï„Î¿Î³ÏÎ±Ï†Î¯ÎµÏ‚.
             </p>
           </section>
         </aside>
