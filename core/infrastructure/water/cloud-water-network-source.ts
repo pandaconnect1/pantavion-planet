@@ -27,6 +27,14 @@ export type WaterNetworkSourceResult = {
   errorMessage?: string;
 };
 
+const localMobilePath = path.join(
+  process.cwd(),
+  "data",
+  "water-network-private",
+  "mobile",
+  "water-network-mobile.geojson"
+);
+
 const localProcessedPath = path.join(
   process.cwd(),
   "data",
@@ -41,10 +49,10 @@ export const emptyWaterNetworkCollection: WaterCollection = {
   pantavion: {
     status: "no_private_processed_layer",
     message:
-      "ÃŽâ€ÃŽÂµÃŽÂ½ Ãâ€¦Ãâ‚¬ÃŽÂ¬ÃÂÃâ€¡ÃŽÂµÃŽÂ¹ ÃŽÂ±ÃŽÂºÃÅ’ÃŽÂ¼ÃŽÂ± ÃŽÂµÃŽÂ½ÃŽÂµÃÂÃŽÂ³ÃÅ’ Ãâ‚¬ÃŽÂ±ÃÂÃŽÂ±ÃŽÂ³Ãâ€°ÃŽÂ³ÃŽÂ¹ÃŽÂºÃÅ’ private cloud layer ÃÂÃŽÂ´ÃÂÃŽÂµÃâ€¦ÃÆ’ÃŽÂ·Ãâ€š. ÃŽÂ¤ÃŽÂ¿ Pantavion.com ÃŽÂ´ÃŽÂµÃŽÂ½ ÃŽÂ¼Ãâ‚¬ÃŽÂ¿ÃÂÃŽÂµÃŽÂ¯ ÃŽÂ½ÃŽÂ± ÃŽÂ´ÃŽÂ¹ÃŽÂ±ÃŽÂ²ÃŽÂ¬ÃÆ’ÃŽÂµÃŽÂ¹ Ãâ€žÃŽÂ¿Ãâ‚¬ÃŽÂ¹ÃŽÂºÃŽÂ¬ ÃŽÂ±ÃÂÃâ€¡ÃŽÂµÃŽÂ¯ÃŽÂ± ÃŽÂ±Ãâ‚¬ÃÅ’ PC. ÃŽÂ¡ÃÂÃŽÂ¸ÃŽÂ¼ÃŽÂ¹ÃÆ’ÃŽÂµ PANTAVION_WATER_NETWORK_GEOJSON_URL ÃÆ’ÃŽÂµ private cloud/object storage.",
+      "Δεν υπάρχει ακόμα ενεργό παραγωγικό private cloud layer ύδρευσης. Το Pantavion.com δεν μπορεί να διαβάσει τοπικά αρχεία από PC. Ρύθμισε PANTAVION_WATER_NETWORK_GEOJSON_URL σε private cloud/object storage.",
     rawFileExposed: false,
     publicFolder: false,
-    authorityOwner: "ÃŽâ€œÃŽÂ¹ÃÅ½ÃÂÃŽÂ³ÃŽÂ¿Ãâ€š",
+    authorityOwner: "Γιώργος",
   },
 };
 
@@ -106,7 +114,12 @@ async function readCloudCollection(): Promise<WaterNetworkSourceResult | null> {
 }
 
 function readLocalCollection(): WaterNetworkSourceResult {
-  if (!existsSync(localProcessedPath)) {
+  const preferredLocalPath = existsSync(localMobilePath) ? localMobilePath : localProcessedPath;
+  const preferredLocalLabel = existsSync(localMobilePath)
+    ? "local private mobile GeoJSON"
+    : "local private processed GeoJSON";
+
+  if (!existsSync(preferredLocalPath)) {
     return {
       collection: emptyWaterNetworkCollection,
       sourceMode: "missing",
@@ -116,19 +129,19 @@ function readLocalCollection(): WaterNetworkSourceResult {
   }
 
   try {
-    const collection = parseCollection(readFileSync(localProcessedPath, "utf8"));
+    const collection = parseCollection(readFileSync(preferredLocalPath, "utf8"));
 
     return {
       collection,
       sourceMode: "local_private_file",
-      sourceLabel: "local private processed GeoJSON",
+      sourceLabel: preferredLocalLabel,
       sourceConfigured: true,
     };
   } catch (error) {
     return {
       collection: emptyWaterNetworkCollection,
       sourceMode: "error",
-      sourceLabel: "local private processed GeoJSON",
+      sourceLabel: preferredLocalLabel,
       sourceConfigured: true,
       errorMessage: error instanceof Error ? error.message : "Unknown local read error",
     };
