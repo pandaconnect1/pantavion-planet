@@ -41,10 +41,10 @@ export const emptyWaterNetworkCollection: WaterCollection = {
   pantavion: {
     status: "no_private_processed_layer",
     message:
-      "Î”ÎµÎ½ Ï…Ï€Î¬ÏÏ‡ÎµÎ¹ Î±ÎºÏŒÎ¼Î± ÎµÎ½ÎµÏÎ³ÏŒ Ï€Î±ÏÎ±Î³Ï‰Î³Î¹ÎºÏŒ private cloud layer ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚. Î¤Î¿ Pantavion.com Î´ÎµÎ½ Î¼Ï€Î¿ÏÎµÎ¯ Î½Î± Î´Î¹Î±Î²Î¬ÏƒÎµÎ¹ Ï„Î¿Ï€Î¹ÎºÎ¬ Î±ÏÏ‡ÎµÎ¯Î± Î±Ï€ÏŒ PC. Î¡ÏÎ¸Î¼Î¹ÏƒÎµ PANTAVION_WATER_NETWORK_GEOJSON_URL ÏƒÎµ private cloud/object storage.",
+      "ÃŽâ€ÃŽÂµÃŽÂ½ Ãâ€¦Ãâ‚¬ÃŽÂ¬ÃÂÃâ€¡ÃŽÂµÃŽÂ¹ ÃŽÂ±ÃŽÂºÃÅ’ÃŽÂ¼ÃŽÂ± ÃŽÂµÃŽÂ½ÃŽÂµÃÂÃŽÂ³ÃÅ’ Ãâ‚¬ÃŽÂ±ÃÂÃŽÂ±ÃŽÂ³Ãâ€°ÃŽÂ³ÃŽÂ¹ÃŽÂºÃÅ’ private cloud layer ÃÂÃŽÂ´ÃÂÃŽÂµÃâ€¦ÃÆ’ÃŽÂ·Ãâ€š. ÃŽÂ¤ÃŽÂ¿ Pantavion.com ÃŽÂ´ÃŽÂµÃŽÂ½ ÃŽÂ¼Ãâ‚¬ÃŽÂ¿ÃÂÃŽÂµÃŽÂ¯ ÃŽÂ½ÃŽÂ± ÃŽÂ´ÃŽÂ¹ÃŽÂ±ÃŽÂ²ÃŽÂ¬ÃÆ’ÃŽÂµÃŽÂ¹ Ãâ€žÃŽÂ¿Ãâ‚¬ÃŽÂ¹ÃŽÂºÃŽÂ¬ ÃŽÂ±ÃÂÃâ€¡ÃŽÂµÃŽÂ¯ÃŽÂ± ÃŽÂ±Ãâ‚¬ÃÅ’ PC. ÃŽÂ¡ÃÂÃŽÂ¸ÃŽÂ¼ÃŽÂ¹ÃÆ’ÃŽÂµ PANTAVION_WATER_NETWORK_GEOJSON_URL ÃÆ’ÃŽÂµ private cloud/object storage.",
     rawFileExposed: false,
     publicFolder: false,
-    authorityOwner: "Î“Î¹ÏŽÏÎ³Î¿Ï‚",
+    authorityOwner: "ÃŽâ€œÃŽÂ¹ÃÅ½ÃÂÃŽÂ³ÃŽÂ¿Ãâ€š",
   },
 };
 
