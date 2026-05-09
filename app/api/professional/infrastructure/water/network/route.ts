@@ -21,7 +21,7 @@ type WaterCollection = {
 };
 
 const DEFAULT_LIMIT = 2600;
-const MIN_LIMIT = 400;
+const MIN_LIMIT = 500;
 const MAX_LIMIT = 5200;
 
 const emptyCollection = {
@@ -45,24 +45,60 @@ function safeLimit(request: NextRequest) {
   return Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, raw));
 }
 
-function featureRank(feature: WaterFeature) {
-  const geometryType = feature.geometry?.type || "";
-  const assetType = String(feature.properties?.pantavionAssetType || "").toLowerCase();
+function getGeometryType(feature: WaterFeature) {
+  return String(feature.geometry?.type || "");
+}
 
-  if (geometryType === "LineString" && assetType.includes("central")) return 0;
-  if (geometryType === "LineString") return 1;
-  if (geometryType === "Polygon") return 2;
-  if (geometryType === "Point" && assetType.includes("valve")) return 3;
-  if (geometryType === "Point") return 4;
-
-  return 9;
+function getAssetType(feature: WaterFeature) {
+  return String(feature.properties?.pantavionAssetType || "").toLowerCase();
 }
 
 function selectMapFeatures(features: WaterFeature[], limit: number) {
-  return features
-    .filter((feature) => feature && feature.geometry && feature.geometry.coordinates)
-    .sort((a, b) => featureRank(a) - featureRank(b))
-    .slice(0, limit);
+  const centralLines: WaterFeature[] = [];
+  const lines: WaterFeature[] = [];
+  const polygons: WaterFeature[] = [];
+  const valves: WaterFeature[] = [];
+  const points: WaterFeature[] = [];
+
+  const centralLimit = Math.ceil(limit * 0.28);
+  const lineLimit = Math.ceil(limit * 0.48);
+  const polygonLimit = Math.ceil(limit * 0.08);
+  const valveLimit = Math.ceil(limit * 0.1);
+  const pointLimit = Math.ceil(limit * 0.06);
+
+  for (const feature of features) {
+    if (!feature || !feature.geometry || !feature.geometry.coordinates) continue;
+
+    const geometryType = getGeometryType(feature);
+    const assetType = getAssetType(feature);
+
+    if (geometryType === "LineString" && assetType.includes("central")) {
+      if (centralLines.length < centralLimit) centralLines.push(feature);
+      continue;
+    }
+
+    if (geometryType === "LineString") {
+      if (lines.length < lineLimit) lines.push(feature);
+      continue;
+    }
+
+    if (geometryType === "Polygon") {
+      if (polygons.length < polygonLimit) polygons.push(feature);
+      continue;
+    }
+
+    if (geometryType === "Point" && assetType.includes("valve")) {
+      if (valves.length < valveLimit) valves.push(feature);
+      continue;
+    }
+
+    if (geometryType === "Point") {
+      if (points.length < pointLimit) points.push(feature);
+      continue;
+    }
+  }
+
+  return [...centralLines, ...lines, ...polygons, ...valves, ...points].slice(0, limit);
 }
 
 export async function GET(request: NextRequest) {
