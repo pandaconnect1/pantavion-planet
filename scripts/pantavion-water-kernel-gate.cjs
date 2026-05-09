@@ -18,6 +18,30 @@ const forbiddenRootFiles = [
 
 const forbiddenPublicExtensions = [".kmz", ".kml", ".geojson"];
 
+const sourceTruthScanFiles = [
+  "core/infrastructure/water/cloud-water-network-source.ts",
+  "app/api/professional/infrastructure/water/network/route.ts",
+  "app/api/professional/infrastructure/water/network/status/route.ts",
+  "app/professional/infrastructure/water/page.tsx",
+  "app/professional/infrastructure/water/water-network-client.tsx",
+];
+
+const forbiddenFinalTruthClaims = [
+  {
+    label: "mobile/preview/sample/subset/5000 described as final/full/master/complete truth",
+    pattern: /\\b(mobile|preview|sample|sampled|subset|reduced|5000|5,000)\\b[\\s\\S]{0,140}\\b(final|full|master|complete|production truth|reference truth)\\b/i,
+  },
+  {
+    label: "final/full/master/complete truth described as mobile/preview/sample/subset/5000",
+    pattern: /\\b(final|full|master|complete|production truth|reference truth)\\b[\\s\\S]{0,140}\\b(mobile|preview|sample|sampled|subset|reduced|5000|5,000)\\b/i,
+  },
+  {
+    label: "reduced or sampled data presented as production/final/truth",
+    pattern: /\\b(reduced|sampled|subset|preview)\\b[\\s\\S]{0,140}\\b(production|final|truth|complete)\\b/i,
+  },
+];
+
+
 const requiredLawMarkers = [
   "NO_DATA_LOSS",
   "NO_SAMPLING_AS_FINAL",
@@ -50,7 +74,7 @@ function pass(message) {
   console.log("[PASS] " + message);
 }
 
-console.log("=== Pantavion Water Kernel Gate v1 ===");
+console.log("=== Pantavion Water Kernel Gate v2 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -105,6 +129,26 @@ function scanPublicGeodata(dir) {
 }
 
 scanPublicGeodata(publicDir);
+
+
+console.log("=== Source Truth Claim Scan v2 ===");
+
+for (const file of sourceTruthScanFiles) {
+  if (!exists(file)) {
+    warn("Source truth scan target missing or not yet implemented: " + file);
+    continue;
+  }
+
+  const content = fs.readFileSync(path.join(root, file), "utf8");
+
+  for (const rule of forbiddenFinalTruthClaims) {
+    if (rule.pattern.test(content)) {
+      fail("Forbidden final-truth claim in " + file + ": " + rule.label);
+    }
+  }
+
+  pass("No forbidden final-truth claim in: " + file);
+}
 
 const mobileFile = "data/water-network-private/mobile/water-network-mobile.geojson";
 
