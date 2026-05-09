@@ -5,6 +5,8 @@
   type PantavionWaterServingReadinessResult,
 } from "./water-serving-contract";
 
+import { evaluateControlledWaterAccess } from "./controlled-water-access";
+
 export const PANTAVION_WATER_CONTROLLED_SERVING_SCAFFOLD_VERSION =
   "water-controlled-serving-scaffold-v1" as const;
 
@@ -65,7 +67,9 @@ export function planControlledWaterServingRequest(
   const readiness: PantavionWaterServingReadinessResult =
     evaluateWaterServingReadiness(request.readiness);
 
-  const blockers = [...readiness.blockers];
+  const accessDecision = evaluateControlledWaterAccess(request.requester);
+
+  const blockers = [...readiness.blockers, ...accessDecision.blockers];
   const warnings: string[] = [];
 
   if (!isValidWaterBoundingBox(request.bbox)) {
@@ -74,10 +78,6 @@ export function planControlledWaterServingRequest(
 
   if (!isValidWaterZoom(request.zoom)) {
     blockers.push("Invalid zoom. Controlled serving requires a valid zoom level.");
-  }
-
-  if (request.requester.status !== "active") {
-    blockers.push("Requester is not active.");
   }
 
   if (blockers.length > 0) {
@@ -95,6 +95,12 @@ export function planControlledWaterServingRequest(
   warnings.push(
     "Serving is permission-aware and viewport-limited. The full raw master network must never be returned to the browser.",
   );
+
+  if (accessDecision.mayViewFullControlledFounderScope) {
+    warnings.push(
+      "Founder/admin controlled view may inspect the authorized full scope, but raw export remains blocked.",
+    );
+  }
 
   return {
     mode: "controlled-production-ready",
