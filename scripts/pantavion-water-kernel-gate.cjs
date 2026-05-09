@@ -29,7 +29,8 @@ const sourceTruthScanFiles = [
 const dataTruthReportPath = "docs/requirements/pantavion-water-data-truth-report.md",
   "docs/requirements/pantavion-water-data-serving-strategy.md",
   "docs/requirements/pantavion-water-serving-architecture-decision.md",
-  "core/infrastructure/water/water-serving-contract.ts";
+  "core/infrastructure/water/water-serving-contract.ts",
+  "core/infrastructure/water/controlled-water-serving-scaffold.ts";
 
 const requiredDataTruthReportMarkers = [
   "Google Earth KMZ file is the reference truth",
@@ -92,7 +93,7 @@ function pass(message) {
   console.log("[PASS] " + message);
 }
 
-console.log("=== Pantavion Water Kernel Gate v6 ===");
+console.log("=== Pantavion Water Kernel Gate v7 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -233,7 +234,8 @@ if (exists(servingArchitectureDecisionRelativePath)) {
 }
 
 console.log("=== Serving Contract Enforcement v6 ===");
-const servingContractRelativePath = "core/infrastructure/water/water-serving-contract.ts";
+const servingContractRelativePath = "core/infrastructure/water/water-serving-contract.ts",
+  "core/infrastructure/water/controlled-water-serving-scaffold.ts";
 
 if (exists(servingContractRelativePath)) {
   const servingContract = fs.readFileSync(path.join(root, servingContractRelativePath), "utf8");
@@ -256,6 +258,33 @@ if (exists(servingContractRelativePath)) {
       pass("Serving Contract marker present: " + marker);
     } else {
       fail("Serving Contract marker missing: " + marker);
+    }
+  }
+}
+
+console.log("=== Controlled Serving Scaffold Enforcement v7 ===");
+const controlledServingScaffoldRelativePath = "core/infrastructure/water/controlled-water-serving-scaffold.ts";
+
+if (exists(controlledServingScaffoldRelativePath)) {
+  const controlledServingScaffold = fs.readFileSync(path.join(root, controlledServingScaffoldRelativePath), "utf8");
+
+  const controlledServingRequiredMarkers = [
+    "water-controlled-serving-scaffold-v1",
+    "planControlledWaterServingRequest",
+    "mayReturnRawMaster: false",
+    "mayReturnCompleteNetwork: false",
+    "Invalid bbox. Controlled serving requires a valid visible spatial area.",
+    "Invalid zoom. Controlled serving requires a valid zoom level.",
+    "Requester is not active.",
+    "The full raw master network must never be returned to the browser.",
+    "bbox-api"
+  ];
+
+  for (const marker of controlledServingRequiredMarkers) {
+    if (controlledServingScaffold.includes(marker)) {
+      pass("Controlled Serving Scaffold marker present: " + marker);
+    } else {
+      fail("Controlled Serving Scaffold marker missing: " + marker);
     }
   }
 }
