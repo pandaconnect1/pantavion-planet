@@ -27,7 +27,8 @@ const sourceTruthScanFiles = [
 ];
 
 const dataTruthReportPath = "docs/requirements/pantavion-water-data-truth-report.md",
-  "docs/requirements/pantavion-water-data-serving-strategy.md";
+  "docs/requirements/pantavion-water-data-serving-strategy.md",
+  "docs/requirements/pantavion-water-serving-architecture-decision.md";
 
 const requiredDataTruthReportMarkers = [
   "Google Earth KMZ file is the reference truth",
@@ -90,7 +91,7 @@ function pass(message) {
   console.log("[PASS] " + message);
 }
 
-console.log("=== Pantavion Water Kernel Gate v4 ===");
+console.log("=== Pantavion Water Kernel Gate v5 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -165,7 +166,8 @@ if (!exists(dataTruthReportPath)) {
 
 
 console.log("=== Data Serving Strategy Enforcement v4 ===");
-const dataServingStrategyRelativePath = "docs/requirements/pantavion-water-data-serving-strategy.md";
+const dataServingStrategyRelativePath = "docs/requirements/pantavion-water-data-serving-strategy.md",
+  "docs/requirements/pantavion-water-serving-architecture-decision.md";
 
 if (exists(dataServingStrategyRelativePath)) {
   const dataServingStrategy = fs.readFileSync(path.join(root, dataServingStrategyRelativePath), "utf8");
@@ -194,6 +196,37 @@ if (exists(dataServingStrategyRelativePath)) {
       pass("Data Serving Strategy marker present: " + marker);
     } else {
       fail("Data Serving Strategy marker missing: " + marker);
+    }
+  }
+}
+
+console.log("=== Serving Architecture Decision Enforcement v5 ===");
+const servingArchitectureDecisionRelativePath = "docs/requirements/pantavion-water-serving-architecture-decision.md";
+
+if (exists(servingArchitectureDecisionRelativePath)) {
+  const servingArchitectureDecision = fs.readFileSync(path.join(root, servingArchitectureDecisionRelativePath), "utf8");
+
+  const servingArchitectureRequiredMarkers = [
+    "controlled hybrid spatial-serving architecture",
+    "The browser must never load the full raw water network directly",
+    "Protected full master source",
+    "Private processing pipeline",
+    "Private spatial index",
+    "Controlled serving API",
+    "Renderer receives only permitted bbox/tile data",
+    "PostGIS or equivalent spatial database",
+    "protected bbox API",
+    "protected vector tile service",
+    "role/access filtering",
+    "audit logging",
+    "renderer: later, after serving and access controls are ready"
+  ];
+
+  for (const marker of servingArchitectureRequiredMarkers) {
+    if (servingArchitectureDecision.includes(marker)) {
+      pass("Serving Architecture Decision marker present: " + marker);
+    } else {
+      fail("Serving Architecture Decision marker missing: " + marker);
     }
   }
 }
