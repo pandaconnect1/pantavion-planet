@@ -256,3 +256,4 @@ const styles: Record<string, CSSProperties> = {
     lineHeight: 1.55,
   },
 };
+

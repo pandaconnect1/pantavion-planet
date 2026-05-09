@@ -336,12 +336,12 @@ export default function WaterNetworkClient() {
               ? "ορτώνει το ιδιωτικό δίκτυο..."
               : hasFeatures
                 ? `νεργό layer: ${returnedFeatures} στοιχεία προβολής από ${totalFeatures} συνολικά`
-                : "εν βρέθηκαν γεωμετρίες για προβολή"}
+                : "εν βρέθηκαν στοιχεία δικτύου για προβολή"}
           </h3>
           <p style={styles.meta}>{sourceFile}</p>
         </div>
 
-        <div style={styles.modeBadge}>λαφρύ layer · αφή / σύρσιμο / τροχός</div>
+        <div style={styles.modeBadge}>ίκτυο ύδρευσης · αφή / σύρσιμο / τροχός</div>
       </div>
 
       <div
@@ -381,7 +381,7 @@ export default function WaterNetworkClient() {
         {!mapModel && (
           <div style={styles.empty}>
             <strong>εν φαίνεται σωστό δίκτυο ακόμα.</strong>
-            <span>{error || "ο layer φορτώθηκε, αλλά δεν βρέθηκαν σχεδιάσιμες γεωμετρίες."}</span>
+            <span>{error || "ο layer φορτώθηκε, αλλά δεν βρέθηκαν σχεδιάσιμες στοιχεία δικτύου."}</span>
           </div>
         )}
 
@@ -489,7 +489,7 @@ export default function WaterNetworkClient() {
             </svg>
 
             <div style={styles.mapBadge}>
-              διωτικό δίκτυο ενεργό · zoom {mapModel.zoom} · ελαφρύ mobile layer
+              διωτικό δίκτυο ενεργό · zoom {mapModel.zoom} · γρήγορο mobile layer
             </div>
           </>
         )}
@@ -631,3 +631,4 @@ const styles: Record<string, CSSProperties> = {
     fontSize: 13,
   },
 };
+
