@@ -41,10 +41,10 @@ export const emptyWaterNetworkCollection: WaterCollection = {
   pantavion: {
     status: "no_private_processed_layer",
     message:
-      "Δεν υπάρχει ακόμα ενεργό παραγωγικό private cloud layer ύδρευσης. Το Pantavion.com δεν μπορεί να διαβάσει τοπικά αρχεία από PC. Ρύθμισε PANTAVION_WATER_NETWORK_GEOJSON_URL σε private cloud/object storage.",
+      "Î”ÎµÎ½ Ï…Ï€Î¬ÏÏ‡ÎµÎ¹ Î±ÎºÏŒÎ¼Î± ÎµÎ½ÎµÏÎ³ÏŒ Ï€Î±ÏÎ±Î³Ï‰Î³Î¹ÎºÏŒ private cloud layer ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚. Î¤Î¿ Pantavion.com Î´ÎµÎ½ Î¼Ï€Î¿ÏÎµÎ¯ Î½Î± Î´Î¹Î±Î²Î¬ÏƒÎµÎ¹ Ï„Î¿Ï€Î¹ÎºÎ¬ Î±ÏÏ‡ÎµÎ¯Î± Î±Ï€ÏŒ PC. Î¡ÏÎ¸Î¼Î¹ÏƒÎµ PANTAVION_WATER_NETWORK_GEOJSON_URL ÏƒÎµ private cloud/object storage.",
     rawFileExposed: false,
     publicFolder: false,
-    authorityOwner: "Γιώργος",
+    authorityOwner: "Î“Î¹ÏŽÏÎ³Î¿Ï‚",
   },
 };
 
@@ -151,8 +151,10 @@ function geometryFamily(feature: WaterFeature): "line" | "polygon" | "point" | "
   if (type === "Polygon" || type === "MultiPolygon") return "polygon";
   if (type === "Point" || type === "MultiPoint") return "point";
 
-  if (type === "GeometryCollection" && Array.isArray(geometry?.geometries)) {
-    const childTypes = geometry.geometries.map((child) => child.type || "");
+  const childGeometries = geometry?.geometries;
+
+  if (type === "GeometryCollection" && Array.isArray(childGeometries)) {
+    const childTypes = childGeometries.map((child) => child.type || "");
 
     if (childTypes.some((childType) => childType === "LineString" || childType === "MultiLineString")) {
       return "line";
