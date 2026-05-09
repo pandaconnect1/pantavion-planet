@@ -1,4 +1,4 @@
-﻿const fs = require("fs");
+const fs = require("fs");
 const path = require("path");
 
 const root = process.cwd();
@@ -26,7 +26,8 @@ const sourceTruthScanFiles = [
   "app/professional/infrastructure/water/water-network-client.tsx",
 ];
 
-const dataTruthReportPath = "docs/requirements/pantavion-water-data-truth-report.md";
+const dataTruthReportPath = "docs/requirements/pantavion-water-data-truth-report.md",
+  "docs/requirements/pantavion-water-data-serving-strategy.md";
 
 const requiredDataTruthReportMarkers = [
   "Google Earth KMZ file is the reference truth",
@@ -89,7 +90,7 @@ function pass(message) {
   console.log("[PASS] " + message);
 }
 
-console.log("=== Pantavion Water Kernel Gate v3 ===");
+console.log("=== Pantavion Water Kernel Gate v4 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -162,6 +163,40 @@ if (!exists(dataTruthReportPath)) {
   }
 }
 
+
+console.log("=== Data Serving Strategy Enforcement v4 ===");
+const dataServingStrategyRelativePath = "docs/requirements/pantavion-water-data-serving-strategy.md";
+
+if (exists(dataServingStrategyRelativePath)) {
+  const dataServingStrategy = fs.readFileSync(path.join(root, dataServingStrategyRelativePath), "utf8");
+
+  const dataServingRequiredMarkers = [
+    "No renderer work may proceed before data serving strategy is locked",
+    "The full master source must remain complete",
+    "The browser must not load the entire raw water network at once",
+    "current visible map area",
+    "current zoom level",
+    "current authorized access level",
+    "current permitted network zone",
+    "bbox API",
+    "vector tiles",
+    "PMTiles",
+    "MBTiles",
+    "PostGIS",
+    "protected tile service",
+    "The serving system must not expose raw KMZ, KML, full GeoJSON, or complete network exports publicly",
+    "Raw export requires founder/admin approval",
+    "Founder/admin approval is required before production serving implementation"
+  ];
+
+  for (const marker of dataServingRequiredMarkers) {
+    if (dataServingStrategy.includes(marker)) {
+      pass("Data Serving Strategy marker present: " + marker);
+    } else {
+      fail("Data Serving Strategy marker missing: " + marker);
+    }
+  }
+}
 console.log("=== Source Truth Claim Scan v2 ===");
 
 for (const file of sourceTruthScanFiles) {
