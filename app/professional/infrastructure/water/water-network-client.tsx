@@ -19,7 +19,6 @@ type Collection = {
   type?: string;
   features?: Feature[];
   pantavion?: {
-    sourceFile?: string;
     featureCount?: number;
     returnedFeatureCount?: number;
     message?: string;
@@ -43,6 +42,7 @@ type Center = {
   lon: number;
   lat: number;
   label: string;
+  zoom?: number;
 };
 
 type WorldPoint = {
@@ -54,7 +54,37 @@ const MAP_WIDTH = 1200;
 const MAP_HEIGHT = 720;
 const TILE_SIZE = 256;
 const REQUEST_LIMIT = 5000;
-const MAX_POINTS = 150;
+const MAX_POINTS = 140;
+
+const copy = {
+  input: "\u0393\u03c1\u03ac\u03c8\u03b5 \u03bf\u03b4\u03cc \u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae",
+  search: "\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7",
+  locate: "\u0392\u03c1\u03b5\u03c2 \u03c4\u03b7 \u03b8\u03ad\u03c3\u03b7 \u03bc\u03bf\u03c5",
+  loading: "\u03a6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b7 \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5 \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2...",
+  loaded: "\u03a4\u03bf \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2 \u03c6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b5.",
+  loadFailed: "\u0394\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b5 \u03c4\u03bf \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2.",
+  writeAddress: "\u0393\u03c1\u03ac\u03c8\u03b5 \u03bf\u03b4\u03cc \u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae.",
+  searching: "\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7 \u03bf\u03b4\u03bf\u03cd...",
+  notFound: "\u0394\u03b5\u03bd \u03b2\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03b7 \u03bf\u03b4\u03cc\u03c2 \u03ae \u03b7 \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae.",
+  searchDone: "\u039f \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03bc\u03b5\u03c4\u03b1\u03ba\u03b9\u03bd\u03ae\u03b8\u03b7\u03ba\u03b5 \u03c3\u03c4\u03b7\u03bd \u03bf\u03b4\u03cc \u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae.",
+  searchFailed: "\u0397 \u03b1\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7 \u03b4\u03b5\u03bd \u03bf\u03bb\u03bf\u03ba\u03bb\u03b7\u03c1\u03ce\u03b8\u03b7\u03ba\u03b5.",
+  noGeo: "\u039f browser \u03b4\u03b5\u03bd \u03c5\u03c0\u03bf\u03c3\u03c4\u03b7\u03c1\u03af\u03b6\u03b5\u03b9 \u03b5\u03bd\u03c4\u03bf\u03c0\u03b9\u03c3\u03bc\u03cc \u03b8\u03ad\u03c3\u03b7\u03c2.",
+  locating: "\u0395\u03bd\u03c4\u03bf\u03c0\u03b9\u03c3\u03bc\u03cc\u03c2 \u03b8\u03ad\u03c3\u03b7\u03c2...",
+  locationDone: "\u039f \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03bc\u03b5\u03c4\u03b1\u03ba\u03b9\u03bd\u03ae\u03b8\u03b7\u03ba\u03b5 \u03c3\u03c4\u03b7 \u03b8\u03ad\u03c3\u03b7 \u03c3\u03bf\u03c5.",
+  locationFailed: "\u0394\u03b5\u03bd \u03b5\u03c0\u03b9\u03c4\u03c1\u03ac\u03c0\u03b7\u03ba\u03b5 \u03ae \u03b4\u03b5\u03bd \u03b2\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03b7 \u03b8\u03ad\u03c3\u03b7 \u03c3\u03bf\u03c5.",
+  currentLocation: "\u0397 \u03c4\u03c1\u03ad\u03c7\u03bf\u03c5\u03c3\u03b1 \u03b8\u03ad\u03c3\u03b7 \u03bc\u03bf\u03c5",
+  networkCenter: "\u039a\u03ad\u03bd\u03c4\u03c1\u03bf \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5",
+  network: "\u0394\u03af\u03ba\u03c4\u03c5\u03bf \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2",
+  shown: "\u03a0\u03c1\u03bf\u03b2\u03bf\u03bb\u03ae",
+  from: "\u03b1\u03c0\u03cc",
+  items: "\u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03b1 \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5",
+  noMap: "\u0394\u03b5\u03bd \u03b5\u03bc\u03c6\u03b1\u03bd\u03af\u03c3\u03c4\u03b7\u03ba\u03b5 \u03c4\u03bf \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2.",
+  checkSource: "\u0388\u03bb\u03b5\u03b3\u03be\u03b5 \u03c4\u03bf \u03b1\u03c1\u03c7\u03b9\u03ba\u03cc \u03b1\u03c1\u03c7\u03b5\u03af\u03bf \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5.",
+  selected: "\u0395\u03c0\u03b9\u03bb\u03b5\u03b3\u03bc\u03ad\u03bd\u03bf",
+  none: "\u03ba\u03b1\u03bc\u03af\u03b1 \u03b5\u03c0\u03b9\u03bb\u03bf\u03b3\u03ae",
+  item: "\u03a3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03bf \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5",
+  protectedText: "\u0399\u03b4\u03b9\u03c9\u03c4\u03b9\u03ba\u03cc \u03b1\u03c1\u03c7\u03b5\u03af\u03bf \u03b4\u03b9\u03ba\u03c4\u03cd\u03bf\u03c5: \u03c0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c4\u03b5\u03c5\u03bc\u03ad\u03bd\u03bf",
+};
 
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
@@ -129,9 +159,7 @@ function extractPartsFromGeometry(geometry: Geometry | undefined, feature: Featu
         if (!Array.isArray(ring)) continue;
 
         const points = ring.filter(isPosition);
-        if (points.length >= 3) {
-          parts.push({ kind: "polygon", points, feature });
-        }
+        if (points.length >= 3) parts.push({ kind: "polygon", points, feature });
       }
     }
 
@@ -186,23 +214,23 @@ function lonLatToWorld(lon: number, lat: number, zoom: number): WorldPoint {
 }
 
 function chooseZoom(bounds: Bounds) {
-  for (let zoom = 18; zoom >= 9; zoom -= 1) {
+  for (let zoom = 17; zoom >= 9; zoom -= 1) {
     const a = lonLatToWorld(bounds.minLon, bounds.maxLat, zoom);
     const b = lonLatToWorld(bounds.maxLon, bounds.minLat, zoom);
     const width = Math.abs(b.x - a.x);
     const height = Math.abs(b.y - a.y);
 
-    if (width <= MAP_WIDTH * 0.9 && height <= MAP_HEIGHT * 0.9) return zoom;
+    if (width <= MAP_WIDTH * 0.88 && height <= MAP_HEIGHT * 0.88) return zoom;
   }
 
-  return 14;
+  return 13;
 }
 
 function getBoundsCenter(bounds: Bounds): Center {
   return {
     lon: (bounds.minLon + bounds.maxLon) / 2,
     lat: (bounds.minLat + bounds.maxLat) / 2,
-    label: "Κέντρο δικτύου",
+    label: copy.networkCenter,
   };
 }
 
@@ -260,7 +288,7 @@ function getName(feature: Feature) {
       feature.properties?.NAME ||
       feature.properties?.pantavionId ||
       feature.properties?.id ||
-      "Στοιχείο δικτύου"
+      copy.item
   );
 }
 
@@ -269,7 +297,7 @@ export default function WaterNetworkClient() {
   const [selected, setSelected] = useState<Feature | null>(null);
   const [manualCenter, setManualCenter] = useState<Center | null>(null);
   const [query, setQuery] = useState("");
-  const [status, setStatus] = useState("Φόρτωση δικτύου ύδρευσης...");
+  const [status, setStatus] = useState(copy.loading);
 
   useEffect(() => {
     let active = true;
@@ -281,11 +309,11 @@ export default function WaterNetworkClient() {
       .then((json: Collection) => {
         if (!active) return;
         setData(json);
-        setStatus("Το δίκτυο ύδρευσης φορτώθηκε.");
+        setStatus(copy.loaded);
       })
       .catch(() => {
         if (!active) return;
-        setStatus("Δεν φορτώθηκε το δίκτυο ύδρευσης.");
+        setStatus(copy.loadFailed);
       });
 
     return () => {
@@ -301,7 +329,7 @@ export default function WaterNetworkClient() {
     if (!bounds) return null;
 
     const center = manualCenter || getBoundsCenter(bounds);
-    const zoom = manualCenter ? 17 : chooseZoom(bounds);
+    const zoom = manualCenter?.zoom || (manualCenter ? 17 : chooseZoom(bounds));
     const centerWorld = lonLatToWorld(center.lon, center.lat, zoom);
     const tiles = getTiles(centerWorld, zoom);
 
@@ -314,11 +342,11 @@ export default function WaterNetworkClient() {
     const text = query.trim();
 
     if (!text) {
-      setStatus("ΓΓράψε οδό ή περιοχή.");
+      setStatus(copy.writeAddress);
       return;
     }
 
-    setStatus("Αναζήτηση οδού...");
+    setStatus(copy.searching);
 
     try {
       const response = await fetch(
@@ -327,7 +355,7 @@ export default function WaterNetworkClient() {
       const results = (await response.json()) as { lon: string; lat: string; display_name: string }[];
 
       if (!results.length) {
-        setStatus("Δεν βρέθηκε η οδός ή η περιοχή.");
+        setStatus(copy.notFound);
         return;
       }
 
@@ -335,32 +363,34 @@ export default function WaterNetworkClient() {
         lon: Number(results[0].lon),
         lat: Number(results[0].lat),
         label: results[0].display_name,
+        zoom: 17,
       });
-      setStatus("Ο χάρτης μετακινήθηκε στην οδό/περιοχή.");
+      setStatus(copy.searchDone);
     } catch {
-      setStatus("Η αναζήτηση δεν ολοκληρώθηκε.");
+      setStatus(copy.searchFailed);
     }
   }
 
   function locateUser() {
     if (!navigator.geolocation) {
-      setStatus("Ο browser δεν υποστηρίζει εντοπισμό θέσης.");
+      setStatus(copy.noGeo);
       return;
     }
 
-    setStatus("Εντοπισμός θέσης...");
+    setStatus(copy.locating);
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setManualCenter({
           lon: position.coords.longitude,
           lat: position.coords.latitude,
-          label: "Η τρέχουσα θέση μου",
+          label: copy.currentLocation,
+          zoom: 17,
         });
-        setStatus("Ο χάρτης μετακινήθηκε στη θέση σου.");
+        setStatus(copy.locationDone);
       },
       () => {
-        setStatus("Δεν επιτράπηκε ή δεν βρέθηκε η θέση σου.");
+        setStatus(copy.locationFailed);
       },
       { enableHighAccuracy: true, timeout: 12000 }
     );
@@ -375,32 +405,32 @@ export default function WaterNetworkClient() {
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Γράψε οδό ή περιοχή"
+          placeholder={copy.input}
           style={styles.input}
         />
 
         <button type="submit" style={styles.button}>
-          ναζήτηση
+          {copy.search}
         </button>
 
         <button type="button" style={styles.button} onClick={locateUser}>
-          ρες τη θέση μου
+          {copy.locate}
         </button>
       </form>
 
       <div style={styles.status}>
-        <strong>Δίκτυο ύδρευσης</strong>
+        <strong>{copy.network}</strong>
         <span>{status}</span>
         <span>
-          Προβολή: {shown} από {total} στοιχεία δικτύου
+          {copy.shown}: {shown} {copy.from} {total} {copy.items}
         </span>
       </div>
 
       <div style={styles.map}>
         {!model ? (
           <div style={styles.empty}>
-            <strong>εν εμφανίστηκε το δίκτυο ύδρευσης.</strong>
-            <span>{data?.pantavion?.message || "Έλεγξε το αρχικό αρχείο δικτύου."}</span>
+            <strong>{copy.noMap}</strong>
+            <span>{data?.pantavion?.message || copy.checkSource}</span>
           </div>
         ) : (
           <>
@@ -462,10 +492,10 @@ export default function WaterNetworkClient() {
                     points={pointsToSvg(sampled, model.centerWorld, model.zoom)}
                     fill="none"
                     stroke="#ffd15c"
-                    strokeWidth="4"
+                    strokeWidth="3.2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    opacity="0.97"
+                    opacity="0.95"
                     onClick={() => setSelected(part.feature)}
                   />
                 );
@@ -489,9 +519,10 @@ export default function WaterNetworkClient() {
       </div>
 
       <footer style={styles.footer}>
-        <span>KMZ/KML δημόσια λήψη: όχι</span>
-        <span>Mock χρήστες: όχι</span>
-        <span>Επιλογή: {selected ? getName(selected) : "καμία"}</span>
+        <span>{copy.protectedText}</span>
+        <span>
+          {copy.selected}: {selected ? getName(selected) : copy.none}
+        </span>
       </footer>
     </div>
   );
@@ -504,14 +535,13 @@ const styles: Record<string, CSSProperties> = {
     color: "#fff8e7",
   },
   controls: {
-    display: "flex",
-    flexWrap: "wrap",
+    display: "grid",
+    gridTemplateColumns: "minmax(220px, 1fr) auto auto",
     gap: 10,
     padding: 14,
     borderBottom: "1px solid rgba(246,200,95,.22)",
   },
   input: {
-    flex: "1 1 280px",
     minHeight: 46,
     borderRadius: 14,
     border: "1px solid rgba(246,200,95,.35)",
@@ -531,6 +561,7 @@ const styles: Record<string, CSSProperties> = {
     fontSize: 15,
     fontWeight: 900,
     cursor: "pointer",
+    whiteSpace: "nowrap",
   },
   status: {
     display: "flex",
@@ -543,16 +574,14 @@ const styles: Record<string, CSSProperties> = {
   },
   map: {
     position: "relative",
-    height: "min(74vh, 760px)",
-    minHeight: 560,
+    height: "calc(100vh - 245px)",
+    minHeight: 520,
     overflow: "hidden",
     background: "#0a1324",
   },
   tiles: {
     position: "absolute",
     inset: 0,
-    opacity: 0.84,
-    filter: "contrast(.96) saturate(.88) brightness(.86)",
   },
   svg: {
     position: "absolute",
