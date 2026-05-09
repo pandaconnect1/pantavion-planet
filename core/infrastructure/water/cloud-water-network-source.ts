@@ -35,6 +35,14 @@ const localMobilePath = path.join(
   "water-network-mobile.geojson"
 );
 
+const localMobilePath = path.join(
+  process.cwd(),
+  "data",
+  "water-network-private",
+  "mobile",
+  "water-network-mobile.geojson"
+);
+
 const localProcessedPath = path.join(
   process.cwd(),
   "data",
