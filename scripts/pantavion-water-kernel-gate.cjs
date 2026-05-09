@@ -28,7 +28,8 @@ const sourceTruthScanFiles = [
 
 const dataTruthReportPath = "docs/requirements/pantavion-water-data-truth-report.md",
   "docs/requirements/pantavion-water-data-serving-strategy.md",
-  "docs/requirements/pantavion-water-serving-architecture-decision.md";
+  "docs/requirements/pantavion-water-serving-architecture-decision.md",
+  "core/infrastructure/water/water-serving-contract.ts";
 
 const requiredDataTruthReportMarkers = [
   "Google Earth KMZ file is the reference truth",
@@ -91,7 +92,7 @@ function pass(message) {
   console.log("[PASS] " + message);
 }
 
-console.log("=== Pantavion Water Kernel Gate v5 ===");
+console.log("=== Pantavion Water Kernel Gate v6 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -227,6 +228,34 @@ if (exists(servingArchitectureDecisionRelativePath)) {
       pass("Serving Architecture Decision marker present: " + marker);
     } else {
       fail("Serving Architecture Decision marker missing: " + marker);
+    }
+  }
+}
+
+console.log("=== Serving Contract Enforcement v6 ===");
+const servingContractRelativePath = "core/infrastructure/water/water-serving-contract.ts";
+
+if (exists(servingContractRelativePath)) {
+  const servingContract = fs.readFileSync(path.join(root, servingContractRelativePath), "utf8");
+
+  const servingContractRequiredMarkers = [
+    "water-serving-contract-v1",
+    "controlled-hybrid-spatial-serving",
+    "postgis",
+    "bbox-api",
+    "vector-tiles",
+    "protected-tile-service",
+    "renderer-downstream-only",
+    "The browser must never load the full raw water network directly",
+    "founderApprovedProductionActivation",
+    "Founder/admin approval is required before production activation"
+  ];
+
+  for (const marker of servingContractRequiredMarkers) {
+    if (servingContract.includes(marker)) {
+      pass("Serving Contract marker present: " + marker);
+    } else {
+      fail("Serving Contract marker missing: " + marker);
     }
   }
 }
