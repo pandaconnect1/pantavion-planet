@@ -14,6 +14,7 @@ const requiredFiles = [
   "core/infrastructure/water/water-serving-contract.ts",
   "core/infrastructure/water/controlled-water-serving-scaffold.ts",
   "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+  "app/api/professional/infrastructure/water/serving/bbox/route.ts",
 ];
 
 const forbiddenRootFiles = [
@@ -181,7 +182,7 @@ function enforceMarkers(title, relativePath, markers) {
   }
 }
 
-console.log("=== Pantavion Water Kernel Gate v9 ===");
+console.log("=== Pantavion Water Kernel Gate v10 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -265,6 +266,38 @@ if (exists(servingReadinessRouteRelativePath)) {
       pass("Serving Readiness Route marker present: " + marker);
     } else {
       fail("Serving Readiness Route marker missing: " + marker);
+    }
+  }
+}
+
+console.log("=== Serving BBOX Route Enforcement v10 ===");
+const servingBboxRouteRelativePath = "app/api/professional/infrastructure/water/serving/bbox/route.ts";
+
+if (exists(servingBboxRouteRelativePath)) {
+  const servingBboxRoute = read(servingBboxRouteRelativePath);
+
+  const servingBboxRouteRequiredMarkers = [
+    "water-serving-bbox-route-v1",
+    "productionServingStatus: \"blocked\"",
+    "rendererStatus: \"blocked\"",
+    "dataReturned: false",
+    "mayReturnRawMaster: false",
+    "mayReturnCompleteNetwork: false",
+    "No water network data is returned by this bbox route.",
+    "Founder/admin approval is required before production activation",
+    "spatialServingReady: false",
+    "accessControlReady: false",
+    "founderApprovedProductionActivation: false",
+    "requestedViewport",
+    "missingParameters",
+    "bbox-api"
+  ];
+
+  for (const marker of servingBboxRouteRequiredMarkers) {
+    if (servingBboxRoute.includes(marker)) {
+      pass("Serving BBOX Route marker present: " + marker);
+    } else {
+      fail("Serving BBOX Route marker missing: " + marker);
     }
   }
 }
