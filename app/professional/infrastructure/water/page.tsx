@@ -4,40 +4,40 @@ import FounderApprovalQueue from "./founder-approval-queue";
 import PantaAIWaterSentinel from "./pantaai-water-sentinel";
 
 const officialLayers = [
-  "Î‘Î³Ï‰Î³Î¿Î¯ ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚",
-  "ÎšÎµÎ½Ï„ÏÎ¹ÎºÎ¿Î¯ Î±Î³Ï‰Î³Î¿Î¯",
-  "Î’Î¬Î½ÎµÏ‚",
-  "Î Î±ÏÎ¿Ï‡Î­Ï‚",
-  "ÎœÎµÏ„ÏÎ·Ï„Î­Ï‚ ÏŒÏ€Î¿Ï… Ï…Ï€Î¬ÏÏ‡Î¿Ï…Î½",
-  "Î•Î¾Î±ÏÏ„Î®Î¼Î±Ï„Î±",
-  "Î Î±Î»Î±Î¹ÏŒ / Î±Î½Ï„Î¹ÎºÎ±Ï„ÎµÏƒÏ„Î·Î¼Î­Î½Î¿ Î´Î¯ÎºÏ„Ï…Î¿",
-  "Î£Î·Î¼ÎµÎ¯Î± Ï„ÎµÏ‡Î½Î¹ÎºÎ®Ï‚ Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·Ï‚",
+  "�Z�?~�Z³Ï�?��Z³�Z¿�Z¯ Ï�Z´Ï�ZµÏ�?�Ï�'�Z·Ï�?s",
+  "�Zš�Zµ�Z½Ï�?zÏ�Z¹�Zº�Z¿�Z¯ �Z±�Z³Ï�?��Z³�Z¿�Z¯",
+  "�Z�?T�Z¬�Z½�ZµÏ�?s",
+  "�Z �Z±Ï�Z¿Ï�?��Z­Ï�?s",
+  "�Z�"�ZµÏ�?zÏ�Z·Ï�?z�Z­Ï�?s Ï�'Ï�,��Z¿Ï�?� Ï�?�Ï�,��Z¬ÏÏ�?��Z¿Ï�?��Z½",
+  "�Z�?��Z¾�Z±ÏÏ�?z�Z®�Z¼�Z±Ï�?z�Z±",
+  "�Z �Z±�Z»�Z±�Z¹Ï�' / �Z±�Z½Ï�?z�Z¹�Zº�Z±Ï�?z�ZµÏ�'Ï�?z�Z·�Z¼�Z­�Z½�Z¿ �Z´�Z¯�ZºÏ�?zÏ�?��Z¿",
+  "�Z£�Z·�Z¼�Zµ�Z¯�Z± Ï�?z�ZµÏ�?��Z½�Z¹�Zº�Z®Ï�?s �Z´�Z¹�ZµÏ�Z¸Ï�?��Z½Ï�'�Z·Ï�?s",
 ];
 
 const fieldRules = [
-  "ÎŸ Ï‡Î¬ÏÏ„Î·Ï‚ ÎµÎ¯Î½Î±Î¹ Î· Ï€ÏÏŽÏ„Î· Î»ÎµÎ¹Ï„Î¿Ï…ÏÎ³Î¯Î±.",
-  "Î— ÎºÎ¯Î½Î·ÏƒÎ· Î³Î¯Î½ÎµÏ„Î±Î¹ Î¼Îµ Î±Ï†Î®, ÏƒÏÏÏƒÎ¹Î¼Î¿ ÎºÎ±Î¹ Ï†Ï…ÏƒÎ¹ÎºÎ® Ï€Î»Î¿Î®Î³Î·ÏƒÎ·.",
-  "Î¤Î¿ Ï€ÏÎ±Î³Î¼Î±Ï„Î¹ÎºÏŒ KMZ/KML Î´ÎµÎ½ ÎµÎºÏ„Î¯Î¸ÎµÏ„Î±Î¹ Î´Î·Î¼ÏŒÏƒÎ¹Î±.",
-  "ÎšÎ¬Î¸Îµ ÎµÏ…Î±Î¯ÏƒÎ¸Î·Ï„Î· Ï€ÏÏŒÏƒÎ²Î±ÏƒÎ· ÎµÎ³ÎºÏÎ¯Î½ÎµÏ„Î±Î¹ Î±Ï€ÏŒ Ï„Î·Î½ Î‘ÏÏ‡Î®.",
-  "Î¤Î¿ Î»Î¿Î³Î¹ÏƒÏ„Î®ÏÎ¹Î¿, Î· Î±Ï€Î¿Î¸Î®ÎºÎ· ÎºÎ±Î¹ Ï„Î± ÏƒÏ…Î½ÎµÏÎ³ÎµÎ¯Î± Î¸Î± ÏƒÏ…Î½Î´ÎµÎ¸Î¿ÏÎ½ ÏƒÎµ ÎµÏ€ÏŒÎ¼ÎµÎ½Î± ÏƒÏ„Î¬Î´Î¹Î±.",
+  "�ZŸ Ï�?��Z¬ÏÏ�?z�Z·Ï�?s �Zµ�Z¯�Z½�Z±�Z¹ �Z· Ï�,�ÏÏŽÏ�?z�Z· �Z»�Zµ�Z¹Ï�?z�Z¿Ï�?�Ï�Z³�Z¯�Z±.",
+  "�Z�?" �Zº�Z¯�Z½�Z·Ï�'�Z· �Z³�Z¯�Z½�ZµÏ�?z�Z±�Z¹ �Z¼�Zµ �Z±Ï�?��Z®, Ï�'ÏÏÏ�'�Z¹�Z¼�Z¿ �Zº�Z±�Z¹ Ï�?�Ï�?�Ï�'�Z¹�Zº�Z® Ï�,��Z»�Z¿�Z®�Z³�Z·Ï�'�Z·.",
+  "�Z¤�Z¿ Ï�,�Ï�Z±�Z³�Z¼�Z±Ï�?z�Z¹�ZºÏ�' KMZ/KML �Z´�Zµ�Z½ �Zµ�ZºÏ�?z�Z¯�Z¸�ZµÏ�?z�Z±�Z¹ �Z´�Z·�Z¼Ï�'Ï�'�Z¹�Z±.",
+  "�Zš�Z¬�Z¸�Zµ �ZµÏ�?��Z±�Z¯Ï�'�Z¸�Z·Ï�?z�Z· Ï�,�ÏÏ�'Ï�'�Z²�Z±Ï�'�Z· �Zµ�Z³�ZºÏ�Z¯�Z½�ZµÏ�?z�Z±�Z¹ �Z±Ï�,�Ï�' Ï�?z�Z·�Z½ �Z�?~ÏÏ�?��Z®.",
+  "�Z¤�Z¿ �Z»�Z¿�Z³�Z¹Ï�'Ï�?z�Z®Ï�Z¹�Z¿, �Z· �Z±Ï�,��Z¿�Z¸�Z®�Zº�Z· �Zº�Z±�Z¹ Ï�?z�Z± Ï�'Ï�?��Z½�ZµÏ�Z³�Zµ�Z¯�Z± �Z¸�Z± Ï�'Ï�?��Z½�Z´�Zµ�Z¸�Z¿Ï�Z½ Ï�'�Zµ �ZµÏ�,�Ï�'�Z¼�Zµ�Z½�Z± Ï�'Ï�?z�Z¬�Z´�Z¹�Z±.",
 ];
 
 export default function WaterInfrastructurePage() {
   return (
     <main style={styles.shell}>
       <section style={styles.hero}>
-        <div style={styles.lockBadge}>Î Î¡ÎŸÎ£Î¤Î‘Î¤Î•Î¥ÎœÎ•ÎÎ— Î•Î Î‘Î“Î“Î•Î›ÎœÎ‘Î¤Î™ÎšÎ— Î•ÎÎŸÎ¤Î—Î¤Î‘ Â· Î¥Î”Î¡Î•Î¥Î£Î—</div>
-        <p style={styles.kicker}>Pantavion ÎµÏ€Î±Î³Î³ÎµÎ»Î¼Î±Ï„Î¹ÎºÎ® Ï…Ï€Î¿Î´Î¿Î¼Î®</p>
-        <h1 style={styles.title}>ÎˆÎ»ÎµÎ³Ï‡Î¿Ï‚ Î”Î¹ÎºÏ„ÏÎ¿Ï… ÎŽÎ´ÏÎµÏ…ÏƒÎ·Ï‚</h1>
+        <div style={styles.lockBadge}>�Z �Z¡�ZŸ�Z£�Z¤�Z�?~�Z¤�Z�?��Z¥�Z�"�Z�?��Z�Z�?" �Z�?��Z �Z�?~�Z�?o�Z�?o�Z�?��Z�?��Z�"�Z�?~�Z¤�Z�"��Zš�Z�?" �Z�?��Z�ZŸ�Z¤�Z�?"�Z¤�Z�?~ �,· �Z¥�Z�?��Z¡�Z�?��Z¥�Z£�Z�?"</div>
+        <p style={styles.kicker}>Pantavion �ZµÏ�,��Z±�Z³�Z³�Zµ�Z»�Z¼�Z±Ï�?z�Z¹�Zº�Z® Ï�?�Ï�,��Z¿�Z´�Z¿�Z¼�Z®</p>
+        <h1 style={styles.title}>�Z�?�Z»�Zµ�Z³Ï�?��Z¿Ï�?s �Z�?��Z¹�ZºÏ�?zÏ�Z¿Ï�?� �ZŽ�Z´Ï�ZµÏ�?�Ï�'�Z·Ï�?s</h1>
         <p style={styles.subtitle}>
-          Î ÏÎ±Î³Î¼Î±Ï„Î¹ÎºÏŒÏ‚ Ï‡Î¬ÏÏ„Î·Ï‚ ÎµÏÎ³Î±ÏƒÎ¯Î±Ï‚ Î³Î¹Î± Î±Î³Ï‰Î³Î¿ÏÏ‚, Î²Î¬Î½ÎµÏ‚, Ï€Î±ÏÎ¿Ï‡Î­Ï‚, Ï„ÎµÏ‡Î½Î¹ÎºÎ­Ï‚ Î´Î¹ÎµÏ…Î¸ÏÎ½ÏƒÎµÎ¹Ï‚,
-          Î²Î»Î¬Î²ÎµÏ‚, Ï†Ï‰Ï„Î¿Î³ÏÎ±Ï†Î¯ÎµÏ‚, ÏƒÏ…Î½ÎµÏÎ³ÎµÎ¯Î± ÎºÎ±Î¹ ÎµÎ»ÎµÎ³Ï‡ÏŒÎ¼ÎµÎ½Î· Ï€ÏÏŒÏƒÎ²Î±ÏƒÎ·.
+          �Z Ï�Z±�Z³�Z¼�Z±Ï�?z�Z¹�ZºÏ�'Ï�?s Ï�?��Z¬ÏÏ�?z�Z·Ï�?s �ZµÏ�Z³�Z±Ï�'�Z¯�Z±Ï�?s �Z³�Z¹�Z± �Z±�Z³Ï�?��Z³�Z¿ÏÏ�?s, �Z²�Z¬�Z½�ZµÏ�?s, Ï�,��Z±Ï�Z¿Ï�?��Z­Ï�?s, Ï�?z�ZµÏ�?��Z½�Z¹�Zº�Z­Ï�?s �Z´�Z¹�ZµÏ�?��Z¸Ï�Z½Ï�'�Zµ�Z¹Ï�?s,
+          �Z²�Z»�Z¬�Z²�ZµÏ�?s, Ï�?�Ï�?�Ï�?z�Z¿�Z³Ï�Z±Ï�?��Z¯�ZµÏ�?s, Ï�'Ï�?��Z½�ZµÏ�Z³�Zµ�Z¯�Z± �Zº�Z±�Z¹ �Zµ�Z»�Zµ�Z³Ï�?�Ï�'�Z¼�Zµ�Z½�Z· Ï�,�ÏÏ�'Ï�'�Z²�Z±Ï�'�Z·.
         </p>
 
         <div style={styles.securityStrip}>
-          <span>ÎšÎ±Î¼Î¯Î± Î´Î·Î¼ÏŒÏƒÎ¹Î± Î»Î®ÏˆÎ· KMZ/KML</span>
-          <span>Î™Î´Î¹Ï‰Ï„Î¹ÎºÎ® Î±Ï€Î¿Î¸Î®ÎºÎµÏ…ÏƒÎ·</span>
-          <span>ÎˆÎ³ÎºÏÎ¹ÏƒÎ· Î±Ï€ÏŒ Î“Î¹ÏŽÏÎ³Î¿</span>
+          <span>�Zš�Z±�Z¼�Z¯�Z± �Z´�Z·�Z¼Ï�'Ï�'�Z¹�Z± �Z»�Z®Ï�?�Z· KMZ/KML</span>
+          <span>�Z�"��Z´�Z¹Ï�?�Ï�?z�Z¹�Zº�Z® �Z±Ï�,��Z¿�Z¸�Z®�Zº�ZµÏ�?�Ï�'�Z·</span>
+          <span>�Z�?�Z³�ZºÏ�Z¹Ï�'�Z· �Z±Ï�,�Ï�' �Z�?o�Z¹ÏŽÏ�Z³�Z¿</span>
           <span>Audit-ready</span>
           <span>Mobile-first</span>
         </div>
@@ -46,7 +46,7 @@ export default function WaterInfrastructurePage() {
       <section style={styles.workspace}>
         <aside style={styles.leftPanel}>
           <section style={styles.panel}>
-            <p style={styles.panelLabel}>Î•Ï€Î¯Ï€ÎµÎ´Î± Î´Î¹ÎºÏ„ÏÎ¿Ï…</p>
+            <p style={styles.panelLabel}>�Z�?�Ï�,��Z¯Ï�,��Zµ�Z´�Z± �Z´�Z¹�ZºÏ�?zÏ�Z¿Ï�?�</p>
             <div style={styles.layerList}>
               {officialLayers.map((layer) => (
                 <span key={layer} style={styles.layerItem}>
@@ -57,7 +57,7 @@ export default function WaterInfrastructurePage() {
           </section>
 
           <section style={styles.panel}>
-            <p style={styles.panelLabel}>ÎšÎ±Î½ÏŒÎ½ÎµÏ‚ Ï€ÎµÎ´Î¯Î¿Ï…</p>
+            <p style={styles.panelLabel}>�Zš�Z±�Z½Ï�'�Z½�ZµÏ�?s Ï�,��Zµ�Z´�Z¯�Z¿Ï�?�</p>
             <ul style={styles.ruleList}>
               {fieldRules.map((rule) => (
                 <li key={rule}>{rule}</li>
@@ -76,11 +76,11 @@ export default function WaterInfrastructurePage() {
           <PantaAIWaterSentinel />
 
           <section style={styles.panel}>
-            <p style={styles.panelLabel}>Î¤ÎµÏ‡Î½Î¹ÎºÏŒ Î±Ï€Î¿Ï„Î­Î»ÎµÏƒÎ¼Î±</p>
+            <p style={styles.panelLabel}>�Z¤�ZµÏ�?��Z½�Z¹�ZºÏ�' �Z±Ï�,��Z¿Ï�?z�Z­�Z»�ZµÏ�'�Z¼�Z±</p>
             <p style={styles.panelText}>
-              Î¤Î¿ module Ï€ÏÎ­Ï€ÎµÎ¹ Î½Î± Î±Î½Î¿Î¯Î³ÎµÎ¹ Î³ÏÎ®Î³Î¿ÏÎ± ÏƒÎµ PC, tablet ÎºÎ±Î¹ ÎºÎ¹Î½Î·Ï„ÏŒ. Î— Ï€Î»Î®ÏÎ·Ï‚ Ï€Î±ÏÎ±Î³Ï‰Î³Î®
-              Ï‡ÏÎµÎ¹Î¬Î¶ÎµÏ„Î±Î¹ ÏƒÏ„Î· ÏƒÏ…Î½Î­Ï‡ÎµÎ¹Î± vector tiles, Ï€ÏÎ±Î³Î¼Î±Ï„Î¹ÎºÏŒ auth, audit log, offline cache ÎºÎ±Î¹
-              ÎºÎ±Ï„Î±Ï‡ÏŽÏÎ·ÏƒÎ· ÎµÏÎ³Î±ÏƒÎ¹ÏŽÎ½ Î¼Îµ Ï†Ï‰Ï„Î¿Î³ÏÎ±Ï†Î¯ÎµÏ‚.
+              �Z¤�Z¿ module Ï�,�Ï�Z­Ï�,��Zµ�Z¹ �Z½�Z± �Z±�Z½�Z¿�Z¯�Z³�Zµ�Z¹ �Z³Ï�Z®�Z³�Z¿Ï�Z± Ï�'�Zµ PC, tablet �Zº�Z±�Z¹ �Zº�Z¹�Z½�Z·Ï�?zÏ�'. �Z�?" Ï�,��Z»�Z®Ï�Z·Ï�?s Ï�,��Z±Ï�Z±�Z³Ï�?��Z³�Z®
+              Ï�?�Ï�Zµ�Z¹�Z¬�Z¶�ZµÏ�?z�Z±�Z¹ Ï�'Ï�?z�Z· Ï�'Ï�?��Z½�Z­Ï�?��Zµ�Z¹�Z± vector tiles, Ï�,�Ï�Z±�Z³�Z¼�Z±Ï�?z�Z¹�ZºÏ�' auth, audit log, offline cache �Zº�Z±�Z¹
+              �Zº�Z±Ï�?z�Z±Ï�?�ÏŽÏ�Z·Ï�'�Z· �ZµÏ�Z³�Z±Ï�'�Z¹ÏŽ�Z½ �Z¼�Zµ Ï�?�Ï�?�Ï�?z�Z¿�Z³Ï�Z±Ï�?��Z¯�ZµÏ�?s.
             </p>
           </section>
         </aside>
