@@ -1,4 +1,4 @@
-const fs = require("fs");
+﻿const fs = require("fs");
 const path = require("path");
 
 const root = process.cwd();
@@ -7,6 +7,12 @@ const requiredFiles = [
   "core/infrastructure/water/water-kernel-constitution.ts",
   "data/water-network-private/processed/water-network.geojson",
   "data/water-network-private/mobile/water-network-mobile.geojson",
+  "docs/requirements/pantavion-water-data-truth-report.md",
+  "docs/requirements/pantavion-water-full-master-strategy.md",
+  "docs/requirements/pantavion-water-data-serving-strategy.md",
+  "docs/requirements/pantavion-water-serving-architecture-decision.md",
+  "core/infrastructure/water/water-serving-contract.ts",
+  "core/infrastructure/water/controlled-water-serving-scaffold.ts",
 ];
 
 const forbiddenRootFiles = [
@@ -26,11 +32,22 @@ const sourceTruthScanFiles = [
   "app/professional/infrastructure/water/water-network-client.tsx",
 ];
 
-const dataTruthReportPath = "docs/requirements/pantavion-water-data-truth-report.md",
-  "docs/requirements/pantavion-water-data-serving-strategy.md",
-  "docs/requirements/pantavion-water-serving-architecture-decision.md",
-  "core/infrastructure/water/water-serving-contract.ts",
-  "core/infrastructure/water/controlled-water-serving-scaffold.ts";
+const dataTruthReportPath = "docs/requirements/pantavion-water-data-truth-report.md";
+const dataServingStrategyRelativePath = "docs/requirements/pantavion-water-data-serving-strategy.md";
+const servingArchitectureDecisionRelativePath = "docs/requirements/pantavion-water-serving-architecture-decision.md";
+const servingContractRelativePath = "core/infrastructure/water/water-serving-contract.ts";
+const controlledServingScaffoldRelativePath = "core/infrastructure/water/controlled-water-serving-scaffold.ts";
+
+const requiredLawMarkers = [
+  "NO_DATA_LOSS",
+  "NO_SAMPLING_AS_FINAL",
+  "NO_PREVIEW_AS_PRODUCTION",
+  "NO_PUBLIC_GEODATA",
+  "NO_GUESSED_ASSET_TYPES",
+  "GOOGLE_EARTH_REFERENCE_REQUIRED",
+  "BUILD_TSC_AUDIT_REQUIRED",
+  "FOUNDER_APPROVAL_REQUIRED",
+];
 
 const requiredDataTruthReportMarkers = [
   "Google Earth KMZ file is the reference truth",
@@ -44,32 +61,79 @@ const requiredDataTruthReportMarkers = [
   "No data pipeline change without founder approval",
 ];
 
+const dataServingRequiredMarkers = [
+  "No renderer work may proceed before data serving strategy is locked",
+  "The full master source must remain complete",
+  "The browser must not load the entire raw water network at once",
+  "current visible map area",
+  "current zoom level",
+  "current authorized access level",
+  "current permitted network zone",
+  "bbox API",
+  "vector tiles",
+  "PMTiles",
+  "MBTiles",
+  "PostGIS",
+  "protected tile service",
+  "The serving system must not expose raw KMZ, KML, full GeoJSON, or complete network exports publicly",
+  "Raw export requires founder/admin approval",
+  "Founder/admin approval is required before production serving implementation",
+];
+
+const servingArchitectureRequiredMarkers = [
+  "controlled hybrid spatial-serving architecture",
+  "The browser must never load the full raw water network directly",
+  "Protected full master source",
+  "Private processing pipeline",
+  "Private spatial index",
+  "Controlled serving API",
+  "Renderer receives only permitted bbox/tile data",
+  "PostGIS or equivalent spatial database",
+  "protected bbox API",
+  "protected vector tile service",
+  "role/access filtering",
+  "audit logging",
+  "renderer: later, after serving and access controls are ready",
+];
+
+const servingContractRequiredMarkers = [
+  "water-serving-contract-v1",
+  "controlled-hybrid-spatial-serving",
+  "postgis",
+  "bbox-api",
+  "vector-tiles",
+  "protected-tile-service",
+  "renderer-downstream-only",
+  "The browser must never load the full raw water network directly",
+  "founderApprovedProductionActivation",
+  "Founder/admin approval is required before production activation",
+];
+
+const controlledServingRequiredMarkers = [
+  "water-controlled-serving-scaffold-v1",
+  "planControlledWaterServingRequest",
+  "mayReturnRawMaster: false",
+  "mayReturnCompleteNetwork: false",
+  "Invalid bbox. Controlled serving requires a valid visible spatial area.",
+  "Invalid zoom. Controlled serving requires a valid zoom level.",
+  "Requester is not active.",
+  "The full raw master network must never be returned to the browser.",
+  "bbox-api",
+];
 
 const forbiddenFinalTruthClaims = [
   {
     label: "mobile/preview/sample/subset/5000 described as final/full/master/complete truth",
-    pattern: /\\b(mobile|preview|sample|sampled|subset|reduced|5000|5,000)\\b[\\s\\S]{0,140}\\b(final|full|master|complete|production truth|reference truth)\\b/i,
+    pattern: /\b(mobile|preview|sample|sampled|subset|reduced|5000|5,000)\b[\s\S]{0,140}\b(final|full|master|complete|production truth|reference truth)\b/i,
   },
   {
     label: "final/full/master/complete truth described as mobile/preview/sample/subset/5000",
-    pattern: /\\b(final|full|master|complete|production truth|reference truth)\\b[\\s\\S]{0,140}\\b(mobile|preview|sample|sampled|subset|reduced|5000|5,000)\\b/i,
+    pattern: /\b(final|full|master|complete|production truth|reference truth)\b[\s\S]{0,140}\b(mobile|preview|sample|sampled|subset|reduced|5000|5,000)\b/i,
   },
   {
     label: "reduced or sampled data presented as production/final/truth",
-    pattern: /\\b(reduced|sampled|subset|preview)\\b[\\s\\S]{0,140}\\b(production|final|truth|complete)\\b/i,
+    pattern: /\b(reduced|sampled|subset|preview)\b[\s\S]{0,140}\b(production|final|truth|complete)\b/i,
   },
-];
-
-
-const requiredLawMarkers = [
-  "NO_DATA_LOSS",
-  "NO_SAMPLING_AS_FINAL",
-  "NO_PREVIEW_AS_PRODUCTION",
-  "NO_PUBLIC_GEODATA",
-  "NO_GUESSED_ASSET_TYPES",
-  "GOOGLE_EARTH_REFERENCE_REQUIRED",
-  "BUILD_TSC_AUDIT_REQUIRED",
-  "FOUNDER_APPROVAL_REQUIRED",
 ];
 
 let failures = 0;
@@ -77,6 +141,10 @@ let warnings = 0;
 
 function exists(relativePath) {
   return fs.existsSync(path.join(root, relativePath));
+}
+
+function read(relativePath) {
+  return fs.readFileSync(path.join(root, relativePath), "utf8");
 }
 
 function fail(message) {
@@ -93,7 +161,26 @@ function pass(message) {
   console.log("[PASS] " + message);
 }
 
-console.log("=== Pantavion Water Kernel Gate v7 ===");
+function enforceMarkers(title, relativePath, markers) {
+  console.log(title);
+
+  if (!exists(relativePath)) {
+    fail("Required enforcement file missing: " + relativePath);
+    return;
+  }
+
+  const content = read(relativePath);
+
+  for (const marker of markers) {
+    if (content.includes(marker)) {
+      pass("Marker present in " + relativePath + ": " + marker);
+    } else {
+      fail("Marker missing in " + relativePath + ": " + marker);
+    }
+  }
+}
+
+console.log("=== Pantavion Water Kernel Gate v8 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -103,10 +190,10 @@ for (const file of requiredFiles) {
   }
 }
 
-const constitutionPath = path.join(root, "core/infrastructure/water/water-kernel-constitution.ts");
+const constitutionPath = "core/infrastructure/water/water-kernel-constitution.ts";
 
-if (fs.existsSync(constitutionPath)) {
-  const constitution = fs.readFileSync(constitutionPath, "utf8");
+if (exists(constitutionPath)) {
+  const constitution = read(constitutionPath);
 
   for (const marker of requiredLawMarkers) {
     if (constitution.includes(marker)) {
@@ -124,8 +211,6 @@ for (const file of forbiddenRootFiles) {
     pass("No forbidden temporary root geodata file: " + file);
   }
 }
-
-const publicDir = path.join(root, "public");
 
 function scanPublicGeodata(dir) {
   if (!fs.existsSync(dir)) return;
@@ -147,148 +232,15 @@ function scanPublicGeodata(dir) {
   }
 }
 
-scanPublicGeodata(publicDir);
+scanPublicGeodata(path.join(root, "public"));
 
+enforceMarkers("=== Data Truth Report Enforcement v8 ===", dataTruthReportPath, requiredDataTruthReportMarkers);
+enforceMarkers("=== Data Serving Strategy Enforcement v8 ===", dataServingStrategyRelativePath, dataServingRequiredMarkers);
+enforceMarkers("=== Serving Architecture Decision Enforcement v8 ===", servingArchitectureDecisionRelativePath, servingArchitectureRequiredMarkers);
+enforceMarkers("=== Serving Contract Enforcement v8 ===", servingContractRelativePath, servingContractRequiredMarkers);
+enforceMarkers("=== Controlled Serving Scaffold Enforcement v8 ===", controlledServingScaffoldRelativePath, controlledServingRequiredMarkers);
 
-console.log("=== Data Truth Report Enforcement v3 ===");
-
-if (!exists(dataTruthReportPath)) {
-  fail("Data Truth Report missing: " + dataTruthReportPath);
-} else {
-  const report = fs.readFileSync(path.join(root, dataTruthReportPath), "utf8");
-
-  for (const marker of requiredDataTruthReportMarkers) {
-    if (report.includes(marker)) {
-      pass("Data Truth Report marker present: " + marker);
-    } else {
-      fail("Data Truth Report marker missing: " + marker);
-    }
-  }
-}
-
-
-console.log("=== Data Serving Strategy Enforcement v4 ===");
-const dataServingStrategyRelativePath = "docs/requirements/pantavion-water-data-serving-strategy.md",
-  "docs/requirements/pantavion-water-serving-architecture-decision.md";
-
-if (exists(dataServingStrategyRelativePath)) {
-  const dataServingStrategy = fs.readFileSync(path.join(root, dataServingStrategyRelativePath), "utf8");
-
-  const dataServingRequiredMarkers = [
-    "No renderer work may proceed before data serving strategy is locked",
-    "The full master source must remain complete",
-    "The browser must not load the entire raw water network at once",
-    "current visible map area",
-    "current zoom level",
-    "current authorized access level",
-    "current permitted network zone",
-    "bbox API",
-    "vector tiles",
-    "PMTiles",
-    "MBTiles",
-    "PostGIS",
-    "protected tile service",
-    "The serving system must not expose raw KMZ, KML, full GeoJSON, or complete network exports publicly",
-    "Raw export requires founder/admin approval",
-    "Founder/admin approval is required before production serving implementation"
-  ];
-
-  for (const marker of dataServingRequiredMarkers) {
-    if (dataServingStrategy.includes(marker)) {
-      pass("Data Serving Strategy marker present: " + marker);
-    } else {
-      fail("Data Serving Strategy marker missing: " + marker);
-    }
-  }
-}
-
-console.log("=== Serving Architecture Decision Enforcement v5 ===");
-const servingArchitectureDecisionRelativePath = "docs/requirements/pantavion-water-serving-architecture-decision.md";
-
-if (exists(servingArchitectureDecisionRelativePath)) {
-  const servingArchitectureDecision = fs.readFileSync(path.join(root, servingArchitectureDecisionRelativePath), "utf8");
-
-  const servingArchitectureRequiredMarkers = [
-    "controlled hybrid spatial-serving architecture",
-    "The browser must never load the full raw water network directly",
-    "Protected full master source",
-    "Private processing pipeline",
-    "Private spatial index",
-    "Controlled serving API",
-    "Renderer receives only permitted bbox/tile data",
-    "PostGIS or equivalent spatial database",
-    "protected bbox API",
-    "protected vector tile service",
-    "role/access filtering",
-    "audit logging",
-    "renderer: later, after serving and access controls are ready"
-  ];
-
-  for (const marker of servingArchitectureRequiredMarkers) {
-    if (servingArchitectureDecision.includes(marker)) {
-      pass("Serving Architecture Decision marker present: " + marker);
-    } else {
-      fail("Serving Architecture Decision marker missing: " + marker);
-    }
-  }
-}
-
-console.log("=== Serving Contract Enforcement v6 ===");
-const servingContractRelativePath = "core/infrastructure/water/water-serving-contract.ts",
-  "core/infrastructure/water/controlled-water-serving-scaffold.ts";
-
-if (exists(servingContractRelativePath)) {
-  const servingContract = fs.readFileSync(path.join(root, servingContractRelativePath), "utf8");
-
-  const servingContractRequiredMarkers = [
-    "water-serving-contract-v1",
-    "controlled-hybrid-spatial-serving",
-    "postgis",
-    "bbox-api",
-    "vector-tiles",
-    "protected-tile-service",
-    "renderer-downstream-only",
-    "The browser must never load the full raw water network directly",
-    "founderApprovedProductionActivation",
-    "Founder/admin approval is required before production activation"
-  ];
-
-  for (const marker of servingContractRequiredMarkers) {
-    if (servingContract.includes(marker)) {
-      pass("Serving Contract marker present: " + marker);
-    } else {
-      fail("Serving Contract marker missing: " + marker);
-    }
-  }
-}
-
-console.log("=== Controlled Serving Scaffold Enforcement v7 ===");
-const controlledServingScaffoldRelativePath = "core/infrastructure/water/controlled-water-serving-scaffold.ts";
-
-if (exists(controlledServingScaffoldRelativePath)) {
-  const controlledServingScaffold = fs.readFileSync(path.join(root, controlledServingScaffoldRelativePath), "utf8");
-
-  const controlledServingRequiredMarkers = [
-    "water-controlled-serving-scaffold-v1",
-    "planControlledWaterServingRequest",
-    "mayReturnRawMaster: false",
-    "mayReturnCompleteNetwork: false",
-    "Invalid bbox. Controlled serving requires a valid visible spatial area.",
-    "Invalid zoom. Controlled serving requires a valid zoom level.",
-    "Requester is not active.",
-    "The full raw master network must never be returned to the browser.",
-    "bbox-api"
-  ];
-
-  for (const marker of controlledServingRequiredMarkers) {
-    if (controlledServingScaffold.includes(marker)) {
-      pass("Controlled Serving Scaffold marker present: " + marker);
-    } else {
-      fail("Controlled Serving Scaffold marker missing: " + marker);
-    }
-  }
-}
-console.log("=== Source Truth Claim Scan v2 ===");
+console.log("=== Source Truth Claim Scan v8 ===");
 
 for (const file of sourceTruthScanFiles) {
   if (!exists(file)) {
@@ -296,7 +248,7 @@ for (const file of sourceTruthScanFiles) {
     continue;
   }
 
-  const content = fs.readFileSync(path.join(root, file), "utf8");
+  const content = read(file);
 
   for (const rule of forbiddenFinalTruthClaims) {
     if (rule.pattern.test(content)) {
