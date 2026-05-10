@@ -7,7 +7,7 @@
                     "build":  "next build",
                     "start":  "next start",
                     "audit:pantavion":  "node scripts/pantavion-master-audit.cjs",
-                    "audit:water":  "node scripts/pantavion-water-kernel-gate.cjs \u0026\u0026 node scripts/water-guardian-surface-audit.cjs",
+                    "audit:water":  "node scripts/pantavion-water-kernel-gate.cjs \u0026\u0026 node scripts/water-guardian-surface-audit.cjs \u0026\u0026 node scripts/pantavion-multimodal-language-audit.cjs",
                     "audit:water:production":  "node scripts/water-guardian-production-smoke.cjs"
                 },
     "dependencies":  {
