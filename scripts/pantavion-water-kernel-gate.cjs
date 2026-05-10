@@ -17,6 +17,7 @@ const requiredFiles = [
   "core/infrastructure/water/water-authorized-person-store.ts",
   "core/infrastructure/water/controlled-water-serving-scaffold.ts",
   "core/infrastructure/water/water-spatial-serving-readiness.ts",
+  "core/infrastructure/water/water-spatial-index.ts",
   "core/infrastructure/water/water-audit-logging.ts",
   "app/api/professional/infrastructure/water/serving/readiness/route.ts",
   "app/api/professional/infrastructure/water/serving/bbox/route.ts",
@@ -187,7 +188,7 @@ function enforceMarkers(title, relativePath, markers) {
   }
 }
 
-console.log("=== Pantavion Water Kernel Gate v15 ===");
+console.log("=== Pantavion Water Kernel Gate v16 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -275,6 +276,35 @@ if (exists(auditLoggingRelativePath)) {
       pass("Controlled Audit Logging marker present: " + marker);
     } else {
       fail("Controlled Audit Logging marker missing: " + marker);
+    }
+  }
+}
+
+console.log("=== Spatial Index Enforcement v16 ===");
+const spatialIndexRelativePath = "core/infrastructure/water/water-spatial-index.ts";
+
+if (exists(spatialIndexRelativePath)) {
+  const spatialIndex = read(spatialIndexRelativePath);
+
+  const spatialIndexRequiredMarkers = [
+    "water-spatial-index-v1",
+    "evaluateWaterSpatialIndexReadiness",
+    "spatialIndexReady",
+    "productionIndexAllowed",
+    "indexBuiltFromFullMaster",
+    "indexCoversCompleteNetwork",
+    "duplicateStreetNameDisambiguationRequired",
+    "Coordinate reference system must be declared before spatial indexing.",
+    "Founder/admin approval is required before production spatial index activation.",
+    "mayStoreRawNetworkPayload: false",
+    "mayStoreCompleteNetworkPayload: false"
+  ];
+
+  for (const marker of spatialIndexRequiredMarkers) {
+    if (spatialIndex.includes(marker)) {
+      pass("Spatial Index marker present: " + marker);
+    } else {
+      fail("Spatial Index marker missing: " + marker);
     }
   }
 }

@@ -1,4 +1,8 @@
-﻿export const PANTAVION_WATER_SPATIAL_SERVING_READINESS_VERSION =
+﻿import {
+  PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS,
+} from "./water-spatial-index";
+
+export const PANTAVION_WATER_SPATIAL_SERVING_READINESS_VERSION =
   "water-spatial-serving-readiness-v1" as const;
 
 export type PantavionWaterSpatialServingProvider =
@@ -108,7 +112,7 @@ export function evaluateWaterSpatialServingReadiness(
 export const PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS =
   evaluateWaterSpatialServingReadiness({
     fullMasterSourceProtected: true,
-    spatialIndexAvailable: false,
+    spatialIndexAvailable: PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS.spatialIndexReady,
     bboxQueryProviderAvailable: false,
     accessFilteringAvailable: false,
     auditLoggingAvailable: false,

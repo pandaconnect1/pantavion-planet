@@ -7,6 +7,10 @@ import {
 } from "@/core/infrastructure/water/controlled-water-serving-scaffold";
 
 import {
+  PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS,
+} from "@/core/infrastructure/water/water-spatial-index";
+
+import {
   PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
 } from "@/core/infrastructure/water/water-spatial-serving-readiness";
 
@@ -116,6 +120,7 @@ export async function GET(request: NextRequest) {
       message: "No water network data is returned by this bbox route.",
       activationRule: "Founder/admin approval is required before production activation",
       authorizedPersonStoreReadiness: PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS,
+      spatialIndexReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS,
       spatialServingReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
       accessControlReadiness: PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS,
       auditLoggingReadiness: PANTAVION_WATER_BLOCKED_AUDIT_LOGGING_READINESS,
