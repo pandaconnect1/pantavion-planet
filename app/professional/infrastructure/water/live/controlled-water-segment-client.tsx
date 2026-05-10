@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -41,6 +41,14 @@ const UI = {
     failed: "\u0394\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b5 \u03c4\u03bc\u03ae\u03bc\u03b1 \u03b1\u03b3\u03c9\u03b3\u03ce\u03bd. \u0394\u03bf\u03ba\u03af\u03bc\u03b1\u03c3\u03b5 \u03bc\u03b9\u03ba\u03c1\u03cc\u03c4\u03b5\u03c1\u03b7 \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae.",
     map: "\u03a7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2",
     protected: "\u03a4\u03bf \u03c0\u03bb\u03ae\u03c1\u03b5\u03c2 \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03b4\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03bd\u03b5\u03c4\u03b1\u03b9 \u03c3\u03c4\u03bf\u03bd browser.",
+    locate: "\u03a4\u03bf \u03c3\u03b7\u03bc\u03b5\u03af\u03bf \u03bc\u03bf\u03c5",
+    search: "\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7 / \u03c3\u03c4\u03af\u03b3\u03bc\u03b1",
+    locating: "\u0395\u03bd\u03c4\u03bf\u03c0\u03b9\u03c3\u03bc\u03cc\u03c2 \u03b8\u03ad\u03c3\u03b7\u03c2...",
+    located: "\u0392\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03b7 \u03b8\u03ad\u03c3\u03b7 \u03c3\u03bf\u03c5. \u03a6\u03bf\u03c1\u03c4\u03ce\u03bd\u03c9 \u03c4\u03bf\u03c0\u03b9\u03ba\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf.",
+    locationUnavailable: "\u0394\u03b5\u03bd \u03ae\u03c4\u03b1\u03bd \u03b4\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03b7 \u03b7 \u03b8\u03ad\u03c3\u03b7. \u039c\u03c0\u03bf\u03c1\u03b5\u03af\u03c2 \u03bd\u03b1 \u03bc\u03b5\u03c4\u03b1\u03ba\u03b9\u03bd\u03ae\u03c3\u03b5\u03b9\u03c2 \u03c4\u03bf\u03bd \u03c7\u03ac\u03c1\u03c4\u03b7 \u03ae \u03bd\u03b1 \u03ba\u03ac\u03bd\u03b5\u03b9\u03c2 \u03b1\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7.",
+    searchEmpty: "\u0393\u03c1\u03ac\u03c8\u03b5 \u03bf\u03b4\u03cc, \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae \u03ae \u03c4\u03b1\u03c7\u03c5\u03b4\u03c1\u03bf\u03bc\u03b9\u03ba\u03cc \u03b3\u03b9\u03b1 \u03bd\u03b1 \u03bc\u03c0\u03b5\u03b9 \u03c3\u03c4\u03af\u03b3\u03bc\u03b1.",
+    searchNotFound: "\u0394\u03b5\u03bd \u03b2\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03c4\u03bf \u03c3\u03b7\u03bc\u03b5\u03af\u03bf. \u0394\u03bf\u03ba\u03af\u03bc\u03b1\u03c3\u03b5 \u03c0\u03b9\u03bf \u03c0\u03bb\u03ae\u03c1\u03b7 \u03b4\u03b9\u03b5\u03cd\u03b8\u03c5\u03bd\u03c3\u03b7.",
+    searchFound: "\u0392\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03c3\u03c4\u03af\u03b3\u03bc\u03b1 \u03b1\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7\u03c2. \u03a6\u03bf\u03c1\u03c4\u03ce\u03bd\u03c9 \u03c4\u03bf\u03c0\u03b9\u03ba\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf.",
   },
   en: {
     title: "Pantavion Water Network",
@@ -58,6 +66,14 @@ const UI = {
     failed: "No pipe segment loaded. Pan or zoom and it will retry automatically.",
     map: "Water map",
     protected: "The complete network is not loaded in the browser.",
+    locate: "My location",
+    search: "Search / marker",
+    locating: "Locating...",
+    located: "Your location was found. Loading local network.",
+    locationUnavailable: "Location was not available. You can pan the map or search.",
+    searchEmpty: "Enter street, area or postal code to place a marker.",
+    searchNotFound: "No matching point found. Try a fuller address.",
+    searchFound: "Search marker found. Loading local network.",
   },
 };
 
@@ -221,6 +237,10 @@ export default function ControlledWaterSegmentClient() {
   const layerRef = useRef<any>(null);
   const autoLoadTimerRef = useRef<number | null>(null);
   const loadInProgressRef = useRef(false);
+  const userMarkerRef = useRef<any>(null);
+  const userAccuracyRef = useRef<any>(null);
+  const searchMarkerRef = useRef<any>(null);
+  const locationRequestedRef = useRef(false);
 
   const t = UI[lang];
 
@@ -262,6 +282,171 @@ export default function ControlledWaterSegmentClient() {
       }
     };
   }, []);
+
+  async function placeCircleMarker(options: {
+    lat: number;
+    lng: number;
+    title: string;
+    kind: "user" | "search";
+    accuracy?: number;
+  }) {
+    const map = mapRef.current;
+
+    if (!map) return;
+
+    const L = await ensureLeaflet();
+    const markerRef = options.kind === "user" ? userMarkerRef : searchMarkerRef;
+
+    if (markerRef.current) {
+      markerRef.current.remove();
+      markerRef.current = null;
+    }
+
+    const markerColor = options.kind === "user" ? "#f2c766" : "#ef4444";
+
+    markerRef.current = L.circleMarker([options.lat, options.lng], {
+      radius: 9,
+      color: "#07111f",
+      weight: 3,
+      fillColor: markerColor,
+      fillOpacity: 0.95,
+    })
+      .addTo(map)
+      .bindPopup(options.title);
+
+    if (options.kind === "user") {
+      if (userAccuracyRef.current) {
+        userAccuracyRef.current.remove();
+        userAccuracyRef.current = null;
+      }
+
+      if (typeof options.accuracy === "number" && Number.isFinite(options.accuracy)) {
+        userAccuracyRef.current = L.circle([options.lat, options.lng], {
+          radius: Math.max(15, Math.min(options.accuracy, 250)),
+          color: "#f2c766",
+          weight: 1,
+          fillColor: "#f2c766",
+          fillOpacity: 0.08,
+        }).addTo(map);
+      }
+    }
+  }
+
+  function moveMapToPoint(lat: number, lng: number) {
+    const map = mapRef.current;
+
+    if (!map) return;
+
+    map.setView([lat, lng], Math.max(map.getZoom(), 18), {
+      animate: true,
+    });
+  }
+
+  async function locateMe() {
+    if (typeof window === "undefined" || !window.navigator?.geolocation) {
+      setMessage(t.locationUnavailable);
+      return;
+    }
+
+    setMessage(t.locating);
+
+    window.navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const accuracy = position.coords.accuracy;
+
+        void placeCircleMarker({
+          lat,
+          lng,
+          accuracy,
+          kind: "user",
+          title: lang === "el" ? "\u03a4\u03bf \u03c3\u03b7\u03bc\u03b5\u03af\u03bf \u03bc\u03bf\u03c5" : "My location",
+        });
+
+        moveMapToPoint(lat, lng);
+        setMessage(t.located);
+
+        window.setTimeout(() => {
+          void loadPipes();
+        }, 1100);
+      },
+      () => {
+        setMessage(t.locationUnavailable);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 12000,
+        maximumAge: 30000,
+      },
+    );
+  }
+
+  function buildSearchQuery() {
+    return [street, number, area, postal, "Cyprus"]
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .join(", ");
+  }
+
+  async function searchAddressMarker() {
+    const query = buildSearchQuery();
+
+    if (!query || query === "Cyprus") {
+      setMessage(t.searchEmpty);
+      return;
+    }
+
+    setLoading(true);
+    setMessage(t.loading);
+
+    try {
+      const params = new URLSearchParams({
+        format: "jsonv2",
+        limit: "1",
+        countrycodes: "cy",
+        q: query,
+      });
+
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?${params.toString()}`, {
+        cache: "no-store",
+      });
+
+      const results = (await response.json()) as Array<{ lat: string; lon: string; display_name?: string }>;
+      const result = results[0];
+
+      if (!result) {
+        setMessage(t.searchNotFound);
+        return;
+      }
+
+      const lat = Number(result.lat);
+      const lng = Number(result.lon);
+
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+        setMessage(t.searchNotFound);
+        return;
+      }
+
+      await placeCircleMarker({
+        lat,
+        lng,
+        kind: "search",
+        title: result.display_name || query,
+      });
+
+      moveMapToPoint(lat, lng);
+      setMessage(t.searchFound);
+
+      window.setTimeout(() => {
+        void loadPipes();
+      }, 1100);
+    } catch {
+      setMessage(t.searchNotFound);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function loadPipes() {
     const map = mapRef.current;
@@ -357,7 +542,7 @@ export default function ControlledWaterSegmentClient() {
       layerRef.current = layer;
 
       const count = features.length;
-      const tileText = lang === "el" ? "Ï„Î¼Î®Î¼Î±Ï„Î± Î¿Î¸ÏŒÎ½Î·Ï‚" : "screen chunks";
+      const tileText = lang === "el" ? "\u03c4\u03bc\u03ae\u03bc\u03b1\u03c4\u03b1 \u03bf\u03b8\u03cc\u03bd\u03b7\u03c2" : "screen chunks";
 
       setPipeCount(count);
       setMessage(`${t.loaded}: ${count} (${tiles.length} ${tileText})`);
@@ -366,9 +551,7 @@ export default function ControlledWaterSegmentClient() {
 
       if (error instanceof Error && error.message === "VISIBLE_AREA_TOO_LARGE") {
         setMessage(
-          lang === "el"
-            ? "Î— Î¿ÏÎ±Ï„Î® Ï€ÎµÏÎ¹Î¿Ï‡Î® ÎµÎ¯Î½Î±Î¹ Ï€Î¿Î»Ï Î¼ÎµÎ³Î¬Î»Î·. ÎšÎ¬Î½Îµ Î»Î¯Î³Î¿ zoom ÎºÎ±Î¹ Î¾Î±Î½Î±Ï†ÏŒÏÏ„Ï‰ÏƒÎµ."
-            : "The visible area is too large. Zoom in a little, then reload.",
+          lang === "el" ? "\u0397 \u03bf\u03c1\u03b1\u03c4\u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae \u03b5\u03af\u03bd\u03b1\u03b9 \u03c0\u03bf\u03bb\u03cd \u03bc\u03b5\u03b3\u03ac\u03bb\u03b7. \u039a\u03ac\u03bd\u03b5 \u03bb\u03af\u03b3\u03bf zoom \u03ba\u03b1\u03b9 \u03b8\u03b1 \u03be\u03b1\u03bd\u03b1\u03c6\u03bf\u03c1\u03c4\u03ce\u03c3\u03b5\u03b9." : "The visible area is too large. Zoom in a little, then reload.",
         );
       } else {
         setMessage(t.failed);
@@ -408,6 +591,16 @@ export default function ControlledWaterSegmentClient() {
     };
   }, [mapReady, lang, street, number, area, postal]);
 
+  useEffect(() => {
+    if (!mapReady || locationRequestedRef.current) return;
+
+    locationRequestedRef.current = true;
+
+    window.setTimeout(() => {
+      void locateMe();
+    }, 800);
+  }, [mapReady]);
+
   return (
     <main className="min-h-screen bg-[#06111f] text-white">
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-5">
@@ -429,7 +622,7 @@ export default function ControlledWaterSegmentClient() {
                 onChange={(event) => setLang(event.target.value as Lang)}
                 className="rounded-2xl border border-[#b89445]/60 bg-[#07111f] px-4 py-3 text-white outline-none"
               >
-                <option value="el">Î•Î»Î»Î·Î½Î¹ÎºÎ¬</option>
+                <option value="el">{"\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac"}</option>
                 <option value="en">English</option>
               </select>
             </label>
@@ -465,6 +658,24 @@ export default function ControlledWaterSegmentClient() {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-3">
+
+            <button
+              type="button"
+              onClick={() => void locateMe()}
+              disabled={loading}
+              className="rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-3 text-sm font-black text-[#f8e6ad] disabled:opacity-60"
+            >
+              {t.locate}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => void searchAddressMarker()}
+              disabled={loading}
+              className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-3 text-sm font-black text-sky-100 disabled:opacity-60"
+            >
+              {t.search}
+            </button>
 
             <button
               type="button"
