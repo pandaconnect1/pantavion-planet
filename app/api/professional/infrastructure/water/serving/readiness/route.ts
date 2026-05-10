@@ -9,6 +9,11 @@ import {
   PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
 } from "@/core/infrastructure/water/water-spatial-serving-readiness";
 
+import {
+  PANTAVION_WATER_BLOCKED_AUDIT_LOGGING_READINESS,
+  createWaterAuditLogRecord,
+} from "@/core/infrastructure/water/water-audit-logging";
+
 export const dynamic = "force-dynamic";
 
 const WATER_SERVING_READINESS_ROUTE_VERSION = "water-serving-readiness-route-v1" as const;
@@ -45,6 +50,16 @@ const diagnosticDecision: PantavionWaterServingDecision =
     },
   });
 
+const diagnosticAuditRecord = createWaterAuditLogRecord({
+  action: "readiness-check",
+  actor: diagnosticRequester,
+  route: "/api/professional/infrastructure/water/serving/readiness",
+  decisionAllowed: diagnosticDecision.allowed,
+  blockers: diagnosticDecision.blockers,
+  rawNetworkReturned: false,
+  completeNetworkReturned: false,
+});
+
 export async function GET() {
   return NextResponse.json({
     version: WATER_SERVING_READINESS_ROUTE_VERSION,
@@ -57,6 +72,8 @@ export async function GET() {
     message: "No water network data is returned by this route.",
     activationRule: "Founder/admin approval is required before production activation",
     spatialServingReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
+    auditLoggingReadiness: PANTAVION_WATER_BLOCKED_AUDIT_LOGGING_READINESS,
+    diagnosticAuditRecord,
     decision: diagnosticDecision,
   });
 }

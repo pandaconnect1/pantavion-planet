@@ -10,6 +10,11 @@ import {
   PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
 } from "@/core/infrastructure/water/water-spatial-serving-readiness";
 
+import {
+  PANTAVION_WATER_BLOCKED_AUDIT_LOGGING_READINESS,
+  createWaterAuditLogRecord,
+} from "@/core/infrastructure/water/water-audit-logging";
+
 export const dynamic = "force-dynamic";
 
 const WATER_SERVING_BBOX_ROUTE_VERSION = "water-serving-bbox-route-v1" as const;
@@ -76,6 +81,18 @@ export async function GET(request: NextRequest) {
     },
   });
 
+  const diagnosticAuditRecord = createWaterAuditLogRecord({
+    action: "bbox-request",
+    actor: diagnosticRequester,
+    route: "/api/professional/infrastructure/water/serving/bbox",
+    bbox,
+    zoom,
+    decisionAllowed: decision.allowed,
+    blockers: decision.blockers,
+    rawNetworkReturned: false,
+    completeNetworkReturned: false,
+  });
+
   return NextResponse.json(
     {
       version: WATER_SERVING_BBOX_ROUTE_VERSION,
@@ -94,6 +111,8 @@ export async function GET(request: NextRequest) {
       message: "No water network data is returned by this bbox route.",
       activationRule: "Founder/admin approval is required before production activation",
       spatialServingReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
+      auditLoggingReadiness: PANTAVION_WATER_BLOCKED_AUDIT_LOGGING_READINESS,
+      diagnosticAuditRecord,
       decision,
     },
     {

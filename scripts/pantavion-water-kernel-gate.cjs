@@ -15,6 +15,7 @@ const requiredFiles = [
   "core/infrastructure/water/controlled-water-access.ts",
   "core/infrastructure/water/controlled-water-serving-scaffold.ts",
   "core/infrastructure/water/water-spatial-serving-readiness.ts",
+  "core/infrastructure/water/water-audit-logging.ts",
   "app/api/professional/infrastructure/water/serving/readiness/route.ts",
   "app/api/professional/infrastructure/water/serving/bbox/route.ts",
 ];
@@ -184,7 +185,7 @@ function enforceMarkers(title, relativePath, markers) {
   }
 }
 
-console.log("=== Pantavion Water Kernel Gate v12 ===");
+console.log("=== Pantavion Water Kernel Gate v13 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -246,6 +247,35 @@ enforceMarkers("=== Controlled Serving Scaffold Enforcement v8 ===", controlledS
 
 
 
+
+console.log("=== Controlled Audit Logging Enforcement v13 ===");
+const auditLoggingRelativePath = "core/infrastructure/water/water-audit-logging.ts";
+
+if (exists(auditLoggingRelativePath)) {
+  const auditLogging = read(auditLoggingRelativePath);
+
+  const auditLoggingRequiredMarkers = [
+    "water-audit-logging-v1",
+    "evaluateWaterAuditLoggingReadiness",
+    "createWaterAuditLogRecord",
+    "durableAuditSinkAvailable",
+    "retentionPolicyReady",
+    "rawPayloadLoggingBlocked",
+    "Founder/admin review must be required for production audit activation.",
+    "mayLogRawNetworkPayload: false",
+    "mayLogCompleteNetworkPayload: false",
+    "rawPayloadStored: false",
+    "completeNetworkPayloadStored: false"
+  ];
+
+  for (const marker of auditLoggingRequiredMarkers) {
+    if (auditLogging.includes(marker)) {
+      pass("Controlled Audit Logging marker present: " + marker);
+    } else {
+      fail("Controlled Audit Logging marker missing: " + marker);
+    }
+  }
+}
 console.log("=== Spatial Serving Readiness Enforcement v12 ===");
 const spatialServingReadinessRelativePath = "core/infrastructure/water/water-spatial-serving-readiness.ts";
 
