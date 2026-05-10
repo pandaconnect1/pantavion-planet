@@ -222,8 +222,14 @@ function assertIndexManifest(manifest: WaterIndexManifest) {
     throw new Error(`Water index gate failed: fullMasterFeatureCount ${manifest.fullMasterFeatureCount}`);
   }
 
-  if (manifest.indexRecordCount !== EXPECTED_PLACEMARKS) {
+  if (manifest.indexRecordCount <= 0 || manifest.indexRecordCount > EXPECTED_PLACEMARKS) {
     throw new Error(`Water index gate failed: indexRecordCount ${manifest.indexRecordCount}`);
+  }
+
+  if (manifest.indexedFeatureCount !== manifest.indexRecordCount) {
+    throw new Error(
+      `Water index gate failed: indexedFeatureCount ${manifest.indexedFeatureCount} != indexRecordCount ${manifest.indexRecordCount}`,
+    );
   }
 
   if (manifest.sampleAsFinal !== false) {
@@ -308,7 +314,7 @@ async function readIndex() {
   const raw = await readTextSource(INDEX_PATH, BLOB_PATHS.index);
   const index = JSON.parse(raw) as IndexRecord[];
 
-  if (index.length !== EXPECTED_PLACEMARKS) {
+  if (index.length <= 0 || index.length > EXPECTED_PLACEMARKS) {
     throw new Error(`Water index gate failed: runtime index length ${index.length}`);
   }
 
@@ -398,3 +404,4 @@ export async function getControlledWaterSegmentFromPrivateIndex(
     },
   };
 }
+
