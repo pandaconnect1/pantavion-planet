@@ -1,74 +1,58 @@
-import { NextRequest, NextResponse } from "next/server";
-import {
-  getWaterNetworkGeometrySummary,
-  readWaterNetworkSource,
-  selectWaterNetworkMapFeatures,
-} from "@/core/infrastructure/water/cloud-water-network-source";
+﻿import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const DEFAULT_LIMIT = 5200;
-const MIN_LIMIT = 900;
-const MAX_LIMIT = 9000;
+const LEGACY_WATER_NETWORK_ENDPOINT_BLOCKED_MARKER =
+  "legacy_water_network_endpoint_blocked_v1";
 
-function safeLimit(request: NextRequest) {
-  const raw = Number.parseInt(request.nextUrl.searchParams.get("limit") || "", 10);
-
-  if (!Number.isFinite(raw)) return DEFAULT_LIMIT;
-
-  return Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, raw));
-}
-
-export async function GET(request: NextRequest) {
-  const source = await readWaterNetworkSource();
-  const allFeatures = Array.isArray(source.collection.features) ? source.collection.features : [];
-  const limit = safeLimit(request);
-  const selectedFeatures = selectWaterNetworkMapFeatures(allFeatures, limit);
-
-  const status =
-    source.sourceMode === "production_cloud"
-      ? "production_private_water_network_active"
-      : source.sourceMode === "local_private_file"
-        ? "local_private_water_network_active"
-        : source.sourceMode === "error"
-          ? "private_water_network_source_error"
-          : "no_private_processed_layer";
-
-  const statusCode = source.sourceMode === "error" ? 502 : 200;
-
+export async function GET() {
   return NextResponse.json(
     {
-      ...source.collection,
-      type: "FeatureCollection",
-      features: selectedFeatures,
-      pantavion: {
-        ...(source.collection.pantavion || {}),
-        status,
-        authorityOwner: "Γιώργος",
-        rawFileExposed: false,
-        publicFolder: false,
-        sourceMode: source.sourceMode,
-        sourceLabel: source.sourceLabel,
-        sourceConfigured: source.sourceConfigured,
-        sourceError: source.errorMessage || null,
-        featureCount: allFeatures.length,
-        returnedFeatureCount: selectedFeatures.length,
-        serverLimit: limit,
-        renderingMode: "production-cloud-or-local-balanced-mobile-preview",
-        geometrySummary: getWaterNetworkGeometrySummary(allFeatures),
-        productionCloudRequiredForPantavionDotCom: true,
-      },
+      marker: LEGACY_WATER_NETWORK_ENDPOINT_BLOCKED_MARKER,
+      status: "blocked",
+      productionServingStatus: "blocked",
+      rendererStatus: "blocked",
+      reason:
+        "Legacy network endpoint is disabled. Full, sampled, preview, or mobile water network payloads must not be returned to the browser. Use readiness, target viewport, address candidates, and controlled bbox contracts only.",
+      dataReturned: false,
+      noDataReturned: true,
+      waterNetworkDataReturned: false,
+      noWaterNetworkDataReturned: true,
+      featuresReturned: 0,
+      mayReturnRawMaster: false,
+      mayReturnCompleteNetwork: false,
+      mayReturnPreviewAsProduction: false,
+      mayReturnSampleAsFinal: false,
+      mayLoadFullNetworkInBrowser: false,
+      mayUseLegacyRenderer: false,
+      requiredPresentationRoute: "/professional/infrastructure/water/readiness",
+      allowedContracts: [
+        "/api/professional/infrastructure/water/production-readiness",
+        "/api/professional/infrastructure/water/address/candidates",
+        "/api/professional/infrastructure/water/serving/readiness",
+        "/api/professional/infrastructure/water/serving/bbox"
+      ],
+      blockers: [
+        "real spatial index required",
+        "server-side bbox provider required",
+        "viewport-scoped access filtering required",
+        "durable authorized-person store required",
+        "durable append-only audit sink required",
+        "address candidate disambiguation required",
+        "founder/admin approval required"
+      ]
     },
     {
-      status: statusCode,
+      status: 423,
       headers: {
         "Cache-Control": "no-store",
-        "X-Pantavion-Data-Source": source.sourceMode,
-        "X-Pantavion-Raw-File-Exposed": "false",
-        "X-Pantavion-Public-Folder": "false",
-        "X-Pantavion-Authority-Owner": "George-Nicolaou",
-      },
+        "X-Pantavion-Water-Network-Endpoint": "blocked",
+        "X-Pantavion-Data-Returned": "false",
+        "X-Pantavion-Raw-Master": "blocked",
+        "X-Pantavion-Complete-Network": "blocked",
+        "X-Pantavion-Legacy-Renderer": "disabled"
+      }
     }
   );
 }
