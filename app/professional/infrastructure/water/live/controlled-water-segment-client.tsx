@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -51,22 +51,19 @@ const UI = {
     number: "Number",
     area: "Area",
     postal: "Postal code",
-    load: "Load pipes in map area",
+    load: "Load pipes in visible map area",
     loading: "Loading...",
-    ready: "Map is ready. Pan or zoom, then load the visible area.",
+    ready: "Map is ready. Pan or zoom, then load. The visible screen is loaded in safe chunks.",
     loaded: "Loaded pipe segments",
-    failed: "No pipe segment loaded. Try a smaller area.",
+    failed: "No pipe segment loaded. Pan or zoom, then reload the visible area.",
     map: "Water map",
     protected: "The complete network is not loaded in the browser.",
   },
 };
 
-const AREAS = [
-  { label: "\u039b\u03b5\u03bc\u03b5\u03c3\u03cc\u03c2", center: [34.681, 33.038], zoom: 15 },
-  { label: "\u0393\u03b5\u03c1\u03bc\u03b1\u03c3\u03cc\u03b3\u03b5\u03b9\u03b1", center: [34.704, 33.081], zoom: 15 },
-  { label: "\u0386\u03b3\u03b9\u03bf\u03c2 \u0391\u03b8\u03b1\u03bd\u03ac\u03c3\u03b9\u03bf\u03c2", center: [34.714, 33.055], zoom: 15 },
-  { label: "\u039a\u03bf\u03bb\u03cc\u03c3\u03c3\u03b9", center: [34.669, 32.933], zoom: 15 },
-] as const;
+const VIEWPORT_TILE_SPAN_DEGREES = 0.055;
+const MAX_VIEWPORT_TILES = 16;
+const MAX_FEATURES_PER_TILE = 1200;
 
 function ensureLeaflet() {
   return new Promise<any>((resolve, reject) => {
@@ -140,11 +137,72 @@ function bboxFromMap(map: any) {
   const bounds = map.getBounds();
 
   return {
-    minLng: bounds.getWest().toFixed(6),
-    minLat: bounds.getSouth().toFixed(6),
-    maxLng: bounds.getEast().toFixed(6),
-    maxLat: bounds.getNorth().toFixed(6),
+    minLng: bounds.getWest(),
+    minLat: bounds.getSouth(),
+    maxLng: bounds.getEast(),
+    maxLat: bounds.getNorth(),
   };
+}
+
+function bboxParams(bbox: {
+  minLng: number;
+  minLat: number;
+  maxLng: number;
+  maxLat: number;
+}) {
+  return {
+    minLng: bbox.minLng.toFixed(6),
+    minLat: bbox.minLat.toFixed(6),
+    maxLng: bbox.maxLng.toFixed(6),
+    maxLat: bbox.maxLat.toFixed(6),
+  };
+}
+
+function splitVisibleBboxIntoSafeTiles(bbox: {
+  minLng: number;
+  minLat: number;
+  maxLng: number;
+  maxLat: number;
+}) {
+  const lngSpan = bbox.maxLng - bbox.minLng;
+  const latSpan = bbox.maxLat - bbox.minLat;
+
+  const lngSteps = Math.max(1, Math.ceil(lngSpan / VIEWPORT_TILE_SPAN_DEGREES));
+  const latSteps = Math.max(1, Math.ceil(latSpan / VIEWPORT_TILE_SPAN_DEGREES));
+
+  if (lngSteps * latSteps > MAX_VIEWPORT_TILES) {
+    throw new Error("VISIBLE_AREA_TOO_LARGE");
+  }
+
+  const tiles: Array<{
+    minLng: number;
+    minLat: number;
+    maxLng: number;
+    maxLat: number;
+  }> = [];
+
+  for (let y = 0; y < latSteps; y += 1) {
+    for (let x = 0; x < lngSteps; x += 1) {
+      const minLng = bbox.minLng + (lngSpan * x) / lngSteps;
+      const maxLng = bbox.minLng + (lngSpan * (x + 1)) / lngSteps;
+      const minLat = bbox.minLat + (latSpan * y) / latSteps;
+      const maxLat = bbox.minLat + (latSpan * (y + 1)) / latSteps;
+
+      tiles.push({ minLng, minLat, maxLng, maxLat });
+    }
+  }
+
+  return tiles;
+}
+
+function featureKey(feature: any, fallback: string) {
+  const id =
+    feature?.id ??
+    feature?.properties?.placemarkIndex ??
+    feature?.properties?.featureIndex ??
+    feature?.properties?.name;
+
+  return id === undefined || id === null ? fallback : String(id);
 }
 
 export default function ControlledWaterSegmentClient() {
@@ -201,11 +259,6 @@ export default function ControlledWaterSegmentClient() {
     };
   }, []);
 
-  function moveTo(center: readonly [number, number], zoom: number) {
-    if (!mapRef.current) return;
-    mapRef.current.setView(center, zoom, { animate: true });
-  }
-
   async function loadPipes() {
     const map = mapRef.current;
 
@@ -218,30 +271,51 @@ export default function ControlledWaterSegmentClient() {
     setMessage(t.loading);
 
     try {
-      const params = new URLSearchParams({
-        ...bboxFromMap(map),
-        maxFeatures: "1200",
-        street,
-        houseNumber: number,
-        area,
-        postalCode: postal,
+      const visibleBbox = bboxFromMap(map);
+      const tiles = splitVisibleBboxIntoSafeTiles(visibleBbox);
+      const allFeatures: any[] = [];
+
+      for (const tile of tiles) {
+        const params = new URLSearchParams({
+          ...bboxParams(tile),
+          maxFeatures: String(MAX_FEATURES_PER_TILE),
+          street,
+          houseNumber: number,
+          area,
+          postalCode: postal,
+        });
+
+        const response = await fetch(
+          `/api/professional/infrastructure/water/segment/bbox?${params.toString()}`,
+          { cache: "no-store" },
+        );
+
+        const json = (await response.json()) as SegmentResponse;
+
+        if (
+          !response.ok ||
+          json.completeNetworkReturned === true ||
+          json.rawMasterReturned === true ||
+          json.browserFullNetworkLoaded === true
+        ) {
+          throw new Error(json.error || json.reason || "No safe segment returned.");
+        }
+
+        if (json.segment?.features?.length) {
+          allFeatures.push(...json.segment.features);
+        }
+      }
+
+      const deduped = new Map<string, any>();
+
+      allFeatures.forEach((feature, index) => {
+        deduped.set(featureKey(feature, `fallback-${index}`), feature);
       });
 
-      const response = await fetch(
-        `/api/professional/infrastructure/water/segment/bbox?${params.toString()}`,
-        { cache: "no-store" },
-      );
+      const features = Array.from(deduped.values());
 
-      const json = (await response.json()) as SegmentResponse;
-
-      if (
-        !response.ok ||
-        !json.segment?.features?.length ||
-        json.completeNetworkReturned === true ||
-        json.rawMasterReturned === true ||
-        json.browserFullNetworkLoaded === true
-      ) {
-        throw new Error(json.error || json.reason || "No safe segment returned.");
+      if (features.length <= 0) {
+        throw new Error("No visible pipe features returned.");
       }
 
       const L = await ensureLeaflet();
@@ -251,7 +325,12 @@ export default function ControlledWaterSegmentClient() {
         layerRef.current = null;
       }
 
-      const layer = L.geoJSON(json.segment, {
+      const collection = {
+        type: "FeatureCollection",
+        features,
+      };
+
+      const layer = L.geoJSON(collection, {
         style: (feature: any) => getPipeStyle(feature),
         pointToLayer: (feature: any, latlng: any) => {
           const style = getPipeStyle(feature);
@@ -270,17 +349,23 @@ export default function ControlledWaterSegmentClient() {
       layer.addTo(map);
       layerRef.current = layer;
 
-      const bounds = layer.getBounds();
-      if (bounds.isValid()) {
-        map.fitBounds(bounds, { padding: [30, 30], maxZoom: 18 });
-      }
+      const count = features.length;
+      const tileText = lang === "el" ? "τμήματα οθόνης" : "screen chunks";
 
-      const count = json.pipeSegmentCount ?? json.segmentCount ?? json.segment.features.length;
       setPipeCount(count);
-      setMessage(`${t.loaded}: ${count}`);
-    } catch {
+      setMessage(`${t.loaded}: ${count} (${tiles.length} ${tileText})`);
+    } catch (error) {
       setPipeCount(null);
-      setMessage(t.failed);
+
+      if (error instanceof Error && error.message === "VISIBLE_AREA_TOO_LARGE") {
+        setMessage(
+          lang === "el"
+            ? "Η ορατή περιοχή είναι πολύ μεγάλη. Κάνε λίγο zoom και ξαναφόρτωσε."
+            : "The visible area is too large. Zoom in a little, then reload.",
+        );
+      } else {
+        setMessage(t.failed);
+      }
     } finally {
       setLoading(false);
     }
@@ -307,7 +392,7 @@ export default function ControlledWaterSegmentClient() {
                 onChange={(event) => setLang(event.target.value as Lang)}
                 className="rounded-2xl border border-[#b89445]/60 bg-[#07111f] px-4 py-3 text-white outline-none"
               >
-                <option value="el">Ελληνικά</option>
+                <option value="el">Î•Î»Î»Î·Î½Î¹ÎºÎ¬</option>
                 <option value="en">English</option>
               </select>
             </label>
@@ -343,16 +428,6 @@ export default function ControlledWaterSegmentClient() {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-3">
-            {AREAS.map((item) => (
-              <button
-                key={item.label}
-                type="button"
-                onClick={() => moveTo(item.center, item.zoom)}
-                className="rounded-2xl border border-[#b89445]/60 bg-[#1a2232] px-4 py-3 text-sm font-black text-[#f2c766]"
-              >
-                {item.label}
-              </button>
-            ))}
 
             <button
               type="button"
@@ -383,3 +458,4 @@ export default function ControlledWaterSegmentClient() {
     </main>
   );
 }
+
