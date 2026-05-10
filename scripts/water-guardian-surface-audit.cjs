@@ -90,6 +90,7 @@ console.log("=== Pantavion Water Guardian Surface Audit v2 ===");
 const legacyClientPath = "app/professional/infrastructure/water/water-network-client.tsx";
 const waterPagePath = "app/professional/infrastructure/water/page.tsx";
 const readinessPagePath = "app/professional/infrastructure/water/readiness/page.tsx";
+const readinessClientPath = "app/professional/infrastructure/water/readiness/water-readiness-live-console.tsx";
 const readinessClientPath =
   "app/professional/infrastructure/water/readiness/water-readiness-live-console.tsx";
 const legacyNetworkRoutePath = "app/api/professional/infrastructure/water/network/route.ts";
@@ -109,6 +110,8 @@ forbidExistingFile(
 
 const waterPage = requireFile(waterPagePath);
 const readinessPage = requireFile(readinessPagePath);
+const readinessClient = requireFile(readinessClientPath);
+const readinessSurface = readinessPage + "\n" + readinessClient;
 const readinessClient = requireFile(readinessClientPath);
 const readinessSurface = readinessPage + "\n" + readinessClient;
 const legacyNetworkRoute = requireFile(legacyNetworkRoutePath);
@@ -165,7 +168,7 @@ const readinessRequiredMarkers = [
   "pantavion-language",
   "250",
   "7200",
-  "Εκτέλεση live ελέγχου",
+  "Î•ÎºÏ„Î­Î»ÎµÏƒÎ· live ÎµÎ»Î­Î³Ï‡Î¿Ï…",
   "Run live checks",
   "window.localStorage",
   "window.navigator.language",
