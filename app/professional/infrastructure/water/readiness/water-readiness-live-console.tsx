@@ -3,31 +3,31 @@
 import { useMemo, useState } from "react";
 
 const languages = [
-  { code: "el", nativeName: "Ελληνικά", label: "Greek / Cyprus", region: "Κύπρος · Ελλάδα" },
+  { code: "el", nativeName: "Î•Î»Î»Î·Î½Î¹ÎºÎ¬", label: "Greek / Cyprus", region: "ÎšÏÏ€ÏÎ¿Ï‚ Â· Î•Î»Î»Î¬Î´Î±" },
   { code: "en", nativeName: "English", label: "English", region: "Global" },
-  { code: "tr", nativeName: "Türkçe", label: "Turkish", region: "Κύπρος · Τουρκία" },
-  { code: "ar", nativeName: "العربية", label: "Arabic", region: "Μέση Ανατολή · Αφρική", dir: "rtl" },
-  { code: "ar-sy", nativeName: "العربية السورية", label: "Arabic / Syria", region: "Σύριοι", dir: "rtl" },
-  { code: "ar-ps", nativeName: "العربية الفلسطينية", label: "Arabic / Palestine", region: "Παλαιστίνιοι", dir: "rtl" },
-  { code: "ru", nativeName: "Русский", label: "Russian", region: "Κύπρος · Ευρώπη · Ασία" },
-  { code: "uk", nativeName: "Українська", label: "Ukrainian", region: "Ευρώπη" },
-  { code: "zh", nativeName: "中文", label: "Chinese", region: "Ασία" },
-  { code: "pl", nativeName: "Polski", label: "Polish", region: "Κύπρος · Ευρώπη" },
-  { code: "hy", nativeName: "Հայերեն", label: "Armenian", region: "Κύπρος · Αρμενία" },
-  { code: "ro", nativeName: "Română", label: "Romanian", region: "Κύπρος · Ευρώπη" },
-  { code: "bg", nativeName: "Български", label: "Bulgarian", region: "Κύπρος · Ευρώπη" },
-  { code: "fil", nativeName: "Filipino / Tagalog", label: "Filipino", region: "Φιλιππίνες" },
-  { code: "ne", nativeName: "नेपाली", label: "Nepali", region: "Νεπάλ" },
-  { code: "hi", nativeName: "हिन्दी", label: "Hindi", region: "Ινδία" },
-  { code: "ur", nativeName: "اردو", label: "Urdu", region: "Πακιστάν · Ινδία", dir: "rtl" },
-  { code: "bn", nativeName: "বাংলা", label: "Bengali", region: "Μπαγκλαντές · Ινδία" },
-  { code: "pa", nativeName: "ਪੰਜਾਬੀ", label: "Punjabi", region: "Ινδία · Πακιστάν" },
-  { code: "ta", nativeName: "தமிழ்", label: "Tamil", region: "Ινδία · Σρι Λάνκα" },
-  { code: "si", nativeName: "සිංහල", label: "Sinhala", region: "Σρι Λάνκα" },
-  { code: "fr", nativeName: "Français", label: "French", region: "Ευρώπη · Αφρική · Κονγκό" },
-  { code: "ln", nativeName: "Lingála", label: "Lingala", region: "Κονγκό" },
-  { code: "sw", nativeName: "Kiswahili", label: "Swahili", region: "Αφρική" },
-  { code: "ku", nativeName: "Kurdî", label: "Kurdish", region: "Μέση Ανατολή" }
+  { code: "tr", nativeName: "TÃ¼rkÃ§e", label: "Turkish", region: "ÎšÏÏ€ÏÎ¿Ï‚ Â· Î¤Î¿Ï…ÏÎºÎ¯Î±" },
+  { code: "ar", nativeName: "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©", label: "Arabic", region: "ÎœÎ­ÏƒÎ· Î‘Î½Î±Ï„Î¿Î»Î® Â· Î‘Ï†ÏÎ¹ÎºÎ®", dir: "rtl" },
+  { code: "ar-sy", nativeName: "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© Ø§Ù„Ø³ÙˆØ±ÙŠØ©", label: "Arabic / Syria", region: "Î£ÏÏÎ¹Î¿Î¹", dir: "rtl" },
+  { code: "ar-ps", nativeName: "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© Ø§Ù„ÙÙ„Ø³Ø·ÙŠÙ†ÙŠØ©", label: "Arabic / Palestine", region: "Î Î±Î»Î±Î¹ÏƒÏ„Î¯Î½Î¹Î¿Î¹", dir: "rtl" },
+  { code: "ru", nativeName: "Ð ÑƒÑÑÐºÐ¸Ð¹", label: "Russian", region: "ÎšÏÏ€ÏÎ¿Ï‚ Â· Î•Ï…ÏÏŽÏ€Î· Â· Î‘ÏƒÎ¯Î±" },
+  { code: "uk", nativeName: "Ð£ÐºÑ€Ð°Ñ—Ð½ÑÑŒÐºÐ°", label: "Ukrainian", region: "Î•Ï…ÏÏŽÏ€Î·" },
+  { code: "zh", nativeName: "ä¸­æ–‡", label: "Chinese", region: "Î‘ÏƒÎ¯Î±" },
+  { code: "pl", nativeName: "Polski", label: "Polish", region: "ÎšÏÏ€ÏÎ¿Ï‚ Â· Î•Ï…ÏÏŽÏ€Î·" },
+  { code: "hy", nativeName: "Õ€Õ¡ÕµÕ¥Ö€Õ¥Õ¶", label: "Armenian", region: "ÎšÏÏ€ÏÎ¿Ï‚ Â· Î‘ÏÎ¼ÎµÎ½Î¯Î±" },
+  { code: "ro", nativeName: "RomÃ¢nÄƒ", label: "Romanian", region: "ÎšÏÏ€ÏÎ¿Ï‚ Â· Î•Ï…ÏÏŽÏ€Î·" },
+  { code: "bg", nativeName: "Ð‘ÑŠÐ»Ð³Ð°Ñ€ÑÐºÐ¸", label: "Bulgarian", region: "ÎšÏÏ€ÏÎ¿Ï‚ Â· Î•Ï…ÏÏŽÏ€Î·" },
+  { code: "fil", nativeName: "Filipino / Tagalog", label: "Filipino", region: "Î¦Î¹Î»Î¹Ï€Ï€Î¯Î½ÎµÏ‚" },
+  { code: "ne", nativeName: "à¤¨à¥‡à¤ªà¤¾à¤²à¥€", label: "Nepali", region: "ÎÎµÏ€Î¬Î»" },
+  { code: "hi", nativeName: "à¤¹à¤¿à¤¨à¥à¤¦à¥€", label: "Hindi", region: "Î™Î½Î´Î¯Î±" },
+  { code: "ur", nativeName: "Ø§Ø±Ø¯Ùˆ", label: "Urdu", region: "Î Î±ÎºÎ¹ÏƒÏ„Î¬Î½ Â· Î™Î½Î´Î¯Î±", dir: "rtl" },
+  { code: "bn", nativeName: "à¦¬à¦¾à¦‚à¦²à¦¾", label: "Bengali", region: "ÎœÏ€Î±Î³ÎºÎ»Î±Î½Ï„Î­Ï‚ Â· Î™Î½Î´Î¯Î±" },
+  { code: "pa", nativeName: "à¨ªà©°à¨œà¨¾à¨¬à©€", label: "Punjabi", region: "Î™Î½Î´Î¯Î± Â· Î Î±ÎºÎ¹ÏƒÏ„Î¬Î½" },
+  { code: "ta", nativeName: "à®¤à®®à®¿à®´à¯", label: "Tamil", region: "Î™Î½Î´Î¯Î± Â· Î£ÏÎ¹ Î›Î¬Î½ÎºÎ±" },
+  { code: "si", nativeName: "à·ƒà·’à¶‚à·„à¶½", label: "Sinhala", region: "Î£ÏÎ¹ Î›Î¬Î½ÎºÎ±" },
+  { code: "fr", nativeName: "FranÃ§ais", label: "French", region: "Î•Ï…ÏÏŽÏ€Î· Â· Î‘Ï†ÏÎ¹ÎºÎ® Â· ÎšÎ¿Î½Î³ÎºÏŒ" },
+  { code: "ln", nativeName: "LingÃ¡la", label: "Lingala", region: "ÎšÎ¿Î½Î³ÎºÏŒ" },
+  { code: "sw", nativeName: "Kiswahili", label: "Swahili", region: "Î‘Ï†ÏÎ¹ÎºÎ®" },
+  { code: "ku", nativeName: "KurdÃ®", label: "Kurdish", region: "ÎœÎ­ÏƒÎ· Î‘Î½Î±Ï„Î¿Î»Î®" }
 ] as const;
 
 type LanguageCode = (typeof languages)[number]["code"];
@@ -137,55 +137,55 @@ const initialEndpointState: EndpointState[] = [
 ];
 
 const el: CopyPack = {
-  languageLabel: "Γλώσσα",
+  languageLabel: "Î“Î»ÏŽÏƒÏƒÎ±",
   languagePromise:
-    "Το Pantavion στηρίζει γλώσσα επιλογής χρήστη. Πρώτος στόχος: 250 γλώσσες. Μετά, σταδιακή επέκταση προς 7200 φυσικές διαλέκτους, ανά χώρα, ήπειρο και πραγματικό πληθυσμό.",
+    "Î¤Î¿ Pantavion ÏƒÏ„Î·ÏÎ¯Î¶ÎµÎ¹ Î³Î»ÏŽÏƒÏƒÎ± ÎµÏ€Î¹Î»Î¿Î³Î®Ï‚ Ï‡ÏÎ®ÏƒÏ„Î·. Î ÏÏŽÏ„Î¿Ï‚ ÏƒÏ„ÏŒÏ‡Î¿Ï‚: 250 Î³Î»ÏŽÏƒÏƒÎµÏ‚. ÎœÎµÏ„Î¬, ÏƒÏ„Î±Î´Î¹Î±ÎºÎ® ÎµÏ€Î­ÎºÏ„Î±ÏƒÎ· Ï€ÏÎ¿Ï‚ 7200 Ï†Ï…ÏƒÎ¹ÎºÎ­Ï‚ Î´Î¹Î±Î»Î­ÎºÏ„Î¿Ï…Ï‚, Î±Î½Î¬ Ï‡ÏŽÏÎ±, Î®Ï€ÎµÎ¹ÏÎ¿ ÎºÎ±Î¹ Ï€ÏÎ±Î³Î¼Î±Ï„Î¹ÎºÏŒ Ï€Î»Î·Î¸Ï…ÏƒÎ¼ÏŒ.",
   title: "Pantavion Water Module",
-  subtitle: "Ζωντανό κέντρο ελέγχου ετοιμότητας — όχι στατική βιτρίνα.",
+  subtitle: "Î–Ï‰Î½Ï„Î±Î½ÏŒ ÎºÎ­Î½Ï„ÏÎ¿ ÎµÎ»Î­Î³Ï‡Î¿Ï… ÎµÏ„Î¿Î¹Î¼ÏŒÏ„Î·Ï„Î±Ï‚ â€” ÏŒÏ‡Î¹ ÏƒÏ„Î±Ï„Î¹ÎºÎ® Î²Î¹Ï„ÏÎ¯Î½Î±.",
   explanation:
-    "Το πλήρες master δίκτυο ύδρευσης παραμένει προστατευμένο. Η σελίδα κάνει live ελέγχους στα readiness, address candidate και controlled bbox contracts, χωρίς να επιστρέφει geometry, raw master ή complete water network payloads.",
-  currentStatus: "Τρέχουσα κατάσταση",
-  productionBlocked: "Production μπλοκαρισμένο",
+    "Î¤Î¿ Ï€Î»Î®ÏÎµÏ‚ master Î´Î¯ÎºÏ„Ï…Î¿ ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚ Ï€Î±ÏÎ±Î¼Î­Î½ÎµÎ¹ Ï€ÏÎ¿ÏƒÏ„Î±Ï„ÎµÏ…Î¼Î­Î½Î¿. Î— ÏƒÎµÎ»Î¯Î´Î± ÎºÎ¬Î½ÎµÎ¹ live ÎµÎ»Î­Î³Ï‡Î¿Ï…Ï‚ ÏƒÏ„Î± readiness, address candidate ÎºÎ±Î¹ controlled bbox contracts, Ï‡Ï‰ÏÎ¯Ï‚ Î½Î± ÎµÏ€Î¹ÏƒÏ„ÏÎ­Ï†ÎµÎ¹ geometry, raw master Î® complete water network payloads.",
+  currentStatus: "Î¤ÏÎ­Ï‡Î¿Ï…ÏƒÎ± ÎºÎ±Ï„Î¬ÏƒÏ„Î±ÏƒÎ·",
+  productionBlocked: "Production Î¼Ï€Î»Î¿ÎºÎ±ÏÎ¹ÏƒÎ¼Î­Î½Î¿",
   blockedReason:
-    "Μπλοκαρισμένο σωστά μέχρι να υπάρχουν spatial index, bbox provider, access filtering, durable audit, authorized-person store και founder/admin approval.",
-  runLiveChecks: "Εκτέλεση live ελέγχου",
-  copyPresentation: "Αντιγραφή μηνύματος παρουσίασης",
-  copied: "Αντιγράφηκε",
-  printPage: "Εκτύπωση / αποθήκευση",
-  exportSnapshot: "Εξαγωγή JSON snapshot",
-  openReadinessApi: "Άνοιγμα readiness API",
-  openServingApi: "Άνοιγμα serving API",
-  openAddressApi: "Άνοιγμα address candidates API",
-  openBboxApi: "Άνοιγμα controlled bbox API",
+    "ÎœÏ€Î»Î¿ÎºÎ±ÏÎ¹ÏƒÎ¼Î­Î½Î¿ ÏƒÏ‰ÏƒÏ„Î¬ Î¼Î­Ï‡ÏÎ¹ Î½Î± Ï…Ï€Î¬ÏÏ‡Î¿Ï…Î½ spatial index, bbox provider, access filtering, durable audit, authorized-person store ÎºÎ±Î¹ founder/admin approval.",
+  runLiveChecks: "Î•ÎºÏ„Î­Î»ÎµÏƒÎ· live ÎµÎ»Î­Î³Ï‡Î¿Ï…",
+  copyPresentation: "Î‘Î½Ï„Î¹Î³ÏÎ±Ï†Î® Î¼Î·Î½ÏÎ¼Î±Ï„Î¿Ï‚ Ï€Î±ÏÎ¿Ï…ÏƒÎ¯Î±ÏƒÎ·Ï‚",
+  copied: "Î‘Î½Ï„Î¹Î³ÏÎ¬Ï†Î·ÎºÎµ",
+  printPage: "Î•ÎºÏ„ÏÏ€Ï‰ÏƒÎ· / Î±Ï€Î¿Î¸Î®ÎºÎµÏ…ÏƒÎ·",
+  exportSnapshot: "Î•Î¾Î±Î³Ï‰Î³Î® JSON snapshot",
+  openReadinessApi: "Î†Î½Î¿Î¹Î³Î¼Î± readiness API",
+  openServingApi: "Î†Î½Î¿Î¹Î³Î¼Î± serving API",
+  openAddressApi: "Î†Î½Î¿Î¹Î³Î¼Î± address candidates API",
+  openBboxApi: "Î†Î½Î¿Î¹Î³Î¼Î± controlled bbox API",
   liveChecksTitle: "Live contract checks",
   liveChecksText:
-    "Κάθε ενεργό κουμπί κάνει πραγματική ενέργεια. Το 423 είναι επιτυχές safety block, όχι αποτυχία.",
-  lastRun: "Τελευταίος έλεγχος",
-  notRun: "Δεν έγινε ακόμα",
-  checking: "Έλεγχος...",
-  notChecked: "Δεν ελέγχθηκε",
-  expected: "Αναμενόμενο",
-  jsonError: "Η απάντηση δεν ήταν JSON. Πιθανό protection/auth ή HTML error page.",
-  presentationTitle: "Μήνυμα παρουσίασης",
+    "ÎšÎ¬Î¸Îµ ÎµÎ½ÎµÏÎ³ÏŒ ÎºÎ¿Ï…Î¼Ï€Î¯ ÎºÎ¬Î½ÎµÎ¹ Ï€ÏÎ±Î³Î¼Î±Ï„Î¹ÎºÎ® ÎµÎ½Î­ÏÎ³ÎµÎ¹Î±. Î¤Î¿ 423 ÎµÎ¯Î½Î±Î¹ ÎµÏ€Î¹Ï„Ï…Ï‡Î­Ï‚ safety block, ÏŒÏ‡Î¹ Î±Ï€Î¿Ï„Ï…Ï‡Î¯Î±.",
+  lastRun: "Î¤ÎµÎ»ÎµÏ…Ï„Î±Î¯Î¿Ï‚ Î­Î»ÎµÎ³Ï‡Î¿Ï‚",
+  notRun: "Î”ÎµÎ½ Î­Î³Î¹Î½Îµ Î±ÎºÏŒÎ¼Î±",
+  checking: "ÎˆÎ»ÎµÎ³Ï‡Î¿Ï‚...",
+  notChecked: "Î”ÎµÎ½ ÎµÎ»Î­Î³Ï‡Î¸Î·ÎºÎµ",
+  expected: "Î‘Î½Î±Î¼ÎµÎ½ÏŒÎ¼ÎµÎ½Î¿",
+  jsonError: "Î— Î±Ï€Î¬Î½Ï„Î·ÏƒÎ· Î´ÎµÎ½ Î®Ï„Î±Î½ JSON. Î Î¹Î¸Î±Î½ÏŒ protection/auth Î® HTML error page.",
+  presentationTitle: "ÎœÎ®Î½Ï…Î¼Î± Ï€Î±ÏÎ¿Ï…ÏƒÎ¯Î±ÏƒÎ·Ï‚",
   presentationP1:
-    "Το Pantavion Water Module δεν φορτώνει ολόκληρο το δίκτυο ύδρευσης στον browser. Το πλήρες master παραμένει προστατευμένο. Το σύστημα ζητά μόνο ελεγχόμενο τμήμα βάσει τρέχουσας θέσης, αναζήτησης διεύθυνσης, χειροκίνητης μετακίνησης/zoom ή founder/admin selected area.",
+    "Î¤Î¿ Pantavion Water Module Î´ÎµÎ½ Ï†Î¿ÏÏ„ÏŽÎ½ÎµÎ¹ Î¿Î»ÏŒÎºÎ»Î·ÏÎ¿ Ï„Î¿ Î´Î¯ÎºÏ„Ï…Î¿ ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚ ÏƒÏ„Î¿Î½ browser. Î¤Î¿ Ï€Î»Î®ÏÎµÏ‚ master Ï€Î±ÏÎ±Î¼Î­Î½ÎµÎ¹ Ï€ÏÎ¿ÏƒÏ„Î±Ï„ÎµÏ…Î¼Î­Î½Î¿. Î¤Î¿ ÏƒÏÏƒÏ„Î·Î¼Î± Î¶Î·Ï„Î¬ Î¼ÏŒÎ½Î¿ ÎµÎ»ÎµÎ³Ï‡ÏŒÎ¼ÎµÎ½Î¿ Ï„Î¼Î®Î¼Î± Î²Î¬ÏƒÎµÎ¹ Ï„ÏÎ­Ï‡Î¿Ï…ÏƒÎ±Ï‚ Î¸Î­ÏƒÎ·Ï‚, Î±Î½Î±Î¶Î®Ï„Î·ÏƒÎ·Ï‚ Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·Ï‚, Ï‡ÎµÎ¹ÏÎ¿ÎºÎ¯Î½Î·Ï„Î·Ï‚ Î¼ÎµÏ„Î±ÎºÎ¯Î½Î·ÏƒÎ·Ï‚/zoom Î® founder/admin selected area.",
   presentationP2:
-    "Για διευθύνσεις ή οδούς που υπάρχουν πολλές φορές στην ίδια πόλη, το σύστημα δεν κάνει ποτέ auto-pick. Επιστρέφει candidates και απαιτεί selectedCandidateId πριν από οποιοδήποτε controlled bbox serving.",
+    "Î“Î¹Î± Î´Î¹ÎµÏ…Î¸ÏÎ½ÏƒÎµÎ¹Ï‚ Î® Î¿Î´Î¿ÏÏ‚ Ï€Î¿Ï… Ï…Ï€Î¬ÏÏ‡Î¿Ï…Î½ Ï€Î¿Î»Î»Î­Ï‚ Ï†Î¿ÏÎ­Ï‚ ÏƒÏ„Î·Î½ Î¯Î´Î¹Î± Ï€ÏŒÎ»Î·, Ï„Î¿ ÏƒÏÏƒÏ„Î·Î¼Î± Î´ÎµÎ½ ÎºÎ¬Î½ÎµÎ¹ Ï€Î¿Ï„Î­ auto-pick. Î•Ï€Î¹ÏƒÏ„ÏÎ­Ï†ÎµÎ¹ candidates ÎºÎ±Î¹ Î±Ï€Î±Î¹Ï„ÎµÎ¯ selectedCandidateId Ï€ÏÎ¹Î½ Î±Ï€ÏŒ Î¿Ï€Î¿Î¹Î¿Î´Î®Ï€Î¿Ï„Îµ controlled bbox serving.",
   readinessTitle: "Live production readiness",
-  overallReady: "Συνολικά έτοιμο",
-  productionActivationAllowed: "Επιτρέπεται production activation",
-  dataReturned: "Επιστρέφονται δεδομένα",
-  mayReturnRawMaster: "Μπορεί να επιστρέψει raw master",
-  mayReturnCompleteNetwork: "Μπορεί να επιστρέψει complete network",
+  overallReady: "Î£Ï…Î½Î¿Î»Î¹ÎºÎ¬ Î­Ï„Î¿Î¹Î¼Î¿",
+  productionActivationAllowed: "Î•Ï€Î¹Ï„ÏÎ­Ï€ÎµÏ„Î±Î¹ production activation",
+  dataReturned: "Î•Ï€Î¹ÏƒÏ„ÏÎ­Ï†Î¿Î½Ï„Î±Î¹ Î´ÎµÎ´Î¿Î¼Î­Î½Î±",
+  mayReturnRawMaster: "ÎœÏ€Î¿ÏÎµÎ¯ Î½Î± ÎµÏ€Î¹ÏƒÏ„ÏÎ­ÏˆÎµÎ¹ raw master",
+  mayReturnCompleteNetwork: "ÎœÏ€Î¿ÏÎµÎ¯ Î½Î± ÎµÏ€Î¹ÏƒÏ„ÏÎ­ÏˆÎµÎ¹ complete network",
   addressTitle: "Address disambiguation",
   addressP1:
-    "Ίδιες οδοί ή ίδιες διευθύνσεις μπορεί να υπάρχουν πολλές φορές στην ίδια πόλη, δήμο, συνοικία, τομέα ή ζώνη.",
+    "ÎŠÎ´Î¹ÎµÏ‚ Î¿Î´Î¿Î¯ Î® Î¯Î´Î¹ÎµÏ‚ Î´Î¹ÎµÏ…Î¸ÏÎ½ÏƒÎµÎ¹Ï‚ Î¼Ï€Î¿ÏÎµÎ¯ Î½Î± Ï…Ï€Î¬ÏÏ‡Î¿Ï…Î½ Ï€Î¿Î»Î»Î­Ï‚ Ï†Î¿ÏÎ­Ï‚ ÏƒÏ„Î·Î½ Î¯Î´Î¹Î± Ï€ÏŒÎ»Î·, Î´Î®Î¼Î¿, ÏƒÏ…Î½Î¿Î¹ÎºÎ¯Î±, Ï„Î¿Î¼Î­Î± Î® Î¶ÏŽÎ½Î·.",
   addressP2:
-    "Το σύστημα δεν επιτρέπεται να επιλέξει αυτόματα ambiguous address. Candidate selection απαιτείται πριν δημιουργηθεί target viewport.",
-  selectedCandidateRequired: "selectedCandidateId απαιτείται πριν το bbox",
+    "Î¤Î¿ ÏƒÏÏƒÏ„Î·Î¼Î± Î´ÎµÎ½ ÎµÏ€Î¹Ï„ÏÎ­Ï€ÎµÏ„Î±Î¹ Î½Î± ÎµÏ€Î¹Î»Î­Î¾ÎµÎ¹ Î±Ï…Ï„ÏŒÎ¼Î±Ï„Î± ambiguous address. Candidate selection Î±Ï€Î±Î¹Ï„ÎµÎ¯Ï„Î±Î¹ Ï€ÏÎ¹Î½ Î´Î·Î¼Î¹Î¿Ï…ÏÎ³Î·Î¸ÎµÎ¯ target viewport.",
+  selectedCandidateRequired: "selectedCandidateId Î±Ï€Î±Î¹Ï„ÎµÎ¯Ï„Î±Î¹ Ï€ÏÎ¹Î½ Ï„Î¿ bbox",
   mayAutoPick: "mayAutoPickAmbiguousAddress",
   bboxDataReturned: "controlled bbox dataReturned",
-  requiredBeforeProduction: "Απαιτούνται πριν το production",
+  requiredBeforeProduction: "Î‘Ï€Î±Î¹Ï„Î¿ÏÎ½Ï„Î±Î¹ Ï€ÏÎ¹Î½ Ï„Î¿ production",
   safeGuaranteeTitle: "Safe presentation guarantee",
   safe1: "No raw master network is returned.",
   safe2: "No complete network payload is returned.",
@@ -197,7 +197,7 @@ const en: CopyPack = {
   languageLabel: "Language",
   languagePromise:
     "Pantavion supports user-selected language. First target: 250 languages. Then progressive support for 7200 natural dialects by country, continent, and real population needs.",
-  subtitle: "Live readiness control center — not a static display.",
+  subtitle: "Live readiness control center â€” not a static display.",
   explanation:
     "The complete master water network remains protected. This page performs live checks against readiness, address candidate, and controlled bbox contracts without returning geometry, raw master data, or complete water network payloads.",
   currentStatus: "Current status",
@@ -242,183 +242,193 @@ const partialCopies: Record<string, Partial<CopyPack>> = {
   tr: {
     languageLabel: "Dil",
     languagePromise:
-      "Pantavion kullanıcının seçtiği dili destekler. İlk hedef: 250 dil. Sonra ülke, kıta ve gerçek nüfus ihtiyaçlarına göre 7200 doğal lehçe.",
-    subtitle: "Canlı hazırlık kontrol merkezi — statik vitrin değil.",
+      "Pantavion kullanÄ±cÄ±nÄ±n seÃ§tiÄŸi dili destekler. Ä°lk hedef: 250 dil. Sonra Ã¼lke, kÄ±ta ve gerÃ§ek nÃ¼fus ihtiyaÃ§larÄ±na gÃ¶re 7200 doÄŸal lehÃ§e.",
+    subtitle: "CanlÄ± hazÄ±rlÄ±k kontrol merkezi â€” statik vitrin deÄŸil.",
     currentStatus: "Mevcut durum",
     productionBlocked: "Production engellendi",
-    runLiveChecks: "Canlı kontrolü çalıştır",
-    copyPresentation: "Sunum mesajını kopyala",
+    runLiveChecks: "CanlÄ± kontrolÃ¼ Ã§alÄ±ÅŸtÄ±r",
+    copyPresentation: "Sunum mesajÄ±nÄ± kopyala",
   },
   ar: {
-    languageLabel: "اللغة",
+    languageLabel: "Ø§Ù„Ù„ØºØ©",
     languagePromise:
-      "يدعم Pantavion لغة يختارها المستخدم. الهدف الأول: 250 لغة، ثم دعم تدريجي لـ 7200 لهجة طبيعية حسب البلد والقارة واحتياجات السكان.",
-    subtitle: "مركز تحقق مباشر للجاهزية — ليس عرضاً ثابتاً.",
-    currentStatus: "الحالة الحالية",
-    productionBlocked: "الإنتاج محظور",
-    runLiveChecks: "تشغيل الفحص المباشر",
-    copyPresentation: "نسخ رسالة العرض",
+      "ÙŠØ¯Ø¹Ù… Pantavion Ù„ØºØ© ÙŠØ®ØªØ§Ø±Ù‡Ø§ Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…. Ø§Ù„Ù‡Ø¯Ù Ø§Ù„Ø£ÙˆÙ„: 250 Ù„ØºØ©ØŒ Ø«Ù… Ø¯Ø¹Ù… ØªØ¯Ø±ÙŠØ¬ÙŠ Ù„Ù€ 7200 Ù„Ù‡Ø¬Ø© Ø·Ø¨ÙŠØ¹ÙŠØ© Ø­Ø³Ø¨ Ø§Ù„Ø¨Ù„Ø¯ ÙˆØ§Ù„Ù‚Ø§Ø±Ø© ÙˆØ§Ø­ØªÙŠØ§Ø¬Ø§Øª Ø§Ù„Ø³ÙƒØ§Ù†.",
+    subtitle: "Ù…Ø±ÙƒØ² ØªØ­Ù‚Ù‚ Ù…Ø¨Ø§Ø´Ø± Ù„Ù„Ø¬Ø§Ù‡Ø²ÙŠØ© â€” Ù„ÙŠØ³ Ø¹Ø±Ø¶Ø§Ù‹ Ø«Ø§Ø¨ØªØ§Ù‹.",
+    currentStatus: "Ø§Ù„Ø­Ø§Ù„Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©",
+    productionBlocked: "Ø§Ù„Ø¥Ù†ØªØ§Ø¬ Ù…Ø­Ø¸ÙˆØ±",
+    runLiveChecks: "ØªØ´ØºÙŠÙ„ Ø§Ù„ÙØ­Øµ Ø§Ù„Ù…Ø¨Ø§Ø´Ø±",
+    copyPresentation: "Ù†Ø³Ø® Ø±Ø³Ø§Ù„Ø© Ø§Ù„Ø¹Ø±Ø¶",
   },
   "ar-sy": {
-    languageLabel: "اللغة",
+    languageLabel: "Ø§Ù„Ù„ØºØ©",
     languagePromise:
-      "دعم خاص للناطقين بالعربية السورية ضمن خطة Pantavion للغات والجاليات في قبرص والعالم.",
-    subtitle: "مركز تحقق مباشر للجاهزية — ليس عرضاً ثابتاً.",
-    runLiveChecks: "تشغيل الفحص المباشر",
+      "Ø¯Ø¹Ù… Ø®Ø§Øµ Ù„Ù„Ù†Ø§Ø·Ù‚ÙŠÙ† Ø¨Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© Ø§Ù„Ø³ÙˆØ±ÙŠØ© Ø¶Ù…Ù† Ø®Ø·Ø© Pantavion Ù„Ù„ØºØ§Øª ÙˆØ§Ù„Ø¬Ø§Ù„ÙŠØ§Øª ÙÙŠ Ù‚Ø¨Ø±Øµ ÙˆØ§Ù„Ø¹Ø§Ù„Ù….",
+    subtitle: "Ù…Ø±ÙƒØ² ØªØ­Ù‚Ù‚ Ù…Ø¨Ø§Ø´Ø± Ù„Ù„Ø¬Ø§Ù‡Ø²ÙŠØ© â€” Ù„ÙŠØ³ Ø¹Ø±Ø¶Ø§Ù‹ Ø«Ø§Ø¨ØªØ§Ù‹.",
+    runLiveChecks: "ØªØ´ØºÙŠÙ„ Ø§Ù„ÙØ­Øµ Ø§Ù„Ù…Ø¨Ø§Ø´Ø±",
   },
   "ar-ps": {
-    languageLabel: "اللغة",
+    languageLabel: "Ø§Ù„Ù„ØºØ©",
     languagePromise:
-      "دعم خاص للناطقين بالعربية الفلسطينية ضمن خطة Pantavion للغات والجاليات في قبرص والعالم.",
-    subtitle: "مركز تحقق مباشر للجاهزية — ليس عرضاً ثابتاً.",
-    runLiveChecks: "تشغيل الفحص المباشر",
+      "Ø¯Ø¹Ù… Ø®Ø§Øµ Ù„Ù„Ù†Ø§Ø·Ù‚ÙŠÙ† Ø¨Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© Ø§Ù„ÙÙ„Ø³Ø·ÙŠÙ†ÙŠØ© Ø¶Ù…Ù† Ø®Ø·Ø© Pantavion Ù„Ù„ØºØ§Øª ÙˆØ§Ù„Ø¬Ø§Ù„ÙŠØ§Øª ÙÙŠ Ù‚Ø¨Ø±Øµ ÙˆØ§Ù„Ø¹Ø§Ù„Ù….",
+    subtitle: "Ù…Ø±ÙƒØ² ØªØ­Ù‚Ù‚ Ù…Ø¨Ø§Ø´Ø± Ù„Ù„Ø¬Ø§Ù‡Ø²ÙŠØ© â€” Ù„ÙŠØ³ Ø¹Ø±Ø¶Ø§Ù‹ Ø«Ø§Ø¨ØªØ§Ù‹.",
+    runLiveChecks: "ØªØ´ØºÙŠÙ„ Ø§Ù„ÙØ­Øµ Ø§Ù„Ù…Ø¨Ø§Ø´Ø±",
   },
   ru: {
-    languageLabel: "Язык",
+    languageLabel: "Ð¯Ð·Ñ‹Ðº",
     languagePromise:
-      "Pantavion поддерживает язык, выбранный пользователем. Цель: 250 языков, затем 7200 естественных диалектов.",
-    subtitle: "Живой центр проверки готовности — не статическая витрина.",
-    currentStatus: "Текущее состояние",
-    productionBlocked: "Production заблокирован",
-    runLiveChecks: "Запустить live-проверку",
+      "Pantavion Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÑ‚ ÑÐ·Ñ‹Ðº, Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð½Ñ‹Ð¹ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÐµÐ¼. Ð¦ÐµÐ»ÑŒ: 250 ÑÐ·Ñ‹ÐºÐ¾Ð², Ð·Ð°Ñ‚ÐµÐ¼ 7200 ÐµÑÑ‚ÐµÑÑ‚Ð²ÐµÐ½Ð½Ñ‹Ñ… Ð´Ð¸Ð°Ð»ÐµÐºÑ‚Ð¾Ð².",
+    subtitle: "Ð–Ð¸Ð²Ð¾Ð¹ Ñ†ÐµÐ½Ñ‚Ñ€ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸ Ð³Ð¾Ñ‚Ð¾Ð²Ð½Ð¾ÑÑ‚Ð¸ â€” Ð½Ðµ ÑÑ‚Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð²Ð¸Ñ‚Ñ€Ð¸Ð½Ð°.",
+    currentStatus: "Ð¢ÐµÐºÑƒÑ‰ÐµÐµ ÑÐ¾ÑÑ‚Ð¾ÑÐ½Ð¸Ðµ",
+    productionBlocked: "Production Ð·Ð°Ð±Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²Ð°Ð½",
+    runLiveChecks: "Ð—Ð°Ð¿ÑƒÑÑ‚Ð¸Ñ‚ÑŒ live-Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÑƒ",
   },
   uk: {
-    languageLabel: "Мова",
+    languageLabel: "ÐœÐ¾Ð²Ð°",
     languagePromise:
-      "Pantavion підтримує мову, обрану користувачем. Мета: 250 мов, потім 7200 природних діалектів.",
-    subtitle: "Живий центр перевірки готовності — не статична вітрина.",
-    runLiveChecks: "Запустити live-перевірку",
+      "Pantavion Ð¿Ñ–Ð´Ñ‚Ñ€Ð¸Ð¼ÑƒÑ” Ð¼Ð¾Ð²Ñƒ, Ð¾Ð±Ñ€Ð°Ð½Ñƒ ÐºÐ¾Ñ€Ð¸ÑÑ‚ÑƒÐ²Ð°Ñ‡ÐµÐ¼. ÐœÐµÑ‚Ð°: 250 Ð¼Ð¾Ð², Ð¿Ð¾Ñ‚Ñ–Ð¼ 7200 Ð¿Ñ€Ð¸Ñ€Ð¾Ð´Ð½Ð¸Ñ… Ð´Ñ–Ð°Ð»ÐµÐºÑ‚Ñ–Ð².",
+    subtitle: "Ð–Ð¸Ð²Ð¸Ð¹ Ñ†ÐµÐ½Ñ‚Ñ€ Ð¿ÐµÑ€ÐµÐ²Ñ–Ñ€ÐºÐ¸ Ð³Ð¾Ñ‚Ð¾Ð²Ð½Ð¾ÑÑ‚Ñ– â€” Ð½Ðµ ÑÑ‚Ð°Ñ‚Ð¸Ñ‡Ð½Ð° Ð²Ñ–Ñ‚Ñ€Ð¸Ð½Ð°.",
+    runLiveChecks: "Ð—Ð°Ð¿ÑƒÑÑ‚Ð¸Ñ‚Ð¸ live-Ð¿ÐµÑ€ÐµÐ²Ñ–Ñ€ÐºÑƒ",
   },
   zh: {
-    languageLabel: "语言",
+    languageLabel: "è¯­è¨€",
     languagePromise:
-      "Pantavion 支持用户选择语言。第一目标：250种语言；随后逐步支持7200种自然方言。",
-    subtitle: "实时就绪控制中心 — 不是静态展示。",
-    currentStatus: "当前状态",
-    productionBlocked: "生产已阻止",
-    runLiveChecks: "运行实时检查",
+      "Pantavion æ”¯æŒç”¨æˆ·é€‰æ‹©è¯­è¨€ã€‚ç¬¬ä¸€ç›®æ ‡ï¼š250ç§è¯­è¨€ï¼›éšåŽé€æ­¥æ”¯æŒ7200ç§è‡ªç„¶æ–¹è¨€ã€‚",
+    subtitle: "å®žæ—¶å°±ç»ªæŽ§åˆ¶ä¸­å¿ƒ â€” ä¸æ˜¯é™æ€å±•ç¤ºã€‚",
+    currentStatus: "å½“å‰çŠ¶æ€",
+    productionBlocked: "ç”Ÿäº§å·²é˜»æ­¢",
+    runLiveChecks: "è¿è¡Œå®žæ—¶æ£€æŸ¥",
   },
   pl: {
-    languageLabel: "Język",
+    languageLabel: "JÄ™zyk",
     languagePromise:
-      "Pantavion obsługuje język wybrany przez użytkownika. Cel: 250 języków, potem 7200 naturalnych dialektów.",
-    subtitle: "Centrum kontroli gotowości na żywo — nie statyczna witryna.",
+      "Pantavion obsÅ‚uguje jÄ™zyk wybrany przez uÅ¼ytkownika. Cel: 250 jÄ™zykÃ³w, potem 7200 naturalnych dialektÃ³w.",
+    subtitle: "Centrum kontroli gotowoÅ›ci na Å¼ywo â€” nie statyczna witryna.",
     currentStatus: "Aktualny status",
     productionBlocked: "Production zablokowane",
-    runLiveChecks: "Uruchom kontrolę live",
+    runLiveChecks: "Uruchom kontrolÄ™ live",
   },
   hy: {
-    languageLabel: "Լեզու",
+    languageLabel: "Ô¼Õ¥Õ¦Õ¸Ö‚",
     languagePromise:
-      "Pantavion-ը աջակցում է օգտատիրոջ ընտրած լեզուն։ Նպատակ՝ 250 լեզու, ապա 7200 բնական բարբառ։",
-    subtitle: "Կենդանի պատրաստության վերահսկման կենտրոն — ոչ ստատիկ էջ։",
-    runLiveChecks: "Գործարկել կենդանի ստուգումը",
+      "Pantavion-Õ¨ Õ¡Õ»Õ¡Õ¯ÖÕ¸Ö‚Õ´ Õ§ Ö…Õ£Õ¿Õ¡Õ¿Õ«Ö€Õ¸Õ» Õ¨Õ¶Õ¿Ö€Õ¡Õ® Õ¬Õ¥Õ¦Õ¸Ö‚Õ¶Ö‰ Õ†ÕºÕ¡Õ¿Õ¡Õ¯Õ 250 Õ¬Õ¥Õ¦Õ¸Ö‚, Õ¡ÕºÕ¡ 7200 Õ¢Õ¶Õ¡Õ¯Õ¡Õ¶ Õ¢Õ¡Ö€Õ¢Õ¡Õ¼Ö‰",
+    subtitle: "Ô¿Õ¥Õ¶Õ¤Õ¡Õ¶Õ« ÕºÕ¡Õ¿Ö€Õ¡Õ½Õ¿Õ¸Ö‚Õ©ÕµÕ¡Õ¶ Õ¾Õ¥Ö€Õ¡Õ°Õ½Õ¯Õ´Õ¡Õ¶ Õ¯Õ¥Õ¶Õ¿Ö€Õ¸Õ¶ â€” Õ¸Õ¹ Õ½Õ¿Õ¡Õ¿Õ«Õ¯ Õ§Õ»Ö‰",
+    runLiveChecks: "Ô³Õ¸Ö€Õ®Õ¡Ö€Õ¯Õ¥Õ¬ Õ¯Õ¥Õ¶Õ¤Õ¡Õ¶Õ« Õ½Õ¿Õ¸Ö‚Õ£Õ¸Ö‚Õ´Õ¨",
   },
   ro: {
-    languageLabel: "Limbă",
+    languageLabel: "LimbÄƒ",
     languagePromise:
-      "Pantavion susține limba aleasă de utilizator. Țintă: 250 de limbi, apoi 7200 de dialecte naturale.",
-    subtitle: "Centru live de verificare a pregătirii — nu vitrină statică.",
-    currentStatus: "Stare curentă",
+      "Pantavion susÈ›ine limba aleasÄƒ de utilizator. ÈšintÄƒ: 250 de limbi, apoi 7200 de dialecte naturale.",
+    subtitle: "Centru live de verificare a pregÄƒtirii â€” nu vitrinÄƒ staticÄƒ.",
+    currentStatus: "Stare curentÄƒ",
     productionBlocked: "Production blocat",
-    runLiveChecks: "Rulează verificarea live",
+    runLiveChecks: "RuleazÄƒ verificarea live",
   },
   bg: {
-    languageLabel: "Език",
+    languageLabel: "Ð•Ð·Ð¸Ðº",
     languagePromise:
-      "Pantavion поддържа избрания от потребителя език. Цел: 250 езика, после 7200 естествени диалекта.",
-    subtitle: "Жив център за проверка на готовността — не статична витрина.",
-    currentStatus: "Текущо състояние",
-    productionBlocked: "Production блокирано",
-    runLiveChecks: "Стартирай live проверка",
+      "Pantavion Ð¿Ð¾Ð´Ð´ÑŠÑ€Ð¶Ð° Ð¸Ð·Ð±Ñ€Ð°Ð½Ð¸Ñ Ð¾Ñ‚ Ð¿Ð¾Ñ‚Ñ€ÐµÐ±Ð¸Ñ‚ÐµÐ»Ñ ÐµÐ·Ð¸Ðº. Ð¦ÐµÐ»: 250 ÐµÐ·Ð¸ÐºÐ°, Ð¿Ð¾ÑÐ»Ðµ 7200 ÐµÑÑ‚ÐµÑÑ‚Ð²ÐµÐ½Ð¸ Ð´Ð¸Ð°Ð»ÐµÐºÑ‚Ð°.",
+    subtitle: "Ð–Ð¸Ð² Ñ†ÐµÐ½Ñ‚ÑŠÑ€ Ð·Ð° Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð½Ð° Ð³Ð¾Ñ‚Ð¾Ð²Ð½Ð¾ÑÑ‚Ñ‚Ð° â€” Ð½Ðµ ÑÑ‚Ð°Ñ‚Ð¸Ñ‡Ð½Ð° Ð²Ð¸Ñ‚Ñ€Ð¸Ð½Ð°.",
+    currentStatus: "Ð¢ÐµÐºÑƒÑ‰Ð¾ ÑÑŠÑÑ‚Ð¾ÑÐ½Ð¸Ðµ",
+    productionBlocked: "Production Ð±Ð»Ð¾ÐºÐ¸Ñ€Ð°Ð½Ð¾",
+    runLiveChecks: "Ð¡Ñ‚Ð°Ñ€Ñ‚Ð¸Ñ€Ð°Ð¹ live Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ°",
   },
   fil: {
     languageLabel: "Wika",
     languagePromise:
       "Sinusuportahan ng Pantavion ang wikang pinili ng user. Target: 250 wika, pagkatapos 7200 natural dialects.",
-    subtitle: "Live readiness control center — hindi static display.",
+    subtitle: "Live readiness control center â€” hindi static display.",
     runLiveChecks: "Patakbuhin ang live check",
   },
   ne: {
-    languageLabel: "भाषा",
+    languageLabel: "à¤­à¤¾à¤·à¤¾",
     languagePromise:
-      "Pantavion ले प्रयोगकर्ताले रोजेको भाषा समर्थन गर्छ। लक्ष्य: 250 भाषा, त्यसपछि 7200 प्राकृतिक बोलिहरू।",
-    subtitle: "प्रत्यक्ष readiness control center — static display होइन।",
-    runLiveChecks: "Live check चलाउनुहोस्",
+      "Pantavion à¤²à¥‡ à¤ªà¥à¤°à¤¯à¥‹à¤—à¤•à¤°à¥à¤¤à¤¾à¤²à¥‡ à¤°à¥‹à¤œà¥‡à¤•à¥‹ à¤­à¤¾à¤·à¤¾ à¤¸à¤®à¤°à¥à¤¥à¤¨ à¤—à¤°à¥à¤›à¥¤ à¤²à¤•à¥à¤·à¥à¤¯: 250 à¤­à¤¾à¤·à¤¾, à¤¤à¥à¤¯à¤¸à¤ªà¤›à¤¿ 7200 à¤ªà¥à¤°à¤¾à¤•à¥ƒà¤¤à¤¿à¤• à¤¬à¥‹à¤²à¤¿à¤¹à¤°à¥‚à¥¤",
+    subtitle: "à¤ªà¥à¤°à¤¤à¥à¤¯à¤•à¥à¤· readiness control center â€” static display à¤¹à¥‹à¤‡à¤¨à¥¤",
+    runLiveChecks: "Live check à¤šà¤²à¤¾à¤‰à¤¨à¥à¤¹à¥‹à¤¸à¥",
   },
   hi: {
-    languageLabel: "भाषा",
+    languageLabel: "à¤­à¤¾à¤·à¤¾",
     languagePromise:
-      "Pantavion उपयोगकर्ता द्वारा चुनी गई भाषा का समर्थन करता है। लक्ष्य: 250 भाषाएँ, फिर 7200 प्राकृतिक बोलियाँ।",
-    subtitle: "Live readiness control center — static display नहीं।",
-    runLiveChecks: "Live check चलाएँ",
+      "Pantavion à¤‰à¤ªà¤¯à¥‹à¤—à¤•à¤°à¥à¤¤à¤¾ à¤¦à¥à¤µà¤¾à¤°à¤¾ à¤šà¥à¤¨à¥€ à¤—à¤ˆ à¤­à¤¾à¤·à¤¾ à¤•à¤¾ à¤¸à¤®à¤°à¥à¤¥à¤¨ à¤•à¤°à¤¤à¤¾ à¤¹à¥ˆà¥¤ à¤²à¤•à¥à¤·à¥à¤¯: 250 à¤­à¤¾à¤·à¤¾à¤à¤, à¤«à¤¿à¤° 7200 à¤ªà¥à¤°à¤¾à¤•à¥ƒà¤¤à¤¿à¤• à¤¬à¥‹à¤²à¤¿à¤¯à¤¾à¤à¥¤",
+    subtitle: "Live readiness control center â€” static display à¤¨à¤¹à¥€à¤‚à¥¤",
+    runLiveChecks: "Live check à¤šà¤²à¤¾à¤à¤",
   },
   ur: {
-    languageLabel: "زبان",
+    languageLabel: "Ø²Ø¨Ø§Ù†",
     languagePromise:
-      "Pantavion صارف کی منتخب زبان کو سپورٹ کرتا ہے۔ ہدف: 250 زبانیں، پھر 7200 قدرتی بولیاں۔",
-    subtitle: "براہ راست readiness control center — static display نہیں۔",
-    runLiveChecks: "Live check چلائیں",
+      "Pantavion ØµØ§Ø±Ù Ú©ÛŒ Ù…Ù†ØªØ®Ø¨ Ø²Ø¨Ø§Ù† Ú©Ùˆ Ø³Ù¾ÙˆØ±Ù¹ Ú©Ø±ØªØ§ ÛÛ’Û” ÛØ¯Ù: 250 Ø²Ø¨Ø§Ù†ÛŒÚºØŒ Ù¾Ú¾Ø± 7200 Ù‚Ø¯Ø±ØªÛŒ Ø¨ÙˆÙ„ÛŒØ§ÚºÛ”",
+    subtitle: "Ø¨Ø±Ø§Û Ø±Ø§Ø³Øª readiness control center â€” static display Ù†ÛÛŒÚºÛ”",
+    runLiveChecks: "Live check Ú†Ù„Ø§Ø¦ÛŒÚº",
   },
   bn: {
-    languageLabel: "ভাষা",
+    languageLabel: "à¦­à¦¾à¦·à¦¾",
     languagePromise:
-      "Pantavion ব্যবহারকারীর নির্বাচিত ভাষা সমর্থন করে। লক্ষ্য: 250 ভাষা, তারপর 7200 প্রাকৃতিক উপভাষা।",
-    subtitle: "লাইভ readiness control center — static display নয়।",
-    runLiveChecks: "Live check চালান",
+      "Pantavion à¦¬à§à¦¯à¦¬à¦¹à¦¾à¦°à¦•à¦¾à¦°à§€à¦° à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¿à¦¤ à¦­à¦¾à¦·à¦¾ à¦¸à¦®à¦°à§à¦¥à¦¨ à¦•à¦°à§‡à¥¤ à¦²à¦•à§à¦·à§à¦¯: 250 à¦­à¦¾à¦·à¦¾, à¦¤à¦¾à¦°à¦ªà¦° 7200 à¦ªà§à¦°à¦¾à¦•à§ƒà¦¤à¦¿à¦• à¦‰à¦ªà¦­à¦¾à¦·à¦¾à¥¤",
+    subtitle: "à¦²à¦¾à¦‡à¦­ readiness control center â€” static display à¦¨à¦¯à¦¼à¥¤",
+    runLiveChecks: "Live check à¦šà¦¾à¦²à¦¾à¦¨",
   },
   pa: {
-    languageLabel: "ਭਾਸ਼ਾ",
+    languageLabel: "à¨­à¨¾à¨¸à¨¼à¨¾",
     languagePromise:
-      "Pantavion ਯੂਜ਼ਰ ਦੀ ਚੁਣੀ ਭਾਸ਼ਾ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ। ਟੀਚਾ: 250 ਭਾਸ਼ਾਵਾਂ, ਫਿਰ 7200 ਕੁਦਰਤੀ ਬੋਲੀਆਂ।",
-    subtitle: "Live readiness control center — static display ਨਹੀਂ।",
-    runLiveChecks: "Live check ਚਲਾਓ",
+      "Pantavion à¨¯à©‚à¨œà¨¼à¨° à¨¦à©€ à¨šà©à¨£à©€ à¨­à¨¾à¨¸à¨¼à¨¾ à¨¦à¨¾ à¨¸à¨®à¨°à¨¥à¨¨ à¨•à¨°à¨¦à¨¾ à¨¹à©ˆà¥¤ à¨Ÿà©€à¨šà¨¾: 250 à¨­à¨¾à¨¸à¨¼à¨¾à¨µà¨¾à¨‚, à¨«à¨¿à¨° 7200 à¨•à©à¨¦à¨°à¨¤à©€ à¨¬à©‹à¨²à©€à¨†à¨‚à¥¤",
+    subtitle: "Live readiness control center â€” static display à¨¨à¨¹à©€à¨‚à¥¤",
+    runLiveChecks: "Live check à¨šà¨²à¨¾à¨“",
   },
   ta: {
-    languageLabel: "மொழி",
+    languageLabel: "à®®à¯Šà®´à®¿",
     languagePromise:
-      "Pantavion பயனர் தேர்ந்தெடுத்த மொழியை ஆதரிக்கிறது. இலக்கு: 250 மொழிகள், பின்னர் 7200 இயல்பான வழக்குகள்.",
-    subtitle: "Live readiness control center — static display அல்ல.",
-    runLiveChecks: "Live check இயக்கவும்",
+      "Pantavion à®ªà®¯à®©à®°à¯ à®¤à¯‡à®°à¯à®¨à¯à®¤à¯†à®Ÿà¯à®¤à¯à®¤ à®®à¯Šà®´à®¿à®¯à¯ˆ à®†à®¤à®°à®¿à®•à¯à®•à®¿à®±à®¤à¯. à®‡à®²à®•à¯à®•à¯: 250 à®®à¯Šà®´à®¿à®•à®³à¯, à®ªà®¿à®©à¯à®©à®°à¯ 7200 à®‡à®¯à®²à¯à®ªà®¾à®© à®µà®´à®•à¯à®•à¯à®•à®³à¯.",
+    subtitle: "Live readiness control center â€” static display à®…à®²à¯à®².",
+    runLiveChecks: "Live check à®‡à®¯à®•à¯à®•à®µà¯à®®à¯",
   },
   si: {
-    languageLabel: "භාෂාව",
+    languageLabel: "à¶·à·à·‚à·à·€",
     languagePromise:
-      "Pantavion පරිශීලකයා තෝරාගත් භාෂාවට සහාය දක්වයි. ඉලක්කය: භාෂා 250, පසුව ස්වභාවික උපභාෂා 7200.",
-    subtitle: "Live readiness control center — static display එකක් නොවේ.",
-    runLiveChecks: "Live check ධාවනය කරන්න",
+      "Pantavion à¶´à¶»à·’à·à·“à¶½à¶šà¶ºà· à¶­à·à¶»à·à¶œà¶­à·Š à¶·à·à·‚à·à·€à¶§ à·ƒà·„à·à¶º à¶¯à¶šà·Šà·€à¶ºà·’. à¶‰à¶½à¶šà·Šà¶šà¶º: à¶·à·à·‚à· 250, à¶´à·ƒà·”à·€ à·ƒà·Šà·€à¶·à·à·€à·’à¶š à¶‹à¶´à¶·à·à·‚à· 7200.",
+    subtitle: "Live readiness control center â€” static display à¶‘à¶šà¶šà·Š à¶±à·œà·€à·š.",
+    runLiveChecks: "Live check à¶°à·à·€à¶±à¶º à¶šà¶»à¶±à·Šà¶±",
   },
   fr: {
     languageLabel: "Langue",
     languagePromise:
-      "Pantavion prend en charge la langue choisie par l’utilisateur. Objectif: 250 langues, puis 7200 dialectes naturels.",
-    subtitle: "Centre de contrôle de préparation en direct — pas une vitrine statique.",
-    currentStatus: "État actuel",
-    productionBlocked: "Production bloquée",
-    runLiveChecks: "Lancer le contrôle en direct",
+      "Pantavion prend en charge la langue choisie par lâ€™utilisateur. Objectif: 250 langues, puis 7200 dialectes naturels.",
+    subtitle: "Centre de contrÃ´le de prÃ©paration en direct â€” pas une vitrine statique.",
+    currentStatus: "Ã‰tat actuel",
+    productionBlocked: "Production bloquÃ©e",
+    runLiveChecks: "Lancer le contrÃ´le en direct",
   },
   ln: {
     languageLabel: "Lokota",
     languagePromise:
       "Pantavion esungaka lokota oyo mosaleli aponi. Mokano: minoko 250, sima maloba ya mboka 7200.",
-    subtitle: "Centre ya contrôle ya bomilengeli na live — ezali vitrine statique te.",
-    runLiveChecks: "Bandisa contrôle live",
+    subtitle: "Centre ya contrÃ´le ya bomilengeli na live â€” ezali vitrine statique te.",
+    runLiveChecks: "Bandisa contrÃ´le live",
   },
   sw: {
     languageLabel: "Lugha",
     languagePromise:
       "Pantavion inaunga mkono lugha iliyochaguliwa na mtumiaji. Lengo: lugha 250, kisha lahaja asilia 7200.",
-    subtitle: "Kituo cha ukaguzi wa utayari live — si onyesho tuli.",
+    subtitle: "Kituo cha ukaguzi wa utayari live â€” si onyesho tuli.",
     runLiveChecks: "Endesha ukaguzi live",
   },
   ku: {
     languageLabel: "Ziman",
     languagePromise:
-      "Pantavion piştgirî dide zimanê ku bikarhêner hilbijêre. Armanc: 250 ziman, paşê 7200 zaravayên xwezayî.",
-    subtitle: "Navenda kontrola amadebûnê ya live — ne dîmenderek statîk.",
+      "Pantavion piÅŸtgirÃ® dide zimanÃª ku bikarhÃªner hilbijÃªre. Armanc: 250 ziman, paÅŸÃª 7200 zaravayÃªn xwezayÃ®.",
+    subtitle: "Navenda kontrola amadebÃ»nÃª ya live â€” ne dÃ®menderek statÃ®k.",
     runLiveChecks: "Kontrola live bike",
   },
 };
+
+function languageDirectionFor(language: LanguageCode): "ltr" | "rtl" {
+  const match = languages.find((item) => item.code === language);
+
+  if (match && "dir" in match && match.dir) {
+    return match.dir;
+  }
+
+  return "ltr";
+}
 
 function copyFor(language: LanguageCode): CopyPack {
   if (language === "el") return el;
@@ -432,10 +442,10 @@ function copyFor(language: LanguageCode): CopyPack {
 
 const cardCopies = {
   el: [
-    ["Προστατευμένο", "Πλήρες master δίκτυο", "Το πλήρες master μένει προστατευμένο και δεν εκτίθεται ως public geodata."],
-    ["Μπλοκαρισμένο", "Φόρτωση στον browser", "Ο browser δεν παίρνει raw/full δίκτυο."],
-    ["Contract ready", "Target viewport", "Η περιοχή μπορεί να προκύψει από θέση, αναζήτηση, pan/zoom ή admin selection."],
-    ["Απαιτείται διαχωρισμός", "Ίδιες οδοί σε πολλές περιοχές", "Ίδιες οδοί απαιτούν candidate selection πριν δημιουργηθεί bbox."],
+    ["Î ÏÎ¿ÏƒÏ„Î±Ï„ÎµÏ…Î¼Î­Î½Î¿", "Î Î»Î®ÏÎµÏ‚ master Î´Î¯ÎºÏ„Ï…Î¿", "Î¤Î¿ Ï€Î»Î®ÏÎµÏ‚ master Î¼Î­Î½ÎµÎ¹ Ï€ÏÎ¿ÏƒÏ„Î±Ï„ÎµÏ…Î¼Î­Î½Î¿ ÎºÎ±Î¹ Î´ÎµÎ½ ÎµÎºÏ„Î¯Î¸ÎµÏ„Î±Î¹ Ï‰Ï‚ public geodata."],
+    ["ÎœÏ€Î»Î¿ÎºÎ±ÏÎ¹ÏƒÎ¼Î­Î½Î¿", "Î¦ÏŒÏÏ„Ï‰ÏƒÎ· ÏƒÏ„Î¿Î½ browser", "ÎŸ browser Î´ÎµÎ½ Ï€Î±Î¯ÏÎ½ÎµÎ¹ raw/full Î´Î¯ÎºÏ„Ï…Î¿."],
+    ["Contract ready", "Target viewport", "Î— Ï€ÎµÏÎ¹Î¿Ï‡Î® Î¼Ï€Î¿ÏÎµÎ¯ Î½Î± Ï€ÏÎ¿ÎºÏÏˆÎµÎ¹ Î±Ï€ÏŒ Î¸Î­ÏƒÎ·, Î±Î½Î±Î¶Î®Ï„Î·ÏƒÎ·, pan/zoom Î® admin selection."],
+    ["Î‘Ï€Î±Î¹Ï„ÎµÎ¯Ï„Î±Î¹ Î´Î¹Î±Ï‡Ï‰ÏÎ¹ÏƒÎ¼ÏŒÏ‚", "ÎŠÎ´Î¹ÎµÏ‚ Î¿Î´Î¿Î¯ ÏƒÎµ Ï€Î¿Î»Î»Î­Ï‚ Ï€ÎµÏÎ¹Î¿Ï‡Î­Ï‚", "ÎŠÎ´Î¹ÎµÏ‚ Î¿Î´Î¿Î¯ Î±Ï€Î±Î¹Ï„Î¿ÏÎ½ candidate selection Ï€ÏÎ¹Î½ Î´Î·Î¼Î¹Î¿Ï…ÏÎ³Î·Î¸ÎµÎ¯ bbox."],
   ],
   en: [
     ["Protected", "Full master network", "The complete master remains protected and is not exposed as public geodata."],
@@ -447,14 +457,14 @@ const cardCopies = {
 
 const requiredItems = {
   el: [
-    "Πλήρης προστατευμένη master πηγή",
-    "Spatial index από ολόκληρο το master",
+    "Î Î»Î®ÏÎ·Ï‚ Ï€ÏÎ¿ÏƒÏ„Î±Ï„ÎµÏ…Î¼Î­Î½Î· master Ï€Î·Î³Î®",
+    "Spatial index Î±Ï€ÏŒ Î¿Î»ÏŒÎºÎ»Î·ÏÎ¿ Ï„Î¿ master",
     "Server-side bbox query provider",
-    "Access filtering ανά viewport / ρόλο / κατάσταση",
+    "Access filtering Î±Î½Î¬ viewport / ÏÏŒÎ»Î¿ / ÎºÎ±Ï„Î¬ÏƒÏ„Î±ÏƒÎ·",
     "Durable authorized-person store",
     "Append-only encrypted audit sink",
     "Address candidate / place-zone disambiguation",
-    "Founder/admin approval για production activation",
+    "Founder/admin approval Î³Î¹Î± production activation",
   ],
   en: [
     "Complete protected master source",
@@ -552,7 +562,7 @@ export default function WaterReadinessLiveConsole() {
 
   const copy = copyFor(language);
   const languageMeta = languages.find((item) => item.code === language) ?? languages[0];
-  const direction = languageMeta.dir ?? "ltr";
+  const direction = languageDirectionFor(language);
   const cards = language === "el" ? cardCopies.el : cardCopies.en;
   const required = language === "el" ? requiredItems.el : requiredItems.en;
 
@@ -578,8 +588,7 @@ export default function WaterReadinessLiveConsole() {
     setLanguage(nextLanguage);
     window.localStorage.setItem("pantavion-language", nextLanguage);
     document.documentElement.lang = nextLanguage;
-    document.documentElement.dir =
-      languages.find((item) => item.code === nextLanguage)?.dir ?? "ltr";
+    document.documentElement.dir = languageDirectionFor(nextLanguage);
   }
 
   async function runAllChecks() {
@@ -660,7 +669,7 @@ export default function WaterReadinessLiveConsole() {
                   {copy.languagePromise}
                 </p>
                 <p className="mt-2 text-xs uppercase tracking-[0.18em] text-slate-500">
-                  Cyprus priority languages · six continents · 250 languages · 7200 natural dialects
+                  Cyprus priority languages Â· six continents Â· 250 languages Â· 7200 natural dialects
                 </p>
               </div>
 
@@ -672,7 +681,7 @@ export default function WaterReadinessLiveConsole() {
               >
                 {languages.map((item) => (
                   <option key={item.code} value={item.code}>
-                    {item.nativeName} / {item.label} — {item.region}
+                    {item.nativeName} / {item.label} â€” {item.region}
                   </option>
                 ))}
               </select>
