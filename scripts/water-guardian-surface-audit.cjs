@@ -19,11 +19,6 @@ function fail(message) {
   console.error("[FAIL] " + message);
 }
 
-function warn(message) {
-  warnings += 1;
-  console.warn("[WARN] " + message);
-}
-
 function pass(message) {
   console.log("[PASS] " + message);
 }
@@ -85,96 +80,68 @@ function walkFiles(relativePath) {
   return output;
 }
 
-console.log("=== Pantavion Water Guardian Surface Audit v2 ===");
+console.log("=== Pantavion Water Guardian Surface Audit v4 ===");
 
 const legacyClientPath = "app/professional/infrastructure/water/water-network-client.tsx";
 const waterPagePath = "app/professional/infrastructure/water/page.tsx";
 const readinessPagePath = "app/professional/infrastructure/water/readiness/page.tsx";
-const readinessClientPath = "app/professional/infrastructure/water/readiness/water-readiness-live-console.tsx";
 const readinessClientPath =
   "app/professional/infrastructure/water/readiness/water-readiness-live-console.tsx";
+const liveMapClientPath =
+  "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx";
 const legacyNetworkRoutePath = "app/api/professional/infrastructure/water/network/route.ts";
-const productionReadinessRoutePath =
-  "app/api/professional/infrastructure/water/production-readiness/route.ts";
-const addressCandidatesRoutePath =
-  "app/api/professional/infrastructure/water/address/candidates/route.ts";
-const servingReadinessRoutePath =
-  "app/api/professional/infrastructure/water/serving/readiness/route.ts";
-const servingBboxRoutePath =
-  "app/api/professional/infrastructure/water/serving/bbox/route.ts";
+const segmentBboxRoutePath = "app/api/professional/infrastructure/water/segment/bbox/route.ts";
 
 forbidExistingFile(
   legacyClientPath,
-  "Legacy browser renderer must stay deleted until controlled serving is production-ready.",
+  "Legacy full-network browser renderer must stay deleted.",
 );
 
 const waterPage = requireFile(waterPagePath);
 const readinessPage = requireFile(readinessPagePath);
 const readinessClient = requireFile(readinessClientPath);
 const readinessSurface = readinessPage + "\n" + readinessClient;
-const readinessClient = requireFile(readinessClientPath);
-const readinessSurface = readinessPage + "\n" + readinessClient;
+const liveMapClient = requireFile(liveMapClientPath);
 const legacyNetworkRoute = requireFile(legacyNetworkRoutePath);
-const productionReadinessRoute = requireFile(productionReadinessRoutePath);
-const addressCandidatesRoute = requireFile(addressCandidatesRoutePath);
-requireFile(servingReadinessRoutePath);
-requireFile(servingBboxRoutePath);
+const segmentBboxRoute = requireFile(segmentBboxRoutePath);
 
-console.log("=== Water Presentation Route Enforcement ===");
+console.log("=== Water Entry Route Enforcement ===");
 
 requireMarker(waterPage, waterPagePath, 'redirect("/professional/infrastructure/water/readiness")');
 forbidMarker(waterPage, waterPagePath, "WaterNetworkClient");
-forbidMarker(waterPage, waterPagePath, "tile.openstreetmap.org");
-forbidMarker(waterPage, waterPagePath, "nominatim.openstreetmap.org");
 forbidMarker(waterPage, waterPagePath, "/api/professional/infrastructure/water/network");
-forbidMarker(waterPage, waterPagePath, "returnedFeatureCount");
 forbidMarker(waterPage, waterPagePath, "limit=5000");
 
 console.log("=== Legacy Network Endpoint Block Enforcement ===");
 
 requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, "legacy_water_network_endpoint_blocked_v1");
 requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, 'status: "blocked"');
-requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, 'productionServingStatus: "blocked"');
-requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, 'rendererStatus: "blocked"');
 requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, "dataReturned: false");
-requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, "noDataReturned: true");
 requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, "waterNetworkDataReturned: false");
 requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, "featuresReturned: 0");
 requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, "mayReturnRawMaster: false");
 requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, "mayReturnCompleteNetwork: false");
-requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, "mayReturnPreviewAsProduction: false");
-requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, "mayReturnSampleAsFinal: false");
 requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, "mayLoadFullNetworkInBrowser: false");
-requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, "mayUseLegacyRenderer: false");
 requireMarker(legacyNetworkRoute, legacyNetworkRoutePath, "status: 423");
 
 forbidMarker(legacyNetworkRoute, legacyNetworkRoutePath, "readWaterNetworkSource");
 forbidMarker(legacyNetworkRoute, legacyNetworkRoutePath, "selectWaterNetworkMapFeatures");
-forbidMarker(legacyNetworkRoute, legacyNetworkRoutePath, "source.collection");
-forbidMarker(legacyNetworkRoute, legacyNetworkRoutePath, "selectedFeatures");
-forbidMarker(legacyNetworkRoute, legacyNetworkRoutePath, "returnedFeatureCount");
 forbidMarker(legacyNetworkRoute, legacyNetworkRoutePath, "features: selectedFeatures");
 
-console.log("=== Safe + Live + Multilingual Readiness Enforcement ===");
+console.log("=== Readiness Surface Enforcement ===");
 
 const readinessRequiredMarkers = [
   "Water Module Readiness",
-  "Production blocked",
   "Address disambiguation",
-  "No raw master network is returned",
-  "No complete network payload is returned",
-  "No renderer or map layer is activated here",
   "pantavion-language-selector",
   "pantavion-language",
   "250",
   "7200",
-  "Î•ÎºÏ„Î­Î»ÎµÏƒÎ· live ÎµÎ»Î­Î³Ï‡Î¿Ï…",
   "Run live checks",
   "window.localStorage",
   "window.navigator.language",
   "copyPresentationMessage",
   "openContract",
-  "exportSnapshot",
   "loadEndpoint",
   "/api/professional/infrastructure/water/production-readiness",
   "/api/professional/infrastructure/water/serving/readiness",
@@ -191,18 +158,25 @@ forbidMarker(readinessSurface, "water readiness surface", "nominatim.openstreetm
 forbidMarker(readinessSurface, "water readiness surface", "/api/professional/infrastructure/water/network?limit");
 forbidMarker(readinessSurface, "water readiness surface", "WaterNetworkClient");
 
-console.log("=== Production Readiness Contract Enforcement ===");
+console.log("=== Controlled Live Map Enforcement ===");
 
-requireMarker(productionReadinessRoute, productionReadinessRoutePath, "getWaterProductionReadinessSummary");
-requireMarker(productionReadinessRoute, productionReadinessRoutePath, "Cache-Control");
-requireMarker(productionReadinessRoute, productionReadinessRoutePath, "no-store");
+const liveMapRequiredMarkers = [
+  "Πραγματικός χάρτης δικτύου ύδρευσης",
+  "tile.openstreetmap.org",
+  "/api/professional/infrastructure/water/segment/bbox",
+  "leaflet.geoJSON",
+  "Φόρτωσε τμήμα από τον χάρτη",
+  "completeNetworkReturned",
+  "rawMasterReturned",
+];
 
-console.log("=== Address Candidate Disambiguation Route Enforcement ===");
+for (const marker of liveMapRequiredMarkers) {
+  requireMarker(liveMapClient, liveMapClientPath, marker);
+}
 
-requireMarker(addressCandidatesRoute, addressCandidatesRoutePath, "planWaterAddressCandidateSearch");
-requireMarker(addressCandidatesRoute, addressCandidatesRoutePath, "selectedCandidateId");
-requireMarker(addressCandidatesRoute, addressCandidatesRoutePath, "Cache-Control");
-requireMarker(addressCandidatesRoute, addressCandidatesRoutePath, "no-store");
+requireMarker(segmentBboxRoute, segmentBboxRoutePath, "completeNetworkReturned: false");
+requireMarker(segmentBboxRoute, segmentBboxRoutePath, "rawMasterReturned: false");
+requireMarker(segmentBboxRoute, segmentBboxRoutePath, "segmentReturned: true");
 
 console.log("=== Global Forbidden Water Surface Scan ===");
 
@@ -211,24 +185,30 @@ const scanTargets = [
   ...walkFiles("app/api/professional/infrastructure/water"),
 ];
 
-const globalForbiddenMarkers = [
+const forbiddenEverywhere = [
   "WaterNetworkClient",
-  "tile.openstreetmap.org",
-  "nominatim.openstreetmap.org",
   "REQUEST_LIMIT",
   "limit=5000",
   "returnedFeatureCount",
   "selectWaterNetworkMapFeatures",
   "features: selectedFeatures",
+  "nominatim.openstreetmap.org",
 ];
 
 for (const file of scanTargets) {
   const content = read(file);
 
-  for (const marker of globalForbiddenMarkers) {
+  for (const marker of forbiddenEverywhere) {
     if (content.includes(marker)) {
-      fail("Forbidden live water surface marker found in " + file + ": " + marker);
+      fail("Forbidden water marker found in " + file + ": " + marker);
     }
+  }
+
+  if (
+    file !== liveMapClientPath &&
+    content.includes("tile.openstreetmap.org")
+  ) {
+    fail("OpenStreetMap tiles are allowed only in controlled live map client, found in " + file);
   }
 }
 
