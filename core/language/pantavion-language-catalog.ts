@@ -1,4 +1,4 @@
-﻿export type PantavionLanguage = {
+export type PantavionLanguage = {
   code: string;
   name: string;
   region?: string;

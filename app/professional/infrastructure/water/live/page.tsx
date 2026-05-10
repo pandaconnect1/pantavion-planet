@@ -1,4 +1,4 @@
-﻿import ControlledWaterSegmentClient from "./controlled-water-segment-client";
+import ControlledWaterSegmentClient from "./controlled-water-segment-client";
 
 export const dynamic = "force-dynamic";
 
