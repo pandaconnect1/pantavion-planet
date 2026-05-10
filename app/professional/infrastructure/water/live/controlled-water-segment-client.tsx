@@ -1,6 +1,11 @@
 ﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
+import {
+  PANTAVION_LANGUAGE_CATALOG,
+  getPantavionUiLanguage,
+  getSupportedPantavionLanguage,
+} from "@/core/language/pantavion-language-catalog";
 
 declare global {
   interface Window {
@@ -8,7 +13,7 @@ declare global {
   }
 }
 
-type Lang = "el" | "en";
+type Lang = string;
 
 type SegmentResponse = {
   segment?: {
@@ -141,7 +146,7 @@ function getInitialLang(): Lang {
 
   const saved = window.localStorage.getItem("pantavion-language");
 
-  return saved === "en" ? "en" : "el";
+  return getSupportedPantavionLanguage(saved)?.code ?? "el";
 }
 
 function ensureLeaflet() {
@@ -299,12 +304,13 @@ export default function ControlledWaterSegmentClient() {
   const autoLoadTimerRef = useRef<number | null>(null);
   const loadInProgressRef = useRef(false);
 
-  const t = UI[lang];
+  const t = UI[getPantavionUiLanguage(lang)];
 
   useEffect(() => {
     window.localStorage.setItem("pantavion-language", lang);
-    document.documentElement.lang = lang === "el" ? "el" : "en";
-    setMessage(pipeCount === null ? UI[lang].ready : `${UI[lang].loaded}: ${pipeCount}`);
+    document.documentElement.lang = lang;
+    const uiLang = getPantavionUiLanguage(lang);
+    setMessage(pipeCount === null ? UI[uiLang].ready : `${UI[uiLang].loaded}: ${pipeCount}`);
   }, [lang, pipeCount]);
 
   useEffect(() => {
@@ -333,7 +339,7 @@ export default function ControlledWaterSegmentClient() {
         window.setTimeout(() => map.invalidateSize(), 300);
         window.setTimeout(() => map.invalidateSize(), 900);
       })
-      .catch(() => setMessage(UI[lang].failed));
+      .catch(() => setMessage(UI[getPantavionUiLanguage(lang)].failed));
 
     return () => {
       cancelled = true;
@@ -739,8 +745,11 @@ export default function ControlledWaterSegmentClient() {
                   onChange={(event) => setLang(event.target.value as Lang)}
                   className="rounded-2xl border border-[#b89445]/60 bg-[#07111f] px-4 py-3 text-white outline-none"
                 >
-                  <option value="el">Ελληνικά</option>
-                  <option value="en">English</option>
+                  {PANTAVION_LANGUAGE_CATALOG.map((language) => (
+                    <option key={language.code} value={language.code}>
+                      {language.name}
+                    </option>
+                  ))}
                 </select>
               </label>
             </div>
@@ -838,8 +847,11 @@ export default function ControlledWaterSegmentClient() {
                 onChange={(event) => setLang(event.target.value as Lang)}
                 className="rounded-2xl border border-[#b89445]/60 bg-[#07111f] px-4 py-3 text-white outline-none"
               >
-                <option value="el">Ελληνικά</option>
-                <option value="en">English</option>
+                {PANTAVION_LANGUAGE_CATALOG.map((language) => (
+                    <option key={language.code} value={language.code}>
+                      {language.name}
+                    </option>
+                  ))}
               </select>
             </label>
           </div>
@@ -886,3 +898,5 @@ export default function ControlledWaterSegmentClient() {
     </main>
   );
 }
+
+
