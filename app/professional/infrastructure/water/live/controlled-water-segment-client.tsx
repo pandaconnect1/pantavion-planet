@@ -64,12 +64,12 @@ const UI = {
     lastName: "Επίθετο",
     roleTitle: "Τίτλος / Ρόλος",
     organization: "Οργανισμός / Εταιρεία",
-    emailOrPhone: "Email ή τηλέφωνο",
+    emailOrPhone: "Τηλέφωνο",
     reason: "Λόγος πρόσβασης",
-    accessCode: "Κωδικός έγκρισης",
+    accessCode: "Founder code ή εγκεκριμένο τηλέφωνο",
     submitRequest: "Αποστολή αίτησης για έγκριση",
     requestSent: "Η αίτηση στάλθηκε για έγκριση. Δεν έχει δοθεί πρόσβαση ακόμη.",
-    requestMissing: "Συμπλήρωσε όνομα, επίθετο, τίτλο, επικοινωνία και λόγο πρόσβασης.",
+    requestMissing: "Συμπλήρωσε όνομα, επίθετο, τίτλο/ρόλο και τηλέφωνο.",
     requestFailed: "Δεν στάλθηκε η αίτηση. Δοκίμασε ξανά.",
     enterApproved: "Είσοδος με έγκριση",
     accessDenied: "Δεν υπάρχει έγκριση ή ο κωδικός δεν είναι σωστός.",
@@ -113,12 +113,12 @@ const UI = {
     lastName: "Last name",
     roleTitle: "Title / Role",
     organization: "Organization / Company",
-    emailOrPhone: "Email or phone",
+    emailOrPhone: "Phone",
     reason: "Reason for access",
-    accessCode: "Approval code",
+    accessCode: "Founder code or approved phone",
     submitRequest: "Submit request for approval",
     requestSent: "The request was sent for approval. Access has not been granted yet.",
-    requestMissing: "Fill first name, last name, title, contact and access reason.",
+    requestMissing: "Fill first name, last name, title/role and phone.",
     requestFailed: "Request was not sent. Try again.",
     enterApproved: "Enter with approval",
     accessDenied: "No approval or wrong code.",
@@ -140,6 +140,37 @@ const UI = {
 const VIEWPORT_TILE_SPAN_DEGREES = 0.055;
 const MAX_VIEWPORT_TILES = 16;
 const MAX_FEATURES_PER_TILE = 1200;
+
+const PANTAVION_WATER_DEVICE_APPROVAL_KEY = "pantavion:water:approved-until:v3";
+const PANTAVION_WATER_DEVICE_APPROVAL_DAYS = 30;
+
+function readWaterDeviceApproval() {
+  if (typeof window === "undefined") return false;
+
+  const raw = window.localStorage.getItem(PANTAVION_WATER_DEVICE_APPROVAL_KEY);
+  if (!raw) return false;
+
+  const expiresAt = Number(raw);
+  if (!Number.isFinite(expiresAt) || Date.now() > expiresAt) {
+    window.localStorage.removeItem(PANTAVION_WATER_DEVICE_APPROVAL_KEY);
+    return false;
+  }
+
+  return true;
+}
+
+function writeWaterDeviceApproval() {
+  if (typeof window === "undefined") return;
+
+  const expiresAt =
+    Date.now() + PANTAVION_WATER_DEVICE_APPROVAL_DAYS * 24 * 60 * 60 * 1000;
+
+  window.localStorage.setItem(
+    PANTAVION_WATER_DEVICE_APPROVAL_KEY,
+    String(expiresAt),
+  );
+}
+
 
 function getInitialLang(): Lang {
   if (typeof window === "undefined") return "el";
@@ -277,7 +308,7 @@ function featureKey(feature: any, fallback: string) {
 
 export default function ControlledWaterSegmentClient() {
   const [lang, setLang] = useState<Lang>(getInitialLang);
-  const [accessApproved, setAccessApproved] = useState(false);
+  const [accessApproved, setAccessApproved] = useState(() => readWaterDeviceApproval());
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [roleTitle, setRoleTitle] = useState("");
@@ -353,7 +384,7 @@ export default function ControlledWaterSegmentClient() {
   }, [accessApproved, lang]);
 
   async function submitAccessRequest() {
-    if (!firstName.trim() || !lastName.trim() || !roleTitle.trim() || !emailOrPhone.trim() || !reason.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !roleTitle.trim() || !emailOrPhone.trim()) {
       setAccessMessage(t.requestMissing);
       return;
     }
@@ -770,9 +801,9 @@ export default function ControlledWaterSegmentClient() {
                   <input value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder={t.firstName} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
                   <input value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder={t.lastName} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
                   <input value={roleTitle} onChange={(event) => setRoleTitle(event.target.value)} placeholder={t.roleTitle} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
-                  <input value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={t.organization} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                  <input value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={t.organization} className="hidden rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
                   <input value={emailOrPhone} onChange={(event) => setEmailOrPhone(event.target.value)} placeholder={t.emailOrPhone} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
-                  <textarea value={reason} onChange={(event) => setReason(event.target.value)} placeholder={t.reason} className="min-h-[110px] rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
+                  <textarea value={reason} onChange={(event) => setReason(event.target.value)} placeholder={t.reason} className="hidden min-h-[110px] rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
                 </div>
 
                 <button
