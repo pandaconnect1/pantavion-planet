@@ -136,12 +136,12 @@ const UI = {
     lastName: "Last name",
     roleTitle: "Title / Role",
     organization: "Organization / Company",
-    emailOrPhone: "Email or phone",
+    emailOrPhone: "Phone",
     reason: "Reason for access",
     accessCode: "Founder code or approved email/phone",
     submitRequest: "Submit request for approval",
     requestSent: "The request was sent for approval. Access has not been granted yet.",
-    requestMissing: "Fill first name, last name, title, contact and access reason.",
+    requestMissing: "Fill first name, last name, title/role and phone.",
     requestFailed: "Request was not sent. Try again.",
     enterApproved: "Enter with approval",
     accessDenied: "No approval or wrong code.",
@@ -376,7 +376,7 @@ export default function ControlledWaterSegmentClient() {
   }, [accessApproved, lang]);
 
   async function submitAccessRequest() {
-    if (!firstName.trim() || !lastName.trim() || !roleTitle.trim() || !emailOrPhone.trim() || !reason.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !roleTitle.trim() || !emailOrPhone.trim() ) {
       setAccessMessage(t.requestMissing);
       
       writeWaterDeviceApproval();
@@ -812,9 +812,9 @@ try {
                   <input value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder={t.firstName} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
                   <input value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder={t.lastName} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
                   <input value={roleTitle} onChange={(event) => setRoleTitle(event.target.value)} placeholder={t.roleTitle} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
-                  <input value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={t.organization} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                  <input value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={t.organization} className="hidden rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
                   <input value={emailOrPhone} onChange={(event) => setEmailOrPhone(event.target.value)} placeholder={t.emailOrPhone} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
-                  <textarea value={reason} onChange={(event) => setReason(event.target.value)} placeholder={t.reason} className="min-h-[110px] rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
+                  <textarea value={reason} onChange={(event) => setReason(event.target.value)} placeholder={t.reason} className="hidden min-h-[110px] rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
                 </div>
 
                 <button
@@ -940,6 +940,7 @@ try {
     </main>
   );
 }
+
 
 
 

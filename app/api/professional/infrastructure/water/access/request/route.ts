@@ -14,6 +14,10 @@ function clean(value: unknown) {
   return typeof value === "string" ? value.trim().slice(0, 500) : "";
 }
 
+function normalizePhone(value: unknown) {
+  return clean(value).replace(/[\s()\-.]/g, "");
+}
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as WaterAccessRequestBody;
@@ -24,25 +28,18 @@ export async function POST(request: Request) {
       lastName: clean(body.lastName),
       title: clean(body.title),
       organization: clean(body.organization),
-      emailOrPhone: clean(body.emailOrPhone),
+      emailOrPhone: normalizePhone(body.emailOrPhone),
       reason: clean(body.reason),
       status: "pending_founder_review",
       createdAt: new Date().toISOString(),
       source: "pantavion-water-live-access-request",
     };
 
-    if (
-      !payload.firstName ||
-      !payload.lastName ||
-      !payload.title ||
-      !payload.emailOrPhone ||
-      !payload.reason
-    ) {
+    if (!payload.firstName || !payload.lastName || !payload.title || !payload.emailOrPhone) {
       return NextResponse.json(
         {
           ok: false,
-          error:
-            "missing_required_fields",
+          error: "missing_required_fields",
         },
         { status: 400 },
       );

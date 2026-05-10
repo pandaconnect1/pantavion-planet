@@ -1,4 +1,5 @@
-﻿import { NextResponse } from "next/server";
+﻿import { list } from "@vercel/blob";
+import { NextResponse } from "next/server";
 
 type WaterAccessAuthorizeBody = {
   code?: string;
@@ -12,17 +13,22 @@ function clean(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function normalizeAccessContact(value: unknown) {
+function normalizePhone(value: unknown) {
   return clean(value)
     .toLowerCase()
     .replace(/[\s()\-.]/g, "");
 }
 
-function readApprovedContacts() {
-  return (process.env.PANTAVION_WATER_APPROVED_CONTACTS || "")
-    .split(",")
-    .map((item) => normalizeAccessContact(item))
-    .filter(Boolean);
+async function approvedPhoneExists(phone: string) {
+  if (!phone) return false;
+
+  const pathname = `water/private/approved-contacts/${phone}.json`;
+  const result = await list({
+    prefix: pathname,
+    limit: 1,
+  });
+
+  return result.blobs.some((blob) => blob.pathname === pathname);
 }
 
 export async function POST(request: Request) {
@@ -30,14 +36,12 @@ export async function POST(request: Request) {
 
   const founderCode = process.env.PANTAVION_WATER_FOUNDER_ACCESS_CODE || "";
   const submittedCode = clean(body.code);
-  const submittedContact = normalizeAccessContact(body.emailOrPhone || body.code);
-  const approvedContacts = readApprovedContacts();
+  const submittedPhone = normalizePhone(body.emailOrPhone || body.code);
 
   const isFounderAccess = Boolean(founderCode) && submittedCode === founderCode;
-  const isApprovedContactAccess =
-    Boolean(submittedContact) && approvedContacts.includes(submittedContact);
+  const isApprovedPhoneAccess = await approvedPhoneExists(submittedPhone);
 
-  if (!founderCode && approvedContacts.length === 0) {
+  if (!founderCode && !submittedPhone) {
     return NextResponse.json(
       {
         ok: false,
@@ -47,7 +51,7 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!isFounderAccess && !isApprovedContactAccess) {
+  if (!isFounderAccess && !isApprovedPhoneAccess) {
     return NextResponse.json(
       {
         ok: false,
@@ -60,13 +64,13 @@ export async function POST(request: Request) {
   return NextResponse.json({
     ok: true,
     approved: true,
-    accessMode: isFounderAccess ? "founder" : "approved-contact",
+    accessMode: isFounderAccess ? "founder" : "approved-phone",
     approvedAt: new Date().toISOString(),
     holder: {
       firstName: clean(body.firstName),
       lastName: clean(body.lastName),
       title: clean(body.title),
-      contact: submittedContact,
+      phone: submittedPhone,
     },
   });
 }
