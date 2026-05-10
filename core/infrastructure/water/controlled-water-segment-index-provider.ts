@@ -1,3 +1,4 @@
+﻿import { get } from "@vercel/blob";
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -61,6 +62,13 @@ const INDEX_PATH = path.join(DERIVED_DIR, "water-feature-bbox-index.json");
 const NDJSON_PATH = path.join(DERIVED_DIR, "water-features.ndjson");
 const MANIFEST_PATH = path.join(DERIVED_DIR, "water-segment-index-manifest.json");
 
+const BLOB_PATHS = {
+  truthReport: "water/private/processed/water-source-truth-report.json",
+  manifest: "water/private/derived/water-segment-index-manifest.json",
+  index: "water/private/derived/water-feature-bbox-index.json",
+  ndjson: "water/private/derived/water-features.ndjson",
+} as const;
+
 const EXPECTED_PLACEMARKS = 122857;
 const EXPECTED_LINE_STRINGS = 125398;
 const EXPECTED_COORDINATE_POINTS = 528063;
@@ -71,6 +79,11 @@ const MAX_BBOX_SPAN_DEGREES = 0.08;
 
 let cachedIndex: IndexRecord[] | null = null;
 let cachedVerified = false;
+let cachedNdjsonBuffer: Buffer | null = null;
+
+function shouldUseProductionBlobSource() {
+  return process.env.VERCEL === "1" && Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+}
 
 function parseNumber(value: string | null, label: string) {
   if (!value) throw new Error(`Missing ${label}`);
@@ -82,9 +95,58 @@ function parseNumber(value: string | null, label: string) {
   return parsed;
 }
 
-async function readJsonFile<T>(filePath: string): Promise<T> {
-  const raw = await fs.readFile(filePath, "utf8");
+async function readPrivateBlobBuffer(pathname: string) {
+  const result = await get(pathname, { access: "private" });
+
+  if (!result || result.statusCode !== 200 || !result.stream) {
+    throw new Error(`Private water blob read failed: ${pathname}`);
+  }
+
+  const reader = result.stream.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+
+  while (true) {
+    const next = await reader.read();
+
+    if (next.done) break;
+
+    chunks.push(next.value);
+    total += next.value.byteLength;
+  }
+
+  const output = Buffer.alloc(total);
+  let offset = 0;
+
+  for (const chunk of chunks) {
+    output.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+
+  return output;
+}
+
+async function readTextSource(localPath: string, blobPath: string) {
+  if (shouldUseProductionBlobSource()) {
+    return (await readPrivateBlobBuffer(blobPath)).toString("utf8");
+  }
+
+  return fs.readFile(localPath, "utf8");
+}
+
+async function readJsonSource<T>(localPath: string, blobPath: string): Promise<T> {
+  const raw = await readTextSource(localPath, blobPath);
   return JSON.parse(raw) as T;
+}
+
+async function readNdjsonBuffer() {
+  if (!shouldUseProductionBlobSource()) return null;
+
+  if (!cachedNdjsonBuffer) {
+    cachedNdjsonBuffer = await readPrivateBlobBuffer(BLOB_PATHS.ndjson);
+  }
+
+  return cachedNdjsonBuffer;
 }
 
 function assertTruthReport(report: WaterTruthReport) {
@@ -185,8 +247,8 @@ async function assertVerifiedPrivateSource() {
   if (cachedVerified) return;
 
   const [truthReport, indexManifest] = await Promise.all([
-    readJsonFile<WaterTruthReport>(TRUTH_REPORT_PATH),
-    readJsonFile<WaterIndexManifest>(MANIFEST_PATH),
+    readJsonSource<WaterTruthReport>(TRUTH_REPORT_PATH, BLOB_PATHS.truthReport),
+    readJsonSource<WaterIndexManifest>(MANIFEST_PATH, BLOB_PATHS.manifest),
   ]);
 
   assertTruthReport(truthReport);
@@ -243,7 +305,7 @@ async function readIndex() {
 
   await assertVerifiedPrivateSource();
 
-  const raw = await fs.readFile(INDEX_PATH, "utf8");
+  const raw = await readTextSource(INDEX_PATH, BLOB_PATHS.index);
   const index = JSON.parse(raw) as IndexRecord[];
 
   if (index.length !== EXPECTED_PLACEMARKS) {
@@ -256,6 +318,20 @@ async function readIndex() {
 }
 
 async function readFeatures(records: IndexRecord[]) {
+  if (shouldUseProductionBlobSource()) {
+    const ndjson = await readNdjsonBuffer();
+
+    if (!ndjson) {
+      throw new Error("Private water NDJSON blob buffer unavailable");
+    }
+
+    return records.map((record) => {
+      const start = record.offset;
+      const end = record.offset + record.bytes;
+      return JSON.parse(ndjson.subarray(start, end).toString("utf8"));
+    });
+  }
+
   const handle = await fs.open(NDJSON_PATH, "r");
 
   try {
@@ -281,7 +357,7 @@ export async function getControlledWaterSegmentFromPrivateIndex(
 
   const [index, manifest] = await Promise.all([
     readIndex(),
-    readJsonFile<WaterIndexManifest>(MANIFEST_PATH),
+    readJsonSource<WaterIndexManifest>(MANIFEST_PATH, BLOB_PATHS.manifest),
   ]);
 
   assertIndexManifest(manifest);
@@ -290,11 +366,15 @@ export async function getControlledWaterSegmentFromPrivateIndex(
   const selected = matches.slice(0, maxFeatures);
   const features = await readFeatures(selected);
 
+  const sourceMode = shouldUseProductionBlobSource()
+    ? "verified_private_blob_index_from_authentic_kmz"
+    : "verified_private_index_from_authentic_kmz";
+
   return {
     marker: "pantavion_verified_private_water_segment_v1",
     status: "controlled_segment_ready",
     bbox,
-    sourceMode: "verified_private_index_from_authentic_kmz",
+    sourceMode,
     sourceTruthLocked: true,
     sourcePlacemarkCount: EXPECTED_PLACEMARKS,
     sourceLineStringCount: EXPECTED_LINE_STRINGS,
