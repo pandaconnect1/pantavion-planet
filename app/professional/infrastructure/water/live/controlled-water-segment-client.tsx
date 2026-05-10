@@ -33,45 +33,54 @@ type Bbox = {
 
 const UI = {
   el: {
-    title: "\u0394\u03af\u03ba\u03c4\u03c5\u03bf \u038e\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2 Pantavion",
+    title: "Δίκτυο Ύδρευσης Pantavion",
     subtitle:
-      "\u0391\u03bb\u03b7\u03b8\u03b9\u03bd\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03b1\u03b3\u03c9\u03b3\u03ce\u03bd \u03b1\u03c0\u03cc \u03c4\u03bf \u03b1\u03c5\u03b8\u03b5\u03bd\u03c4\u03b9\u03ba\u03cc KMZ. \u0394\u03b5\u03bd \u03b1\u03bb\u03bb\u03ac\u03b6\u03bf\u03c5\u03bc\u03b5 \u03c7\u03c1\u03ce\u03bc\u03b1\u03c4\u03b1, \u03b3\u03c1\u03b1\u03bc\u03bc\u03ad\u03c2 \u03ae \u03b1\u03b3\u03c9\u03b3\u03bf\u03cd\u03c2. \u039f browser \u03c6\u03bf\u03c1\u03c4\u03ce\u03bd\u03b5\u03b9 \u03bc\u03cc\u03bd\u03bf \u03b5\u03bb\u03b5\u03b3\u03c7\u03cc\u03bc\u03b5\u03bd\u03b1 \u03c4\u03bc\u03ae\u03bc\u03b1\u03c4\u03b1.",
-    language: "\u0393\u03bb\u03ce\u03c3\u03c3\u03b1",
-    street: "\u039f\u03b4\u03cc\u03c2",
-    number: "\u0391\u03c1\u03b9\u03b8\u03bc\u03cc\u03c2",
-    area: "\u03a0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae",
-    postal: "\u03a4\u03b1\u03c7\u03c5\u03b4\u03c1\u03bf\u03bc\u03b9\u03ba\u03cc\u03c2",
-    load: "\u03a6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b5 \u03b1\u03b3\u03c9\u03b3\u03bf\u03cd\u03c2 \u03c3\u03c4\u03b7\u03bd \u03bf\u03c1\u03b1\u03c4\u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae",
-    loading: "\u03a6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b7...",
-    ready:
-      "\u039f \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03b5\u03af\u03bd\u03b1\u03b9 \u03ad\u03c4\u03bf\u03b9\u03bc\u03bf\u03c2. \u039c\u03b5\u03c4\u03b1\u03ba\u03af\u03bd\u03b7\u03c3\u03b5 \u03ae \u03ba\u03ac\u03bd\u03b5 zoom. \u039f\u03b9 \u03b1\u03b3\u03c9\u03b3\u03bf\u03af \u03c6\u03bf\u03c1\u03c4\u03ce\u03bd\u03bf\u03c5\u03bd \u03c4\u03bc\u03b7\u03bc\u03b1\u03c4\u03b9\u03ba\u03ac.",
-    loaded: "\u03a6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b1\u03bd \u03b1\u03b3\u03c9\u03b3\u03bf\u03af",
-    failed:
-      "\u0394\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b1\u03bd \u03b1\u03b3\u03c9\u03b3\u03bf\u03af. \u039a\u03ac\u03bd\u03b5 \u03bb\u03af\u03b3\u03bf zoom \u03ae \u03bc\u03b5\u03c4\u03b1\u03ba\u03af\u03bd\u03b7\u03c3\u03b5 \u03c4\u03bf\u03bd \u03c7\u03ac\u03c1\u03c4\u03b7.",
-    map: "\u03a7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2",
-    protected:
-      "\u03a4\u03bf \u03c0\u03bb\u03ae\u03c1\u03b5\u03c2 \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03b4\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03bd\u03b5\u03c4\u03b1\u03b9 \u03c3\u03c4\u03bf\u03bd browser.",
-    accessTitle: "\u03a0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c4\u03b5\u03c5\u03bc\u03ad\u03bd\u03bf\u03c2 \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2",
+      "Αληθινό δίκτυο αγωγών από το αυθεντικό KMZ. Δεν αλλάζουμε χρώματα, γραμμές ή αγωγούς. Ο browser φορτώνει μόνο ελεγχόμενα τμήματα.",
+    language: "Γλώσσα",
+    street: "Οδός",
+    number: "Αριθμός",
+    area: "Περιοχή",
+    postal: "Ταχυδρομικός",
+    load: "Φόρτωσε αγωγούς στην ορατή περιοχή",
+    loading: "Φόρτωση...",
+    ready: "Ο χάρτης είναι έτοιμος. Μετακίνησε ή κάνε zoom. Οι αγωγοί φορτώνουν τμηματικά.",
+    loaded: "Φορτώθηκαν αγωγοί",
+    failed: "Δεν φορτώθηκαν αγωγοί. Κάνε λίγο zoom ή μετακίνησε τον χάρτη.",
+    map: "Χάρτης ύδρευσης",
+    protected: "Το πλήρες δίκτυο δεν φορτώνεται στον browser.",
+    accessTitle: "Προστατευμένος χάρτης",
     accessText:
-      "\u0397 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7 \u03c3\u03c4\u03bf\u03c5\u03c2 \u03c7\u03ac\u03c1\u03c4\u03b5\u03c2 \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2 \u03b1\u03c0\u03b1\u03b9\u03c4\u03b5\u03af \u03c1\u03b7\u03c4\u03ae \u03b5\u03be\u03bf\u03c5\u03c3\u03b9\u03bf\u03b4\u03cc\u03c4\u03b7\u03c3\u03b7. \u039c\u03c0\u03b1\u03af\u03bd\u03b5\u03b9\u03c2 \u03bc\u03cc\u03bd\u03bf \u03b1\u03bd \u03ad\u03c7\u03b5\u03b9\u03c2 \u03ad\u03b3\u03ba\u03c1\u03b9\u03c3\u03b7.",
-    approveAccess:
-      "\u0395\u03af\u03bc\u03b1\u03b9 \u03b5\u03be\u03bf\u03c5\u03c3\u03b9\u03bf\u03b4\u03bf\u03c4\u03b7\u03bc\u03ad\u03bd\u03bf\u03c2 - \u0395\u03af\u03c3\u03bf\u03b4\u03bf\u03c2",
-    locate: "\u03a4\u03bf \u03c3\u03b7\u03bc\u03b5\u03af\u03bf \u03bc\u03bf\u03c5",
-    search: "\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7 / \u03a3\u03c4\u03af\u03b3\u03bc\u03b1",
-    locating: "\u0395\u03bd\u03c4\u03bf\u03c0\u03b9\u03c3\u03bc\u03cc\u03c2 \u03b8\u03ad\u03c3\u03b7\u03c2...",
-    located:
-      "\u0392\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03b7 \u03b8\u03ad\u03c3\u03b7 \u03c3\u03bf\u03c5. \u03a6\u03bf\u03c1\u03c4\u03ce\u03bd\u03c9 \u03c4\u03bf\u03c0\u03b9\u03ba\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf.",
+      "Η πρόσβαση στους χάρτες ύδρευσης απαιτεί ρητή εξουσιοδότηση και έγκριση υπεύθυνου Pantavion.",
+    requestAccess: "Αίτηση πρόσβασης",
+    requestText:
+      "Στείλε αίτημα με τα στοιχεία σου. Δεν ανοίγει ο χάρτης μέχρι να εγκριθείς.",
+    founderAccess: "Είσοδος εγκεκριμένου χρήστη",
+    firstName: "Όνομα",
+    lastName: "Επίθετο",
+    roleTitle: "Τίτλος / Ρόλος",
+    organization: "Οργανισμός / Εταιρεία",
+    emailOrPhone: "Email ή τηλέφωνο",
+    reason: "Λόγος πρόσβασης",
+    accessCode: "Κωδικός έγκρισης",
+    submitRequest: "Αποστολή αίτησης για έγκριση",
+    requestSent: "Η αίτηση στάλθηκε για έγκριση. Δεν έχει δοθεί πρόσβαση ακόμη.",
+    requestMissing: "Συμπλήρωσε όνομα, επίθετο, τίτλο, επικοινωνία και λόγο πρόσβασης.",
+    requestFailed: "Δεν στάλθηκε η αίτηση. Δοκίμασε ξανά.",
+    enterApproved: "Είσοδος με έγκριση",
+    accessDenied: "Δεν υπάρχει έγκριση ή ο κωδικός δεν είναι σωστός.",
+    accessNotConfigured: "Δεν έχει ρυθμιστεί ακόμη κωδικός πρόσβασης στο server.",
+    accessApproved: "Η πρόσβαση εγκρίθηκε.",
+    locate: "Το σημείο μου",
+    search: "Αναζήτηση / Στίγμα",
+    locating: "Εντοπισμός θέσης...",
+    located: "Βρέθηκε η θέση σου. Φορτώνω τοπικό δίκτυο.",
     locationUnavailable:
-      "\u0394\u03b5\u03bd \u03ae\u03c4\u03b1\u03bd \u03b4\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03b7 \u03b7 \u03b8\u03ad\u03c3\u03b7. \u039c\u03c0\u03bf\u03c1\u03b5\u03af\u03c2 \u03bd\u03b1 \u03bc\u03b5\u03c4\u03b1\u03ba\u03b9\u03bd\u03ae\u03c3\u03b5\u03b9\u03c2 \u03c4\u03bf\u03bd \u03c7\u03ac\u03c1\u03c4\u03b7 \u03ae \u03bd\u03b1 \u03ba\u03ac\u03bd\u03b5\u03b9\u03c2 \u03b1\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7.",
-    searchEmpty:
-      "\u0393\u03c1\u03ac\u03c8\u03b5 \u03bf\u03b4\u03cc, \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae \u03ae \u03c4\u03b1\u03c7\u03c5\u03b4\u03c1\u03bf\u03bc\u03b9\u03ba\u03cc.",
-    searchNotFound:
-      "\u0394\u03b5\u03bd \u03b2\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03c4\u03bf \u03c3\u03b7\u03bc\u03b5\u03af\u03bf. \u0394\u03bf\u03ba\u03af\u03bc\u03b1\u03c3\u03b5 \u03c0\u03b9\u03bf \u03c0\u03bb\u03ae\u03c1\u03b7 \u03b4\u03b9\u03b5\u03cd\u03b8\u03c5\u03bd\u03c3\u03b7.",
-    searchFound:
-      "\u0392\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03c3\u03c4\u03af\u03b3\u03bc\u03b1. \u03a6\u03bf\u03c1\u03c4\u03ce\u03bd\u03c9 \u03c4\u03bf\u03c0\u03b9\u03ba\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf.",
-    visibleTooLarge:
-      "\u0397 \u03bf\u03c1\u03b1\u03c4\u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae \u03b5\u03af\u03bd\u03b1\u03b9 \u03bc\u03b5\u03b3\u03ac\u03bb\u03b7. \u039a\u03ac\u03bd\u03b5 \u03bb\u03af\u03b3\u03bf zoom.",
-    chunks: "\u03c4\u03bc\u03ae\u03bc\u03b1\u03c4\u03b1 \u03bf\u03b8\u03cc\u03bd\u03b7\u03c2",
+      "Δεν ήταν διαθέσιμη η θέση. Μπορείς να μετακινήσεις τον χάρτη ή να κάνεις αναζήτηση.",
+    searchEmpty: "Γράψε οδό, περιοχή ή ταχυδρομικό.",
+    searchNotFound: "Δεν βρέθηκε το σημείο. Δοκίμασε πιο πλήρη διεύθυνση.",
+    searchFound: "Βρέθηκε στίγμα. Φορτώνω τοπικό δίκτυο.",
+    visibleTooLarge: "Η ορατή περιοχή είναι μεγάλη. Κάνε λίγο zoom.",
+    chunks: "τμήματα οθόνης",
   },
   en: {
     title: "Pantavion Water Network",
@@ -90,8 +99,26 @@ const UI = {
     map: "Water map",
     protected: "The complete network is not loaded in the browser.",
     accessTitle: "Protected map",
-    accessText: "Access to water maps requires explicit authorization. Enter only if you are approved.",
-    approveAccess: "I am authorized - Enter",
+    accessText:
+      "Access to water maps requires explicit authorization and Pantavion responsible-person approval.",
+    requestAccess: "Request access",
+    requestText: "Send your details. The map does not open until you are approved.",
+    founderAccess: "Approved user entry",
+    firstName: "First name",
+    lastName: "Last name",
+    roleTitle: "Title / Role",
+    organization: "Organization / Company",
+    emailOrPhone: "Email or phone",
+    reason: "Reason for access",
+    accessCode: "Approval code",
+    submitRequest: "Submit request for approval",
+    requestSent: "The request was sent for approval. Access has not been granted yet.",
+    requestMissing: "Fill first name, last name, title, contact and access reason.",
+    requestFailed: "Request was not sent. Try again.",
+    enterApproved: "Enter with approval",
+    accessDenied: "No approval or wrong code.",
+    accessNotConfigured: "Server access code is not configured yet.",
+    accessApproved: "Access approved.",
     locate: "My location",
     search: "Search / Marker",
     locating: "Locating...",
@@ -246,11 +273,19 @@ function featureKey(feature: any, fallback: string) {
 export default function ControlledWaterSegmentClient() {
   const [lang, setLang] = useState<Lang>(getInitialLang);
   const [accessApproved, setAccessApproved] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [roleTitle, setRoleTitle] = useState("");
+  const [organization, setOrganization] = useState("");
+  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [reason, setReason] = useState("");
+  const [accessCode, setAccessCode] = useState("");
   const [street, setStreet] = useState("");
   const [number, setNumber] = useState("");
-  const [area, setArea] = useState("\u039b\u03b5\u03bc\u03b5\u03c3\u03cc\u03c2");
+  const [area, setArea] = useState("Λεμεσός");
   const [postal, setPostal] = useState("");
   const [message, setMessage] = useState(UI.el.ready);
+  const [accessMessage, setAccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [pipeCount, setPipeCount] = useState<number | null>(null);
   const [mapReady, setMapReady] = useState(false);
@@ -309,7 +344,83 @@ export default function ControlledWaterSegmentClient() {
         mapRef.current = null;
       }
     };
-  }, [accessApproved]);
+  }, [accessApproved, lang]);
+
+  async function submitAccessRequest() {
+    if (!firstName.trim() || !lastName.trim() || !roleTitle.trim() || !emailOrPhone.trim() || !reason.trim()) {
+      setAccessMessage(t.requestMissing);
+      return;
+    }
+
+    setLoading(true);
+    setAccessMessage(t.loading);
+
+    try {
+      const response = await fetch("/api/professional/infrastructure/water/access/request", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          title: roleTitle,
+          organization,
+          emailOrPhone,
+          reason,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("request_failed");
+      }
+
+      setAccessMessage(t.requestSent);
+    } catch {
+      setAccessMessage(t.requestFailed);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function authorizeAccess() {
+    setLoading(true);
+    setAccessMessage(t.loading);
+
+    try {
+      const response = await fetch("/api/professional/infrastructure/water/access/authorize", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          code: accessCode,
+          firstName,
+          lastName,
+          title: roleTitle,
+        }),
+      });
+
+      const json = (await response.json()) as { ok?: boolean; error?: string };
+
+      if (!response.ok || !json.ok) {
+        if (json.error === "founder_access_code_not_configured") {
+          setAccessMessage(t.accessNotConfigured);
+        } else {
+          setAccessMessage(t.accessDenied);
+        }
+
+        return;
+      }
+
+      setAccessApproved(true);
+      setAccessMessage(t.accessApproved);
+    } catch {
+      setAccessMessage(t.accessDenied);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function placeCircleMarker(options: {
     lat: number;
@@ -618,8 +729,8 @@ export default function ControlledWaterSegmentClient() {
   if (!accessApproved) {
     return (
       <main className="min-h-screen bg-[#06111f] px-4 py-6 text-white">
-        <section className="mx-auto flex min-h-[80vh] w-full max-w-3xl items-center">
-          <div className="w-full rounded-3xl border border-[#b89445]/50 bg-[#0d1a2d] p-6 shadow-2xl">
+        <section className="mx-auto flex min-h-[80vh] w-full max-w-5xl items-center">
+          <div className="w-full rounded-3xl border border-[#b89445]/50 bg-[#0d1a2d] p-5 shadow-2xl sm:p-6">
             <div className="mb-5 flex justify-end">
               <label className="flex min-w-[180px] flex-col gap-2 text-sm font-bold text-[#f2c766]">
                 {t.language}
@@ -628,26 +739,76 @@ export default function ControlledWaterSegmentClient() {
                   onChange={(event) => setLang(event.target.value as Lang)}
                   className="rounded-2xl border border-[#b89445]/60 bg-[#07111f] px-4 py-3 text-white outline-none"
                 >
-                  <option value="el">{"\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac"}</option>
+                  <option value="el">Ελληνικά</option>
                   <option value="en">English</option>
                 </select>
               </label>
             </div>
 
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.34em] text-[#f2c766]">
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.26em] text-[#f2c766]">
               PANTAVION PROTECTED INFRASTRUCTURE
             </p>
             <h1 className="text-3xl font-black tracking-tight sm:text-5xl">{t.accessTitle}</h1>
             <p className="mt-4 text-base leading-8 text-slate-200">{t.accessText}</p>
             <p className="mt-3 text-sm font-bold text-[#f2c766]">{t.protected}</p>
 
-            <button
-              type="button"
-              onClick={() => setAccessApproved(true)}
-              className="mt-6 w-full rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-4 text-base font-black text-emerald-100"
-            >
-              {t.approveAccess}
-            </button>
+            <div className="mt-6 grid gap-4 lg:grid-cols-2">
+              <section className="rounded-3xl border border-slate-700 bg-[#07111f] p-4">
+                <h2 className="text-xl font-black text-[#f2c766]">{t.requestAccess}</h2>
+                <p className="mt-2 text-sm leading-6 text-slate-300">{t.requestText}</p>
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <input value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder={t.firstName} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                  <input value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder={t.lastName} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                  <input value={roleTitle} onChange={(event) => setRoleTitle(event.target.value)} placeholder={t.roleTitle} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                  <input value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={t.organization} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                  <input value={emailOrPhone} onChange={(event) => setEmailOrPhone(event.target.value)} placeholder={t.emailOrPhone} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
+                  <textarea value={reason} onChange={(event) => setReason(event.target.value)} placeholder={t.reason} className="min-h-[110px] rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => void submitAccessRequest()}
+                  disabled={loading}
+                  className="mt-4 w-full rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-4 text-base font-black text-[#f8e6ad] disabled:opacity-60"
+                >
+                  {t.submitRequest}
+                </button>
+              </section>
+
+              <section className="rounded-3xl border border-emerald-700/60 bg-emerald-950/20 p-4">
+                <h2 className="text-xl font-black text-emerald-100">{t.founderAccess}</h2>
+                <p className="mt-2 text-sm leading-6 text-emerald-100/80">{t.accessText}</p>
+
+                <div className="mt-4 grid gap-3">
+                  <input value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder={t.firstName} className="rounded-2xl border border-emerald-700/70 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                  <input value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder={t.lastName} className="rounded-2xl border border-emerald-700/70 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                  <input value={roleTitle} onChange={(event) => setRoleTitle(event.target.value)} placeholder={t.roleTitle} className="rounded-2xl border border-emerald-700/70 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                  <input
+                    value={accessCode}
+                    onChange={(event) => setAccessCode(event.target.value)}
+                    placeholder={t.accessCode}
+                    type="password"
+                    className="rounded-2xl border border-emerald-700/70 bg-[#0d1a2d] px-4 py-3 text-white outline-none"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => void authorizeAccess()}
+                  disabled={loading}
+                  className="mt-4 w-full rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-4 text-base font-black text-emerald-100 disabled:opacity-60"
+                >
+                  {t.enterApproved}
+                </button>
+              </section>
+            </div>
+
+            {accessMessage ? (
+              <div className="mt-4 rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-sm text-slate-100">
+                {accessMessage}
+              </div>
+            ) : null}
           </div>
         </section>
       </main>
@@ -677,7 +838,7 @@ export default function ControlledWaterSegmentClient() {
                 onChange={(event) => setLang(event.target.value as Lang)}
                 className="rounded-2xl border border-[#b89445]/60 bg-[#07111f] px-4 py-3 text-white outline-none"
               >
-                <option value="el">{"\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac"}</option>
+                <option value="el">Ελληνικά</option>
                 <option value="en">English</option>
               </select>
             </label>
@@ -686,57 +847,22 @@ export default function ControlledWaterSegmentClient() {
 
         <section className="rounded-3xl border border-slate-700 bg-[#0d1a2d] p-3 sm:p-4">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <input
-              value={street}
-              onChange={(event) => setStreet(event.target.value)}
-              placeholder={t.street}
-              className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none"
-            />
-            <input
-              value={number}
-              onChange={(event) => setNumber(event.target.value)}
-              placeholder={t.number}
-              className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none"
-            />
-            <input
-              value={area}
-              onChange={(event) => setArea(event.target.value)}
-              placeholder={t.area}
-              className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none"
-            />
-            <input
-              value={postal}
-              onChange={(event) => setPostal(event.target.value)}
-              placeholder={t.postal}
-              className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none"
-            />
+            <input value={street} onChange={(event) => setStreet(event.target.value)} placeholder={t.street} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+            <input value={number} onChange={(event) => setNumber(event.target.value)} placeholder={t.number} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+            <input value={area} onChange={(event) => setArea(event.target.value)} placeholder={t.area} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+            <input value={postal} onChange={(event) => setPostal(event.target.value)} placeholder={t.postal} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
-            <button
-              type="button"
-              onClick={() => void locateMe()}
-              disabled={loading}
-              className="rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-3 text-sm font-black text-[#f8e6ad] disabled:opacity-60"
-            >
+            <button type="button" onClick={() => void locateMe()} disabled={loading} className="rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-3 text-sm font-black text-[#f8e6ad] disabled:opacity-60">
               {t.locate}
             </button>
 
-            <button
-              type="button"
-              onClick={() => void searchAddressMarker()}
-              disabled={loading}
-              className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-3 text-sm font-black text-sky-100 disabled:opacity-60"
-            >
+            <button type="button" onClick={() => void searchAddressMarker()} disabled={loading} className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-3 text-sm font-black text-sky-100 disabled:opacity-60">
               {t.search}
             </button>
 
-            <button
-              type="button"
-              onClick={() => void loadPipes()}
-              disabled={loading}
-              className="rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60"
-            >
+            <button type="button" onClick={() => void loadPipes()} disabled={loading} className="rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60">
               {loading ? t.loading : t.load}
             </button>
           </div>
