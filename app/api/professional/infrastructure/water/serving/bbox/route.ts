@@ -19,6 +19,10 @@ import {
 } from "@/core/infrastructure/water/water-access-filtering";
 
 import {
+  PANTAVION_WATER_BLOCKED_TARGET_VIEWPORT_READINESS,
+} from "@/core/infrastructure/water/water-target-viewport";
+
+import {
   PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
 } from "@/core/infrastructure/water/water-spatial-serving-readiness";
 
@@ -69,6 +73,10 @@ export async function GET(request: NextRequest) {
     zoom: readNumber(searchParams, "zoom"),
   };
 
+  const targetSource = searchParams.get("targetSource") ?? "manual-map-pan-zoom";
+  const searchQuery = searchParams.get("q");
+  const selectedCandidateId = searchParams.get("selectedCandidateId");
+
   const missingParameters = Object.entries(parsed)
     .filter(([, value]) => value === null)
     .map(([key]) => key);
@@ -100,7 +108,8 @@ export async function GET(request: NextRequest) {
         PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS.productionAccessAllowed &&
         PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS.productionStoreAllowed &&
         PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS.productionAccessFilteringAllowed &&
-        PANTAVION_WATER_BLOCKED_AUDIT_DURABLE_SINK_READINESS.productionAuditSinkAllowed,
+        PANTAVION_WATER_BLOCKED_AUDIT_DURABLE_SINK_READINESS.productionAuditSinkAllowed &&
+        PANTAVION_WATER_BLOCKED_TARGET_VIEWPORT_READINESS.productionTargetViewportAllowed,
     },
   });
 
@@ -126,6 +135,12 @@ export async function GET(request: NextRequest) {
       mayReturnRawMaster: false,
       mayReturnCompleteNetwork: false,
       servingPattern: "bbox-api",
+      targetViewportRequest: {
+        targetSource,
+        searchQuery,
+        selectedCandidateId,
+        rule: "Network bbox must be derived from the selected target viewport, not only from current GPS location.",
+      },
       requestedViewport: {
         bbox,
         zoom,
@@ -137,6 +152,7 @@ export async function GET(request: NextRequest) {
       spatialIndexReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS,
       bboxQueryProviderReadiness: PANTAVION_WATER_BLOCKED_BBOX_QUERY_PROVIDER_READINESS,
       accessFilteringReadiness: PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS,
+      targetViewportReadiness: PANTAVION_WATER_BLOCKED_TARGET_VIEWPORT_READINESS,
       auditDurableSinkReadiness: PANTAVION_WATER_BLOCKED_AUDIT_DURABLE_SINK_READINESS,
       spatialServingReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
       accessControlReadiness: PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS,

@@ -20,6 +20,7 @@ const requiredFiles = [
   "core/infrastructure/water/water-spatial-index.ts",
   "core/infrastructure/water/water-bbox-query-provider.ts",
   "core/infrastructure/water/water-access-filtering.ts",
+  "core/infrastructure/water/water-target-viewport.ts",
   "core/infrastructure/water/water-audit-logging.ts",
   "core/infrastructure/water/water-audit-durable-sink.ts",
   "app/api/professional/infrastructure/water/serving/readiness/route.ts",
@@ -191,7 +192,7 @@ function enforceMarkers(title, relativePath, markers) {
   }
 }
 
-console.log("=== Pantavion Water Kernel Gate v19 ===");
+console.log("=== Pantavion Water Kernel Gate v20 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -343,6 +344,37 @@ if (exists(spatialIndexRelativePath)) {
 }
 
 
+
+console.log("=== Target Viewport Search Enforcement v20 ===");
+const targetViewportRelativePath = "core/infrastructure/water/water-target-viewport.ts";
+
+if (exists(targetViewportRelativePath)) {
+  const targetViewport = read(targetViewportRelativePath);
+
+  const targetViewportRequiredMarkers = [
+    "water-target-viewport-search-v1",
+    "evaluateWaterTargetViewportReadiness",
+    "current-location",
+    "address-search",
+    "manual-map-pan-zoom",
+    "founder-admin-selected-area",
+    "addressCandidateDisambiguationRequired",
+    "selectedCandidateRequiredBeforeNetworkLoad",
+    "bboxDerivedFromSelectedTargetRequired",
+    "mayLoadNetworkFromCurrentLocationOnly: false",
+    "mayAutoPickAmbiguousAddress: false",
+    "mayReturnRawMaster: false",
+    "mayReturnCompleteNetwork: false"
+  ];
+
+  for (const marker of targetViewportRequiredMarkers) {
+    if (targetViewport.includes(marker)) {
+      pass("Target Viewport marker present: " + marker);
+    } else {
+      fail("Target Viewport marker missing: " + marker);
+    }
+  }
+}
 console.log("=== Access Filtering Enforcement v18 ===");
 const accessFilteringRelativePath = "core/infrastructure/water/water-access-filtering.ts";
 
