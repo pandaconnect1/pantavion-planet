@@ -1,27 +1,4 @@
-﻿"use client";
-
-
-
-const PANTAVION_WATER_DEVICE_APPROVAL_KEY = "pantavion:water:approved-until";
-const PANTAVION_WATER_DEVICE_APPROVAL_HOURS = 24;
-
-function readWaterDeviceApproval() {
-  if (typeof window === "undefined") return false;
-  const raw = window.localStorage.getItem(PANTAVION_WATER_DEVICE_APPROVAL_KEY);
-  if (!raw) return false;
-  const expiresAt = Number(raw);
-  if (!Number.isFinite(expiresAt) || Date.now() > expiresAt) {
-    window.localStorage.removeItem(PANTAVION_WATER_DEVICE_APPROVAL_KEY);
-    return false;
-  }
-  return true;
-}
-
-function writeWaterDeviceApproval() {
-  if (typeof window === "undefined") return;
-  const expiresAt = Date.now() + PANTAVION_WATER_DEVICE_APPROVAL_HOURS * 60 * 60 * 1000;
-  window.localStorage.setItem(PANTAVION_WATER_DEVICE_APPROVAL_KEY, String(expiresAt));
-}
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import {
@@ -61,54 +38,54 @@ type Bbox = {
 
 const UI = {
   el: {
-    title: "Î”Î¯ÎºÏ„Ï…Î¿ ÎŽÎ´ÏÎµÏ…ÏƒÎ·Ï‚ Pantavion",
+    title: "Δίκτυο Ύδρευσης Pantavion",
     subtitle:
-      "Î‘Î»Î·Î¸Î¹Î½ÏŒ Î´Î¯ÎºÏ„Ï…Î¿ Î±Î³Ï‰Î³ÏŽÎ½ Î±Ï€ÏŒ Ï„Î¿ Î±Ï…Î¸ÎµÎ½Ï„Î¹ÎºÏŒ KMZ. Î”ÎµÎ½ Î±Î»Î»Î¬Î¶Î¿Ï…Î¼Îµ Ï‡ÏÏŽÎ¼Î±Ï„Î±, Î³ÏÎ±Î¼Î¼Î­Ï‚ Î® Î±Î³Ï‰Î³Î¿ÏÏ‚. ÎŸ browser Ï†Î¿ÏÏ„ÏŽÎ½ÎµÎ¹ Î¼ÏŒÎ½Î¿ ÎµÎ»ÎµÎ³Ï‡ÏŒÎ¼ÎµÎ½Î± Ï„Î¼Î®Î¼Î±Ï„Î±.",
-    language: "Î“Î»ÏŽÏƒÏƒÎ±",
-    street: "ÎŸÎ´ÏŒÏ‚",
-    number: "Î‘ÏÎ¹Î¸Î¼ÏŒÏ‚",
-    area: "Î ÎµÏÎ¹Î¿Ï‡Î®",
-    postal: "Î¤Î±Ï‡Ï…Î´ÏÎ¿Î¼Î¹ÎºÏŒÏ‚",
-    load: "Î¦ÏŒÏÏ„Ï‰ÏƒÎµ Î±Î³Ï‰Î³Î¿ÏÏ‚ ÏƒÏ„Î·Î½ Î¿ÏÎ±Ï„Î® Ï€ÎµÏÎ¹Î¿Ï‡Î®",
-    loading: "Î¦ÏŒÏÏ„Ï‰ÏƒÎ·...",
-    ready: "ÎŸ Ï‡Î¬ÏÏ„Î·Ï‚ ÎµÎ¯Î½Î±Î¹ Î­Ï„Î¿Î¹Î¼Î¿Ï‚. ÎœÎµÏ„Î±ÎºÎ¯Î½Î·ÏƒÎµ Î® ÎºÎ¬Î½Îµ zoom. ÎŸÎ¹ Î±Î³Ï‰Î³Î¿Î¯ Ï†Î¿ÏÏ„ÏŽÎ½Î¿Ï…Î½ Ï„Î¼Î·Î¼Î±Ï„Î¹ÎºÎ¬.",
-    loaded: "Î¦Î¿ÏÏ„ÏŽÎ¸Î·ÎºÎ±Î½ Î±Î³Ï‰Î³Î¿Î¯",
-    failed: "Î”ÎµÎ½ Ï†Î¿ÏÏ„ÏŽÎ¸Î·ÎºÎ±Î½ Î±Î³Ï‰Î³Î¿Î¯. ÎšÎ¬Î½Îµ Î»Î¯Î³Î¿ zoom Î® Î¼ÎµÏ„Î±ÎºÎ¯Î½Î·ÏƒÎµ Ï„Î¿Î½ Ï‡Î¬ÏÏ„Î·.",
-    map: "Î§Î¬ÏÏ„Î·Ï‚ ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚",
-    protected: "Î¤Î¿ Ï€Î»Î®ÏÎµÏ‚ Î´Î¯ÎºÏ„Ï…Î¿ Î´ÎµÎ½ Ï†Î¿ÏÏ„ÏŽÎ½ÎµÏ„Î±Î¹ ÏƒÏ„Î¿Î½ browser.",
-    accessTitle: "Î ÏÎ¿ÏƒÏ„Î±Ï„ÎµÏ…Î¼Î­Î½Î¿Ï‚ Ï‡Î¬ÏÏ„Î·Ï‚",
+      "Αληθινό δίκτυο αγωγών από το αυθεντικό KMZ. Δεν αλλάζουμε χρώματα, γραμμές ή αγωγούς. Ο browser φορτώνει μόνο ελεγχόμενα τμήματα.",
+    language: "Γλώσσα",
+    street: "Οδός",
+    number: "Αριθμός",
+    area: "Περιοχή",
+    postal: "Ταχυδρομικός",
+    load: "Φόρτωσε αγωγούς στην ορατή περιοχή",
+    loading: "Φόρτωση...",
+    ready: "Ο χάρτης είναι έτοιμος. Μετακίνησε ή κάνε zoom. Οι αγωγοί φορτώνουν τμηματικά.",
+    loaded: "Φορτώθηκαν αγωγοί",
+    failed: "Δεν φορτώθηκαν αγωγοί. Κάνε λίγο zoom ή μετακίνησε τον χάρτη.",
+    map: "Χάρτης ύδρευσης",
+    protected: "Το πλήρες δίκτυο δεν φορτώνεται στον browser.",
+    accessTitle: "Προστατευμένος χάρτης",
     accessText:
-      "Î— Ï€ÏÏŒÏƒÎ²Î±ÏƒÎ· ÏƒÏ„Î¿Ï…Ï‚ Ï‡Î¬ÏÏ„ÎµÏ‚ ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚ Î±Ï€Î±Î¹Ï„ÎµÎ¯ ÏÎ·Ï„Î® ÎµÎ¾Î¿Ï…ÏƒÎ¹Î¿Î´ÏŒÏ„Î·ÏƒÎ· ÎºÎ±Î¹ Î­Î³ÎºÏÎ¹ÏƒÎ· Ï…Ï€ÎµÏÎ¸Ï…Î½Î¿Ï… Pantavion.",
-    requestAccess: "Î‘Î¯Ï„Î·ÏƒÎ· Ï€ÏÏŒÏƒÎ²Î±ÏƒÎ·Ï‚",
+      "Η πρόσβαση στους χάρτες ύδρευσης απαιτεί ρητή εξουσιοδότηση και έγκριση υπεύθυνου Pantavion.",
+    requestAccess: "Αίτηση πρόσβασης",
     requestText:
-      "Î£Ï„ÎµÎ¯Î»Îµ Î±Î¯Ï„Î·Î¼Î± Î¼Îµ Ï„Î± ÏƒÏ„Î¿Î¹Ï‡ÎµÎ¯Î± ÏƒÎ¿Ï…. Î”ÎµÎ½ Î±Î½Î¿Î¯Î³ÎµÎ¹ Î¿ Ï‡Î¬ÏÏ„Î·Ï‚ Î¼Î­Ï‡ÏÎ¹ Î½Î± ÎµÎ³ÎºÏÎ¹Î¸ÎµÎ¯Ï‚.",
-    founderAccess: "Î•Î¯ÏƒÎ¿Î´Î¿Ï‚ ÎµÎ³ÎºÎµÎºÏÎ¹Î¼Î­Î½Î¿Ï… Ï‡ÏÎ®ÏƒÏ„Î·",
-    firstName: "ÎŒÎ½Î¿Î¼Î±",
-    lastName: "Î•Ï€Î¯Î¸ÎµÏ„Î¿",
-    roleTitle: "Î¤Î¯Ï„Î»Î¿Ï‚ / Î¡ÏŒÎ»Î¿Ï‚",
-    organization: "ÎŸÏÎ³Î±Î½Î¹ÏƒÎ¼ÏŒÏ‚ / Î•Ï„Î±Î¹ÏÎµÎ¯Î±",
-    emailOrPhone: "Email Î® Ï„Î·Î»Î­Ï†Ï‰Î½Î¿",
-    reason: "Î›ÏŒÎ³Î¿Ï‚ Ï€ÏÏŒÏƒÎ²Î±ÏƒÎ·Ï‚",
-    accessCode: "ÎšÏ‰Î´Î¹ÎºÏŒÏ‚ Î­Î³ÎºÏÎ¹ÏƒÎ·Ï‚",
-    submitRequest: "Î‘Ï€Î¿ÏƒÏ„Î¿Î»Î® Î±Î¯Ï„Î·ÏƒÎ·Ï‚ Î³Î¹Î± Î­Î³ÎºÏÎ¹ÏƒÎ·",
-    requestSent: "Î— Î±Î¯Ï„Î·ÏƒÎ· ÏƒÏ„Î¬Î»Î¸Î·ÎºÎµ Î³Î¹Î± Î­Î³ÎºÏÎ¹ÏƒÎ·. Î”ÎµÎ½ Î­Ï‡ÎµÎ¹ Î´Î¿Î¸ÎµÎ¯ Ï€ÏÏŒÏƒÎ²Î±ÏƒÎ· Î±ÎºÏŒÎ¼Î·.",
-    requestMissing: "Î£Ï…Î¼Ï€Î»Î®ÏÏ‰ÏƒÎµ ÏŒÎ½Î¿Î¼Î±, ÎµÏ€Î¯Î¸ÎµÏ„Î¿, Ï„Î¯Ï„Î»Î¿, ÎµÏ€Î¹ÎºÎ¿Î¹Î½Ï‰Î½Î¯Î± ÎºÎ±Î¹ Î»ÏŒÎ³Î¿ Ï€ÏÏŒÏƒÎ²Î±ÏƒÎ·Ï‚.",
-    requestFailed: "Î”ÎµÎ½ ÏƒÏ„Î¬Î»Î¸Î·ÎºÎµ Î· Î±Î¯Ï„Î·ÏƒÎ·. Î”Î¿ÎºÎ¯Î¼Î±ÏƒÎµ Î¾Î±Î½Î¬.",
-    enterApproved: "Î•Î¯ÏƒÎ¿Î´Î¿Ï‚ Î¼Îµ Î­Î³ÎºÏÎ¹ÏƒÎ·",
-    accessDenied: "Î”ÎµÎ½ Ï…Ï€Î¬ÏÏ‡ÎµÎ¹ Î­Î³ÎºÏÎ¹ÏƒÎ· Î® Î¿ ÎºÏ‰Î´Î¹ÎºÏŒÏ‚ Î´ÎµÎ½ ÎµÎ¯Î½Î±Î¹ ÏƒÏ‰ÏƒÏ„ÏŒÏ‚.",
-    accessNotConfigured: "Î”ÎµÎ½ Î­Ï‡ÎµÎ¹ ÏÏ…Î¸Î¼Î¹ÏƒÏ„ÎµÎ¯ Î±ÎºÏŒÎ¼Î· ÎºÏ‰Î´Î¹ÎºÏŒÏ‚ Ï€ÏÏŒÏƒÎ²Î±ÏƒÎ·Ï‚ ÏƒÏ„Î¿ server.",
-    accessApproved: "Î— Ï€ÏÏŒÏƒÎ²Î±ÏƒÎ· ÎµÎ³ÎºÏÎ¯Î¸Î·ÎºÎµ.",
-    locate: "Î¤Î¿ ÏƒÎ·Î¼ÎµÎ¯Î¿ Î¼Î¿Ï…",
-    search: "Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ· / Î£Ï„Î¯Î³Î¼Î±",
-    locating: "Î•Î½Ï„Î¿Ï€Î¹ÏƒÎ¼ÏŒÏ‚ Î¸Î­ÏƒÎ·Ï‚...",
-    located: "Î’ÏÎ­Î¸Î·ÎºÎµ Î· Î¸Î­ÏƒÎ· ÏƒÎ¿Ï…. Î¦Î¿ÏÏ„ÏŽÎ½Ï‰ Ï„Î¿Ï€Î¹ÎºÏŒ Î´Î¯ÎºÏ„Ï…Î¿.",
+      "Στείλε αίτημα με τα στοιχεία σου. Δεν ανοίγει ο χάρτης μέχρι να εγκριθείς.",
+    founderAccess: "Είσοδος εγκεκριμένου χρήστη",
+    firstName: "Όνομα",
+    lastName: "Επίθετο",
+    roleTitle: "Τίτλος / Ρόλος",
+    organization: "Οργανισμός / Εταιρεία",
+    emailOrPhone: "Email ή τηλέφωνο",
+    reason: "Λόγος πρόσβασης",
+    accessCode: "Κωδικός έγκρισης",
+    submitRequest: "Αποστολή αίτησης για έγκριση",
+    requestSent: "Η αίτηση στάλθηκε για έγκριση. Δεν έχει δοθεί πρόσβαση ακόμη.",
+    requestMissing: "Συμπλήρωσε όνομα, επίθετο, τίτλο, επικοινωνία και λόγο πρόσβασης.",
+    requestFailed: "Δεν στάλθηκε η αίτηση. Δοκίμασε ξανά.",
+    enterApproved: "Είσοδος με έγκριση",
+    accessDenied: "Δεν υπάρχει έγκριση ή ο κωδικός δεν είναι σωστός.",
+    accessNotConfigured: "Δεν έχει ρυθμιστεί ακόμη κωδικός πρόσβασης στο server.",
+    accessApproved: "Η πρόσβαση εγκρίθηκε.",
+    locate: "Το σημείο μου",
+    search: "Αναζήτηση / Στίγμα",
+    locating: "Εντοπισμός θέσης...",
+    located: "Βρέθηκε η θέση σου. Φορτώνω τοπικό δίκτυο.",
     locationUnavailable:
-      "Î”ÎµÎ½ Î®Ï„Î±Î½ Î´Î¹Î±Î¸Î­ÏƒÎ¹Î¼Î· Î· Î¸Î­ÏƒÎ·. ÎœÏ€Î¿ÏÎµÎ¯Ï‚ Î½Î± Î¼ÎµÏ„Î±ÎºÎ¹Î½Î®ÏƒÎµÎ¹Ï‚ Ï„Î¿Î½ Ï‡Î¬ÏÏ„Î· Î® Î½Î± ÎºÎ¬Î½ÎµÎ¹Ï‚ Î±Î½Î±Î¶Î®Ï„Î·ÏƒÎ·.",
-    searchEmpty: "Î“ÏÎ¬ÏˆÎµ Î¿Î´ÏŒ, Ï€ÎµÏÎ¹Î¿Ï‡Î® Î® Ï„Î±Ï‡Ï…Î´ÏÎ¿Î¼Î¹ÎºÏŒ.",
-    searchNotFound: "Î”ÎµÎ½ Î²ÏÎ­Î¸Î·ÎºÎµ Ï„Î¿ ÏƒÎ·Î¼ÎµÎ¯Î¿. Î”Î¿ÎºÎ¯Î¼Î±ÏƒÎµ Ï€Î¹Î¿ Ï€Î»Î®ÏÎ· Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·.",
-    searchFound: "Î’ÏÎ­Î¸Î·ÎºÎµ ÏƒÏ„Î¯Î³Î¼Î±. Î¦Î¿ÏÏ„ÏŽÎ½Ï‰ Ï„Î¿Ï€Î¹ÎºÏŒ Î´Î¯ÎºÏ„Ï…Î¿.",
-    visibleTooLarge: "Î— Î¿ÏÎ±Ï„Î® Ï€ÎµÏÎ¹Î¿Ï‡Î® ÎµÎ¯Î½Î±Î¹ Î¼ÎµÎ³Î¬Î»Î·. ÎšÎ¬Î½Îµ Î»Î¯Î³Î¿ zoom.",
-    chunks: "Ï„Î¼Î®Î¼Î±Ï„Î± Î¿Î¸ÏŒÎ½Î·Ï‚",
+      "Δεν ήταν διαθέσιμη η θέση. Μπορείς να μετακινήσεις τον χάρτη ή να κάνεις αναζήτηση.",
+    searchEmpty: "Γράψε οδό, περιοχή ή ταχυδρομικό.",
+    searchNotFound: "Δεν βρέθηκε το σημείο. Δοκίμασε πιο πλήρη διεύθυνση.",
+    searchFound: "Βρέθηκε στίγμα. Φορτώνω τοπικό δίκτυο.",
+    visibleTooLarge: "Η ορατή περιοχή είναι μεγάλη. Κάνε λίγο zoom.",
+    chunks: "τμήματα οθόνης",
   },
   en: {
     title: "Pantavion Water Network",
@@ -136,12 +113,12 @@ const UI = {
     lastName: "Last name",
     roleTitle: "Title / Role",
     organization: "Organization / Company",
-    emailOrPhone: "Phone",
+    emailOrPhone: "Email or phone",
     reason: "Reason for access",
-    accessCode: "Founder code or approved email/phone",
+    accessCode: "Approval code",
     submitRequest: "Submit request for approval",
     requestSent: "The request was sent for approval. Access has not been granted yet.",
-    requestMissing: "Fill first name, last name, title/role and phone.",
+    requestMissing: "Fill first name, last name, title, contact and access reason.",
     requestFailed: "Request was not sent. Try again.",
     enterApproved: "Enter with approval",
     accessDenied: "No approval or wrong code.",
@@ -300,7 +277,7 @@ function featureKey(feature: any, fallback: string) {
 
 export default function ControlledWaterSegmentClient() {
   const [lang, setLang] = useState<Lang>(getInitialLang);
-  const [accessApproved, setAccessApproved] = useState(() => readWaterDeviceApproval());
+  const [accessApproved, setAccessApproved] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [roleTitle, setRoleTitle] = useState("");
@@ -310,13 +287,13 @@ export default function ControlledWaterSegmentClient() {
   const [accessCode, setAccessCode] = useState("");
   const [street, setStreet] = useState("");
   const [number, setNumber] = useState("");
-  const [area, setArea] = useState("Î›ÎµÎ¼ÎµÏƒÏŒÏ‚");
+  const [area, setArea] = useState("Λεμεσός");
   const [postal, setPostal] = useState("");
   const [message, setMessage] = useState(UI.el.ready);
   const [accessMessage, setAccessMessage] = useState("");
-  const [loading, setLoading] = useState(() => readWaterDeviceApproval());
+  const [loading, setLoading] = useState(false);
   const [pipeCount, setPipeCount] = useState<number | null>(null);
-  const [mapReady, setMapReady] = useState(() => readWaterDeviceApproval());
+  const [mapReady, setMapReady] = useState(false);
 
   const mapEl = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
@@ -376,19 +353,15 @@ export default function ControlledWaterSegmentClient() {
   }, [accessApproved, lang]);
 
   async function submitAccessRequest() {
-    if (!firstName.trim() || !lastName.trim() || !roleTitle.trim() || !emailOrPhone.trim() ) {
+    if (!firstName.trim() || !lastName.trim() || !roleTitle.trim() || !emailOrPhone.trim() || !reason.trim()) {
       setAccessMessage(t.requestMissing);
-      
-      writeWaterDeviceApproval();
-return;
+      return;
     }
 
     setLoading(true);
     setAccessMessage(t.loading);
 
-    
-      writeWaterDeviceApproval();
-try {
+    try {
       const response = await fetch("/api/professional/infrastructure/water/access/request", {
         method: "POST",
         headers: {
@@ -409,13 +382,9 @@ try {
       }
 
       setAccessMessage(t.requestSent);
-    
-      writeWaterDeviceApproval();
-} catch {
+    } catch {
       setAccessMessage(t.requestFailed);
-    
-      writeWaterDeviceApproval();
-} finally {
+    } finally {
       setLoading(false);
     }
   }
@@ -424,9 +393,7 @@ try {
     setLoading(true);
     setAccessMessage(t.loading);
 
-    
-      writeWaterDeviceApproval();
-try {
+    try {
       const response = await fetch("/api/professional/infrastructure/water/access/authorize", {
         method: "POST",
         headers: {
@@ -434,7 +401,6 @@ try {
         },
         body: JSON.stringify({
           code: accessCode,
-          emailOrPhone,
           firstName,
           lastName,
           title: roleTitle,
@@ -446,26 +412,18 @@ try {
       if (!response.ok || !json.ok) {
         if (json.error === "founder_access_code_not_configured") {
           setAccessMessage(t.accessNotConfigured);
-        
-      writeWaterDeviceApproval();
-} else {
+        } else {
           setAccessMessage(t.accessDenied);
-        
-      writeWaterDeviceApproval();
-}
+        }
 
         return;
       }
 
       setAccessApproved(true);
       setAccessMessage(t.accessApproved);
-    
-      writeWaterDeviceApproval();
-} catch {
+    } catch {
       setAccessMessage(t.accessDenied);
-    
-      writeWaterDeviceApproval();
-} finally {
+    } finally {
       setLoading(false);
     }
   }
@@ -812,9 +770,9 @@ try {
                   <input value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder={t.firstName} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
                   <input value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder={t.lastName} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
                   <input value={roleTitle} onChange={(event) => setRoleTitle(event.target.value)} placeholder={t.roleTitle} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
-                  <input value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={t.organization} className="hidden rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                  <input value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={t.organization} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
                   <input value={emailOrPhone} onChange={(event) => setEmailOrPhone(event.target.value)} placeholder={t.emailOrPhone} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
-                  <textarea value={reason} onChange={(event) => setReason(event.target.value)} placeholder={t.reason} className="hidden min-h-[110px] rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
+                  <textarea value={reason} onChange={(event) => setReason(event.target.value)} placeholder={t.reason} className="min-h-[110px] rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
                 </div>
 
                 <button
@@ -838,8 +796,8 @@ try {
                   <input
                     value={accessCode}
                     onChange={(event) => setAccessCode(event.target.value)}
-                    placeholder="Email/τηλέφωνο εγκεκριμένου χρήστη ή founder code"
-                    type="text"
+                    placeholder={t.accessCode}
+                    type="password"
                     className="rounded-2xl border border-emerald-700/70 bg-[#0d1a2d] px-4 py-3 text-white outline-none"
                   />
                 </div>
@@ -940,9 +898,5 @@ try {
     </main>
   );
 }
-
-
-
-
 
 
