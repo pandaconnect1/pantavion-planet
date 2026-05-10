@@ -25,6 +25,37 @@ type AddressSearchResponse = {
   message?: string;
 };
 
+
+function getPipeStyleFromOriginalKml(feature: { properties?: Record<string, unknown> } | undefined) {
+  const properties = feature?.properties;
+  const raw = properties?.kmlLineStyle;
+
+  if (!raw || typeof raw !== "object") {
+    return {
+      color: "#202020",
+      weight: 1,
+      opacity: 1,
+    };
+  }
+
+  const style = raw as {
+    color?: unknown;
+    weight?: unknown;
+    opacity?: unknown;
+  };
+
+  return {
+    color: typeof style.color === "string" ? style.color : "#202020",
+    weight:
+      typeof style.weight === "number"
+        ? Math.max(1, Math.min(8, style.weight))
+        : 1,
+    opacity:
+      typeof style.opacity === "number"
+        ? Math.max(0.05, Math.min(1, style.opacity))
+        : 1,
+  };
+}
 type SegmentResponse = {
   segmentCount?: number;
   reason?: string;
@@ -40,11 +71,11 @@ type SegmentResponse = {
 };
 
 const QUICK_AREAS = [
-  { label: "Λεμεσός", center: [34.681, 33.038] as [number, number], zoom: 16 },
-  { label: "Γερμασόγεια", center: [34.704, 33.081] as [number, number], zoom: 16 },
-  { label: "Άγιος Αθανάσιος", center: [34.714, 33.055] as [number, number], zoom: 16 },
-  { label: "Κάψαλος", center: [34.696, 33.026] as [number, number], zoom: 16 },
-  { label: "Κολόσσι", center: [34.669, 32.933] as [number, number], zoom: 16 },
+  { label: "Î›ÎµÎ¼ÎµÏƒÏŒÏ‚", center: [34.681, 33.038] as [number, number], zoom: 16 },
+  { label: "Î“ÎµÏÎ¼Î±ÏƒÏŒÎ³ÎµÎ¹Î±", center: [34.704, 33.081] as [number, number], zoom: 16 },
+  { label: "Î†Î³Î¹Î¿Ï‚ Î‘Î¸Î±Î½Î¬ÏƒÎ¹Î¿Ï‚", center: [34.714, 33.055] as [number, number], zoom: 16 },
+  { label: "ÎšÎ¬ÏˆÎ±Î»Î¿Ï‚", center: [34.696, 33.026] as [number, number], zoom: 16 },
+  { label: "ÎšÎ¿Î»ÏŒÏƒÏƒÎ¹", center: [34.669, 32.933] as [number, number], zoom: 16 },
 ];
 
 function bboxFromMap(map: Leaflet.Map): BboxForm {
@@ -78,7 +109,7 @@ export default function ControlledWaterSegmentClient() {
 
   const [street, setStreet] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
-  const [area, setArea] = useState("Λεμεσός");
+  const [area, setArea] = useState("Î›ÎµÎ¼ÎµÏƒÏŒÏ‚");
   const [postalCode, setPostalCode] = useState("");
   const [bbox, setBbox] = useState<BboxForm>({
     minLng: "33.015",
@@ -90,14 +121,14 @@ export default function ControlledWaterSegmentClient() {
   const [addressLoading, setAddressLoading] = useState(false);
   const [segmentLoading, setSegmentLoading] = useState(false);
   const [mapReady, setMapReady] = useState(false);
-  const [message, setMessage] = useState("Βάλε οδό, αριθμό, περιοχή ή ταχυδρομικό και πάτησε Αναζήτηση.");
+  const [message, setMessage] = useState("Î’Î¬Î»Îµ Î¿Î´ÏŒ, Î±ÏÎ¹Î¸Î¼ÏŒ, Ï€ÎµÏÎ¹Î¿Ï‡Î® Î® Ï„Î±Ï‡Ï…Î´ÏÎ¿Î¼Î¹ÎºÏŒ ÎºÎ±Î¹ Ï€Î¬Ï„Î·ÏƒÎµ Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ·.");
   const [addressResponse, setAddressResponse] = useState<AddressSearchResponse | null>(null);
   const [selectedCandidate, setSelectedCandidate] = useState<AddressCandidate | null>(null);
   const [segmentCount, setSegmentCount] = useState<number | null>(null);
 
   async function searchAddress() {
     setAddressLoading(true);
-    setMessage("Αναζήτηση διεύθυνσης...");
+    setMessage("Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ· Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·Ï‚...");
 
     try {
       const params = new URLSearchParams({
@@ -116,13 +147,13 @@ export default function ControlledWaterSegmentClient() {
       setAddressResponse(json);
 
       if (!response.ok) {
-        setMessage(json.message ?? "Δεν βρέθηκε διεύθυνση.");
+        setMessage(json.message ?? "Î”ÎµÎ½ Î²ÏÎ­Î¸Î·ÎºÎµ Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·.");
         return;
       }
 
-      setMessage(`Βρέθηκαν ${json.candidateCount ?? 0} επιλογές. Διάλεξε σωστή περιοχή.`);
+      setMessage(`Î’ÏÎ­Î¸Î·ÎºÎ±Î½ ${json.candidateCount ?? 0} ÎµÏ€Î¹Î»Î¿Î³Î­Ï‚. Î”Î¹Î¬Î»ÎµÎ¾Îµ ÏƒÏ‰ÏƒÏ„Î® Ï€ÎµÏÎ¹Î¿Ï‡Î®.`);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Σφάλμα αναζήτησης.");
+      setMessage(error instanceof Error ? error.message : "Î£Ï†Î¬Î»Î¼Î± Î±Î½Î±Î¶Î®Ï„Î·ÏƒÎ·Ï‚.");
     } finally {
       setAddressLoading(false);
     }
@@ -132,7 +163,7 @@ export default function ControlledWaterSegmentClient() {
     const activeBbox = nextBbox ?? bbox;
 
     setSegmentLoading(true);
-    setMessage("Φόρτωση δικτύου ύδρευσης στην επιλεγμένη περιοχή...");
+    setMessage("Î¦ÏŒÏÏ„Ï‰ÏƒÎ· Î´Î¹ÎºÏ„ÏÎ¿Ï… ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚ ÏƒÏ„Î·Î½ ÎµÏ€Î¹Î»ÎµÎ³Î¼Î­Î½Î· Ï€ÎµÏÎ¹Î¿Ï‡Î®...");
 
     try {
       const params = new URLSearchParams({
@@ -151,7 +182,7 @@ export default function ControlledWaterSegmentClient() {
       const json = (await response.json()) as SegmentResponse;
 
       if (!response.ok || !json.segment?.features?.length) {
-        setMessage(json.error || json.reason || "Δεν βρέθηκε τμήμα δικτύου σε αυτή την περιοχή.");
+        setMessage(json.error || json.reason || "Î”ÎµÎ½ Î²ÏÎ­Î¸Î·ÎºÎµ Ï„Î¼Î®Î¼Î± Î´Î¹ÎºÏ„ÏÎ¿Ï… ÏƒÎµ Î±Ï…Ï„Î® Ï„Î·Î½ Ï€ÎµÏÎ¹Î¿Ï‡Î®.");
         setSegmentCount(null);
         clearWaterLayer();
         return;
@@ -159,9 +190,9 @@ export default function ControlledWaterSegmentClient() {
 
       setSegmentCount(json.segmentCount ?? json.segment.features.length);
       drawWaterSegment(json);
-      setMessage(`Φορτώθηκε τμήμα δικτύου ύδρευσης: ${json.segmentCount ?? json.segment.features.length} στοιχεία.`);
+      setMessage(`Î¦Î¿ÏÏ„ÏŽÎ¸Î·ÎºÎµ Ï„Î¼Î®Î¼Î± Î´Î¹ÎºÏ„ÏÎ¿Ï… ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚: ${json.segmentCount ?? json.segment.features.length} ÏƒÏ„Î¿Î¹Ï‡ÎµÎ¯Î±.`);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Σφάλμα φόρτωσης δικτύου.");
+      setMessage(error instanceof Error ? error.message : "Î£Ï†Î¬Î»Î¼Î± Ï†ÏŒÏÏ„Ï‰ÏƒÎ·Ï‚ Î´Î¹ÎºÏ„ÏÎ¿Ï….");
     } finally {
       setSegmentLoading(false);
     }
@@ -185,18 +216,24 @@ export default function ControlledWaterSegmentClient() {
     clearWaterLayer();
 
     const layer = leaflet.geoJSON(response.segment as never, {
-      style: () => ({
-        color: "#00d7ff",
-        weight: 4,
-        opacity: 0.95,
-      }),
-      pointToLayer: (_feature, latlng) =>
-        leaflet.circleMarker(latlng, {
-          radius: 4,
-          color: "#00d7ff",
-          fillColor: "#00d7ff",
-          fillOpacity: 0.9,
-        }),
+      style: (feature) =>
+        getPipeStyleFromOriginalKml(
+          feature as { properties?: Record<string, unknown> } | undefined,
+        ),
+      pointToLayer: (feature, latlng) => {
+        const style = getPipeStyleFromOriginalKml(
+          feature as { properties?: Record<string, unknown> } | undefined,
+        );
+
+        return leaflet.circleMarker(latlng, {
+          radius: Math.max(3, style.weight),
+          color: style.color,
+          fillColor: style.color,
+          fillOpacity: style.opacity,
+          opacity: style.opacity,
+          weight: style.weight,
+        });
+      },
     });
 
     layer.addTo(map);
@@ -303,7 +340,7 @@ export default function ControlledWaterSegmentClient() {
       leaflet
         .tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 19,
-          attribution: "© OpenStreetMap contributors",
+          attribution: "Â© OpenStreetMap contributors",
         })
         .addTo(map);
 
@@ -337,47 +374,47 @@ export default function ControlledWaterSegmentClient() {
           </p>
 
           <h1 className="mt-3 text-3xl font-bold md:text-5xl">
-            Χάρτης δικτύου ύδρευσης
+            Î§Î¬ÏÏ„Î·Ï‚ Î´Î¹ÎºÏ„ÏÎ¿Ï… ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚
           </h1>
 
           <p className="mt-3 max-w-5xl text-base leading-7 text-slate-200">
-            Αναζήτηση με οδό, αριθμό, περιοχή και ταχυδρομικό. Αν υπάρχουν ίδιες οδοί
-            σε διαφορετικές περιοχές, πρώτα επιλέγεται η σωστή διεύθυνση και μετά
-            φορτώνει το αντίστοιχο τμήμα δικτύου.
+            Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ· Î¼Îµ Î¿Î´ÏŒ, Î±ÏÎ¹Î¸Î¼ÏŒ, Ï€ÎµÏÎ¹Î¿Ï‡Î® ÎºÎ±Î¹ Ï„Î±Ï‡Ï…Î´ÏÎ¿Î¼Î¹ÎºÏŒ. Î‘Î½ Ï…Ï€Î¬ÏÏ‡Î¿Ï…Î½ Î¯Î´Î¹ÎµÏ‚ Î¿Î´Î¿Î¯
+            ÏƒÎµ Î´Î¹Î±Ï†Î¿ÏÎµÏ„Î¹ÎºÎ­Ï‚ Ï€ÎµÏÎ¹Î¿Ï‡Î­Ï‚, Ï€ÏÏŽÏ„Î± ÎµÏ€Î¹Î»Î­Î³ÎµÏ„Î±Î¹ Î· ÏƒÏ‰ÏƒÏ„Î® Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ· ÎºÎ±Î¹ Î¼ÎµÏ„Î¬
+            Ï†Î¿ÏÏ„ÏŽÎ½ÎµÎ¹ Ï„Î¿ Î±Î½Ï„Î¯ÏƒÏ„Î¿Î¹Ï‡Î¿ Ï„Î¼Î®Î¼Î± Î´Î¹ÎºÏ„ÏÎ¿Ï….
           </p>
         </header>
 
         <section className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-4">
           <h2 className="text-2xl font-bold text-[#f2d27a]">
-            Αναζήτηση διεύθυνσης
+            Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ· Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·Ï‚
           </h2>
 
           <div className="mt-4 grid gap-3 md:grid-cols-[1.2fr_0.5fr_1fr_0.7fr_auto]">
             <input
               value={street}
               onChange={(event) => setStreet(event.target.value)}
-              placeholder="Οδός"
+              placeholder="ÎŸÎ´ÏŒÏ‚"
               className="rounded-xl border border-white/15 bg-black/30 p-3 text-sm text-white"
             />
 
             <input
               value={houseNumber}
               onChange={(event) => setHouseNumber(event.target.value)}
-              placeholder="Αριθμός"
+              placeholder="Î‘ÏÎ¹Î¸Î¼ÏŒÏ‚"
               className="rounded-xl border border-white/15 bg-black/30 p-3 text-sm text-white"
             />
 
             <input
               value={area}
               onChange={(event) => setArea(event.target.value)}
-              placeholder="Περιοχή / Δήμος"
+              placeholder="Î ÎµÏÎ¹Î¿Ï‡Î® / Î”Î®Î¼Î¿Ï‚"
               className="rounded-xl border border-white/15 bg-black/30 p-3 text-sm text-white"
             />
 
             <input
               value={postalCode}
               onChange={(event) => setPostalCode(event.target.value)}
-              placeholder="Ταχυδρομικός"
+              placeholder="Î¤Î±Ï‡Ï…Î´ÏÎ¿Î¼Î¹ÎºÏŒÏ‚"
               className="rounded-xl border border-white/15 bg-black/30 p-3 text-sm text-white"
             />
 
@@ -386,14 +423,14 @@ export default function ControlledWaterSegmentClient() {
               onClick={searchAddress}
               className="rounded-xl border border-[#d8b35a]/40 bg-[#d8b35a]/10 px-5 py-3 text-sm font-bold text-[#ffe8a3]"
             >
-              {addressLoading ? "Αναζήτηση..." : "Αναζήτηση"}
+              {addressLoading ? "Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ·..." : "Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ·"}
             </button>
           </div>
 
           {addressResponse?.candidates?.length ? (
             <div className="mt-4 grid gap-3">
               <p className="text-sm font-bold text-[#f2d27a]">
-                Διάλεξε σωστή διεύθυνση
+                Î”Î¹Î¬Î»ÎµÎ¾Îµ ÏƒÏ‰ÏƒÏ„Î® Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·
               </p>
 
               <div className="grid max-h-72 gap-2 overflow-auto pr-2">
@@ -430,7 +467,7 @@ export default function ControlledWaterSegmentClient() {
               onClick={loadFromCurrentMap}
               className="rounded-2xl border border-emerald-400/40 bg-emerald-950/30 px-5 py-3 text-sm font-bold text-emerald-100"
             >
-              {segmentLoading ? "Φόρτωση..." : "Φόρτωσε δίκτυο στην περιοχή του χάρτη"}
+              {segmentLoading ? "Î¦ÏŒÏÏ„Ï‰ÏƒÎ·..." : "Î¦ÏŒÏÏ„Ï‰ÏƒÎµ Î´Î¯ÎºÏ„Ï…Î¿ ÏƒÏ„Î·Î½ Ï€ÎµÏÎ¹Î¿Ï‡Î® Ï„Î¿Ï… Ï‡Î¬ÏÏ„Î·"}
             </button>
           </div>
 
@@ -441,7 +478,7 @@ export default function ControlledWaterSegmentClient() {
 
         {selectedCandidate ? (
           <section className="rounded-[2rem] border border-[#d8b35a]/20 bg-[#d8b35a]/10 p-4">
-            <p className="text-sm font-bold text-[#ffe8a3]">Επιλεγμένη διεύθυνση</p>
+            <p className="text-sm font-bold text-[#ffe8a3]">Î•Ï€Î¹Î»ÎµÎ³Î¼Î­Î½Î· Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·</p>
             <p className="mt-2 text-slate-100">{selectedCandidate.displayName}</p>
           </section>
         ) : null}
@@ -449,15 +486,15 @@ export default function ControlledWaterSegmentClient() {
         <section className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b1426]">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 p-4">
             <h2 className="text-2xl font-bold text-[#f2d27a]">
-              Χάρτης ύδρευσης
+              Î§Î¬ÏÏ„Î·Ï‚ ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚
             </h2>
 
             <p className="text-sm text-slate-300">
               {mapReady
                 ? segmentCount
-                  ? `Φορτωμένα στοιχεία δικτύου: ${segmentCount}`
-                  : "Ο χάρτης είναι έτοιμος για μετακίνηση και zoom."
-                : "Φόρτωση χάρτη..."}
+                  ? `Î¦Î¿ÏÏ„Ï‰Î¼Î­Î½Î± ÏƒÏ„Î¿Î¹Ï‡ÎµÎ¯Î± Î´Î¹ÎºÏ„ÏÎ¿Ï…: ${segmentCount}`
+                  : "ÎŸ Ï‡Î¬ÏÏ„Î·Ï‚ ÎµÎ¯Î½Î±Î¹ Î­Ï„Î¿Î¹Î¼Î¿Ï‚ Î³Î¹Î± Î¼ÎµÏ„Î±ÎºÎ¯Î½Î·ÏƒÎ· ÎºÎ±Î¹ zoom."
+                : "Î¦ÏŒÏÏ„Ï‰ÏƒÎ· Ï‡Î¬ÏÏ„Î·..."}
             </p>
           </div>
 
