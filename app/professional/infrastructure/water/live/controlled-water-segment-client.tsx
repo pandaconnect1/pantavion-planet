@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -24,62 +24,98 @@ type SegmentResponse = {
   reason?: string;
 };
 
+type Bbox = {
+  minLng: number;
+  minLat: number;
+  maxLng: number;
+  maxLat: number;
+};
+
 const UI = {
   el: {
     title: "\u0394\u03af\u03ba\u03c4\u03c5\u03bf \u038e\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2 Pantavion",
     subtitle:
-      "\u0391\u03bb\u03b7\u03b8\u03b9\u03bd\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03b1\u03b3\u03c9\u03b3\u03ce\u03bd \u03b1\u03c0\u03cc \u03c4\u03bf \u03b1\u03c5\u03b8\u03b5\u03bd\u03c4\u03b9\u03ba\u03cc KMZ. \u0394\u03b5\u03bd \u03b1\u03bb\u03bb\u03ac\u03b6\u03bf\u03c5\u03bc\u03b5 \u03c7\u03c1\u03ce\u03bc\u03b1\u03c4\u03b1, \u03b3\u03c1\u03b1\u03bc\u03bc\u03ad\u03c2 \u03ae \u03b1\u03b3\u03c9\u03b3\u03bf\u03cd\u03c2. \u039f browser \u03c6\u03bf\u03c1\u03c4\u03ce\u03bd\u03b5\u03b9 \u03bc\u03cc\u03bd\u03bf \u03c4\u03bf \u03b5\u03bb\u03b5\u03b3\u03c7\u03cc\u03bc\u03b5\u03bd\u03bf \u03c4\u03bc\u03ae\u03bc\u03b1.",
+      "\u0391\u03bb\u03b7\u03b8\u03b9\u03bd\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03b1\u03b3\u03c9\u03b3\u03ce\u03bd \u03b1\u03c0\u03cc \u03c4\u03bf \u03b1\u03c5\u03b8\u03b5\u03bd\u03c4\u03b9\u03ba\u03cc KMZ. \u0394\u03b5\u03bd \u03b1\u03bb\u03bb\u03ac\u03b6\u03bf\u03c5\u03bc\u03b5 \u03c7\u03c1\u03ce\u03bc\u03b1\u03c4\u03b1, \u03b3\u03c1\u03b1\u03bc\u03bc\u03ad\u03c2 \u03ae \u03b1\u03b3\u03c9\u03b3\u03bf\u03cd\u03c2. \u039f browser \u03c6\u03bf\u03c1\u03c4\u03ce\u03bd\u03b5\u03b9 \u03bc\u03cc\u03bd\u03bf \u03b5\u03bb\u03b5\u03b3\u03c7\u03cc\u03bc\u03b5\u03bd\u03b1 \u03c4\u03bc\u03ae\u03bc\u03b1\u03c4\u03b1.",
     language: "\u0393\u03bb\u03ce\u03c3\u03c3\u03b1",
     street: "\u039f\u03b4\u03cc\u03c2",
     number: "\u0391\u03c1\u03b9\u03b8\u03bc\u03cc\u03c2",
     area: "\u03a0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae",
     postal: "\u03a4\u03b1\u03c7\u03c5\u03b4\u03c1\u03bf\u03bc\u03b9\u03ba\u03cc\u03c2",
-    load: "\u03a6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b5 \u03b1\u03b3\u03c9\u03b3\u03bf\u03cd\u03c2 \u03c3\u03c4\u03b7\u03bd \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae \u03c4\u03bf\u03c5 \u03c7\u03ac\u03c1\u03c4\u03b7",
+    load: "\u03a6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b5 \u03b1\u03b3\u03c9\u03b3\u03bf\u03cd\u03c2 \u03c3\u03c4\u03b7\u03bd \u03bf\u03c1\u03b1\u03c4\u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae",
     loading: "\u03a6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b7...",
-    ready: "\u039f \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03b5\u03af\u03bd\u03b1\u03b9 \u03ad\u03c4\u03bf\u03b9\u03bc\u03bf\u03c2. \u039c\u03b5\u03c4\u03b1\u03ba\u03af\u03bd\u03b7\u03c3\u03b5 \u03ae \u03ba\u03ac\u03bd\u03b5 zoom \u03ba\u03b1\u03b9 \u03c0\u03ac\u03c4\u03b7\u03c3\u03b5 \u03c6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b7.",
-    loaded: "\u03a6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b1\u03bd \u03c4\u03bc\u03ae\u03bc\u03b1\u03c4\u03b1 \u03b1\u03b3\u03c9\u03b3\u03ce\u03bd",
-    failed: "\u0394\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b5 \u03c4\u03bc\u03ae\u03bc\u03b1 \u03b1\u03b3\u03c9\u03b3\u03ce\u03bd. \u0394\u03bf\u03ba\u03af\u03bc\u03b1\u03c3\u03b5 \u03bc\u03b9\u03ba\u03c1\u03cc\u03c4\u03b5\u03c1\u03b7 \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae.",
+    ready:
+      "\u039f \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03b5\u03af\u03bd\u03b1\u03b9 \u03ad\u03c4\u03bf\u03b9\u03bc\u03bf\u03c2. \u039c\u03b5\u03c4\u03b1\u03ba\u03af\u03bd\u03b7\u03c3\u03b5 \u03ae \u03ba\u03ac\u03bd\u03b5 zoom. \u039f\u03b9 \u03b1\u03b3\u03c9\u03b3\u03bf\u03af \u03c6\u03bf\u03c1\u03c4\u03ce\u03bd\u03bf\u03c5\u03bd \u03c4\u03bc\u03b7\u03bc\u03b1\u03c4\u03b9\u03ba\u03ac.",
+    loaded: "\u03a6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b1\u03bd \u03b1\u03b3\u03c9\u03b3\u03bf\u03af",
+    failed:
+      "\u0394\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b1\u03bd \u03b1\u03b3\u03c9\u03b3\u03bf\u03af. \u039a\u03ac\u03bd\u03b5 \u03bb\u03af\u03b3\u03bf zoom \u03ae \u03bc\u03b5\u03c4\u03b1\u03ba\u03af\u03bd\u03b7\u03c3\u03b5 \u03c4\u03bf\u03bd \u03c7\u03ac\u03c1\u03c4\u03b7.",
     map: "\u03a7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2",
-    protected: "\u03a4\u03bf \u03c0\u03bb\u03ae\u03c1\u03b5\u03c2 \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03b4\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03bd\u03b5\u03c4\u03b1\u03b9 \u03c3\u03c4\u03bf\u03bd browser.",
+    protected:
+      "\u03a4\u03bf \u03c0\u03bb\u03ae\u03c1\u03b5\u03c2 \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03b4\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03bd\u03b5\u03c4\u03b1\u03b9 \u03c3\u03c4\u03bf\u03bd browser.",
+    accessTitle: "\u03a0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c4\u03b5\u03c5\u03bc\u03ad\u03bd\u03bf\u03c2 \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2",
+    accessText:
+      "\u0397 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7 \u03c3\u03c4\u03bf\u03c5\u03c2 \u03c7\u03ac\u03c1\u03c4\u03b5\u03c2 \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2 \u03b1\u03c0\u03b1\u03b9\u03c4\u03b5\u03af \u03c1\u03b7\u03c4\u03ae \u03b5\u03be\u03bf\u03c5\u03c3\u03b9\u03bf\u03b4\u03cc\u03c4\u03b7\u03c3\u03b7. \u039c\u03c0\u03b1\u03af\u03bd\u03b5\u03b9\u03c2 \u03bc\u03cc\u03bd\u03bf \u03b1\u03bd \u03ad\u03c7\u03b5\u03b9\u03c2 \u03ad\u03b3\u03ba\u03c1\u03b9\u03c3\u03b7.",
+    approveAccess:
+      "\u0395\u03af\u03bc\u03b1\u03b9 \u03b5\u03be\u03bf\u03c5\u03c3\u03b9\u03bf\u03b4\u03bf\u03c4\u03b7\u03bc\u03ad\u03bd\u03bf\u03c2 - \u0395\u03af\u03c3\u03bf\u03b4\u03bf\u03c2",
     locate: "\u03a4\u03bf \u03c3\u03b7\u03bc\u03b5\u03af\u03bf \u03bc\u03bf\u03c5",
-    search: "\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7 / \u03c3\u03c4\u03af\u03b3\u03bc\u03b1",
+    search: "\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7 / \u03a3\u03c4\u03af\u03b3\u03bc\u03b1",
     locating: "\u0395\u03bd\u03c4\u03bf\u03c0\u03b9\u03c3\u03bc\u03cc\u03c2 \u03b8\u03ad\u03c3\u03b7\u03c2...",
-    located: "\u0392\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03b7 \u03b8\u03ad\u03c3\u03b7 \u03c3\u03bf\u03c5. \u03a6\u03bf\u03c1\u03c4\u03ce\u03bd\u03c9 \u03c4\u03bf\u03c0\u03b9\u03ba\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf.",
-    locationUnavailable: "\u0394\u03b5\u03bd \u03ae\u03c4\u03b1\u03bd \u03b4\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03b7 \u03b7 \u03b8\u03ad\u03c3\u03b7. \u039c\u03c0\u03bf\u03c1\u03b5\u03af\u03c2 \u03bd\u03b1 \u03bc\u03b5\u03c4\u03b1\u03ba\u03b9\u03bd\u03ae\u03c3\u03b5\u03b9\u03c2 \u03c4\u03bf\u03bd \u03c7\u03ac\u03c1\u03c4\u03b7 \u03ae \u03bd\u03b1 \u03ba\u03ac\u03bd\u03b5\u03b9\u03c2 \u03b1\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7.",
-    searchEmpty: "\u0393\u03c1\u03ac\u03c8\u03b5 \u03bf\u03b4\u03cc, \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae \u03ae \u03c4\u03b1\u03c7\u03c5\u03b4\u03c1\u03bf\u03bc\u03b9\u03ba\u03cc \u03b3\u03b9\u03b1 \u03bd\u03b1 \u03bc\u03c0\u03b5\u03b9 \u03c3\u03c4\u03af\u03b3\u03bc\u03b1.",
-    searchNotFound: "\u0394\u03b5\u03bd \u03b2\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03c4\u03bf \u03c3\u03b7\u03bc\u03b5\u03af\u03bf. \u0394\u03bf\u03ba\u03af\u03bc\u03b1\u03c3\u03b5 \u03c0\u03b9\u03bf \u03c0\u03bb\u03ae\u03c1\u03b7 \u03b4\u03b9\u03b5\u03cd\u03b8\u03c5\u03bd\u03c3\u03b7.",
-    searchFound: "\u0392\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03c3\u03c4\u03af\u03b3\u03bc\u03b1 \u03b1\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7\u03c2. \u03a6\u03bf\u03c1\u03c4\u03ce\u03bd\u03c9 \u03c4\u03bf\u03c0\u03b9\u03ba\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf.",
+    located:
+      "\u0392\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03b7 \u03b8\u03ad\u03c3\u03b7 \u03c3\u03bf\u03c5. \u03a6\u03bf\u03c1\u03c4\u03ce\u03bd\u03c9 \u03c4\u03bf\u03c0\u03b9\u03ba\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf.",
+    locationUnavailable:
+      "\u0394\u03b5\u03bd \u03ae\u03c4\u03b1\u03bd \u03b4\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03b7 \u03b7 \u03b8\u03ad\u03c3\u03b7. \u039c\u03c0\u03bf\u03c1\u03b5\u03af\u03c2 \u03bd\u03b1 \u03bc\u03b5\u03c4\u03b1\u03ba\u03b9\u03bd\u03ae\u03c3\u03b5\u03b9\u03c2 \u03c4\u03bf\u03bd \u03c7\u03ac\u03c1\u03c4\u03b7 \u03ae \u03bd\u03b1 \u03ba\u03ac\u03bd\u03b5\u03b9\u03c2 \u03b1\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7.",
+    searchEmpty:
+      "\u0393\u03c1\u03ac\u03c8\u03b5 \u03bf\u03b4\u03cc, \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae \u03ae \u03c4\u03b1\u03c7\u03c5\u03b4\u03c1\u03bf\u03bc\u03b9\u03ba\u03cc.",
+    searchNotFound:
+      "\u0394\u03b5\u03bd \u03b2\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03c4\u03bf \u03c3\u03b7\u03bc\u03b5\u03af\u03bf. \u0394\u03bf\u03ba\u03af\u03bc\u03b1\u03c3\u03b5 \u03c0\u03b9\u03bf \u03c0\u03bb\u03ae\u03c1\u03b7 \u03b4\u03b9\u03b5\u03cd\u03b8\u03c5\u03bd\u03c3\u03b7.",
+    searchFound:
+      "\u0392\u03c1\u03ad\u03b8\u03b7\u03ba\u03b5 \u03c3\u03c4\u03af\u03b3\u03bc\u03b1. \u03a6\u03bf\u03c1\u03c4\u03ce\u03bd\u03c9 \u03c4\u03bf\u03c0\u03b9\u03ba\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf.",
+    visibleTooLarge:
+      "\u0397 \u03bf\u03c1\u03b1\u03c4\u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae \u03b5\u03af\u03bd\u03b1\u03b9 \u03bc\u03b5\u03b3\u03ac\u03bb\u03b7. \u039a\u03ac\u03bd\u03b5 \u03bb\u03af\u03b3\u03bf zoom.",
+    chunks: "\u03c4\u03bc\u03ae\u03bc\u03b1\u03c4\u03b1 \u03bf\u03b8\u03cc\u03bd\u03b7\u03c2",
   },
   en: {
     title: "Pantavion Water Network",
     subtitle:
-      "Real pipe network from the authentic KMZ. Colors, lines and pipe geometry are not changed. The browser receives only the controlled map segment.",
+      "Real pipe network from the authentic KMZ. Colors, lines and pipe geometry are not changed. The browser receives only controlled segments.",
     language: "Language",
     street: "Street",
     number: "Number",
     area: "Area",
     postal: "Postal code",
-    load: "Load pipes in visible map area",
+    load: "Load pipes in visible area",
     loading: "Loading...",
-    ready: "Map is ready. Pan or zoom. Pipes load automatically in the visible area.",
-    loaded: "Loaded pipe segments",
-    failed: "No pipe segment loaded. Pan or zoom and it will retry automatically.",
+    ready: "Map is ready. Pan or zoom. Pipes load automatically in safe chunks.",
+    loaded: "Loaded pipes",
+    failed: "No pipes loaded. Zoom in or move the map.",
     map: "Water map",
     protected: "The complete network is not loaded in the browser.",
+    accessTitle: "Protected map",
+    accessText: "Access to water maps requires explicit authorization. Enter only if you are approved.",
+    approveAccess: "I am authorized - Enter",
     locate: "My location",
-    search: "Search / marker",
+    search: "Search / Marker",
     locating: "Locating...",
     located: "Your location was found. Loading local network.",
     locationUnavailable: "Location was not available. You can pan the map or search.",
-    searchEmpty: "Enter street, area or postal code to place a marker.",
+    searchEmpty: "Enter street, area or postal code.",
     searchNotFound: "No matching point found. Try a fuller address.",
     searchFound: "Search marker found. Loading local network.",
+    visibleTooLarge: "The visible area is large. Zoom in a little.",
+    chunks: "screen chunks",
   },
 };
 
 const VIEWPORT_TILE_SPAN_DEGREES = 0.055;
 const MAX_VIEWPORT_TILES = 16;
 const MAX_FEATURES_PER_TILE = 1200;
+
+function getInitialLang(): Lang {
+  if (typeof window === "undefined") return "el";
+
+  const saved = window.localStorage.getItem("pantavion-language");
+
+  return saved === "en" ? "en" : "el";
+}
 
 function ensureLeaflet() {
   return new Promise<any>((resolve, reject) => {
@@ -102,6 +138,7 @@ function ensureLeaflet() {
     }
 
     const existing = document.querySelector("script[data-leaflet-js]");
+
     if (existing) {
       existing.addEventListener("load", () => resolve(window.L));
       existing.addEventListener("error", reject);
@@ -149,7 +186,7 @@ function getPipeStyle(feature: any) {
   };
 }
 
-function bboxFromMap(map: any) {
+function bboxFromMap(map: any): Bbox {
   const bounds = map.getBounds();
 
   return {
@@ -160,12 +197,7 @@ function bboxFromMap(map: any) {
   };
 }
 
-function bboxParams(bbox: {
-  minLng: number;
-  minLat: number;
-  maxLng: number;
-  maxLat: number;
-}) {
+function bboxParams(bbox: Bbox) {
   return {
     minLng: bbox.minLng.toFixed(6),
     minLat: bbox.minLat.toFixed(6),
@@ -174,12 +206,7 @@ function bboxParams(bbox: {
   };
 }
 
-function splitVisibleBboxIntoSafeTiles(bbox: {
-  minLng: number;
-  minLat: number;
-  maxLng: number;
-  maxLat: number;
-}) {
+function splitVisibleBboxIntoSafeTiles(bbox: Bbox) {
   const lngSpan = bbox.maxLng - bbox.minLng;
   const latSpan = bbox.maxLat - bbox.minLat;
 
@@ -190,12 +217,7 @@ function splitVisibleBboxIntoSafeTiles(bbox: {
     throw new Error("VISIBLE_AREA_TOO_LARGE");
   }
 
-  const tiles: Array<{
-    minLng: number;
-    minLat: number;
-    maxLng: number;
-    maxLat: number;
-  }> = [];
+  const tiles: Bbox[] = [];
 
   for (let y = 0; y < latSteps; y += 1) {
     for (let x = 0; x < lngSteps; x += 1) {
@@ -222,7 +244,8 @@ function featureKey(feature: any, fallback: string) {
 }
 
 export default function ControlledWaterSegmentClient() {
-  const [lang, setLang] = useState<Lang>("el");
+  const [lang, setLang] = useState<Lang>(getInitialLang);
+  const [accessApproved, setAccessApproved] = useState(false);
   const [street, setStreet] = useState("");
   const [number, setNumber] = useState("");
   const [area, setArea] = useState("\u039b\u03b5\u03bc\u03b5\u03c3\u03cc\u03c2");
@@ -235,20 +258,23 @@ export default function ControlledWaterSegmentClient() {
   const mapEl = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
   const layerRef = useRef<any>(null);
-  const autoLoadTimerRef = useRef<number | null>(null);
-  const loadInProgressRef = useRef(false);
   const userMarkerRef = useRef<any>(null);
   const userAccuracyRef = useRef<any>(null);
   const searchMarkerRef = useRef<any>(null);
-  const locationRequestedRef = useRef(false);
+  const autoLoadTimerRef = useRef<number | null>(null);
+  const loadInProgressRef = useRef(false);
 
   const t = UI[lang];
 
   useEffect(() => {
+    window.localStorage.setItem("pantavion-language", lang);
+    document.documentElement.lang = lang === "el" ? "el" : "en";
     setMessage(pipeCount === null ? UI[lang].ready : `${UI[lang].loaded}: ${pipeCount}`);
-  }, [lang]);
+  }, [lang, pipeCount]);
 
   useEffect(() => {
+    if (!accessApproved) return;
+
     let cancelled = false;
 
     ensureLeaflet()
@@ -276,12 +302,14 @@ export default function ControlledWaterSegmentClient() {
 
     return () => {
       cancelled = true;
+      setMapReady(false);
+
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
       }
     };
-  }, []);
+  }, [accessApproved]);
 
   async function placeCircleMarker(options: {
     lat: number;
@@ -361,7 +389,7 @@ export default function ControlledWaterSegmentClient() {
           lng,
           accuracy,
           kind: "user",
-          title: lang === "el" ? "\u03a4\u03bf \u03c3\u03b7\u03bc\u03b5\u03af\u03bf \u03bc\u03bf\u03c5" : "My location",
+          title: t.locate,
         });
 
         moveMapToPoint(lat, lng);
@@ -408,11 +436,16 @@ export default function ControlledWaterSegmentClient() {
         q: query,
       });
 
-      const response = await fetch(`https://nominatim.openstreetmap.org/search?${params.toString()}`, {
-        cache: "no-store",
-      });
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?${params.toString()}`,
+        { cache: "no-store" },
+      );
 
-      const results = (await response.json()) as Array<{ lat: string; lon: string; display_name?: string }>;
+      const results = (await response.json()) as Array<{
+        lat: string;
+        lon: string;
+        display_name?: string;
+      }>;
       const result = results[0];
 
       if (!result) {
@@ -451,12 +484,7 @@ export default function ControlledWaterSegmentClient() {
   async function loadPipes() {
     const map = mapRef.current;
 
-    if (!map) {
-      setMessage(t.failed);
-      return;
-    }
-
-    if (loadInProgressRef.current) return;
+    if (!map || loadInProgressRef.current) return;
 
     loadInProgressRef.current = true;
     setLoading(true);
@@ -542,17 +570,13 @@ export default function ControlledWaterSegmentClient() {
       layerRef.current = layer;
 
       const count = features.length;
-      const tileText = lang === "el" ? "\u03c4\u03bc\u03ae\u03bc\u03b1\u03c4\u03b1 \u03bf\u03b8\u03cc\u03bd\u03b7\u03c2" : "screen chunks";
-
       setPipeCount(count);
-      setMessage(`${t.loaded}: ${count} (${tiles.length} ${tileText})`);
+      setMessage(`${t.loaded}: ${count} (${tiles.length} ${t.chunks})`);
     } catch (error) {
       setPipeCount(null);
 
       if (error instanceof Error && error.message === "VISIBLE_AREA_TOO_LARGE") {
-        setMessage(
-          lang === "el" ? "\u0397 \u03bf\u03c1\u03b1\u03c4\u03ae \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae \u03b5\u03af\u03bd\u03b1\u03b9 \u03c0\u03bf\u03bb\u03cd \u03bc\u03b5\u03b3\u03ac\u03bb\u03b7. \u039a\u03ac\u03bd\u03b5 \u03bb\u03af\u03b3\u03bf zoom \u03ba\u03b1\u03b9 \u03b8\u03b1 \u03be\u03b1\u03bd\u03b1\u03c6\u03bf\u03c1\u03c4\u03ce\u03c3\u03b5\u03b9." : "The visible area is too large. Zoom in a little, then reload.",
-        );
+        setMessage(t.visibleTooLarge);
       } else {
         setMessage(t.failed);
       }
@@ -591,31 +615,62 @@ export default function ControlledWaterSegmentClient() {
     };
   }, [mapReady, lang, street, number, area, postal]);
 
-  useEffect(() => {
-    if (!mapReady || locationRequestedRef.current) return;
+  if (!accessApproved) {
+    return (
+      <main className="min-h-screen bg-[#06111f] px-4 py-6 text-white">
+        <section className="mx-auto flex min-h-[80vh] w-full max-w-3xl items-center">
+          <div className="w-full rounded-3xl border border-[#b89445]/50 bg-[#0d1a2d] p-6 shadow-2xl">
+            <div className="mb-5 flex justify-end">
+              <label className="flex min-w-[180px] flex-col gap-2 text-sm font-bold text-[#f2c766]">
+                {t.language}
+                <select
+                  value={lang}
+                  onChange={(event) => setLang(event.target.value as Lang)}
+                  className="rounded-2xl border border-[#b89445]/60 bg-[#07111f] px-4 py-3 text-white outline-none"
+                >
+                  <option value="el">{"\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac"}</option>
+                  <option value="en">English</option>
+                </select>
+              </label>
+            </div>
 
-    locationRequestedRef.current = true;
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.34em] text-[#f2c766]">
+              PANTAVION PROTECTED INFRASTRUCTURE
+            </p>
+            <h1 className="text-3xl font-black tracking-tight sm:text-5xl">{t.accessTitle}</h1>
+            <p className="mt-4 text-base leading-8 text-slate-200">{t.accessText}</p>
+            <p className="mt-3 text-sm font-bold text-[#f2c766]">{t.protected}</p>
 
-    window.setTimeout(() => {
-      void locateMe();
-    }, 800);
-  }, [mapReady]);
+            <button
+              type="button"
+              onClick={() => setAccessApproved(true)}
+              className="mt-6 w-full rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-4 text-base font-black text-emerald-100"
+            >
+              {t.approveAccess}
+            </button>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[#06111f] text-white">
-      <section className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-5">
-        <header className="rounded-3xl border border-[#b89445]/40 bg-[#0d1a2d] p-5 shadow-2xl">
+      <section className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-3 py-4 sm:px-4 sm:py-5">
+        <header className="rounded-3xl border border-[#b89445]/40 bg-[#0d1a2d] p-4 shadow-2xl sm:p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.34em] text-[#f2c766]">
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.22em] text-[#f2c766] sm:tracking-[0.34em]">
                 PANTAVION PROFESSIONAL INFRASTRUCTURE
               </p>
               <h1 className="text-3xl font-black tracking-tight sm:text-5xl">{t.title}</h1>
-              <p className="mt-3 max-w-4xl text-base leading-8 text-slate-200">{t.subtitle}</p>
+              <p className="mt-3 max-w-4xl text-sm leading-7 text-slate-200 sm:text-base sm:leading-8">
+                {t.subtitle}
+              </p>
               <p className="mt-2 text-sm font-bold text-[#f2c766]">{t.protected}</p>
             </div>
 
-            <label className="flex min-w-[220px] flex-col gap-2 text-sm font-bold text-[#f2c766]">
+            <label className="flex min-w-[180px] flex-col gap-2 text-sm font-bold text-[#f2c766]">
               {t.language}
               <select
                 value={lang}
@@ -629,8 +684,8 @@ export default function ControlledWaterSegmentClient() {
           </div>
         </header>
 
-        <section className="rounded-3xl border border-slate-700 bg-[#0d1a2d] p-4">
-          <div className="grid gap-3 md:grid-cols-4">
+        <section className="rounded-3xl border border-slate-700 bg-[#0d1a2d] p-3 sm:p-4">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <input
               value={street}
               onChange={(event) => setStreet(event.target.value)}
@@ -657,8 +712,7 @@ export default function ControlledWaterSegmentClient() {
             />
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-3">
-
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
             <button
               type="button"
               onClick={() => void locateMe()}
@@ -679,7 +733,7 @@ export default function ControlledWaterSegmentClient() {
 
             <button
               type="button"
-              onClick={loadPipes}
+              onClick={() => void loadPipes()}
               disabled={loading}
               className="rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60"
             >
@@ -693,18 +747,16 @@ export default function ControlledWaterSegmentClient() {
         </section>
 
         <section className="overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
-          <div className="flex items-center justify-between border-b border-slate-700 px-5 py-4">
-            <h2 className="text-2xl font-black text-[#f2c766]">{t.map}</h2>
+          <div className="flex flex-col gap-1 border-b border-slate-700 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-4">
+            <h2 className="text-xl font-black text-[#f2c766] sm:text-2xl">{t.map}</h2>
             <span className="text-sm text-slate-300">
               {pipeCount !== null ? `${t.loaded}: ${pipeCount}` : t.protected}
             </span>
           </div>
 
-          <div ref={mapEl} className="h-[72vh] min-h-[560px] w-full bg-slate-200" />
+          <div ref={mapEl} className="h-[70vh] min-h-[420px] w-full bg-slate-200 sm:min-h-[560px]" />
         </section>
       </section>
     </main>
   );
 }
-
-
