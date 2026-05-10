@@ -1,84 +1,142 @@
 "use client";
 
-import type * as Leaflet from "leaflet";
 import { useEffect, useRef, useState } from "react";
 
-type BboxForm = {
-  minLng: string;
-  minLat: string;
-  maxLng: string;
-  maxLat: string;
-};
+declare global {
+  interface Window {
+    L?: any;
+  }
+}
 
-type AddressCandidate = {
-  candidateId: string;
-  displayName: string;
-  coordinates: {
-    lat: number;
-    lng: number;
+type Lang = "el" | "en";
+
+type SegmentResponse = {
+  segment?: {
+    type: "FeatureCollection";
+    features: any[];
   };
+  segmentCount?: number;
+  pipeSegmentCount?: number;
+  completeNetworkReturned?: boolean;
+  rawMasterReturned?: boolean;
+  browserFullNetworkLoaded?: boolean;
+  error?: string;
+  reason?: string;
 };
 
-type AddressSearchResponse = {
-  candidates?: AddressCandidate[];
-  candidateCount?: number;
-  message?: string;
+const UI = {
+  el: {
+    title: "\u0394\u03af\u03ba\u03c4\u03c5\u03bf \u038e\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2 Pantavion",
+    subtitle:
+      "\u0391\u03bb\u03b7\u03b8\u03b9\u03bd\u03cc \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03b1\u03b3\u03c9\u03b3\u03ce\u03bd \u03b1\u03c0\u03cc \u03c4\u03bf \u03b1\u03c5\u03b8\u03b5\u03bd\u03c4\u03b9\u03ba\u03cc KMZ. \u0394\u03b5\u03bd \u03b1\u03bb\u03bb\u03ac\u03b6\u03bf\u03c5\u03bc\u03b5 \u03c7\u03c1\u03ce\u03bc\u03b1\u03c4\u03b1, \u03b3\u03c1\u03b1\u03bc\u03bc\u03ad\u03c2 \u03ae \u03b1\u03b3\u03c9\u03b3\u03bf\u03cd\u03c2. \u039f browser \u03c6\u03bf\u03c1\u03c4\u03ce\u03bd\u03b5\u03b9 \u03bc\u03cc\u03bd\u03bf \u03c4\u03bf \u03b5\u03bb\u03b5\u03b3\u03c7\u03cc\u03bc\u03b5\u03bd\u03bf \u03c4\u03bc\u03ae\u03bc\u03b1.",
+    language: "\u0393\u03bb\u03ce\u03c3\u03c3\u03b1",
+    street: "\u039f\u03b4\u03cc\u03c2",
+    number: "\u0391\u03c1\u03b9\u03b8\u03bc\u03cc\u03c2",
+    area: "\u03a0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae",
+    postal: "\u03a4\u03b1\u03c7\u03c5\u03b4\u03c1\u03bf\u03bc\u03b9\u03ba\u03cc\u03c2",
+    load: "\u03a6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b5 \u03b1\u03b3\u03c9\u03b3\u03bf\u03cd\u03c2 \u03c3\u03c4\u03b7\u03bd \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae \u03c4\u03bf\u03c5 \u03c7\u03ac\u03c1\u03c4\u03b7",
+    loading: "\u03a6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b7...",
+    ready: "\u039f \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03b5\u03af\u03bd\u03b1\u03b9 \u03ad\u03c4\u03bf\u03b9\u03bc\u03bf\u03c2. \u039c\u03b5\u03c4\u03b1\u03ba\u03af\u03bd\u03b7\u03c3\u03b5 \u03ae \u03ba\u03ac\u03bd\u03b5 zoom \u03ba\u03b1\u03b9 \u03c0\u03ac\u03c4\u03b7\u03c3\u03b5 \u03c6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b7.",
+    loaded: "\u03a6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b1\u03bd \u03c4\u03bc\u03ae\u03bc\u03b1\u03c4\u03b1 \u03b1\u03b3\u03c9\u03b3\u03ce\u03bd",
+    failed: "\u0394\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03b8\u03b7\u03ba\u03b5 \u03c4\u03bc\u03ae\u03bc\u03b1 \u03b1\u03b3\u03c9\u03b3\u03ce\u03bd. \u0394\u03bf\u03ba\u03af\u03bc\u03b1\u03c3\u03b5 \u03bc\u03b9\u03ba\u03c1\u03cc\u03c4\u03b5\u03c1\u03b7 \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae.",
+    map: "\u03a7\u03ac\u03c1\u03c4\u03b7\u03c2 \u03cd\u03b4\u03c1\u03b5\u03c5\u03c3\u03b7\u03c2",
+    protected: "\u03a4\u03bf \u03c0\u03bb\u03ae\u03c1\u03b5\u03c2 \u03b4\u03af\u03ba\u03c4\u03c5\u03bf \u03b4\u03b5\u03bd \u03c6\u03bf\u03c1\u03c4\u03ce\u03bd\u03b5\u03c4\u03b1\u03b9 \u03c3\u03c4\u03bf\u03bd browser.",
+  },
+  en: {
+    title: "Pantavion Water Network",
+    subtitle:
+      "Real pipe network from the authentic KMZ. Colors, lines and pipe geometry are not changed. The browser receives only the controlled map segment.",
+    language: "Language",
+    street: "Street",
+    number: "Number",
+    area: "Area",
+    postal: "Postal code",
+    load: "Load pipes in map area",
+    loading: "Loading...",
+    ready: "Map is ready. Pan or zoom, then load the visible area.",
+    loaded: "Loaded pipe segments",
+    failed: "No pipe segment loaded. Try a smaller area.",
+    map: "Water map",
+    protected: "The complete network is not loaded in the browser.",
+  },
 };
 
+const AREAS = [
+  { label: "\u039b\u03b5\u03bc\u03b5\u03c3\u03cc\u03c2", center: [34.681, 33.038], zoom: 15 },
+  { label: "\u0393\u03b5\u03c1\u03bc\u03b1\u03c3\u03cc\u03b3\u03b5\u03b9\u03b1", center: [34.704, 33.081], zoom: 15 },
+  { label: "\u0386\u03b3\u03b9\u03bf\u03c2 \u0391\u03b8\u03b1\u03bd\u03ac\u03c3\u03b9\u03bf\u03c2", center: [34.714, 33.055], zoom: 15 },
+  { label: "\u039a\u03bf\u03bb\u03cc\u03c3\u03c3\u03b9", center: [34.669, 32.933], zoom: 15 },
+] as const;
 
-function getPipeStyleFromOriginalKml(feature: { properties?: Record<string, unknown> } | undefined) {
-  const properties = feature?.properties;
-  const raw = properties?.kmlLineStyle;
+function ensureLeaflet() {
+  return new Promise<any>((resolve, reject) => {
+    if (typeof window === "undefined") {
+      reject(new Error("window unavailable"));
+      return;
+    }
+
+    if (window.L) {
+      resolve(window.L);
+      return;
+    }
+
+    if (!document.querySelector("link[data-leaflet-css]")) {
+      const css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+      css.setAttribute("data-leaflet-css", "true");
+      document.head.appendChild(css);
+    }
+
+    const existing = document.querySelector("script[data-leaflet-js]");
+    if (existing) {
+      existing.addEventListener("load", () => resolve(window.L));
+      existing.addEventListener("error", reject);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    script.async = true;
+    script.setAttribute("data-leaflet-js", "true");
+    script.onload = () => resolve(window.L);
+    script.onerror = reject;
+    document.body.appendChild(script);
+  });
+}
+
+function getPipeStyle(feature: any) {
+  const raw = feature?.properties?.kmlLineStyle;
 
   if (!raw || typeof raw !== "object") {
-    return {
-      color: "#202020",
-      weight: 1,
-      opacity: 1,
-    };
+    return { color: "#202020", weight: 2, opacity: 1 };
   }
 
   const style = raw as {
     color?: unknown;
     weight?: unknown;
+    width?: unknown;
     opacity?: unknown;
   };
 
+  const weight =
+    typeof style.weight === "number"
+      ? style.weight
+      : typeof style.width === "number"
+        ? style.width
+        : 2;
+
   return {
     color: typeof style.color === "string" ? style.color : "#202020",
-    weight:
-      typeof style.weight === "number"
-        ? Math.max(1, Math.min(8, style.weight))
-        : 1,
+    weight: Math.max(1, Math.min(10, weight)),
     opacity:
       typeof style.opacity === "number"
         ? Math.max(0.05, Math.min(1, style.opacity))
         : 1,
   };
 }
-type SegmentResponse = {
-  segmentCount?: number;
-  reason?: string;
-  error?: string;
-  segment?: {
-    type: "FeatureCollection";
-    features: Array<{
-      type: "Feature";
-      geometry: unknown;
-      properties?: Record<string, unknown>;
-    }>;
-  };
-};
 
-const QUICK_AREAS = [
-  { label: "Î›ÎµÎ¼ÎµÏƒÏŒÏ‚", center: [34.681, 33.038] as [number, number], zoom: 16 },
-  { label: "Î“ÎµÏÎ¼Î±ÏƒÏŒÎ³ÎµÎ¹Î±", center: [34.704, 33.081] as [number, number], zoom: 16 },
-  { label: "Î†Î³Î¹Î¿Ï‚ Î‘Î¸Î±Î½Î¬ÏƒÎ¹Î¿Ï‚", center: [34.714, 33.055] as [number, number], zoom: 16 },
-  { label: "ÎšÎ¬ÏˆÎ±Î»Î¿Ï‚", center: [34.696, 33.026] as [number, number], zoom: 16 },
-  { label: "ÎšÎ¿Î»ÏŒÏƒÏƒÎ¹", center: [34.669, 32.933] as [number, number], zoom: 16 },
-];
-
-function bboxFromMap(map: Leaflet.Map): BboxForm {
+function bboxFromMap(map: any) {
   const bounds = map.getBounds();
 
   return {
@@ -89,89 +147,84 @@ function bboxFromMap(map: Leaflet.Map): BboxForm {
   };
 }
 
-function bboxAroundCandidate(candidate: AddressCandidate): BboxForm {
-  const pad = 0.006;
-
-  return {
-    minLng: (candidate.coordinates.lng - pad).toFixed(6),
-    minLat: (candidate.coordinates.lat - pad).toFixed(6),
-    maxLng: (candidate.coordinates.lng + pad).toFixed(6),
-    maxLat: (candidate.coordinates.lat + pad).toFixed(6),
-  };
-}
-
 export default function ControlledWaterSegmentClient() {
-  const mapElementRef = useRef<HTMLDivElement | null>(null);
-  const leafletRef = useRef<typeof Leaflet | null>(null);
-  const mapRef = useRef<Leaflet.Map | null>(null);
-  const waterLayerRef = useRef<Leaflet.GeoJSON | null>(null);
-  const markerLayerRef = useRef<Leaflet.Layer | null>(null);
-
+  const [lang, setLang] = useState<Lang>("el");
   const [street, setStreet] = useState("");
-  const [houseNumber, setHouseNumber] = useState("");
-  const [area, setArea] = useState("Î›ÎµÎ¼ÎµÏƒÏŒÏ‚");
-  const [postalCode, setPostalCode] = useState("");
-  const [bbox, setBbox] = useState<BboxForm>({
-    minLng: "33.015",
-    minLat: "34.668",
-    maxLng: "33.055",
-    maxLat: "34.700",
-  });
+  const [number, setNumber] = useState("");
+  const [area, setArea] = useState("\u039b\u03b5\u03bc\u03b5\u03c3\u03cc\u03c2");
+  const [postal, setPostal] = useState("");
+  const [message, setMessage] = useState(UI.el.ready);
+  const [loading, setLoading] = useState(false);
+  const [pipeCount, setPipeCount] = useState<number | null>(null);
 
-  const [addressLoading, setAddressLoading] = useState(false);
-  const [segmentLoading, setSegmentLoading] = useState(false);
-  const [mapReady, setMapReady] = useState(false);
-  const [message, setMessage] = useState("Î’Î¬Î»Îµ Î¿Î´ÏŒ, Î±ÏÎ¹Î¸Î¼ÏŒ, Ï€ÎµÏÎ¹Î¿Ï‡Î® Î® Ï„Î±Ï‡Ï…Î´ÏÎ¿Î¼Î¹ÎºÏŒ ÎºÎ±Î¹ Ï€Î¬Ï„Î·ÏƒÎµ Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ·.");
-  const [addressResponse, setAddressResponse] = useState<AddressSearchResponse | null>(null);
-  const [selectedCandidate, setSelectedCandidate] = useState<AddressCandidate | null>(null);
-  const [segmentCount, setSegmentCount] = useState<number | null>(null);
+  const mapEl = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<any>(null);
+  const layerRef = useRef<any>(null);
 
-  async function searchAddress() {
-    setAddressLoading(true);
-    setMessage("Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ· Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·Ï‚...");
+  const t = UI[lang];
 
-    try {
-      const params = new URLSearchParams({
-        street,
-        houseNumber,
-        area,
-        postalCode,
-      });
+  useEffect(() => {
+    setMessage(pipeCount === null ? UI[lang].ready : `${UI[lang].loaded}: ${pipeCount}`);
+  }, [lang]);
 
-      const response = await fetch(
-        `/api/professional/infrastructure/water/address/search?${params.toString()}`,
-        { cache: "no-store" },
-      );
+  useEffect(() => {
+    let cancelled = false;
 
-      const json = (await response.json()) as AddressSearchResponse;
-      setAddressResponse(json);
+    ensureLeaflet()
+      .then((L) => {
+        if (cancelled || !mapEl.current || mapRef.current) return;
 
-      if (!response.ok) {
-        setMessage(json.message ?? "Î”ÎµÎ½ Î²ÏÎ­Î¸Î·ÎºÎµ Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·.");
-        return;
+        const map = L.map(mapEl.current, {
+          center: [34.681, 33.038],
+          zoom: 15,
+          zoomControl: true,
+          preferCanvas: true,
+        });
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 20,
+          attribution: "&copy; OpenStreetMap contributors",
+        }).addTo(map);
+
+        mapRef.current = map;
+        window.setTimeout(() => map.invalidateSize(), 300);
+        window.setTimeout(() => map.invalidateSize(), 900);
+      })
+      .catch(() => setMessage(UI[lang].failed));
+
+    return () => {
+      cancelled = true;
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
       }
+    };
+  }, []);
 
-      setMessage(`Î’ÏÎ­Î¸Î·ÎºÎ±Î½ ${json.candidateCount ?? 0} ÎµÏ€Î¹Î»Î¿Î³Î­Ï‚. Î”Î¹Î¬Î»ÎµÎ¾Îµ ÏƒÏ‰ÏƒÏ„Î® Ï€ÎµÏÎ¹Î¿Ï‡Î®.`);
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Î£Ï†Î¬Î»Î¼Î± Î±Î½Î±Î¶Î®Ï„Î·ÏƒÎ·Ï‚.");
-    } finally {
-      setAddressLoading(false);
-    }
+  function moveTo(center: readonly [number, number], zoom: number) {
+    if (!mapRef.current) return;
+    mapRef.current.setView(center, zoom, { animate: true });
   }
 
-  async function loadSegment(nextBbox?: BboxForm) {
-    const activeBbox = nextBbox ?? bbox;
+  async function loadPipes() {
+    const map = mapRef.current;
 
-    setSegmentLoading(true);
-    setMessage("Î¦ÏŒÏÏ„Ï‰ÏƒÎ· Î´Î¹ÎºÏ„ÏÎ¿Ï… ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚ ÏƒÏ„Î·Î½ ÎµÏ€Î¹Î»ÎµÎ³Î¼Î­Î½Î· Ï€ÎµÏÎ¹Î¿Ï‡Î®...");
+    if (!map) {
+      setMessage(t.failed);
+      return;
+    }
+
+    setLoading(true);
+    setMessage(t.loading);
 
     try {
       const params = new URLSearchParams({
-        minLng: activeBbox.minLng,
-        minLat: activeBbox.minLat,
-        maxLng: activeBbox.maxLng,
-        maxLat: activeBbox.maxLat,
+        ...bboxFromMap(map),
         maxFeatures: "1200",
+        street,
+        houseNumber: number,
+        area,
+        postalCode: postal,
       });
 
       const response = await fetch(
@@ -181,328 +234,150 @@ export default function ControlledWaterSegmentClient() {
 
       const json = (await response.json()) as SegmentResponse;
 
-      if (!response.ok || !json.segment?.features?.length) {
-        setMessage(json.error || json.reason || "Î”ÎµÎ½ Î²ÏÎ­Î¸Î·ÎºÎµ Ï„Î¼Î®Î¼Î± Î´Î¹ÎºÏ„ÏÎ¿Ï… ÏƒÎµ Î±Ï…Ï„Î® Ï„Î·Î½ Ï€ÎµÏÎ¹Î¿Ï‡Î®.");
-        setSegmentCount(null);
-        clearWaterLayer();
-        return;
+      if (
+        !response.ok ||
+        !json.segment?.features?.length ||
+        json.completeNetworkReturned === true ||
+        json.rawMasterReturned === true ||
+        json.browserFullNetworkLoaded === true
+      ) {
+        throw new Error(json.error || json.reason || "No safe segment returned.");
       }
 
-      setSegmentCount(json.segmentCount ?? json.segment.features.length);
-      drawWaterSegment(json);
-      setMessage(`Î¦Î¿ÏÏ„ÏŽÎ¸Î·ÎºÎµ Ï„Î¼Î®Î¼Î± Î´Î¹ÎºÏ„ÏÎ¿Ï… ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚: ${json.segmentCount ?? json.segment.features.length} ÏƒÏ„Î¿Î¹Ï‡ÎµÎ¯Î±.`);
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Î£Ï†Î¬Î»Î¼Î± Ï†ÏŒÏÏ„Ï‰ÏƒÎ·Ï‚ Î´Î¹ÎºÏ„ÏÎ¿Ï….");
+      const L = await ensureLeaflet();
+
+      if (layerRef.current) {
+        layerRef.current.remove();
+        layerRef.current = null;
+      }
+
+      const layer = L.geoJSON(json.segment, {
+        style: (feature: any) => getPipeStyle(feature),
+        pointToLayer: (feature: any, latlng: any) => {
+          const style = getPipeStyle(feature);
+
+          return L.circleMarker(latlng, {
+            radius: Math.max(3, style.weight),
+            color: style.color,
+            fillColor: style.color,
+            fillOpacity: style.opacity,
+            opacity: style.opacity,
+            weight: style.weight,
+          });
+        },
+      });
+
+      layer.addTo(map);
+      layerRef.current = layer;
+
+      const bounds = layer.getBounds();
+      if (bounds.isValid()) {
+        map.fitBounds(bounds, { padding: [30, 30], maxZoom: 18 });
+      }
+
+      const count = json.pipeSegmentCount ?? json.segmentCount ?? json.segment.features.length;
+      setPipeCount(count);
+      setMessage(`${t.loaded}: ${count}`);
+    } catch {
+      setPipeCount(null);
+      setMessage(t.failed);
     } finally {
-      setSegmentLoading(false);
+      setLoading(false);
     }
   }
-
-  function clearWaterLayer() {
-    const map = mapRef.current;
-
-    if (map && waterLayerRef.current) {
-      waterLayerRef.current.removeFrom(map);
-      waterLayerRef.current = null;
-    }
-  }
-
-  function drawWaterSegment(response: SegmentResponse) {
-    const leaflet = leafletRef.current;
-    const map = mapRef.current;
-
-    if (!leaflet || !map || !response.segment?.features?.length) return;
-
-    clearWaterLayer();
-
-    const layer = leaflet.geoJSON(response.segment as never, {
-      style: (feature) =>
-        getPipeStyleFromOriginalKml(
-          feature as { properties?: Record<string, unknown> } | undefined,
-        ),
-      pointToLayer: (feature, latlng) => {
-        const style = getPipeStyleFromOriginalKml(
-          feature as { properties?: Record<string, unknown> } | undefined,
-        );
-
-        return leaflet.circleMarker(latlng, {
-          radius: Math.max(3, style.weight),
-          color: style.color,
-          fillColor: style.color,
-          fillOpacity: style.opacity,
-          opacity: style.opacity,
-          weight: style.weight,
-        });
-      },
-    });
-
-    layer.addTo(map);
-    waterLayerRef.current = layer;
-
-    const bounds = layer.getBounds();
-
-    if (bounds.isValid()) {
-      map.fitBounds(bounds, {
-        padding: [34, 34],
-        maxZoom: 18,
-      });
-    }
-  }
-
-  function selectCandidate(candidate: AddressCandidate) {
-    const leaflet = leafletRef.current;
-    const map = mapRef.current;
-    const nextBbox = bboxAroundCandidate(candidate);
-
-    setSelectedCandidate(candidate);
-    setBbox(nextBbox);
-
-    if (leaflet && map) {
-      map.setView([candidate.coordinates.lat, candidate.coordinates.lng], 17, {
-        animate: true,
-      });
-
-      if (markerLayerRef.current) {
-        markerLayerRef.current.removeFrom(map);
-      }
-
-      const marker = leaflet
-        .circleMarker([candidate.coordinates.lat, candidate.coordinates.lng], {
-          radius: 9,
-          color: "#f2d27a",
-          fillColor: "#f2d27a",
-          fillOpacity: 0.9,
-          weight: 3,
-        })
-        .bindPopup(candidate.displayName);
-
-      marker.addTo(map);
-      markerLayerRef.current = marker;
-
-      window.setTimeout(() => {
-        const current = mapRef.current;
-        if (!current) return;
-
-        const currentBbox = bboxFromMap(current);
-        setBbox(currentBbox);
-        void loadSegment(currentBbox);
-      }, 500);
-    } else {
-      void loadSegment(nextBbox);
-    }
-  }
-
-  function moveToArea(center: [number, number], zoom: number) {
-    const map = mapRef.current;
-
-    if (!map) return;
-
-    map.setView(center, zoom, { animate: true });
-
-    window.setTimeout(() => {
-      const current = mapRef.current;
-      if (!current) return;
-
-      const currentBbox = bboxFromMap(current);
-      setBbox(currentBbox);
-      void loadSegment(currentBbox);
-    }, 500);
-  }
-
-  function loadFromCurrentMap() {
-    const map = mapRef.current;
-    const currentBbox = map ? bboxFromMap(map) : bbox;
-
-    setBbox(currentBbox);
-    void loadSegment(currentBbox);
-  }
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function initMap() {
-      if (!mapElementRef.current || mapRef.current) return;
-
-      const leaflet = await import("leaflet");
-
-      if (cancelled || !mapElementRef.current) return;
-
-      leafletRef.current = leaflet;
-
-      const map = leaflet.map(mapElementRef.current, {
-        zoomControl: true,
-        attributionControl: true,
-        preferCanvas: true,
-      });
-
-      map.setView([34.681, 33.038], 15);
-
-      leaflet
-        .tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          maxZoom: 19,
-          attribution: "Â© OpenStreetMap contributors",
-        })
-        .addTo(map);
-
-      map.on("moveend", () => setBbox(bboxFromMap(map)));
-      map.on("zoomend", () => setBbox(bboxFromMap(map)));
-
-      mapRef.current = map;
-      setBbox(bboxFromMap(map));
-      setMapReady(true);
-
-      window.setTimeout(() => map.invalidateSize(), 100);
-      window.setTimeout(() => map.invalidateSize(), 500);
-      window.setTimeout(() => map.invalidateSize(), 1200);
-    }
-
-    void initMap();
-
-    return () => {
-      cancelled = true;
-      mapRef.current?.remove();
-      mapRef.current = null;
-    };
-  }, []);
 
   return (
-    <main className="min-h-screen bg-[#07101f] px-4 py-6 text-white md:px-8">
-      <section className="mx-auto flex max-w-[1700px] flex-col gap-5">
-        <header className="rounded-[2rem] border border-[#d8b35a]/30 bg-[#101b2f] p-6">
-          <p className="text-xs font-bold uppercase tracking-[0.32em] text-[#d8b35a]">
-            Pantavion Water Network
-          </p>
+    <main className="min-h-screen bg-[#06111f] text-white">
+      <section className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-5">
+        <header className="rounded-3xl border border-[#b89445]/40 bg-[#0d1a2d] p-5 shadow-2xl">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.34em] text-[#f2c766]">
+                PANTAVION PROFESSIONAL INFRASTRUCTURE
+              </p>
+              <h1 className="text-3xl font-black tracking-tight sm:text-5xl">{t.title}</h1>
+              <p className="mt-3 max-w-4xl text-base leading-8 text-slate-200">{t.subtitle}</p>
+              <p className="mt-2 text-sm font-bold text-[#f2c766]">{t.protected}</p>
+            </div>
 
-          <h1 className="mt-3 text-3xl font-bold md:text-5xl">
-            Î§Î¬ÏÏ„Î·Ï‚ Î´Î¹ÎºÏ„ÏÎ¿Ï… ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚
-          </h1>
-
-          <p className="mt-3 max-w-5xl text-base leading-7 text-slate-200">
-            Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ· Î¼Îµ Î¿Î´ÏŒ, Î±ÏÎ¹Î¸Î¼ÏŒ, Ï€ÎµÏÎ¹Î¿Ï‡Î® ÎºÎ±Î¹ Ï„Î±Ï‡Ï…Î´ÏÎ¿Î¼Î¹ÎºÏŒ. Î‘Î½ Ï…Ï€Î¬ÏÏ‡Î¿Ï…Î½ Î¯Î´Î¹ÎµÏ‚ Î¿Î´Î¿Î¯
-            ÏƒÎµ Î´Î¹Î±Ï†Î¿ÏÎµÏ„Î¹ÎºÎ­Ï‚ Ï€ÎµÏÎ¹Î¿Ï‡Î­Ï‚, Ï€ÏÏŽÏ„Î± ÎµÏ€Î¹Î»Î­Î³ÎµÏ„Î±Î¹ Î· ÏƒÏ‰ÏƒÏ„Î® Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ· ÎºÎ±Î¹ Î¼ÎµÏ„Î¬
-            Ï†Î¿ÏÏ„ÏŽÎ½ÎµÎ¹ Ï„Î¿ Î±Î½Ï„Î¯ÏƒÏ„Î¿Î¹Ï‡Î¿ Ï„Î¼Î®Î¼Î± Î´Î¹ÎºÏ„ÏÎ¿Ï….
-          </p>
+            <label className="flex min-w-[220px] flex-col gap-2 text-sm font-bold text-[#f2c766]">
+              {t.language}
+              <select
+                value={lang}
+                onChange={(event) => setLang(event.target.value as Lang)}
+                className="rounded-2xl border border-[#b89445]/60 bg-[#07111f] px-4 py-3 text-white outline-none"
+              >
+                <option value="el">Ελληνικά</option>
+                <option value="en">English</option>
+              </select>
+            </label>
+          </div>
         </header>
 
-        <section className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-4">
-          <h2 className="text-2xl font-bold text-[#f2d27a]">
-            Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ· Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·Ï‚
-          </h2>
-
-          <div className="mt-4 grid gap-3 md:grid-cols-[1.2fr_0.5fr_1fr_0.7fr_auto]">
+        <section className="rounded-3xl border border-slate-700 bg-[#0d1a2d] p-4">
+          <div className="grid gap-3 md:grid-cols-4">
             <input
               value={street}
               onChange={(event) => setStreet(event.target.value)}
-              placeholder="ÎŸÎ´ÏŒÏ‚"
-              className="rounded-xl border border-white/15 bg-black/30 p-3 text-sm text-white"
+              placeholder={t.street}
+              className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none"
             />
-
             <input
-              value={houseNumber}
-              onChange={(event) => setHouseNumber(event.target.value)}
-              placeholder="Î‘ÏÎ¹Î¸Î¼ÏŒÏ‚"
-              className="rounded-xl border border-white/15 bg-black/30 p-3 text-sm text-white"
+              value={number}
+              onChange={(event) => setNumber(event.target.value)}
+              placeholder={t.number}
+              className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none"
             />
-
             <input
               value={area}
               onChange={(event) => setArea(event.target.value)}
-              placeholder="Î ÎµÏÎ¹Î¿Ï‡Î® / Î”Î®Î¼Î¿Ï‚"
-              className="rounded-xl border border-white/15 bg-black/30 p-3 text-sm text-white"
+              placeholder={t.area}
+              className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none"
             />
-
             <input
-              value={postalCode}
-              onChange={(event) => setPostalCode(event.target.value)}
-              placeholder="Î¤Î±Ï‡Ï…Î´ÏÎ¿Î¼Î¹ÎºÏŒÏ‚"
-              className="rounded-xl border border-white/15 bg-black/30 p-3 text-sm text-white"
+              value={postal}
+              onChange={(event) => setPostal(event.target.value)}
+              placeholder={t.postal}
+              className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none"
             />
-
-            <button
-              type="button"
-              onClick={searchAddress}
-              className="rounded-xl border border-[#d8b35a]/40 bg-[#d8b35a]/10 px-5 py-3 text-sm font-bold text-[#ffe8a3]"
-            >
-              {addressLoading ? "Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ·..." : "Î‘Î½Î±Î¶Î®Ï„Î·ÏƒÎ·"}
-            </button>
           </div>
 
-          {addressResponse?.candidates?.length ? (
-            <div className="mt-4 grid gap-3">
-              <p className="text-sm font-bold text-[#f2d27a]">
-                Î”Î¹Î¬Î»ÎµÎ¾Îµ ÏƒÏ‰ÏƒÏ„Î® Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·
-              </p>
-
-              <div className="grid max-h-72 gap-2 overflow-auto pr-2">
-                {addressResponse.candidates.map((candidate) => (
-                  <button
-                    key={candidate.candidateId}
-                    type="button"
-                    onClick={() => selectCandidate(candidate)}
-                    className="rounded-2xl border border-white/10 bg-black/25 p-4 text-left text-sm hover:border-[#d8b35a]/50"
-                  >
-                    <span className="block font-bold text-white">
-                      {candidate.displayName}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
-
           <div className="mt-4 flex flex-wrap gap-3">
-            {QUICK_AREAS.map((quickArea) => (
+            {AREAS.map((item) => (
               <button
-                key={quickArea.label}
+                key={item.label}
                 type="button"
-                onClick={() => moveToArea(quickArea.center, quickArea.zoom)}
-                className="rounded-2xl border border-[#d8b35a]/40 bg-[#d8b35a]/10 px-4 py-3 text-sm font-bold text-[#ffe8a3]"
+                onClick={() => moveTo(item.center, item.zoom)}
+                className="rounded-2xl border border-[#b89445]/60 bg-[#1a2232] px-4 py-3 text-sm font-black text-[#f2c766]"
               >
-                {quickArea.label}
+                {item.label}
               </button>
             ))}
 
             <button
               type="button"
-              onClick={loadFromCurrentMap}
-              className="rounded-2xl border border-emerald-400/40 bg-emerald-950/30 px-5 py-3 text-sm font-bold text-emerald-100"
+              onClick={loadPipes}
+              disabled={loading}
+              className="rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60"
             >
-              {segmentLoading ? "Î¦ÏŒÏÏ„Ï‰ÏƒÎ·..." : "Î¦ÏŒÏÏ„Ï‰ÏƒÎµ Î´Î¯ÎºÏ„Ï…Î¿ ÏƒÏ„Î·Î½ Ï€ÎµÏÎ¹Î¿Ï‡Î® Ï„Î¿Ï… Ï‡Î¬ÏÏ„Î·"}
+              {loading ? t.loading : t.load}
             </button>
           </div>
 
-          <p className="mt-3 rounded-2xl border border-white/10 bg-black/20 p-3 text-sm text-slate-200">
+          <div className="mt-4 rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-sm text-slate-200">
             {message}
-          </p>
+          </div>
         </section>
 
-        {selectedCandidate ? (
-          <section className="rounded-[2rem] border border-[#d8b35a]/20 bg-[#d8b35a]/10 p-4">
-            <p className="text-sm font-bold text-[#ffe8a3]">Î•Ï€Î¹Î»ÎµÎ³Î¼Î­Î½Î· Î´Î¹ÎµÏÎ¸Ï…Î½ÏƒÎ·</p>
-            <p className="mt-2 text-slate-100">{selectedCandidate.displayName}</p>
-          </section>
-        ) : null}
-
-        <section className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b1426]">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 p-4">
-            <h2 className="text-2xl font-bold text-[#f2d27a]">
-              Î§Î¬ÏÏ„Î·Ï‚ ÏÎ´ÏÎµÏ…ÏƒÎ·Ï‚
-            </h2>
-
-            <p className="text-sm text-slate-300">
-              {mapReady
-                ? segmentCount
-                  ? `Î¦Î¿ÏÏ„Ï‰Î¼Î­Î½Î± ÏƒÏ„Î¿Î¹Ï‡ÎµÎ¯Î± Î´Î¹ÎºÏ„ÏÎ¿Ï…: ${segmentCount}`
-                  : "ÎŸ Ï‡Î¬ÏÏ„Î·Ï‚ ÎµÎ¯Î½Î±Î¹ Î­Ï„Î¿Î¹Î¼Î¿Ï‚ Î³Î¹Î± Î¼ÎµÏ„Î±ÎºÎ¯Î½Î·ÏƒÎ· ÎºÎ±Î¹ zoom."
-                : "Î¦ÏŒÏÏ„Ï‰ÏƒÎ· Ï‡Î¬ÏÏ„Î·..."}
-            </p>
+        <section className="overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
+          <div className="flex items-center justify-between border-b border-slate-700 px-5 py-4">
+            <h2 className="text-2xl font-black text-[#f2c766]">{t.map}</h2>
+            <span className="text-sm text-slate-300">
+              {pipeCount !== null ? `${t.loaded}: ${pipeCount}` : t.protected}
+            </span>
           </div>
 
-          <div
-            ref={mapElementRef}
-            className="h-[76vh] min-h-[680px] w-full bg-[#06101d]"
-            aria-label="Pantavion controlled water network map"
-          />
+          <div ref={mapEl} className="h-[72vh] min-h-[560px] w-full bg-slate-200" />
         </section>
       </section>
     </main>
