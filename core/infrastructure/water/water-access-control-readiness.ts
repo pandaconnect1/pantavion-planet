@@ -1,4 +1,8 @@
-﻿export const PANTAVION_WATER_ACCESS_CONTROL_READINESS_VERSION =
+﻿import {
+  PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS,
+} from "./water-authorized-person-store";
+
+export const PANTAVION_WATER_ACCESS_CONTROL_READINESS_VERSION =
   "water-access-control-readiness-v1" as const;
 
 export interface PantavionWaterAccessControlReadinessInput {
@@ -87,7 +91,8 @@ export const PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS =
     authorizedPersonSchemaReady: true,
     roleModelReady: true,
     founderAdminDiagnosticAccessReady: true,
-    durableAuthorizedPersonStoreAvailable: false,
+    durableAuthorizedPersonStoreAvailable:
+      PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS.authorizedPersonStoreReady,
     accessDecisionAuditReady: true,
     rawExportBlocked: true,
     completeNetworkExportBlocked: true,
