@@ -6,6 +6,10 @@ import type {
   PantavionWaterBoundingBox,
 } from "./controlled-water-serving-scaffold";
 
+import {
+  PANTAVION_WATER_BLOCKED_AUDIT_DURABLE_SINK_READINESS,
+} from "./water-audit-durable-sink";
+
 export const PANTAVION_WATER_AUDIT_LOGGING_VERSION =
   "water-audit-logging-v1" as const;
 
@@ -142,8 +146,10 @@ export function createWaterAuditLogRecord(
 export const PANTAVION_WATER_BLOCKED_AUDIT_LOGGING_READINESS =
   evaluateWaterAuditLoggingReadiness({
     auditSchemaReady: true,
-    durableAuditSinkAvailable: false,
-    retentionPolicyReady: false,
+    durableAuditSinkAvailable:
+      PANTAVION_WATER_BLOCKED_AUDIT_DURABLE_SINK_READINESS.durableAuditSinkReady,
+    retentionPolicyReady:
+      PANTAVION_WATER_BLOCKED_AUDIT_DURABLE_SINK_READINESS.productionAuditSinkAllowed,
     rawPayloadLoggingBlocked: true,
     founderAdminReviewRequired: true,
   });

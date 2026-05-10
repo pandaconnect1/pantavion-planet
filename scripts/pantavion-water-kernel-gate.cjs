@@ -21,6 +21,7 @@ const requiredFiles = [
   "core/infrastructure/water/water-bbox-query-provider.ts",
   "core/infrastructure/water/water-access-filtering.ts",
   "core/infrastructure/water/water-audit-logging.ts",
+  "core/infrastructure/water/water-audit-durable-sink.ts",
   "app/api/professional/infrastructure/water/serving/readiness/route.ts",
   "app/api/professional/infrastructure/water/serving/bbox/route.ts",
 ];
@@ -190,7 +191,7 @@ function enforceMarkers(title, relativePath, markers) {
   }
 }
 
-console.log("=== Pantavion Water Kernel Gate v18 ===");
+console.log("=== Pantavion Water Kernel Gate v19 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -253,6 +254,36 @@ enforceMarkers("=== Controlled Serving Scaffold Enforcement v8 ===", controlledS
 
 
 
+
+console.log("=== Audit Durable Sink Enforcement v19 ===");
+const auditDurableSinkRelativePath = "core/infrastructure/water/water-audit-durable-sink.ts";
+
+if (exists(auditDurableSinkRelativePath)) {
+  const auditDurableSink = read(auditDurableSinkRelativePath);
+
+  const auditDurableSinkRequiredMarkers = [
+    "water-audit-durable-sink-v1",
+    "evaluateWaterAuditDurableSinkReadiness",
+    "durableAuditSinkReady",
+    "productionAuditSinkAllowed",
+    "appendOnlyRequired",
+    "encryptedAtRestRequired",
+    "retentionPolicyReady",
+    "tamperEvidenceRequired",
+    "Founder/admin approval is required before production audit writes.",
+    "mayStoreRawNetworkPayload: false",
+    "mayStoreCompleteNetworkPayload: false",
+    "mayDeleteAuditTrailSilently: false"
+  ];
+
+  for (const marker of auditDurableSinkRequiredMarkers) {
+    if (auditDurableSink.includes(marker)) {
+      pass("Audit Durable Sink marker present: " + marker);
+    } else {
+      fail("Audit Durable Sink marker missing: " + marker);
+    }
+  }
+}
 console.log("=== Controlled Audit Logging Enforcement v13 ===");
 const auditLoggingRelativePath = "core/infrastructure/water/water-audit-logging.ts";
 
