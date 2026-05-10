@@ -5,6 +5,10 @@ import {
   type PantavionWaterServingDecision,
 } from "@/core/infrastructure/water/controlled-water-serving-scaffold";
 
+import {
+  PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
+} from "@/core/infrastructure/water/water-spatial-serving-readiness";
+
 export const dynamic = "force-dynamic";
 
 const WATER_SERVING_READINESS_ROUTE_VERSION = "water-serving-readiness-route-v1" as const;
@@ -34,9 +38,10 @@ const diagnosticDecision: PantavionWaterServingDecision =
       hasDataServingStrategy: true,
       hasServingArchitectureDecision: true,
       fullMasterProtected: true,
-      spatialServingReady: false,
+      spatialServingReady: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.spatialServingReady,
       accessControlReady: false,
-      founderApprovedProductionActivation: false,
+      founderApprovedProductionActivation:
+        PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.productionActivationAllowed,
     },
   });
 
@@ -51,6 +56,7 @@ export async function GET() {
     mayReturnCompleteNetwork: false,
     message: "No water network data is returned by this route.",
     activationRule: "Founder/admin approval is required before production activation",
+    spatialServingReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
     decision: diagnosticDecision,
   });
 }

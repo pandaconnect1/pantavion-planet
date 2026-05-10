@@ -14,6 +14,7 @@ const requiredFiles = [
   "core/infrastructure/water/water-serving-contract.ts",
   "core/infrastructure/water/controlled-water-access.ts",
   "core/infrastructure/water/controlled-water-serving-scaffold.ts",
+  "core/infrastructure/water/water-spatial-serving-readiness.ts",
   "app/api/professional/infrastructure/water/serving/readiness/route.ts",
   "app/api/professional/infrastructure/water/serving/bbox/route.ts",
 ];
@@ -183,7 +184,7 @@ function enforceMarkers(title, relativePath, markers) {
   }
 }
 
-console.log("=== Pantavion Water Kernel Gate v11 ===");
+console.log("=== Pantavion Water Kernel Gate v12 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -244,6 +245,36 @@ enforceMarkers("=== Serving Contract Enforcement v8 ===", servingContractRelativ
 enforceMarkers("=== Controlled Serving Scaffold Enforcement v8 ===", controlledServingScaffoldRelativePath, controlledServingRequiredMarkers);
 
 
+
+console.log("=== Spatial Serving Readiness Enforcement v12 ===");
+const spatialServingReadinessRelativePath = "core/infrastructure/water/water-spatial-serving-readiness.ts";
+
+if (exists(spatialServingReadinessRelativePath)) {
+  const spatialServingReadiness = read(spatialServingReadinessRelativePath);
+
+  const spatialServingReadinessRequiredMarkers = [
+    "water-spatial-serving-readiness-v1",
+    "evaluateWaterSpatialServingReadiness",
+    "fullMasterSourceProtected",
+    "spatialIndexAvailable",
+    "bboxQueryProviderAvailable",
+    "accessFilteringAvailable",
+    "auditLoggingAvailable",
+    "rawExportBlocked",
+    "browserFullNetworkBlocked",
+    "Founder/admin approval is required before production spatial serving activation.",
+    "mayReturnRawMaster: false",
+    "mayReturnCompleteNetwork: false"
+  ];
+
+  for (const marker of spatialServingReadinessRequiredMarkers) {
+    if (spatialServingReadiness.includes(marker)) {
+      pass("Spatial Serving Readiness marker present: " + marker);
+    } else {
+      fail("Spatial Serving Readiness marker missing: " + marker);
+    }
+  }
+}
 console.log("=== Serving Readiness Route Enforcement v9 ===");
 const servingReadinessRouteRelativePath = "app/api/professional/infrastructure/water/serving/readiness/route.ts";
 

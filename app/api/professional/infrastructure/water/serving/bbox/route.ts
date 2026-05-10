@@ -6,6 +6,10 @@ import {
   type PantavionWaterServingDecision,
 } from "@/core/infrastructure/water/controlled-water-serving-scaffold";
 
+import {
+  PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
+} from "@/core/infrastructure/water/water-spatial-serving-readiness";
+
 export const dynamic = "force-dynamic";
 
 const WATER_SERVING_BBOX_ROUTE_VERSION = "water-serving-bbox-route-v1" as const;
@@ -65,9 +69,10 @@ export async function GET(request: NextRequest) {
       hasDataServingStrategy: true,
       hasServingArchitectureDecision: true,
       fullMasterProtected: true,
-      spatialServingReady: false,
+      spatialServingReady: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.spatialServingReady,
       accessControlReady: false,
-      founderApprovedProductionActivation: false,
+      founderApprovedProductionActivation:
+        PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.productionActivationAllowed,
     },
   });
 
@@ -88,6 +93,7 @@ export async function GET(request: NextRequest) {
       missingParameters,
       message: "No water network data is returned by this bbox route.",
       activationRule: "Founder/admin approval is required before production activation",
+      spatialServingReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
       decision,
     },
     {
