@@ -2,6 +2,10 @@
   PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS,
 } from "./water-spatial-index";
 
+import {
+  PANTAVION_WATER_BLOCKED_BBOX_QUERY_PROVIDER_READINESS,
+} from "./water-bbox-query-provider";
+
 export const PANTAVION_WATER_SPATIAL_SERVING_READINESS_VERSION =
   "water-spatial-serving-readiness-v1" as const;
 
@@ -113,7 +117,8 @@ export const PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS =
   evaluateWaterSpatialServingReadiness({
     fullMasterSourceProtected: true,
     spatialIndexAvailable: PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS.spatialIndexReady,
-    bboxQueryProviderAvailable: false,
+    bboxQueryProviderAvailable:
+      PANTAVION_WATER_BLOCKED_BBOX_QUERY_PROVIDER_READINESS.bboxQueryProviderReady,
     accessFilteringAvailable: false,
     auditLoggingAvailable: false,
     rawExportBlocked: true,

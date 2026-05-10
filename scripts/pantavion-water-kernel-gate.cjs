@@ -18,6 +18,7 @@ const requiredFiles = [
   "core/infrastructure/water/controlled-water-serving-scaffold.ts",
   "core/infrastructure/water/water-spatial-serving-readiness.ts",
   "core/infrastructure/water/water-spatial-index.ts",
+  "core/infrastructure/water/water-bbox-query-provider.ts",
   "core/infrastructure/water/water-audit-logging.ts",
   "app/api/professional/infrastructure/water/serving/readiness/route.ts",
   "app/api/professional/infrastructure/water/serving/bbox/route.ts",
@@ -188,7 +189,7 @@ function enforceMarkers(title, relativePath, markers) {
   }
 }
 
-console.log("=== Pantavion Water Kernel Gate v16 ===");
+console.log("=== Pantavion Water Kernel Gate v17 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -305,6 +306,37 @@ if (exists(spatialIndexRelativePath)) {
       pass("Spatial Index marker present: " + marker);
     } else {
       fail("Spatial Index marker missing: " + marker);
+    }
+  }
+}
+
+console.log("=== BBOX Query Provider Enforcement v17 ===");
+const bboxQueryProviderRelativePath = "core/infrastructure/water/water-bbox-query-provider.ts";
+
+if (exists(bboxQueryProviderRelativePath)) {
+  const bboxQueryProvider = read(bboxQueryProviderRelativePath);
+
+  const bboxQueryProviderRequiredMarkers = [
+    "water-bbox-query-provider-v1",
+    "evaluateWaterBboxQueryProviderReadiness",
+    "bboxQueryProviderReady",
+    "productionBboxQueriesAllowed",
+    "providerBackedByCompleteIndex",
+    "viewportLimitEnforced",
+    "zoomLimitEnforced",
+    "accessFilteringRequired",
+    "auditLoggingRequired",
+    "BBOX query provider must preserve duplicate street-name and place/zone disambiguation rules.",
+    "mayReturnRawMaster: false",
+    "mayReturnCompleteNetwork: false",
+    "mayBypassAccessFiltering: false"
+  ];
+
+  for (const marker of bboxQueryProviderRequiredMarkers) {
+    if (bboxQueryProvider.includes(marker)) {
+      pass("BBOX Query Provider marker present: " + marker);
+    } else {
+      fail("BBOX Query Provider marker missing: " + marker);
     }
   }
 }
