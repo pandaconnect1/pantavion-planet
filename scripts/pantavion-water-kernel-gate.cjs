@@ -13,6 +13,7 @@ const requiredFiles = [
   "docs/requirements/pantavion-water-serving-architecture-decision.md",
   "core/infrastructure/water/water-serving-contract.ts",
   "core/infrastructure/water/controlled-water-access.ts",
+  "core/infrastructure/water/water-access-control-readiness.ts",
   "core/infrastructure/water/controlled-water-serving-scaffold.ts",
   "core/infrastructure/water/water-spatial-serving-readiness.ts",
   "core/infrastructure/water/water-audit-logging.ts",
@@ -185,7 +186,7 @@ function enforceMarkers(title, relativePath, markers) {
   }
 }
 
-console.log("=== Pantavion Water Kernel Gate v13 ===");
+console.log("=== Pantavion Water Kernel Gate v14 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
