@@ -19,6 +19,7 @@ const requiredFiles = [
   "core/infrastructure/water/water-spatial-serving-readiness.ts",
   "core/infrastructure/water/water-spatial-index.ts",
   "core/infrastructure/water/water-bbox-query-provider.ts",
+  "core/infrastructure/water/water-access-filtering.ts",
   "core/infrastructure/water/water-audit-logging.ts",
   "app/api/professional/infrastructure/water/serving/readiness/route.ts",
   "app/api/professional/infrastructure/water/serving/bbox/route.ts",
@@ -189,7 +190,7 @@ function enforceMarkers(title, relativePath, markers) {
   }
 }
 
-console.log("=== Pantavion Water Kernel Gate v17 ===");
+console.log("=== Pantavion Water Kernel Gate v18 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -310,6 +311,37 @@ if (exists(spatialIndexRelativePath)) {
   }
 }
 
+
+console.log("=== Access Filtering Enforcement v18 ===");
+const accessFilteringRelativePath = "core/infrastructure/water/water-access-filtering.ts";
+
+if (exists(accessFilteringRelativePath)) {
+  const accessFiltering = read(accessFilteringRelativePath);
+
+  const accessFilteringRequiredMarkers = [
+    "water-access-filtering-v1",
+    "evaluateWaterAccessFilteringReadiness",
+    "accessFilteringReady",
+    "productionAccessFilteringAllowed",
+    "viewportScopedFilteringRequired",
+    "manualPanZoomRevalidationRequired",
+    "placeZoneDisambiguationRequired",
+    "accessLevelFilteringRequired",
+    "statusFilteringRequired",
+    "Founder/admin approval is required before production access filtering activation.",
+    "mayReturnRawMaster: false",
+    "mayReturnCompleteNetwork: false",
+    "mayBypassFounderApproval: false"
+  ];
+
+  for (const marker of accessFilteringRequiredMarkers) {
+    if (accessFiltering.includes(marker)) {
+      pass("Access Filtering marker present: " + marker);
+    } else {
+      fail("Access Filtering marker missing: " + marker);
+    }
+  }
+}
 console.log("=== BBOX Query Provider Enforcement v17 ===");
 const bboxQueryProviderRelativePath = "core/infrastructure/water/water-bbox-query-provider.ts";
 

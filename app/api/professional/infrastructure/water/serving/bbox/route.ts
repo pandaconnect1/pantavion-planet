@@ -15,6 +15,10 @@ import {
 } from "@/core/infrastructure/water/water-bbox-query-provider";
 
 import {
+  PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS,
+} from "@/core/infrastructure/water/water-access-filtering";
+
+import {
   PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
 } from "@/core/infrastructure/water/water-spatial-serving-readiness";
 
@@ -90,7 +94,8 @@ export async function GET(request: NextRequest) {
       founderApprovedProductionActivation:
         PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.productionActivationAllowed &&
         PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS.productionAccessAllowed &&
-        PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS.productionStoreAllowed,
+        PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS.productionStoreAllowed &&
+        PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS.productionAccessFilteringAllowed,
     },
   });
 
@@ -126,6 +131,7 @@ export async function GET(request: NextRequest) {
       authorizedPersonStoreReadiness: PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS,
       spatialIndexReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS,
       bboxQueryProviderReadiness: PANTAVION_WATER_BLOCKED_BBOX_QUERY_PROVIDER_READINESS,
+      accessFilteringReadiness: PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS,
       spatialServingReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,
       accessControlReadiness: PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS,
       auditLoggingReadiness: PANTAVION_WATER_BLOCKED_AUDIT_LOGGING_READINESS,

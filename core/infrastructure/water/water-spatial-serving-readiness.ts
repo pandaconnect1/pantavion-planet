@@ -6,6 +6,10 @@ import {
   PANTAVION_WATER_BLOCKED_BBOX_QUERY_PROVIDER_READINESS,
 } from "./water-bbox-query-provider";
 
+import {
+  PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS,
+} from "./water-access-filtering";
+
 export const PANTAVION_WATER_SPATIAL_SERVING_READINESS_VERSION =
   "water-spatial-serving-readiness-v1" as const;
 
@@ -119,7 +123,8 @@ export const PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS =
     spatialIndexAvailable: PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS.spatialIndexReady,
     bboxQueryProviderAvailable:
       PANTAVION_WATER_BLOCKED_BBOX_QUERY_PROVIDER_READINESS.bboxQueryProviderReady,
-    accessFilteringAvailable: false,
+    accessFilteringAvailable:
+      PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS.accessFilteringReady,
     auditLoggingAvailable: false,
     rawExportBlocked: true,
     browserFullNetworkBlocked: true,
