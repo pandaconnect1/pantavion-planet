@@ -53,9 +53,9 @@ const UI = {
     postal: "Postal code",
     load: "Load pipes in visible map area",
     loading: "Loading...",
-    ready: "Map is ready. Pan or zoom, then load. The visible screen is loaded in safe chunks.",
+    ready: "Map is ready. Pan or zoom. Pipes load automatically in the visible area.",
     loaded: "Loaded pipe segments",
-    failed: "No pipe segment loaded. Pan or zoom, then reload the visible area.",
+    failed: "No pipe segment loaded. Pan or zoom and it will retry automatically.",
     map: "Water map",
     protected: "The complete network is not loaded in the browser.",
   },
@@ -214,10 +214,13 @@ export default function ControlledWaterSegmentClient() {
   const [message, setMessage] = useState(UI.el.ready);
   const [loading, setLoading] = useState(false);
   const [pipeCount, setPipeCount] = useState<number | null>(null);
+  const [mapReady, setMapReady] = useState(false);
 
   const mapEl = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
   const layerRef = useRef<any>(null);
+  const autoLoadTimerRef = useRef<number | null>(null);
+  const loadInProgressRef = useRef(false);
 
   const t = UI[lang];
 
@@ -245,6 +248,7 @@ export default function ControlledWaterSegmentClient() {
         }).addTo(map);
 
         mapRef.current = map;
+        setMapReady(true);
         window.setTimeout(() => map.invalidateSize(), 300);
         window.setTimeout(() => map.invalidateSize(), 900);
       })
@@ -267,6 +271,9 @@ export default function ControlledWaterSegmentClient() {
       return;
     }
 
+    if (loadInProgressRef.current) return;
+
+    loadInProgressRef.current = true;
     setLoading(true);
     setMessage(t.loading);
 
@@ -350,7 +357,7 @@ export default function ControlledWaterSegmentClient() {
       layerRef.current = layer;
 
       const count = features.length;
-      const tileText = lang === "el" ? "τμήματα οθόνης" : "screen chunks";
+      const tileText = lang === "el" ? "Ï„Î¼Î®Î¼Î±Ï„Î± Î¿Î¸ÏŒÎ½Î·Ï‚" : "screen chunks";
 
       setPipeCount(count);
       setMessage(`${t.loaded}: ${count} (${tiles.length} ${tileText})`);
@@ -360,16 +367,46 @@ export default function ControlledWaterSegmentClient() {
       if (error instanceof Error && error.message === "VISIBLE_AREA_TOO_LARGE") {
         setMessage(
           lang === "el"
-            ? "Η ορατή περιοχή είναι πολύ μεγάλη. Κάνε λίγο zoom και ξαναφόρτωσε."
+            ? "Î— Î¿ÏÎ±Ï„Î® Ï€ÎµÏÎ¹Î¿Ï‡Î® ÎµÎ¯Î½Î±Î¹ Ï€Î¿Î»Ï Î¼ÎµÎ³Î¬Î»Î·. ÎšÎ¬Î½Îµ Î»Î¯Î³Î¿ zoom ÎºÎ±Î¹ Î¾Î±Î½Î±Ï†ÏŒÏÏ„Ï‰ÏƒÎµ."
             : "The visible area is too large. Zoom in a little, then reload.",
         );
       } else {
         setMessage(t.failed);
       }
     } finally {
+      loadInProgressRef.current = false;
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    const map = mapRef.current;
+
+    if (!mapReady || !map) return;
+
+    function clearAutoLoadTimer() {
+      if (autoLoadTimerRef.current) {
+        window.clearTimeout(autoLoadTimerRef.current);
+        autoLoadTimerRef.current = null;
+      }
+    }
+
+    function scheduleAutoLoad() {
+      clearAutoLoadTimer();
+
+      autoLoadTimerRef.current = window.setTimeout(() => {
+        void loadPipes();
+      }, 900);
+    }
+
+    map.on("moveend zoomend", scheduleAutoLoad);
+    scheduleAutoLoad();
+
+    return () => {
+      clearAutoLoadTimer();
+      map.off("moveend zoomend", scheduleAutoLoad);
+    };
+  }, [mapReady, lang, street, number, area, postal]);
 
   return (
     <main className="min-h-screen bg-[#06111f] text-white">
@@ -458,4 +495,5 @@ export default function ControlledWaterSegmentClient() {
     </main>
   );
 }
+
 
