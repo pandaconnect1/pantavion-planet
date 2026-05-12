@@ -1,6 +1,6 @@
-﻿"use client";
+"use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type WaterAccessRequest = {
   id: string;
@@ -14,13 +14,45 @@ type WaterAccessRequest = {
   createdAt: string;
 };
 
+const FOUNDER_CODE_STORAGE_KEY = "pantavion.water.admin.founderCode.v1";
+
 export default function WaterAdminAccessPage() {
   const [founderCode, setFounderCode] = useState("");
+  const [trustedDevice, setTrustedDevice] = useState(false);
   const [requests, setRequests] = useState<WaterAccessRequest[]>([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function loadRequests() {
+  function getSavedFounderCode() {
+    if (typeof window === "undefined") return "";
+    return window.localStorage.getItem(FOUNDER_CODE_STORAGE_KEY) || "";
+  }
+
+  function rememberFounderCode(value: string) {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(FOUNDER_CODE_STORAGE_KEY, value);
+    setTrustedDevice(true);
+  }
+
+  function forgetThisDevice() {
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem(FOUNDER_CODE_STORAGE_KEY);
+    }
+
+    setFounderCode("");
+    setTrustedDevice(false);
+    setRequests([]);
+    setMessage("Η συσκευή καθαρίστηκε. Θα χρειαστεί ξανά founder/admin κωδικός.");
+  }
+
+  async function loadRequests(codeOverride?: string) {
+    const codeToUse = (codeOverride || founderCode || getSavedFounderCode()).trim();
+
+    if (!codeToUse) {
+      setMessage("Βάλε founder/admin κωδικό την πρώτη φορά.");
+      return;
+    }
+
     setLoading(true);
     setMessage("Φόρτωση αιτημάτων...");
 
@@ -30,7 +62,7 @@ export default function WaterAdminAccessPage() {
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify({ founderCode }),
+        body: JSON.stringify({ founderCode: codeToUse }),
       });
 
       const json = (await response.json()) as {
@@ -43,16 +75,26 @@ export default function WaterAdminAccessPage() {
         throw new Error(json.error || "requests_failed");
       }
 
+      setFounderCode(codeToUse);
+      rememberFounderCode(codeToUse);
       setRequests(json.requests || []);
       setMessage(`Βρέθηκαν ${json.requests?.length || 0} αιτήματα.`);
     } catch {
-      setMessage("Δεν φορτώθηκαν τα αιτήματα. Έλεγξε τον founder κωδικό.");
+      setTrustedDevice(false);
+      setMessage("Δεν φορτώθηκαν τα αιτήματα. Έλεγξε τον founder/admin κωδικό.");
     } finally {
       setLoading(false);
     }
   }
 
   async function decide(requestId: string, decision: "approve" | "reject") {
+    const codeToUse = (founderCode || getSavedFounderCode()).trim();
+
+    if (!codeToUse) {
+      setMessage("Χρειάζεται founder/admin κωδικός πριν από έγκριση ή απόρριψη.");
+      return;
+    }
+
     setLoading(true);
     setMessage(decision === "approve" ? "Έγκριση..." : "Απόρριψη...");
 
@@ -63,7 +105,7 @@ export default function WaterAdminAccessPage() {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          founderCode,
+          founderCode: codeToUse,
           requestId,
           decision,
         }),
@@ -78,14 +120,26 @@ export default function WaterAdminAccessPage() {
         throw new Error(json.error || "decision_failed");
       }
 
+      rememberFounderCode(codeToUse);
       setMessage(decision === "approve" ? "Εγκρίθηκε." : "Απορρίφθηκε.");
-      await loadRequests();
+      await loadRequests(codeToUse);
     } catch {
       setMessage("Η απόφαση δεν αποθηκεύτηκε.");
     } finally {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    const savedCode = getSavedFounderCode();
+
+    if (savedCode) {
+      setFounderCode(savedCode);
+      setTrustedDevice(true);
+      void loadRequests(savedCode);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <main className="min-h-screen bg-[#06111f] px-4 py-6 text-white">
@@ -101,6 +155,12 @@ export default function WaterAdminAccessPage() {
         </p>
 
         <div className="mt-6 grid gap-3 rounded-3xl border border-slate-700 bg-[#07111f] p-4">
+          {trustedDevice ? (
+            <div className="rounded-2xl border border-emerald-500/40 bg-emerald-950/30 px-4 py-3 text-sm font-bold text-emerald-100">
+              Αυτή η συσκευή αναγνωρίστηκε ως founder/admin συσκευή. Τα αιτήματα φορτώνονται αυτόματα.
+            </div>
+          ) : null}
+
           <input
             value={founderCode}
             onChange={(event) => setFounderCode(event.target.value)}
@@ -109,14 +169,25 @@ export default function WaterAdminAccessPage() {
             className="rounded-2xl border border-[#b89445]/60 bg-[#0d1a2d] px-4 py-3 text-white outline-none"
           />
 
-          <button
-            type="button"
-            onClick={() => void loadRequests()}
-            disabled={loading}
-            className="rounded-2xl bg-[#f2c766] px-5 py-3 font-black text-black disabled:opacity-60"
-          >
-            Φόρτωση αιτημάτων
-          </button>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => void loadRequests()}
+              disabled={loading}
+              className="rounded-2xl bg-[#f2c766] px-5 py-3 font-black text-black disabled:opacity-60"
+            >
+              Φόρτωση αιτημάτων
+            </button>
+
+            <button
+              type="button"
+              onClick={forgetThisDevice}
+              disabled={loading}
+              className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-5 py-3 font-black text-slate-100 disabled:opacity-60"
+            >
+              Ξέχνα αυτή τη συσκευή
+            </button>
+          </div>
 
           {message ? <p className="text-sm font-bold text-[#f2c766]">{message}</p> : null}
         </div>
