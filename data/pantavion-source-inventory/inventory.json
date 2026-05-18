@@ -1,0 +1,3057 @@
+{
+  "id": "pantavion_source_inventory_v1",
+  "generatedAt": "2026-05-18T18:34:49.357Z",
+  "activeRepo": "C:\\Users\\gnkkm\\pantavion-planet",
+  "activeGitHub": "pandaconnect1/pantavion-planet",
+  "git": {
+    "status": {
+      "command": "git status --short --untracked-files=all",
+      "ok": true,
+      "status": 0,
+      "stdout": "?? scripts/pantavion-source-inventory.cjs\n",
+      "stderr": ""
+    },
+    "log": {
+      "command": "git log --oneline -12",
+      "ok": true,
+      "status": 0,
+      "stdout": "13d5f49 test(translate): add real provider smoke test\nba5506a feat(kernel): expose real implementation planning endpoint\n4ee8560 feat(kernel): add autonomous builder work order gate\n86f4ac4 feat(kernel): add implementation engine audit gate\n2a57ede fix(translate): stabilize provider typing and build safety\ncf03192 feat(translate): connect PantaTranslate providers platform-wide\n0d34401 feat(translate): add platform PantaTranslate interpreter kernel\n58d8df4 fix(water): remember founder admin device locally\n2165e7b fix(water): repair Greek UI and persist approved device safely\n3fdf10c fix(water): persist device approval on successful access\nf3937b2 fix(water): finalize approved phone device memory\n6197f41 fix(water): restore Greek UI and persist approved device\n",
+      "stderr": ""
+    },
+    "remotes": {
+      "command": "git remote -v",
+      "ok": true,
+      "status": 0,
+      "stdout": "origin\thttps://github.com/pandaconnect1/pantavion-planet.git (fetch)\norigin\thttps://github.com/pandaconnect1/pantavion-planet.git (push)\n",
+      "stderr": ""
+    },
+    "branch": {
+      "command": "git branch --show-current",
+      "ok": true,
+      "status": 0,
+      "stdout": "main\n",
+      "stderr": ""
+    }
+  },
+  "local": {
+    "files": {
+      "total": 939,
+      "counts": {
+        "file": 439,
+        "api_route": 42,
+        "markdown": 23,
+        "app_page": 185,
+        "kernel": 45,
+        "translation": 5,
+        "json": 4,
+        "script": 86,
+        "local_backup": 108,
+        "archive_text": 2
+      },
+      "importantFiles": [
+        {
+          "path": ".github/workflows/pantavion-autonomous-guardian.yml",
+          "size": 2174,
+          "kind": "file"
+        },
+        {
+          "path": ".github/workflows/pantavion-deploy.yml",
+          "size": 6499,
+          "kind": "file"
+        },
+        {
+          "path": ".pantavion-backup/20260408-203349/route.ts",
+          "size": 2107,
+          "kind": "api_route"
+        },
+        {
+          "path": ".pantavion-backup/20260408-204519/route.ts",
+          "size": 2107,
+          "kind": "api_route"
+        },
+        {
+          "path": ".pantavion-backup/paste-junk-20260426131507/e open device capabilities where allowed local display, QR, haptic, flash, siren, cached text and offline phrase packs.,",
+          "size": 16465,
+          "kind": "file"
+        },
+        {
+          "path": ".pantavion-backup/paste-junk-20260426131507/eslint.config.mjs",
+          "size": 465,
+          "kind": "file"
+        },
+        {
+          "path": ".pantavion-backup/paste-junk-20260426131507/next.config.mjs",
+          "size": 650,
+          "kind": "file"
+        },
+        {
+          "path": ".pantavion-backup/paste-junk-20260426131507/next.config.ts",
+          "size": 133,
+          "kind": "file"
+        },
+        {
+          "path": ".pantavion-backup/paste-junk-20260426131507/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "size": 44393,
+          "kind": "file"
+        },
+        {
+          "path": ".pantavion-backup/paste-junk-20260426131507/patch, satellite rescue, EPIRB, PLB, 112, 911 or coast guard equivalence.,",
+          "size": 16465,
+          "kind": "file"
+        },
+        {
+          "path": ".pantavion-backup/paste-junk-20260426131507/t `n--- TypeScript check --- -ForegroundColor Yellow",
+          "size": 373,
+          "kind": "file"
+        },
+        {
+          "path": ".pantavion-backup/paste-junk-20260426131507/t `nPATCH 2C CLEAN. Pantavion sovereignty ledger committed and pushed. -ForegroundColor Green",
+          "size": 16465,
+          "kind": "file"
+        },
+        {
+          "path": ".pantavion-backup/paste-junk-20260426131507/t `nPATCH 2C RECOVERY CLEAN. Sovereignty ledger committed and pushed. -ForegroundColor Green",
+          "size": 16465,
+          "kind": "file"
+        },
+        {
+          "path": ".pantavion-backup/paste-junk-20260426131507/t_guard,",
+          "size": 447,
+          "kind": "file"
+        },
+        {
+          "path": "app/acceptable-use/page.tsx",
+          "size": 1938,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/access-model/page.tsx",
+          "size": 3792,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/ads/page.tsx",
+          "size": 1929,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/adult-connect/page.tsx",
+          "size": 1964,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/advertise/page.tsx",
+          "size": 4914,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/ai-feature-register/page.tsx",
+          "size": 3109,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/api/admission/route.ts",
+          "size": 481,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/contacts/import/route.ts",
+          "size": 535,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/emergency/partner-interest/route.ts",
+          "size": 2104,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/health/route.ts",
+          "size": 301,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/intelligence/actions/route.ts",
+          "size": 6100,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/intelligence/execute/route.ts",
+          "size": 396,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/kernel/analyze/route.ts",
+          "size": 453,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/kernel/complete/route.ts",
+          "size": 456,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/kernel/intake/route.ts",
+          "size": 450,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/kernel/route.ts",
+          "size": 458,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/kernel/run/route.ts",
+          "size": 441,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/kernel/state/route.ts",
+          "size": 718,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/kernel/status/route.ts",
+          "size": 649,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/messages/send/route.ts",
+          "size": 536,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/pantai/execute/route.ts",
+          "size": 1036,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/pantavion/ai/route.ts",
+          "size": 2759,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/pantavion/implementation-plan/route.ts",
+          "size": 4176,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/pantavion/translate/route.ts",
+          "size": 4418,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+          "size": 3604,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/access/admin/requests/route.ts",
+          "size": 2224,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/access/authorize/route.ts",
+          "size": 1991,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/access/request/route.ts",
+          "size": 1867,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/address/candidates/route.ts",
+          "size": 1204,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/address/search/route.ts",
+          "size": 3763,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/language/multimodal/readiness/route.ts",
+          "size": 535,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/language/translate/route.ts",
+          "size": 1532,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/network/route.ts",
+          "size": 2242,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/network/status/route.ts",
+          "size": 1769,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/production-readiness/route.ts",
+          "size": 387,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/segment/bbox/route.ts",
+          "size": 1434,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/sentinel/route.ts",
+          "size": 10226,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+          "size": 6239,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+          "size": 4636,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/signals/route.ts",
+          "size": 273,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/sos/dispatch/route.ts",
+          "size": 2643,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/translate/status/route.ts",
+          "size": 296,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/translate/text/route.ts",
+          "size": 1879,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/api/translate/universal/route.ts",
+          "size": 779,
+          "kind": "api_route"
+        },
+        {
+          "path": "app/architecture/page.tsx",
+          "size": 3278,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/auth/login/page.tsx",
+          "size": 238,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/auth/register/page.tsx",
+          "size": 250,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/backend-claims/page.tsx",
+          "size": 3346,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/build-services/page.tsx",
+          "size": 1925,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/commercial/page.tsx",
+          "size": 1693,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/communication/page.tsx",
+          "size": 2021,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/connect/page.tsx",
+          "size": 1931,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/contact/page.tsx",
+          "size": 342,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/cookies/page.tsx",
+          "size": 336,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/dashboard/page.tsx",
+          "size": 4010,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/deep-audit/page.tsx",
+          "size": 6086,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/discovery/page.tsx",
+          "size": 4105,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/distribution/page.tsx",
+          "size": 7229,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/download/page.tsx",
+          "size": 1908,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/ecosystem/page.tsx",
+          "size": 4311,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/elite/page.tsx",
+          "size": 340,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/evolution/page.tsx",
+          "size": 12777,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/feedback/page.tsx",
+          "size": 4733,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/founding-access/page.tsx",
+          "size": 1920,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/governance/page.tsx",
+          "size": 1825,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/import-world/page.tsx",
+          "size": 1937,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/infrastructure/page.tsx",
+          "size": 7428,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/inspector/page.tsx",
+          "size": 1809,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/intelligence/capabilities/page.tsx",
+          "size": 7698,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/intelligence/competitive/page.tsx",
+          "size": 3685,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/intelligence/execute/page.tsx",
+          "size": 279,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/intelligence/page.tsx",
+          "size": 10144,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/intelligence/routing/page.tsx",
+          "size": 11136,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/interpreter/page.tsx",
+          "size": 45,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/kernel/audit/page.tsx",
+          "size": 4956,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/kernel/completion/page.tsx",
+          "size": 6434,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/kernel/hardening/page.tsx",
+          "size": 5016,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/kernel/intake/page.tsx",
+          "size": 9118,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/kernel/page.tsx",
+          "size": 18231,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/kernel/prime-law/page.tsx",
+          "size": 5057,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/kernel/run/page.tsx",
+          "size": 6264,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/language/page.tsx",
+          "size": 2695,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/legal/page.tsx",
+          "size": 341,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/life-connector/page.tsx",
+          "size": 2287,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/live-core/page.tsx",
+          "size": 2054,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/market/page.tsx",
+          "size": 1935,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/media/page.tsx",
+          "size": 1904,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/memory/page.tsx",
+          "size": 1769,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/messages/page.tsx",
+          "size": 1920,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/minors/page.tsx",
+          "size": 1936,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/newspaper/page.tsx",
+          "size": 4160,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/no-dead-surfaces/page.tsx",
+          "size": 4838,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/page.tsx",
+          "size": 246,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/panta-ai/page.tsx",
+          "size": 2435,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantaai/page.tsx",
+          "size": 2972,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/device-support/DeviceCapabilityPanel.tsx",
+          "size": 6095,
+          "kind": "file"
+        },
+        {
+          "path": "app/pantavion/emergency/device-support/page.tsx",
+          "size": 4618,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/disaster/page.tsx",
+          "size": 289,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/evidence/page.tsx",
+          "size": 7607,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/extreme-offgrid/page.tsx",
+          "size": 1961,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/global-network/page.tsx",
+          "size": 299,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/guardian/page.tsx",
+          "size": 13243,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/multi-signal-sos/page.tsx",
+          "size": 295,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/offline-beacon/page.tsx",
+          "size": 299,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/page.tsx",
+          "size": 8257,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/partners/page.tsx",
+          "size": 5862,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/profile/page.tsx",
+          "size": 8750,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/safepulse/page.tsx",
+          "size": 291,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/scenarios/page.tsx",
+          "size": 2594,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pantavion/emergency/_components/EmergencyFeaturePage.tsx",
+          "size": 3497,
+          "kind": "file"
+        },
+        {
+          "path": "app/pantavion-home-client.tsx",
+          "size": 9734,
+          "kind": "file"
+        },
+        {
+          "path": "app/people/page.tsx",
+          "size": 2961,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/planet/page.tsx",
+          "size": 2965,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/pricing/page.tsx",
+          "size": 639,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/privacy/page.tsx",
+          "size": 340,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/product-status/page.tsx",
+          "size": 1955,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/professional/infrastructure/water/admin/page.tsx",
+          "size": 8788,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/professional/infrastructure/water/live/page.tsx",
+          "size": 420,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/professional/infrastructure/water/page.tsx",
+          "size": 395,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/professional/infrastructure/water/readiness/page.tsx",
+          "size": 226,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/radio/page.tsx",
+          "size": 1927,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/readiness/page.tsx",
+          "size": 8022,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/refund-policy/page.tsx",
+          "size": 1933,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/safety/page.tsx",
+          "size": 6710,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/security/page.tsx",
+          "size": 1836,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/services/page.tsx",
+          "size": 1922,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/signals/page.tsx",
+          "size": 8848,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/sos/admin-readiness/page.tsx",
+          "size": 2521,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/sos/contacts/page.tsx",
+          "size": 15301,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/sos/elder/page.tsx",
+          "size": 58737,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/sos/page.tsx",
+          "size": 8171,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/sos/providers/page.tsx",
+          "size": 2537,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/sos/readiness/page.tsx",
+          "size": 3792,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/sos-interpreter/page.tsx",
+          "size": 3132,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/sovereignty/page.tsx",
+          "size": 9663,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/stripe-readiness/page.tsx",
+          "size": 6078,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/studio/page.tsx",
+          "size": 1930,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/terms/page.tsx",
+          "size": 1923,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/translate/page.tsx",
+          "size": 15628,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/work/page.tsx",
+          "size": 1931,
+          "kind": "app_page"
+        },
+        {
+          "path": "app/_pantavion/locale.ts",
+          "size": 494,
+          "kind": "file"
+        },
+        {
+          "path": "app/_pantavion/role.ts",
+          "size": 2015,
+          "kind": "file"
+        },
+        {
+          "path": "app/_pantavion/ui.tsx",
+          "size": 8013,
+          "kind": "file"
+        },
+        {
+          "path": "components/pantavion/PantavionLanguageSelect.tsx",
+          "size": 2480,
+          "kind": "file"
+        },
+        {
+          "path": "components/PantavionLaunchSurface.tsx",
+          "size": 3971,
+          "kind": "file"
+        },
+        {
+          "path": "components/PantavionPublicShell.tsx",
+          "size": 8854,
+          "kind": "file"
+        },
+        {
+          "path": "components/PantavionShell.tsx",
+          "size": 1814,
+          "kind": "file"
+        },
+        {
+          "path": "core/actions/pantavion-action-state.ts",
+          "size": 2029,
+          "kind": "file"
+        },
+        {
+          "path": "core/ai/pantavion-ai-command-center.ts",
+          "size": 3963,
+          "kind": "file"
+        },
+        {
+          "path": "core/ai/pantavion-ai-layer-separation.ts",
+          "size": 2858,
+          "kind": "file"
+        },
+        {
+          "path": "core/growth/pantavion-public-growth-ledger.ts",
+          "size": 4898,
+          "kind": "file"
+        },
+        {
+          "path": "core/guardian/pantavion-autonomous-internal-ai-os.ts",
+          "size": 1288,
+          "kind": "file"
+        },
+        {
+          "path": "core/guardian/pantavion-guardian-kernel.ts",
+          "size": 17852,
+          "kind": "file"
+        },
+        {
+          "path": "core/i18n/pantavion-global-language.ts",
+          "size": 11661,
+          "kind": "file"
+        },
+        {
+          "path": "core/i18n/pantavion-multimodal-language-contract.ts",
+          "size": 2953,
+          "kind": "file"
+        },
+        {
+          "path": "core/kernel/derivative-kernel-registry.ts",
+          "size": 5779,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/final-closure-audit-policy.ts",
+          "size": 4461,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/final-closure-audit-wave.ts",
+          "size": 9177,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-admission-policy.ts",
+          "size": 5039,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-admission.ts",
+          "size": 11113,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-artifact-summary.ts",
+          "size": 1850,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-bootstrap-command-pack.ts",
+          "size": 3303,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-bootstrap-manifest.ts",
+          "size": 8090,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-bootstrap.ts",
+          "size": 16204,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-command-surface.ts",
+          "size": 4859,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-constitution-regeneration-wave.ts",
+          "size": 7240,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-constitution-registry.ts",
+          "size": 5171,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-control-plane.ts",
+          "size": 8568,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-control-plane.ts.bak",
+          "size": 8566,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-entrypoint.ts",
+          "size": 1931,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-evolution-proposal-log.ts",
+          "size": 3832,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-exported-runner.ts",
+          "size": 2803,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-final-audit.ts",
+          "size": 7256,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-final-closure-report.ts",
+          "size": 1596,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-foundation-lock.ts",
+          "size": 4607,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-foundation-report.ts",
+          "size": 4552,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-foundation-smoke.ts",
+          "size": 5266,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-foundation-smoke.ts.bak",
+          "size": 5207,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-gap-matrix.ts",
+          "size": 5172,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-integration-runner.ts",
+          "size": 2859,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-json-export.ts",
+          "size": 6171,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-lineage-snapshot.ts",
+          "size": 2755,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-one-shot-runner.ts",
+          "size": 3324,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-ops-report.ts",
+          "size": 2554,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-printable-foundation-pack.ts",
+          "size": 2187,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-priority-queue.ts",
+          "size": 4767,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-readiness-report.ts",
+          "size": 7153,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-readiness-report.ts.bak",
+          "size": 7151,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-real-runner.ts",
+          "size": 2026,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-regeneration-policy.ts",
+          "size": 3576,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-run-artifact.ts",
+          "size": 2357,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-saved-export.ts",
+          "size": 3541,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-script-surface.ts",
+          "size": 3028,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-taxonomy.ts",
+          "size": 16738,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-terminal-runner.ts",
+          "size": 1798,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel-usage-harness.ts",
+          "size": 4184,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/kernel.ts",
+          "size": 80927,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/pantavion-autonomous-builder-kernel.ts",
+          "size": 10308,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/pantavion-central-ai-kernel-controller.ts",
+          "size": 2356,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/kernel/pantavion-implementation-engine.ts",
+          "size": 5645,
+          "kind": "kernel"
+        },
+        {
+          "path": "core/language/pantavion-language-atlas.ts",
+          "size": 8633,
+          "kind": "file"
+        },
+        {
+          "path": "core/language/pantavion-language-catalog.ts",
+          "size": 9850,
+          "kind": "file"
+        },
+        {
+          "path": "core/memory/pantavion-continuity-thread-memory.ts",
+          "size": 7404,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/abuse-reporting-flows.ts",
+          "size": 1118,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/adult-restricted-policy.ts",
+          "size": 1107,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/ai-feature-register.ts",
+          "size": 3372,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/ai-sovereignty-roadmap.ts",
+          "size": 2585,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/capability-registry.ts",
+          "size": 1450,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/competitive-intelligence-layer.ts",
+          "size": 4427,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/custom-domain-checklist.ts",
+          "size": 784,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/deep-audit-ledger.ts",
+          "size": 2286,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/elite-secure-channels-policy.ts",
+          "size": 1065,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/global-distribution-ledger.ts",
+          "size": 2697,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/global-jurisdiction-matrix.ts",
+          "size": 13316,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/import-world-consent-matrix.ts",
+          "size": 2528,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/import-world-legal-matrix.ts",
+          "size": 1616,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/internal-infrastructure-registry.ts",
+          "size": 17061,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/kernel-completion-spine.ts",
+          "size": 14101,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/kernel-gap-index.ts",
+          "size": 3551,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/kernel-hardening-ledger.ts",
+          "size": 9286,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/live-backend-contract.ts",
+          "size": 5553,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/marketplace-taxonomy.ts",
+          "size": 1304,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/master-architecture-baseline.ts",
+          "size": 3707,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/master-ecosystem-doctrine.ts",
+          "size": 1486,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/media-radio-rights-policy.ts",
+          "size": 1098,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/minors-protection-architecture.ts",
+          "size": 1145,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/no-dead-button-policy.ts",
+          "size": 951,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/no-dead-surface-ledger.ts",
+          "size": 7217,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/no-dead-surface-policy.ts",
+          "size": 1521,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/pantai-local-executor.ts",
+          "size": 4136,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/pantavion-access-model.ts",
+          "size": 6892,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/platform-discovery-matrix.ts",
+          "size": 3793,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/prime-kernel-law.ts",
+          "size": 2821,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/product-family-taxonomy.ts",
+          "size": 7375,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/production-readiness-gates.ts",
+          "size": 3441,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/production-seo-metadata.ts",
+          "size": 765,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/provider-sovereignty-ledger.ts",
+          "size": 21250,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/public-claims-registry.ts",
+          "size": 3767,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/public-indexing-policy.ts",
+          "size": 3483,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/real-backend-claims-registry.ts",
+          "size": 1856,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/release-gates-before-stripe.ts",
+          "size": 1314,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/risk-registry.ts",
+          "size": 1300,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/route-registry.ts",
+          "size": 2519,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/route-status-registry.ts",
+          "size": 5469,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/security-control-ledger.ts",
+          "size": 2781,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/security-hacker-api-checklist.ts",
+          "size": 1493,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/sos-interpreter.ts",
+          "size": 2943,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/sovereignty-ledger.ts",
+          "size": 9477,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/stripe-readiness-ledger.ts",
+          "size": 5162,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/translation-confidence-model.ts",
+          "size": 1241,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion/translation-safety-ledger.ts",
+          "size": 1610,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-capabilities.ts",
+          "size": 603,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-constitution.ts",
+          "size": 1007,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-evolution-engine.ts",
+          "size": 3267,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-intelligence-registry.ts",
+          "size": 4812,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-kernel-completion.ts",
+          "size": 12183,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-kernel-executor.ts",
+          "size": 594,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-kernel-foundation.ts",
+          "size": 17766,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-kernel-intake.ts",
+          "size": 8004,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-kernel-intelligence.ts",
+          "size": 15289,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-kernel-ledger.ts",
+          "size": 890,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-kernel.ts",
+          "size": 396,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-memory.ts",
+          "size": 587,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-planner.ts",
+          "size": 497,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-runner.ts",
+          "size": 162,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-signal-seeds.ts",
+          "size": 8365,
+          "kind": "file"
+        },
+        {
+          "path": "core/pantavion-tech-radar.ts",
+          "size": 2373,
+          "kind": "file"
+        },
+        {
+          "path": "core/platform/pantavion-registry.ts",
+          "size": 23443,
+          "kind": "file"
+        },
+        {
+          "path": "core/product/pantavion-product-truth-ledger.ts",
+          "size": 12759,
+          "kind": "file"
+        },
+        {
+          "path": "core/public/pantavion-public-surfaces.ts",
+          "size": 26170,
+          "kind": "file"
+        },
+        {
+          "path": "core/sos/pantavion-sos-ai-center.ts",
+          "size": 815,
+          "kind": "file"
+        },
+        {
+          "path": "core/translation/pantavion-natural-language-universe.ts",
+          "size": 1857,
+          "kind": "translation"
+        },
+        {
+          "path": "core/translation/pantavion-translation-provider-adapters.ts",
+          "size": 12340,
+          "kind": "translation"
+        },
+        {
+          "path": "core/translation/pantavion-translation-provider-router.ts",
+          "size": 3089,
+          "kind": "translation"
+        },
+        {
+          "path": "core/translation/pantavion-universal-interpreter-contract.ts",
+          "size": 2701,
+          "kind": "translation"
+        },
+        {
+          "path": "core/translation/pantavion-universal-interpreter.ts",
+          "size": 3516,
+          "kind": "translation"
+        },
+        {
+          "path": "docs/deployment/PANTAVION_DEPLOYMENT_SPINE_v1.md",
+          "size": 915,
+          "kind": "markdown"
+        },
+        {
+          "path": "docs/requirements/pantavion-pantaai-water-sentinel.md",
+          "size": 888,
+          "kind": "markdown"
+        },
+        {
+          "path": "docs/requirements/pantavion-professional-infrastructure-water-master-locked.md",
+          "size": 69865,
+          "kind": "markdown"
+        },
+        {
+          "path": "docs/requirements/pantavion-water-access-approval-identity-rule.md",
+          "size": 841,
+          "kind": "markdown"
+        },
+        {
+          "path": "docs/requirements/pantavion-water-data-serving-strategy.md",
+          "size": 2826,
+          "kind": "markdown"
+        },
+        {
+          "path": "docs/requirements/pantavion-water-data-truth-report.md",
+          "size": 2966,
+          "kind": "markdown"
+        },
+        {
+          "path": "docs/requirements/pantavion-water-full-master-strategy.md",
+          "size": 3398,
+          "kind": "markdown"
+        },
+        {
+          "path": "docs/requirements/pantavion-water-network-kernel-lock-v1.md",
+          "size": 1236,
+          "kind": "markdown"
+        },
+        {
+          "path": "docs/requirements/pantavion-water-production-cloud-bridge.md",
+          "size": 1380,
+          "kind": "markdown"
+        },
+        {
+          "path": "docs/requirements/pantavion-water-serving-architecture-decision.md",
+          "size": 5086,
+          "kind": "markdown"
+        },
+        {
+          "path": "pantavion-build-error.log",
+          "size": 2754,
+          "kind": "file"
+        },
+        {
+          "path": "pantavion-kernel-ledger.json",
+          "size": 7370,
+          "kind": "json"
+        },
+        {
+          "path": "PANTAVION-MASTER-DOCTRINE.md",
+          "size": 4306,
+          "kind": "markdown"
+        },
+        {
+          "path": "PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "size": 44399,
+          "kind": "file"
+        },
+        {
+          "path": "public/pantavion-icon.svg",
+          "size": 748,
+          "kind": "file"
+        },
+        {
+          "path": "public/pantavion-orb.svg",
+          "size": 480,
+          "kind": "file"
+        },
+        {
+          "path": "scripts/add-guardian-emergency-routes.cjs",
+          "size": 2720,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/apply-pantavion-global-safety-patch.cjs",
+          "size": 46103,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-ai-authority-registry-wave.ts",
+          "size": 890,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-app-auth-role-session-integration-wave.ts",
+          "size": 961,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-app-route-wiring-snapshot.ts",
+          "size": 1049,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-canonical-routing-truth-wave.ts",
+          "size": 900,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-cognitive-memory-stratification-wave.ts",
+          "size": 954,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-commercial-billing-rail-wave.ts",
+          "size": 902,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-cross-device-continuity-wave.ts",
+          "size": 902,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-donor-extraction-wave.ts",
+          "size": 853,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-final-closure-audit-wave.ts",
+          "size": 870,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-founder-human-final-authority-wave.ts",
+          "size": 942,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-global-governance-closure-wave.ts",
+          "size": 916,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-human-first-homepage-wave.ts",
+          "size": 879,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-kernel-constitution-regeneration-wave.ts",
+          "size": 961,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-kernel-intake-expansion-wave.ts",
+          "size": 898,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-kernel-saved.ts",
+          "size": 1079,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-locale-consistency-snapshot.ts",
+          "size": 1148,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-memory-thread-kernel-wave.ts",
+          "size": 872,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-project-recovery-audit-wave.ts",
+          "size": 893,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-repository-triage-plan-wave.ts",
+          "size": 893,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-secrets-deploy-observability-integration-wave.ts",
+          "size": 1012,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-security-enforcement-wave.ts",
+          "size": 881,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-security-hardening-closure-wave.ts",
+          "size": 921,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-tenant-data-access-storage-isolation-wave.ts",
+          "size": 982,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-vercel-product-connection-public-surface-wave.ts",
+          "size": 1189,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/export-visibility-inspector-surface.ts",
+          "size": 1085,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/final-fix-greek-label.cjs",
+          "size": 1896,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/fix-global-language-pr.cjs",
+          "size": 1240,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/force-fix-language-source.cjs",
+          "size": 1358,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/global-emergency-languages-patch.cjs",
+          "size": 9408,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-ai-integrity-check.cjs",
+          "size": 22867,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-autonomous-builder-gate.cjs",
+          "size": 1996,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-autonomous-guardian-audit.cjs",
+          "size": 1670,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-implementation-gate.cjs",
+          "size": 3099,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-implementation-runtime-gate.cjs",
+          "size": 2429,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-master-audit.cjs",
+          "size": 2540,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-multimodal-language-audit.cjs",
+          "size": 2652,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-product-truth-audit.cjs",
+          "size": 1887,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-public-growth-audit.cjs",
+          "size": 3539,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-real-translation-smoke.cjs",
+          "size": 3219,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-source-inventory.cjs",
+          "size": 6792,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-translation-integrity-check.cjs",
+          "size": 4492,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-water-kernel-gate.cjs",
+          "size": 19354,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/pantavion-water-kml-to-geojson.cjs",
+          "size": 9101,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/print-kernel-foundation.ts",
+          "size": 436,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-ai-authority-registry-wave.ts",
+          "size": 294,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-app-auth-role-session-integration-wave.ts",
+          "size": 329,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-canonical-routing-truth-wave.ts",
+          "size": 298,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-cognitive-memory-stratification-wave.ts",
+          "size": 328,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-commercial-billing-rail-wave.ts",
+          "size": 300,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-cross-device-continuity-wave.ts",
+          "size": 300,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-direct-dispatch-promotion-mini-wave.ts",
+          "size": 324,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-donor-extraction-wave.ts",
+          "size": 272,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-external-routing-promotion-mini-wave.ts",
+          "size": 328,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-fallback-bypass-enforcement-mini-wave.ts",
+          "size": 332,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-final-closure-audit-wave.ts",
+          "size": 280,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-founder-human-final-authority-wave.ts",
+          "size": 322,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-global-governance-closure-wave.ts",
+          "size": 308,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-human-first-homepage-wave.ts",
+          "size": 266,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-kernel-constitution-regeneration-wave.ts",
+          "size": 332,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-kernel-intake-expansion-wave.ts",
+          "size": 296,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-kernel-one-shot.ts",
+          "size": 283,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-kernel-persistence-wave.ts",
+          "size": 287,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-memory-thread-kernel-wave.ts",
+          "size": 279,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-primary-lane-cutover-mini-wave.ts",
+          "size": 304,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-project-recovery-audit-wave.ts",
+          "size": 294,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-provider-adapter-wave.ts",
+          "size": 281,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-real-external-provider-bridge-wave.ts",
+          "size": 323,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-repository-triage-plan-wave.ts",
+          "size": 294,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-route-selector-hardening-mini-wave.ts",
+          "size": 320,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-runtime-hardening-wave.ts",
+          "size": 283,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-secrets-deploy-observability-integration-wave.ts",
+          "size": 359,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-security-enforcement-wave.ts",
+          "size": 288,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-security-hardening-closure-wave.ts",
+          "size": 310,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-tenant-data-access-storage-isolation-wave.ts",
+          "size": 341,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-vercel-product-connection-public-surface-wave.ts",
+          "size": 357,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-visibility-inspector-surface.ts",
+          "size": 301,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-voice-multilingual-policy.ts",
+          "size": 369,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/run-voice-runtime-hardening-mini-wave.ts",
+          "size": 315,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/water-apply-original-kmz-styles-to-private-index.cjs",
+          "size": 5989,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/water-build-private-segment-index.cjs",
+          "size": 3626,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/water-convert-kml-to-authentic-geojson.cjs",
+          "size": 6393,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/water-guardian-production-smoke.cjs",
+          "size": 4406,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/water-guardian-surface-audit.cjs",
+          "size": 3936,
+          "kind": "script"
+        },
+        {
+          "path": "scripts/water-private-index-runtime-smoke.cjs",
+          "size": 3392,
+          "kind": "script"
+        },
+        {
+          "path": "src/kernel/pantavion-kernel.ts",
+          "size": 107,
+          "kind": "file"
+        },
+        {
+          "path": "types/pantavion-emergency.ts",
+          "size": 1240,
+          "kind": "file"
+        },
+        {
+          "path": "types/pantavion-sos.ts",
+          "size": 1260,
+          "kind": "file"
+        },
+        {
+          "path": "types/pantavion.ts",
+          "size": 332,
+          "kind": "file"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/) {",
+          "size": 16465,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/,",
+          "size": 364,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/.github/workflows/pantavion-guardian-nightly.yml",
+          "size": 2202,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/= @(",
+          "size": 5230,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/api/language/translate/route.ts",
+          "size": 388,
+          "kind": "api_route"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/api/professional/infrastructure/water/access/admin/route.ts",
+          "size": 606,
+          "kind": "api_route"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/evolution/PANTAVION-MASTER-DOCTRINE  25-5-2026.txt",
+          "size": 7561,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ai/agents/page.tsx",
+          "size": 1867,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ai/atlas/page.tsx",
+          "size": 2135,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ai/capabilities/page.tsx",
+          "size": 2091,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ai/connectors/page.tsx",
+          "size": 1902,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ai/evals/page.tsx",
+          "size": 1706,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ai/model-selection/page.tsx",
+          "size": 1682,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ai/page.tsx",
+          "size": 1899,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ai/provider-costs/page.tsx",
+          "size": 1613,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ai/providers/page.tsx",
+          "size": 1931,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ai/router/page.tsx",
+          "size": 1844,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ai/skills/page.tsx",
+          "size": 1820,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/architecture/page.tsx",
+          "size": 2297,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/architecture-data.ts",
+          "size": 6092,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/architecture-layer-page.tsx",
+          "size": 3505,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/build-studio/page.tsx",
+          "size": 1621,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/business/billing/page.tsx",
+          "size": 1655,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/business/pricing/page.tsx",
+          "size": 1844,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/business/smb/page.tsx",
+          "size": 1882,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/canonical/page.tsx",
+          "size": 1696,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/chat/page.tsx",
+          "size": 1593,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/companies/page.tsx",
+          "size": 1631,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/connectivity/page.tsx",
+          "size": 1895,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/countries/page.tsx",
+          "size": 1664,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/creator/page.tsx",
+          "size": 1766,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/daily/page.tsx",
+          "size": 1584,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/dating/page.tsx",
+          "size": 1635,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/developer-academy/page.tsx",
+          "size": 1730,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/domain-registry.ts",
+          "size": 3409,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/donations/page.tsx",
+          "size": 1556,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/elder/page.tsx",
+          "size": 1657,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/enterprise/page.tsx",
+          "size": 1701,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/family/page.tsx",
+          "size": 1673,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/games/page.tsx",
+          "size": 1585,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/global/aviation/page.tsx",
+          "size": 1675,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/global/conflicts/page.tsx",
+          "size": 1672,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/global/environment/page.tsx",
+          "size": 1730,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/global/history/page.tsx",
+          "size": 1582,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/global/maritime/page.tsx",
+          "size": 1788,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/global/page.tsx",
+          "size": 1878,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/global/politics/page.tsx",
+          "size": 1633,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/global/tech/page.tsx",
+          "size": 1828,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/guardian/page.tsx",
+          "size": 1770,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/identity/page.tsx",
+          "size": 311,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/institutions/page.tsx",
+          "size": 1781,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/jobs/page.tsx",
+          "size": 1643,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/kernel/page.tsx",
+          "size": 307,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/kids/page.tsx",
+          "size": 1731,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/layout.tsx",
+          "size": 5289,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/learning-to-income/page.tsx",
+          "size": 1968,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/legal/charter/page.tsx",
+          "size": 2025,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/marketplace/categories/page.tsx",
+          "size": 2043,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/moderation/page.tsx",
+          "size": 1773,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/music/page.tsx",
+          "size": 1535,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/notifications/page.tsx",
+          "size": 1598,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/offgrid/page.tsx",
+          "size": 1784,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ops/infrastructure/page.tsx",
+          "size": 2090,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ops/scale-ladder/page.tsx",
+          "size": 1999,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ops/staffing/page.tsx",
+          "size": 2227,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/payments/page.tsx",
+          "size": 1676,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/photos/page.tsx",
+          "size": 1629,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/professional/page.tsx",
+          "size": 1748,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/protocol/a2a/page.tsx",
+          "size": 1818,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/protocol/acp/page.tsx",
+          "size": 1694,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/protocol/mcp/page.tsx",
+          "size": 1898,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/protocol/page.tsx",
+          "size": 311,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/pulse/page.tsx",
+          "size": 1689,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/readiness/page.tsx",
+          "size": 1585,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/research/page.tsx",
+          "size": 2029,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/resilience/page.tsx",
+          "size": 315,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/runtime/page.tsx",
+          "size": 309,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/security/ai-threat-model/page.tsx",
+          "size": 2117,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/security/page.tsx",
+          "size": 1959,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/services/page.tsx",
+          "size": 1754,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/sos/page.tsx",
+          "size": 1762,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/sports/page.tsx",
+          "size": 1616,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/storage/page.tsx",
+          "size": 2365,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/stories/page.tsx",
+          "size": 1584,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/apple/page.tsx",
+          "size": 1830,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/china/page.tsx",
+          "size": 1963,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/competitors/page.tsx",
+          "size": 1896,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/gap-closure/page.tsx",
+          "size": 1877,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/global-giants/page.tsx",
+          "size": 1762,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/google/page.tsx",
+          "size": 1823,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/page.tsx",
+          "size": 1991,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/trust-safety/page.tsx",
+          "size": 1807,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/video/page.tsx",
+          "size": 1714,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/voice/realtime/page.tsx",
+          "size": 1702,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/workspaces/connectors/page.tsx",
+          "size": 1822,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/workspaces/intelligence/page.tsx",
+          "size": 1752,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/_components/pantavion-section-page.tsx",
+          "size": 3060,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/app/professional/infrastructure/water/recover/page.tsx",
+          "size": 3452,
+          "kind": "app_page"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/before-status.txt",
+          "size": 7984,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/ai/ai-atlas.ts",
+          "size": 2637,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/ai/capability-taxonomy.ts",
+          "size": 5268,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/ai/model-router.ts",
+          "size": 4253,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/business/smb-operating-center.ts",
+          "size": 2354,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/canonical/implementation-map.ts",
+          "size": 2375,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/communication/communication-model.ts",
+          "size": 2669,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/connectivity/connectivity-model.ts",
+          "size": 2476,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/daily/daily-surface-rules.ts",
+          "size": 3505,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/enterprise/enterprise-requirements.ts",
+          "size": 2150,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/family/family-circle.ts",
+          "size": 1760,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/global/global-domain-rules.ts",
+          "size": 3696,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/global/region-model.ts",
+          "size": 3077,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/guardian/guardian-loop.ts",
+          "size": 2887,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/guardian/guardian-runtime-status.json",
+          "size": 184,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/guardian/pantavion-guardian-brain.ts",
+          "size": 1988,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/guardian/pantavion-guardian-runtime-ledger.ts",
+          "size": 1630,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/infrastructure/water/water-access-store.ts",
+          "size": 10624,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/learning/learning-to-income.ts",
+          "size": 2387,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/legal/legal-foundation.ts",
+          "size": 2011,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/marketplace/marketplace-policy.ts",
+          "size": 1890,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/marketplace/marketplace-verticals.ts",
+          "size": 3174,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/media/media-policy.ts",
+          "size": 1652,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/moderation/moderation-model.ts",
+          "size": 1982,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/notifications/notification-model.ts",
+          "size": 1937,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/ops/scale-ladder.ts",
+          "size": 2878,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/payments/payment-readiness.ts",
+          "size": 1698,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/protocol/interoperability-standards.ts",
+          "size": 3803,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/security/ai-threat-model.ts",
+          "size": 3034,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/security/security-constitution.ts",
+          "size": 1940,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/social/social-governance.ts",
+          "size": 2105,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/storage/storage-architecture.ts",
+          "size": 2358,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/competitor-intelligence.ts",
+          "size": 7282,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/gap-closure.ts",
+          "size": 3331,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/pantavion-master-requirement-ledger.ts",
+          "size": 18613,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/translation/interpreter-model.ts",
+          "size": 2385,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/core/workspaces/workspace-intelligence.ts",
+          "size": 2829,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-master-locked.md",
+          "size": 46887,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-water.md",
+          "size": 22845,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/moved-untracked-files.txt",
+          "size": 7095,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/public/preview (1).webp",
+          "size": 61320,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/scripts/expand-emergency-languages.cjs",
+          "size": 22418,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/scripts/pantavion-master-ledger-audit.cjs",
+          "size": 2079,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/tatus -sb",
+          "size": 129,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-ai-audit-last.txt",
+          "size": 478,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-audit-before-sos-bridge-fix.txt",
+          "size": 430,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-audit-now.txt",
+          "size": 456,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-find-200-languages.txt",
+          "size": 4334,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-guardian-tsc.txt",
+          "size": 980,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-sos-clean-facts.txt",
+          "size": 12466,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-sos-language-audit.txt",
+          "size": 13938,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "size": 44399,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_quarantine/broken_outputs/patched to the configured Pantavion emergency webhook.',",
+          "size": 16465,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_quarantine/old_patches/pantavion-elder-broken-local-backup.patch",
+          "size": 20752,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_quarantine/old_patches/pantavion-local-amended-before-elder-fast-forward-fix-20260504-012507.patch",
+          "size": 0,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/git-clean-report-20260518-165826/git-clean-dry-run.txt",
+          "size": 8412,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/git-clean-report-20260518-165826/git-clean-executed.txt",
+          "size": 7452,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/git-clean-report-20260518-165826/status-after-clean.txt",
+          "size": 472,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/leftover-quarantine-20260518-165624/_pantavion_quarantine/broken_outputs/e open file formats and user-provided exports wherever possible.,",
+          "size": 16465,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/leftover-quarantine-20260518-165624/_pantavion_quarantine/broken_outputs/parency and minors protection required,",
+          "size": 447,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/leftover-quarantine-20260518-165624/_pantavion_quarantine/broken_outputs/t `n--- TypeScript check --- -ForegroundColor Yellow",
+          "size": 364,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/leftover-quarantine-20260518-165624/_pantavion_quarantine/broken_outputs/t `nPATCH 2C CLEAN. Pantavion sovereignty ledger committed and pushed. -ForegroundColor Green",
+          "size": 16465,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/patch-translate-ref-type.cjs",
+          "size": 859,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/patch-translate-speech-types.cjs",
+          "size": 2651,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/remaining-untracked-20260518-165719/before-status.txt",
+          "size": 1127,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/remaining-untracked-20260518-165719/missing-during-move.txt",
+          "size": 759,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/terminal-recovery-20260518-171755/changed-files.txt",
+          "size": 358,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/terminal-recovery-20260518-171755/status.txt",
+          "size": 382,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/terminal-recovery-20260518-171755/tsc.txt",
+          "size": 2956,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/after-status.txt",
+          "size": 7984,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/before-status.txt",
+          "size": 9873,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/moved-obvious-junk.txt",
+          "size": 1814,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/pantavion-current-log.txt",
+          "size": 1054,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/pantavion-current-status.txt",
+          "size": 8802,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/water-recovery-audit-20260509-091210.txt",
+          "size": 1272753,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/app-page.tsx.bak",
+          "size": 39169,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/global-emergency-languages.ts.before-language-marker-fix.bak",
+          "size": 22363,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/global-emergency-languages.ts.before-minimum-180-marker-fix.bak",
+          "size": 22483,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/kernel-control-plane.ts.bak",
+          "size": 8566,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/kernel-foundation-smoke.ts.bak",
+          "size": 5207,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/kernel-readiness-report.ts.bak",
+          "size": 7151,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/package-lock.json.bak",
+          "size": 228738,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/package.json.bak",
+          "size": 465,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/package.json.broken-before-product-truth.bak",
+          "size": 1120,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/package.json.broken-before-truth-commit.bak",
+          "size": 1019,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/package.json.local-broken.bak",
+          "size": 1022,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/page.tsx.before-ai-command-center-markers.bak",
+          "size": 2340,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/page.tsx.before-elder-build-fix.bak",
+          "size": 39169,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/page.tsx.before-nextTranslation-fallback.bak",
+          "size": 58737,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/page.tsx.before-nextTranslation-fix.bak",
+          "size": 58713,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/page.tsx.before-public-gateway-upgrade.bak",
+          "size": 3829,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/page.tsx.before-readiness-links-fix.bak",
+          "size": 7302,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/pantavion-ai-integrity-check.cjs.before-elder-build-fix.bak",
+          "size": 12044,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/pantavion-ai-integrity-check.cjs.before-language-count-regex-fix.bak",
+          "size": 22450,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/postcss.config.mjs.bak",
+          "size": 71,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/route.ts.before-api-safety-cleanup.bak",
+          "size": 2643,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/sos-page-before-location-fix-20260502-164450.tsx.bak",
+          "size": 3596,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_local_backups/untracked-quarantine-20260518-165426/_pantavion_quarantine/old_backups/tailwind.config.js.bak",
+          "size": 558,
+          "kind": "local_backup"
+        },
+        {
+          "path": "_pantavion_archive_txt/pantavion-build-errors.txt",
+          "size": 14576,
+          "kind": "archive_text"
+        },
+        {
+          "path": "_pantavion_archive_txt/pantavion-git-status.txt",
+          "size": 2782,
+          "kind": "archive_text"
+        }
+      ]
+    }
+  },
+  "knownExternalSourcesToConsolidateNext": {
+    "githubRepos": [
+      "pandaconnect1/pantavion-planet",
+      "pandaconnect1/pantavion-one-clean",
+      "pandaconnect1/pantavion-one",
+      "pandaconnect1/pantavion-one-main",
+      "pandaconnect1/pantavion-one-clean-ui",
+      "pandaconnect1/pantavion-voice",
+      "pandaconnect1/pantavion-voice-",
+      "pandaconnect1/pantavion.com",
+      "pandaconnect1/pantavion",
+      "pandaconnect1/pantavion-socialhub",
+      "pandaconnect1/pantavion-app."
+    ],
+    "publicDomains": [
+      "https://pantavion.com",
+      "https://www.pantavion.com",
+      "https://pantavion.net",
+      "https://www.pantavion.net",
+      "https://pantavion.info",
+      "https://www.pantavion.info"
+    ],
+    "vercel": "Run Vercel CLI inventory in next slice if CLI/login/token is available."
+  },
+  "rules": [
+    "repo and inventory are source of truth, not chat memory",
+    "nothing discovered is implemented until it has real route/function/kernel/test/audit",
+    "no blanket staging",
+    "no private water raw data exposure",
+    "no fake/static completion",
+    "all consolidation must pass audit TypeScript and build"
+  ]
+}
