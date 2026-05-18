@@ -11,7 +11,8 @@
         "audit:water:production": "node scripts/water-guardian-production-smoke.cjs",
         "audit:implementation": "node scripts/pantavion-implementation-gate.cjs",
         "audit:autonomous-builder": "node scripts/pantavion-autonomous-builder-gate.cjs",
-        "audit:implementation-runtime": "node scripts/pantavion-implementation-runtime-gate.cjs"
+        "audit:implementation-runtime": "node scripts/pantavion-implementation-runtime-gate.cjs",
+        "smoke:translation": "node scripts/pantavion-real-translation-smoke.cjs"
     },
     "dependencies": {
         "@vercel/analytics": "^2.0.1",
