@@ -224,7 +224,7 @@ if (!fs.existsSync(worldLanguageFile)) {
     failures.push({
       file: "core/emergency/global-emergency-languages.ts",
       text: "pantavion_world_language_catalog_minimum_180",
-      reason: "SOS language catalog must not shrink below 180 languages"
+      reason: "SOS/PantaTranslate language catalog must not shrink below 250 languages"
     });
   }
 }

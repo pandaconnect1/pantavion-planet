@@ -41,6 +41,9 @@ requireFile("app/api/translate/universal/route.ts", "Universal translation API r
 requireFile("core/translation/pantavion-natural-language-universe.ts", "Natural language universe contract must exist");
 requireFile("core/translation/pantavion-universal-interpreter-contract.ts", "Universal interpreter contract must exist");
 requireFile("core/translation/pantavion-translation-provider-router.ts", "Translation provider router must exist");
+requireFile("core/translation/pantavion-translation-provider-adapters.ts", "Real translation provider adapters must exist");
+requireFile("app/api/translate/status/route.ts", "Translation provider status API must exist");
+requireFile("components/translation/PantaTranslateFloatingWidget.tsx", "Global PantaTranslate floating widget must exist");
 
 requireText("core/translation/pantavion-natural-language-universe.ts", "targetNaturalLanguageCount: 7000", "7000+ natural language target must be preserved");
 requireText("core/translation/pantavion-universal-interpreter-contract.ts", "notSosOnly", "translation must not be SOS-only");
@@ -51,6 +54,12 @@ requireText("core/translation/pantavion-universal-interpreter-contract.ts", "cam
 requireText("core/translation/pantavion-universal-interpreter-contract.ts", "elderSimpleMode", "elder simple interpreter must be locked");
 requireText("app/translate/page.tsx", "PantaTranslate / Universal Interpreter", "main translation route must be visible");
 requireText("app/page.tsx", "/translate", "homepage must expose translation entry");
+requireText("app/layout.tsx", "PantaTranslateFloatingWidget", "global layout must expose PantaTranslate everywhere");
+requireText("core/translation/pantavion-translation-provider-adapters.ts", "translateWithPantavionProvider", "translation must call real provider adapter");
+requireText("core/translation/pantavion-translation-provider-adapters.ts", "deepl", "DeepL adapter must be present");
+requireText("core/translation/pantavion-translation-provider-adapters.ts", "azure", "Azure adapter must be present");
+requireText("core/translation/pantavion-translation-provider-adapters.ts", "google", "Google adapter must be present");
+requireText("core/translation/pantavion-translation-provider-adapters.ts", "libretranslate", "LibreTranslate adapter must be present");
 requireText("app/sos/elder/page.tsx", "pantavion_global_language_v1", "elder language memory must remain global");
 
 const world = exists("core/emergency/global-emergency-languages.ts")
