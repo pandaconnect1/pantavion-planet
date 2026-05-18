@@ -1,4 +1,4 @@
-import {
+﻿import {
   normalizePantavionNaturalLanguage,
   type PantavionNaturalLanguageCode,
 } from "./pantavion-natural-language-universe";
@@ -34,17 +34,26 @@ export type PantavionTranslationResult = {
   message: string;
 };
 
+export type NormalizedPantavionTranslationRequest = {
+  inputText: string;
+  sourceLanguage: PantavionNaturalLanguageCode | "auto";
+  targetLanguage: PantavionNaturalLanguageCode;
+  mode: PantavionTranslationMode;
+  sessionId: string | null;
+};
+
 export function normalizeTranslationRequest(
   request: PantavionTranslationRequest
-) {
+): NormalizedPantavionTranslationRequest {
   const inputText = String(request.text ?? "").trim();
-  const sourceLanguage =
+
+  const sourceLanguage: PantavionNaturalLanguageCode | "auto" =
     !request.sourceLanguage || request.sourceLanguage === "auto"
       ? "auto"
       : normalizePantavionNaturalLanguage(request.sourceLanguage);
-  const targetLanguage = normalizePantavionNaturalLanguage(
-    request.targetLanguage || "en"
-  );
+
+  const targetLanguage: PantavionNaturalLanguageCode =
+    normalizePantavionNaturalLanguage(request.targetLanguage || "en");
 
   return {
     inputText,
@@ -71,7 +80,7 @@ export function createProviderPendingTranslationResult(
     providerRequired: true,
     message: normalized.inputText
       ? "PantaTranslate is ready, but no live translation provider is configured yet."
-      : "Text is empty."
+      : "Text is empty.",
   };
 }
 
@@ -82,7 +91,7 @@ export const pantavionTranslationProviderRouter = {
     "PANTAVION_TRANSLATE_API_KEY",
     "PANTAVION_SPEECH_TO_TEXT_PROVIDER",
     "PANTAVION_TEXT_TO_SPEECH_PROVIDER",
-    "PANTAVION_OCR_PROVIDER"
+    "PANTAVION_OCR_PROVIDER",
   ],
   routeBy: [
     "language_pair",
@@ -92,13 +101,13 @@ export const pantavionTranslationProviderRouter = {
     "jurisdiction",
     "accessibility_need",
     "emergency_context",
-    "provider_availability"
+    "provider_availability",
   ],
   fallbackOrder: [
     "live_provider",
     "text_fallback",
     "large_text_cards",
     "saved_phrase_pack",
-    "provider_pending_truth_state"
-  ]
+    "provider_pending_truth_state",
+  ],
 } as const;

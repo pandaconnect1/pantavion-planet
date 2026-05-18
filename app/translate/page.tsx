@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -9,24 +9,30 @@ import {
   type PantavionNaturalLanguageCode,
 } from "@/core/translation/pantavion-natural-language-universe";
 
-type SpeechRecognitionResultLike = {
-  isFinal: boolean;
-  0: { transcript: string };
+type SpeechRecognitionAlternativeLike = {
+  transcript?: string;
 };
 
-type SpeechRecognitionEventLike = {
-  resultIndex: number;
-  results: {
-    length: number;
-    [index: number]: SpeechRecognitionResultLike;
-  };
+type SpeechRecognitionResultLike = {
+  isFinal?: boolean;
+  0?: SpeechRecognitionAlternativeLike;
+};
+
+type SpeechRecognitionResultListLike = {
+  length: number;
+  [index: number]: SpeechRecognitionResultLike | undefined;
+};
+
+type SpeechRecognitionResultEventLike = {
+  resultIndex?: number;
+  results: SpeechRecognitionResultListLike;
 };
 
 type SpeechRecognitionLike = {
   lang: string;
   continuous: boolean;
   interimResults: boolean;
-  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onresult: ((event: SpeechRecognitionResultEventLike) => void) | null;
   onerror: (() => void) | null;
   onend: (() => void) | null;
   start: () => void;
@@ -35,11 +41,10 @@ type SpeechRecognitionLike = {
 
 type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
 
-type SpeechWindow = Window &
-  typeof globalThis & {
-    SpeechRecognition?: SpeechRecognitionConstructor;
-    webkitSpeechRecognition?: SpeechRecognitionConstructor;
-  };
+type SpeechWindow = {
+  SpeechRecognition?: SpeechRecognitionConstructor;
+  webkitSpeechRecognition?: SpeechRecognitionConstructor;
+};
 
 const globalLanguageKey = "pantavion_global_language_v1";
 const otherLanguageKey = "pantavion_translate_other_language_v1";
@@ -54,7 +59,7 @@ export default function PantaTranslatePage() {
   const [status, setStatus] = useState("PantaTranslate ready.");
   const [providerMessage, setProviderMessage] = useState("");
   const [listening, setListening] = useState<"me" | "other" | null>(null);
-  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const recognitionRef = useRef<{ stop: () => void } | null>(null);
 
   const languages = pantavionPracticalLanguageMenu;
 
@@ -143,7 +148,7 @@ export default function PantaTranslatePage() {
   }
 
   function startListening(lane: "me" | "other") {
-    const speechWindow = window as SpeechWindow;
+    const speechWindow = window as unknown as SpeechWindow;
     const Recognition =
       speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition;
 
@@ -162,14 +167,16 @@ export default function PantaTranslatePage() {
     recognition.continuous = false;
     recognition.interimResults = true;
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: SpeechRecognitionResultEventLike) => {
       let finalText = "";
+      const startIndex = typeof event.resultIndex === "number" ? event.resultIndex : 0;
 
-      for (let index = event.resultIndex; index < event.results.length; index += 1) {
+      for (let index = startIndex; index < event.results.length; index += 1) {
         const result = event.results[index];
+        const transcript = result?.[0]?.transcript ?? "";
 
-        if (result.isFinal) {
-          finalText += result[0].transcript;
+        if (result?.isFinal && transcript) {
+          finalText += transcript;
         }
       }
 
@@ -215,7 +222,7 @@ export default function PantaTranslatePage() {
               href="/"
               className="rounded-full border border-yellow-300/30 px-4 py-2 text-sm font-bold text-yellow-100"
             >
-              ← Pantavion
+              â† Pantavion
             </Link>
             <Link
               href="/sos/elder"
@@ -250,7 +257,7 @@ export default function PantaTranslatePage() {
             <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
               <p className="text-sm text-slate-300">Modes</p>
               <p className="mt-2 text-lg font-black text-green-200">
-                Voice · Text · Subtitles · Camera · SOS
+                Voice Â· Text Â· Subtitles Â· Camera Â· SOS
               </p>
             </div>
           </div>
@@ -270,7 +277,7 @@ export default function PantaTranslatePage() {
               >
                 {languages.map((language) => (
                   <option key={language.code} value={language.code}>
-                    {language.nativeLabel} — {language.label}
+                    {language.nativeLabel} â€” {language.label}
                   </option>
                 ))}
               </select>
@@ -327,7 +334,7 @@ export default function PantaTranslatePage() {
               >
                 {languages.map((language) => (
                   <option key={language.code} value={language.code}>
-                    {language.nativeLabel} — {language.label}
+                    {language.nativeLabel} â€” {language.label}
                   </option>
                 ))}
               </select>
@@ -405,3 +412,5 @@ export default function PantaTranslatePage() {
     </main>
   );
 }
+
+
