@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+require("./pantavion-translation-integrity-check.cjs");
 
 const root = process.cwd();
 const roots = ["app", "core", "components", "kernel"].filter((dir) =>
@@ -217,7 +218,7 @@ if (!fs.existsSync(worldLanguageFile)) {
   });
 } else {
   const worldLanguageContent = fs.readFileSync(worldLanguageFile, "utf8");
-  const languageCodeCount = (worldLanguageContent.match(/code:\s*"/g) || []).length;
+  const languageCodeCount = (worldLanguageContent.match(/code:\s*"/g).length;
 
   if (languageCodeCount < 180) {
     failures.push({
@@ -240,7 +241,7 @@ if (fs.existsSync(elderSafeModeFile)) {
     });
   }
 
-  const helperStateCount = (elderSafeModeContent.match(/const \\[helperLanguageCode, setHelperLanguageCode\\]/g) || []).length;
+  const helperStateCount = (elderSafeModeContent.match(/const \[helperLanguageCode, setHelperLanguageCode\]/g).length;
 
   if (helperStateCount > 1) {
     failures.push({
