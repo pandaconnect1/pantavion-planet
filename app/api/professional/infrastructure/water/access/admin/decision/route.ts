@@ -1,4 +1,4 @@
-﻿import { list, put } from "@vercel/blob";
+import { list, put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 type DecisionBody = {
@@ -100,12 +100,24 @@ export async function POST(request: Request) {
 
     const payload = await readJsonBlob(requestBlob);
     const approvedPhone = normalizePhone(payload.emailOrPhone);
+    const deviceId = clean(payload.device?.id);
+    const deviceTokenHash = clean(payload.device?.tokenHash);
 
     if (!approvedPhone) {
       return NextResponse.json(
         {
           ok: false,
           error: "missing_phone",
+        },
+        { status: 400 },
+      );
+    }
+
+    if (decision === "approve" && (!deviceId || !deviceTokenHash)) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "request_missing_device_claim",
         },
         { status: 400 },
       );
@@ -126,6 +138,34 @@ export async function POST(request: Request) {
 
     if (decision === "approve") {
       await put(
+        `water/private/approved-devices/${deviceId}.json`,
+        JSON.stringify(
+          {
+            deviceId,
+            tokenHash: deviceTokenHash,
+            phone: approvedPhone,
+            firstName: clean(payload.firstName),
+            lastName: clean(payload.lastName),
+            title: clean(payload.title),
+            organization: clean(payload.organization),
+            requestId,
+            approvedAt: updatedPayload.decidedAt,
+            approvedBy: "pantavion-founder",
+            status: "approved",
+            revoked: false,
+            accessMode: "device-bound",
+          },
+          null,
+          2,
+        ),
+        {
+          access: "private",
+          allowOverwrite: true,
+          contentType: "application/json",
+        },
+      );
+
+      await put(
         `water/private/approved-contacts/${approvedPhone}.json`,
         JSON.stringify(
           {
@@ -133,10 +173,13 @@ export async function POST(request: Request) {
             firstName: clean(payload.firstName),
             lastName: clean(payload.lastName),
             title: clean(payload.title),
+            organization: clean(payload.organization),
+            lastApprovedDeviceId: deviceId,
             requestId,
             approvedAt: updatedPayload.decidedAt,
             approvedBy: "pantavion-founder",
             status: "approved",
+            accessMode: "device-bound",
           },
           null,
           2,
@@ -154,6 +197,7 @@ export async function POST(request: Request) {
       requestId,
       decision,
       phone: approvedPhone,
+      approvedDeviceId: decision === "approve" ? deviceId : null,
     });
   } catch (error) {
     return NextResponse.json(

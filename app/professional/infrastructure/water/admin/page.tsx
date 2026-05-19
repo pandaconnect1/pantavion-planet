@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type WaterAccessRequest = {
   id: string;
@@ -12,6 +12,9 @@ type WaterAccessRequest = {
   reason?: string;
   status: string;
   createdAt: string;
+  deviceId?: string;
+  deviceLabel?: string;
+  hasDeviceToken?: boolean;
 };
 
 const FOUNDER_CODE_STORAGE_KEY = "pantavion.water.admin.founderCode.v1";
@@ -69,6 +72,9 @@ export default function WaterAdminAccessPage() {
         ok?: boolean;
         requests?: WaterAccessRequest[];
         error?: string;
+        blobCount?: number;
+        readCount?: number;
+        skippedCount?: number;
       };
 
       if (!response.ok || !json.ok) {
@@ -78,7 +84,9 @@ export default function WaterAdminAccessPage() {
       setFounderCode(codeToUse);
       rememberFounderCode(codeToUse);
       setRequests(json.requests || []);
-      setMessage(`Βρέθηκαν ${json.requests?.length || 0} αιτήματα.`);
+      setMessage(
+        `Βρέθηκαν ${json.requests?.length || 0} αιτήματα. Blob: ${json.blobCount || 0}, διαβάστηκαν: ${json.readCount || 0}, skipped: ${json.skippedCount || 0}.`,
+      );
     } catch {
       setTrustedDevice(false);
       setMessage("Δεν φορτώθηκαν τα αιτήματα. Έλεγξε τον founder/admin κωδικό.");
@@ -87,11 +95,16 @@ export default function WaterAdminAccessPage() {
     }
   }
 
-  async function decide(requestId: string, decision: "approve" | "reject") {
+  async function decide(request: WaterAccessRequest, decision: "approve" | "reject") {
     const codeToUse = (founderCode || getSavedFounderCode()).trim();
 
     if (!codeToUse) {
       setMessage("Χρειάζεται founder/admin κωδικός πριν από έγκριση ή απόρριψη.");
+      return;
+    }
+
+    if (decision === "approve" && !request.hasDeviceToken) {
+      setMessage("Αυτό είναι παλιό αίτημα χωρίς δεμένη συσκευή. Ζήτησε από τον χρήστη να κάνει νέα αίτηση από το κινητό του.");
       return;
     }
 
@@ -106,7 +119,7 @@ export default function WaterAdminAccessPage() {
         },
         body: JSON.stringify({
           founderCode: codeToUse,
-          requestId,
+          requestId: request.id,
           decision,
         }),
       });
@@ -121,7 +134,7 @@ export default function WaterAdminAccessPage() {
       }
 
       rememberFounderCode(codeToUse);
-      setMessage(decision === "approve" ? "Εγκρίθηκε." : "Απορρίφθηκε.");
+      setMessage(decision === "approve" ? "Εγκρίθηκε η συγκεκριμένη συσκευή." : "Απορρίφθηκε.");
       await loadRequests(codeToUse);
     } catch {
       setMessage("Η απόφαση δεν αποθηκεύτηκε.");
@@ -141,9 +154,24 @@ export default function WaterAdminAccessPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const counts = useMemo(() => {
+    const pending = requests.filter((item) => item.status === "pending_founder_review").length;
+    const approved = requests.filter((item) => item.status === "approved").length;
+    const rejected = requests.filter((item) => item.status === "rejected").length;
+    const deviceReady = requests.filter((item) => item.hasDeviceToken).length;
+
+    return {
+      total: requests.length,
+      pending,
+      approved,
+      rejected,
+      deviceReady,
+    };
+  }, [requests]);
+
   return (
     <main className="min-h-screen bg-[#06111f] px-4 py-6 text-white">
-      <section className="mx-auto w-full max-w-4xl rounded-3xl border border-[#b89445]/50 bg-[#0d1a2d] p-5 shadow-2xl">
+      <section className="mx-auto w-full max-w-5xl rounded-3xl border border-[#b89445]/50 bg-[#0d1a2d] p-5 shadow-2xl">
         <p className="mb-3 text-xs font-bold uppercase tracking-[0.26em] text-[#f2c766]">
           PANTAVION WATER ADMIN
         </p>
@@ -151,7 +179,7 @@ export default function WaterAdminAccessPage() {
         <h1 className="text-3xl font-black">Έγκριση πρόσβασης ύδρευσης</h1>
 
         <p className="mt-3 text-sm leading-6 text-slate-300">
-          Από εδώ εγκρίνεις ή απορρίπτεις αιτήματα από το κινητό σου. Δεν δίνεις τον founder κωδικό σε κανέναν.
+          Από εδώ εγκρίνεις ή απορρίπτεις αιτήματα από το κινητό σου. Η πρόσβαση δένεται με τη συγκεκριμένη συσκευή του χρήστη.
         </p>
 
         <div className="mt-6 grid gap-3 rounded-3xl border border-slate-700 bg-[#07111f] p-4">
@@ -192,43 +220,80 @@ export default function WaterAdminAccessPage() {
           {message ? <p className="text-sm font-bold text-[#f2c766]">{message}</p> : null}
         </div>
 
+        <div className="mt-5 grid gap-3 sm:grid-cols-5">
+          <div className="rounded-2xl border border-slate-700 bg-[#07111f] p-4">
+            <p className="text-xs text-slate-400">Σύνολο</p>
+            <p className="text-2xl font-black text-[#f2c766]">{counts.total}</p>
+          </div>
+          <div className="rounded-2xl border border-amber-600/50 bg-amber-950/20 p-4">
+            <p className="text-xs text-amber-100/70">Σε αναμονή</p>
+            <p className="text-2xl font-black text-amber-100">{counts.pending}</p>
+          </div>
+          <div className="rounded-2xl border border-emerald-600/50 bg-emerald-950/20 p-4">
+            <p className="text-xs text-emerald-100/70">Εγκεκριμένα</p>
+            <p className="text-2xl font-black text-emerald-100">{counts.approved}</p>
+          </div>
+          <div className="rounded-2xl border border-red-600/50 bg-red-950/20 p-4">
+            <p className="text-xs text-red-100/70">Απορρίψεις</p>
+            <p className="text-2xl font-black text-red-100">{counts.rejected}</p>
+          </div>
+          <div className="rounded-2xl border border-sky-600/50 bg-sky-950/20 p-4">
+            <p className="text-xs text-sky-100/70">Με συσκευή</p>
+            <p className="text-2xl font-black text-sky-100">{counts.deviceReady}</p>
+          </div>
+        </div>
+
         <div className="mt-6 grid gap-4">
-          {requests.map((item) => (
-            <article
-              key={item.id}
-              className="rounded-3xl border border-slate-700 bg-[#07111f] p-4"
-            >
-              <div className="flex flex-col gap-2">
-                <p className="text-xl font-black">
-                  {item.firstName} {item.lastName}
-                </p>
-                <p className="text-sm text-slate-300">Τίτλος/Ρόλος: {item.title}</p>
-                <p className="text-sm text-slate-300">Τηλέφωνο: {item.emailOrPhone}</p>
-                <p className="text-sm text-slate-300">Κατάσταση: {item.status}</p>
-                <p className="text-xs text-slate-500">{item.createdAt}</p>
-              </div>
+          {requests.map((item) => {
+            const pending = item.status === "pending_founder_review";
+            const canApprove = pending && item.hasDeviceToken === true;
 
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={() => void decide(item.id, "approve")}
-                  disabled={loading || item.status === "approved"}
-                  className="rounded-2xl border border-emerald-500 bg-emerald-950/40 px-5 py-3 font-black text-emerald-100 disabled:opacity-50"
-                >
-                  Εγκρίνω
-                </button>
+            return (
+              <article
+                key={item.id}
+                className="rounded-3xl border border-slate-700 bg-[#07111f] p-4"
+              >
+                <div className="flex flex-col gap-2">
+                  <p className="text-xl font-black">
+                    {item.firstName} {item.lastName}
+                  </p>
+                  <p className="text-sm text-slate-300">Τίτλος/Ρόλος: {item.title}</p>
+                  <p className="text-sm text-slate-300">Τηλέφωνο: {item.emailOrPhone}</p>
+                  <p className="text-sm text-slate-300">Κατάσταση: {item.status}</p>
+                  <p className="text-sm text-slate-300">
+                    Συσκευή: {item.hasDeviceToken ? item.deviceLabel || item.deviceId || "δεμένη συσκευή" : "παλιό αίτημα χωρίς συσκευή"}
+                  </p>
+                  <p className="text-xs text-slate-500">{item.createdAt}</p>
 
-                <button
-                  type="button"
-                  onClick={() => void decide(item.id, "reject")}
-                  disabled={loading || item.status === "rejected"}
-                  className="rounded-2xl border border-red-500 bg-red-950/40 px-5 py-3 font-black text-red-100 disabled:opacity-50"
-                >
-                  Απόρριψη
-                </button>
-              </div>
-            </article>
-          ))}
+                  {!item.hasDeviceToken ? (
+                    <p className="rounded-2xl border border-amber-500/40 bg-amber-950/30 px-4 py-3 text-sm font-bold text-amber-100">
+                      Παλιά αίτηση χωρίς ασφαλές device token. Ζήτησε νέα αίτηση από το κινητό του χρήστη.
+                    </p>
+                  ) : null}
+                </div>
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={() => void decide(item, "approve")}
+                    disabled={loading || !canApprove}
+                    className="rounded-2xl border border-emerald-500 bg-emerald-950/40 px-5 py-3 font-black text-emerald-100 disabled:opacity-50"
+                  >
+                    Εγκρίνω τη συσκευή
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => void decide(item, "reject")}
+                    disabled={loading || item.status === "rejected"}
+                    className="rounded-2xl border border-red-500 bg-red-950/40 px-5 py-3 font-black text-red-100 disabled:opacity-50"
+                  >
+                    Απόρριψη
+                  </button>
+                </div>
+              </article>
+            );
+          })}
 
           {requests.length === 0 ? (
             <p className="rounded-3xl border border-slate-700 bg-[#07111f] p-4 text-slate-300">

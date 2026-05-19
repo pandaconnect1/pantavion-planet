@@ -66,7 +66,7 @@ const UI = {
     organization: "Οργανισμός / Εταιρεία",
     emailOrPhone: "Τηλέφωνο",
     reason: "Λόγος πρόσβασης",
-    accessCode: "Founder code ή εγκεκριμένο τηλέφωνο",
+    accessCode: "Founder code ή αυτόματος έλεγχος εγκεκριμένης συσκευής",
     submitRequest: "Αποστολή αίτησης για έγκριση",
     requestSent: "Η αίτηση στάλθηκε για έγκριση. Δεν έχει δοθεί πρόσβαση ακόμη.",
     requestMissing: "Συμπλήρωσε όνομα, επίθετο, τίτλο/ρόλο και τηλέφωνο.",
@@ -412,7 +412,8 @@ export default function ControlledWaterSegmentClient() {
         throw new Error("request_failed");
       }
 
-      setAccessMessage(t.requestSent);
+      const json = (await response.json()) as { requestId?: string };
+      setAccessMessage(`${t.requestSent} Request ID: ${json.requestId || "pending"}. Μείνε στην ίδια συσκευή μέχρι να εγκριθεί.`);
     } catch {
       setAccessMessage(t.requestFailed);
     } finally {

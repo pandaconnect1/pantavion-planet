@@ -1,4 +1,6 @@
-﻿import { list } from "@vercel/blob";
+import { createHash } from "crypto";
+
+import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 type WaterAccessAuthorizeBody = {
@@ -7,28 +9,67 @@ type WaterAccessAuthorizeBody = {
   firstName?: string;
   lastName?: string;
   title?: string;
+  deviceId?: string;
+  deviceToken?: string;
+};
+
+type BlobLike = {
+  url: string;
+  downloadUrl?: string;
+  pathname: string;
 };
 
 function clean(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function normalizePhone(value: unknown) {
-  return clean(value)
-    .toLowerCase()
-    .replace(/[\s()\-.]/g, "");
+function hashToken(value: string) {
+  return createHash("sha256").update(value).digest("hex");
 }
 
-async function approvedPhoneExists(phone: string) {
-  if (!phone) return false;
+function privateBlobHeaders(): HeadersInit {
+  const token = process.env.BLOB_READ_WRITE_TOKEN || "";
 
-  const pathname = `water/private/approved-contacts/${phone}.json`;
+  return token
+    ? {
+        Authorization: `Bearer ${token}`,
+      }
+    : {};
+}
+
+async function readJsonBlob(blob: BlobLike) {
+  const response = await fetch(blob.downloadUrl || blob.url, {
+    cache: "no-store",
+    headers: privateBlobHeaders(),
+  });
+
+  if (!response.ok) {
+    throw new Error(`blob_read_failed_${response.status}`);
+  }
+
+  return response.json();
+}
+
+async function approvedDeviceMatches(deviceId: string, deviceToken: string) {
+  if (!deviceId || !deviceToken) return null;
+
+  const pathname = `water/private/approved-devices/${deviceId}.json`;
   const result = await list({
     prefix: pathname,
     limit: 1,
   });
 
-  return result.blobs.some((blob) => blob.pathname === pathname);
+  const blob = (result.blobs as BlobLike[]).find((item) => item.pathname === pathname);
+  if (!blob) return null;
+
+  const payload = await readJsonBlob(blob);
+  const tokenHash = hashToken(deviceToken);
+
+  if (clean(payload.status) !== "approved") return null;
+  if (payload.revoked === true) return null;
+  if (clean(payload.tokenHash) !== tokenHash) return null;
+
+  return payload;
 }
 
 export async function POST(request: Request) {
@@ -36,12 +77,13 @@ export async function POST(request: Request) {
 
   const founderCode = process.env.PANTAVION_WATER_FOUNDER_ACCESS_CODE || "";
   const submittedCode = clean(body.code);
-  const submittedPhone = normalizePhone(body.emailOrPhone || body.code);
+  const deviceId = clean(body.deviceId);
+  const deviceToken = clean(body.deviceToken);
 
   const isFounderAccess = Boolean(founderCode) && submittedCode === founderCode;
-  const isApprovedPhoneAccess = await approvedPhoneExists(submittedPhone);
+  const approvedDevice = await approvedDeviceMatches(deviceId, deviceToken);
 
-  if (!founderCode && !submittedPhone) {
+  if (!founderCode && !deviceId) {
     return NextResponse.json(
       {
         ok: false,
@@ -51,7 +93,7 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!isFounderAccess && !isApprovedPhoneAccess) {
+  if (!isFounderAccess && !approvedDevice) {
     return NextResponse.json(
       {
         ok: false,
@@ -64,14 +106,14 @@ export async function POST(request: Request) {
   return NextResponse.json({
     ok: true,
     approved: true,
-    accessMode: isFounderAccess ? "founder" : "approved-phone",
+    accessMode: isFounderAccess ? "founder" : "approved-device",
     approvedAt: new Date().toISOString(),
     holder: {
-      firstName: clean(body.firstName),
-      lastName: clean(body.lastName),
-      title: clean(body.title),
-      phone: submittedPhone,
+      firstName: isFounderAccess ? clean(body.firstName) : clean(approvedDevice?.firstName),
+      lastName: isFounderAccess ? clean(body.lastName) : clean(approvedDevice?.lastName),
+      title: isFounderAccess ? clean(body.title) : clean(approvedDevice?.title),
+      phone: clean(approvedDevice?.phone),
+      deviceId,
     },
   });
 }
-

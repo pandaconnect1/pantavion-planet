@@ -60,7 +60,7 @@ export async function POST(request: Request) {
 
     const result = await list({
       prefix: "water/private/access-requests/",
-      limit: 100,
+      limit: 200,
     });
 
     const requests = [];
@@ -69,6 +69,7 @@ export async function POST(request: Request) {
     for (const blob of result.blobs as BlobLike[]) {
       try {
         const payload = await readJsonBlob(blob);
+        const device = payload.device || {};
 
         requests.push({
           id: clean(payload.id),
@@ -80,6 +81,9 @@ export async function POST(request: Request) {
           reason: clean(payload.reason),
           status: clean(payload.status),
           createdAt: clean(payload.createdAt),
+          deviceId: clean(device.id),
+          deviceLabel: clean(device.label),
+          hasDeviceToken: Boolean(clean(device.tokenHash)),
         });
       } catch {
         skippedCount += 1;
