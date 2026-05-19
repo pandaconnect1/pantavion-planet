@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
+
+import WaterEntryClient from "./water-entry-client";
 
 export const metadata: Metadata = {
-  title: "Pantavion Water Network",
+  title: "Pantavion Water Access",
   description:
-    "Protected Pantavion water network live map with authorized access and controlled private pipe segments.",
+    "Protected Pantavion water infrastructure access entry for approved users and founder admin review.",
 };
 
 export default function WaterInfrastructurePage() {
-  redirect("/professional/infrastructure/water/live");
+  return <WaterEntryClient />;
 }

@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 type DecisionBody = {
   founderCode?: string;
   requestId?: string;
-  decision?: "approve" | "reject";
+  decision?: "approve" | "reject" | "revoke";
 };
 
 type BlobLike = {
@@ -66,7 +66,8 @@ export async function POST(request: Request) {
     }
 
     const requestId = clean(body.requestId);
-    const decision = body.decision === "reject" ? "reject" : "approve";
+    const decision =
+      body.decision === "reject" ? "reject" : body.decision === "revoke" ? "revoke" : "approve";
 
     if (!requestId) {
       return NextResponse.json(
@@ -123,10 +124,15 @@ export async function POST(request: Request) {
       );
     }
 
+    const nextStatus =
+      decision === "approve" ? "approved" : decision === "revoke" ? "revoked" : "rejected";
+
+    const decidedAt = new Date().toISOString();
+
     const updatedPayload = {
       ...payload,
-      status: decision === "approve" ? "approved" : "rejected",
-      decidedAt: new Date().toISOString(),
+      status: nextStatus,
+      decidedAt,
       decidedBy: "pantavion-founder",
     };
 
@@ -149,7 +155,7 @@ export async function POST(request: Request) {
             title: clean(payload.title),
             organization: clean(payload.organization),
             requestId,
-            approvedAt: updatedPayload.decidedAt,
+            approvedAt: decidedAt,
             approvedBy: "pantavion-founder",
             status: "approved",
             revoked: false,
@@ -176,9 +182,39 @@ export async function POST(request: Request) {
             organization: clean(payload.organization),
             lastApprovedDeviceId: deviceId,
             requestId,
-            approvedAt: updatedPayload.decidedAt,
+            approvedAt: decidedAt,
             approvedBy: "pantavion-founder",
             status: "approved",
+            accessMode: "device-bound",
+          },
+          null,
+          2,
+        ),
+        {
+          access: "private",
+          allowOverwrite: true,
+          contentType: "application/json",
+        },
+      );
+    }
+
+    if (decision === "revoke" && deviceId) {
+      await put(
+        `water/private/approved-devices/${deviceId}.json`,
+        JSON.stringify(
+          {
+            deviceId,
+            tokenHash: deviceTokenHash,
+            phone: approvedPhone,
+            firstName: clean(payload.firstName),
+            lastName: clean(payload.lastName),
+            title: clean(payload.title),
+            organization: clean(payload.organization),
+            requestId,
+            revokedAt: decidedAt,
+            revokedBy: "pantavion-founder",
+            status: "revoked",
+            revoked: true,
             accessMode: "device-bound",
           },
           null,
@@ -196,8 +232,9 @@ export async function POST(request: Request) {
       ok: true,
       requestId,
       decision,
+      status: nextStatus,
       phone: approvedPhone,
-      approvedDeviceId: decision === "approve" ? deviceId : null,
+      deviceId: deviceId || null,
     });
   } catch (error) {
     return NextResponse.json(
