@@ -20,7 +20,7 @@ function clean(value: unknown) {
 function normalizePhone(value: unknown) {
   return clean(value)
     .toLowerCase()
-    .replace(/[\s()\-.]/g, "");
+    .replace(/[\s().-]/g, "");
 }
 
 function founderOk(value: unknown) {
@@ -28,13 +28,24 @@ function founderOk(value: unknown) {
   return Boolean(founderCode) && clean(value) === founderCode;
 }
 
+function privateBlobHeaders(): HeadersInit {
+  const token = process.env.BLOB_READ_WRITE_TOKEN || "";
+
+  return token
+    ? {
+        Authorization: `Bearer ${token}`,
+      }
+    : {};
+}
+
 async function readJsonBlob(blob: BlobLike) {
   const response = await fetch(blob.downloadUrl || blob.url, {
     cache: "no-store",
+    headers: privateBlobHeaders(),
   });
 
   if (!response.ok) {
-    throw new Error("blob_read_failed");
+    throw new Error(`blob_read_failed_${response.status}`);
   }
 
   return response.json();

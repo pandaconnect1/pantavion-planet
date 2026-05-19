@@ -1,4 +1,4 @@
-﻿import { list } from "@vercel/blob";
+import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 type FounderRequestBody = {
@@ -21,13 +21,24 @@ function founderOk(value: unknown) {
   return Boolean(founderCode) && clean(value) === founderCode;
 }
 
+function privateBlobHeaders(): HeadersInit {
+  const token = process.env.BLOB_READ_WRITE_TOKEN || "";
+
+  return token
+    ? {
+        Authorization: `Bearer ${token}`,
+      }
+    : {};
+}
+
 async function readJsonBlob(blob: BlobLike) {
   const response = await fetch(blob.downloadUrl || blob.url, {
     cache: "no-store",
+    headers: privateBlobHeaders(),
   });
 
   if (!response.ok) {
-    throw new Error("blob_read_failed");
+    throw new Error(`blob_read_failed_${response.status}`);
   }
 
   return response.json();
@@ -53,6 +64,7 @@ export async function POST(request: Request) {
     });
 
     const requests = [];
+    let skippedCount = 0;
 
     for (const blob of result.blobs as BlobLike[]) {
       try {
@@ -70,7 +82,7 @@ export async function POST(request: Request) {
           createdAt: clean(payload.createdAt),
         });
       } catch {
-        // Skip unreadable request without exposing private storage details.
+        skippedCount += 1;
       }
     }
 
@@ -79,6 +91,10 @@ export async function POST(request: Request) {
     return NextResponse.json({
       ok: true,
       requests,
+      blobCount: result.blobs.length,
+      readCount: requests.length,
+      skippedCount,
+      checkedAt: new Date().toISOString(),
     });
   } catch (error) {
     return NextResponse.json(
