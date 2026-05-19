@@ -1,4 +1,4 @@
-import { list, put } from "@vercel/blob";
+import { del, list, put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 type DecisionBody = {
@@ -100,6 +100,37 @@ export async function POST(request: Request) {
     }
 
     const payload = await readJsonBlob(requestBlob);
+    const decidedAt = new Date().toISOString();
+
+    if (decision === "reject") {
+      const rejectedPayload = {
+        ...payload,
+        status: "rejected",
+        decidedAt,
+        decidedBy: "pantavion-founder",
+        archivedReason: "rejected_by_founder",
+      };
+
+      await put(
+        `water/private/rejected-requests/${requestId}.json`,
+        JSON.stringify(rejectedPayload, null, 2),
+        {
+          access: "private",
+          allowOverwrite: true,
+          contentType: "application/json",
+        },
+      );
+
+      await del(requestPath);
+
+      return NextResponse.json({
+        ok: true,
+        requestId,
+        decision: "reject",
+        status: "removed_from_active_queue",
+      });
+    }
+
     const approvedPhone = normalizePhone(payload.emailOrPhone);
     const deviceId = clean(payload.device?.id);
     const deviceTokenHash = clean(payload.device?.tokenHash);
@@ -124,10 +155,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const nextStatus =
-      decision === "approve" ? "approved" : decision === "revoke" ? "revoked" : "rejected";
-
-    const decidedAt = new Date().toISOString();
+    const nextStatus = decision === "approve" ? "approved" : "revoked";
 
     const updatedPayload = {
       ...payload,

@@ -69,6 +69,11 @@ export async function POST(request: Request) {
     for (const blob of result.blobs as BlobLike[]) {
       try {
         const payload = await readJsonBlob(blob);
+        // hide rejected active requests from the live founder/admin queue.
+        if (clean(payload.status) === "rejected") {
+          continue;
+        }
+
         const device = payload.device || {};
 
         requests.push({
