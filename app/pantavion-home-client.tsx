@@ -201,7 +201,7 @@ export default function HomePage() {
                   </p>
                   <h3 className="text-2xl font-black">{title}</h3>
                   <p className="mt-3 text-base leading-7 text-slate-200">{text}</p>
-                  <p className="mt-4 text-sm font-black text-[#f6c85f]">{module.href}</p>
+                  <p className="mt-4 text-sm font-black text-[#f6c85f]">Άνοιγμα ενότητας</p>
                 </Link>
               );
             })}
