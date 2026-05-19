@@ -76,7 +76,7 @@ const UI = {
 };
 
 const modules = [
-  { key: "water", href: "/professional/infrastructure/water/live" },
+  { key: "water", href: "/professional/infrastructure/water" },
   { key: "translate", href: "/translate" },
   { key: "ai", href: "/panta-ai" },
   { key: "sos", href: "/sos" },
@@ -145,7 +145,7 @@ export default function HomePage() {
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap">
-            <Link href="/professional/infrastructure/water/live" className="rounded-full border border-[#f6c85f]/60 bg-[#f6c85f]/15 px-6 py-4 text-center text-base font-black text-[#fff8e7]">
+            <Link href="/professional/infrastructure/water" className="rounded-full border border-[#f6c85f]/60 bg-[#f6c85f]/15 px-6 py-4 text-center text-base font-black text-[#fff8e7]">
               {t.water}
             </Link>
 
