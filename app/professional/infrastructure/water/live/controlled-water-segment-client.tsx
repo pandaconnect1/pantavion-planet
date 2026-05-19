@@ -172,6 +172,57 @@ function writeWaterDeviceApproval() {
 }
 
 
+const PANTAVION_WATER_DEVICE_ID_KEY = "pantavion:water:device-id:v1";
+const PANTAVION_WATER_DEVICE_TOKEN_KEY = "pantavion:water:device-token:v1";
+const PANTAVION_WATER_FOUNDER_CODE_STORAGE_KEY = "pantavion.water.admin.founderCode.v1";
+
+function randomWaterDeviceSecret() {
+  if (typeof window !== "undefined" && window.crypto?.getRandomValues) {
+    const values = window.crypto.getRandomValues(new Uint32Array(4));
+
+    return Array.from(values)
+      .map((value) => value.toString(36))
+      .join("");
+  }
+
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+}
+
+function getOrCreateWaterAccessDevice() {
+  if (typeof window === "undefined") {
+    return {
+      deviceId: "",
+      deviceToken: "",
+      deviceLabel: "",
+    };
+  }
+
+  let deviceId = window.localStorage.getItem(PANTAVION_WATER_DEVICE_ID_KEY) || "";
+  let deviceToken = window.localStorage.getItem(PANTAVION_WATER_DEVICE_TOKEN_KEY) || "";
+
+  if (!deviceId) {
+    deviceId = `water-device-${Date.now().toString(36)}-${randomWaterDeviceSecret()}`;
+    window.localStorage.setItem(PANTAVION_WATER_DEVICE_ID_KEY, deviceId);
+  }
+
+  if (!deviceToken) {
+    deviceToken = `water-token-${randomWaterDeviceSecret()}-${randomWaterDeviceSecret()}`;
+    window.localStorage.setItem(PANTAVION_WATER_DEVICE_TOKEN_KEY, deviceToken);
+  }
+
+  return {
+    deviceId,
+    deviceToken,
+    deviceLabel: `${window.navigator.platform || "unknown"} / ${window.navigator.userAgent.slice(0, 90)}`,
+  };
+}
+
+function getSavedWaterFounderCode() {
+  if (typeof window === "undefined") return "";
+
+  return window.localStorage.getItem(PANTAVION_WATER_FOUNDER_CODE_STORAGE_KEY) || "";
+}
+
 function getInitialLang(): Lang {
   if (typeof window === "undefined") return "el";
 
@@ -336,6 +387,46 @@ export default function ControlledWaterSegmentClient() {
   const loadInProgressRef = useRef(false);
 
   const t = UI[getPantavionUiLanguage(lang)];
+
+  useEffect(() => {
+    if (accessApproved) return;
+
+    let cancelled = false;
+
+    async function checkApprovedDevice() {
+      const device = getOrCreateWaterAccessDevice();
+
+      try {
+        const response = await fetch("/api/professional/infrastructure/water/access/authorize", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            code: getSavedWaterFounderCode(),
+            deviceId: device.deviceId,
+            deviceToken: device.deviceToken,
+          }),
+        });
+
+        const json = (await response.json()) as { ok?: boolean };
+
+        if (!cancelled && response.ok && json.ok) {
+          setAccessApproved(true);
+          writeWaterDeviceApproval();
+          setAccessMessage(t.accessApproved);
+        }
+      } catch {
+        // auto-approved-device-check: stay on protected screen.
+      }
+    }
+
+    void checkApprovedDevice();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [accessApproved, t.accessApproved]);
 
   useEffect(() => {
     window.localStorage.setItem("pantavion-language", lang);
