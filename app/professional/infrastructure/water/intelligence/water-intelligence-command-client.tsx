@@ -7,6 +7,7 @@ import {
   WATER_IMPLEMENTATION_SEQUENCE,
   WATER_KERNEL_DOCTRINE,
   WATER_OPERATION_ROLE_VIEWS,
+  WATER_SUPERVISOR_FAULT_ASSISTANT,
   WATER_VISIBILITY_RULES,
 } from "@/core/water/water-intelligence-master-contract";
 
@@ -301,6 +302,51 @@ export default function WaterIntelligenceCommandClient() {
           />
         </section>
 
+        <section className="mt-6 rounded-[2rem] border border-[#f6c85f]/25 bg-[#071425] p-5">
+          <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f6c85f]">
+            Βοηθός Επιστάτη
+          </p>
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Δεξί χέρι του επιστάτη για βλάβες και συνεργεία
+          </h2>
+          <p className="mt-3 max-w-4xl text-sm font-semibold leading-7 text-slate-300">
+            Το Pantavion θα κρατά αρχείο βλαβών, θα καταγράφει είδος βλάβης,
+            περιοχή και διεύθυνση, θα βάζει τις εργασίες σε σειρά
+            προτεραιότητας και θα εισηγείται ποιο συνεργείο είναι πιο κοντά ή
+            τελειώνει πιο σύντομα.
+          </p>
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            <ListBlock
+              title="Τι καταχωρεί ο επιστάτης"
+              items={WATER_SUPERVISOR_FAULT_ASSISTANT.faultFields}
+            />
+            <ListBlock
+              title="Είδη βλάβης"
+              items={WATER_SUPERVISOR_FAULT_ASSISTANT.faultTypes}
+            />
+            <ListBlock
+              title="Πώς μπαίνουν οι προτεραιότητες"
+              items={WATER_SUPERVISOR_FAULT_ASSISTANT.priorityRules}
+            />
+            <ListBlock
+              title="Πώς επιλέγεται συνεργείο"
+              items={WATER_SUPERVISOR_FAULT_ASSISTANT.crewAssignmentSignals}
+            />
+            <ListBlock
+              title="Ενέργειες επιστάτη"
+              items={WATER_SUPERVISOR_FAULT_ASSISTANT.supervisorActions}
+            />
+            <ListBlock
+              title="Τι μένει στο αρχείο"
+              items={WATER_SUPERVISOR_FAULT_ASSISTANT.archiveKeeps}
+            />
+          </div>
+
+          <p className="mt-5 rounded-2xl border border-[#f6c85f]/25 bg-[#f6c85f]/10 px-4 py-3 text-sm font-black leading-7 text-[#ffe29a]">
+            {WATER_SUPERVISOR_FAULT_ASSISTANT.safetyRule}
+          </p>
+        </section>
         <section className="mt-6">
           <div className="rounded-[2rem] border border-[#f6c85f]/25 bg-[#071425] p-5">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f6c85f]">
@@ -329,6 +375,51 @@ export default function WaterIntelligenceCommandClient() {
           </div>
         </section>
 
+        <section className="mt-6 rounded-[2rem] border border-[#f6c85f]/25 bg-[#071425] p-5">
+          <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f6c85f]">
+            Βοηθός Επιστάτη
+          </p>
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Δεξί χέρι του επιστάτη για βλάβες και συνεργεία
+          </h2>
+          <p className="mt-3 max-w-4xl text-sm font-semibold leading-7 text-slate-300">
+            Το Pantavion θα κρατά αρχείο βλαβών, θα καταγράφει είδος βλάβης,
+            περιοχή και διεύθυνση, θα βάζει τις εργασίες σε σειρά
+            προτεραιότητας και θα εισηγείται ποιο συνεργείο είναι πιο κοντά ή
+            τελειώνει πιο σύντομα.
+          </p>
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            <ListBlock
+              title="Τι καταχωρεί ο επιστάτης"
+              items={WATER_SUPERVISOR_FAULT_ASSISTANT.faultFields}
+            />
+            <ListBlock
+              title="Είδη βλάβης"
+              items={WATER_SUPERVISOR_FAULT_ASSISTANT.faultTypes}
+            />
+            <ListBlock
+              title="Πώς μπαίνουν οι προτεραιότητες"
+              items={WATER_SUPERVISOR_FAULT_ASSISTANT.priorityRules}
+            />
+            <ListBlock
+              title="Πώς επιλέγεται συνεργείο"
+              items={WATER_SUPERVISOR_FAULT_ASSISTANT.crewAssignmentSignals}
+            />
+            <ListBlock
+              title="Ενέργειες επιστάτη"
+              items={WATER_SUPERVISOR_FAULT_ASSISTANT.supervisorActions}
+            />
+            <ListBlock
+              title="Τι μένει στο αρχείο"
+              items={WATER_SUPERVISOR_FAULT_ASSISTANT.archiveKeeps}
+            />
+          </div>
+
+          <p className="mt-5 rounded-2xl border border-[#f6c85f]/25 bg-[#f6c85f]/10 px-4 py-3 text-sm font-black leading-7 text-[#ffe29a]">
+            {WATER_SUPERVISOR_FAULT_ASSISTANT.safetyRule}
+          </p>
+        </section>
         <section className="mt-6">
           <div className="rounded-[2rem] border border-[#f6c85f]/25 bg-[#071425] p-5">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f6c85f]">
