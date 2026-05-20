@@ -1,29 +1,11 @@
 export type WaterVisibility =
   | "founder_only"
   | "admin_review"
+  | "supervisor_review"
   | "user_private"
   | "pending_founder_approval"
   | "approved_shared"
   | "master_locked";
-
-export type WaterSourceKind =
-  | "dwg"
-  | "dxf"
-  | "kmz"
-  | "kml"
-  | "geojson"
-  | "geopackage"
-  | "shapefile"
-  | "pdf"
-  | "scan"
-  | "photo"
-  | "video"
-  | "voice_note"
-  | "field_note"
-  | "telemetry"
-  | "satellite"
-  | "sensor"
-  | "manual_entry";
 
 export type WaterApprovalAction =
   | "approve_for_all"
@@ -31,361 +13,387 @@ export type WaterApprovalAction =
   | "founder_only"
   | "needs_correction"
   | "revoke"
-  | "archive";
+  | "archive"
+  | "send_to_warehouse"
+  | "send_to_accounting"
+  | "send_to_hr"
+  | "schedule_followup";
 
 export const WATER_KERNEL_DOCTRINE = {
-  name: "Pantavion Water Intelligence Kernel",
+  name: "Πυρήνας Νοημοσύνης Ύδρευσης Pantavion",
   publicEntry: "pantavion.com",
   doctrine:
-    "Solution-first, protection-always. Large or difficult sources are not rejected; they are protected, classified, processed, simplified, reviewed, and only then shared.",
-  operationalFlow: [
-    "Observe",
-    "Understand",
-    "Compare options",
-    "Predict risks",
-    "Recommend best path",
-    "Ask founder approval",
-    "Patch safely",
-    "Build",
-    "Test",
-    "Deploy",
-    "Report result",
-    "Keep memory",
-  ],
+    "Πρώτα βρίσκουμε ασφαλή λύση. Μεγάλα, δύσκολα ή ατελή δεδομένα δεν απορρίπτονται. Προστατεύονται, ταξινομούνται, ελέγχονται, απλοποιούνται και γίνονται κοινά μόνο μετά από έγκριση.",
   masterRule:
-    "Locked master files are never changed automatically. They change only after explicit founder approval, backup/versioning, audit, and rollback readiness.",
+    "Τα κλειδωμένα κύρια αρχεία δεν αλλάζουν αυτόματα. Αλλάζουν μόνο με ρητή έγκριση ιδρυτή, αντίγραφο ασφαλείας, έλεγχο και δυνατότητα επαναφοράς.",
+  operatingLoop: [
+    "Παρατήρηση",
+    "Κατανόηση",
+    "Σύγκριση επιλογών",
+    "Πρόβλεψη κινδύνων",
+    "Εισήγηση καλύτερης λύσης",
+    "Έγκριση ιδρυτή",
+    "Ασφαλής υλοποίηση",
+    "Έλεγχος",
+    "Ανέβασμα",
+    "Αναφορά αποτελέσματος",
+    "Μνήμη",
+  ],
 } as const;
 
 export const WATER_VISIBILITY_RULES = {
   founderCanSee: [
-    "all source vault files",
-    "all pending access requests",
-    "all pending map notes",
-    "all field photos",
-    "all voice notes",
-    "all fault reports",
-    "all AI engineering suggestions",
-    "all technology registry items",
-    "all approval controls",
-    "all founder-only intelligence layers",
+    "όλα τα αρχεία πηγής",
+    "όλες τις αιτήσεις πρόσβασης",
+    "όλες τις σημειώσεις χρηστών που αφορούν δίκτυο",
+    "όλες τις φωτογραφίες πεδίου",
+    "όλες τις ηχητικές σημειώσεις",
+    "όλες τις βλάβες",
+    "όλες τις εισηγήσεις τεχνικής νοημοσύνης",
+    "όλες τις εκκρεμότητες προς έγκριση",
+    "όλα τα στοιχεία συνεργείων",
+    "όλα τα στοιχεία αποθήκης",
+    "όλα τα στοιχεία λογιστηρίου έργων",
+    "όλα τα στοιχεία προσωπικού και βαρδιών",
+  ],
+  workerCanSee: [
+    "τη δική του εργασία",
+    "το σημείο του",
+    "απλές οδηγίες πεδίου",
+    "εγκεκριμένες πληροφορίες δικτύου",
+    "κοντινές βάνες εφόσον επιτρέπεται",
+    "δικές του σημειώσεις",
+    "δικές του φωτογραφίες",
+    "δική του άφιξη και αναχώρηση",
+  ],
+  supervisorCanSee: [
+    "εργασίες συνεργείων",
+    "άφιξη και αναχώρηση συνεργείων",
+    "ανοικτές βλάβες",
+    "φωτογραφίες και ηχητικά προς έλεγχο",
+    "υλικά που δηλώθηκαν",
+    "βάνες που δεν δουλεύουν",
+    "πρόοδο εργασιών",
+    "εκκρεμότητες προς επιστροφή ή επιβεβαίωση",
   ],
   approvedUserCanSee: [
-    "approved water map layers",
-    "approved network data",
-    "own private notes",
-    "own pending submissions",
-    "approved shared notes",
-    "location tools",
-    "search tools",
-    "safe field assistant information",
+    "εγκεκριμένα επίπεδα χάρτη",
+    "εγκεκριμένες κοινές σημειώσεις",
+    "δικές του εκκρεμείς υποβολές",
+    "αναζήτηση",
+    "το σημείο μου",
+    "ασφαλή βασική πληροφορία πεδίου",
   ],
   hiddenFromUsers: [
-    "raw DWG/DXF sources",
-    "founder-only engineering intelligence",
-    "unapproved faults",
-    "unapproved user submissions",
-    "source vault",
-    "AI risk predictions before approval",
-    "internal approval inbox",
-    "sensitive infrastructure reports",
+    "ακατέργαστα αρχεία DWG/DXF",
+    "εσωτερικές τεχνικές εισηγήσεις",
+    "εκκρεμείς αλλαγές άλλων χρηστών",
+    "εσωτερικό κέντρο εγκρίσεων",
+    "αναφορές κινδύνου",
+    "στοιχεία κόστους",
+    "στοιχεία HR",
+    "λογιστικά στοιχεία",
+    "ευαίσθητες πληροφορίες υποδομής",
   ],
 } as const;
 
-export const WATER_SOURCE_VAULT = {
-  purpose:
-    "Founder-only protected vault for large, raw, sensitive map and engineering sources before extraction into lightweight approved layers.",
-  accepts: [
-    "DWG",
-    "DXF",
-    "KMZ",
-    "KML",
-    "GeoJSON",
-    "GeoPackage",
-    "Shapefile ZIP",
-    "PDF",
-    "scanner reports",
-    "photos",
-    "videos",
-    "voice notes",
-    "telemetry exports",
-    "satellite indicators",
-    "contractor as-built files",
-    "manual field notes",
-  ],
-  statuses: [
-    "received",
-    "private_source",
-    "pending_inspection",
-    "pending_extraction",
-    "processing",
-    "preview_ready",
-    "founder_review",
-    "approved_layer_ready",
-    "published_to_users",
-    "archived",
-  ],
-  safetyRules: [
-    "Never publish raw master sources to users.",
-    "Never upload raw large infrastructure files to GitHub public history.",
-    "Never load full raw infrastructure files in the browser.",
-    "Always create lightweight derived layers before user visibility.",
-    "Always preserve provenance, audit, and rollback.",
-  ],
-} as const;
+export const WATER_OPERATION_ROLE_VIEWS = [
+  {
+    role: "Εργάτης / Συνεργείο",
+    purpose: "Να δουλεύει γρήγορα στο πεδίο χωρίς πολύπλοκη ορολογία.",
+    sees: [
+      "Η εργασία μου",
+      "Το σημείο μου",
+      "Άφιξη",
+      "Αναχώρηση",
+      "Φωτογραφία",
+      "Ηχητική σημείωση",
+      "Βλάβη",
+      "Υλικά που χρησιμοποίησα",
+      "Η βάνα δεν δουλεύει",
+      "Αποστολή για έλεγχο",
+    ],
+    sendsTo: [
+      "επιστάτη για έλεγχο",
+      "ιδρυτή για τελική έγκριση όταν αφορά δίκτυο",
+      "αποθήκη όταν δηλωθούν υλικά",
+      "HR όταν αφορά χρόνο παρουσίας ή ασφάλεια",
+    ],
+  },
+  {
+    role: "Επιστάτης",
+    purpose: "Να ελέγχει συνεργεία, πρόοδο, υλικά, χρόνους και ποιότητα εργασίας.",
+    sees: [
+      "συνεργεία ημέρας",
+      "ανοικτές βλάβες",
+      "άφιξη και αναχώρηση",
+      "φωτογραφίες πεδίου",
+      "ηχητικές σημειώσεις",
+      "υλικά προς επιβεβαίωση",
+      "χαλασμένες βάνες",
+      "εργασίες που χρειάζονται διόρθωση",
+    ],
+    sendsTo: [
+      "ιδρυτή για έγκριση",
+      "αποθήκη για υλικά",
+      "λογιστήριο για κόστος έργου",
+      "HR για ωράρια, επιφυλακές και υπερωρίες",
+    ],
+  },
+  {
+    role: "Ιδρυτής / Κεντρικός Διαχειριστής",
+    purpose: "Να βλέπει όλη την εικόνα και να αποφασίζει τι γίνεται κοινό, τι μένει εσωτερικό και τι γίνεται υποψήφιο για κύριο αρχείο.",
+    sees: [
+      "όλες τις εγκρίσεις",
+      "όλες τις βλάβες",
+      "όλες τις αλλαγές δικτύου",
+      "όλες τις φωτογραφίες",
+      "όλα τα ηχητικά",
+      "όλες τις εισηγήσεις τεχνικής νοημοσύνης",
+      "όλα τα στοιχεία προσωπικού, υλικών και κόστους",
+      "ημερήσια και μηνιαία εικόνα οργανισμού",
+    ],
+    sendsTo: [
+      "κοινή προβολή για όλους",
+      "μόνο εσωτερική χρήση",
+      "αποθήκη",
+      "λογιστήριο",
+      "HR",
+      "υποψήφιο για κύρια ενημέρωση δικτύου",
+    ],
+  },
+  {
+    role: "Αποθήκη",
+    purpose: "Να επιβεβαιώνει υλικά που χρησιμοποιήθηκαν και να κρατά υπόλοιπα.",
+    sees: [
+      "υλικά που δηλώθηκαν από φωτογραφία ή συνεργείο",
+      "υλικά προς επιβεβαίωση",
+      "υλικά που χρησιμοποιήθηκαν σε βλάβη",
+      "υλικά που επιστράφηκαν",
+      "υπόλοιπα",
+      "ανάγκες επόμενων εργασιών",
+    ],
+    sendsTo: [
+      "λογιστήριο για κόστος",
+      "επιστάτη για διόρθωση",
+      "ιδρυτή για αναφορά ελλείψεων",
+    ],
+  },
+  {
+    role: "Λογιστήριο Έργων",
+    purpose: "Να βλέπει μόνο επιβεβαιωμένα κόστη, υλικά και εργατοώρες.",
+    sees: [
+      "επιβεβαιωμένα υλικά",
+      "εργατοώρες εργασίας",
+      "κόστος ανά βλάβη",
+      "κόστος ανά περιοχή",
+      "κόστος εργολάβου",
+      "κόστος προληπτικής συντήρησης",
+      "κόστος επαναλαμβανόμενων βλαβών",
+    ],
+    sendsTo: [
+      "διοίκηση για οικονομική εικόνα",
+      "ιδρυτή για αποφάσεις έργων",
+      "αποθήκη για συμφωνία υπολοίπων",
+    ],
+  },
+  {
+    role: "HR / Προσωπικό",
+    purpose: "Να παρακολουθεί βάρδιες, επιφυλακές, άφιξη, αναχώρηση, υπερωρίες, ασφάλεια και φόρτο προσωπικού.",
+    sees: [
+      "άφιξη",
+      "αναχώρηση",
+      "ώρες εργασίας",
+      "επιφυλακές",
+      "υπερωρίες",
+      "εργασίες υψηλού κινδύνου",
+      "ατυχήματα ή παραλίγο ατυχήματα",
+      "ανάγκη επιπλέον προσωπικού",
+    ],
+    sendsTo: [
+      "διοίκηση για στελέχωση",
+      "ιδρυτή για κρίσιμες ελλείψεις",
+      "λογιστήριο για μισθολογικά/υπερωρίες όπου εφαρμόζεται",
+    ],
+  },
+  {
+    role: "Διοίκηση Οργανισμού",
+    purpose: "Να καταλαβαίνει ορθολογικά το δίκτυο, το προσωπικό, τις απώλειες νερού, το κόστος και τις ανάγκες ανάπτυξης.",
+    sees: [
+      "δείκτη βλαβών",
+      "εργατοώρες",
+      "έλλειμμα προσωπικού",
+      "ατιμολόγητο νερό",
+      "προληπτική συντήρηση",
+      "ανάγκες συνεργείων",
+      "κόστος επαναλαμβανόμενων προβλημάτων",
+      "περιοχές που χρειάζονται αναβάθμιση",
+    ],
+    sendsTo: [
+      "ιδρυτή για στρατηγική απόφαση",
+      "τεχνική υπηρεσία για πρόγραμμα εργασιών",
+      "λογιστήριο για προϋπολογισμό",
+      "HR για στελέχωση",
+    ],
+  },
+] as const;
 
-export const WATER_APPROVAL_INBOX = {
-  purpose:
-    "Single founder-only inbox for every pending decision in Pantavion Water.",
-  includes: [
-    "new user access requests",
-    "new device requests",
-    "map notes",
-    "photos",
-    "voice notes",
-    "fault reports",
-    "new roads",
-    "new zones",
-    "possible valves",
-    "pipe corrections",
-    "PDF scanner imports",
-    "AI upgrade suggestions",
-    "technology recommendations",
-  ],
-  actions: [
-    "approve_for_all",
-    "reject",
-    "founder_only",
-    "needs_correction",
-    "revoke",
-    "archive",
-  ] satisfies readonly WaterApprovalAction[],
-  audioSupport:
-    "Founder can listen to voice notes and future spoken summaries before approval.",
-} as const;
-
-export const WATER_INTELLIGENCE_SIDEBAR = {
-  purpose:
-    "Clean appendix/sidebar for water intelligence without cluttering or breaking the working map.",
-  buttons: [
-    "Area Details",
-    "Faults",
-    "Valves",
-    "Works and Extensions",
-    "Photos and Evidence",
-    "Voice Notes",
-    "Pipe Material",
-    "Depth and Diameter",
-    "Pressure and Zone",
-    "History",
-    "AI Recommendation",
-    "Pending Approval",
-  ],
-} as const;
-
-export const WATER_FIELD_ASSISTANT = {
-  purpose:
-    "Simple controlled field interface usable by non-specialist workers without exposing founder-only intelligence.",
-  userCanSee: [
-    "my location",
-    "search area road village zone",
-    "approved nearby network",
-    "approved valve tank zone information",
-    "pipe material if approved",
-    "pipe depth if approved",
-    "pressure if approved or clearly labelled as estimated",
-    "nearby approved notes",
-  ],
-  userCanSubmit: [
-    "field note",
-    "photo",
-    "voice note",
-    "fault report",
-    "new road",
-    "new area",
-    "possible valve",
-    "possible pipe correction",
-    "depth observation",
-    "pipe material observation",
-    "other underground service observation",
-  ],
-  submissionRule:
-    "User submissions remain private or pending until founder approval. They never become shared automatically.",
-} as const;
-
-export const WATER_CHANGE_AND_EVIDENCE_LOG = {
-  purpose:
-    "Permanent change and evidence history for roads, pipes, valves, services, works, photos, and field observations.",
-  entryTypes: [
-    "photo",
-    "note",
-    "fault",
-    "new_valve",
-    "remove_valve",
-    "replace_valve",
-    "new_pipe",
-    "pipe_repair",
-    "network_extension",
-    "new_service_connection",
-    "service_isolation",
-    "pressure_or_zone_change",
-    "pipe_depth",
-    "pipe_material",
-    "new_road",
-    "new_area",
-    "pdf_scan",
-    "voice_note",
-  ],
-  certaintyLabels: [
-    "verified",
-    "founder_approved",
-    "field_observed",
-    "ai_estimated",
-    "needs_check",
-    "unknown",
-  ],
-  rule:
-    "No change modifies the locked master directly. All changes move through pending, founder review, approved shared layer, and only then possible master update by explicit founder decision.",
-} as const;
-
-export const WATER_ENGINEERING_INTELLIGENCE = {
-  purpose:
-    "Founder-only AI-assisted engineering advisor for better water network design, reliability, leakage reduction, and minimum shutdown area.",
-  modules: [
-    "Fault Ledger",
-    "Valve Registry",
-    "Tank Registry",
-    "Zone Registry",
-    "Pressure and Elevation Intelligence",
-    "Valve Isolation Optimizer",
-    "Leak and Risk Advisor",
-    "AI Sensor Placement Advisor",
-    "Upgrade Intake",
-    "Daily Founder Report",
-  ],
-  valveOptimizationGoal:
-    "In a fault, identify the smallest possible water shutdown area and recommend where new valves may reduce disruption.",
-  engineeringSafety:
-    "AI provides recommendations with evidence, confidence, and required human founder or engineer confirmation. AI does not directly alter critical master infrastructure.",
-} as const;
-
-export const WATER_TECHNOLOGY_REGISTRY = {
-  purpose:
-    "Registry of every technology that may improve water networks. Difficult technologies are not rejected; they are tracked, scored, and connected when feasible.",
-  technologies: [
-    "telemetry",
-    "SCADA",
-    "RTU",
-    "pressure sensors",
-    "flow meters",
-    "tank level sensors",
-    "smart meters AMR AMI",
-    "acoustic leak detection",
-    "fiber optic sensing",
-    "GPR underground scan",
-    "drones",
-    "thermal imaging",
-    "satellite remote sensing",
-    "SAR InSAR indicators",
-    "DEM and 3D terrain",
-    "EPANET hydraulic modeling",
-    "AI leak prediction",
-    "PDF OCR extraction",
-    "photo as-built extraction",
-  ],
-  scoringDimensions: [
-    "value",
-    "cost",
-    "complexity",
-    "accuracy",
-    "safety risk",
-    "data requirements",
-    "provider dependency",
-    "founder visibility",
-    "user visibility",
-    "deployment readiness",
-  ],
-} as const;
-
-export const WATER_SEARCH_AND_GUIDANCE = {
-  searchRequirements: [
-    "Greek",
-    "Greeklish",
-    "English",
-    "misspellings",
-    "without accents",
-    "road",
-    "area",
-    "village",
-    "zone number",
-    "postal code optional",
-    "new road not officially registered",
-    "new area without official road",
-  ],
-  guidanceTools: [
-    "my location",
-    "target point",
-    "distance to target",
-    "line guidance",
-    "nearby pipes",
-    "nearest approved valve",
-    "load network around current point",
-    "load network around target",
-  ],
-} as const;
+export const WATER_DEPARTMENT_DATA_FLOWS = [
+  {
+    name: "Ημερήσια Ενημέρωση Ύδρευσης",
+    inputs: [
+      "βλάβες",
+      "άφιξη συνεργείου",
+      "αναχώρηση συνεργείου",
+      "φωτογραφίες",
+      "ηχητικές σημειώσεις",
+      "υλικά",
+      "χαλασμένες βάνες",
+      "νέες εργασίες",
+    ],
+    outputs: [
+      "εκκρεμότητες επιστάτη",
+      "εγκρίσεις ιδρυτή",
+      "ημερήσια αναφορά",
+      "προτεραιότητες επόμενης ημέρας",
+    ],
+  },
+  {
+    name: "Βλάβες και Αποκοπές Νερού",
+    inputs: [
+      "σημείο βλάβης",
+      "ζώνη",
+      "κοντινές βάνες",
+      "βάνες που δεν δουλεύουν",
+      "επηρεαζόμενες οδοί",
+      "ώρα διακοπής",
+      "ώρα αποκατάστασης",
+    ],
+    outputs: [
+      "σχέδιο απομόνωσης",
+      "εναλλακτικές βάνες",
+      "λίστα επηρεαζόμενων περιοχών",
+      "αναφορά προς διοίκηση",
+      "ιστορικό αποκοπής",
+    ],
+  },
+  {
+    name: "Υλικά, Αποθήκη και Λογιστήριο",
+    inputs: [
+      "φωτογραφία υλικών",
+      "δήλωση συνεργείου",
+      "επιβεβαίωση επιστάτη",
+      "ποσότητες",
+      "επιστροφές υλικών",
+      "εργατοώρες",
+    ],
+    outputs: [
+      "κίνηση αποθήκης",
+      "κόστος εργασίας",
+      "κόστος περιοχής",
+      "ελλείψεις υλικών",
+      "λογιστική αναφορά έργου",
+    ],
+  },
+  {
+    name: "HR και Ασφάλεια Πεδίου",
+    inputs: [
+      "άφιξη",
+      "αναχώρηση",
+      "επιφυλακή",
+      "υπερωρία",
+      "εργασία υψηλού κινδύνου",
+      "συνθήκες δρόμου",
+      "εκσκαφή",
+      "άλλες υπηρεσίες στο υπέδαφος",
+    ],
+    outputs: [
+      "ώρες προσωπικού",
+      "ανάγκη ενίσχυσης",
+      "αναφορά ασφάλειας",
+      "εισήγηση βάρδιας",
+      "εισήγηση εργολάβου ή πρόσληψης",
+    ],
+  },
+  {
+    name: "Ατιμολόγητο Νερό και Πρόληψη",
+    inputs: [
+      "βλάβες ανά ζώνη",
+      "επαναλαμβανόμενες βλάβες",
+      "πιέσεις",
+      "μετρήσεις παροχής",
+      "χαλασμένες βάνες",
+      "ύποπτη νυχτερινή ροή",
+      "μετρητές",
+    ],
+    outputs: [
+      "πραγματικές απώλειες",
+      "φαινομενικές απώλειες",
+      "προληπτικές εργασίες",
+      "προτεραιότητες αντικατάστασης",
+      "εισήγηση για τηλεμετρία",
+    ],
+  },
+  {
+    name: "Ανάπτυξη Περιοχών και Ικανότητα Δικτύου",
+    inputs: [
+      "νέα κτίρια",
+      "αύξηση πληθυσμού",
+      "ουρανοξύστες",
+      "νέες οδοί",
+      "επεκτάσεις",
+      "παλιές διαμέτρους αγωγών",
+      "βλάβες λόγω υπερφόρτωσης",
+    ],
+    outputs: [
+      "περιοχές υπερφόρτωσης",
+      "ανάγκη νέου αγωγού",
+      "ανάγκη νέας ζώνης",
+      "ανάγκη PRV ή τηλεμετρίας",
+      "προτεραιότητα έργου",
+    ],
+  },
+] as const;
 
 export const WATER_IMPLEMENTATION_SEQUENCE = [
   {
     phase: 1,
-    name: "Founder Source Vault",
-    goal: "Accept and protect large raw water files without breaking existing maps.",
+    name: "Ελληνικό Κέντρο Διοίκησης Ύδρευσης",
+    goal: "Να γίνει το παράρτημα μόνο για ιδρυτή/διαχειριστή και πλήρως ελληνικό.",
   },
   {
     phase: 2,
-    name: "Approval Inbox",
-    goal: "Unify user requests, notes, photos, voice notes, and changes for founder review.",
+    name: "Ημερήσια Ενημέρωση",
+    goal: "Να μπαίνουν καθημερινά βλάβες, άφιξη, αναχώρηση, φωτογραφίες, ηχητικά, υλικά και παρατηρήσεις.",
   },
   {
     phase: 3,
-    name: "Intelligence Sidebar",
-    goal: "Add organized appendix buttons for faults, valves, area details, history, and approvals.",
+    name: "Εγκρίσεις",
+    goal: "Να περνούν όλα από επιστάτη και ιδρυτή πριν γίνουν κοινά ή επίσημα.",
   },
   {
     phase: 4,
-    name: "Field Assistant Foundation",
-    goal: "Allow simple workers to submit safe controlled field data.",
+    name: "Συνεργεία, HR και Εργατοώρες",
+    goal: "Να φαίνεται φόρτος, βάρδιες, επιφυλακές, υπερωρίες και ανάγκη ενίσχυσης.",
   },
   {
     phase: 5,
-    name: "Change and Evidence Log",
-    goal: "Track photos, notes, added/removed valves, extensions, pipe data, and field proof.",
+    name: "Αποθήκη και Λογιστήριο",
+    goal: "Να συνδέονται επιβεβαιωμένα υλικά και εργατοώρες με κόστος εργασίας.",
   },
   {
     phase: 6,
-    name: "Secondary Layer Registry",
-    goal: "Prepare AutoCAD-derived layers without loading raw DXF in browser.",
+    name: "Βάνες και Αποκοπές Νερού",
+    goal: "Να προτείνονται βάνες απομόνωσης, εναλλακτικές λύσεις και λίστα αντικατάστασης.",
   },
   {
     phase: 7,
-    name: "Technology Registry",
-    goal: "Track telemetry, satellite, sensors, hydraulic modeling, and future water technologies.",
+    name: "Ατιμολόγητο Νερό",
+    goal: "Να μετρώνται πραγματικές και φαινομενικές απώλειες με βάση ζώνες, βλάβες και μετρήσεις.",
+  },
+  {
+    phase: 8,
+    name: "Μεγάλα Αρχεία και Δεύτερος Χάρτης",
+    goal: "Να μπαίνουν μεγάλα DWG/DXF/PDF σε ιδιωτικό θησαυροφυλάκιο και μετά σε ελαφριά επίπεδα χάρτη.",
   },
 ] as const;
-
-export const WATER_NEXT_REAL_PATCH = {
-  commit: "feat(water): add founder source vault and approval inbox foundation",
-  scope: [
-    "founder-only source vault foundation",
-    "founder approval inbox foundation",
-    "intelligence sidebar foundation",
-    "no changes to existing live map rendering",
-    "no raw DXF upload to public",
-    "no user-visible engineering intelligence",
-  ],
-  mustNotTouch: [
-    "existing water segment API",
-    "existing working map network layer",
-    "Vercel Blob production network URL",
-    "auth device approval logic unless required",
-    "master data files",
-  ],
-} as const;
