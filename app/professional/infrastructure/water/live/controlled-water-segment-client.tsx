@@ -650,18 +650,103 @@ export default function ControlledWaterSegmentClient() {
     );
   }
 
-  function buildSearchQuery() {
-    return [street, number, area, postal, "Cyprus"]
+  function normalizeSearchText(value: string) {
+    return value
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[΄’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function greeklishToGreek(value: string) {
+    const normalized = normalizeSearchText(value);
+
+    return normalized
+      .replace(/\bagiou\b/g, "αγιου")
+      .replace(/\bagios\b/g, "αγιος")
+      .replace(/\bagia\b/g, "αγια")
+      .replace(/\blemesos\b/g, "λεμεσος")
+      .replace(/\blimassol\b/g, "λεμεσος")
+      .replace(/\bgermasogeia\b/g, "γερμασογεια")
+      .replace(/\bypsonas\b/g, "υψωνας")
+      .replace(/\bkolossi\b/g, "κολοσσι")
+      .replace(/\berimi\b/g, "εριμη")
+      .replace(/\bparekklisia\b/g, "παρεκκλησια")
+      .replace(/\bpalodia\b/g, "παλοδια")
+      .replace(/\bmesa geitonia\b/g, "μεσα γειτονια")
+      .replace(/\bagios tychonas\b/g, "αγιος τυχωνας")
+      .replace(/\btrachoni\b/g, "τραχωνι")
+      .replace(/\bzakaki\b/g, "ζακακι")
+      .replace(/\bomonoia\b/g, "ομονοια")
+      .replace(/\bmakariou\b/g, "μακαριου")
+      .replace(/\bgriva digeni\b/g, "γριβα διγενη")
+      .replace(/\banexartisias\b/g, "ανεξαρτησιας")
+      .replace(/\barchiepiskopou\b/g, "αρχιεπισκοπου")
+      .replace(/\bvasileos\b/g, "βασιλεως")
+      .replace(/\bgeorgiou\b/g, "γεωργιου")
+      .replace(/\bnikolaou\b/g, "νικολαου")
+      .replace(/\bandrea\b/g, "ανδρεα")
+      .replace(/\bchristou\b/g, "χριστου");
+  }
+
+  function buildSearchParts() {
+    return [street, number, area, postal]
+      .map((part) => part.trim())
+      .filter(Boolean);
+  }
+
+  function buildSearchQueries() {
+    const parts = buildSearchParts();
+    const raw = parts.join(", ");
+    const normalized = normalizeSearchText(raw);
+    const greeklish = greeklishToGreek(raw);
+    const withoutNumber = [street, area, postal]
       .map((part) => part.trim())
       .filter(Boolean)
       .join(", ");
+    const areaOnly = [area, postal]
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .join(", ");
+
+    return Array.from(
+      new Set(
+        [
+          raw,
+          `${raw}, Cyprus`,
+          `${raw}, Limassol, Cyprus`,
+          `${greeklish}, Cyprus`,
+          `${greeklish}, εμεσός, ύπρος`,
+          `${normalized}, Cyprus`,
+          withoutNumber ? `${withoutNumber}, Cyprus` : "",
+          areaOnly ? `${areaOnly}, Cyprus` : "",
+        ]
+          .map((query) => query.replace(/\s+/g, " ").trim())
+          .filter((query) => query && query !== "Cyprus"),
+      ),
+    );
+  }
+
+  function readPendingLocalAddressMatches(query: string) {
+    if (typeof window === "undefined") return [];
+
+    const key = "pantavion.water.pending.map.additions.v1";
+    const pending = JSON.parse(window.localStorage.getItem(key) || "[]") as string[];
+    const normalizedQuery = normalizeSearchText(query);
+
+    return pending.filter((item) =>
+      normalizeSearchText(item).includes(normalizedQuery),
+    );
   }
 
   async function searchAddressMarker() {
-    const query = buildSearchQuery();
+    const map = mapRef.current;
+    const queries = buildSearchQueries();
 
-    if (!query || query === "Cyprus") {
-      setMessage(t.searchEmpty);
+    if (!map || queries.length === 0) {
+      setMessage(t.searchNotFound);
       return;
     }
 
@@ -669,58 +754,73 @@ export default function ControlledWaterSegmentClient() {
     setMessage(t.loading);
 
     try {
-      const params = new URLSearchParams({
-        format: "jsonv2",
-        limit: "1",
-        countrycodes: "cy",
-        q: query,
-      });
+      const pendingMatches = readPendingLocalAddressMatches(queries[0] || "");
 
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?${params.toString()}`,
-        { cache: "no-store" },
+      for (const query of queries) {
+        const params = new URLSearchParams({
+          q: query,
+          format: "json",
+          limit: "1",
+          addressdetails: "1",
+          countrycodes: "cy",
+        });
+
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?${params.toString()}`,
+          {
+            headers: {
+              accept: "application/json",
+            },
+          },
+        );
+
+        if (!response.ok) continue;
+
+        const results = (await response.json()) as Array<{
+          lat?: string;
+          lon?: string;
+          display_name?: string;
+        }>;
+
+        const result = results[0];
+        const lat = Number(result?.lat);
+        const lng = Number(result?.lon);
+
+        if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
+
+        await placeCircleMarker({
+          lat,
+          lng,
+          kind: "search",
+          title: result?.display_name || query,
+        });
+
+        moveMapToPoint(lat, lng);
+        setMessage(t.searchFound);
+
+        window.setTimeout(() => {
+          void loadPipes();
+        }, 1100);
+
+        return;
+      }
+
+      if (pendingMatches.length > 0) {
+        setMessage(
+          `ρέθηκε προσωρινή καταχώρηση στη συσκευή: ${pendingMatches[0]}. εν έχει ακόμη γεωγραφικές συντεταγμένες ή έγκριση.`,
+        );
+        return;
+      }
+
+      setMessage(
+        "εν βρέθηκε η διεύθυνση. οκίμασε οδό + περιοχή, Greeklish, χωρίς αριθμό ή πρόσθεσέ την ως νέο σημείο για έγκριση.",
       );
-
-      const results = (await response.json()) as Array<{
-        lat: string;
-        lon: string;
-        display_name?: string;
-      }>;
-      const result = results[0];
-
-      if (!result) {
-        setMessage(t.searchNotFound);
-        return;
-      }
-
-      const lat = Number(result.lat);
-      const lng = Number(result.lon);
-
-      if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
-        setMessage(t.searchNotFound);
-        return;
-      }
-
-      await placeCircleMarker({
-        lat,
-        lng,
-        kind: "search",
-        title: result.display_name || query,
-      });
-
-      moveMapToPoint(lat, lng);
-      setMessage(t.searchFound);
-
-      window.setTimeout(() => {
-        void loadPipes();
-      }, 1100);
     } catch {
       setMessage(t.searchNotFound);
     } finally {
       setLoading(false);
     }
   }
-
   async function loadPipes() {
     const map = mapRef.current;
 
