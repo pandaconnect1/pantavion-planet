@@ -28,7 +28,33 @@ function List({ items }: { items: readonly string[] }) {
 
 export default function WaterSourcesPage() {
   return (
-    <main className="min-h-screen bg-[#020b16] px-4 py-6 text-white sm:px-8 lg:px-12">
+    <main className="min-h-screen bg-[#020b16] px-4 py-6 text-white sm:px-8 lg:px-12 water-sources-greek-safe-text-v2">
+      <style>{`
+        .water-sources-greek-safe-text-v2,
+        .water-sources-greek-safe-text-v2 * {
+          font-family: Arial, "Segoe UI", "Noto Sans", sans-serif !important;
+          text-rendering: optimizeLegibility;
+          -webkit-font-smoothing: antialiased;
+        }
+
+        .water-sources-greek-safe-text-v2 h1,
+        .water-sources-greek-safe-text-v2 h2,
+        .water-sources-greek-safe-text-v2 h3,
+        .water-sources-greek-safe-text-v2 p,
+        .water-sources-greek-safe-text-v2 a {
+          overflow: visible !important;
+          padding-left: 0.18em !important;
+          letter-spacing: 0 !important;
+        }
+
+        .water-sources-greek-safe-text-v2 h1::before,
+        .water-sources-greek-safe-text-v2 h2::before,
+        .water-sources-greek-safe-text-v2 h3::before,
+        .water-sources-greek-safe-text-v2 p::before,
+        .water-sources-greek-safe-text-v2 a::before {
+          content: "\\00a0";
+        }
+      `}</style>
       <section className="mx-auto max-w-7xl">
         <div className="rounded-[2rem] border border-[#f6c85f]/30 bg-[#09182b] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.45)] sm:p-8">
           <p className="text-xs font-black uppercase tracking-[0.3em] text-[#f6c85f]">
