@@ -8,7 +8,7 @@ import {
 export const metadata: Metadata = {
   title: "ηγές ικτύου Ύδρευσης | Pantavion",
   description:
-    "Founder-only registry για το υπάρχον live δίκτυο και το δεύτερο DWG master source στο Vercel Blob.",
+    "Founder-only registry για το υπάρχον live δίκτυο και τη δεύτερη DWG πηγή στο Vercel Blob.",
 };
 
 function List({ items }: { items: readonly string[] }) {
@@ -32,7 +32,7 @@ export default function WaterSourcesPage() {
       <section className="mx-auto max-w-7xl">
         <div className="rounded-[2rem] border border-[#f6c85f]/30 bg-[#09182b] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.45)] sm:p-8">
           <p className="text-xs font-black uppercase tracking-[0.3em] text-[#f6c85f]">
-            Pantavion Water Source Vault
+            PANTAVION WATER SOURCE VAULT
           </p>
           <h1 className="mt-4 max-w-5xl text-4xl font-black leading-tight text-white sm:text-5xl">
             ηγές δικτύου ύδρευσης
@@ -67,7 +67,7 @@ export default function WaterSourcesPage() {
 
         <section className="mt-6 rounded-[2rem] border border-[#f6c85f]/20 bg-[#071425] p-5 shadow-[0_20px_70px_rgba(0,0,0,0.28)]">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f6c85f]">
-            εύτερη πηγή
+             
           </p>
           <h2 className="mt-3 text-3xl font-black text-white">
             {WATER_SECOND_NETWORK_SOURCE.title}
@@ -78,12 +78,12 @@ export default function WaterSourcesPage() {
               <h3 className="text-xl font-black text-[#ffe29a]">τοιχεία αρχείου</h3>
               <div className="mt-4 grid gap-2 text-sm font-bold leading-7 text-slate-200">
                 <p>ρχείο: {WATER_SECOND_NETWORK_SOURCE.fileName}</p>
-                <p>Storage: {WATER_SECOND_NETWORK_SOURCE.storage}</p>
+                <p>ποθηκευτικό σύστημα: {WATER_SECOND_NETWORK_SOURCE.storageLabel}</p>
                 <p>Blob store: {WATER_SECOND_NETWORK_SOURCE.blobStore}</p>
                 <p>έγεθος: {WATER_SECOND_NETWORK_SOURCE.approximateSize}</p>
                 <p>ύπος: {WATER_SECOND_NETWORK_SOURCE.sourceType}</p>
-                <p>ατάσταση: {WATER_SECOND_NETWORK_SOURCE.status}</p>
-                <p>ρατότητα: {WATER_SECOND_NETWORK_SOURCE.visibility}</p>
+                <p>ατάσταση: {WATER_SECOND_NETWORK_SOURCE.statusLabel}</p>
+                <p>ρατότητα: {WATER_SECOND_NETWORK_SOURCE.visibilityLabel}</p>
               </div>
             </div>
 
