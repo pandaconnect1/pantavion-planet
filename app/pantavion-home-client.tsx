@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -12,66 +12,75 @@ type Lang = string;
 
 const UI = {
   el: {
-    language: "λώσσα Pantavion",
+    language: "Γλώσσα Pantavion",
     badge: "PANTAVION PLANET",
-    languageSpineTitle: "εντρική επιλογή γλώσσας Pantavion",
+    languageSpineTitle: "Κεντρική επιλογή γλώσσας Pantavion",
     languageSpine:
-      " γλώσσα που επιλέγεις εδώ αποθηκεύεται ως πρωταρχική γλώσσα Pantavion και θα ισχύει στις δημόσιες και προστατευμένες ενότητες.",
-    title: " πλανήτης σε μία ζωντανή οθόνη.",
+      "Η γλώσσα που επιλέγεις εδώ αποθηκεύεται ως πρωταρχική γλώσσα Pantavion και θα ισχύει σε κάθε ενότητα: Water, SOS, Interpreter, PantaAI και μελλοντικά modules.",
+    title: "Ο πλανήτης σε μία ζωντανή οθόνη.",
     subtitle:
-      "πικοινωνία, ασφάλεια SOS, τεχνητή νοημοσύνη, εργασία, υπηρεσίες και προστατευμένες επαγγελματικές ενότητες σε ένα οργανωμένο οικοσύστημα.",
-    sos: "SOS Center",
-    requestAccess: "ίτηση προστατευμένης πρόσβασης",
+      "Επικοινωνία, ασφάλεια SOS, PantaAI, άνθρωποι, εργασία, πολιτισμός, υπηρεσίες και προστατευμένες επαγγελματικές ενότητες σε ένα οργανωμένο οικοσύστημα.",
+    water: "Δίκτυο Ύδρευσης",
     interpreter: "Universal Interpreter",
-    pantaAI: "PantaAI Center",
-    accessEyebrow: "PROTECTED ACCESS",
-    accessTitle: "παγγελματικές ενότητες με έγκριση",
-    accessText:
-      "ι ευαίσθητες υποδομές και οι επαγγελματικές λειτουργίες του Pantavion εμφανίζονται μόνο μετά από έγκριση, ρόλο και καταγραφή πρόσβασης.",
-    infrastructureTitle: "ροστατευμένες υποδομές",
-    infrastructureText:
-      "ι χάρτες, τα τεχνικά αρχεία και τα επιχειρησιακά δεδομένα δεν προβάλλονται δημόσια.",
-    rolesTitle: "ρόσβαση ανά ρόλο",
-    rolesText:
-      "άθε εγκεκριμένος χρήστης βλέπει μόνο τις ενότητες που αντιστοιχούν στην ευθύνη του.",
-    auditTitle: "Έλεγχος και καταγραφή",
-    auditText:
-      "ι ευαίσθητες ενέργειες πρέπει να περνούν από έλεγχο, έγκριση και audit trail.",
-    waterEntry: "ίσοδος / αίτηση πρόσβασης υποδομών",
+    pantaAI: "PantaAI",
+    sos: "SOS Center",
+    discoveryTitle: "Πραγματικές ενότητες Pantavion",
+    discoveryText:
+      "Κάθε κουμπί οδηγεί σε πραγματική διαδρομή ή προστατευμένη ενότητα. Δεν αφήνουμε σπασμένες σελίδες για επίσημη παρουσίαση.",
+    waterTitle: "Προστατευμένο Δίκτυο Ύδρευσης",
+    waterText:
+      "Είσοδος στο καθαρό live module με αίτηση πρόσβασης, έγκριση και τμηματική φόρτωση αγωγών.",
+    translateTitle: "Universal Interpreter",
+    translateText:
+      "Μελλοντικός καθολικός διερμηνέας για κείμενο, φωνή, ταξίδι, εργασία, δημόσιες υπηρεσίες και SOS.",
+    aiTitle: "PantaAI Center",
+    aiText:
+      "Κέντρο τεχνητής νοημοσύνης, εργασίας, αναζήτησης, μνήμης και εκτέλεσης.",
+    sosTitle: "SOS Center",
+    sosText:
+      "Ασφάλεια, trusted contacts, elder mode και σαφή όρια χωρίς ψεύτικες υποσχέσεις αποστολής αρχών.",
     languageNote:
-      " πλήρης αυτόματη μετάφραση και η φωνητική λειτουργία θα συνδεθούν σταδιακά μέσω του Translation Kernel/provider.",
+      "Η λίστα 250+ γλωσσών είναι κοινή για όλο το Pantavion. Οι πλήρεις αυτόματες μεταφράσεις θα συνδεθούν μέσω Translation Kernel/provider.",
   },
   en: {
     language: "Pantavion Language",
     badge: "PANTAVION PLANET",
     languageSpineTitle: "Pantavion global language selection",
     languageSpine:
-      "The language selected here is saved as the primary Pantavion language and will apply across public and protected sections.",
+      "The language selected here is saved as the primary Pantavion language and will apply across Water, SOS, Interpreter, PantaAI, and future modules.",
     title: "The planet in one living screen.",
     subtitle:
-      "Communication, SOS safety, artificial intelligence, work, services, and protected professional sections in one governed ecosystem.",
-    sos: "SOS Center",
-    requestAccess: "Request protected access",
+      "Communication, SOS safety, PantaAI, people, work, culture, services, and protected professional modules in one governed ecosystem.",
+    water: "Water Network",
     interpreter: "Universal Interpreter",
-    pantaAI: "PantaAI Center",
-    accessEyebrow: "PROTECTED ACCESS",
-    accessTitle: "Professional sections with approval",
-    accessText:
-      "Sensitive infrastructure and professional Pantavion operations are shown only after approval, role assignment, and access logging.",
-    infrastructureTitle: "Protected infrastructure",
-    infrastructureText:
-      "Maps, technical files, and operational data are not exposed publicly.",
-    rolesTitle: "Role-based access",
-    rolesText:
-      "Each approved user sees only the sections that match their responsibility.",
-    auditTitle: "Control and audit",
-    auditText:
-      "Sensitive actions must pass through review, approval, and audit trail.",
-    waterEntry: "Infrastructure access / request",
+    pantaAI: "PantaAI",
+    sos: "SOS Center",
+    discoveryTitle: "Real Pantavion modules",
+    discoveryText:
+      "Every button points to a real route or protected module. Broken public pages are not acceptable for official presentation.",
+    waterTitle: "Protected Water Network",
+    waterText:
+      "Entry to the clean live module with access request, approval, and segmented pipe loading.",
+    translateTitle: "Universal Interpreter",
+    translateText:
+      "Future universal interpreter for text, voice, travel, work, public services, and SOS support.",
+    aiTitle: "PantaAI Center",
+    aiText:
+      "AI center for help, work, search, memory, execution, and guided workflows.",
+    sosTitle: "SOS Center",
+    sosText:
+      "Safety, trusted contacts, elder mode, and clear boundaries without false authority dispatch claims.",
     languageNote:
-      "Full automatic translation and voice operation will be connected gradually through the Translation Kernel/provider.",
+      "The 250+ language list is shared across Pantavion. Full automatic translations will be connected through the Translation Kernel/provider.",
   },
 };
+
+const modules = [
+  { key: "water", href: "/professional/infrastructure/water" },
+  { key: "translate", href: "/translate" },
+  { key: "ai", href: "/panta-ai" },
+  { key: "sos", href: "/sos" },
+] as const;
 
 function getInitialLang(): Lang {
   if (typeof window === "undefined") return "el";
@@ -136,72 +145,67 @@ export default function HomePage() {
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap">
-            <Link
-              href="/sos"
-              className="rounded-full bg-[#ff2f3f] px-6 py-4 text-center text-base font-black text-white"
-            >
-              {t.sos}
+            <Link href="/professional/infrastructure/water" className="rounded-full border border-[#f6c85f]/60 bg-[#f6c85f]/15 px-6 py-4 text-center text-base font-black text-[#fff8e7]">
+              {t.water}
             </Link>
 
-            <Link
-              href="/professional/infrastructure/water"
-              className="rounded-full border border-[#f6c85f]/60 bg-[#f6c85f]/15 px-6 py-4 text-center text-base font-black text-[#fff8e7]"
-            >
-              {t.requestAccess}
-            </Link>
-
-            <Link
-              href="/translate"
-              className="rounded-full bg-[#f6c85f] px-6 py-4 text-center text-base font-black text-[#071020]"
-            >
+            <Link href="/translate" className="rounded-full bg-[#f6c85f] px-6 py-4 text-center text-base font-black text-[#071020]">
               {t.interpreter}
             </Link>
 
-            <Link
-              href="/panta-ai"
-              className="rounded-full border border-[#f6c85f]/45 bg-white/5 px-6 py-4 text-center text-base font-black text-[#fff8e7]"
-            >
+            <Link href="/panta-ai" className="rounded-full border border-[#f6c85f]/45 bg-white/5 px-6 py-4 text-center text-base font-black text-[#fff8e7]">
               {t.pantaAI}
+            </Link>
+
+            <Link href="/sos" className="rounded-full bg-[#ff2f3f] px-6 py-4 text-center text-base font-black text-white">
+              {t.sos}
             </Link>
           </div>
         </section>
 
-        <section className="mt-8 rounded-[2rem] border border-[#f6c85f]/20 bg-[#071020]/80 p-5 shadow-2xl sm:p-8">
-          <p className="mb-3 text-xs font-black uppercase tracking-[0.35em] text-[#f6c85f]">
-            {t.accessEyebrow}
-          </p>
-
-          <h2 className="max-w-4xl text-3xl font-black sm:text-5xl">
-            {t.accessTitle}
-          </h2>
-
-          <p className="mt-4 max-w-4xl text-lg leading-8 text-slate-200">
-            {t.accessText}
-          </p>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <article className="rounded-3xl border border-[#f6c85f]/20 bg-[#0d1a2d]/70 p-5">
-              <h3 className="text-xl font-black text-[#fff8e7]">{t.infrastructureTitle}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-300">{t.infrastructureText}</p>
-            </article>
-
-            <article className="rounded-3xl border border-[#f6c85f]/20 bg-[#0d1a2d]/70 p-5">
-              <h3 className="text-xl font-black text-[#fff8e7]">{t.rolesTitle}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-300">{t.rolesText}</p>
-            </article>
-
-            <article className="rounded-3xl border border-[#f6c85f]/20 bg-[#0d1a2d]/70 p-5">
-              <h3 className="text-xl font-black text-[#fff8e7]">{t.auditTitle}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-300">{t.auditText}</p>
-            </article>
+        <section className="mt-8">
+          <div className="mb-5">
+            <p className="mb-2 text-xs font-black uppercase tracking-[0.35em] text-[#f6c85f]">
+              PUBLIC DISCOVERY
+            </p>
+            <h2 className="text-3xl font-black sm:text-5xl">{t.discoveryTitle}</h2>
+            <p className="mt-3 max-w-4xl text-lg leading-8 text-slate-200">
+              {t.discoveryText}
+            </p>
           </div>
 
-          <Link
-            href="/professional/infrastructure/water"
-            className="mt-6 inline-flex rounded-full border border-[#f6c85f]/60 bg-[#f6c85f]/15 px-6 py-4 text-center text-base font-black text-[#fff8e7]"
-          >
-            {t.waterEntry}
-          </Link>
+          <div className="grid gap-4 md:grid-cols-2">
+            {modules.map((module) => {
+              const title =
+                module.key === "water"
+                  ? t.waterTitle
+                  : module.key === "translate"
+                    ? t.translateTitle
+                    : module.key === "ai"
+                      ? t.aiTitle
+                      : t.sosTitle;
+
+              const text =
+                module.key === "water"
+                  ? t.waterText
+                  : module.key === "translate"
+                    ? t.translateText
+                    : module.key === "ai"
+                      ? t.aiText
+                      : t.sosText;
+
+              return (
+                <Link key={module.href} href={module.href} className="rounded-3xl border border-[#f6c85f]/25 bg-[#071020]/80 p-5 text-[#fff8e7] no-underline shadow-xl">
+                  <p className="mb-3 text-xs font-black uppercase tracking-[0.2em] text-[#f6c85f]">
+                    PANTAVION MODULE
+                  </p>
+                  <h3 className="text-2xl font-black">{title}</h3>
+                  <p className="mt-3 text-base leading-7 text-slate-200">{text}</p>
+                  <p className="mt-4 text-sm font-black text-[#f6c85f]">Άνοιγμα ενότητας</p>
+                </Link>
+              );
+            })}
+          </div>
         </section>
       </section>
     </main>
