@@ -31,6 +31,51 @@ const ROLES = [
   { value: "president", label: "Πρόεδρος" },
 ] as const;
 
+const CATEGORY_REQUIREMENTS: Record<
+  string,
+  {
+    guide: string;
+    needsLocationDetails: boolean;
+  }
+> = {
+  tool_request: {
+    guide: "Αίτημα εργαλείου: δεν χρειάζεται οδός, περιοχή ή ζώνη. Γράψε καθαρά τι εργαλείο χρειάζεσαι, γιατί και πόσο επείγει.",
+    needsLocationDetails: false,
+  },
+  material_request: {
+    guide: "Αίτημα υλικού: δεν χρειάζεται πάντα οδός, περιοχή ή ζώνη. Γράψε υλικό, ποσότητα και αν αφορά συγκεκριμένη εργασία.",
+    needsLocationDetails: false,
+  },
+  work_blocker: {
+    guide: "Εμπόδιο εργασίας: βάλε περιοχή/οδό/ζώνη μόνο αν το πρόβλημα αφορά συγκεκριμένο σημείο.",
+    needsLocationDetails: true,
+  },
+  collaboration_problem: {
+    guide: "Πρόβλημα συνεργασίας: γράψε καθαρά τι συμβαίνει, ποιοι ρόλοι εμπλέκονται και τι λύση ζητάς. Δεν χρειάζεται χάρτης.",
+    needsLocationDetails: false,
+  },
+  safety_problem: {
+    guide: "Θέμα ασφάλειας: βάλε περιοχή/οδό/ζώνη αν υπάρχει κίνδυνος σε συγκεκριμένο σημείο.",
+    needsLocationDetails: true,
+  },
+  service_problem: {
+    guide: "Πρόβλημα υπηρεσίας ή διαδικασίας: γράψε ποια διαδικασία μπλοκάρει και σε ποιο τμήμα πρέπει να πάει.",
+    needsLocationDetails: false,
+  },
+  analysis_request: {
+    guide: "Αίτημα ανάλυσης: βάλε ζώνη, περιοχή ή χρονικό πλαίσιο μόνο αν χρειάζεται για στατιστικά ή ιστορικό.",
+    needsLocationDetails: true,
+  },
+  improvement_proposal: {
+    guide: "Πρόταση βελτίωσης: γράψε τι αλλάζει, ποιον βοηθά και τι αποτέλεσμα περιμένεις.",
+    needsLocationDetails: false,
+  },
+  other: {
+    guide: "Γράψε το αίτημα απλά. Το Pantavion θα το δρομολογήσει με βάση περιγραφή, ρόλο και προτεινόμενο υπεύθυνο.",
+    needsLocationDetails: false,
+  },
+};
+
 function makeId() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return crypto.randomUUID();
@@ -78,6 +123,9 @@ export default function WaterHelpResolutionPage() {
   const [aiHint, setAiHint] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const categoryGuide = CATEGORY_REQUIREMENTS[category] || CATEGORY_REQUIREMENTS.other;
+  const needsLocationDetails = categoryGuide.needsLocationDetails;
+
   async function submitForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -101,9 +149,9 @@ export default function WaterHelpResolutionPage() {
           requestedBy,
           role,
           contact,
-          areaLabel,
-          roadLabel,
-          zoneLabel,
+          areaLabel: needsLocationDetails ? areaLabel : "",
+          roadLabel: needsLocationDetails ? roadLabel : "",
+          zoneLabel: needsLocationDetails ? zoneLabel : "",
           targetDepartment,
           suggestedAssignee,
           evidenceRefs: evidenceRefs
@@ -162,6 +210,21 @@ export default function WaterHelpResolutionPage() {
           θα το δρομολογήσει με βάση υπεύθυνο, ανώτερο ή διαχειριστή και θα κρατήσει ιστορικό.
         </p>
 
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <Link
+            href="/professional/infrastructure/water/help/inbox"
+            className="rounded-2xl border border-[#f2c766]/50 bg-[#07111f] px-4 py-3 text-center font-black text-[#f2c766]"
+          >
+            Τα δικά μου αιτήματα
+          </Link>
+          <Link
+            href="/professional/infrastructure/water/admin/help"
+            className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-center font-black text-white"
+          >
+            Αιτήματα διαχειριστή
+          </Link>
+        </div>
+
         <form onSubmit={(event) => void submitForm(event)} className="mt-6 grid gap-4">
           <div className="grid gap-4 sm:grid-cols-3">
             <label className="grid gap-2">
@@ -208,6 +271,10 @@ export default function WaterHelpResolutionPage() {
             </label>
           </div>
 
+          <p className="rounded-2xl border border-[#f2c766]/30 bg-[#f2c766]/10 p-4 text-sm font-black leading-6 text-[#f2c766]">
+            {categoryGuide.guide}
+          </p>
+
           <label className="grid gap-2">
             <span className="text-sm font-black text-[#f2c766]">Τίτλος</span>
             <input
@@ -251,34 +318,43 @@ export default function WaterHelpResolutionPage() {
             </label>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-3">
-            <label className="grid gap-2">
-              <span className="text-sm font-black text-[#f2c766]">Περιοχή</span>
-              <input
-                value={areaLabel}
-                onChange={(event) => setAreaLabel(event.target.value)}
-                className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
-              />
-            </label>
+          {needsLocationDetails ? (
+            <div className="grid gap-4 sm:grid-cols-3">
+              <label className="grid gap-2">
+                <span className="text-sm font-black text-[#f2c766]">Περιοχή</span>
+                <input
+                  value={areaLabel}
+                  onChange={(event) => setAreaLabel(event.target.value)}
+                  placeholder="Μόνο αν χρειάζεται για το συγκεκριμένο αίτημα"
+                  className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
+                />
+              </label>
 
-            <label className="grid gap-2">
-              <span className="text-sm font-black text-[#f2c766]">Οδός</span>
-              <input
-                value={roadLabel}
-                onChange={(event) => setRoadLabel(event.target.value)}
-                className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
-              />
-            </label>
+              <label className="grid gap-2">
+                <span className="text-sm font-black text-[#f2c766]">Οδός</span>
+                <input
+                  value={roadLabel}
+                  onChange={(event) => setRoadLabel(event.target.value)}
+                  placeholder="Μόνο αν υπάρχει σημείο ή βλάβη"
+                  className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
+                />
+              </label>
 
-            <label className="grid gap-2">
-              <span className="text-sm font-black text-[#f2c766]">Ζώνη</span>
-              <input
-                value={zoneLabel}
-                onChange={(event) => setZoneLabel(event.target.value)}
-                className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
-              />
-            </label>
-          </div>
+              <label className="grid gap-2">
+                <span className="text-sm font-black text-[#f2c766]">Ζώνη</span>
+                <input
+                  value={zoneLabel}
+                  onChange={(event) => setZoneLabel(event.target.value)}
+                  placeholder="Μόνο αν αφορά ζώνη / δίκτυο"
+                  className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
+                />
+              </label>
+            </div>
+          ) : (
+            <p className="rounded-2xl border border-slate-700 bg-[#07111f] p-4 text-sm font-bold text-slate-300">
+              Για αυτή την κατηγορία δεν ζητάμε οδό, περιοχή ή ζώνη για να μην φορτώνεται άδικα ο χρήστης.
+            </p>
+          )}
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="grid gap-2">
