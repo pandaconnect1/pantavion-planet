@@ -19,6 +19,57 @@ type WaterAccessRequest = {
 
 const FOUNDER_CODE_STORAGE_KEY = "pantavion.water.admin.founderCode.v1";
 
+const WATER_FOUNDER_CONTROL_MODULES = [
+  {
+    title: "Founder Source Vault",
+    status: "Foundation ready",
+    text: "Private area for DWG, DXF, KMZ, KML, GeoJSON, PDF, scanner, photos, audio, telemetry, satellite indicators, and contractor/as-built sources.",
+    next: "Next: private upload/storage API",
+  },
+  {
+    title: "Approval Inbox",
+    status: "Foundation ready",
+    text: "Founder review queue for access requests, devices, notes, photos, voice notes, faults, valves, network changes, PDF/scanner items, and AI proposals.",
+    next: "Next: approval inbox screen",
+  },
+  {
+    title: "Intelligence Sidebar",
+    status: "Foundation ready",
+    text: "Area, road, zone, valves, tanks, faults, photos, voice notes, pressure, depth, material, history, AI recommendation, and pending approval panels.",
+    next: "Next: map-side panel UI",
+  },
+  {
+    title: "Field Assistant",
+    status: "Foundation ready",
+    text: "Simple field workflow for technicians: my location, search area/road/zone, what is under here, add note/photo/audio, report fault, nearest valve.",
+    next: "Next: field submission form",
+  },
+  {
+    title: "Change & Evidence Log",
+    status: "Foundation ready",
+    text: "Long-term history for photos, notes, faults, valves, pipe repairs, extensions, pressure/zone changes, PDF/scanner and voice evidence.",
+    next: "Next: evidence timeline UI",
+  },
+  {
+    title: "Technology Registry",
+    status: "Foundation ready",
+    text: "Registry for telemetry, SCADA, sensors, flow meters, tanks, leak detection, GPR, drones, thermal, satellite, EPANET, AI prediction and OCR.",
+    next: "Next: technology review table",
+  },
+  {
+    title: "Secondary Layers",
+    status: "Foundation ready",
+    text: "Safe derived layers for pressure zones, DMA sectors, valves, hydrants, reservoirs, pumps, risks, maintenance, satellite and AI overlays.",
+    next: "Next: layer visibility controls",
+  },
+  {
+    title: "DXF Processing Plan",
+    status: "Foundation ready",
+    text: "Private DWG/DXF route: source vault, provenance, inspection, extraction, lightweight derived layers, founder review, rollback and publish.",
+    next: "Next: private source processing API",
+  },
+] as const;
+
 export default function WaterAdminAccessPage() {
   const [founderCode, setFounderCode] = useState("");
   const [trustedDevice, setTrustedDevice] = useState(false);
@@ -242,6 +293,36 @@ export default function WaterAdminAccessPage() {
             <p className="text-2xl font-black text-sky-100">{counts.deviceReady}</p>
           </div>
         </div>
+
+        <section className="mt-6 rounded-3xl border border-[#f2c766]/30 bg-[#07111f] p-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f2c766]">
+              FOUNDER WATER CONTROL CENTER
+            </p>
+            <h2 className="text-2xl font-black text-white">Κέντρο ελέγχου υποδομής ύδρευσης</h2>
+            <p className="text-sm leading-6 text-slate-300">
+              Τα παρακάτω modules είναι πλέον κλειδωμένα ως foundation. Τα raw DWG/DXF/PDF/φωτογραφίες/ηχητικά παραμένουν private μέχρι να υπάρξει founder approval και ασφαλές derived layer.
+            </p>
+          </div>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            {WATER_FOUNDER_CONTROL_MODULES.map((module) => (
+              <article
+                key={module.title}
+                className="rounded-2xl border border-slate-700 bg-[#0d1a2d] p-4"
+              >
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-black text-white">{module.title}</p>
+                  <p className="w-fit rounded-full border border-emerald-500/40 bg-emerald-950/30 px-3 py-1 text-xs font-black text-emerald-100">
+                    {module.status}
+                  </p>
+                  <p className="text-sm leading-6 text-slate-300">{module.text}</p>
+                  <p className="text-sm font-black text-[#f2c766]">{module.next}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <div className="mt-6 grid gap-4">
           {requests.map((item) => {
