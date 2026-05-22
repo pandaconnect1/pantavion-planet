@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -66,6 +66,11 @@ type FaultResponse = {
   approvalState?: string;
   aiMissingCount?: number;
   mapLinkStatus?: string;
+  deliveryTarget?: string;
+  deliveryTargetLabel?: string;
+  storedAt?: string;
+  approvalInbox?: string;
+  nextStep?: string;
   message?: string;
   error?: string;
   aiChecks?: Array<{
@@ -334,6 +339,15 @@ export default function FieldFaultPage() {
               </p>
             ) : null}
 
+            {result.ok ? (
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <InfoCard title="Πού στάλθηκε" value={result.deliveryTargetLabel || "Founder/Admin approval inbox"} />
+                <InfoCard title="Επόμενο βήμα" value={result.nextStep || "Έλεγχος και ανάθεση από υπεύθυνο."} />
+                <InfoCard title="Private dossier" value={result.storedAt || "water/private/fault-dossiers/pending"} />
+                <InfoCard title="Approval inbox" value={result.approvalInbox || "water/private/fault-approval-inbox/founder-admin"} />
+              </div>
+            ) : null}
+
             {result.aiChecks?.length ? (
               <div className="mt-4 grid gap-3">
                 {result.aiChecks.map((check) => (
@@ -348,6 +362,15 @@ export default function FieldFaultPage() {
         ) : null}
       </section>
     </main>
+  );
+}
+
+function InfoCard({ title, value }: { title: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-700 bg-[#0d1a2d] p-3">
+      <p className="text-xs font-black text-[#f2c766]">{title}</p>
+      <p className="mt-1 break-words text-sm font-bold text-white">{value}</p>
+    </div>
   );
 }
 

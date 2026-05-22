@@ -1,4 +1,4 @@
-﻿import { createHash } from "crypto";
+import { createHash } from "crypto";
 
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
@@ -396,8 +396,13 @@ export async function POST(request: Request) {
       aiMissingCount: aiChecks.filter((check) => !check.resolved).length,
       aiChecks,
       mapLinkStatus: dossier.location.mapLinkStatus,
+      deliveryTarget: "founder_admin_approval_inbox",
+      deliveryTargetLabel: "Founder/Admin approval inbox",
+      storedAt: `water/private/fault-dossiers/pending/${safeSegment(recordNumber)}.json`,
+      approvalInbox: `water/private/fault-approval-inbox/founder-admin/${safeSegment(recordNumber)}.json`,
+      nextStep: "Έλεγχος από επιστάτη ή founder/admin και μετά ανάθεση σε υπεύθυνο/συνεργείο.",
       message:
-        "Η βλάβη καταχωρήθηκε ως pending approval. Χρειάζεται έλεγχος/έγκριση πριν γίνει επίσημος φάκελος.",
+        "Η βλάβη καταχωρήθηκε ως pending approval και στάλθηκε στο Founder/Admin approval inbox. Χρειάζεται έλεγχος/έγκριση πριν γίνει επίσημος φάκελος.",
     });
   } catch (error) {
     return NextResponse.json(
