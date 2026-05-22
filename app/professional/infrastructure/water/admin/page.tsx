@@ -21,52 +21,52 @@ const FOUNDER_CODE_STORAGE_KEY = "pantavion.water.admin.founderCode.v1";
 
 const WATER_FOUNDER_CONTROL_MODULES = [
   {
-    title: "Founder Source Vault",
-    status: "Foundation ready",
-    text: "Private area for DWG, DXF, KMZ, KML, GeoJSON, PDF, scanner, photos, audio, telemetry, satellite indicators, and contractor/as-built sources.",
-    next: "Next: private upload/storage API",
+    title: "Ιδιωτική Αποθήκη Πηγών",
+    status: "Θεμέλιο έτοιμο",
+    text: "Ιδιωτική περιοχή για DWG, DXF, KMZ, KML, GeoJSON, PDF, scanner, φωτογραφίες, ηχητικά, τηλεμετρία, δορυφορικές ενδείξεις και αρχεία εργολάβων/as-built.",
+    next: "Επόμενο: ιδιωτικό API upload/storage",
   },
   {
-    title: "Approval Inbox",
-    status: "Foundation ready",
-    text: "Founder review queue for access requests, devices, notes, photos, voice notes, faults, valves, network changes, PDF/scanner items, and AI proposals.",
-    next: "Next: approval inbox screen",
+    title: "Κέντρο Εγκρίσεων",
+    status: "Θεμέλιο έτοιμο",
+    text: "Ουρά ελέγχου για αιτήματα πρόσβασης, συσκευές, σημειώσεις, φωτογραφίες, ηχητικά, βλάβες, βάνες, αλλαγές δικτύου, PDF/scanner και εισηγήσεις AI.",
+    next: "Επόμενο: οθόνη Κέντρου Εγκρίσεων",
   },
   {
-    title: "Intelligence Sidebar",
-    status: "Foundation ready",
-    text: "Area, road, zone, valves, tanks, faults, photos, voice notes, pressure, depth, material, history, AI recommendation, and pending approval panels.",
-    next: "Next: map-side panel UI",
+    title: "Πλευρική Μπάρα Πληροφοριών",
+    status: "Θεμέλιο έτοιμο",
+    text: "Περιοχή, οδός, ζώνη, βάνες, δεξαμενές, βλάβες, φωτογραφίες, ηχητικά, πίεση, βάθος, υλικό, ιστορικό, εισήγηση AI και στοιχεία προς έγκριση.",
+    next: "Επόμενο: πλευρικό πάνελ στον χάρτη",
   },
   {
-    title: "Field Assistant",
-    status: "Foundation ready",
-    text: "Simple field workflow for technicians: my location, search area/road/zone, what is under here, add note/photo/audio, report fault, nearest valve.",
-    next: "Next: field submission form",
+    title: "Βοηθός Πεδίου",
+    status: "Θεμέλιο έτοιμο",
+    text: "Απλή ροή για τεχνικούς: το σημείο μου, αναζήτηση περιοχής/οδού/ζώνης, τι υπάρχει κάτω εδώ, προσθήκη σημείωσης/φωτογραφίας/ηχητικού, αναφορά βλάβης, κοντινή βάνα.",
+    next: "Επόμενο: φόρμα καταχώρησης πεδίου",
   },
   {
-    title: "Change & Evidence Log",
-    status: "Foundation ready",
-    text: "Long-term history for photos, notes, faults, valves, pipe repairs, extensions, pressure/zone changes, PDF/scanner and voice evidence.",
-    next: "Next: evidence timeline UI",
+    title: "Ημερολόγιο Αλλαγών & Τεκμηρίων",
+    status: "Θεμέλιο έτοιμο",
+    text: "Μακροχρόνιο ιστορικό για φωτογραφίες, σημειώσεις, βλάβες, βάνες, επισκευές αγωγών, επεκτάσεις, αλλαγές πίεσης/ζώνης, PDF/scanner και ηχητικά τεκμήρια.",
+    next: "Επόμενο: χρονολόγιο τεκμηρίων",
   },
   {
-    title: "Technology Registry",
-    status: "Foundation ready",
-    text: "Registry for telemetry, SCADA, sensors, flow meters, tanks, leak detection, GPR, drones, thermal, satellite, EPANET, AI prediction and OCR.",
-    next: "Next: technology review table",
+    title: "Μητρώο Τεχνολογιών",
+    status: "Θεμέλιο έτοιμο",
+    text: "Μητρώο για τηλεμετρία, SCADA, αισθητήρες, μετρητές ροής, δεξαμενές, ανίχνευση διαρροών, GPR, drones, θερμικά, δορυφορικά, EPANET, πρόβλεψη AI και OCR.",
+    next: "Επόμενο: πίνακας αξιολόγησης τεχνολογιών",
   },
   {
-    title: "Secondary Layers",
-    status: "Foundation ready",
-    text: "Safe derived layers for pressure zones, DMA sectors, valves, hydrants, reservoirs, pumps, risks, maintenance, satellite and AI overlays.",
-    next: "Next: layer visibility controls",
+    title: "Δευτερεύοντα Επίπεδα",
+    status: "Θεμέλιο έτοιμο",
+    text: "Ασφαλή παράγωγα επίπεδα για ζώνες πίεσης, τομείς DMA, βάνες, υδροστόμια, δεξαμενές, αντλίες, κινδύνους, συντήρηση, δορυφορικά και AI overlays.",
+    next: "Επόμενο: έλεγχος ορατότητας επιπέδων",
   },
   {
-    title: "DXF Processing Plan",
-    status: "Foundation ready",
-    text: "Private DWG/DXF route: source vault, provenance, inspection, extraction, lightweight derived layers, founder review, rollback and publish.",
-    next: "Next: private source processing API",
+    title: "Σχέδιο Επεξεργασίας DXF",
+    status: "Θεμέλιο έτοιμο",
+    text: "Ιδιωτική ροή DWG/DXF: αποθήκη πηγών, προέλευση, έλεγχος, εξαγωγή, ελαφριά παράγωγα επίπεδα, έλεγχος founder, rollback και δημοσίευση.",
+    next: "Επόμενο: API επεξεργασίας ιδιωτικών πηγών",
   },
 ] as const;
 
@@ -297,7 +297,7 @@ export default function WaterAdminAccessPage() {
         <section className="mt-6 rounded-3xl border border-[#f2c766]/30 bg-[#07111f] p-4">
           <div className="flex flex-col gap-2">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f2c766]">
-              FOUNDER WATER CONTROL CENTER
+              ΚΕΝΤΡΟ ΕΛΕΓΧΟΥ ΥΔΡΕΥΣΗΣ
             </p>
             <h2 className="text-2xl font-black text-white">Κέντρο ελέγχου υποδομής ύδρευσης</h2>
             <p className="text-sm leading-6 text-slate-300">
