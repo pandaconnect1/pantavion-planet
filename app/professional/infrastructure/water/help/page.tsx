@@ -84,7 +84,7 @@ export default function WaterHelpResolutionPage() {
     const { deviceId, deviceToken } = getOrCreateDeviceClaim();
 
     setLoading(true);
-    setMessage("Αποστολή αιτήματος...");
+    setMessage("Καταχώρηση και δρομολόγηση αιτήματος...");
     setAiHint("");
 
     try {
@@ -121,6 +121,10 @@ export default function WaterHelpResolutionPage() {
         requestId?: string;
         aiRoutingHint?: string;
         aiFirstRecommendation?: string;
+        routingMode?: string;
+        deliveryStatus?: string;
+        deliveryTargetLabel?: string;
+        requiresManualForwarding?: boolean;
         error?: string;
       };
 
@@ -128,13 +132,13 @@ export default function WaterHelpResolutionPage() {
         throw new Error(json.error || "help_request_failed");
       }
 
-      setMessage(`Στάλθηκε για έλεγχο. ID: ${json.requestId}`);
+      setMessage(`Καταχωρήθηκε και δρομολογήθηκε. ID: ${json.requestId}. Προορισμός: ${json.deliveryTargetLabel || "Founder/Admin"}. Κατάσταση: ${json.deliveryStatus || "pending"}.`);
       setAiHint(json.aiFirstRecommendation || "");
       setTitle("");
       setDescription("");
       setEvidenceRefs("");
     } catch {
-      setMessage("Δεν στάλθηκε. Έλεγξε τίτλο και περιγραφή.");
+      setMessage("Δεν καταχωρήθηκε. Έλεγξε τίτλο και περιγραφή.");
     } finally {
       setLoading(false);
     }
@@ -154,8 +158,8 @@ export default function WaterHelpResolutionPage() {
         <h1 className="mt-3 text-3xl font-black">Αίτημα / πρόβλημα / λύση</h1>
 
         <p className="mt-3 text-sm font-bold leading-6 text-slate-300">
-          Γράψε τι χρειάζεσαι ή τι πρόβλημα υπάρχει. Το Pantavion θα το ταξινομήσει,
-          θα το στείλει στο σωστό επίπεδο και θα κρατήσει ιστορικό.
+          Γράψε τι χρειάζεσαι ή τι πρόβλημα υπάρχει. Το Pantavion θα το καταχωρήσει,
+          θα το δρομολογήσει με βάση υπεύθυνο, ανώτερο ή διαχειριστή και θα κρατήσει ιστορικό.
         </p>
 
         <form onSubmit={(event) => void submitForm(event)} className="mt-6 grid gap-4">
@@ -314,7 +318,7 @@ export default function WaterHelpResolutionPage() {
             disabled={loading}
             className="rounded-2xl bg-[#f2c766] px-5 py-4 text-lg font-black text-black disabled:opacity-60"
           >
-            Αποστολή για επίλυση
+            Καταχώρηση και δρομολόγηση αιτήματος
           </button>
 
           {message ? (
