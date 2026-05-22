@@ -5,17 +5,17 @@ import { useMemo, useState } from "react";
 const DEVICE_ID_KEY = "pantavion.water.field.deviceId.v1";
 const DEVICE_TOKEN_KEY = "pantavion.water.field.deviceToken.v1";
 
-const SUBMISSION_TYPES = [
+const ACTIONS = [
   { value: "note", label: "Σημείωση" },
-  { value: "fault_report", label: "Αναφορά βλάβης" },
+  { value: "fault_report", label: "Νέα βλάβη" },
   { value: "possible_valve", label: "Πιθανή βάνα" },
   { value: "new_road", label: "Νέα οδός" },
   { value: "new_area", label: "Νέα περιοχή" },
-  { value: "pipe_depth_observation", label: "Παρατήρηση βάθους σωλήνα" },
-  { value: "pipe_material_observation", label: "Παρατήρηση υλικού σωλήνα" },
+  { value: "pipe_depth_observation", label: "Βάθος σωλήνα" },
+  { value: "pipe_material_observation", label: "Υλικό σωλήνα" },
   { value: "underground_service_observation", label: "Άλλη υπόγεια υπηρεσία" },
-  { value: "photo_reference", label: "Αναφορά φωτογραφίας" },
-  { value: "voice_reference", label: "Αναφορά ηχητικού" },
+  { value: "photo_reference", label: "Φωτογραφία" },
+  { value: "voice_reference", label: "Ηχητική σημείωση" },
 ] as const;
 
 function makeId() {
@@ -53,18 +53,16 @@ export default function WaterFieldSubmissionPage() {
   const [description, setDescription] = useState("");
   const [submittedBy, setSubmittedBy] = useState("");
   const [contact, setContact] = useState("");
-  const [role, setRole] = useState("");
   const [areaLabel, setAreaLabel] = useState("");
   const [roadLabel, setRoadLabel] = useState("");
   const [zoneLabel, setZoneLabel] = useState("");
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
+  const [materials, setMaterials] = useState("");
   const [evidenceRefs, setEvidenceRefs] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const selectedTypeLabel = useMemo(() => {
-    return SUBMISSION_TYPES.find((item) => item.value === type)?.label || "Σημείωση";
+  const selectedLabel = useMemo(() => {
+    return ACTIONS.find((item) => item.value === type)?.label || "Σημείωση";
   }, [type]);
 
   async function submitForm(event: React.FormEvent<HTMLFormElement>) {
@@ -73,7 +71,7 @@ export default function WaterFieldSubmissionPage() {
     const { deviceId, deviceToken } = getOrCreateDeviceClaim();
 
     setLoading(true);
-    setMessage("Αποστολή καταχώρησης προς Κέντρο Εγκρίσεων...");
+    setMessage("Αποστολή...");
 
     try {
       const response = await fetch("/api/professional/infrastructure/water/field/submission", {
@@ -83,16 +81,17 @@ export default function WaterFieldSubmissionPage() {
         },
         body: JSON.stringify({
           type,
-          title,
-          description,
+          title: title || selectedLabel,
+          description: [
+            description,
+            materials ? `Υλικά: ${materials}` : "",
+          ].filter(Boolean).join("\n\n"),
           submittedBy,
           contact,
-          role,
+          role: "field_worker",
           areaLabel,
           roadLabel,
           zoneLabel,
-          latitude: latitude ? Number(latitude) : undefined,
-          longitude: longitude ? Number(longitude) : undefined,
           evidenceRefs: evidenceRefs
             .split("\n")
             .map((item) => item.trim())
@@ -113,54 +112,74 @@ export default function WaterFieldSubmissionPage() {
         throw new Error(json.error || "submission_failed");
       }
 
-      setMessage(`Η καταχώρηση αποθηκεύτηκε private και περιμένει έγκριση. ID: ${json.submissionId}`);
+      setMessage("Στάλθηκε για έλεγχο.");
       setTitle("");
       setDescription("");
+      setMaterials("");
       setEvidenceRefs("");
     } catch {
-      setMessage("Δεν αποθηκεύτηκε η καταχώρηση. Έλεγξε τα υποχρεωτικά πεδία.");
+      setMessage("Δεν στάλθηκε. Έλεγξε τίτλο και περιγραφή.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="min-h-screen bg-[#06111f] px-4 py-6 text-white">
-      <section className="mx-auto w-full max-w-4xl rounded-3xl border border-[#b89445]/50 bg-[#0d1a2d] p-5 shadow-2xl">
-        <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f2c766]">
-          WATER FIELD ASSISTANT
+    <main className="min-h-screen bg-[#06111f] px-4 py-5 text-white">
+      <section className="mx-auto w-full max-w-3xl rounded-3xl border border-[#b89445]/50 bg-[#0d1a2d] p-5 shadow-2xl">
+        <p className="text-xs font-black uppercase tracking-[0.22em] text-[#f2c766]">
+          PANTAVION ΥΔΡΕΥΣΗ
         </p>
 
-        <h1 className="mt-3 text-3xl font-black">Καταχώρηση πεδίου ύδρευσης</h1>
+        <h1 className="mt-3 text-3xl font-black">Εργασία πεδίου</h1>
 
-        <p className="mt-3 text-sm leading-6 text-slate-300">
-          Ο τεχνικός μπορεί να στείλει σημείωση, βλάβη, πιθανή βάνα, νέα οδό/περιοχή ή παρατήρηση σωλήνα.
-          Όλα μένουν private και pending μέχρι έγκριση founder.
-        </p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => {
+              setType("note");
+              setTitle("Άφιξη");
+              setDescription("Άφιξη στο σημείο εργασίας.");
+            }}
+            className="rounded-2xl border border-emerald-400/50 bg-emerald-950/30 px-5 py-4 text-left text-lg font-black text-emerald-100"
+          >
+            Άφιξη
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setType("note");
+              setTitle("Αναχώρηση");
+              setDescription("Αναχώρηση από το σημείο εργασίας.");
+            }}
+            className="rounded-2xl border border-sky-400/50 bg-sky-950/30 px-5 py-4 text-left text-lg font-black text-sky-100"
+          >
+            Αναχώρηση
+          </button>
+
+          {ACTIONS.map((item) => (
+            <button
+              key={item.value}
+              type="button"
+              onClick={() => {
+                setType(item.value);
+                setTitle(item.label);
+              }}
+              className="rounded-2xl border border-slate-700 bg-[#07111f] px-5 py-4 text-left text-lg font-black text-white"
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
 
         <form onSubmit={(event) => void submitForm(event)} className="mt-6 grid gap-4">
-          <label className="grid gap-2">
-            <span className="text-sm font-black text-[#f2c766]">Τύπος καταχώρησης</span>
-            <select
-              value={type}
-              onChange={(event) => setType(event.target.value)}
-              className="rounded-2xl border border-[#b89445]/60 bg-[#07111f] px-4 py-3 text-white outline-none"
-            >
-              {SUBMISSION_TYPES.map((item) => (
-                <option key={item.value} value={item.value}>
-                  {item.label}
-                </option>
-              ))}
-            </select>
-          </label>
-
           <label className="grid gap-2">
             <span className="text-sm font-black text-[#f2c766]">Τίτλος</span>
             <input
               value={title}
               onChange={(event) => setTitle(event.target.value)}
               required
-              placeholder={`${selectedTypeLabel} - σύντομος τίτλος`}
               className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
             />
           </label>
@@ -172,12 +191,12 @@ export default function WaterFieldSubmissionPage() {
               onChange={(event) => setDescription(event.target.value)}
               required
               rows={5}
-              placeholder="Τι παρατηρήθηκε; Πού είναι; Τι χρειάζεται έλεγχο;"
+              placeholder="Γράψε τι έγινε ή τι παρατηρήθηκε."
               className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
             />
           </label>
 
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2">
             <label className="grid gap-2">
               <span className="text-sm font-black text-[#f2c766]">Όνομα</span>
               <input
@@ -188,26 +207,16 @@ export default function WaterFieldSubmissionPage() {
             </label>
 
             <label className="grid gap-2">
-              <span className="text-sm font-black text-[#f2c766]">Επικοινωνία</span>
+              <span className="text-sm font-black text-[#f2c766]">Τηλέφωνο</span>
               <input
                 value={contact}
                 onChange={(event) => setContact(event.target.value)}
                 className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
               />
             </label>
-
-            <label className="grid gap-2">
-              <span className="text-sm font-black text-[#f2c766]">Ρόλος</span>
-              <input
-                value={role}
-                onChange={(event) => setRole(event.target.value)}
-                placeholder="Τεχνικός, εργολάβος, κάτοικος..."
-                className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
-              />
-            </label>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-3">
             <label className="grid gap-2">
               <span className="text-sm font-black text-[#f2c766]">Περιοχή</span>
               <input
@@ -236,35 +245,24 @@ export default function WaterFieldSubmissionPage() {
             </label>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <label className="grid gap-2">
-              <span className="text-sm font-black text-[#f2c766]">Latitude</span>
-              <input
-                value={latitude}
-                onChange={(event) => setLatitude(event.target.value)}
-                inputMode="decimal"
-                className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
-              />
-            </label>
-
-            <label className="grid gap-2">
-              <span className="text-sm font-black text-[#f2c766]">Longitude</span>
-              <input
-                value={longitude}
-                onChange={(event) => setLongitude(event.target.value)}
-                inputMode="decimal"
-                className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
-              />
-            </label>
-          </div>
+          <label className="grid gap-2">
+            <span className="text-sm font-black text-[#f2c766]">Υλικά</span>
+            <textarea
+              value={materials}
+              onChange={(event) => setMaterials(event.target.value)}
+              rows={3}
+              placeholder="Σωλήνες, εξαρτήματα, βάνα, μούφα, κολάρο..."
+              className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
+            />
+          </label>
 
           <label className="grid gap-2">
-            <span className="text-sm font-black text-[#f2c766]">References φωτογραφίας/ηχητικού/PDF</span>
+            <span className="text-sm font-black text-[#f2c766]">Φωτογραφίες / ηχητικά / PDF</span>
             <textarea
               value={evidenceRefs}
               onChange={(event) => setEvidenceRefs(event.target.value)}
               rows={3}
-              placeholder="Προσωρινά refs/ονόματα αρχείων, ένα ανά γραμμή. Το πραγματικό upload αρχείων θα μπει στο επόμενο API."
+              placeholder="Προσωρινά γράψε όνομα αρχείου ή σημείωση. Το upload θα μπει στο επόμενο βήμα."
               className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
             />
           </label>
@@ -272,13 +270,13 @@ export default function WaterFieldSubmissionPage() {
           <button
             type="submit"
             disabled={loading}
-            className="rounded-2xl bg-[#f2c766] px-5 py-4 font-black text-black disabled:opacity-60"
+            className="rounded-2xl bg-[#f2c766] px-5 py-4 text-lg font-black text-black disabled:opacity-60"
           >
-            Αποστολή για έγκριση founder
+            Αποστολή
           </button>
 
           {message ? (
-            <p className="rounded-2xl border border-[#f2c766]/30 bg-[#f2c766]/10 p-4 text-sm font-bold text-[#f2c766]">
+            <p className="rounded-2xl border border-[#f2c766]/30 bg-[#f2c766]/10 p-4 text-sm font-black text-[#f2c766]">
               {message}
             </p>
           ) : null}
