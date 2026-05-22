@@ -18,6 +18,33 @@ type WaterAccessRequest = {
   hasDeviceToken?: boolean;
 };
 
+type WaterFieldSubmission = {
+  id: string;
+  source: string;
+  type: string;
+  status: string;
+  truthLabel: string;
+  title: string;
+  description: string;
+  submittedBy: string;
+  contact: string;
+  role: string;
+  areaLabel: string;
+  roadLabel: string;
+  zoneLabel: string;
+  latitude: number | null;
+  longitude: number | null;
+  evidenceRefs: string[];
+  visibleToFounder: boolean;
+  visibleToApprovedUsers: boolean;
+  rawSensitiveDataHiddenFromUsers: boolean;
+  aiEstimateIsVerifiedTruth: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deviceId: string;
+  deviceLabel: string;
+};
+
 const FOUNDER_CODE_STORAGE_KEY = "pantavion.water.admin.founderCode.v1";
 
 const APPROVAL_CATEGORIES = [
@@ -27,29 +54,14 @@ const APPROVAL_CATEGORIES = [
     description: "Πραγματικά αιτήματα πρόσβασης και δεμένες συσκευές χρηστών.",
   },
   {
-    title: "Σημειώσεις χάρτη",
-    status: "Επόμενο API",
-    description: "Σημειώσεις από τεχνικούς/χρήστες που θα μένουν pending μέχρι founder approval.",
+    title: "Καταχωρήσεις πεδίου",
+    status: "Ενεργό",
+    description: "Άφιξη, αναχώρηση, βλάβες, βάνες, φωτογραφίες, ηχητικά, υλικά και παρατηρήσεις από εργάτη/τεχνίτη.",
   },
   {
-    title: "Φωτογραφίες",
+    title: "Φωτογραφίες / Ηχητικά / PDF",
     status: "Επόμενο API",
-    description: "Φωτογραφίες εργοταξίου, βανών, επεκτάσεων και επισκευών πριν γίνουν κοινές.",
-  },
-  {
-    title: "Ηχητικά",
-    status: "Επόμενο API",
-    description: "Ηχητικές περιγραφές πεδίου με μεταγραφή και έλεγχο πριν από δημοσίευση.",
-  },
-  {
-    title: "Βλάβες / Βάνες",
-    status: "Επόμενο API",
-    description: "Βλάβες, πιθανές βάνες, αλλαγές βανών, αφαιρέσεις και διορθώσεις δικτύου.",
-  },
-  {
-    title: "PDF / Scanner",
-    status: "Επόμενο API",
-    description: "Σχέδια, αναφορές scanner, έγγραφα και τεχνικά αρχεία προς έλεγχο.",
+    description: "Το σημερινό βήμα διαβάζει references. Το πραγματικό upload αρχείων μπαίνει στο επόμενο βήμα.",
   },
   {
     title: "AI εισηγήσεις",
@@ -68,13 +80,76 @@ function rememberFounderCode(value: string) {
   window.localStorage.setItem(FOUNDER_CODE_STORAGE_KEY, value);
 }
 
+function typeLabel(type: string) {
+  const labels: Record<string, string> = {
+    note: "Σημείωση",
+    fault_report: "Νέα βλάβη",
+    possible_valve: "Πιθανή βάνα",
+    new_road: "Νέα οδός",
+    new_area: "Νέα περιοχή",
+    pipe_depth_observation: "Βάθος σωλήνα",
+    pipe_material_observation: "Υλικό σωλήνα",
+    underground_service_observation: "Άλλη υπόγεια υπηρεσία",
+    photo_reference: "Φωτογραφία",
+    voice_reference: "Ηχητική σημείωση",
+  };
+
+  return labels[type] || type || "Καταχώρηση";
+}
+
 export default function WaterApprovalInboxPage() {
   const [founderCode, setFounderCode] = useState("");
   const [requests, setRequests] = useState<WaterAccessRequest[]>([]);
+  const [fieldSubmissions, setFieldSubmissions] = useState<WaterFieldSubmission[]>([]);
   const [message, setMessage] = useState("");
+  const [fieldMessage, setFieldMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function loadRequests(codeOverride?: string) {
+  async function loadAccessRequests(codeToUse: string) {
+    const response = await fetch("/api/professional/infrastructure/water/access/admin/requests", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ founderCode: codeToUse }),
+    });
+
+    const json = (await response.json()) as {
+      ok?: boolean;
+      requests?: WaterAccessRequest[];
+      error?: string;
+    };
+
+    if (!response.ok || !json.ok) {
+      throw new Error(json.error || "requests_failed");
+    }
+
+    return json.requests || [];
+  }
+
+  async function loadFieldSubmissions(codeToUse: string) {
+    const response = await fetch("/api/professional/infrastructure/water/field/admin/submissions", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ founderCode: codeToUse }),
+    });
+
+    const json = (await response.json()) as {
+      ok?: boolean;
+      submissions?: WaterFieldSubmission[];
+      error?: string;
+    };
+
+    if (!response.ok || !json.ok) {
+      throw new Error(json.error || "field_submissions_failed");
+    }
+
+    return json.submissions || [];
+  }
+
+  async function loadInbox(codeOverride?: string) {
     const codeToUse = (codeOverride || founderCode || getSavedFounderCode()).trim();
 
     if (!codeToUse) {
@@ -83,33 +158,25 @@ export default function WaterApprovalInboxPage() {
     }
 
     setLoading(true);
-    setMessage("Φόρτωση Κέντρου Εγκρίσεων...");
+    setMessage("Φόρτωση αιτημάτων πρόσβασης...");
+    setFieldMessage("Φόρτωση καταχωρήσεων πεδίου...");
 
     try {
-      const response = await fetch("/api/professional/infrastructure/water/access/admin/requests", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ founderCode: codeToUse }),
-      });
-
-      const json = (await response.json()) as {
-        ok?: boolean;
-        requests?: WaterAccessRequest[];
-        error?: string;
-      };
-
-      if (!response.ok || !json.ok) {
-        throw new Error(json.error || "requests_failed");
-      }
+      const [nextRequests, nextFieldSubmissions] = await Promise.all([
+        loadAccessRequests(codeToUse),
+        loadFieldSubmissions(codeToUse),
+      ]);
 
       setFounderCode(codeToUse);
       rememberFounderCode(codeToUse);
-      setRequests(json.requests || []);
-      setMessage(`Φορτώθηκαν ${json.requests?.length || 0} αιτήματα πρόσβασης/συσκευών.`);
+      setRequests(nextRequests);
+      setFieldSubmissions(nextFieldSubmissions);
+
+      setMessage(`Φορτώθηκαν ${nextRequests.length} αιτήματα πρόσβασης/συσκευών.`);
+      setFieldMessage(`Φορτώθηκαν ${nextFieldSubmissions.length} καταχωρήσεις πεδίου.`);
     } catch {
-      setMessage("Δεν φορτώθηκαν τα αιτήματα. Έλεγξε τον founder/admin κωδικό.");
+      setMessage("Δεν φορτώθηκαν όλα τα στοιχεία. Έλεγξε τον founder/admin κωδικό ή το deploy.");
+      setFieldMessage("Οι καταχωρήσεις πεδίου δεν φορτώθηκαν.");
     } finally {
       setLoading(false);
     }
@@ -154,7 +221,7 @@ export default function WaterApprovalInboxPage() {
       }
 
       rememberFounderCode(codeToUse);
-      await loadRequests(codeToUse);
+      await loadInbox(codeToUse);
       setMessage(decision === "approve" ? "Εγκρίθηκε η συσκευή." : "Απορρίφθηκε το αίτημα.");
     } catch {
       setMessage("Η απόφαση δεν αποθηκεύτηκε.");
@@ -168,12 +235,12 @@ export default function WaterApprovalInboxPage() {
 
     if (savedCode) {
       setFounderCode(savedCode);
-      void loadRequests(savedCode);
+      void loadInbox(savedCode);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const counts = useMemo(() => {
+  const accessCounts = useMemo(() => {
     return {
       total: requests.length,
       pending: requests.filter((item) => item.status === "pending_founder_review").length,
@@ -182,6 +249,14 @@ export default function WaterApprovalInboxPage() {
       deviceReady: requests.filter((item) => item.hasDeviceToken).length,
     };
   }, [requests]);
+
+  const fieldCounts = useMemo(() => {
+    return {
+      total: fieldSubmissions.length,
+      pending: fieldSubmissions.filter((item) => item.status === "pending_founder_review").length,
+      withEvidence: fieldSubmissions.filter((item) => item.evidenceRefs.length > 0).length,
+    };
+  }, [fieldSubmissions]);
 
   return (
     <main className="min-h-screen bg-[#06111f] px-4 py-6 text-white">
@@ -194,10 +269,10 @@ export default function WaterApprovalInboxPage() {
           ΚΕΝΤΡΟ ΕΓΚΡΙΣΕΩΝ ΥΔΡΕΥΣΗΣ
         </p>
 
-        <h1 className="mt-3 text-3xl font-black">Όλα τα pending στοιχεία πριν γίνουν κοινά</h1>
+        <h1 className="mt-3 text-3xl font-black">Pending στοιχεία πριν γίνουν κοινά</h1>
 
         <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300">
-          Από εδώ ο founder ελέγχει πρόσβαση, συσκευές, σημειώσεις, φωτογραφίες, ηχητικά, βλάβες, βάνες, PDF/scanner και AI εισηγήσεις. Τίποτα δεν γίνεται κοινό χωρίς έγκριση.
+          Από εδώ ο founder ελέγχει πρόσβαση, συσκευές και καταχωρήσεις πεδίου. Τίποτα από εργάτη/τεχνίτη δεν γίνεται κοινό χωρίς έγκριση.
         </p>
 
         <div className="mt-6 grid gap-3 rounded-3xl border border-slate-700 bg-[#07111f] p-4">
@@ -211,7 +286,7 @@ export default function WaterApprovalInboxPage() {
 
           <button
             type="button"
-            onClick={() => void loadRequests()}
+            onClick={() => void loadInbox()}
             disabled={loading}
             className="rounded-2xl bg-[#f2c766] px-5 py-3 font-black text-black disabled:opacity-60"
           >
@@ -219,28 +294,25 @@ export default function WaterApprovalInboxPage() {
           </button>
 
           {message ? <p className="text-sm font-bold text-[#f2c766]">{message}</p> : null}
+          {fieldMessage ? <p className="text-sm font-bold text-[#f2c766]">{fieldMessage}</p> : null}
         </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-5">
+        <div className="mt-5 grid gap-3 sm:grid-cols-4">
           <div className="rounded-2xl border border-slate-700 bg-[#07111f] p-4">
-            <p className="text-xs text-slate-400">Σύνολο</p>
-            <p className="text-2xl font-black text-[#f2c766]">{counts.total}</p>
-          </div>
-          <div className="rounded-2xl border border-amber-600/50 bg-amber-950/20 p-4">
-            <p className="text-xs text-amber-100/70">Σε αναμονή</p>
-            <p className="text-2xl font-black text-amber-100">{counts.pending}</p>
+            <p className="text-xs text-slate-400">Αιτήματα πρόσβασης</p>
+            <p className="text-2xl font-black text-[#f2c766]">{accessCounts.total}</p>
           </div>
           <div className="rounded-2xl border border-emerald-600/50 bg-emerald-950/20 p-4">
-            <p className="text-xs text-emerald-100/70">Εγκεκριμένα</p>
-            <p className="text-2xl font-black text-emerald-100">{counts.approved}</p>
+            <p className="text-xs text-emerald-100/70">Εγκεκριμένες συσκευές</p>
+            <p className="text-2xl font-black text-emerald-100">{accessCounts.deviceReady}</p>
           </div>
-          <div className="rounded-2xl border border-red-600/50 bg-red-950/20 p-4">
-            <p className="text-xs text-red-100/70">Απορρίψεις</p>
-            <p className="text-2xl font-black text-red-100">{counts.rejected}</p>
+          <div className="rounded-2xl border border-amber-600/50 bg-amber-950/20 p-4">
+            <p className="text-xs text-amber-100/70">Καταχωρήσεις πεδίου</p>
+            <p className="text-2xl font-black text-amber-100">{fieldCounts.total}</p>
           </div>
           <div className="rounded-2xl border border-sky-600/50 bg-sky-950/20 p-4">
-            <p className="text-xs text-sky-100/70">Με συσκευή</p>
-            <p className="text-2xl font-black text-sky-100">{counts.deviceReady}</p>
+            <p className="text-xs text-sky-100/70">Με τεκμήρια/refs</p>
+            <p className="text-2xl font-black text-sky-100">{fieldCounts.withEvidence}</p>
           </div>
         </div>
 
@@ -258,7 +330,57 @@ export default function WaterApprovalInboxPage() {
           ))}
         </section>
 
-        <section className="mt-6 grid gap-4">
+        <section className="mt-8 grid gap-4">
+          <h2 className="text-2xl font-black">Καταχωρήσεις πεδίου εργάτη / τεχνίτη</h2>
+
+          {fieldSubmissions.map((item) => (
+            <article key={item.id} className="rounded-3xl border border-amber-500/40 bg-amber-950/10 p-4">
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="rounded-full border border-[#f2c766]/40 bg-[#f2c766]/10 px-3 py-1 text-xs font-black text-[#f2c766]">
+                    {typeLabel(item.type)}
+                  </p>
+                  <p className="rounded-full border border-amber-500/40 px-3 py-1 text-xs font-black text-amber-100">
+                    {item.status}
+                  </p>
+                </div>
+
+                <h3 className="text-xl font-black">{item.title}</h3>
+                <p className="whitespace-pre-wrap text-sm leading-6 text-slate-300">{item.description}</p>
+
+                <div className="grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
+                  <p>Όνομα: {item.submittedBy || "—"}</p>
+                  <p>Τηλέφωνο: {item.contact || "—"}</p>
+                  <p>Περιοχή: {item.areaLabel || "—"}</p>
+                  <p>Οδός: {item.roadLabel || "—"}</p>
+                  <p>Ζώνη: {item.zoneLabel || "—"}</p>
+                  <p>Συσκευή: {item.deviceLabel || item.deviceId || "—"}</p>
+                </div>
+
+                {item.evidenceRefs.length > 0 ? (
+                  <div className="mt-3 rounded-2xl border border-slate-700 bg-[#07111f] p-3">
+                    <p className="text-sm font-black text-[#f2c766]">Τεκμήρια / refs</p>
+                    <ul className="mt-2 grid gap-1 text-sm text-slate-300">
+                      {item.evidenceRefs.map((ref) => (
+                        <li key={ref}>• {ref}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+
+                <p className="text-xs text-slate-500">{item.createdAt}</p>
+              </div>
+            </article>
+          ))}
+
+          {fieldSubmissions.length === 0 ? (
+            <p className="rounded-3xl border border-slate-700 bg-[#07111f] p-4 text-slate-300">
+              Δεν υπάρχουν ακόμη καταχωρήσεις πεδίου.
+            </p>
+          ) : null}
+        </section>
+
+        <section className="mt-8 grid gap-4">
           <h2 className="text-2xl font-black">Πραγματικά αιτήματα πρόσβασης / συσκευών</h2>
 
           {requests.map((item) => {
@@ -305,7 +427,7 @@ export default function WaterApprovalInboxPage() {
 
           {requests.length === 0 ? (
             <p className="rounded-3xl border border-slate-700 bg-[#07111f] p-4 text-slate-300">
-              Δεν εμφανίζονται αιτήματα ακόμη.
+              Δεν εμφανίζονται αιτήματα πρόσβασης ακόμη.
             </p>
           ) : null}
         </section>
