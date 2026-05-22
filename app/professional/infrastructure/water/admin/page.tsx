@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 type WaterAccessRequest = {
@@ -30,7 +31,8 @@ const WATER_FOUNDER_CONTROL_MODULES = [
     title: "Κέντρο Εγκρίσεων",
     status: "Θεμέλιο έτοιμο",
     text: "Ουρά ελέγχου για αιτήματα πρόσβασης, συσκευές, σημειώσεις, φωτογραφίες, ηχητικά, βλάβες, βάνες, αλλαγές δικτύου, PDF/scanner και εισηγήσεις AI.",
-    next: "Επόμενο: οθόνη Κέντρου Εγκρίσεων",
+    next: "Άνοιγμα Κέντρου Εγκρίσεων",
+    href: "/professional/infrastructure/water/admin/approvals",
   },
   {
     title: "Πλευρική Μπάρα Πληροφοριών",
@@ -317,7 +319,16 @@ export default function WaterAdminAccessPage() {
                     {module.status}
                   </p>
                   <p className="text-sm leading-6 text-slate-300">{module.text}</p>
-                  <p className="text-sm font-black text-[#f2c766]">{module.next}</p>
+                  {"href" in module ? (
+                    <Link
+                      href={module.href}
+                      className="w-fit rounded-full bg-[#f2c766] px-4 py-2 text-sm font-black text-black no-underline"
+                    >
+                      {module.next}
+                    </Link>
+                  ) : (
+                    <p className="text-sm font-black text-[#f2c766]">{module.next}</p>
+                  )}
                 </div>
               </article>
             ))}
