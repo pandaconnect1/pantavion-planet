@@ -100,9 +100,9 @@ export default function HomePage() {
   }, [lang]);
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#192b55_0,#071020_48%,#02040b_100%)] px-4 py-6 text-[#fff8e7] sm:px-8 lg:px-12">
-      <section className="mx-auto max-w-6xl">
-        <div className="mb-6 rounded-3xl border border-[#f6c85f]/25 bg-[#071020]/70 p-4 sm:p-5">
+    <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-[radial-gradient(circle_at_top,#192b55_0,#071020_48%,#02040b_100%)] px-4 py-6 text-[#fff8e7] sm:px-8 lg:px-12">
+      <section className="mx-auto w-full min-w-0 max-w-6xl">
+        <div className="mb-6 w-full min-w-0 overflow-hidden rounded-3xl border border-[#f6c85f]/25 bg-[#071020]/70 p-4 sm:p-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-black text-[#f6c85f]">{t.languageSpineTitle}</p>
@@ -114,7 +114,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <label className="flex min-w-[240px] flex-col gap-2 text-sm font-black text-[#f6c85f]">
+            <label className="flex w-full min-w-0 max-w-full flex-col gap-2 text-sm font-black text-[#f6c85f] sm:w-[240px] sm:shrink-0">
               {t.language}
               <select
                 value={lang}
@@ -136,7 +136,7 @@ export default function HomePage() {
             {t.badge}
           </p>
 
-          <h1 className="max-w-5xl text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-8xl">
+          <h1 className="max-w-5xl break-words text-4xl font-black leading-[1.03] tracking-tight sm:text-6xl sm:leading-[0.98] lg:text-8xl">
             {t.title}
           </h1>
 
@@ -144,8 +144,8 @@ export default function HomePage() {
             {t.subtitle}
           </p>
 
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap">
-            <Link href="/professional/infrastructure/water" className="rounded-full border border-[#f6c85f]/60 bg-[#f6c85f]/15 px-6 py-4 text-center text-base font-black text-[#fff8e7]">
+          <div className="mt-8 grid w-full min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap">
+            <Link href="/professional/infrastructure/water" className="block min-w-0 max-w-full whitespace-normal break-words rounded-full border border-[#f6c85f]/60 bg-[#f6c85f]/15 px-6 py-4 text-center text-base font-black text-[#fff8e7]">
               {t.water}
             </Link>
 
@@ -211,3 +211,4 @@ export default function HomePage() {
     </main>
   );
 }
+
