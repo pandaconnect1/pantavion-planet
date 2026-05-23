@@ -3,6 +3,17 @@ import { createHash } from "crypto";
 import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
+import {
+  decideWaterAIKernel,
+  type WaterAIFaultInput,
+} from "@/core/water/water-ai-operations-kernel";
+import {
+  decideWaterAIMapIntelligence,
+  type WaterFaultMapInput,
+  type WaterGeoPoint,
+  type WaterMapAsset,
+} from "@/core/water/water-ai-map-intelligence-kernel";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -61,6 +72,105 @@ async function readJson(blob: BlobListItem) {
   return response.json();
 }
 
+type JsonRecord = Record<string, unknown>;
+
+function asRecord(value: unknown): JsonRecord {
+  return value && typeof value === "object" && !Array.isArray(value) ? (value as JsonRecord) : {};
+}
+
+function asText(value: unknown) {
+  return typeof value === "string" && value.trim().length > 0 ? value.trim() : undefined;
+}
+
+function asNumber(value: unknown) {
+  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+}
+
+function asBoolean(value: unknown) {
+  return typeof value === "boolean" ? value : undefined;
+}
+
+function arrayCount(value: unknown) {
+  return Array.isArray(value) ? value.length : undefined;
+}
+
+function asGeoPoint(value: unknown): WaterGeoPoint | undefined {
+  const data = asRecord(value);
+  const lat = asNumber(data.lat) ?? asNumber(data.latitude);
+  const lng = asNumber(data.lng) ?? asNumber(data.longitude);
+
+  return typeof lat === "number" && typeof lng === "number" ? { lat, lng } : undefined;
+}
+
+function asMapAssets(value: unknown): WaterMapAsset[] {
+  return Array.isArray(value) ? (value as WaterMapAsset[]) : [];
+}
+
+function toWaterAIFaultInput(item: unknown): WaterAIFaultInput {
+  const data = asRecord(item);
+  const location = asRecord(data.location);
+  const timestamps = asRecord(data.timestamps);
+  const recordedBy = asRecord(data.recordedBy);
+  const assignedTo = asRecord(data.assignedTo);
+  const excavation = asRecord(data.excavation);
+  const audioTranscript = asRecord(data.audioTranscript);
+  const managementMetrics = asRecord(data.managementMetrics);
+
+  return {
+    recordNumber: asText(data.recordNumber),
+    title: asText(data.title),
+    description: asText(data.description),
+    source: asText(data.source),
+    faultType: asText(data.faultType),
+    priority: asText(data.priority),
+    status: asText(data.status),
+    createdByRole: asText(recordedBy.role),
+    assignedToRole: asText(assignedTo.role),
+    assignedToUserId: asText(assignedTo.userId),
+    areaLabel: asText(location.areaLabel),
+    roadLabel: asText(location.roadLabel),
+    zoneLabel: asText(location.zoneLabel),
+    nearestPipeId: asText(location.nearestPipeId),
+    nearestValveId: asText(location.nearestValveId),
+    mapLinked:
+      asBoolean(location.mapLinked) ??
+      Boolean(asText(location.mapPath) || asText(location.nearestPipeId) || asText(location.nearestValveId)),
+    materialsDeclared: Array.isArray(data.materials) ? data.materials.length > 0 : asBoolean(data.materialsDeclared),
+    excavationDeclared: asBoolean(excavation.wasExcavationDone),
+    arrivalAt: asText(timestamps.crewArrivedAt),
+    departureAt: asText(timestamps.crewDepartedAt),
+    deliveredAt: asText(timestamps.deliveredAt),
+    photosBeforeCount: asNumber(data.photosBeforeCount) ?? arrayCount(data.photosBefore),
+    photosAfterCount: asNumber(data.photosAfterCount) ?? arrayCount(data.photosAfter),
+    audioRefsCount: asNumber(data.audioRefsCount) ?? arrayCount(data.audioRefs),
+    transcriptText: asText(audioTranscript.transcriptText),
+    transcriptStatus: asText(audioTranscript.transcriptStatus),
+    signatureEventsCount: asNumber(data.signatureEventsCount) ?? arrayCount(data.signatureEvents),
+    repeatedFaultsNearbyCount: asNumber(managementMetrics.repeatedFaultCountNearby),
+    possibleWaterLoss: asBoolean(managementMetrics.possibleWaterLoss),
+    isFounderOnly: asBoolean(data.isFounderOnly),
+  };
+}
+
+function toWaterFaultMapInput(item: unknown): WaterFaultMapInput {
+  const data = asRecord(item);
+  const location = asRecord(data.location);
+  const managementMetrics = asRecord(data.managementMetrics);
+
+  return {
+    recordNumber: asText(data.recordNumber) || "pending-record",
+    faultPoint: asGeoPoint(location.faultPoint) ?? asGeoPoint(data.faultPoint) ?? asGeoPoint(location),
+    areaLabel: asText(location.areaLabel),
+    roadLabel: asText(location.roadLabel),
+    zoneLabel: asText(location.zoneLabel),
+    existingPipeId: asText(location.nearestPipeId),
+    existingValveId: asText(location.nearestValveId),
+    existingZoneId: asText(location.zoneId) ?? asText(location.pressureZoneId),
+    repeatedFaultsNearbyCount: asNumber(managementMetrics.repeatedFaultCountNearby),
+    possibleWaterLoss: asBoolean(managementMetrics.possibleWaterLoss),
+    assets: asMapAssets(data.mapAssets).length ? asMapAssets(data.mapAssets) : asMapAssets(location.mapAssets),
+  };
+}
 export async function GET(request: Request, context: RouteContext) {
   try {
     if (!hasAdminReadSession(request)) {
@@ -115,9 +225,15 @@ export async function GET(request: Request, context: RouteContext) {
       );
     }
 
+    const aiOperationsDecision = decideWaterAIKernel(toWaterAIFaultInput(item));
+    const aiMapDecision = decideWaterAIMapIntelligence(toWaterFaultMapInput(item));
+
     return NextResponse.json({
       ok: true,
       item,
+      aiOperationsDecision,
+      aiMapDecision,
+      aiKernelVersion: "water_ai_operations_and_map_intelligence_v1",
       generatedAt: new Date().toISOString(),
       source: "water/private/fault-approval-inbox/founder-admin/",
     });
