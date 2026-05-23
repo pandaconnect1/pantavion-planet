@@ -1,4 +1,4 @@
-﻿import { createHash, timingSafeEqual } from "crypto";
+import { createHash, timingSafeEqual } from "crypto";
 
 import { NextResponse } from "next/server";
 
@@ -6,6 +6,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const SESSION_COOKIE = "pantavion_water_admin_session";
+const TRUSTED_DEVICE_COOKIE = "pantavion_water_trusted_device";
 
 type AdminSessionBody = {
   accessCode?: string;

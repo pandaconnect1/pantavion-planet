@@ -39,6 +39,10 @@ function adminSessionValue(secret: string) {
   return createHash("sha256").update(`pantavion-water-admin-session-v1:${secret}`).digest("hex");
 }
 
+function trustedDeviceValue(secret: string) {
+  return createHash("sha256").update(`pantavion-water-trusted-device-v1:${secret}`).digest("hex");
+}
+
 function hasAdminReadSession(request: Request) {
   if (process.env.NODE_ENV !== "production") return true;
 
@@ -47,8 +51,12 @@ function hasAdminReadSession(request: Request) {
 
   const cookieHeader = request.headers.get("cookie") || "";
   const sessionCookie = cookieValue(cookieHeader, "pantavion_water_admin_session");
+  const trustedDeviceCookie = cookieValue(cookieHeader, "pantavion_water_trusted_device");
 
-  return sessionCookie === adminSessionValue(expectedSecret);
+  return (
+    sessionCookie === adminSessionValue(expectedSecret) ||
+    trustedDeviceCookie === trustedDeviceValue(expectedSecret)
+  );
 }
 
 function safeSegment(value: string) {

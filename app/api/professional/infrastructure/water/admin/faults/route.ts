@@ -109,6 +109,10 @@ function adminSessionValue(secret: string) {
   return createHash("sha256").update(`pantavion-water-admin-session-v1:${secret}`).digest("hex");
 }
 
+function trustedDeviceValue(secret: string) {
+  return createHash("sha256").update(`pantavion-water-trusted-device-v1:${secret}`).digest("hex");
+}
+
 function hasAdminReadSession(request: Request) {
   if (process.env.NODE_ENV !== "production") return true;
 
