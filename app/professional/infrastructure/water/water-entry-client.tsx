@@ -83,6 +83,101 @@ function rememberPendingRequestId(value: string) {
   window.localStorage.setItem(PANTAVION_WATER_PENDING_REQUEST_KEY, value);
 }
 
+
+function WaterLiveIntelligenceViewSelector() {
+  const views = [
+    {
+      key: "operational_map",
+      label: "Operational",
+      title: "Λειτουργικός χάρτης",
+      detail: "Ασφαλές layer για καθημερινή χρήση, εργασίες, βλάβες και πεδίο.",
+    },
+    {
+      key: "master_map",
+      label: "Master",
+      title: "Master χάρτης",
+      detail: "Πλήρες προστατευμένο δίκτυο. Θέλει founder/admin ή εγκεκριμένη πρόσβαση.",
+    },
+    {
+      key: "terrain_elevation_map",
+      label: "Terrain",
+      title: "Υψόμετρα / μορφολογία",
+      detail: "Βάση για υψομετρικές διαφορές, πιθανές πιέσεις και υδραυλική αξιολόγηση.",
+    },
+    {
+      key: "pressure_risk_map",
+      label: "Pressure Risk",
+      title: "Ρίσκο πίεσης",
+      detail: "Ενδείξεις για χαμηλή/υψηλή πίεση, αδύνατα σημεία και ανάγκη μετρήσεων.",
+    },
+    {
+      key: "demand_growth_map",
+      label: "Demand Growth",
+      title: "Ανάπτυξη / ζήτηση",
+      detail: "Πολυκατοικίες, πληθυσμιακή ανάπτυξη, νέα φορτία σε παλιό δίκτυο.",
+    },
+    {
+      key: "prv_candidate_map",
+      label: "PRV",
+      title: "PRV candidates",
+      detail: "Πιθανές περιοχές για pressure reducing valve ή engineering review.",
+    },
+  ] as const;
+
+  return (
+    <section className="mt-6 rounded-3xl border border-[#f2c766]/40 bg-[#07111f]/95 p-5 shadow-2xl">
+      <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.28em] text-[#f2c766]">
+            Pantavion Water Intelligence Views
+          </p>
+          <h2 className="mt-2 text-2xl font-black text-white">
+            Επιλογή χάρτη / AI hydraulic layers
+          </h2>
+          <p className="mt-2 max-w-4xl text-sm font-semibold leading-6 text-slate-300">
+            Διάλεξε επιχειρησιακή προβολή, master view, terrain, pressure risk,
+            demand growth ή PRV candidates. Το AI εισηγείται, αλλά καμία master
+            ή υδραυλική αλλαγή δεν εγκρίνεται χωρίς άνθρωπο, audit και approval.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-[#f2c766]/30 bg-[#f2c766]/10 px-4 py-3 text-xs font-black uppercase tracking-[0.2em] text-[#f2c766]">
+          Live foundation
+        </div>
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {views.map((view) => (
+          <a
+            key={view.key}
+            href={`/professional/infrastructure/water?view=${view.key}`}
+            className="group rounded-2xl border border-slate-700 bg-[#0d1a2d] p-4 transition hover:border-[#f2c766]/70 hover:bg-[#10213a]"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-sm font-black text-white">{view.label}</p>
+              <span className="rounded-full border border-[#f2c766]/30 px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#f2c766]">
+                open
+              </span>
+            </div>
+            <p className="mt-2 text-sm font-bold text-[#f2c766]">{view.title}</p>
+            <p className="mt-2 text-xs font-semibold leading-5 text-slate-300">
+              {view.detail}
+            </p>
+          </a>
+        ))}
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-slate-700 bg-black/25 p-4">
+        <p className="text-sm font-black text-white">AI / Kernel boundary</p>
+        <p className="mt-2 text-xs font-semibold leading-5 text-slate-300">
+          Master, pressure, terrain, demand και PRV layers είναι protected engineering
+          views. Το Pantavion μπορεί να αναλύει, να προτείνει, να ζητά μετρήσεις
+          και να φτιάχνει dossier, αλλά δεν αλλάζει master χάρτη ή υδραυλικό σχεδιασμό
+          χωρίς founder/admin ή engineer approval.
+        </p>
+      </div>
+    </section>
+  );
+}
 export default function WaterEntryClient() {
   const [founderCode, setFounderCode] = useState("");
   const [showFounderLogin, setShowFounderLogin] = useState(false);
@@ -603,6 +698,7 @@ export default function WaterEntryClient() {
           </div>
         </div>
       </section>
-    </main>
+    
+      <WaterLiveIntelligenceViewSelector /></main>
   );
 }
