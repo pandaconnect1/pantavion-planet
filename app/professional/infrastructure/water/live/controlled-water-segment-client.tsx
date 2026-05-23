@@ -357,6 +357,105 @@ function featureKey(feature: any, fallback: string) {
   return id === undefined || id === null ? fallback : String(id);
 }
 
+
+function WaterLiveMapIntelligenceSelector() {
+  const views = [
+    {
+      key: "operational_map",
+      label: "Operational",
+      title: "Λειτουργικός χάρτης",
+      detail: "Ασφαλές live layer για καθημερινή προβολή, βλάβες, αγωγούς και εργασίες πεδίου.",
+    },
+    {
+      key: "master_map",
+      label: "Master",
+      title: "Master δίκτυο",
+      detail: "Προστατευμένη προβολή πλήρους δικτύου. Απαιτεί founder/admin ή εγκεκριμένη πρόσβαση.",
+    },
+    {
+      key: "terrain_elevation_map",
+      label: "Terrain",
+      title: "Υψόμετρα / μορφολογία",
+      detail: "Βάση για υψομετρικές διαφορές, χαμηλές/υψηλές πιέσεις και τεχνικό έλεγχο.",
+    },
+    {
+      key: "pressure_risk_map",
+      label: "Pressure Risk",
+      title: "Ρίσκο πίεσης",
+      detail: "Ενδείξεις για αδύνατες πιέσεις, υπερπιέσεις, ζώνες ρίσκου και ανάγκη μετρήσεων.",
+    },
+    {
+      key: "demand_growth_map",
+      label: "Demand Growth",
+      title: "Ανάπτυξη / ζήτηση",
+      detail: "Πολυκατοικίες, νέες αναπτύξεις, πληθυσμιακή αύξηση και παλιό δίκτυο με νέα φορτία.",
+    },
+    {
+      key: "prv_candidate_map",
+      label: "PRV",
+      title: "PRV candidates",
+      detail: "Πιθανές περιοχές για pressure reducing valve ή engineering review πριν από έργο.",
+    },
+  ] as const;
+
+  return (
+    <section className="mt-5 rounded-3xl border border-[#f2c766]/40 bg-[#07111f]/95 p-5 shadow-2xl">
+      <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.28em] text-[#f2c766]">
+            Pantavion Water AI / Kernel Views
+          </p>
+          <h2 className="mt-2 text-2xl font-black text-white">
+            Έξυπνες προβολές χάρτη
+          </h2>
+          <p className="mt-2 max-w-5xl text-sm font-semibold leading-6 text-slate-300">
+            Επίλεξε live operational χάρτη, master, terrain, pressure risk,
+            demand growth ή PRV candidates. Το AI αναλύει και εισηγείται·
+            καμία master ή υδραυλική αλλαγή δεν γίνεται χωρίς ανθρώπινη έγκριση,
+            audit και rollback.
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-[#f2c766]/30 bg-[#f2c766]/10 px-4 py-3 text-xs font-black uppercase tracking-[0.2em] text-[#f2c766]">
+          Live map intelligence
+        </div>
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {views.map((view) => (
+          <a
+            key={view.key}
+            href={`/professional/infrastructure/water/live?view=${view.key}`}
+            className="group rounded-2xl border border-slate-700 bg-[#0d1a2d] p-4 transition hover:border-[#f2c766]/70 hover:bg-[#10213a]"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-sm font-black text-white">{view.label}</p>
+              <span className="rounded-full border border-[#f2c766]/30 px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#f2c766]">
+                view
+              </span>
+            </div>
+            <p className="mt-2 text-sm font-bold text-[#f2c766]">{view.title}</p>
+            <p className="mt-2 text-xs font-semibold leading-5 text-slate-300">
+              {view.detail}
+            </p>
+          </a>
+        ))}
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-slate-700 bg-black/25 p-4">
+        <p className="text-sm font-black text-white">
+          AI / Kernel κανόνας ασφαλείας
+        </p>
+        <p className="mt-2 text-xs font-semibold leading-5 text-slate-300">
+          Terrain, pressure, demand και PRV layers είναι engineering-sensitive.
+          Το Pantavion μπορεί να προτείνει PRV, μετρήσεις πίεσης, weak points,
+          νέες ζώνες ή αλλαγές δικτύου, αλλά η τελική απόφαση ανήκει σε
+          founder/admin, μηχανικό ή εξουσιοδοτημένο υπεύθυνο.
+        </p>
+      </div>
+    </section>
+  );
+}
 export default function ControlledWaterSegmentClient() {
   const [lang, setLang] = useState<Lang>(getInitialLang);
   const [accessApproved, setAccessApproved] = useState(() => readWaterDeviceApproval());
@@ -1107,7 +1206,9 @@ export default function ControlledWaterSegmentClient() {
           </div>
         </section>
 
-        <section className="overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
+        
+      <WaterLiveMapIntelligenceSelector />
+<section className="overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
           <div className="flex flex-col gap-1 border-b border-slate-700 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-4">
             <h2 className="text-xl font-black text-[#f2c766] sm:text-2xl">{t.map}</h2>
             <span className="text-sm text-slate-300">
