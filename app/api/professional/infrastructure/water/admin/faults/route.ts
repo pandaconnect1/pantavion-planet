@@ -1,4 +1,6 @@
-﻿import { list } from "@vercel/blob";
+import { createHash } from "crypto";
+
+import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -103,23 +105,22 @@ function cookieValue(cookieHeader: string, name: string) {
   return found ? decodeURIComponent(found.slice(name.length + 1)) : "";
 }
 
+function adminSessionValue(secret: string) {
+  return createHash("sha256").update(`pantavion-water-admin-session-v1:${secret}`).digest("hex");
+}
+
 function hasAdminReadSession(request: Request) {
   if (process.env.NODE_ENV !== "production") return true;
 
   const cookieHeader = request.headers.get("cookie") || "";
-  const expected = process.env.PANTAVION_WATER_ADMIN_SESSION_SECRET || "";
+  const expectedSecret = process.env.PANTAVION_WATER_ADMIN_SESSION_SECRET || "";
 
-  const possibleCookies = [
-    cookieValue(cookieHeader, "pantavion_water_admin_session"),
-    cookieValue(cookieHeader, "pantavion_water_founder_session"),
-    cookieValue(cookieHeader, "pantavion_founder_admin_session"),
-  ].filter(Boolean);
+  if (!expectedSecret) return false;
 
-  if (expected && possibleCookies.includes(expected)) return true;
+  const expectedSession = adminSessionValue(expectedSecret);
+  const sessionCookie = cookieValue(cookieHeader, "pantavion_water_admin_session");
 
-  const roleCookie = cookieValue(cookieHeader, "pantavion_water_role").toLowerCase();
-
-  return ["founder_admin", "founder", "admin", "chief_supervisor"].includes(roleCookie);
+  return Boolean(sessionCookie && sessionCookie === expectedSession);
 }
 
 async function readBlobJson(blob: BlobListItem) {
