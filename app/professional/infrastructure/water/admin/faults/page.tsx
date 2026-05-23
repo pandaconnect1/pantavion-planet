@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -201,6 +201,13 @@ export default function WaterAdminFaultsPage() {
               <p className="mt-4 rounded-2xl border border-slate-700 bg-[#0d1a2d] p-4 text-sm font-black text-slate-200">
                 Επόμενο βήμα: {item.nextStep}
               </p>
+
+              <Link
+                href={`/professional/infrastructure/water/admin/faults/${encodeURIComponent(item.recordNumber)}`}
+                className="mt-4 inline-flex rounded-2xl bg-[#f2c766] px-5 py-3 font-black text-black"
+              >
+                Άνοιγμα φακέλου
+              </Link>
             </article>
           ))}
 
