@@ -9,6 +9,8 @@ type ApiResponse = {
   message?: string;
   error?: string;
   item?: Record<string, unknown>;
+  aiOperationsDecision?: Record<string, unknown>;
+  aiMapDecision?: Record<string, unknown>;
 };
 
 function valueText(value: unknown) {
@@ -51,6 +53,8 @@ export default function WaterFaultDossierPage() {
   const recordNumber = String(params?.recordNumber || "");
 
   const [item, setItem] = useState<Record<string, unknown> | null>(null);
+  const [aiOperationsDecision, setAiOperationsDecision] = useState<Record<string, unknown> | null>(null);
+  const [aiMapDecision, setAiMapDecision] = useState<Record<string, unknown> | null>(null);
   const [message, setMessage] = useState("Φόρτωση φακέλου βλάβης...");
   const [loading, setLoading] = useState(false);
 
@@ -73,9 +77,13 @@ export default function WaterFaultDossierPage() {
       }
 
       setItem(json.item);
+      setAiOperationsDecision(json.aiOperationsDecision || null);
+      setAiMapDecision(json.aiMapDecision || null);
       setMessage("Ο φάκελος φορτώθηκε από το private founder/admin approval inbox.");
     } catch (error) {
       setItem(null);
+      setAiOperationsDecision(null);
+      setAiMapDecision(null);
       setMessage(error instanceof Error ? error.message : "Δεν φορτώθηκε ο φάκελος.");
     } finally {
       setLoading(false);
@@ -93,6 +101,11 @@ export default function WaterFaultDossierPage() {
   const excavation = asRecord(item?.excavation);
   const audioTranscript = asRecord(item?.audioTranscript);
   const managementMetrics = asRecord(item?.managementMetrics);
+  const aiOperations = asRecord(aiOperationsDecision);
+  const aiMap = asRecord(aiMapDecision);
+  const nearestPipe = asRecord(aiMap.nearestPipe);
+  const nearestValve = asRecord(aiMap.nearestValve);
+  const nearestZone = asRecord(aiMap.nearestZone);
 
   return (
     <main className="min-h-screen bg-[#06111f] px-4 py-5 text-white">
@@ -186,6 +199,58 @@ export default function WaterFaultDossierPage() {
               <Info title="Transcript" value={valueText(audioTranscript.transcriptStatus)} />
             </Section>
 
+            <Section title="AI Operations Kernel">
+              <Info title="Προτεινόμενη διαδρομή" value={valueText(aiOperations.suggestedRoute)} />
+              <Info title="Τελική έγκριση επιτρέπεται" value={valueText(aiOperations.canBeFinalApproved)} />
+              <Info title="Founder/Admin review" value={valueText(aiOperations.founderAdminMustReview)} />
+              <Info title="Audit required" value={valueText(aiOperations.auditRequired)} />
+              <Info title="Ελλείψεις" value={`${asList(aiOperations.missingFields).length}`} />
+              <Info title="Ρίσκα" value={`${asList(aiOperations.riskHints).length}`} />
+              <Info title="Ενέργειες" value={`${asList(aiOperations.actions).length}`} />
+              <Info title="Σύνοψη" value={valueText(aiOperations.summary)} />
+            </Section>
+
+            <Section title="AI Map Intelligence Kernel">
+              <Info title="Κοντινός αγωγός" value={valueText(nearestPipe.assetId || nearestPipe.label)} />
+              <Info title="Απόσταση αγωγού" value={nearestPipe.distanceMeters ? `${valueText(nearestPipe.distanceMeters)} m` : "—"} />
+              <Info title="Κοντινή βάνα" value={valueText(nearestValve.assetId || nearestValve.label)} />
+              <Info title="Απόσταση βάνας" value={nearestValve.distanceMeters ? `${valueText(nearestValve.distanceMeters)} m` : "—"} />
+              <Info title="Ζώνη" value={valueText(nearestZone.assetId || nearestZone.label)} />
+              <Info title="Human review" value={valueText(aiMap.humanReviewRequired)} />
+              <Info title="Master map write" value={valueText(aiMap.canWriteMasterMap)} />
+              <Info title="Map suggestion" value={valueText(aiMap.canSuggestMapLink)} />
+            </Section>
+
+            <JsonBlock title="AI Operations: ελλείψεις" value={asList(aiOperations.missingFields)} />
+            <JsonBlock title="AI Operations: ενέργειες / routing" value={asList(aiOperations.actions)} />
+            <JsonBlock title="AI Map: missing links" value={asList(aiMap.missingLinks)} />
+            <JsonBlock title="AI Map: risk hints" value={asList(aiMap.riskHints)} />
+            <Section title="AI Operations Kernel">
+              <Info title="Προτεινόμενη διαδρομή" value={valueText(aiOperations.suggestedRoute)} />
+              <Info title="Τελική έγκριση επιτρέπεται" value={valueText(aiOperations.canBeFinalApproved)} />
+              <Info title="Founder/Admin review" value={valueText(aiOperations.founderAdminMustReview)} />
+              <Info title="Audit required" value={valueText(aiOperations.auditRequired)} />
+              <Info title="Ελλείψεις" value={`${asList(aiOperations.missingFields).length}`} />
+              <Info title="Ρίσκα" value={`${asList(aiOperations.riskHints).length}`} />
+              <Info title="Ενέργειες" value={`${asList(aiOperations.actions).length}`} />
+              <Info title="Σύνοψη" value={valueText(aiOperations.summary)} />
+            </Section>
+
+            <Section title="AI Map Intelligence Kernel">
+              <Info title="Κοντινός αγωγός" value={valueText(nearestPipe.assetId || nearestPipe.label)} />
+              <Info title="Απόσταση αγωγού" value={nearestPipe.distanceMeters ? `${valueText(nearestPipe.distanceMeters)} m` : "—"} />
+              <Info title="Κοντινή βάνα" value={valueText(nearestValve.assetId || nearestValve.label)} />
+              <Info title="Απόσταση βάνας" value={nearestValve.distanceMeters ? `${valueText(nearestValve.distanceMeters)} m` : "—"} />
+              <Info title="Ζώνη" value={valueText(nearestZone.assetId || nearestZone.label)} />
+              <Info title="Human review" value={valueText(aiMap.humanReviewRequired)} />
+              <Info title="Master map write" value={valueText(aiMap.canWriteMasterMap)} />
+              <Info title="Map suggestion" value={valueText(aiMap.canSuggestMapLink)} />
+            </Section>
+
+            <JsonBlock title="AI Operations: ελλείψεις" value={asList(aiOperations.missingFields)} />
+            <JsonBlock title="AI Operations: ενέργειες / routing" value={asList(aiOperations.actions)} />
+            <JsonBlock title="AI Map: missing links" value={asList(aiMap.missingLinks)} />
+            <JsonBlock title="AI Map: risk hints" value={asList(aiMap.riskHints)} />
             <TextBlock title="Transcript text" value={valueText(audioTranscript.transcriptText)} />
             <JsonBlock title="AI ελλείψεις / προτάσεις" value={asList(item.aiChecks)} />
             <JsonBlock title="Ιστορικό επικοινωνίας" value={asList(item.communicationEvents)} />
