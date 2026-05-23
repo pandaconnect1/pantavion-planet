@@ -94,6 +94,113 @@ export function normalizeWaterSearchText(value: string | undefined | null) {
     .trim();
 }
 
+
+export function greeklishToGreekSearchText(value: string) {
+  let text = normalizeWaterSearchText(value);
+
+  const replacements: Array<[string, string]> = [
+    ["th", "θ"],
+    ["ch", "χ"],
+    ["ps", "ψ"],
+    ["ks", "ξ"],
+    ["x", "ξ"],
+    ["ou", "ου"],
+    ["ai", "αι"],
+    ["ei", "ει"],
+    ["oi", "οι"],
+    ["mp", "μπ"],
+    ["nt", "ντ"],
+    ["gk", "γκ"],
+    ["tz", "τζ"],
+    ["ts", "τσ"],
+    ["a", "α"],
+    ["b", "β"],
+    ["v", "β"],
+    ["g", "γ"],
+    ["d", "δ"],
+    ["e", "ε"],
+    ["z", "ζ"],
+    ["h", "η"],
+    ["i", "ι"],
+    ["y", "υ"],
+    ["k", "κ"],
+    ["l", "λ"],
+    ["m", "μ"],
+    ["n", "ν"],
+    ["o", "ο"],
+    ["p", "π"],
+    ["r", "ρ"],
+    ["s", "σ"],
+    ["t", "τ"],
+    ["f", "φ"],
+    ["u", "υ"],
+    ["w", "ω"],
+  ];
+
+  for (const [from, to] of replacements) {
+    text = text.replaceAll(from, to);
+  }
+
+  return normalizeWaterSearchText(text);
+}
+
+export function buildGreeklishAwareSearchVariants(value: string | undefined | null) {
+  const base = normalizeWaterSearchText(value);
+  const greeklish = greeklishToGreekSearchText(base);
+
+  const variants = new Set<string>();
+  if (base) variants.add(base);
+  if (greeklish) variants.add(greeklish);
+
+  if (base.includes("αγιο ")) variants.add(base.replace("αγιο ", "αγιου "));
+  if (base.includes("αγιου ")) variants.add(base.replace("αγιου ", "αγιο "));
+  if (greeklish.includes("αγιο ")) variants.add(greeklish.replace("αγιο ", "αγιου "));
+  if (greeklish.includes("αγιου ")) variants.add(greeklish.replace("αγιου ", "αγιο "));
+
+  return Array.from(variants).filter(Boolean);
+}
+
+function scoreTextSimilarity(query: string, candidateText: string) {
+  const queryVariants = buildGreeklishAwareSearchVariants(query);
+  const candidateVariants = buildGreeklishAwareSearchVariants(candidateText);
+
+  let bestScore = 0;
+  let bestReason = "";
+
+  for (const q of queryVariants) {
+    for (const c of candidateVariants) {
+      if (!q || !c) continue;
+
+      if (c === q) {
+        if (bestScore < 100) {
+          bestScore = 100;
+          bestReason = "exact_greek_greeklish_match";
+        }
+        continue;
+      }
+
+      if (c.includes(q) || q.includes(c)) {
+        if (bestScore < 70) {
+          bestScore = 70;
+          bestReason = "contains_greek_greeklish_match";
+        }
+        continue;
+      }
+
+      const queryWords = q.split(" ").filter(Boolean);
+      const matchedWords = queryWords.filter((word) => c.includes(word));
+      if (matchedWords.length) {
+        const score = Math.round((matchedWords.length / Math.max(queryWords.length, 1)) * 55);
+        if (score > bestScore) {
+          bestScore = score;
+          bestReason = "partial_greek_greeklish_word_match";
+        }
+      }
+    }
+  }
+
+  return { score: bestScore, reason: bestReason };
+}
 function confidenceFromScore(score: number, ambiguous: boolean): WaterSearchConfidence {
   if (ambiguous) return "ambiguous";
   if (score >= 100) return "exact";
@@ -149,22 +256,16 @@ function scoreCandidate(input: {
     return { score: 0, reasons: ["empty_query"] };
   }
 
-  if (candidateText === query) {
-    score += 100;
-    reasons.push("exact_full_match");
-  } else if (street && street === query) {
-    score += 85;
-    reasons.push("exact_street_match");
-  } else if (candidateText.includes(query)) {
-    score += 60;
-    reasons.push("candidate_contains_query");
-  } else {
-    const words = query.split(" ").filter(Boolean);
-    const matchedWords = words.filter((word) => candidateText.includes(word));
-    if (matchedWords.length) {
-      score += Math.round((matchedWords.length / Math.max(words.length, 1)) * 45);
-      reasons.push("partial_word_match");
-    }
+  const textScore = scoreTextSimilarity(query, candidateText);
+  if (textScore.score > 0) {
+    score += textScore.score;
+    reasons.push(textScore.reason);
+  }
+
+  const streetScore = scoreTextSimilarity(query, street);
+  if (streetScore.score >= 100) {
+    score += 15;
+    reasons.push("street_name_exact_bonus");
   }
 
   if (area && query.includes(area)) {

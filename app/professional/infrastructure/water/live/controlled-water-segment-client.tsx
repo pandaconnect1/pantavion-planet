@@ -359,42 +359,42 @@ function featureKey(feature: any, fallback: string) {
 
 
 function WaterLiveMapIntelligenceSelector() {
-  const views = [
+  const προβολήs = [
     {
       key: "operational_map",
-      label: "Operational",
+      label: "Λειτουργικός",
       title: "Λειτουργικός χάρτης",
       detail: "Ασφαλές live layer για καθημερινή προβολή, βλάβες, αγωγούς και εργασίες πεδίου.",
     },
     {
       key: "master_map",
-      label: "Master",
+      label: "Καθαρός Master",
       title: "Master δίκτυο",
       detail: "Προστατευμένη προβολή πλήρους δικτύου. Απαιτεί founder/admin ή εγκεκριμένη πρόσβαση.",
     },
     {
       key: "terrain_elevation_map",
-      label: "Terrain",
+      label: "Υψόμετρα",
       title: "Υψόμετρα / μορφολογία",
       detail: "Βάση για υψομετρικές διαφορές, χαμηλές/υψηλές πιέσεις και τεχνικό έλεγχο.",
     },
     {
       key: "pressure_risk_map",
-      label: "Pressure Risk",
+      label: "Ρίσκο πίεσης",
       title: "Ρίσκο πίεσης",
       detail: "Ενδείξεις για αδύνατες πιέσεις, υπερπιέσεις, ζώνες ρίσκου και ανάγκη μετρήσεων.",
     },
     {
       key: "demand_growth_map",
-      label: "Demand Growth",
+      label: "Ανάπτυξη / ζήτηση",
       title: "Ανάπτυξη / ζήτηση",
       detail: "Πολυκατοικίες, νέες αναπτύξεις, πληθυσμιακή αύξηση και παλιό δίκτυο με νέα φορτία.",
     },
     {
       key: "prv_candidate_map",
-      label: "PRV",
+      label: "Υποψήφια PRV",
       title: "PRV candidates",
-      detail: "Πιθανές περιοχές για pressure reducing valve ή engineering review πριν από έργο.",
+      detail: "Πιθανές περιοχές για pressure reducing valve ή engineering reπροβολή πριν από έργο.",
     },
   ] as const;
 
@@ -403,7 +403,7 @@ function WaterLiveMapIntelligenceSelector() {
       <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.28em] text-[#f2c766]">
-            Pantavion Water AI / Kernel Views
+            Pantavion Ύδρευση AI / Kernel
           </p>
           <h2 className="mt-2 text-2xl font-black text-white">
             Έξυπνες προβολές χάρτη
@@ -417,26 +417,26 @@ function WaterLiveMapIntelligenceSelector() {
         </div>
 
         <div className="rounded-2xl border border-[#f2c766]/30 bg-[#f2c766]/10 px-4 py-3 text-xs font-black uppercase tracking-[0.2em] text-[#f2c766]">
-          Live map intelligence
+          Ζωντανή νοημοσύνη χάρτη
         </div>
       </div>
 
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {views.map((view) => (
+        {προβολήs.map((προβολή) => (
           <a
-            key={view.key}
-            href={`/professional/infrastructure/water/live?view=${view.key}`}
+            key={προβολή.key}
+            href={`/professional/infrastructure/water/live?προβολή=${προβολή.key}`}
             className="group rounded-2xl border border-slate-700 bg-[#0d1a2d] p-4 transition hover:border-[#f2c766]/70 hover:bg-[#10213a]"
           >
             <div className="flex items-center justify-between gap-3">
-              <p className="text-sm font-black text-white">{view.label}</p>
+              <p className="text-sm font-black text-white">{προβολή.label}</p>
               <span className="rounded-full border border-[#f2c766]/30 px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#f2c766]">
-                view
+                προβολή
               </span>
             </div>
-            <p className="mt-2 text-sm font-bold text-[#f2c766]">{view.title}</p>
+            <p className="mt-2 text-sm font-bold text-[#f2c766]">{προβολή.title}</p>
             <p className="mt-2 text-xs font-semibold leading-5 text-slate-300">
-              {view.detail}
+              {προβολή.detail}
             </p>
           </a>
         ))}
@@ -447,7 +447,7 @@ function WaterLiveMapIntelligenceSelector() {
           AI / Kernel κανόνας ασφαλείας
         </p>
         <p className="mt-2 text-xs font-semibold leading-5 text-slate-300">
-          Terrain, pressure, demand και PRV layers είναι engineering-sensitive.
+          Τα layers υψομέτρων, πίεσης, ζήτησης και PRV είναι τεχνικά ευαίσθητα.
           Το Pantavion μπορεί να προτείνει PRV, μετρήσεις πίεσης, weak points,
           νέες ζώνες ή αλλαγές δικτύου, αλλά η τελική απόφαση ανήκει σε
           founder/admin, μηχανικό ή εξουσιοδοτημένο υπεύθυνο.
