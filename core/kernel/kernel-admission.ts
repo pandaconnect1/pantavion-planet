@@ -209,8 +209,8 @@ export class PantavionKernelAdmission {
         actorType: identity.actor.type,
         role: identity.effectiveRoles[0],
         scopes: identity.effectiveScopes,
-        delegatedBy: identity.delegatedBy,
-        trustTierHint: identity.trustTier,
+        delegatedBy: undefined,
+        trustTierHint: undefined,
       },
       metadata: {
         admission: true,
