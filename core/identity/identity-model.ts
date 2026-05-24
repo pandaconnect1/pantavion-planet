@@ -100,6 +100,9 @@ export function resolveIdentityPosture(
 ): PantavionIdentityResolution {
   return resolveIdentity(actor, proofs);
 }
+
+export type PantavionIdentityRecord = PantavionIdentityProfile;
+export type PantavionResolvedIdentityPosture = PantavionIdentityResolution;
 export const identityModel = {
   id: "pantavion_identity_model_v1",
   systemIdentity: SYSTEM_KERNEL_IDENTITY,
