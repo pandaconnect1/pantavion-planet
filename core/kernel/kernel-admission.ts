@@ -177,8 +177,7 @@ export class PantavionKernelAdmission {
     const actorId = safeText(candidate.actorId, pantavionFoundation.actors.adminRoot.id);
 
     const identity = pantavionFoundation.resolveIdentity({
-      id: actorId,      role: safeText(candidate.actorRole, 'admin-operator'),
-      scopes: candidate.actorScopes ?? (['global'] as ReturnType<typeof pantavionFoundation.resolveIdentity>['effectiveScopes']),    });
+      id: actorId,      scopes: candidate.actorScopes ?? (['global'] as ReturnType<typeof pantavionFoundation.resolveIdentity>['effectiveScopes']),    });
 
     const kernelInput: KernelInput = {
       title: candidate.title,
