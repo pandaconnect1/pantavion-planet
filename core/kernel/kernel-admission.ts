@@ -205,8 +205,8 @@ export class PantavionKernelAdmission {
       memoryClass: 'session',
       sensitivity: candidate.sensitivity ?? 'internal',
       actor: {
-        actorId: identity.actorId,
-        actorType: identity.actorType,
+        actorId: identity.actor.id,
+        actorType: identity.actor.type,
         role: identity.effectiveRoles[0],
         scopes: identity.effectiveScopes,
         delegatedBy: identity.delegatedBy,
