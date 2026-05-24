@@ -1,0 +1,52 @@
+core/kernel/kernel-admission.ts(3,15): error TS2305: Module '"./kernel"' has no exported member 'KernelGap'.
+core/kernel/kernel-admission.ts(3,26): error TS2305: Module '"./kernel"' has no exported member 'KernelInput'.
+core/kernel/kernel-admission.ts(3,39): error TS2305: Module '"./kernel"' has no exported member 'KernelOutput'.
+core/kernel/kernel-bootstrap.ts(4,3): error TS2305: Module '"./kernel"' has no exported member 'createKernel0Coordinator'.
+core/kernel/kernel-bootstrap.ts(5,8): error TS2305: Module '"./kernel"' has no exported member 'KernelGap'.
+core/kernel/kernel-bootstrap.ts(6,8): error TS2305: Module '"./kernel"' has no exported member 'KernelInput'.
+core/kernel/kernel-bootstrap.ts(7,8): error TS2305: Module '"./kernel"' has no exported member 'KernelOutput'.
+core/kernel/kernel-bootstrap.ts(8,8): error TS2305: Module '"./kernel"' has no exported member 'PantavionKernel0Coordinator'.
+core/kernel/kernel-bootstrap.ts(12,3): error TS2305: Module '"../identity/identity-model"' has no exported member 'identityModel'.
+core/kernel/kernel-bootstrap.ts(13,3): error TS2305: Module '"../identity/identity-model"' has no exported member 'registerIdentity'.
+core/kernel/kernel-bootstrap.ts(14,3): error TS2724: '"../identity/identity-model"' has no exported member named 'resolveIdentityPosture'. Did you mean 'resolveIdentity'?
+core/kernel/kernel-bootstrap.ts(15,8): error TS2724: '"../identity/identity-model"' has no exported member named 'PantavionIdentityRecord'. Did you mean 'PantavionIdentityProfile'?
+core/kernel/kernel-bootstrap.ts(16,8): error TS2305: Module '"../identity/identity-model"' has no exported member 'PantavionResolvedIdentityPosture'.
+core/kernel/kernel-bootstrap.ts(20,3): error TS2724: '"../identity/delegation-model"' has no exported member named 'createDelegation'. Did you mean 'evaluateDelegation'?
+core/kernel/kernel-bootstrap.ts(21,3): error TS2305: Module '"../identity/delegation-model"' has no exported member 'delegationModel'.
+core/kernel/kernel-bootstrap.ts(22,8): error TS2724: '"../identity/delegation-model"' has no exported member named 'PantavionDelegationRecord'. Did you mean 'PantavionDelegationGrant'?
+core/kernel/kernel-bootstrap.ts(26,3): error TS2305: Module '"../protocol/protocol-gateway"' has no exported member 'protocolGateway'.
+core/kernel/kernel-bootstrap.ts(27,3): error TS2305: Module '"../protocol/protocol-gateway"' has no exported member 'registerFoundationProtocolAdapter'.
+core/kernel/kernel-bootstrap.ts(28,3): error TS2305: Module '"../protocol/protocol-gateway"' has no exported member 'registerProtocolHandler'.
+core/kernel/kernel-bootstrap.ts(29,3): error TS2305: Module '"../protocol/protocol-gateway"' has no exported member 'getProtocolRegistrySnapshot'.
+core/kernel/kernel-bootstrap.ts(33,3): error TS2305: Module '"../runtime/durable-execution"' has no exported member 'durableExecutionRuntime'.
+core/kernel/kernel-bootstrap.ts(34,8): error TS2724: '"../runtime/durable-execution"' has no exported member named 'PantavionDurableExecutionRuntime'. Did you mean 'PantavionDurableExecutionRecord'?
+core/kernel/kernel-bootstrap.ts(38,3): error TS2305: Module '"../runtime/workspace-runtime"' has no exported member 'workspaceRuntime'.
+core/kernel/kernel-bootstrap.ts(39,8): error TS2724: '"../runtime/workspace-runtime"' has no exported member named 'PantavionWorkspaceRuntime'. Did you mean 'PantavionWorkspaceRuntimeContext'?
+core/kernel/kernel-bootstrap.ts(43,3): error TS2305: Module '"../runtime/voice-runtime"' has no exported member 'voiceRuntime'.
+core/kernel/kernel-bootstrap.ts(44,8): error TS2724: '"../runtime/voice-runtime"' has no exported member named 'PantavionVoiceRuntime'. Did you mean 'PantavionVoiceRuntimeRequest'?
+core/kernel/kernel-bootstrap.ts(48,3): error TS2305: Module '"../runtime/resilience-runtime"' has no exported member 'resilienceRuntime'.
+core/kernel/kernel-bootstrap.ts(49,3): error TS2305: Module '"../runtime/resilience-runtime"' has no exported member 'evaluateResilience'.
+core/kernel/kernel-bootstrap.ts(50,8): error TS2724: '"../runtime/resilience-runtime"' has no exported member named 'PantavionResilienceEvaluation'. Did you mean 'PantavionResilienceState'?
+core/kernel/kernel-bootstrap.ts(51,8): error TS2724: '"../runtime/resilience-runtime"' has no exported member named 'PantavionResilienceRuntime'. Did you mean 'PantavionResilienceMode'?
+core/kernel/kernel-bootstrap.ts(266,56): error TS7031: Binding element 'request' implicitly has an 'any' type.
+core/kernel/kernel-bootstrap.ts(323,60): error TS7031: Binding element 'request' implicitly has an 'any' type.
+core/kernel/kernel-bootstrap.ts(365,36): error TS7006: Parameter 'request' implicitly has an 'any' type.
+core/kernel/kernel-bootstrap.ts(380,29): error TS7006: Parameter 'input' implicitly has an 'any' type.
+core/kernel/kernel-bootstrap.ts(518,54): error TS7006: Parameter 'adapter' implicitly has an 'any' type.
+core/kernel/kernel-bootstrap.ts(537,10): error TS7006: Parameter 'adapter' implicitly has an 'any' type.
+core/kernel/kernel-control-plane.ts(18,3): error TS2305: Module '"../runtime/resilience-runtime"' has no exported member 'evaluateResilience'.
+core/kernel/kernel-control-plane.ts(19,3): error TS2305: Module '"../runtime/resilience-runtime"' has no exported member 'getResilienceSnapshot'.
+core/kernel/kernel-control-plane.ts(21,10): error TS2305: Module '"../protocol/protocol-gateway"' has no exported member 'getProtocolGatewayStats'.
+core/kernel/kernel-foundation-smoke.ts(8,15): error TS2305: Module '"./kernel"' has no exported member 'KernelOutput'.
+core/kernel/kernel-foundation-smoke.ts(10,15): error TS2305: Module '"../runtime/workspace-runtime"' has no exported member 'PantavionWorkspaceTaskRunOutput'.
+core/kernel/kernel-foundation-smoke.ts(11,15): error TS2305: Module '"../runtime/voice-runtime"' has no exported member 'PantavionVoiceTurnProcessOutput'.
+core/kernel/kernel-foundation-smoke.ts(12,15): error TS2724: '"../runtime/resilience-runtime"' has no exported member named 'PantavionResilienceEvaluation'. Did you mean 'PantavionResilienceState'?
+core/kernel/kernel-integration-runner.ts(16,3): error TS2305: Module '"../protocol/protocol-gateway"' has no exported member 'getProtocolGatewayStats'.
+core/kernel/kernel-integration-runner.ts(17,3): error TS2305: Module '"../protocol/protocol-gateway"' has no exported member 'getProtocolRegistrySnapshot'.
+core/kernel/kernel-integration-runner.ts(20,10): error TS2305: Module '"../runtime/resilience-runtime"' has no exported member 'getResilienceSnapshot'.
+core/kernel/kernel-integration-runner.ts(20,38): error TS2724: '"../runtime/resilience-runtime"' has no exported member named 'PantavionResilienceSnapshot'. Did you mean 'PantavionResilienceState'?
+core/kernel/kernel-usage-harness.ts(8,10): error TS2305: Module '"../protocol/protocol-gateway"' has no exported member 'getProtocolGatewayStats'.
+core/kernel/kernel-usage-harness.ts(9,10): error TS2305: Module '"../runtime/resilience-runtime"' has no exported member 'getResilienceSnapshot'.
+core/registry/capability-family-registry.ts(4,3): error TS2305: Module '"../identity/identity-model"' has no exported member 'PantavionApprovalTier'.
+core/registry/capability-family-registry.ts(5,3): error TS2305: Module '"../identity/identity-model"' has no exported member 'PantavionTrustTier'.
+
