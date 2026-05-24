@@ -1,0 +1,50 @@
+name: Pantavion Guardian 365
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  guardian-365:
+    name: Guardian 365 Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout Pantavion
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run existing Pantavion audits
+        run: |
+          npm run audit:pantavion
+          npm run audit:implementation
+          npm run audit:autonomous-builder
+          npm run audit:intelligence
+
+      - name: Run Guardian 365
+        run: node scripts/pantavion-guardian-365.cjs
+
+      - name: Upload Guardian report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-guardian-365-report
+          path: artifacts/pantavion-guardian-365/
+          if-no-files-found: warn

@@ -49,3 +49,5 @@ uploads/water-network/
 # Pantavion private water infrastructure data - never commit raw/derived private network
 data/water-network-private/**
 !data/water-network-private/.gitkeep
+
+artifacts/
