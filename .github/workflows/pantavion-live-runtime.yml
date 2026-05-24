@@ -1,0 +1,46 @@
+﻿name: pantavion-live-runtime
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  live-runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Pantavion
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install
+        run: npm install
+
+      - name: Pantavion continuity audit
+        run: npm run audit:continuity-runtime
+
+      - name: Pantavion runtime heartbeat
+        run: npm run runtime:heartbeat
+
+      - name: Pantavion market radar report
+        run: npm run radar:report
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Build check
+        run: npm run build
+
+      - name: Upload runtime reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-runtime-reports
+          path: data/runtime-reports

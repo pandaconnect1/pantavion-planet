@@ -1,0 +1,22 @@
+{
+  "id": "pantavion_safe_git_autopilot_v1",
+  "generatedAt": "2026-05-24T10:55:05.817Z",
+  "staged": [
+    ".github/workflows/pantavion-live-runtime.yml",
+    ".pantavion-tsc.txt",
+    "app/api/pantavion/intelligence/ecosystem-radar/route.ts",
+    "app/api/pantavion/runtime/heartbeat/route.ts",
+    "core/runtime/pantavion-runtime-heartbeat.ts",
+    "scripts/pantavion-runtime-heartbeat.cjs"
+  ],
+  "skipped": [
+    {
+      "file": "app/professional/infrastructure/water/master-dwg/page.tsx",
+      "reason": "blocked protected/private area"
+    },
+    {
+      "file": "scripts/pantavion-safe-git-autopilot.cjs",
+      "reason": "not in safe allowlist"
+    }
+  ]
+}
