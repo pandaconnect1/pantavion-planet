@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getPantavionEcosystemRadarRuntime } from "@/core/intelligence/pantavion-ecosystem-radar-runtime";
 
 export const runtime = "nodejs";
