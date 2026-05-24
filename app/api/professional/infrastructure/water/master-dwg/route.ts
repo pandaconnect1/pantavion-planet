@@ -5,7 +5,7 @@ import { list } from "@vercel/blob";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const MASTER_DWG_FILE_NAME = "2026_ANDREASPAP-01-02-014.dwg";
+const MASTER_DWG_FILE_NAME = "PANTAVION_WATER_MASTER_B.dwg";
 const DEFAULT_MASTER_DWG_BLOB_PATH = "water/private/maps/dwg/2026_ANDREASPAP-01-02-014.dwg";
 
 type BlobLike = {
@@ -207,3 +207,4 @@ export async function GET(request: Request) {
     },
   });
 }
+

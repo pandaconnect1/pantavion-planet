@@ -2,10 +2,67 @@
 
 import { useState } from "react";
 
-const FILE_NAME = "2026_ANDREASPAP-01-02-014.dwg";
+const DOWNLOAD_FILE_NAME = "PANTAVION_WATER_MASTER_B.dwg";
 
-function t(value: string) {
-  return value;
+function readStoredWaterDevice() {
+  if (typeof window === "undefined") {
+    return {
+      deviceId: "",
+      deviceToken: "",
+    };
+  }
+
+  const directId =
+    window.localStorage.getItem("pantavion_water_device_id") ||
+    window.localStorage.getItem("pantavion-water-device-id") ||
+    window.localStorage.getItem("waterDeviceId") ||
+    "";
+
+  const directToken =
+    window.localStorage.getItem("pantavion_water_device_token") ||
+    window.localStorage.getItem("pantavion-water-device-token") ||
+    window.localStorage.getItem("waterDeviceToken") ||
+    "";
+
+  if (directId && directToken) {
+    return {
+      deviceId: directId,
+      deviceToken: directToken,
+    };
+  }
+
+  const possibleJsonKeys = [
+    "pantavion_water_access_device",
+    "pantavion-water-access-device",
+    "waterAccessDevice",
+    "water-approved-device",
+  ];
+
+  for (const key of possibleJsonKeys) {
+    const raw = window.localStorage.getItem(key);
+
+    if (!raw) continue;
+
+    try {
+      const parsed = JSON.parse(raw);
+      const deviceId = String(parsed.deviceId || parsed.id || "");
+      const deviceToken = String(parsed.deviceToken || parsed.token || "");
+
+      if (deviceId && deviceToken) {
+        return {
+          deviceId,
+          deviceToken,
+        };
+      }
+    } catch {
+      // ignore invalid localStorage value
+    }
+  }
+
+  return {
+    deviceId: "",
+    deviceToken: "",
+  };
 }
 
 export default function WaterMasterDwgPage() {
@@ -17,11 +74,15 @@ export default function WaterMasterDwgPage() {
     setStatus("loading");
     setDetails("");
 
+    const storedDevice = readStoredWaterDevice();
+
     try {
       const response = await fetch("/api/professional/infrastructure/water/master-dwg", {
         cache: "no-store",
         headers: {
           "x-pantavion-water-founder-code": founderCode.trim(),
+          "x-pantavion-water-device-id": storedDevice.deviceId,
+          "x-pantavion-water-device-token": storedDevice.deviceToken,
         },
       });
 
@@ -35,7 +96,7 @@ export default function WaterMasterDwgPage() {
       const link = document.createElement("a");
 
       link.href = objectUrl;
-      link.download = FILE_NAME;
+      link.download = DOWNLOAD_FILE_NAME;
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -64,15 +125,12 @@ export default function WaterMasterDwgPage() {
         </h1>
 
         <p className="mt-4 max-w-3xl text-sm font-semibold leading-6 text-slate-300">
-          {"\u0391\u03c5\u03c4\u03cc\u03c2 \u03b5\u03af\u03bd\u03b1\u03b9 \u03bf \u03b3\u03bd\u03ae\u03c3\u03b9\u03bf\u03c2 \u03c4\u03b5\u03c7\u03bd\u03b9\u03ba\u03cc\u03c2 master \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2. \u0394\u03b5\u03bd \u03bc\u03b5\u03c4\u03b1\u03c4\u03c1\u03ad\u03c0\u03b5\u03c4\u03b1\u03b9, \u03b4\u03b5\u03bd \u03c6\u03b9\u03bb\u03c4\u03c1\u03ac\u03c1\u03b5\u03c4\u03b1\u03b9, \u03b4\u03b5\u03bd \u03b1\u03c0\u03bb\u03bf\u03c0\u03bf\u03b9\u03b5\u03af\u03c4\u03b1\u03b9."}
+          {"\u0391\u03c5\u03c4\u03cc\u03c2 \u03b5\u03af\u03bd\u03b1\u03b9 \u03bf \u03b3\u03bd\u03ae\u03c3\u03b9\u03bf\u03c2 \u03c4\u03b5\u03c7\u03bd\u03b9\u03ba\u03cc\u03c2 master \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2."}
         </p>
 
         <div className="mt-6 rounded-2xl border border-slate-700 bg-black/25 p-4">
           <p className="text-sm font-black text-[#f2c766]">MASTER FILE</p>
-          <p className="mt-2 break-all text-lg font-black">{FILE_NAME}</p>
-          <p className="mt-2 text-xs font-semibold text-slate-400">
-            BLOB_PATH: water/private/maps/dwg/2026_ANDREASPAP-01-02-014.dwg
-          </p>
+          <p className="mt-2 break-all text-lg font-black">{DOWNLOAD_FILE_NAME}</p>
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-[1fr_auto]">
@@ -103,15 +161,6 @@ export default function WaterMasterDwgPage() {
               {details}
             </p>
           ) : null}
-        </div>
-
-        <div className="mt-6 rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-4">
-          <p className="text-sm font-black text-emerald-200">
-            {"\u039a\u03b1\u03bd\u03cc\u03bd\u03b1\u03c2 \u03b1\u03c3\u03c6\u03b1\u03bb\u03b5\u03af\u03b1\u03c2"}
-          </p>
-          <p className="mt-2 text-xs font-semibold leading-5 text-emerald-100/90">
-            {"\u039f \u03a7\u03ac\u03c1\u03c4\u03b7\u03c2 \u0392 \u03bc\u03ad\u03bd\u03b5\u03b9 \u03b3\u03bd\u03ae\u03c3\u03b9\u03bf\u03c2. \u039f \u03a7\u03ac\u03c1\u03c4\u03b7\u03c2 \u0391 \u03b4\u03b5\u03bd \u03b1\u03bb\u03bb\u03ac\u03b6\u03b5\u03b9. \u039f \u03a7\u03ac\u03c1\u03c4\u03b7\u03c2 \u0393 \u03b8\u03b1 \u03bc\u03c0\u03b5\u03b9 \u03bc\u03b5\u03c4\u03ac \u03b1\u03c0\u03cc Google Earth / KMZ."}
-          </p>
         </div>
       </section>
     </main>
