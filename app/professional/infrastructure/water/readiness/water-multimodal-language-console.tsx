@@ -23,13 +23,6 @@ type SpeechRecognitionLike = {
 
 type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
 
-declare global {
-  interface Window {
-    SpeechRecognition?: SpeechRecognitionConstructor;
-    webkitSpeechRecognition?: SpeechRecognitionConstructor;
-  }
-}
-
 const priorityLanguages = [
   { code: "el", label: "Ελληνικά / Greek" },
   { code: "en", label: "English" },
@@ -78,7 +71,7 @@ export default function WaterMultimodalLanguageConsole() {
   const speechSupported = useMemo(() => {
     if (typeof window === "undefined") return false;
 
-    return Boolean(window.SpeechRecognition || window.webkitSpeechRecognition);
+    return Boolean((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
   }, []);
 
   async function runMultimodalReadiness() {
@@ -116,7 +109,7 @@ export default function WaterMultimodalLanguageConsole() {
 
   function startVoiceInput() {
     const SpeechRecognitionApi =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognitionApi) {
       setSpeechStatus("Speech recognition is not supported in this browser.");
