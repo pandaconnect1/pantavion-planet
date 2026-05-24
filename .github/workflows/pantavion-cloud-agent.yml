@@ -1,0 +1,26 @@
+name: Pantavion Cloud Agent
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Optional GitHub issue number with agent request JSON"
+        required: false
+  schedule:
+    - cron: "*/15 * * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  pantavion-cloud-agent:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Pantavion Cloud Agent
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.inputs.issue_number }}
+        run: node scripts/pantavion-cloud-agent.cjs
