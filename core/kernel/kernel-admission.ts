@@ -1,4 +1,4 @@
-﻿// core/kernel/kernel-admission.ts
+// core/kernel/kernel-admission.ts
 
 import type { KernelGap, KernelInput, KernelOutput } from './kernel';
 import { pantavionFoundation } from './kernel-bootstrap';
@@ -180,7 +180,7 @@ export class PantavionKernelAdmission {
       actorId,
       actorType: 'human',
       role: safeText(candidate.actorRole, 'admin-operator'),
-      scopes: candidate.actorScopes ?? ['global'],
+      scopes: candidate.actorScopes ?? (['global'] as const),
       requestedOperation: 'kernel admission',
       requestedSensitivity: candidate.sensitivity ?? 'internal',
     });
