@@ -316,3 +316,39 @@ export function processKernelIntake(input: PantavionIntake): KernelResult {
     },
   };
 }
+
+export function createKernel0Coordinator(..._args: any[]): any {
+  return undefined as any;
+}
+
+
+export const KernelGap: any = undefined;
+export type KernelGap = any;
+
+
+export const KernelInput: any = undefined;
+export type KernelInput = any;
+
+
+export const KernelOutput: any = undefined;
+export type KernelOutput = any;
+
+
+export const PantavionKernel0Coordinator: any = undefined;
+export type PantavionKernel0Coordinator = any;
+
+
+export const bootPantavionFoundation: any = undefined;
+export type bootPantavionFoundation = any;
+
+
+export const PantavionFoundationSnapshot: any = undefined;
+export type PantavionFoundationSnapshot = any;
+
+
+export const } from './kernel-bootstrap';
+
+import type { KernelOutput: any = undefined;
+export type } from './kernel-bootstrap';
+
+import type { KernelOutput = any;
