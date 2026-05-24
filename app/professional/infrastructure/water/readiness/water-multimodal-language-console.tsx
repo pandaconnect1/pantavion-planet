@@ -130,7 +130,7 @@ export default function WaterMultimodalLanguageConsole() {
       setSpeechStatus("Voice captured locally by browser speech recognition.");
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: any) => {
       setSpeechStatus(`Speech input error: ${event.error ?? "unknown"}`);
     };
 
