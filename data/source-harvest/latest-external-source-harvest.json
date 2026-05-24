@@ -1,0 +1,52 @@
+{
+  "id": "pantavion_external_source_harvest_v1",
+  "generatedAt": "2026-05-24T11:43:38.351Z",
+  "truth": "This harvest checks public Pantavion domains and turns visible gaps into implementation signals. It cannot read private GPT threads unless exported into the founder vision vault.",
+  "results": [
+    {
+      "url": "https://pantavion.com",
+      "ok": true,
+      "status": 200,
+      "contentLength": 26250,
+      "title": "Pantavion | One Planet. One Living Screen.",
+      "detectedSignals": [
+        "pantavion_brand_detected",
+        "translation_detected",
+        "sos_detected",
+        "ai_detected"
+      ]
+    },
+    {
+      "url": "https://pantavion.net",
+      "ok": true,
+      "status": 200,
+      "contentLength": 0,
+      "title": "",
+      "detectedSignals": [
+        "pantavion_brand_missing",
+        "translation_missing",
+        "sos_missing",
+        "ai_missing"
+      ]
+    },
+    {
+      "url": "https://pantavion.info",
+      "ok": true,
+      "status": 200,
+      "contentLength": 114,
+      "title": "",
+      "detectedSignals": [
+        "pantavion_brand_missing",
+        "translation_missing",
+        "sos_missing",
+        "ai_missing"
+      ]
+    }
+  ],
+  "requiredFollowUp": [
+    "Compare public pantavion.com/net/info against repo runtime routes",
+    "Detect missing public entry links for live interpreter, radar, founder vision, SOS, PantaAI",
+    "Generate implementation tasks for missing runtime surfaces",
+    "Never copy third-party IP; adapt only lawful patterns"
+  ]
+}
