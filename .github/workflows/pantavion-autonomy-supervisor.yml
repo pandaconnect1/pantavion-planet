@@ -1,0 +1,65 @@
+﻿name: pantavion-autonomy-supervisor
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
+
+permissions:
+  contents: write
+  issues: write
+  actions: read
+  pull-requests: write
+
+jobs:
+  autonomy-supervisor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Pantavion
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install
+        run: npm install
+
+      - name: Run Pantavion autonomy supervisor
+        id: supervisor
+        continue-on-error: true
+        run: npm run autonomy:supervisor
+
+      - name: Upload runtime reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-autonomy-reports
+          path: data/runtime-reports
+
+      - name: Commit runtime reports
+        if: always()
+        run: |
+          git config user.name "pantavion-autonomy-bot"
+          git config user.email "actions@github.com"
+          git add data/runtime-reports || true
+          git diff --cached --quiet || git commit -m "chore(runtime): update autonomy reports"
+          git push || true
+
+      - name: Open failure issue
+        if: steps.supervisor.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BODY="$(cat data/runtime-reports/latest-autonomy-supervisor.log | head -c 6000)"
+          gh issue create \
+            --title "Pantavion autonomy supervisor detected runtime failure" \
+            --body "Autonomy supervisor failed on $(date -u). Founder review required.
+
+\`\`\`
+${BODY}
+\`\`\`" || true
+
+      - name: Fail workflow if supervisor failed
+        if: steps.supervisor.outcome == 'failure'
+        run: exit 1
