@@ -93,6 +93,13 @@ export function hasRequiredScopes(
 export function registerIdentity(actor: PantavionActorRef): PantavionIdentityProfile {
   return buildIdentityProfile(actor);
 }
+
+export function resolveIdentityPosture(
+  actor: PantavionActorRef | undefined,
+  proofs: PantavionAuthorityProof[] = []
+): PantavionIdentityResolution {
+  return resolveIdentity(actor, proofs);
+}
 export const identityModel = {
   id: "pantavion_identity_model_v1",
   systemIdentity: SYSTEM_KERNEL_IDENTITY,
