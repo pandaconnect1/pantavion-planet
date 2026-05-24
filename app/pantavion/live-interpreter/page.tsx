@@ -2,14 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-declare global {
-  interface Window {
-    webkitSpeechRecognition: any;
-    SpeechRecognition: any;
-    speechSynthesis: SpeechSynthesis;
-  }
-}
-
 export default function PantavionLiveInterpreterPage() {
   const recognitionRef = useRef<any>(null);
 
@@ -21,8 +13,13 @@ export default function PantavionLiveInterpreterPage() {
   const [status, setStatus] = useState("idle");
 
   useEffect(() => {
+    const browserWindow = window as typeof window & {
+      SpeechRecognition?: any;
+      webkitSpeechRecognition?: any;
+    };
+
     const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+      browserWindow.SpeechRecognition || browserWindow.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
       setStatus("speech_recognition_not_supported");
