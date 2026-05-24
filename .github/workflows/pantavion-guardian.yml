@@ -1,0 +1,52 @@
+name: pantavion-guardian
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Guardian file check
+        run: node scripts/pantavion-guardian.cjs
+
+      - name: Build
+        run: |
+          node -e "const fs=require('fs');const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));process.exit(pkg.scripts&&pkg.scripts.build?0:1)" && npm run build || echo "No build script"
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Open issue on scheduled failure
+        if: ${{ failure() && github.event_name == 'schedule' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Pantavion guardian scheduled failure',
+              body: 'The scheduled guardian workflow failed. Review the latest workflow logs and restore the foundation runtime.'
+            })

@@ -1,94 +1,139 @@
-﻿type UnknownRecord = Record<string, unknown>;
+import type {
+  PantavionBuildRecommendation,
+  PantavionGap,
+  PantavionPriority,
+  PantavionSensitivity,
+  PantavionTruthZone,
+} from '../../types/pantavion';
 
-function buildSearchText(request: UnknownRecord): string {
-  return [
-    request.title,
-    request.description,
-    request.inputText,
-    request.requestedOperation,
-    request.targetPath,
-    request.targetModule,
-  ]
-    .filter(Boolean)
-    .map((item) => String(item))
-    .join(' ')
-    .toLowerCase();
+export type PolicyPriority =
+  | 'legal-safety-hard-rules'
+  | 'identity-role-entitlement'
+  | 'privacy-memory-sovereignty'
+  | 'truth-provenance'
+  | 'capability-health-scope'
+  | 'resilience-fallback-degradation'
+  | 'cost-latency-optimization'
+  | 'style-presentation';
+
+export interface PolicyRuleResult {
+  priority: PolicyPriority;
+  allowed: boolean;
+  reviewRequired: boolean;
+  reasons: string[];
+  blockers: string[];
 }
 
-export async function evaluatePolicy(context: UnknownRecord): Promise<UnknownRecord> {
-  const request = (context.request as UnknownRecord | undefined) ?? {};
-  const classification = (context.classification as UnknownRecord | undefined) ?? {};
-  const capabilityPlan = (context.capabilityPlan as UnknownRecord | undefined) ?? {};
+export interface PolicyEvaluation {
+  allowed: boolean;
+  reviewRequired: boolean;
+  reviewType: 'none' | 'admin' | 'security' | 'identity' | 'legal';
+  policyVersion: string;
+  rules: PolicyRuleResult[];
+  finalReasons: string[];
+  blockers: string[];
+}
 
-  const searchText = buildSearchText(request);
-  const sensitivity = String(request.sensitivity ?? 'internal');
-  const reasons: string[] = [];
-  const appliedRules: string[] = [];
-  const requiredApprovals: string[] = [];
-  const allowedScopes = Array.isArray((context.identity as UnknownRecord | undefined)?.effectiveScopes)
-    ? (((context.identity as UnknownRecord).effectiveScopes as unknown[]) ?? []).map((item) => String(item))
-    : [];
+const DANGEROUS_KEYWORDS = [
+  'delete',
+  'erase',
+  'purge',
+  'exfiltrate',
+  'disable safety',
+  'admin override',
+  'bypass',
+];
 
-  let disposition: 'allow' | 'review' | 'deny' = 'allow';
-  let riskPosture = String(classification.riskPosture ?? 'normal');
+export function evaluatePolicy(input: {
+  content: string;
+  truthZone: PantavionTruthZone;
+  sensitivity: PantavionSensitivity;
+  priority: PantavionPriority;
+  identityApproved: boolean;
+  identityDenials: string[];
+  hasAllowedCapability: boolean;
+  runtimeGaps: PantavionGap[];
+  buildRecommendation?: PantavionBuildRecommendation;
+}): PolicyEvaluation {
+  const text = input.content.toLowerCase();
+  const dangerousHits = DANGEROUS_KEYWORDS.filter((keyword) => text.includes(keyword));
 
-  if (sensitivity === 'restricted') {
-    disposition = 'review';
-    riskPosture = 'restricted';
-    reasons.push('Restricted sensitivity requires review.');
-    appliedRules.push('privacy / memory sovereignty rules');
-    requiredApprovals.push('Security approval required.');
-  }
+  const rules: PolicyRuleResult[] = [
+    {
+      priority: 'legal-safety-hard-rules',
+      allowed: dangerousHits.length === 0,
+      reviewRequired: dangerousHits.length > 0,
+      reasons: dangerousHits.length ? dangerousHits.map((hit) => `dangerous-keyword:${hit}`) : ['no-hard-safety-hit'],
+      blockers: dangerousHits,
+    },
+    {
+      priority: 'identity-role-entitlement',
+      allowed: input.identityApproved,
+      reviewRequired: !input.identityApproved,
+      reasons: input.identityApproved ? ['identity-approved'] : input.identityDenials,
+      blockers: input.identityApproved ? [] : input.identityDenials,
+    },
+    {
+      priority: 'privacy-memory-sovereignty',
+      allowed: !(input.sensitivity === 'critical' && !input.identityApproved),
+      reviewRequired: input.sensitivity === 'critical',
+      reasons: input.sensitivity === 'critical' ? ['critical-sensitivity-demands-governed-review'] : ['privacy-boundary-clear'],
+      blockers: input.sensitivity === 'critical' && !input.identityApproved ? ['critical-sensitivity-with-unapproved-identity'] : [],
+    },
+    {
+      priority: 'truth-provenance',
+      allowed: !(input.truthZone === 'verified' && input.content.trim().length < 4),
+      reviewRequired: input.truthZone === 'verified',
+      reasons: input.truthZone === 'verified' ? ['verified-zone-needs-anchored-evidence'] : ['truth-zone-clear'],
+      blockers: input.truthZone === 'verified' && input.content.trim().length < 4 ? ['verified-zone-thin-evidence'] : [],
+    },
+    {
+      priority: 'capability-health-scope',
+      allowed: input.hasAllowedCapability,
+      reviewRequired: !input.hasAllowedCapability,
+      reasons: input.hasAllowedCapability ? ['allowed-capability-present'] : ['no-allowed-capability'],
+      blockers: input.hasAllowedCapability ? [] : ['no-allowed-capability'],
+    },
+    {
+      priority: 'resilience-fallback-degradation',
+      allowed: input.runtimeGaps.filter((gap) => gap.severity === 'critical').length === 0,
+      reviewRequired: input.runtimeGaps.length > 0,
+      reasons: input.runtimeGaps.length ? input.runtimeGaps.map((gap) => gap.id) : ['resilience-clear'],
+      blockers: input.runtimeGaps.filter((gap) => gap.severity === 'critical').map((gap) => gap.id),
+    },
+    {
+      priority: 'cost-latency-optimization',
+      allowed: true,
+      reviewRequired: false,
+      reasons: ['not-a-hard-blocker-at-foundation-v1'],
+      blockers: [],
+    },
+    {
+      priority: 'style-presentation',
+      allowed: true,
+      reviewRequired: false,
+      reasons: ['style-is-never-a-hard-blocker'],
+      blockers: [],
+    },
+  ];
 
-  if (
-    searchText.includes('delete') ||
-    searchText.includes('destructive') ||
-    searchText.includes('global permission shift')
-  ) {
-    disposition = 'deny';
-    riskPosture = 'restricted';
-    reasons.push('Potentially destructive operation detected.');
-    appliedRules.push('legal / safety hard rules');
-    requiredApprovals.push('Blocked pending explicit safeguarded protocol.');
-  }
-
-  const restrictedCapabilities = Array.isArray(capabilityPlan.restrictedCapabilities)
-    ? capabilityPlan.restrictedCapabilities
-    : [];
-
-  const missingCapabilities = Array.isArray(capabilityPlan.missingCapabilities)
-    ? capabilityPlan.missingCapabilities
-    : [];
-
-  if (restrictedCapabilities.length > 0 && disposition !== 'deny') {
-    disposition = 'review';
-    reasons.push('Restricted capabilities require review.');
-    appliedRules.push('capability availability / trust / health');
-    requiredApprovals.push('Restricted capability review required.');
-  }
-
-  if (missingCapabilities.length > 0 && disposition === 'allow') {
-    disposition = 'review';
-    reasons.push('Missing capabilities reduce confidence.');
-    appliedRules.push('capability availability / trust / health');
-  }
-
-  if (reasons.length === 0) {
-    reasons.push('No blocking conflict detected.');
-    appliedRules.push('truth / provenance requirements');
-  }
+  const blockers = [...new Set(rules.flatMap((rule) => rule.blockers))];
+  const allowed = rules.every((rule) => rule.allowed);
+  const reviewRequired = rules.some((rule) => rule.reviewRequired);
+  const reviewType: PolicyEvaluation['reviewType'] =
+    !allowed ? 'security' :
+    !input.identityApproved ? 'identity' :
+    dangerousHits.length ? 'legal' :
+    reviewRequired ? 'admin' :
+    'none';
 
   return {
-    disposition,
-    riskPosture,
-    score: disposition === 'deny' ? 0.1 : disposition === 'review' ? 0.72 : 0.93,
-    reasons,
-    appliedRules,
-    requiredApprovals,
-    allowedScopes,
+    allowed,
+    reviewRequired,
+    reviewType,
+    policyVersion: 'pantavion-policy-v1',
+    rules,
+    finalReasons: [...new Set(rules.flatMap((rule) => rule.reasons))],
+    blockers,
   };
-}
-
-export async function evaluateSecurity(context: UnknownRecord): Promise<UnknownRecord> {
-  return evaluatePolicy(context);
 }
