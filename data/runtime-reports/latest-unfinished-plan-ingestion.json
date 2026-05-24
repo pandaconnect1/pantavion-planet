@@ -1,0 +1,4823 @@
+{
+  "id": "pantavion_unfinished_plan_ingestion_v1",
+  "generatedAt": "2026-05-24T11:26:51.477Z",
+  "truth": "This report scans pushed/local repository files for unfinished Pantavion plans, runtime gaps, provider-pending states, fake-risk markers, and untracked work. It does not inspect private VS Code memory outside the repository.",
+  "totals": {
+    "scannedFiles": 702,
+    "findings": 11360,
+    "untrackedOrModifiedLines": 4
+  },
+  "immediateRuntimePriorities": [
+    "Realtime voice interpreter: mic in, language detection, translation, subtitles, speech out",
+    "Global language runtime across all Pantavion UI/routes",
+    "Provider Router v1 with OpenAI/Google/Anthropic/Mistral/local model adapter slots",
+    "Agent Identity + Delegation + Provenance audit",
+    "Auth/database/session foundation",
+    "SOS trusted contacts backend + provider-pending SMS/push",
+    "Social/chat backend foundation",
+    "Marketplace/work/services backend foundation"
+  ],
+  "gitStatus": " M app/professional/infrastructure/water/master-dwg/page.tsx\n?? core/intelligence/pantavion-unfinished-plan-ingestion.ts\n?? scripts/pantavion-unfinished-plan-ingestion-gate.cjs\n?? scripts/pantavion-unfinished-plan-ingestion.cjs\n",
+  "findings": [
+    {
+      "file": "app/acceptable-use/page.tsx",
+      "line": 54,
+      "marker": "foundation",
+      "text": "Foundation"
+    },
+    {
+      "file": "app/access-model/page.tsx",
+      "line": 74,
+      "marker": "blocked",
+      "text": "<p style={{ color: \"#ffb3b3\", fontWeight: 900 }}>Blocked / Restricted</p>"
+    },
+    {
+      "file": "app/access-model/page.tsx",
+      "line": 75,
+      "marker": "blocked",
+      "text": "<p style={{ color: \"#fff7e8\" }}>{item.blocked.join(\", \")}</p>"
+    },
+    {
+      "file": "app/ads/page.tsx",
+      "line": 54,
+      "marker": "foundation",
+      "text": "Foundation"
+    },
+    {
+      "file": "app/adult-connect/page.tsx",
+      "line": 54,
+      "marker": "blocked",
+      "text": "Blocked — Legal Review Required"
+    },
+    {
+      "file": "app/advertise/page.tsx",
+      "line": 4,
+      "marker": "sos",
+      "text": "\"Request professional promotion on Pantavion by continent, country, city, region, community, category and language. No intrusive ads, no ads in SOS, no adult ads to minors.\","
+    },
+    {
+      "file": "app/advertise/page.tsx",
+      "line": 28,
+      "marker": "provider",
+      "text": "\"Payment provider setup is required before live checkout\","
+    },
+    {
+      "file": "app/advertise/page.tsx",
+      "line": 45,
+      "marker": "sos",
+      "text": "Pantavion does not place intrusive ads inside SOS, private communication, minors,"
+    },
+    {
+      "file": "app/advertise/page.tsx",
+      "line": 51,
+      "marker": "voice",
+      "text": "<strong>Truth status:</strong> automated payment, invoices, tax handling, checkout,"
+    },
+    {
+      "file": "app/advertise/page.tsx",
+      "line": 52,
+      "marker": "database",
+      "text": "webhooks and self-serve publishing are provider/payment/database-required. This page is"
+    },
+    {
+      "file": "app/advertise/page.tsx",
+      "line": 95,
+      "marker": "sos",
+      "text": "No ads inside SOS. No adult ads to minors. No popups that disturb core life use."
+    },
+    {
+      "file": "app/api/admission/route.ts",
+      "line": 12,
+      "marker": "requires",
+      "text": "reason: \"Admission requires real auth, database, consent, and policy gates before public activation.\","
+    },
+    {
+      "file": "app/api/admission/route.ts",
+      "line": 14,
+      "marker": "identity",
+      "text": "nextGate: \"identity_database_gate\","
+    },
+    {
+      "file": "app/api/contacts/import/route.ts",
+      "line": 12,
+      "marker": "requires",
+      "text": "reason: \"Contact import requires explicit user consent, official export/API source, auth, and storage. No scraping. No third-party passwords.\","
+    },
+    {
+      "file": "app/api/emergency/partner-interest/route.ts",
+      "line": 6,
+      "marker": "sos",
+      "text": "const receivedAt = new Date().toISOString();"
+    },
+    {
+      "file": "app/api/emergency/partner-interest/route.ts",
+      "line": 18,
+      "marker": "missing",
+      "text": "message: `Missing required field: ${key}`,"
+    },
+    {
+      "file": "app/api/health/route.ts",
+      "line": 9,
+      "marker": "sos",
+      "text": "timestamp: new Date().toISOString()"
+    },
+    {
+      "file": "app/api/intelligence/actions/route.ts",
+      "line": 5,
+      "marker": "kernel",
+      "text": "import * as Admission from \"../../../../core/intelligence/panta-ai-kernel-admission\";"
+    },
+    {
+      "file": "app/api/intelligence/actions/route.ts",
+      "line": 136,
+      "marker": "kernel",
+      "text": "kernelLane: \"prime-kernel\","
+    },
+    {
+      "file": "app/api/intelligence/actions/route.ts",
+      "line": 142,
+      "marker": "kernel",
+      "text": "\"Route through the Prime Kernel before execution.\","
+    },
+    {
+      "file": "app/api/intelligence/actions/route.ts",
+      "line": 153,
+      "marker": "kernel",
+      "text": "\"createPantaAIKernelAdmissionPacket\","
+    },
+    {
+      "file": "app/api/intelligence/actions/route.ts",
+      "line": 156,
+      "marker": "kernel",
+      "text": "\"buildPantaAIKernelAdmission\","
+    },
+    {
+      "file": "app/api/intelligence/actions/route.ts",
+      "line": 165,
+      "marker": "kernel",
+      "text": "status: \"admitted-for-kernel-review\","
+    },
+    {
+      "file": "app/api/intelligence/actions/route.ts",
+      "line": 168,
+      "marker": "kernel",
+      "text": "kernelRoute: \"prime-kernel.intelligence.panta-ai\","
+    },
+    {
+      "file": "app/api/kernel/analyze/route.ts",
+      "line": 2,
+      "marker": "kernel",
+      "text": "import { pantavionKernel } from \"@/kernel/kernel\";"
+    },
+    {
+      "file": "app/api/kernel/analyze/route.ts",
+      "line": 3,
+      "marker": "kernel",
+      "text": "import type { KernelAnalyzeRequest } from \"@/kernel/types\";"
+    },
+    {
+      "file": "app/api/kernel/analyze/route.ts",
+      "line": 9,
+      "marker": "kernel",
+      "text": "const body = (await request.json()) as KernelAnalyzeRequest;"
+    },
+    {
+      "file": "app/api/kernel/analyze/route.ts",
+      "line": 10,
+      "marker": "kernel",
+      "text": "const result = pantavionKernel.analyze(body);"
+    },
+    {
+      "file": "app/api/kernel/complete/route.ts",
+      "line": 2,
+      "marker": "kernel",
+      "text": "import { pantavionKernel } from \"@/kernel/kernel\";"
+    },
+    {
+      "file": "app/api/kernel/complete/route.ts",
+      "line": 3,
+      "marker": "kernel",
+      "text": "import type { KernelCompleteRequest } from \"@/kernel/types\";"
+    },
+    {
+      "file": "app/api/kernel/complete/route.ts",
+      "line": 9,
+      "marker": "kernel",
+      "text": "const body = (await request.json()) as KernelCompleteRequest;"
+    },
+    {
+      "file": "app/api/kernel/complete/route.ts",
+      "line": 10,
+      "marker": "kernel",
+      "text": "const result = pantavionKernel.complete(body);"
+    },
+    {
+      "file": "app/api/kernel/intake/route.ts",
+      "line": 2,
+      "marker": "kernel",
+      "text": "import { pantavionKernel } from \"@/kernel/kernel\";"
+    },
+    {
+      "file": "app/api/kernel/intake/route.ts",
+      "line": 3,
+      "marker": "kernel",
+      "text": "import type { KernelIntakeRequest } from \"@/kernel/types\";"
+    },
+    {
+      "file": "app/api/kernel/intake/route.ts",
+      "line": 9,
+      "marker": "kernel",
+      "text": "const body = (await request.json()) as KernelIntakeRequest;"
+    },
+    {
+      "file": "app/api/kernel/intake/route.ts",
+      "line": 10,
+      "marker": "kernel",
+      "text": "const result = pantavionKernel.intake(body);"
+    },
+    {
+      "file": "app/api/kernel/route.ts",
+      "line": 2,
+      "marker": "kernel",
+      "text": "import { getCanonicalKernelRuntime, pantavionKernel } from \"@/kernel/kernel\";"
+    },
+    {
+      "file": "app/api/kernel/route.ts",
+      "line": 8,
+      "marker": "kernel",
+      "text": "const runtimeHealth = getCanonicalKernelRuntime().health();"
+    },
+    {
+      "file": "app/api/kernel/route.ts",
+      "line": 13,
+      "marker": "kernel",
+      "text": "summary: pantavionKernel.getStateSummary(),"
+    },
+    {
+      "file": "app/api/kernel/run/route.ts",
+      "line": 2,
+      "marker": "kernel",
+      "text": "import { pantavionKernel } from \"@/kernel/kernel\";"
+    },
+    {
+      "file": "app/api/kernel/run/route.ts",
+      "line": 3,
+      "marker": "kernel",
+      "text": "import type { KernelRunRequest } from \"@/kernel/types\";"
+    },
+    {
+      "file": "app/api/kernel/run/route.ts",
+      "line": 9,
+      "marker": "kernel",
+      "text": "const body = (await request.json()) as KernelRunRequest;"
+    },
+    {
+      "file": "app/api/kernel/run/route.ts",
+      "line": 10,
+      "marker": "kernel",
+      "text": "const result = pantavionKernel.run(body);"
+    },
+    {
+      "file": "app/api/kernel/state/route.ts",
+      "line": 2,
+      "marker": "kernel",
+      "text": "import { getCanonicalKernelRuntime, pantavionKernel } from \"@/kernel/kernel\";"
+    },
+    {
+      "file": "app/api/kernel/state/route.ts",
+      "line": 10,
+      "marker": "kernel",
+      "text": "const runtimeHealth = getCanonicalKernelRuntime().health();"
+    },
+    {
+      "file": "app/api/kernel/state/route.ts",
+      "line": 16,
+      "marker": "kernel",
+      "text": "state: pantavionKernel.getState(),"
+    },
+    {
+      "file": "app/api/kernel/state/route.ts",
+      "line": 23,
+      "marker": "kernel",
+      "text": "summary: pantavionKernel.getStateSummary(),"
+    },
+    {
+      "file": "app/api/kernel/status/route.ts",
+      "line": 6,
+      "marker": "kernel",
+      "text": "service: \"pantavion-kernel\","
+    },
+    {
+      "file": "app/api/kernel/status/route.ts",
+      "line": 7,
+      "marker": "kernel",
+      "text": "route: \"/api/kernel/status\","
+    },
+    {
+      "file": "app/api/kernel/status/route.ts",
+      "line": 8,
+      "marker": "kernel",
+      "text": "kernel: {"
+    },
+    {
+      "file": "app/api/kernel/status/route.ts",
+      "line": 9,
+      "marker": "kernel",
+      "text": "name: \"Pantavion Prime Kernel\","
+    },
+    {
+      "file": "app/api/kernel/status/route.ts",
+      "line": 10,
+      "marker": "foundation",
+      "text": "mode: \"foundation\","
+    },
+    {
+      "file": "app/api/kernel/status/route.ts",
+      "line": 16,
+      "marker": "planned",
+      "text": "identity: \"planned\","
+    },
+    {
+      "file": "app/api/kernel/status/route.ts",
+      "line": 17,
+      "marker": "planned",
+      "text": "safety: \"planned\","
+    },
+    {
+      "file": "app/api/kernel/status/route.ts",
+      "line": 18,
+      "marker": "planned",
+      "text": "translation: \"planned\","
+    },
+    {
+      "file": "app/api/kernel/status/route.ts",
+      "line": 19,
+      "marker": "planned",
+      "text": "sos: \"planned\","
+    },
+    {
+      "file": "app/api/kernel/status/route.ts",
+      "line": 20,
+      "marker": "planned",
+      "text": "pantai: \"planned\","
+    },
+    {
+      "file": "app/api/kernel/status/route.ts",
+      "line": 21,
+      "marker": "planned",
+      "text": "registry: \"planned\""
+    },
+    {
+      "file": "app/api/kernel/status/route.ts",
+      "line": 23,
+      "marker": "sos",
+      "text": "timestamp: new Date().toISOString()"
+    },
+    {
+      "file": "app/api/messages/send/route.ts",
+      "line": 12,
+      "marker": "requires",
+      "text": "reason: \"Pantavion messaging requires auth, user identity, recipient consent, abuse protection, and database persistence before live sending.\","
+    },
+    {
+      "file": "app/api/messages/send/route.ts",
+      "line": 14,
+      "marker": "identity",
+      "text": "nextGate: \"identity_messaging_database_gate\","
+    },
+    {
+      "file": "app/api/pantai/execute/route.ts",
+      "line": 24,
+      "marker": "foundation",
+      "text": "mode: \"foundation_stub\","
+    },
+    {
+      "file": "app/api/pantai/execute/route.ts",
+      "line": 27,
+      "marker": "sos",
+      "text": "timestamp: new Date().toISOString()"
+    },
+    {
+      "file": "app/api/pantavion/ai/route.ts",
+      "line": 32,
+      "marker": "missing",
+      "text": "error: \"PANTAVION_AI_PROVIDER_MISSING\","
+    },
+    {
+      "file": "app/api/pantavion/ai/route.ts",
+      "line": 46,
+      "marker": "auth",
+      "text": "Authorization: `Bearer ${apiKey}`,"
+    },
+    {
+      "file": "app/api/pantavion/ai/route.ts",
+      "line": 62,
+      "marker": "provider",
+      "text": "error: \"PANTAVION_AI_PROVIDER_ERROR\","
+    },
+    {
+      "file": "app/api/pantavion/ai/route.ts",
+      "line": 64,
+      "marker": "provider",
+      "text": "providerResponse: data,"
+    },
+    {
+      "file": "app/api/pantavion/ai/route.ts",
+      "line": 74,
+      "marker": "provider",
+      "text": "provider: \"openai-responses\","
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 6,
+      "marker": "kernel",
+      "text": "} from \"@/core/kernel/pantavion-implementation-engine\";"
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 11,
+      "marker": "kernel",
+      "text": "\"kernel\","
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 15,
+      "marker": "sos",
+      "text": "\"sos\","
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 17,
+      "marker": "translation",
+      "text": "\"translation\","
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 18,
+      "marker": "marketplace",
+      "text": "\"marketplace\","
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 19,
+      "marker": "social",
+      "text": "\"social\","
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 30,
+      "marker": "requires",
+      "text": "requiresRuntimeBehavior?: unknown;"
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 31,
+      "marker": "requires",
+      "text": "requiresFounderApproval?: unknown;"
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 68,
+      "marker": "kernel",
+      "text": "return surfaces.length > 0 ? surfaces : [\"kernel\"];"
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 73,
+      "marker": "requires",
+      "text": "const requiresRuntimeBehavior = boolean(body.requiresRuntimeBehavior, true);"
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 82,
+      "marker": "requires",
+      "text": "requiresRuntimeBehavior,"
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 83,
+      "marker": "requires",
+      "text": "requiresFounderApproval: boolean(body.requiresFounderApproval, false),"
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 98,
+      "marker": "approval",
+      "text": "\"Convert founder intent into a Pantavion implementation plan with scoped files, risk findings, approval boundaries, and verification commands.\","
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 105,
+      "marker": "requires",
+      "text": "requiresRuntimeBehavior: \"boolean\","
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 106,
+      "marker": "requires",
+      "text": "requiresFounderApproval: \"boolean\","
+    },
+    {
+      "file": "app/api/pantavion/implementation-plan/route.ts",
+      "line": 140,
+      "marker": "sos",
+      "text": "generatedAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 7,
+      "marker": "auth",
+      "text": "function isAuthorizedCronRequest(request: Request) {"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 17,
+      "marker": "auth",
+      "text": "const authorization = request.headers.get(\"authorization\") || \"\";"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 20,
+      "marker": "auth",
+      "text": "ok: authorization === \"Bearer \" + secret,"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 26,
+      "marker": "auth",
+      "text": "const auth = isAuthorizedCronRequest(request);"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 28,
+      "marker": "auth",
+      "text": "if (!auth.ok) {"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 33,
+      "marker": "auth",
+      "text": "error: \"Unauthorized cron request.\","
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 34,
+      "marker": "auth",
+      "text": "mode: auth.mode,"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 44,
+      "marker": "auth",
+      "text": "authMode: auth.mode,"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 49,
+      "marker": "auth",
+      "text": "const auth = isAuthorizedCronRequest(request);"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 51,
+      "marker": "auth",
+      "text": "if (!auth.ok) {"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 56,
+      "marker": "auth",
+      "text": "error: \"Unauthorized cron request.\","
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 57,
+      "marker": "auth",
+      "text": "mode: auth.mode,"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "line": 67,
+      "marker": "auth",
+      "text": "authMode: auth.mode,"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/ecosystem-radar/route.ts",
+      "line": 2,
+      "marker": "radar",
+      "text": "import { getPantavionEcosystemRadarRuntime } from \"@/core/intelligence/pantavion-ecosystem-radar-runtime\";"
+    },
+    {
+      "file": "app/api/pantavion/intelligence/ecosystem-radar/route.ts",
+      "line": 10,
+      "marker": "radar",
+      "text": "route: \"/api/pantavion/intelligence/ecosystem-radar\","
+    },
+    {
+      "file": "app/api/pantavion/intelligence/ecosystem-radar/route.ts",
+      "line": 11,
+      "marker": "radar",
+      "text": "radar: getPantavionEcosystemRadarRuntime(),"
+    },
+    {
+      "file": "app/api/pantavion/radar/route.ts",
+      "line": 2,
+      "marker": "radar",
+      "text": "import { getPantavionMarketRadarReport } from \"@/core/intelligence/pantavion-market-radar\";"
+    },
+    {
+      "file": "app/api/pantavion/radar/route.ts",
+      "line": 8,
+      "marker": "radar",
+      "text": "return NextResponse.json(getPantavionMarketRadarReport());"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 3,
+      "marker": "translation",
+      "text": "buildPantavionTranslationPrompt,"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 4,
+      "marker": "translation",
+      "text": "createProviderPendingTranslation,"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 5,
+      "marker": "translation",
+      "text": "pantavionUniversalTranslationContract,"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 6,
+      "marker": "translation",
+      "text": "type PantavionTranslationRequest,"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 7,
+      "marker": "translation",
+      "text": "} from \"@/core/translation/pantavion-universal-translation-runtime\";"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 19,
+      "marker": "translation",
+      "text": "contract: pantavionUniversalTranslationContract,"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 20,
+      "marker": "provider",
+      "text": "providerConfigured: Boolean(process.env.OPENAI_API_KEY),"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 27,
+      "marker": "translation",
+      "text": "const translationRequest: PantavionTranslationRequest = {"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 31,
+      "marker": "translation",
+      "text": "domain: asString(body.domain, \"general\") as PantavionTranslationRequest[\"domain\"],"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 32,
+      "marker": "translation",
+      "text": "tone: asString(body.tone, \"natural\") as PantavionTranslationRequest[\"tone\"],"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 36,
+      "marker": "translation",
+      "text": "if (!translationRequest.text.trim()) {"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 37,
+      "marker": "missing",
+      "text": "return NextResponse.json({ ok: false, error: \"Missing text.\" }, { status: 400 });"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 40,
+      "marker": "translation",
+      "text": "if (!translationRequest.targetLanguage.trim()) {"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 41,
+      "marker": "missing",
+      "text": "return NextResponse.json({ ok: false, error: \"Missing targetLanguage.\" }, { status: 400 });"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 47,
+      "marker": "translation",
+      "text": "return NextResponse.json(createProviderPendingTranslation(translationRequest), { status: 503 });"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 50,
+      "marker": "translation",
+      "text": "const prompt = buildPantavionTranslationPrompt(translationRequest);"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 52,
+      "marker": "provider",
+      "text": "const providerResponse = await fetch(\"https://api.openai.com/v1/responses\", {"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 55,
+      "marker": "auth",
+      "text": "Authorization: `Bearer ${apiKey}`,"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 59,
+      "marker": "translation",
+      "text": "model: process.env.PANTAVION_TRANSLATION_MODEL || \"gpt-4.1-mini\","
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 64,
+      "marker": "provider",
+      "text": "const payload = await providerResponse.json();"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 66,
+      "marker": "provider",
+      "text": "if (!providerResponse.ok) {"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 70,
+      "marker": "provider",
+      "text": "status: \"provider_error\","
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 71,
+      "marker": "translation",
+      "text": "contract: pantavionUniversalTranslationContract,"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 72,
+      "marker": "translation",
+      "text": "error: payload.error?.message || \"Translation provider error.\","
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 89,
+      "marker": "translation",
+      "text": "contract: pantavionUniversalTranslationContract,"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 90,
+      "marker": "translation",
+      "text": "input: translationRequest,"
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 92,
+      "marker": "provider",
+      "text": "provider: \"openai_responses\","
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 93,
+      "marker": "translation",
+      "text": "model: process.env.PANTAVION_TRANSLATION_MODEL || \"gpt-4.1-mini\","
+    },
+    {
+      "file": "app/api/pantavion/translate/route.ts",
+      "line": 94,
+      "marker": "sos",
+      "text": "generatedAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+      "line": 36,
+      "marker": "auth",
+      "text": "Authorization: `Bearer ${token}`,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+      "line": 62,
+      "marker": "auth",
+      "text": "error: \"founder_not_authorized\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+      "line": 76,
+      "marker": "missing",
+      "text": "error: \"missing_request_id\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+      "line": 103,
+      "marker": "sos",
+      "text": "const decidedAt = new Date().toISOString();"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+      "line": 142,
+      "marker": "missing",
+      "text": "error: \"missing_phone\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+      "line": 152,
+      "marker": "missing",
+      "text": "error: \"request_missing_device_claim\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/admin/requests/route.ts",
+      "line": 29,
+      "marker": "auth",
+      "text": "Authorization: `Bearer ${token}`,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/admin/requests/route.ts",
+      "line": 55,
+      "marker": "auth",
+      "text": "error: \"founder_not_authorized\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/admin/requests/route.ts",
+      "line": 106,
+      "marker": "sos",
+      "text": "checkedAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/authorize/route.ts",
+      "line": 6,
+      "marker": "auth",
+      "text": "type WaterAccessAuthorizeBody = {"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/authorize/route.ts",
+      "line": 35,
+      "marker": "auth",
+      "text": "Authorization: `Bearer ${token}`,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/authorize/route.ts",
+      "line": 76,
+      "marker": "auth",
+      "text": "const body = (await request.json()) as WaterAccessAuthorizeBody;"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/authorize/route.ts",
+      "line": 110,
+      "marker": "sos",
+      "text": "approvedAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/request/route.ts",
+      "line": 47,
+      "marker": "sos",
+      "text": "createdAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/request/route.ts",
+      "line": 53,
+      "marker": "sos",
+      "text": "requestedAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/request/route.ts",
+      "line": 62,
+      "marker": "missing",
+      "text": "error: \"missing_required_fields\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/access/request/route.ts",
+      "line": 72,
+      "marker": "missing",
+      "text": "error: \"missing_device_claim\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/address/search/route.ts",
+      "line": 36,
+      "marker": "missing",
+      "text": "status: \"missing_query\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/address/search/route.ts",
+      "line": 46,
+      "marker": "provider",
+      "text": "const providerUrl = new URL(\"https://nominatim.openstreetmap.org/search\");"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/address/search/route.ts",
+      "line": 47,
+      "marker": "provider",
+      "text": "providerUrl.searchParams.set(\"format\", \"jsonv2\");"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/address/search/route.ts",
+      "line": 48,
+      "marker": "provider",
+      "text": "providerUrl.searchParams.set(\"addressdetails\", \"1\");"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/address/search/route.ts",
+      "line": 49,
+      "marker": "provider",
+      "text": "providerUrl.searchParams.set(\"limit\", \"8\");"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/address/search/route.ts",
+      "line": 50,
+      "marker": "provider",
+      "text": "providerUrl.searchParams.set(\"countrycodes\", \"cy\");"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/address/search/route.ts",
+      "line": 51,
+      "marker": "provider",
+      "text": "providerUrl.searchParams.set(\"q\", query);"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/address/search/route.ts",
+      "line": 53,
+      "marker": "provider",
+      "text": "const response = await fetch(providerUrl, {"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/address/search/route.ts",
+      "line": 64,
+      "marker": "provider",
+      "text": "status: \"provider_error\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/address/search/route.ts",
+      "line": 68,
+      "marker": "provider",
+      "text": "message: `Address provider error ${response.status}`,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/address/search/route.ts",
+      "line": 107,
+      "marker": "provider",
+      "text": "providerType: item.type ?? item.class ?? \"address\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "line": 60,
+      "marker": "approval",
+      "text": "approvalState?: string;"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "line": 83,
+      "marker": "approval",
+      "text": "officialAfterApprovalOnly?: boolean;"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "line": 144,
+      "marker": "missing",
+      "text": "const missingChecks = aiChecks.filter((check) => !check.resolved);"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "line": 168,
+      "marker": "approval",
+      "text": "approvalState: clean(item.approvalState, 120),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "line": 169,
+      "marker": "missing",
+      "text": "aiMissingCount: missingChecks.length,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "line": 170,
+      "marker": "missing",
+      "text": "aiCriticalCount: missingChecks.filter((check) => check.severity === \"critical\").length,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "line": 171,
+      "marker": "missing",
+      "text": "aiChecks: missingChecks.slice(0, 8).map((check) => ({"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "line": 180,
+      "marker": "approval",
+      "text": "deliveryTargetLabel: \"Founder/Admin approval inbox\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "line": 192,
+      "marker": "identity",
+      "text": "error: \"identity_session_required\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "line": 201,
+      "marker": "approval",
+      "text": "prefix: \"water/private/fault-approval-inbox/founder-admin/\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "line": 217,
+      "marker": "sos",
+      "text": "generatedAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "line": 218,
+      "marker": "approval",
+      "text": "source: \"water/private/fault-approval-inbox/founder-admin/\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "line": 7,
+      "marker": "kernel",
+      "text": "decideWaterAIKernel,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "line": 9,
+      "marker": "kernel",
+      "text": "} from \"@/core/water/water-ai-operations-kernel\";"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "line": 15,
+      "marker": "kernel",
+      "text": "} from \"@/core/water/water-ai-map-intelligence-kernel\";"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "line": 188,
+      "marker": "identity",
+      "text": "error: \"identity_session_required\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "line": 198,
+      "marker": "approval",
+      "text": "const approvalList = await list({"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "line": 199,
+      "marker": "approval",
+      "text": "prefix: `water/private/fault-approval-inbox/founder-admin/${safeRecordNumber}.json`,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "line": 203,
+      "marker": "approval",
+      "text": "const pendingList = approvalList.blobs?.length"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "line": 204,
+      "marker": "approval",
+      "text": "? approvalList"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "line": 236,
+      "marker": "kernel",
+      "text": "const aiOperationsDecision = decideWaterAIKernel(toWaterAIFaultInput(item));"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "line": 244,
+      "marker": "kernel",
+      "text": "aiKernelVersion: \"water_ai_operations_and_map_intelligence_v1\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "line": 245,
+      "marker": "sos",
+      "text": "generatedAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "line": 246,
+      "marker": "approval",
+      "text": "source: \"water/private/fault-approval-inbox/founder-admin/\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/admin/submissions/route.ts",
+      "line": 29,
+      "marker": "auth",
+      "text": "Authorization: `Bearer ${token}`,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/admin/submissions/route.ts",
+      "line": 88,
+      "marker": "auth",
+      "text": "error: \"founder_not_authorized\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/admin/submissions/route.ts",
+      "line": 125,
+      "marker": "sos",
+      "text": "checkedAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 116,
+      "marker": "sos",
+      "text": ".toISOString()"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 145,
+      "marker": "missing",
+      "text": "function aiMissingChecks(input: {"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 161,
+      "marker": "requires",
+      "text": "requiresHumanApproval: boolean;"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 167,
+      "marker": "missing",
+      "text": "id: \"missing-title\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 169,
+      "marker": "missing",
+      "text": "category: \"missing_field\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 172,
+      "marker": "requires",
+      "text": "requiresHumanApproval: false,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 179,
+      "marker": "missing",
+      "text": "id: \"missing-description-or-audio\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 181,
+      "marker": "missing",
+      "text": "category: \"missing_field\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 184,
+      "marker": "requires",
+      "text": "requiresHumanApproval: false,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 191,
+      "marker": "missing",
+      "text": "id: \"missing-location\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 196,
+      "marker": "requires",
+      "text": "requiresHumanApproval: true,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 203,
+      "marker": "missing",
+      "text": "id: \"missing-photo-before\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 208,
+      "marker": "requires",
+      "text": "requiresHumanApproval: false,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 220,
+      "marker": "sos",
+      "text": "const createdAt = now.toISOString();"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 237,
+      "marker": "missing",
+      "text": "error: \"missing_fault_content\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 244,
+      "marker": "missing",
+      "text": "const aiChecks = aiMissingChecks({"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 257,
+      "marker": "approval",
+      "text": "status: \"pending_approval\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 288,
+      "marker": "missing",
+      "text": "mapLinkStatus: areaLabel || roadLabel || zoneLabel ? \"manual_location\" : \"missing\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 348,
+      "marker": "approval",
+      "text": "approvalNotes: [],"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 350,
+      "marker": "approval",
+      "text": "approvalState: \"pending_supervisor\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 355,
+      "marker": "approval",
+      "text": "\"pending approval\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 356,
+      "marker": "missing",
+      "text": "areaLabel ? `area:${areaLabel}` : \"area:missing\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 357,
+      "marker": "missing",
+      "text": "zoneLabel ? `zone:${zoneLabel}` : \"zone:missing\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 365,
+      "marker": "approval",
+      "text": "officialAfterApprovalOnly: true,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 367,
+      "marker": "approval",
+      "text": "\"Quick field capture creates a pending approval fault dossier. It is not final truth until supervisor/founder/admin approval.\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 382,
+      "marker": "approval",
+      "text": "`water/private/fault-approval-inbox/founder-admin/${safeSegment(recordNumber)}.json`,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 394,
+      "marker": "approval",
+      "text": "status: \"pending_approval\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 395,
+      "marker": "approval",
+      "text": "approvalState: \"pending_supervisor\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 396,
+      "marker": "missing",
+      "text": "aiMissingCount: aiChecks.filter((check) => !check.resolved).length,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 399,
+      "marker": "approval",
+      "text": "deliveryTarget: \"founder_admin_approval_inbox\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 400,
+      "marker": "approval",
+      "text": "deliveryTargetLabel: \"Founder/Admin approval inbox\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 402,
+      "marker": "approval",
+      "text": "approvalInbox: `water/private/fault-approval-inbox/founder-admin/${safeSegment(recordNumber)}.json`,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "line": 405,
+      "marker": "approval",
+      "text": "\"Η βλάβη καταχωρήθηκε ως pending approval και στάλθηκε στο Founder/Admin approval inbox. Χρειάζεται έλεγχος/έγκριση πριν γίνει επίσημος φάκελος.\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/submission/route.ts",
+      "line": 27,
+      "marker": "voice",
+      "text": "\"voice_reference\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/submission/route.ts",
+      "line": 82,
+      "marker": "missing",
+      "text": "error: \"missing_required_fields\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/submission/route.ts",
+      "line": 92,
+      "marker": "missing",
+      "text": "error: \"missing_device_claim\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/field/submission/route.ts",
+      "line": 98,
+      "marker": "sos",
+      "text": "const now = new Date().toISOString();"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/inbox/route.ts",
+      "line": 38,
+      "marker": "requires",
+      "text": "requiresManualForwarding?: boolean;"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/inbox/route.ts",
+      "line": 91,
+      "marker": "requires",
+      "text": "requiresManualForwarding: Boolean(payload.routing?.requiresManualForwarding),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/inbox/route.ts",
+      "line": 149,
+      "marker": "identity",
+      "text": "error: \"identity_session_required\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/inbox/route.ts",
+      "line": 166,
+      "marker": "missing",
+      "text": "error: \"missing_device_token\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/inbox/route.ts",
+      "line": 180,
+      "marker": "sos",
+      "text": "generatedAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/request/route.ts",
+      "line": 55,
+      "marker": "requires",
+      "text": "requiresManualForwarding: boolean;"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/request/route.ts",
+      "line": 248,
+      "marker": "requires",
+      "text": "requiresManualForwarding: false,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/request/route.ts",
+      "line": 278,
+      "marker": "requires",
+      "text": "requiresManualForwarding: true,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/request/route.ts",
+      "line": 298,
+      "marker": "requires",
+      "text": "requiresManualForwarding: true,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/request/route.ts",
+      "line": 416,
+      "marker": "missing",
+      "text": "error: \"missing_required_fields\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/request/route.ts",
+      "line": 426,
+      "marker": "missing",
+      "text": "error: \"missing_device_claim\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/request/route.ts",
+      "line": 432,
+      "marker": "sos",
+      "text": "const now = new Date().toISOString();"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/request/route.ts",
+      "line": 478,
+      "marker": "requires",
+      "text": "requiresHumanReview: true,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/request/route.ts",
+      "line": 530,
+      "marker": "requires",
+      "text": "requiresManualForwarding: payload.routing.requiresManualForwarding,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 85,
+      "marker": "provider",
+      "text": "smsStatus: \"not_requested\" | \"not_sent_provider_not_connected\";"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 91,
+      "marker": "requires",
+      "text": "requiresIdentitySessionForFullRead: true;"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 221,
+      "marker": "missing",
+      "text": "error: \"missing_request_id_or_message\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 227,
+      "marker": "sos",
+      "text": "const now = new Date().toISOString();"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 265,
+      "marker": "provider",
+      "text": "smsStatus: body.smsRequested ? \"not_sent_provider_not_connected\" : \"not_requested\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 271,
+      "marker": "requires",
+      "text": "requiresIdentitySessionForFullRead: true,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 273,
+      "marker": "provider",
+      "text": "\"This records a private Pantavion thread event only. It does not claim external SMS delivery without a connected provider.\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 324,
+      "marker": "provider",
+      "text": "event.delivery.smsStatus === \"not_sent_provider_not_connected\""
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 325,
+      "marker": "provider",
+      "text": "? \"Το μήνυμα καταγράφηκε στο Pantavion thread. SMS δεν εστάλη γιατί δεν υπάρχει συνδεδεμένος SMS provider.\""
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 349,
+      "marker": "missing",
+      "text": "error: \"missing_request_id\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 359,
+      "marker": "identity",
+      "text": "error: \"identity_session_required\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 376,
+      "marker": "missing",
+      "text": "error: \"missing_device_token\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "line": 391,
+      "marker": "sos",
+      "text": "generatedAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/language/multimodal/readiness/route.ts",
+      "line": 13,
+      "marker": "blocked",
+      "text": "\"X-Pantavion-Multimodal-Language\": \"contract-ready-provider-blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/language/translate/route.ts",
+      "line": 19,
+      "marker": "blocked",
+      "text": "marker: \"pantavion_multimodal_translation_provider_blocked_v1\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/language/translate/route.ts",
+      "line": 20,
+      "marker": "blocked",
+      "text": "status: \"blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/language/translate/route.ts",
+      "line": 22,
+      "marker": "translation",
+      "text": "\"Multimodal translation contract exists, but no approved translation/speech/audio/image provider is connected yet. No fake translation is returned.\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/language/translate/route.ts",
+      "line": 29,
+      "marker": "provider",
+      "text": "providerReadiness: getPantavionMultimodalLanguageReadiness(),"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/language/translate/route.ts",
+      "line": 31,
+      "marker": "translation",
+      "text": "\"approved translation provider\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/language/translate/route.ts",
+      "line": 32,
+      "marker": "provider",
+      "text": "\"approved speech-to-text provider\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/language/translate/route.ts",
+      "line": 33,
+      "marker": "provider",
+      "text": "\"approved text-to-speech provider\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/language/translate/route.ts",
+      "line": 34,
+      "marker": "provider",
+      "text": "\"approved OCR/image provider\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/language/translate/route.ts",
+      "line": 35,
+      "marker": "provider",
+      "text": "\"approved audio transcription provider\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/language/translate/route.ts",
+      "line": 37,
+      "marker": "approval",
+      "text": "\"founder/admin approval\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/language/translate/route.ts",
+      "line": 44,
+      "marker": "blocked",
+      "text": "\"X-Pantavion-Multimodal-Translation\": \"provider-blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/master-dwg/route.ts",
+      "line": 38,
+      "marker": "auth",
+      "text": "Authorization: `Bearer ${token}`,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/master-dwg/route.ts",
+      "line": 106,
+      "marker": "missing",
+      "text": "throw new Error(\"blob_token_missing\");"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/route.ts",
+      "line": 6,
+      "marker": "blocked",
+      "text": "const LEGACY_WATER_NETWORK_ENDPOINT_BLOCKED_MARKER ="
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/route.ts",
+      "line": 7,
+      "marker": "blocked",
+      "text": "\"legacy_water_network_endpoint_blocked_v1\";"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/route.ts",
+      "line": 12,
+      "marker": "blocked",
+      "text": "marker: LEGACY_WATER_NETWORK_ENDPOINT_BLOCKED_MARKER,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/route.ts",
+      "line": 13,
+      "marker": "blocked",
+      "text": "status: \"blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/route.ts",
+      "line": 14,
+      "marker": "blocked",
+      "text": "productionServingStatus: \"blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/route.ts",
+      "line": 15,
+      "marker": "blocked",
+      "text": "rendererStatus: \"blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/route.ts",
+      "line": 38,
+      "marker": "provider",
+      "text": "\"server-side bbox provider required\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/route.ts",
+      "line": 40,
+      "marker": "auth",
+      "text": "\"durable authorized-person store required\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/route.ts",
+      "line": 43,
+      "marker": "approval",
+      "text": "\"founder/admin approval required\""
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/route.ts",
+      "line": 50,
+      "marker": "blocked",
+      "text": "\"X-Pantavion-Water-Network-Endpoint\": \"blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/route.ts",
+      "line": 52,
+      "marker": "blocked",
+      "text": "\"X-Pantavion-Raw-Master\": \"blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/route.ts",
+      "line": 53,
+      "marker": "blocked",
+      "text": "\"X-Pantavion-Complete-Network\": \"blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/network/status/route.ts",
+      "line": 24,
+      "marker": "auth",
+      "text": "authorityOwner: \"Γιώργος\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/segment/bbox/route.ts",
+      "line": 7,
+      "marker": "provider",
+      "text": "} from \"@/core/infrastructure/water/controlled-water-segment-index-provider\";"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/segment/bbox/route.ts",
+      "line": 23,
+      "marker": "auth",
+      "text": "\"X-Pantavion-Water-Segment\": \"private-index-authentic-source\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/sentinel/route.ts",
+      "line": 61,
+      "marker": "missing",
+      "text": "return \"missing\";"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/sentinel/route.ts",
+      "line": 71,
+      "marker": "auth",
+      "text": "headers: token ? { Authorization: `Bearer ${token}` } : undefined,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/sentinel/route.ts",
+      "line": 102,
+      "marker": "missing",
+      "text": "if (sourceMode === \"missing\") {"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/sentinel/route.ts",
+      "line": 131,
+      "marker": "auth",
+      "text": "\"Έλεγξε authentication, audit log και viewport/vector tile περιορισμούς πριν δοθεί πρόσβαση σε συνεργεία.\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/sentinel/route.ts",
+      "line": 226,
+      "marker": "auth",
+      "text": "authorityOwner: \"Γιώργος\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/sentinel/route.ts",
+      "line": 260,
+      "marker": "auth",
+      "text": "authorityOwner: \"Γιώργος\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 10,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 14,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_BBOX_QUERY_PROVIDER_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 15,
+      "marker": "provider",
+      "text": "} from \"@/core/infrastructure/water/water-bbox-query-provider\";"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 18,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 22,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_TARGET_VIEWPORT_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 26,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 30,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_AUDIT_DURABLE_SINK_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 34,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_AUDIT_LOGGING_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 39,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 43,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 45,
+      "marker": "auth",
+      "text": "} from \"@/core/infrastructure/water/water-authorized-person-store\";"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 80,
+      "marker": "missing",
+      "text": "const missingParameters = Object.entries(parsed)"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 98,
+      "marker": "kernel",
+      "text": "hasWaterKernelConstitution: true,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 104,
+      "marker": "blocked",
+      "text": "spatialServingReady: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.spatialServingReady,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 105,
+      "marker": "blocked",
+      "text": "accessControlReady: PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS.accessControlReady,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 107,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.productionActivationAllowed &&"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 108,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS.productionAccessAllowed &&"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 109,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS.productionStoreAllowed &&"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 110,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS.productionAccessFilteringAllowed &&"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 111,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_AUDIT_DURABLE_SINK_READINESS.productionAuditSinkAllowed &&"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 112,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_TARGET_VIEWPORT_READINESS.productionTargetViewportAllowed,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 132,
+      "marker": "blocked",
+      "text": "productionServingStatus: \"blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 133,
+      "marker": "blocked",
+      "text": "rendererStatus: \"blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 148,
+      "marker": "missing",
+      "text": "missingParameters,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 150,
+      "marker": "approval",
+      "text": "activationRule: \"Founder/admin approval is required before production activation\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 151,
+      "marker": "blocked",
+      "text": "authorizedPersonStoreReadiness: PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 152,
+      "marker": "blocked",
+      "text": "spatialIndexReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 153,
+      "marker": "blocked",
+      "text": "bboxQueryProviderReadiness: PANTAVION_WATER_BLOCKED_BBOX_QUERY_PROVIDER_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 154,
+      "marker": "blocked",
+      "text": "accessFilteringReadiness: PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 155,
+      "marker": "blocked",
+      "text": "targetViewportReadiness: PANTAVION_WATER_BLOCKED_TARGET_VIEWPORT_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 156,
+      "marker": "blocked",
+      "text": "auditDurableSinkReadiness: PANTAVION_WATER_BLOCKED_AUDIT_DURABLE_SINK_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 157,
+      "marker": "blocked",
+      "text": "spatialServingReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 158,
+      "marker": "blocked",
+      "text": "accessControlReadiness: PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/bbox/route.ts",
+      "line": 159,
+      "marker": "blocked",
+      "text": "auditLoggingReadiness: PANTAVION_WATER_BLOCKED_AUDIT_LOGGING_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 9,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 13,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_BBOX_QUERY_PROVIDER_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 14,
+      "marker": "provider",
+      "text": "} from \"@/core/infrastructure/water/water-bbox-query-provider\";"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 17,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 21,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_TARGET_VIEWPORT_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 25,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 29,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_AUDIT_DURABLE_SINK_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 33,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_AUDIT_LOGGING_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 38,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 42,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 44,
+      "marker": "auth",
+      "text": "} from \"@/core/infrastructure/water/water-authorized-person-store\";"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 63,
+      "marker": "kernel",
+      "text": "hasWaterKernelConstitution: true,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 69,
+      "marker": "blocked",
+      "text": "spatialServingReady: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.spatialServingReady,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 70,
+      "marker": "blocked",
+      "text": "accessControlReady: PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS.accessControlReady,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 72,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.productionActivationAllowed &&"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 73,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS.productionAccessAllowed &&"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 74,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS.productionStoreAllowed &&"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 75,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS.productionAccessFilteringAllowed &&"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 76,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_AUDIT_DURABLE_SINK_READINESS.productionAuditSinkAllowed &&"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 77,
+      "marker": "blocked",
+      "text": "PANTAVION_WATER_BLOCKED_TARGET_VIEWPORT_READINESS.productionTargetViewportAllowed,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 95,
+      "marker": "blocked",
+      "text": "productionServingStatus: \"blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 96,
+      "marker": "blocked",
+      "text": "rendererStatus: \"blocked\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 101,
+      "marker": "approval",
+      "text": "activationRule: \"Founder/admin approval is required before production activation\","
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 102,
+      "marker": "blocked",
+      "text": "authorizedPersonStoreReadiness: PANTAVION_WATER_BLOCKED_AUTHORIZED_PERSON_STORE_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 103,
+      "marker": "blocked",
+      "text": "spatialIndexReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_INDEX_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 104,
+      "marker": "blocked",
+      "text": "bboxQueryProviderReadiness: PANTAVION_WATER_BLOCKED_BBOX_QUERY_PROVIDER_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 105,
+      "marker": "blocked",
+      "text": "accessFilteringReadiness: PANTAVION_WATER_BLOCKED_ACCESS_FILTERING_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 106,
+      "marker": "blocked",
+      "text": "targetViewportReadiness: PANTAVION_WATER_BLOCKED_TARGET_VIEWPORT_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 107,
+      "marker": "blocked",
+      "text": "auditDurableSinkReadiness: PANTAVION_WATER_BLOCKED_AUDIT_DURABLE_SINK_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 108,
+      "marker": "blocked",
+      "text": "spatialServingReadiness: PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 109,
+      "marker": "blocked",
+      "text": "accessControlReadiness: PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS,"
+    },
+    {
+      "file": "app/api/professional/infrastructure/water/serving/readiness/route.ts",
+      "line": 110,
+      "marker": "blocked",
+      "text": "auditLoggingReadiness: PANTAVION_WATER_BLOCKED_AUDIT_LOGGING_READINESS,"
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 3,
+      "marker": "sos",
+      "text": "PantavionSosDispatchResult,"
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 4,
+      "marker": "sos",
+      "text": "PantavionSosPacket,"
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 5,
+      "marker": "sos",
+      "text": "} from \"@/types/pantavion-sos\";"
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 10,
+      "marker": "sos",
+      "text": "const receivedAt = new Date().toISOString();"
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 13,
+      "marker": "sos",
+      "text": "const packet = (await request.json()) as PantavionSosPacket;"
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 16,
+      "marker": "sos",
+      "text": "return NextResponse.json<PantavionSosDispatchResult>("
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 21,
+      "marker": "sos",
+      "text": "\"Consent is required before Pantavion can use emergency profile data for SOS dispatch.\","
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 29,
+      "marker": "sos",
+      "text": "return NextResponse.json<PantavionSosDispatchResult>("
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 33,
+      "marker": "missing",
+      "text": "message: \"Invalid SOS packet. Missing packet id or message.\","
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 40,
+      "marker": "sos",
+      "text": "const webhookUrl = process.env.PANTAVION_SOS_WEBHOOK_URL;"
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 43,
+      "marker": "sos",
+      "text": "return NextResponse.json<PantavionSosDispatchResult>({"
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 47,
+      "marker": "sos",
+      "text": "\"SOS reached the Pantavion internal API. External rescue webhook is not configured yet.\","
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 56,
+      "marker": "sos",
+      "text": "\"X-Pantavion-Event\": \"lifeshield.sos\","
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 59,
+      "marker": "sos",
+      "text": "event: \"lifeshield.sos\","
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 67,
+      "marker": "sos",
+      "text": "return NextResponse.json<PantavionSosDispatchResult>("
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 72,
+      "marker": "sos",
+      "text": "\"External SOS webhook failed. Keep using phone, SMS, share, and local rescue actions.\","
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 79,
+      "marker": "sos",
+      "text": "return NextResponse.json<PantavionSosDispatchResult>({"
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 82,
+      "marker": "sos",
+      "text": "message: \"SOS packet delivered to the configured Pantavion emergency channel.\","
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 86,
+      "marker": "sos",
+      "text": "return NextResponse.json<PantavionSosDispatchResult>("
+    },
+    {
+      "file": "app/api/sos/dispatch/route.ts",
+      "line": 90,
+      "marker": "sos",
+      "text": "message: \"SOS API could not parse the request. Nothing was silently accepted.\","
+    },
+    {
+      "file": "app/api/translate/status/route.ts",
+      "line": 2,
+      "marker": "translation",
+      "text": "import { getPantavionTranslationProviderStatus } from \"@/core/translation/pantavion-translation-provider-adapters\";"
+    },
+    {
+      "file": "app/api/translate/status/route.ts",
+      "line": 7,
+      "marker": "translation",
+      "text": "return NextResponse.json(getPantavionTranslationProviderStatus());"
+    },
+    {
+      "file": "app/api/translate/text/route.ts",
+      "line": 3,
+      "marker": "translation",
+      "text": "type TranslationBody = {"
+    },
+    {
+      "file": "app/api/translate/text/route.ts",
+      "line": 27,
+      "marker": "translation",
+      "text": "const body = (await request.json().catch(() => ({}))) as TranslationBody;"
+    },
+    {
+      "file": "app/api/translate/text/route.ts",
+      "line": 43,
+      "marker": "foundation",
+      "text": "`[Foundation translation packet] ${text}`,"
+    },
+    {
+      "file": "app/api/translate/text/route.ts",
+      "line": 45,
+      "marker": "foundation",
+      "text": "mode: exact ? \"foundation-dictionary\" : \"provider-ready-fallback\","
+    },
+    {
+      "file": "app/api/translate/text/route.ts",
+      "line": 46,
+      "marker": "provider",
+      "text": "providerStatus:"
+    },
+    {
+      "file": "app/api/translate/text/route.ts",
+      "line": 48,
+      "marker": "foundation",
+      "text": "? \"Matched local foundation dictionary.\""
+    },
+    {
+      "file": "app/api/translate/text/route.ts",
+      "line": 49,
+      "marker": "translation",
+      "text": ": \"External translation provider is not connected yet. Route/API is live and ready for provider integration.\","
+    },
+    {
+      "file": "app/api/translate/text/route.ts",
+      "line": 51,
+      "marker": "translation",
+      "text": "\"Connect translation provider\","
+    },
+    {
+      "file": "app/api/translate/text/route.ts",
+      "line": 55,
+      "marker": "translation",
+      "text": "\"Add group translation rooms\","
+    },
+    {
+      "file": "app/api/translate/universal/route.ts",
+      "line": 2,
+      "marker": "translation",
+      "text": "import type { PantavionTranslationRequest } from \"@/core/translation/pantavion-translation-provider-router\";"
+    },
+    {
+      "file": "app/api/translate/universal/route.ts",
+      "line": 3,
+      "marker": "translation",
+      "text": "import { translateWithPantavionProvider } from \"@/core/translation/pantavion-translation-provider-adapters\";"
+    },
+    {
+      "file": "app/api/translate/universal/route.ts",
+      "line": 9,
+      "marker": "translation",
+      "text": "const body = (await request.json()) as PantavionTranslationRequest;"
+    },
+    {
+      "file": "app/api/translate/universal/route.ts",
+      "line": 10,
+      "marker": "provider",
+      "text": "const result = await translateWithPantavionProvider(body);"
+    },
+    {
+      "file": "app/api/translate/universal/route.ts",
+      "line": 16,
+      "marker": "provider",
+      "text": "status: \"provider_error\","
+    },
+    {
+      "file": "app/api/translate/universal/route.ts",
+      "line": 18,
+      "marker": "translation",
+      "text": "error instanceof Error ? error.message : \"Translation request failed.\","
+    },
+    {
+      "file": "app/architecture/page.tsx",
+      "line": 26,
+      "marker": "identity",
+      "text": "<span style={badge}>Identity</span>"
+    },
+    {
+      "file": "app/architecture/page.tsx",
+      "line": 27,
+      "marker": "identity",
+      "text": "<h2 style={{ fontSize: 38, marginBottom: 8 }}>{base.identity}</h2>"
+    },
+    {
+      "file": "app/auth/login/LoginClient.tsx",
+      "line": 15,
+      "marker": "foundation",
+      "text": "setMessage(\"Βάλε email για local foundation session.\");"
+    },
+    {
+      "file": "app/auth/login/LoginClient.tsx",
+      "line": 19,
+      "marker": "foundation",
+      "text": "localStorage.setItem(\"pantavion.session\", \"local-foundation\");"
+    },
+    {
+      "file": "app/auth/login/LoginClient.tsx",
+      "line": 21,
+      "marker": "foundation",
+      "text": "setMessage(\"Local foundation session created. Production login needs auth provider/database.\");"
+    },
+    {
+      "file": "app/auth/login/LoginClient.tsx",
+      "line": 26,
+      "marker": "foundation",
+      "text": "<span className=\"pv-status\">Login Foundation</span>"
+    },
+    {
+      "file": "app/auth/login/LoginClient.tsx",
+      "line": 29,
+      "marker": "foundation",
+      "text": "This is a real route and client-side foundation flow. It does not pretend to be secure production auth."
+    },
+    {
+      "file": "app/auth/login/LoginClient.tsx",
+      "line": 47,
+      "marker": "auth",
+      "text": "<Link className=\"pv-button\" href=\"/auth/register\">Register</Link>"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 15,
+      "marker": "identity",
+      "text": "const identity = {"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 24,
+      "marker": "sos",
+      "text": "createdAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 25,
+      "marker": "foundation",
+      "text": "mode: \"local-foundation\","
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 28,
+      "marker": "identity",
+      "text": "if (!identity.firstName || !identity.email || !identity.country) {"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 33,
+      "marker": "identity",
+      "text": "if (!identity.ageConfirmed || !identity.termsAccepted || !identity.privacyAccepted) {"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 38,
+      "marker": "identity",
+      "text": "localStorage.setItem(\"pantavion.identity\", JSON.stringify(identity));"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 39,
+      "marker": "foundation",
+      "text": "localStorage.setItem(\"pantavion.session\", \"local-foundation\");"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 47,
+      "marker": "identity",
+      "text": "<span className=\"pv-status\">Local identity saved</span>"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 50,
+      "marker": "foundation",
+      "text": "Δημιουργήθηκε local foundation identity στο browser. Αυτό είναι πραγματική λειτουργία UI,"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 51,
+      "marker": "auth",
+      "text": "αλλά όχι production authentication. Επόμενο βήμα: database, email verification, sessions."
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 63,
+      "marker": "foundation",
+      "text": "<span className=\"pv-status\">Register Foundation</span>"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 64,
+      "marker": "identity",
+      "text": "<h1>Create Pantavion identity</h1>"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 110,
+      "marker": "foundation",
+      "text": "<span>Αποδέχομαι τους Terms ως foundation route. Νομικό review απαιτείται πριν production.</span>"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 115,
+      "marker": "foundation",
+      "text": "<span>Αποδέχομαι το Privacy foundation. Θα χρειαστεί versioned consent με backend.</span>"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 118,
+      "marker": "foundation",
+      "text": "<button className=\"pv-button gold\" type=\"submit\">Create local foundation identity</button>"
+    },
+    {
+      "file": "app/auth/register/RegisterClient.tsx",
+      "line": 121,
+      "marker": "auth",
+      "text": "Already entered? <Link href=\"/auth/login\">Login</Link>"
+    },
+    {
+      "file": "app/backend-claims/page.tsx",
+      "line": 16,
+      "marker": "foundation",
+      "text": "This registry prevents fake-live claims. Every Pantavion surface must be classified as doctrine, static, foundation, backend-connected, or production-operational."
+    },
+    {
+      "file": "app/backend-claims/page.tsx",
+      "line": 29,
+      "marker": "foundation",
+      "text": "<div style={{ fontSize: \"12px\", color: \"#d6ad60\" }}>Foundation</div>"
+    },
+    {
+      "file": "app/backend-claims/page.tsx",
+      "line": 30,
+      "marker": "foundation",
+      "text": "<div style={{ fontSize: \"32px\", fontWeight: 900 }}>{summary.foundation || 0}</div>"
+    },
+    {
+      "file": "app/communication/page.tsx",
+      "line": 34,
+      "marker": "translation",
+      "text": "universe inspired by social patterns but built with Pantavion-owned safety, translation,"
+    },
+    {
+      "file": "app/communication/page.tsx",
+      "line": 47,
+      "marker": "requires",
+      "text": "Real chat/social/media requires auth, database, storage, moderation, reporting and age-role enforcement."
+    },
+    {
+      "file": "app/contact/page.tsx",
+      "line": 6,
+      "marker": "foundation",
+      "text": "description: \"Contact and support foundation.\","
+    },
+    {
+      "file": "app/cookies/page.tsx",
+      "line": 6,
+      "marker": "foundation",
+      "text": "description: \"Cookie policy foundation.\","
+    },
+    {
+      "file": "app/dashboard/page.tsx",
+      "line": 19,
+      "marker": "identity",
+      "text": "Daily Hub, Global Hub, Language Bridge, PantaAI, Work, Safety and Identity"
+    },
+    {
+      "file": "app/dashboard/page.tsx",
+      "line": 28,
+      "marker": "foundation",
+      "text": "<StatusBadge status=\"live-foundation\" />"
+    },
+    {
+      "file": "app/dashboard/page.tsx",
+      "line": 30,
+      "marker": "voice",
+      "text": "<p>Text bridge route and API shell. Next: voice, captions and rooms.</p>"
+    },
+    {
+      "file": "app/dashboard/page.tsx",
+      "line": 34,
+      "marker": "foundation",
+      "text": "<StatusBadge status=\"live-foundation\" />"
+    },
+    {
+      "file": "app/dashboard/page.tsx",
+      "line": 35,
+      "marker": "sos",
+      "text": "<h3>SOS / Safety</h3>"
+    },
+    {
+      "file": "app/dashboard/page.tsx",
+      "line": 36,
+      "marker": "foundation",
+      "text": "<p>Safety Center, minors, reports and lawful escalation foundations.</p>"
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 7,
+      "marker": "translation",
+      "text": "\"Pantavion Deep Audit Gate: legal, safety, security, translation, marketplace, media, payments and backend-claims readiness before public scale.\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 54,
+      "marker": "marketplace",
+      "text": "\"Country and region review for privacy, minors, adult/restricted zones, emergency use, marketplace, media and data-transfer boundaries.\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 69,
+      "marker": "translation",
+      "text": "title: \"Translation Safety Ledger\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 70,
+      "marker": "interpreter",
+      "text": "status: \"Mandatory before interpreter claims\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 72,
+      "marker": "translation",
+      "text": "\"Assistive translation only until confidence scoring, fallback phrases, emergency disclaimers, offline phrase packs and human-review lanes exist.\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 82,
+      "marker": "blocked",
+      "text": "status: \"Blocked until commercial/legal gate\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 84,
+      "marker": "blocked",
+      "text": "\"Checkout-only first. No raw card handling. Marketplace payouts, connected accounts, KYC/KYB and restricted categories remain blocked until reviewed.\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 90,
+      "marker": "blocked",
+      "text": "\"Minors protection first. Adult/restricted content remains blocked until legal, age-verification, jurisdiction and provider approval are complete.\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 93,
+      "marker": "marketplace",
+      "text": "title: \"Marketplace Fraud Policy\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 94,
+      "marker": "marketplace",
+      "text": "status: \"Mandatory before marketplace payments\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 96,
+      "marker": "blocked",
+      "text": "\"Blocked categories include weapons, drugs, adult services, counterfeit goods, stolen goods, scams, regulated medical goods and hazardous items.\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 102,
+      "marker": "voice",
+      "text": "\"News, opinion, ads, user submissions, official alerts, AI voice, human presenter and sponsored bulletins must be clearly separated and rights-cleared.\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 108,
+      "marker": "foundation",
+      "text": "\"Every module must declare its real state: doctrine only, static page, UI foundation, local prototype, backend connected or production operational.\","
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 144,
+      "marker": "marketplace",
+      "text": "Pantavion does not move to live charging, marketplace activity, institutional routes, public safety claims or global growth before the deep audit gates are visible, governed and reviewed."
+    },
+    {
+      "file": "app/deep-audit/page.tsx",
+      "line": 151,
+      "marker": "blocked",
+      "text": "Current commercial status: <strong style={gold}>Stripe readiness foundation only</strong>. Live payments remain blocked until legal, commercial, security and restricted-category controls pass."
+    },
+    {
+      "file": "app/discovery/page.tsx",
+      "line": 4,
+      "marker": "social",
+      "text": "\"Pantavion public discovery truth: search engines, sitemap, robots, Apple Business Connect readiness, Bing IndexNow readiness, social sharing and honest product status.\","
+    },
+    {
+      "file": "app/discovery/page.tsx",
+      "line": 24,
+      "marker": "social",
+      "text": "title: \"Organic social\","
+    },
+    {
+      "file": "app/discovery/page.tsx",
+      "line": 26,
+      "marker": "interpreter",
+      "text": "text: \"Pantavion needs repeated public threads and shareable pages for Interpreter, SOS, PantaAI, Life Connector, Communication Universe and Newspaper Ads Center.\","
+    },
+    {
+      "file": "app/discovery/page.tsx",
+      "line": 67,
+      "marker": "requires",
+      "text": "or automatic Apple/Bing/Google discovery. Growth requires public pages, indexing setup,"
+    },
+    {
+      "file": "app/discovery/page.tsx",
+      "line": 68,
+      "marker": "social",
+      "text": "social content, trust, product usefulness and conversion paths."
+    },
+    {
+      "file": "app/distribution/page.tsx",
+      "line": 10,
+      "marker": "social",
+      "text": "description: \"Pantavion global discovery, SEO, social preview, PWA and public/private indexing readiness gate.\""
+    },
+    {
+      "file": "app/distribution/page.tsx",
+      "line": 65,
+      "marker": "blocked",
+      "text": "if (status.includes(\"blocked\")) return \"#ff8b8b\";"
+    },
+    {
+      "file": "app/distribution/page.tsx",
+      "line": 82,
+      "marker": "social",
+      "text": "Search, social, mobile and public claims under one governed gate."
+    },
+    {
+      "file": "app/distribution/page.tsx",
+      "line": 148,
+      "marker": "blocked",
+      "text": "<p style={{ color: \"#ffb3b3\", lineHeight: 1.65 }}>Blocked: {claim.blockedClaim}</p>"
+    },
+    {
+      "file": "app/distribution/page.tsx",
+      "line": 165,
+      "marker": "blocked",
+      "text": "<h2 style={{ fontSize: 38, marginTop: 0 }}>Blocked Until Later</h2>"
+    },
+    {
+      "file": "app/distribution/page.tsx",
+      "line": 167,
+      "marker": "blocked",
+      "text": "These items stay blocked until their own legal, backend, payment, rights or operational gates pass."
+    },
+    {
+      "file": "app/distribution/page.tsx",
+      "line": 170,
+      "marker": "blocked",
+      "text": "{gate.blockedUntilLater.map((item) => ("
+    },
+    {
+      "file": "app/distribution/page.tsx",
+      "line": 172,
+      "marker": "blocked",
+      "text": "<span style={{ ...badge, color: \"#ffb3b3\" }}>Blocked</span>"
+    },
+    {
+      "file": "app/ecosystem/page.tsx",
+      "line": 9,
+      "marker": "foundation",
+      "text": "\"Pantavion master ecosystem doctrine, capability families and route foundations.\""
+    },
+    {
+      "file": "app/ecosystem/page.tsx",
+      "line": 64,
+      "marker": "kernel",
+      "text": "<Link href=\"/kernel/audit\" style={button}>Open Kernel Audit</Link>"
+    },
+    {
+      "file": "app/ecosystem/page.tsx",
+      "line": 93,
+      "marker": "foundation",
+      "text": "<h2 style={{ fontSize: 42, marginBottom: 18 }}>Public Route Foundation</h2>"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 4,
+      "marker": "kernel",
+      "text": "import { loadKernelState, resetKernelState, saveKernelState } from \"../../kernel/store\";"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 5,
+      "marker": "kernel",
+      "text": "import { addMemoryEntry } from \"../../kernel/memory\";"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 6,
+      "marker": "kernel",
+      "text": "import { addPlannerEntry } from \"../../kernel/planner\";"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 7,
+      "marker": "kernel",
+      "text": "import { addAuditEntry } from \"../../kernel/audit\";"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 8,
+      "marker": "kernel",
+      "text": "import { addTaskEntry } from \"../../kernel/runner\";"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 9,
+      "marker": "kernel",
+      "text": "import { runEvolutionCycle } from \"../../kernel/evolution\";"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 10,
+      "marker": "kernel",
+      "text": "import { getKernelStats } from \"../../kernel/stats\";"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 11,
+      "marker": "kernel",
+      "text": "import type { KernelPriority, KernelState } from \"../../kernel/types\";"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 22,
+      "marker": "kernel",
+      "text": "function safeKernelState(): KernelState {"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 23,
+      "marker": "kernel",
+      "text": "return loadKernelState() as KernelState;"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 26,
+      "marker": "kernel",
+      "text": "function enabledModulesCount(state: KernelState): number {"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 31,
+      "marker": "kernel",
+      "text": "function recommendedCapabilities(state: KernelState): string[] {"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 37,
+      "marker": "kernel",
+      "text": "const [state, setState] = useState<KernelState>(() => safeKernelState());"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 41,
+      "marker": "kernel",
+      "text": "const [priority, setPriority] = useState<KernelPriority>(\"HIGH\");"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 44,
+      "marker": "kernel",
+      "text": "saveKernelState(state as any);"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 47,
+      "marker": "kernel",
+      "text": "const stats = useMemo(() => getKernelStats(state as any), [state]);"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 56,
+      "marker": "kernel",
+      "text": "<div className=\"text-sm uppercase tracking-[0.35em] text-cyan-300\">Pantavion Kernel</div>"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 59,
+      "marker": "kernel",
+      "text": "Controlled kernel evolution surface for memory, planning, tasks, signals, audit continuity, and"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 66,
+      "marker": "kernel",
+      "text": "onClick={() => setState((current) => runEvolutionCycle(current as any) as KernelState)}"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 73,
+      "marker": "kernel",
+      "text": "onClick={() => setState(() => resetKernelState() as KernelState)}"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 76,
+      "marker": "kernel",
+      "text": "Reset Kernel State"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 85,
+      "marker": "radar",
+      "text": "{statBox(\"Radar\", stats.radar)}"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 95,
+      "marker": "kernel",
+      "text": "<h2 className=\"text-2xl font-semibold text-white\">Kernel Inputs</h2>"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 107,
+      "marker": "kernel",
+      "text": "placeholder=\"Write a governed memory directive for the kernel...\""
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 121,
+      "marker": "kernel",
+      "text": "tags: [\"kernel\"],"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 130,
+      "marker": "kernel",
+      "text": ") as KernelState"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 147,
+      "marker": "kernel",
+      "text": "placeholder=\"Write a plan goal or kernel direction...\""
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 153,
+      "marker": "kernel",
+      "text": "onChange={(event) => setPriority(event.target.value as KernelPriority)}"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 181,
+      "marker": "kernel",
+      "text": ") as KernelState"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 198,
+      "marker": "kernel",
+      "text": "placeholder=\"Describe the next queued kernel task...\""
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 220,
+      "marker": "kernel",
+      "text": ") as KernelState"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 235,
+      "marker": "kernel",
+      "text": "<h2 className=\"text-2xl font-semibold text-white\">Kernel Summary</h2>"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 244,
+      "marker": "radar",
+      "text": "<div className=\"text-xs uppercase tracking-[0.2em] text-slate-400\">Radar Ring</div>"
+    },
+    {
+      "file": "app/evolution/page.tsx",
+      "line": 245,
+      "marker": "radar",
+      "text": "<div className=\"mt-2 text-lg font-semibold text-white\">{String(stats.radarRing)}</div>"
+    },
+    {
+      "file": "app/feedback/page.tsx",
+      "line": 26,
+      "marker": "sos",
+      "text": "text: \"Ανάφερε λάθος, νεκρό κουμπί, γλώσσα, SOS κείμενο ή τεχνικό θέμα.\","
+    },
+    {
+      "file": "app/feedback/page.tsx",
+      "line": 100,
+      "marker": "sos",
+      "text": "<Link href=\"/sos\" className=\"font-semibold text-[#f6d889]\">"
+    },
+    {
+      "file": "app/feedback/page.tsx",
+      "line": 101,
+      "marker": "sos",
+      "text": "Open SOS safety layer →"
+    },
+    {
+      "file": "app/founding-access/page.tsx",
+      "line": 54,
+      "marker": "foundation",
+      "text": "Foundation"
+    },
+    {
+      "file": "app/governance/page.tsx",
+      "line": 17,
+      "marker": "auth",
+      "text": ": 'Founder constitutional surface for human final authority, legal-safe adaptation, jurisdiction overlays and sovereign governance.'"
+    },
+    {
+      "file": "app/governance/page.tsx",
+      "line": 34,
+      "marker": "auth",
+      "text": "{ label: 'Authority', value: 'human-final' },"
+    },
+    {
+      "file": "app/import-world/page.tsx",
+      "line": 54,
+      "marker": "foundation",
+      "text": "Foundation"
+    },
+    {
+      "file": "app/infrastructure/page.tsx",
+      "line": 11,
+      "marker": "translation",
+      "text": "\"Pantavion-owned infrastructure roadmap for AI, communication, memory, translation, maps, analytics, payments, security and media.\""
+    },
+    {
+      "file": "app/infrastructure/page.tsx",
+      "line": 89,
+      "marker": "kernel",
+      "text": "<Link href=\"/kernel/audit\" style={{ ...badge, textDecoration: \"none\" }}>Kernel Audit</Link>"
+    },
+    {
+      "file": "app/infrastructure/page.tsx",
+      "line": 100,
+      "marker": "provider",
+      "text": "<span style={badge}>Provider rule</span>"
+    },
+    {
+      "file": "app/infrastructure/page.tsx",
+      "line": 101,
+      "marker": "provider",
+      "text": "<p style={{ color: \"#fff7e8\", lineHeight: 1.7 }}>{pantavionSovereigntyDoctrine.providerRule}</p>"
+    },
+    {
+      "file": "app/infrastructure/page.tsx",
+      "line": 104,
+      "marker": "kernel",
+      "text": "<span style={badge}>Kernel rule</span>"
+    },
+    {
+      "file": "app/infrastructure/page.tsx",
+      "line": 105,
+      "marker": "kernel",
+      "text": "<p style={{ color: \"#fff7e8\", lineHeight: 1.7 }}>{pantavionSovereigntyDoctrine.kernelRule}</p>"
+    },
+    {
+      "file": "app/infrastructure/page.tsx",
+      "line": 132,
+      "marker": "blocked",
+      "text": "<p style={gold}>Blocked</p>"
+    },
+    {
+      "file": "app/infrastructure/page.tsx",
+      "line": 133,
+      "marker": "blocked",
+      "text": "<h2 style={{ fontSize: 44, margin: 0 }}>{pantavionInfrastructureStats.blockedSystems}</h2>"
+    },
+    {
+      "file": "app/inspector/page.tsx",
+      "line": 33,
+      "marker": "auth",
+      "text": "{ label: 'Access', value: 'authenticated' },"
+    },
+    {
+      "file": "app/intelligence/capabilities/page.tsx",
+      "line": 27,
+      "marker": "kernel",
+      "text": "select the capability family, create a kernel action packet, apply"
+    },
+    {
+      "file": "app/intelligence/capabilities/page.tsx",
+      "line": 52,
+      "marker": "kernel",
+      "text": "<Metric label=\"Kernel lanes\" value={summary.kernelLanes.length} />"
+    },
+    {
+      "file": "app/intelligence/capabilities/page.tsx",
+      "line": 61,
+      "marker": "kernel",
+      "text": "\"The Prime Kernel owns routing, truth, safety and access.\","
+    },
+    {
+      "file": "app/intelligence/capabilities/page.tsx",
+      "line": 84,
+      "marker": "kernel",
+      "text": "<Badge>{surface.kernelLane}</Badge>"
+    },
+    {
+      "file": "app/intelligence/capabilities/page.tsx",
+      "line": 131,
+      "marker": "kernel",
+      "text": "Start via Kernel"
+    },
+    {
+      "file": "app/intelligence/execute/PantaAIExecuteClient.tsx",
+      "line": 13,
+      "marker": "foundation",
+      "text": "setResult(\"Executing intent through Pantavion foundation kernel...\");"
+    },
+    {
+      "file": "app/intelligence/execute/PantaAIExecuteClient.tsx",
+      "line": 33,
+      "marker": "provider",
+      "text": "and return a result packet. This is the real execution shell before external AI/tool providers."
+    },
+    {
+      "file": "app/intelligence/page.tsx",
+      "line": 32,
+      "marker": "kernel",
+      "text": "Pantavion Prime Kernel Surface"
+    },
+    {
+      "file": "app/intelligence/page.tsx",
+      "line": 142,
+      "marker": "kernel",
+      "text": "Prime Kernel Role"
+    },
+    {
+      "file": "app/intelligence/page.tsx",
+      "line": 145,
+      "marker": "kernel",
+      "text": "{card.kernelRole}"
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 7,
+      "marker": "foundation",
+      "text": "\"PantaAI routing foundation for intent, capability families, kernel routes and execution lanes.\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 10,
+      "marker": "provider-required",
+      "text": "type RouteStatus = \"live-foundation\" | \"active-preview\" | \"provider-required\";"
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 16,
+      "marker": "kernel",
+      "text": "kernelRoute: string;"
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 28,
+      "marker": "voice",
+      "text": "query: \"Translate, voice, subtitles, multilingual rooms, cross-language communication.\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 29,
+      "marker": "voice",
+      "text": "kernelRoute: \"voice.multilingual.runtime\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 31,
+      "marker": "foundation",
+      "text": "status: \"live-foundation\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 33,
+      "marker": "translation",
+      "text": "\"Text translation\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 34,
+      "marker": "voice",
+      "text": "\"Voice interpretation\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 36,
+      "marker": "translation",
+      "text": "\"Group translation\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 43,
+      "marker": "provider",
+      "text": "\"Provider requirement is explicit\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 46,
+      "marker": "translation",
+      "text": "\"Connect translation provider\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 56,
+      "marker": "kernel",
+      "text": "kernelRoute: \"planet.signal.runtime\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 72,
+      "marker": "database",
+      "text": "\"Add country/culture database\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 73,
+      "marker": "provider",
+      "text": "\"Add map provider\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 79,
+      "marker": "social",
+      "text": "id: \"people-social\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 80,
+      "marker": "social",
+      "text": "title: \"People / Social Universe\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 82,
+      "marker": "social",
+      "text": "kernelRoute: \"people.social.graph\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 87,
+      "marker": "social",
+      "text": "\"Social graph\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 90,
+      "marker": "identity",
+      "text": "\"Creator identity\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 93,
+      "marker": "social",
+      "text": "\"Social surface is reachable\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 98,
+      "marker": "database",
+      "text": "\"Add database\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 108,
+      "marker": "kernel",
+      "text": "kernelRoute: \"intelligence.intent.execution\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 110,
+      "marker": "foundation",
+      "text": "status: \"live-foundation\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 121,
+      "marker": "kernel",
+      "text": "\"Kernel routing concept is represented\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 125,
+      "marker": "provider",
+      "text": "\"Connect tool providers\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 133,
+      "marker": "marketplace",
+      "text": "query: \"Jobs, services, marketplace, earnings, business profiles, subscriptions.\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 134,
+      "marker": "kernel",
+      "text": "kernelRoute: \"commercial.execution.runtime\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 136,
+      "marker": "provider-required",
+      "text": "status: \"provider-required\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 140,
+      "marker": "marketplace",
+      "text": "\"Marketplace\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 150,
+      "marker": "provider",
+      "text": "\"Connect payments provider\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 151,
+      "marker": "database",
+      "text": "\"Add listings database\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 152,
+      "marker": "voice",
+      "text": "\"Add invoices\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 157,
+      "marker": "identity",
+      "text": "id: \"safety-identity\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 158,
+      "marker": "identity",
+      "text": "title: \"Safety / Law / Identity\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 160,
+      "marker": "identity",
+      "text": "kernelRoute: \"security.identity.governance\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 162,
+      "marker": "foundation",
+      "text": "status: \"live-foundation\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 176,
+      "marker": "database",
+      "text": "\"Add report database\","
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 220,
+      "marker": "foundation",
+      "text": "\"live-foundation\": {"
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 242,
+      "marker": "provider-required",
+      "text": "\"provider-required\": {"
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 335,
+      "marker": "kernel",
+      "text": "<strong style={{ color: \"#39D6FF\" }}>Kernel route</strong>"
+    },
+    {
+      "file": "app/intelligence/routing/page.tsx",
+      "line": 336,
+      "marker": "kernel",
+      "text": "<div style={{ color: \"rgba(245,241,231,.76)\", marginTop: 4 }}>{route.kernelRoute}</div>"
+    },
+    {
+      "file": "app/kernel/audit/page.tsx",
+      "line": 3,
+      "marker": "kernel",
+      "text": "import { kernelGapRegistry } from \"@/core/pantavion/kernel-gap-index\";"
+    },
+    {
+      "file": "app/kernel/audit/page.tsx",
+      "line": 6,
+      "marker": "kernel",
+      "text": "title: \"Kernel Audit | Pantavion One\","
+    },
+    {
+      "file": "app/kernel/audit/page.tsx",
+      "line": 7,
+      "marker": "foundation",
+      "text": "description: \"Pantavion Kernel Audit: governed registry of foundation, safety, policy, readiness and execution gaps.\","
+    },
+    {
+      "file": "app/kernel/audit/page.tsx",
+      "line": 66,
+      "marker": "kernel",
+      "text": "return parts.length > 0 ? parts.join(\" • \") : \"Registered kernel control item requiring review.\";"
+    },
+    {
+      "file": "app/kernel/audit/page.tsx",
+      "line": 76,
+      "marker": "kernel",
+      "text": "`kernel-gap-${index + 1}`;"
+    },
+    {
+      "file": "app/kernel/audit/page.tsx",
+      "line": 92,
+      "marker": "foundation",
+      "text": "\"foundation\";"
+    },
+    {
+      "file": "app/kernel/audit/page.tsx",
+      "line": 108,
+      "marker": "kernel",
+      "text": "export default function KernelAuditPage() {"
+    },
+    {
+      "file": "app/kernel/audit/page.tsx",
+      "line": 109,
+      "marker": "kernel",
+      "text": "const gaps = Array.isArray(kernelGapRegistry)"
+    },
+    {
+      "file": "app/kernel/audit/page.tsx",
+      "line": 110,
+      "marker": "kernel",
+      "text": "? kernelGapRegistry.map((gap, index) => normalizeGap(gap, index))"
+    },
+    {
+      "file": "app/kernel/audit/page.tsx",
+      "line": 121,
+      "marker": "kernel",
+      "text": "Kernel Audit"
+    },
+    {
+      "file": "app/kernel/audit/page.tsx",
+      "line": 129,
+      "marker": "foundation",
+      "text": "Pantavion Kernel Audit tracks foundation, readiness, legal, safety, security, AI and execution controls before public launch, payments, marketplace activity or institutional integrations."
+    },
+    {
+      "file": "app/kernel/audit/page.tsx",
+      "line": 134,
+      "marker": "kernel",
+      "text": "<h2 style={{ fontSize: 38, marginBottom: 8 }}>Kernel Gap Registry</h2>"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 3,
+      "marker": "kernel",
+      "text": "kernelCompletionDoctrine,"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 4,
+      "marker": "kernel",
+      "text": "kernelCompletionItems,"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 5,
+      "marker": "kernel",
+      "text": "kernelCompletionStats,"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 6,
+      "marker": "kernel",
+      "text": "kernelNextActions"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 7,
+      "marker": "kernel",
+      "text": "} from \"@/core/pantavion/kernel-completion-spine\";"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 10,
+      "marker": "kernel",
+      "text": "title: \"Kernel Completion | Pantavion One\","
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 12,
+      "marker": "blocked",
+      "text": "\"Pantavion Kernel completion spine for gaps, blocked claims, provider sovereignty, legal gates, security gates and next actions.\""
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 65,
+      "marker": "kernel",
+      "text": "export default function KernelCompletionPage() {"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 74,
+      "marker": "kernel",
+      "text": "Kernel Completion Spine"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 78,
+      "marker": "kernel",
+      "text": "The Kernel must finish, block, repair and prioritize the ecosystem."
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 82,
+      "marker": "kernel",
+      "text": "{kernelCompletionDoctrine.mission}"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 86,
+      "marker": "kernel",
+      "text": "<h2 style={{ marginTop: 0, fontSize: 34 }}>{kernelCompletionDoctrine.title}</h2>"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 87,
+      "marker": "kernel",
+      "text": "<p style={{ color: \"#fff7e8\", lineHeight: 1.7 }}>{kernelCompletionDoctrine.rule}</p>"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 88,
+      "marker": "kernel",
+      "text": "<p style={{ color: \"#dffbff\", lineHeight: 1.7 }}>{kernelCompletionDoctrine.sovereignty}</p>"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 89,
+      "marker": "kernel",
+      "text": "<p style={{ color: \"#ffd28a\", lineHeight: 1.7 }}>{kernelCompletionDoctrine.reality}</p>"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 94,
+      "marker": "kernel",
+      "text": "[\"Total\", kernelCompletionStats.total],"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 95,
+      "marker": "foundation",
+      "text": "[\"Foundation\", kernelCompletionStats.foundation],"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 96,
+      "marker": "kernel",
+      "text": "[\"In progress\", kernelCompletionStats.inProgress],"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 97,
+      "marker": "blocked",
+      "text": "[\"Blocked\", kernelCompletionStats.blocked],"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 98,
+      "marker": "kernel",
+      "text": "[\"Critical\", kernelCompletionStats.critical]"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 110,
+      "marker": "kernel",
+      "text": "{kernelCompletionItems.map((item) => ("
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 129,
+      "marker": "kernel",
+      "text": "<p style={gold}>Kernel action</p>"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 130,
+      "marker": "kernel",
+      "text": "<p style={{ color: \"#dffbff\", lineHeight: 1.65 }}>{item.kernelAction}</p>"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 139,
+      "marker": "blocked",
+      "text": "<p style={gold}>Blocked claims</p>"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 141,
+      "marker": "blocked",
+      "text": "{item.blockedClaims.map((entry) => ("
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 151,
+      "marker": "kernel",
+      "text": "<h2 style={{ marginTop: 0, fontSize: 36 }}>Next Kernel actions</h2>"
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 153,
+      "marker": "kernel",
+      "text": "{kernelNextActions.map((action) => ("
+    },
+    {
+      "file": "app/kernel/completion/page.tsx",
+      "line": 164,
+      "marker": "kernel",
+      "text": "<Link href=\"/kernel/audit\" style={{ ...badge, textDecoration: \"none\" }}>Kernel Audit</Link>"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 2,
+      "marker": "kernel",
+      "text": "KERNEL_HARDENING_LEDGER,"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 3,
+      "marker": "kernel",
+      "text": "KERNEL_HARDENING_STATUS_LABELS,"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 4,
+      "marker": "kernel",
+      "text": "getKernelHardeningSummary,"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 5,
+      "marker": "kernel",
+      "text": "} from \"@/core/pantavion/kernel-hardening-ledger\";"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 7,
+      "marker": "kernel",
+      "text": "export default function KernelHardeningPage() {"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 8,
+      "marker": "kernel",
+      "text": "const summary = getKernelHardeningSummary();"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 14,
+      "marker": "kernel",
+      "text": "Pantavion Kernel Control Room"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 18,
+      "marker": "kernel",
+      "text": "Kernel Real-World Hardening Ledger"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 23,
+      "marker": "translation",
+      "text": "SOS boundaries, translation limits, third-party lock-in attempts and recovery pressure."
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 24,
+      "marker": "kernel",
+      "text": "The Kernel does not claim impossible zero failure. It enforces zero uncontrolled risk."
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 30,
+      "marker": "foundation",
+      "text": "<Metric label=\"Active foundation\" value={summary.activeFoundation} />"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 32,
+      "marker": "blocked",
+      "text": "<Metric label=\"Blocked gates\" value={summary.blockedUntilGate} />"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 36,
+      "marker": "kernel",
+      "text": "<strong style={{ color: \"#ffd1d1\" }}>Kernel rule: zero uncontrolled risk.</strong>"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 38,
+      "marker": "provider",
+      "text": "The Kernel must block fake-live claims, dead surfaces, uncontrolled provider dependency, unsafe payment activation,"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 44,
+      "marker": "kernel",
+      "text": "{KERNEL_HARDENING_LEDGER.map((record) => ("
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 62,
+      "marker": "kernel",
+      "text": "<Badge text={KERNEL_HARDENING_STATUS_LABELS[record.status]} />"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 67,
+      "marker": "kernel",
+      "text": "<GridBlock title=\"Kernel duty\" text={record.kernelDuty} />"
+    },
+    {
+      "file": "app/kernel/hardening/page.tsx",
+      "line": 68,
+      "marker": "missing",
+      "text": "<GridBlock title=\"Failure if missing\" text={record.failureIfMissing} />"
+    },
+    {
+      "file": "app/kernel/intake/page.tsx",
+      "line": 52,
+      "marker": "kernel",
+      "text": "export default function KernelIntakePage() {"
+    },
+    {
+      "file": "app/kernel/intake/page.tsx",
+      "line": 59,
+      "marker": "voice",
+      "text": "\"build multilingual voice agents for business lead qualification\","
+    },
+    {
+      "file": "app/kernel/intake/page.tsx",
+      "line": 76,
+      "marker": "kernel",
+      "text": "const res = await fetch(\"/api/kernel/intake\", {"
+    },
+    {
+      "file": "app/kernel/intake/page.tsx",
+      "line": 99,
+      "marker": "kernel",
+      "text": "Pantavion Kernel Intake"
+    },
+    {
+      "file": "app/kernel/intake/page.tsx",
+      "line": 105,
+      "marker": "kernel",
+      "text": "Το kernel παίρνει input τζαι αποφασίζει τι είναι, πού πάει, ποιο segment αφορά,"
+    },
+    {
+      "file": "app/kernel/intake/page.tsx",
+      "line": 114,
+      "marker": "kernel",
+      "text": "placeholder=\"γράψε input για το Pantavion Kernel...\""
+    },
+    {
+      "file": "app/kernel/intake/page.tsx",
+      "line": 134,
+      "marker": "kernel",
+      "text": "href=\"/kernel\""
+    },
+    {
+      "file": "app/kernel/intake/page.tsx",
+      "line": 137,
+      "marker": "kernel",
+      "text": "Open kernel"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 5,
+      "marker": "kernel",
+      "text": "type KernelApiResult = {"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 60,
+      "marker": "requires",
+      "text": "requiresHumanApproval: boolean;"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 125,
+      "marker": "translation",
+      "text": "title: \"Voice translation architecture\","
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 126,
+      "marker": "translation",
+      "text": "text: \"Build kernel routing for STT, TTS, language detect, bidirectional translation and fallback continuity.\""
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 157,
+      "marker": "kernel",
+      "text": "export default function PantavionKernelPage() {"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 163,
+      "marker": "kernel",
+      "text": "const [result, setResult] = useState<KernelApiResult[\"result\"]>();"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 169,
+      "marker": "kernel",
+      "text": "const response = await fetch(\"/api/kernel\", { cache: \"no-store\" });"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 181,
+      "marker": "kernel",
+      "text": "async function runKernel() {"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 186,
+      "marker": "kernel",
+      "text": "const response = await fetch(\"/api/kernel\", {"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 198,
+      "marker": "kernel",
+      "text": "const data: KernelApiResult = await response.json();"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 201,
+      "marker": "kernel",
+      "text": "setError(data.error || \"Kernel execution failed.\");"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 226,
+      "marker": "kernel",
+      "text": "Pantavion Kernel Studio"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 229,
+      "marker": "kernel",
+      "text": "Kernel 0 Execution Surface"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 246,
+      "marker": "kernel",
+      "text": "<SectionCard title=\"Kernel Input\">"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 254,
+      "marker": "kernel",
+      "text": "placeholder=\"Write a kernel title...\""
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 271,
+      "marker": "kernel",
+      "text": "onClick={runKernel}"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 275,
+      "marker": "kernel",
+      "text": "{loading ? \"Running Kernel...\" : \"Run Kernel\"}"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 321,
+      "marker": "kernel",
+      "text": "No kernel result yet. Run the input to see classification, registry mapping,"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 439,
+      "marker": "kernel",
+      "text": "<SectionCard title=\"Kernel Memory\">"
+    },
+    {
+      "file": "app/kernel/page.tsx",
+      "line": 457,
+      "marker": "kernel",
+      "text": "{item.input.title || \"Untitled kernel input\"}"
+    },
+    {
+      "file": "app/kernel/prime-law/page.tsx",
+      "line": 2,
+      "marker": "kernel",
+      "text": "import { primeKernelLaw } from \"@/core/pantavion/prime-kernel-law\";"
+    },
+    {
+      "file": "app/kernel/prime-law/page.tsx",
+      "line": 5,
+      "marker": "kernel",
+      "text": "title: \"Prime Kernel Law | Pantavion One\","
+    },
+    {
+      "file": "app/kernel/prime-law/page.tsx",
+      "line": 7,
+      "marker": "missing",
+      "text": "\"The supreme Pantavion Kernel law: no request, route, capability, section, button, user need, risk or missing function remains dead, empty or unclassified.\""
+    },
+    {
+      "file": "app/kernel/prime-law/page.tsx",
+      "line": 52,
+      "marker": "kernel",
+      "text": "export default function PrimeKernelLawPage() {"
+    },
+    {
+      "file": "app/kernel/prime-law/page.tsx",
+      "line": 61,
+      "marker": "kernel",
+      "text": "Prime Kernel Law"
+    },
+    {
+      "file": "app/kernel/prime-law/page.tsx",
+      "line": 69,
+      "marker": "kernel",
+      "text": "{primeKernelLaw.summary}"
+    },
+    {
+      "file": "app/kernel/prime-law/page.tsx",
+      "line": 73,
+      "marker": "kernel",
+      "text": "<Link href=\"/kernel/audit\" style={goldButton}>Open Kernel Audit</Link>"
+    },
+    {
+      "file": "app/kernel/prime-law/page.tsx",
+      "line": 86,
+      "marker": "kernel",
+      "text": "{primeKernelLaw.command}"
+    },
+    {
+      "file": "app/kernel/prime-law/page.tsx",
+      "line": 91,
+      "marker": "kernel",
+      "text": "{primeKernelLaw.responseStates.map((state) => ("
+    },
+    {
+      "file": "app/kernel/prime-law/page.tsx",
+      "line": 102,
+      "marker": "kernel",
+      "text": "{primeKernelLaw.executionDoctrine.map((rule) => ("
+    },
+    {
+      "file": "app/kernel/prime-law/page.tsx",
+      "line": 113,
+      "marker": "kernel",
+      "text": "{primeKernelLaw.creationPath.map((step, index) => ("
+    },
+    {
+      "file": "app/kernel/prime-law/page.tsx",
+      "line": 125,
+      "marker": "kernel",
+      "text": "{primeKernelLaw.boundaries.map((boundary) => ("
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 4,
+      "marker": "kernel",
+      "text": "title: \"Pantavion Kernel Run | Pantavion One\","
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 6,
+      "marker": "kernel",
+      "text": "\"Pantavion sovereign kernel control room for orchestration, resilience, security, routing and execution.\","
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 9,
+      "marker": "kernel",
+      "text": "const kernelLayers = ["
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 11,
+      "marker": "kernel",
+      "text": "title: \"Prime Kernel\","
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 14,
+      "marker": "identity",
+      "text": "\"Central command layer for identity, intent, routing, memory, safety, resilience and execution coordination.\","
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 32,
+      "marker": "provider",
+      "text": "\"Every capability is registered by purpose, risk, provider requirement, cost profile and execution status.\","
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 38,
+      "marker": "future",
+      "text": "\"Policy, age-gates, reports, legal routes, consent checks, prompt-risk controls and future voice threat detection.\","
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 44,
+      "marker": "requires",
+      "text": "\"The system records what changed, what was repaired, what needs connection and what requires founder approval.\","
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 50,
+      "marker": "foundation",
+      "text": "\"Visible controls route to real surfaces or clearly marked foundation states.\","
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 51,
+      "marker": "foundation",
+      "text": "\"Kernel language rejects fake completion: foundation, connected and regulated layers are separated.\","
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 58,
+      "marker": "kernel",
+      "text": "\"Kernel classification\","
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 65,
+      "marker": "kernel",
+      "text": "export default function KernelRunPage() {"
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 73,
+      "marker": "kernel",
+      "text": "Pantavion Kernel Run"
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 89,
+      "marker": "kernel",
+      "text": "The Kernel is not a weak fallback layer. It is the internal command"
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 91,
+      "marker": "identity",
+      "text": "Pantavion across people, language, media, work, safety, identity,"
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 92,
+      "marker": "future",
+      "text": "AI execution and future voice-native operation."
+    },
+    {
+      "file": "app/kernel/run/page.tsx",
+      "line": 111,
+      "marker": "kernel",
+      "text": "{kernelLayers.map((layer) => ("
+    },
+    {
+      "file": "app/language/LanguageClient.tsx",
+      "line": 31,
+      "marker": "foundation",
+      "text": "<span className=\"pv-status\">Language Bridge Foundation</span>"
+    },
+    {
+      "file": "app/language/LanguageClient.tsx",
+      "line": 34,
+      "marker": "foundation",
+      "text": "Real route + real API shell. It performs foundation dictionary/fallback translation now and is ready"
+    },
+    {
+      "file": "app/language/LanguageClient.tsx",
+      "line": 35,
+      "marker": "provider",
+      "text": "for live provider integration next."
+    },
+    {
+      "file": "app/language/LanguageClient.tsx",
+      "line": 67,
+      "marker": "foundation",
+      "text": "<button className=\"pv-button gold\" type=\"submit\">Translate through foundation bridge</button>"
+    },
+    {
+      "file": "app/layout.tsx",
+      "line": 5,
+      "marker": "translation",
+      "text": "import PantaTranslateFloatingWidget from \"@/components/translation/PantaTranslateFloatingWidget\";"
+    },
+    {
+      "file": "app/layout.tsx",
+      "line": 22,
+      "marker": "database",
+      "text": "metadataBase: new URL(siteUrl),"
+    },
+    {
+      "file": "app/layout.tsx",
+      "line": 35,
+      "marker": "sos",
+      "text": "\"SOS\","
+    },
+    {
+      "file": "app/layout.tsx",
+      "line": 36,
+      "marker": "translation",
+      "text": "\"translation\","
+    },
+    {
+      "file": "app/layout.tsx",
+      "line": 39,
+      "marker": "social",
+      "text": "\"social platform\","
+    },
+    {
+      "file": "app/layout.tsx",
+      "line": 42,
+      "marker": "auth",
+      "text": "authors: [{ name: \"George Nicolaou\" }],"
+    },
+    {
+      "file": "app/legal/page.tsx",
+      "line": 6,
+      "marker": "foundation",
+      "text": "description: \"Legal and trust foundation.\","
+    },
+    {
+      "file": "app/life-connector/page.tsx",
+      "line": 9,
+      "marker": "provider-required",
+      "text": "[\"Email contacts\", \"OAuth/provider-required\"],"
+    },
+    {
+      "file": "app/life-connector/page.tsx",
+      "line": 11,
+      "marker": "provider-required",
+      "text": "[\"Email hub\", \"OAuth/provider-required\"],"
+    },
+    {
+      "file": "app/life-connector/page.tsx",
+      "line": 13,
+      "marker": "provider-required",
+      "text": "[\"Calendar\", \"OAuth/provider-required\"],"
+    },
+    {
+      "file": "app/life-connector/page.tsx",
+      "line": 14,
+      "marker": "database",
+      "text": "[\"Birthdays\", \"Local-first/database-required\"],"
+    },
+    {
+      "file": "app/life-connector/page.tsx",
+      "line": 15,
+      "marker": "database",
+      "text": "[\"Notes and tasks\", \"Local-first/database-required\"],"
+    },
+    {
+      "file": "app/life-connector/page.tsx",
+      "line": 31,
+      "marker": "provider",
+      "text": "without explicit consent and real provider/OS permission."
+    },
+    {
+      "file": "app/life-connector/page.tsx",
+      "line": 45,
+      "marker": "auth",
+      "text": "Email and calendar require OAuth/provider consent. App contacts require official APIs or legal exports."
+    },
+    {
+      "file": "app/live-core/page.tsx",
+      "line": 26,
+      "marker": "kernel",
+      "text": "Pantavion Sovereign Kernel"
+    },
+    {
+      "file": "app/live-core/page.tsx",
+      "line": 42,
+      "marker": "translation",
+      "text": "It is the public checkpoint for kernel, safety, translation, SOS,"
+    },
+    {
+      "file": "app/live-core/page.tsx",
+      "line": 43,
+      "marker": "future",
+      "text": "and future execution orchestration layers."
+    },
+    {
+      "file": "app/live-core/page.tsx",
+      "line": 51,
+      "marker": "foundation",
+      "text": "{[\"Kernel Status\",\"Health Check\",\"PantaAI Execute\",\"Safety Foundation\"].map((item) => ("
+    },
+    {
+      "file": "app/manifest.ts",
+      "line": 8,
+      "marker": "identity",
+      "text": "\"Pantavion emergency layer for phones, tablets, desktops, PWA, offline identity, and truth-governed rescue workflows.\","
+    },
+    {
+      "file": "app/market/page.tsx",
+      "line": 33,
+      "marker": "marketplace",
+      "text": "Marketplace"
+    },
+    {
+      "file": "app/memory/page.tsx",
+      "line": 33,
+      "marker": "auth",
+      "text": "{ label: 'Access', value: 'authenticated' },"
+    },
+    {
+      "file": "app/minors/page.tsx",
+      "line": 54,
+      "marker": "foundation",
+      "text": "Foundation"
+    },
+    {
+      "file": "app/newspaper/page.tsx",
+      "line": 14,
+      "marker": "approval",
+      "text": "text: \"Cities, villages, diaspora groups, events and institutions can publish structured public announcements after approval.\","
+    },
+    {
+      "file": "app/newspaper/page.tsx",
+      "line": 17,
+      "marker": "marketplace",
+      "text": "title: \"Marketplace lifecycle\","
+    },
+    {
+      "file": "app/newspaper/page.tsx",
+      "line": 50,
+      "marker": "planned",
+      "text": "This is the planned public surface for professional promotion, classifieds,"
+    },
+    {
+      "file": "app/newspaper/page.tsx",
+      "line": 51,
+      "marker": "sos",
+      "text": "requests, community announcements and regional discovery. It is separate from SOS,"
+    },
+    {
+      "file": "app/newspaper/page.tsx",
+      "line": 57,
+      "marker": "provider",
+      "text": "automated checkout, publishing and expiry automation require provider/payment,"
+    },
+    {
+      "file": "app/newspaper/page.tsx",
+      "line": 58,
+      "marker": "database",
+      "text": "database, moderation and legal workflow before being marked live."
+    },
+    {
+      "file": "app/no-dead-surfaces/page.tsx",
+      "line": 23,
+      "marker": "foundation",
+      "text": "governance link and product surface must have a real route, an honest foundation status,"
+    },
+    {
+      "file": "app/no-dead-surfaces/page.tsx",
+      "line": 24,
+      "marker": "blocked",
+      "text": "a disabled state, or a blocked gate. No empty buttons. No fake-live claims."
+    },
+    {
+      "file": "app/no-dead-surfaces/page.tsx",
+      "line": 30,
+      "marker": "foundation",
+      "text": "<Metric label=\"Foundation routes\" value={summary.foundationRoutes} />"
+    },
+    {
+      "file": "app/no-dead-surfaces/page.tsx",
+      "line": 31,
+      "marker": "blocked",
+      "text": "<Metric label=\"Blocked/disabled\" value={summary.blockedOrDisabled} />"
+    },
+    {
+      "file": "app/no-dead-surfaces/page.tsx",
+      "line": 69,
+      "marker": "blocked",
+      "text": "<GridBlock title=\"Blocked claim\" text={surface.blockedClaim} />"
+    },
+    {
+      "file": "app/panta-ai/page.tsx",
+      "line": 2,
+      "marker": "guardian",
+      "text": "title: \"PantaAI | Public, Personal and Internal Guardian Kernel\","
+    },
+    {
+      "file": "app/panta-ai/page.tsx",
+      "line": 4,
+      "marker": "database",
+      "text": "\"PantaAI truth page: public AI, personal AI and internal Internal Guardian Kernel are separate layers with provider, database, privacy and audit requirements.\","
+    },
+    {
+      "file": "app/panta-ai/page.tsx",
+      "line": 10,
+      "marker": "provider-required",
+      "text": "status: \"Provider-required\","
+    },
+    {
+      "file": "app/panta-ai/page.tsx",
+      "line": 11,
+      "marker": "translation",
+      "text": "text: \"The public AI should answer about Pantavion, translation, safety, work and learning. It must not make medical, legal, financial or emergency authority claims.\","
+    },
+    {
+      "file": "app/panta-ai/page.tsx",
+      "line": 15,
+      "marker": "auth",
+      "text": "status: \"Database/auth-required\","
+    },
+    {
+      "file": "app/panta-ai/page.tsx",
+      "line": 16,
+      "marker": "auth",
+      "text": "text: \"Each user assistant needs auth, profile, age role, language, country, consent, memory policy and provider routing before being live.\","
+    },
+    {
+      "file": "app/panta-ai/page.tsx",
+      "line": 19,
+      "marker": "guardian",
+      "text": "title: \"Internal Guardian Kernel\","
+    },
+    {
+      "file": "app/panta-ai/page.tsx",
+      "line": 21,
+      "marker": "missing",
+      "text": "text: \"Internal Guardian Kernel must check broken routes, dead buttons, debug text, unsafe SOS claims, language mismatch and missing requirements before auto-actions.\","
+    },
+    {
+      "file": "app/panta-ai/page.tsx",
+      "line": 35,
+      "marker": "auth",
+      "text": "and internal Internal Guardian Kernel for audits. Anything not connected to provider/auth/database"
+    },
+    {
+      "file": "app/pantaai/page.tsx",
+      "line": 43,
+      "marker": "sos",
+      "text": "<Link href=\"/sos\" style={button(\"#ef2e37\", \"white\")}>SOS</Link>"
+    },
+    {
+      "file": "app/pantavion/emergency/device-support/DeviceCapabilityPanel.tsx",
+      "line": 155,
+      "marker": "missing",
+      "text": "what works on this device and degrade safely when something is missing."
+    },
+    {
+      "file": "app/pantavion/emergency/evidence/page.tsx",
+      "line": 141,
+      "marker": "future",
+      "text": "unless the user downloads or shares it. Future versions can encrypt,"
+    },
+    {
+      "file": "app/pantavion/emergency/evidence/page.tsx",
+      "line": 142,
+      "marker": "provider",
+      "text": "queue, and upload evidence to trusted contacts when a provider is configured."
+    },
+    {
+      "file": "app/pantavion/emergency/evidence/page.tsx",
+      "line": 149,
+      "marker": "requires",
+      "text": "capture requires native app/platform support and strict consent rules."
+    },
+    {
+      "file": "app/pantavion/emergency/extreme-offgrid/page.tsx",
+      "line": 2,
+      "marker": "sos",
+      "text": "extremeSosDoctrine,"
+    },
+    {
+      "file": "app/pantavion/emergency/extreme-offgrid/page.tsx",
+      "line": 3,
+      "marker": "sos",
+      "text": "sosCapabilityTruth,"
+    },
+    {
+      "file": "app/pantavion/emergency/extreme-offgrid/page.tsx",
+      "line": 4,
+      "marker": "sos",
+      "text": "} from \"@/core/emergency/extreme-sos-capability\";"
+    },
+    {
+      "file": "app/pantavion/emergency/extreme-offgrid/page.tsx",
+      "line": 11,
+      "marker": "sos",
+      "text": "Extreme Off-grid SOS"
+    },
+    {
+      "file": "app/pantavion/emergency/extreme-offgrid/page.tsx",
+      "line": 15,
+      "marker": "sos",
+      "text": "{extremeSosDoctrine.title}"
+    },
+    {
+      "file": "app/pantavion/emergency/extreme-offgrid/page.tsx",
+      "line": 19,
+      "marker": "sos",
+      "text": "{extremeSosDoctrine.mission}"
+    },
+    {
+      "file": "app/pantavion/emergency/extreme-offgrid/page.tsx",
+      "line": 23,
+      "marker": "sos",
+      "text": "<p className=\"text-2xl font-bold\">{extremeSosDoctrine.operatingLaw}</p>"
+    },
+    {
+      "file": "app/pantavion/emergency/extreme-offgrid/page.tsx",
+      "line": 28,
+      "marker": "sos",
+      "text": "<p className=\"mt-2 text-sm leading-6\">{extremeSosDoctrine.truthBoundary}</p>"
+    },
+    {
+      "file": "app/pantavion/emergency/extreme-offgrid/page.tsx",
+      "line": 32,
+      "marker": "sos",
+      "text": "{sosCapabilityTruth.map((group) => ("
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 5,
+      "marker": "sos",
+      "text": "createSosPacket,"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 6,
+      "marker": "sos",
+      "text": "loadSosProfile,"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 7,
+      "marker": "sos",
+      "text": "queueSosPacket,"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 8,
+      "marker": "sos",
+      "text": "} from \"@/core/emergency/sos-storage\";"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 9,
+      "marker": "sos",
+      "text": "import type { PantavionSosLocation, PantavionSosProfile } from \"@/types/pantavion-sos\";"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 11,
+      "marker": "guardian",
+      "text": "type GuardianPlan = {"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 23,
+      "marker": "guardian",
+      "text": "const GUARDIAN_KEY = \"pantavion.guardian.plan.v1\";"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 36,
+      "marker": "guardian",
+      "text": "function defaultPlan(): GuardianPlan {"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 42,
+      "marker": "sos",
+      "text": "deadlineLocal: deadline.toISOString().slice(0, 16),"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 51,
+      "marker": "guardian",
+      "text": "function loadPlan(): GuardianPlan {"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 55,
+      "marker": "guardian",
+      "text": "const raw = window.localStorage.getItem(GUARDIAN_KEY);"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 57,
+      "marker": "guardian",
+      "text": "return { ...defaultPlan(), ...(JSON.parse(raw) as Partial<GuardianPlan>) };"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 63,
+      "marker": "guardian",
+      "text": "function savePlan(plan: GuardianPlan) {"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 64,
+      "marker": "guardian",
+      "text": "window.localStorage.setItem(GUARDIAN_KEY, JSON.stringify(plan));"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 67,
+      "marker": "sos",
+      "text": "function toLocation(position: GeolocationPosition): PantavionSosLocation {"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 77,
+      "marker": "sos",
+      "text": "timestamp: new Date(position.timestamp).toISOString(),"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 81,
+      "marker": "guardian",
+      "text": "export default function GuardianModePage() {"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 82,
+      "marker": "guardian",
+      "text": "const [plan, setPlan] = useState<GuardianPlan>(defaultPlan());"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 83,
+      "marker": "sos",
+      "text": "const [profile, setProfile] = useState<PantavionSosProfile | null>(null);"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 84,
+      "marker": "sos",
+      "text": "const [location, setLocation] = useState<PantavionSosLocation | null>(null);"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 86,
+      "marker": "guardian",
+      "text": "const [status, setStatus] = useState(\"Guardian Mode ready.\");"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 91,
+      "marker": "sos",
+      "text": "setProfile(loadSosProfile());"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 114,
+      "marker": "sos",
+      "text": "const currentProfile = profile ?? loadSosProfile();"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 115,
+      "marker": "sos",
+      "text": "const packet = createSosPacket(currentProfile, location, !navigator.onLine);"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 116,
+      "marker": "sos",
+      "text": "queueSosPacket(packet);"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 123,
+      "marker": "sos",
+      "text": "\"Missed check-in: SOS packet queued locally. If the device is online, open /sos and replay queued SOS.\""
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 127,
+      "marker": "guardian",
+      "text": "function updatePlan<K extends keyof GuardianPlan>(key: K, value: GuardianPlan[K]) {"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 146,
+      "marker": "guardian",
+      "text": "setStatus(\"Location captured for Guardian Mode.\");"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 155,
+      "marker": "guardian",
+      "text": "function startGuardian() {"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 159,
+      "marker": "sos",
+      "text": "setError(\"Consent is required before Guardian Mode can arm a missed-check-in SOS.\");"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 164,
+      "marker": "sos",
+      "text": "setProfile(loadSosProfile());"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 171,
+      "marker": "sos",
+      "text": "startedAt: new Date().toISOString(),"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 176,
+      "marker": "sos",
+      "text": "setStatus(\"Guardian Mode armed. If check-in is missed while this page/PWA is active, an SOS packet will be queued.\");"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 183,
+      "marker": "sos",
+      "text": "deadlineLocal: deadline.toISOString().slice(0, 16),"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 190,
+      "marker": "guardian",
+      "text": "setStatus(\"Check-in received. Guardian deadline extended.\");"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 193,
+      "marker": "guardian",
+      "text": "function stopGuardian() {"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 197,
+      "marker": "guardian",
+      "text": "setStatus(\"Guardian Mode stopped.\");"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 200,
+      "marker": "sos",
+      "text": "function forceQueueTestSos() {"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 201,
+      "marker": "sos",
+      "text": "const currentProfile = profile ?? loadSosProfile();"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 202,
+      "marker": "sos",
+      "text": "const packet = createSosPacket(currentProfile, location, !navigator.onLine);"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 203,
+      "marker": "sos",
+      "text": "queueSosPacket(packet);"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 204,
+      "marker": "sos",
+      "text": "setStatus(\"TEST SOS packet queued locally. Open /sos to replay queued SOS.\");"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 211,
+      "marker": "sos",
+      "text": "Pantavion No-Touch SOS"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 215,
+      "marker": "guardian",
+      "text": "Guardian Mode"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 221,
+      "marker": "sos",
+      "text": "page/PWA is active, Pantavion queues an SOS packet for your trusted"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 228,
+      "marker": "guardian",
+      "text": "Browser/PWA Guardian Mode can run while the page/app is active."
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 229,
+      "marker": "requires",
+      "text": "Reliable background crash/fall/no-movement detection requires a"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 230,
+      "marker": "future",
+      "text": "future native app, operating-system permissions, and/or wearable or"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 275,
+      "marker": "planned",
+      "text": "placeholder=\"Vehicle, plate, group, planned route, weather, terrain, medical risk, hunting area, expected return...\""
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 295,
+      "marker": "guardian",
+      "text": "<p className=\"text-sm text-slate-300\">Guardian status</p>"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 314,
+      "marker": "guardian",
+      "text": "I consent to Pantavion Guardian Mode storing this plan locally,"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 316,
+      "marker": "sos",
+      "text": "SOS packet to my trusted-contact flow if I miss check-in. I understand"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 326,
+      "marker": "guardian",
+      "text": "<button onClick={startGuardian} className=\"rounded-2xl border border-yellow-300/30 bg-yellow-300/10 px-5 py-4 text-left font-bold text-yellow-100 hover:bg-yellow-300/20\">"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 327,
+      "marker": "guardian",
+      "text": "Start Guardian Mode"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 332,
+      "marker": "guardian",
+      "text": "<button onClick={stopGuardian} className=\"rounded-2xl border border-red-300/30 bg-red-500/10 px-5 py-4 text-left font-bold text-red-100 hover:bg-red-500/20\">"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 333,
+      "marker": "guardian",
+      "text": "Stop Guardian"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 335,
+      "marker": "sos",
+      "text": "<button onClick={forceQueueTestSos} className=\"rounded-2xl border border-white/15 bg-white/5 px-5 py-4 text-left font-bold hover:bg-white/10\">"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 336,
+      "marker": "sos",
+      "text": "Queue TEST SOS packet"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 338,
+      "marker": "sos",
+      "text": "<a href=\"/sos\" className=\"rounded-2xl border border-red-300/30 bg-red-600 px-5 py-4 text-left font-bold text-white hover:bg-red-500\">"
+    },
+    {
+      "file": "app/pantavion/emergency/guardian/page.tsx",
+      "line": 339,
+      "marker": "sos",
+      "text": "Open Real SOS"
+    },
+    {
+      "file": "app/pantavion/emergency/page.tsx",
+      "line": 22,
+      "marker": "future",
+      "text": "\"future-roadmap\": \"futureRoadmap\","
+    },
+    {
+      "file": "app/pantavion/emergency/page.tsx",
+      "line": 132,
+      "marker": "requires",
+      "text": "{layer.requiresSpecialHardware ? copy.required : copy.notRequired}"
+    },
+    {
+      "file": "app/pantavion/emergency/page.tsx",
+      "line": 138,
+      "marker": "requires",
+      "text": "{layer.requiresInstitutionalAgreement ? copy.required : copy.notRequired}"
+    },
+    {
+      "file": "app/pantavion/emergency/partners/page.tsx",
+      "line": 104,
+      "marker": "approval",
+      "text": "I confirm this is an official institutional or partner inquiry. I understand this does not create dispatch authority, emergency routing, or legal integration until Pantavion and the institution complete verified agreements and technical approval."
+    },
+    {
+      "file": "app/pantavion/emergency/profile/page.tsx",
+      "line": 6,
+      "marker": "sos",
+      "text": "PantavionSosContact,"
+    },
+    {
+      "file": "app/pantavion/emergency/profile/page.tsx",
+      "line": 7,
+      "marker": "sos",
+      "text": "PantavionSosProfile,"
+    },
+    {
+      "file": "app/pantavion/emergency/profile/page.tsx",
+      "line": 8,
+      "marker": "sos",
+      "text": "} from \"@/types/pantavion-sos\";"
+    },
+    {
+      "file": "app/pantavion/emergency/profile/page.tsx",
+      "line": 10,
+      "marker": "sos",
+      "text": "createDefaultSosProfile,"
+    }
+  ]
+}
