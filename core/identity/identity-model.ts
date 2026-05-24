@@ -89,6 +89,10 @@ export function hasRequiredScopes(
   return requiredScopes.every((scope) => resolution.effectiveScopes.includes(scope));
 }
 
+
+export function registerIdentity(actor: PantavionActorRef): PantavionIdentityProfile {
+  return buildIdentityProfile(actor);
+}
 export const identityModel = {
   id: "pantavion_identity_model_v1",
   systemIdentity: SYSTEM_KERNEL_IDENTITY,
