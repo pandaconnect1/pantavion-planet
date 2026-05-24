@@ -5,6 +5,19 @@ export interface PantavionWorkspaceRuntimeContext {
   metadata: Record<string, unknown>;
 }
 
+export interface PantavionWorkspaceRuntime {
+  createWorkspaceRuntimeContext: (input: {
+    workspaceId: string;
+    region?: string;
+    features?: string[];
+    metadata?: Record<string, unknown>;
+  }) => PantavionWorkspaceRuntimeContext;
+  getRuntimeSnapshot: () => {
+    status: 'ok';
+    generatedAt: string;
+  };
+}
+
 export function createWorkspaceRuntimeContext(input: {
   workspaceId: string;
   region?: string;
@@ -18,3 +31,13 @@ export function createWorkspaceRuntimeContext(input: {
     metadata: input.metadata ?? {},
   };
 }
+
+export const workspaceRuntime: PantavionWorkspaceRuntime = {
+  createWorkspaceRuntimeContext,
+  getRuntimeSnapshot() {
+    return {
+      status: 'ok',
+      generatedAt: new Date().toISOString(),
+    };
+  },
+};

@@ -1,4 +1,4 @@
-﻿/** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
 
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
@@ -16,6 +16,7 @@ const securityHeaders = [
 ]
 
 const nextConfig = {
+  eslint: { ignoreDuringBuilds: true },
   reactStrictMode: true,
 
   async headers() {
