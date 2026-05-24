@@ -88,3 +88,11 @@ export function hasRequiredScopes(
 ): boolean {
   return requiredScopes.every((scope) => resolution.effectiveScopes.includes(scope));
 }
+
+export const identityModel = {
+  id: "pantavion_identity_model_v1",
+  systemIdentity: SYSTEM_KERNEL_IDENTITY,
+  buildIdentityProfile,
+  resolveIdentity,
+  hasRequiredScopes,
+} as const;
