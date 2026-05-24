@@ -122,7 +122,7 @@ export default function WaterMultimodalLanguageConsole() {
     recognition.interimResults = false;
     recognition.continuous = false;
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: any) => {
       const lastResult = event.results[event.results.length - 1];
       const transcript = lastResult?.[0]?.transcript ?? "";
 
