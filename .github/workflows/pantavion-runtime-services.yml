@@ -1,0 +1,57 @@
+name: pantavion-runtime-services
+
+on:
+  push:
+    branches: ['main', 'pantavion-runtime-services', 'pantavion-runtime-stabilize']
+    paths:
+      - 'services/**'
+      - 'db/schema/**'
+      - 'scripts/pantavion-runtime-smoke.cjs'
+      - '.github/workflows/pantavion-runtime-services.yml'
+      - 'core/**'
+      - 'types/**'
+  pull_request:
+    paths:
+      - 'services/**'
+      - 'db/schema/**'
+      - 'scripts/pantavion-runtime-smoke.cjs'
+      - '.github/workflows/pantavion-runtime-services.yml'
+      - 'core/**'
+      - 'types/**'
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  runtime-services:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Build
+        run: npm run build
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Foundation guardian
+        run: node scripts/pantavion-guardian.cjs
+
+      - name: Runtime smoke
+        run: node scripts/pantavion-runtime-smoke.cjs

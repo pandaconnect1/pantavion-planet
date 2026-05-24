@@ -28,3 +28,16 @@ export function createProtocolGateway(): PantavionProtocolGateway {
     },
   };
 }
+
+export const pantavionFoundation } from './kernel-bootstrap';
+import { runPantavionKernelIntegration } from './kernel-integration-runner';
+import { evaluateKernelAdmissionPolicy } from './kernel-admission-policy';
+import { getKernelTaxonomySnapshot } from './kernel-taxonomy';
+import { getCapabilityFamilyRegistrySnapshot } from '../registry/capability-family-registry';
+import { getProtocolGatewayStats: any = undefined;
+export type pantavionFoundation } from './kernel-bootstrap';
+import { runPantavionKernelIntegration } from './kernel-integration-runner';
+import { evaluateKernelAdmissionPolicy } from './kernel-admission-policy';
+import { getKernelTaxonomySnapshot } from './kernel-taxonomy';
+import { getCapabilityFamilyRegistrySnapshot } from '../registry/capability-family-registry';
+import { getProtocolGatewayStats = any;
