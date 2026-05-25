@@ -1,4 +1,4 @@
-import type { PantavionScope } from '../../types/pantavion';
+﻿import type { PantavionScope } from '../../types/pantavion';
 import type { PantavionAuthorityProof, PantavionIdentityProfile } from './identity-model';
 
 export interface PantavionDelegationGrant {
@@ -46,3 +46,41 @@ export function evaluateDelegation(
     },
   };
 }
+
+export function createDelegation(input: {
+  kind: string;
+  principalId: string;
+  delegateId: string;
+  scope: string;
+  reason: string;
+  issuedAt?: string;
+  expiresAt?: string;
+}): PantavionDelegationGrant {
+  const now = input.issuedAt || new Date().toISOString();
+
+  return {
+    id: `delegation_${input.kind}_${input.principalId}_${input.delegateId}_${Date.parse(now)}`,
+    kind: input.kind,
+    principalId: input.principalId,
+    delegateId: input.delegateId,
+    grantorId: input.principalId,
+    granteeId: input.delegateId,
+    scope: input.scope,
+    scopes: [input.scope],
+    reason: input.reason,
+    issuedAt: now,
+    expiresAt: input.expiresAt || null,
+    status: "active",
+    active: true,
+  } as unknown as PantavionDelegationGrant;
+}
+
+export type PantavionDelegationRecord = PantavionDelegationGrant;
+
+export const delegationModel = {
+  createDelegation,
+  evaluateDelegation,
+  create: createDelegation,
+  evaluate: evaluateDelegation,
+};
+

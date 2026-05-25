@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   PantavionExecutionReceipt,
   PantavionProtocolEnvelope,
 } from './protocol-types';
@@ -40,3 +40,90 @@ import { runPantavionKernelIntegration } from './kernel-integration-runner';
 import { evaluateKernelAdmissionPolicy } from './kernel-admission-policy';
 import { getKernelTaxonomySnapshot } from './kernel-taxonomy';
 import { getCapabilityFamilyRegistrySnapshot } from '../registry/capability-family-registry';
+
+type PantavionProtocolRegistryEntry = {
+  key: string;
+  value: unknown;
+  registeredAt: string;
+};
+
+const foundationProtocolAdapters: PantavionProtocolRegistryEntry[] = [];
+const protocolHandlers: PantavionProtocolRegistryEntry[] = [];
+
+function getRegistryKey(value: unknown, fallbackPrefix: string) {
+  if (typeof value === "string" && value.trim()) return value.trim();
+
+  if (value && typeof value === "object") {
+    const record = value as { key?: unknown; id?: unknown; name?: unknown };
+
+    if (typeof record.key === "string" && record.key.trim()) return record.key.trim();
+    if (typeof record.id === "string" && record.id.trim()) return record.id.trim();
+    if (typeof record.name === "string" && record.name.trim()) return record.name.trim();
+  }
+
+  return `${fallbackPrefix}_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+}
+
+export function registerFoundationProtocolAdapter(
+  keyOrAdapter: string | unknown,
+  maybeAdapter?: unknown,
+) {
+  const key =
+    typeof keyOrAdapter === "string"
+      ? keyOrAdapter
+      : getRegistryKey(keyOrAdapter, "foundation_adapter");
+
+  const value = typeof keyOrAdapter === "string" ? maybeAdapter : keyOrAdapter;
+
+  const entry = {
+    key,
+    value,
+    registeredAt: new Date().toISOString(),
+  };
+
+  foundationProtocolAdapters.push(entry);
+
+  return entry;
+}
+
+export function registerProtocolHandler(
+  keyOrHandler: string | unknown,
+  maybeHandler?: unknown,
+) {
+  const key =
+    typeof keyOrHandler === "string"
+      ? keyOrHandler
+      : getRegistryKey(keyOrHandler, "protocol_handler");
+
+  const value = typeof keyOrHandler === "string" ? maybeHandler : keyOrHandler;
+
+  const entry = {
+    key,
+    value,
+    registeredAt: new Date().toISOString(),
+  };
+
+  protocolHandlers.push(entry);
+
+  return entry;
+}
+
+export function getProtocolRegistrySnapshot() {
+  return {
+    foundationProtocolAdapters: foundationProtocolAdapters.map((entry) => ({
+      key: entry.key,
+      registeredAt: entry.registeredAt,
+    })),
+    protocolHandlers: protocolHandlers.map((entry) => ({
+      key: entry.key,
+      registeredAt: entry.registeredAt,
+    })),
+    totals: {
+      foundationProtocolAdapters: foundationProtocolAdapters.length,
+      protocolHandlers: protocolHandlers.length,
+    },
+  };
+}
+
+export const protocolGateway = createProtocolGateway();
+

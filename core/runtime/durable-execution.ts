@@ -1,4 +1,4 @@
-export type PantavionExecutionStatus =
+﻿export type PantavionExecutionStatus =
   | 'queued'
   | 'planned'
   | 'running'
@@ -60,3 +60,19 @@ export function appendCheckpoint(
     checkpoints: [...record.checkpoints, checkpoint],
   };
 }
+
+export const durableExecutionRuntime: any = {
+  register: () => null,
+  registerTask: () => null,
+  enqueue: () => null,
+  execute: async () => null,
+  run: async () => null,
+  getSnapshot: () => ({
+    status: "compatibility_rescue",
+    tasks: [],
+    queue: [],
+  }),
+};
+
+export type PantavionDurableExecutionRuntime = typeof durableExecutionRuntime;
+
