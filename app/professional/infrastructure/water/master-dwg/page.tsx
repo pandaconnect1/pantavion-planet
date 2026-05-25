@@ -3,73 +3,133 @@
 import Link from "next/link";
 import { useState } from "react";
 
-const MASTER_API = "/api/professional/infrastructure/water/master-dwg";
-const MASTER_FILE_NAME = "PANTAVION_WATER_MASTER_B.dwg";
+const DOWNLOAD_FILE_NAME = "PANTAVION_WATER_MASTER_B.dwg";
 
-function readLocalValue(keys: string[]) {
-  if (typeof window === "undefined") return "";
-
-  for (const key of keys) {
-    const value = window.localStorage.getItem(key);
-    if (value && value.trim()) return value.trim();
+function readApprovedWaterDevice() {
+  if (typeof window === "undefined") {
+    return { deviceId: "", deviceToken: "" };
   }
 
-  return "";
-}
-
-function readAccessHeaders() {
-  const headers = new Headers();
-
-  const founderCode = readLocalValue([
-    "pantavion.water.admin.founderCode.v1",
-    "pantavion_water_founder_access_code",
-    "pantavion-water-founder-access-code",
-    "waterFounderAccessCode",
-  ]);
-
-  const deviceId = readLocalValue([
-    "pantavion:water:device-id:v1",
+  const directIdKeys = [
     "pantavion_water_device_id",
     "pantavion-water-device-id",
     "pantavion_water_approved_device_id",
     "pantavion-water-approved-device-id",
     "waterDeviceId",
     "water_device_id",
-  ]);
+  ];
 
-  const deviceToken = readLocalValue([
-    "pantavion:water:device-token:v1",
+  const directTokenKeys = [
     "pantavion_water_device_token",
     "pantavion-water-device-token",
     "pantavion_water_approved_device_token",
     "pantavion-water-approved-device-token",
     "waterDeviceToken",
     "water_device_token",
-  ]);
+  ];
 
-  if (founderCode) headers.set("x-pantavion-water-founder-code", founderCode);
-  if (deviceId && deviceToken) {
-    headers.set("x-pantavion-water-device-id", deviceId);
-    headers.set("x-pantavion-water-device-token", deviceToken);
+  for (const idKey of directIdKeys) {
+    const deviceId = window.localStorage.getItem(idKey) || "";
+
+    if (!deviceId) continue;
+
+    for (const tokenKey of directTokenKeys) {
+      const deviceToken = window.localStorage.getItem(tokenKey) || "";
+
+      if (deviceToken) {
+        return { deviceId, deviceToken };
+      }
+    }
   }
 
-  return headers;
+  const jsonKeys = [
+    "pantavion_water_access_device",
+    "pantavion-water-access-device",
+    "pantavion_water_approved_device",
+    "pantavion-water-approved-device",
+    "waterAccessDevice",
+    "waterApprovedDevice",
+    "waterAdminSession",
+    "pantavion_water_admin_session",
+  ];
+
+  for (const key of jsonKeys) {
+    const raw = window.localStorage.getItem(key);
+
+    if (!raw) continue;
+
+    try {
+      const parsed = JSON.parse(raw) as {
+        deviceId?: unknown;
+        id?: unknown;
+        deviceToken?: unknown;
+        token?: unknown;
+      };
+
+      const deviceId = String(parsed.deviceId || parsed.id || "");
+      const deviceToken = String(parsed.deviceToken || parsed.token || "");
+
+      if (deviceId && deviceToken) {
+        return { deviceId, deviceToken };
+      }
+    } catch {
+      // Ignore invalid localStorage JSON.
+    }
+  }
+
+  for (let index = 0; index < window.localStorage.length; index += 1) {
+    const key = window.localStorage.key(index) || "";
+
+    if (!key.toLowerCase().includes("water")) continue;
+
+    const raw = window.localStorage.getItem(key);
+
+    if (!raw) continue;
+
+    try {
+      const parsed = JSON.parse(raw) as {
+        deviceId?: unknown;
+        id?: unknown;
+        deviceToken?: unknown;
+        token?: unknown;
+      };
+
+      const deviceId = String(parsed.deviceId || parsed.id || "");
+      const deviceToken = String(parsed.deviceToken || parsed.token || "");
+
+      if (deviceId && deviceToken) {
+        return { deviceId, deviceToken };
+      }
+    } catch {
+      // Ignore non-JSON localStorage values.
+    }
+  }
+
+  return { deviceId: "", deviceToken: "" };
 }
 
 export default function WaterMasterDwgPage() {
   const [status, setStatus] = useState("ready");
   const [details, setDetails] = useState("");
 
-  async function openOriginalMaster() {
+  async function openMasterB() {
     setStatus("opening");
     setDetails("");
 
+    const approvedDevice = readApprovedWaterDevice();
+    const headers = new Headers();
+
+    if (approvedDevice.deviceId && approvedDevice.deviceToken) {
+      headers.set("x-pantavion-water-device-id", approvedDevice.deviceId);
+      headers.set("x-pantavion-water-device-token", approvedDevice.deviceToken);
+    }
+
     try {
-      const response = await fetch(MASTER_API, {
+      const response = await fetch("/api/professional/infrastructure/water/master-dwg", {
         method: "GET",
         cache: "no-store",
         credentials: "same-origin",
-        headers: readAccessHeaders(),
+        headers,
       });
 
       if (!response.ok) {
@@ -82,7 +142,7 @@ export default function WaterMasterDwgPage() {
       const link = document.createElement("a");
 
       link.href = objectUrl;
-      link.download = MASTER_FILE_NAME;
+      link.download = DOWNLOAD_FILE_NAME;
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -92,10 +152,10 @@ export default function WaterMasterDwgPage() {
       }, 15000);
 
       setStatus("ok");
-      setDetails("ORIGINAL_MASTER_B_OPENED");
+      setDetails("MASTER_B_OPENED");
     } catch (error) {
       setStatus("error");
-      setDetails(error instanceof Error ? error.message : "MASTER_B_ACCESS_FAILED");
+      setDetails(error instanceof Error ? error.message : "ACCESS_DENIED");
     }
   }
 
@@ -111,7 +171,7 @@ export default function WaterMasterDwgPage() {
         </h1>
 
         <p className="mt-4 max-w-3xl text-sm font-semibold leading-6 text-slate-300">
-          Επιλογή ενός χάρτη κάθε φορά. Ο Master Β ανοίγει από το γνήσιο DWG αρχείο.
+          Επιλογή χάρτη για εγκεκριμένους χρήστες και διαχειριστές.
         </p>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -133,7 +193,7 @@ export default function WaterMasterDwgPage() {
 
           <button
             type="button"
-            onClick={() => void openOriginalMaster()}
+            onClick={() => void openMasterB()}
             disabled={status === "opening"}
             className="rounded-2xl border border-[#f2c766] bg-[#f2c766]/15 p-5 text-left transition hover:bg-[#f2c766]/25 disabled:cursor-not-allowed disabled:opacity-60"
           >
@@ -142,20 +202,17 @@ export default function WaterMasterDwgPage() {
             </p>
             <h2 className="mt-2 text-2xl font-black">Master χάρτης</h2>
             <p className="mt-2 text-sm font-semibold text-slate-300">
-              Γνήσιο DWG Master B. Το αρχείο δεν αλλάζει και δεν αλλοιώνεται.
+              Γνήσιος DWG Master για εγκεκριμένη πρόσβαση.
             </p>
             <p className="mt-4 text-sm font-black text-[#f8e6ad]">
-              {status === "opening" ? "OPENING MASTER..." : "OPEN ORIGINAL MASTER B"}
+              {status === "opening" ? "OPENING..." : "OPEN MASTER B"}
             </p>
           </button>
         </div>
 
         <div className="mt-6 rounded-2xl border border-slate-700 bg-black/25 p-4">
           <p className="text-sm font-black text-[#f2c766]">MASTER FILE</p>
-          <p className="mt-2 break-all text-lg font-black">{MASTER_FILE_NAME}</p>
-          <p className="mt-2 text-xs font-semibold text-slate-300">
-            Πηγή: protected Blob original DWG. Δεν χρησιμοποιείται mobile preview.
-          </p>
+          <p className="mt-2 break-all text-lg font-black">{DOWNLOAD_FILE_NAME}</p>
         </div>
 
         <div className="mt-5 rounded-2xl border border-slate-700 bg-[#07111f] p-4">
