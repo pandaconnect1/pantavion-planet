@@ -1,135 +1,89 @@
 ﻿"use client";
 
-import Link from "next/link";
 import { useState } from "react";
 
 const DOWNLOAD_FILE_NAME = "PANTAVION_WATER_MASTER_B.dwg";
 
-function readApprovedWaterDevice() {
+function readStoredWaterDevice() {
   if (typeof window === "undefined") {
-    return { deviceId: "", deviceToken: "" };
+    return {
+      deviceId: "",
+      deviceToken: "",
+    };
   }
 
-  const directIdKeys = [
-    "pantavion_water_device_id",
-    "pantavion-water-device-id",
-    "pantavion_water_approved_device_id",
-    "pantavion-water-approved-device-id",
-    "waterDeviceId",
-    "water_device_id",
-  ];
+  const directId =
+    window.localStorage.getItem("pantavion_water_device_id") ||
+    window.localStorage.getItem("pantavion-water-device-id") ||
+    window.localStorage.getItem("waterDeviceId") ||
+    "";
 
-  const directTokenKeys = [
-    "pantavion_water_device_token",
-    "pantavion-water-device-token",
-    "pantavion_water_approved_device_token",
-    "pantavion-water-approved-device-token",
-    "waterDeviceToken",
-    "water_device_token",
-  ];
+  const directToken =
+    window.localStorage.getItem("pantavion_water_device_token") ||
+    window.localStorage.getItem("pantavion-water-device-token") ||
+    window.localStorage.getItem("waterDeviceToken") ||
+    "";
 
-  for (const idKey of directIdKeys) {
-    const deviceId = window.localStorage.getItem(idKey) || "";
-
-    if (!deviceId) continue;
-
-    for (const tokenKey of directTokenKeys) {
-      const deviceToken = window.localStorage.getItem(tokenKey) || "";
-
-      if (deviceToken) {
-        return { deviceId, deviceToken };
-      }
-    }
+  if (directId && directToken) {
+    return {
+      deviceId: directId,
+      deviceToken: directToken,
+    };
   }
 
-  const jsonKeys = [
+  const possibleJsonKeys = [
     "pantavion_water_access_device",
     "pantavion-water-access-device",
-    "pantavion_water_approved_device",
-    "pantavion-water-approved-device",
     "waterAccessDevice",
-    "waterApprovedDevice",
-    "waterAdminSession",
-    "pantavion_water_admin_session",
+    "water-approved-device",
   ];
 
-  for (const key of jsonKeys) {
+  for (const key of possibleJsonKeys) {
     const raw = window.localStorage.getItem(key);
 
     if (!raw) continue;
 
     try {
-      const parsed = JSON.parse(raw) as {
-        deviceId?: unknown;
-        id?: unknown;
-        deviceToken?: unknown;
-        token?: unknown;
-      };
-
+      const parsed = JSON.parse(raw);
       const deviceId = String(parsed.deviceId || parsed.id || "");
       const deviceToken = String(parsed.deviceToken || parsed.token || "");
 
       if (deviceId && deviceToken) {
-        return { deviceId, deviceToken };
+        return {
+          deviceId,
+          deviceToken,
+        };
       }
     } catch {
-      // Ignore invalid localStorage JSON.
+      // ignore invalid localStorage value
     }
   }
 
-  for (let index = 0; index < window.localStorage.length; index += 1) {
-    const key = window.localStorage.key(index) || "";
-
-    if (!key.toLowerCase().includes("water")) continue;
-
-    const raw = window.localStorage.getItem(key);
-
-    if (!raw) continue;
-
-    try {
-      const parsed = JSON.parse(raw) as {
-        deviceId?: unknown;
-        id?: unknown;
-        deviceToken?: unknown;
-        token?: unknown;
-      };
-
-      const deviceId = String(parsed.deviceId || parsed.id || "");
-      const deviceToken = String(parsed.deviceToken || parsed.token || "");
-
-      if (deviceId && deviceToken) {
-        return { deviceId, deviceToken };
-      }
-    } catch {
-      // Ignore non-JSON localStorage values.
-    }
-  }
-
-  return { deviceId: "", deviceToken: "" };
+  return {
+    deviceId: "",
+    deviceToken: "",
+  };
 }
 
 export default function WaterMasterDwgPage() {
+  const [founderCode, setFounderCode] = useState("");
   const [status, setStatus] = useState("ready");
   const [details, setDetails] = useState("");
 
-  async function openMasterB() {
-    setStatus("opening");
+  async function downloadMaster() {
+    setStatus("loading");
     setDetails("");
 
-    const approvedDevice = readApprovedWaterDevice();
-    const headers = new Headers();
-
-    if (approvedDevice.deviceId && approvedDevice.deviceToken) {
-      headers.set("x-pantavion-water-device-id", approvedDevice.deviceId);
-      headers.set("x-pantavion-water-device-token", approvedDevice.deviceToken);
-    }
+    const storedDevice = readStoredWaterDevice();
 
     try {
       const response = await fetch("/api/professional/infrastructure/water/master-dwg", {
-        method: "GET",
         cache: "no-store",
-        credentials: "same-origin",
-        headers,
+        headers: {
+          "x-pantavion-water-founder-code": founderCode.trim(),
+          "x-pantavion-water-device-id": storedDevice.deviceId,
+          "x-pantavion-water-device-token": storedDevice.deviceToken,
+        },
       });
 
       if (!response.ok) {
@@ -152,10 +106,10 @@ export default function WaterMasterDwgPage() {
       }, 15000);
 
       setStatus("ok");
-      setDetails("MASTER_B_OPENED");
+      setDetails("DOWNLOAD_OK");
     } catch (error) {
       setStatus("error");
-      setDetails(error instanceof Error ? error.message : "ACCESS_DENIED");
+      setDetails(error instanceof Error ? error.message : "UNKNOWN_ERROR");
     }
   }
 
@@ -167,52 +121,35 @@ export default function WaterMasterDwgPage() {
         </p>
 
         <h1 className="mt-4 text-3xl font-black tracking-tight md:text-5xl">
-          Χάρτες Ύδρευσης
+          {"\u03a7\u03ac\u03c1\u03c4\u03b7\u03c2 \u0392 - \u0393\u03bd\u03ae\u03c3\u03b9\u03bf\u03c2 DWG Master"}
         </h1>
 
         <p className="mt-4 max-w-3xl text-sm font-semibold leading-6 text-slate-300">
-          Επιλογή χάρτη για εγκεκριμένους χρήστες και διαχειριστές.
+          {"\u0391\u03c5\u03c4\u03cc\u03c2 \u03b5\u03af\u03bd\u03b1\u03b9 \u03bf \u03b3\u03bd\u03ae\u03c3\u03b9\u03bf\u03c2 \u03c4\u03b5\u03c7\u03bd\u03b9\u03ba\u03cc\u03c2 master \u03c7\u03ac\u03c1\u03c4\u03b7\u03c2."}
         </p>
-
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <Link
-            href="/professional/infrastructure/water/live"
-            className="rounded-2xl border border-slate-600 bg-black/25 p-5 transition hover:border-[#f2c766]"
-          >
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#f2c766]">
-              A
-            </p>
-            <h2 className="mt-2 text-2xl font-black">Λειτουργικός χάρτης</h2>
-            <p className="mt-2 text-sm font-semibold text-slate-300">
-              Υφιστάμενος χάρτης δικτύου.
-            </p>
-            <p className="mt-4 text-sm font-black text-[#f8e6ad]">
-              OPEN MAP A
-            </p>
-          </Link>
-
-          <button
-            type="button"
-            onClick={() => void openMasterB()}
-            disabled={status === "opening"}
-            className="rounded-2xl border border-[#f2c766] bg-[#f2c766]/15 p-5 text-left transition hover:bg-[#f2c766]/25 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#f2c766]">
-              B
-            </p>
-            <h2 className="mt-2 text-2xl font-black">Master χάρτης</h2>
-            <p className="mt-2 text-sm font-semibold text-slate-300">
-              Γνήσιος DWG Master για εγκεκριμένη πρόσβαση.
-            </p>
-            <p className="mt-4 text-sm font-black text-[#f8e6ad]">
-              {status === "opening" ? "OPENING..." : "OPEN MASTER B"}
-            </p>
-          </button>
-        </div>
 
         <div className="mt-6 rounded-2xl border border-slate-700 bg-black/25 p-4">
           <p className="text-sm font-black text-[#f2c766]">MASTER FILE</p>
           <p className="mt-2 break-all text-lg font-black">{DOWNLOAD_FILE_NAME}</p>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-[1fr_auto]">
+          <input
+            value={founderCode}
+            onChange={(event) => setFounderCode(event.target.value)}
+            type="password"
+            placeholder="Founder access code"
+            className="rounded-2xl border border-slate-600 bg-[#07111f] px-4 py-4 text-sm font-bold text-white outline-none focus:border-[#f2c766]"
+          />
+
+          <button
+            type="button"
+            onClick={() => void downloadMaster()}
+            disabled={status === "loading"}
+            className="rounded-2xl border border-[#f2c766] bg-[#f2c766]/15 px-6 py-4 text-sm font-black uppercase tracking-[0.16em] text-[#f8e6ad] transition hover:bg-[#f2c766]/25 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {status === "loading" ? "LOADING" : "DOWNLOAD DWG MASTER"}
+          </button>
         </div>
 
         <div className="mt-5 rounded-2xl border border-slate-700 bg-[#07111f] p-4">
