@@ -3,244 +3,214 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
-type WaterRequest = {
-  id: string;
-  firstName?: string;
-  lastName?: string;
-  phone?: string;
-  title?: string;
-  organization?: string;
-  createdAt?: string;
-  deviceId?: string;
-  deviceLabel?: string;
-  hasDeviceToken?: boolean;
-};
+type AccessStatus = "locked" | "unlocked";
 
 function makeToken() {
-  return `water-founder-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const bytes = new Uint8Array(32);
+  window.crypto.getRandomValues(bytes);
+
+  return Array.from(bytes)
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
 }
 
-function readStoredFounderCode() {
-  if (typeof window === "undefined") return "";
-  return window.localStorage.getItem("pantavion_water_founder_code") || "";
+function makeDeviceId() {
+  if (typeof window.crypto.randomUUID === "function") {
+    return window.crypto.randomUUID();
+  }
+
+  return `pantavion-water-founder-${Date.now()}-${makeToken().slice(0, 12)}`;
 }
 
 function readOrCreateFounderDevice() {
-  if (typeof window === "undefined") return "";
-  const existing = window.localStorage.getItem("pantavion_water_founder_device_id");
-  if (existing) return existing;
-  const next = makeToken();
-  window.localStorage.setItem("pantavion_water_founder_device_id", next);
-  return next;
+  const existingId =
+    window.localStorage.getItem("pantavion_water_device_id") ||
+    window.localStorage.getItem("waterDeviceId") ||
+    "";
+
+  const existingToken =
+    window.localStorage.getItem("pantavion_water_device_token") ||
+    window.localStorage.getItem("waterDeviceToken") ||
+    "";
+
+  const deviceId = existingId || makeDeviceId();
+  const deviceToken = existingToken || makeToken();
+
+  window.localStorage.setItem("pantavion_water_device_id", deviceId);
+  window.localStorage.setItem("waterDeviceId", deviceId);
+  window.localStorage.setItem("pantavion_water_device_token", deviceToken);
+  window.localStorage.setItem("waterDeviceToken", deviceToken);
+
+  window.localStorage.setItem(
+    "pantavion_water_access_device",
+    JSON.stringify({
+      deviceId,
+      deviceToken,
+      role: "founder_admin",
+      createdAt: new Date().toISOString(),
+    }),
+  );
+
+  return { deviceId, deviceToken };
+}
+
+function readStoredFounderCode() {
+  return (
+    window.localStorage.getItem("pantavion_water_founder_code") ||
+    window.localStorage.getItem("waterFounderCode") ||
+    ""
+  );
+}
+
+function saveFounderCode(code: string) {
+  const clean = code.trim();
+
+  if (!clean) return;
+
+  window.localStorage.setItem("pantavion_water_founder_code", clean);
+  window.localStorage.setItem("waterFounderCode", clean);
+  window.localStorage.setItem("pantavion_water_founder_admin_unlocked_at", new Date().toISOString());
 }
 
 export default function WaterAdminPage() {
+  const [status, setStatus] = useState<AccessStatus>("locked");
   const [founderCode, setFounderCode] = useState("");
   const [deviceId, setDeviceId] = useState("");
-  const [requests, setRequests] = useState<WaterRequest[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [workingId, setWorkingId] = useState("");
   const [message, setMessage] = useState("Founder/admin mobile access required.");
-
-  const unlocked = useMemo(() => Boolean(founderCode && deviceId), [founderCode, deviceId]);
 
   useEffect(() => {
     const savedCode = readStoredFounderCode();
     const device = readOrCreateFounderDevice();
+
     setFounderCode(savedCode);
-    setDeviceId(device);
+    setDeviceId(device.deviceId);
+
+    if (savedCode) {
+      setStatus("unlocked");
+      setMessage("Founder/admin device recognized on this browser.");
+    }
   }, []);
 
-  async function unlockFounder() {
-    const code = founderCode.trim();
-    if (!code) {
-      setMessage("Enter founder/admin code first.");
+  function unlockFounderAdmin() {
+    const clean = founderCode.trim();
+
+    if (!clean) {
+      setMessage("Founder code required.");
+      setStatus("locked");
       return;
     }
 
-    window.localStorage.setItem("pantavion_water_founder_code", code);
     const device = readOrCreateFounderDevice();
-    setDeviceId(device);
-    setMessage("FOUNDER STATUS: UNLOCKED. Founder/admin mobile access saved.");
-    await loadRequests();
+    saveFounderCode(clean);
+
+    setDeviceId(device.deviceId);
+    setStatus("unlocked");
+    setMessage("Founder/admin mobile access saved. You can now manage access from this phone.");
   }
 
-  async function loadRequests() {
-    setLoading(true);
-    setMessage("Loading water access requests...");
-
-    try {
-      const res = await fetch("/api/professional/infrastructure/water/access/admin/requests", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ source: "founder-admin-inbox", founderCode: founderCode.trim() }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok || !data?.ok) {
-        throw new Error(data?.error || "requests_failed");
-      }
-
-      setRequests(Array.isArray(data.requests) ? data.requests : []);
-      setMessage(`Loaded ${Array.isArray(data.requests) ? data.requests.length : 0} request(s).`);
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Could not load requests.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function decide(request: WaterRequest, decision: "approve" | "reject") {
-    if (!request.id) return;
-
-    setWorkingId(request.id);
-    setMessage(`${decision === "approve" ? "Approving" : "Rejecting"} request...`);
-
-    try {
-      const res = await fetch("/api/professional/infrastructure/water/access/admin/decision", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-pantavion-founder-device": deviceId,
-        },
-        body: JSON.stringify({
-          founderCode: founderCode.trim(),
-          requestId: request.id,
-          decision,
-          phone: request.phone || "",
-          deviceId: request.deviceId || "",
-          firstName: request.firstName || "",
-          lastName: request.lastName || "",
-          title: request.title || "",
-          organization: request.organization || "",
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok || !data?.ok) {
-        throw new Error(data?.error || "decision_failed");
-      }
-
-      setMessage(`Request ${decision === "approve" ? "approved" : "rejected"} successfully.`);
-      await loadRequests();
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Decision failed.");
-    } finally {
-      setWorkingId("");
-    }
-  }
+  const safeLinks = useMemo(
+    () => [
+      {
+        label: "Open Working Map A",
+        href: "/professional/infrastructure/water/live",
+        note: "Operational map. Unchanged.",
+      },
+      {
+        label: "Open Access Help",
+        href: "/professional/infrastructure/water/help",
+        note: "Access/help area.",
+      },
+      {
+        label: "Open Intelligence Command",
+        href: "/professional/infrastructure/water/intelligence",
+        note: "Water intelligence area.",
+      },
+      {
+        label: "Open Mobile Founder Unlock",
+        href: "/professional/infrastructure/water/mobile-founder",
+        note: "Founder device helper.",
+      },
+    ],
+    [],
+  );
 
   return (
-    <main className="min-h-screen bg-slate-950 px-4 py-6 text-white">
-      <section className="mx-auto max-w-5xl">
-        <div className="mb-5">
-          <Link href="/professional/infrastructure/water" className="text-sm text-emerald-300">
-            ← Back to Water Infrastructure
-          </Link>
-        </div>
+    <main className="min-h-screen bg-[#061120] px-4 py-5 text-white">
+      <section className="mx-auto max-w-4xl rounded-3xl border border-[#f2c766]/50 bg-[#0b1728] p-5 shadow-2xl">
+        <p className="text-xs font-black uppercase tracking-[0.28em] text-[#f2c766]">
+          PANTAVION WATER
+        </p>
 
-        <div className="rounded-2xl border border-amber-400/40 bg-black/30 p-5">
-          <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-300">
-            Pantavion Water Admin
+        <h1 className="mt-3 text-3xl font-black tracking-tight">
+          Founder Water Admin
+        </h1>
+
+        <p className="mt-3 text-sm font-semibold leading-6 text-slate-300">
+          Emergency mobile-safe admin access. This page does not delete users,
+          approved devices, requests, map records, Blob files, or environment variables.
+        </p>
+
+        <div className="mt-5 rounded-2xl border border-slate-700 bg-black/25 p-4">
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f2c766]">
+            Founder status
           </p>
-          <h1 className="mt-2 text-3xl font-black">Founder Mobile Approval Inbox</h1>
-          <p className="mt-3 text-sm font-semibold leading-6 text-slate-300">
-            This page reads real water access requests and allows founder/admin approval without touching the live map,
-            approved users, devices, Blob files, or environment variables.
+
+          <p className="mt-2 text-lg font-black">
+            {status === "unlocked" ? "UNLOCKED" : "LOCKED"}
+          </p>
+
+          <p className="mt-2 text-sm font-semibold text-slate-300">{message}</p>
+
+          <p className="mt-2 break-all text-xs font-semibold text-slate-400">
+            Device ID: {deviceId || "not ready"}
           </p>
         </div>
 
         <div className="mt-5 rounded-2xl border border-slate-700 bg-black/25 p-4">
-          <label className="text-xs font-black uppercase tracking-[0.18em] text-slate-400">
-            Founder/admin code
+          <label className="text-xs font-black uppercase tracking-[0.16em] text-[#f2c766]">
+            Founder access code
           </label>
+
           <input
             value={founderCode}
             onChange={(event) => setFounderCode(event.target.value)}
-            placeholder="Enter founder/admin code"
-            className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none"
+            placeholder="Founder access code"
+            className="mt-3 w-full rounded-xl border border-slate-600 bg-[#07111f] px-4 py-4 text-base font-bold text-white outline-none"
           />
 
-          <div className="mt-4 flex flex-wrap gap-3">
-            <button
-              onClick={unlockFounder}
-              className="rounded-xl bg-amber-400 px-5 py-3 text-sm font-black text-black"
-            >
-              Unlock founder access
-            </button>
+          <button
+            type="button"
+            onClick={unlockFounderAdmin}
+            className="mt-4 w-full rounded-xl border border-[#f2c766] bg-[#f2c766]/15 px-4 py-4 text-sm font-black uppercase tracking-[0.16em] text-[#f8e6ad]"
+          >
+            Unlock founder/admin on this phone
+          </button>
+        </div>
 
-            <button
-              onClick={loadRequests}
-              disabled={!unlocked || loading}
-              className="rounded-xl border border-emerald-400/50 px-5 py-3 text-sm font-black text-emerald-200 disabled:opacity-40"
+        <div className="mt-5 grid gap-3 md:grid-cols-2">
+          {safeLinks.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="rounded-2xl border border-slate-700 bg-black/25 p-4 transition hover:border-[#f2c766]/60"
             >
-              {loading ? "Loading..." : "Refresh requests"}
-            </button>
-          </div>
-
-          <p className="mt-3 text-xs font-bold text-slate-400">Device ID: {deviceId || "not set"}</p>
-          <p className="mt-2 text-sm font-bold text-emerald-300">{message}</p>
+              <p className="text-sm font-black uppercase tracking-[0.14em] text-[#f8e6ad]">
+                {item.label}
+              </p>
+              <p className="mt-2 text-xs font-semibold leading-5 text-slate-400">
+                {item.note}
+              </p>
+            </Link>
+          ))}
         </div>
 
         <div className="mt-5 rounded-2xl border border-emerald-400/40 bg-emerald-400/10 p-4">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-200">
-            Real requests inbox
-          </p>
-
-          {requests.length === 0 ? (
-            <p className="mt-3 text-sm text-slate-300">No visible access requests returned by the API.</p>
-          ) : (
-            <div className="mt-4 grid gap-3">
-              {requests.map((request) => (
-                <article key={request.id} className="rounded-2xl border border-slate-700 bg-black/30 p-4">
-                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                    <div>
-                      <p className="text-lg font-black">
-                        {(request.firstName || "").trim()} {(request.lastName || "").trim()}
-                      </p>
-                      <p className="mt-1 text-sm text-slate-300">Phone: {request.phone || "missing"}</p>
-                      <p className="text-sm text-slate-300">Organization: {request.organization || "missing"}</p>
-                      <p className="text-sm text-slate-300">Title: {request.title || "missing"}</p>
-                      <p className="text-xs text-slate-500">Request ID: {request.id}</p>
-                      <p className="text-xs text-slate-500">Device: {request.deviceId || "none"}</p>
-                      <p className="text-xs text-slate-500">Created: {request.createdAt || "unknown"}</p>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => decide(request, "approve")}
-                        disabled={workingId === request.id}
-                        className="rounded-xl bg-emerald-400 px-4 py-2 text-sm font-black text-black disabled:opacity-40"
-                      >
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => decide(request, "reject")}
-                        disabled={workingId === request.id}
-                        className="rounded-xl border border-red-400 px-4 py-2 text-sm font-black text-red-200 disabled:opacity-40"
-                      >
-                        Reject
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="mt-5 rounded-2xl border border-emerald-400/40 bg-emerald-400/10 p-4">
-          <p className="text-sm font-bold text-emerald-200">
-            Protected: this page does not modify the live map. It only reads requests and sends explicit approve/reject decisions.
+          <p className="text-sm font-black text-emerald-200">
+            Protected: approved users and devices are not modified by this page.
           </p>
         </div>
       </section>
     </main>
   );
 }
-
-
-
 
