@@ -1,4 +1,4 @@
-﻿export type PantavionImplementationRisk =
+export type PantavionImplementationRisk =
   | "static_only"
   | "fake_ui"
   | "dead_route"
@@ -186,3 +186,82 @@ export const pantavionImplementationEngineContract = {
     "No complete claim without audit, TypeScript, and build verification",
   ],
 } as const;
+
+export type PantavionRealityProofStatus =
+  | "real_runtime_path"
+  | "disabled_or_beta_visible_boundary"
+  | "blocked_static_or_fake";
+
+export interface PantavionRealityProof {
+  id: string;
+  status: PantavionRealityProofStatus;
+  visibleSurface: boolean;
+  hasUserAction: boolean;
+  hasRouteOrApi: boolean;
+  hasRuntimeFunction: boolean;
+  hasAudit: boolean;
+  hasBuildVerification: boolean;
+  hasTypeScriptVerification: boolean;
+  hasProductionVerification: boolean;
+  blockers: string[];
+  generatedAt: string;
+}
+
+export function createPantavionRealityProof(input: {
+  id: string;
+  visibleSurface: boolean;
+  hasUserAction: boolean;
+  hasRouteOrApi: boolean;
+  hasRuntimeFunction: boolean;
+  hasAudit: boolean;
+  hasBuildVerification: boolean;
+  hasTypeScriptVerification: boolean;
+  hasProductionVerification: boolean;
+  markedDisabledOrBeta?: boolean;
+}): PantavionRealityProof {
+  const blockers: string[] = [];
+
+  if (
+    input.visibleSurface &&
+    input.hasUserAction &&
+    !input.hasRouteOrApi &&
+    !input.hasRuntimeFunction &&
+    !input.markedDisabledOrBeta
+  ) {
+    blockers.push("visible_action_without_route_api_or_runtime_function");
+  }
+
+  if (!input.hasAudit) blockers.push("missing_audit");
+  if (!input.hasBuildVerification) blockers.push("missing_build_verification");
+  if (!input.hasTypeScriptVerification) blockers.push("missing_typescript_verification");
+
+  const status: PantavionRealityProofStatus =
+    blockers.length === 0
+      ? "real_runtime_path"
+      : input.markedDisabledOrBeta
+        ? "disabled_or_beta_visible_boundary"
+        : "blocked_static_or_fake";
+
+  return {
+    id: input.id,
+    status,
+    visibleSurface: input.visibleSurface,
+    hasUserAction: input.hasUserAction,
+    hasRouteOrApi: input.hasRouteOrApi,
+    hasRuntimeFunction: input.hasRuntimeFunction,
+    hasAudit: input.hasAudit,
+    hasBuildVerification: input.hasBuildVerification,
+    hasTypeScriptVerification: input.hasTypeScriptVerification,
+    hasProductionVerification: input.hasProductionVerification,
+    blockers,
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+export const pantavionRealityNonNegotiables = [
+  "No visual-only features",
+  "No fake connected systems",
+  "No button without route API runtime function or disabled beta boundary",
+  "No complete claim without audit build TypeScript and production verification",
+  "No architecture-only claim as implemented product behavior",
+] as const;

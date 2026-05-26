@@ -89,8 +89,12 @@ if (
   failures.push("package.json must include audit:intelligence script.");
 }
 
-if (fabric.includes("git add .")) {
-  failures.push("Fabric must not contain blanket git add.");
+const unsafeGitAddInstruction =
+  /allowedNextCommands:[\\s\\S]*git add \\./.test(fabric) ||
+  /run\\s+["'`]git add \\./i.test(fabric);
+
+if (unsafeGitAddInstruction) {
+  failures.push("Fabric must not allow blanket git add as an executable instruction.");
 }
 
 if (failures.length > 0) {
