@@ -956,6 +956,8 @@ export default function ControlledWaterSegmentClient() {
       const visibleBbox = bboxFromMap(map);
       const tiles = splitVisibleBboxIntoSafeTiles(visibleBbox);
       const allFeatures: any[] = [];
+      const device = getOrCreateWaterAccessDevice();
+      const savedFounderCode = getSavedWaterFounderCode();
 
       for (const tile of tiles) {
         const params = new URLSearchParams({
@@ -969,7 +971,14 @@ export default function ControlledWaterSegmentClient() {
 
         const response = await fetch(
           `/api/professional/infrastructure/water/segment/bbox?${params.toString()}`,
-          { cache: "no-store" },
+          {
+            cache: "no-store",
+            headers: {
+              "x-pantavion-water-device-id": device.deviceId,
+              "x-pantavion-water-device-token": device.deviceToken,
+              "x-pantavion-water-founder-code": savedFounderCode,
+            },
+          },
         );
 
         const json = (await response.json()) as SegmentResponse;
