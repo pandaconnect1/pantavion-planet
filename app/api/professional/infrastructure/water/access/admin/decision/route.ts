@@ -1,4 +1,4 @@
-import { del, list, put } from "@vercel/blob";
+﻿import { del, list, put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 type DecisionBody = {
@@ -114,12 +114,13 @@ export async function POST(request: Request) {
       await put(
         `water/private/rejected-requests/${requestId}.json`,
         JSON.stringify(rejectedPayload, null, 2),
-        {
-          access: "private",
-          allowOverwrite: true,
-          contentType: "application/json",
-        },
-      );
+          {
+            access: "private",
+            allowOverwrite: true,
+            contentType: "application/json",
+          },
+        );
+      }
 
       await del(requestPath);
 
@@ -135,15 +136,6 @@ export async function POST(request: Request) {
     const deviceId = clean(payload.device?.id);
     const deviceTokenHash = clean(payload.device?.tokenHash);
 
-    if (!approvedPhone) {
-      return NextResponse.json(
-        {
-          ok: false,
-          error: "missing_phone",
-        },
-        { status: 400 },
-      );
-    }
 
     if (decision === "approve" && (!deviceId || !deviceTokenHash)) {
       return NextResponse.json(
@@ -192,15 +184,17 @@ export async function POST(request: Request) {
           null,
           2,
         ),
-        {
-          access: "private",
-          allowOverwrite: true,
-          contentType: "application/json",
-        },
-      );
+          {
+            access: "private",
+            allowOverwrite: true,
+            contentType: "application/json",
+          },
+        );
+      }
 
-      await put(
-        `water/private/approved-contacts/${approvedPhone}.json`,
+      if (approvedPhone) {
+        await put(
+          `water/private/approved-contacts/${approvedPhone}.json`,
         JSON.stringify(
           {
             phone: approvedPhone,
@@ -218,12 +212,13 @@ export async function POST(request: Request) {
           null,
           2,
         ),
-        {
-          access: "private",
-          allowOverwrite: true,
-          contentType: "application/json",
-        },
-      );
+          {
+            access: "private",
+            allowOverwrite: true,
+            contentType: "application/json",
+          },
+        );
+      }
     }
 
     if (decision === "revoke" && deviceId) {
@@ -248,12 +243,13 @@ export async function POST(request: Request) {
           null,
           2,
         ),
-        {
-          access: "private",
-          allowOverwrite: true,
-          contentType: "application/json",
-        },
-      );
+          {
+            access: "private",
+            allowOverwrite: true,
+            contentType: "application/json",
+          },
+        );
+      }
     }
 
     return NextResponse.json({
@@ -274,3 +270,4 @@ export async function POST(request: Request) {
     );
   }
 }
+
