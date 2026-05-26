@@ -73,7 +73,7 @@ export default function WaterAdminPage() {
       const res = await fetch("/api/professional/infrastructure/water/access/admin/requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ source: "founder-admin-inbox" }),
+        body: JSON.stringify({ source: "founder-admin-inbox", founderCode: founderCode.trim() }),
       });
 
       const data = await res.json();
@@ -105,6 +105,7 @@ export default function WaterAdminPage() {
           "x-pantavion-founder-device": deviceId,
         },
         body: JSON.stringify({
+          founderCode: founderCode.trim(),
           requestId: request.id,
           decision,
           phone: request.phone || "",
@@ -239,5 +240,7 @@ export default function WaterAdminPage() {
     </main>
   );
 }
+
+
 
 
