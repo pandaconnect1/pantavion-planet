@@ -1,7 +1,7 @@
-﻿import type {
+import type {
   PantavionExecutionReceipt,
   PantavionProtocolEnvelope,
-} from './protocol-types';
+} from "./protocol-types";
 
 export interface PantavionProtocolGateway {
   accept<TPayload>(envelope: PantavionProtocolEnvelope<TPayload>): PantavionExecutionReceipt;
@@ -12,15 +12,15 @@ export function createProtocolGateway(): PantavionProtocolGateway {
     accept<TPayload>(envelope: PantavionProtocolEnvelope<TPayload>): PantavionExecutionReceipt {
       const reasons: string[] = [];
 
-      if (!envelope.packetId) reasons.push('missing_packet_id');
-      if (!envelope.protocolVersion) reasons.push('missing_protocol_version');
-      if (!envelope.source?.principalId) reasons.push('missing_source_principal');
-      if (!envelope.target?.route) reasons.push('missing_target_route');
+      if (!envelope.packetId) reasons.push("missing_packet_id");
+      if (!envelope.protocolVersion) reasons.push("missing_protocol_version");
+      if (!envelope.source?.principalId) reasons.push("missing_source_principal");
+      if (!envelope.target?.route) reasons.push("missing_target_route");
 
       return {
-        receiptId: `receipt:${envelope.packetId}`,
+        receiptId: "receipt:" + envelope.packetId,
         packetId: envelope.packetId,
-        status: reasons.length === 0 ? 'accepted' : 'rejected',
+        status: reasons.length === 0 ? "accepted" : "rejected",
         truthZone: envelope.truthZone,
         createdAt: new Date().toISOString(),
         reasons,
@@ -28,18 +28,6 @@ export function createProtocolGateway(): PantavionProtocolGateway {
     },
   };
 }
-
-export const pantavionFoundation } from './kernel-bootstrap';
-import { runPantavionKernelIntegration } from './kernel-integration-runner';
-import { evaluateKernelAdmissionPolicy } from './kernel-admission-policy';
-import { getKernelTaxonomySnapshot } from './kernel-taxonomy';
-import { getCapabilityFamilyRegistrySnapshot } from '../registry/capability-family-registry';
-import { getProtocolGatewayStats: any = undefined;
-
-import { runPantavionKernelIntegration } from './kernel-integration-runner';
-import { evaluateKernelAdmissionPolicy } from './kernel-admission-policy';
-import { getKernelTaxonomySnapshot } from './kernel-taxonomy';
-import { getCapabilityFamilyRegistrySnapshot } from '../registry/capability-family-registry';
 
 type PantavionProtocolRegistryEntry = {
   key: string;
@@ -55,13 +43,12 @@ function getRegistryKey(value: unknown, fallbackPrefix: string) {
 
   if (value && typeof value === "object") {
     const record = value as { key?: unknown; id?: unknown; name?: unknown };
-
     if (typeof record.key === "string" && record.key.trim()) return record.key.trim();
     if (typeof record.id === "string" && record.id.trim()) return record.id.trim();
     if (typeof record.name === "string" && record.name.trim()) return record.name.trim();
   }
 
-  return `${fallbackPrefix}_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  return fallbackPrefix + "_" + Date.now() + "_" + Math.random().toString(36).slice(2);
 }
 
 export function registerFoundationProtocolAdapter(
@@ -82,7 +69,6 @@ export function registerFoundationProtocolAdapter(
   };
 
   foundationProtocolAdapters.push(entry);
-
   return entry;
 }
 
@@ -104,7 +90,6 @@ export function registerProtocolHandler(
   };
 
   protocolHandlers.push(entry);
-
   return entry;
 }
 
@@ -125,5 +110,14 @@ export function getProtocolRegistrySnapshot() {
   };
 }
 
-export const protocolGateway = createProtocolGateway();
+export function getProtocolGatewayStats() {
+  const snapshot = getProtocolRegistrySnapshot();
 
+  return {
+    ...snapshot.totals,
+    gatewayReady: true,
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+export const protocolGateway = createProtocolGateway();

@@ -1,4 +1,4 @@
-export type PantavionResilienceMode = 'normal' | 'degraded' | 'fallback' | 'protected';
+export type PantavionResilienceMode = "normal" | "degraded" | "fallback" | "protected";
 
 export interface PantavionResilienceState {
   mode: PantavionResilienceMode;
@@ -6,8 +6,10 @@ export interface PantavionResilienceState {
   updatedAt: string;
 }
 
+let currentResilienceState: PantavionResilienceState = createResilienceState();
+
 export function createResilienceState(
-  mode: PantavionResilienceMode = 'normal',
+  mode: PantavionResilienceMode = "normal",
   reasons: string[] = [],
 ): PantavionResilienceState {
   return {
@@ -17,17 +19,21 @@ export function createResilienceState(
   };
 }
 
-export const pantavionFoundation } from './kernel-bootstrap';
-import { runPantavionKernelIntegration } from './kernel-integration-runner';
-import { evaluateKernelAdmissionPolicy } from './kernel-admission-policy';
-import { getKernelTaxonomySnapshot } from './kernel-taxonomy';
-import { getCapabilityFamilyRegistrySnapshot } from '../registry/capability-family-registry';
-import { getProtocolGatewayStats } from '../protocol/protocol-gateway';
-import { getResilienceSnapshot: any = undefined;
-export type pantavionFoundation } from './kernel-bootstrap';
-import { runPantavionKernelIntegration } from './kernel-integration-runner';
-import { evaluateKernelAdmissionPolicy } from './kernel-admission-policy';
-import { getKernelTaxonomySnapshot } from './kernel-taxonomy';
-import { getCapabilityFamilyRegistrySnapshot } from '../registry/capability-family-registry';
-import { getProtocolGatewayStats } from '../protocol/protocol-gateway';
-import { getResilienceSnapshot = any;
+export function setResilienceMode(
+  mode: PantavionResilienceMode,
+  reasons: string[] = [],
+): PantavionResilienceState {
+  currentResilienceState = createResilienceState(mode, reasons);
+  return currentResilienceState;
+}
+
+export function getResilienceSnapshot() {
+  return {
+    ...currentResilienceState,
+    healthy: currentResilienceState.mode === "normal",
+    protected: currentResilienceState.mode === "protected",
+    degraded:
+      currentResilienceState.mode === "degraded" ||
+      currentResilienceState.mode === "fallback",
+  };
+}
