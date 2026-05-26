@@ -223,6 +223,15 @@ function getSavedWaterFounderCode() {
   return window.localStorage.getItem(PANTAVION_WATER_FOUNDER_CODE_STORAGE_KEY) || "";
 }
 
+function rememberSavedWaterFounderCode(value: string) {
+  if (typeof window === "undefined") return;
+
+  const clean = value.trim();
+  if (!clean) return;
+
+  window.localStorage.setItem(PANTAVION_WATER_FOUNDER_CODE_STORAGE_KEY, clean);
+}
+
 function getInitialLang(): Lang {
   if (typeof window === "undefined") return "el";
 
@@ -582,6 +591,8 @@ export default function ControlledWaterSegmentClient() {
     setLoading(true);
     setAccessMessage(t.loading);
 
+    const device = getOrCreateWaterAccessDevice();
+
     try {
       const response = await fetch("/api/professional/infrastructure/water/access/request", {
         method: "POST",
@@ -595,6 +606,9 @@ export default function ControlledWaterSegmentClient() {
           organization,
           emailOrPhone,
           reason,
+          deviceId: device.deviceId,
+          deviceToken: device.deviceToken,
+          deviceLabel: device.deviceLabel,
         }),
       });
 
@@ -615,6 +629,8 @@ export default function ControlledWaterSegmentClient() {
     setLoading(true);
     setAccessMessage(t.loading);
 
+    const device = getOrCreateWaterAccessDevice();
+
     try {
       const response = await fetch("/api/professional/infrastructure/water/access/authorize", {
         method: "POST",
@@ -626,6 +642,8 @@ export default function ControlledWaterSegmentClient() {
           firstName,
           lastName,
           title: roleTitle,
+          deviceId: device.deviceId,
+          deviceToken: device.deviceToken,
         }),
       });
 
@@ -641,6 +659,11 @@ export default function ControlledWaterSegmentClient() {
         return;
       }
 
+      if (accessCode.trim()) {
+        rememberSavedWaterFounderCode(accessCode.trim());
+      }
+
+      writeWaterDeviceApproval();
       setAccessApproved(true);
       setAccessMessage(t.accessApproved);
     } catch {
