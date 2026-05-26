@@ -71,8 +71,9 @@ export default function WaterAdminPage() {
 
     try {
       const res = await fetch("/api/professional/infrastructure/water/access/admin/requests", {
-        method: "GET",
-        cache: "no-store",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ source: "founder-admin-inbox" }),
       });
 
       const data = await res.json();
@@ -238,3 +239,5 @@ export default function WaterAdminPage() {
     </main>
   );
 }
+
+
