@@ -1,9 +1,9 @@
-﻿import WaterMapNavigation from "../water-map-navigation";
+import WaterMapNavigation from "../water-map-navigation";
 
 export const metadata = {
   title: "Pantavion Water A B C Maps",
   description:
-    "Protected mobile entry for Pantavion Water A Map, B Master DWG and C Intelligent Map.",
+    "Protected mobile entry for Pantavion Water A Map, B Derived Map and C Intelligent Map.",
 };
 
 const cards = [
@@ -12,27 +12,27 @@ const cards = [
     title: "Live Operational Map",
     status: "Ενεργό",
     description:
-      "Ο σημερινός προστατευμένος live χάρτης ύδρευσης για approved users. Δεν αντικαθίσταται και δεν φορτώνει raw DWG.",
+      "Ο σημερινός προστατευμένος live χάρτης ύδρευσης για approved users. Καθημερινή λειτουργική χρήση και φόρτωση ελεγχόμενων τμημάτων.",
     href: "/professional/infrastructure/water/live",
     action: "Άνοιγμα A Map",
   },
   {
-    label: "B MASTER",
-    title: "Authentic DWG Master",
-    status: "Private vault connected",
+    label: "B MAP",
+    title: "B Derived Protected Map",
+    status: "Real preview",
     description:
-      "Το αυθεντικό DWG βρίσκεται σε private vault. Δεν κατεβαίνει raw, δεν είναι public, δεν φορτώνει ολόκληρο στο κινητό.",
-    href: "/professional/infrastructure/water/master",
-    action: "Έλεγχος B Master",
+      "Πρώτη προστατευμένη B προβολή πάνω σε οδικό υπόβαθρο, για έλεγχο δικτύου/αγωγών χωρίς raw DWG και χωρίς full browser load.",
+    href: "/professional/infrastructure/water/b",
+    action: "Άνοιγμα B Map",
   },
   {
-    label: "C INTELLIGENT",
-    title: "Intelligent Engineering Map",
-    status: "Foundation",
+    label: "C MAP",
+    title: "C Intelligent Map",
+    status: "Intelligence preview",
     description:
-      "Το επόμενο έξυπνο επίπεδο για αλλαγές, βάνες, βλάβες, φωτογραφίες, σημειώσεις, οδούς, πίεση, PRV και τηλεμετρία.",
+      "C workspace για υψόμετρα, πίεση, ζώνες, PRV, βλάβες, αλλαγές πεδίου, φωτογραφίες και μελλοντική τηλεμετρία.",
     href: "/professional/infrastructure/water/c",
-    action: "Προβολή C Foundation",
+    action: "Άνοιγμα C Map",
   },
 ];
 
@@ -53,9 +53,8 @@ export default function WaterAbcMapsPage() {
 
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300 md:text-base">
             Καθαρό κέντρο πλοήγησης για τους προστατευμένους χάρτες ύδρευσης:
-            A Map για τον σημερινό live χάρτη, B Master για το αυθεντικό DWG
-            private vault και C Intelligent για το επόμενο έξυπνο επαγγελματικό
-            επίπεδο.
+            A για λειτουργία πεδίου, B για derived protected network view και C
+            για έξυπνη engineering προβολή.
           </p>
 
           <div className="mt-7 grid gap-4 md:grid-cols-3">
@@ -89,15 +88,15 @@ export default function WaterAbcMapsPage() {
           </div>
 
           <div className="mt-7 rounded-3xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm leading-7 text-emerald-100">
-            Status: A Map παραμένει το λειτουργικό map. B Master DWG είναι
-            private connected source. C Intelligent Map είναι το επόμενο στάδιο
-            για derived protected intelligence view.
+            B και C φορτώνουν protected network segments από το υπάρχον
+            ασφαλές API. Δεν υπάρχει raw DWG download, δεν υπάρχει public master
+            και δεν γίνεται πλήρες browser load.
           </div>
 
           <div className="mt-4 rounded-3xl border border-red-400/20 bg-red-500/10 p-4 text-sm leading-7 text-red-100">
-            Protection: Δεν υπάρχει raw DWG download, δεν υπάρχει public master,
-            δεν υπάρχει browser full network load και καμία αλλαγή master δεν
-            γίνεται χωρίς founder approval.
+            Τα C engineering layers δεν είναι τελικές μετρήσεις πίεσης ή
+            υψομέτρων μέχρι να συνδεθούν επίσημες πηγές, field data και
+            founder/engineer approval.
           </div>
         </section>
       </main>

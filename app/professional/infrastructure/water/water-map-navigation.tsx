@@ -24,14 +24,14 @@ const links = [
     description: "live",
   },
   {
-    href: "/professional/infrastructure/water/master",
-    label: "B Master",
-    description: "DWG status",
+    href: "/professional/infrastructure/water/b",
+    label: "B Map",
+    description: "derived",
   },
   {
     href: "/professional/infrastructure/water/c",
-    label: "C Intelligent",
-    description: "foundation",
+    label: "C Map",
+    description: "intelligent",
   },
 ];
 
