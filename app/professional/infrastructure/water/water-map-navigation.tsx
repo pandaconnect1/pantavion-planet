@@ -1,17 +1,27 @@
-﻿"use client";
+"use client";
 
 import { useRouter } from "next/navigation";
 
 const links = [
   {
+    href: "/professional/infrastructure/water",
+    label: "Water Home",
+    description: "κέντρο",
+  },
+  {
+    href: "/professional/infrastructure/water/access",
+    label: "Users / Access",
+    description: "αιτήσεις / approvals",
+  },
+  {
     href: "/professional/infrastructure/water/maps",
     label: "A / B / C",
-    description: "Κέντρο χαρτών",
+    description: "χάρτες",
   },
   {
     href: "/professional/infrastructure/water/live",
     label: "A Map",
-    description: "Live χάρτης",
+    description: "live",
   },
   {
     href: "/professional/infrastructure/water/master",
@@ -21,7 +31,7 @@ const links = [
   {
     href: "/professional/infrastructure/water/c",
     label: "C Intelligent",
-    description: "Foundation",
+    description: "foundation",
   },
 ];
 
