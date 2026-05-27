@@ -1,5 +1,5 @@
 import WaterMapNavigation from "../water-map-navigation";
-import WaterEntryClient from "../water-entry-client";
+import WaterAccessControlClient from "./water-access-control-client";
 
 export const metadata = {
   title: "Pantavion Water Users Access",
@@ -11,7 +11,7 @@ export default function WaterUsersAccessPage() {
   return (
     <>
       <WaterMapNavigation title="Users / Access" />
-      <WaterEntryClient />
+      <WaterAccessControlClient />
     </>
   );
 }
