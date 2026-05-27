@@ -16,10 +16,13 @@ type AccessRecord = {
   lastName?: string;
   phone?: string;
   roleTitle?: string;
+  title?: string;
   status?: string;
   createdAt?: string;
+  requestedAt?: string;
   approvedAt?: string;
   updatedAt?: string;
+  sourcePath?: string;
 };
 
 type ApiResult = {
@@ -37,37 +40,13 @@ type ApiResult = {
   users?: AccessRecord[];
 };
 
-const AUTHORIZE_PATHS = [
-  "/api/professional/infrastructure/water/access/authorize",
-];
-
-const REQUEST_PATHS = [
-  "/api/professional/infrastructure/water/access/request",
-  "/api/professional/infrastructure/water/access/requests",
-];
-
-const ADMIN_LIST_PATHS = [
-  "/api/professional/infrastructure/water/access/admin",
-  "/api/professional/infrastructure/water/access/admin/requests",
-  "/api/professional/infrastructure/water/access/requests",
-];
-
-const APPROVE_PATHS = [
-  "/api/professional/infrastructure/water/access/admin/approve",
-  "/api/professional/infrastructure/water/access/approve",
-];
-
-const DELETE_REQUEST_PATHS = [
-  "/api/professional/infrastructure/water/access/admin/delete",
-  "/api/professional/infrastructure/water/access/admin/reject",
-  "/api/professional/infrastructure/water/access/delete",
-  "/api/professional/infrastructure/water/access/reject",
-];
-
-const REVOKE_PATHS = [
-  "/api/professional/infrastructure/water/access/admin/revoke",
-  "/api/professional/infrastructure/water/access/revoke",
-];
+const API = {
+  authorize: "/api/professional/infrastructure/water/access/authorize",
+  request: "/api/professional/infrastructure/water/access/request",
+  adminRequests: "/api/professional/infrastructure/water/access/admin/requests",
+  adminDecision: "/api/professional/infrastructure/water/access/admin/decision",
+  adminApproved: "/api/professional/infrastructure/water/access/admin/approved",
+};
 
 const DEVICE_ID_KEYS = [
   "pantavion_water_device_id",
@@ -150,7 +129,7 @@ async function postJson(
   path: string,
   body: Record<string, unknown>,
   founderCode?: string
-): Promise<{ status: number; payload: ApiResult }> {
+): Promise<ApiResult> {
   const response = await fetch(path, {
     method: "POST",
     headers: {
@@ -166,40 +145,37 @@ async function postJson(
     cache: "no-store",
   });
 
+  const contentType = response.headers.get("content-type") || "";
   const text = await response.text();
 
+  if (!contentType.includes("application/json")) {
+    return {
+      ok: false,
+      error:
+        "Το API δεν επέστρεψε JSON. Έγινε μπλοκάρισμα για να μη φανεί HTML σφάλμα.",
+    };
+  }
+
   let payload: ApiResult = {};
+
   try {
     payload = text ? (JSON.parse(text) as ApiResult) : {};
   } catch {
-    payload = { ok: false, error: text || "Invalid server response." };
+    return {
+      ok: false,
+      error: "Το API επέστρεψε μη έγκυρο JSON.",
+    };
   }
 
-  return { status: response.status, payload };
-}
-
-async function firstWorkingPost(
-  paths: string[],
-  body: Record<string, unknown>,
-  founderCode?: string
-): Promise<ApiResult> {
-  let lastError = "Δεν βρέθηκε διαθέσιμο access API.";
-
-  for (const path of paths) {
-    try {
-      const result = await postJson(path, body, founderCode);
-
-      if (result.status >= 200 && result.status < 300) {
-        return result.payload;
-      }
-
-      lastError = result.payload.error || result.payload.message || lastError;
-    } catch (error) {
-      lastError = error instanceof Error ? error.message : lastError;
-    }
+  if (!response.ok && !payload.error) {
+    return {
+      ...payload,
+      ok: false,
+      error: `API error ${response.status}`,
+    };
   }
 
-  return { ok: false, error: lastError };
+  return payload;
 }
 
 function asArray(value: unknown): AccessRecord[] {
@@ -207,11 +183,16 @@ function asArray(value: unknown): AccessRecord[] {
 }
 
 function pendingFrom(payload: ApiResult): AccessRecord[] {
-  return [
+  const records = [
     ...asArray(payload.pendingRequests),
     ...asArray(payload.pending),
     ...asArray(payload.requests),
   ];
+
+  return records.filter((record) => {
+    const status = String(record.status || "").toLowerCase();
+    return status !== "approved" && status !== "revoked" && status !== "rejected";
+  });
 }
 
 function approvedFrom(payload: ApiResult): AccessRecord[] {
@@ -230,6 +211,7 @@ function recordKey(record: AccessRecord): string {
     record.requestId ||
     record.id ||
     record.deviceId ||
+    record.sourcePath ||
     `${record.firstName || ""}-${record.lastName || ""}-${record.phone || ""}`
   );
 }
@@ -239,16 +221,27 @@ function recordName(record: AccessRecord): string {
   return fullName || record.phone || record.deviceId || "Χρήστης";
 }
 
-function adminBody(founderCode: string, record?: AccessRecord) {
+function adminBaseBody(founderCode: string) {
   return {
     founderCode,
     adminCode: founderCode,
     code: founderCode,
-    requestId: record?.requestId || record?.id,
-    id: record?.id || record?.requestId,
-    deviceId: record?.deviceId,
-    deviceToken: record?.deviceToken,
-    phone: record?.phone,
+  };
+}
+
+function adminDecisionBody(
+  founderCode: string,
+  decision: "approve" | "reject" | "revoke",
+  record: AccessRecord
+) {
+  return {
+    ...adminBaseBody(founderCode),
+    decision,
+    requestId: record.requestId || record.id,
+    id: record.id || record.requestId,
+    deviceId: record.deviceId,
+    deviceToken: record.deviceToken,
+    phone: record.phone,
   };
 }
 
@@ -290,7 +283,7 @@ export default function WaterAccessControlClient() {
   async function checkApprovedDevice(currentDevice: DeviceIdentity) {
     setCheckingAccess(true);
 
-    const payload = await firstWorkingPost(AUTHORIZE_PATHS, {
+    const payload = await postJson(API.authorize, {
       deviceId: currentDevice.deviceId,
       deviceToken: currentDevice.deviceToken,
     });
@@ -311,7 +304,7 @@ export default function WaterAccessControlClient() {
 
     setRequestMessage("Αποστολή αίτησης...");
 
-    const payload = await firstWorkingPost(REQUEST_PATHS, {
+    const payload = await postJson(API.request, {
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       phone: phone.trim(),
@@ -345,28 +338,42 @@ export default function WaterAccessControlClient() {
     }
 
     setAdminLoading(true);
-    setAdminMessage("Φόρτωση αιτήσεων και approved users...");
+    setAdminMessage("Φόρτωση pending requests και approved users...");
 
-    const payload = await firstWorkingPost(
-      ADMIN_LIST_PATHS,
-      adminBody(code),
+    const requestsPayload = await postJson(
+      API.adminRequests,
+      adminBaseBody(code),
       code
     );
 
-    if (!payload.ok && !payload.requests && !payload.pendingRequests) {
-      setAdminMessage(payload.error || "Δεν φορτώθηκαν τα στοιχεία.");
+    const approvedPayload = await postJson(
+      API.adminApproved,
+      adminBaseBody(code),
+      code
+    );
+
+    if (!requestsPayload.ok) {
+      setAdminMessage(requestsPayload.error || "Δεν φορτώθηκαν οι αιτήσεις.");
       setAdminLoading(false);
       return;
     }
 
-    setPendingRequests(pendingFrom(payload));
-    setApprovedUsers(approvedFrom(payload));
+    if (!approvedPayload.ok) {
+      setAdminMessage(
+        approvedPayload.error || "Δεν φορτώθηκαν οι approved users."
+      );
+      setAdminLoading(false);
+      return;
+    }
+
+    setPendingRequests(pendingFrom(requestsPayload));
+    setApprovedUsers(approvedFrom(approvedPayload));
     setAdminMessage("Φορτώθηκαν τα στοιχεία πρόσβασης.");
     setAdminLoading(false);
   }
 
   async function runAdminAction(
-    action: "approve" | "delete" | "revoke",
+    decision: "approve" | "reject" | "revoke",
     record: AccessRecord
   ) {
     const code = founderCode.trim();
@@ -376,17 +383,14 @@ export default function WaterAccessControlClient() {
       return;
     }
 
-    const paths =
-      action === "approve"
-        ? APPROVE_PATHS
-        : action === "delete"
-          ? DELETE_REQUEST_PATHS
-          : REVOKE_PATHS;
-
     setAdminLoading(true);
     setAdminMessage("Εκτέλεση ενέργειας...");
 
-    const payload = await firstWorkingPost(paths, adminBody(code, record), code);
+    const payload = await postJson(
+      API.adminDecision,
+      adminDecisionBody(code, decision, record),
+      code
+    );
 
     if (!payload.ok) {
       setAdminMessage(payload.error || "Η ενέργεια δεν ολοκληρώθηκε.");
@@ -549,7 +553,7 @@ export default function WaterAccessControlClient() {
                           <p className="font-black">{recordName(record)}</p>
                           <p className="mt-1 text-sm text-slate-300">
                             {record.phone || "χωρίς τηλέφωνο"} ·{" "}
-                            {record.roleTitle || "χωρίς ρόλο"}
+                            {record.roleTitle || record.title || "χωρίς ρόλο"}
                           </p>
                           <p className="mt-1 break-all text-xs text-slate-500">
                             {record.requestId || record.id || record.deviceId}
@@ -558,14 +562,16 @@ export default function WaterAccessControlClient() {
                           <div className="mt-3 grid gap-2 md:grid-cols-2">
                             <button
                               type="button"
-                              onClick={() => void runAdminAction("approve", record)}
+                              onClick={() =>
+                                void runAdminAction("approve", record)
+                              }
                               className="rounded-xl bg-emerald-400 px-4 py-2 text-sm font-black text-[#07101e]"
                             >
                               Approve
                             </button>
                             <button
                               type="button"
-                              onClick={() => void runAdminAction("delete", record)}
+                              onClick={() => void runAdminAction("reject", record)}
                               className="rounded-xl bg-red-400 px-4 py-2 text-sm font-black text-[#07101e]"
                             >
                               Delete / Reject
@@ -585,7 +591,7 @@ export default function WaterAccessControlClient() {
                   <div className="mt-4 space-y-3">
                     {approvedUsers.length === 0 ? (
                       <p className="text-sm text-slate-400">
-                        Δεν φορτώθηκαν approved users ή δεν υπάρχουν ακόμα.
+                        Δεν υπάρχουν approved users ή δεν φορτώθηκαν ακόμα.
                       </p>
                     ) : (
                       approvedUsers.map((record) => (
@@ -596,7 +602,7 @@ export default function WaterAccessControlClient() {
                           <p className="font-black">{recordName(record)}</p>
                           <p className="mt-1 text-sm text-slate-300">
                             {record.phone || "χωρίς τηλέφωνο"} ·{" "}
-                            {record.roleTitle || "approved"}
+                            {record.roleTitle || record.title || "approved"}
                           </p>
                           <p className="mt-1 break-all text-xs text-slate-500">
                             {record.deviceId || record.id || record.requestId}
