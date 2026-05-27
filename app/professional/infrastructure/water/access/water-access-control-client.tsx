@@ -221,6 +221,18 @@ function recordName(record: AccessRecord): string {
   return fullName || record.phone || record.deviceId || "Χρήστης";
 }
 
+function isFounderAdminRecord(record: AccessRecord): boolean {
+  const text = `${record.roleTitle || ""} ${record.title || ""} ${
+    record.status || ""
+  }`.toLowerCase();
+
+  return text.includes("founder") || text.includes("admin");
+}
+
+function isCurrentDeviceRecord(record: AccessRecord, device: DeviceIdentity | null) {
+  return Boolean(device?.deviceId && record.deviceId === device.deviceId);
+}
+
 function adminBaseBody(founderCode: string) {
   return {
     founderCode,
@@ -232,7 +244,9 @@ function adminBaseBody(founderCode: string) {
 function adminDecisionBody(
   founderCode: string,
   decision: "approve" | "reject" | "revoke",
-  record: AccessRecord
+  record: AccessRecord,
+  device: DeviceIdentity | null,
+  revokeConfirmation?: string
 ) {
   return {
     ...adminBaseBody(founderCode),
@@ -242,6 +256,8 @@ function adminDecisionBody(
     deviceId: record.deviceId,
     deviceToken: record.deviceToken,
     phone: record.phone,
+    actingDeviceId: device?.deviceId,
+    revokeConfirmation,
   };
 }
 
@@ -263,6 +279,8 @@ export default function WaterAccessControlClient() {
   const [adminMessage, setAdminMessage] = useState("");
   const [pendingRequests, setPendingRequests] = useState<AccessRecord[]>([]);
   const [approvedUsers, setApprovedUsers] = useState<AccessRecord[]>([]);
+  const [managedRecord, setManagedRecord] = useState<AccessRecord | null>(null);
+  const [revokeText, setRevokeText] = useState("");
 
   const canSubmit = useMemo(() => {
     return Boolean(firstName.trim() && lastName.trim() && phone.trim());
@@ -368,13 +386,16 @@ export default function WaterAccessControlClient() {
 
     setPendingRequests(pendingFrom(requestsPayload));
     setApprovedUsers(approvedFrom(approvedPayload));
+    setManagedRecord(null);
+    setRevokeText("");
     setAdminMessage("Φορτώθηκαν τα στοιχεία πρόσβασης.");
     setAdminLoading(false);
   }
 
   async function runAdminAction(
     decision: "approve" | "reject" | "revoke",
-    record: AccessRecord
+    record: AccessRecord,
+    revokeConfirmation?: string
   ) {
     const code = founderCode.trim();
 
@@ -383,23 +404,56 @@ export default function WaterAccessControlClient() {
       return;
     }
 
+    if (decision === "reject") {
+      const ok = window.confirm(
+        "Να γίνει reject/delete αυτής της αίτησης; Η ενέργεια θα την αφαιρέσει από το active queue."
+      );
+
+      if (!ok) return;
+    }
+
+    if (decision === "revoke") {
+      if (isFounderAdminRecord(record)) {
+        setAdminMessage("Founder/admin access is protected. Δεν γίνεται revoke.");
+        return;
+      }
+
+      if (isCurrentDeviceRecord(record, device)) {
+        setAdminMessage("Δεν μπορείς να κάνεις revoke τη συσκευή που χρησιμοποιείς τώρα.");
+        return;
+      }
+
+      if (revokeConfirmation !== "REVOKE") {
+        setAdminMessage("Για revoke πρέπει πρώτα να γράψεις REVOKE.");
+        return;
+      }
+    }
+
     setAdminLoading(true);
     setAdminMessage("Εκτέλεση ενέργειας...");
 
     const payload = await postJson(
       API.adminDecision,
-      adminDecisionBody(code, decision, record),
+      adminDecisionBody(code, decision, record, device, revokeConfirmation),
       code
     );
 
     if (!payload.ok) {
-      setAdminMessage(payload.error || "Η ενέργεια δεν ολοκληρώθηκε.");
+      setAdminMessage(payload.message || payload.error || "Η ενέργεια δεν ολοκληρώθηκε.");
       setAdminLoading(false);
       return;
     }
 
     setAdminMessage("Η ενέργεια ολοκληρώθηκε.");
+    setManagedRecord(null);
+    setRevokeText("");
     await loadAdminRequests();
+  }
+
+  function openManage(record: AccessRecord) {
+    setManagedRecord(record);
+    setRevokeText("");
+    setAdminMessage("Άνοιξε ασφαλής διαχείριση πρόσβασης.");
   }
 
   return (
@@ -574,7 +628,7 @@ export default function WaterAccessControlClient() {
                               onClick={() => void runAdminAction("reject", record)}
                               className="rounded-xl bg-red-400 px-4 py-2 text-sm font-black text-[#07101e]"
                             >
-                              Delete / Reject
+                              Reject request
                             </button>
                           </div>
                         </div>
@@ -594,33 +648,100 @@ export default function WaterAccessControlClient() {
                         Δεν υπάρχουν approved users ή δεν φορτώθηκαν ακόμα.
                       </p>
                     ) : (
-                      approvedUsers.map((record) => (
-                        <div
-                          key={recordKey(record)}
-                          className="rounded-2xl border border-white/10 bg-[#07101e] p-4"
-                        >
-                          <p className="font-black">{recordName(record)}</p>
-                          <p className="mt-1 text-sm text-slate-300">
-                            {record.phone || "χωρίς τηλέφωνο"} ·{" "}
-                            {record.roleTitle || record.title || "approved"}
-                          </p>
-                          <p className="mt-1 break-all text-xs text-slate-500">
-                            {record.deviceId || record.id || record.requestId}
-                          </p>
+                      approvedUsers.map((record) => {
+                        const founderProtected = isFounderAdminRecord(record);
+                        const currentDeviceProtected = isCurrentDeviceRecord(record, device);
+                        const protectedRecord = founderProtected || currentDeviceProtected;
 
-                          <button
-                            type="button"
-                            onClick={() => void runAdminAction("revoke", record)}
-                            className="mt-3 rounded-xl border border-red-400/50 px-4 py-2 text-sm font-black text-red-200"
+                        return (
+                          <div
+                            key={recordKey(record)}
+                            className="rounded-2xl border border-white/10 bg-[#07101e] p-4"
                           >
-                            Revoke access
-                          </button>
-                        </div>
-                      ))
+                            <p className="font-black">{recordName(record)}</p>
+                            <p className="mt-1 text-sm text-slate-300">
+                              {record.phone || "χωρίς τηλέφωνο"} ·{" "}
+                              {record.roleTitle || record.title || "approved"}
+                            </p>
+                            <p className="mt-1 break-all text-xs text-slate-500">
+                              {record.deviceId || record.id || record.requestId}
+                            </p>
+
+                            {protectedRecord ? (
+                              <p className="mt-3 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-2 text-sm font-black text-emerald-100">
+                                Protected access - no direct revoke
+                              </p>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => openManage(record)}
+                                className="mt-3 rounded-xl border border-[#d8b45f]/50 px-4 py-2 text-sm font-black text-[#f3db9d]"
+                              >
+                                Manage access
+                              </button>
+                            )}
+                          </div>
+                        );
+                      })
                     )}
                   </div>
                 </section>
               </div>
+
+              {managedRecord ? (
+                <section className="mt-6 rounded-3xl border border-red-400/30 bg-red-500/10 p-5">
+                  <p className="text-xs font-black uppercase tracking-[0.25em] text-red-200">
+                    Safe access management
+                  </p>
+
+                  <h3 className="mt-2 text-2xl font-black">
+                    {recordName(managedRecord)}
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-7 text-red-100">
+                    Επικίνδυνη ενέργεια. Το revoke δεν γίνεται με ένα click.
+                    Πρώτα άνοιξες Manage access, μετά πρέπει να γράψεις REVOKE,
+                    και μόνο μετά ενεργοποιείται η τελική εντολή.
+                  </p>
+
+                  <div className="mt-4 rounded-2xl border border-white/10 bg-[#06101f] p-4 text-sm text-slate-200">
+                    <p>Device: {managedRecord.deviceId || "unknown"}</p>
+                    <p>Phone: {managedRecord.phone || "unknown"}</p>
+                    <p>Role: {managedRecord.roleTitle || managedRecord.title || "approved"}</p>
+                  </div>
+
+                  <input
+                    value={revokeText}
+                    onChange={(event) => setRevokeText(event.target.value)}
+                    placeholder="Γράψε REVOKE για επιβεβαίωση"
+                    className="mt-4 w-full rounded-2xl border border-red-400/30 bg-[#06101f] px-4 py-3 text-white outline-none focus:border-red-300"
+                  />
+
+                  <div className="mt-4 grid gap-3 md:grid-cols-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setManagedRecord(null);
+                        setRevokeText("");
+                      }}
+                      className="rounded-2xl border border-white/20 px-5 py-3 font-black text-white"
+                    >
+                      Cancel
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={revokeText !== "REVOKE" || adminLoading}
+                      onClick={() =>
+                        void runAdminAction("revoke", managedRecord, revokeText)
+                      }
+                      className="rounded-2xl bg-red-400 px-5 py-3 font-black text-[#07101e] disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      Confirm revoke
+                    </button>
+                  </div>
+                </section>
+              ) : null}
             </div>
           ) : null}
         </div>
