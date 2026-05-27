@@ -1,4 +1,5 @@
-﻿import BMasterStatusClient from "./b-master-status-client";
+﻿import WaterMapNavigation from "../water-map-navigation";
+import BMasterStatusClient from "./b-master-status-client";
 
 export const metadata = {
   title: "Pantavion Water B Master Status",
@@ -6,5 +7,10 @@ export const metadata = {
 };
 
 export default function WaterBMasterStatusPage() {
-  return <BMasterStatusClient />;
+  return (
+    <>
+      <WaterMapNavigation title="B Master DWG Status" />
+      <BMasterStatusClient />
+    </>
+  );
 }
