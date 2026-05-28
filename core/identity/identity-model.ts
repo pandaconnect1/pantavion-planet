@@ -1,17 +1,51 @@
 import type {
-  PantavionActorRef,
   PantavionPrincipalType,
-  PantavionScope,
   PantavionSensitivity,
-} from '../../types/pantavion';
+} from "../../types/pantavion";
+
+export type PantavionTrustTier =
+  | "untrusted"
+  | "basic"
+  | "trusted"
+  | "high-trust"
+  | "system";
+
+export type PantavionApprovalTier =
+  | "none"
+  | "review"
+  | "admin"
+  | "security"
+  | "executive";
 
 export interface PantavionAuthorityProof {
   id: string;
-  kind: 'direct' | 'delegated' | 'service' | 'system';
+  kind: "direct" | "delegated" | "service" | "system";
   issuedAt: string;
   expiresAt?: string;
   issuedBy?: string;
   note?: string;
+}
+
+export interface PantavionIdentityRegistrationInput {
+  id?: string;
+  actorId?: string;
+  type?: PantavionPrincipalType;
+  actorType?: PantavionPrincipalType;
+  displayName?: string;
+  region?: string;
+  verified?: boolean;
+  roles?: string[];
+  role?: string;
+  scopes?: string[];
+  primaryRole?: string;
+  trustTier?: PantavionTrustTier;
+  approvalTier?: PantavionApprovalTier;
+  status?: "active" | "inactive" | "suspended";
+  defaultScopes?: Array<string | { id?: string; label?: string; kind?: string }>;
+  requestedOperation?: string;
+  requestedSensitivity?: PantavionSensitivity;
+  metadata?: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
 export interface PantavionIdentityProfile {
@@ -21,92 +55,131 @@ export interface PantavionIdentityProfile {
   region?: string;
   sensitivityCeiling: PantavionSensitivity;
   roles: string[];
-  scopes: PantavionScope[];
+  scopes: string[];
   active: boolean;
   verified: boolean;
+  trustTier: PantavionTrustTier;
+  approvalTier: PantavionApprovalTier;
   metadata?: Record<string, unknown>;
 }
 
 export interface PantavionIdentityResolution {
   actor: PantavionIdentityProfile;
-  proofs: PantavionAuthorityProof[];
+  actorId: string;
+  actorType: PantavionPrincipalType;
   effectiveRoles: string[];
-  effectiveScopes: PantavionScope[];
+  effectiveScopes: string[];
+  trustTier: PantavionTrustTier;
+  approvalTier: PantavionApprovalTier;
+  proofs: PantavionAuthorityProof[];
   approved: boolean;
   denialReasons: string[];
 }
 
+export type PantavionIdentityRecord = PantavionIdentityProfile;
+export type PantavionResolvedIdentityPosture = PantavionIdentityResolution;
+
 export const SYSTEM_KERNEL_IDENTITY: PantavionIdentityProfile = {
-  id: 'pantavion.kernel0',
-  type: 'system',
-  displayName: 'Pantavion Kernel 0',
-  sensitivityCeiling: 'critical',
-  roles: ['kernel', 'governor', 'system'],
-  scopes: ['read', 'write', 'execute', 'delegate', 'approve', 'admin', 'memory', 'policy', 'identity', 'ops', 'protocol'],
+  id: "pantavion.kernel0",
+  type: "system",
+  displayName: "Pantavion Kernel 0",
+  sensitivityCeiling: "critical",
+  roles: ["kernel", "governor", "system"],
+  scopes: ["read", "write", "execute", "delegate", "approve", "admin", "memory", "policy", "identity", "ops", "protocol", "global"],
   active: true,
   verified: true,
+  trustTier: "system",
+  approvalTier: "security",
 };
 
-export function buildIdentityProfile(actor: PantavionActorRef): PantavionIdentityProfile {
+function uniq(values: string[]): string[] {
+  return [...new Set(values.map((value) => value.trim()).filter(Boolean))];
+}
+
+function normalizeScope(value: string | { id?: string; label?: string; kind?: string }): string {
+  if (typeof value === "string") return value;
+  return value.id || value.label || value.kind || "global";
+}
+
+export function buildIdentityProfile(actor: PantavionIdentityRegistrationInput): PantavionIdentityProfile {
+  const type = actor.type || actor.actorType || "human";
+  const roles = uniq([
+    ...(actor.roles ?? []),
+    ...(actor.primaryRole ? [actor.primaryRole] : []),
+    ...(actor.role ? [actor.role] : []),
+  ]);
+
+  const scopes = uniq(
+    actor.scopes?.length
+      ? actor.scopes.map(String)
+      : (actor.defaultScopes ?? ["read"]).map(normalizeScope)
+  );
+
   return {
-    id: actor.id,
-    type: actor.type ?? 'human',
-    displayName: actor.displayName ?? actor.id,
+    id: String(actor.id || actor.actorId || "unknown-actor"),
+    type,
+    displayName: String(actor.displayName ?? actor.id ?? actor.actorId ?? "unknown-actor"),
     region: actor.region,
-    sensitivityCeiling: 'internal',
-    roles: actor.roles ?? [],
-    scopes: actor.scopes ?? ['read'],
-    active: true,
-    verified: actor.verified ?? false,
+    sensitivityCeiling: "internal",
+    roles,
+    scopes,
+    active: actor.status ? actor.status === "active" : true,
+    verified: actor.verified ?? (type === "system" || type === "service"),
+    trustTier: actor.trustTier ?? (type === "system" ? "system" : "trusted"),
+    approvalTier: actor.approvalTier ?? "review",
+    metadata: actor.metadata,
   };
 }
 
+export function registerIdentity(actor: PantavionIdentityRegistrationInput): PantavionIdentityProfile {
+  return buildIdentityProfile(actor);
+}
+
 export function resolveIdentity(
-  actor: PantavionActorRef | undefined,
+  actor: PantavionIdentityRegistrationInput | undefined,
   proofs: PantavionAuthorityProof[] = [],
 ): PantavionIdentityResolution {
-  const profile = buildIdentityProfile(actor ?? { id: 'unknown-actor', verified: false });
-
+  const profile = buildIdentityProfile(actor ?? { id: "unknown-actor", verified: false });
   const denialReasons: string[] = [];
-  if (!profile.id.trim()) denialReasons.push('missing_actor_id');
-  if (!profile.active) denialReasons.push('actor_inactive');
-  if (!profile.verified) denialReasons.push('actor_unverified');
+
+  if (!profile.id.trim()) denialReasons.push("missing_actor_id");
+  if (!profile.active) denialReasons.push("actor_inactive");
+  if (!profile.verified) denialReasons.push("actor_unverified");
 
   return {
     actor: profile,
+    actorId: profile.id,
+    actorType: profile.type,
     proofs,
-    effectiveRoles: [...new Set(profile.roles)],
-    effectiveScopes: [...new Set(profile.scopes)],
+    effectiveRoles: uniq(profile.roles),
+    effectiveScopes: uniq(profile.scopes),
+    trustTier: profile.trustTier,
+    approvalTier: profile.approvalTier,
     approved: denialReasons.length === 0,
     denialReasons,
   };
 }
 
-export function hasRequiredScopes(
-  resolution: PantavionIdentityResolution,
-  requiredScopes: PantavionScope[],
-): boolean {
-  return requiredScopes.every((scope) => resolution.effectiveScopes.includes(scope));
-}
-
-
-export function registerIdentity(actor: PantavionActorRef): PantavionIdentityProfile {
-  return buildIdentityProfile(actor);
-}
-
 export function resolveIdentityPosture(
-  actor: PantavionActorRef | undefined,
-  proofs: PantavionAuthorityProof[] = []
+  actor: PantavionIdentityRegistrationInput | undefined,
+  proofs: PantavionAuthorityProof[] = [],
 ): PantavionIdentityResolution {
   return resolveIdentity(actor, proofs);
 }
 
-export type PantavionIdentityRecord = PantavionIdentityProfile;
-export type PantavionResolvedIdentityPosture = PantavionIdentityResolution;
+export function hasRequiredScopes(
+  resolution: PantavionIdentityResolution,
+  requiredScopes: string[],
+): boolean {
+  return requiredScopes.every((scope) => resolution.effectiveScopes.includes(scope));
+}
+
 export const identityModel = {
   id: "pantavion_identity_model_v1",
   systemIdentity: SYSTEM_KERNEL_IDENTITY,
   buildIdentityProfile,
+  registerIdentity,
   resolveIdentity,
+  resolveIdentityPosture,
   hasRequiredScopes,
 } as const;

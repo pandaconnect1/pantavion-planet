@@ -1,4 +1,4 @@
-﻿import type { PantavionScope } from '../../types/pantavion';
+import type { PantavionScope } from '../../types/pantavion';
 import type { PantavionAuthorityProof, PantavionIdentityProfile } from './identity-model';
 
 export interface PantavionDelegationGrant {
@@ -48,31 +48,65 @@ export function evaluateDelegation(
 }
 
 export function createDelegation(input: {
+  id?: string;
   kind: string;
   principalId: string;
+  principalType?: string;
   delegateId: string;
-  scope: string;
-  reason: string;
+  delegateType?: string;
+  scope?: PantavionScope | string;
+  scopes?: Array<PantavionScope | string>;
+  delegatedScopes?: Array<string | { scopeId?: string; scopeLabel?: string; id?: string; label?: string }>;
+  delegatedRoles?: string[];
+  delegatedEntitlements?: string[];
+  delegatedCapabilities?: unknown[];
+  trustFloor?: string;
+  approvalTier?: string;
+  constraints?: string[];
+  rationale?: string[];
+  reason?: string;
   issuedAt?: string;
   expiresAt?: string;
+  metadata?: Record<string, unknown>;
+  [key: string]: unknown;
 }): PantavionDelegationGrant {
   const now = input.issuedAt || new Date().toISOString();
 
+  const delegatedScopeValues = (input.delegatedScopes ?? []).map((scope) => {
+    if (typeof scope === "string") return scope;
+    return scope.scopeId || scope.id || scope.scopeLabel || scope.label || "global";
+  });
+
+  const scopes = [
+    ...(input.scopes ?? []),
+    ...(input.scope ? [input.scope] : []),
+    ...delegatedScopeValues,
+  ].map((scope) => String(scope)) as PantavionScope[];
+
+  const finalScopes = scopes.length > 0 ? scopes : (["global"] as PantavionScope[]);
+
   return {
-    id: `delegation_${input.kind}_${input.principalId}_${input.delegateId}_${Date.parse(now)}`,
+    id: input.id || `delegation_${input.kind}_${input.principalId}_${input.delegateId}_${Date.parse(now)}`,
     kind: input.kind,
     principalId: input.principalId,
     delegateId: input.delegateId,
     grantorId: input.principalId,
     granteeId: input.delegateId,
-    scope: input.scope,
-    scopes: [input.scope],
-    reason: input.reason,
+    scope: finalScopes[0],
+    scopes: finalScopes,
+    reason:
+      input.reason ||
+      input.rationale?.join(" ") ||
+      "Pantavion delegated foundation grant.",
     issuedAt: now,
-    expiresAt: input.expiresAt || null,
+    expiresAt: input.expiresAt,
     status: "active",
     active: true,
   } as unknown as PantavionDelegationGrant;
+}
+
+export function activateDelegation(id: string): boolean {
+  return Boolean(id && id.trim());
 }
 
 export type PantavionDelegationRecord = PantavionDelegationGrant;
@@ -82,5 +116,6 @@ export const delegationModel = {
   evaluateDelegation,
   create: createDelegation,
   evaluate: evaluateDelegation,
+  activateDelegation,
 };
 

@@ -1,4 +1,4 @@
-﻿// core/kernel/kernel-bootstrap.ts
+// core/kernel/kernel-bootstrap.ts
 
 import {
   createKernel0Coordinator,
@@ -199,6 +199,7 @@ function registerFoundationDelegations(
   actors: PantavionFoundationActors,
 ): PantavionFoundationDelegations {
   const adminToWorkspaceAgent = createDelegation({
+    id: 'delegation.admin.workspace.foundation',
     kind: 'workspace',
     principalId: actors.adminRoot.id,
     principalType: 'human',
@@ -263,7 +264,7 @@ function ensureFoundationProtocolAdapters(): string[] {
       },
     });
 
-    registerProtocolHandler('voice-internal', async ({ request }) => {
+    registerProtocolHandler('voice-internal', async ({ request }: import('../protocol/protocol-gateway').ProtocolHandlerContext) => {
       const payload = asRecord(request.input);
       const text = safeText(payload.text, '[voice]');
       const sourceLanguage = safeText(payload.sourceLanguage, 'auto');
@@ -320,7 +321,7 @@ function ensureFoundationProtocolAdapters(): string[] {
       },
     });
 
-    registerProtocolHandler('workspace-internal', async ({ request }) => {
+    registerProtocolHandler('workspace-internal', async ({ request }: import('../protocol/protocol-gateway').ProtocolHandlerContext) => {
       return {
         text: `[workspace-executed] ${request.operationKey}`,
         operationKey: request.operationKey,
@@ -365,7 +366,7 @@ function buildKernelHooks(
     resolveIdentityPosture: async (request) => {
       return resolveIdentityPosture({
         actorId: request.actor.actorId,
-        actorType: request.actor.actorType,
+        actorType: request.actor.actorType as import('../../types/pantavion').PantavionPrincipalType,
         role: request.actor.role,
         scopes: request.actor.scopes,
         delegatedBy: request.actor.delegatedBy,

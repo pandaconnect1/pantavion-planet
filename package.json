@@ -26,7 +26,8 @@
     "sources:harvest": "node scripts/pantavion-external-source-harvest.cjs",
     "audit:translation-runtime": "node scripts/pantavion-translation-runtime-gate.cjs",
     "audit:vision": "node scripts/pantavion-vision-registry-gate.cjs",
-    "audit:water:abc": "node scripts/pantavion-water-abc-map-system-gate.cjs"
+    "audit:water:abc": "node scripts/pantavion-water-abc-map-system-gate.cjs",
+    "audit:emergency-guardian": "node scripts/pantavion-emergency-guardian-gate.cjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

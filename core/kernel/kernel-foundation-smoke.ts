@@ -1,4 +1,4 @@
-﻿// core/kernel/kernel-foundation-smoke.ts
+// core/kernel/kernel-foundation-smoke.ts
 
 import {
   bootPantavionFoundation,
@@ -39,7 +39,7 @@ export async function runPantavionFoundationSmoke(): Promise<PantavionFoundation
     actorId: foundation.actors.adminRoot.id,
     actorType: 'human',
     role: 'admin-operator',
-    scopes: ['global'],
+    scopes: ['read'],
     requestedOperation: 'kernel bootstrap smoke',
     requestedSensitivity: 'internal',
   });
@@ -121,7 +121,7 @@ export async function runPantavionFoundationSmoke(): Promise<PantavionFoundation
     sessionId: voiceSession.sessionId,
     identity: adminIdentity,
     turn: {
-        text: 'Καλημέρα Pantavion',
+        text: 'ÃŽÅ¡ÃŽÂ±ÃŽÂ»ÃŽÂ·ÃŽÂ¼ÃŽÂ­ÃÂÃŽÂ± Pantavion',
         intent: 'voice-smoke',
         metadata: {
           smoke: true,

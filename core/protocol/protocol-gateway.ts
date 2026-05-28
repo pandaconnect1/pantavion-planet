@@ -3,52 +3,53 @@ import type {
   PantavionProtocolEnvelope,
 } from "./protocol-types";
 
-export interface PantavionProtocolGateway {
-  accept<TPayload>(envelope: PantavionProtocolEnvelope<TPayload>): PantavionExecutionReceipt;
-}
-
-export function createProtocolGateway(): PantavionProtocolGateway {
-  return {
-    accept<TPayload>(envelope: PantavionProtocolEnvelope<TPayload>): PantavionExecutionReceipt {
-      const reasons: string[] = [];
-
-      if (!envelope.packetId) reasons.push("missing_packet_id");
-      if (!envelope.protocolVersion) reasons.push("missing_protocol_version");
-      if (!envelope.source?.principalId) reasons.push("missing_source_principal");
-      if (!envelope.target?.route) reasons.push("missing_target_route");
-
-      return {
-        receiptId: "receipt:" + envelope.packetId,
-        packetId: envelope.packetId,
-        status: reasons.length === 0 ? "accepted" : "rejected",
-        truthZone: envelope.truthZone,
-        createdAt: new Date().toISOString(),
-        reasons,
-      };
-    },
-  };
-}
-
-type PantavionProtocolRegistryEntry = {
+type RegistryEntry<TValue = unknown> = {
   key: string;
-  value: unknown;
+  adapterKey: string;
+  value: TValue;
   registeredAt: string;
 };
 
-const foundationProtocolAdapters: PantavionProtocolRegistryEntry[] = [];
-const protocolHandlers: PantavionProtocolRegistryEntry[] = [];
+export interface ProtocolHandlerContext {
+  request: {
+    operationKey: string;
+    capabilityKey?: string;
+    input?: unknown;
+  };
+}
+
+type ProtocolHandler = (context: ProtocolHandlerContext) => Promise<unknown> | unknown;
+
+const foundationProtocolAdapters: RegistryEntry[] = [];
+const protocolHandlers: RegistryEntry<ProtocolHandler>[] = [];
+let dispatchCount = 0;
 
 function getRegistryKey(value: unknown, fallbackPrefix: string) {
   if (typeof value === "string" && value.trim()) return value.trim();
 
   if (value && typeof value === "object") {
-    const record = value as { key?: unknown; id?: unknown; name?: unknown };
+    const record = value as {
+      key?: unknown;
+      id?: unknown;
+      name?: unknown;
+      adapterKey?: unknown;
+      displayName?: unknown;
+    };
+
+    if (typeof record.adapterKey === "string" && record.adapterKey.trim()) return record.adapterKey.trim();
     if (typeof record.key === "string" && record.key.trim()) return record.key.trim();
     if (typeof record.id === "string" && record.id.trim()) return record.id.trim();
     if (typeof record.name === "string" && record.name.trim()) return record.name.trim();
+    if (typeof record.displayName === "string" && record.displayName.trim()) return record.displayName.trim();
   }
 
-  return fallbackPrefix + "_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+  return `${fallbackPrefix}_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+}
+
+export interface PantavionProtocolGateway {
+  accept<TPayload>(envelope: PantavionProtocolEnvelope<TPayload>): PantavionExecutionReceipt;
+  getAdapter(adapterKey: string): RegistryEntry | null;
+  getStats(): ReturnType<typeof getProtocolGatewayStats>;
 }
 
 export function registerFoundationProtocolAdapter(
@@ -62,8 +63,12 @@ export function registerFoundationProtocolAdapter(
 
   const value = typeof keyOrAdapter === "string" ? maybeAdapter : keyOrAdapter;
 
-  const entry = {
+  const existing = foundationProtocolAdapters.find((entry) => entry.key === key);
+  if (existing) return existing;
+
+  const entry: RegistryEntry = {
     key,
+    adapterKey: key,
     value,
     registeredAt: new Date().toISOString(),
   };
@@ -83,9 +88,10 @@ export function registerProtocolHandler(
 
   const value = typeof keyOrHandler === "string" ? maybeHandler : keyOrHandler;
 
-  const entry = {
+  const entry: RegistryEntry<ProtocolHandler> = {
     key,
-    value,
+    adapterKey: key,
+    value: value as ProtocolHandler,
     registeredAt: new Date().toISOString(),
   };
 
@@ -95,6 +101,16 @@ export function registerProtocolHandler(
 
 export function getProtocolRegistrySnapshot() {
   return {
+    adapters: foundationProtocolAdapters.map((entry) => ({
+      adapterKey: entry.adapterKey,
+      key: entry.key,
+      registeredAt: entry.registeredAt,
+    })),
+    handlers: protocolHandlers.map((entry) => ({
+      adapterKey: entry.adapterKey,
+      key: entry.key,
+      registeredAt: entry.registeredAt,
+    })),
     foundationProtocolAdapters: foundationProtocolAdapters.map((entry) => ({
       key: entry.key,
       registeredAt: entry.registeredAt,
@@ -104,6 +120,8 @@ export function getProtocolRegistrySnapshot() {
       registeredAt: entry.registeredAt,
     })),
     totals: {
+      adapters: foundationProtocolAdapters.length,
+      handlers: protocolHandlers.length,
       foundationProtocolAdapters: foundationProtocolAdapters.length,
       protocolHandlers: protocolHandlers.length,
     },
@@ -115,8 +133,42 @@ export function getProtocolGatewayStats() {
 
   return {
     ...snapshot.totals,
+    dispatchCount,
+    adapterCount: snapshot.totals.adapters,
+    handlerCount: snapshot.totals.handlers,
     gatewayReady: true,
     updatedAt: new Date().toISOString(),
+  };
+}
+
+export function createProtocolGateway(): PantavionProtocolGateway {
+  return {
+    accept<TPayload>(envelope: PantavionProtocolEnvelope<TPayload>): PantavionExecutionReceipt {
+      dispatchCount += 1;
+
+      const reasons: string[] = [];
+      if (!envelope.packetId) reasons.push("missing_packet_id");
+      if (!envelope.protocolVersion) reasons.push("missing_protocol_version");
+      if (!envelope.source?.principalId) reasons.push("missing_source_principal");
+      if (!envelope.target?.route) reasons.push("missing_target_route");
+
+      return {
+        receiptId: "receipt:" + envelope.packetId,
+        packetId: envelope.packetId,
+        status: reasons.length === 0 ? "accepted" : "rejected",
+        truthZone: envelope.truthZone,
+        createdAt: new Date().toISOString(),
+        reasons,
+      };
+    },
+
+    getAdapter(adapterKey: string): RegistryEntry | null {
+      return foundationProtocolAdapters.find((entry) => entry.adapterKey === adapterKey || entry.key === adapterKey) ?? null;
+    },
+
+    getStats() {
+      return getProtocolGatewayStats();
+    },
   };
 }
 

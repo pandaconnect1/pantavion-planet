@@ -1,4 +1,4 @@
-﻿// core/kernel/kernel-readiness-report.ts
+// core/kernel/kernel-readiness-report.ts
 
 import {
   runKernelControlPlane,
@@ -184,7 +184,7 @@ export function buildKernelReadinessReport(
       'resilience',
       run.resilienceMode === 'normal'
         ? 'pass'
-        : run.resilienceMode === 'degraded' || run.resilienceMode === 'offline-buffered'
+        : run.resilienceMode === 'degraded' 
           ? 'warn'
           : 'fail',
       `Resilience mode=${run.resilienceMode}.`,

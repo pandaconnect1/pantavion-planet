@@ -13,7 +13,8 @@ export type PantavionScope =
   | 'policy'
   | 'identity'
   | 'ops'
-  | 'protocol';
+  | 'protocol'
+  | 'global';
 
 export type PantavionDomain =
   | 'kernel'
