@@ -4,6 +4,7 @@ import {
   createPantavionKernelAccessDeniedReport,
   isPantavionKernelAccessAllowed,
   PANTAVION_KERNEL_ACCESS_QUERY,
+  PANTAVION_KERNEL_FOUNDER_QUERY,
 } from "@/core/kernel/kernel-access-guard";
 import { createPantavionKernelHeartbeat } from "@/core/kernel/kernel-heartbeat";
 
@@ -17,11 +18,21 @@ function parseReserveKernelCount(): number {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
 }
 
+function readFounderToken(request: NextRequest): string | null {
+  return (
+    request.nextUrl.searchParams.get(PANTAVION_KERNEL_ACCESS_QUERY) ??
+    request.nextUrl.searchParams.get(PANTAVION_KERNEL_FOUNDER_QUERY) ??
+    request.headers.get("x-pantavion-kernel-token") ??
+    request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ??
+    null
+  );
+}
+
 export async function GET(request: NextRequest) {
-  const token = request.nextUrl.searchParams.get(PANTAVION_KERNEL_ACCESS_QUERY);
+  const token = readFounderToken(request);
 
   if (!isPantavionKernelAccessAllowed(token)) {
-    return NextResponse.json(createPantavionKernelAccessDeniedReport(), {
+    return NextResponse.json(createPantavionKernelAccessDeniedReport(token), {
       status: 404,
       headers: {
         "Cache-Control": "no-store",
