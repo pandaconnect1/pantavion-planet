@@ -153,7 +153,10 @@ export default function HomePage() {
               {t.interpreter}
             </Link>
 
-            <Link href="/panta-ai" className="rounded-full border border-[#f6c85f]/45 bg-white/5 px-6 py-4 text-center text-base font-black text-[#fff8e7]">
+                        <Link href="/unified-inbox" className="rounded-full border border-[#f6c85f]/45 bg-white/5 px-6 py-4 text-center text-base font-black text-[#fff8e7]">
+              Unified Inbox
+            </Link>
+<Link href="/panta-ai" className="rounded-full border border-[#f6c85f]/45 bg-white/5 px-6 py-4 text-center text-base font-black text-[#fff8e7]">
               {t.pantaAI}
             </Link>
 
