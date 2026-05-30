@@ -10,21 +10,13 @@ import {
 
 export const dynamic = "force-dynamic";
 
-function readFounderToken(request: NextRequest): string | null {
-  return (
-    request.nextUrl.searchParams.get(PANTAVION_KERNEL_ACCESS_QUERY) ??
-    request.nextUrl.searchParams.get(PANTAVION_KERNEL_FOUNDER_QUERY) ??
-    request.headers.get("x-pantavion-kernel-token") ??
-    request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ??
-    null
-  );
-}
-
 export async function GET(request: NextRequest) {
-  const token = readFounderToken(request);
+  const token =
+    request.nextUrl.searchParams.get(PANTAVION_KERNEL_FOUNDER_QUERY) ??
+    request.nextUrl.searchParams.get(PANTAVION_KERNEL_ACCESS_QUERY);
 
   if (!isPantavionKernelAccessAllowed(token)) {
-    return NextResponse.json(createPantavionKernelAccessDeniedReport(token), {
+    return NextResponse.json(createPantavionKernelAccessDeniedReport(), {
       status: 404,
       headers: {
         "Cache-Control": "no-store",
@@ -33,13 +25,12 @@ export async function GET(request: NextRequest) {
   }
 
   const response = NextResponse.redirect(new URL("/kernel", request.url));
-
   response.cookies.set(PANTAVION_KERNEL_SESSION_COOKIE, token ?? "", {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     path: "/",
-    maxAge: 60 * 60 * 6,
+    maxAge: 60 * 60 * 8,
   });
 
   return response;
