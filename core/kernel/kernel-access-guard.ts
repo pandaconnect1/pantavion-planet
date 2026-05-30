@@ -1,5 +1,6 @@
 ﻿export const PANTAVION_KERNEL_ACCESS_QUERY = "kernelToken";
 export const PANTAVION_KERNEL_FOUNDER_QUERY = "founderToken";
+export const PANTAVION_KERNEL_SESSION_COOKIE = "pantavion_kernel_founder_session";
 
 export type PantavionKernelAccessDeniedReason =
   | "not-production"
