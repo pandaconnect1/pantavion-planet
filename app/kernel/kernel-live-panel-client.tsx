@@ -1,8 +1,8 @@
-﻿"use client";
+"use client";
 
 import { useMemo, useState } from "react";
 
-type KernelApiKey = "heartbeat" | "gap" | "product" | "research";
+type KernelApiKey = "heartbeat" | "gap" | "product" | "research" | "waterHistory";
 
 interface KernelApiTarget {
   key: KernelApiKey;
@@ -48,6 +48,12 @@ const TARGETS: KernelApiTarget[] = [
     title: "Research Assimilation",
     description: "Seven-continent research, legal transformation, Pantavion-owned superior systems.",
     endpoint: "/api/kernel/research-assimilation",
+  },
+  {
+    key: "waterHistory",
+    title: "Water History Ledger",
+    description: "Protected evidence inbox and street history ledger for faults, scanner notes, PDFs, photos, audio, QGIS and CSV imports.",
+    endpoint: "/api/professional/infrastructure/water/history-ledger",
   },
 ];
 
@@ -182,7 +188,7 @@ export default function KernelLivePanelClient() {
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
             <p className="text-sm text-sky-200">Live API checks passed</p>
-            <p className="mt-3 text-3xl font-black text-emerald-300">{passedCount}/4</p>
+            <p className="mt-3 text-3xl font-black text-emerald-300">{passedCount}/{TARGETS.length}</p>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
