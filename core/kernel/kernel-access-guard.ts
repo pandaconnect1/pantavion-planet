@@ -17,11 +17,16 @@ export interface PantavionKernelAccessDecision {
   tokenReceived: boolean;
   tokenLengthOk: boolean;
   acceptedEnvNames: string[];
+  activeEnvName: string | null;
+  requiredTokenLength: number;
+  providedTokenLength: number;
+  sameLength: boolean;
+  firstMismatchIndex: number | null;
 }
 
 export interface PantavionKernelAccessDeniedReport {
   ok: false;
-  marker: "pantavion_kernel_access_denied_v2";
+  marker: "pantavion_kernel_access_denied_v3";
   status: "restricted";
   message: "Kernel control routes are internal and require founder authorization.";
   publicSafe: true;
@@ -32,6 +37,11 @@ export interface PantavionKernelAccessDeniedReport {
     tokenReceived: boolean;
     tokenLengthOk: boolean;
     acceptedEnvNames: string[];
+    activeEnvName: string | null;
+    requiredTokenLength: number;
+    providedTokenLength: number;
+    sameLength: boolean;
+    firstMismatchIndex: number | null;
   };
 }
 
@@ -44,13 +54,25 @@ function cleanToken(value?: string | null): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function getRequiredToken(): string {
+function getRequiredTokenRecord(): { token: string; envName: string | null } {
   for (const name of ACCEPTED_ENV_NAMES) {
     const value = cleanToken(process.env[name]);
-    if (value.length >= 12) return value;
+    if (value.length >= 12) {
+      return { token: value, envName: name };
+    }
   }
 
-  return "";
+  return { token: "", envName: null };
+}
+
+function findFirstMismatchIndex(a: string, b: string): number | null {
+  const max = Math.max(a.length, b.length);
+
+  for (let index = 0; index < max; index += 1) {
+    if (a[index] !== b[index]) return index;
+  }
+
+  return null;
 }
 
 export function evaluatePantavionKernelAccess(token?: string | null): PantavionKernelAccessDecision {
@@ -65,21 +87,39 @@ export function evaluatePantavionKernelAccess(token?: string | null): PantavionK
       tokenReceived: true,
       tokenLengthOk: true,
       acceptedEnvNames: ACCEPTED_ENV_NAMES,
+      activeEnvName: "local-development",
+      requiredTokenLength: 0,
+      providedTokenLength: cleanToken(token).length,
+      sameLength: true,
+      firstMismatchIndex: null,
     };
   }
 
-  const requiredToken = getRequiredToken();
+  const required = getRequiredTokenRecord();
+  const requiredToken = required.token;
   const providedToken = cleanToken(token);
+
+  const base = {
+    production: true,
+    acceptedEnvNames: ACCEPTED_ENV_NAMES,
+    activeEnvName: required.envName,
+    requiredTokenLength: requiredToken.length,
+    providedTokenLength: providedToken.length,
+    sameLength: requiredToken.length === providedToken.length,
+    firstMismatchIndex:
+      requiredToken && providedToken
+        ? findFirstMismatchIndex(requiredToken, providedToken)
+        : null,
+  };
 
   if (!requiredToken) {
     return {
       allowed: false,
       reason: "env-missing",
-      production: true,
       envConfigured: false,
       tokenReceived: providedToken.length > 0,
       tokenLengthOk: providedToken.length >= 12,
-      acceptedEnvNames: ACCEPTED_ENV_NAMES,
+      ...base,
     };
   }
 
@@ -87,11 +127,10 @@ export function evaluatePantavionKernelAccess(token?: string | null): PantavionK
     return {
       allowed: false,
       reason: "token-missing",
-      production: true,
       envConfigured: true,
       tokenReceived: false,
       tokenLengthOk: false,
-      acceptedEnvNames: ACCEPTED_ENV_NAMES,
+      ...base,
     };
   }
 
@@ -99,22 +138,22 @@ export function evaluatePantavionKernelAccess(token?: string | null): PantavionK
     return {
       allowed: false,
       reason: "token-too-short",
-      production: true,
       envConfigured: true,
       tokenReceived: true,
       tokenLengthOk: false,
-      acceptedEnvNames: ACCEPTED_ENV_NAMES,
+      ...base,
     };
   }
 
+  const allowed = providedToken === requiredToken;
+
   return {
-    allowed: providedToken === requiredToken,
-    reason: providedToken === requiredToken ? "not-production" : "token-mismatch",
-    production: true,
+    allowed,
+    reason: allowed ? "not-production" : "token-mismatch",
     envConfigured: true,
     tokenReceived: true,
     tokenLengthOk: true,
-    acceptedEnvNames: ACCEPTED_ENV_NAMES,
+    ...base,
   };
 }
 
@@ -129,7 +168,7 @@ export function createPantavionKernelAccessDeniedReport(
 
   return {
     ok: false,
-    marker: "pantavion_kernel_access_denied_v2",
+    marker: "pantavion_kernel_access_denied_v3",
     status: "restricted",
     message: "Kernel control routes are internal and require founder authorization.",
     publicSafe: true,
@@ -140,6 +179,11 @@ export function createPantavionKernelAccessDeniedReport(
       tokenReceived: decision.tokenReceived,
       tokenLengthOk: decision.tokenLengthOk,
       acceptedEnvNames: decision.acceptedEnvNames,
+      activeEnvName: decision.activeEnvName,
+      requiredTokenLength: decision.requiredTokenLength,
+      providedTokenLength: decision.providedTokenLength,
+      sameLength: decision.sameLength,
+      firstMismatchIndex: decision.firstMismatchIndex,
     },
   };
 }
