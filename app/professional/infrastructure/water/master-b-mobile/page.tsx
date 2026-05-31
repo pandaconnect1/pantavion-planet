@@ -212,7 +212,7 @@ export default function MasterBMobilePage() {
           </p>
 
           <h1 className="mt-3 text-3xl font-black tracking-tight md:text-5xl">
-            Master B πραγματικό δίκτυο
+            Master B εγκεκριμένο derived δίκτυο
           </h1>
 
           <p className="mt-3 max-w-3xl text-sm font-semibold leading-7 text-slate-300 md:text-base">
@@ -321,7 +321,7 @@ export default function MasterBMobilePage() {
                 </svg>
               ) : (
                 <div className="flex h-full items-center justify-center p-6 text-center text-sm font-black text-slate-700">
-                  {status === "loading" ? "Loading Master B network tiles..." : "B derived geometry layer is not processed yet. Raw DWG/DXF remains private and blocked. No real LineString/MultiLineString segments are available for browser rendering yet."}
+                  {status === "loading" ? "Loading Master B network tiles..." : "B approved derived geometry layer is not configured/processed yet. Raw DWG/DXF remains in the private founder/admin vault. Approved users will receive only browser-safe derived LineString/MultiLineString segments after processing, access approval, and audit."}
                 </div>
               )}
             </div>
