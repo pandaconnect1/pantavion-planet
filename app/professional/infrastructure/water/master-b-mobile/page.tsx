@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 
@@ -321,7 +321,7 @@ export default function MasterBMobilePage() {
                 </svg>
               ) : (
                 <div className="flex h-full items-center justify-center p-6 text-center text-sm font-black text-slate-700">
-                  {status === "loading" ? "Loading Master B network tiles..." : "No segments loaded."}
+                  {status === "loading" ? "Loading Master B network tiles..." : "B derived geometry layer is not processed yet. Raw DWG/DXF remains private and blocked. No real LineString/MultiLineString segments are available for browser rendering yet."}
                 </div>
               )}
             </div>
