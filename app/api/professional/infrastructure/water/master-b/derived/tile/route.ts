@@ -1,35 +1,51 @@
-﻿import fs from "fs/promises";
-import path from "path";
-import { NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
+import fs from "node:fs/promises";
+import path from "node:path";
 
-export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-function getDerivedNetworkDir(): string | null {
-  if (process.env.PANTAVION_MASTER_B_DERIVED_NETWORK_DIR) {
-    return process.env.PANTAVION_MASTER_B_DERIVED_NETWORK_DIR;
-  }
+function getMasterBDerivedNetworkDir(): string | null {
+  const configured = process.env.MASTER_B_DERIVED_NETWORK_DIR?.trim();
 
-  const userProfile = process.env.USERPROFILE;
-
-  if (!userProfile) {
+  if (!configured) {
     return null;
   }
 
-  return path.join(
-    userProfile,
-    "Desktop",
-    "Pantavion-Verify",
-    "master-b-derived-network-tiles",
-  );
+  return path.isAbsolute(configured)
+    ? configured
+    : path.join(process.cwd(), configured);
 }
 
-function isSafeTileName(value: string): boolean {
-  return /^tile_\d{2}_\d{2}\.json$/.test(value);
+function normalizeMasterBTileFile(value: string): string | null {
+  const normalized = value.trim().replaceAll("\\", "/");
+
+  if (!normalized || normalized.includes("..")) {
+    return null;
+  }
+
+  const withoutPrefix = normalized.startsWith("tiles/")
+    ? normalized.slice("tiles/".length)
+    : normalized;
+
+  if (
+    withoutPrefix.includes("/") ||
+    withoutPrefix.includes("\\") ||
+    !withoutPrefix.startsWith("master-b-tile-") ||
+    !withoutPrefix.endsWith(".json")
+  ) {
+    return null;
+  }
+
+  return withoutPrefix;
 }
 
-export async function GET(request: Request) {
-  const dir = getDerivedNetworkDir();
+function parseTileJson(raw: string): unknown {
+  const clean = raw.replace(/\u001e/g, "");
+  return JSON.parse(clean);
+}
+
+export async function GET(request: NextRequest) {
+  const dir = getMasterBDerivedNetworkDir();
 
   if (!dir) {
     return NextResponse.json(
@@ -41,15 +57,15 @@ export async function GET(request: Request) {
     );
   }
 
-  const url = new URL(request.url);
-  const requestedFile = url.searchParams.get("file") ?? "";
-  const tileName = path.basename(requestedFile);
+  const requestedFile = request.nextUrl.searchParams.get("file") || "";
+  const tileName = normalizeMasterBTileFile(requestedFile);
 
-  if (!isSafeTileName(tileName)) {
+  if (!tileName) {
     return NextResponse.json(
       {
         ok: false,
-        error: "INVALID_TILE_NAME",
+        error: "INVALID_TILE_FILE",
+        requestedFile,
       },
       { status: 400 },
     );
@@ -59,7 +75,7 @@ export async function GET(request: Request) {
 
   try {
     const raw = await fs.readFile(tilePath, "utf8");
-    const tile = JSON.parse(raw) as unknown;
+    const tile = parseTileJson(raw);
 
     return NextResponse.json(tile, {
       headers: {
@@ -74,6 +90,7 @@ export async function GET(request: Request) {
         ok: false,
         error: "MASTER_B_TILE_READ_FAILED",
         tile: tileName,
+        path: tilePath,
         message: error instanceof Error ? error.message : "UNKNOWN_ERROR",
       },
       { status: 500 },
