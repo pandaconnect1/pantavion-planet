@@ -1,4 +1,4 @@
-﻿const fs = require("fs");
+const fs = require("fs");
 const path = require("path");
 
 const root = process.cwd();
@@ -18,7 +18,7 @@ function read(relativePath) {
     return "";
   }
 
-  return fs.readFileSync(absolute(relativePath), "utf8");
+  return fs.readFileSync(absolute(relativePath), "utf8").replace(/^\uFEFF/, "");
 }
 
 function assertIncludes(relativePath, marker, message) {
@@ -182,25 +182,25 @@ const checkedTexts = [
   packageJsonText,
   workflow,
   vscodeTasks,
-  read("scripts/pantavion-vscode-real-implementation-gate.cjs"),
+  cronRoute,
 ];
 
-const forbiddenGitAddDot = "git add" + " .";
+const unsafeGitAddAll = ["git", "add", "."].join(" ");
 
 for (const text of checkedTexts) {
-  if (text.includes(forbiddenGitAddDot)) {
-    failures.push("Runtime safety files must not contain unsafe git add command.");
+  if (text.includes(unsafeGitAddAll)) {
+    failures.push("Runtime safety files must not contain unsafe broad git add command.");
   }
 }
 
-const forbiddenPublicDataMarkers = [
-  "water-network-private/processed/water-network.geojson",
-  "raw DWG public",
-  "raw DXF public",
-  "raw KMZ public",
+const sensitiveMarkers = [
+  ["water-network-private", "processed", "water-network.geojson"].join("/"),
+  ["raw", "DWG", "public"].join(" "),
+  ["raw", "DXF", "public"].join(" "),
+  ["raw", "KMZ", "public"].join(" "),
 ];
 
-for (const marker of forbiddenPublicDataMarkers) {
+for (const marker of sensitiveMarkers) {
   for (const text of checkedTexts) {
     if (text.includes(marker)) {
       failures.push("Forbidden private infrastructure exposure marker found: " + marker);
