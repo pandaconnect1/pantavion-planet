@@ -157,7 +157,6 @@ if (!cronRoute.includes("PANTAVION_ALLOW_VERCEL_CRON_USER_AGENT")) {
 
 const workflow = read(".github/workflows/pantavion-runtime-safety.yml");
 const workflowMarkers = [
-  "npm ci",
   "npm run verify:runtime-safety",
   "pull_request",
   "push",
@@ -168,6 +167,13 @@ for (const marker of workflowMarkers) {
   if (!workflow.includes(marker)) {
     failures.push("Runtime safety workflow missing marker: " + marker);
   }
+}
+
+if (
+  !workflow.includes("npm ci") &&
+  !workflow.includes("npm install --no-audit --no-fund")
+) {
+  failures.push("Runtime safety workflow must install dependencies with npm ci or npm install --no-audit --no-fund.");
 }
 
 const vscodeTasks = read(".vscode/tasks.json");

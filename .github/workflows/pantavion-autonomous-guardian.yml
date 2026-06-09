@@ -1,4 +1,4 @@
-﻿name: Pantavion Autonomous Guardian
+name: Pantavion Autonomous Guardian
 
 on:
   schedule:
@@ -28,7 +28,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Pantavion AI integrity audit
         run: node scripts/pantavion-ai-integrity-check.cjs
