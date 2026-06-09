@@ -4,37 +4,33 @@ import { runPantavionCloudCronTick } from "@/core/intelligence/pantavion-intelli
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+type PantavionCronAuthMode =
+  | "cron_secret_required"
+  | "local_development_unprotected"
+  | "production_blocked_missing_cron_secret"
+  | "production_vercel_cron_user_agent_explicitly_allowed";
+
 function isAuthorizedCronRequest(request: Request) {
-  const secret = process.env.CRON_SECRET;
-
-  if (!secret) {
-    return {
-      ok: true,
-      mode: "unprotected_until_cron_secret_is_configured",
-    };
-  }
-
+  const secret = process.env.CRON_SECRET || "";
   const authorization = request.headers.get("authorization") || "";
+  const userAgent = request.headers.get("user-agent") || "";
+  const isDevelopment = process.env.NODE_ENV !== "production";
+  const allowVercelCronUserAgent =
+    process.env.PANTAVION_ALLOW_VERCEL_CRON_USER_AGENT === "true";
 
-  return {
-    ok: authorization === "Bearer " + secret,
-    mode: "cron_secret_required",
-  };
+  if (secret) {
+    return {
+      ok: authorization === "Bearer "ed unless a real authorization boundary is configured.",
+    },
+    { status: 401 },
+  );
 }
 
 export async function GET(request: Request) {
   const auth = isAuthorizedCronRequest(request);
 
   if (!auth.ok) {
-    return NextResponse.json(
-      {
-        ok: false,
-        route: "/api/pantavion/intelligence/cron",
-        error: "Unauthorized cron request.",
-        mode: auth.mode,
-      },
-      { status: 401 },
-    );
+    return unauthorizedCronResponse(auth.mode);
   }
 
   const result = await runPantavionCloudCronTick("vercel_cron");
@@ -42,6 +38,8 @@ export async function GET(request: Request) {
   return NextResponse.json({
     ...result,
     authMode: auth.mode,
+    runtimeSafety:
+      "Cron executed through an explicit authorization boundary. This is not autonomous deployment.",
   });
 }
 
@@ -49,15 +47,7 @@ export async function POST(request: Request) {
   const auth = isAuthorizedCronRequest(request);
 
   if (!auth.ok) {
-    return NextResponse.json(
-      {
-        ok: false,
-        route: "/api/pantavion/intelligence/cron",
-        error: "Unauthorized cron request.",
-        mode: auth.mode,
-      },
-      { status: 401 },
-    );
+    return unauthorizedCronResponse(auth.mode);
   }
 
   const result = await runPantavionCloudCronTick("external_scheduler");
@@ -65,5 +55,7 @@ export async function POST(request: Request) {
   return NextResponse.json({
     ...result,
     authMode: auth.mode,
+    runtimeSafety:
+      "External scheduler execution accepted through an explicit authorization boundary.",
   });
 }

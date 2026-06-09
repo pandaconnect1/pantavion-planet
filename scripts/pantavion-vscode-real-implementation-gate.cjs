@@ -1,0 +1,221 @@
+const fs = require("fs");
+const path = require("path");
+
+const root = process.cwd();
+const failures = [];
+
+function absolute(relativePath) {
+  return path.join(root, relativePath);
+}
+
+function exists(relativePath) {
+  return fs.existsSync(absolute(relativePath));
+}
+
+function read(relativePath) {
+  if (!exists(relativePath)) {
+    failures.push("Missing required file: " + relativePath);
+    return "";
+  }
+
+  return fs.readFileSync(absolute(relativePath), "utf8");
+}
+
+function assertIncludes(relativePath, marker, message) {
+  const content = read(relativePath);
+  if (!content.includes(marker)) {
+    failures.push(message + " (" + relativePath + ")");
+  }
+}
+
+const requiredFiles = [
+  "package.json",
+  "vercel.json",
+  "scripts/pantavion-implementation-gate.cjs",
+  "core/kernel/pantavion-implementation-engine.ts",
+  "app/api/pantavion/intelligence/cron/route.ts",
+  "scripts/pantavion-vscode-real-implementation-gate.cjs",
+  ".github/workflows/pantavion-runtime-safety.yml",
+  ".vscode/tasks.json",
+];
+
+for (const file of requiredFiles) {
+  if (!exists(file)) failures.push("Missing required file: " + file);
+}
+
+let packageJson = null;
+const packageJsonText = read("package.json");
+
+try {
+  packageJson = JSON.parse(packageJsonText);
+} catch {
+  failures.push("package.json is not valid JSON.");
+}
+
+if (packageJson) {
+  if (
+    packageJson.scripts?.["audit:implementation"] !==
+    "node scripts/pantavion-implementation-gate.cjs"
+  ) {
+    failures.push("package.json must preserve audit:implementation.");
+  }
+
+  if (packageJson.scripts?.typecheck !== "tsc --noEmit") {
+    failures.push("package.json must include a real typecheck script.");
+  }
+
+  const verifyScript = packageJson.scripts?.["verify:runtime-safety"] || "";
+  const requiredVerifyParts = [
+    "npm run audit:implementation",
+    "node scripts/pantavion-vscode-real-implementation-gate.cjs",
+    "npm run typecheck",
+    "npm run build",
+  ];
+
+  for (const part of requiredVerifyParts) {
+    if (!verifyScript.includes(part)) {
+      failures.push("verify:runtime-safety missing step: " + part);
+    }
+  }
+}
+
+assertIncludes(
+  "core/kernel/pantavion-implementation-engine.ts",
+  "pantavion_implementation_engine_v1",
+  "Implementation engine contract marker is missing",
+);
+
+assertIncludes(
+  "core/kernel/pantavion-implementation-engine.ts",
+  "No fake UI",
+  "Implementation engine must block fake UI",
+);
+
+assertIncludes(
+  "core/kernel/pantavion-implementation-engine.ts",
+  "No visual-only features",
+  "Implementation engine must block visual-only features",
+);
+
+assertIncludes(
+  "core/kernel/pantavion-implementation-engine.ts",
+  "No fake connected systems",
+  "Implementation engine must block fake connected systems",
+);
+
+assertIncludes(
+  "core/kernel/pantavion-implementation-engine.ts",
+  "No dead buttons",
+  "Implementation engine must block dead buttons",
+);
+
+assertIncludes(
+  "core/kernel/pantavion-implementation-engine.ts",
+  "No static-only completion claims",
+  "Implementation engine must block static-only claims",
+);
+
+assertIncludes(
+  "core/kernel/pantavion-implementation-engine.ts",
+  "No button without route API runtime function or disabled beta boundary",
+  "Implementation engine must block visible buttons without runtime path",
+);
+
+assertIncludes(
+  "core/kernel/pantavion-implementation-engine.ts",
+  "No architecture-only claim as implemented product behavior",
+  "Implementation engine must block architecture-only implementation claims",
+);
+
+assertIncludes(
+  "core/kernel/pantavion-implementation-engine.ts",
+  "pantavionRealityNonNegotiables",
+  "Implementation engine must expose reality non-negotiables",
+);
+
+const cronRoute = read("app/api/pantavion/intelligence/cron/route.ts");
+
+if (!cronRoute.includes("CRON_SECRET")) {
+  failures.push("Cron route must use CRON_SECRET.");
+}
+
+if (cronRoute.includes("unprotected_until_cron_secret_is_configured")) {
+  failures.push("Cron route must not allow unprotected production cron without CRON_SECRET.");
+}
+
+if (!cronRoute.includes("process.env.NODE_ENV !== \"production\"")) {
+  failures.push("Cron route must explicitly allow missing CRON_SECRET only outside production.");
+}
+
+if (!cronRoute.includes("production_blocked_missing_cron_secret")) {
+  failures.push("Cron route must block production when CRON_SECRET is missing.");
+}
+
+if (!cronRoute.includes("PANTAVION_ALLOW_VERCEL_CRON_USER_AGENT")) {
+  failures.push("Cron route must expose explicit Vercel cron user-agent boundary.");
+}
+
+const workflow = read(".github/workflows/pantavion-runtime-safety.yml");
+const workflowMarkers = [
+  "npm ci",
+  "npm run verify:runtime-safety",
+  "pull_request",
+  "push",
+  "workflow_dispatch",
+];
+
+for (const marker of workflowMarkers) {
+  if (!workflow.includes(marker)) {
+    failures.push("Runtime safety workflow missing marker: " + marker);
+  }
+}
+
+const vscodeTasks = read(".vscode/tasks.json");
+if (!vscodeTasks.includes("Pantavion: verify runtime safety")) {
+  failures.push("VS Code tasks must include Pantavion runtime safety task.");
+}
+if (!vscodeTasks.includes("npm run verify:runtime-safety")) {
+  failures.push("VS Code runtime safety task must run verify:runtime-safety.");
+}
+
+const checkedTexts = [
+  packageJsonText,
+  workflow,
+  vscodeTasks,
+  read("scripts/pantavion-vscode-real-implementation-gate.cjs"),
+];
+
+for (const text of checkedTexts) {
+  if (text.includes("git add .")) {
+    failures.push("Runtime safety files must not contain git add dot.");
+  }
+}
+
+const forbiddenPublicDataMarkers = [
+  "water-network-private/processed/water-network.geojson",
+  "raw DWG public",
+  "raw DXF public",
+  "raw KMZ public",
+];
+
+for (const marker of forbiddenPublicDataMarkers) {
+  for (const text of checkedTexts) {
+    if (text.includes(marker)) {
+      failures.push("Forbidden private infrastructure exposure marker found: " + marker);
+    }
+  }
+}
+
+if (failures.length > 0) {
+  console.error("PANTAVION VS CODE REAL IMPLEMENTATION GATE: FAILED");
+  for (const failure of failures) console.error("- " + failure);
+  process.exitCode = 1;
+} else {
+  console.log("PANTAVION VS CODE REAL IMPLEMENTATION GATE: PASSED");
+  console.log("- real implementation gate present");
+  console.log("- static/fake/dead-button doctrine checked");
+  console.log("- audit/build/typecheck chain required");
+  console.log("- cron secret production boundary checked");
+  console.log("- GitHub Actions runtime safety workflow checked");
+  console.log("- VS Code runtime safety task checked");
+}
