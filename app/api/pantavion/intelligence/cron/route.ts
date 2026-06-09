@@ -4,37 +4,72 @@ import { runPantavionCloudCronTick } from "@/core/intelligence/pantavion-intelli
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-function isAuthorizedCronRequest(request: Request) {
-  const secret = process.env.CRON_SECRET;
+type PantavionCronAuthMode =
+  | "cron_secret_required"
+  | "local_development_unprotected"
+  | "production_blocked_missing_cron_secret"
+  | "production_vercel_cron_user_agent_explicitly_allowed";
 
-  if (!secret) {
+type PantavionCronAuthResult = {
+  ok: boolean;
+  mode: PantavionCronAuthMode;
+};
+
+function isAuthorizedCronRequest(request: Request): PantavionCronAuthResult {
+  const secret = process.env.CRON_SECRET || "";
+  const authorization = request.headers.get("authorization") || "";
+  const userAgent = request.headers.get("user-agent") || "";
+  const isDevelopment = process.env.NODE_ENV !== "production";
+  const allowVercelCronUserAgent =
+    process.env.PANTAVION_ALLOW_VERCEL_CRON_USER_AGENT === "true";
+
+  if (secret) {
     return {
-      ok: true,
-      mode: "unprotected_until_cron_secret_is_configured",
+      ok: authorization === "Bearer " + secret,
+      mode: "cron_secret_required",
     };
   }
 
-  const authorization = request.headers.get("authorization") || "";
+  if (isDevelopment) {
+    return {
+      ok: true,
+      mode: "local_development_unprotected",
+    };
+  }
+
+  if (allowVercelCronUserAgent && userAgent.includes("vercel-cron/1.0")) {
+    return {
+      ok: true,
+      mode: "production_vercel_cron_user_agent_explicitly_allowed",
+    };
+  }
 
   return {
-    ok: authorization === "Bearer " + secret,
-    mode: "cron_secret_required",
+    ok: false,
+    mode: "production_blocked_missing_cron_secret",
   };
+}
+
+function unauthorizedCronResponse(mode: PantavionCronAuthMode) {
+  return NextResponse.json(
+    {
+      ok: false,
+      route: "/api/pantavion/intelligence/cron",
+      error:
+        "Unauthorized cron request. Configure CRON_SECRET or explicitly allow the Vercel cron user-agent boundary.",
+      mode,
+      runtimeSafety:
+        "Production cron execution is blocked unless a real authorization boundary is configured.",
+    },
+    { status: 401 },
+  );
 }
 
 export async function GET(request: Request) {
   const auth = isAuthorizedCronRequest(request);
 
   if (!auth.ok) {
-    return NextResponse.json(
-      {
-        ok: false,
-        route: "/api/pantavion/intelligence/cron",
-        error: "Unauthorized cron request.",
-        mode: auth.mode,
-      },
-      { status: 401 },
-    );
+    return unauthorizedCronResponse(auth.mode);
   }
 
   const result = await runPantavionCloudCronTick("vercel_cron");
@@ -42,6 +77,8 @@ export async function GET(request: Request) {
   return NextResponse.json({
     ...result,
     authMode: auth.mode,
+    runtimeSafety:
+      "Cron executed through an explicit authorization boundary. This is not autonomous deployment.",
   });
 }
 
@@ -49,15 +86,7 @@ export async function POST(request: Request) {
   const auth = isAuthorizedCronRequest(request);
 
   if (!auth.ok) {
-    return NextResponse.json(
-      {
-        ok: false,
-        route: "/api/pantavion/intelligence/cron",
-        error: "Unauthorized cron request.",
-        mode: auth.mode,
-      },
-      { status: 401 },
-    );
+    return unauthorizedCronResponse(auth.mode);
   }
 
   const result = await runPantavionCloudCronTick("external_scheduler");
@@ -65,5 +94,7 @@ export async function POST(request: Request) {
   return NextResponse.json({
     ...result,
     authMode: auth.mode,
+    runtimeSafety:
+      "External scheduler execution accepted through an explicit authorization boundary.",
   });
 }

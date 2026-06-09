@@ -1,4 +1,4 @@
-﻿name: Pantavion CI + Deploy Spine
+name: Pantavion CI + Deploy Spine
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Lint if present
         run: npm run lint --if-present
@@ -81,7 +81,7 @@ jobs:
 
       - name: Install dependencies
         if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Install Vercel CLI
         if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
@@ -138,7 +138,7 @@ jobs:
 
       - name: Install dependencies
         if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Install Vercel CLI
         if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
