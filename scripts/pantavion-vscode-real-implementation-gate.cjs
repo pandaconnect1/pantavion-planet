@@ -1,4 +1,4 @@
-const fs = require("fs");
+﻿const fs = require("fs");
 const path = require("path");
 
 const root = process.cwd();
@@ -143,7 +143,7 @@ if (cronRoute.includes("unprotected_until_cron_secret_is_configured")) {
   failures.push("Cron route must not allow unprotected production cron without CRON_SECRET.");
 }
 
-if (!cronRoute.includes("process.env.NODE_ENV !== \"production\"")) {
+if (!cronRoute.includes('process.env.NODE_ENV !== "production"')) {
   failures.push("Cron route must explicitly allow missing CRON_SECRET only outside production.");
 }
 
@@ -185,9 +185,11 @@ const checkedTexts = [
   read("scripts/pantavion-vscode-real-implementation-gate.cjs"),
 ];
 
+const forbiddenGitAddDot = "git add" + " .";
+
 for (const text of checkedTexts) {
-  if (text.includes("git add .")) {
-    failures.push("Runtime safety files must not contain git add dot.");
+  if (text.includes(forbiddenGitAddDot)) {
+    failures.push("Runtime safety files must not contain unsafe git add command.");
   }
 }
 

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { runPantavionCloudCronTick } from "@/core/intelligence/pantavion-intelligence-ledger";
 
 export const runtime = "nodejs";
@@ -10,10 +10,12 @@ type PantavionCronAuthMode =
   | "production_blocked_missing_cron_secret"
   | "production_vercel_cron_user_agent_explicitly_allowed";
 
-function isAuthorizedCronRequest(request: Request): {
+type PantavionCronAuthResult = {
   ok: boolean;
   mode: PantavionCronAuthMode;
-} {
+};
+
+function isAuthorizedCronRequest(request: Request): PantavionCronAuthResult {
   const secret = process.env.CRON_SECRET || "";
   const authorization = request.headers.get("authorization") || "";
   const userAgent = request.headers.get("user-agent") || "";
@@ -21,7 +23,6 @@ function isAuthorizedCronRequest(request: Request): {
   const allowVercelCronUserAgent =
     process.env.PANTAVION_ALLOW_VERCEL_CRON_USER_AGENT === "true";
 
-  // If we have a secret configured, require proper authorization
   if (secret) {
     return {
       ok: authorization === "Bearer " + secret,
@@ -29,24 +30,20 @@ function isAuthorizedCronRequest(request: Request): {
     };
   }
 
-  // No secret configured - behavior depends on environment
   if (isDevelopment) {
-    // In development, allow unprotected access for testing
     return {
       ok: true,
       mode: "local_development_unprotected",
     };
   }
 
-  // In production without a secret, check for explicit Vercel cron user agent allowance
-  if (allowVercelCronUserAgent && userAgent.includes("vercel-cron")) {
+  if (allowVercelCronUserAgent && userAgent.includes("vercel-cron/1.0")) {
     return {
       ok: true,
       mode: "production_vercel_cron_user_agent_explicitly_allowed",
     };
   }
 
-  // Production without secret and no explicit allowance - block for safety
   return {
     ok: false,
     mode: "production_blocked_missing_cron_secret",
@@ -58,10 +55,11 @@ function unauthorizedCronResponse(mode: PantavionCronAuthMode) {
     {
       ok: false,
       route: "/api/pantavion/intelligence/cron",
-      error: "Unauthorized cron request.",
+      error:
+        "Unauthorized cron request. Configure CRON_SECRET or explicitly allow the Vercel cron user-agent boundary.",
       mode,
       runtimeSafety:
-        "Request blocked unless a real authorization boundary is configured.",
+        "Production cron execution is blocked unless a real authorization boundary is configured.",
     },
     { status: 401 },
   );
