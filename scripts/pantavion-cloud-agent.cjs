@@ -1,4 +1,4 @@
-﻿const fs = require("fs");
+const fs = require("fs");
 
 const requiredFiles = [
   "package.json",
@@ -20,3 +20,4 @@ if (missing.length > 0) {
   console.log("- cloud agent placeholder is active");
   console.log("- no autonomous production mutation is allowed in this placeholder");
 }
+
