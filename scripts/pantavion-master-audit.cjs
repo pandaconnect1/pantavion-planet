@@ -110,8 +110,8 @@ requireIncludes("app/api/translate/universal/route.ts", [
 ]);
 
 requireAnyFileIncludes(
-  ["app/api/translate/universal/route.ts", "core/translation/pantavion-translation-provider-adapters.ts"],
-  ["provider_missing", "translatedText"],
+  ["app/api/translate/universal/route.ts", "core/translation/pantavion-translation-provider-adapters.ts", "core/translation/pantavion-translation-provider-router.ts"],
+  ["provider_not_configured", "provider_pending", "translatedText"],
   "real translation provider boundary",
 );
 
