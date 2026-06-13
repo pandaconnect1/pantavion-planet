@@ -1,79 +1,166 @@
 ﻿import { runAutonomousEngineeringKernel } from "@/core/kernel/autonomous-engineering-kernel";
+import {
+  decidePantavionSchedulerRun,
+  isPantavionSchedulerAuthorized,
+} from "@/core/pantaai/runtime/scheduler-guard";
+import { appendPantavionRuntimeLedgerEvent } from "@/core/pantaai/runtime/runtime-ledger";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-function getWriteModeFromUrl(url: string) {
-  const parsed = new URL(url);
-  const mode = parsed.searchParams.get("mode");
-
-  if (
-    mode === "observe" ||
-    mode === "draft" ||
-    mode === "local_scaffold" ||
-    mode === "github_pr"
-  ) {
-    return mode;
+function recordSchedulerEvent(input: {
+  readonly eventType:
+    | "kernel_wake"
+    | "founder_gate_required"
+    | "protected_gate_required"
+    | "error_recorded";
+  readonly severity?: "info" | "warning" | "error" | "critical";
+  readonly message: string;
+  readonly protectedDomains?: readonly string[];
+  readonly metadata?: Record<string, unknown>;
+}): void {
+  try {
+    appendPantavionRuntimeLedgerEvent({
+      eventType: input.eventType,
+      severity: input.severity ?? "info",
+      kernelFamily: "Pantavion Autonomous Scheduler Kernel",
+      message: input.message,
+      protectedDomains: input.protectedDomains ?? [],
+      metadata: input.metadata,
+    });
+  } catch {
+    // Scheduler must not fail because ledger storage is unavailable.
   }
-
-  return undefined;
-}
-
-function isAuthorized(request: Request) {
-  const secret = process.env.PANTAVION_AUTONOMOUS_SECRET;
-  const auth = request.headers.get("authorization") ?? "";
-  const headerSecret = request.headers.get("x-pantavion-autonomous-secret") ?? "";
-
-  if (!secret) {
-    return process.env.NODE_ENV !== "production";
-  }
-
-  return auth === `Bearer ${secret}` || headerSecret === secret;
 }
 
 export async function GET(request: Request) {
-  const writeMode = getWriteModeFromUrl(request.url);
+  const decision = decidePantavionSchedulerRun(request);
 
-  if ((writeMode === "local_scaffold" || writeMode === "github_pr") && !isAuthorized(request)) {
+  recordSchedulerEvent({
+    eventType: "kernel_wake",
+    message: "Autonomous engineering scheduler wake requested.",
+    protectedDomains: decision.protectedDomains,
+    metadata: decision,
+  });
+
+  if (!decision.ok) {
+    recordSchedulerEvent({
+      eventType: "founder_gate_required",
+      severity: "warning",
+      message: decision.blockedReason ?? "Autonomous scheduler request blocked by protected gate.",
+      protectedDomains: decision.protectedDomains,
+      metadata: decision,
+    });
+
     return Response.json(
       {
         ok: false,
-        error: "Unauthorized autonomous mutation request.",
+        marker: "pantavion_autonomous_scheduler_hardened_route_c8a_v1",
+        decision,
       },
-      { status: 401 }
+      { status: 403 },
     );
   }
 
   const result = await runAutonomousEngineeringKernel({
-    trigger: "cron",
-    writeMode,
-    maxJobs: 3,
+    trigger: decision.trigger,
+    writeMode: decision.effectiveMode,
+    maxJobs: decision.maxJobs,
   });
 
-  return Response.json(result);
+  return Response.json({
+    ok: true,
+    marker: "pantavion_autonomous_engineering_route_c1_v1",
+    schedulerMarker: "pantavion_autonomous_scheduler_hardened_route_c8a_v1",
+    decision,
+    result,
+  });
 }
 
 export async function POST(request: Request) {
-  if (!isAuthorized(request)) {
+  if (!isPantavionSchedulerAuthorized(request)) {
+    recordSchedulerEvent({
+      eventType: "founder_gate_required",
+      severity: "warning",
+      message: "Unauthorized POST request blocked by autonomous scheduler gate.",
+      protectedDomains: [
+        "production",
+        "water",
+        "users",
+        "payments",
+        "identity",
+        "sos",
+        "legal",
+        "private_data",
+      ],
+    });
+
     return Response.json(
       {
         ok: false,
         error: "Unauthorized autonomous engineering request.",
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
   const body = await request.json().catch(() => ({}));
-  const result = await runAutonomousEngineeringKernel({
-    trigger: "api",
-    writeMode: body.writeMode,
-    maxJobs: typeof body.maxJobs === "number" ? body.maxJobs : 3,
+  const writeMode =
+    body.writeMode === "observe" ||
+    body.writeMode === "draft" ||
+    body.writeMode === "local_scaffold" ||
+    body.writeMode === "github_pr"
+      ? body.writeMode
+      : undefined;
+
+  const maxJobs =
+    typeof body.maxJobs === "number"
+      ? Math.max(1, Math.min(Math.floor(body.maxJobs), 10))
+      : 3;
+
+  recordSchedulerEvent({
+    eventType: "kernel_wake",
+    message: "Authorized autonomous engineering POST wake requested.",
+    protectedDomains:
+      writeMode === "local_scaffold" || writeMode === "github_pr"
+        ? ["production", "protected_domain", "founder_gate"]
+        : [],
+    metadata: {
+      writeMode,
+      maxJobs,
+      trigger: "api",
+    },
   });
 
-  return Response.json(result);
+  try {
+    const result = await runAutonomousEngineeringKernel({
+      trigger: "api",
+      writeMode,
+      maxJobs,
+    });
+
+    return Response.json({
+      ok: true,
+      marker: "pantavion_autonomous_scheduler_hardened_route_c8a_v1",
+      result,
+    });
+  } catch (error) {
+    recordSchedulerEvent({
+      eventType: "error_recorded",
+      severity: "error",
+      message: "Autonomous engineering POST run failed.",
+      protectedDomains: ["autonomous_engineering"],
+      metadata: {
+        error: error instanceof Error ? error.message : String(error),
+      },
+    });
+
+    throw error;
+  }
 }
 
 const pantavion_autonomous_engineering_route_marker_v1 =
   "pantavion_autonomous_engineering_route_c1_v1";
 
+const pantavion_autonomous_scheduler_hardened_route_marker_v1 =
+  "pantavion_autonomous_scheduler_hardened_route_c8a_v1";
