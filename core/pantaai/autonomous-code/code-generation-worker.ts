@@ -1,0 +1,325 @@
+﻿import fs from "fs";
+import path from "path";
+import { randomUUID } from "crypto";
+import {
+  scanPantavionCapabilityGaps,
+  type PantavionCapabilityGap,
+} from "./capability-gap-scanner";
+import { evaluateAutonomousMutation } from "./protected-path-policy";
+import {
+  routePantavionAgentTask,
+  type PantavionAgentTaskKind,
+} from "../model-router/agent-task-router";
+import {
+  advisePantavionToolSubstitution,
+  type PantavionToolNeed,
+} from "../tool-substitution/tool-substitution-advisor";
+import {
+  createAutonomousGithubPullRequest,
+  type GithubPatchFile,
+} from "./github-autonomous-writer";
+
+export type PantavionCodeGenerationMode =
+  | "observe"
+  | "draft"
+  | "local_scaffold"
+  | "github_pr";
+
+export type PantavionGeneratedModule = {
+  readonly id: string;
+  readonly sourceGapId: string;
+  readonly path: string;
+  readonly title: string;
+  readonly content: string;
+  readonly taskKind: PantavionAgentTaskKind;
+  readonly toolNeed: PantavionToolNeed;
+  readonly gates: readonly string[];
+};
+
+export type PantavionCodeGenerationWorkerInput = {
+  readonly mode?: PantavionCodeGenerationMode;
+  readonly maxModules?: number;
+  readonly trigger: "manual" | "api" | "cron";
+};
+
+export type PantavionCodeGenerationWorkerResult = {
+  readonly ok: boolean;
+  readonly runId: string;
+  readonly mode: PantavionCodeGenerationMode;
+  readonly createdAt: string;
+  readonly gapsDetected: number;
+  readonly modulesPrepared: number;
+  readonly modulesWritten: number;
+  readonly pr?: unknown;
+  readonly artifacts: readonly string[];
+  readonly skipped: readonly {
+    readonly path: string;
+    readonly reason: string;
+  }[];
+  readonly generatedModules: readonly Pick<
+    PantavionGeneratedModule,
+    "id" | "sourceGapId" | "path" | "title" | "taskKind" | "toolNeed"
+  >[];
+};
+
+function nowIso(): string {
+  return new Date().toISOString();
+}
+
+function slug(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 90);
+}
+
+function pascal(value: string): string {
+  const cleaned = value
+    .replace(/[^a-zA-Z0-9]+/g, " ")
+    .trim()
+    .split(/\s+/)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join("");
+
+  return cleaned || "PantavionGeneratedCapability";
+}
+
+function inferTaskKind(gap: PantavionCapabilityGap): PantavionAgentTaskKind {
+  const text = `${gap.id} ${gap.title} ${gap.reason}`.toLowerCase();
+
+  if (text.includes("translation") || text.includes("voice")) return "translate_live";
+  if (text.includes("china") || text.includes("super")) return "china_superapp_module";
+  if (text.includes("continent") || text.includes("regional")) return "seven_continent_localization";
+  if (text.includes("water") || text.includes("identity") || text.includes("sos") || text.includes("legal")) {
+    return "protected_domain_kernel";
+  }
+  if (text.includes("rag") || text.includes("memory") || text.includes("research")) return "research";
+  if (text.includes("workflow") || text.includes("automation")) return "workflow_automation";
+
+  return "write_code";
+}
+
+function inferToolNeed(gap: PantavionCapabilityGap): PantavionToolNeed {
+  const text = `${gap.id} ${gap.title} ${gap.reason}`.toLowerCase();
+
+  if (text.includes("presentation")) return "presentation";
+  if (text.includes("video") || text.includes("media")) return "video";
+  if (text.includes("image") || text.includes("design")) return "image";
+  if (text.includes("writing") || text.includes("content")) return "writing";
+  if (text.includes("meeting")) return "meeting_notes";
+  if (text.includes("voice")) return "voice";
+  if (text.includes("research") || text.includes("rag") || text.includes("memory")) return "research";
+  if (text.includes("workflow") || text.includes("automation")) return "workflow";
+  if (text.includes("search")) return "search";
+  if (text.includes("social") || text.includes("china")) return "social";
+  if (text.includes("commerce") || text.includes("payment") || text.includes("market")) return "commerce";
+  if (text.includes("map") || text.includes("mobility") || text.includes("water")) return "maps";
+  if (text.includes("dating") || text.includes("relationship")) return "dating";
+  if (text.includes("translation")) return "translation";
+  if (text.includes("knowledge") || text.includes("learning")) return "knowledge";
+  if (text.includes("productivity") || text.includes("work")) return "productivity";
+
+  return "coding";
+}
+
+function createModuleContent(args: {
+  gap: PantavionCapabilityGap;
+  taskKind: PantavionAgentTaskKind;
+  toolNeed: PantavionToolNeed;
+  route: ReturnType<typeof routePantavionAgentTask>;
+  substitution: ReturnType<typeof advisePantavionToolSubstitution>;
+}): string {
+  const exportName = pascal(args.gap.id);
+  const generatedAt = nowIso();
+
+  return `// Auto-generated Pantavion capability scaffold.
+// Generated by Pantavion Code Generation Worker C4.
+// This file is a real kernel scaffold, not public UI.
+// Generated at: ${generatedAt}
+
+export const ${exportName}Capability = {
+  id: ${JSON.stringify(args.gap.id)},
+  title: ${JSON.stringify(args.gap.title)},
+  status: "kernel_scaffold_ready",
+  generatedBy: "pantavion_code_generation_worker_c4",
+  taskKind: ${JSON.stringify(ounder-gated direct mutation"
+  ]
+} as const;
+
+export type ${exportName}Capability = typeof ${exportName}Capability;
+
+export function plan${exportName}Execution(input: {
+  readonly intent: string;
+  readonly context?: unknown;
+}) {
+  return {
+    ok: true,
+    capabilityId: ${exportName}Capability.id,
+    intent: input.intent,
+    kernelFamily: ${exportName}Capability.kernelFamily,
+    nextAction: "connect_executor_or_provider_adapter",
+    gates: ${exportName}Capability.requiredGates,
+    protectedBy: "pantavion_autonomous_engineering_kernel",
+  };
+}
+`;
+}
+
+function prepareModules(gaps: readonly PantavionCapabilityGap[], maxModules: number): PantavionGeneratedModule[] {
+  return gaps.slice(0, maxModules).map((gap) => {
+    const taskKind = inferTaskKind(gap);
+    const toolNeed = inferToolNeed(gap);
+
+    const route = routePantavionAgentTask({
+      goal: gap.reason,
+      kind: taskKind,
+      sensitivity: taskKind === "protected_domain_kernel" ? "protected" : "internal",
+    });
+
+    const substitution = advisePantavionToolSubstitution({
+      need: toolNeed,
+      preference: "internal_first",
+      sensitivity: taskKind === "protected_domain_kernel" ? "protected" : "internal",
+    });
+
+    const id = `generated-${slug(gap.id)}`;
+    const filePath = `core/pantaai/generated-capabilities/${slug(gap.id)}.ts`;
+
+    return {
+      id,
+      sourceGapId: gap.id,
+      path: filePath,
+      title: gap.title,
+      taskKind,
+      toolNeed,
+      gates: Array.from(new Set([...route.gates, ...substitution.gates])),
+      content: createModuleContent({ gap, taskKind, toolNeed, route, substitution }),
+    };
+  });
+}
+
+function writeLocalFile(filePath: string, content: string): void {
+  const absolutePath = path.join(process.cwd(), filePath);
+  fs.mkdirSync(path.dirname(absolutePath), { recursive: true });
+  fs.writeFileSync(absolutePath, content, "utf8");
+}
+
+function writeArtifact(runId: string, value: unknown): string {
+  const artifactPath = `.pantavion/code-generation-worker/${runId}.json`;
+  writeLocalFile(artifactPath, JSON.stringify(value, null, 2));
+  return artifactPath;
+}
+
+function resolveMode(inputMode?: PantavionCodeGenerationMode): PantavionCodeGenerationMode {
+  if (inputMode) return inputMode;
+
+  const envMode = process.env.PANTAVION_CODE_GENERATION_MODE;
+  if (
+    envMode === "observe" ||
+    envMode === "draft" ||
+    envMode === "local_scaffold" ||
+    envMode === "github_pr"
+  ) {
+    return envMode;
+  }
+
+  return "observe";
+}
+
+export async function runPantavionCodeGenerationWorker(
+  input: PantavionCodeGenerationWorkerInput,
+): Promise<PantavionCodeGenerationWorkerResult> {
+  const runId = randomUUID();
+  const mode = resolveMode(input.mode);
+  const maxModules = Math.max(1, Math.min(input.maxModules ?? 5, 20));
+  const gaps = scanPantavionCapabilityGaps();
+  const generatedModules = prepareModules(gaps, maxModules);
+  const skipped: PantavionCodeGenerationWorkerResult["skipped"] = [];
+  const artifacts: string[] = [];
+  let modulesWritten = 0;
+  let pr: unknown = undefined;
+
+  const draft = {
+    runId,
+    mode,
+    createdAt: nowIso(),
+    trigger: input.trigger,
+    gapsDetected: gaps.length,
+    generatedModules: generatedModules.map((moduleItem) => ({
+      id: moduleItem.id,
+      sourceGapId: moduleItem.sourceGapId,
+      path: moduleItem.path,
+      title: moduleItem.title,
+      taskKind: moduleItem.taskKind,
+      toolNeed: moduleItem.toolNeed,
+      gates: moduleItem.gates,
+    })),
+  };
+
+  if (mode === "draft" || mode === "local_scaffold") {
+    artifacts.push(writeArtifact(runId, draft));
+  }
+
+  if (mode === "local_scaffold") {
+    for (const moduleItem of generatedModules) {
+      const decision = evaluateAutonomousMutation({
+        filePath: moduleItem.path,
+        operation: "create",
+        reason: moduleItem.title,
+        requestedBy: "kernel",
+      });
+
+      if (!decision.canWriteDirectly) {
+        skipped.push({
+          path: moduleItem.path,
+          reason: decision.reasons.join(" "),
+        });
+        continue;
+      }
+
+      writeLocalFile(moduleItem.path, moduleItem.content);
+      modulesWritten += 1;
+    }
+  }
+
+  if (mode === "github_pr") {
+    const files: GithubPatchFile[] = generatedModules.map((moduleItem) => ({
+      path: moduleItem.path,
+      content: moduleItem.content,
+      message: `feat(pantaai): scaffold ${moduleItem.title}`,
+    }));
+
+    pr = await createAutonomousGithubPullRequest({
+      runId,
+      title: `feat(pantaai): autonomous generated capability modules ${runId}`,
+      body:
+        "Pantavion Code Generation Worker C4 generated scoped capability scaffolds from the autonomous gap scanner. Protected domains remain child-kernel gated.",
+      files,
+    });
+  }
+
+  return {
+    ok: true,
+    runId,
+    mode,
+    createdAt: nowIso(),
+    gapsDetected: gaps.length,
+    modulesPrepared: generatedModules.length,
+    modulesWritten,
+    pr,
+    artifacts,
+    skipped,
+    generatedModules: generatedModules.map((moduleItem) => ({
+      id: moduleItem.id,
+      sourceGapId: moduleItem.sourceGapId,
+      path: moduleItem.path,
+      title: moduleItem.title,
+      taskKind: moduleItem.taskKind,
+      toolNeed: moduleItem.toolNeed,
+    })),
+  };
+}
+
+export const pantavion_code_generation_worker_marker_v1 =
+  "pantavion_code_generation_worker_c4_v1";
