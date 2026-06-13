@@ -102,5 +102,6 @@ export async function GET(request: Request) {
   });
 }
 
-export const pantavion_model_agent_router_route_marker_v1 =
+const pantavion_model_agent_router_route_marker_v1 =
   "pantavion_model_agent_router_route_c3_v1";
+

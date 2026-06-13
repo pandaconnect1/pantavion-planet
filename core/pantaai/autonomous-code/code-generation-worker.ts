@@ -236,7 +236,7 @@ export async function runPantavionCodeGenerationWorker(
   const maxModules = Math.max(1, Math.min(input.maxModules ?? 5, 20));
   const gaps = scanPantavionCapabilityGaps();
   const generatedModules = prepareModules(gaps, maxModules);
-  const skipped: PantavionCodeGenerationWorkerResult["skipped"] = [];
+  const skipped: Array<{ readonly path: string; readonly reason: string; }> = [];
   const artifacts: string[] = [];
   let modulesWritten = 0;
   let pr: unknown = undefined;
@@ -324,3 +324,4 @@ export async function runPantavionCodeGenerationWorker(
 
 export const pantavion_code_generation_worker_marker_v1 =
   "pantavion_code_generation_worker_c4_v1";
+

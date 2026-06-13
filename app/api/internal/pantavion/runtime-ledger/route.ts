@@ -102,5 +102,6 @@ export async function POST(request: Request) {
   });
 }
 
-export const pantavion_runtime_ledger_route_marker_v1 =
+const pantavion_runtime_ledger_route_marker_v1 =
   "pantavion_runtime_ledger_route_c7a_v1";
+

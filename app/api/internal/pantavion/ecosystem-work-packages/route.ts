@@ -21,5 +21,6 @@ export async function GET(request: Request) {
   });
 }
 
-export const pantavion_ecosystem_work_packages_route_marker_v1 =
+const pantavion_ecosystem_work_packages_route_marker_v1 =
   "pantavion_ecosystem_work_packages_route_c5_v1";
+

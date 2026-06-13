@@ -29,5 +29,6 @@ export async function GET(request: Request) {
   });
 }
 
-export const pantavion_executor_adapters_route_marker_v1 =
+const pantavion_executor_adapters_route_marker_v1 =
   "pantavion_executor_adapters_route_c6b_v1";
+

@@ -74,5 +74,6 @@ export async function POST(request: Request) {
   return Response.json(result);
 }
 
-export const pantavion_autonomous_engineering_route_marker_v1 =
+const pantavion_autonomous_engineering_route_marker_v1 =
   "pantavion_autonomous_engineering_route_c1_v1";
+

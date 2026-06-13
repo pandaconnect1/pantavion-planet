@@ -55,5 +55,6 @@ export async function GET(request: Request) {
   return Response.json(result);
 }
 
-export const pantavion_ecosystem_unification_route_marker_v1 =
+const pantavion_ecosystem_unification_route_marker_v1 =
   "pantavion_ecosystem_unification_route_c2_v1";
+

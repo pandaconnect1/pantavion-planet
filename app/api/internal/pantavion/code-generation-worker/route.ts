@@ -80,5 +80,6 @@ export async function POST(request: Request) {
   return Response.json(result);
 }
 
-export const pantavion_code_generation_worker_route_marker_v1 =
+const pantavion_code_generation_worker_route_marker_v1 =
   "pantavion_code_generation_worker_route_c4_v1";
+
