@@ -1,14 +1,17 @@
-﻿import { runAutonomousEngineeringKernel } from "@/core/kernel/autonomous-engineering-kernel";
+﻿import { randomUUID } from "crypto";
+import { runAutonomousEngineeringKernel } from "@/core/kernel/autonomous-engineering-kernel";
 import {
   decidePantavionSchedulerRun,
   isPantavionSchedulerAuthorized,
 } from "@/core/pantaai/runtime/scheduler-guard";
+import { runPantavionSchedulerWorkPackageBridge } from "@/core/pantaai/runtime/scheduler-work-package-bridge";
 import { appendPantavionRuntimeLedgerEvent } from "@/core/pantaai/runtime/runtime-ledger";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 function recordSchedulerEvent(input: {
+  readonly runId?: string;
   readonly eventType:
     | "kernel_wake"
     | "founder_gate_required"
@@ -21,6 +24,7 @@ function recordSchedulerEvent(input: {
 }): void {
   try {
     appendPantavionRuntimeLedgerEvent({
+      runId: input.runId,
       eventType: input.eventType,
       severity: input.severity ?? "info",
       kernelFamily: "Pantavion Autonomous Scheduler Kernel",
@@ -34,9 +38,12 @@ function recordSchedulerEvent(input: {
 }
 
 export async function GET(request: Request) {
+  const runId = `scheduler-${randomUUID()}`;
   const decision = decidePantavionSchedulerRun(request);
+  const authorized = isPantavionSchedulerAuthorized(request);
 
   recordSchedulerEvent({
+    runId,
     eventType: "kernel_wake",
     message: "Autonomous engineering scheduler wake requested.",
     protectedDomains: decision.protectedDomains,
@@ -45,6 +52,7 @@ export async function GET(request: Request) {
 
   if (!decision.ok) {
     recordSchedulerEvent({
+      runId,
       eventType: "founder_gate_required",
       severity: "warning",
       message: decision.blockedReason ?? "Autonomous scheduler request blocked by protected gate.",
@@ -56,11 +64,21 @@ export async function GET(request: Request) {
       {
         ok: false,
         marker: "pantavion_autonomous_scheduler_hardened_route_c8a_v1",
+        bridgeMarker: "pantavion_scheduler_work_package_bridge_c9f_v1",
+        runId,
         decision,
       },
       { status: 403 },
     );
   }
+
+  const workPackageBridge = runPantavionSchedulerWorkPackageBridge({
+    trigger: decision.trigger,
+    writeMode: decision.effectiveMode,
+    maxJobs: decision.maxJobs,
+    authorized,
+    sourceRunId: runId,
+  });
 
   const result = await runAutonomousEngineeringKernel({
     trigger: decision.trigger,
@@ -72,7 +90,10 @@ export async function GET(request: Request) {
     ok: true,
     marker: "pantavion_autonomous_engineering_route_c1_v1",
     schedulerMarker: "pantavion_autonomous_scheduler_hardened_route_c8a_v1",
+    bridgeMarker: "pantavion_scheduler_work_package_bridge_c9f_v1",
+    runId,
     decision,
+    workPackageBridge,
     result,
   });
 }
@@ -104,6 +125,7 @@ export async function POST(request: Request) {
     );
   }
 
+  const runId = `scheduler-${randomUUID()}`;
   const body = await request.json().catch(() => ({}));
   const writeMode =
     body.writeMode === "observe" ||
@@ -118,21 +140,32 @@ export async function POST(request: Request) {
       ? Math.max(1, Math.min(Math.floor(body.maxJobs), 10))
       : 3;
 
+  const effectiveWriteMode = writeMode ?? "observe";
+
   recordSchedulerEvent({
+    runId,
     eventType: "kernel_wake",
     message: "Authorized autonomous engineering POST wake requested.",
     protectedDomains:
-      writeMode === "local_scaffold" || writeMode === "github_pr"
+      effectiveWriteMode === "local_scaffold" || effectiveWriteMode === "github_pr"
         ? ["production", "protected_domain", "founder_gate"]
         : [],
     metadata: {
-      writeMode,
+      writeMode: effectiveWriteMode,
       maxJobs,
       trigger: "api",
     },
   });
 
   try {
+    const workPackageBridge = runPantavionSchedulerWorkPackageBridge({
+      trigger: "api",
+      writeMode: effectiveWriteMode,
+      maxJobs,
+      authorized: true,
+      sourceRunId: runId,
+    });
+
     const result = await runAutonomousEngineeringKernel({
       trigger: "api",
       writeMode,
@@ -142,10 +175,14 @@ export async function POST(request: Request) {
     return Response.json({
       ok: true,
       marker: "pantavion_autonomous_scheduler_hardened_route_c8a_v1",
+      bridgeMarker: "pantavion_scheduler_work_package_bridge_c9f_v1",
+      runId,
+      workPackageBridge,
       result,
     });
   } catch (error) {
     recordSchedulerEvent({
+      runId,
       eventType: "error_recorded",
       severity: "error",
       message: "Autonomous engineering POST run failed.",
@@ -164,3 +201,6 @@ const pantavion_autonomous_engineering_route_marker_v1 =
 
 const pantavion_autonomous_scheduler_hardened_route_marker_v1 =
   "pantavion_autonomous_scheduler_hardened_route_c8a_v1";
+
+const pantavion_scheduler_work_package_bridge_route_marker_v1 =
+  "pantavion_scheduler_work_package_bridge_c9f_v1";
