@@ -93,7 +93,8 @@ export function unifyPantavionEcosystems(
           "maps_mobility",
           "local_services",
           "marketplace_commerce",
-          "dating_matching",`r`n        ],
+          "dating_matching",
+        ],
         purpose:
           "Transform China-style all-in-one ecosystem patterns into Pantavion-owned global super-app modules.",
         nextCodeTargets: [
@@ -167,5 +168,6 @@ export function unifyPantavionEcosystems(
 
 export const pantavion_ecosystem_unification_kernel_marker_v1 =
   "pantavion_ecosystem_unification_kernel_c2_v1";
+
 
 
