@@ -5,6 +5,7 @@ import {
   isPantavionSchedulerAuthorized,
 } from "@/core/pantaai/runtime/scheduler-guard";
 import { runPantavionSchedulerWorkPackageBridge } from "@/core/pantaai/runtime/scheduler-work-package-bridge";
+import { executeClaimedPantavionWorkPackageAsPr } from "@/core/pantaai/runtime/work-package-pr-executor";
 import { appendPantavionRuntimeLedgerEvent } from "@/core/pantaai/runtime/runtime-ledger";
 
 export const runtime = "nodejs";
@@ -37,6 +38,39 @@ function recordSchedulerEvent(input: {
   }
 }
 
+async function maybeExecuteWorkPackagePr(input: {
+  readonly runId: string;
+  readonly writeMode: "observe" | "draft" | "local_scaffold" | "github_pr";
+  readonly workPackageBridge: ReturnType<typeof runPantavionSchedulerWorkPackageBridge>;
+}) {
+  if (!input.workPackageBridge.claimed) {
+    return {
+      ok: true,
+      marker: "pantavion_scheduler_auto_pr_flow_c9h_v1",
+      executed: false,
+      reason: "No claimed work package was available for PR execution.",
+    };
+  }
+
+  const packageId = input.workPackageBridge.workPackage.package.id;
+  const mode = input.writeMode === "github_pr" ? "github_pr" : "dry_run";
+
+  const result = await executeClaimedPantavionWorkPackageAsPr({
+    packageId,
+    mode,
+    sourceRunId: input.runId,
+  });
+
+  return {
+    ok: result.ok,
+    marker: "pantavion_scheduler_auto_pr_flow_c9h_v1",
+    executed: mode === "github_pr",
+    mode,
+    packageId,
+    result,
+  };
+}
+
 export async function GET(request: Request) {
   const runId = `scheduler-${randomUUID()}`;
   const decision = decidePantavionSchedulerRun(request);
@@ -65,6 +99,7 @@ export async function GET(request: Request) {
         ok: false,
         marker: "pantavion_autonomous_scheduler_hardened_route_c8a_v1",
         bridgeMarker: "pantavion_scheduler_work_package_bridge_c9f_v1",
+        autoPrMarker: "pantavion_scheduler_auto_pr_flow_c9h_v1",
         runId,
         decision,
       },
@@ -80,6 +115,12 @@ export async function GET(request: Request) {
     sourceRunId: runId,
   });
 
+  const workPackagePrExecution = await maybeExecuteWorkPackagePr({
+    runId,
+    writeMode: decision.effectiveMode,
+    workPackageBridge,
+  });
+
   const result = await runAutonomousEngineeringKernel({
     trigger: decision.trigger,
     writeMode: decision.effectiveMode,
@@ -91,9 +132,11 @@ export async function GET(request: Request) {
     marker: "pantavion_autonomous_engineering_route_c1_v1",
     schedulerMarker: "pantavion_autonomous_scheduler_hardened_route_c8a_v1",
     bridgeMarker: "pantavion_scheduler_work_package_bridge_c9f_v1",
+    autoPrMarker: "pantavion_scheduler_auto_pr_flow_c9h_v1",
     runId,
     decision,
     workPackageBridge,
+    workPackagePrExecution,
     result,
   });
 }
@@ -166,6 +209,12 @@ export async function POST(request: Request) {
       sourceRunId: runId,
     });
 
+    const workPackagePrExecution = await maybeExecuteWorkPackagePr({
+      runId,
+      writeMode: effectiveWriteMode,
+      workPackageBridge,
+    });
+
     const result = await runAutonomousEngineeringKernel({
       trigger: "api",
       writeMode,
@@ -176,8 +225,10 @@ export async function POST(request: Request) {
       ok: true,
       marker: "pantavion_autonomous_scheduler_hardened_route_c8a_v1",
       bridgeMarker: "pantavion_scheduler_work_package_bridge_c9f_v1",
+      autoPrMarker: "pantavion_scheduler_auto_pr_flow_c9h_v1",
       runId,
       workPackageBridge,
+      workPackagePrExecution,
       result,
     });
   } catch (error) {
@@ -204,3 +255,6 @@ const pantavion_autonomous_scheduler_hardened_route_marker_v1 =
 
 const pantavion_scheduler_work_package_bridge_route_marker_v1 =
   "pantavion_scheduler_work_package_bridge_c9f_v1";
+
+const pantavion_scheduler_auto_pr_flow_route_marker_v1 =
+  "pantavion_scheduler_auto_pr_flow_c9h_v1";
