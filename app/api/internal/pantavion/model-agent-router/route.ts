@@ -7,6 +7,7 @@ import {
   type PantavionToolNeed,
   type PantavionPreference,
 } from "@/core/pantaai/tool-substitution/tool-substitution-advisor";
+import { appendPantavionRuntimeLedgerEvent } from "@/core/pantaai/runtime/runtime-ledger";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -73,6 +74,26 @@ function asPreference(value: string | null): PantavionPreference | undefined {
     : undefined;
 }
 
+function recordModelAgentRouterLedgerEvent(input: {
+  readonly goal: string;
+  readonly kind: PantavionAgentTaskKind;
+  readonly need: PantavionToolNeed;
+  readonly preference?: PantavionPreference;
+  readonly gateCount: number;
+}): void {
+  try {
+    appendPantavionRuntimeLedgerEvent({
+      eventType: "job_claimed",
+      kernelFamily: "Pantavion Model Agent Router Kernel",
+      message: "Model, agent and tool substitution route was requested.",
+      protectedDomains: input.kind === "protected_domain_kernel" ? ["protected_domain"] : [],
+      metadata: input,
+    });
+  } catch {
+    // Ledger failure must never break router responses.
+  }
+}
+
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const goal =
@@ -94,14 +115,25 @@ export async function GET(request: Request) {
     sensitivity: kind === "protected_domain_kernel" ? "protected" : "internal",
   });
 
+  recordModelAgentRouterLedgerEvent({
+    goal,
+    kind,
+    need,
+    preference,
+    gateCount: agentRoute.gates.length + substitution.gates.length,
+  });
+
   return Response.json({
     ok: true,
     route: agentRoute,
     substitution,
     marker: "pantavion_model_agent_router_route_c3_v1",
+    ledgerMarker: "pantavion_model_agent_router_ledger_route_c7c_v1",
   });
 }
 
 const pantavion_model_agent_router_route_marker_v1 =
   "pantavion_model_agent_router_route_c3_v1";
 
+const pantavion_model_agent_router_ledger_route_marker_v1 =
+  "pantavion_model_agent_router_ledger_route_c7c_v1";
