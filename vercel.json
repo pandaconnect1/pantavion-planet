@@ -3,6 +3,10 @@
     {
       "path": "/api/pantavion/intelligence/cron",
       "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/internal/pantavion/autonomous-engineering",
+      "schedule": "*/5 * * * *"
     }
   ]
 }

@@ -31,7 +31,8 @@
     "audit:vision": "node scripts/pantavion-vision-registry-gate.cjs",
     "audit:water:abc": "node scripts/pantavion-water-abc-map-system-gate.cjs",
     "audit:emergency-guardian": "node scripts/pantavion-emergency-guardian-gate.cjs",
-    "audit:protected-change": "node scripts/pantavion-protected-change-gate.cjs"
+    "audit:protected-change": "node scripts/pantavion-protected-change-gate.cjs",
+    "audit:autonomous": "node scripts/pantavion-autonomous-engineering-gate.cjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
