@@ -143,7 +143,8 @@ export const ${exportName}Capability = {
   title: ${JSON.stringify(args.gap.title)},
   status: "kernel_scaffold_ready",
   generatedBy: "pantavion_code_generation_worker_c4",
-  taskKind: ${JSON.stringify(ounder-gated direct mutation"
+  taskKind: ${JSON.stringify(args.taskKind)},
+  toolNe
   ]
 } as const;
 
