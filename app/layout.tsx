@@ -2,21 +2,8 @@ import "leaflet/dist/leaflet.css";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-import PantaTranslateFloatingWidget from "@/components/translation/PantaTranslateFloatingWidget";
 
-const fallbackSiteUrl = "https://pantavion-planet.vercel.app";
-
-function getSiteUrl() {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL || fallbackSiteUrl;
-
-  try {
-    return new URL(raw).origin;
-  } catch {
-    return fallbackSiteUrl;
-  }
-}
-
-const siteUrl = getSiteUrl();
+const siteUrl = "https://www.pantavion.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -26,18 +13,20 @@ export const metadata: Metadata = {
     template: "%s | Pantavion"
   },
   description:
-    "Pantavion is a governed global ecosystem for communication, safety, knowledge, work, culture and AI-assisted execution.",
+    "Pantavion is a governed global ecosystem for communication, SOS safety, universal interpretation, PantaAI, professional infrastructure, knowledge, work, culture and protected services.",
   keywords: [
     "Pantavion",
-    "global ecosystem",
-    "communication",
-    "AI orchestration",
-    "SOS",
-    "translation",
+    "global AI platform",
+    "global communication platform",
+    "SOS safety platform",
+    "universal interpretation",
+    "PantaAI",
+    "professional infrastructure",
+    "water infrastructure",
     "knowledge",
     "work",
-    "social platform",
-    "PWA"
+    "culture",
+    "protected services"
   ],
   authors: [{ name: "George Nicolaou" }],
   creator: "Pantavion",
@@ -51,7 +40,7 @@ export const metadata: Metadata = {
     siteName: "Pantavion",
     title: "Pantavion | One Planet. One Living Screen.",
     description:
-      "A governed global ecosystem for communication, safety, knowledge, work and AI-assisted execution.",
+      "A governed global ecosystem for communication, SOS safety, universal interpretation, PantaAI, professional infrastructure, knowledge, work and protected services.",
     images: [
       {
         url: "/opengraph-image",
@@ -66,7 +55,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Pantavion | One Planet. One Living Screen.",
     description:
-      "A governed global ecosystem for communication, safety, knowledge, work and AI-assisted execution.",
+      "A governed global ecosystem for communication, SOS safety, universal interpretation, PantaAI, professional infrastructure, knowledge, work and protected services.",
     images: ["/twitter-image"]
   },
   robots: {

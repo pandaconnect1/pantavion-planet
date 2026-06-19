@@ -1,4 +1,4 @@
-﻿import type { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -11,6 +11,6 @@ export default function robots(): MetadataRoute.Robots {
         "/admin/",
       ],
     },
-    sitemap: "https://pantavion.com/sitemap.xml",
+    sitemap: "https://www.pantavion.com/sitemap.xml",
   };
 }

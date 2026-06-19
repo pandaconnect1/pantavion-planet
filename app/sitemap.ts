@@ -1,6 +1,6 @@
-﻿import type { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
 
-const siteUrl = "https://pantavion.com";
+const siteUrl = "https://www.pantavion.com";
 
 const routes = [
   "",

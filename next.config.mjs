@@ -1,4 +1,6 @@
-﻿/** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
+
+const canonicalOrigin = "https://www.pantavion.com";
 
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
@@ -13,12 +15,29 @@ const securityHeaders = [
     value:
       "camera=(), microphone=(), geolocation=(self), payment=(), usb=(), bluetooth=()",
   },
-]
+];
 
 const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
   reactStrictMode: true,
+
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "pantavion.com" }],
+        destination: `${canonicalOrigin}/:path*`,
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "pantavion-planet.vercel.app" }],
+        destination: `${canonicalOrigin}/:path*`,
+        permanent: true,
+      },
+    ];
+  },
 
   async headers() {
     return [
@@ -26,8 +45,8 @@ const nextConfig = {
         source: "/:path*",
         headers: securityHeaders,
       },
-    ]
+    ];
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;
