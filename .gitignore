@@ -51,3 +51,6 @@ data/water-network-private/**
 !data/water-network-private/.gitkeep
 
 artifacts/
+
+# Pantavion local intake scans can expose internal paths; keep local only.
+exports/project-intake/*.json
