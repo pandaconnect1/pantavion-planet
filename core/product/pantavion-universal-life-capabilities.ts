@@ -394,7 +394,7 @@ export const PANTAVION_UNIVERSAL_LIFE_CAPABILITIES: PantavionUniversalLifeCapabi
     source: "merged",
     principle: "Elite should be a premium, clean, ad-free, professional and trusted society layer.",
     realImplementationRequired: "Membership, identity, pricing, benefits, moderation, professional verification and privacy rules."
-  }
+  },
   {
     id: "health",
     title: "Health",
@@ -431,26 +431,6 @@ export const PANTAVION_CAPABILITY_DOMAIN_ORDER: PantavionCapabilityDomain[] = [
   "Finance",
   "Governance",
   "Future"
-  {
-    id: "health",
-    title: "Health",
-    domain: "Safety",
-    status: "legal_provider_required",
-    source: "pantavion-one",
-    principle: "Health belongs inside Pantavion as a protected care, support and safety layer, not as fake medical authority.",
-    realImplementationRequired: "Medical disclaimers, risk triage, professional-care escalation, provider review, user consent, audit logs and no diagnosis claims.",
-    safetyNote: "Health must stay safety-limited until medical/legal governance and provider controls are complete."
-  },
-  {
-    id: "support-care",
-    title: "Support and Care",
-    domain: "Safety",
-    status: "foundation",
-    route: "/sos/elder",
-    source: "merged",
-    principle: "Support and Care covers elder, child, vulnerable, disabled, special-needs and everyday help flows inside Pantavion.",
-    realImplementationRequired: "Trusted contacts, guardian rules, elder mode, care history, privacy controls, consent, escalation boundaries and language assistance."
-  },
 ];
 
 export const PANTAVION_CAPABILITY_STATUS_ORDER: PantavionCapabilityStatus[] = [
@@ -459,26 +439,6 @@ export const PANTAVION_CAPABILITY_STATUS_ORDER: PantavionCapabilityStatus[] = [
   "foundation",
   "planned",
   "legal_provider_required"
-  {
-    id: "health",
-    title: "Health",
-    domain: "Safety",
-    status: "legal_provider_required",
-    source: "pantavion-one",
-    principle: "Health belongs inside Pantavion as a protected care, support and safety layer, not as fake medical authority.",
-    realImplementationRequired: "Medical disclaimers, risk triage, professional-care escalation, provider review, user consent, audit logs and no diagnosis claims.",
-    safetyNote: "Health must stay safety-limited until medical/legal governance and provider controls are complete."
-  },
-  {
-    id: "support-care",
-    title: "Support and Care",
-    domain: "Safety",
-    status: "foundation",
-    route: "/sos/elder",
-    source: "merged",
-    principle: "Support and Care covers elder, child, vulnerable, disabled, special-needs and everyday help flows inside Pantavion.",
-    realImplementationRequired: "Trusted contacts, guardian rules, elder mode, care history, privacy controls, consent, escalation boundaries and language assistance."
-  },
 ];
 
 export function getPantavionUniversalLifeCapability(id: string) {
