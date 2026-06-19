@@ -42,8 +42,8 @@ export async function GET() {
       token,
     });
 
-    if (blob) {
-      return new Response(blob.stream() as BodyInit, {
+  if (blob?.stream) {
+    return new Response(blob.stream as unknown as BodyInit, {
         status: 200,
         headers: headers(),
       });
