@@ -1,3 +1,4 @@
+import PantavionGlobalLanguageSelector from "./pantavion-global-language-selector";
 import "leaflet/dist/leaflet.css";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
@@ -92,9 +93,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <PantavionGlobalLanguageSelector />
         {children}
         <Analytics />
       </body>
     </html>
   );
 }
+
+
