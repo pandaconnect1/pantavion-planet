@@ -48,6 +48,28 @@ const PANTAVION_VISIBLE_ECOSYSTEM_MODULES = [
   { title: "Pantavion Elite", status: "planned", note: "Requires subscription, identity, privacy, premium service boundaries and billing controls." },
 ] as const;
 
+const PANTAVION_LANGUAGE_LAYER = [
+  {
+    title: "Visible language selector",
+    status: "planned",
+    note: "Global language selection belongs in the Pantavion header/corner, not hidden inside one page.",
+  },
+  {
+    title: "UI languages",
+    status: "foundation",
+    note: "Pantavion must expose supported interface languages clearly and expand through controlled releases.",
+  },
+  {
+    title: "Speech and subtitle translation",
+    status: "legal_provider_required",
+    note: "Real-time speech, subtitles and rare-language support require providers, consent, safety and quality checks.",
+  },
+  {
+    title: "Thousands of natural languages in scope",
+    status: "planned",
+    note: "Pantavion may target all natural human languages, but must not claim every language is live until provider and quality gates pass.",
+  },
+] as const;
 const statusOrder: PantavionCapabilityStatus[] = [
   "live",
   "beta",
@@ -179,6 +201,47 @@ export default function ProductStatusPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-5 pt-10 sm:px-8">
+        <div className="rounded-[2rem] border border-amber-400/25 bg-slate-950/80 p-6 shadow-2xl shadow-black/30">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-300">
+                Universal Language Layer
+              </p>
+              <h2 className="mt-3 text-3xl font-black text-white sm:text-4xl">
+                Languages, translation, voice and subtitles
+              </h2>
+              <p className="mt-3 max-w-4xl text-sm leading-7 text-slate-300">
+                Pantavion is designed for global language access. A visible language selector, voice translation,
+                subtitles, RTL support and rare-language coverage must pass provider, quality, consent, safety and legal gates
+                before they are shown as live.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm font-bold text-amber-100">
+              Header/corner selector: planned as global UI layer
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {PANTAVION_LANGUAGE_LAYER.map((item) => (
+              <article
+                key={item.title}
+                className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-4"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="text-base font-black text-white">{item.title}</h3>
+                  <span className={`shrink-0 rounded-full border px-2 py-1 text-[0.65rem] font-black uppercase tracking-[0.12em] ${statusClass(item.status)}`}>
+                    {statusMeta[item.status].label}
+                  </span>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-slate-300">{item.note}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {statusRows.map((row) => (
@@ -272,7 +335,7 @@ export default function ProductStatusPage() {
 
                     <div className="mt-4 rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
                       <p className="text-xs font-bold uppercase tracking-[0.16em] text-amber-200">
-                        Required real implementation
+                        Next implementation step
                       </p>
                       <p className="mt-2 text-sm leading-6 text-slate-300">
                         {capability.realImplementationRequired}
@@ -288,7 +351,7 @@ export default function ProductStatusPage() {
                       </Link>
                     ) : (
                       <p className="mt-4 text-sm font-semibold text-slate-500">
-                        No public route yet. Work order required before live use.
+                        Not live yet. Work order and approval required before public use.
                       </p>
                     )}
                   </article>
@@ -301,5 +364,6 @@ export default function ProductStatusPage() {
     </main>
   );
 }
+
 
 
