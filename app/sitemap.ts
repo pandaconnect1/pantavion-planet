@@ -3,6 +3,7 @@ import type { MetadataRoute } from "next";
 const siteUrl = "https://www.pantavion.com";
 
 const routes = [
+  "/universal-life",
   "",
   "/sos",
   "/translate",
@@ -26,3 +27,4 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === "" ? 1 : 0.8,
   }));
 }
+
