@@ -172,6 +172,16 @@ export default function PantavionGlobalLanguageSelector() {
 
     try {
       window.localStorage.setItem(STORAGE_KEY, language);
+      window.dispatchEvent(
+        new CustomEvent("pantavion:language-change", {
+          detail: {
+            language,
+            htmlLang: selected.htmlLang,
+            label: selected.label,
+            title: selected.title,
+          },
+        })
+      );
       document.documentElement.lang = selected.htmlLang;
       document.documentElement.dataset.pantavionLanguage = language;
       document.documentElement.dataset.pantavionLanguageScope =
