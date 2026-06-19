@@ -15,6 +15,39 @@ export const metadata: Metadata = {
   },
 };
 
+const PANTAVION_VISIBLE_ECOSYSTEM_MODULES = [
+  { title: "Messages / Chat", status: "planned", note: "Real messaging, inbox, privacy, moderation, identity and provider/backend work required." },
+  { title: "Stories", status: "planned", note: "Media/story system requires storage, safety review, privacy controls and moderation." },
+  { title: "Music", status: "planned", note: "Requires licensing, media providers, creator rights and playback infrastructure." },
+  { title: "Dates / Connections", status: "legal_provider_required", note: "Requires age gates, consent, safety, matching rules and legal review." },
+  { title: "Health", status: "legal_provider_required", note: "Safety-limited care support only; no diagnosis claims; provider and legal controls required." },
+  { title: "Calendar / Reminders", status: "planned", note: "Requires user accounts, reminders, notifications, consent and recurring task backend." },
+  { title: "Culture", status: "planned", note: "Global culture layer requires multilingual content, moderation and regional sensitivity." },
+  { title: "Environment", status: "planned", note: "Requires verified environmental sources, maps, alerts and reliability tiers." },
+  { title: "Education", status: "planned", note: "Requires academy structure, progress state, multilingual lessons and source quality controls." },
+  { title: "Sports", status: "planned", note: "Requires feeds/providers, schedules, localization and rights-safe presentation." },
+  { title: "News", status: "legal_provider_required", note: "Requires source reliability, misinformation controls and regional/legal policy." },
+  { title: "Work / Business", status: "beta", note: "Existing work route exists, but marketplace, CRM, payments and provider layers remain staged." },
+  { title: "Family and Friends", status: "planned", note: "Requires social graph, trusted circles, privacy and consent rules." },
+  { title: "Economy / Banks", status: "legal_provider_required", note: "Financial information must remain risk-controlled; banking/payment providers required." },
+  { title: "Shipping / Marine", status: "planned", note: "Requires maritime data providers, maps, safety disclaimers and professional controls." },
+  { title: "Flights / Travel", status: "planned", note: "Requires travel providers, flight data, identity, notifications and regional rules." },
+  { title: "Tourism", status: "planned", note: "Requires places, guides, localization, safety notes and marketplace/provider mapping." },
+  { title: "Politics", status: "legal_provider_required", note: "Requires civic integrity, source quality, regional law and misinformation controls." },
+  { title: "Faith and Religions", status: "planned", note: "Requires respectful global content, moderation and community safety rules." },
+  { title: "VR / AR", status: "planned", note: "Requires device/provider capability, rendering pipeline and safety boundaries." },
+  { title: "Multimedia", status: "planned", note: "Requires storage, upload, transcoding, copyright, moderation and creator controls." },
+  { title: "Contacts and Invite System", status: "beta", note: "SOS contacts exist; broader invite/import needs consent, privacy and provider-safe flows." },
+  { title: "Marketplace", status: "planned", note: "Requires categories, moderation, payments, fraud controls and lawful listing policy." },
+  { title: "Academy", status: "planned", note: "Requires learning paths, progress, multilingual content and source reliability." },
+  { title: "Research", status: "planned", note: "Requires source atlas, citations, licensing, retrieval and reliability tiers." },
+  { title: "Communities", status: "planned", note: "Requires groups, roles, moderation, safety and region/community governance." },
+  { title: "Support and Care", status: "planned", note: "Requires trusted support flows, escalation, vulnerable-user protections and audit." },
+  { title: "Professional Infrastructure", status: "foundation", note: "Professional protected infrastructure area exists; access, vaults and audit continue." },
+  { title: "Water Infrastructure", status: "beta", note: "Water Control Center and A Map exist; B/C/D map layers remain protected staged work." },
+  { title: "Pantavion Elite", status: "planned", note: "Requires subscription, identity, privacy, premium service boundaries and billing controls." },
+] as const;
+
 const statusOrder: PantavionCapabilityStatus[] = [
   "live",
   "beta",
@@ -109,6 +142,39 @@ export default function ProductStatusPage() {
             >
               Back to Pantavion
             </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8">
+        <div className="rounded-[2rem] border border-amber-400/20 bg-slate-950/70 p-6 shadow-2xl shadow-black/30">
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-300">
+            Pantavion Planet Registry
+          </p>
+          <h2 className="mt-3 text-3xl font-black text-white sm:text-4xl">
+            Pantavion Ecosystem Modules
+          </h2>
+          <p className="mt-3 max-w-4xl text-sm leading-7 text-slate-300">
+            Όλες οι βασικές ενότητες εμφανίζονται εδώ ως Kernel-governed product modules.
+            Όσα δεν έχουν ακόμη πραγματικό route, backend, provider ή legal approval δεν εμφανίζονται ως τελειωμένα.
+            Περνούν πρώτα από work order, autonomous draft gate και Founder approval όπου απαιτείται.
+          </p>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {PANTAVION_VISIBLE_ECOSYSTEM_MODULES.map((module) => (
+              <article
+                key={module.title}
+                className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-4"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="text-base font-black text-white">{module.title}</h3>
+                  <span className={`shrink-0 rounded-full border px-2 py-1 text-[0.65rem] font-black uppercase tracking-[0.12em] ${statusClass(module.status)}`}>
+                    {statusMeta[module.status].label}
+                  </span>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-slate-300">{module.note}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -235,3 +301,5 @@ export default function ProductStatusPage() {
     </main>
   );
 }
+
+
