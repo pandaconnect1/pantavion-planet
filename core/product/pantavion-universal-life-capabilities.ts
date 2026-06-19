@@ -292,7 +292,10 @@ export const PANTAVION_UNIVERSAL_LIFE_CAPABILITIES: PantavionUniversalLifeCapabi
     route: "/sos",
     source: "pantavion-planet",
     principle: "SOS is a life-protection mechanism, not a casual feature.",
-    realImplementationRequired: "Trusted contacts, consent, emergency flow, offline pack, audit loendar-reminders",
+    realImplementationRequired: "Trusted contacts, consent, emergency flow, offline pack, audit logs, provider boundaries and clear disclaimers."
+  },
+  {
+    id: "calendar-reminders",
     title: "Calendar / Reminders",
     domain: "Safety",
     status: "planned",
