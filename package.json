@@ -31,11 +31,16 @@
     "audit:vision": "node scripts/pantavion-vision-registry-gate.cjs",
     "audit:water:abc": "node scripts/pantavion-water-abc-map-system-gate.cjs",
     "audit:emergency-guardian": "node scripts/pantavion-emergency-guardian-gate.cjs",
-    "audit:protected-change": "node scripts/pantavion-protected-change-gate.cjs"
+    "audit:protected-change": "node scripts/pantavion-protected-change-gate.cjs",
+    "audit:kernel-lifetime": "node scripts/pantavion-kernel-lifetime-gate.cjs",
+    "safety:pantavion": "node scripts/pantavion-runtime-safety-gate.cjs"
   },
   "dependencies": {
+    "@mlightcad/cad-simple-viewer": "^1.5.5",
+    "@mlightcad/cad-viewer": "^1.5.5",
+    "@mlightcad/libredwg-web": "^0.7.4",
     "@vercel/analytics": "^2.0.1",
-    "@vercel/blob": "^2.3.3",
+    "@vercel/blob": "^2.4.0",
     "leaflet": "^1.9.4",
     "next": "15.5.14",
     "react": "18.2.0",
