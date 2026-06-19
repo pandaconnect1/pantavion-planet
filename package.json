@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "verify:runtime-safety": "npm run audit:implementation && node scripts/pantavion-vscode-real-implementation-gate.cjs && npm run typecheck && npm run build",
+    "verify:runtime-safety": "npm run audit:implementation && node scripts/pantavion-vscode-real-implementation-gate.cjs && npm run audit:capability-readiness && npm run typecheck && npm run build",
     "verify:runtime-safety:ci": "npm run verify:runtime-safety",
     "audit:pantavion": "node scripts/pantavion-master-audit.cjs",
     "audit:water": "node scripts/pantavion-water-kernel-gate.cjs && node scripts/water-guardian-surface-audit.cjs && node scripts/pantavion-multimodal-language-audit.cjs",
@@ -31,7 +31,8 @@
     "audit:vision": "node scripts/pantavion-vision-registry-gate.cjs",
     "audit:water:abc": "node scripts/pantavion-water-abc-map-system-gate.cjs",
     "audit:emergency-guardian": "node scripts/pantavion-emergency-guardian-gate.cjs",
-    "audit:protected-change": "node scripts/pantavion-protected-change-gate.cjs"
+    "audit:protected-change": "node scripts/pantavion-protected-change-gate.cjs",
+    "audit:capability-readiness": "node scripts/pantavion-capability-readiness-gate.cjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
