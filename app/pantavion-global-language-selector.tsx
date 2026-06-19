@@ -221,7 +221,14 @@ export default function PantavionGlobalLanguageSelector() {
             aria-label="Pantavion language"
             title={`Pantavion language: ${selectedTitle}`}
           >
-            {LANGUAGE_OPTIONS.map((option) => (
+            {[...LANGUAGE_OPTIONS]
+                    .sort((a, b) =>
+                      a.label.localeCompare(b.label, undefined, {
+                        sensitivity: "base",
+                        numeric: true,
+                      }),
+                    )
+                    .map((option) => (
               <option key={option.code} value={option.code}>
                 {option.kind === "control" ? option.label : `${option.label} — ${option.code}`}
               </option>
@@ -258,3 +265,4 @@ export default function PantavionGlobalLanguageSelector() {
     </aside>
   );
 }
+
