@@ -40,6 +40,14 @@ const cards = [
     action: "Έλεγχος B Master",
   },
   {
+    title: "B Map PDF Foundation",
+    label: "PDF VIEW",
+    description:
+      "Protected read-only PDF derivative view from authentic B Master DWG vault. No raw DWG browser load or public file exposure.",
+    href: "/professional/infrastructure/water/b-map",
+    action: "Open B Map foundation",
+  },
+  {
     title: "C Intelligent",
     label: "FOUNDATION",
     description:
