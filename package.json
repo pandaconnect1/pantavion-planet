@@ -33,8 +33,11 @@
     "audit:emergency-guardian": "node scripts/pantavion-emergency-guardian-gate.cjs",
     "audit:protected-change": "node scripts/pantavion-protected-change-gate.cjs",
     "audit:kernel-lifetime": "node scripts/pantavion-kernel-lifetime-gate.cjs",
-    "safety:pantavion": "node scripts/pantavion-runtime-safety-gate.cjs",
-    "audit:foundation": "node scripts/pantavion-foundation-audit.cjs"
+    "safety:pantavion": "node scripts/pantavion-kernel-tick.cjs",
+    "audit:foundation": "node scripts/pantavion-foundation-audit.cjs",
+    "kernel:tick": "node scripts/pantavion-kernel-tick.cjs",
+    "kernel:evolve": "node scripts/pantavion-evolution-pr-writer.cjs --mode local",
+    "kernel:apply-pack": "node scripts/pantavion-apply-command-pack.cjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",

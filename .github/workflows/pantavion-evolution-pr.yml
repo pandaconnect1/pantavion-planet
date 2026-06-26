@@ -1,0 +1,56 @@
+name: Pantavion Evolution PR
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "37 2 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  evolution-pr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Configure Git
+        run: |
+          git config user.name "pantavion-kernel"
+          git config user.email "pantavion-kernel@users.noreply.github.com"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build gate
+        run: npm run build
+
+      - name: Typecheck gate
+        run: npx tsc --noEmit --pretty false
+
+      - name: Kernel tick
+        run: node scripts/pantavion-kernel-tick.cjs
+        env:
+          PANTAVION_KERNEL_BASE_URL: ${{ secrets.PANTAVION_KERNEL_BASE_URL }}
+          PANTAVION_KERNEL_SECRET: ${{ secrets.PANTAVION_KERNEL_SECRET }}
+
+      - name: Evolution PR writer
+        run: node scripts/pantavion-evolution-pr-writer.cjs --mode ci
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PANTAVION_KERNEL_BASE_URL: ${{ secrets.PANTAVION_KERNEL_BASE_URL }}
+          PANTAVION_KERNEL_SECRET: ${{ secrets.PANTAVION_KERNEL_SECRET }}
