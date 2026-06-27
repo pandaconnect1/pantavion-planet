@@ -42,7 +42,8 @@
     "kernel:ecosystem": "node scripts/pantavion-ecosystem-analyze.cjs",
     "founder:autoevolve": "npm run kernel:ecosystem && npm run founder:write-code",
     "kernel:user-signal": "node scripts/pantavion-user-signal.cjs",
-    "kernel:omnimodal": "node scripts/pantavion-omnimodal-intake.cjs"
+    "kernel:omnimodal": "node scripts/pantavion-omnimodal-intake.cjs",
+    "kernel:conversion": "node scripts/pantavion-conversion-job.cjs --list"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
