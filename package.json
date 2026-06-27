@@ -37,7 +37,8 @@
     "audit:foundation": "node scripts/pantavion-foundation-audit.cjs",
     "kernel:tick": "node scripts/pantavion-kernel-tick.cjs",
     "kernel:evolve": "node scripts/pantavion-evolution-pr-writer.cjs --mode local",
-    "kernel:apply-pack": "node scripts/pantavion-apply-command-pack.cjs"
+    "kernel:apply-pack": "node scripts/pantavion-apply-command-pack.cjs",
+    "founder:write-code": "node scripts/pantavion-founder-command-code-writer.cjs --latest --apply"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
