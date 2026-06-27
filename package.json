@@ -41,7 +41,8 @@
     "founder:write-code": "node scripts/pantavion-founder-command-code-writer.cjs --latest --apply",
     "kernel:ecosystem": "node scripts/pantavion-ecosystem-analyze.cjs",
     "founder:autoevolve": "npm run kernel:ecosystem && npm run founder:write-code",
-    "kernel:user-signal": "node scripts/pantavion-user-signal.cjs"
+    "kernel:user-signal": "node scripts/pantavion-user-signal.cjs",
+    "kernel:omnimodal": "node scripts/pantavion-omnimodal-intake.cjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
