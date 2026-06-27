@@ -38,7 +38,9 @@
     "kernel:tick": "node scripts/pantavion-kernel-tick.cjs",
     "kernel:evolve": "node scripts/pantavion-evolution-pr-writer.cjs --mode local",
     "kernel:apply-pack": "node scripts/pantavion-apply-command-pack.cjs",
-    "founder:write-code": "node scripts/pantavion-founder-command-code-writer.cjs --latest --apply"
+    "founder:write-code": "node scripts/pantavion-founder-command-code-writer.cjs --latest --apply",
+    "kernel:ecosystem": "node scripts/pantavion-ecosystem-analyze.cjs",
+    "founder:autoevolve": "npm run kernel:ecosystem && npm run founder:write-code"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
