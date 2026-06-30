@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 import {
   assessPantavionSensitiveArtifact,
   listPantavionSensitiveArtifactRules,
@@ -9,8 +10,17 @@ import { appendPantavionSensitiveArtifactAudit } from "@/core/vault/sensitive-ar
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  const actor = "api:kernel:sensitive-artifact-vault:get";
+export async function GET(request: NextRequest) {
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
+  const actor = auth.ok ? auth.actor : "local-sensitive-artifact-vault";
   const rules = listPantavionSensitiveArtifactRules();
 
   await appendPantavionSensitiveArtifactAudit({
@@ -36,7 +46,16 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:sensitive-artifact-vault:post";
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
+  const actor = auth.ok ? auth.actor : "local-sensitive-artifact-vault";
   const body = (await request.json().catch(() => null)) as
     | Partial<PantavionSensitiveArtifactInput>
     | null;
@@ -51,7 +70,7 @@ export async function POST(request: NextRequest) {
     production: body?.production,
     containsSecret: body?.containsSecret,
     founderApproved: body?.founderApproved,
-    actor: body?.actor ?? actor,
+    actor,
     reason: body?.reason
   };
 
