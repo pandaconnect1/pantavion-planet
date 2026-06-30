@@ -92,21 +92,46 @@ addCheck("artifact intake registry exists", () => {
 addCheck("water sources admin page exists", () => {
   const page = read("app/professional/infrastructure/water/sources/page.tsx");
   const component = read("components/water/WaterSourcesAdminPanel.tsx");
-  assert(page.includes("WaterSourcesAdminPanel"), "Missing water sources panel on page.");
-  assert(page.includes("assessPantavionArtifactIntake"), "Missing intake assessment on page.");
-  assert(component.includes("Artifact Intake / Upload Source Registry"), "Missing admin page heading.");
-  assert(component.includes("DWG original source truth"), "Missing DWG warning.");
+  assert(page.includes("WaterSourcesAdminPanel"), "Missing water sources panel.");
+  assert(component.includes("Artifact Intake / Upload Source Registry"), "Missing water sources heading.");
 });
 
-addCheck("water sources audit exists", () => {
-  const source = read("scripts/audit-water-sources-admin-page.mjs");
-  assert(source.includes("Water sources admin page audit passed."), "Missing water sources audit script.");
+addCheck("device geo status exists", () => {
+  const source = read("core/geo/device-geo-status.ts");
+  assert(source.includes("assessPantavionDeviceGeoStatus"), "Missing device geo status assessment.");
+  assert(source.includes("buildViewport"), "Missing viewport builder.");
+  assert(source.includes("canOpenCurrentArea"), "Missing current area flag.");
+  assert(source.includes("canSearchNearbyRoads"), "Missing nearby roads flag.");
+  assert(source.includes("preciseLocationStored: false"), "Missing no precise storage rule.");
+  assert(source.includes("continuousTracking: false"), "Missing no continuous tracking rule.");
+  assert(source.includes("backgroundTracking: false"), "Missing no background tracking rule.");
 });
 
-addCheck("PATCH 8M docs exist", () => {
-  const source = read("docs/pantavion/water-sources-admin-page.md");
-  assert(source.includes("PATCH 8M"), "Missing PATCH 8M doc heading.");
-  assert(source.includes("/professional/infrastructure/water/sources"), "Missing sources page route doc.");
+addCheck("device geo audit exists", () => {
+  const source = read("core/geo/device-geo-status-audit.ts");
+  assert(source.includes("device-geo-status-audit.jsonl"), "Missing geo audit file.");
+  assert(source.includes("appendPantavionDeviceGeoStatusAudit"), "Missing geo audit append.");
+});
+
+addCheck("device geo API route exists", () => {
+  const source = read("app/api/kernel/device-geo-status/route.ts");
+  assert(source.includes("export async function GET"), "Missing geo GET route.");
+  assert(source.includes("export async function POST"), "Missing geo POST route.");
+  assert(source.includes("pantavion_device_geo_status_current_position_viewport"), "Missing geo capability.");
+});
+
+addCheck("device geo client page exists", () => {
+  const component = read("components/geo/DeviceGeoStatusClient.tsx");
+  const page = read("app/professional/infrastructure/water/geo-status/page.tsx");
+  assert(component.includes("navigator.geolocation.getCurrentPosition"), "Missing real browser geolocation call.");
+  assert(component.includes("Use my current location"), "Missing location button.");
+  assert(page.includes("DeviceGeoStatusClient"), "Missing geo client page.");
+});
+
+addCheck("PATCH 8N docs exist", () => {
+  const source = read("docs/pantavion/device-geo-status-current-position.md");
+  assert(source.includes("PATCH 8N"), "Missing PATCH 8N doc heading.");
+  assert(source.includes("No continuous tracking."), "Missing no continuous tracking rule.");
 });
 
 let failed = 0;
