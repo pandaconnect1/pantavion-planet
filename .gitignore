@@ -60,3 +60,6 @@ exports/project-intake/*.json
 
 .pantavion/
 
+data/private-artifacts/
+data/kernel/private-local-artifact-intake-state.json
+data/kernel/private-local-artifact-intake-audit.jsonl

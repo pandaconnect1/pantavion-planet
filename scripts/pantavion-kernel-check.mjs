@@ -304,6 +304,39 @@ addCheck("PATCH 8S docs exist", () => {
   assert(source.includes("Original DWG is never mutated."), "Missing no DWG mutation doc rule.");
 });
 
+
+addCheck("private local artifact intake exists", () => {
+  const source = read("core/storage/private-local-artifact-intake.ts");
+  assert(source.includes("ingestPantavionPrivateLocalArtifact"), "Missing local artifact ingest function.");
+  assert(source.includes("assessPantavionPrivateLocalArtifactIntake"), "Missing local artifact assessment.");
+  assert(source.includes("fileSha256Copy"), "Missing SHA256 streaming copy.");
+  assert(source.includes("data/private-artifacts/originals"), "Missing private artifact folder.");
+  assert(source.includes("private-local-artifact-intake-state.json"), "Missing local intake state file.");
+  assert(source.includes("private-local-artifact-intake-audit.jsonl"), "Missing local intake audit file.");
+  assert(source.includes("originalDwgMutationAllowed: false"), "Missing no original DWG mutation rule.");
+  assert(source.includes("noGitStorage: true"), "Missing no Git storage rule.");
+  assert(source.includes("noPublicFolder: true"), "Missing no public folder rule.");
+  assert(source.includes("publicAccessAllowed: false"), "Missing no public access rule.");
+  assert(source.includes("sha256_mismatch"), "Missing SHA256 mismatch protection.");
+  assert(source.includes("requestedSurface"), "Missing B/C requested surface metadata.");
+});
+
+addCheck("private local artifact intake API route exists", () => {
+  const source = read("app/api/kernel/private-local-artifact-intake/route.ts");
+  assert(source.includes("export async function GET"), "Missing local intake GET route.");
+  assert(source.includes("export async function POST"), "Missing local intake POST route.");
+  assert(source.includes("pantavion_private_local_artifact_intake_dwg_upload"), "Missing local intake capability.");
+  assert(source.includes("mode === \"ingest\""), "Missing ingest mode.");
+});
+
+addCheck("PATCH 8T docs exist", () => {
+  const source = read("docs/pantavion/private-local-artifact-intake-dwg-upload.md");
+  assert(source.includes("PATCH 8T"), "Missing PATCH 8T doc heading.");
+  assert(source.includes("Private Local Artifact Intake"), "Missing local intake doc scope.");
+  assert(source.includes("Original DWG is never mutated."), "Missing no DWG mutation doc rule.");
+  assert(source.includes("SHA256"), "Missing SHA256 doc rule.");
+});
+
 let failed = 0;
 
 for (const check of checks) {
