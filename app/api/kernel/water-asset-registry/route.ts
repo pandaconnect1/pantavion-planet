@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 import {
   assessPantavionWaterAssetRegistration,
   listPantavionWaterAssetTypeRegistry,
@@ -13,6 +14,26 @@ import {
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+function resolveActor(request: Request) {
+  const auth = verifyKernelRequest(request);
+
+  if (auth.ok) {
+    return {
+      actor: auth.actor,
+      authWarning: auth.warning
+    };
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return {
+      actor: "local-water-asset-registry-api",
+      authWarning: "Local development mode. Water asset registry request accepted without production auth."
+    };
+  }
+
+  return null;
+}
+
 function stringArray(value: unknown): string[] | undefined {
   if (!Array.isArray(value)) {
     return undefined;
@@ -25,8 +46,17 @@ function numberValue(value: unknown): number | undefined {
   return typeof value === "number" && Number.isFinite(value) ? value : undefined;
 }
 
-export async function GET() {
-  const actor = "api:kernel:water-asset-registry:get";
+export async function GET(request: NextRequest) {
+  const resolved = resolveActor(request);
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized water asset registry access." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const records = await readPantavionWaterAssetRecords();
 
   await appendPantavionWaterAssetRegistryAudit({
@@ -40,6 +70,7 @@ export async function GET() {
     ok: true,
     capability: "pantavion_water_asset_registry_sv_fh_prv_dma_telemetry",
     status: "internal",
+    authWarning: resolved.authWarning,
     assetTypes: listPantavionWaterAssetTypeRegistry(),
     records,
     rules: {
@@ -56,7 +87,16 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:water-asset-registry:post";
+  const resolved = resolveActor(request);
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized water asset registry mutation." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
 
   const registryRequest: PantavionWaterAssetRegistryInput = {
@@ -81,7 +121,7 @@ export async function POST(request: NextRequest) {
     sourceTruth: Boolean(body?.sourceTruth),
     fieldVerified: Boolean(body?.fieldVerified),
     supervisorReviewed: Boolean(body?.supervisorReviewed),
-    actor: typeof body?.actor === "string" ? body.actor : actor,
+    actor,
     reason: typeof body?.reason === "string" ? body.reason : undefined
   };
 
@@ -93,6 +133,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       ok: true,
       mode,
+      authWarning: resolved.authWarning,
       assessment: result.assessment,
       records: result.records
     });
@@ -111,6 +152,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({
     ok: true,
     mode,
+    authWarning: resolved.authWarning,
     assessment
   });
 }
