@@ -5,12 +5,22 @@ import {
   type PantavionConversionRequestInput,
 } from "@/core/conversion/format-matrix";
 import { appendPantavionConversionAudit } from "@/core/conversion/conversion-audit";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  const actor = "api:kernel:conversion-matrix:get";
+export async function GET(request: NextRequest) {
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
+  const actor = auth.ok ? auth.actor : "local-conversion-matrix";
   const matrix = listPantavionConversionMatrix();
 
   await appendPantavionConversionAudit({
@@ -36,7 +46,16 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:conversion-matrix:post";
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
+  const actor = auth.ok ? auth.actor : "local-conversion-matrix";
   const body = (await request.json().catch(() => null)) as
     | Partial<PantavionConversionRequestInput>
     | null;
@@ -57,14 +76,14 @@ export async function POST(request: NextRequest) {
     useCase: body.useCase,
     sensitive: body.sensitive,
     sourceTruth: body.sourceTruth,
-    actor: body.actor ?? actor,
+    actor,
   };
 
   const assessment = assessPantavionConversionRequest(conversionRequest);
 
   await appendPantavionConversionAudit({
     event: "conversion.request.assessed",
-    actor: conversionRequest.actor ?? actor,
+    actor,
     createdAt: new Date().toISOString(),
     request: conversionRequest,
     assessment,
