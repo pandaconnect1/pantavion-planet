@@ -371,6 +371,16 @@ function sensitiveBlockReason(originalName: string): string | null {
     return `Sensitive extension is blocked: ${ext}`;
   }
 
+  // path.extname returns "" for bare dotfiles (e.g. ".env", ".pem"), so the
+  // extension check above misses them. Match against the basename directly so
+  // files literally named after a sensitive extension are still blocked.
+  const base = path.basename(lower);
+  for (const sensitive of SENSITIVE_EXTENSIONS) {
+    if (base === sensitive || base.endsWith(sensitive)) {
+      return `Sensitive extension is blocked: ${sensitive}`;
+    }
+  }
+
   for (const fragment of SENSITIVE_NAME_FRAGMENTS) {
     if (lower.includes(fragment)) {
       return `Sensitive filename fragment is blocked: ${fragment}`;

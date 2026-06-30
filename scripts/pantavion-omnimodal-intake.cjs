@@ -70,9 +70,18 @@ function detect(filePath) {
 function blockReason(filePath) {
   const lower = path.basename(filePath).toLowerCase();
   const ext = extensionOf(filePath);
+  const sensitiveExtensions = [".env", ".pem", ".key", ".p12", ".pfx", ".sqlite", ".db"];
 
-  if ([".env", ".pem", ".key", ".p12", ".pfx", ".sqlite", ".db"].includes(ext)) {
+  if (sensitiveExtensions.includes(ext)) {
     return `Sensitive extension is blocked: ${ext}`;
+  }
+
+  // path.extname returns "" for bare dotfiles (e.g. ".env"), so match the
+  // basename directly to catch files literally named after a sensitive extension.
+  for (const sensitive of sensitiveExtensions) {
+    if (lower === sensitive || lower.endsWith(sensitive)) {
+      return `Sensitive extension is blocked: ${sensitive}`;
+    }
   }
 
   for (const fragment of ["password", "credential", "private_key", "secret_key", "api_key"]) {
