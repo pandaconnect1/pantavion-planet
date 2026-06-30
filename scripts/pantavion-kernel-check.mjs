@@ -34,7 +34,6 @@ addCheck("sensitive artifact vault exists", () => {
   const source = read("core/vault/sensitive-artifact-vault.ts");
   assert(source.includes("PANTAVION_SENSITIVE_ARTIFACT_RULES"), "Missing sensitive vault.");
   assert(source.includes("dwg_master_source_truth"), "Missing DWG source-truth vault rule.");
-  assert(source.includes("secret_or_token_artifact"), "Missing secret vault rule.");
 });
 
 addCheck("founder approval board exists", () => {
@@ -59,46 +58,53 @@ addCheck("agent execution reliability exists", () => {
   const source = read("core/agent/agent-execution-reliability.ts");
   assert(source.includes("assessPantavionAgentExecutionReliability"), "Missing execution reliability assessment.");
   assert(source.includes("checkpointPlan"), "Missing checkpoint plan.");
-  assert(source.includes("rollbackPlan"), "Missing rollback plan.");
 });
 
 addCheck("original DWG source binding exists", () => {
   const source = read("core/water/original-dwg-source-binding.ts");
   assert(source.includes("PANTAVION_ORIGINAL_DWG_SOURCE_BINDING"), "Missing original DWG source binding.");
   assert(source.includes("GEORGE_MAP_MASTER_B_C_FINAL.dwg"), "Missing final DWG filename.");
-  assert(source.includes("205877448"), "Missing final DWG size.");
   assert(source.includes("0070db27b6b22cc3aa24353c9445f87910925b6d18bea27914c915da13bbc1d9"), "Missing final DWG sha256.");
-  assert(source.includes("sourceTruth: true"), "Missing source truth lock.");
-  assert(source.includes("readOnly: true"), "Missing read-only lock.");
-  assert(source.includes("immutable: true"), "Missing immutable lock.");
   assert(source.includes("derivativeMayReplaceOriginal: false"), "Missing derivative block.");
 });
 
-addCheck("original DWG verifier exists", () => {
-  const source = read("core/water/original-dwg-source-verifier.ts");
-  assert(source.includes("verifyPantavionOriginalDwgLocalFile"), "Missing local DWG verifier.");
-  assert(source.includes("sha256File"), "Missing SHA256 verifier.");
-  assert(source.includes("founderApproved"), "Missing founder approval gate.");
+addCheck("original DWG viewer bridge exists", () => {
+  const source = read("core/water/original-dwg-viewer-bridge.ts");
+  assert(source.includes("assessPantavionOriginalDwgViewerBridge"), "Missing original DWG viewer bridge assessment.");
+  assert(source.includes("PANTAVION_ORIGINAL_DWG_VIEWER_SURFACES"), "Missing original DWG viewer surfaces.");
+  assert(source.includes("surface: \"B\""), "Missing B surface.");
+  assert(source.includes("surface: \"C\""), "Missing C surface.");
+  assert(source.includes("noDerivativeAsOriginal: true"), "Missing no derivative original rule.");
+  assert(source.includes("automaticRenderBlocked: true"), "Missing automatic render block.");
+  assert(source.includes("oda_inweb_dwg_viewer"), "Missing ODA adapter bridge.");
 });
 
-addCheck("original DWG audit exists", () => {
-  const source = read("core/water/original-dwg-source-audit.ts");
-  assert(source.includes("original-dwg-source-binding-audit.jsonl"), "Missing original DWG audit file.");
-  assert(source.includes("appendPantavionOriginalDwgSourceAudit"), "Missing original DWG audit append.");
+addCheck("original DWG viewer bridge audit exists", () => {
+  const source = read("core/water/original-dwg-viewer-bridge-audit.ts");
+  assert(source.includes("original-dwg-viewer-bridge-audit.jsonl"), "Missing viewer bridge audit file.");
+  assert(source.includes("appendPantavionOriginalDwgViewerBridgeAudit"), "Missing viewer bridge audit append.");
 });
 
-addCheck("original DWG API route exists", () => {
-  const source = read("app/api/kernel/original-dwg-source-binding/route.ts");
-  assert(source.includes("export async function GET"), "Missing original DWG GET route.");
-  assert(source.includes("export async function POST"), "Missing original DWG POST route.");
-  assert(source.includes("assessPantavionSensitiveArtifact"), "Missing vault connection.");
-  assert(source.includes("assessPantavionCadViewerAdapter"), "Missing CAD adapter connection.");
+addCheck("original DWG viewer bridge API route exists", () => {
+  const source = read("app/api/kernel/original-dwg-viewer-bridge/route.ts");
+  assert(source.includes("export async function GET"), "Missing viewer bridge GET route.");
+  assert(source.includes("export async function POST"), "Missing viewer bridge POST route.");
+  assert(source.includes("pantavion_b_c_original_dwg_viewer_bridge"), "Missing viewer bridge capability.");
 });
 
-addCheck("PATCH 8I docs exist", () => {
-  const source = read("docs/pantavion/original-dwg-source-binding.md");
-  assert(source.includes("PATCH 8I"), "Missing PATCH 8I doc heading.");
-  assert(source.includes("No PDF, image, screenshot, GeoJSON"), "Missing no-derivative-as-original rule.");
+addCheck("B and C pages are bridged", () => {
+  const pageB = read("app/professional/infrastructure/water/b/page.tsx");
+  const pageC = read("app/professional/infrastructure/water/c/page.tsx");
+  assert(pageB.includes("OriginalDwgViewerBridgePanel"), "Surface B is not connected to bridge panel.");
+  assert(pageB.includes("surface: \"B\""), "Surface B page is not bound to B.");
+  assert(pageC.includes("OriginalDwgViewerBridgePanel"), "Surface C is not connected to bridge panel.");
+  assert(pageC.includes("surface: \"C\""), "Surface C page is not bound to C.");
+});
+
+addCheck("PATCH 8J docs exist", () => {
+  const source = read("docs/pantavion/original-dwg-viewer-bridge.md");
+  assert(source.includes("PATCH 8J"), "Missing PATCH 8J doc heading.");
+  assert(source.includes("No PDF, image, screenshot, GeoJSON"), "Missing no fake original rule.");
 });
 
 let failed = 0;

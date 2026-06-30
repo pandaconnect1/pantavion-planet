@@ -1,19 +1,22 @@
-import WaterMapNavigation from "../water-map-navigation";
-import WaterDerivedMapClient from "../components/water-derived-map-client";
+import { OriginalDwgViewerBridgePanel } from "@/components/water/OriginalDwgViewerBridgePanel";
+import { assessPantavionOriginalDwgViewerBridge } from "@/core/water/original-dwg-viewer-bridge";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Pantavion Water B Derived Map",
-  description:
-    "Protected B derived water network map preview over road base, without raw DWG exposure.",
-};
+export default function PantavionWaterSurfaceBPage() {
+  const bridge = assessPantavionOriginalDwgViewerBridge({
+    surface: "B",
+    founderApproved: false,
+    licenseAvailable: false,
+    cloudApproved: false,
+    actor: "page:water:b"
+  });
 
-export default function WaterBDerivedMapPage() {
   return (
-    <>
-      <WaterMapNavigation title="B Derived Map" />
-      <WaterDerivedMapClient mode="b" />
-    </>
+    <main className="min-h-screen bg-[#02040b] px-6 py-8 text-white">
+      <div className="mx-auto max-w-6xl">
+        <OriginalDwgViewerBridgePanel bridge={bridge} />
+      </div>
+    </main>
   );
 }
