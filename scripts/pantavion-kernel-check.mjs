@@ -263,6 +263,47 @@ addCheck("PATCH 8R docs exist", () => {
   assert(source.includes("No SCADA write."), "Missing no SCADA write doc rule.");
 });
 
+
+addCheck("private upload session exists", () => {
+  const source = read("core/storage/private-upload-session-contract.ts");
+  assert(source.includes("PANTAVION_PRIVATE_UPLOAD_SUPPORTED_EXTENSIONS"), "Missing private upload supported extensions.");
+  assert(source.includes("assessPantavionPrivateUploadSession"), "Missing private upload assessment.");
+  assert(source.includes("dwg"), "Missing DWG upload support.");
+  assert(source.includes("dxf"), "Missing DXF upload support.");
+  assert(source.includes("dgn"), "Missing DGN upload support.");
+  assert(source.includes("multipart_private_upload"), "Missing multipart upload strategy.");
+  assert(source.includes("chunked_resumable_upload"), "Missing chunked resumable upload strategy.");
+  assert(source.includes("privateStorageOnly: true"), "Missing private storage only rule.");
+  assert(source.includes("noGitStorage: true"), "Missing no Git storage rule.");
+  assert(source.includes("noPublicFolder: true"), "Missing no public folder rule.");
+  assert(source.includes("uploadBytesAllowedNow: false"), "Missing no bytes upload yet rule.");
+  assert(source.includes("originalDwgMutationAllowed: false"), "Missing no original DWG mutation rule.");
+});
+
+addCheck("private upload session store exists", () => {
+  const source = read("core/storage/private-upload-session-store.ts");
+  assert(source.includes("private-upload-session-contracts.json"), "Missing private upload state file.");
+  assert(source.includes("private-upload-session-audit.jsonl"), "Missing private upload audit file.");
+  assert(source.includes("registerPantavionPrivateUploadSessionContract"), "Missing private upload register function.");
+  assert(source.includes("registered_pending_adapter"), "Missing pending adapter status.");
+});
+
+addCheck("private upload session API route exists", () => {
+  const source = read("app/api/kernel/private-upload-session/route.ts");
+  assert(source.includes("export async function GET"), "Missing private upload GET route.");
+  assert(source.includes("export async function POST"), "Missing private upload POST route.");
+  assert(source.includes("pantavion_private_storage_upload_session_multipart_contract"), "Missing private upload capability.");
+  assert(source.includes("mode === \"register\""), "Missing private upload register mode.");
+});
+
+addCheck("PATCH 8S docs exist", () => {
+  const source = read("docs/pantavion/private-storage-upload-session-multipart-contract.md");
+  assert(source.includes("PATCH 8S"), "Missing PATCH 8S doc heading.");
+  assert(source.includes("Private Storage Upload Session / Multipart Contract"), "Missing private upload doc scope.");
+  assert(source.includes("This patch does not upload bytes yet."), "Missing no-upload-yet doc rule.");
+  assert(source.includes("Original DWG is never mutated."), "Missing no DWG mutation doc rule.");
+});
+
 let failed = 0;
 
 for (const check of checks) {
