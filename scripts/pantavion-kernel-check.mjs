@@ -96,42 +96,50 @@ addCheck("water sources admin page exists", () => {
   assert(component.includes("Artifact Intake / Upload Source Registry"), "Missing water sources heading.");
 });
 
-addCheck("device geo status exists", () => {
-  const source = read("core/geo/device-geo-status.ts");
-  assert(source.includes("assessPantavionDeviceGeoStatus"), "Missing device geo status assessment.");
-  assert(source.includes("buildViewport"), "Missing viewport builder.");
-  assert(source.includes("canOpenCurrentArea"), "Missing current area flag.");
-  assert(source.includes("canSearchNearbyRoads"), "Missing nearby roads flag.");
-  assert(source.includes("preciseLocationStored: false"), "Missing no precise storage rule.");
-  assert(source.includes("continuousTracking: false"), "Missing no continuous tracking rule.");
-  assert(source.includes("backgroundTracking: false"), "Missing no background tracking rule.");
+addCheck("water operational overlay exists", () => {
+  const source = read("core/water/water-operational-overlay.ts");
+  assert(source.includes("PANTAVION_WATER_OPERATIONAL_COLOR_POLICY"), "Missing water operational color policy.");
+  assert(source.includes("assessPantavionWaterOperationalOverlay"), "Missing overlay assessment.");
+  assert(source.includes("closed_temporary_fault"), "Missing blue temporary closed state.");
+  assert(source.includes("closed_permanent"), "Missing red permanent closed state.");
+  assert(source.includes("opened_after_repair"), "Missing green opened after repair state.");
+  assert(source.includes("sv_replacement_required"), "Missing SV replacement required state.");
+  assert(source.includes("sv_lost_or_covered"), "Missing lost/covered SV state.");
+  assert(source.includes("cyan_lost_covered_ring"), "Missing cyan lost/covered ring intent.");
+  assert(source.includes("dashed_ring"), "Missing dashed ring shape.");
+  assert(source.includes("dashed_ring_white_hatch"), "Missing white hatch lost/covered ring shape.");
+  assert(source.includes("white_hatch_lines"), "Missing white hatch visual distinction.");
+  assert(source.includes("originalDwgMutationAllowed: false"), "Missing no original DWG mutation rule.");
+  assert(source.includes("physicalValveControl: false"), "Missing no physical valve control rule.");
+  assert(source.includes("scadaWriteAllowed: false"), "Missing no SCADA write rule.");
 });
 
-addCheck("device geo audit exists", () => {
-  const source = read("core/geo/device-geo-status-audit.ts");
-  assert(source.includes("device-geo-status-audit.jsonl"), "Missing geo audit file.");
-  assert(source.includes("appendPantavionDeviceGeoStatusAudit"), "Missing geo audit append.");
+addCheck("water operational overlay store exists", () => {
+  const source = read("core/water/water-operational-overlay-store.ts");
+  assert(source.includes("water-operational-overlay-state.json"), "Missing overlay state file.");
+  assert(source.includes("water-operational-overlay-audit.jsonl"), "Missing overlay audit file.");
+  assert(source.includes("applyPantavionWaterOperationalOverlay"), "Missing overlay apply function.");
+  assert(source.includes("restore_all_opened"), "Missing restore all opened workflow.");
 });
 
-addCheck("device geo API route exists", () => {
-  const source = read("app/api/kernel/device-geo-status/route.ts");
-  assert(source.includes("export async function GET"), "Missing geo GET route.");
-  assert(source.includes("export async function POST"), "Missing geo POST route.");
-  assert(source.includes("pantavion_device_geo_status_current_position_viewport"), "Missing geo capability.");
+addCheck("water operational overlay API route exists", () => {
+  const source = read("app/api/kernel/water-operational-overlay/route.ts");
+  assert(source.includes("export async function GET"), "Missing overlay GET route.");
+  assert(source.includes("export async function POST"), "Missing overlay POST route.");
+  assert(source.includes("pantavion_water_operational_overlay_sv_workflow"), "Missing overlay capability.");
+  assert(source.includes("mark_sv_lost_or_covered"), "Missing lost/covered action route.");
 });
 
-addCheck("device geo client page exists", () => {
-  const component = read("components/geo/DeviceGeoStatusClient.tsx");
-  const page = read("app/professional/infrastructure/water/geo-status/page.tsx");
-  assert(component.includes("navigator.geolocation.getCurrentPosition"), "Missing real browser geolocation call.");
-  assert(component.includes("Use my current location"), "Missing location button.");
-  assert(page.includes("DeviceGeoStatusClient"), "Missing geo client page.");
+addCheck("water operational overlay audit script exists", () => {
+  const source = read("scripts/audit-water-operational-overlay.mjs");
+  assert(source.includes("Water operational overlay audit passed."), "Missing overlay audit script.");
 });
 
-addCheck("PATCH 8N docs exist", () => {
-  const source = read("docs/pantavion/device-geo-status-current-position.md");
-  assert(source.includes("PATCH 8N"), "Missing PATCH 8N doc heading.");
-  assert(source.includes("No continuous tracking."), "Missing no continuous tracking rule.");
+addCheck("PATCH 8O docs exist", () => {
+  const source = read("docs/pantavion/water-operational-overlay-sv-workflow.md");
+  assert(source.includes("PATCH 8O"), "Missing PATCH 8O doc heading.");
+  assert(source.includes("Cyan dashed ring"), "Missing lost/covered ring documentation.");
+  assert(source.includes("Original DWG is never mutated."), "Missing no DWG mutation doc rule.");
 });
 
 let failed = 0;
