@@ -256,7 +256,13 @@ const CONVERSION_OPTIONS: ConversionOption[] = [
 function normalizeExtension(value: string): string {
   const clean = String(value || "").trim().toLowerCase();
   if (!clean) return "unknown";
-  return clean.startsWith(".") ? clean : `.${clean}`;
+  // Strip everything except alphanumerics so the result can never contain
+  // path separators or `..` segments. Without this, a crafted extension such
+  // as ".../../../../tmp/pwned" survives into the output filename and lets
+  // path.join escape the conversion output directory (arbitrary file write).
+  const stripped = clean.replace(/[^a-z0-9]/g, "");
+  if (!stripped) return "unknown";
+  return `.${stripped}`;
 }
 
 function safeFileName(input: string): string {
@@ -431,8 +437,20 @@ async function executeLocalConversion(job: ConversionJob): Promise<ConversionJob
   const baseName = safeFileName(
     job.sourceOriginalName.replace(/\.[^.]+$/, "") || "conversion-output",
   );
-  const outputName = `${job.id}-${baseName}${job.desiredOutputExtension}`;
+  const outputName = safeFileName(
+    `${job.id}-${baseName}${normalizeExtension(job.desiredOutputExtension)}`,
+  );
   const outputPath = path.join(outputDir, outputName);
+
+  // Defense in depth: the resolved output path must stay inside outputDir.
+  const resolvedOutputDir = path.resolve(outputDir);
+  const resolvedOutputPath = path.resolve(outputPath);
+  if (
+    resolvedOutputPath !== path.join(resolvedOutputDir, outputName) ||
+    !resolvedOutputPath.startsWith(resolvedOutputDir + path.sep)
+  ) {
+    throw new Error("Refusing to write conversion output outside output directory.");
+  }
 
   await fs.writeFile(outputPath, outputText, "utf8");
 
