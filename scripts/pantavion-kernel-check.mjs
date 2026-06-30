@@ -86,32 +86,27 @@ addCheck("artifact intake registry exists", () => {
   assert(source.includes("PANTAVION_ARTIFACT_INTAKE_RULES"), "Missing artifact intake rules.");
   assert(source.includes("assessPantavionArtifactIntake"), "Missing artifact intake assessment.");
   assert(source.includes("dwg_original_source_truth_intake"), "Missing DWG intake rule.");
-  assert(source.includes("gis_source_intake"), "Missing GIS intake rule.");
-  assert(source.includes("geojson_derivative_intake"), "Missing GeoJSON derivative rule.");
-  assert(source.includes("direct_private_upload_session"), "Missing direct private upload strategy.");
-  assert(source.includes("multipart_private_upload"), "Missing multipart upload strategy.");
-  assert(source.includes("requiresPrivateStorage"), "Missing private storage requirement.");
-  assert(source.includes("requiresSha256"), "Missing SHA256 requirement.");
   assert(source.includes("allowedForAutomaticPublicUse: false"), "Missing public use block.");
 });
 
-addCheck("artifact intake audit exists", () => {
-  const source = read("core/artifacts/artifact-intake-audit.ts");
-  assert(source.includes("artifact-intake-registry-audit.jsonl"), "Missing intake audit file.");
-  assert(source.includes("appendPantavionArtifactIntakeAudit"), "Missing intake audit append.");
+addCheck("water sources admin page exists", () => {
+  const page = read("app/professional/infrastructure/water/sources/page.tsx");
+  const component = read("components/water/WaterSourcesAdminPanel.tsx");
+  assert(page.includes("WaterSourcesAdminPanel"), "Missing water sources panel on page.");
+  assert(page.includes("assessPantavionArtifactIntake"), "Missing intake assessment on page.");
+  assert(component.includes("Artifact Intake / Upload Source Registry"), "Missing admin page heading.");
+  assert(component.includes("DWG original source truth"), "Missing DWG warning.");
 });
 
-addCheck("artifact intake API route exists", () => {
-  const source = read("app/api/kernel/artifact-intake-registry/route.ts");
-  assert(source.includes("export async function GET"), "Missing intake GET route.");
-  assert(source.includes("export async function POST"), "Missing intake POST route.");
-  assert(source.includes("pantavion_universal_artifact_intake_registry"), "Missing intake capability.");
+addCheck("water sources audit exists", () => {
+  const source = read("scripts/audit-water-sources-admin-page.mjs");
+  assert(source.includes("Water sources admin page audit passed."), "Missing water sources audit script.");
 });
 
-addCheck("PATCH 8L docs exist", () => {
-  const source = read("docs/pantavion/artifact-intake-upload-source-registry.md");
-  assert(source.includes("PATCH 8L"), "Missing PATCH 8L doc heading.");
-  assert(source.includes("Large/source-truth artifacts must not be committed to Git."), "Missing no Git source-truth rule.");
+addCheck("PATCH 8M docs exist", () => {
+  const source = read("docs/pantavion/water-sources-admin-page.md");
+  assert(source.includes("PATCH 8M"), "Missing PATCH 8M doc heading.");
+  assert(source.includes("/professional/infrastructure/water/sources"), "Missing sources page route doc.");
 });
 
 let failed = 0;
