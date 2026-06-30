@@ -65,10 +65,37 @@ addCheck("cad viewer adapter audit exists", () => {
   assert(source.includes("appendPantavionCadViewerAudit"), "Missing CAD audit function.");
 });
 
-addCheck("PATCH 8C docs exist", () => {
-  const source = read("docs/pantavion/cad-dwg-viewer-adapter-matrix.md");
-  assert(source.includes("PATCH 8C"), "Missing PATCH 8C doc heading.");
-  assert(source.includes("Static image/PDF/screenshot/Leaflet/GeoJSON as original is blocked."), "Missing blocked fake original rule.");
+addCheck("sensitive artifact vault exists", () => {
+  const source = read("core/vault/sensitive-artifact-vault.ts");
+  assert(source.includes("PANTAVION_SENSITIVE_ARTIFACT_RULES"), "Missing sensitive artifact rules.");
+  assert(source.includes("assessPantavionSensitiveArtifact"), "Missing sensitive artifact assessment function.");
+  assert(source.includes("dwg_master_source_truth"), "Missing DWG source-truth vault rule.");
+  assert(source.includes("secret_or_token_artifact"), "Missing secret/token vault rule.");
+  assert(source.includes("production_config_artifact"), "Missing production config vault rule.");
+  assert(source.includes("legal_document_artifact"), "Missing legal document vault rule.");
+  assert(source.includes("auth_user_data_artifact"), "Missing auth/user data vault rule.");
+  assert(source.includes("billing_data_artifact"), "Missing billing vault rule.");
+  assert(source.includes("backup_restore_artifact"), "Missing backup/restore vault rule.");
+  assert(source.includes("sourceTruthMutationBlocked"), "Missing source-truth mutation block.");
+});
+
+addCheck("sensitive artifact vault API route exists", () => {
+  const source = read("app/api/kernel/sensitive-artifact-vault/route.ts");
+  assert(source.includes("export async function GET"), "Missing vault GET route.");
+  assert(source.includes("export async function POST"), "Missing vault POST route.");
+  assert(source.includes("appendPantavionSensitiveArtifactAudit"), "Missing vault audit append.");
+});
+
+addCheck("sensitive artifact vault audit exists", () => {
+  const source = read("core/vault/sensitive-artifact-audit.ts");
+  assert(source.includes("sensitive-artifact-vault-audit.jsonl"), "Missing vault JSONL audit path.");
+  assert(source.includes("appendPantavionSensitiveArtifactAudit"), "Missing vault audit function.");
+});
+
+addCheck("PATCH 8D docs exist", () => {
+  const source = read("docs/pantavion/sensitive-artifact-vault.md");
+  assert(source.includes("PATCH 8D"), "Missing PATCH 8D doc heading.");
+  assert(source.includes("Original source-truth artifacts are read-only and immutable by default."), "Missing source-truth immutability rule.");
 });
 
 let failed = 0;
