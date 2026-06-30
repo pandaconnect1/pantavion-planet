@@ -142,6 +142,45 @@ addCheck("PATCH 8O docs exist", () => {
   assert(source.includes("Original DWG is never mutated."), "Missing no DWG mutation doc rule.");
 });
 
+
+addCheck("water asset registry exists", () => {
+  const source = read("core/water/water-asset-registry.ts");
+  assert(source.includes("PANTAVION_WATER_ASSET_TYPE_REGISTRY"), "Missing water asset type registry.");
+  assert(source.includes("assessPantavionWaterAssetRegistration"), "Missing water asset assessment.");
+  assert(source.includes("SV"), "Missing SV asset kind.");
+  assert(source.includes("FH"), "Missing FH asset kind.");
+  assert(source.includes("PRV"), "Missing PRV asset kind.");
+  assert(source.includes("DMA"), "Missing DMA asset kind.");
+  assert(source.includes("TELEMETRY"), "Missing telemetry asset kind.");
+  assert(source.includes("lost_or_covered"), "Missing lost/covered asset condition.");
+  assert(source.includes("replacement_required"), "Missing replacement required condition.");
+  assert(source.includes("originalDwgMutationAllowed: false"), "Missing no original DWG mutation rule.");
+  assert(source.includes("physicalControlAllowed: false"), "Missing no physical control rule.");
+  assert(source.includes("scadaWriteAllowed: false"), "Missing no SCADA write rule.");
+});
+
+addCheck("water asset registry store exists", () => {
+  const source = read("core/water/water-asset-registry-store.ts");
+  assert(source.includes("water-asset-registry-state.json"), "Missing water asset state file.");
+  assert(source.includes("water-asset-registry-audit.jsonl"), "Missing water asset audit file.");
+  assert(source.includes("registerPantavionWaterAsset"), "Missing water asset register function.");
+});
+
+addCheck("water asset registry API route exists", () => {
+  const source = read("app/api/kernel/water-asset-registry/route.ts");
+  assert(source.includes("export async function GET"), "Missing water asset GET route.");
+  assert(source.includes("export async function POST"), "Missing water asset POST route.");
+  assert(source.includes("pantavion_water_asset_registry_sv_fh_prv_dma_telemetry"), "Missing water asset capability.");
+  assert(source.includes("mode === \"register\""), "Missing register mode.");
+});
+
+addCheck("PATCH 8P docs exist", () => {
+  const source = read("docs/pantavion/water-asset-registry-sv-fh-prv-dma-telemetry.md");
+  assert(source.includes("PATCH 8P"), "Missing PATCH 8P doc heading.");
+  assert(source.includes("SV / FH / PRV / DMA / Telemetry"), "Missing asset registry doc scope.");
+  assert(source.includes("Original DWG is never mutated."), "Missing no DWG mutation doc rule.");
+});
+
 let failed = 0;
 
 for (const check of checks) {
