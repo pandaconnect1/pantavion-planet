@@ -7,6 +7,7 @@ import {
   type PantavionStartupDomain
 } from "@/core/startup/startup-builder-stack";
 import { appendPantavionStartupBuilderAudit } from "@/core/startup/startup-builder-audit";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -55,8 +56,17 @@ function normalizeActionClass(value: unknown): PantavionStartupActionClass {
     : "unknown";
 }
 
-export async function GET() {
-  const actor = "api:kernel:startup-builder-stack:get";
+export async function GET(request: NextRequest) {
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
+  const actor = auth.ok ? auth.actor : "api:kernel:startup-builder-stack:get";
   const stack = listPantavionStartupBuilderStack();
 
   await appendPantavionStartupBuilderAudit({
@@ -82,7 +92,16 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:startup-builder-stack:post";
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
+  const actor = auth.ok ? auth.actor : "api:kernel:startup-builder-stack:post";
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
 
   const startupRequest: PantavionStartupBuilderRequestInput = {
