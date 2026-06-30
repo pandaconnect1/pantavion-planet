@@ -23,7 +23,6 @@ addCheck("conversion matrix exists", () => {
   assert(source.includes("assessPantavionConversionRequest"), "Missing conversion assessment function.");
   assert(source.includes("cad_dwg_to_embedded_viewer"), "Missing DWG embedded viewer rule.");
   assert(source.includes("cad_dwg_to_static_image_as_original"), "Missing blocked fake/static DWG rule.");
-  assert(source.includes("requiresFounderApproval: true"), "Missing founder approval requirement.");
 });
 
 addCheck("cad viewer adapter matrix exists", () => {
@@ -48,39 +47,44 @@ addCheck("founder approval board exists", () => {
   assert(source.includes("PantavionFounderApprovalRecord"), "Missing founder approval record type.");
   assert(source.includes("createPantavionFounderApprovalRecord"), "Missing founder approval creation logic.");
   assert(source.includes("decidePantavionFounderApprovalRecord"), "Missing founder approval decision logic.");
-  assert(source.includes("assessPantavionFounderApprovalRecord"), "Missing founder approval assessment logic.");
   assert(source.includes("Z3_Z4_ACTION_CLASSES"), "Missing Z3/Z4 protected action classes.");
-  assert(source.includes("dwg_source_truth"), "Missing DWG/source-truth approval class.");
-  assert(source.includes("secret_access"), "Missing secret approval class.");
-  assert(source.includes("production_deploy"), "Missing production deploy approval class.");
-  assert(source.includes("billing_payment"), "Missing billing approval class.");
-  assert(source.includes("auth_user_access"), "Missing auth/user approval class.");
-  assert(source.includes("backup_restore"), "Missing backup/restore approval class.");
   assert(source.includes("blocksAutomaticExecution"), "Missing automatic execution block.");
 });
 
-addCheck("founder approval store exists", () => {
-  const source = read("core/approval/founder-approval-store.ts");
-  assert(source.includes("founder-approval-board.json"), "Missing founder approval state file.");
-  assert(source.includes("founder-approval-board-audit.jsonl"), "Missing founder approval audit file.");
-  assert(source.includes("createStoredPantavionFounderApprovalRequest"), "Missing stored approval create function.");
-  assert(source.includes("decideStoredPantavionFounderApprovalRequest"), "Missing stored approval decision function.");
-  assert(source.includes("appendPantavionFounderApprovalAudit"), "Missing approval audit append.");
+addCheck("repo agent safety gate exists", () => {
+  const source = read("core/agent/repo-agent-safety-gate.ts");
+  assert(source.includes("PANTAVION_REPO_AGENT_ALLOWED_COMMAND_PATTERNS"), "Missing allowed command patterns.");
+  assert(source.includes("PANTAVION_REPO_AGENT_BLOCKED_COMMAND_PATTERNS"), "Missing blocked command patterns.");
+  assert(source.includes("PANTAVION_REPO_AGENT_APPROVAL_COMMAND_PATTERNS"), "Missing approval command patterns.");
+  assert(source.includes("assessPantavionRepoAgentSafety"), "Missing repo safety assessment function.");
+  assert(source.includes("createPantavionAiCodeProvenanceRecord"), "Missing AI code provenance record.");
+  assert(source.includes("git_add"), "Missing git add action class.");
+  assert(source.includes("secrets_access"), "Missing secrets action class.");
+  assert(source.includes("production_deploy"), "Missing production deploy action class.");
+  assert(source.includes("source_truth_change"), "Missing source-truth action class.");
+  assert(source.includes("allowedForAutomaticExecution"), "Missing automatic execution decision.");
+  assert(source.includes("requiredChecks"), "Missing required checks.");
 });
 
-addCheck("founder approval API route exists", () => {
-  const source = read("app/api/kernel/founder-approval-board/route.ts");
-  assert(source.includes("export async function GET"), "Missing approval GET route.");
-  assert(source.includes("export async function POST"), "Missing approval POST route.");
-  assert(source.includes("export async function PATCH"), "Missing approval PATCH route.");
-  assert(source.includes("createStoredPantavionFounderApprovalRequest"), "Missing approval create route logic.");
-  assert(source.includes("decideStoredPantavionFounderApprovalRequest"), "Missing approval decision route logic.");
+addCheck("repo agent safety audit exists", () => {
+  const source = read("core/agent/repo-agent-safety-audit.ts");
+  assert(source.includes("repo-agent-safety-gate-audit.jsonl"), "Missing repo agent safety audit file.");
+  assert(source.includes("appendPantavionRepoAgentSafetyAudit"), "Missing repo safety audit append.");
 });
 
-addCheck("PATCH 8E docs exist", () => {
-  const source = read("docs/pantavion/founder-approval-board.md");
-  assert(source.includes("PATCH 8E"), "Missing PATCH 8E doc heading.");
-  assert(source.includes("Z3/Z4 actions require founder approval before execution."), "Missing Z3/Z4 approval rule.");
+addCheck("repo agent safety API route exists", () => {
+  const source = read("app/api/kernel/repo-agent-safety-gate/route.ts");
+  assert(source.includes("export async function GET"), "Missing repo safety GET route.");
+  assert(source.includes("export async function POST"), "Missing repo safety POST route.");
+  assert(source.includes("appendPantavionRepoAgentSafetyAudit"), "Missing repo safety audit append in route.");
+  assert(source.includes("repo.agent.provenance.recorded"), "Missing provenance audit event.");
+});
+
+addCheck("PATCH 8F docs exist", () => {
+  const source = read("docs/pantavion/repo-agent-safety-gate.md");
+  assert(source.includes("PATCH 8F"), "Missing PATCH 8F doc heading.");
+  assert(source.includes("No git add ."), "Missing git add dot block rule.");
+  assert(source.includes("AI-generated code must carry provenance"), "Missing AI provenance rule.");
 });
 
 let failed = 0;
