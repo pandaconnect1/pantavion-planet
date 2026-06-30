@@ -39,10 +39,36 @@ addCheck("conversion audit exists", () => {
   assert(source.includes("appendPantavionConversionAudit"), "Missing audit function.");
 });
 
-addCheck("PATCH 8B docs exist", () => {
-  const source = read("docs/pantavion/conversion-format-matrix.md");
-  assert(source.includes("PATCH 8B"), "Missing PATCH 8B doc heading.");
-  assert(source.includes("Derivatives must never be presented as original source truth."), "Missing source-truth derivative rule.");
+addCheck("cad viewer adapter matrix exists", () => {
+  const source = read("core/cad/cad-viewer-adapter-matrix.ts");
+  assert(source.includes("PANTAVION_CAD_VIEWER_ADAPTER_MATRIX"), "Missing CAD viewer adapter matrix.");
+  assert(source.includes("assessPantavionCadViewerAdapter"), "Missing CAD viewer assessment function.");
+  assert(source.includes("oda_inweb_dwg_viewer"), "Missing ODA inWEB rule.");
+  assert(source.includes("oda_mcp_future"), "Missing ODA MCP future rule.");
+  assert(source.includes("autodesk_aps_cloud_viewer"), "Missing Autodesk APS cloud rule.");
+  assert(source.includes("leaflet_geojson_as_original"), "Missing blocked Leaflet/GeoJSON original rule.");
+  assert(source.includes("static_image_pdf_as_original"), "Missing blocked static/PDF original rule.");
+  assert(source.includes("preserve_original"), "Missing preserve_original source-truth policy.");
+  assert(source.includes("blocked"), "Missing blocked policy.");
+});
+
+addCheck("cad viewer adapter API route exists", () => {
+  const source = read("app/api/kernel/cad-viewer-adapters/route.ts");
+  assert(source.includes("export async function GET"), "Missing CAD GET route.");
+  assert(source.includes("export async function POST"), "Missing CAD POST route.");
+  assert(source.includes("appendPantavionCadViewerAudit"), "Missing CAD audit append.");
+});
+
+addCheck("cad viewer adapter audit exists", () => {
+  const source = read("core/cad/cad-viewer-audit.ts");
+  assert(source.includes("cad-viewer-adapters-audit.jsonl"), "Missing CAD JSONL audit path.");
+  assert(source.includes("appendPantavionCadViewerAudit"), "Missing CAD audit function.");
+});
+
+addCheck("PATCH 8C docs exist", () => {
+  const source = read("docs/pantavion/cad-dwg-viewer-adapter-matrix.md");
+  assert(source.includes("PATCH 8C"), "Missing PATCH 8C doc heading.");
+  assert(source.includes("Static image/PDF/screenshot/Leaflet/GeoJSON as original is blocked."), "Missing blocked fake original rule.");
 });
 
 let failed = 0;
