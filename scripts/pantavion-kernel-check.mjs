@@ -66,25 +66,40 @@ addCheck("repo agent safety gate exists", () => {
   assert(source.includes("requiredChecks"), "Missing required checks.");
 });
 
-addCheck("repo agent safety audit exists", () => {
-  const source = read("core/agent/repo-agent-safety-audit.ts");
-  assert(source.includes("repo-agent-safety-gate-audit.jsonl"), "Missing repo agent safety audit file.");
-  assert(source.includes("appendPantavionRepoAgentSafetyAudit"), "Missing repo safety audit append.");
+addCheck("startup builder stack exists", () => {
+  const source = read("core/startup/startup-builder-stack.ts");
+  assert(source.includes("PANTAVION_STARTUP_BUILDER_STACK"), "Missing startup builder stack.");
+  assert(source.includes("assessPantavionStartupBuilderRequest"), "Missing startup builder assessment function.");
+  assert(source.includes("startup_ideation_engine"), "Missing ideation capability.");
+  assert(source.includes("market_research_intake"), "Missing market research capability.");
+  assert(source.includes("code_writer_runtime"), "Missing code writer runtime capability.");
+  assert(source.includes("deployment_planner"), "Missing deployment planner capability.");
+  assert(source.includes("legal_checklist_builder"), "Missing legal checklist capability.");
+  assert(source.includes("finance_checklist_builder"), "Missing finance checklist capability.");
+  assert(source.includes("sales_outreach_assistant"), "Missing sales outreach capability.");
+  assert(source.includes("company_workspace_agents"), "Missing workspace agents capability.");
+  assert(source.includes("requiresRepoSafetyGate"), "Missing repo safety gate requirement.");
+  assert(source.includes("requiresSensitiveVaultCheck"), "Missing vault check requirement.");
+  assert(source.includes("allowedForAutomaticExecution"), "Missing automatic execution decision.");
 });
 
-addCheck("repo agent safety API route exists", () => {
-  const source = read("app/api/kernel/repo-agent-safety-gate/route.ts");
-  assert(source.includes("export async function GET"), "Missing repo safety GET route.");
-  assert(source.includes("export async function POST"), "Missing repo safety POST route.");
-  assert(source.includes("appendPantavionRepoAgentSafetyAudit"), "Missing repo safety audit append in route.");
-  assert(source.includes("repo.agent.provenance.recorded"), "Missing provenance audit event.");
+addCheck("startup builder audit exists", () => {
+  const source = read("core/startup/startup-builder-audit.ts");
+  assert(source.includes("startup-builder-stack-audit.jsonl"), "Missing startup builder audit file.");
+  assert(source.includes("appendPantavionStartupBuilderAudit"), "Missing startup builder audit append.");
 });
 
-addCheck("PATCH 8F docs exist", () => {
-  const source = read("docs/pantavion/repo-agent-safety-gate.md");
-  assert(source.includes("PATCH 8F"), "Missing PATCH 8F doc heading.");
-  assert(source.includes("No git add ."), "Missing git add dot block rule.");
-  assert(source.includes("AI-generated code must carry provenance"), "Missing AI provenance rule.");
+addCheck("startup builder API route exists", () => {
+  const source = read("app/api/kernel/startup-builder-stack/route.ts");
+  assert(source.includes("export async function GET"), "Missing startup builder GET route.");
+  assert(source.includes("export async function POST"), "Missing startup builder POST route.");
+  assert(source.includes("appendPantavionStartupBuilderAudit"), "Missing startup builder audit append in route.");
+});
+
+addCheck("PATCH 8G docs exist", () => {
+  const source = read("docs/pantavion/startup-builder-stack-registry.md");
+  assert(source.includes("PATCH 8G"), "Missing PATCH 8G doc heading.");
+  assert(source.includes("No fake/static/UI-only startup builder capability."), "Missing no fake UI rule.");
 });
 
 let failed = 0;

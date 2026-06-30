@@ -49,7 +49,8 @@
     "kernel:cad": "node scripts/audit-cad-viewer-adapters.mjs",
     "kernel:vault": "node scripts/audit-sensitive-artifact-vault.mjs",
     "kernel:approval": "node scripts/audit-founder-approval-board.mjs",
-    "kernel:repo": "node scripts/audit-repo-agent-safety-gate.mjs"
+    "kernel:repo": "node scripts/audit-repo-agent-safety-gate.mjs",
+    "kernel:startup": "node scripts/audit-startup-builder-stack.mjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
