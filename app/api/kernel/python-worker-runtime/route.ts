@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 import {
   assessPantavionPythonWorkerRuntime,
   listPantavionPythonWorkerJobDefinitions,
@@ -17,8 +18,38 @@ function numberValue(value: unknown): number | undefined {
   return typeof value === "number" && Number.isFinite(value) ? value : undefined;
 }
 
-export async function GET() {
-  const actor = "api:kernel:python-worker-runtime:get";
+function resolveActor(request: Request) {
+  const auth = verifyKernelRequest(request);
+
+  if (auth.ok) {
+    return {
+      actor: auth.actor,
+      authWarning: auth.warning
+    };
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return {
+      actor: "local-python-worker-runtime-api",
+      authWarning:
+        "Local development mode. Python worker runtime request accepted without production auth."
+    };
+  }
+
+  return null;
+}
+
+export async function GET(request: NextRequest) {
+  const resolved = resolveActor(request);
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized python worker runtime access." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const records = await readPantavionPythonWorkerJobRecords();
 
   await appendPantavionPythonWorkerRuntimeAudit({
@@ -50,7 +81,16 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:python-worker-runtime:post";
+  const resolved = resolveActor(request);
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized python worker runtime request." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
 
   const workerRequest: PantavionPythonWorkerRuntimeInput = {
@@ -68,7 +108,7 @@ export async function POST(request: NextRequest) {
     founderApproved: Boolean(body?.founderApproved),
     workerRuntimeAvailable: Boolean(body?.workerRuntimeAvailable),
     sandboxAvailable: Boolean(body?.sandboxAvailable),
-    actor: typeof body?.actor === "string" ? body.actor : actor,
+    actor,
     reason: typeof body?.reason === "string" ? body.reason : undefined
   };
 
