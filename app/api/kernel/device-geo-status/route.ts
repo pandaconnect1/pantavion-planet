@@ -6,9 +6,30 @@ import {
   type PantavionGeoSource
 } from "@/core/geo/device-geo-status";
 import { appendPantavionDeviceGeoStatusAudit } from "@/core/geo/device-geo-status-audit";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+function resolveActor(request: Request) {
+  const auth = verifyKernelRequest(request);
+
+  if (auth.ok) {
+    return {
+      actor: auth.actor,
+      authWarning: auth.warning
+    };
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return {
+      actor: "local-device-geo-status-api",
+      authWarning: "Local development mode. Device geo status accepted without production auth."
+    };
+  }
+
+  return null;
+}
 
 function numberValue(value: unknown): number | undefined {
   return typeof value === "number" && Number.isFinite(value) ? value : undefined;
@@ -32,8 +53,17 @@ function normalizeSource(value: unknown): PantavionGeoSource {
   return "unknown";
 }
 
-export async function GET() {
-  const actor = "api:kernel:device-geo-status:get";
+export async function GET(request: NextRequest) {
+  const auth = resolveActor(request);
+
+  if (!auth) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized device geo status access." },
+      { status: 401 }
+    );
+  }
+
+  const actor = auth.actor;
   const policy = listPantavionDeviceGeoStatusPolicy();
 
   await appendPantavionDeviceGeoStatusAudit({
@@ -46,6 +76,7 @@ export async function GET() {
     ok: true,
     capability: "pantavion_device_geo_status_current_position_viewport",
     status: "internal",
+    authWarning: auth.authWarning,
     policy,
     privacy: {
       consent:
@@ -59,7 +90,16 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:device-geo-status:post";
+  const auth = resolveActor(request);
+
+  if (!auth) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized device geo status assessment." },
+      { status: 401 }
+    );
+  }
+
+  const actor = auth.actor;
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
 
   const geoRequest: PantavionDeviceGeoStatusInput = {
@@ -73,7 +113,7 @@ export async function POST(request: NextRequest) {
     requestedSurface: typeof body?.requestedSurface === "string" ? body.requestedSurface : "C",
     consentGranted: Boolean(body?.consentGranted),
     ephemeralOnly: body?.ephemeralOnly !== false,
-    actor: typeof body?.actor === "string" ? body.actor : actor,
+    actor,
     reason: typeof body?.reason === "string" ? body.reason : undefined
   };
 
@@ -81,7 +121,7 @@ export async function POST(request: NextRequest) {
 
   await appendPantavionDeviceGeoStatusAudit({
     event: "device.geo.status.assessed",
-    actor: geoRequest.actor ?? actor,
+    actor,
     createdAt: new Date().toISOString(),
     request: geoRequest,
     assessment
@@ -89,6 +129,7 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json({
     ok: true,
+    authWarning: auth.authWarning,
     assessment
   });
 }
