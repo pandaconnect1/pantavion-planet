@@ -53,7 +53,8 @@
     "kernel:startup": "node scripts/audit-startup-builder-stack.mjs",
     "kernel:exec": "node scripts/audit-agent-execution-reliability.mjs",
     "kernel:dwg": "node scripts/audit-original-dwg-source-binding.mjs",
-    "kernel:dwg-bridge": "node scripts/audit-original-dwg-viewer-bridge.mjs"
+    "kernel:dwg-bridge": "node scripts/audit-original-dwg-viewer-bridge.mjs",
+    "kernel:dwg-adapter": "node scripts/audit-licensed-dwg-adapter-runtime-contract.mjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",

@@ -70,41 +70,43 @@ addCheck("original DWG source binding exists", () => {
 
 addCheck("original DWG viewer bridge exists", () => {
   const source = read("core/water/original-dwg-viewer-bridge.ts");
-  assert(source.includes("assessPantavionOriginalDwgViewerBridge"), "Missing original DWG viewer bridge assessment.");
-  assert(source.includes("PANTAVION_ORIGINAL_DWG_VIEWER_SURFACES"), "Missing original DWG viewer surfaces.");
-  assert(source.includes("surface: \"B\""), "Missing B surface.");
-  assert(source.includes("surface: \"C\""), "Missing C surface.");
-  assert(source.includes("noDerivativeAsOriginal: true"), "Missing no derivative original rule.");
+  assert(source.includes("assessPantavionOriginalDwgViewerBridge"), "Missing original DWG viewer bridge.");
+  assert(source.includes("surface: \"B\""), "Missing B bridge.");
+  assert(source.includes("surface: \"C\""), "Missing C bridge.");
   assert(source.includes("automaticRenderBlocked: true"), "Missing automatic render block.");
-  assert(source.includes("oda_inweb_dwg_viewer"), "Missing ODA adapter bridge.");
 });
 
-addCheck("original DWG viewer bridge audit exists", () => {
-  const source = read("core/water/original-dwg-viewer-bridge-audit.ts");
-  assert(source.includes("original-dwg-viewer-bridge-audit.jsonl"), "Missing viewer bridge audit file.");
-  assert(source.includes("appendPantavionOriginalDwgViewerBridgeAudit"), "Missing viewer bridge audit append.");
+addCheck("licensed DWG adapter runtime contract exists", () => {
+  const source = read("core/water/licensed-dwg-adapter-runtime-contract.ts");
+  assert(source.includes("LICENSED_DWG_ADAPTER_RUNTIME_CONTRACTS"), "Missing licensed DWG adapter contracts.");
+  assert(source.includes("assessPantavionLicensedDwgAdapterRuntime"), "Missing licensed DWG adapter runtime assessment.");
+  assert(source.includes("oda_inweb_runtime_contract"), "Missing ODA inWEB runtime contract.");
+  assert(source.includes("autodesk_aps_cloud_runtime_contract"), "Missing Autodesk APS runtime contract.");
+  assert(source.includes("loadOriginalDwgReadOnly"), "Missing read-only DWG load method.");
+  assert(source.includes("renderEmbedded"), "Missing renderEmbedded method.");
+  assert(source.includes("noFakeRender"), "Missing no fake render rule.");
+  assert(source.includes("noDerivativeAsOriginal"), "Missing no derivative as original rule.");
+  assert(source.includes("noClientFileBytes"), "Missing no client file bytes rule.");
+  assert(source.includes("allowedForProduction: false"), "Missing production block.");
 });
 
-addCheck("original DWG viewer bridge API route exists", () => {
-  const source = read("app/api/kernel/original-dwg-viewer-bridge/route.ts");
-  assert(source.includes("export async function GET"), "Missing viewer bridge GET route.");
-  assert(source.includes("export async function POST"), "Missing viewer bridge POST route.");
-  assert(source.includes("pantavion_b_c_original_dwg_viewer_bridge"), "Missing viewer bridge capability.");
+addCheck("licensed DWG adapter audit exists", () => {
+  const source = read("core/water/licensed-dwg-adapter-runtime-audit.ts");
+  assert(source.includes("licensed-dwg-adapter-runtime-contract-audit.jsonl"), "Missing licensed adapter audit file.");
+  assert(source.includes("appendPantavionLicensedDwgAdapterRuntimeAudit"), "Missing licensed adapter audit append.");
 });
 
-addCheck("B and C pages are bridged", () => {
-  const pageB = read("app/professional/infrastructure/water/b/page.tsx");
-  const pageC = read("app/professional/infrastructure/water/c/page.tsx");
-  assert(pageB.includes("OriginalDwgViewerBridgePanel"), "Surface B is not connected to bridge panel.");
-  assert(pageB.includes("surface: \"B\""), "Surface B page is not bound to B.");
-  assert(pageC.includes("OriginalDwgViewerBridgePanel"), "Surface C is not connected to bridge panel.");
-  assert(pageC.includes("surface: \"C\""), "Surface C page is not bound to C.");
+addCheck("licensed DWG adapter API route exists", () => {
+  const source = read("app/api/kernel/licensed-dwg-adapter-runtime-contract/route.ts");
+  assert(source.includes("export async function GET"), "Missing licensed adapter GET route.");
+  assert(source.includes("export async function POST"), "Missing licensed adapter POST route.");
+  assert(source.includes("pantavion_licensed_dwg_adapter_runtime_contract"), "Missing licensed adapter capability.");
 });
 
-addCheck("PATCH 8J docs exist", () => {
-  const source = read("docs/pantavion/original-dwg-viewer-bridge.md");
-  assert(source.includes("PATCH 8J"), "Missing PATCH 8J doc heading.");
-  assert(source.includes("No PDF, image, screenshot, GeoJSON"), "Missing no fake original rule.");
+addCheck("PATCH 8K docs exist", () => {
+  const source = read("docs/pantavion/licensed-dwg-adapter-runtime-contract.md");
+  assert(source.includes("PATCH 8K"), "Missing PATCH 8K doc heading.");
+  assert(source.includes("No fake DWG render."), "Missing no fake render doc rule.");
 });
 
 let failed = 0;
