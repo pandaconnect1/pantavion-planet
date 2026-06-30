@@ -44,7 +44,8 @@
     "kernel:user-signal": "node scripts/pantavion-user-signal.cjs",
     "kernel:omnimodal": "node scripts/pantavion-omnimodal-intake.cjs",
     "kernel:conversion": "node scripts/audit-conversion-matrix.mjs",
-    "kernel:conversion-matrix": "node scripts/pantavion-conversion-matrix.cjs"
+    "kernel:conversion-matrix": "node scripts/pantavion-conversion-matrix.cjs",
+    "kernel": "node scripts/pantavion-kernel-check.mjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
