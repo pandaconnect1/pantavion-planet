@@ -221,6 +221,48 @@ addCheck("PATCH 8Q docs exist", () => {
   assert(source.includes("No SCADA write."), "Missing no SCADA write doc rule.");
 });
 
+
+addCheck("python worker runtime exists", () => {
+  const source = read("core/processing/python-worker-runtime-contract.ts");
+  assert(source.includes("PANTAVION_PYTHON_WORKER_JOB_DEFINITIONS"), "Missing Python worker job definitions.");
+  assert(source.includes("assessPantavionPythonWorkerRuntime"), "Missing Python worker assessment.");
+  assert(source.includes("excel_xlsx_parse"), "Missing Excel worker job.");
+  assert(source.includes("pdf_text_extract"), "Missing PDF text worker job.");
+  assert(source.includes("pdf_ocr_extract"), "Missing PDF OCR worker job.");
+  assert(source.includes("docx_text_extract"), "Missing DOCX worker job.");
+  assert(source.includes("gis_spatial_index"), "Missing GIS spatial index worker job.");
+  assert(source.includes("cad_text_index"), "Missing CAD/DWG text index worker job.");
+  assert(source.includes("telemetry_timeseries_profile"), "Missing telemetry worker job.");
+  assert(source.includes("hydraulic_epanet_prepare"), "Missing hydraulic/EPANET worker job.");
+  assert(source.includes("sidecarOnly: true"), "Missing sidecar-only rule.");
+  assert(source.includes("pythonExecutionAllowedNow: false"), "Missing no-execution-yet rule.");
+  assert(source.includes("originalDwgMutationAllowed: false"), "Missing no original DWG mutation rule.");
+});
+
+addCheck("python worker runtime store exists", () => {
+  const source = read("core/processing/python-worker-runtime-store.ts");
+  assert(source.includes("python-worker-runtime-jobs.json"), "Missing Python worker state file.");
+  assert(source.includes("python-worker-runtime-audit.jsonl"), "Missing Python worker audit file.");
+  assert(source.includes("registerPantavionPythonWorkerJob"), "Missing Python worker register function.");
+  assert(source.includes("registered_pending_worker"), "Missing pending worker status.");
+});
+
+addCheck("python worker runtime API route exists", () => {
+  const source = read("app/api/kernel/python-worker-runtime/route.ts");
+  assert(source.includes("export async function GET"), "Missing Python worker GET route.");
+  assert(source.includes("export async function POST"), "Missing Python worker POST route.");
+  assert(source.includes("pantavion_python_worker_runtime_contract"), "Missing Python worker capability.");
+  assert(source.includes("mode === \"register\""), "Missing Python worker register mode.");
+});
+
+addCheck("PATCH 8R docs exist", () => {
+  const source = read("docs/pantavion/python-worker-runtime-contract.md");
+  assert(source.includes("PATCH 8R"), "Missing PATCH 8R doc heading.");
+  assert(source.includes("Python Worker Runtime Contract"), "Missing Python worker doc scope.");
+  assert(source.includes("Original DWG is never mutated."), "Missing no DWG mutation doc rule.");
+  assert(source.includes("No SCADA write."), "Missing no SCADA write doc rule.");
+});
+
 let failed = 0;
 
 for (const check of checks) {
