@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 import {
   assessPantavionFounderApprovalRecord,
   type PantavionApprovalActionClass,
@@ -47,8 +48,19 @@ function normalizeActionClass(value: unknown): PantavionApprovalActionClass {
     : "unknown";
 }
 
-export async function GET() {
-  const actor = "api:kernel:founder-approval-board:get";
+export async function GET(request: NextRequest) {
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
+  const actor = auth.ok
+    ? auth.actor
+    : "api:kernel:founder-approval-board:get";
   const records = await readPantavionFounderApprovalRecords();
 
   await appendPantavionFounderApprovalAudit({
@@ -75,6 +87,15 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
   const body = (await request.json().catch(() => null)) as
     | Partial<PantavionFounderApprovalRequestInput>
     | null;
@@ -115,6 +136,15 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
   const body = (await request.json().catch(() => null)) as
     | Partial<PantavionFounderApprovalDecisionInput>
     | null;
