@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 import {
   assessPantavionWaterOperationalOverlay,
   listPantavionWaterOperationalColorPolicy,
@@ -14,6 +15,27 @@ import {
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+function resolveActor(request: NextRequest) {
+  const auth = verifyKernelRequest(request);
+
+  if (auth.ok) {
+    return {
+      actor: auth.actor,
+      authWarning: auth.warning,
+    };
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return {
+      actor: "local-water-operational-overlay-api",
+      authWarning:
+        "Local development mode. Water operational overlay request accepted without production auth.",
+    };
+  }
+
+  return null;
+}
 
 function normalizeAction(value: unknown): PantavionWaterOperationalAction {
   const raw = String(value || "").trim();
@@ -59,8 +81,17 @@ function normalizeAssetKind(value: unknown): PantavionWaterOperationalAssetKind 
     : "UNKNOWN";
 }
 
-export async function GET() {
-  const actor = "api:kernel:water-operational-overlay:get";
+export async function GET(request: NextRequest) {
+  const resolved = resolveActor(request);
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized water operational overlay access." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const records = await readPantavionWaterOperationalOverlayRecords();
 
   await appendPantavionWaterOperationalOverlayAudit({
@@ -90,7 +121,16 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:water-operational-overlay:post";
+  const resolved = resolveActor(request);
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized water operational overlay mutation." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
 
   const overlayRequest: PantavionWaterOperationalOverlayInput = {
@@ -101,7 +141,7 @@ export async function POST(request: NextRequest) {
     faultId: typeof body?.faultId === "string" ? body.faultId : undefined,
     workOrderId: typeof body?.workOrderId === "string" ? body.workOrderId : undefined,
     reason: typeof body?.reason === "string" ? body.reason : undefined,
-    actor: typeof body?.actor === "string" ? body.actor : actor,
+    actor,
     includePermanent: Boolean(body?.includePermanent),
     fieldVerified: Boolean(body?.fieldVerified),
     supervisorReviewed: Boolean(body?.supervisorReviewed)
