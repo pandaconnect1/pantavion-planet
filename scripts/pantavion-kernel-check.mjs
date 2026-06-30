@@ -181,6 +181,46 @@ addCheck("PATCH 8P docs exist", () => {
   assert(source.includes("Original DWG is never mutated."), "Missing no DWG mutation doc rule.");
 });
 
+
+addCheck("water work order registry exists", () => {
+  const source = read("core/water/water-work-order-registry.ts");
+  assert(source.includes("assessPantavionWaterWorkOrder"), "Missing work order assessment.");
+  assert(source.includes("fault"), "Missing fault workflow.");
+  assert(source.includes("repair"), "Missing repair workflow.");
+  assert(source.includes("replacement"), "Missing replacement workflow.");
+  assert(source.includes("lost_covered_investigation"), "Missing lost/covered investigation workflow.");
+  assert(source.includes("telemetry_check"), "Missing telemetry check workflow.");
+  assert(source.includes("as_built_verification"), "Missing as-built verification workflow.");
+  assert(source.includes("requiresFieldVerification"), "Missing field verification gate.");
+  assert(source.includes("requiresPhotoRefs"), "Missing photo refs gate.");
+  assert(source.includes("originalDwgMutationAllowed: false"), "Missing no original DWG mutation rule.");
+  assert(source.includes("physicalControlAllowed: false"), "Missing no physical control rule.");
+  assert(source.includes("scadaWriteAllowed: false"), "Missing no SCADA write rule.");
+});
+
+addCheck("water work order registry store exists", () => {
+  const source = read("core/water/water-work-order-registry-store.ts");
+  assert(source.includes("water-work-order-registry-state.json"), "Missing work order state file.");
+  assert(source.includes("water-work-order-registry-audit.jsonl"), "Missing work order audit file.");
+  assert(source.includes("registerPantavionWaterWorkOrder"), "Missing work order register function.");
+});
+
+addCheck("water work order registry API route exists", () => {
+  const source = read("app/api/kernel/water-work-order-registry/route.ts");
+  assert(source.includes("export async function GET"), "Missing work order GET route.");
+  assert(source.includes("export async function POST"), "Missing work order POST route.");
+  assert(source.includes("pantavion_water_work_order_field_verification_registry"), "Missing work order capability.");
+  assert(source.includes("mode === \"register\""), "Missing work order register mode.");
+});
+
+addCheck("PATCH 8Q docs exist", () => {
+  const source = read("docs/pantavion/water-work-order-field-verification-registry.md");
+  assert(source.includes("PATCH 8Q"), "Missing PATCH 8Q doc heading.");
+  assert(source.includes("Work Order / Field Verification Registry"), "Missing work order doc scope.");
+  assert(source.includes("Original DWG is never mutated."), "Missing no DWG mutation doc rule.");
+  assert(source.includes("No SCADA write."), "Missing no SCADA write doc rule.");
+});
+
 let failed = 0;
 
 for (const check of checks) {

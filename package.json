@@ -59,7 +59,8 @@
     "kernel:water-sources": "node scripts/audit-water-sources-admin-page.mjs",
     "kernel:geo": "node scripts/audit-device-geo-status.mjs",
     "kernel:water-overlay": "node scripts/audit-water-operational-overlay.mjs",
-    "kernel:water-assets": "node scripts/audit-water-asset-registry.mjs"
+    "kernel:water-assets": "node scripts/audit-water-asset-registry.mjs",
+    "kernel:water-work-orders": "node scripts/audit-water-work-order-registry.mjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
