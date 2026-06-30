@@ -1,3 +1,14 @@
+import { timingSafeEqual } from "crypto";
+
+function safeEqual(a: string, b: string) {
+  const left = Buffer.from(a);
+  const right = Buffer.from(b);
+
+  if (left.length !== right.length) return false;
+
+  return timingSafeEqual(left, right);
+}
+
 export type KernelAuthResult =
   | {
       ok: true;
@@ -32,7 +43,7 @@ export function verifyKernelRequest(request: Request): KernelAuthResult {
 
   const incoming = request.headers.get("x-pantavion-kernel-secret")?.trim();
 
-  if (incoming !== secret) {
+  if (!incoming || !safeEqual(incoming, secret)) {
     return {
       ok: false,
       statusCode: 401,
