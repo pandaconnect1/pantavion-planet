@@ -5,12 +5,22 @@ import {
   type PantavionCadViewerAssessmentInput
 } from "@/core/cad/cad-viewer-adapter-matrix";
 import { appendPantavionCadViewerAudit } from "@/core/cad/cad-viewer-audit";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  const actor = "api:kernel:cad-viewer-adapters:get";
+export async function GET(request: NextRequest) {
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
+  const actor = auth.ok ? auth.actor : "local-cad-viewer-adapters";
   const adapters = listPantavionCadViewerAdapters();
 
   await appendPantavionCadViewerAudit({
@@ -36,7 +46,16 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:cad-viewer-adapters:post";
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
+  const actor = auth.ok ? auth.actor : "local-cad-viewer-adapters";
   const body = (await request.json().catch(() => null)) as
     | Partial<PantavionCadViewerAssessmentInput>
     | null;
@@ -51,7 +70,7 @@ export async function POST(request: NextRequest) {
     founderApproved: body?.founderApproved,
     licenseAvailable: body?.licenseAvailable,
     cloudApproved: body?.cloudApproved,
-    actor: body?.actor ?? actor
+    actor
   };
 
   const assessment = assessPantavionCadViewerAdapter(cadRequest);
