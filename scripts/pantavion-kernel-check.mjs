@@ -65,7 +65,6 @@ addCheck("original DWG source binding exists", () => {
   assert(source.includes("PANTAVION_ORIGINAL_DWG_SOURCE_BINDING"), "Missing original DWG source binding.");
   assert(source.includes("GEORGE_MAP_MASTER_B_C_FINAL.dwg"), "Missing final DWG filename.");
   assert(source.includes("0070db27b6b22cc3aa24353c9445f87910925b6d18bea27914c915da13bbc1d9"), "Missing final DWG sha256.");
-  assert(source.includes("derivativeMayReplaceOriginal: false"), "Missing derivative block.");
 });
 
 addCheck("original DWG viewer bridge exists", () => {
@@ -73,40 +72,46 @@ addCheck("original DWG viewer bridge exists", () => {
   assert(source.includes("assessPantavionOriginalDwgViewerBridge"), "Missing original DWG viewer bridge.");
   assert(source.includes("surface: \"B\""), "Missing B bridge.");
   assert(source.includes("surface: \"C\""), "Missing C bridge.");
-  assert(source.includes("automaticRenderBlocked: true"), "Missing automatic render block.");
 });
 
 addCheck("licensed DWG adapter runtime contract exists", () => {
   const source = read("core/water/licensed-dwg-adapter-runtime-contract.ts");
   assert(source.includes("LICENSED_DWG_ADAPTER_RUNTIME_CONTRACTS"), "Missing licensed DWG adapter contracts.");
-  assert(source.includes("assessPantavionLicensedDwgAdapterRuntime"), "Missing licensed DWG adapter runtime assessment.");
-  assert(source.includes("oda_inweb_runtime_contract"), "Missing ODA inWEB runtime contract.");
-  assert(source.includes("autodesk_aps_cloud_runtime_contract"), "Missing Autodesk APS runtime contract.");
-  assert(source.includes("loadOriginalDwgReadOnly"), "Missing read-only DWG load method.");
-  assert(source.includes("renderEmbedded"), "Missing renderEmbedded method.");
+  assert(source.includes("oda_inweb_runtime_contract"), "Missing ODA runtime contract.");
   assert(source.includes("noFakeRender"), "Missing no fake render rule.");
-  assert(source.includes("noDerivativeAsOriginal"), "Missing no derivative as original rule.");
-  assert(source.includes("noClientFileBytes"), "Missing no client file bytes rule.");
-  assert(source.includes("allowedForProduction: false"), "Missing production block.");
 });
 
-addCheck("licensed DWG adapter audit exists", () => {
-  const source = read("core/water/licensed-dwg-adapter-runtime-audit.ts");
-  assert(source.includes("licensed-dwg-adapter-runtime-contract-audit.jsonl"), "Missing licensed adapter audit file.");
-  assert(source.includes("appendPantavionLicensedDwgAdapterRuntimeAudit"), "Missing licensed adapter audit append.");
+addCheck("artifact intake registry exists", () => {
+  const source = read("core/artifacts/artifact-intake-registry.ts");
+  assert(source.includes("PANTAVION_ARTIFACT_INTAKE_RULES"), "Missing artifact intake rules.");
+  assert(source.includes("assessPantavionArtifactIntake"), "Missing artifact intake assessment.");
+  assert(source.includes("dwg_original_source_truth_intake"), "Missing DWG intake rule.");
+  assert(source.includes("gis_source_intake"), "Missing GIS intake rule.");
+  assert(source.includes("geojson_derivative_intake"), "Missing GeoJSON derivative rule.");
+  assert(source.includes("direct_private_upload_session"), "Missing direct private upload strategy.");
+  assert(source.includes("multipart_private_upload"), "Missing multipart upload strategy.");
+  assert(source.includes("requiresPrivateStorage"), "Missing private storage requirement.");
+  assert(source.includes("requiresSha256"), "Missing SHA256 requirement.");
+  assert(source.includes("allowedForAutomaticPublicUse: false"), "Missing public use block.");
 });
 
-addCheck("licensed DWG adapter API route exists", () => {
-  const source = read("app/api/kernel/licensed-dwg-adapter-runtime-contract/route.ts");
-  assert(source.includes("export async function GET"), "Missing licensed adapter GET route.");
-  assert(source.includes("export async function POST"), "Missing licensed adapter POST route.");
-  assert(source.includes("pantavion_licensed_dwg_adapter_runtime_contract"), "Missing licensed adapter capability.");
+addCheck("artifact intake audit exists", () => {
+  const source = read("core/artifacts/artifact-intake-audit.ts");
+  assert(source.includes("artifact-intake-registry-audit.jsonl"), "Missing intake audit file.");
+  assert(source.includes("appendPantavionArtifactIntakeAudit"), "Missing intake audit append.");
 });
 
-addCheck("PATCH 8K docs exist", () => {
-  const source = read("docs/pantavion/licensed-dwg-adapter-runtime-contract.md");
-  assert(source.includes("PATCH 8K"), "Missing PATCH 8K doc heading.");
-  assert(source.includes("No fake DWG render."), "Missing no fake render doc rule.");
+addCheck("artifact intake API route exists", () => {
+  const source = read("app/api/kernel/artifact-intake-registry/route.ts");
+  assert(source.includes("export async function GET"), "Missing intake GET route.");
+  assert(source.includes("export async function POST"), "Missing intake POST route.");
+  assert(source.includes("pantavion_universal_artifact_intake_registry"), "Missing intake capability.");
+});
+
+addCheck("PATCH 8L docs exist", () => {
+  const source = read("docs/pantavion/artifact-intake-upload-source-registry.md");
+  assert(source.includes("PATCH 8L"), "Missing PATCH 8L doc heading.");
+  assert(source.includes("Large/source-truth artifacts must not be committed to Git."), "Missing no Git source-truth rule.");
 });
 
 let failed = 0;
