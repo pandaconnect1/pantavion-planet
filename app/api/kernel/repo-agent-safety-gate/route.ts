@@ -8,6 +8,7 @@ import {
   type PantavionRepoAgentSourceOrigin
 } from "@/core/agent/repo-agent-safety-gate";
 import { appendPantavionRepoAgentSafetyAudit } from "@/core/agent/repo-agent-safety-audit";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -60,8 +61,17 @@ function stringArray(value: unknown): string[] | undefined {
   return value.filter((item): item is string => typeof item === "string");
 }
 
-export async function GET() {
-  const actor = "api:kernel:repo-agent-safety-gate:get";
+export async function GET(request: NextRequest) {
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
+  const actor = auth.ok ? auth.actor : "api:kernel:repo-agent-safety-gate:get";
   const policy = listPantavionRepoAgentSafetyPolicy();
 
   await appendPantavionRepoAgentSafetyAudit({
@@ -91,7 +101,16 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:repo-agent-safety-gate:post";
+  const auth = verifyKernelRequest(request);
+
+  if (!auth.ok && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, error: auth.error },
+      { status: auth.statusCode }
+    );
+  }
+
+  const actor = auth.ok ? auth.actor : "api:kernel:repo-agent-safety-gate:post";
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
 
   const safetyRequest: PantavionRepoAgentSafetyInput = {
