@@ -47,7 +47,8 @@
     "kernel:conversion-matrix": "node scripts/pantavion-conversion-matrix.cjs",
     "kernel": "node scripts/pantavion-kernel-check.mjs",
     "kernel:cad": "node scripts/audit-cad-viewer-adapters.mjs",
-    "kernel:vault": "node scripts/audit-sensitive-artifact-vault.mjs"
+    "kernel:vault": "node scripts/audit-sensitive-artifact-vault.mjs",
+    "kernel:approval": "node scripts/audit-founder-approval-board.mjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",

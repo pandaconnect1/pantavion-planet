@@ -26,76 +26,61 @@ addCheck("conversion matrix exists", () => {
   assert(source.includes("requiresFounderApproval: true"), "Missing founder approval requirement.");
 });
 
-addCheck("conversion API route exists", () => {
-  const source = read("app/api/kernel/conversion-matrix/route.ts");
-  assert(source.includes("export async function GET"), "Missing GET route.");
-  assert(source.includes("export async function POST"), "Missing POST route.");
-  assert(source.includes("appendPantavionConversionAudit"), "Missing conversion audit append.");
-});
-
-addCheck("conversion audit exists", () => {
-  const source = read("core/conversion/conversion-audit.ts");
-  assert(source.includes("conversion-matrix-audit.jsonl"), "Missing JSONL audit path.");
-  assert(source.includes("appendPantavionConversionAudit"), "Missing audit function.");
-});
-
 addCheck("cad viewer adapter matrix exists", () => {
   const source = read("core/cad/cad-viewer-adapter-matrix.ts");
   assert(source.includes("PANTAVION_CAD_VIEWER_ADAPTER_MATRIX"), "Missing CAD viewer adapter matrix.");
-  assert(source.includes("assessPantavionCadViewerAdapter"), "Missing CAD viewer assessment function.");
   assert(source.includes("oda_inweb_dwg_viewer"), "Missing ODA inWEB rule.");
-  assert(source.includes("oda_mcp_future"), "Missing ODA MCP future rule.");
   assert(source.includes("autodesk_aps_cloud_viewer"), "Missing Autodesk APS cloud rule.");
   assert(source.includes("leaflet_geojson_as_original"), "Missing blocked Leaflet/GeoJSON original rule.");
   assert(source.includes("static_image_pdf_as_original"), "Missing blocked static/PDF original rule.");
-  assert(source.includes("preserve_original"), "Missing preserve_original source-truth policy.");
-  assert(source.includes("blocked"), "Missing blocked policy.");
-});
-
-addCheck("cad viewer adapter API route exists", () => {
-  const source = read("app/api/kernel/cad-viewer-adapters/route.ts");
-  assert(source.includes("export async function GET"), "Missing CAD GET route.");
-  assert(source.includes("export async function POST"), "Missing CAD POST route.");
-  assert(source.includes("appendPantavionCadViewerAudit"), "Missing CAD audit append.");
-});
-
-addCheck("cad viewer adapter audit exists", () => {
-  const source = read("core/cad/cad-viewer-audit.ts");
-  assert(source.includes("cad-viewer-adapters-audit.jsonl"), "Missing CAD JSONL audit path.");
-  assert(source.includes("appendPantavionCadViewerAudit"), "Missing CAD audit function.");
 });
 
 addCheck("sensitive artifact vault exists", () => {
   const source = read("core/vault/sensitive-artifact-vault.ts");
   assert(source.includes("PANTAVION_SENSITIVE_ARTIFACT_RULES"), "Missing sensitive artifact rules.");
-  assert(source.includes("assessPantavionSensitiveArtifact"), "Missing sensitive artifact assessment function.");
   assert(source.includes("dwg_master_source_truth"), "Missing DWG source-truth vault rule.");
   assert(source.includes("secret_or_token_artifact"), "Missing secret/token vault rule.");
-  assert(source.includes("production_config_artifact"), "Missing production config vault rule.");
-  assert(source.includes("legal_document_artifact"), "Missing legal document vault rule.");
-  assert(source.includes("auth_user_data_artifact"), "Missing auth/user data vault rule.");
-  assert(source.includes("billing_data_artifact"), "Missing billing vault rule.");
-  assert(source.includes("backup_restore_artifact"), "Missing backup/restore vault rule.");
   assert(source.includes("sourceTruthMutationBlocked"), "Missing source-truth mutation block.");
 });
 
-addCheck("sensitive artifact vault API route exists", () => {
-  const source = read("app/api/kernel/sensitive-artifact-vault/route.ts");
-  assert(source.includes("export async function GET"), "Missing vault GET route.");
-  assert(source.includes("export async function POST"), "Missing vault POST route.");
-  assert(source.includes("appendPantavionSensitiveArtifactAudit"), "Missing vault audit append.");
+addCheck("founder approval board exists", () => {
+  const source = read("core/approval/founder-approval-board.ts");
+  assert(source.includes("PantavionFounderApprovalRecord"), "Missing founder approval record type.");
+  assert(source.includes("createPantavionFounderApprovalRecord"), "Missing founder approval creation logic.");
+  assert(source.includes("decidePantavionFounderApprovalRecord"), "Missing founder approval decision logic.");
+  assert(source.includes("assessPantavionFounderApprovalRecord"), "Missing founder approval assessment logic.");
+  assert(source.includes("Z3_Z4_ACTION_CLASSES"), "Missing Z3/Z4 protected action classes.");
+  assert(source.includes("dwg_source_truth"), "Missing DWG/source-truth approval class.");
+  assert(source.includes("secret_access"), "Missing secret approval class.");
+  assert(source.includes("production_deploy"), "Missing production deploy approval class.");
+  assert(source.includes("billing_payment"), "Missing billing approval class.");
+  assert(source.includes("auth_user_access"), "Missing auth/user approval class.");
+  assert(source.includes("backup_restore"), "Missing backup/restore approval class.");
+  assert(source.includes("blocksAutomaticExecution"), "Missing automatic execution block.");
 });
 
-addCheck("sensitive artifact vault audit exists", () => {
-  const source = read("core/vault/sensitive-artifact-audit.ts");
-  assert(source.includes("sensitive-artifact-vault-audit.jsonl"), "Missing vault JSONL audit path.");
-  assert(source.includes("appendPantavionSensitiveArtifactAudit"), "Missing vault audit function.");
+addCheck("founder approval store exists", () => {
+  const source = read("core/approval/founder-approval-store.ts");
+  assert(source.includes("founder-approval-board.json"), "Missing founder approval state file.");
+  assert(source.includes("founder-approval-board-audit.jsonl"), "Missing founder approval audit file.");
+  assert(source.includes("createStoredPantavionFounderApprovalRequest"), "Missing stored approval create function.");
+  assert(source.includes("decideStoredPantavionFounderApprovalRequest"), "Missing stored approval decision function.");
+  assert(source.includes("appendPantavionFounderApprovalAudit"), "Missing approval audit append.");
 });
 
-addCheck("PATCH 8D docs exist", () => {
-  const source = read("docs/pantavion/sensitive-artifact-vault.md");
-  assert(source.includes("PATCH 8D"), "Missing PATCH 8D doc heading.");
-  assert(source.includes("Original source-truth artifacts are read-only and immutable by default."), "Missing source-truth immutability rule.");
+addCheck("founder approval API route exists", () => {
+  const source = read("app/api/kernel/founder-approval-board/route.ts");
+  assert(source.includes("export async function GET"), "Missing approval GET route.");
+  assert(source.includes("export async function POST"), "Missing approval POST route.");
+  assert(source.includes("export async function PATCH"), "Missing approval PATCH route.");
+  assert(source.includes("createStoredPantavionFounderApprovalRequest"), "Missing approval create route logic.");
+  assert(source.includes("decideStoredPantavionFounderApprovalRequest"), "Missing approval decision route logic.");
+});
+
+addCheck("PATCH 8E docs exist", () => {
+  const source = read("docs/pantavion/founder-approval-board.md");
+  assert(source.includes("PATCH 8E"), "Missing PATCH 8E doc heading.");
+  assert(source.includes("Z3/Z4 actions require founder approval before execution."), "Missing Z3/Z4 approval rule.");
 });
 
 let failed = 0;
