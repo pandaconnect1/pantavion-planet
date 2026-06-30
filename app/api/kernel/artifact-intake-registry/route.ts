@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 import {
   assessPantavionArtifactIntake,
   listPantavionArtifactIntakeRules,
@@ -9,6 +10,26 @@ import { appendPantavionArtifactIntakeAudit } from "@/core/artifacts/artifact-in
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+function resolveActor(request: Request) {
+  const auth = verifyKernelRequest(request);
+
+  if (auth.ok) {
+    return {
+      actor: auth.actor,
+      authWarning: auth.warning
+    };
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return {
+      actor: "local-artifact-intake-registry-api",
+      authWarning: "Local development mode. Artifact intake request accepted without production auth."
+    };
+  }
+
+  return null;
+}
 
 function normalizeStorageProvider(value: unknown): PantavionArtifactStorageProvider {
   const allowed: PantavionArtifactStorageProvider[] = [
@@ -27,8 +48,17 @@ function normalizeStorageProvider(value: unknown): PantavionArtifactStorageProvi
     : "unknown";
 }
 
-export async function GET() {
-  const actor = "api:kernel:artifact-intake-registry:get";
+export async function GET(request: NextRequest) {
+  const auth = resolveActor(request);
+
+  if (!auth) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized artifact intake registry access." },
+      { status: 401 }
+    );
+  }
+
+  const actor = auth.actor;
   const rules = listPantavionArtifactIntakeRules();
 
   await appendPantavionArtifactIntakeAudit({
@@ -41,6 +71,7 @@ export async function GET() {
     ok: true,
     capability: "pantavion_universal_artifact_intake_registry",
     status: "internal",
+    authWarning: auth.authWarning,
     rules,
     policy: {
       storage:
@@ -56,7 +87,16 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:artifact-intake-registry:post";
+  const auth = resolveActor(request);
+
+  if (!auth) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized artifact intake assessment." },
+      { status: 401 }
+    );
+  }
+
+  const actor = auth.actor;
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
 
   const intakeRequest: PantavionArtifactIntakeInput = {
@@ -69,7 +109,7 @@ export async function POST(request: NextRequest) {
     sourceTruth: Boolean(body?.sourceTruth),
     production: Boolean(body?.production),
     founderApproved: Boolean(body?.founderApproved),
-    actor: typeof body?.actor === "string" ? body.actor : actor,
+    actor,
     reason: typeof body?.reason === "string" ? body.reason : undefined
   };
 
@@ -77,7 +117,7 @@ export async function POST(request: NextRequest) {
 
   await appendPantavionArtifactIntakeAudit({
     event: "artifact.intake.assessed",
-    actor: intakeRequest.actor ?? actor,
+    actor,
     createdAt: new Date().toISOString(),
     request: intakeRequest,
     assessment
@@ -85,6 +125,7 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json({
     ok: true,
+    authWarning: auth.authWarning,
     assessment
   });
 }
