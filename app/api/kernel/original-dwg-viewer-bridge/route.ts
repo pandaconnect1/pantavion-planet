@@ -5,12 +5,44 @@ import {
   type PantavionOriginalDwgViewerBridgeInput
 } from "@/core/water/original-dwg-viewer-bridge";
 import { appendPantavionOriginalDwgViewerBridgeAudit } from "@/core/water/original-dwg-viewer-bridge-audit";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+function resolveActor(request: NextRequest, fallbackActor: string) {
+  const auth = verifyKernelRequest(request);
+
+  if (auth.ok) {
+    return {
+      actor: auth.actor,
+      authWarning: auth.warning,
+    };
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return {
+      actor: fallbackActor,
+      authWarning:
+        "Local development mode. Original DWG viewer bridge accepted without production auth.",
+    };
+  }
+
+  return null;
+}
+
 export async function GET(request: NextRequest) {
-  const actor = "api:kernel:original-dwg-viewer-bridge:get";
+  const fallbackActor = "api:kernel:original-dwg-viewer-bridge:get";
+  const resolved = resolveActor(request, fallbackActor);
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized original DWG viewer bridge access." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const surface = request.nextUrl.searchParams.get("surface") ?? "B";
 
   const assessment = assessPantavionOriginalDwgViewerBridge({
@@ -50,7 +82,17 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:original-dwg-viewer-bridge:post";
+  const fallbackActor = "api:kernel:original-dwg-viewer-bridge:post";
+  const resolved = resolveActor(request, fallbackActor);
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized original DWG viewer bridge assessment." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const body = (await request.json().catch(() => null)) as
     | Partial<PantavionOriginalDwgViewerBridgeInput>
     | null;
@@ -60,7 +102,7 @@ export async function POST(request: NextRequest) {
     founderApproved: Boolean(body?.founderApproved),
     licenseAvailable: Boolean(body?.licenseAvailable),
     cloudApproved: Boolean(body?.cloudApproved),
-    actor: body?.actor ?? actor,
+    actor,
     reason: body?.reason
   };
 
@@ -68,7 +110,7 @@ export async function POST(request: NextRequest) {
 
   await appendPantavionOriginalDwgViewerBridgeAudit({
     event: "original.dwg.viewer.bridge.assessed",
-    actor: bridgeRequest.actor ?? actor,
+    actor,
     createdAt: new Date().toISOString(),
     request: bridgeRequest,
     assessment
