@@ -8,12 +8,43 @@ import { verifyPantavionOriginalDwgLocalFile } from "@/core/water/original-dwg-s
 import { appendPantavionOriginalDwgSourceAudit } from "@/core/water/original-dwg-source-audit";
 import { assessPantavionSensitiveArtifact } from "@/core/vault/sensitive-artifact-vault";
 import { assessPantavionCadViewerAdapter } from "@/core/cad/cad-viewer-adapter-matrix";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  const actor = "api:kernel:original-dwg-source-binding:get";
+function resolveActor(request: Request) {
+  const auth = verifyKernelRequest(request);
+
+  if (auth.ok) {
+    return {
+      actor: auth.actor,
+      authWarning: auth.warning
+    };
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return {
+      actor: "local-original-dwg-source-binding",
+      authWarning:
+        "Local development mode. Original DWG source binding accepted without production auth."
+    };
+  }
+
+  return null;
+}
+
+export async function GET(request: NextRequest) {
+  const resolved = resolveActor(request);
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized original DWG source binding access." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const binding = getPantavionOriginalDwgSourceBinding();
 
   await appendPantavionOriginalDwgSourceAudit({
@@ -24,6 +55,7 @@ export async function GET() {
 
   return NextResponse.json({
     ok: true,
+    authWarning: resolved.authWarning,
     capability: "pantavion_original_dwg_source_binding",
     status: "internal",
     binding,
@@ -41,7 +73,16 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:original-dwg-source-binding:post";
+  const resolved = resolveActor(request);
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized original DWG source binding." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
 
   const localPath = typeof body?.localPath === "string" ? body.localPath : undefined;
@@ -126,6 +167,7 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json({
     ok: true,
+    authWarning: resolved.authWarning,
     assessment,
     vaultAssessment,
     cadAssessment
