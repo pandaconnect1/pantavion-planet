@@ -7,9 +7,31 @@ import {
   type PantavionLicensedDwgAdapterRuntimeInput
 } from "@/core/water/licensed-dwg-adapter-runtime-contract";
 import { appendPantavionLicensedDwgAdapterRuntimeAudit } from "@/core/water/licensed-dwg-adapter-runtime-audit";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+function resolveActor(request: NextRequest, fallbackActor: string) {
+  const auth = verifyKernelRequest(request);
+
+  if (auth.ok) {
+    return {
+      actor: auth.actor,
+      authWarning: auth.warning
+    };
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return {
+      actor: fallbackActor,
+      authWarning:
+        "Local development mode. Licensed DWG adapter runtime contract accessed without production auth."
+    };
+  }
+
+  return null;
+}
 
 function normalizeAdapterKind(value: unknown): PantavionDwgAdapterKind {
   const allowed: PantavionDwgAdapterKind[] = [
@@ -42,8 +64,20 @@ function normalizeMethods(value: unknown): PantavionDwgAdapterRequiredMethod[] |
   );
 }
 
-export async function GET() {
-  const actor = "api:kernel:licensed-dwg-adapter-runtime-contract:get";
+export async function GET(request: NextRequest) {
+  const resolved = resolveActor(
+    request,
+    "api:kernel:licensed-dwg-adapter-runtime-contract:get"
+  );
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized licensed DWG adapter runtime contract access." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const contracts = listPantavionLicensedDwgAdapterRuntimeContracts();
 
   await appendPantavionLicensedDwgAdapterRuntimeAudit({
@@ -56,6 +90,7 @@ export async function GET() {
     ok: true,
     capability: "pantavion_licensed_dwg_adapter_runtime_contract",
     status: "internal",
+    authWarning: resolved.authWarning,
     contracts,
     policy: {
       noFakeRender:
@@ -71,7 +106,19 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:licensed-dwg-adapter-runtime-contract:post";
+  const resolved = resolveActor(
+    request,
+    "api:kernel:licensed-dwg-adapter-runtime-contract:post"
+  );
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized licensed DWG adapter runtime contract assessment." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
 
   const contractRequest: PantavionLicensedDwgAdapterRuntimeInput = {
@@ -83,7 +130,7 @@ export async function POST(request: NextRequest) {
     cloudApproved: Boolean(body?.cloudApproved),
     verifiedMethods: normalizeMethods(body?.verifiedMethods),
     production: Boolean(body?.production),
-    actor: typeof body?.actor === "string" ? body.actor : actor,
+    actor,
     reason: typeof body?.reason === "string" ? body.reason : undefined
   };
 
@@ -99,6 +146,7 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json({
     ok: true,
+    authWarning: resolved.authWarning,
     assessment
   });
 }
