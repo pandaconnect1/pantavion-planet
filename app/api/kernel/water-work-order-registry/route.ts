@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { verifyKernelRequest } from "@/core/kernel/kernel-auth";
 import {
   assessPantavionWaterWorkOrder,
   type PantavionWaterWorkOrderRegistryInput
@@ -20,8 +21,38 @@ function stringArray(value: unknown): string[] | undefined {
   return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
 }
 
-export async function GET() {
-  const actor = "api:kernel:water-work-order-registry:get";
+function resolveActor(request: Request, fallbackActor: string) {
+  const auth = verifyKernelRequest(request);
+
+  if (auth.ok) {
+    return {
+      actor: auth.actor,
+      authWarning: auth.warning
+    };
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return {
+      actor: fallbackActor,
+      authWarning:
+        "Local development mode. Water work order registry request accepted without production auth."
+    };
+  }
+
+  return null;
+}
+
+export async function GET(request: NextRequest) {
+  const resolved = resolveActor(request, "api:kernel:water-work-order-registry:get");
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized water work order registry access." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const records = await readPantavionWaterWorkOrderRecords();
 
   await appendPantavionWaterWorkOrderRegistryAudit({
@@ -52,7 +83,16 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const actor = "api:kernel:water-work-order-registry:post";
+  const resolved = resolveActor(request, "api:kernel:water-work-order-registry:post");
+
+  if (!resolved) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized water work order registry mutation." },
+      { status: 401 }
+    );
+  }
+
+  const actor = resolved.actor;
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
 
   const workOrderRequest: PantavionWaterWorkOrderRegistryInput = {
@@ -83,7 +123,7 @@ export async function POST(request: NextRequest) {
     supervisorReviewed: Boolean(body?.supervisorReviewed),
     replacementRequired: Boolean(body?.replacementRequired),
     repairCompleted: Boolean(body?.repairCompleted),
-    actor: typeof body?.actor === "string" ? body.actor : actor,
+    actor,
     reason: typeof body?.reason === "string" ? body.reason : undefined
   };
 
@@ -104,7 +144,7 @@ export async function POST(request: NextRequest) {
 
   await appendPantavionWaterWorkOrderRegistryAudit({
     event: "water.work.order.registry.assessed",
-    actor: workOrderRequest.actor ?? actor,
+    actor,
     createdAt: new Date().toISOString(),
     request: workOrderRequest,
     assessment
