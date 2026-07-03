@@ -63,7 +63,8 @@
     "kernel:water-work-orders": "node scripts/audit-water-work-order-registry.mjs",
     "kernel:python": "node scripts/audit-python-worker-runtime.mjs",
     "kernel:upload-session": "node scripts/audit-private-upload-session.mjs",
-    "kernel:local-intake": "node scripts/audit-private-local-artifact-intake.mjs"
+    "kernel:local-intake": "node scripts/audit-private-local-artifact-intake.mjs",
+    "audit:agent-runtime": "node scripts/pantavion-agent-runtime-guardrails-gate.cjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
