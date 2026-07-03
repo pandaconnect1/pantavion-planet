@@ -75,7 +75,9 @@
     "audit:archive": "node scripts/pantavion-canonical-archive-gate.cjs",
     "agent:founder-doctrine": "node scripts/pantavion-founder-doctrine-ingest.cjs",
     "agent:code-writer": "node scripts/pantavion-agent-code-writer.cjs",
-    "audit:founder-doctrine": "node scripts/pantavion-founder-doctrine-gate.cjs"
+    "audit:founder-doctrine": "node scripts/pantavion-founder-doctrine-gate.cjs",
+    "agent:supervisor": "node scripts/pantavion-agent-supervisor.cjs",
+    "audit:agent-supervisor": "node scripts/pantavion-agent-supervisor-gate.cjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
