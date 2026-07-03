@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "id": "pantavion_agent_code_writer_plan_v1",
+  "generatedAt": "2026-07-03T15:58:22.918Z",
+  "source": "Founder doctrine deep intake + canonical archive + two-year recovery backlog",
+  "rule": "Code Writer turns doctrine work orders into scoped implementation slices. It does not run git add dot, force push, expose secrets or bypass founder approval.",
+  "currentRealCodeWritten": [
+    "core/execution/pantavion-execution-kernel.ts",
+    "app/api/pantavion/execute/route.ts",
+    "app/api/pantavion/agents/runtime/founder-doctrine/route.ts",
+    "app/api/pantavion/agents/runtime/code-writer/route.ts"
+  ],
+  "blockedActions": [
+    "git add .",
+    "force push",
+    "production deploy without founder approval",
+    "billing without approval",
+    "auth/user-data migration without approval",
+    "DWG/source-truth transformation without approval",
+    "secrets in committed files"
+  ],
+  "totalSlices": 14,
+  "safeInternalSlices": 8,
+  "approvalQueue": 6
+}

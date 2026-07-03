@@ -1,0 +1,300 @@
+{
+  "ok": true,
+  "slices": [
+    {
+      "id": "slice_001_execution_system",
+      "workOrderId": "founder_execution_system_001",
+      "title": "Build real Pantavion execution kernel",
+      "priority": "P0",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "implementationMode": "safe_internal_patch_allowed",
+      "targetFiles": [
+        "core/execution/pantavion-execution-kernel.ts",
+        "app/api/pantavion/execute/route.ts",
+        "scripts/pantavion-execution-kernel-gate.cjs"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Safe internal implementation slice can be generated after supervisor selection.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_002_tool_registry",
+      "workOrderId": "founder_tool_registry_002",
+      "title": "Build formal tool/capability ingestion registry",
+      "priority": "P0",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "implementationMode": "safe_internal_patch_allowed",
+      "targetFiles": [
+        "core/capabilities/pantavion-capability-registry.ts",
+        "app/api/pantavion/capabilities/route.ts",
+        "scripts/pantavion-capability-registry-gate.cjs"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Safe internal implementation slice can be generated after supervisor selection.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_003_workspace_mapping",
+      "workOrderId": "founder_workspace_mapping_003",
+      "title": "Map workspaces to executable workflows",
+      "priority": "P0",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "implementationMode": "safe_internal_patch_allowed",
+      "targetFiles": [
+        "core/workspaces/pantavion-workspace-execution-map.ts",
+        "app/api/pantavion/workspaces/map/route.ts"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Safe internal implementation slice can be generated after supervisor selection.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_004_kernel_agents",
+      "workOrderId": "founder_kernel_agents_004",
+      "title": "Connect Kernel/Agents to archive, work orders and code writer",
+      "priority": "P0",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "implementationMode": "safe_internal_patch_allowed",
+      "targetFiles": [
+        "core/agents/pantavion-agent-supervisor.ts",
+        "app/api/pantavion/agents/runtime/supervisor/route.ts",
+        "scripts/pantavion-agent-supervisor.cjs"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Safe internal implementation slice can be generated after supervisor selection.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_005_auth_identity",
+      "workOrderId": "founder_auth_identity_005",
+      "title": "Build auth/identity implementation plan",
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "implementationMode": "plan_only_until_founder_approval",
+      "targetFiles": [
+        "core/auth/pantavion-auth-plan.ts",
+        "app/api/pantavion/auth/status/route.ts"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Prepare design and request founder approval before writing sensitive code.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_006_dwg_water",
+      "workOrderId": "founder_dwg_water_006",
+      "title": "Protect DWG/water source truth implementation path",
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "implementationMode": "plan_only_until_founder_approval",
+      "targetFiles": [
+        "core/water/pantavion-dwg-source-truth-plan.ts",
+        "app/api/professional/infrastructure/water/dwg-viewer/status/route.ts"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Prepare design and request founder approval before writing sensitive code.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_007_sos_rescue",
+      "workOrderId": "founder_sos_rescue_007",
+      "title": "Build SOS/rescue governed implementation plan",
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "implementationMode": "plan_only_until_founder_approval",
+      "targetFiles": [
+        "core/sos/pantavion-sos-rescue-plan.ts",
+        "app/api/pantavion/sos/status/route.ts"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Prepare design and request founder approval before writing sensitive code.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_008_multimodal_access",
+      "workOrderId": "founder_multimodal_access_008",
+      "title": "Create multimodal access roadmap",
+      "priority": "P1",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "implementationMode": "safe_internal_patch_allowed",
+      "targetFiles": [
+        "core/input/pantavion-universal-input.ts",
+        "app/api/pantavion/input/route.ts"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Safe internal implementation slice can be generated after supervisor selection.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_009_global_absorption",
+      "workOrderId": "founder_global_absorption_009",
+      "title": "Create daily global absorption pipeline",
+      "priority": "P1",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "implementationMode": "safe_internal_patch_allowed",
+      "targetFiles": [
+        "core/research/pantavion-global-absorption.ts",
+        "app/api/pantavion/research/absorption/route.ts"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Safe internal implementation slice can be generated after supervisor selection.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_010_memory_graph",
+      "workOrderId": "founder_memory_graph_010",
+      "title": "Design durable memory and knowledge graph foundation",
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "implementationMode": "plan_only_until_founder_approval",
+      "targetFiles": [
+        "core/memory/pantavion-memory-contract.ts",
+        "app/api/pantavion/memory/status/route.ts"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Prepare design and request founder approval before writing sensitive code.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_011_repo_deploy",
+      "workOrderId": "founder_repo_deploy_011",
+      "title": "Build repo/deploy controller plan",
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "implementationMode": "plan_only_until_founder_approval",
+      "targetFiles": [
+        "core/agents/pantavion-repo-deploy-controller.ts",
+        "app/api/pantavion/agents/runtime/repo-plan/route.ts"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Prepare design and request founder approval before writing sensitive code.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_012_billing_vip",
+      "workOrderId": "founder_billing_vip_012",
+      "title": "Build billing/VIP implementation plan",
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "implementationMode": "plan_only_until_founder_approval",
+      "targetFiles": [
+        "core/billing/pantavion-billing-plan.ts",
+        "app/api/pantavion/billing/status/route.ts"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Prepare design and request founder approval before writing sensitive code.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_013_general_doctrine",
+      "workOrderId": "founder_general_doctrine_013",
+      "title": "Classify general founder doctrine into implementation queue",
+      "priority": "P2",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "implementationMode": "safe_internal_patch_allowed",
+      "targetFiles": [
+        "docs/continuity/pantavion-general-doctrine-queue.md"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Safe internal implementation slice can be generated after supervisor selection.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    },
+    {
+      "id": "slice_014_metadata_only",
+      "workOrderId": "founder_metadata_only_014",
+      "title": "Classify general founder doctrine into implementation queue",
+      "priority": "P2",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "implementationMode": "safe_internal_patch_allowed",
+      "targetFiles": [
+        "docs/continuity/pantavion-general-doctrine-queue.md"
+      ],
+      "requiredChecks": [
+        "npx tsc --noEmit --pretty false",
+        "npm run build",
+        "npm run audit:agent-runtime",
+        "npm run audit:agent-tick"
+      ],
+      "nextAction": "Safe internal implementation slice can be generated after supervisor selection.",
+      "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+    }
+  ]
+}

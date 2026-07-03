@@ -72,7 +72,10 @@
     "agent:legacy-intake": "node scripts/pantavion-legacy-source-ingest.cjs",
     "audit:legacy-intake": "node scripts/pantavion-legacy-source-ingest-gate.cjs",
     "agent:archive": "node scripts/pantavion-canonical-archive.cjs",
-    "audit:archive": "node scripts/pantavion-canonical-archive-gate.cjs"
+    "audit:archive": "node scripts/pantavion-canonical-archive-gate.cjs",
+    "agent:founder-doctrine": "node scripts/pantavion-founder-doctrine-ingest.cjs",
+    "agent:code-writer": "node scripts/pantavion-agent-code-writer.cjs",
+    "audit:founder-doctrine": "node scripts/pantavion-founder-doctrine-gate.cjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
