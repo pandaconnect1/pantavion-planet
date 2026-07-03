@@ -70,7 +70,9 @@
     "audit:agent-tick": "node scripts/pantavion-agent-runtime-tick-gate.cjs",
     "audit:entry": "node scripts/pantavion-universal-entry-gate.cjs",
     "agent:legacy-intake": "node scripts/pantavion-legacy-source-ingest.cjs",
-    "audit:legacy-intake": "node scripts/pantavion-legacy-source-ingest-gate.cjs"
+    "audit:legacy-intake": "node scripts/pantavion-legacy-source-ingest-gate.cjs",
+    "agent:archive": "node scripts/pantavion-canonical-archive.cjs",
+    "audit:archive": "node scripts/pantavion-canonical-archive-gate.cjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
