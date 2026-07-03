@@ -1,0 +1,2718 @@
+{
+  "ok": true,
+  "workOrders": [
+    {
+      "id": "legacy_kernel_agent_001",
+      "category": "kernel_agent",
+      "priority": "P0",
+      "title": "Merge legacy kernel/agent/runtime ideas into Agent Supervisor and Safe Runner.",
+      "reason": "Legacy intake found 40 relevant evidence item(s) for kernel_agent.",
+      "requiredOutcome": "Supervisor route, script/source truth ledger, work-order queue, state and audit.",
+      "evidence": [
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-compat-fix.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T10:40:01.121Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-broken-compat.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:06:19.180Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-identity-model-export.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:37:18.471Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-package.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T11:50:49.959Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-tsc.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-24T10:29:20.313Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/AGENTS.md",
+          "extension": ".md",
+          "modifiedAt": "2026-07-03T12:15:27.914Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/CLAUDE.md",
+          "extension": ".md",
+          "modifiedAt": "2026-04-06T17:26:40.060Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package-lock.json",
+          "extension": ".json",
+          "modifiedAt": "2026-06-19T17:29:44.842Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package.json",
+          "extension": ".json",
+          "modifiedAt": "2026-07-03T15:21:20.679Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/pantavion-kernel-ledger.json",
+          "extension": ".json",
+          "modifiedAt": "2026-04-08T17:04:44.956Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION-MASTER-DOCTRINE.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-01T21:16:14.430Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_FOUNDER_APPROVAL_365.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-24T09:19:33.981Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-09T06:16:33.705Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/tsconfig.json",
+          "extension": ".json",
+          "modifiedAt": "2026-05-18T14:14:57.476Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/big-identity-input-rescue.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:34:00.734Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/big-rescue-sweep.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:32:31.836Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-healthy-resilience-mode.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:44:45.100Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-protocol-resilience-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:48:08.264Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-full-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:40:34.509Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-mode-sweep.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:35:39.670Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-recommendations.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:37:09.385Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-durable-execution-runtime.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:15:39.695Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-identity-model-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:26:23.588Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-kernel-bootstrap-request-type.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:29:40.077Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-resilience-runtime-exports.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:22:44.550Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-voice-runtime-export.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:21:06.798Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-workspace-runtime-export.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:18:08.143Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/repair-corrupted-kernel-tails.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:07:36.164Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/repair-resilience-runtime-newlines.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:24:15.230Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/after-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.832Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.153Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/moved-obvious-junk.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.464Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.109Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/moved-untracked-files.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.353Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-sos-clean-facts.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:41:50.909Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-sos-language-audit.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:32:23.376Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-04-26T20:00:57.674Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-master-locked.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:03:28.427Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-water.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:01:33.480Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/competitor-intelligence.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:57.911Z",
+          "secretsRedacted": false
+        }
+      ],
+      "status": "ready_for_kernel_agent_review",
+      "requiresFounderApproval": false,
+      "createdAt": "2026-07-03T15:21:24.397Z"
+    },
+    {
+      "id": "legacy_auth_identity_002",
+      "category": "auth_identity",
+      "priority": "P0",
+      "title": "Convert auth/login/profile ideas into real account foundation.",
+      "reason": "Legacy intake found 40 relevant evidence item(s) for auth_identity.",
+      "requiredOutcome": "Auth provider plan, sessions, profile, consent memory and security audit.",
+      "evidence": [
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-compat-fix.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T10:40:01.121Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-all-water-speech-events.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:32:51.786Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-broken-compat.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:06:19.180Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-identity-model-export.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:37:18.471Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-live-interpreter-types.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:09:51.334Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-package.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T11:50:49.959Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-water-event-any.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:25:25.724Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-water-speech-types.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:19:08.802Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-tsc.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-24T10:29:20.313Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/AGENTS.md",
+          "extension": ".md",
+          "modifiedAt": "2026-07-03T12:15:27.914Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/CLAUDE.md",
+          "extension": ".md",
+          "modifiedAt": "2026-04-06T17:26:40.060Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/eslint.config.mjs",
+          "extension": ".mjs",
+          "modifiedAt": "2026-04-26T20:00:54.991Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/middleware.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-04-25T09:11:31.193Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/next-env.d.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-04-08T02:26:36.085Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/next.config.mjs",
+          "extension": ".mjs",
+          "modifiedAt": "2026-06-19T18:19:47.471Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/next.config.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-04-26T20:00:54.741Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package-lock.json",
+          "extension": ".json",
+          "modifiedAt": "2026-06-19T17:29:44.842Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package.json",
+          "extension": ".json",
+          "modifiedAt": "2026-07-03T15:21:20.679Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/pantavion-kernel-ledger.json",
+          "extension": ".json",
+          "modifiedAt": "2026-04-08T17:04:44.956Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION-MASTER-DOCTRINE.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-01T21:16:14.430Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_FOUNDER_APPROVAL_365.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-24T09:19:33.981Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-09T06:16:33.705Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/postcss.config.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-04-25T21:09:33.256Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/README.md",
+          "extension": ".md",
+          "modifiedAt": "2026-04-25T09:11:30.847Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/tailwind.config.js",
+          "extension": ".js",
+          "modifiedAt": "2026-04-25T11:57:22.298Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/tsconfig.json",
+          "extension": ".json",
+          "modifiedAt": "2026-05-18T14:14:57.476Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/vercel.json",
+          "extension": ".json",
+          "modifiedAt": "2026-06-15T21:00:53.302Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_pantavion_archive_txt/pantavion-build-errors.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-01T19:54:25.400Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_pantavion_archive_txt/pantavion-git-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-01T19:53:37.635Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/big-identity-input-rescue.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:34:00.734Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/big-rescue-sweep.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:32:31.836Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/current-build.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-24T21:39:28.570Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/current-diff-check.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-24T21:38:55.106Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/current-tsc.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-24T21:39:01.870Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-healthy-resilience-mode.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:44:45.100Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-protocol-resilience-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:48:08.264Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-full-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:40:34.509Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-mode-sweep.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:35:39.670Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-recommendations.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:37:09.385Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-create-delegation-export.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:10:25.541Z",
+          "secretsRedacted": false
+        }
+      ],
+      "status": "ready_for_kernel_agent_review",
+      "requiresFounderApproval": true,
+      "createdAt": "2026-07-03T15:21:24.397Z"
+    },
+    {
+      "id": "legacy_water_dwg_gis_003",
+      "category": "water_dwg_gis",
+      "priority": "P0",
+      "title": "Convert water/DWG/GIS ideas into source-truth protected infrastructure module.",
+      "reason": "Legacy intake found 40 relevant evidence item(s) for water_dwg_gis.",
+      "requiredOutcome": "Original DWG read-only contract, licensed viewer adapter work order, C overlays and audit.",
+      "evidence": [
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-compat-fix.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T10:40:01.121Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-all-water-speech-events.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:32:51.786Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-package.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T11:50:49.959Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-water-event-any.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:25:25.724Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-water-speech-types.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:19:08.802Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-tsc.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-24T10:29:20.313Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/AGENTS.md",
+          "extension": ".md",
+          "modifiedAt": "2026-07-03T12:15:27.914Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package-lock.json",
+          "extension": ".json",
+          "modifiedAt": "2026-06-19T17:29:44.842Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package.json",
+          "extension": ".json",
+          "modifiedAt": "2026-07-03T15:21:20.679Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION-MASTER-DOCTRINE.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-01T21:16:14.430Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-09T06:16:33.705Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/README.md",
+          "extension": ".md",
+          "modifiedAt": "2026-04-25T09:11:30.847Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-full-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:40:34.509Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-create-delegation-export.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:10:25.541Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-delegation-input-shape.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:27:57.862Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-durable-execution-runtime.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:15:39.695Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-identity-model-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:26:23.588Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-protocol-gateway-exports.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:13:52.381Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-voice-runtime-export.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:21:06.798Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-workspace-runtime-export.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:18:08.143Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/after-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.832Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.153Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/moved-obvious-junk.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.464Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/remaining-untracked-20260518-165719/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:57:20.134Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/remaining-untracked-20260518-165719/missing-during-move.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:57:20.579Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.109Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/moved-untracked-files.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.353Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-find-200-languages.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:44:31.300Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-sos-clean-facts.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:41:50.909Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-sos-language-audit.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:32:23.376Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-04-26T20:00:57.674Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/scripts/expand-emergency-languages.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-02T21:05:19.765Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-master-locked.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:03:28.427Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-water.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:01:33.480Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/competitor-intelligence.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:57.911Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/pantavion-master-requirement-ledger.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-05T20:10:30.444Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/learning/learning-to-income.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:53:56.836Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/infrastructure/water/water-access-store.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-11T19:24:07.083Z",
+          "secretsRedacted": true
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/global/global-domain-rules.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T19:26:57.733Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/global/region-model.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:20.404Z",
+          "secretsRedacted": false
+        }
+      ],
+      "status": "ready_for_kernel_agent_review",
+      "requiresFounderApproval": true,
+      "createdAt": "2026-07-03T15:21:24.397Z"
+    },
+    {
+      "id": "legacy_sos_rescue_recovery_004",
+      "category": "sos_rescue_recovery",
+      "priority": "P0",
+      "title": "Convert SOS/rescue/recovery ideas into lawful safety and recovery modules.",
+      "reason": "Legacy intake found 40 relevant evidence item(s) for sos_rescue_recovery.",
+      "requiredOutcome": "SOS/rescue routes, emergency circle, official recovery flows, prohibited actions and audit.",
+      "evidence": [
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-compat-fix.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T10:40:01.121Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package-lock.json",
+          "extension": ".json",
+          "modifiedAt": "2026-06-19T17:29:44.842Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package.json",
+          "extension": ".json",
+          "modifiedAt": "2026-07-03T15:21:20.679Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION-MASTER-DOCTRINE.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-01T21:16:14.430Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_FOUNDER_APPROVAL_365.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-24T09:19:33.981Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-09T06:16:33.705Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/big-identity-input-rescue.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:34:00.734Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/big-rescue-sweep.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:32:31.836Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-full-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:40:34.509Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-recommendations.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:37:09.385Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-create-delegation-export.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:10:25.541Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-resilience-runtime-exports.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:22:44.550Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/repair-resilience-runtime-newlines.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:24:15.230Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/after-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.832Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.153Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/moved-obvious-junk.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.464Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/terminal-recovery-20260518-171755/changed-files.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T14:17:56.344Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/terminal-recovery-20260518-171755/status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T14:17:56.184Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/terminal-recovery-20260518-171755/tsc.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T14:18:02.007Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/remaining-untracked-20260518-165719/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:57:20.134Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/remaining-untracked-20260518-165719/missing-during-move.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:57:20.579Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.109Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/moved-untracked-files.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.353Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-audit-before-sos-bridge-fix.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:05:07.396Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-find-200-languages.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:44:31.300Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-sos-clean-facts.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:41:50.909Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-sos-language-audit.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:32:23.376Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-04-26T20:00:57.674Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/scripts/expand-emergency-languages.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-02T21:05:19.765Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/scripts/pantavion-master-ledger-audit.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-05T20:10:30.678Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-master-locked.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:03:28.427Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-water.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:01:33.480Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/translation/interpreter-model.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:20.804Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/pantavion-master-requirement-ledger.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-05T20:10:30.444Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/storage/storage-architecture.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:47:33.905Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/security/security-constitution.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:47:34.045Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/ops/scale-ladder.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:47:34.226Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/notifications/notification-model.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:22.005Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/moderation/moderation-model.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:21.824Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/legal/legal-foundation.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:21.488Z",
+          "secretsRedacted": false
+        }
+      ],
+      "status": "ready_for_kernel_agent_review",
+      "requiresFounderApproval": true,
+      "createdAt": "2026-07-03T15:21:24.397Z"
+    },
+    {
+      "id": "legacy_files_conversion_005",
+      "category": "files_conversion",
+      "priority": "P1",
+      "title": "Convert file/conversion ideas into Conversion Matrix and adapter registry.",
+      "reason": "Legacy intake found 40 relevant evidence item(s) for files_conversion.",
+      "requiredOutcome": "Format support levels, adapter/provider/license/cost status and derivative-only outputs.",
+      "evidence": [
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-compat-fix.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T10:40:01.121Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-all-water-speech-events.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:32:51.786Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-broken-compat.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:06:19.180Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-identity-model-export.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:37:18.471Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-live-interpreter-types.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:09:51.334Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-package.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T11:50:49.959Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-water-event-any.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:25:25.724Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-water-speech-types.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:19:08.802Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-tsc.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-24T10:29:20.313Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/AGENTS.md",
+          "extension": ".md",
+          "modifiedAt": "2026-07-03T12:15:27.914Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/middleware.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-04-25T09:11:31.193Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/next-env.d.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-04-08T02:26:36.085Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package-lock.json",
+          "extension": ".json",
+          "modifiedAt": "2026-06-19T17:29:44.842Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package.json",
+          "extension": ".json",
+          "modifiedAt": "2026-07-03T15:21:20.679Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION-MASTER-DOCTRINE.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-01T21:16:14.430Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-09T06:16:33.705Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/README.md",
+          "extension": ".md",
+          "modifiedAt": "2026-04-25T09:11:30.847Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/big-identity-input-rescue.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:34:00.734Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/big-rescue-sweep.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:32:31.836Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-healthy-resilience-mode.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:44:45.100Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-protocol-resilience-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:48:08.264Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-full-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:40:34.509Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-mode-sweep.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:35:39.670Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-recommendations.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:37:09.385Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-create-delegation-export.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:10:25.541Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-delegation-input-shape.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:27:57.862Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-delegation-rationale.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T20:48:07.881Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-durable-execution-runtime.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:15:39.695Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-identity-model-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:26:23.588Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-kernel-bootstrap-request-type.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:29:40.077Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-protocol-gateway-exports.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:13:52.381Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-resilience-runtime-exports.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:22:44.550Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-voice-runtime-export.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:21:06.798Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-workspace-runtime-export.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:18:08.143Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/patch-translate-ref-type.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-18T14:20:17.749Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/patch-translate-speech-types.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-18T14:19:09.922Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/repair-corrupted-kernel-tails.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:07:36.164Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/repair-resilience-runtime-newlines.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:24:15.230Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/after-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.832Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.153Z",
+          "secretsRedacted": false
+        }
+      ],
+      "status": "ready_for_kernel_agent_review",
+      "requiresFounderApproval": false,
+      "createdAt": "2026-07-03T15:21:24.397Z"
+    },
+    {
+      "id": "legacy_voice_translation_006",
+      "category": "voice_translation",
+      "priority": "P1",
+      "title": "Convert legacy voice/translation/language ideas into provider-adapter work orders.",
+      "reason": "Legacy intake found 40 relevant evidence item(s) for voice_translation.",
+      "requiredOutcome": "Voice/text/camera translation status, provider adapter gates, minors policy and audit.",
+      "evidence": [
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-all-water-speech-events.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:32:51.786Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-live-interpreter-types.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:09:51.334Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-package.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T11:50:49.959Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-water-event-any.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:25:25.724Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-fix-water-speech-types.js",
+          "extension": ".js",
+          "modifiedAt": "2026-05-24T12:19:08.802Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-tsc.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-24T10:29:20.313Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package-lock.json",
+          "extension": ".json",
+          "modifiedAt": "2026-06-19T17:29:44.842Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package.json",
+          "extension": ".json",
+          "modifiedAt": "2026-07-03T15:21:20.679Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION-MASTER-DOCTRINE.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-01T21:16:14.430Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_FOUNDER_APPROVAL_365.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-24T09:19:33.981Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-09T06:16:33.705Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/README.md",
+          "extension": ".md",
+          "modifiedAt": "2026-04-25T09:11:30.847Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-protocol-resilience-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:48:08.264Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-full-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:40:34.509Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-resilience-runtime-exports.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:22:44.550Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-voice-runtime-export.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:21:06.798Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/patch-translate-ref-type.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-18T14:20:17.749Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/patch-translate-speech-types.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-18T14:19:09.922Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/repair-resilience-runtime-newlines.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:24:15.230Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/after-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.832Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.153Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/moved-obvious-junk.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.464Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.109Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/moved-untracked-files.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.353Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-find-200-languages.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:44:31.300Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-sos-clean-facts.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:41:50.909Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-sos-language-audit.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:32:23.376Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-04-26T20:00:57.674Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/scripts/expand-emergency-languages.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-02T21:05:19.765Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/scripts/pantavion-master-ledger-audit.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-05T20:10:30.678Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-master-locked.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:03:28.427Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-water.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:01:33.480Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/translation/interpreter-model.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:20.804Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/competitor-intelligence.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:57.911Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/pantavion-master-requirement-ledger.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-05T20:10:30.444Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/protocol/interoperability-standards.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:53:55.960Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/payments/payment-readiness.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:21.321Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/marketplace/marketplace-verticals.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T19:26:57.457Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/legal/legal-foundation.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:21.488Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/guardian/pantavion-guardian-brain.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-07T02:42:01.286Z",
+          "secretsRedacted": false
+        }
+      ],
+      "status": "ready_for_kernel_agent_review",
+      "requiresFounderApproval": false,
+      "createdAt": "2026-07-03T15:21:24.397Z"
+    },
+    {
+      "id": "legacy_implementation_gaps_007",
+      "category": "implementation_gaps",
+      "priority": "P0",
+      "title": "Turn legacy TODO/fake/placeholder/gap findings into implementation work orders.",
+      "reason": "Legacy intake found 40 relevant evidence item(s) for implementation_gaps.",
+      "requiredOutcome": "Every gap gets owner category, required files, route/state/audit and verification gate.",
+      "evidence": [
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/.pantavion-tsc.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-24T10:29:20.313Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/AGENTS.md",
+          "extension": ".md",
+          "modifiedAt": "2026-07-03T12:15:27.914Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package-lock.json",
+          "extension": ".json",
+          "modifiedAt": "2026-06-19T17:29:44.842Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/pantavion-kernel-ledger.json",
+          "extension": ".json",
+          "modifiedAt": "2026-04-08T17:04:44.956Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION-MASTER-DOCTRINE.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-01T21:16:14.430Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_FOUNDER_APPROVAL_365.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-24T09:19:33.981Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-09T06:16:33.705Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/README.md",
+          "extension": ".md",
+          "modifiedAt": "2026-04-25T09:11:30.847Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/final-resilience-full-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:40:34.509Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/fix-identity-model-compat.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-24T21:26:23.588Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/after-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.832Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.153Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/remaining-untracked-20260518-165719/missing-during-move.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:57:20.579Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.109Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/moved-untracked-files.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.353Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-sos-clean-facts.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:41:50.909Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/pantavion-sos-language-audit.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-04T19:32:23.376Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-04-26T20:00:57.674Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/scripts/expand-emergency-languages.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-02T21:05:19.765Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/scripts/pantavion-master-ledger-audit.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-05T20:10:30.678Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-master-locked.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:03:28.427Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-water.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:01:33.480Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/workspaces/workspace-intelligence.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:58.345Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/gap-closure.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:58.134Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/pantavion-master-requirement-ledger.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-05T20:10:30.444Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/security/ai-threat-model.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:53:56.637Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/protocol/interoperability-standards.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:53:55.960Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/marketplace/marketplace-verticals.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T19:26:57.457Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/guardian/guardian-loop.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:53:56.391Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/guardian/pantavion-guardian-brain.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-07T02:42:01.286Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/guardian/pantavion-guardian-runtime-ledger.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-06T16:47:04.524Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/communication/communication-model.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:20.618Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/canonical/implementation-map.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:58.675Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/professional/infrastructure/water/recover/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-11T19:24:09.364Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/architecture-data.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:32:59.827Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/architecture-layer-page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:33:00.061Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/domain-registry.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:47:33.555Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/layout.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:34:01.380Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/_components/pantavion-section-page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:47:33.336Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:33:59.667Z",
+          "secretsRedacted": false
+        }
+      ],
+      "status": "ready_for_kernel_agent_review",
+      "requiresFounderApproval": false,
+      "createdAt": "2026-07-03T15:21:24.397Z"
+    },
+    {
+      "id": "legacy_payments_vip_008",
+      "category": "payments_vip",
+      "priority": "P0",
+      "title": "Convert payments/VIP ideas into billing and entitlement foundation.",
+      "reason": "Legacy intake found 40 relevant evidence item(s) for payments_vip.",
+      "requiredOutcome": "Stripe/provider plan, VIP entitlements, billing audit and production approval gate.",
+      "evidence": [
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/AGENTS.md",
+          "extension": ".md",
+          "modifiedAt": "2026-07-03T12:15:27.914Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/next.config.mjs",
+          "extension": ".mjs",
+          "modifiedAt": "2026-06-19T18:19:47.471Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/package-lock.json",
+          "extension": ".json",
+          "modifiedAt": "2026-06-19T17:29:44.842Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION-MASTER-DOCTRINE.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-01T21:16:14.430Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_FOUNDER_APPROVAL_365.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-24T09:19:33.981Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-09T06:16:33.705Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/README.md",
+          "extension": ".md",
+          "modifiedAt": "2026-04-25T09:11:30.847Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/after-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.832Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.153Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.109Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/moved-untracked-files.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.353Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/_pantavion_archive_txt/PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-04-26T20:00:57.674Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-master-locked.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:03:28.427Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-water.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:01:33.480Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/workspaces/workspace-intelligence.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:58.345Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/competitor-intelligence.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:57.911Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/gap-closure.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:58.134Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/pantavion-master-requirement-ledger.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-05T20:10:30.444Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/storage/storage-architecture.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:47:33.905Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/security/security-constitution.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:47:34.045Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/payments/payment-readiness.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:21.321Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/ops/scale-ladder.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:47:34.226Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/notifications/notification-model.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:22.005Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/moderation/moderation-model.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:21.824Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/marketplace/marketplace-policy.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:21.154Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/legal/legal-foundation.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:21.488Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/global/region-model.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:20.404Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/enterprise/enterprise-requirements.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:58.509Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/ai/capability-taxonomy.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:57.356Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/domain-registry.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:47:33.555Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/competitors/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:33:59.794Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/china/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:34:00.035Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/apple/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:33:59.912Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/payments/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:58:23.407Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ops/staffing/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:47:35.343Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ops/infrastructure/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:47:35.470Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/notifications/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:58:23.105Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/jobs/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T19:26:58.406Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/enterprise/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:34:00.680Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/donations/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T19:26:58.668Z",
+          "secretsRedacted": false
+        }
+      ],
+      "status": "ready_for_kernel_agent_review",
+      "requiresFounderApproval": true,
+      "createdAt": "2026-07-03T15:21:24.397Z"
+    },
+    {
+      "id": "legacy_social_messaging_dating_009",
+      "category": "social_messaging_dating",
+      "priority": "P0",
+      "title": "Convert social/messaging/dating ideas into governed identity and safety modules.",
+      "reason": "Legacy intake found 40 relevant evidence item(s) for social_messaging_dating.",
+      "requiredOutcome": "Real routes with identity, consent, moderation, report/block, age gates and founder approval.",
+      "evidence": [
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/PANTAVION-MASTER-DOCTRINE.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-01T21:16:14.430Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/README.md",
+          "extension": ".md",
+          "modifiedAt": "2026-04-25T09:11:30.847Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/after-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.832Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/untracked-quarantine-20260518-165426/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:54:27.153Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/before-status.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.109Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/moved-untracked-files.txt",
+          "extension": ".txt",
+          "modifiedAt": "2026-05-18T13:55:25.353Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/scripts/pantavion-master-ledger-audit.cjs",
+          "extension": ".cjs",
+          "modifiedAt": "2026-05-05T20:10:30.678Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-master-locked.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:03:28.427Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/docs/requirements/pantavion-professional-infrastructure-water.md",
+          "extension": ".md",
+          "modifiedAt": "2026-05-09T13:01:33.480Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/competitor-intelligence.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:57.911Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/gap-closure.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:58.134Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/strategy/pantavion-master-requirement-ledger.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-05T20:10:30.444Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/storage/storage-architecture.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:47:33.905Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/social/social-governance.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:20.982Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/security/ai-threat-model.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:53:56.637Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/guardian/pantavion-guardian-brain.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-07T02:42:01.286Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/global/region-model.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T18:58:20.404Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/daily/daily-surface-rules.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-17T19:26:57.990Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/core/ai/capability-taxonomy.ts",
+          "extension": ".ts",
+          "modifiedAt": "2026-05-18T02:33:57.356Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/layout.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:34:01.380Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/trust-safety/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:47:35.069Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:33:59.667Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/google/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:34:00.155Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/global-giants/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:34:00.255Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/competitors/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:33:59.794Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/china/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:34:00.035Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/strategy/apple/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:33:59.912Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/stories/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:58:22.829Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/sports/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T19:26:59.874Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/security/ai-threat-model/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:53:58.803Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/pulse/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:58:22.695Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/photos/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T19:27:00.260Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/moderation/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:58:23.272Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/kids/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T19:27:00.796Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/games/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T19:27:00.389Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/dating/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T19:27:00.128Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/daily/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:58:22.434Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/chat/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:58:22.564Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/business/smb/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-17T18:53:58.306Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/Users/gnkkm/pantavion-planet",
+          "path": "C:/Users/gnkkm/pantavion-planet/_local_backups/full-untracked-quarantine-20260518-165524/app/pantavion/ai/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2026-05-18T02:33:58.816Z",
+          "secretsRedacted": false
+        }
+      ],
+      "status": "ready_for_kernel_agent_review",
+      "requiresFounderApproval": true,
+      "createdAt": "2026-07-03T15:21:24.397Z"
+    },
+    {
+      "id": "legacy_general_pantavion_010",
+      "category": "general_pantavion",
+      "priority": "P2",
+      "title": "Review general Pantavion legacy ideas and classify into modules.",
+      "reason": "Legacy intake found 9 relevant evidence item(s) for general_pantavion.",
+      "requiredOutcome": "Module classification, priority, risk zone and next implementation slice.",
+      "evidence": [
+        {
+          "source": "C:/pantavion-one",
+          "path": "C:/pantavion-one/eslint.config.mjs",
+          "extension": ".mjs",
+          "modifiedAt": "2025-11-15T22:12:20.138Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/pantavion-one",
+          "path": "C:/pantavion-one/next.config.ts",
+          "extension": ".ts",
+          "modifiedAt": "2025-11-15T22:12:20.298Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/pantavion-one",
+          "path": "C:/pantavion-one/package.json",
+          "extension": ".json",
+          "modifiedAt": "2025-12-03T23:41:20.656Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/pantavion-one",
+          "path": "C:/pantavion-one/postcss.config.mjs",
+          "extension": ".mjs",
+          "modifiedAt": "2025-11-15T22:12:20.176Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/pantavion-one",
+          "path": "C:/pantavion-one/tsconfig.json",
+          "extension": ".json",
+          "modifiedAt": "2025-11-15T22:13:52.399Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/pantavion-one",
+          "path": "C:/pantavion-one/app/pulse/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2025-12-04T00:21:06.547Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/pantavion-one",
+          "path": "C:/pantavion-one/app/planet/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2025-12-04T00:19:49.998Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/pantavion-one",
+          "path": "C:/pantavion-one/app/mind/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2025-12-04T00:20:34.795Z",
+          "secretsRedacted": false
+        },
+        {
+          "source": "C:/pantavion-one",
+          "path": "C:/pantavion-one/app/media/page.tsx",
+          "extension": ".tsx",
+          "modifiedAt": "2025-12-04T00:20:23.971Z",
+          "secretsRedacted": false
+        }
+      ],
+      "status": "ready_for_kernel_agent_review",
+      "requiresFounderApproval": false,
+      "createdAt": "2026-07-03T15:21:24.397Z"
+    }
+  ]
+}
