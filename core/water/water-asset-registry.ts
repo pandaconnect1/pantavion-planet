@@ -412,8 +412,7 @@ export function assessPantavionWaterAssetRegistration(
   const requiresWorkOrder = conditionNeedsWorkOrder;
   const requiresSupervisorReview =
     replacementOrPermanent ||
-    condition === "lost_or_covered" ||
-    condition === "permanent_closed";
+    condition === "lost_or_covered";
 
   const blocked = missingAssetId || unsupportedKind;
 

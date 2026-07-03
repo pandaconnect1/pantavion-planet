@@ -28,13 +28,13 @@ function AssessmentCard({
     <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-semibold text-white">{title}</h2>
-        <Pill>{assessment.status}</Pill>
+        <Pill>{assessment.blocked ? "blocked" : "allowed"}</Pill>
       </div>
 
       <div className="mt-4 grid gap-3 text-sm text-white/70 md:grid-cols-2">
         <p>Extension: {assessment.extension}</p>
-        <p>Strategy: {assessment.uploadStrategy}</p>
-        <p>Source class: {assessment.sourceClass}</p>
+        <p>Strategy: {assessment.recommendedUploadStrategy}</p>
+        <p>Source class: {assessment.artifactClass}</p>
         <p>Private storage: {assessment.requiresPrivateStorage ? "required" : "not required"}</p>
         <p>SHA256: {assessment.requiresSha256 ? "required" : "not required"}</p>
         <p>Founder approval: {assessment.requiresFounderApproval ? "required" : "not required"}</p>
@@ -97,11 +97,11 @@ export function WaterSourcesAdminPanel({
                     {rule.extensions.map((ext) => ext.toUpperCase()).join(", ")}
                   </p>
                 </div>
-                <Pill>{rule.status}</Pill>
+                <Pill>{rule.allowedForPrivateUploadSession ? "private upload" : "metadata only"}</Pill>
               </div>
 
               <div className="mt-3 grid gap-2 text-xs text-white/60 md:grid-cols-3">
-                <p>Strategy: {rule.uploadStrategy}</p>
+                <p>Strategy: {rule.allowedForPrivateUploadSession ? "private upload session" : "metadata only"}</p>
                 <p>Private storage: {rule.requiresPrivateStorage ? "yes" : "no"}</p>
                 <p>SHA256: {rule.requiresSha256 ? "yes" : "no"}</p>
               </div>

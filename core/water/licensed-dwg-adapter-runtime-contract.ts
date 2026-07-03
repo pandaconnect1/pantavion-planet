@@ -375,7 +375,7 @@ export function assessPantavionLicensedDwgAdapterRuntime(
   const verifiedMethods = normalizeMethods(input.verifiedMethods);
   const missingMethods = contract
     ? contract.requirements.requiredMethods.filter((method) => !verifiedMethods.includes(method))
-    : ["initialize", "loadOriginalDwgReadOnly", "renderEmbedded", "dispose"];
+    : (["initialize", "loadOriginalDwgReadOnly", "renderEmbedded", "dispose"] as PantavionDwgAdapterRequiredMethod[]);
 
   const missingLicense = Boolean(contract?.requiresLicense) && !input.licenseAvailable;
   const missingPackage = Boolean(contract?.requiresAdapterPackage) && !input.adapterPackageAvailable;

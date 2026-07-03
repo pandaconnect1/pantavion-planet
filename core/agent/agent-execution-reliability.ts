@@ -244,9 +244,7 @@ export function assessPantavionAgentExecutionReliability(
 
   const requiresRollbackPlan =
     Boolean(input.requiresRollbackPlan) ||
-    requiresCheckpoint ||
-    actionClass === "dependency_install" ||
-    actionClass === "deploy";
+    requiresCheckpoint;
 
   const blocked = blockedCommand || secretLikeText || actionClass === "secret_sensitive";
 
