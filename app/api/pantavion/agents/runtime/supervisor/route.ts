@@ -41,12 +41,22 @@ async function collectExistingTargets(slices: PantavionImplementationSlice[]) {
   return [...targets];
 }
 
-export async function GET() {
-  const slicesFile = await readJson("data/pantavion-agent-code-writer/implementation-slices.json") as
-    | { slices?: PantavionImplementationSlice[] }
-    | null;
+function extractSlices(value: unknown): PantavionImplementationSlice[] {
+  if (
+    value &&
+    typeof value === "object" &&
+    "slices" in value &&
+    Array.isArray((value as { slices?: unknown }).slices)
+  ) {
+    return (value as { slices: PantavionImplementationSlice[] }).slices;
+  }
 
-  const slices = Array.isArray(slicesFile?.slices) ? slicesFile.slices : [];
+  return [];
+}
+
+export async function GET() {
+  const slicesFile = await readJson("data/pantavion-agent-code-writer/implementation-slices.json");
+  const slices = extractSlices(slicesFile);
   const existingFiles = await collectExistingTargets(slices);
 
   const report = createPantavionAgentSupervisorReport({
@@ -67,11 +77,8 @@ export async function GET() {
 }
 
 export async function POST() {
-  const slicesFile = await readJson("data/pantavion-agent-code-writer/implementation-slices.json") as
-    | { slices?: PantavionImplementationSlice[] }
-    | null;
-
-  const slices = Array.isArray(slicesFile?.slices) ? slicesFile.slices : [];
+  const slicesFile = await readJson("data/pantavion-agent-code-writer/implementation-slices.json");
+  const slices = extractSlices(slicesFile);
   const existingFiles = await collectExistingTargets(slices);
 
   const report = createPantavionAgentSupervisorReport({

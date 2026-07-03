@@ -77,7 +77,8 @@
     "agent:code-writer": "node scripts/pantavion-agent-code-writer.cjs",
     "audit:founder-doctrine": "node scripts/pantavion-founder-doctrine-gate.cjs",
     "agent:supervisor": "node scripts/pantavion-agent-supervisor.cjs",
-    "audit:agent-supervisor": "node scripts/pantavion-agent-supervisor-gate.cjs"
+    "audit:agent-supervisor": "node scripts/pantavion-agent-supervisor-gate.cjs",
+    "audit:live-surface": "node scripts/pantavion-live-surface-gate.cjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
