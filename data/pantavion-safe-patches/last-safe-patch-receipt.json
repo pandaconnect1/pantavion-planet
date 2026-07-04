@@ -1,0 +1,73 @@
+{
+  "ok": true,
+  "id": "pantavion_safe_patch_receipt_v1",
+  "generatedAt": "2026-07-04T08:48:09.843Z",
+  "writer": "scripts/pantavion-safe-patch-writer.cjs",
+  "selectedSlice": {
+    "id": "slice_001_execution_system",
+    "workOrderId": "founder_execution_system_001",
+    "title": "Build real Pantavion execution kernel",
+    "priority": "P0",
+    "riskZone": "Z2",
+    "approvalRequired": false,
+    "implementationMode": "safe_internal_patch_allowed",
+    "targetFiles": [
+      "core/execution/pantavion-execution-kernel.ts",
+      "app/api/pantavion/execute/route.ts",
+      "scripts/pantavion-execution-kernel-gate.cjs"
+    ],
+    "requiredChecks": [
+      "npx tsc --noEmit --pretty false",
+      "npm run build",
+      "npm run audit:agent-runtime",
+      "npm run audit:agent-tick"
+    ],
+    "nextAction": "Safe internal implementation slice can be generated after supervisor selection.",
+    "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+  },
+  "activeSlice": {
+    "id": "slice_001_execution_system",
+    "workOrderId": "founder_execution_system_001",
+    "title": "Build real Pantavion execution kernel",
+    "priority": "P0",
+    "riskZone": "Z2",
+    "approvalRequired": false,
+    "implementationMode": "safe_internal_patch_allowed",
+    "targetFiles": [
+      "core/execution/pantavion-execution-kernel.ts",
+      "app/api/pantavion/execute/route.ts",
+      "scripts/pantavion-execution-kernel-gate.cjs"
+    ],
+    "requiredChecks": [
+      "npx tsc --noEmit --pretty false",
+      "npm run build",
+      "npm run audit:agent-runtime",
+      "npm run audit:agent-tick"
+    ],
+    "nextAction": "Safe internal implementation slice can be generated after supervisor selection.",
+    "truthRule": "Every generated feature must include route, state/data, audit/verification and must not be fake UI."
+  },
+  "wrote": [
+    "core/capabilities/pantavion-capability-registry.ts",
+    "app/api/pantavion/capabilities/route.ts",
+    "scripts/pantavion-capability-registry-gate.cjs",
+    "docs/continuity/pantavion-safe-patch-writer.md"
+  ],
+  "checksToRun": [
+    "npm run audit:capability-registry",
+    "npm run audit:safe-patch",
+    "npx tsc --noEmit --pretty false",
+    "npm run build"
+  ],
+  "safety": {
+    "mode": "scoped_source_writer",
+    "allowedRiskZones": [
+      "Z1",
+      "Z2"
+    ],
+    "approvalRequiredBlocked": true,
+    "productionDeployBlocked": true,
+    "secretsBlocked": true,
+    "blanketAddBlocked": true
+  }
+}

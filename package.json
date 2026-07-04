@@ -78,7 +78,10 @@
     "audit:founder-doctrine": "node scripts/pantavion-founder-doctrine-gate.cjs",
     "agent:supervisor": "node scripts/pantavion-agent-supervisor.cjs",
     "audit:agent-supervisor": "node scripts/pantavion-agent-supervisor-gate.cjs",
-    "audit:live-surface": "node scripts/pantavion-live-surface-gate.cjs"
+    "audit:live-surface": "node scripts/pantavion-live-surface-gate.cjs",
+    "agent:safe-patch": "node scripts/pantavion-safe-patch-writer.cjs",
+    "audit:safe-patch": "node scripts/pantavion-safe-patch-writer-gate.cjs",
+    "audit:capability-registry": "node scripts/pantavion-capability-registry-gate.cjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",

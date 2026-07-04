@@ -35,8 +35,10 @@ type PulseRecord = {
   createdAt: string;
 };
 
+type PantavionLiveMode = "live" | "chat" | "pulse" | "people" | "tools" | "execution";
+
 type LiveSurfaceProps = {
-  defaultMode?: "live" | "chat" | "pulse";
+  defaultMode?: PantavionLiveMode;
 };
 
 const modeLabels = [
@@ -58,7 +60,7 @@ function statusClass(status: string) {
 }
 
 export default function PantavionLiveSurfaceClient({ defaultMode = "live" }: LiveSurfaceProps) {
-  const [mode, setMode] = useState(defaultMode);
+  const [mode, setMode] = useState<PantavionLiveMode>(defaultMode);
   const [modules, setModules] = useState<LiveModule[]>([]);
   const [chatInput, setChatInput] = useState("");
   const [pulseInput, setPulseInput] = useState("");
@@ -331,3 +333,4 @@ export default function PantavionLiveSurfaceClient({ defaultMode = "live" }: Liv
     </main>
   );
 }
+
