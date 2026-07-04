@@ -85,7 +85,9 @@
     "agent:loop": "node scripts/pantavion-safe-patch-loop.cjs",
     "agent:loop:dry": "node scripts/pantavion-safe-patch-loop.cjs --dry-run",
     "audit:agent-loop": "node scripts/pantavion-safe-patch-loop-gate.cjs",
-    "audit:agent-dashboard": "node scripts/pantavion-agent-dashboard-gate.cjs"
+    "audit:agent-dashboard": "node scripts/pantavion-agent-dashboard-gate.cjs",
+    "agent:auto-code": "node scripts/pantavion-autonomous-code-runner.cjs",
+    "audit:auto-code": "node scripts/pantavion-autonomous-code-runner-gate.cjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
