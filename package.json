@@ -81,7 +81,10 @@
     "audit:live-surface": "node scripts/pantavion-live-surface-gate.cjs",
     "agent:safe-patch": "node scripts/pantavion-safe-patch-writer.cjs",
     "audit:safe-patch": "node scripts/pantavion-safe-patch-writer-gate.cjs",
-    "audit:capability-registry": "node scripts/pantavion-capability-registry-gate.cjs"
+    "audit:capability-registry": "node scripts/pantavion-capability-registry-gate.cjs",
+    "agent:loop": "node scripts/pantavion-safe-patch-loop.cjs",
+    "agent:loop:dry": "node scripts/pantavion-safe-patch-loop.cjs --dry-run",
+    "audit:agent-loop": "node scripts/pantavion-safe-patch-loop-gate.cjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
