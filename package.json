@@ -88,7 +88,8 @@
     "audit:agent-dashboard": "node scripts/pantavion-agent-dashboard-gate.cjs",
     "agent:auto-code": "node scripts/pantavion-autonomous-code-runner.cjs",
     "audit:auto-code": "node scripts/pantavion-autonomous-code-runner-gate.cjs",
-    "audit:founder-approvals": "node scripts/pantavion-founder-approvals-gate.cjs"
+    "audit:founder-approvals": "node scripts/pantavion-founder-approvals-gate.cjs",
+    "audit:language-runtime": "node scripts/pantavion-language-runtime-gate.cjs"
   },
   "dependencies": {
     "@mlightcad/cad-simple-viewer": "^1.5.5",
