@@ -2,9 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { spawnSync } = require("child_process");
 
-const PANTAVION_AUTONOMOUS_CODE_RUNNER_ID =
-  "pantavion_autonomous_code_runner_v1";
-
+const ID = "pantavion_autonomous_code_runner_v2";
 const ROOT = process.cwd();
 const runtimeDir = path.join(ROOT, ".pantavion", "agent-runtime");
 const reportPath = path.join(runtimeDir, "autonomous-code-runner-report.json");
@@ -13,37 +11,30 @@ function ensureDir(dir) {
   fs.mkdirSync(dir, { recursive: true });
 }
 
-function bin(name) {
-  if (process.platform === "win32") {
-    if (name === "npm") return "npm.cmd";
-    if (name === "npx") return "npx.cmd";
-  }
-  return name;
-}
-
-function tail(value, max = 5000) {
+function tail(value, max = 6000) {
   const text = String(value || "");
-  if (text.length <= max) return text;
-  return text.slice(text.length - max);
+  return text.length <= max ? text : text.slice(text.length - max);
 }
 
-function runStep(label, command, args) {
+function runStep(label, command) {
   const startedAt = new Date().toISOString();
   const started = Date.now();
 
-  const result = spawnSync(bin(command), args, {
+  const result = spawnSync(command, {
     cwd: ROOT,
     encoding: "utf8",
-    shell: false,
+    shell: true,
     windowsHide: true,
     maxBuffer: 1024 * 1024 * 20
   });
 
   return {
     label,
-    command: [command].concat(args).join(" "),
+    command,
     ok: result.status === 0,
     status: result.status,
+    signal: result.signal || null,
+    error: result.error ? result.error.message : "",
     durationMs: Date.now() - started,
     startedAt,
     finishedAt: new Date().toISOString(),
@@ -53,38 +44,29 @@ function runStep(label, command, args) {
 }
 
 function gitStatusShort() {
-  const result = spawnSync(bin("git"), ["status", "--short"], {
+  const result = spawnSync("git status --short", {
     cwd: ROOT,
     encoding: "utf8",
-    shell: false,
+    shell: true,
     windowsHide: true
   });
 
-  if (result.status !== 0) {
-    return {
-      ok: false,
-      text: "",
-      error: tail(result.stderr || result.stdout)
-    };
-  }
-
   return {
-    ok: true,
+    ok: result.status === 0,
     text: String(result.stdout || "").trim(),
-    error: ""
+    error: tail(result.stderr || result.stdout || (result.error ? result.error.message : ""))
   };
 }
 
-function parseChangedFiles(statusText) {
+function changedFiles(statusText) {
   return String(statusText || "")
     .split(/\r?\n/)
     .map((line) => line.trimEnd())
     .filter(Boolean)
-    .map((line) => {
-      const status = line.slice(0, 2).trim();
-      const file = line.slice(3).trim();
-      return { status, file };
-    });
+    .map((line) => ({
+      status: line.slice(0, 2).trim(),
+      file: line.slice(3).trim()
+    }));
 }
 
 function writeReport(report) {
@@ -92,157 +74,123 @@ function writeReport(report) {
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2) + "\n", "utf8");
 }
 
+function finish(report, exitCode) {
+  writeReport(report);
+  console.log(JSON.stringify(report, null, 2));
+  process.exit(exitCode);
+}
+
 function main() {
   ensureDir(runtimeDir);
 
-  const initialStatus = gitStatusShort();
+  const startStatus = gitStatusShort();
 
-  if (!initialStatus.ok) {
-    const report = {
-      ok: false,
-      id: PANTAVION_AUTONOMOUS_CODE_RUNNER_ID,
-      createdAt: new Date().toISOString(),
-      status: "failed_git_status",
-      error: initialStatus.error,
-      safety: {
-        bounded: true,
-        commitsBlockedByDefault: true,
-        pushBlockedByDefault: true,
-        deployBlocked: true,
-        secretsBlocked: true,
-        destructiveActionsBlocked: true,
-        founderApprovalStillRequiredForSensitiveActions: true
-      }
-    };
-
-    writeReport(report);
-    console.log(JSON.stringify(report, null, 2));
-    process.exit(1);
-  }
-
-  if (initialStatus.text) {
-    const report = {
-      ok: false,
-      id: PANTAVION_AUTONOMOUS_CODE_RUNNER_ID,
-      createdAt: new Date().toISOString(),
-      status: "blocked_dirty_worktree",
-      error: "Autonomous code runner requires clean git status before it writes new code.",
-      gitStatusStart: initialStatus.text,
-      changedFilesStart: parseChangedFiles(initialStatus.text),
-      safety: {
-        bounded: true,
-        commitsBlockedByDefault: true,
-        pushBlockedByDefault: true,
-        deployBlocked: true,
-        secretsBlocked: true,
-        destructiveActionsBlocked: true,
-        founderApprovalStillRequiredForSensitiveActions: true
-      }
-    };
-
-    writeReport(report);
-    console.log(JSON.stringify(report, null, 2));
-    process.exit(1);
-  }
-
-  const steps = [
-    {
-      label: "agent supervisor chooses safe implementation slice",
-      command: "npm",
-      args: ["run", "agent:supervisor"]
-    },
-    {
-      label: "safe patch writer writes scoped source files",
-      command: "npm",
-      args: ["run", "agent:safe-patch"]
-    },
-    {
-      label: "safe patch audit",
-      command: "npm",
-      args: ["run", "audit:safe-patch"]
-    },
-    {
-      label: "capability registry audit",
-      command: "npm",
-      args: ["run", "audit:capability-registry"]
-    },
-    {
-      label: "typescript check",
-      command: "npx",
-      args: ["tsc", "--noEmit", "--pretty", "false"]
-    },
-    {
-      label: "production build",
-      command: "npm",
-      args: ["run", "build"]
-    }
-  ];
-
-  const executed = [];
-
-  for (const step of steps) {
-    const result = runStep(step.label, step.command, step.args);
-    executed.push(result);
-
-    if (!result.ok) {
-      const endStatus = gitStatusShort();
-      const report = {
+  if (!startStatus.ok) {
+    finish(
+      {
         ok: false,
-        id: PANTAVION_AUTONOMOUS_CODE_RUNNER_ID,
+        id: ID,
         createdAt: new Date().toISOString(),
-        status: "failed",
-        failedStep: result.label,
-        steps: executed,
-        gitStatusStart: initialStatus.text,
-        gitStatusEnd: endStatus.text,
-        changedFilesEnd: parseChangedFiles(endStatus.text),
+        status: "failed_git_status",
+        error: startStatus.error
+      },
+      1
+    );
+  }
+
+  if (startStatus.text) {
+    finish(
+      {
+        ok: false,
+        id: ID,
+        createdAt: new Date().toISOString(),
+        status: "blocked_dirty_worktree",
+        error: "Autonomous runner requires clean git status before writing code.",
+        gitStatusStart: startStatus.text,
+        changedFilesStart: changedFiles(startStatus.text),
         safety: {
-          bounded: true,
           commitsBlockedByDefault: true,
           pushBlockedByDefault: true,
           deployBlocked: true,
           secretsBlocked: true,
-          destructiveActionsBlocked: true,
-          founderApprovalStillRequiredForSensitiveActions: true
-        },
-        truthRule:
-          "Autonomous runner writes only through existing safe patch scripts and stops on failed audit, typecheck or build."
-      };
+          riskyActionsGoToFounderApprovalDashboard: true
+        }
+      },
+      1
+    );
+  }
 
-      writeReport(report);
-      console.log(JSON.stringify(report, null, 2));
-      process.exit(1);
+  const steps = [
+    ["agent supervisor chooses safe implementation slice", "npm run agent:supervisor"],
+    ["safe patch writer writes scoped source files", "npm run agent:safe-patch"],
+    ["safe patch audit", "npm run audit:safe-patch"],
+    ["capability registry audit", "npm run audit:capability-registry"],
+    ["founder approvals route audit", "npm run audit:founder-approvals"],
+    ["typescript check", "npx tsc --noEmit --pretty false"],
+    ["production build", "npm run build"]
+  ];
+
+  const executed = [];
+
+  for (const [label, command] of steps) {
+    const result = runStep(label, command);
+    executed.push(result);
+
+    if (!result.ok) {
+      const endStatus = gitStatusShort();
+
+      finish(
+        {
+          ok: false,
+          id: ID,
+          createdAt: new Date().toISOString(),
+          status: "failed",
+          failedStep: label,
+          steps: executed,
+          gitStatusStart: startStatus.text,
+          gitStatusEnd: endStatus.text,
+          changedFilesEnd: changedFiles(endStatus.text),
+          safety: {
+            commitsBlockedByDefault: true,
+            pushBlockedByDefault: true,
+            deployBlocked: true,
+            secretsBlocked: true,
+            riskyActionsGoToFounderApprovalDashboard: true
+          },
+          truthRule:
+            "Pantavion stops on failed audit/typecheck/build and reports the exact failed step."
+        },
+        1
+      );
     }
   }
 
-  const finalStatus = gitStatusShort();
+  const endStatus = gitStatusShort();
 
-  const report = {
-    ok: true,
-    id: PANTAVION_AUTONOMOUS_CODE_RUNNER_ID,
-    createdAt: new Date().toISOString(),
-    status: "completed",
-    steps: executed,
-    gitStatusStart: initialStatus.text,
-    gitStatusEnd: finalStatus.text,
-    changedFilesEnd: parseChangedFiles(finalStatus.text),
-    safety: {
-      bounded: true,
-      commitsBlockedByDefault: true,
-      pushBlockedByDefault: true,
-      deployBlocked: true,
-      secretsBlocked: true,
-      destructiveActionsBlocked: true,
-      founderApprovalStillRequiredForSensitiveActions: true
+  finish(
+    {
+      ok: true,
+      id: ID,
+      createdAt: new Date().toISOString(),
+      status: "completed",
+      steps: executed,
+      gitStatusStart: startStatus.text,
+      gitStatusEnd: endStatus.text,
+      changedFilesEnd: changedFiles(endStatus.text),
+      nextHumanAction:
+        "Review generated scoped files. Commit only approved scoped files.",
+      safety: {
+        commitsBlockedByDefault: true,
+        pushBlockedByDefault: true,
+        deployBlocked: true,
+        secretsBlocked: true,
+        riskyActionsGoToFounderApprovalDashboard: true
+      },
+      truthRule:
+        "Safe code generation may run automatically. Z3/Z4 actions require founder approval."
     },
-    nextHumanAction:
-      "Review git status. Commit only scoped generated files after founder approval.",
-    truthRule:
-      "Pantavion generated or refreshed code through the controlled safe patch path. Missing/failed steps are reported, not hidden."
-  };
-
-  writeReport(report);
-  console.log(JSON.stringify(report, null, 2));
+    0
+  );
 }
 
 main();
