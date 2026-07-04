@@ -5,12 +5,11 @@ const { spawnSync } = require("child_process");
 const root = process.cwd();
 const LOOP_ID = "pantavion_safe_patch_loop_v1";
 
-const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
-const npxCmd = process.platform === "win32" ? "npx.cmd" : "npx";
-
 const dryRun =
   process.argv.includes("--dry-run") ||
   process.env.PANTAVION_AGENT_LOOP_DRY_RUN === "1";
+
+const forceSafePatch = process.env.PANTAVION_AGENT_LOOP_FORCE_SAFE_PATCH === "1";
 
 const reportPath = path.join(
   root,
@@ -19,11 +18,41 @@ const reportPath = path.join(
   "safe-patch-loop-report.json"
 );
 
-function run(command, args, label, required = true) {
+const selectedSlicePath = path.join(
+  root,
+  ".pantavion",
+  "agent-runtime",
+  "selected-implementation-slice.json"
+);
+
+const supportedWriterTargets = [
+  "core/capabilities/pantavion-capability-registry.ts",
+  "app/api/pantavion/capabilities/route.ts",
+  "scripts/pantavion-capability-registry-gate.cjs",
+  "docs/continuity/pantavion-safe-patch-writer.md"
+];
+
+function now() {
+  return new Date().toISOString();
+}
+
+function exists(relativePath) {
+  return fs.existsSync(path.join(root, relativePath));
+}
+
+function readJson(filePath, fallback) {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, "utf8"));
+  } catch {
+    return fallback;
+  }
+}
+
+function runShell(commandText, label, required = true) {
   if (dryRun) {
     return {
       label,
-      command: [command, ...args].join(" "),
+      command: commandText,
       ok: true,
       skipped: true,
       reason: "dry_run"
@@ -31,6 +60,12 @@ function run(command, args, label, required = true) {
   }
 
   const startedAt = Date.now();
+
+  const command = process.platform === "win32" ? "cmd.exe" : "sh";
+  const args =
+    process.platform === "win32"
+      ? ["/d", "/s", "/c", commandText]
+      : ["-lc", commandText];
 
   const result = spawnSync(command, args, {
     cwd: root,
@@ -40,9 +75,10 @@ function run(command, args, label, required = true) {
 
   const record = {
     label,
-    command: [command, ...args].join(" "),
-    ok: result.status === 0,
+    command: commandText,
+    ok: result.status === 0 && !result.error,
     status: result.status,
+    error: result.error ? String(result.error.message || result.error) : null,
     durationMs: Date.now() - startedAt,
     stdoutTail: String(result.stdout || "").slice(-3000),
     stderrTail: String(result.stderr || "").slice(-3000)
@@ -58,11 +94,11 @@ function run(command, args, label, required = true) {
 }
 
 function npmRun(script, label, required = true) {
-  return run(npmCmd, ["run", script], label, required);
+  return runShell(`npm run ${script}`, label, required);
 }
 
 function typecheck() {
-  return run(npxCmd, ["tsc", "--noEmit", "--pretty", "false"], "typecheck", true);
+  return runShell("npx tsc --noEmit --pretty false", "typecheck", true);
 }
 
 function gitStatus() {
@@ -80,13 +116,51 @@ function writeReport(report) {
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2) + "\n", "utf8");
 }
 
+function isSafeSlice(slice) {
+  return Boolean(
+    slice &&
+      slice.approvalRequired !== true &&
+      (slice.riskZone === "Z1" || slice.riskZone === "Z2")
+  );
+}
+
+function decideSafePatch(selectedSlice) {
+  const missingSupportedTargets = supportedWriterTargets.filter((target) => !exists(target));
+  const selectedSliceSafe = isSafeSlice(selectedSlice);
+
+  const reasons = [];
+
+  if (!selectedSliceSafe) {
+    reasons.push("selected_slice_not_safe_or_missing");
+  }
+
+  if (missingSupportedTargets.length === 0 && !forceSafePatch) {
+    reasons.push("no_missing_supported_targets");
+  }
+
+  const shouldRun =
+    forceSafePatch ||
+    (selectedSliceSafe && missingSupportedTargets.length > 0);
+
+  return {
+    shouldRun,
+    forceSafePatch,
+    selectedSliceSafe,
+    missingSupportedTargets,
+    reasons
+  };
+}
+
 const report = {
   ok: false,
   id: LOOP_ID,
-  createdAt: new Date().toISOString(),
+  createdAt: now(),
   dryRun,
+  forceSafePatch,
   status: "starting",
   steps: [],
+  selectedSlice: null,
+  safePatchDecision: null,
   safety: {
     bounded: true,
     commitsBlocked: true,
@@ -106,7 +180,24 @@ try {
   }
 
   report.steps.push(npmRun("agent:supervisor", "agent_supervisor", true));
-  report.steps.push(npmRun("agent:safe-patch", "agent_safe_patch", true));
+
+  const selectedSlice = readJson(selectedSlicePath, null);
+  report.selectedSlice = selectedSlice;
+
+  const decision = decideSafePatch(selectedSlice);
+  report.safePatchDecision = decision;
+
+  if (decision.shouldRun) {
+    report.steps.push(npmRun("agent:safe-patch", "agent_safe_patch", true));
+  } else {
+    report.steps.push({
+      label: "agent_safe_patch",
+      ok: true,
+      skipped: true,
+      reason: decision.reasons.join(", ")
+    });
+  }
+
   report.steps.push(npmRun("audit:safe-patch", "audit_safe_patch", true));
   report.steps.push(npmRun("audit:capability-registry", "audit_capability_registry", true));
   report.steps.push(typecheck());
@@ -135,6 +226,7 @@ try {
         id: report.id,
         status: report.status,
         dryRun: report.dryRun,
+        safePatchDecision: report.safePatchDecision,
         report: ".pantavion/agent-runtime/safe-patch-loop-report.json"
       },
       null,
