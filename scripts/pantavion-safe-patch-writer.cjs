@@ -256,7 +256,7 @@ export function getPantavionCapabilityRegistry() {
     status: "live_capability_registry_foundation",
     capabilities: PANTAVION_CAPABILITIES,
     truthRule:
-      "Pantavion exposes truthful capability status. Visible does not mean production-complete."
+      "Pantavion exposes truthful capability status. visible does not mean production-complete."
   };
 }
 
@@ -491,3 +491,5 @@ console.log(JSON.stringify({
   wrote,
   receipt: "data/pantavion-safe-patches/last-safe-patch-receipt.json"
 }, null, 2));
+
+
