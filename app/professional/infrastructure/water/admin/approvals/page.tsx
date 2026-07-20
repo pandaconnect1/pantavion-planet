@@ -228,9 +228,17 @@ export default function WaterApprovalInboxPage() {
   return (
     <main className="min-h-screen bg-[#06111f] px-4 py-6 text-white">
       <section className="mx-auto w-full max-w-6xl rounded-3xl border border-[#b89445]/50 bg-[#0d1a2d] p-5 shadow-2xl">
-        <Link href="/professional/infrastructure/water/admin" className="text-sm font-black text-[#f2c766]">
-          ← Πίσω στο Water Admin
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/professional/infrastructure/water" className="text-sm font-black text-[#f2c766]">
+            ← Πίσω στην Ύδρευση
+          </Link>
+          <Link
+            href="/professional/infrastructure/water/admin/faults"
+            className="text-sm font-black text-[#f2c766]"
+          >
+            Βλάβες προς έγκριση
+          </Link>
+        </div>
 
         <p className="mt-6 text-xs font-black uppercase tracking-[0.24em] text-[#f2c766]">
           ΚΕΝΤΡΟ ΕΓΚΡΙΣΕΩΝ ΥΔΡΕΥΣΗΣ

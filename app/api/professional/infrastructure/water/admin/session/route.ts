@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     const response = NextResponse.json({
       ok: true,
       message: "Το founder/admin session ενεργοποιήθηκε.",
-      redirectTo: "/professional/infrastructure/water/admin/faults",
+      redirectTo: "/professional/infrastructure/water/admin/approvals",
     });
 
     response.cookies.set({

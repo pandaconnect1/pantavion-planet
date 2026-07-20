@@ -125,11 +125,18 @@ export default function WaterAdminFaultsPage() {
         </p>
 
         <div className="mt-5 flex flex-wrap gap-3">
+          <Link
+            href="/professional/infrastructure/water/admin/approvals"
+            className="rounded-2xl bg-[#f2c766] px-5 py-3 font-black text-black"
+          >
+            Users / Εγκρίσεις
+          </Link>
+
           <button
             type="button"
             onClick={() => void loadFaults()}
             disabled={loading}
-            className="rounded-2xl bg-[#f2c766] px-5 py-3 font-black text-black disabled:opacity-60"
+            className="rounded-2xl border border-[#f2c766]/60 bg-[#f2c766]/10 px-5 py-3 font-black text-[#f2c766] disabled:opacity-60"
           >
             Ανανέωση pending βλαβών
           </button>
