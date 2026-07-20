@@ -1,5 +1,7 @@
 ﻿import { list } from "@vercel/blob";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+
+import { hasWaterAdminSession } from "@/core/security/water-admin-session";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -15,30 +17,6 @@ type BlobAvailability = {
 
 function readEnv(name: string): string {
   return (process.env[name] || "").trim();
-}
-
-function getFounderAccessCode(): string {
-  return (
-    readEnv("PANTAVION_WATER_FOUNDER_ACCESS_CODE") ||
-    readEnv("PANTAVION_WATER_ADMIN_ACCESS_CODE") ||
-    readEnv("PANTAVION_ADMIN_ACCESS_CODE")
-  );
-}
-
-function isFounderAuthorized(request: NextRequest): boolean {
-  const expectedCode = getFounderAccessCode();
-
-  if (!expectedCode) {
-    return false;
-  }
-
-  const submittedCode =
-    request.headers.get("x-pantavion-water-founder-code") ||
-    request.headers.get("x-pantavion-admin-code") ||
-    request.cookies.get("pantavion_water_founder_code")?.value ||
-    "";
-
-  return submittedCode.trim() === expectedCode;
 }
 
 async function checkPrivateBlobPrefix(
@@ -86,8 +64,8 @@ async function checkPrivateBlobPrefix(
   }
 }
 
-export async function GET(request: NextRequest) {
-  if (!isFounderAuthorized(request)) {
+export async function GET(request: Request) {
+  if (!hasWaterAdminSession(request)) {
     return NextResponse.json(
       {
         ok: false,

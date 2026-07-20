@@ -1,5 +1,7 @@
 import { list } from "@vercel/blob";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+
+import { hasWaterAdminSession } from "@/core/security/water-admin-session";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -30,14 +32,6 @@ type ApprovedUserRecord = {
 
 function clean(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
-}
-
-function founderCodeFromEnv(): string {
-  return (
-    clean(process.env.PANTAVION_WATER_FOUNDER_ACCESS_CODE) ||
-    clean(process.env.PANTAVION_WATER_ADMIN_ACCESS_CODE) ||
-    clean(process.env.PANTAVION_ADMIN_ACCESS_CODE)
-  );
 }
 
 function privateBlobHeaders(): HeadersInit {
@@ -88,39 +82,12 @@ function normalizeApprovedRecord(
   };
 }
 
-export async function POST(request: NextRequest) {
-  const expectedCode = founderCodeFromEnv();
-
-  if (!expectedCode) {
+export async function POST(request: Request) {
+  if (!hasWaterAdminSession(request)) {
     return NextResponse.json(
       {
         ok: false,
-        error: "missing_founder_code_env",
-      },
-      { status: 500, headers: { "Cache-Control": "no-store" } }
-    );
-  }
-
-  let body: Record<string, unknown> = {};
-
-  try {
-    body = (await request.json()) as Record<string, unknown>;
-  } catch {
-    body = {};
-  }
-
-  const submittedCode =
-    clean(body.founderCode) ||
-    clean(body.adminCode) ||
-    clean(body.code) ||
-    clean(request.headers.get("x-pantavion-water-founder-code")) ||
-    clean(request.headers.get("x-pantavion-admin-code"));
-
-  if (submittedCode !== expectedCode) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "unauthorized",
+        error: "admin_session_required",
       },
       { status: 401, headers: { "Cache-Control": "no-store" } }
     );

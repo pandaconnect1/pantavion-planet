@@ -174,7 +174,6 @@ function writeWaterDeviceApproval() {
 
 const PANTAVION_WATER_DEVICE_ID_KEY = "pantavion:water:device-id:v1";
 const PANTAVION_WATER_DEVICE_TOKEN_KEY = "pantavion:water:device-token:v1";
-const PANTAVION_WATER_FOUNDER_CODE_STORAGE_KEY = "pantavion.water.admin.founderCode.v1";
 
 function randomWaterDeviceSecret() {
   if (typeof window !== "undefined" && window.crypto?.getRandomValues) {
@@ -215,21 +214,6 @@ function getOrCreateWaterAccessDevice() {
     deviceToken,
     deviceLabel: `${window.navigator.platform || "unknown"} / ${window.navigator.userAgent.slice(0, 90)}`,
   };
-}
-
-function getSavedWaterFounderCode() {
-  if (typeof window === "undefined") return "";
-
-  return window.localStorage.getItem(PANTAVION_WATER_FOUNDER_CODE_STORAGE_KEY) || "";
-}
-
-function rememberSavedWaterFounderCode(value: string) {
-  if (typeof window === "undefined") return;
-
-  const clean = value.trim();
-  if (!clean) return;
-
-  window.localStorage.setItem(PANTAVION_WATER_FOUNDER_CODE_STORAGE_KEY, clean);
 }
 
 function getInitialLang(): Lang {
@@ -474,7 +458,6 @@ export default function ControlledWaterSegmentClient() {
   const [organization, setOrganization] = useState("");
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [reason, setReason] = useState("");
-  const [accessCode, setAccessCode] = useState("");
   const [street, setStreet] = useState("");
   const [number, setNumber] = useState("");
   const [area, setArea] = useState("Λεμεσός");
@@ -507,11 +490,11 @@ export default function ControlledWaterSegmentClient() {
       try {
         const response = await fetch("/api/professional/infrastructure/water/access/authorize", {
           method: "POST",
+          credentials: "include",
           headers: {
             "content-type": "application/json",
           },
           body: JSON.stringify({
-            code: getSavedWaterFounderCode(),
             deviceId: device.deviceId,
             deviceToken: device.deviceToken,
           }),
@@ -620,54 +603,6 @@ export default function ControlledWaterSegmentClient() {
       setAccessMessage(`${t.requestSent} Request ID: ${json.requestId || "pending"}. Μείνε στην ίδια συσκευή μέχρι να εγκριθεί.`);
     } catch {
       setAccessMessage(t.requestFailed);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function authorizeAccess() {
-    setLoading(true);
-    setAccessMessage(t.loading);
-
-    const device = getOrCreateWaterAccessDevice();
-
-    try {
-      const response = await fetch("/api/professional/infrastructure/water/access/authorize", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          code: accessCode,
-          firstName,
-          lastName,
-          title: roleTitle,
-          deviceId: device.deviceId,
-          deviceToken: device.deviceToken,
-        }),
-      });
-
-      const json = (await response.json()) as { ok?: boolean; error?: string };
-
-      if (!response.ok || !json.ok) {
-        if (json.error === "founder_access_code_not_configured") {
-          setAccessMessage(t.accessNotConfigured);
-        } else {
-          setAccessMessage(t.accessDenied);
-        }
-
-        return;
-      }
-
-      if (accessCode.trim()) {
-        rememberSavedWaterFounderCode(accessCode.trim());
-      }
-
-      writeWaterDeviceApproval();
-      setAccessApproved(true);
-      setAccessMessage(t.accessApproved);
-    } catch {
-      setAccessMessage(t.accessDenied);
     } finally {
       setLoading(false);
     }
@@ -957,7 +892,6 @@ export default function ControlledWaterSegmentClient() {
       const tiles = splitVisibleBboxIntoSafeTiles(visibleBbox);
       const allFeatures: any[] = [];
       const device = getOrCreateWaterAccessDevice();
-      const savedFounderCode = getSavedWaterFounderCode();
 
       for (const tile of tiles) {
         const params = new URLSearchParams({
@@ -973,10 +907,10 @@ export default function ControlledWaterSegmentClient() {
           `/api/professional/infrastructure/water/segment/bbox?${params.toString()}`,
           {
             cache: "no-store",
+            credentials: "include",
             headers: {
               "x-pantavion-water-device-id": device.deviceId,
               "x-pantavion-water-device-token": device.deviceToken,
-              "x-pantavion-water-founder-code": savedFounderCode,
             },
           },
         );
@@ -1115,7 +1049,7 @@ export default function ControlledWaterSegmentClient() {
             <p className="mt-4 text-base leading-8 text-slate-200">{t.accessText}</p>
             <p className="mt-3 text-sm font-bold text-[#f2c766]">{t.protected}</p>
 
-            <div className="mt-6 grid gap-4 lg:grid-cols-2">
+            <div className="mt-6">
               <section className="rounded-3xl border border-slate-700 bg-[#07111f] p-4">
                 <h2 className="text-xl font-black text-[#f2c766]">{t.requestAccess}</h2>
                 <p className="mt-2 text-sm leading-6 text-slate-300">{t.requestText}</p>
@@ -1139,32 +1073,6 @@ export default function ControlledWaterSegmentClient() {
                 </button>
               </section>
 
-              <section className="rounded-3xl border border-emerald-700/60 bg-emerald-950/20 p-4">
-                <h2 className="text-xl font-black text-emerald-100">{t.founderAccess}</h2>
-                <p className="mt-2 text-sm leading-6 text-emerald-100/80">{t.accessText}</p>
-
-                <div className="mt-4 grid gap-3">
-                  <input value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder={t.firstName} className="rounded-2xl border border-emerald-700/70 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
-                  <input value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder={t.lastName} className="rounded-2xl border border-emerald-700/70 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
-                  <input value={roleTitle} onChange={(event) => setRoleTitle(event.target.value)} placeholder={t.roleTitle} className="rounded-2xl border border-emerald-700/70 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
-                  <input
-                    value={accessCode}
-                    onChange={(event) => setAccessCode(event.target.value)}
-                    placeholder={t.accessCode}
-                    type="password"
-                    className="rounded-2xl border border-emerald-700/70 bg-[#0d1a2d] px-4 py-3 text-white outline-none"
-                  />
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => void authorizeAccess()}
-                  disabled={loading}
-                  className="mt-4 w-full rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-4 text-base font-black text-emerald-100 disabled:opacity-60"
-                >
-                  {t.enterApproved}
-                </button>
-              </section>
             </div>
 
             {accessMessage ? (
@@ -1254,5 +1162,3 @@ export default function ControlledWaterSegmentClient() {
     </main>
   );
 }
-
-

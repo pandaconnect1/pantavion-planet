@@ -4,6 +4,7 @@ import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 import { getPantavionWaterAbcMapSystemContract } from "@/core/infrastructure/water/water-abc-map-system-contract";
+import { hasWaterAdminSession } from "@/core/security/water-admin-session";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -21,7 +22,6 @@ type ApprovedWaterDevicePayload = {
 };
 
 type RegistryRequestBody = {
-  code?: string;
   deviceId?: string;
   deviceToken?: string;
 };
@@ -83,16 +83,14 @@ async function approvedDeviceMatches(deviceId: string, deviceToken: string) {
   }
 }
 
-async function authorizeRegistryAccess(body: RegistryRequestBody) {
-  const founderCode = process.env.PANTAVION_WATER_FOUNDER_ACCESS_CODE || "";
-  const submittedCode = clean(body.code);
+async function authorizeRegistryAccess(request: Request, body: RegistryRequestBody) {
   const deviceId = clean(body.deviceId);
   const deviceToken = clean(body.deviceToken);
 
-  if (founderCode && submittedCode === founderCode) {
+  if (hasWaterAdminSession(request)) {
     return {
       ok: true,
-      mode: "founder-admin" as const,
+      mode: "admin-session" as const,
     };
   }
 
@@ -125,7 +123,7 @@ function readSourcePresence() {
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as RegistryRequestBody;
-    const access = await authorizeRegistryAccess(body);
+    const access = await authorizeRegistryAccess(request, body);
 
     if (!access.ok) {
       return NextResponse.json(

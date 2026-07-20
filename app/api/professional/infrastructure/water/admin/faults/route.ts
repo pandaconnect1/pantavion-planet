@@ -1,7 +1,7 @@
-import { createHash } from "crypto";
-
 import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
+
+import { hasWaterAdminSession } from "@/core/security/water-admin-session";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -98,35 +98,6 @@ function maskPhone(value: string) {
   return `${cleaned.slice(0, 3)}****${cleaned.slice(-2)}`;
 }
 
-function cookieValue(cookieHeader: string, name: string) {
-  const cookies = cookieHeader.split(";").map((part) => part.trim());
-  const found = cookies.find((part) => part.startsWith(`${name}=`));
-
-  return found ? decodeURIComponent(found.slice(name.length + 1)) : "";
-}
-
-function adminSessionValue(secret: string) {
-  return createHash("sha256").update(`pantavion-water-admin-session-v1:${secret}`).digest("hex");
-}
-
-function trustedDeviceValue(secret: string) {
-  return createHash("sha256").update(`pantavion-water-trusted-device-v1:${secret}`).digest("hex");
-}
-
-function hasAdminReadSession(request: Request) {
-  if (process.env.NODE_ENV !== "production") return true;
-
-  const cookieHeader = request.headers.get("cookie") || "";
-  const expectedSecret = process.env.PANTAVION_WATER_ADMIN_SESSION_SECRET || "";
-
-  if (!expectedSecret) return false;
-
-  const expectedSession = adminSessionValue(expectedSecret);
-  const sessionCookie = cookieValue(cookieHeader, "pantavion_water_admin_session");
-
-  return Boolean(sessionCookie && sessionCookie === expectedSession);
-}
-
 async function readBlobJson(blob: BlobListItem) {
   const url = blob.downloadUrl || blob.url;
 
@@ -185,7 +156,7 @@ function publicFault(item: FaultDossier) {
 
 export async function GET(request: Request) {
   try {
-    if (!hasAdminReadSession(request)) {
+    if (!hasWaterAdminSession(request)) {
       return NextResponse.json(
         {
           ok: false,

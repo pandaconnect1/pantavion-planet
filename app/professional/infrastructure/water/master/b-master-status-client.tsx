@@ -25,23 +25,6 @@ type BMasterApiResponse = {
 
 type LoadState = "idle" | "loading" | "ready" | "locked" | "error";
 
-const FOUNDER_CODE_KEYS = [
-  "pantavion_water_founder_code",
-  "waterFounderCode",
-  "waterFounderCodeClean",
-];
-
-function readStoredFounderCode(): string | null {
-  if (typeof window === "undefined") return null;
-
-  for (const key of FOUNDER_CODE_KEYS) {
-    const value = window.localStorage.getItem(key);
-    if (value && value.trim().length > 0) return value.trim();
-  }
-
-  return null;
-}
-
 function textValue(value: unknown): string {
   if (typeof value === "string" && value.trim().length > 0) return value;
   if (typeof value === "number" || typeof value === "boolean") return String(value);
@@ -70,26 +53,13 @@ export default function BMasterStatusClient() {
   const manifest = useMemo(() => readObject(response?.manifest), [response]);
 
   const loadStatus = useCallback(async () => {
-    const founderCode = readStoredFounderCode();
-
-    if (!founderCode) {
-      setState("locked");
-      setError(
-        "Δεν βρέθηκε founder/admin unlock σε αυτή τη συσκευή. Άνοιξε πρώτα το Mobile Founder unlock."
-      );
-      setResponse(null);
-      return;
-    }
-
     setState("loading");
     setError(null);
 
     try {
       const result = await fetch("/api/professional/infrastructure/water/master/b", {
         method: "GET",
-        headers: {
-          "x-pantavion-water-founder-code": founderCode,
-        },
+        credentials: "include",
         cache: "no-store",
       });
 
@@ -154,13 +124,13 @@ export default function BMasterStatusClient() {
 
           <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-slate-300">
-              Founder/Admin Session
+              Private session
             </p>
             <p className="mt-3 text-sm leading-6 text-slate-200">
-              Η σελίδα χρησιμοποιεί το ήδη αποθηκευμένο founder unlock της
-              συσκευής. Δεν ζητάει κωδικό μέσα στο B Map.
+              Η σελίδα δεν αποθηκεύει ούτε εμφανίζει κωδικό στον browser. Τα
+              προστατευμένα στοιχεία φορτώνονται μόνο με ενεργό ασφαλές session.
             </p>
-            <div className="mt-5 flex flex-wrap gap-3">
+            <div className="mt-5">
               <button
                 type="button"
                 onClick={() => void loadStatus()}
@@ -169,13 +139,6 @@ export default function BMasterStatusClient() {
               >
                 {state === "loading" ? "CHECKING" : "REFRESH B STATUS"}
               </button>
-
-              <a
-                href="/professional/infrastructure/water/mobile-founder"
-                className="rounded-2xl border border-white/25 px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white transition hover:bg-white/10"
-              >
-                Founder Unlock
-              </a>
             </div>
           </div>
         </div>

@@ -2,6 +2,8 @@
 
 import { list } from "@vercel/blob";
 
+import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -79,13 +81,10 @@ async function approvedDeviceMatches(deviceId: string, deviceToken: string) {
 }
 
 async function assertAccess(request: Request) {
-  const founderCode = clean(process.env.PANTAVION_WATER_FOUNDER_ACCESS_CODE);
-  const submittedFounderCode = clean(request.headers.get("x-pantavion-water-founder-code"));
-
-  if (founderCode && submittedFounderCode === founderCode) {
+  if (hasWaterAdminSession(request)) {
     return {
       allowed: true,
-      mode: "founder",
+      mode: "admin-session",
     };
   }
 
@@ -207,4 +206,3 @@ export async function GET(request: Request) {
     },
   });
 }
-

@@ -11,23 +11,6 @@ import {
   WATER_VISIBILITY_RULES,
 } from "@/core/water/water-intelligence-master-contract";
 
-const FOUNDER_CODE_STORAGE_KEY = "pantavion.water.admin.founderCode.v1";
-
-function getSavedFounderCode() {
-  if (typeof window === "undefined") return "";
-  return window.localStorage.getItem(FOUNDER_CODE_STORAGE_KEY) || "";
-}
-
-function saveFounderCode(value: string) {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(FOUNDER_CODE_STORAGE_KEY, value);
-}
-
-function forgetFounderCode() {
-  if (typeof window === "undefined") return;
-  window.localStorage.removeItem(FOUNDER_CODE_STORAGE_KEY);
-}
-
 function Chip({ children }: { children: React.ReactNode }) {
   return (
     <span className="rounded-full border border-[#f6c85f]/25 bg-[#f6c85f]/10 px-3 py-1 text-xs font-black text-[#ffe29a]">
@@ -106,34 +89,18 @@ function FlowCard({
 }
 
 export default function WaterIntelligenceCommandClient() {
-  const [founderCode, setFounderCode] = useState("");
   const [trusted, setTrusted] = useState(false);
   const [message, setMessage] = useState("Έλεγχος πρόσβασης...");
-  const [loading, setLoading] = useState(false);
 
-  async function validateFounder(codeValue: string) {
-    const code = codeValue.trim();
-
-    if (!code) {
-      setTrusted(false);
-      setMessage("Χρειάζεται κωδικός ιδρυτή/διαχειριστή.");
-      return;
-    }
-
-    setLoading(true);
-    setMessage("Έλεγχος κωδικού...");
+  async function validateSession() {
+    setMessage("Έλεγχος ασφαλούς session...");
 
     try {
-      const response = await fetch(
-        "/api/professional/infrastructure/water/access/admin/requests",
-        {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({ founderCode: code }),
-        },
-      );
+      const response = await fetch("/api/professional/infrastructure/water/admin/session", {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+      });
 
       const json = (await response.json()) as { ok?: boolean };
 
@@ -141,29 +108,16 @@ export default function WaterIntelligenceCommandClient() {
         throw new Error("not_authorized");
       }
 
-      saveFounderCode(code);
-      setFounderCode(code);
       setTrusted(true);
       setMessage("Η πρόσβαση εγκρίθηκε για το Κέντρο Διοίκησης Ύδρευσης.");
     } catch {
       setTrusted(false);
-      setMessage("Δεν εγκρίθηκε η πρόσβαση. Έλεγξε τον κωδικό.");
-    } finally {
-      setLoading(false);
+      setMessage("Το ασφαλές session έληξε.");
     }
   }
 
   useEffect(() => {
-    const saved = getSavedFounderCode();
-    setFounderCode(saved);
-
-    if (saved) {
-      void validateFounder(saved);
-      return;
-    }
-
-    setTrusted(false);
-    setMessage("Η σελίδα αυτή είναι μόνο για ιδρυτή/διαχειριστή.");
+    void validateSession();
   }, []);
 
   const sequence = useMemo(() => WATER_IMPLEMENTATION_SEQUENCE, []);
@@ -186,21 +140,6 @@ export default function WaterIntelligenceCommandClient() {
             </p>
 
             <div className="mt-6 grid gap-3">
-              <input
-                value={founderCode}
-                onChange={(event) => setFounderCode(event.target.value)}
-                type="password"
-                placeholder="Κωδικός ιδρυτή / διαχειριστή"
-                className="rounded-2xl border border-[#f6c85f]/35 bg-black/25 px-4 py-4 text-white outline-none"
-              />
-              <button
-                type="button"
-                onClick={() => void validateFounder(founderCode)}
-                disabled={loading}
-                className="rounded-2xl bg-[#f6c85f] px-5 py-4 font-black text-black disabled:opacity-60"
-              >
-                Άνοιγμα κέντρου διοίκησης
-              </button>
               <p className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm font-bold text-[#ffe29a]">
                 {message}
               </p>
@@ -275,10 +214,13 @@ export default function WaterIntelligenceCommandClient() {
             <button
               type="button"
               onClick={() => {
-                forgetFounderCode();
-                setTrusted(false);
-                setFounderCode("");
-                setMessage("Η συσκευή βγήκε από το κέντρο διοίκησης.");
+                void fetch("/api/professional/infrastructure/water/admin/session", {
+                  method: "DELETE",
+                  credentials: "include",
+                }).finally(() => {
+                  setTrusted(false);
+                  window.location.href = "/professional/infrastructure/water";
+                });
               }}
               className="rounded-full border border-red-400/35 bg-red-500/10 px-5 py-3 text-sm font-black text-red-100"
             >

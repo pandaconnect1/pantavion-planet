@@ -1,12 +1,16 @@
-import { createHash, timingSafeEqual } from "crypto";
-
 import { NextResponse } from "next/server";
+
+import {
+  createWaterAdminSessionValue,
+  getWaterAdminAccessCode,
+  getWaterAdminSessionSecret,
+  hasWaterAdminSession,
+  safeSecretEqual,
+  WATER_ADMIN_SESSION_COOKIE,
+} from "@/core/security/water-admin-session";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const SESSION_COOKIE = "pantavion_water_admin_session";
-const TRUSTED_DEVICE_COOKIE = "pantavion_water_trusted_device";
 
 type AdminSessionBody = {
   accessCode?: string;
@@ -16,24 +20,12 @@ function clean(value: unknown, maxLength = 1000) {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
 }
 
-function sessionValue(secret: string) {
-  return createHash("sha256").update(`pantavion-water-admin-session-v1:${secret}`).digest("hex");
-}
-
-function safeEqual(a: string, b: string) {
-  const left = Buffer.from(a);
-  const right = Buffer.from(b);
-
-  if (left.length !== right.length) return false;
-
-  return timingSafeEqual(left, right);
-}
-
 export async function POST(request: Request) {
   try {
-    const expectedSecret = clean(process.env.PANTAVION_WATER_ADMIN_SESSION_SECRET, 1000);
+    const expectedAccessCode = getWaterAdminAccessCode();
+    const sessionSecret = getWaterAdminSessionSecret();
 
-    if (!expectedSecret) {
+    if (!expectedAccessCode || !sessionSecret) {
       return NextResponse.json(
         {
           ok: false,
@@ -47,7 +39,7 @@ export async function POST(request: Request) {
     const body = (await request.json()) as AdminSessionBody;
     const accessCode = clean(body.accessCode, 1000);
 
-    if (!accessCode || !safeEqual(accessCode, expectedSecret)) {
+    if (!accessCode || !safeSecretEqual(accessCode, expectedAccessCode)) {
       return NextResponse.json(
         {
           ok: false,
@@ -65,10 +57,10 @@ export async function POST(request: Request) {
     });
 
     response.cookies.set({
-      name: SESSION_COOKIE,
-      value: sessionValue(expectedSecret),
+      name: WATER_ADMIN_SESSION_COOKIE,
+      value: createWaterAdminSessionValue(sessionSecret),
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
       maxAge: 60 * 60 * 8,
@@ -86,6 +78,23 @@ export async function POST(request: Request) {
   }
 }
 
+export async function GET(request: Request) {
+  const authorized = hasWaterAdminSession(request);
+
+  return NextResponse.json(
+    {
+      ok: authorized,
+      authenticated: authorized,
+    },
+    {
+      status: authorized ? 200 : 401,
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    },
+  );
+}
+
 export async function DELETE() {
   const response = NextResponse.json({
     ok: true,
@@ -93,14 +102,30 @@ export async function DELETE() {
   });
 
   response.cookies.set({
-    name: SESSION_COOKIE,
+    name: WATER_ADMIN_SESSION_COOKIE,
     value: "",
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     path: "/",
     maxAge: 0,
   });
+
+  for (const legacyCookie of [
+    "pantavion_water_founder_code",
+    "waterFounderCode",
+    "waterFounderCodeClean",
+  ]) {
+    response.cookies.set({
+      name: legacyCookie,
+      value: "",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 0,
+    });
+  }
 
   return response;
 }

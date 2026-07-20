@@ -210,18 +210,12 @@ export default function WaterHelpResolutionPage() {
           θα το δρομολογήσει με βάση υπεύθυνο, ανώτερο ή διαχειριστή και θα κρατήσει ιστορικό.
         </p>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        <div className="mt-5 grid gap-3">
           <Link
             href="/professional/infrastructure/water/help/inbox"
             className="rounded-2xl border border-[#f2c766]/50 bg-[#07111f] px-4 py-3 text-center font-black text-[#f2c766]"
           >
             Τα δικά μου αιτήματα
-          </Link>
-          <Link
-            href="/professional/infrastructure/water/admin/help"
-            className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-center font-black text-white"
-          >
-            Αιτήματα διαχειριστή
           </Link>
         </div>
 

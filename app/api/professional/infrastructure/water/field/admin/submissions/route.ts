@@ -1,9 +1,7 @@
 import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
-type FounderRequestBody = {
-  founderCode?: string;
-};
+import { hasWaterAdminSession } from "@/core/security/water-admin-session";
 
 type BlobLike = {
   url: string;
@@ -14,11 +12,6 @@ type BlobLike = {
 
 function clean(value: unknown, fallback = "") {
   return typeof value === "string" ? value.trim() : fallback;
-}
-
-function founderOk(value: unknown) {
-  const founderCode = process.env.PANTAVION_WATER_FOUNDER_ACCESS_CODE || "";
-  return Boolean(founderCode) && clean(value) === founderCode;
 }
 
 function privateBlobHeaders(): HeadersInit {
@@ -79,13 +72,11 @@ function normalizeSubmission(payload: Record<string, unknown>) {
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as FounderRequestBody;
-
-    if (!founderOk(body.founderCode)) {
+    if (!hasWaterAdminSession(request)) {
       return NextResponse.json(
         {
           ok: false,
-          error: "founder_not_authorized",
+          error: "admin_session_required",
         },
         { status: 403 },
       );

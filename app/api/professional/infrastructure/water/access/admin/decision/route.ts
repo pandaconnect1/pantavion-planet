@@ -1,10 +1,9 @@
 import { del, list, put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
+import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+
 type DecisionBody = {
-  founderCode?: string;
-  adminCode?: string;
-  code?: string;
   requestId?: string;
   id?: string;
   deviceId?: string;
@@ -31,20 +30,6 @@ function normalizePhone(value: unknown) {
   return clean(value)
     .toLowerCase()
     .replace(/[\s().-]/g, "");
-}
-
-function founderOk(value: unknown) {
-  const founderCode =
-    process.env.PANTAVION_WATER_FOUNDER_ACCESS_CODE ||
-    process.env.PANTAVION_WATER_ADMIN_ACCESS_CODE ||
-    process.env.PANTAVION_ADMIN_ACCESS_CODE ||
-    "";
-
-  return Boolean(founderCode) && clean(value) === founderCode;
-}
-
-function submittedFounderCode(body: DecisionBody) {
-  return clean(body.founderCode) || clean(body.adminCode) || clean(body.code);
 }
 
 function privateBlobHeaders(): HeadersInit {
@@ -376,17 +361,17 @@ async function revokeAccess(body: DecisionBody, requestPayload?: RecordLike, req
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as DecisionBody;
-
-    if (!founderOk(submittedFounderCode(body))) {
+    if (!hasWaterAdminSession(request)) {
       return NextResponse.json(
         {
           ok: false,
-          error: "founder_not_authorized",
+          error: "admin_session_required",
         },
         { status: 403 },
       );
     }
+
+    const body = (await request.json()) as DecisionBody;
 
     const decision =
       body.decision === "reject"
