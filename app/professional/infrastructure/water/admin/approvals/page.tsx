@@ -18,6 +18,19 @@ type WaterAccessRequest = {
   hasDeviceToken?: boolean;
 };
 
+type ApprovedUserRecord = {
+  id?: string;
+  deviceId?: string;
+  requestId?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  roleTitle?: string;
+  status?: string;
+  approvedAt?: string;
+  updatedAt?: string;
+};
+
 type WaterFieldSubmission = {
   id: string;
   source: string;
@@ -87,8 +100,12 @@ function typeLabel(type: string) {
 
 export default function WaterApprovalInboxPage() {
   const [requests, setRequests] = useState<WaterAccessRequest[]>([]);
+  const [approvedUsers, setApprovedUsers] = useState<ApprovedUserRecord[]>([]);
   const [fieldSubmissions, setFieldSubmissions] = useState<WaterFieldSubmission[]>([]);
+  const [managedUserKey, setManagedUserKey] = useState("");
+  const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const [message, setMessage] = useState("");
+  const [approvedMessage, setApprovedMessage] = useState("");
   const [fieldMessage, setFieldMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -113,6 +130,29 @@ export default function WaterApprovalInboxPage() {
     }
 
     return json.requests || [];
+  }
+
+  async function loadApprovedUsers() {
+    const response = await fetch("/api/professional/infrastructure/water/access/admin/approved", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({}),
+    });
+
+    const json = (await response.json()) as {
+      ok?: boolean;
+      approvedUsers?: ApprovedUserRecord[];
+      error?: string;
+    };
+
+    if (!response.ok || !json.ok) {
+      throw new Error(json.error || "approved_users_failed");
+    }
+
+    return json.approvedUsers || [];
   }
 
   async function loadFieldSubmissions() {
@@ -141,22 +181,39 @@ export default function WaterApprovalInboxPage() {
   async function loadInbox() {
     setLoading(true);
     setMessage("Φόρτωση αιτημάτων πρόσβασης...");
+    setApprovedMessage("Φόρτωση εγκεκριμένων Users...");
     setFieldMessage("Φόρτωση καταχωρήσεων πεδίου...");
 
     try {
-      const [nextRequests, nextFieldSubmissions] = await Promise.all([
+      const [requestResult, approvedResult, fieldResult] = await Promise.allSettled([
         loadAccessRequests(),
+        loadApprovedUsers(),
         loadFieldSubmissions(),
       ]);
 
-      setRequests(nextRequests);
-      setFieldSubmissions(nextFieldSubmissions);
+      if (requestResult.status === "fulfilled") {
+        setRequests(requestResult.value);
+        setMessage(`Φορτώθηκαν ${requestResult.value.length} αιτήματα πρόσβασης/συσκευών.`);
+      } else {
+        setRequests([]);
+        setMessage("Τα αιτήματα πρόσβασης δεν φορτώθηκαν.");
+      }
 
-      setMessage(`Φορτώθηκαν ${nextRequests.length} αιτήματα πρόσβασης/συσκευών.`);
-      setFieldMessage(`Φορτώθηκαν ${nextFieldSubmissions.length} καταχωρήσεις πεδίου.`);
-    } catch {
-      setMessage("Δεν φορτώθηκαν όλα τα στοιχεία. Το ασφαλές session έληξε ή το deploy δεν είναι έτοιμο.");
-      setFieldMessage("Οι καταχωρήσεις πεδίου δεν φορτώθηκαν.");
+      if (approvedResult.status === "fulfilled") {
+        setApprovedUsers(approvedResult.value);
+        setApprovedMessage(`Φορτώθηκαν ${approvedResult.value.length} εγκεκριμένοι Users.`);
+      } else {
+        setApprovedUsers([]);
+        setApprovedMessage("Οι εγκεκριμένοι Users δεν φορτώθηκαν.");
+      }
+
+      if (fieldResult.status === "fulfilled") {
+        setFieldSubmissions(fieldResult.value);
+        setFieldMessage(`Φορτώθηκαν ${fieldResult.value.length} καταχωρήσεις πεδίου.`);
+      } else {
+        setFieldSubmissions([]);
+        setFieldMessage("Οι καταχωρήσεις πεδίου δεν φορτώθηκαν.");
+      }
     } finally {
       setLoading(false);
     }
@@ -202,6 +259,83 @@ export default function WaterApprovalInboxPage() {
     }
   }
 
+  function openDeleteUser(user: ApprovedUserRecord) {
+    const userKey = user.deviceId || user.id || user.requestId || "";
+
+    if (!userKey || !user.deviceId) {
+      setApprovedMessage("Δεν υπάρχει device ID για ασφαλές block αυτού του User.");
+      return;
+    }
+
+    setManagedUserKey(userKey);
+    setDeleteConfirmation("");
+    setApprovedMessage("Επιβεβαίωσε τον σωστό User πριν από το προσωρινό Delete / Block.");
+  }
+
+  function cancelDeleteUser() {
+    setManagedUserKey("");
+    setDeleteConfirmation("");
+    setApprovedMessage("Η διαγραφή ακυρώθηκε. Δεν άλλαξε καμία πρόσβαση.");
+  }
+
+  async function deleteUser(user: ApprovedUserRecord) {
+    const deviceId = user.deviceId?.trim() || "";
+
+    if (!deviceId) {
+      setApprovedMessage("Δεν υπάρχει device ID για ασφαλές block αυτού του User.");
+      return;
+    }
+
+    const userLabel = `${user.firstName || ""} ${user.lastName || ""}`.trim() || deviceId;
+
+    if (deleteConfirmation.trim().toUpperCase() !== "DELETE") {
+      setApprovedMessage(`Γράψε DELETE για να μπλοκάρεις προσωρινά τον User ${userLabel}.`);
+      return;
+    }
+
+    setLoading(true);
+    setApprovedMessage(`Delete / Block πρόσβασης για ${userLabel}...`);
+
+    try {
+      const response = await fetch("/api/professional/infrastructure/water/access/admin/decision", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          decision: "revoke",
+          deviceId,
+          requestId: user.requestId || "",
+          revokeConfirmation: "REVOKE",
+        }),
+      });
+
+      const json = (await response.json()) as {
+        ok?: boolean;
+        error?: string;
+        message?: string;
+      };
+
+      if (!response.ok || !json.ok) {
+        throw new Error(json.message || json.error || "revoke_failed");
+      }
+
+      setManagedUserKey("");
+      setDeleteConfirmation("");
+      await loadInbox();
+      setApprovedMessage(
+        `Ο User ${userLabel} διαγράφηκε από τους ενεργούς Users και η συσκευή του μπλοκαρίστηκε. Μπορεί αργότερα να κάνει νέα αίτηση.`,
+      );
+    } catch (error) {
+      setApprovedMessage(
+        error instanceof Error ? error.message : "Το Delete / Block του User δεν ολοκληρώθηκε.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     void loadInbox();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -216,6 +350,11 @@ export default function WaterApprovalInboxPage() {
       deviceReady: requests.filter((item) => item.hasDeviceToken).length,
     };
   }, [requests]);
+
+  const pendingRequests = useMemo(
+    () => requests.filter((item) => item.status === "pending_founder_review"),
+    [requests],
+  );
 
   const fieldCounts = useMemo(() => {
     return {
@@ -261,6 +400,7 @@ export default function WaterApprovalInboxPage() {
           </button>
 
           {message ? <p className="text-sm font-bold text-[#f2c766]">{message}</p> : null}
+          {approvedMessage ? <p className="text-sm font-bold text-[#f2c766]">{approvedMessage}</p> : null}
           {fieldMessage ? <p className="text-sm font-bold text-[#f2c766]">{fieldMessage}</p> : null}
         </div>
 
@@ -270,8 +410,8 @@ export default function WaterApprovalInboxPage() {
             <p className="text-2xl font-black text-[#f2c766]">{accessCounts.total}</p>
           </div>
           <div className="rounded-2xl border border-emerald-600/50 bg-emerald-950/20 p-4">
-            <p className="text-xs text-emerald-100/70">Εγκεκριμένες συσκευές</p>
-            <p className="text-2xl font-black text-emerald-100">{accessCounts.deviceReady}</p>
+            <p className="text-xs text-emerald-100/70">Εγκεκριμένοι Users</p>
+            <p className="text-2xl font-black text-emerald-100">{approvedUsers.length}</p>
           </div>
           <div className="rounded-2xl border border-amber-600/50 bg-amber-950/20 p-4">
             <p className="text-xs text-amber-100/70">Καταχωρήσεις πεδίου</p>
@@ -295,6 +435,91 @@ export default function WaterApprovalInboxPage() {
               </div>
             </article>
           ))}
+        </section>
+
+        <section className="mt-8 grid gap-4">
+          <div>
+            <h2 className="text-2xl font-black">Εγκεκριμένοι Users</h2>
+            <p className="mt-2 text-sm font-bold leading-6 text-slate-300">
+              Το Delete / Block αφαιρεί αμέσως τον User από τους ενεργούς Users και μπλοκάρει τη
+              συγκεκριμένη συσκευή. Αργότερα μπορεί να κάνει νέα αίτηση για να τον εγκρίνεις ξανά.
+            </p>
+          </div>
+
+          {approvedUsers.map((user) => {
+            const userKey = user.deviceId || user.id || user.requestId || `${user.firstName}-${user.lastName}`;
+            const isManaged = managedUserKey === userKey;
+            const userLabel = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "αυτόν τον User";
+
+            return (
+              <article key={userKey} className="rounded-3xl border border-emerald-700/50 bg-emerald-950/15 p-4">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="grid gap-1">
+                    <p className="text-xl font-black">
+                      {user.firstName || "—"} {user.lastName || ""}
+                    </p>
+                    <p className="text-sm text-slate-300">Ρόλος: {user.roleTitle || "—"}</p>
+                    <p className="text-sm text-slate-300">Τηλέφωνο: {user.phone || "—"}</p>
+                    <p className="text-sm text-slate-300">Συσκευή: {user.deviceId || "—"}</p>
+                    <p className="text-xs text-slate-500">Εγκρίθηκε: {user.approvedAt || user.updatedAt || "—"}</p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => openDeleteUser(user)}
+                    disabled={loading || !user.deviceId}
+                    className="rounded-2xl border border-red-500 bg-red-950/40 px-5 py-3 font-black text-red-100 disabled:opacity-50"
+                  >
+                    Delete / Block User
+                  </button>
+                </div>
+
+                {isManaged ? (
+                  <div className="mt-5 rounded-2xl border border-red-500/60 bg-red-950/40 p-4">
+                    <p className="font-black text-red-100">Προσωρινό Delete / Block: {userLabel}</p>
+                    <p className="mt-2 text-sm leading-6 text-red-100/80">
+                      Έλεγξε το όνομα και το τηλέφωνο. Γράψε DELETE για να αφαιρεθεί από τους
+                      ενεργούς Users και να μπλοκαριστεί αυτή η συσκευή.
+                    </p>
+
+                    <input
+                      value={deleteConfirmation}
+                      onChange={(event) => setDeleteConfirmation(event.target.value)}
+                      autoCapitalize="characters"
+                      autoComplete="off"
+                      placeholder="Γράψε DELETE"
+                      className="mt-4 w-full rounded-2xl border border-red-400/50 bg-[#07111f] px-4 py-3 font-black text-white outline-none focus:border-red-300"
+                    />
+
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                      <button
+                        type="button"
+                        onClick={cancelDeleteUser}
+                        disabled={loading}
+                        className="rounded-2xl border border-slate-500 px-5 py-3 font-black text-white disabled:opacity-50"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => void deleteUser(user)}
+                        disabled={loading || deleteConfirmation.trim().toUpperCase() !== "DELETE"}
+                        className="rounded-2xl bg-red-500 px-5 py-3 font-black text-white disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Confirm Delete / Block
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
+              </article>
+            );
+          })}
+
+          {approvedUsers.length === 0 ? (
+            <p className="rounded-3xl border border-slate-700 bg-[#07111f] p-4 text-slate-300">
+              Δεν υπάρχουν εγκεκριμένοι Users.
+            </p>
+          ) : null}
         </section>
 
         <section className="mt-8 grid gap-4">
@@ -348,9 +573,9 @@ export default function WaterApprovalInboxPage() {
         </section>
 
         <section className="mt-8 grid gap-4">
-          <h2 className="text-2xl font-black">Πραγματικά αιτήματα πρόσβασης / συσκευών</h2>
+          <h2 className="text-2xl font-black">Pending αιτήματα πρόσβασης / συσκευών</h2>
 
-          {requests.map((item) => {
+          {pendingRequests.map((item) => {
             const pending = item.status === "pending_founder_review";
             const canApprove = pending && item.hasDeviceToken === true;
 
@@ -392,9 +617,9 @@ export default function WaterApprovalInboxPage() {
             );
           })}
 
-          {requests.length === 0 ? (
+          {pendingRequests.length === 0 ? (
             <p className="rounded-3xl border border-slate-700 bg-[#07111f] p-4 text-slate-300">
-              Δεν εμφανίζονται αιτήματα πρόσβασης ακόμη.
+              Δεν υπάρχουν pending αιτήματα πρόσβασης.
             </p>
           ) : null}
         </section>
