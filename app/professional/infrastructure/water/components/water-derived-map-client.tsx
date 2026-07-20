@@ -58,11 +58,6 @@ const DEVICE_TOKEN_KEYS = [
   "waterAccessDeviceToken",
 ];
 
-const FOUNDER_CODE_KEYS = [
-  "pantavion.water.admin.founderCode.v1",
-  "pantavion_water_founder_code",
-];
-
 const modeCopy = {
   b: {
     eyebrow: "Pantavion Water B Derived",
@@ -183,10 +178,6 @@ function getOrCreateDevice(): DeviceIdentity {
   }
 
   return { deviceId, deviceToken };
-}
-
-function readFounderCode() {
-  return readStorage(FOUNDER_CODE_KEYS);
 }
 
 function ensureLeaflet() {
@@ -422,7 +413,6 @@ export default function WaterDerivedMapClient({ mode }: { mode: Mode }) {
       const tiles = splitVisibleBboxIntoSafeTiles(visibleBbox);
       const allFeatures: any[] = [];
       const device = getOrCreateDevice();
-      const founderCode = readFounderCode();
 
       for (const tile of tiles) {
         const params = new URLSearchParams({
@@ -438,10 +428,10 @@ export default function WaterDerivedMapClient({ mode }: { mode: Mode }) {
           `/api/professional/infrastructure/water/segment/bbox?${params.toString()}`,
           {
             cache: "no-store",
+            credentials: "include",
             headers: {
               "x-pantavion-water-device-id": device.deviceId,
               "x-pantavion-water-device-token": device.deviceToken,
-              "x-pantavion-water-founder-code": founderCode,
             },
           }
         );

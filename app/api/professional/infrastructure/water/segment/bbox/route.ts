@@ -8,6 +8,7 @@ import {
   parseWaterSegmentBbox,
   parseWaterSegmentLimit,
 } from "@/core/infrastructure/water/controlled-water-segment-index-provider";
+import { hasWaterAdminSession } from "@/core/security/water-admin-session";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -27,11 +28,11 @@ type ApprovedWaterDevicePayload = {
 type WaterSegmentAccessDecision =
   | {
       ok: true;
-      mode: "founder" | "approved-device";
+      mode: "admin-session" | "approved-device";
     }
   | {
       ok: false;
-      error: "founder_access_code_not_configured" | "access_not_approved";
+      error: "access_not_approved";
     };
 
 function clean(value: unknown) {
@@ -92,17 +93,13 @@ async function approvedDeviceMatches(deviceId: string, deviceToken: string) {
 }
 
 async function authorizeWaterSegmentRequest(request: Request): Promise<WaterSegmentAccessDecision> {
-  const founderCode = process.env.PANTAVION_WATER_FOUNDER_ACCESS_CODE || "";
-  const submittedFounderCode = clean(request.headers.get("x-pantavion-water-founder-code"));
   const deviceId = clean(request.headers.get("x-pantavion-water-device-id"));
   const deviceToken = clean(request.headers.get("x-pantavion-water-device-token"));
 
-  const founderApproved = Boolean(founderCode) && submittedFounderCode === founderCode;
-
-  if (founderApproved) {
+  if (hasWaterAdminSession(request)) {
     return {
       ok: true,
-      mode: "founder",
+      mode: "admin-session",
     };
   }
 
@@ -117,7 +114,7 @@ async function authorizeWaterSegmentRequest(request: Request): Promise<WaterSegm
 
   return {
     ok: false,
-    error: founderCode ? "access_not_approved" : "founder_access_code_not_configured",
+    error: "access_not_approved",
   };
 }
 

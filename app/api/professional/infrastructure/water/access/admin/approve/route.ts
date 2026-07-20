@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 
+import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -37,39 +39,6 @@ function clean(value: unknown, maxLength = 500) {
 
 function hashToken(value: string) {
   return crypto.createHash("sha256").update(value).digest("hex");
-}
-
-function cookieValue(cookieHeader: string, name: string) {
-  const cookies = cookieHeader.split(";").map((part) => part.trim());
-  const found = cookies.find((part) => part.startsWith(`${name}=`));
-
-  return found ? decodeURIComponent(found.slice(name.length + 1)) : "";
-}
-
-function hasAdminSession(request: Request, body: Record<string, unknown>) {
-  if (process.env.NODE_ENV !== "production") return true;
-
-  const cookieHeader = request.headers.get("cookie") || "";
-  const expectedSession = process.env.PANTAVION_WATER_ADMIN_SESSION_SECRET || "";
-  const expectedCode =
-    process.env.PANTAVION_WATER_FOUNDER_ACCESS_CODE ||
-    process.env.PANTAVION_WATER_ADMIN_ACCESS_CODE ||
-    "";
-
-  const sessionCookies = [
-    cookieValue(cookieHeader, "pantavion_water_admin_session"),
-    cookieValue(cookieHeader, "pantavion_water_founder_session"),
-    cookieValue(cookieHeader, "pantavion_founder_admin_session"),
-  ].filter(Boolean);
-
-  if (expectedSession && sessionCookies.includes(expectedSession)) return true;
-
-  const providedCode =
-    clean(body.accessCode, 200) ||
-    clean(body.adminCode, 200) ||
-    clean(request.headers.get("x-pantavion-water-admin-code"), 200);
-
-  return Boolean(expectedCode && providedCode && providedCode === expectedCode);
 }
 
 async function readJsonBlob<T>(blob: BlobItem) {
@@ -119,7 +88,7 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
 
-    if (!hasAdminSession(request, body)) {
+    if (!hasWaterAdminSession(request)) {
       return NextResponse.json(
         {
           ok: false,

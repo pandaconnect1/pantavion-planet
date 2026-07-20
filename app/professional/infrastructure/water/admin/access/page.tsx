@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type SessionResponse = {
   ok?: boolean;
@@ -15,6 +15,18 @@ export default function WaterAdminAccessPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("Βάλε το founder/admin access code για να ανοίξει ασφαλές session.");
   const [ok, setOk] = useState(false);
+
+  useEffect(() => {
+    for (const key of [
+      "pantavion.water.admin.founderCode.v1",
+      "pantavion_water_founder_code",
+      "waterFounderCode",
+      "waterFounderCodeClean",
+    ]) {
+      window.localStorage.removeItem(key);
+      window.sessionStorage.removeItem(key);
+    }
+  }, []);
 
   async function submitAccess(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -40,6 +52,7 @@ export default function WaterAdminAccessPage() {
       }
 
       setOk(true);
+      setAccessCode("");
       setMessage(json.message || "Το founder/admin session ενεργοποιήθηκε.");
 
       window.setTimeout(() => {
@@ -95,7 +108,8 @@ export default function WaterAdminAccessPage() {
               value={accessCode}
               onChange={(event) => setAccessCode(event.target.value)}
               type="password"
-              autoComplete="current-password"
+              autoComplete="off"
+              spellCheck={false}
               placeholder="Βάλε εδώ το μυστικό που έχεις στο Vercel"
               className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
             />
@@ -121,13 +135,6 @@ export default function WaterAdminAccessPage() {
         </div>
 
         <div className="mt-5 flex flex-wrap gap-3">
-          <Link
-            href="/professional/infrastructure/water/admin/faults"
-            className="rounded-2xl border border-slate-700 bg-[#07111f] px-5 py-3 font-black text-white"
-          >
-            Άνοιγμα pending βλαβών
-          </Link>
-
           <button
             type="button"
             onClick={() => void logout()}

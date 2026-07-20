@@ -45,8 +45,6 @@ type WaterFieldSubmission = {
   deviceLabel: string;
 };
 
-const FOUNDER_CODE_STORAGE_KEY = "pantavion.water.admin.founderCode.v1";
-
 const APPROVAL_CATEGORIES = [
   {
     title: "Πρόσβαση / Συσκευές",
@@ -70,16 +68,6 @@ const APPROVAL_CATEGORIES = [
   },
 ] as const;
 
-function getSavedFounderCode() {
-  if (typeof window === "undefined") return "";
-  return window.localStorage.getItem(FOUNDER_CODE_STORAGE_KEY) || "";
-}
-
-function rememberFounderCode(value: string) {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(FOUNDER_CODE_STORAGE_KEY, value);
-}
-
 function typeLabel(type: string) {
   const labels: Record<string, string> = {
     note: "Σημείωση",
@@ -98,20 +86,20 @@ function typeLabel(type: string) {
 }
 
 export default function WaterApprovalInboxPage() {
-  const [founderCode, setFounderCode] = useState("");
   const [requests, setRequests] = useState<WaterAccessRequest[]>([]);
   const [fieldSubmissions, setFieldSubmissions] = useState<WaterFieldSubmission[]>([]);
   const [message, setMessage] = useState("");
   const [fieldMessage, setFieldMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function loadAccessRequests(codeToUse: string) {
+  async function loadAccessRequests() {
     const response = await fetch("/api/professional/infrastructure/water/access/admin/requests", {
       method: "POST",
+      credentials: "include",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({ founderCode: codeToUse }),
+      body: JSON.stringify({}),
     });
 
     const json = (await response.json()) as {
@@ -127,13 +115,14 @@ export default function WaterApprovalInboxPage() {
     return json.requests || [];
   }
 
-  async function loadFieldSubmissions(codeToUse: string) {
+  async function loadFieldSubmissions() {
     const response = await fetch("/api/professional/infrastructure/water/field/admin/submissions", {
       method: "POST",
+      credentials: "include",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({ founderCode: codeToUse }),
+      body: JSON.stringify({}),
     });
 
     const json = (await response.json()) as {
@@ -149,33 +138,24 @@ export default function WaterApprovalInboxPage() {
     return json.submissions || [];
   }
 
-  async function loadInbox(codeOverride?: string) {
-    const codeToUse = (codeOverride || founderCode || getSavedFounderCode()).trim();
-
-    if (!codeToUse) {
-      setMessage("Βάλε founder/admin κωδικό.");
-      return;
-    }
-
+  async function loadInbox() {
     setLoading(true);
     setMessage("Φόρτωση αιτημάτων πρόσβασης...");
     setFieldMessage("Φόρτωση καταχωρήσεων πεδίου...");
 
     try {
       const [nextRequests, nextFieldSubmissions] = await Promise.all([
-        loadAccessRequests(codeToUse),
-        loadFieldSubmissions(codeToUse),
+        loadAccessRequests(),
+        loadFieldSubmissions(),
       ]);
 
-      setFounderCode(codeToUse);
-      rememberFounderCode(codeToUse);
       setRequests(nextRequests);
       setFieldSubmissions(nextFieldSubmissions);
 
       setMessage(`Φορτώθηκαν ${nextRequests.length} αιτήματα πρόσβασης/συσκευών.`);
       setFieldMessage(`Φορτώθηκαν ${nextFieldSubmissions.length} καταχωρήσεις πεδίου.`);
     } catch {
-      setMessage("Δεν φορτώθηκαν όλα τα στοιχεία. Έλεγξε τον founder/admin κωδικό ή το deploy.");
+      setMessage("Δεν φορτώθηκαν όλα τα στοιχεία. Το ασφαλές session έληξε ή το deploy δεν είναι έτοιμο.");
       setFieldMessage("Οι καταχωρήσεις πεδίου δεν φορτώθηκαν.");
     } finally {
       setLoading(false);
@@ -183,13 +163,6 @@ export default function WaterApprovalInboxPage() {
   }
 
   async function decide(request: WaterAccessRequest, decision: "approve" | "reject") {
-    const codeToUse = (founderCode || getSavedFounderCode()).trim();
-
-    if (!codeToUse) {
-      setMessage("Χρειάζεται founder/admin κωδικός.");
-      return;
-    }
-
     if (decision === "approve" && !request.hasDeviceToken) {
       setMessage("Παλιά αίτηση χωρίς device token. Ζήτησε νέα αίτηση από τη συσκευή του χρήστη.");
       return;
@@ -201,11 +174,11 @@ export default function WaterApprovalInboxPage() {
     try {
       const response = await fetch("/api/professional/infrastructure/water/access/admin/decision", {
         method: "POST",
+        credentials: "include",
         headers: {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          founderCode: codeToUse,
           requestId: request.id,
           decision,
         }),
@@ -220,8 +193,7 @@ export default function WaterApprovalInboxPage() {
         throw new Error(json.error || "decision_failed");
       }
 
-      rememberFounderCode(codeToUse);
-      await loadInbox(codeToUse);
+      await loadInbox();
       setMessage(decision === "approve" ? "Εγκρίθηκε η συσκευή." : "Απορρίφθηκε το αίτημα.");
     } catch {
       setMessage("Η απόφαση δεν αποθηκεύτηκε.");
@@ -231,12 +203,7 @@ export default function WaterApprovalInboxPage() {
   }
 
   useEffect(() => {
-    const savedCode = getSavedFounderCode();
-
-    if (savedCode) {
-      setFounderCode(savedCode);
-      void loadInbox(savedCode);
-    }
+    void loadInbox();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -276,14 +243,6 @@ export default function WaterApprovalInboxPage() {
         </p>
 
         <div className="mt-6 grid gap-3 rounded-3xl border border-slate-700 bg-[#07111f] p-4">
-          <input
-            value={founderCode}
-            onChange={(event) => setFounderCode(event.target.value)}
-            placeholder="Founder/admin κωδικός"
-            type="password"
-            className="rounded-2xl border border-[#b89445]/60 bg-[#0d1a2d] px-4 py-3 text-white outline-none"
-          />
-
           <button
             type="button"
             onClick={() => void loadInbox()}

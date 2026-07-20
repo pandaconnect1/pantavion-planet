@@ -3,8 +3,9 @@ import { createHash } from "crypto";
 import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
+import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+
 type WaterAccessAuthorizeBody = {
-  code?: string;
   emailOrPhone?: string;
   firstName?: string;
   lastName?: string;
@@ -75,25 +76,13 @@ async function approvedDeviceMatches(deviceId: string, deviceToken: string) {
 export async function POST(request: Request) {
   const body = (await request.json()) as WaterAccessAuthorizeBody;
 
-  const founderCode = process.env.PANTAVION_WATER_FOUNDER_ACCESS_CODE || "";
-  const submittedCode = clean(body.code);
   const deviceId = clean(body.deviceId);
   const deviceToken = clean(body.deviceToken);
 
-  const isFounderAccess = Boolean(founderCode) && submittedCode === founderCode;
+  const isAdminSession = hasWaterAdminSession(request);
   const approvedDevice = await approvedDeviceMatches(deviceId, deviceToken);
 
-  if (!founderCode && !deviceId) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "founder_access_code_not_configured",
-      },
-      { status: 403 },
-    );
-  }
-
-  if (!isFounderAccess && !approvedDevice) {
+  if (!isAdminSession && !approvedDevice) {
     return NextResponse.json(
       {
         ok: false,
@@ -106,12 +95,12 @@ export async function POST(request: Request) {
   return NextResponse.json({
     ok: true,
     approved: true,
-    accessMode: isFounderAccess ? "founder" : "approved-device",
+    accessMode: isAdminSession ? "admin-session" : "approved-device",
     approvedAt: new Date().toISOString(),
     holder: {
-      firstName: isFounderAccess ? clean(body.firstName) : clean(approvedDevice?.firstName),
-      lastName: isFounderAccess ? clean(body.lastName) : clean(approvedDevice?.lastName),
-      title: isFounderAccess ? clean(body.title) : clean(approvedDevice?.title),
+      firstName: isAdminSession ? clean(body.firstName) : clean(approvedDevice?.firstName),
+      lastName: isAdminSession ? clean(body.lastName) : clean(approvedDevice?.lastName),
+      title: isAdminSession ? clean(body.title) : clean(approvedDevice?.title),
       phone: clean(approvedDevice?.phone),
       deviceId,
     },

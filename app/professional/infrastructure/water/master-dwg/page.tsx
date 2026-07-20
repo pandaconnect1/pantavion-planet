@@ -66,7 +66,6 @@ function readStoredWaterDevice() {
 }
 
 export default function WaterMasterDwgPage() {
-  const [founderCode, setFounderCode] = useState("");
   const [status, setStatus] = useState("ready");
   const [details, setDetails] = useState("");
 
@@ -79,8 +78,8 @@ export default function WaterMasterDwgPage() {
     try {
       const response = await fetch("/api/professional/infrastructure/water/master-dwg", {
         cache: "no-store",
+        credentials: "include",
         headers: {
-          "x-pantavion-water-founder-code": founderCode.trim(),
           "x-pantavion-water-device-id": storedDevice.deviceId,
           "x-pantavion-water-device-token": storedDevice.deviceToken,
         },
@@ -133,20 +132,12 @@ export default function WaterMasterDwgPage() {
           <p className="mt-2 break-all text-lg font-black">{DOWNLOAD_FILE_NAME}</p>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-[1fr_auto]">
-          <input
-            value={founderCode}
-            onChange={(event) => setFounderCode(event.target.value)}
-            type="password"
-            placeholder="Founder access code"
-            className="rounded-2xl border border-slate-600 bg-[#07111f] px-4 py-4 text-sm font-bold text-white outline-none focus:border-[#f2c766]"
-          />
-
+        <div className="mt-6">
           <button
             type="button"
             onClick={() => void downloadMaster()}
             disabled={status === "loading"}
-            className="rounded-2xl border border-[#f2c766] bg-[#f2c766]/15 px-6 py-4 text-sm font-black uppercase tracking-[0.16em] text-[#f8e6ad] transition hover:bg-[#f2c766]/25 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-2xl border border-[#f2c766] bg-[#f2c766]/15 px-6 py-4 text-sm font-black uppercase tracking-[0.16em] text-[#f8e6ad] transition hover:bg-[#f2c766]/25 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {status === "loading" ? "LOADING" : "DOWNLOAD DWG MASTER"}
           </button>

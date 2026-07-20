@@ -1,3 +1,10 @@
+import { cookies } from "next/headers";
+
+import {
+  isWaterAdminSessionValue,
+  WATER_ADMIN_SESSION_COOKIE,
+} from "@/core/security/water-admin-session";
+
 import WaterMapNavigation from "./water-map-navigation";
 
 export const metadata = {
@@ -11,7 +18,7 @@ const cards = [
     title: "Users / Access",
     label: "APPROVALS",
     description:
-      "Αιτήσεις πρόσβασης, approved users, founder/admin έλεγχος, approve/delete/revoke flow.",
+      "Αιτήσεις πρόσβασης και αυτόματος έλεγχος εγκεκριμένης συσκευής.",
     href: "/professional/infrastructure/water/access",
     action: "Άνοιγμα Users / Access",
   },
@@ -38,6 +45,7 @@ const cards = [
       "Έλεγχος ότι το αυθεντικό DWG υπάρχει private, με manifest/chunks και raw download blocked.",
     href: "/professional/infrastructure/water/master",
     action: "Έλεγχος B Master",
+    adminOnly: true,
   },
   {
     title: "B Map PDF Foundation",
@@ -57,7 +65,15 @@ const cards = [
   },
 ];
 
-export default function WaterControlCenterPage() {
+export default async function WaterControlCenterPage() {
+  const cookieStore = await cookies();
+  const isAdmin = isWaterAdminSessionValue(
+    cookieStore.get(WATER_ADMIN_SESSION_COOKIE)?.value || "",
+  );
+  const visibleCards = cards.filter(
+    (card) => !("adminOnly" in card && card.adminOnly) || isAdmin,
+  );
+
   return (
     <>
       <WaterMapNavigation title="Water Control Center" />
@@ -80,7 +96,7 @@ export default function WaterControlCenterPage() {
           </p>
 
           <div className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {cards.map((card) => (
+            {visibleCards.map((card) => (
               <article
                 key={card.href}
                 className="rounded-3xl border border-white/10 bg-black/20 p-5"
