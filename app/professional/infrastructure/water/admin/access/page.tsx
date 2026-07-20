@@ -10,6 +10,23 @@ type SessionResponse = {
   redirectTo?: string;
 };
 
+const WATER_ADMIN_PATH = "/professional/infrastructure/water/admin";
+const WATER_ADMIN_ACCESS_PATH = `${WATER_ADMIN_PATH}/access`;
+const WATER_ADMIN_DEFAULT_PATH = `${WATER_ADMIN_PATH}/approvals`;
+
+function safeRequestedAdminPath() {
+  const requestedPath = new URLSearchParams(window.location.search).get("next") || "";
+
+  if (
+    requestedPath !== WATER_ADMIN_ACCESS_PATH &&
+    (requestedPath === WATER_ADMIN_PATH || requestedPath.startsWith(`${WATER_ADMIN_PATH}/`))
+  ) {
+    return requestedPath;
+  }
+
+  return "";
+}
+
 export default function WaterAdminAccessPage() {
   const [accessCode, setAccessCode] = useState("");
   const [loading, setLoading] = useState(false);
@@ -56,7 +73,7 @@ export default function WaterAdminAccessPage() {
       setMessage(json.message || "Το founder/admin session ενεργοποιήθηκε.");
 
       window.setTimeout(() => {
-        window.location.href = json.redirectTo || "/professional/infrastructure/water/admin/faults";
+        window.location.href = safeRequestedAdminPath() || json.redirectTo || WATER_ADMIN_DEFAULT_PATH;
       }, 600);
     } catch (error) {
       setOk(false);
@@ -98,7 +115,7 @@ export default function WaterAdminAccessPage() {
 
         <p className="mt-3 text-sm font-bold leading-6 text-slate-300">
           Εδώ δεν μπαίνει token στο URL. Το access code ελέγχεται στον server και μετά δημιουργείται
-          ασφαλές httpOnly session cookie για να ανοίξει το private admin faults inbox.
+          ασφαλές httpOnly session cookie για να ανοίξει το private κέντρο Users / Approvals.
         </p>
 
         <form onSubmit={(event) => void submitAccess(event)} className="mt-6 grid gap-4">
@@ -120,7 +137,7 @@ export default function WaterAdminAccessPage() {
             disabled={loading || !accessCode.trim()}
             className="rounded-2xl bg-[#f2c766] px-5 py-4 text-lg font-black text-black disabled:opacity-60"
           >
-            {loading ? "Έλεγχος..." : "Άνοιγμα admin session"}
+            {loading ? "Έλεγχος..." : "Άνοιγμα Users / Approvals"}
           </button>
         </form>
 
