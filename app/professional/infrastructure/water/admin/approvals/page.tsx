@@ -58,28 +58,9 @@ type WaterFieldSubmission = {
   deviceLabel: string;
 };
 
-const APPROVAL_CATEGORIES = [
-  {
-    title: "Πρόσβαση / Συσκευές",
-    status: "Ενεργό",
-    description: "Πραγματικά αιτήματα πρόσβασης και δεμένες συσκευές χρηστών.",
-  },
-  {
-    title: "Καταχωρήσεις πεδίου",
-    status: "Ενεργό",
-    description: "Άφιξη, αναχώρηση, βλάβες, βάνες, φωτογραφίες, ηχητικά, υλικά και παρατηρήσεις από εργάτη/τεχνίτη.",
-  },
-  {
-    title: "Φωτογραφίες / Ηχητικά / PDF",
-    status: "Επόμενο API",
-    description: "Το σημερινό βήμα διαβάζει references. Το πραγματικό upload αρχείων μπαίνει στο επόμενο βήμα.",
-  },
-  {
-    title: "AI εισηγήσεις",
-    status: "Founder-only",
-    description: "AI engineering proposals που δεν θεωρούνται αλήθεια χωρίς founder approval.",
-  },
-] as const;
+type RequestView = "all" | "pending";
+
+type InboxSectionId = "access-requests" | "approved-users" | "field-submissions";
 
 function typeLabel(type: string) {
   const labels: Record<string, string> = {
@@ -98,16 +79,46 @@ function typeLabel(type: string) {
   return labels[type] || type || "Καταχώρηση";
 }
 
+function requestStatusLabel(status: string) {
+  const labels: Record<string, string> = {
+    pending_founder_review: "Pending για έγκριση",
+    approved: "Εγκεκριμένο",
+    revoked: "Διαγραμμένο / Μπλοκαρισμένο",
+    rejected: "Απορρίφθηκε",
+  };
+
+  return labels[status] || status || "Άγνωστη κατάσταση";
+}
+
 export default function WaterApprovalInboxPage() {
   const [requests, setRequests] = useState<WaterAccessRequest[]>([]);
   const [approvedUsers, setApprovedUsers] = useState<ApprovedUserRecord[]>([]);
   const [fieldSubmissions, setFieldSubmissions] = useState<WaterFieldSubmission[]>([]);
   const [managedUserKey, setManagedUserKey] = useState("");
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
+  const [requestView, setRequestView] = useState<RequestView>("pending");
+  const [activeSection, setActiveSection] = useState<InboxSectionId>("approved-users");
   const [message, setMessage] = useState("");
   const [approvedMessage, setApprovedMessage] = useState("");
   const [fieldMessage, setFieldMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  function openSection(sectionId: InboxSectionId, nextRequestView?: RequestView) {
+    setActiveSection(sectionId);
+
+    if (nextRequestView) {
+      setRequestView(nextRequestView);
+    }
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        document.getElementById(sectionId)?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    });
+  }
 
   async function loadAccessRequests() {
     const response = await fetch("/api/professional/infrastructure/water/access/admin/requests", {
@@ -345,9 +356,6 @@ export default function WaterApprovalInboxPage() {
     return {
       total: requests.length,
       pending: requests.filter((item) => item.status === "pending_founder_review").length,
-      approved: requests.filter((item) => item.status === "approved").length,
-      rejected: requests.filter((item) => item.status === "rejected").length,
-      deviceReady: requests.filter((item) => item.hasDeviceToken).length,
     };
   }, [requests]);
 
@@ -356,10 +364,11 @@ export default function WaterApprovalInboxPage() {
     [requests],
   );
 
+  const visibleRequests = requestView === "all" ? requests : pendingRequests;
+
   const fieldCounts = useMemo(() => {
     return {
       total: fieldSubmissions.length,
-      pending: fieldSubmissions.filter((item) => item.status === "pending_founder_review").length,
       withEvidence: fieldSubmissions.filter((item) => item.evidenceRefs.length > 0).length,
     };
   }, [fieldSubmissions]);
@@ -383,10 +392,11 @@ export default function WaterApprovalInboxPage() {
           ΚΕΝΤΡΟ ΕΓΚΡΙΣΕΩΝ ΥΔΡΕΥΣΗΣ
         </p>
 
-        <h1 className="mt-3 text-3xl font-black">Pending στοιχεία πριν γίνουν κοινά</h1>
+        <h1 className="mt-3 text-3xl font-black">Users / Approvals</h1>
 
         <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300">
-          Από εδώ ο founder ελέγχει πρόσβαση, συσκευές και καταχωρήσεις πεδίου. Τίποτα από εργάτη/τεχνίτη δεν γίνεται κοινό χωρίς έγκριση.
+          Πάτησε μία από τις πραγματικές ενότητες πιο κάτω για να ανοίξει η αντίστοιχη λίστα και οι
+          διαθέσιμες ενέργειες.
         </p>
 
         <div className="mt-6 grid gap-3 rounded-3xl border border-slate-700 bg-[#07111f] p-4">
@@ -404,40 +414,47 @@ export default function WaterApprovalInboxPage() {
           {fieldMessage ? <p className="text-sm font-bold text-[#f2c766]">{fieldMessage}</p> : null}
         </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-4">
-          <div className="rounded-2xl border border-slate-700 bg-[#07111f] p-4">
-            <p className="text-xs text-slate-400">Αιτήματα πρόσβασης</p>
-            <p className="text-2xl font-black text-[#f2c766]">{accessCounts.total}</p>
-          </div>
-          <div className="rounded-2xl border border-emerald-600/50 bg-emerald-950/20 p-4">
-            <p className="text-xs text-emerald-100/70">Εγκεκριμένοι Users</p>
-            <p className="text-2xl font-black text-emerald-100">{approvedUsers.length}</p>
-          </div>
-          <div className="rounded-2xl border border-amber-600/50 bg-amber-950/20 p-4">
-            <p className="text-xs text-amber-100/70">Καταχωρήσεις πεδίου</p>
-            <p className="text-2xl font-black text-amber-100">{fieldCounts.total}</p>
-          </div>
-          <div className="rounded-2xl border border-sky-600/50 bg-sky-950/20 p-4">
-            <p className="text-xs text-sky-100/70">Με τεκμήρια/refs</p>
-            <p className="text-2xl font-black text-sky-100">{fieldCounts.withEvidence}</p>
-          </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          <button
+            type="button"
+            onClick={() => openSection("access-requests", "all")}
+            aria-pressed={activeSection === "access-requests"}
+            className="rounded-2xl border border-[#f2c766]/60 bg-[#07111f] p-4 text-left transition hover:border-[#f2c766] hover:bg-[#f2c766]/10 active:scale-[0.99]"
+          >
+            <span className="block text-xs text-slate-400">Όλα τα αιτήματα / συσκευές</span>
+            <span className="mt-1 block text-3xl font-black text-[#f2c766]">{accessCounts.total}</span>
+            <span className="mt-2 block text-sm font-black text-[#f2c766]">
+              Άνοιγμα λίστας → Pending: {accessCounts.pending}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => openSection("approved-users")}
+            aria-pressed={activeSection === "approved-users"}
+            className="rounded-2xl border border-emerald-500/60 bg-emerald-950/20 p-4 text-left transition hover:border-emerald-300 hover:bg-emerald-900/30 active:scale-[0.99]"
+          >
+            <span className="block text-xs text-emerald-100/70">Εγκεκριμένοι Users</span>
+            <span className="mt-1 block text-3xl font-black text-emerald-100">{approvedUsers.length}</span>
+            <span className="mt-2 block text-sm font-black text-emerald-200">Άνοιγμα Users →</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => openSection("field-submissions")}
+            aria-pressed={activeSection === "field-submissions"}
+            className="rounded-2xl border border-amber-500/60 bg-amber-950/20 p-4 text-left transition hover:border-amber-300 hover:bg-amber-900/30 active:scale-[0.99]"
+          >
+            <span className="block text-xs text-amber-100/70">Καταχωρήσεις πεδίου</span>
+            <span className="mt-1 block text-3xl font-black text-amber-100">{fieldCounts.total}</span>
+            <span className="mt-2 block text-sm font-black text-amber-200">
+              Άνοιγμα καταχωρήσεων → Τεκμήρια: {fieldCounts.withEvidence}
+            </span>
+          </button>
         </div>
 
-        <section className="mt-6 grid gap-3 md:grid-cols-2">
-          {APPROVAL_CATEGORIES.map((category) => (
-            <article key={category.title} className="rounded-2xl border border-slate-700 bg-[#07111f] p-4">
-              <div className="flex flex-col gap-2">
-                <h2 className="text-xl font-black">{category.title}</h2>
-                <p className="w-fit rounded-full border border-[#f2c766]/40 bg-[#f2c766]/10 px-3 py-1 text-xs font-black text-[#f2c766]">
-                  {category.status}
-                </p>
-                <p className="text-sm leading-6 text-slate-300">{category.description}</p>
-              </div>
-            </article>
-          ))}
-        </section>
-
-        <section className="mt-8 grid gap-4">
+        {activeSection === "approved-users" ? (
+          <section id="approved-users" className="mt-8 grid scroll-mt-28 gap-4">
           <div>
             <h2 className="text-2xl font-black">Εγκεκριμένοι Users</h2>
             <p className="mt-2 text-sm font-bold leading-6 text-slate-300">
@@ -464,14 +481,20 @@ export default function WaterApprovalInboxPage() {
                     <p className="text-xs text-slate-500">Εγκρίθηκε: {user.approvedAt || user.updatedAt || "—"}</p>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => openDeleteUser(user)}
-                    disabled={loading || !user.deviceId}
-                    className="rounded-2xl border border-red-500 bg-red-950/40 px-5 py-3 font-black text-red-100 disabled:opacity-50"
-                  >
-                    Delete / Block User
-                  </button>
+                  {user.deviceId ? (
+                    <button
+                      type="button"
+                      onClick={() => openDeleteUser(user)}
+                      disabled={loading}
+                      className="rounded-2xl border border-red-500 bg-red-950/40 px-5 py-3 font-black text-red-100 disabled:opacity-50"
+                    >
+                      Delete / Block User
+                    </button>
+                  ) : (
+                    <p className="rounded-2xl border border-slate-700 px-4 py-3 text-sm font-bold text-slate-300">
+                      Δεν υπάρχει δεμένη συσκευή για ασφαλές block.
+                    </p>
+                  )}
                 </div>
 
                 {isManaged ? (
@@ -520,9 +543,11 @@ export default function WaterApprovalInboxPage() {
               Δεν υπάρχουν εγκεκριμένοι Users.
             </p>
           ) : null}
-        </section>
+          </section>
+        ) : null}
 
-        <section className="mt-8 grid gap-4">
+        {activeSection === "field-submissions" ? (
+          <section id="field-submissions" className="mt-8 grid scroll-mt-28 gap-4">
           <h2 className="text-2xl font-black">Καταχωρήσεις πεδίου εργάτη / τεχνίτη</h2>
 
           {fieldSubmissions.map((item) => (
@@ -570,14 +595,48 @@ export default function WaterApprovalInboxPage() {
               Δεν υπάρχουν ακόμη καταχωρήσεις πεδίου.
             </p>
           ) : null}
-        </section>
+          </section>
+        ) : null}
 
-        <section className="mt-8 grid gap-4">
-          <h2 className="text-2xl font-black">Pending αιτήματα πρόσβασης / συσκευών</h2>
+        {activeSection === "access-requests" ? (
+          <section id="access-requests" className="mt-8 grid scroll-mt-28 gap-4">
+          <div>
+            <h2 className="text-2xl font-black">Αιτήματα πρόσβασης / συσκευών</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Τα {accessCounts.total} είναι αιτήματα/συσκευές και όχι απαραίτητα διαφορετικά άτομα.
+            </p>
 
-          {pendingRequests.map((item) => {
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => setRequestView("all")}
+                aria-pressed={requestView === "all"}
+                className={`rounded-2xl border px-5 py-3 font-black transition ${
+                  requestView === "all"
+                    ? "border-[#f2c766] bg-[#f2c766] text-black"
+                    : "border-[#f2c766]/50 bg-[#f2c766]/10 text-[#f2c766] hover:border-[#f2c766]"
+                }`}
+              >
+                Όλα τα αιτήματα ({accessCounts.total})
+              </button>
+              <button
+                type="button"
+                onClick={() => setRequestView("pending")}
+                aria-pressed={requestView === "pending"}
+                className={`rounded-2xl border px-5 py-3 font-black transition ${
+                  requestView === "pending"
+                    ? "border-amber-300 bg-amber-300 text-black"
+                    : "border-amber-400/50 bg-amber-950/20 text-amber-100 hover:border-amber-300"
+                }`}
+              >
+                Pending για απόφαση ({accessCounts.pending})
+              </button>
+            </div>
+          </div>
+
+          {visibleRequests.map((item) => {
             const pending = item.status === "pending_founder_review";
-            const canApprove = pending && item.hasDeviceToken === true;
+            const canApprove = item.hasDeviceToken === true;
 
             return (
               <article key={item.id} className="rounded-3xl border border-slate-700 bg-[#07111f] p-4">
@@ -587,42 +646,67 @@ export default function WaterApprovalInboxPage() {
                   </p>
                   <p className="text-sm text-slate-300">Ρόλος: {item.title}</p>
                   <p className="text-sm text-slate-300">Τηλέφωνο: {item.emailOrPhone}</p>
-                  <p className="text-sm text-slate-300">Κατάσταση: {item.status}</p>
+                  <p className="text-sm font-black text-[#f2c766]">
+                    Κατάσταση: {requestStatusLabel(item.status)}
+                  </p>
                   <p className="text-sm text-slate-300">
                     Συσκευή: {item.hasDeviceToken ? item.deviceLabel || item.deviceId || "δεμένη συσκευή" : "παλιό αίτημα χωρίς συσκευή"}
                   </p>
                   <p className="text-xs text-slate-500">{item.createdAt}</p>
                 </div>
 
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <button
-                    type="button"
-                    onClick={() => void decide(item, "approve")}
-                    disabled={loading || !canApprove}
-                    className="rounded-2xl border border-emerald-500 bg-emerald-950/40 px-5 py-3 font-black text-emerald-100 disabled:opacity-50"
-                  >
-                    Έγκριση συσκευής
-                  </button>
+                {pending ? (
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    {canApprove ? (
+                      <button
+                        type="button"
+                        onClick={() => void decide(item, "approve")}
+                        disabled={loading}
+                        className="rounded-2xl border border-emerald-500 bg-emerald-950/40 px-5 py-3 font-black text-emerald-100 disabled:opacity-50"
+                      >
+                        Approve User / Συσκευή
+                      </button>
+                    ) : (
+                      <p className="rounded-2xl border border-amber-500/40 bg-amber-950/20 px-4 py-3 text-sm font-bold text-amber-100">
+                        Παλιά αίτηση χωρίς ασφαλές device token. Μπορεί μόνο να απορριφθεί.
+                      </p>
+                    )}
 
+                    <button
+                      type="button"
+                      onClick={() => void decide(item, "reject")}
+                      disabled={loading}
+                      className="rounded-2xl border border-red-500 bg-red-950/40 px-5 py-3 font-black text-red-100 disabled:opacity-50"
+                    >
+                      Reject / Διαγραφή αιτήματος
+                    </button>
+                  </div>
+                ) : item.status === "approved" ? (
                   <button
                     type="button"
-                    onClick={() => void decide(item, "reject")}
-                    disabled={loading || item.status === "rejected"}
-                    className="rounded-2xl border border-red-500 bg-red-950/40 px-5 py-3 font-black text-red-100 disabled:opacity-50"
+                    onClick={() => openSection("approved-users")}
+                    className="mt-4 w-full rounded-2xl border border-emerald-500/60 bg-emerald-950/30 px-5 py-3 font-black text-emerald-100"
                   >
-                    Απόρριψη
+                    Άνοιγμα Εγκεκριμένων Users →
                   </button>
-                </div>
+                ) : (
+                  <p className="mt-4 rounded-2xl border border-slate-700 px-4 py-3 text-sm font-bold text-slate-300">
+                    Δεν υπάρχει διαθέσιμη ενέργεια για αυτή την κατάσταση.
+                  </p>
+                )}
               </article>
             );
           })}
 
-          {pendingRequests.length === 0 ? (
+          {visibleRequests.length === 0 ? (
             <p className="rounded-3xl border border-slate-700 bg-[#07111f] p-4 text-slate-300">
-              Δεν υπάρχουν pending αιτήματα πρόσβασης.
+              {requestView === "pending"
+                ? "Δεν υπάρχουν pending αιτήματα πρόσβασης."
+                : "Δεν υπάρχουν αιτήματα πρόσβασης."}
             </p>
           ) : null}
-        </section>
+          </section>
+        ) : null}
       </section>
     </main>
   );

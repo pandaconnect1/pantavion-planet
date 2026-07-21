@@ -15,6 +15,15 @@ export const metadata = {
 
 const cards = [
   {
+    title: "Administrator / Users Management",
+    label: "ADMINISTRATOR",
+    description:
+      "Προστατευμένη διαχείριση Users με Approve, Reject και προσωρινό Delete / Block.",
+    href: "/professional/infrastructure/water/admin/approvals",
+    action: "Άνοιγμα Administrator",
+    adminOnly: true,
+  },
+  {
     title: "Users / Access",
     label: "APPROVALS",
     description:
