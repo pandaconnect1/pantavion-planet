@@ -10,8 +10,40 @@ type BlobLike = {
   uploadedAt?: string | Date;
 };
 
+type AdminRequestRecord = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  title: string;
+  organization: string;
+  emailOrPhone: string;
+  reason: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  attemptCount: number;
+  deviceId: string;
+  deviceLabel: string;
+  hasDeviceToken: boolean;
+};
+
 function clean(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
+}
+
+function normalizePhone(value: unknown) {
+  return clean(value)
+    .toLowerCase()
+    .replace(/[\s().-]/g, "");
+}
+
+function requestIdentity(record: AdminRequestRecord) {
+  const phone = normalizePhone(record.emailOrPhone);
+
+  if (phone) return `phone:${phone}`;
+  if (record.deviceId) return `device:${record.deviceId}`;
+
+  return `request:${record.id}`;
 }
 
 function privateBlobHeaders(): HeadersInit {
@@ -37,6 +69,30 @@ async function readJsonBlob(blob: BlobLike) {
   return response.json();
 }
 
+function normalizeRequest(payload: Record<string, any>): AdminRequestRecord {
+  const device = payload.device || {};
+  const attemptCount = Number(payload.attemptCount || 1);
+
+  return {
+    id: clean(payload.id),
+    firstName: clean(payload.firstName),
+    lastName: clean(payload.lastName),
+    title: clean(payload.title) || clean(payload.roleTitle),
+    organization: clean(payload.organization),
+    emailOrPhone: normalizePhone(payload.emailOrPhone || payload.phone),
+    reason: clean(payload.reason),
+    status: clean(payload.status),
+    createdAt: clean(payload.createdAt),
+    updatedAt:
+      clean(payload.updatedAt) || clean(payload.lastRequestedAt) || clean(payload.decidedAt),
+    attemptCount:
+      Number.isFinite(attemptCount) && attemptCount > 0 ? Math.floor(attemptCount) : 1,
+    deviceId: clean(device.id) || clean(payload.deviceId),
+    deviceLabel: clean(device.label) || clean(payload.deviceLabel),
+    hasDeviceToken: Boolean(clean(device.tokenHash) || clean(payload.tokenHash)),
+  };
+}
+
 export async function POST(request: Request) {
   try {
     if (!hasWaterAdminSession(request)) {
@@ -54,46 +110,56 @@ export async function POST(request: Request) {
       limit: 200,
     });
 
-    const requests = [];
+    const historyRecords: AdminRequestRecord[] = [];
     let skippedCount = 0;
 
     for (const blob of result.blobs as BlobLike[]) {
       try {
         const payload = await readJsonBlob(blob);
-        // hide rejected active requests from the live founder/admin queue.
-        if (clean(payload.status) === "rejected") {
-          continue;
-        }
-
-        const device = payload.device || {};
-
-        requests.push({
-          id: clean(payload.id),
-          firstName: clean(payload.firstName),
-          lastName: clean(payload.lastName),
-          title: clean(payload.title),
-          organization: clean(payload.organization),
-          emailOrPhone: clean(payload.emailOrPhone),
-          reason: clean(payload.reason),
-          status: clean(payload.status),
-          createdAt: clean(payload.createdAt),
-          deviceId: clean(device.id),
-          deviceLabel: clean(device.label),
-          hasDeviceToken: Boolean(clean(device.tokenHash)),
-        });
+        historyRecords.push(normalizeRequest(payload));
       } catch {
         skippedCount += 1;
       }
     }
 
-    requests.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+    historyRecords.sort((a, b) =>
+      String(b.updatedAt || b.createdAt).localeCompare(String(a.updatedAt || a.createdAt)),
+    );
+
+    const rawPendingRecords = historyRecords.filter(
+      (item) => item.status === "pending_founder_review",
+    );
+    const latestRequestByPerson = new Map<string, AdminRequestRecord>();
+
+    for (const historyRecord of historyRecords) {
+      const identity = requestIdentity(historyRecord);
+
+      if (!latestRequestByPerson.has(identity)) {
+        latestRequestByPerson.set(identity, historyRecord);
+      }
+    }
+
+    const requests = [...latestRequestByPerson.values()].filter(
+      (item) => item.status === "pending_founder_review",
+    );
 
     return NextResponse.json({
       ok: true,
       requests,
+      pendingRequests: requests,
       blobCount: result.blobs.length,
-      readCount: requests.length,
+      readCount: historyRecords.length,
       skippedCount,
+      summary: {
+        newPendingCount: requests.length,
+        rawPendingAttemptCount: rawPendingRecords.length,
+        historicalAttemptCount: historyRecords.length,
+        uniqueHistoricalPeopleCount: latestRequestByPerson.size,
+        duplicateHistoricalAttemptCount: Math.max(
+          0,
+          historyRecords.length - latestRequestByPerson.size,
+        ),
+      },
       checkedAt: new Date().toISOString(),
     });
   } catch (error) {

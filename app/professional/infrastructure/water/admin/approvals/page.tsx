@@ -13,6 +13,8 @@ type WaterAccessRequest = {
   reason?: string;
   status: string;
   createdAt: string;
+  updatedAt?: string;
+  attemptCount?: number;
   deviceId?: string;
   deviceLabel?: string;
   hasDeviceToken?: boolean;
@@ -29,6 +31,16 @@ type ApprovedUserRecord = {
   status?: string;
   approvedAt?: string;
   updatedAt?: string;
+  revokedAt?: string;
+  revoked?: boolean;
+};
+
+type RequestSummary = {
+  newPendingCount?: number;
+  rawPendingAttemptCount?: number;
+  historicalAttemptCount?: number;
+  uniqueHistoricalPeopleCount?: number;
+  duplicateHistoricalAttemptCount?: number;
 };
 
 type WaterFieldSubmission = {
@@ -58,9 +70,11 @@ type WaterFieldSubmission = {
   deviceLabel: string;
 };
 
-type RequestView = "all" | "pending";
-
-type InboxSectionId = "access-requests" | "approved-users" | "field-submissions";
+type InboxSectionId =
+  | "access-requests"
+  | "approved-users"
+  | "blocked-users"
+  | "field-submissions";
 
 function typeLabel(type: string) {
   const labels: Record<string, string> = {
@@ -79,36 +93,22 @@ function typeLabel(type: string) {
   return labels[type] || type || "Καταχώρηση";
 }
 
-function requestStatusLabel(status: string) {
-  const labels: Record<string, string> = {
-    pending_founder_review: "Pending για έγκριση",
-    approved: "Εγκεκριμένο",
-    revoked: "Διαγραμμένο / Μπλοκαρισμένο",
-    rejected: "Απορρίφθηκε",
-  };
-
-  return labels[status] || status || "Άγνωστη κατάσταση";
-}
-
 export default function WaterApprovalInboxPage() {
   const [requests, setRequests] = useState<WaterAccessRequest[]>([]);
+  const [requestSummary, setRequestSummary] = useState<RequestSummary>({});
   const [approvedUsers, setApprovedUsers] = useState<ApprovedUserRecord[]>([]);
+  const [blockedUsers, setBlockedUsers] = useState<ApprovedUserRecord[]>([]);
   const [fieldSubmissions, setFieldSubmissions] = useState<WaterFieldSubmission[]>([]);
   const [managedUserKey, setManagedUserKey] = useState("");
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
-  const [requestView, setRequestView] = useState<RequestView>("pending");
   const [activeSection, setActiveSection] = useState<InboxSectionId>("approved-users");
   const [message, setMessage] = useState("");
   const [approvedMessage, setApprovedMessage] = useState("");
   const [fieldMessage, setFieldMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function openSection(sectionId: InboxSectionId, nextRequestView?: RequestView) {
+  function openSection(sectionId: InboxSectionId) {
     setActiveSection(sectionId);
-
-    if (nextRequestView) {
-      setRequestView(nextRequestView);
-    }
 
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
@@ -133,6 +133,7 @@ export default function WaterApprovalInboxPage() {
     const json = (await response.json()) as {
       ok?: boolean;
       requests?: WaterAccessRequest[];
+      summary?: RequestSummary;
       error?: string;
     };
 
@@ -140,7 +141,10 @@ export default function WaterApprovalInboxPage() {
       throw new Error(json.error || "requests_failed");
     }
 
-    return json.requests || [];
+    return {
+      requests: json.requests || [],
+      summary: json.summary || {},
+    };
   }
 
   async function loadApprovedUsers() {
@@ -156,6 +160,7 @@ export default function WaterApprovalInboxPage() {
     const json = (await response.json()) as {
       ok?: boolean;
       approvedUsers?: ApprovedUserRecord[];
+      blockedUsers?: ApprovedUserRecord[];
       error?: string;
     };
 
@@ -163,7 +168,10 @@ export default function WaterApprovalInboxPage() {
       throw new Error(json.error || "approved_users_failed");
     }
 
-    return json.approvedUsers || [];
+    return {
+      approvedUsers: json.approvedUsers || [],
+      blockedUsers: json.blockedUsers || [],
+    };
   }
 
   async function loadFieldSubmissions() {
@@ -203,18 +211,24 @@ export default function WaterApprovalInboxPage() {
       ]);
 
       if (requestResult.status === "fulfilled") {
-        setRequests(requestResult.value);
-        setMessage(`Φορτώθηκαν ${requestResult.value.length} αιτήματα πρόσβασης/συσκευών.`);
+        setRequests(requestResult.value.requests);
+        setRequestSummary(requestResult.value.summary);
+        setMessage(`Φορτώθηκαν ${requestResult.value.requests.length} νέα pending αιτήματα.`);
       } else {
         setRequests([]);
+        setRequestSummary({});
         setMessage("Τα αιτήματα πρόσβασης δεν φορτώθηκαν.");
       }
 
       if (approvedResult.status === "fulfilled") {
-        setApprovedUsers(approvedResult.value);
-        setApprovedMessage(`Φορτώθηκαν ${approvedResult.value.length} εγκεκριμένοι Users.`);
+        setApprovedUsers(approvedResult.value.approvedUsers);
+        setBlockedUsers(approvedResult.value.blockedUsers);
+        setApprovedMessage(
+          `Φορτώθηκαν ${approvedResult.value.approvedUsers.length} ενεργοί και ${approvedResult.value.blockedUsers.length} μπλοκαρισμένοι Users.`,
+        );
       } else {
         setApprovedUsers([]);
+        setBlockedUsers([]);
         setApprovedMessage("Οι εγκεκριμένοι Users δεν φορτώθηκαν.");
       }
 
@@ -352,20 +366,6 @@ export default function WaterApprovalInboxPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const accessCounts = useMemo(() => {
-    return {
-      total: requests.length,
-      pending: requests.filter((item) => item.status === "pending_founder_review").length,
-    };
-  }, [requests]);
-
-  const pendingRequests = useMemo(
-    () => requests.filter((item) => item.status === "pending_founder_review"),
-    [requests],
-  );
-
-  const visibleRequests = requestView === "all" ? requests : pendingRequests;
-
   const fieldCounts = useMemo(() => {
     return {
       total: fieldSubmissions.length,
@@ -414,18 +414,16 @@ export default function WaterApprovalInboxPage() {
           {fieldMessage ? <p className="text-sm font-bold text-[#f2c766]">{fieldMessage}</p> : null}
         </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <button
             type="button"
-            onClick={() => openSection("access-requests", "all")}
+            onClick={() => openSection("access-requests")}
             aria-pressed={activeSection === "access-requests"}
             className="rounded-2xl border border-[#f2c766]/60 bg-[#07111f] p-4 text-left transition hover:border-[#f2c766] hover:bg-[#f2c766]/10 active:scale-[0.99]"
           >
-            <span className="block text-xs text-slate-400">Όλα τα αιτήματα / συσκευές</span>
-            <span className="mt-1 block text-3xl font-black text-[#f2c766]">{accessCounts.total}</span>
-            <span className="mt-2 block text-sm font-black text-[#f2c766]">
-              Άνοιγμα λίστας → Pending: {accessCounts.pending}
-            </span>
+            <span className="block text-xs text-slate-400">Νέα Pending αιτήματα</span>
+            <span className="mt-1 block text-3xl font-black text-[#f2c766]">{requests.length}</span>
+            <span className="mt-2 block text-sm font-black text-[#f2c766]">Άνοιγμα για απόφαση →</span>
           </button>
 
           <button
@@ -434,9 +432,20 @@ export default function WaterApprovalInboxPage() {
             aria-pressed={activeSection === "approved-users"}
             className="rounded-2xl border border-emerald-500/60 bg-emerald-950/20 p-4 text-left transition hover:border-emerald-300 hover:bg-emerald-900/30 active:scale-[0.99]"
           >
-            <span className="block text-xs text-emerald-100/70">Εγκεκριμένοι Users</span>
+            <span className="block text-xs text-emerald-100/70">Ενεργοί Users / συσκευές</span>
             <span className="mt-1 block text-3xl font-black text-emerald-100">{approvedUsers.length}</span>
-            <span className="mt-2 block text-sm font-black text-emerald-200">Άνοιγμα Users →</span>
+            <span className="mt-2 block text-sm font-black text-emerald-200">Άνοιγμα ενεργών →</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => openSection("blocked-users")}
+            aria-pressed={activeSection === "blocked-users"}
+            className="rounded-2xl border border-red-500/60 bg-red-950/20 p-4 text-left transition hover:border-red-300 hover:bg-red-900/30 active:scale-[0.99]"
+          >
+            <span className="block text-xs text-red-100/70">Μπλοκαρισμένοι Users / συσκευές</span>
+            <span className="mt-1 block text-3xl font-black text-red-100">{blockedUsers.length}</span>
+            <span className="mt-2 block text-sm font-black text-red-200">Άνοιγμα μπλοκαρισμένων →</span>
           </button>
 
           <button
@@ -453,10 +462,22 @@ export default function WaterApprovalInboxPage() {
           </button>
         </div>
 
+        {(requestSummary.historicalAttemptCount || 0) > 0 ? (
+          <div className="mt-4 rounded-2xl border border-slate-700 bg-[#07111f] p-4 text-sm leading-6 text-slate-300">
+            <p className="font-black text-white">Ιστορικό αιτημάτων — δεν είναι νέα αιτήματα</p>
+            <p className="mt-1">
+              Υπάρχουν {requestSummary.historicalAttemptCount || 0} αποθηκευμένες προσπάθειες από περίπου{" "}
+              {requestSummary.uniqueHistoricalPeopleCount || 0} πρόσωπα/ταυτότητες. Οι{" "}
+              {requestSummary.duplicateHistoricalAttemptCount || 0} επαναλήψεις ομαδοποιήθηκαν και δεν
+              εμφανίζονται στην ουρά έγκρισης.
+            </p>
+          </div>
+        ) : null}
+
         {activeSection === "approved-users" ? (
           <section id="approved-users" className="mt-8 grid scroll-mt-28 gap-4">
           <div>
-            <h2 className="text-2xl font-black">Εγκεκριμένοι Users</h2>
+            <h2 className="text-2xl font-black">Ενεργοί εγκεκριμένοι Users / συσκευές</h2>
             <p className="mt-2 text-sm font-bold leading-6 text-slate-300">
               Το Delete / Block αφαιρεί αμέσως τον User από τους ενεργούς Users και μπλοκάρει τη
               συγκεκριμένη συσκευή. Αργότερα μπορεί να κάνει νέα αίτηση για να τον εγκρίνεις ξανά.
@@ -540,9 +561,52 @@ export default function WaterApprovalInboxPage() {
 
           {approvedUsers.length === 0 ? (
             <p className="rounded-3xl border border-slate-700 bg-[#07111f] p-4 text-slate-300">
-              Δεν υπάρχουν εγκεκριμένοι Users.
+              Δεν υπάρχουν ενεργοί εγκεκριμένοι Users.
             </p>
           ) : null}
+          </section>
+        ) : null}
+
+        {activeSection === "blocked-users" ? (
+          <section id="blocked-users" className="mt-8 grid scroll-mt-28 gap-4">
+            <div>
+              <h2 className="text-2xl font-black">Μπλοκαρισμένοι Users / συσκευές</h2>
+              <p className="mt-2 text-sm font-bold leading-6 text-slate-300">
+                Αυτές οι συσκευές δεν έχουν ενεργή πρόσβαση. Για να επιστρέψει κάποιος User, πρέπει να
+                στείλει νέο αίτημα και να τον εγκρίνεις ξανά από τα Νέα Pending αιτήματα.
+              </p>
+            </div>
+
+            {blockedUsers.map((user) => {
+              const userKey =
+                user.deviceId ||
+                user.id ||
+                user.requestId ||
+                `${user.firstName}-${user.lastName}-${user.revokedAt || user.updatedAt || "blocked"}`;
+
+              return (
+                <article key={userKey} className="rounded-3xl border border-red-700/50 bg-red-950/15 p-4">
+                  <div className="grid gap-1">
+                    <p className="text-xl font-black">
+                      {user.firstName || "—"} {user.lastName || ""}
+                    </p>
+                    <p className="text-sm text-slate-300">Ρόλος: {user.roleTitle || "—"}</p>
+                    <p className="text-sm text-slate-300">Τηλέφωνο: {user.phone || "—"}</p>
+                    <p className="text-sm text-slate-300">Συσκευή: {user.deviceId || "—"}</p>
+                    <p className="text-sm font-black text-red-200">Κατάσταση: Μπλοκαρισμένο</p>
+                    <p className="text-xs text-slate-500">
+                      Μπλοκαρίστηκε: {user.revokedAt || user.updatedAt || "—"}
+                    </p>
+                  </div>
+                </article>
+              );
+            })}
+
+            {blockedUsers.length === 0 ? (
+              <p className="rounded-3xl border border-slate-700 bg-[#07111f] p-4 text-slate-300">
+                Δεν υπάρχουν μπλοκαρισμένοι Users.
+              </p>
+            ) : null}
           </section>
         ) : null}
 
@@ -600,62 +664,45 @@ export default function WaterApprovalInboxPage() {
 
         {activeSection === "access-requests" ? (
           <section id="access-requests" className="mt-8 grid scroll-mt-28 gap-4">
-          <div>
-            <h2 className="text-2xl font-black">Αιτήματα πρόσβασης / συσκευών</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
-              Τα {accessCounts.total} είναι αιτήματα/συσκευές και όχι απαραίτητα διαφορετικά άτομα.
-            </p>
-
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <button
-                type="button"
-                onClick={() => setRequestView("all")}
-                aria-pressed={requestView === "all"}
-                className={`rounded-2xl border px-5 py-3 font-black transition ${
-                  requestView === "all"
-                    ? "border-[#f2c766] bg-[#f2c766] text-black"
-                    : "border-[#f2c766]/50 bg-[#f2c766]/10 text-[#f2c766] hover:border-[#f2c766]"
-                }`}
-              >
-                Όλα τα αιτήματα ({accessCounts.total})
-              </button>
-              <button
-                type="button"
-                onClick={() => setRequestView("pending")}
-                aria-pressed={requestView === "pending"}
-                className={`rounded-2xl border px-5 py-3 font-black transition ${
-                  requestView === "pending"
-                    ? "border-amber-300 bg-amber-300 text-black"
-                    : "border-amber-400/50 bg-amber-950/20 text-amber-100 hover:border-amber-300"
-                }`}
-              >
-                Pending για απόφαση ({accessCounts.pending})
-              </button>
+            <div>
+              <h2 className="text-2xl font-black">Νέα Pending αιτήματα</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-300">
+                Εδώ εμφανίζονται μόνο μοναδικά αιτήματα που δεν έχουν ακόμη εγκριθεί ή απορριφθεί.
+                Οι παλιές επαναλήψεις, οι ενεργοί και οι μπλοκαρισμένοι Users δεν μπαίνουν σε αυτή την
+                ουρά.
+              </p>
             </div>
-          </div>
 
-          {visibleRequests.map((item) => {
-            const pending = item.status === "pending_founder_review";
-            const canApprove = item.hasDeviceToken === true;
+            {requests.map((item) => {
+              const canApprove = item.hasDeviceToken === true;
 
-            return (
-              <article key={item.id} className="rounded-3xl border border-slate-700 bg-[#07111f] p-4">
-                <div className="flex flex-col gap-2">
-                  <p className="text-xl font-black">
-                    {item.firstName} {item.lastName}
-                  </p>
-                  <p className="text-sm text-slate-300">Ρόλος: {item.title}</p>
-                  <p className="text-sm text-slate-300">Τηλέφωνο: {item.emailOrPhone}</p>
-                  <p className="text-sm font-black text-[#f2c766]">
-                    Κατάσταση: {requestStatusLabel(item.status)}
-                  </p>
-                  <p className="text-sm text-slate-300">
-                    Συσκευή: {item.hasDeviceToken ? item.deviceLabel || item.deviceId || "δεμένη συσκευή" : "παλιό αίτημα χωρίς συσκευή"}
-                  </p>
-                  <p className="text-xs text-slate-500">{item.createdAt}</p>
-                </div>
+              return (
+                <article key={item.id} className="rounded-3xl border border-slate-700 bg-[#07111f] p-4">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-xl font-black">
+                      {item.firstName} {item.lastName}
+                    </p>
+                    <p className="text-sm text-slate-300">Ρόλος: {item.title || "—"}</p>
+                    <p className="text-sm text-slate-300">Τηλέφωνο: {item.emailOrPhone || "—"}</p>
+                    {item.organization ? (
+                      <p className="text-sm text-slate-300">Οργανισμός: {item.organization}</p>
+                    ) : null}
+                    {item.reason ? <p className="text-sm text-slate-300">Αιτιολογία: {item.reason}</p> : null}
+                    <p className="text-sm font-black text-[#f2c766]">Κατάσταση: Pending για απόφαση</p>
+                    <p className="text-sm text-slate-300">
+                      Συσκευή:{" "}
+                      {canApprove
+                        ? item.deviceLabel || item.deviceId || "δεμένη συσκευή"
+                        : "παλιό αίτημα χωρίς ασφαλές device token"}
+                    </p>
+                    {(item.attemptCount || 0) > 1 ? (
+                      <p className="text-sm font-bold text-amber-200">
+                        Προσπάθειες ίδιας συσκευής: {item.attemptCount} — ομαδοποιημένες σε ένα αίτημα.
+                      </p>
+                    ) : null}
+                    <p className="text-xs text-slate-500">{item.updatedAt || item.createdAt}</p>
+                  </div>
 
-                {pending ? (
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     {canApprove ? (
                       <button
@@ -668,7 +715,8 @@ export default function WaterApprovalInboxPage() {
                       </button>
                     ) : (
                       <p className="rounded-2xl border border-amber-500/40 bg-amber-950/20 px-4 py-3 text-sm font-bold text-amber-100">
-                        Παλιά αίτηση χωρίς ασφαλές device token. Μπορεί μόνο να απορριφθεί.
+                        Χωρίς ασφαλές device token μπορεί μόνο να απορριφθεί. Ο User μπορεί μετά να
+                        στείλει νέο αίτημα από τη συσκευή του.
                       </p>
                     )}
 
@@ -681,30 +729,15 @@ export default function WaterApprovalInboxPage() {
                       Reject / Διαγραφή αιτήματος
                     </button>
                   </div>
-                ) : item.status === "approved" ? (
-                  <button
-                    type="button"
-                    onClick={() => openSection("approved-users")}
-                    className="mt-4 w-full rounded-2xl border border-emerald-500/60 bg-emerald-950/30 px-5 py-3 font-black text-emerald-100"
-                  >
-                    Άνοιγμα Εγκεκριμένων Users →
-                  </button>
-                ) : (
-                  <p className="mt-4 rounded-2xl border border-slate-700 px-4 py-3 text-sm font-bold text-slate-300">
-                    Δεν υπάρχει διαθέσιμη ενέργεια για αυτή την κατάσταση.
-                  </p>
-                )}
-              </article>
-            );
-          })}
+                </article>
+              );
+            })}
 
-          {visibleRequests.length === 0 ? (
-            <p className="rounded-3xl border border-slate-700 bg-[#07111f] p-4 text-slate-300">
-              {requestView === "pending"
-                ? "Δεν υπάρχουν pending αιτήματα πρόσβασης."
-                : "Δεν υπάρχουν αιτήματα πρόσβασης."}
-            </p>
-          ) : null}
+            {requests.length === 0 ? (
+              <p className="rounded-3xl border border-slate-700 bg-[#07111f] p-4 text-slate-300">
+                Δεν υπάρχουν νέα pending αιτήματα πρόσβασης.
+              </p>
+            ) : null}
           </section>
         ) : null}
       </section>

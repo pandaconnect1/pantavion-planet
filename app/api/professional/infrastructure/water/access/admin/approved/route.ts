@@ -26,6 +26,8 @@ type ApprovedUserRecord = {
   title?: string;
   status?: string;
   approvedAt?: string;
+  revokedAt?: string;
+  revoked?: boolean;
   updatedAt?: string;
   sourcePath?: string;
 };
@@ -77,6 +79,8 @@ function normalizeApprovedRecord(
     title: roleTitle,
     status: clean(payload.status) || "approved",
     approvedAt: clean(payload.approvedAt),
+    revokedAt: clean(payload.revokedAt),
+    revoked: payload.revoked === true,
     updatedAt: clean(payload.updatedAt),
     sourcePath: pathname,
   };
@@ -113,6 +117,7 @@ export async function POST(request: Request) {
     });
 
     const approvedUsers: ApprovedUserRecord[] = [];
+    const blockedUsers: ApprovedUserRecord[] = [];
 
     for (const blob of result.blobs as BlobLike[]) {
       const payload = await readJsonBlob(blob);
@@ -121,7 +126,9 @@ export async function POST(request: Request) {
 
       const normalized = normalizeApprovedRecord(blob.pathname, payload);
 
-      if (normalized.status !== "revoked") {
+      if (clean(normalized.status).toLowerCase() === "revoked" || normalized.revoked === true) {
+        blockedUsers.push(normalized);
+      } else {
         approvedUsers.push(normalized);
       }
     }
@@ -131,13 +138,21 @@ export async function POST(request: Request) {
         String(a.approvedAt || a.updatedAt || "")
       )
     );
+    blockedUsers.sort((a, b) =>
+      String(b.revokedAt || b.updatedAt || b.approvedAt || "").localeCompare(
+        String(a.revokedAt || a.updatedAt || a.approvedAt || ""),
+      ),
+    );
 
     return NextResponse.json(
       {
         ok: true,
         approvedUsers,
         approvedDevices: approvedUsers,
+        blockedUsers,
+        revokedUsers: blockedUsers,
         count: approvedUsers.length,
+        blockedCount: blockedUsers.length,
       },
       { headers: { "Cache-Control": "no-store" } }
     );

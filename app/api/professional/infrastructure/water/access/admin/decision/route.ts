@@ -1,4 +1,4 @@
-import { del, list, put } from "@vercel/blob";
+import { list, put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 import { hasWaterAdminSession } from "@/core/security/water-admin-session";
@@ -100,6 +100,7 @@ async function rejectRequest(requestId: string, payload: RecordLike, requestPath
   const rejectedPayload = {
     ...payload,
     status: "rejected",
+    updatedAt: decidedAt,
     decidedAt,
     decidedBy: "pantavion-founder",
     archivedReason: "rejected_by_founder",
@@ -115,7 +116,11 @@ async function rejectRequest(requestId: string, payload: RecordLike, requestPath
     },
   );
 
-  await del(requestPath);
+  await put(requestPath, JSON.stringify(rejectedPayload, null, 2), {
+    access: "private",
+    allowOverwrite: true,
+    contentType: "application/json",
+  });
 
   return NextResponse.json({
     ok: true,
@@ -154,6 +159,7 @@ async function approveRequest(requestId: string, payload: RecordLike, requestPat
   const updatedPayload = {
     ...payload,
     status: "approved",
+    updatedAt: decidedAt,
     decidedAt,
     decidedBy: "pantavion-founder",
   };
@@ -335,6 +341,7 @@ async function revokeAccess(body: DecisionBody, requestPayload?: RecordLike, req
         {
           ...requestPayload,
           status: "revoked",
+          updatedAt: decidedAt,
           decidedAt,
           decidedBy: "pantavion-founder",
           revokedDeviceId: targetDeviceId,
