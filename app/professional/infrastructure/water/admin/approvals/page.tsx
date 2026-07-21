@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
+import WaterAdminPushControls from "./water-admin-push-controls";
+
 type WaterAccessRequest = {
   id: string;
   firstName: string;
@@ -398,6 +400,8 @@ export default function WaterApprovalInboxPage() {
           Πάτησε μία από τις πραγματικές ενότητες πιο κάτω για να ανοίξει η αντίστοιχη λίστα και οι
           διαθέσιμες ενέργειες.
         </p>
+
+        <WaterAdminPushControls />
 
         <div className="mt-6 grid gap-3 rounded-3xl border border-slate-700 bg-[#07111f] p-4">
           <button
