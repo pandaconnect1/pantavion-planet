@@ -142,8 +142,8 @@ export default function WaterAccessControlClient({ isAdmin = false }: { isAdmin?
   const [pendingRequestId, setPendingRequestId] = useState("");
 
   const canSubmit = useMemo(
-    () => Boolean(firstName.trim() && lastName.trim() && phone.trim()),
-    [firstName, lastName, phone],
+    () => Boolean(firstName.trim() && lastName.trim() && phone.trim() && roleTitle.trim()),
+    [firstName, lastName, phone, roleTitle],
   );
 
   useEffect(() => {
@@ -173,7 +173,7 @@ export default function WaterAccessControlClient({ isAdmin = false }: { isAdmin?
     if (!device) return;
 
     if (!canSubmit) {
-      setRequestMessage("Συμπλήρωσε όνομα, επώνυμο και τηλέφωνο.");
+      setRequestMessage("Συμπλήρωσε όνομα, επώνυμο, τηλέφωνο και ρόλο / θέση.");
       return;
     }
 

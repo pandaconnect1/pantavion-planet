@@ -1,6 +1,6 @@
 import { createHash } from "crypto";
 
-import { put } from "@vercel/blob";
+import { list, put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 type WaterAccessRequestBody = {
@@ -10,9 +10,18 @@ type WaterAccessRequestBody = {
   organization?: string;
   emailOrPhone?: string;
   reason?: string;
+  phone?: string;
+  roleTitle?: string;
   deviceId?: string;
   deviceToken?: string;
   deviceLabel?: string;
+  userAgent?: string;
+};
+
+type BlobLike = {
+  url: string;
+  downloadUrl?: string;
+  pathname: string;
 };
 
 function clean(value: unknown) {
@@ -29,33 +38,54 @@ function hashToken(value: string) {
   return createHash("sha256").update(value).digest("hex");
 }
 
+function stableRequestId(deviceId: string) {
+  return `water-access-device-${createHash("sha256").update(deviceId).digest("hex").slice(0, 32)}`;
+}
+
+function privateBlobHeaders(): HeadersInit {
+  const token = process.env.BLOB_READ_WRITE_TOKEN || "";
+
+  return token
+    ? {
+        Authorization: `Bearer ${token}`,
+      }
+    : {};
+}
+
+async function readExistingRequest(pathname: string) {
+  const result = await list({
+    prefix: pathname,
+    limit: 1,
+  });
+  const blob = (result.blobs as BlobLike[]).find((item) => item.pathname === pathname);
+
+  if (!blob) return null;
+
+  const response = await fetch(blob.downloadUrl || blob.url, {
+    cache: "no-store",
+    headers: privateBlobHeaders(),
+  });
+
+  if (!response.ok) return null;
+
+  return (await response.json()) as Record<string, unknown>;
+}
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as WaterAccessRequestBody;
     const deviceId = clean(body.deviceId).slice(0, 120);
     const deviceToken = clean(body.deviceToken);
+    const now = new Date().toISOString();
+    const title = clean(body.title) || clean(body.roleTitle);
+    const emailOrPhone =
+      normalizePhone(body.emailOrPhone) || normalizePhone(body.phone);
+    const deviceLabel =
+      clean(body.deviceLabel).slice(0, 220) ||
+      clean(body.userAgent).slice(0, 220) ||
+      clean(request.headers.get("user-agent")).slice(0, 220);
 
-    const payload = {
-      id: `water-access-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-      firstName: clean(body.firstName),
-      lastName: clean(body.lastName),
-      title: clean(body.title),
-      organization: clean(body.organization),
-      emailOrPhone: normalizePhone(body.emailOrPhone),
-      reason: clean(body.reason),
-      status: "pending_founder_review",
-      createdAt: new Date().toISOString(),
-      source: "pantavion-water-live-access-request",
-      device: {
-        id: deviceId,
-        tokenHash: deviceToken ? hashToken(deviceToken) : "",
-        label: clean(body.deviceLabel).slice(0, 220),
-        requestedAt: new Date().toISOString(),
-        userAgent: clean(request.headers.get("user-agent")).slice(0, 300),
-      },
-    };
-
-    if (!payload.firstName || !payload.lastName || !payload.title || !payload.emailOrPhone) {
+    if (!clean(body.firstName) || !clean(body.lastName) || !title || !emailOrPhone) {
       return NextResponse.json(
         {
           ok: false,
@@ -65,7 +95,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!payload.device.id || !payload.device.tokenHash) {
+    if (!deviceId || !deviceToken) {
       return NextResponse.json(
         {
           ok: false,
@@ -75,21 +105,55 @@ export async function POST(request: Request) {
       );
     }
 
+    const requestId = stableRequestId(deviceId);
+    const requestPath = `water/private/access-requests/${requestId}.json`;
+    const existingRequest = await readExistingRequest(requestPath);
+    const previousAttemptCount = Number(existingRequest?.attemptCount || 0);
+    const attemptCount =
+      Number.isFinite(previousAttemptCount) && previousAttemptCount > 0
+        ? Math.floor(previousAttemptCount) + 1
+        : 1;
+
+    const payload = {
+      id: requestId,
+      firstName: clean(body.firstName),
+      lastName: clean(body.lastName),
+      title,
+      organization: clean(body.organization),
+      emailOrPhone,
+      reason: clean(body.reason),
+      status: "pending_founder_review",
+      createdAt: clean(existingRequest?.createdAt) || now,
+      updatedAt: now,
+      lastRequestedAt: now,
+      attemptCount,
+      source: "pantavion-water-live-access-request",
+      device: {
+        id: deviceId,
+        tokenHash: hashToken(deviceToken),
+        label: deviceLabel,
+        requestedAt: now,
+        userAgent: clean(request.headers.get("user-agent")).slice(0, 300),
+      },
+    };
+
     await put(
-      `water/private/access-requests/${payload.id}.json`,
+      requestPath,
       JSON.stringify(payload, null, 2),
       {
         access: "private",
-        allowOverwrite: false,
+        allowOverwrite: true,
         contentType: "application/json",
       },
     );
 
     return NextResponse.json({
       ok: true,
-      requestId: payload.id,
+      requestId,
       status: payload.status,
       deviceBound: true,
+      deduplicated: Boolean(existingRequest),
+      attemptCount,
     });
   } catch (error) {
     return NextResponse.json(
