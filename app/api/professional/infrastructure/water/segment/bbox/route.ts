@@ -12,7 +12,6 @@ import { hasWaterAdminSession } from "@/core/security/water-admin-session";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
 
 type BlobLike = {
   url: string;

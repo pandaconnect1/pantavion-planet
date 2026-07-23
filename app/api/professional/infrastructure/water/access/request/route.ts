@@ -3,10 +3,6 @@ import { createHash } from "crypto";
 import { list, put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
-import { sendWaterAdminPushNotification } from "@/core/infrastructure/water/water-admin-push";
-
-export const runtime = "nodejs";
-
 type WaterAccessRequestBody = {
   firstName?: string;
   lastName?: string;
@@ -112,7 +108,6 @@ export async function POST(request: Request) {
     const requestId = stableRequestId(deviceId);
     const requestPath = `water/private/access-requests/${requestId}.json`;
     const existingRequest = await readExistingRequest(requestPath);
-    const shouldNotifyAdmin = clean(existingRequest?.status) !== "pending_founder_review";
     const previousAttemptCount = Number(existingRequest?.attemptCount || 0);
     const attemptCount =
       Number.isFinite(previousAttemptCount) && previousAttemptCount > 0
@@ -151,19 +146,6 @@ export async function POST(request: Request) {
         contentType: "application/json",
       },
     );
-
-    if (shouldNotifyAdmin) {
-      try {
-        await sendWaterAdminPushNotification({
-          title: "Νέο αίτημα πρόσβασης",
-          body: "Υπάρχει νέο αίτημα User για έγκριση στο Pantavion Water.",
-          url: "/professional/infrastructure/water/admin/approvals",
-          tag: `water-request-${requestId}`,
-        });
-      } catch {
-        // The access request remains valid even if a push service is temporarily unavailable.
-      }
-    }
 
     return NextResponse.json({
       ok: true,
