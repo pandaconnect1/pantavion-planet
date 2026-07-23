@@ -5,6 +5,9 @@ import { NextResponse } from "next/server";
 
 import { hasWaterAdminSession } from "@/core/security/water-admin-session";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 type WaterAccessAuthorizeBody = {
   emailOrPhone?: string;
   firstName?: string;
@@ -26,6 +29,18 @@ function clean(value: unknown) {
 
 function hashToken(value: string) {
   return createHash("sha256").update(value).digest("hex");
+}
+
+function noStoreJson(body: unknown, init: ResponseInit = {}) {
+  const headers = new Headers(init.headers);
+  headers.set("Cache-Control", "private, no-store, max-age=0");
+  headers.set("Pragma", "no-cache");
+  headers.set("Vary", "Cookie, x-pantavion-water-device-id");
+
+  return NextResponse.json(body, {
+    ...init,
+    headers,
+  });
 }
 
 function privateBlobHeaders(): HeadersInit {
@@ -74,16 +89,56 @@ async function approvedDeviceMatches(deviceId: string, deviceToken: string) {
 }
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as WaterAccessAuthorizeBody;
+  let body: WaterAccessAuthorizeBody;
 
+  try {
+    body = (await request.json()) as WaterAccessAuthorizeBody;
+  } catch {
+    return noStoreJson(
+      {
+        ok: false,
+        error: "invalid_request",
+      },
+      { status: 400 },
+    );
+  }
+
+  const isAdminSession = hasWaterAdminSession(request);
   const deviceId = clean(body.deviceId);
   const deviceToken = clean(body.deviceToken);
 
-  const isAdminSession = hasWaterAdminSession(request);
-  const approvedDevice = await approvedDeviceMatches(deviceId, deviceToken);
+  if (isAdminSession) {
+    return noStoreJson({
+      ok: true,
+      approved: true,
+      accessMode: "admin-session",
+      approvedAt: new Date().toISOString(),
+      holder: {
+        firstName: clean(body.firstName),
+        lastName: clean(body.lastName),
+        title: clean(body.title),
+        phone: "",
+        deviceId,
+      },
+    });
+  }
 
-  if (!isAdminSession && !approvedDevice) {
-    return NextResponse.json(
+  let approvedDevice: Awaited<ReturnType<typeof approvedDeviceMatches>>;
+
+  try {
+    approvedDevice = await approvedDeviceMatches(deviceId, deviceToken);
+  } catch {
+    return noStoreJson(
+      {
+        ok: false,
+        error: "access_verification_unavailable",
+      },
+      { status: 503 },
+    );
+  }
+
+  if (!approvedDevice) {
+    return noStoreJson(
       {
         ok: false,
         error: "access_not_approved",
@@ -92,16 +147,16 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json({
+  return noStoreJson({
     ok: true,
     approved: true,
-    accessMode: isAdminSession ? "admin-session" : "approved-device",
+    accessMode: "approved-device",
     approvedAt: new Date().toISOString(),
     holder: {
-      firstName: isAdminSession ? clean(body.firstName) : clean(approvedDevice?.firstName),
-      lastName: isAdminSession ? clean(body.lastName) : clean(approvedDevice?.lastName),
-      title: isAdminSession ? clean(body.title) : clean(approvedDevice?.title),
-      phone: clean(approvedDevice?.phone),
+      firstName: clean(approvedDevice.firstName),
+      lastName: clean(approvedDevice.lastName),
+      title: clean(approvedDevice.title),
+      phone: clean(approvedDevice.phone),
       deviceId,
     },
   });

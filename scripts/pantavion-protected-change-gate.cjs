@@ -20,7 +20,7 @@ const protectedPathRules = [
     patterns: [
       /^app[\/\\]professional[\/\\]infrastructure[\/\\]water[\/\\]/i,
       /^app[\/\\]api[\/\\]professional[\/\\]infrastructure[\/\\]water[\/\\]/i,
-      /^core[\/\\]water[\/\\]/i,
+      /^core[\/\\](?:infrastructure[\/\\])?water[\/\\]/i,
     ],
   },
   {

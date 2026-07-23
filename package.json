@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "verify:runtime-safety": "npm run audit:implementation && node scripts/pantavion-vscode-real-implementation-gate.cjs && npm run typecheck && npm run build",
+    "verify:runtime-safety": "npm run audit:water:network-lock && npm run audit:implementation && node scripts/pantavion-vscode-real-implementation-gate.cjs && npm run typecheck && npm run build",
     "verify:runtime-safety:ci": "npm run verify:runtime-safety",
     "audit:pantavion": "node scripts/pantavion-master-audit.cjs",
     "audit:water": "node scripts/pantavion-water-kernel-gate.cjs && node scripts/water-guardian-surface-audit.cjs && node scripts/pantavion-multimodal-language-audit.cjs",
@@ -32,6 +32,7 @@
     "audit:water:abc": "node scripts/pantavion-water-abc-map-system-gate.cjs",
     "audit:emergency-guardian": "node scripts/pantavion-emergency-guardian-gate.cjs",
     "audit:protected-change": "node scripts/pantavion-protected-change-gate.cjs",
+    "audit:water:network-lock": "node scripts/pantavion-water-network-runtime-lock.cjs",
     "audit:kernel-lifetime": "node scripts/pantavion-kernel-lifetime-gate.cjs",
     "safety:pantavion": "node scripts/pantavion-runtime-safety-gate.cjs",
     "audit:foundation": "node scripts/pantavion-foundation-audit.cjs"
