@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 
 import {
   getControlledWaterSegmentFromPrivateIndex,
+  getWaterSegmentDiagnosticCode,
   parseWaterSegmentBbox,
   parseWaterSegmentLimit,
 } from "@/core/infrastructure/water/controlled-water-segment-index-provider";
@@ -160,10 +161,14 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
+    const diagnosticCode = getWaterSegmentDiagnosticCode(error);
+    const responseStatus = diagnosticCode === "WATER_BBOX" ? 400 : 503;
+
     return NextResponse.json(
       {
         status: "segment_error",
-        error: error instanceof Error ? error.message : "Unknown segment error",
+        error: "water_segment_unavailable",
+        diagnosticCode,
         dataReturned: false,
         segmentReturned: false,
         completeNetworkReturned: false,
@@ -171,10 +176,11 @@ export async function GET(request: Request) {
         browserFullNetworkLoaded: false,
       },
       {
-        status: 400,
+        status: responseStatus,
         headers: {
           "Cache-Control": "no-store",
           "X-Pantavion-Water-Segment": "error",
+          "X-Pantavion-Water-Diagnostic": diagnosticCode,
           "X-Pantavion-Data-Returned": "false",
         },
       },

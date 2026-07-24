@@ -29,6 +29,7 @@ type SegmentResponse = {
   browserFullNetworkLoaded?: boolean;
   error?: string;
   reason?: string;
+  diagnosticCode?: string;
 };
 
 type Bbox = {
@@ -95,6 +96,7 @@ const UI = {
     searchNotFound: "Δεν βρέθηκε το σημείο. Δοκίμασε πιο πλήρη διεύθυνση.",
     searchFound: "Βρέθηκε στίγμα. Φορτώνω τοπικό δίκτυο.",
     visibleTooLarge: "Η ορατή περιοχή είναι μεγάλη. Κάνε λίγο zoom.",
+    diagnostic: "Κωδικός",
     chunks: "τμήματα οθόνης",
   },
   en: {
@@ -151,6 +153,7 @@ const UI = {
     searchNotFound: "No matching point found. Try a fuller address.",
     searchFound: "Search marker found. Loading local network.",
     visibleTooLarge: "The visible area is large. Zoom in a little.",
+    diagnostic: "Code",
     chunks: "screen chunks",
   },
 };
@@ -939,7 +942,12 @@ export default function ControlledWaterSegmentClient() {
           json.rawMasterReturned === true ||
           json.browserFullNetworkLoaded === true
         ) {
-          throw new Error(json.error || json.reason || "No safe segment returned.");
+          throw new Error(
+            json.diagnosticCode ||
+              json.error ||
+              json.reason ||
+              "WATER_SEGMENT_RESPONSE",
+          );
         }
 
         if (json.segment?.features?.length) {
@@ -956,7 +964,7 @@ export default function ControlledWaterSegmentClient() {
       const features = Array.from(deduped.values());
 
       if (features.length <= 0) {
-        throw new Error("No visible pipe features returned.");
+        throw new Error("WATER_NO_VISIBLE_FEATURES");
       }
 
       const L = await ensureLeaflet();
@@ -999,7 +1007,12 @@ export default function ControlledWaterSegmentClient() {
       if (error instanceof Error && error.message === "VISIBLE_AREA_TOO_LARGE") {
         setMessage(t.visibleTooLarge);
       } else {
-        setMessage(t.failed);
+        const diagnosticCode =
+          error instanceof Error && /^WATER_[A-Z0-9_]+$/.test(error.message)
+            ? error.message
+            : "WATER_CLIENT_LOAD";
+
+        setMessage(`${t.failed} ${t.diagnostic}: ${diagnosticCode}.`);
       }
     } finally {
       loadInProgressRef.current = false;
