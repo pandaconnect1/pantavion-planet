@@ -79,12 +79,33 @@ const MAX_BBOX_SPAN_DEGREES = 0.08;
 const RANGE_WINDOW_BYTES = 8 * 1024 * 1024;
 const RANGE_FETCH_CONCURRENCY = 4;
 const FEATURE_CACHE_MAX_ENTRIES = 6000;
+const RANGE_READ_TIMEOUT_MS = 8_000;
+const STREAM_FALLBACK_TIMEOUT_MS = 45_000;
 
 let cachedIndex: IndexRecord[] | null = null;
 let cachedVerified = false;
 let cachedManifest: WaterIndexManifest | null = null;
 let cachedNdjsonMetadata: HeadBlobResult | null = null;
 const cachedFeatures = new Map<string, unknown>();
+
+function waterSegmentError(code: string, message: string) {
+  return new Error(`[${code}] ${message}`);
+}
+
+export function getWaterSegmentDiagnosticCode(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error || "");
+  const explicitCode = message.match(/^\[([A-Z0-9_]+)\]/)?.[1];
+
+  if (explicitCode) return explicitCode;
+  if (message.includes("Water truth")) return "WATER_SOURCE_TRUTH";
+  if (message.includes("Water index")) return "WATER_INDEX";
+  if (message.includes("JSON") || message.includes("Unexpected token")) {
+    return "WATER_FEATURE_PARSE";
+  }
+  if (message.includes("bbox") || message.includes("περιοχή")) return "WATER_BBOX";
+
+  return "WATER_SEGMENT_UNKNOWN";
+}
 
 function shouldUseProductionBlobSource() {
   return process.env.VERCEL === "1" && Boolean(process.env.BLOB_READ_WRITE_TOKEN);
@@ -94,7 +115,10 @@ function getPrivateBlobToken() {
   const token = process.env.BLOB_READ_WRITE_TOKEN?.trim();
 
   if (!token) {
-    throw new Error("Private water blob token is not configured.");
+    throw waterSegmentError(
+      "WATER_BLOB_TOKEN",
+      "Private water blob token is not configured.",
+    );
   }
 
   return token;
@@ -410,7 +434,10 @@ async function getNdjsonMetadata() {
     cachedNdjsonMetadata.size <= 0 ||
     !cachedNdjsonMetadata.url.startsWith("https://")
   ) {
-    throw new Error("Private water NDJSON blob metadata is invalid.");
+    throw waterSegmentError(
+      "WATER_BLOB_METADATA",
+      "Private water NDJSON blob metadata is invalid.",
+    );
   }
 
   return cachedNdjsonMetadata;
@@ -430,7 +457,10 @@ function assertContentRange(
     Number(match[2]) !== end ||
     Number(match[3]) !== totalSize
   ) {
-    throw new Error("Private water blob returned an invalid byte range.");
+    throw waterSegmentError(
+      "WATER_RANGE_INVALID",
+      "Private water blob returned an invalid byte range.",
+    );
   }
 }
 
@@ -496,11 +526,14 @@ async function fetchPrivateRange(batch: RangeBatch, metadata: HeadBlobResult) {
     headers: {
       Range: `bytes=${batch.start}-${batch.end}`,
     },
-    abortSignal: AbortSignal.timeout(20_000),
+    abortSignal: AbortSignal.timeout(RANGE_READ_TIMEOUT_MS),
   });
 
   if (!result || result.statusCode !== 200 || !result.stream) {
-    throw new Error("Private water blob range read failed.");
+    throw waterSegmentError(
+      "WATER_RANGE_READ",
+      "Private water blob range read failed.",
+    );
   }
 
   assertContentRange(
@@ -514,7 +547,10 @@ async function fetchPrivateRange(batch: RangeBatch, metadata: HeadBlobResult) {
   const expectedBytes = batch.end - batch.start + 1;
 
   if (buffer.byteLength !== expectedBytes) {
-    throw new Error("Private water blob range returned an unexpected byte count.");
+    throw waterSegmentError(
+      "WATER_RANGE_SIZE",
+      "Private water blob range returned an unexpected byte count.",
+    );
   }
 
   return batch.selected.map(({ order, record }) => {
@@ -522,7 +558,10 @@ async function fetchPrivateRange(batch: RangeBatch, metadata: HeadBlobResult) {
     const relativeEnd = relativeStart + record.bytes;
 
     if (relativeStart < 0 || relativeEnd > buffer.byteLength) {
-      throw new Error("Private water feature range is outside the fetched batch.");
+      throw waterSegmentError(
+        "WATER_RANGE_OFFSETS",
+        "Private water feature range is outside the fetched batch.",
+      );
     }
 
     return {
@@ -578,9 +617,158 @@ async function readPrivateFeaturesByRange(records: IndexRecord[]) {
   return output;
 }
 
+export async function extractPrivateWaterFeaturesFromStream(
+  stream: ReadableStream<Uint8Array>,
+  records: IndexRecord[],
+  sourceSize: number,
+) {
+  if (records.length === 0) return [];
+
+  const selected = records
+    .map((record, order) => {
+      assertIndexRecordRange(record, sourceSize);
+
+      return {
+        order,
+        record,
+        buffer: Buffer.alloc(record.bytes),
+        filled: 0,
+      };
+    })
+    .sort((a, b) => a.record.offset - b.record.offset);
+  const output = new Array<unknown>(records.length).fill(undefined);
+  const reader = stream.getReader();
+  let absoluteOffset = 0;
+  let selectedIndex = 0;
+
+  try {
+    while (selectedIndex < selected.length) {
+      const next = await reader.read();
+
+      if (next.done) break;
+
+      const chunk = next.value;
+      const chunkStart = absoluteOffset;
+      const chunkEnd = chunkStart + chunk.byteLength;
+
+      while (selectedIndex < selected.length) {
+        const item = selected[selectedIndex];
+        const recordStart = item.record.offset;
+        const recordEndExclusive = item.record.offset + item.record.bytes;
+
+        if (recordStart >= chunkEnd) break;
+
+        if (recordEndExclusive <= chunkStart) {
+          throw waterSegmentError(
+            "WATER_STREAM_OFFSETS",
+            "Private water stream passed an incomplete indexed feature.",
+          );
+        }
+
+        const overlapStart = Math.max(recordStart, chunkStart);
+        const overlapEnd = Math.min(recordEndExclusive, chunkEnd);
+
+        if (overlapEnd > overlapStart) {
+          const sourceStart = overlapStart - chunkStart;
+          const sourceEnd = overlapEnd - chunkStart;
+          const targetStart = overlapStart - recordStart;
+
+          item.buffer.set(chunk.subarray(sourceStart, sourceEnd), targetStart);
+          item.filled += overlapEnd - overlapStart;
+        }
+
+        if (overlapEnd < recordEndExclusive) break;
+
+        if (item.filled !== item.record.bytes) {
+          throw waterSegmentError(
+            "WATER_STREAM_SIZE",
+            "Private water stream returned an incomplete feature.",
+          );
+        }
+
+        const feature = JSON.parse(item.buffer.toString("utf8"));
+
+        output[item.order] = feature;
+        cacheFeature(item.record, feature);
+        selectedIndex += 1;
+      }
+
+      absoluteOffset = chunkEnd;
+    }
+  } finally {
+    await reader.cancel().catch(() => undefined);
+  }
+
+  if (output.some((feature) => feature === undefined)) {
+    throw waterSegmentError(
+      "WATER_STREAM_INCOMPLETE",
+      "Private water stream ended before all selected features were read.",
+    );
+  }
+
+  return output;
+}
+
+async function readPrivateFeaturesByStream(records: IndexRecord[]) {
+  const metadata = await getNdjsonMetadata();
+  const output = new Array<unknown>(records.length).fill(undefined);
+  const missingRecords: IndexRecord[] = [];
+  const missingOrders: number[] = [];
+
+  records.forEach((record, order) => {
+    const cached = readCachedFeature(record);
+
+    if (cached !== undefined) {
+      output[order] = cached;
+      return;
+    }
+
+    missingRecords.push(record);
+    missingOrders.push(order);
+  });
+
+  if (missingRecords.length === 0) return output;
+
+  const result = await get(BLOB_PATHS.ndjson, {
+    access: "private",
+    token: getPrivateBlobToken(),
+    abortSignal: AbortSignal.timeout(STREAM_FALLBACK_TIMEOUT_MS),
+  });
+
+  if (!result || result.statusCode !== 200 || !result.stream) {
+    throw waterSegmentError(
+      "WATER_STREAM_READ",
+      "Private water stream fallback could not open the NDJSON source.",
+    );
+  }
+
+  const features = await extractPrivateWaterFeaturesFromStream(
+    result.stream,
+    missingRecords,
+    metadata.size,
+  );
+
+  features.forEach((feature, order) => {
+    output[missingOrders[order]] = feature;
+  });
+
+  return output;
+}
+
 async function readFeatures(records: IndexRecord[]) {
   if (shouldUseProductionBlobSource()) {
-    return readPrivateFeaturesByRange(records);
+    try {
+      return await readPrivateFeaturesByRange(records);
+    } catch (rangeError) {
+      try {
+        return await readPrivateFeaturesByStream(records);
+      } catch (streamError) {
+        throw waterSegmentError(
+          "WATER_PRIVATE_READ_FAILED",
+          `Range=${getWaterSegmentDiagnosticCode(rangeError)}; Stream=${getWaterSegmentDiagnosticCode(streamError)}`,
+        );
+      }
+    }
   }
 
   const handle = await fs.open(NDJSON_PATH, "r");
