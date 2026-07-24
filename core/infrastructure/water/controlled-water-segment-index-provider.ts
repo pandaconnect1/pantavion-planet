@@ -1,4 +1,4 @@
-﻿import { get } from "@vercel/blob";
+﻿import { get, head, type HeadBlobResult } from "@vercel/blob";
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -76,13 +76,28 @@ const EXPECTED_COORDINATE_POINTS = 528063;
 const DEFAULT_MAX_FEATURES = 1200;
 const HARD_MAX_FEATURES = 1800;
 const MAX_BBOX_SPAN_DEGREES = 0.08;
+const RANGE_WINDOW_BYTES = 8 * 1024 * 1024;
+const RANGE_FETCH_CONCURRENCY = 4;
+const FEATURE_CACHE_MAX_ENTRIES = 6000;
 
 let cachedIndex: IndexRecord[] | null = null;
 let cachedVerified = false;
-let cachedNdjsonBuffer: Buffer | null = null;
+let cachedManifest: WaterIndexManifest | null = null;
+let cachedNdjsonMetadata: HeadBlobResult | null = null;
+const cachedFeatures = new Map<string, unknown>();
 
 function shouldUseProductionBlobSource() {
   return process.env.VERCEL === "1" && Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+}
+
+function getPrivateBlobToken() {
+  const token = process.env.BLOB_READ_WRITE_TOKEN?.trim();
+
+  if (!token) {
+    throw new Error("Private water blob token is not configured.");
+  }
+
+  return token;
 }
 
 function parseNumber(value: string | null, label: string) {
@@ -96,7 +111,10 @@ function parseNumber(value: string | null, label: string) {
 }
 
 async function readPrivateBlobBuffer(pathname: string) {
-  const result = await get(pathname, { access: "private" });
+  const result = await get(pathname, {
+    access: "private",
+    token: getPrivateBlobToken(),
+  });
 
   if (!result || result.statusCode !== 200 || !result.stream) {
     throw new Error(`Private water blob read failed: ${pathname}`);
@@ -137,16 +155,6 @@ async function readTextSource(localPath: string, blobPath: string) {
 async function readJsonSource<T>(localPath: string, blobPath: string): Promise<T> {
   const raw = await readTextSource(localPath, blobPath);
   return JSON.parse(raw) as T;
-}
-
-async function readNdjsonBuffer() {
-  if (!shouldUseProductionBlobSource()) return null;
-
-  if (!cachedNdjsonBuffer) {
-    cachedNdjsonBuffer = await readPrivateBlobBuffer(BLOB_PATHS.ndjson);
-  }
-
-  return cachedNdjsonBuffer;
 }
 
 function assertTruthReport(report: WaterTruthReport) {
@@ -260,6 +268,7 @@ async function assertVerifiedPrivateSource() {
   assertTruthReport(truthReport);
   assertIndexManifest(indexManifest);
 
+  cachedManifest = indexManifest;
   cachedVerified = true;
 }
 
@@ -323,19 +332,255 @@ async function readIndex() {
   return cachedIndex;
 }
 
-async function readFeatures(records: IndexRecord[]) {
-  if (shouldUseProductionBlobSource()) {
-    const ndjson = await readNdjsonBuffer();
+type SelectedIndexRecord = {
+  order: number;
+  record: IndexRecord;
+};
 
-    if (!ndjson) {
-      throw new Error("Private water NDJSON blob buffer unavailable");
+type RangeBatch = {
+  start: number;
+  end: number;
+  selected: SelectedIndexRecord[];
+};
+
+function recordEnd(record: IndexRecord) {
+  return record.offset + record.bytes - 1;
+}
+
+function assertIndexRecordRange(record: IndexRecord, sourceSize: number) {
+  const end = recordEnd(record);
+
+  if (
+    !Number.isSafeInteger(record.offset) ||
+    !Number.isSafeInteger(record.bytes) ||
+    record.offset < 0 ||
+    record.bytes <= 0 ||
+    end < record.offset ||
+    end >= sourceSize
+  ) {
+    throw new Error("Private water index requested bytes outside the NDJSON source.");
+  }
+}
+
+export function buildPrivateWaterRangeBatches(
+  records: IndexRecord[],
+  sourceSize: number,
+): RangeBatch[] {
+  if (!Number.isSafeInteger(sourceSize) || sourceSize <= 0) {
+    throw new Error("Private water NDJSON blob metadata is invalid.");
+  }
+
+  const selected = records
+    .map((record, order) => ({ order, record }))
+    .sort((a, b) => a.record.offset - b.record.offset);
+  const batches = new Map<number, RangeBatch>();
+
+  for (const item of selected) {
+    assertIndexRecordRange(item.record, sourceSize);
+
+    const window = Math.floor(item.record.offset / RANGE_WINDOW_BYTES);
+    const end = recordEnd(item.record);
+    const existing = batches.get(window);
+
+    if (existing) {
+      existing.start = Math.min(existing.start, item.record.offset);
+      existing.end = Math.max(existing.end, end);
+      existing.selected.push(item);
+      continue;
     }
 
-    return records.map((record) => {
-      const start = record.offset;
-      const end = record.offset + record.bytes;
-      return JSON.parse(ndjson.subarray(start, end).toString("utf8"));
+    batches.set(window, {
+      start: item.record.offset,
+      end,
+      selected: [item],
     });
+  }
+
+  return Array.from(batches.values()).sort((a, b) => a.start - b.start);
+}
+
+async function getNdjsonMetadata() {
+  if (!cachedNdjsonMetadata) {
+    cachedNdjsonMetadata = await head(BLOB_PATHS.ndjson, {
+      token: getPrivateBlobToken(),
+    });
+  }
+
+  if (
+    cachedNdjsonMetadata.size <= 0 ||
+    !cachedNdjsonMetadata.url.startsWith("https://")
+  ) {
+    throw new Error("Private water NDJSON blob metadata is invalid.");
+  }
+
+  return cachedNdjsonMetadata;
+}
+
+function assertContentRange(
+  contentRange: string | null,
+  start: number,
+  end: number,
+  totalSize: number,
+) {
+  const match = contentRange?.match(/^bytes\s+(\d+)-(\d+)\/(\d+)$/i);
+
+  if (
+    !match ||
+    Number(match[1]) !== start ||
+    Number(match[2]) !== end ||
+    Number(match[3]) !== totalSize
+  ) {
+    throw new Error("Private water blob returned an invalid byte range.");
+  }
+}
+
+async function streamToBuffer(stream: ReadableStream<Uint8Array>) {
+  const reader = stream.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+
+  while (true) {
+    const next = await reader.read();
+
+    if (next.done) break;
+
+    chunks.push(next.value);
+    total += next.value.byteLength;
+  }
+
+  const output = Buffer.alloc(total);
+  let offset = 0;
+
+  for (const chunk of chunks) {
+    output.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+
+  return output;
+}
+
+function featureCacheKey(record: IndexRecord) {
+  return `${record.offset}:${record.bytes}`;
+}
+
+function readCachedFeature(record: IndexRecord) {
+  const key = featureCacheKey(record);
+  const feature = cachedFeatures.get(key);
+
+  if (feature === undefined) return undefined;
+
+  cachedFeatures.delete(key);
+  cachedFeatures.set(key, feature);
+
+  return feature;
+}
+
+function cacheFeature(record: IndexRecord, feature: unknown) {
+  const key = featureCacheKey(record);
+
+  cachedFeatures.delete(key);
+  cachedFeatures.set(key, feature);
+
+  while (cachedFeatures.size > FEATURE_CACHE_MAX_ENTRIES) {
+    const oldest = cachedFeatures.keys().next().value;
+
+    if (typeof oldest !== "string") break;
+    cachedFeatures.delete(oldest);
+  }
+}
+
+async function fetchPrivateRange(batch: RangeBatch, metadata: HeadBlobResult) {
+  const result = await get(BLOB_PATHS.ndjson, {
+    access: "private",
+    token: getPrivateBlobToken(),
+    headers: {
+      Range: `bytes=${batch.start}-${batch.end}`,
+    },
+    abortSignal: AbortSignal.timeout(20_000),
+  });
+
+  if (!result || result.statusCode !== 200 || !result.stream) {
+    throw new Error("Private water blob range read failed.");
+  }
+
+  assertContentRange(
+    result.headers.get("content-range"),
+    batch.start,
+    batch.end,
+    metadata.size,
+  );
+
+  const buffer = await streamToBuffer(result.stream);
+  const expectedBytes = batch.end - batch.start + 1;
+
+  if (buffer.byteLength !== expectedBytes) {
+    throw new Error("Private water blob range returned an unexpected byte count.");
+  }
+
+  return batch.selected.map(({ order, record }) => {
+    const relativeStart = record.offset - batch.start;
+    const relativeEnd = relativeStart + record.bytes;
+
+    if (relativeStart < 0 || relativeEnd > buffer.byteLength) {
+      throw new Error("Private water feature range is outside the fetched batch.");
+    }
+
+    return {
+      order,
+      record,
+      feature: JSON.parse(buffer.subarray(relativeStart, relativeEnd).toString("utf8")),
+    };
+  });
+}
+
+async function readPrivateFeaturesByRange(records: IndexRecord[]) {
+  if (records.length === 0) return [];
+
+  const metadata = await getNdjsonMetadata();
+  const output = new Array<unknown>(records.length).fill(undefined);
+  const missingRecords: IndexRecord[] = [];
+  const missingOrders: number[] = [];
+
+  records.forEach((record, order) => {
+    assertIndexRecordRange(record, metadata.size);
+
+    const cached = readCachedFeature(record);
+
+    if (cached !== undefined) {
+      output[order] = cached;
+      return;
+    }
+
+    missingRecords.push(record);
+    missingOrders.push(order);
+  });
+
+  const batches = buildPrivateWaterRangeBatches(missingRecords, metadata.size);
+
+  for (let index = 0; index < batches.length; index += RANGE_FETCH_CONCURRENCY) {
+    const wave = batches.slice(index, index + RANGE_FETCH_CONCURRENCY);
+    const entries = (await Promise.all(
+      wave.map((batch) => fetchPrivateRange(batch, metadata)),
+    )).flat();
+
+    for (const entry of entries) {
+      const originalOrder = missingOrders[entry.order];
+
+      output[originalOrder] = entry.feature;
+      cacheFeature(entry.record, entry.feature);
+    }
+  }
+
+  if (output.some((feature) => feature === undefined)) {
+    throw new Error("Private water feature range read was incomplete.");
+  }
+
+  return output;
+}
+
+async function readFeatures(records: IndexRecord[]) {
+  if (shouldUseProductionBlobSource()) {
+    return readPrivateFeaturesByRange(records);
   }
 
   const handle = await fs.open(NDJSON_PATH, "r");
@@ -361,10 +606,10 @@ export async function getControlledWaterSegmentFromPrivateIndex(
 ) {
   await assertVerifiedPrivateSource();
 
-  const [index, manifest] = await Promise.all([
-    readIndex(),
-    readJsonSource<WaterIndexManifest>(MANIFEST_PATH, BLOB_PATHS.manifest),
-  ]);
+  const index = await readIndex();
+  const manifest =
+    cachedManifest ||
+    (await readJsonSource<WaterIndexManifest>(MANIFEST_PATH, BLOB_PATHS.manifest));
 
   assertIndexManifest(manifest);
 
@@ -404,4 +649,3 @@ export async function getControlledWaterSegmentFromPrivateIndex(
     },
   };
 }
-
