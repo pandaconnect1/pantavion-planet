@@ -1,0 +1,30 @@
+{
+  "marker": "pantavion_water_network_runtime_lock_v1",
+  "version": 1,
+  "lockedAtUtc": "2026-07-23T00:00:00.000Z",
+  "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
+  "sourceTruth": {
+    "placemarks": 122857,
+    "lineStrings": 125398,
+    "coordinatePoints": 528063
+  },
+  "invariants": {
+    "privateSourceOnly": true,
+    "browserFullNetworkAllowed": false,
+    "rawMasterPublicExposureAllowed": false,
+    "serverAuthorizationRequired": true,
+    "segmentedBrowserDeliveryRequired": true
+  },
+  "protectedFiles": {
+    ".github/CODEOWNERS": "93789477aca8ffe37c6f179ca004113c8edba37ecc159d1e67dee9f720955e52",
+    ".github/workflows/pantavion-water-network-lock.yml": "b3d6eb0f0803a9374875d80be18a47e291320a17b6f0b89c33132d0351f63808",
+    "app/api/professional/infrastructure/water/access/authorize/route.ts": "4097cb65785acf8872321b51215e16a833a35dd5a783652165198163f9b76ccf",
+    "app/api/professional/infrastructure/water/segment/bbox/route.ts": "157bfac9fd0e9a0618b1a2f9a6b427c26a9b3edbb34d27d6c09396263a76d7e9",
+    "app/professional/infrastructure/water/admin/access/page.tsx": "487b03889c8697149025a710aff941eefdc0bb642d95bbd118d9eb1302f9ccca",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "26d7ca480f29de45c6d4a8f268d1a6ace1dcd6e58fcdc7457c5b146cc548ba7c",
+    "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
+    "core/infrastructure/water/controlled-water-segment-index-provider.ts": "6e38df225e901fe9ac41e7a38d60ac19fbb01cf711ae35c150d06a1563f96c98",
+    "core/security/water-admin-session.ts": "cadec0b86d93acbbb2b7c95ce5ae35fa7eef7e9707136a960d405197613446ac",
+    "scripts/pantavion-water-network-runtime-lock.cjs": "495f4cc24d521a422a986f22f23359e2f4f94150a7749a18521b675bf59784e5"
+  }
+}

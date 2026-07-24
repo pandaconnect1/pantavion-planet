@@ -1,0 +1,11 @@
+# Pantavion water network runtime: founder review is required when branch
+# protection is configured to require Code Owner approval.
+/app/professional/infrastructure/water/live/ @pandaconnect1
+/app/professional/infrastructure/water/admin/access/ @pandaconnect1
+/app/api/professional/infrastructure/water/access/authorize/ @pandaconnect1
+/app/api/professional/infrastructure/water/segment/bbox/ @pandaconnect1
+/core/infrastructure/water/controlled-water-segment-index-provider.ts @pandaconnect1
+/core/infrastructure/water/water-network-runtime-lock.json @pandaconnect1
+/core/security/water-admin-session.ts @pandaconnect1
+/scripts/pantavion-water-network-runtime-lock.cjs @pandaconnect1
+/.github/workflows/pantavion-water-network-lock.yml @pandaconnect1

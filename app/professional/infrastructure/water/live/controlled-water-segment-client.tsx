@@ -15,6 +15,8 @@ declare global {
 
 type Lang = string;
 
+type AccessState = "checking" | "approved" | "denied" | "error";
+
 type SegmentResponse = {
   segment?: {
     type: "FeatureCollection";
@@ -50,7 +52,8 @@ const UI = {
     loading: "Φόρτωση...",
     ready: "Ο χάρτης είναι έτοιμος. Μετακίνησε ή κάνε zoom. Οι αγωγοί φορτώνουν τμηματικά.",
     loaded: "Φορτώθηκαν αγωγοί",
-    failed: "Δεν φορτώθηκαν αγωγοί. Κάνε λίγο zoom ή μετακίνησε τον χάρτη.",
+    failed:
+      "Προσωρινό σφάλμα φόρτωσης. Οι σωληνώσεις δεν έχουν διαγραφεί. Δοκίμασε ξανά ή μετακίνησε λίγο τον χάρτη.",
     map: "Χάρτης ύδρευσης",
     protected: "Το πλήρες δίκτυο δεν φορτώνεται στον browser.",
     accessTitle: "Προστατευμένος χάρτης",
@@ -75,6 +78,13 @@ const UI = {
     accessDenied: "Δεν υπάρχει έγκριση ή ο κωδικός δεν είναι σωστός.",
     accessNotConfigured: "Δεν έχει ρυθμιστεί ακόμη κωδικός πρόσβασης στο server.",
     accessApproved: "Η πρόσβαση εγκρίθηκε.",
+    accessChecking: "Γίνεται ασφαλής έλεγχος πρόσβασης από τον server...",
+    accessRequired:
+      "Η ασφαλής έγκριση δεν είναι ενεργή ή το Administrator session έληξε. Οι σωληνώσεις και ο χάρτης παραμένουν ασφαλείς.",
+    accessCheckFailed:
+      "Ο έλεγχος πρόσβασης δεν ολοκληρώθηκε λόγω προσωρινού τεχνικού προβλήματος. Οι σωληνώσεις δεν έχουν χαθεί.",
+    adminLogin: "Είσοδος Administrator",
+    retryAccess: "Επανέλεγχος πρόσβασης",
     locate: "Το σημείο μου",
     search: "Αναζήτηση / Στίγμα",
     locating: "Εντοπισμός θέσης...",
@@ -100,7 +110,8 @@ const UI = {
     loading: "Loading...",
     ready: "Map is ready. Pan or zoom. Pipes load automatically in safe chunks.",
     loaded: "Loaded pipes",
-    failed: "No pipes loaded. Zoom in or move the map.",
+    failed:
+      "Temporary loading error. The pipes have not been deleted. Try again or move the map slightly.",
     map: "Water map",
     protected: "The complete network is not loaded in the browser.",
     accessTitle: "Protected map",
@@ -124,6 +135,13 @@ const UI = {
     accessDenied: "No approval or wrong code.",
     accessNotConfigured: "Server access code is not configured yet.",
     accessApproved: "Access approved.",
+    accessChecking: "Securely checking access with the server...",
+    accessRequired:
+      "Secure approval is not active or the Administrator session has expired. The pipes and map remain protected.",
+    accessCheckFailed:
+      "The access check could not complete because of a temporary technical problem. The pipes have not been lost.",
+    adminLogin: "Administrator sign-in",
+    retryAccess: "Check access again",
     locate: "My location",
     search: "Search / Marker",
     locating: "Locating...",
@@ -141,34 +159,13 @@ const VIEWPORT_TILE_SPAN_DEGREES = 0.055;
 const MAX_VIEWPORT_TILES = 16;
 const MAX_FEATURES_PER_TILE = 1200;
 
-const PANTAVION_WATER_DEVICE_APPROVAL_KEY = "pantavion:water:approved-until:v4";
-const PANTAVION_WATER_DEVICE_APPROVAL_DAYS = 365;
+const LEGACY_WATER_DEVICE_APPROVAL_KEY = "pantavion:water:approved-until:v4";
+const WATER_ADMIN_RELOGIN_URL =
+  "/professional/infrastructure/water/admin/access?next=%2Fprofessional%2Finfrastructure%2Fwater%2Flive";
 
-function readWaterDeviceApproval() {
-  if (typeof window === "undefined") return false;
-
-  const raw = window.localStorage.getItem(PANTAVION_WATER_DEVICE_APPROVAL_KEY);
-  if (!raw) return false;
-
-  const expiresAt = Number(raw);
-  if (!Number.isFinite(expiresAt) || Date.now() > expiresAt) {
-    window.localStorage.removeItem(PANTAVION_WATER_DEVICE_APPROVAL_KEY);
-    return false;
-  }
-
-  return true;
-}
-
-function writeWaterDeviceApproval() {
+function clearLegacyWaterDeviceApproval() {
   if (typeof window === "undefined") return;
-
-  const expiresAt =
-    Date.now() + PANTAVION_WATER_DEVICE_APPROVAL_DAYS * 24 * 60 * 60 * 1000;
-
-  window.localStorage.setItem(
-    PANTAVION_WATER_DEVICE_APPROVAL_KEY,
-    String(expiresAt),
-  );
+  window.localStorage.removeItem(LEGACY_WATER_DEVICE_APPROVAL_KEY);
 }
 
 
@@ -224,42 +221,31 @@ function getInitialLang(): Lang {
   return getSupportedPantavionLanguage(saved)?.code ?? "el";
 }
 
+let leafletPromise: Promise<any> | null = null;
+
 function ensureLeaflet() {
-  return new Promise<any>((resolve, reject) => {
-    if (typeof window === "undefined") {
-      reject(new Error("window unavailable"));
-      return;
-    }
+  if (typeof window === "undefined") {
+    return Promise.reject(new Error("window unavailable"));
+  }
 
-    if (window.L) {
-      resolve(window.L);
-      return;
-    }
+  if (window.L) {
+    return Promise.resolve(window.L);
+  }
 
-    if (!document.querySelector("link[data-leaflet-css]")) {
-      const css = document.createElement("link");
-      css.rel = "stylesheet";
-      css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-      css.setAttribute("data-leaflet-css", "true");
-      document.head.appendChild(css);
-    }
+  if (!leafletPromise) {
+    leafletPromise = import("leaflet")
+      .then((leafletModule) => {
+        const Leaflet = leafletModule.default || leafletModule;
+        window.L = Leaflet;
+        return Leaflet;
+      })
+      .catch((error) => {
+        leafletPromise = null;
+        throw error;
+      });
+  }
 
-    const existing = document.querySelector("script[data-leaflet-js]");
-
-    if (existing) {
-      existing.addEventListener("load", () => resolve(window.L));
-      existing.addEventListener("error", reject);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
-    script.async = true;
-    script.setAttribute("data-leaflet-js", "true");
-    script.onload = () => resolve(window.L);
-    script.onerror = reject;
-    document.body.appendChild(script);
-  });
+  return leafletPromise;
 }
 
 function getPipeStyle(feature: any) {
@@ -451,7 +437,8 @@ function WaterLiveMapIntelligenceSelector() {
 }
 export default function ControlledWaterSegmentClient() {
   const [lang, setLang] = useState<Lang>(getInitialLang);
-  const [accessApproved, setAccessApproved] = useState(() => readWaterDeviceApproval());
+  const [accessState, setAccessState] = useState<AccessState>("checking");
+  const [accessCheckVersion, setAccessCheckVersion] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [roleTitle, setRoleTitle] = useState("");
@@ -478,18 +465,22 @@ export default function ControlledWaterSegmentClient() {
   const loadInProgressRef = useRef(false);
 
   const t = UI[getPantavionUiLanguage(lang)];
+  const accessApproved = accessState === "approved";
 
   useEffect(() => {
-    if (accessApproved) return;
-
     let cancelled = false;
 
     async function checkApprovedDevice() {
+      setAccessState("checking");
+      setAccessMessage("");
+      clearLegacyWaterDeviceApproval();
+
       const device = getOrCreateWaterAccessDevice();
 
       try {
         const response = await fetch("/api/professional/infrastructure/water/access/authorize", {
           method: "POST",
+          cache: "no-store",
           credentials: "include",
           headers: {
             "content-type": "application/json",
@@ -500,15 +491,29 @@ export default function ControlledWaterSegmentClient() {
           }),
         });
 
-        const json = (await response.json()) as { ok?: boolean };
+        const json = (await response.json().catch(() => ({}))) as {
+          ok?: boolean;
+          error?: string;
+        };
 
         if (!cancelled && response.ok && json.ok) {
-          setAccessApproved(true);
-          writeWaterDeviceApproval();
-          setAccessMessage(t.accessApproved);
+          setAccessState("approved");
+          return;
+        }
+
+        if (!cancelled) {
+          setAccessState(
+            response.status === 401 ||
+              response.status === 403 ||
+              json.error === "access_not_approved"
+              ? "denied"
+              : "error",
+          );
         }
       } catch {
-        // auto-approved-device-check: stay on protected screen.
+        if (!cancelled) {
+          setAccessState("error");
+        }
       }
     }
 
@@ -517,7 +522,7 @@ export default function ControlledWaterSegmentClient() {
     return () => {
       cancelled = true;
     };
-  }, [accessApproved, t.accessApproved]);
+  }, [accessCheckVersion]);
 
   useEffect(() => {
     window.localStorage.setItem("pantavion-language", lang);
@@ -918,6 +923,17 @@ export default function ControlledWaterSegmentClient() {
         const json = (await response.json()) as SegmentResponse;
 
         if (
+          response.status === 401 ||
+          response.status === 403 ||
+          json.error === "access_not_approved"
+        ) {
+          clearLegacyWaterDeviceApproval();
+          setAccessMessage("");
+          setAccessState("denied");
+          return;
+        }
+
+        if (
           !response.ok ||
           json.completeNetworkReturned === true ||
           json.rawMasterReturned === true ||
@@ -1049,31 +1065,64 @@ export default function ControlledWaterSegmentClient() {
             <p className="mt-4 text-base leading-8 text-slate-200">{t.accessText}</p>
             <p className="mt-3 text-sm font-bold text-[#f2c766]">{t.protected}</p>
 
-            <div className="mt-6">
-              <section className="rounded-3xl border border-slate-700 bg-[#07111f] p-4">
-                <h2 className="text-xl font-black text-[#f2c766]">{t.requestAccess}</h2>
-                <p className="mt-2 text-sm leading-6 text-slate-300">{t.requestText}</p>
+            <div
+              className={`mt-6 rounded-2xl border px-4 py-4 text-sm font-black leading-6 ${
+                accessState === "error"
+                  ? "border-amber-400/40 bg-amber-950/30 text-amber-100"
+                  : "border-[#f2c766]/40 bg-[#f2c766]/10 text-[#f8e6ad]"
+              }`}
+            >
+              {accessState === "checking"
+                ? t.accessChecking
+                : accessState === "error"
+                  ? t.accessCheckFailed
+                  : t.accessRequired}
+            </div>
 
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <input value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder={t.firstName} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
-                  <input value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder={t.lastName} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
-                  <input value={roleTitle} onChange={(event) => setRoleTitle(event.target.value)} placeholder={t.roleTitle} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
-                  <input value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={t.organization} className="hidden rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
-                  <input value={emailOrPhone} onChange={(event) => setEmailOrPhone(event.target.value)} placeholder={t.emailOrPhone} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
-                  <textarea value={reason} onChange={(event) => setReason(event.target.value)} placeholder={t.reason} className="hidden min-h-[110px] rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
-                </div>
-
+            {accessState !== "checking" ? (
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <a
+                  href={WATER_ADMIN_RELOGIN_URL}
+                  className="rounded-2xl bg-[#f2c766] px-5 py-4 text-center text-base font-black text-black"
+                >
+                  {t.adminLogin}
+                </a>
                 <button
                   type="button"
-                  onClick={() => void submitAccessRequest()}
-                  disabled={loading}
-                  className="mt-4 w-full rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-4 text-base font-black text-[#f8e6ad] disabled:opacity-60"
+                  onClick={() => setAccessCheckVersion((value) => value + 1)}
+                  className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-4 text-base font-black text-sky-100"
                 >
-                  {t.submitRequest}
+                  {t.retryAccess}
                 </button>
-              </section>
+              </div>
+            ) : null}
 
-            </div>
+            {accessState === "denied" ? (
+              <div className="mt-6">
+                <section className="rounded-3xl border border-slate-700 bg-[#07111f] p-4">
+                  <h2 className="text-xl font-black text-[#f2c766]">{t.requestAccess}</h2>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">{t.requestText}</p>
+
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    <input value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder={t.firstName} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                    <input value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder={t.lastName} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                    <input value={roleTitle} onChange={(event) => setRoleTitle(event.target.value)} placeholder={t.roleTitle} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                    <input value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={t.organization} className="hidden rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none" />
+                    <input value={emailOrPhone} onChange={(event) => setEmailOrPhone(event.target.value)} placeholder={t.emailOrPhone} className="rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
+                    <textarea value={reason} onChange={(event) => setReason(event.target.value)} placeholder={t.reason} className="hidden min-h-[110px] rounded-2xl border border-slate-600 bg-[#0d1a2d] px-4 py-3 text-white outline-none sm:col-span-2" />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => void submitAccessRequest()}
+                    disabled={loading}
+                    className="mt-4 w-full rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-4 text-base font-black text-[#f8e6ad] disabled:opacity-60"
+                  >
+                    {t.submitRequest}
+                  </button>
+                </section>
+              </div>
+            ) : null}
 
             {accessMessage ? (
               <div className="mt-4 rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-sm text-slate-100">
