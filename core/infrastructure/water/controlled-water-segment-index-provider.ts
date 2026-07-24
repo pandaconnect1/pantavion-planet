@@ -2,6 +2,14 @@
 import { promises as fs } from "fs";
 import path from "path";
 
+import {
+  assertPrivateWaterIndexRecordRange,
+  buildPrivateWaterRangeBatches,
+  extractPrivateWaterFeaturesFromStream,
+  type PrivateWaterIndexRecord,
+  type PrivateWaterRangeBatch,
+} from "./private-water-segment-reader";
+
 type Bbox = {
   minLng: number;
   minLat: number;
@@ -9,15 +17,7 @@ type Bbox = {
   maxLat: number;
 };
 
-type IndexRecord = {
-  featureIndex: number;
-  offset: number;
-  bytes: number;
-  minLng: number;
-  minLat: number;
-  maxLng: number;
-  maxLat: number;
-};
+type IndexRecord = PrivateWaterIndexRecord;
 
 type WaterTruthReport = {
   marker: string;
@@ -76,7 +76,6 @@ const EXPECTED_COORDINATE_POINTS = 528063;
 const DEFAULT_MAX_FEATURES = 1200;
 const HARD_MAX_FEATURES = 1800;
 const MAX_BBOX_SPAN_DEGREES = 0.08;
-const RANGE_WINDOW_BYTES = 8 * 1024 * 1024;
 const RANGE_FETCH_CONCURRENCY = 4;
 const FEATURE_CACHE_MAX_ENTRIES = 6000;
 const RANGE_READ_TIMEOUT_MS = 8_000;
@@ -356,73 +355,6 @@ async function readIndex() {
   return cachedIndex;
 }
 
-type SelectedIndexRecord = {
-  order: number;
-  record: IndexRecord;
-};
-
-type RangeBatch = {
-  start: number;
-  end: number;
-  selected: SelectedIndexRecord[];
-};
-
-function recordEnd(record: IndexRecord) {
-  return record.offset + record.bytes - 1;
-}
-
-function assertIndexRecordRange(record: IndexRecord, sourceSize: number) {
-  const end = recordEnd(record);
-
-  if (
-    !Number.isSafeInteger(record.offset) ||
-    !Number.isSafeInteger(record.bytes) ||
-    record.offset < 0 ||
-    record.bytes <= 0 ||
-    end < record.offset ||
-    end >= sourceSize
-  ) {
-    throw new Error("Private water index requested bytes outside the NDJSON source.");
-  }
-}
-
-export function buildPrivateWaterRangeBatches(
-  records: IndexRecord[],
-  sourceSize: number,
-): RangeBatch[] {
-  if (!Number.isSafeInteger(sourceSize) || sourceSize <= 0) {
-    throw new Error("Private water NDJSON blob metadata is invalid.");
-  }
-
-  const selected = records
-    .map((record, order) => ({ order, record }))
-    .sort((a, b) => a.record.offset - b.record.offset);
-  const batches = new Map<number, RangeBatch>();
-
-  for (const item of selected) {
-    assertIndexRecordRange(item.record, sourceSize);
-
-    const window = Math.floor(item.record.offset / RANGE_WINDOW_BYTES);
-    const end = recordEnd(item.record);
-    const existing = batches.get(window);
-
-    if (existing) {
-      existing.start = Math.min(existing.start, item.record.offset);
-      existing.end = Math.max(existing.end, end);
-      existing.selected.push(item);
-      continue;
-    }
-
-    batches.set(window, {
-      start: item.record.offset,
-      end,
-      selected: [item],
-    });
-  }
-
-  return Array.from(batches.values()).sort((a, b) => a.start - b.start);
-}
-
 async function getNdjsonMetadata() {
   if (!cachedNdjsonMetadata) {
     cachedNdjsonMetadata = await head(BLOB_PATHS.ndjson, {
@@ -519,7 +451,10 @@ function cacheFeature(record: IndexRecord, feature: unknown) {
   }
 }
 
-async function fetchPrivateRange(batch: RangeBatch, metadata: HeadBlobResult) {
+async function fetchPrivateRange(
+  batch: PrivateWaterRangeBatch,
+  metadata: HeadBlobResult,
+) {
   const result = await get(BLOB_PATHS.ndjson, {
     access: "private",
     token: getPrivateBlobToken(),
@@ -581,7 +516,7 @@ async function readPrivateFeaturesByRange(records: IndexRecord[]) {
   const missingOrders: number[] = [];
 
   records.forEach((record, order) => {
-    assertIndexRecordRange(record, metadata.size);
+    assertPrivateWaterIndexRecordRange(record, metadata.size);
 
     const cached = readCachedFeature(record);
 
@@ -612,98 +547,6 @@ async function readPrivateFeaturesByRange(records: IndexRecord[]) {
 
   if (output.some((feature) => feature === undefined)) {
     throw new Error("Private water feature range read was incomplete.");
-  }
-
-  return output;
-}
-
-export async function extractPrivateWaterFeaturesFromStream(
-  stream: ReadableStream<Uint8Array>,
-  records: IndexRecord[],
-  sourceSize: number,
-) {
-  if (records.length === 0) return [];
-
-  const selected = records
-    .map((record, order) => {
-      assertIndexRecordRange(record, sourceSize);
-
-      return {
-        order,
-        record,
-        buffer: Buffer.alloc(record.bytes),
-        filled: 0,
-      };
-    })
-    .sort((a, b) => a.record.offset - b.record.offset);
-  const output = new Array<unknown>(records.length).fill(undefined);
-  const reader = stream.getReader();
-  let absoluteOffset = 0;
-  let selectedIndex = 0;
-
-  try {
-    while (selectedIndex < selected.length) {
-      const next = await reader.read();
-
-      if (next.done) break;
-
-      const chunk = next.value;
-      const chunkStart = absoluteOffset;
-      const chunkEnd = chunkStart + chunk.byteLength;
-
-      while (selectedIndex < selected.length) {
-        const item = selected[selectedIndex];
-        const recordStart = item.record.offset;
-        const recordEndExclusive = item.record.offset + item.record.bytes;
-
-        if (recordStart >= chunkEnd) break;
-
-        if (recordEndExclusive <= chunkStart) {
-          throw waterSegmentError(
-            "WATER_STREAM_OFFSETS",
-            "Private water stream passed an incomplete indexed feature.",
-          );
-        }
-
-        const overlapStart = Math.max(recordStart, chunkStart);
-        const overlapEnd = Math.min(recordEndExclusive, chunkEnd);
-
-        if (overlapEnd > overlapStart) {
-          const sourceStart = overlapStart - chunkStart;
-          const sourceEnd = overlapEnd - chunkStart;
-          const targetStart = overlapStart - recordStart;
-
-          item.buffer.set(chunk.subarray(sourceStart, sourceEnd), targetStart);
-          item.filled += overlapEnd - overlapStart;
-        }
-
-        if (overlapEnd < recordEndExclusive) break;
-
-        if (item.filled !== item.record.bytes) {
-          throw waterSegmentError(
-            "WATER_STREAM_SIZE",
-            "Private water stream returned an incomplete feature.",
-          );
-        }
-
-        const feature = JSON.parse(item.buffer.toString("utf8"));
-
-        output[item.order] = feature;
-        cacheFeature(item.record, feature);
-        selectedIndex += 1;
-      }
-
-      absoluteOffset = chunkEnd;
-    }
-  } finally {
-    await reader.cancel().catch(() => undefined);
-  }
-
-  if (output.some((feature) => feature === undefined)) {
-    throw waterSegmentError(
-      "WATER_STREAM_INCOMPLETE",
-      "Private water stream ended before all selected features were read.",
-    );
   }
 
   return output;
@@ -750,6 +593,7 @@ async function readPrivateFeaturesByStream(records: IndexRecord[]) {
 
   features.forEach((feature, order) => {
     output[missingOrders[order]] = feature;
+    cacheFeature(missingRecords[order], feature);
   });
 
   return output;

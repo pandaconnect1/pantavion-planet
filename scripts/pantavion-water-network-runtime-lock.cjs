@@ -13,6 +13,21 @@ const MANIFEST_PATH = path.join(
   "water-network-runtime-lock.json",
 );
 const EXPECTED_MARKER = "pantavion_water_network_runtime_lock_v1";
+const REQUIRED_PROTECTED_PATHS = [
+  ".github/CODEOWNERS",
+  ".github/workflows/pantavion-water-network-lock.yml",
+  "app/api/professional/infrastructure/water/access/authorize/route.ts",
+  "app/api/professional/infrastructure/water/segment/bbox/route.ts",
+  "app/professional/infrastructure/water/admin/access/page.tsx",
+  "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx",
+  "app/professional/infrastructure/water/live/page.tsx",
+  "core/infrastructure/water/controlled-water-segment-index-provider.ts",
+  "core/infrastructure/water/private-water-segment-reader.ts",
+  "core/security/water-admin-session.ts",
+  "scripts/pantavion-water-network-runtime-lock.cjs",
+  "scripts/water-guardian-production-smoke.cjs",
+  "scripts/water-segment-reader-regression.mjs",
+];
 const BLOCKED_PUBLIC_EXTENSIONS = new Set([
   ".db",
   ".dwg",
@@ -90,6 +105,10 @@ try {
 assert(manifest.marker === EXPECTED_MARKER, "Lock marker is invalid.");
 assert(manifest.version === 1, "Lock version must be 1.");
 assert(
+  Number.isFinite(Date.parse(manifest.lockedAtUtc)),
+  "Lock timestamp must be a valid UTC timestamp.",
+);
+assert(
   manifest.sourceTruth?.placemarks === 122857,
   "Locked placemark truth must remain 122857.",
 );
@@ -117,6 +136,10 @@ assert(
   manifest.invariants?.serverAuthorizationRequired === true,
   "Server authorization must remain mandatory.",
 );
+assert(
+  manifest.invariants?.segmentedBrowserDeliveryRequired === true,
+  "Segmented browser delivery must remain mandatory.",
+);
 
 const protectedFiles = manifest.protectedFiles;
 
@@ -124,11 +147,19 @@ assert(
   protectedFiles &&
     typeof protectedFiles === "object" &&
     !Array.isArray(protectedFiles) &&
-    Object.keys(protectedFiles).length >= 8,
-  "At least eight critical water runtime files must be locked.",
+    Object.keys(protectedFiles).length >= REQUIRED_PROTECTED_PATHS.length,
+  `At least ${REQUIRED_PROTECTED_PATHS.length} critical water runtime files must be locked.`,
 );
 
 if (protectedFiles && typeof protectedFiles === "object") {
+  for (const requiredPath of REQUIRED_PROTECTED_PATHS) {
+    const expectedHash = protectedFiles[requiredPath];
+
+    if (typeof expectedHash !== "string" || !/^[a-f0-9]{64}$/.test(expectedHash)) {
+      failures.push(`Required protected path is missing or invalid: ${requiredPath}`);
+    }
+  }
+
   for (const [relativePath, expectedHash] of Object.entries(protectedFiles)) {
     if (!isSafeRepositoryPath(relativePath)) {
       failures.push(`Unsafe protected path: ${relativePath}`);
@@ -184,4 +215,6 @@ if (failures.length > 0) {
 console.log("Pantavion water network runtime lock PASSED.");
 console.log(`Verified ${Object.keys(protectedFiles).length} protected files.`);
 console.log("Source truth: 122857 placemarks, 125398 line strings, 528063 points.");
-console.log("Private source, server authorization, and segmented browser delivery remain locked.");
+console.log(
+  "Private source, functional segment reader, production guardian, server authorization, and segmented browser delivery remain locked.",
+);

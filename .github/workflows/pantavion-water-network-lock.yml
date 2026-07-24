@@ -6,13 +6,20 @@ on:
     branches:
       - "**"
   workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
 
 permissions:
   contents: read
+  statuses: read
+
+concurrency:
+  group: pantavion-water-network-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   water-network-lock:
-    name: Verify pipes, map, and access integrity
+    name: Verify pipes, reader, map, and access integrity
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
@@ -23,7 +30,36 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Verify immutable water runtime
         run: npm run audit:water:network-lock
+
+      - name: Execute private segment reader regression gate
+        run: node --experimental-strip-types scripts/water-segment-reader-regression.mjs
+
+  water-production-guardian:
+    name: Verify exact production deployment and fail-closed access
+    needs: water-network-lock
+    if: >-
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Wait for and verify the exact pantavion.com deployment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PANTAVION_EXPECTED_GITHUB_SHA: ${{ github.sha }}
+          PANTAVION_PRODUCTION_BASE_URL: https://www.pantavion.com
+        run: node scripts/water-guardian-production-smoke.cjs
