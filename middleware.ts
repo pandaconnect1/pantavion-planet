@@ -1,6 +1,7 @@
-﻿// middleware.ts
+// middleware.ts
 
 import { NextRequest, NextResponse } from 'next/server';
+import { updateSession } from '@/lib/supabase/middleware';
 
 type PantavionRole =
   | 'guest'
@@ -107,6 +108,10 @@ export async function middleware(request: NextRequest) {
     if (!expectedSession || suppliedSession !== expectedSession) {
       return waterAdminAccessRedirect(request);
     }
+  }
+
+  if (path.startsWith('/profile') || path.startsWith('/dashboard')) {
+    return updateSession(request);
   }
 
   const roleParam = request.nextUrl.searchParams.get('as');
