@@ -242,7 +242,53 @@ Use of radio spectrum, cell broadcast, maritime, aviation and emergency frequenc
 
 Pantavion is to build interoperability and resilience—not unauthorized access to protected communications.
 
-## 15. Architectural mandate
+## 15. Multidimensional personalized access
+
+Pantavion is a multidimensional ecosystem, but every user must be able to experience it as a direct, simple and purpose-specific environment.
+
+A user must not be forced to search the full ecosystem or navigate a large menu every time. The platform must support direct entry into the user's preferred dimension, while preserving seamless access to the rest of Pantavion.
+
+Each user may create or select a personalized Pantavion space such as:
+- Social,
+- Learning,
+- Sports,
+- Professional,
+- Business,
+- News,
+- Maps,
+- Classifieds,
+- Messaging,
+- Family,
+- Community,
+- Travel,
+- Health,
+- Emergency/SOS,
+- or any future specialized domain.
+
+The personalized access model must include:
+- configurable home screen,
+- pinned modules and shortcuts,
+- direct deep links into a selected section,
+- role-based workspaces,
+- context-aware navigation,
+- voice and natural-language opening of any function,
+- adaptive recommendations without hiding user control,
+- accessibility modes,
+- child, senior, professional and emergency-focused interfaces,
+- preserved global search across the full ecosystem,
+- instant switching between dimensions without losing state.
+
+A user who wants only sports should be able to open directly into sports. A learner should open directly into learning. A professional should enter their work environment. A person in danger should reach SOS immediately. None of these focused experiences may break, remove or isolate the rest of the ecosystem.
+
+Pantavion must therefore provide both:
+1. a unified global ecosystem, and
+2. multiple personalized front doors into that ecosystem.
+
+Personalization must be portable across devices, privacy-preserving and recoverable. It must not create discriminatory information bubbles, permanently trap users in one domain or prevent discovery of critical verified alerts.
+
+Critical emergency notices may override normal personalization only when necessary, proportionate, geographically relevant and clearly identified.
+
+## 16. Architectural mandate
 
 All future design and development decisions for Pantavion must be evaluated against these questions:
 
@@ -258,5 +304,8 @@ All future design and development decisions for Pantavion must be evaluated agai
 10. Is language quality represented honestly?
 11. Is life-safety access protected from commercial paywalls?
 12. Can critical administration survive account loss or insider abuse?
+13. Can each user reach their preferred section immediately?
+14. Does personalization preserve access to the complete ecosystem?
+15. Can critical alerts reach the user without abusing personalization?
 
-This document is the baseline for the Pantavion communication, live-information, multilingual and emergency-continuity architecture.
+This document is the baseline for the Pantavion communication, live-information, multilingual, personalized-access and emergency-continuity architecture.
