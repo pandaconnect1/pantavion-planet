@@ -48,7 +48,9 @@ The continuity stack must support, where lawful and technically available:
 - cell broadcast through authorized partners,
 - Bluetooth and Wi-Fi Direct mesh,
 - local emergency nodes,
-- licensed terrestrial radio links,
+- licensed VHF/UHF links,
+- licensed HF/shortwave links,
+- authorized amateur-radio interoperability,
 - airborne relay nodes,
 - maritime nodes,
 - satellite backhaul,
@@ -56,13 +58,15 @@ The continuity stack must support, where lawful and technically available:
 - store-carry-forward delivery,
 - offline local operation and later synchronization.
 
+No single frequency is treated as the solution. Pantavion must use a lawful multi-band, multi-provider and multi-transport architecture so that failure or interference on one path does not end communication.
+
 ## 4. Emergency continuity router
 
 Every critical message must be transport-agnostic.
 
 The Pantavion Continuity Router should attempt available paths in priority order and switch automatically when one fails:
 
-Internet → Mobile data → SMS/MMS → Local mesh → Authorized terrestrial radio → Airborne relay → Maritime relay → Satellite → Store-carry-forward.
+Internet → Mobile data → SMS/MMS → Local mesh → Authorized VHF/UHF/HF relay → Airborne relay → Maritime relay → Satellite → Store-carry-forward.
 
 Delivery state must be truthful and explicit:
 - saved locally,
@@ -75,7 +79,38 @@ Delivery state must be truthful and explicit:
 
 Pantavion must never falsely display “delivered”.
 
-## 5. Modular isolation
+## 5. Seven-continent global reach
+
+Pantavion is intended to operate across all seven continents through geographically distributed infrastructure, regional nodes, local partners, independent backups and offline-first clients.
+
+Global reach does not mean pretending that every region has identical connectivity. Each region must have a documented continuity profile covering:
+- normal internet paths,
+- mobile operators,
+- emergency telecom partners,
+- lawful radio options,
+- satellite options,
+- local emergency nodes,
+- offline map and language packs,
+- disaster recovery responsibilities.
+
+## 6. Language mission
+
+Pantavion adopts a long-term mission to support the world's approximately 7,000 living, natural, signed and officially used languages as broadly as technically and ethically possible.
+
+This is an aspirational global coverage target, not a claim that every language can be launched with equal quality from day one.
+
+Language support must be tiered and transparent:
+- human-verified production support,
+- machine translation with measured quality,
+- emergency phrase-pack support,
+- community-assisted translation,
+- text-only support,
+- speech support where reliable,
+- signed-language and accessibility support where available.
+
+Emergency translation must always show the original message, translated message, confidence level and whether a human has verified it. Low-resource languages must not be falsely presented as fully accurate.
+
+## 7. Modular isolation
 
 Each major section must remain operational independently:
 - Identity,
@@ -93,7 +128,7 @@ Each major section must remain operational independently:
 
 Failure of one module must not bring down the entire ecosystem.
 
-## 6. Live and trusted information
+## 8. Live and trusted information
 
 Every live module must support:
 - source identity,
@@ -113,7 +148,7 @@ News and alerts must distinguish:
 - disputed information,
 - corrected or withdrawn information.
 
-## 7. Offline-first emergency operation
+## 9. Offline-first emergency operation
 
 Critical functions must continue without normal internet access:
 - SOS,
@@ -126,7 +161,44 @@ Critical functions must continue without normal internet access:
 - local translation packs,
 - queued reports and later synchronization.
 
-## 8. No single point of failure
+## 10. Security and institutional independence
+
+Pantavion must be resilient against account compromise, cyberattack, provider failure, unlawful interference, insider abuse, misinformation campaigns and coercive pressure.
+
+Required principles include:
+- end-to-end encryption for private communications where appropriate,
+- encryption at rest and in transit,
+- hardware-backed keys where available,
+- multi-party approval for critical administrative actions,
+- least-privilege access,
+- tamper-evident audit logs,
+- independent security reviews,
+- rapid key rotation and credential recovery,
+- anti-DDoS protection,
+- provider and jurisdiction diversity,
+- transparent legal-request handling,
+- narrowly scoped emergency access procedures,
+- no secret universal backdoor.
+
+Pantavion must resist unlawful censorship and abuse through lawful redundancy, transparency and due process. It must not promise immunity from every government, court order, military action or physical destruction, and it must not provide unauthorized access to protected systems or spectrum.
+
+## 11. Immediate emergency response
+
+Pantavion must prioritize life-safety traffic ahead of non-critical traffic during crises.
+
+Emergency mode must provide:
+- immediate local acknowledgement,
+- priority routing,
+- duplicate-safe retransmission,
+- escalation to available responders,
+- location confidence and last-known-location handling,
+- multilingual emergency templates,
+- status tracking,
+- clear distinction between received, verified, assigned and resolved.
+
+The system must never imply that help is coming unless an authorized responder has actually accepted the case.
+
+## 12. No single point of failure
 
 Pantavion must be designed with:
 - multi-provider deployment,
@@ -141,13 +213,36 @@ Pantavion must be designed with:
 
 No single billing issue, provider suspension, server failure, account lock, cyberattack or infrastructure outage should be able to remove the entire service.
 
-## 9. Legal and safety boundary
+## 13. Subscription model with a protected public-safety core
 
-Use of radio spectrum, cell broadcast, maritime, aviation and emergency frequencies must be done only through lawful authorization and cooperation with regulators, telecom operators, civil protection, emergency services, maritime authorities, aviation authorities and satellite providers.
+Pantavion may offer paid subscriptions comparable to or broader than commercial messaging platforms, including:
+- premium storage,
+- advanced business tools,
+- higher-quality media,
+- enterprise administration,
+- verified organization channels,
+- advanced translation,
+- professional mapping and operations tools,
+- premium support,
+- optional satellite or telecom service bundles where commercially and legally available.
+
+However, essential life-safety functions must not be blocked behind a subscription during an emergency. The protected public-safety core must include at minimum:
+- receiving verified emergency alerts,
+- sending a basic SOS request,
+- “I am safe” status,
+- basic emergency text communication,
+- critical offline instructions,
+- access to nearby aid, shelter, hospital and water information.
+
+Commercial revenue must strengthen resilience and coverage, not create a paywall between a person and emergency help.
+
+## 14. Legal and safety boundary
+
+Use of radio spectrum, cell broadcast, maritime, aviation and emergency frequencies must be done only through lawful authorization and cooperation with regulators, telecom operators, civil protection, emergency services, maritime authorities, aviation authorities, amateur-radio organizations and satellite providers.
 
 Pantavion is to build interoperability and resilience—not unauthorized access to protected communications.
 
-## 10. Architectural mandate
+## 15. Architectural mandate
 
 All future design and development decisions for Pantavion must be evaluated against these questions:
 
@@ -159,5 +254,9 @@ All future design and development decisions for Pantavion must be evaluated agai
 6. Is the delivery state truthful?
 7. Is there an offline and emergency path?
 8. Is the implementation lawful and auditable?
+9. Does it work across regions with different infrastructure?
+10. Is language quality represented honestly?
+11. Is life-safety access protected from commercial paywalls?
+12. Can critical administration survive account loss or insider abuse?
 
-This document is the baseline for the Pantavion communication, live-information and emergency-continuity architecture.
+This document is the baseline for the Pantavion communication, live-information, multilingual and emergency-continuity architecture.
