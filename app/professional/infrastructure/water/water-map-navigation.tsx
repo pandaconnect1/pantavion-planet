@@ -14,24 +14,9 @@ const links = [
     description: "αιτήσεις / approvals",
   },
   {
-    href: "/professional/infrastructure/water/maps",
-    label: "A / B / C",
-    description: "χάρτες",
-  },
-  {
     href: "/professional/infrastructure/water/live",
-    label: "A Map",
-    description: "live",
-  },
-  {
-    href: "/professional/infrastructure/water/b",
-    label: "B Map",
-    description: "derived",
-  },
-  {
-    href: "/professional/infrastructure/water/c",
-    label: "C Map",
-    description: "intelligent",
+    label: "A Live Map",
+    description: "πραγματικό δίκτυο",
   },
 ];
 
