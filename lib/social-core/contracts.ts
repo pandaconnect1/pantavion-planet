@@ -33,6 +33,9 @@ export type SocialCapability =
   | "circles.secure.join"
   | "contacts.import"
   | "messages.import"
+  | "ads.create"
+  | "ads.manage"
+  | "ads.purchase"
   | "search.global";
 
 export type VerificationLevel =
@@ -100,6 +103,7 @@ export interface SocialCoreModule {
     | "business"
     | "events"
     | "marketplace"
+    | "ads-center"
     | "trust-safety"
     | "governance";
   name: string;
