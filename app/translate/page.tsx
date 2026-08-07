@@ -3,48 +3,19 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-type PantavionLanguageOption = {
+type LanguageOption = {
   code: string;
   label: string;
-  nativeLabel: string;
   htmlLang: string;
 };
 
-type UiText = {
-  back: string;
-  layer: string;
-  title: string;
-  subtitle: string;
-  naturalTarget: string;
-  selectableNow: string;
-  modes: string;
-  me: string;
-  myLanguage: string;
-  mySearch: string;
-  myPlaceholder: string;
-  speak: string;
-  translateToOther: string;
-  speakTranslation: string;
-  other: string;
-  otherLanguage: string;
-  otherSearch: string;
-  otherPlaceholder: string;
-  otherSpeaks: string;
-  translateBack: string;
-  speakBack: string;
-  userHears: string;
-  cameraTitle: string;
-  cameraText: string;
-  statusTitle: string;
-  truth: string;
-  providerRequired: string;
-  providerMissing: string;
-  listening: string;
-  speechUnavailable: string;
-  writeFirst: string;
-  translationRequested: string;
-  translated: string;
-  globalSelectorSynced: string;
+type Turn = {
+  id: number;
+  speaker: "me" | "other";
+  sourceText: string;
+  translatedText: string;
+  sourceLanguage: string;
+  targetLanguage: string;
 };
 
 type SpeechRecognitionLike = {
@@ -70,24 +41,24 @@ declare global {
 const STORAGE_KEY = "pantavion.ui.language";
 
 const PRIORITY_LABELS: Record<string, string> = {
-  el: "Greek / Ελληνικά",
+  el: "Ελληνικά / Greek",
   en: "English",
-  fr: "French / Français",
-  es: "Spanish / Español",
-  de: "German / Deutsch",
-  it: "Italian / Italiano",
-  pt: "Portuguese / Português",
-  ru: "Russian / Русский",
-  ar: "Arabic / العربية",
-  he: "Hebrew / עברית",
-  tr: "Turkish / Türkçe",
-  zh: "Chinese / 中文",
-  ja: "Japanese / 日本語",
-  ko: "Korean / 한국어",
-  hi: "Hindi / हिन्दी",
-  ur: "Urdu / اردو",
-  fa: "Persian / فارسی",
-  sw: "Swahili / Kiswahili",
+  fr: "Français / French",
+  es: "Español / Spanish",
+  de: "Deutsch / German",
+  it: "Italiano / Italian",
+  pt: "Português / Portuguese",
+  ru: "Русский / Russian",
+  ar: "العربية / Arabic",
+  he: "עברית / Hebrew",
+  tr: "Türkçe / Turkish",
+  zh: "中文 / Chinese",
+  ja: "日本語 / Japanese",
+  ko: "한국어 / Korean",
+  hi: "हिन्दी / Hindi",
+  ur: "اردو / Urdu",
+  fa: "فارسی / Persian",
+  sw: "Kiswahili / Swahili",
 };
 
 const STARTER_LANGUAGE_CODES = Array.from(
@@ -96,268 +67,220 @@ const STARTER_LANGUAGE_CODES = Array.from(
   )
 ).filter(Boolean);
 
-function displayLanguageName(code: string): string {
+function displayLanguageName(code: string) {
   if (PRIORITY_LABELS[code]) return PRIORITY_LABELS[code];
 
   try {
-    const displayNamesConstructor = (Intl as typeof Intl & {
-      DisplayNames?: new (
-        locales: string[],
-        options: { type: "language"; languageDisplay?: "standard" | "dialect" }
-      ) => { of: (code: string) => string | undefined };
+    const DisplayNames = (Intl as typeof Intl & {
+      DisplayNames?: new (locales: string[], options: { type: "language" }) => {
+        of: (code: string) => string | undefined;
+      };
     }).DisplayNames;
 
-    if (displayNamesConstructor) {
-      const displayNames = new displayNamesConstructor(["en"], {
-        type: "language",
-        languageDisplay: "standard",
-      });
-
-      return displayNames.of(code) || code.toUpperCase();
+    if (DisplayNames) {
+      return new DisplayNames(["en"], { type: "language" }).of(code) || code.toUpperCase();
     }
   } catch {
-    return code.toUpperCase();
+    // Fall through to the code.
   }
 
   return code.toUpperCase();
 }
 
-const LANGUAGE_OPTIONS: PantavionLanguageOption[] = STARTER_LANGUAGE_CODES.map((code) => {
-  const label = displayLanguageName(code);
-  return {
-    code,
-    label,
-    nativeLabel: label,
-    htmlLang: code,
-  };
-}).sort((a, b) =>
-  a.label.localeCompare(b.label, undefined, {
-    sensitivity: "base",
-    numeric: true,
-  })
-);
+const LANGUAGE_OPTIONS: LanguageOption[] = STARTER_LANGUAGE_CODES.map((code) => ({
+  code,
+  label: displayLanguageName(code),
+  htmlLang: code,
+})).sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
-function isKnownLanguage(code: string): boolean {
+function getLanguage(code: string) {
+  return LANGUAGE_OPTIONS.find((language) => language.code === code) ||
+    LANGUAGE_OPTIONS.find((language) => language.code === "en") ||
+    LANGUAGE_OPTIONS[0];
+}
+
+function isKnownLanguage(code: string) {
   return LANGUAGE_OPTIONS.some((language) => language.code === code);
 }
 
-function getLanguageMeta(code: string): PantavionLanguageOption {
-  return LANGUAGE_OPTIONS.find((language) => language.code === code) || LANGUAGE_OPTIONS.find((language) => language.code === "en") || LANGUAGE_OPTIONS[0];
-}
-
-const UI_TEXT: Record<"en" | "el", UiText> = {
-  en: {
-    back: "Back to Pantavion",
-    layer: "PantaTranslate / Universal Interpreter",
-    title: "Speak naturally. Let Pantavion interpret the world.",
-    subtitle:
-      "Platform-level translation for travel, work, social, accessibility, camera scan, PantaAI and SOS. SOS only uses this system in emergency mode.",
-    naturalTarget: "Natural-language universe target",
-    selectableNow: "Selectable practical menu now",
-    modes: "Voice • Text • Subtitles • Camera • SOS",
-    me: "Me / User",
-    myLanguage: "My language",
-    mySearch: "Search my language",
-    myPlaceholder: "Speak or write in your natural language...",
-    speak: "Speak",
-    translateToOther: "Translate to other person",
-    speakTranslation: "Speak translation",
-    other: "Other person",
-    otherLanguage: "Other person's language",
-    otherSearch: "Search other language",
-    otherPlaceholder: "The other person speaks or writes here...",
-    otherSpeaks: "Other speaks",
-    translateBack: "Translate back to me",
-    speakBack: "Speak back",
-    userHears: "User hears / reads in",
-    cameraTitle: "Camera / signs / menus / accessibility",
-    cameraText:
-      "Select an image from camera or files. Real OCR requires OCR provider configuration. This route is ready without pretending the provider exists.",
-    statusTitle: "Status",
-    truth:
-      "Truth boundary: translation is assistive. Legal, medical, emergency and certified interpretation require configured providers, agreements and human/professional review where required.",
-    providerRequired: "Provider required",
-    providerMissing:
-      "Live translation provider is not configured yet. Connect Google, Azure, DeepL, OpenAI or another approved provider before presenting this as fully live.",
-    listening: "Listening...",
-    speechUnavailable: "Speech recognition is not available in this browser.",
-    writeFirst: "Write or speak text first.",
-    translationRequested: "Translation requested. Checking provider...",
-    translated: "Translation returned by configured provider.",
-    globalSelectorSynced: "Global Pantavion language synced.",
-  },
-  el: {
-    back: "Πίσω στο Pantavion",
-    layer: "PantaTranslate / Παγκόσμιος Διερμηνέας",
-    title: "Μίλα φυσικά. Άφησε το Pantavion να ερμηνεύσει τον κόσμο.",
-    subtitle:
-      "Μετάφραση επιπέδου πλατφόρμας για ταξίδι, εργασία, κοινωνική χρήση, προσβασιμότητα, κάμερα, PantaAI και SOS. Το SOS χρησιμοποιεί αυτό το σύστημα μόνο σε λειτουργία ανάγκης.",
-    naturalTarget: "Πλανητικός στόχος φυσικών γλωσσών",
-    selectableNow: "Πρακτικές επιλογές τώρα",
-    modes: "Φωνή • Κείμενο • Υπότιτλοι • Κάμερα • SOS",
-    me: "Εγώ / Χρήστης",
-    myLanguage: "Η γλώσσα μου",
-    mySearch: "Αναζήτηση γλώσσας μου",
-    myPlaceholder: "Μίλησε ή γράψε στη φυσική σου γλώσσα...",
-    speak: "Μίλησε",
-    translateToOther: "Μετάφραση προς τον άλλο",
-    speakTranslation: "Άκου μετάφραση",
-    other: "Άλλο άτομο",
-    otherLanguage: "Γλώσσα άλλου ατόμου",
-    otherSearch: "Αναζήτηση άλλης γλώσσας",
-    otherPlaceholder: "Το άλλο άτομο μιλά ή γράφει εδώ...",
-    otherSpeaks: "Μιλά ο άλλος",
-    translateBack: "Μετάφραση πίσω σε μένα",
-    speakBack: "Άκου πίσω",
-    userHears: "Ο χρήστης ακούει / διαβάζει σε",
-    cameraTitle: "Κάμερα / πινακίδες / μενού / προσβασιμότητα",
-    cameraText:
-      "Επίλεξε εικόνα από κάμερα ή αρχεία. Η πραγματική OCR ανάγνωση χρειάζεται provider. Η διαδρομή είναι έτοιμη χωρίς να προσποιείται ότι ο provider υπάρχει.",
-    statusTitle: "Κατάσταση",
-    truth:
-      "Όριο αλήθειας: η μετάφραση είναι βοηθητική. Νομική, ιατρική, έκτακτη και πιστοποιημένη διερμηνεία απαιτεί ρυθμισμένους providers, συμφωνίες και ανθρώπινο/επαγγελματικό έλεγχο όπου χρειάζεται.",
-    providerRequired: "Απαιτείται provider",
-    providerMissing:
-      "Δεν έχει ρυθμιστεί ακόμα live translation provider. Σύνδεσε Google, Azure, DeepL, OpenAI ή άλλον εγκεκριμένο provider πριν εμφανιστεί ως πλήρως ζωντανή μετάφραση.",
-    listening: "Ακούω...",
-    speechUnavailable: "Η αναγνώριση ομιλίας δεν είναι διαθέσιμη σε αυτόν τον browser.",
-    writeFirst: "Γράψε ή μίλησε πρώτα.",
-    translationRequested: "Ζητήθηκε μετάφραση. Έλεγχος provider...",
-    translated: "Η μετάφραση επιστράφηκε από ρυθμισμένο provider.",
-    globalSelectorSynced: "Η παγκόσμια γλώσσα Pantavion συγχρονίστηκε.",
-  },
-};
-
-function getUiLanguage(globalLanguage: string): "en" | "el" {
-  return globalLanguage === "el" ? "el" : "en";
-}
-
-function filterLanguageOptions(query: string, selectedCode: string): PantavionLanguageOption[] {
-  const normalizedQuery = query.trim().toLowerCase();
-  const filtered = normalizedQuery
-    ? LANGUAGE_OPTIONS.filter((language) => {
-        return (
-          language.code.toLowerCase().includes(normalizedQuery) ||
-          language.label.toLowerCase().includes(normalizedQuery) ||
-          language.nativeLabel.toLowerCase().includes(normalizedQuery)
-        );
-      })
-    : LANGUAGE_OPTIONS;
-
-  const selected = LANGUAGE_OPTIONS.find((language) => language.code === selectedCode);
-  const withSelected = selected && !filtered.some((language) => language.code === selected.code)
-    ? [selected, ...filtered]
-    : filtered;
-
-  return withSelected.slice(0, 320);
-}
-
-function normalizeGlobalLanguage(value: string | null): string {
-  if (!value) return "auto";
-  if (value === "auto" || value === "world") return value;
-  return isKnownLanguage(value) ? value : "auto";
-}
-
-function getStoredLanguage(): string {
-  if (typeof window === "undefined") return "auto";
+function readStoredLanguage() {
+  if (typeof window === "undefined") return "el";
 
   try {
-    return normalizeGlobalLanguage(window.localStorage.getItem(STORAGE_KEY));
+    const stored = window.localStorage.getItem(STORAGE_KEY) || "el";
+    return isKnownLanguage(stored) ? stored : "el";
   } catch {
-    return "auto";
+    return "el";
   }
 }
 
 export default function TranslatePage() {
-  const [globalLanguage, setGlobalLanguage] = useState("auto");
   const [myLanguage, setMyLanguage] = useState("el");
-  const [otherLanguage, setOtherLanguage] = useState("en");
-  const [mySearch, setMySearch] = useState("");
-  const [otherSearch, setOtherSearch] = useState("");
-  const [userText, setUserText] = useState("");
-  const [otherText, setOtherText] = useState("");
-  const [userTranslation, setUserTranslation] = useState("");
-  const [otherTranslation, setOtherTranslation] = useState("");
+  const [partnerLanguage, setPartnerLanguage] = useState<string | null>(null);
+  const [manualPartnerLanguage, setManualPartnerLanguage] = useState("en");
+  const [conversationActive, setConversationActive] = useState(false);
+  const [listening, setListening] = useState<"me" | "other" | null>(null);
+  const [text, setText] = useState("");
+  const [turns, setTurns] = useState<Turn[]>([]);
   const [status, setStatus] = useState("Ready.");
-  const [providerMessage, setProviderMessage] = useState("");
+  const [error, setError] = useState("");
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
-  const uiLanguage = getUiLanguage(globalLanguage);
-  const t = UI_TEXT[uiLanguage];
-
-  const myLanguageMeta = getLanguageMeta(myLanguage);
-  const otherLanguageMeta = getLanguageMeta(otherLanguage);
-
-  const myOptions = useMemo(() => filterLanguageOptions(mySearch, myLanguage), [mySearch, myLanguage]);
-  const otherOptions = useMemo(() => filterLanguageOptions(otherSearch, otherLanguage), [otherSearch, otherLanguage]);
+  const myLanguageMeta = useMemo(() => getLanguage(myLanguage), [myLanguage]);
+  const partnerLanguageMeta = useMemo(
+    () => getLanguage(partnerLanguage || manualPartnerLanguage),
+    [partnerLanguage, manualPartnerLanguage]
+  );
 
   useEffect(() => {
-    const initialLanguage = getStoredLanguage();
-    setGlobalLanguage(initialLanguage);
+    setMyLanguage(readStoredLanguage());
 
-    if (isKnownLanguage(initialLanguage)) {
-      setMyLanguage(initialLanguage);
-      setStatus(UI_TEXT[getUiLanguage(initialLanguage)].globalSelectorSynced);
-    }
-
-    function applyLanguage(value: string | null) {
-      const nextLanguage = normalizeGlobalLanguage(value);
-      setGlobalLanguage(nextLanguage);
-
-      if (isKnownLanguage(nextLanguage)) {
-        setMyLanguage(nextLanguage);
-      }
-
-      setStatus(UI_TEXT[getUiLanguage(nextLanguage)].globalSelectorSynced);
-    }
-
-    function onStorage(event: StorageEvent) {
-      if (event.key === STORAGE_KEY) applyLanguage(event.newValue);
-    }
-
-    function onPantavionLanguageChange(event: Event) {
+    function onLanguageChange(event: Event) {
       const customEvent = event as CustomEvent<{ language?: string }>;
-      applyLanguage(customEvent.detail?.language || getStoredLanguage());
+      const language = customEvent.detail?.language;
+      if (language && isKnownLanguage(language)) setMyLanguage(language);
     }
 
-    window.addEventListener("storage", onStorage);
-    window.addEventListener("pantavion:language-change", onPantavionLanguageChange);
-
+    window.addEventListener("pantavion:language-change", onLanguageChange);
     return () => {
-      window.removeEventListener("storage", onStorage);
-      window.removeEventListener("pantavion:language-change", onPantavionLanguageChange);
+      window.removeEventListener("pantavion:language-change", onLanguageChange);
       recognitionRef.current?.stop();
     };
   }, []);
 
-  function speak(text: string, languageCode: string) {
-    if (typeof window === "undefined" || !text.trim()) return;
-
-    if (!("speechSynthesis" in window)) {
-      setStatus(t.speechUnavailable);
-      return;
-    }
+  function speak(textToSpeak: string, languageCode: string) {
+    if (!textToSpeak.trim() || typeof window === "undefined") return;
+    if (!("speechSynthesis" in window)) return;
 
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = getLanguageMeta(languageCode).htmlLang;
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = getLanguage(languageCode).htmlLang;
     window.speechSynthesis.speak(utterance);
   }
 
-  function startListening(target: "user" | "other") {
+  async function detectLanguage(sourceText: string) {
+    try {
+      const response = await fetch("/api/pantavion/detect-language", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: sourceText }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      const language = typeof payload.language === "string" ? payload.language : "";
+      return isKnownLanguage(language) ? language : null;
+    } catch {
+      return null;
+    }
+  }
+
+  async function translate(sourceText: string, sourceLanguage: string, targetLanguage: string) {
+    const response = await fetch("/api/pantavion/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text: sourceText,
+        sourceLanguage,
+        targetLanguage,
+        from: sourceLanguage,
+        to: targetLanguage,
+        mode: "same_phone",
+        surface: "pantavion-simple-interpreter",
+        bidirectional: true,
+      }),
+    });
+
+    const payload = await response.json().catch(() => ({}));
+    const translatedText =
+      payload.translatedText || payload.translation || payload.text || payload.output || "";
+
+    if (!response.ok || !translatedText) {
+      throw new Error(payload.message || payload.error || "Translation provider is unavailable.");
+    }
+
+    return translatedText as string;
+  }
+
+  async function submitTurn(sourceText: string, speaker: "me" | "other") {
+    const cleanText = sourceText.trim();
+    if (!cleanText) return;
+
+    setError("");
+    setStatus("Translating…");
+
+    try {
+      let detectedPartnerLanguage = partnerLanguage;
+
+      if (speaker === "other" && !detectedPartnerLanguage) {
+        setStatus("Detecting the other person's language…");
+        detectedPartnerLanguage = await detectLanguage(cleanText);
+        if (detectedPartnerLanguage) setPartnerLanguage(detectedPartnerLanguage);
+      }
+
+      if (speaker === "me" && !detectedPartnerLanguage) {
+        setStatus("Waiting for the other person to speak once so Pantavion can detect their language.");
+        setError("The other person can speak or type first. After Pantavion detects their language, the conversation runs in both directions.");
+        return;
+      }
+
+      const sourceLanguage = speaker === "me" ? myLanguage : "auto";
+      const targetLanguage = speaker === "me"
+        ? detectedPartnerLanguage || manualPartnerLanguage
+        : myLanguage;
+
+      const translatedText = await translate(cleanText, sourceLanguage, targetLanguage);
+      const actualPartnerLanguage = detectedPartnerLanguage || manualPartnerLanguage;
+
+      setTurns((current) => [
+        ...current,
+        {
+          id: Date.now(),
+          speaker,
+          sourceText: cleanText,
+          translatedText,
+          sourceLanguage: speaker === "me" ? myLanguage : actualPartnerLanguage,
+          targetLanguage,
+        },
+      ]);
+
+      setText("");
+      setStatus("Ready for the next person.");
+
+      if (speaker === "me") {
+        speak(translatedText, actualPartnerLanguage);
+      } else {
+        speak(translatedText, myLanguage);
+      }
+    } catch (translationError) {
+      setStatus("Translation unavailable.");
+      setError(
+        translationError instanceof Error
+          ? translationError.message
+          : "Translation provider is unavailable."
+      );
+    }
+  }
+
+  function startListening(speaker: "me" | "other") {
     if (typeof window === "undefined") return;
 
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
     if (!Recognition) {
-      setStatus(t.speechUnavailable);
+      setError(
+        "This browser does not expose Web Speech Recognition. Pantavion needs the platform speech-to-text provider for reliable voice use on all devices and in-app browsers."
+      );
+      return;
+    }
+
+    if (speaker === "other" && !partnerLanguage) {
+      setError(
+        "Automatic spoken-language detection needs the multilingual speech-to-text provider. For now, the other person can type once, or choose a fallback language below."
+      );
       return;
     }
 
     recognitionRef.current?.stop();
-
     const recognition = new Recognition();
-    recognition.lang = target === "user" ? myLanguageMeta.htmlLang : otherLanguageMeta.htmlLang;
+    recognition.lang = speaker === "me" ? myLanguageMeta.htmlLang : partnerLanguageMeta.htmlLang;
     recognition.continuous = false;
     recognition.interimResults = false;
 
@@ -366,304 +289,240 @@ export default function TranslatePage() {
         .map((result: any) => result?.[0]?.transcript || "")
         .join(" ")
         .trim();
-
-      if (!transcript) return;
-
-      if (target === "user") {
-        setUserText((current) => [current, transcript].filter(Boolean).join(" "));
-      } else {
-        setOtherText((current) => [current, transcript].filter(Boolean).join(" "));
-      }
+      if (transcript) void submitTurn(transcript, speaker);
     };
 
     recognition.onerror = () => {
-      setStatus(t.speechUnavailable);
       setListening(null);
+      setError("Voice recognition failed in this browser. Text translation remains available.");
     };
 
-    recognition.onend = () => {
-      setListening(null);
-    };
+    recognition.onend = () => setListening(null);
 
     recognitionRef.current = recognition;
     recognition.start();
-    setListening(target);
-    setStatus(t.listening);
+    setListening(speaker);
+    setStatus(speaker === "me" ? "Listening to you…" : "Listening to the other person…");
   }
 
-  const [listening, setListening] = useState<"user" | "other" | null>(null);
-
-  async function requestTranslation(direction: "userToOther" | "otherToUser") {
-    const sourceText = direction === "userToOther" ? userText.trim() : otherText.trim();
-    const from = direction === "userToOther" ? myLanguage : otherLanguage;
-    const to = direction === "userToOther" ? otherLanguage : myLanguage;
-
-    if (!sourceText) {
-      setStatus(t.writeFirst);
-      return;
-    }
-
-    setStatus(t.translationRequested);
-    setProviderMessage("");
-
-    try {
-      const response = await fetch("/api/pantavion/translate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: sourceText,
-          from,
-          to,
-          mode: "assistive",
-          surface: "pantavion-translate",
-        }),
-      });
-
-      const result = await response.json().catch(() => ({}));
-
-      const translatedText =
-        result.translatedText ||
-        result.translation ||
-        result.text ||
-        result.output ||
-        "";
-
-      if (!response.ok || !translatedText) {
-        setStatus(t.providerRequired);
-        setProviderMessage(result.message || result.error || t.providerMissing);
-        return;
-      }
-
-      if (direction === "userToOther") {
-        setUserTranslation(translatedText);
-      } else {
-        setOtherTranslation(translatedText);
-      }
-
-      setStatus(t.translated);
-    } catch {
-      setStatus(t.providerRequired);
-      setProviderMessage(t.providerMissing);
-    }
-  }
-
-  function handleCameraFile(file: File | null) {
-    if (!file) return;
-
-    setStatus("Camera/image selected. OCR provider is required for real text extraction.");
-    setProviderMessage(
-      "PantaTranslate camera scan route is ready, but OCR provider is not configured yet."
-    );
+  function resetConversation() {
+    recognitionRef.current?.stop();
+    setTurns([]);
+    setPartnerLanguage(null);
+    setConversationActive(false);
+    setText("");
+    setError("");
+    setStatus("Ready.");
   }
 
   return (
-    <main className="min-h-screen bg-[#050816] px-5 py-8 text-white">
-      <section className="mx-auto flex max-w-7xl flex-col gap-6">
-        <div className="rounded-[2rem] border border-cyan-300/30 bg-gradient-to-br from-[#071528] via-[#08111f] to-black p-6 shadow-2xl">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+    <main className="min-h-screen bg-[#050816] px-4 py-6 text-white sm:px-6">
+      <section className="mx-auto max-w-4xl">
+        <div className="rounded-[2rem] border border-cyan-300/25 bg-gradient-to-br from-[#071528] via-[#08111f] to-black p-5 shadow-2xl sm:p-8">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <Link
               href="/"
               className="rounded-full border border-yellow-300/30 px-4 py-2 text-sm font-bold text-yellow-100"
             >
-              {t.back}
+              Back to Pantavion
             </Link>
-            <div className="rounded-2xl border border-yellow-300/30 bg-yellow-300/10 px-4 py-3 text-xs text-yellow-100">
-              <strong>World Language Layer</strong>
-              <br />
-              250+ starter language/locales now. 7,000+ natural languages in Pantavion scope.
-            </div>
+            <span className="rounded-full border border-emerald-300/25 bg-emerald-300/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-emerald-100">
+              One language • One conversation
+            </span>
           </div>
 
           <p className="mt-8 text-xs font-black uppercase tracking-[0.35em] text-cyan-200">
-            {t.layer}
+            PantaTranslate / Universal Interpreter
           </p>
-          <h1 className="mt-4 max-w-5xl text-5xl font-black leading-none sm:text-6xl">
-            {t.title}
+          <h1 className="mt-4 text-4xl font-black leading-tight sm:text-6xl">
+            Choose your language. Then just talk.
           </h1>
-          <p className="mt-6 max-w-4xl text-lg leading-8 text-slate-100">
-            {t.subtitle}
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-200">
+            Pantavion keeps your language fixed, learns the other person's language, and translates the conversation both ways. The same interaction model is designed to scale to social groups, calls, video, travel, work and SOS.
           </p>
-
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <p className="text-sm text-slate-200">{t.naturalTarget}</p>
-              <p className="mt-2 text-3xl font-black text-yellow-200">7,000+</p>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <p className="text-sm text-slate-200">{t.selectableNow}</p>
-              <p className="mt-2 text-3xl font-black text-cyan-200">
-                {LANGUAGE_OPTIONS.length}+
-              </p>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <p className="text-sm text-slate-200">Modes</p>
-              <p className="mt-2 text-lg font-black text-emerald-100">{t.modes}</p>
-            </div>
-          </div>
         </div>
 
-        <section className="grid gap-5 lg:grid-cols-2">
-          <div className="rounded-[2rem] border border-blue-300/30 bg-blue-950/30 p-5">
-            <h2 className="text-2xl font-black">{t.me}</h2>
+        <section className="mt-5 rounded-[2rem] border border-blue-300/25 bg-blue-950/25 p-5 sm:p-7">
+          <label className="block text-sm font-black text-blue-100">
+            My language
+            <select
+              value={myLanguage}
+              onChange={(event) => {
+                const language = event.target.value;
+                setMyLanguage(language);
+                try {
+                  window.localStorage.setItem(STORAGE_KEY, language);
+                  window.dispatchEvent(
+                    new CustomEvent("pantavion:language-change", { detail: { language } })
+                  );
+                } catch {
+                  // Local storage can be unavailable in restricted browsers.
+                }
+              }}
+              className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-lg font-bold text-white outline-none"
+            >
+              {LANGUAGE_OPTIONS.map((language) => (
+                <option key={language.code} value={language.code}>
+                  {language.label}
+                </option>
+              ))}
+            </select>
+          </label>
 
-            <label className="mt-5 block text-sm font-bold text-blue-100">
-              {t.mySearch}
-              <input
-                value={mySearch}
-                onChange={(event) => setMySearch(event.target.value)}
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 p-3 text-white outline-none"
-                placeholder="Greek, Ελληνικά, el..."
-              />
-            </label>
-
-            <label className="mt-4 block text-sm font-bold text-blue-100">
-              {t.myLanguage}
-              <select
-                value={myLanguage}
-                onChange={(event) => setMyLanguage(event.target.value)}
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 p-3 text-white outline-none"
-              >
-                {myOptions.map((language) => (
-                  <option key={language.code} value={language.code}>
-                    {language.label} - {language.code}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <textarea
-              value={userText}
-              onChange={(event) => setUserText(event.target.value)}
-              placeholder={t.myPlaceholder}
-              className="mt-4 min-h-40 w-full rounded-3xl border border-white/10 bg-black/40 p-4 text-white"
-            />
-
-            <div className="mt-4 flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() => startListening("user")}
-                className="rounded-full bg-blue-400 px-5 py-3 font-black text-slate-950"
-              >
-                {listening === "user" ? t.listening : t.speak}
-              </button>
-              <button
-                type="button"
-                onClick={() => requestTranslation("userToOther")}
-                className="rounded-full bg-cyan-300 px-5 py-3 font-black text-slate-950"
-              >
-                {t.translateToOther}
-              </button>
-              <button
-                type="button"
-                onClick={() => speak(userTranslation, otherLanguage)}
-                className="rounded-full border border-cyan-200 px-5 py-3 font-black text-cyan-100"
-              >
-                {t.speakTranslation}
-              </button>
-            </div>
-
-            <div className="mt-4 rounded-3xl border border-cyan-300/20 bg-black/30 p-4">
-              <p className="text-sm font-bold text-cyan-100">
-                Other person hears / reads in {otherLanguageMeta.label}
+          <div className="mt-5 flex items-center justify-between gap-4 rounded-3xl border border-cyan-300/20 bg-black/30 p-4">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-200">Other person</p>
+              <p className="mt-1 text-xl font-black">
+                {partnerLanguage ? partnerLanguageMeta.label : "Auto-detect"}
               </p>
-              <p className="mt-2 whitespace-pre-wrap text-xl font-bold">
-                {userTranslation || "—"}
+              <p className="mt-1 text-sm text-slate-300">
+                {partnerLanguage
+                  ? "Detected for this conversation."
+                  : "No language menu for the other person."}
               </p>
             </div>
+            <div className="text-3xl" aria-hidden="true">⇄</div>
           </div>
 
-          <div className="rounded-[2rem] border border-yellow-300/30 bg-yellow-950/10 p-5">
-            <h2 className="text-2xl font-black">{t.other}</h2>
-
-            <label className="mt-5 block text-sm font-bold text-yellow-100">
-              {t.otherSearch}
-              <input
-                value={otherSearch}
-                onChange={(event) => setOtherSearch(event.target.value)}
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 p-3 text-white outline-none"
-                placeholder="English, Turkish, Arabic..."
-              />
-            </label>
-
-            <label className="mt-4 block text-sm font-bold text-yellow-100">
-              {t.otherLanguage}
-              <select
-                value={otherLanguage}
-                onChange={(event) => setOtherLanguage(event.target.value)}
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 p-3 text-white outline-none"
+          {!conversationActive ? (
+            <button
+              type="button"
+              onClick={() => {
+                setConversationActive(true);
+                setStatus("Conversation started. The other person can speak or type first for automatic language detection.");
+              }}
+              className="mt-5 w-full rounded-full bg-cyan-300 px-6 py-4 text-lg font-black text-slate-950"
+            >
+              Start conversation
+            </button>
+          ) : (
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => startListening("me")}
+                className="rounded-full bg-blue-400 px-5 py-4 text-lg font-black text-slate-950"
               >
-                {otherOptions.map((language) => (
-                  <option key={language.code} value={language.code}>
-                    {language.label} - {language.code}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <textarea
-              value={otherText}
-              onChange={(event) => setOtherText(event.target.value)}
-              placeholder={t.otherPlaceholder}
-              className="mt-4 min-h-40 w-full rounded-3xl border border-white/10 bg-black/40 p-4 text-white"
-            />
-
-            <div className="mt-4 flex flex-wrap gap-3">
+                {listening === "me" ? "Listening…" : `I speak ${myLanguageMeta.label}`}
+              </button>
               <button
                 type="button"
                 onClick={() => startListening("other")}
-                className="rounded-full bg-orange-300 px-5 py-3 font-black text-slate-950"
+                className="rounded-full bg-yellow-300 px-5 py-4 text-lg font-black text-slate-950"
               >
-                {listening === "other" ? t.listening : t.otherSpeaks}
-              </button>
-              <button
-                type="button"
-                onClick={() => requestTranslation("otherToUser")}
-                className="rounded-full bg-yellow-300 px-5 py-3 font-black text-slate-950"
-              >
-                {t.translateBack}
-              </button>
-              <button
-                type="button"
-                onClick={() => speak(otherTranslation, myLanguage)}
-                className="rounded-full border border-yellow-200 px-5 py-3 font-black text-yellow-100"
-              >
-                {t.speakBack}
+                {listening === "other"
+                  ? "Listening…"
+                  : partnerLanguage
+                    ? `Other person speaks ${partnerLanguageMeta.label}`
+                    : "Other person speaks • auto"}
               </button>
             </div>
+          )}
 
-            <div className="mt-4 rounded-3xl border border-yellow-300/20 bg-black/30 p-4">
-              <p className="text-sm font-bold text-yellow-100">
-                {t.userHears} {myLanguageMeta.label}
-              </p>
-              <p className="mt-2 whitespace-pre-wrap text-xl font-bold">
-                {otherTranslation || "—"}
-              </p>
+          <div className="mt-5 rounded-3xl border border-white/10 bg-black/30 p-4">
+            <textarea
+              value={text}
+              onChange={(event) => setText(event.target.value)}
+              placeholder="Type a sentence if voice is unavailable…"
+              className="min-h-28 w-full resize-none bg-transparent text-lg text-white outline-none placeholder:text-slate-500"
+            />
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => void submitTurn(text, "me")}
+                className="rounded-full border border-blue-300/40 px-4 py-2 font-bold text-blue-100"
+              >
+                Send as me
+              </button>
+              <button
+                type="button"
+                onClick={() => void submitTurn(text, "other")}
+                className="rounded-full border border-yellow-300/40 px-4 py-2 font-bold text-yellow-100"
+              >
+                Send as other person
+              </button>
             </div>
           </div>
+
+          <details className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
+            <summary className="cursor-pointer font-bold text-slate-100">Fallback / advanced</summary>
+            <p className="mt-3">
+              Automatic partner-language detection is the default. A manual fallback remains available for browsers or deployments without the multilingual speech provider.
+            </p>
+            <select
+              value={manualPartnerLanguage}
+              onChange={(event) => {
+                setManualPartnerLanguage(event.target.value);
+                if (!partnerLanguage) setPartnerLanguage(event.target.value);
+              }}
+              className="mt-3 w-full rounded-2xl border border-white/10 bg-black/40 p-3 text-white"
+            >
+              {LANGUAGE_OPTIONS.map((language) => (
+                <option key={language.code} value={language.code}>
+                  {language.label}
+                </option>
+              ))}
+            </select>
+          </details>
         </section>
 
-        <section className="rounded-[2rem] border border-emerald-300/30 bg-emerald-950/20 p-5">
-          <h2 className="text-2xl font-black">{t.cameraTitle}</h2>
-          <p className="mt-2 text-slate-200">{t.cameraText}</p>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(event) => handleCameraFile(event.target.files?.[0] || null)}
-            className="mt-4 block w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-white"
-          />
+        <section className="mt-5 space-y-3">
+          {turns.length === 0 ? (
+            <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 text-center text-slate-400">
+              Conversation will appear here automatically.
+            </div>
+          ) : (
+            turns.map((turn) => (
+              <article
+                key={turn.id}
+                className={`rounded-[2rem] border p-5 ${
+                  turn.speaker === "me"
+                    ? "border-blue-300/25 bg-blue-950/25"
+                    : "border-yellow-300/25 bg-yellow-950/15"
+                }`}
+              >
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-300">
+                  {turn.speaker === "me" ? "You" : "Other person"}
+                </p>
+                <p className="mt-2 text-xl font-bold">{turn.sourceText}</p>
+                <div className="my-4 h-px bg-white/10" />
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-200">
+                  Pantavion translation
+                </p>
+                <p className="mt-2 text-2xl font-black">{turn.translatedText}</p>
+                <button
+                  type="button"
+                  onClick={() => speak(turn.translatedText, turn.targetLanguage)}
+                  className="mt-4 rounded-full border border-cyan-200/40 px-4 py-2 text-sm font-black text-cyan-100"
+                >
+                  Speak translation
+                </button>
+              </article>
+            ))
+          )}
         </section>
 
-        <section className="rounded-[2rem] border border-white/10 bg-white/5 p-5">
-          <h2 className="text-xl font-black">{t.statusTitle}</h2>
-          <p className="mt-2 text-cyan-100">{status}</p>
-          {providerMessage ? (
-            <p className="mt-3 rounded-2xl border border-yellow-300/30 bg-yellow-300/10 p-3 text-yellow-100">
-              {providerMessage}
+        <section className="mt-5 rounded-[2rem] border border-white/10 bg-white/5 p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-black text-cyan-100">Status</p>
+              <p className="mt-1 text-slate-200">{status}</p>
+            </div>
+            <button
+              type="button"
+              onClick={resetConversation}
+              className="rounded-full border border-white/20 px-4 py-2 text-sm font-bold text-slate-200"
+            >
+              New conversation
+            </button>
+          </div>
+          {error ? (
+            <p className="mt-4 rounded-2xl border border-yellow-300/30 bg-yellow-300/10 p-4 text-yellow-100">
+              {error}
             </p>
           ) : null}
-          <p className="mt-4 text-sm text-slate-300">{t.truth}</p>
+          <p className="mt-4 text-sm leading-6 text-slate-400">
+            Platform rule: the user chooses only their own language. The receiving person's language should come from their Pantavion profile in connected social/call surfaces, or from automatic multilingual speech detection in same-device conversations. Browser speech APIs are only a fallback, not the platform architecture.
+          </p>
         </section>
       </section>
     </main>
