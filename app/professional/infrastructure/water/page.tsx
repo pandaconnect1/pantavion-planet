@@ -10,7 +10,7 @@ import WaterMapNavigation from "./water-map-navigation";
 export const metadata = {
   title: "Pantavion Water Control Center",
   description:
-    "Protected Pantavion Water entry for access requests, approved users, A Map, B Master and C Intelligent Map.",
+    "Protected Pantavion Water entry for approved users, access management and the live water network map.",
 };
 
 const cards = [
@@ -18,59 +18,26 @@ const cards = [
     title: "Administrator / Users Management",
     label: "ADMINISTRATOR",
     description:
-      "Προστατευμένη διαχείριση Users με Approve, Reject και προσωρινό Delete / Block.",
+      "Προστατευμένη διαχείριση Users με πραγματικά Approve, Reject και Delete / Block controls.",
     href: "/professional/infrastructure/water/admin/approvals",
     action: "Άνοιγμα Administrator",
     adminOnly: true,
   },
   {
     title: "Users / Access",
-    label: "APPROVALS",
+    label: "LIVE ACCESS",
     description:
-      "Αιτήσεις πρόσβασης και αυτόματος έλεγχος εγκεκριμένης συσκευής.",
+      "Αιτήσεις πρόσβασης και πραγματικός έλεγχος εγκεκριμένης συσκευής πριν από πρόσβαση στο δίκτυο.",
     href: "/professional/infrastructure/water/access",
     action: "Άνοιγμα Users / Access",
   },
   {
-    title: "A / B / C Maps",
-    label: "MAP CENTER",
+    title: "A Live Water Map",
+    label: "LIVE MAP",
     description:
-      "Καθαρό κέντρο για A live map, B Master DWG status και C Intelligent foundation.",
-    href: "/professional/infrastructure/water/maps",
-    action: "Άνοιγμα A / B / C",
-  },
-  {
-    title: "A Map",
-    label: "LIVE",
-    description:
-      "Ο σημερινός live χάρτης ύδρευσης για approved users. Δεν αλλάζει.",
+      "Ο ενεργός προστατευμένος χάρτης ύδρευσης για approved users, με ασφαλή τμηματική φόρτωση σωληνώσεων.",
     href: "/professional/infrastructure/water/live",
-    action: "Άνοιγμα A Map",
-  },
-  {
-    title: "B Master",
-    label: "DWG STATUS",
-    description:
-      "Έλεγχος ότι το αυθεντικό DWG υπάρχει private, με manifest/chunks και raw download blocked.",
-    href: "/professional/infrastructure/water/master",
-    action: "Έλεγχος B Master",
-    adminOnly: true,
-  },
-  {
-    title: "B Map PDF Foundation",
-    label: "PDF VIEW",
-    description:
-      "Protected read-only PDF derivative view from authentic B Master DWG vault. No raw DWG browser load or public file exposure.",
-    href: "/professional/infrastructure/water/b-map",
-    action: "Open B Map foundation",
-  },
-  {
-    title: "C Intelligent",
-    label: "FOUNDATION",
-    description:
-      "Το επόμενο επίπεδο για αλλαγές, βάνες, βλάβες, φωτογραφίες, οδούς, πίεση, PRV και τηλεμετρία.",
-    href: "/professional/infrastructure/water/c",
-    action: "Προβολή C",
+    action: "Άνοιγμα A Live Map",
   },
 ];
 
@@ -90,7 +57,7 @@ export default async function WaterControlCenterPage() {
       <main className="min-h-screen bg-[#06101f] px-4 py-6 text-white">
         <section className="mx-auto max-w-6xl rounded-[2rem] border border-[#d8b45f]/40 bg-[#0a1629] p-5 shadow-2xl shadow-black/40 md:p-8">
           <p className="text-xs font-black uppercase tracking-[0.35em] text-[#d8b45f]">
-            Pantavion Protected Water Access
+            Pantavion Protected Water
           </p>
 
           <h1 className="mt-4 text-3xl font-black tracking-tight md:text-5xl">
@@ -98,10 +65,7 @@ export default async function WaterControlCenterPage() {
           </h1>
 
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300 md:text-base">
-            Καθαρή αρχική σελίδα για τη διαχείριση ύδρευσης. Από εδώ μπαίνεις
-            σε users/access approvals, A Map, B Master DWG status και C
-            Intelligent foundation. Τα δεδομένα χρηστών και οι εγκρίσεις δεν
-            αλλάζουν από αυτή τη σελίδα.
+            Εδώ εμφανίζονται μόνο οι λειτουργίες του Water που είναι πραγματικά ενεργές σήμερα. Foundations και μελλοντικοί χάρτες παραμένουν κρυμμένοι από το production μέχρι να ολοκληρωθούν.
           </p>
 
           <div className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -128,12 +92,6 @@ export default async function WaterControlCenterPage() {
                 </a>
               </article>
             ))}
-          </div>
-
-          <div className="mt-7 rounded-3xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm leading-7 text-amber-100">
-            Σημείωση: B και C δεν είναι ακόμα πλήρεις χάρτες γραμμών στο κινητό.
-            B είναι private DWG master status. C είναι foundation. Το επόμενο
-            πραγματικό βήμα είναι B derived protected view.
           </div>
         </section>
       </main>

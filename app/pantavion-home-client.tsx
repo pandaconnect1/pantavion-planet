@@ -1,217 +1,84 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import {
-  PANTAVION_LANGUAGE_CATALOG,
-  getPantavionUiLanguage,
-  getSupportedPantavionLanguage,
-} from "@/core/language/pantavion-language-catalog";
 
-type Lang = string;
-
-const UI = {
-  el: {
-    language: "Γλώσσα Pantavion",
-    badge: "PANTAVION PLANET",
-    languageSpineTitle: "Κεντρική επιλογή γλώσσας Pantavion",
-    languageSpine:
-      "Η γλώσσα που επιλέγεις εδώ αποθηκεύεται ως πρωταρχική γλώσσα Pantavion και θα ισχύει σε κάθε ενότητα: Water, SOS, Interpreter, PantaAI και μελλοντικά modules.",
-    title: "Ο πλανήτης σε μία ζωντανή οθόνη.",
-    subtitle:
-      "Επικοινωνία, ασφάλεια SOS, PantaAI, άνθρωποι, εργασία, πολιτισμός, υπηρεσίες και προστατευμένες επαγγελματικές ενότητες σε ένα οργανωμένο οικοσύστημα.",
-    water: "Δίκτυο Ύδρευσης",
-    interpreter: "Universal Interpreter",
-    pantaAI: "PantaAI",
-    sos: "SOS Center",
-    discoveryTitle: "Πραγματικές ενότητες Pantavion",
-    discoveryText:
-      "Κάθε κουμπί οδηγεί σε πραγματική διαδρομή ή προστατευμένη ενότητα. Δεν αφήνουμε σπασμένες σελίδες για επίσημη παρουσίαση.",
-    waterTitle: "Προστατευμένο Δίκτυο Ύδρευσης",
-    waterText:
-      "Είσοδος στο καθαρό live module με αίτηση πρόσβασης, έγκριση και τμηματική φόρτωση αγωγών.",
-    translateTitle: "Universal Interpreter",
-    translateText:
-      "Μελλοντικός καθολικός διερμηνέας για κείμενο, φωνή, ταξίδι, εργασία, δημόσιες υπηρεσίες και SOS.",
-    aiTitle: "PantaAI Center",
-    aiText:
-      "Κέντρο τεχνητής νοημοσύνης, εργασίας, αναζήτησης, μνήμης και εκτέλεσης.",
-    sosTitle: "SOS Center",
-    sosText:
-      "Ασφάλεια, trusted contacts, elder mode και σαφή όρια χωρίς ψεύτικες υποσχέσεις αποστολής αρχών.",
-    languageNote:
-      "Η λίστα 250+ γλωσσών είναι κοινή για όλο το Pantavion. Οι πλήρεις αυτόματες μεταφράσεις θα συνδεθούν μέσω Translation Kernel/provider.",
+const productionModules = [
+  {
+    title: "Water Control Center",
+    description:
+      "Το κεντρικό προστατευμένο περιβάλλον του Δικτύου Ύδρευσης. Από εδώ ανοίγεις τις πραγματικές λειτουργίες που είναι διαθέσιμες σήμερα.",
+    href: "/professional/infrastructure/water",
+    action: "Άνοιγμα Water Center",
   },
-  en: {
-    language: "Pantavion Language",
-    badge: "PANTAVION PLANET",
-    languageSpineTitle: "Pantavion global language selection",
-    languageSpine:
-      "The language selected here is saved as the primary Pantavion language and will apply across Water, SOS, Interpreter, PantaAI, and future modules.",
-    title: "The planet in one living screen.",
-    subtitle:
-      "Communication, SOS safety, PantaAI, people, work, culture, services, and protected professional modules in one governed ecosystem.",
-    water: "Water Network",
-    interpreter: "Universal Interpreter",
-    pantaAI: "PantaAI",
-    sos: "SOS Center",
-    discoveryTitle: "Real Pantavion modules",
-    discoveryText:
-      "Every button points to a real route or protected module. Broken public pages are not acceptable for official presentation.",
-    waterTitle: "Protected Water Network",
-    waterText:
-      "Entry to the clean live module with access request, approval, and segmented pipe loading.",
-    translateTitle: "Universal Interpreter",
-    translateText:
-      "Future universal interpreter for text, voice, travel, work, public services, and SOS support.",
-    aiTitle: "PantaAI Center",
-    aiText:
-      "AI center for help, work, search, memory, execution, and guided workflows.",
-    sosTitle: "SOS Center",
-    sosText:
-      "Safety, trusted contacts, elder mode, and clear boundaries without false authority dispatch claims.",
-    languageNote:
-      "The 250+ language list is shared across Pantavion. Full automatic translations will be connected through the Translation Kernel/provider.",
+  {
+    title: "Users / Access",
+    description:
+      "Πραγματική ροή αιτήσεων πρόσβασης και ελέγχου εγκεκριμένων συσκευών. Η διαχείριση Administrator παραμένει προστατευμένη.",
+    href: "/professional/infrastructure/water/access",
+    action: "Άνοιγμα Users / Access",
   },
-};
-
-const modules = [
-  { key: "water", href: "/professional/infrastructure/water" },
-  { key: "translate", href: "/translate" },
-  { key: "ai", href: "/panta-ai" },
-  { key: "sos", href: "/sos" },
+  {
+    title: "A Live Water Map",
+    description:
+      "Ο προστατευμένος live χάρτης του δικτύου ύδρευσης για εγκεκριμένους χρήστες, με τμηματική φόρτωση των σωληνώσεων.",
+    href: "/professional/infrastructure/water/live",
+    action: "Άνοιγμα Live Map",
+  },
 ] as const;
 
-function getInitialLang(): Lang {
-  if (typeof window === "undefined") return "el";
-
-  const saved = window.localStorage.getItem("pantavion-language");
-
-  return getSupportedPantavionLanguage(saved)?.code ?? "el";
-}
-
-export default function HomePage() {
-  const [lang, setLang] = useState<Lang>(getInitialLang);
-  const t = UI[getPantavionUiLanguage(lang)];
-
-  useEffect(() => {
-    window.localStorage.setItem("pantavion-language", lang);
-    document.documentElement.lang = lang;
-  }, [lang]);
-
+export default function PantavionHomeClient() {
   return (
-    <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-[radial-gradient(circle_at_top,#192b55_0,#071020_48%,#02040b_100%)] px-4 py-6 text-[#fff8e7] sm:px-8 lg:px-12">
-      <section className="mx-auto w-full min-w-0 max-w-6xl">
-        <div className="mb-6 w-full min-w-0 overflow-hidden rounded-3xl border border-[#f6c85f]/25 bg-[#071020]/70 p-4 sm:p-5">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-sm font-black text-[#f6c85f]">{t.languageSpineTitle}</p>
-              <p className="mt-2 max-w-4xl text-sm leading-6 text-slate-200 sm:text-base">
-                {t.languageSpine}
-              </p>
-              <p className="mt-2 text-xs font-bold text-slate-400">
-                {t.languageNote}
-              </p>
-            </div>
-
-            <label className="flex w-full min-w-0 max-w-full flex-col gap-2 text-sm font-black text-[#f6c85f] sm:w-[240px] sm:shrink-0">
-              {t.language}
-              <select
-                value={lang}
-                onChange={(event) => setLang(event.target.value)}
-                className="rounded-2xl border border-[#f6c85f]/50 bg-[#071020] px-4 py-3 text-white outline-none"
-              >
-                {PANTAVION_LANGUAGE_CATALOG.map((language) => (
-                  <option key={language.code} value={language.code}>
-                    {language.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-        </div>
-
-        <section className="rounded-[2rem] border border-[#f6c85f]/20 bg-[#0d1a2d]/70 p-5 shadow-2xl sm:p-8 lg:p-10">
-          <p className="mb-3 text-xs font-black uppercase tracking-[0.35em] text-[#f6c85f]">
-            {t.badge}
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#192b55_0,#071020_48%,#02040b_100%)] px-4 py-8 text-[#fff8e7] sm:px-8 lg:px-12">
+      <section className="mx-auto max-w-6xl">
+        <header className="rounded-[2rem] border border-[#f6c85f]/25 bg-[#0d1a2d]/80 p-6 shadow-2xl sm:p-9">
+          <p className="text-xs font-black uppercase tracking-[0.35em] text-[#f6c85f]">
+            PANTAVION • PRODUCTION
           </p>
-
-          <h1 className="max-w-5xl break-words text-4xl font-black leading-[1.03] tracking-tight sm:text-6xl sm:leading-[0.98] lg:text-8xl">
-            {t.title}
+          <h1 className="mt-4 max-w-5xl text-4xl font-black leading-tight sm:text-6xl">
+            Μόνο πραγματικά λειτουργικές ενότητες.
           </h1>
-
-          <p className="mt-6 max-w-4xl text-xl leading-8 text-slate-200 sm:text-2xl sm:leading-10">
-            {t.subtitle}
+          <p className="mt-5 max-w-4xl text-lg leading-8 text-slate-200 sm:text-xl">
+            Η δημόσια production σελίδα εμφανίζει μόνο λειτουργίες που έχουν πραγματική υλοποίηση. Modules που είναι ακόμη foundation, δοκιμαστικά ή υπό ανάπτυξη παραμένουν κρυμμένα μέχρι να είναι έτοιμα.
           </p>
-
-          <div className="mt-8 grid w-full min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap">
-            <Link href="/professional/infrastructure/water" className="block min-w-0 max-w-full whitespace-normal break-words rounded-full border border-[#f6c85f]/60 bg-[#f6c85f]/15 px-6 py-4 text-center text-base font-black text-[#fff8e7]">
-              {t.water}
-            </Link>
-
-            <Link href="/translate" className="rounded-full bg-[#f6c85f] px-6 py-4 text-center text-base font-black text-[#071020]">
-              {t.interpreter}
-            </Link>
-
-                        <Link href="/unified-inbox" className="rounded-full border border-[#f6c85f]/45 bg-white/5 px-6 py-4 text-center text-base font-black text-[#fff8e7]">
-              Unified Inbox
-            </Link>
-<Link href="/panta-ai" className="rounded-full border border-[#f6c85f]/45 bg-white/5 px-6 py-4 text-center text-base font-black text-[#fff8e7]">
-              {t.pantaAI}
-            </Link>
-
-            <Link href="/sos" className="rounded-full bg-[#ff2f3f] px-6 py-4 text-center text-base font-black text-white">
-              {t.sos}
-            </Link>
-          </div>
-        </section>
+        </header>
 
         <section className="mt-8">
           <div className="mb-5">
-            <p className="mb-2 text-xs font-black uppercase tracking-[0.35em] text-[#f6c85f]">
-              PUBLIC DISCOVERY
+            <p className="text-xs font-black uppercase tracking-[0.3em] text-[#f6c85f]">
+              LIVE NOW
             </p>
-            <h2 className="text-3xl font-black sm:text-5xl">{t.discoveryTitle}</h2>
-            <p className="mt-3 max-w-4xl text-lg leading-8 text-slate-200">
-              {t.discoveryText}
+            <h2 className="mt-2 text-3xl font-black sm:text-5xl">Δίκτυο Ύδρευσης</h2>
+            <p className="mt-3 max-w-4xl text-base leading-7 text-slate-300 sm:text-lg">
+              Χάρτης, πρόσβαση χρηστών και προστατευμένη διαχείριση. Δεν εμφανίζονται στατικά κουμπιά ή μελλοντικές υπηρεσίες ως έτοιμες.
             </p>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            {modules.map((module) => {
-              const title =
-                module.key === "water"
-                  ? t.waterTitle
-                  : module.key === "translate"
-                    ? t.translateTitle
-                    : module.key === "ai"
-                      ? t.aiTitle
-                      : t.sosTitle;
-
-              const text =
-                module.key === "water"
-                  ? t.waterText
-                  : module.key === "translate"
-                    ? t.translateText
-                    : module.key === "ai"
-                      ? t.aiText
-                      : t.sosText;
-
-              return (
-                <Link key={module.href} href={module.href} className="rounded-3xl border border-[#f6c85f]/25 bg-[#071020]/80 p-5 text-[#fff8e7] no-underline shadow-xl">
-                  <p className="mb-3 text-xs font-black uppercase tracking-[0.2em] text-[#f6c85f]">
-                    PANTAVION MODULE
-                  </p>
-                  <h3 className="text-2xl font-black">{title}</h3>
-                  <p className="mt-3 text-base leading-7 text-slate-200">{text}</p>
-                  <p className="mt-4 text-sm font-black text-[#f6c85f]">Άνοιγμα ενότητας</p>
-                </Link>
-              );
-            })}
+          <div className="grid gap-4 md:grid-cols-3">
+            {productionModules.map((module) => (
+              <Link
+                key={module.href}
+                href={module.href}
+                className="group rounded-3xl border border-[#f6c85f]/25 bg-[#071020]/85 p-6 text-[#fff8e7] no-underline shadow-xl transition hover:border-[#f6c85f]/60 hover:bg-[#0b1930]"
+              >
+                <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#f6c85f]">
+                  ACTIVE
+                </p>
+                <h3 className="mt-3 text-2xl font-black">{module.title}</h3>
+                <p className="mt-3 min-h-[112px] text-sm leading-7 text-slate-300">
+                  {module.description}
+                </p>
+                <p className="mt-5 text-sm font-black text-[#f6c85f]">
+                  {module.action} →
+                </p>
+              </Link>
+            ))}
           </div>
         </section>
+
+        <footer className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-5 text-sm leading-7 text-slate-300">
+          Pantavion συνεχίζει να αναπτύσσεται στο παρασκήνιο. Μια νέα ενότητα θα εμφανίζεται εδώ μόνο όταν έχει πραγματική λειτουργία και έχει περάσει τον απαιτούμενο έλεγχο πριν από production.
+        </footer>
       </section>
     </main>
   );
 }
-
