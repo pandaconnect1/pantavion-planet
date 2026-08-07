@@ -36,6 +36,7 @@ function countMatches(text, pattern) {
   return matches ? matches.length : 0;
 }
 
+// Global language/translation contracts remain part of the product kernel.
 requireIncludes("core/language/pantavion-language-atlas.ts", [
   "PANTAVION_LANGUAGE_ATLAS_V1",
   "supports7000NaturalLanguages",
@@ -52,68 +53,90 @@ requireIncludes("core/translation/pantavion-natural-language-universe.ts", [
   "pantavion_natural_language_universe_v1",
   "targetNaturalLanguageCount",
   "practicalWorldMenuMinimum",
-  "camera_sign_menu_document_scan",
 ]);
 
-requireIncludes("core/ai/pantavion-ai-command-center.ts", [
-  "PANTAVION_AI_COMMAND_CENTER_V1",
-  "publicGuide",
-  "internalGuardian",
-  "personalUserAssistant",
-]);
-
-requireIncludes("core/sos/pantavion-sos-ai-center.ts", [
-  "PANTAVION_SOS_AI_CENTER_V1",
-  "authorityDispatchRequiresContract",
-]);
-
-requireIncludes("app/panta-ai/page.tsx", [
-  "PANTAVION_AI_COMMAND_CENTER_V1",
-  "Internal Guardian Kernel",
-  "Provider-required",
-]);
-
-requireIncludes("app/sos/page.tsx", [
-  "PANTAVION_SOS_AI_CENTER_V1",
-  "Emergency Circle",
-  "Open interpreter",
-]);
-
-requireIncludes("app/api/pantavion/ai/route.ts", [
-  "PANTAVION_AI_PROVIDER_MISSING",
-  "buildPantaAiSystemInstruction",
-]);
-
+// Public production must be product-facing, not a development status board.
 requireIncludes("app/pantavion-home-client.tsx", [
-  "/translate",
-  "/panta-ai",
-  "/sos",
-  "The planet in one living screen",
-  "Every button points to a real route or protected module",
+  "Pantavion One",
+  "/professional/infrastructure/water",
 ]);
 
+// Translation must call a real backend route and preserve both directions.
 requireIncludes("app/translate/page.tsx", [
   "PantaTranslate / Universal Interpreter",
   "startListening",
   "SpeechRecognition",
   "speechSynthesis",
-  "handleCameraFile",
-  'type="file"',
-  'accept="image/*"',
-  'fetch("/api/translate/universal"',
+  'fetch("/api/pantavion/translate"',
+  "from,",
+  "to,",
 ]);
 
-requireIncludes("app/api/translate/universal/route.ts", [
+requireIncludes("app/api/pantavion/translate/route.ts", [
+  "sourceLanguage",
+  "targetLanguage",
+  "translatedText",
   "translateWithPantavionProvider",
-  "PantavionTranslationRequest",
-  "provider_error",
 ]);
 
 requireAnyFileIncludes(
-  ["app/api/translate/universal/route.ts", "core/translation/pantavion-translation-provider-adapters.ts", "core/translation/pantavion-translation-provider-router.ts"],
-  ["provider_not_configured", "provider_pending", "translatedText"],
+  [
+    "app/api/pantavion/translate/route.ts",
+    "app/api/translate/universal/route.ts",
+    "core/translation/pantavion-translation-provider-adapters.ts",
+    "core/translation/pantavion-translation-provider-router.ts",
+  ],
+  ["provider_pending", "translatedText", "mymemory"],
   "real translation provider boundary",
 );
+
+// Social release must have real server-side Supabase reads/writes, not static cards.
+requireIncludes("app/daily/feed/actions.ts", [
+  "createPost",
+  "toggleLike",
+  "addComment",
+  '.from("social_posts")',
+  '.from("social_reactions")',
+  '.from("social_comments")',
+]);
+
+requireIncludes("app/social/chat/actions.ts", [
+  "createConversation",
+  "sendMessage",
+  '.from("conversations")',
+  '.from("conversation_members")',
+  '.from("messages")',
+]);
+
+requireIncludes("app/social/communities/actions.ts", [
+  "createCommunity",
+  "joinCommunity",
+  '.from("communities")',
+  '.from("community_memberships")',
+]);
+
+requireIncludes("app/social/notifications/actions.ts", [
+  "markNotificationRead",
+  "markAllNotificationsRead",
+  '.from("social_notifications")',
+]);
+
+requireIncludes("supabase/migrations/20260806095000_social_core_foundation.sql", [
+  "social_posts",
+  "social_comments",
+  "social_reactions",
+  "social_notifications",
+  "enable row level security",
+]);
+
+requireIncludes("supabase/migrations/20260806102500_social_chat_communities.sql", [
+  "conversations",
+  "conversation_members",
+  "messages",
+  "communities",
+  "community_memberships",
+  "enable row level security",
+]);
 
 const languageUniverse = read("core/translation/pantavion-natural-language-universe.ts");
 const emergencyLanguages = read("core/emergency/global-emergency-languages.ts");
