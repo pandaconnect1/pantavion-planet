@@ -31,6 +31,7 @@ export default function SocialCoreLayout({ children }: { children: ReactNode }) 
           <Link href="/social/chat" style={navLinkStyle}>Chat</Link>
           <Link href="/social/communities" style={navLinkStyle}>Communities</Link>
           <Link href="/social/notifications" style={navLinkStyle}>Notifications</Link>
+          <Link href="/business/ads" style={navLinkStyle}>Ads Center</Link>
           <Link href="/social-core/cultural-bridge" style={navLinkStyle}>Cultural Bridge</Link>
           <Link href="/language" style={navLinkStyle}>Translation</Link>
           <Link href="/dashboard" style={navLinkStyle}>Dashboard</Link>
