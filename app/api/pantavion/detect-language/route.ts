@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -17,10 +18,21 @@ function detectByScript(text: string): string | null {
   if (/\p{Script=Cyrillic}/u.test(text)) return "ru";
   if (/\p{Script=Arabic}/u.test(text)) return "ar";
   if (/\p{Script=Hebrew}/u.test(text)) return "he";
-  if (/\p{Script=Han}/u.test(text)) return "zh";
   if (/\p{Script=Hiragana}|\p{Script=Katakana}/u.test(text)) return "ja";
   if (/\p{Script=Hangul}/u.test(text)) return "ko";
   if (/\p{Script=Devanagari}/u.test(text)) return "hi";
+  if (/\p{Script=Bengali}/u.test(text)) return "bn";
+  if (/\p{Script=Gurmukhi}/u.test(text)) return "pa";
+  if (/\p{Script=Gujarati}/u.test(text)) return "gu";
+  if (/\p{Script=Tamil}/u.test(text)) return "ta";
+  if (/\p{Script=Telugu}/u.test(text)) return "te";
+  if (/\p{Script=Kannada}/u.test(text)) return "kn";
+  if (/\p{Script=Malayalam}/u.test(text)) return "ml";
+  if (/\p{Script=Thai}/u.test(text)) return "th";
+  if (/\p{Script=Georgian}/u.test(text)) return "ka";
+  if (/\p{Script=Armenian}/u.test(text)) return "hy";
+  if (/\p{Script=Ethiopic}/u.test(text)) return "am";
+  if (/\p{Script=Han}/u.test(text)) return "zh";
   return null;
 }
 
@@ -39,12 +51,15 @@ export async function POST(request: Request) {
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    return NextResponse.json({
-      ok: false,
-      language: null,
-      source: "provider_required",
-      message: "Automatic language detection for Latin-script languages requires the configured language provider.",
-    }, { status: 503 });
+    return NextResponse.json(
+      {
+        ok: false,
+        language: null,
+        source: "provider_required",
+        message: "Automatic language detection for shared-script languages requires the configured language provider.",
+      },
+      { status: 503 },
+    );
   }
 
   try {
@@ -60,7 +75,7 @@ export async function POST(request: Request) {
           {
             role: "system",
             content:
-              "Detect the language of the user's text. Return only the ISO 639-1 language code when available, otherwise the closest short BCP-47 primary language code. No punctuation or explanation.",
+              "Detect the language actually used in the user's text, including colloquial speech and romanized forms. Return only the ISO 639-1 language code when available; otherwise return the closest BCP-47 primary language code. No punctuation, labels, or explanation.",
           },
           { role: "user", content: text },
         ],
@@ -80,21 +95,27 @@ export async function POST(request: Request) {
     const language = normalizeDetectedLanguage(raw);
 
     if (!response.ok || !language) {
-      return NextResponse.json({
-        ok: false,
-        language: null,
-        source: "provider_error",
-        message: "Could not detect language.",
-      }, { status: 502 });
+      return NextResponse.json(
+        {
+          ok: false,
+          language: null,
+          source: "provider_error",
+          message: "Could not detect language.",
+        },
+        { status: 502 },
+      );
     }
 
     return NextResponse.json({ ok: true, language, source: "model" });
   } catch (error) {
-    return NextResponse.json({
-      ok: false,
-      language: null,
-      source: "provider_error",
-      message: error instanceof Error ? error.message : "Could not detect language.",
-    }, { status: 502 });
+    return NextResponse.json(
+      {
+        ok: false,
+        language: null,
+        source: "provider_error",
+        message: error instanceof Error ? error.message : "Could not detect language.",
+      },
+      { status: 502 },
+    );
   }
 }
