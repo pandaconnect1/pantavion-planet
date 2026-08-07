@@ -27,8 +27,11 @@ export default function SocialCoreLayout({ children }: { children: ReactNode }) 
         </Link>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <Link href="/social-core" style={navLinkStyle}>Home</Link>
-          <Link href="/social-core/cultural-bridge" style={navLinkStyle}>Cultural Bridge</Link>
           <Link href="/daily/feed" style={navLinkStyle}>Feed</Link>
+          <Link href="/social/chat" style={navLinkStyle}>Chat</Link>
+          <Link href="/social/communities" style={navLinkStyle}>Communities</Link>
+          <Link href="/social/notifications" style={navLinkStyle}>Notifications</Link>
+          <Link href="/social-core/cultural-bridge" style={navLinkStyle}>Cultural Bridge</Link>
           <Link href="/language" style={navLinkStyle}>Translation</Link>
           <Link href="/dashboard" style={navLinkStyle}>Dashboard</Link>
         </div>
