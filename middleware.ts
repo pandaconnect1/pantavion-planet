@@ -16,15 +16,39 @@ type PantavionLocale =
 const AUTHENTICATED = new Set<PantavionRole>(['user', 'operator', 'founder']);
 const OPERATOR = new Set<PantavionRole>(['operator', 'founder']);
 const FOUNDER = new Set<PantavionRole>(['founder']);
-const WATER_ADMIN_PREFIX = '/professional/infrastructure/water/admin';
+const WATER_PREFIX = '/professional/infrastructure/water';
+const WATER_ADMIN_PREFIX = `${WATER_PREFIX}/admin`;
 const WATER_ADMIN_ACCESS_PATH = `${WATER_ADMIN_PREFIX}/access`;
-const WATER_MOBILE_FOUNDER_PATH = '/professional/infrastructure/water/mobile-founder';
+const WATER_MOBILE_FOUNDER_PATH = `${WATER_PREFIX}/mobile-founder`;
 const WATER_ADMIN_SESSION_COOKIE = 'pantavion_water_admin_session';
 const WATER_ADMIN_ONLY_PATHS = [
-  '/professional/infrastructure/water/intelligence',
-  '/professional/infrastructure/water/master',
-  '/professional/infrastructure/water/master-dwg',
+  `${WATER_PREFIX}/intelligence`,
+  `${WATER_PREFIX}/master`,
+  `${WATER_PREFIX}/master-dwg`,
 ] as const;
+
+// Production truth boundary: until another module has real end-to-end runtime,
+// only the homepage and the verified Water product are publicly reachable.
+// Preview/development builds retain every route so unfinished modules can still
+// be implemented and tested without exposing foundation pages on pantavion.com.
+const PRODUCTION_PUBLIC_EXACT_PATHS = new Set([
+  '/',
+  '/robots.txt',
+  '/sitemap.xml',
+  '/manifest.webmanifest',
+  '/opengraph-image',
+  '/twitter-image',
+]);
+
+function isProductionPublicPath(path: string) {
+  if (PRODUCTION_PUBLIC_EXACT_PATHS.has(path)) return true;
+  if (path === WATER_PREFIX || path.startsWith(`${WATER_PREFIX}/`)) return true;
+
+  // Public static assets such as icons/fonts/images can pass through.
+  if (/\.[a-z0-9]{2,8}$/i.test(path)) return true;
+
+  return false;
+}
 
 const ROUTE_RULES = [
   { prefix: '/memory', allowed: AUTHENTICATED, gate: 'authenticated' },
@@ -84,8 +108,23 @@ function waterAdminAccessRedirect(request: NextRequest) {
   return response;
 }
 
+function productionHomeRedirect(request: NextRequest) {
+  const redirectUrl = request.nextUrl.clone();
+  redirectUrl.pathname = '/';
+  redirectUrl.search = '';
+
+  const response = NextResponse.redirect(redirectUrl, 307);
+  response.headers.set('Cache-Control', 'no-store');
+  response.headers.set('X-Pantavion-Visibility', 'verified-runtime-only');
+  return response;
+}
+
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
+
+  if (process.env.NODE_ENV === 'production' && !isProductionPublicPath(path)) {
+    return productionHomeRedirect(request);
+  }
 
   if (path === WATER_MOBILE_FOUNDER_PATH) {
     return waterAdminAccessRedirect(request);
