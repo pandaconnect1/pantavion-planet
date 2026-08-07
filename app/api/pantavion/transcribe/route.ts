@@ -58,14 +58,14 @@ export async function POST(request: Request) {
     const text = typeof payload.text === "string" ? payload.text.trim() : "";
 
     if (!response.ok || !text) {
+      const upstreamStatus = response.status >= 400 && response.status < 600 ? response.status : 502;
       return NextResponse.json(
         {
           ok: false,
           status: "transcription_error",
-          message:
-            payload?.error?.message || payload?.message || "Speech transcription failed.",
+          message: payload?.error?.message || payload?.message || "Speech transcription failed.",
         },
-        { status: response.ok ? 502 : response.status },
+        { status: upstreamStatus },
       );
     }
 
@@ -73,8 +73,7 @@ export async function POST(request: Request) {
       ok: true,
       status: "transcribed",
       text,
-      providerLanguage:
-        typeof payload.language === "string" ? payload.language : null,
+      providerLanguage: typeof payload.language === "string" ? payload.language : null,
     });
   } catch (error) {
     return NextResponse.json(
