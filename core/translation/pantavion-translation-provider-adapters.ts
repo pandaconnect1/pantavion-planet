@@ -27,7 +27,10 @@ function providerName(): ProviderName {
     return raw;
   }
 
-  return process.env.PANTAVION_TRANSLATE_ENDPOINT ? "generic" : "generic";
+  // Production-safe bootstrap for real text translation without pretending that
+  // every language/mode is covered. A configured Pantavion endpoint still wins;
+  // otherwise use the public MyMemory text service for supported known pairs.
+  return process.env.PANTAVION_TRANSLATE_ENDPOINT ? "generic" : "mymemory";
 }
 
 function endpointFor(provider: ProviderName) {
@@ -265,7 +268,7 @@ async function callMyMemory(
     return {
       ...createProviderPendingTranslationResult(request),
       message:
-        "MyMemory public fallback requires a known source language. Use a real provider for auto-detect.",
+        "Automatic source-language detection requires a configured provider. Select the source language for the public text fallback.",
     };
   }
 
@@ -278,7 +281,7 @@ async function callMyMemory(
 
   const response = await fetch(url, { method: "GET" });
   const data = await response.json().catch(() => ({}));
-  const translatedText = extractTranslatedText(data);
+  const translatedText = decodeHtmlEntities(extractTranslatedText(data));
 
   if (!response.ok || !translatedText) {
     return providerError(request, "mymemory", endpoint, data);
