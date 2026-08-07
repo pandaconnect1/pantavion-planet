@@ -49,24 +49,27 @@ export default function PantavionGlobalLanguageSelector() {
       document.documentElement.lang = selected.htmlLang;
       document.documentElement.dataset.pantavionLanguage = language;
     } catch {
-      // The selector remains usable even if browser storage is unavailable.
+      // Keep the selector usable even if browser storage is unavailable.
     }
   }, [language]);
 
   return (
     <aside
       aria-label="Pantavion language"
-      className="fixed right-3 top-3 z-[90]"
+      className="fixed bottom-4 right-4 z-[90]"
     >
-      <details className="group">
-        <summary className="flex cursor-pointer list-none items-center gap-2 rounded-full border border-[#f6c85f]/35 bg-[#06111f]/95 px-3 py-2 text-xs font-black text-[#f6c85f] shadow-lg backdrop-blur-md">
+      <details className="group relative">
+        <summary
+          className="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-full border border-[#f6c85f]/35 bg-[#06111f]/95 text-lg text-[#f6c85f] shadow-lg backdrop-blur-md transition hover:border-[#f6c85f]/70"
+          title="Γλώσσα / Language"
+          aria-label="Άνοιγμα επιλογής γλώσσας"
+        >
           <span aria-hidden="true">🌐</span>
-          <span>Γλώσσα</span>
         </summary>
 
-        <div className="mt-2 w-56 rounded-2xl border border-[#f6c85f]/30 bg-[#06111f]/98 p-3 shadow-2xl">
+        <div className="absolute bottom-14 right-0 w-56 rounded-2xl border border-[#f6c85f]/30 bg-[#06111f]/98 p-3 shadow-2xl">
           <label className="block text-xs font-bold text-slate-300" htmlFor="pantavion-ui-language">
-            Γλώσσα περιβάλλοντος
+            Γλώσσα / Language
           </label>
           <select
             id="pantavion-ui-language"
@@ -88,7 +91,7 @@ export default function PantavionGlobalLanguageSelector() {
             href="/translate"
             className="mt-3 block rounded-full border border-[#f6c85f]/40 px-3 py-2 text-center text-xs font-black text-[#f6c85f] no-underline"
           >
-            Αμφίδρομη μετάφραση ↔
+            Μετάφραση ↔
           </a>
         </div>
       </details>
