@@ -8,7 +8,7 @@ export type HandoffDomain =
   | "safety"
   | "general";
 
-export interface ConversationSignal {
+export interface HandoffConversationSignal {
   text: string;
   language?: string;
   countryCode?: string;
@@ -97,7 +97,7 @@ function redactSensitiveText(text: string): string {
     .replace(/\+?\d[\d\s()-]{7,}\d/g, "[phone-redacted]");
 }
 
-export function buildContextHandoff(signal: ConversationSignal): HandoffPlan {
+export function buildContextHandoff(signal: HandoffConversationSignal): HandoffPlan {
   const normalized = normalize(signal.text);
   const scored = domainRules
     .map((rule) => ({
