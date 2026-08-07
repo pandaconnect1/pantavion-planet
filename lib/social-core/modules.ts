@@ -17,6 +17,7 @@ export const SOCIAL_CORE_MODULES: readonly SocialCoreModule[] = [
   { id: "business", name: "Business Social", capabilities: ["business.manage"] },
   { id: "events", name: "Events", capabilities: ["events.create", "events.join"] },
   { id: "marketplace", name: "Marketplace", capabilities: ["marketplace.buy", "marketplace.sell"] },
+  { id: "ads-center", name: "Pantavion Ads Center", capabilities: ["ads.create", "ads.manage", "ads.purchase"] },
   { id: "trust-safety", name: "Trust & Safety", capabilities: [] },
   { id: "governance", name: "Policy & Governance", capabilities: [] },
 ] as const;
