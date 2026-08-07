@@ -183,8 +183,7 @@ export default function TranslatePage() {
     });
 
     const payload = await response.json().catch(() => ({}));
-    const translatedText =
-      payload.translatedText || payload.translation || payload.text || payload.output || "";
+    const translatedText = payload.translatedText || payload.translation || payload.text || payload.output || "";
 
     if (!response.ok || !translatedText) {
       throw new Error(payload.message || payload.error || "Translation is temporarily unavailable.");
@@ -253,11 +252,7 @@ export default function TranslatePage() {
       setStatus("Interpreter ready.");
     } catch (processingError) {
       setStatus("Interpreter needs attention.");
-      setError(
-        processingError instanceof Error
-          ? processingError.message
-          : "Pantavion could not process that speech.",
-      );
+      setError(processingError instanceof Error ? processingError.message : "Pantavion could not process that speech.");
     } finally {
       setProcessing(false);
     }
@@ -298,7 +293,6 @@ export default function TranslatePage() {
   async function startRecording() {
     if (processing) return;
     setError("");
-
     if (!conversationActive) setConversationActive(true);
 
     if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
@@ -361,7 +355,7 @@ export default function TranslatePage() {
 
   function resetConversation() {
     if (autoStopRef.current) clearTimeout(autoStopRef.current);
-    recorderRef.current?.stop();
+    if (recorderRef.current?.state === "recording") recorderRef.current.stop();
     streamRef.current?.getTracks().forEach((track) => track.stop());
     setTurns([]);
     setPartnerLanguage(null);
@@ -374,22 +368,27 @@ export default function TranslatePage() {
     setStatus("Ready.");
   }
 
+  function changeMyLanguage(language: string) {
+    resetConversation();
+    setMyLanguage(language);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, language);
+      window.dispatchEvent(new CustomEvent("pantavion:language-change", { detail: { language } }));
+    } catch {
+      // Restricted browsers may block local storage.
+    }
+  }
+
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,#102b3a_0,#07111c_44%,#03070d_100%)] px-4 py-5 text-white sm:px-6 sm:py-8">
       <section className="mx-auto max-w-3xl">
         <header className="rounded-[2rem] border border-white/10 bg-white/[0.055] p-5 shadow-2xl backdrop-blur sm:p-8">
           <div className="flex items-center justify-between gap-3">
-            <Link href="/" className="rounded-full border border-white/15 px-4 py-2 text-sm font-bold text-slate-100">
-              ← Pantavion
-            </Link>
-            <span className="rounded-full bg-emerald-300/10 px-3 py-2 text-xs font-black text-emerald-100">
-              INTERPRETER
-            </span>
+            <Link href="/" className="rounded-full border border-white/15 px-4 py-2 text-sm font-bold text-slate-100">← Pantavion</Link>
+            <span className="rounded-full bg-emerald-300/10 px-3 py-2 text-xs font-black text-emerald-100">INTERPRETER</span>
           </div>
 
-          <h1 className="mt-7 text-4xl font-black leading-tight sm:text-6xl">
-            Just talk.
-          </h1>
+          <h1 className="mt-7 text-4xl font-black leading-tight sm:text-6xl">Just talk.</h1>
           <p className="mt-3 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
             Your personal interpreter for everyday life. Pantavion listens, detects the language and speaks the translation back.
           </p>
@@ -400,18 +399,7 @@ export default function TranslatePage() {
             My language
             <select
               value={myLanguage}
-              onChange={(event) => {
-                const language = event.target.value;
-                setMyLanguage(language);
-                resetConversation();
-                setMyLanguage(language);
-                try {
-                  window.localStorage.setItem(STORAGE_KEY, language);
-                  window.dispatchEvent(new CustomEvent("pantavion:language-change", { detail: { language } }));
-                } catch {
-                  // Restricted browsers may block local storage.
-                }
-              }}
+              onChange={(event) => changeMyLanguage(event.target.value)}
               className="mt-2 w-full rounded-2xl border border-white/10 bg-[#08121d] p-4 text-lg font-bold text-white outline-none"
             >
               {LANGUAGE_OPTIONS.map((language) => (
@@ -423,9 +411,7 @@ export default function TranslatePage() {
           <div className="mt-4 flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-400">Other person</p>
-              <p className="mt-1 text-xl font-black">
-                {partnerLanguage ? partnerLanguageMeta.label : "Automatic detection"}
-              </p>
+              <p className="mt-1 text-xl font-black">{partnerLanguage ? partnerLanguageMeta.label : "Automatic detection"}</p>
             </div>
             <span className="text-2xl" aria-hidden="true">◎</span>
           </div>
@@ -437,7 +423,7 @@ export default function TranslatePage() {
               if (recording) stopRecording();
               else void startRecording();
             }}
-            className={`mx-auto mt-7 flex h-44 w-44 items-center justify-center rounded-full border-8 text-center text-xl font-black shadow-2xl transition sm:h-52 sm:w-52 ${
+            className={`mx-auto mt-7 flex h-44 w-44 whitespace-pre-line items-center justify-center rounded-full border-8 text-center text-xl font-black shadow-2xl transition sm:h-52 sm:w-52 ${
               recording
                 ? "border-red-200/40 bg-red-400 text-[#190507]"
                 : processing
@@ -456,9 +442,7 @@ export default function TranslatePage() {
           ) : null}
 
           {error ? (
-            <p className="mt-4 rounded-2xl border border-amber-300/25 bg-amber-300/10 p-4 text-sm leading-6 text-amber-100">
-              {error}
-            </p>
+            <p className="mt-4 rounded-2xl border border-amber-300/25 bg-amber-300/10 p-4 text-sm leading-6 text-amber-100">{error}</p>
           ) : null}
 
           <details className="mt-5 rounded-2xl border border-white/10 bg-white/[0.035] p-4 text-sm text-slate-300">
@@ -514,9 +498,7 @@ export default function TranslatePage() {
             <article
               key={turn.id}
               className={`rounded-[1.6rem] border p-5 ${
-                turn.speaker === "me"
-                  ? "border-cyan-300/20 bg-cyan-950/20"
-                  : "border-amber-300/20 bg-amber-950/15"
+                turn.speaker === "me" ? "border-cyan-300/20 bg-cyan-950/20" : "border-amber-300/20 bg-amber-950/15"
               }`}
             >
               <div className="flex items-center justify-between gap-3">
@@ -538,7 +520,7 @@ export default function TranslatePage() {
           ))}
         </section>
 
-        {(turns.length > 0 || conversationActive) ? (
+        {turns.length > 0 || conversationActive ? (
           <button
             type="button"
             onClick={resetConversation}
