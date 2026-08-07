@@ -9,15 +9,27 @@ function text(formData: FormData, key: string) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function list(formData: FormData, key: string) {
-  return formData.getAll(key).filter((value): value is string => typeof value === "string" && value.trim().length > 0);
-}
-
 function moneyToCents(value: string) {
   if (!value) return null;
   const amount = Number(value.replace(",", "."));
   if (!Number.isFinite(amount) || amount < 0) return null;
   return Math.round(amount * 100);
+}
+
+function csv(value: string) {
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function advertiserTrack(value: string): "standard" | "enterprise" {
+  return value === "enterprise" ? "enterprise" : "standard";
+}
+
+function scopeType(value: string) {
+  const allowed = new Set(["country", "multi_country", "continent", "multi_continent", "global"]);
+  return allowed.has(value) ? value : "country";
 }
 
 export async function createAdvertiser(formData: FormData) {
@@ -28,11 +40,13 @@ export async function createAdvertiser(formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login?next=/business/ads");
 
+  const track = advertiserTrack(text(formData, "advertiserTrack"));
   const { error } = await supabase.from("pantavion_advertisers").insert({
     owner_id: user.id,
     display_name: displayName,
     legal_name: text(formData, "legalName") || null,
     country_code: text(formData, "countryCode").toUpperCase() || null,
+    advertiser_track: track,
   });
 
   if (error) redirect(`/business/ads?error=${encodeURIComponent(error.message)}`);
@@ -49,16 +63,32 @@ export async function createAdRequest(formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login?next=/business/ads");
 
+  const { data: advertiser } = await supabase
+    .from("pantavion_advertisers")
+    .select("id,advertiser_track")
+    .eq("id", advertiserId)
+    .eq("owner_id", user.id)
+    .single();
+
+  if (!advertiser) redirect("/business/ads?error=Advertiser%20profile%20not%20found");
+
+  const track = advertiserTrack(advertiser.advertiser_track);
+  const scope = scopeType(text(formData, "scopeType"));
+  const targetCountries = csv(text(formData, "countries")).map((country) => country.toUpperCase());
+  const targetContinents = csv(text(formData, "continents"));
+
   const { error } = await supabase.from("pantavion_ad_requests").insert({
     advertiser_id: advertiserId,
     created_by: user.id,
     title,
     objective,
-    requested_surfaces: list(formData, "surface"),
-    target_countries: text(formData, "countries")
-      .split(",")
-      .map((country) => country.trim().toUpperCase())
-      .filter(Boolean),
+    requested_surfaces: ["ads_directory"],
+    target_countries: targetCountries,
+    target_continents: targetContinents,
+    scope_type: scope,
+    commercial_track: track,
+    agreement_type: track === "enterprise" ? "enterprise_msa_io" : "standard_terms",
+    legal_review_status: track === "enterprise" ? "pending" : "not_required",
     requested_start: text(formData, "start") || null,
     requested_end: text(formData, "end") || null,
     budget_cents: moneyToCents(text(formData, "budget")),
