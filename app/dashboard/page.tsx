@@ -38,10 +38,34 @@ export default async function DashboardPage() {
           </p>
           <div className="pv-actions">
             <Link className="pv-button gold" href="/profile">Edit real profile</Link>
-            <Link className="pv-button blue" href="/daily/feed">Open Social Feed</Link>
+            <Link className="pv-button blue" href="/social-core">Open Social World</Link>
             <form action={signOut}>
               <button className="pv-button" type="submit">Logout</button>
             </form>
+          </div>
+        </div>
+
+        <div
+          style={{
+            marginBottom: 34,
+            borderRadius: 30,
+            padding: "clamp(24px,4vw,46px)",
+            background:
+              "radial-gradient(circle at 15% 20%,rgba(63,181,255,.28),transparent 30%),radial-gradient(circle at 88% 15%,rgba(255,181,84,.24),transparent 32%),linear-gradient(135deg,#ffffff 0%,#edf6ff 52%,#fff8ef 100%)",
+            border: "1px solid rgba(38,85,135,.12)",
+            boxShadow: "0 22px 60px rgba(34,72,115,.12)",
+          }}
+        >
+          <p style={{ color: "#1769aa", fontWeight: 900, letterSpacing: ".14em", fontSize: 12, margin: 0 }}>NEW · PANTAVION SOCIAL WORLD</p>
+          <h2 style={{ fontSize: "clamp(34px,5vw,62px)", lineHeight: 1.02, letterSpacing: "-.04em", margin: "14px 0 16px", color: "#102f55" }}>
+            Seven continents. Every age. One connected world.
+          </h2>
+          <p style={{ color: "#526d88", fontSize: 18, lineHeight: 1.55, maxWidth: 780 }}>
+            Enter the new bright global Social Core with personalized Child, Teen, Adult and Elite experiences, unified identity, relationships, safety and language bridging.
+          </p>
+          <div className="pv-actions" style={{ marginTop: 22 }}>
+            <Link className="pv-button blue" href="/social-core">View the new Social World</Link>
+            <Link className="pv-button" href="/daily/feed">Open current Feed</Link>
           </div>
         </div>
 
@@ -63,6 +87,11 @@ export default async function DashboardPage() {
             <StatusBadge status="live-foundation" />
             <h3>Identity & Profile</h3>
             <p>Supabase-backed account, profile fields, protected access and real session logout.</p>
+          </Link>
+          <Link className="pv-card" href="/social-core">
+            <StatusBadge status="live-foundation" />
+            <h3>Unified Global Social</h3>
+            <p>Seven continents, age-personalized experiences, 18 shared modules and one relationship foundation.</p>
           </Link>
           <Link className="pv-card" href="/language">
             <StatusBadge status="live-foundation" />
