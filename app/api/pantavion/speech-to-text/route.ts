@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { normalizePantavionAccessibleSpeechTranscript } from "@/core/translation/pantavion-speech-accessibility";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -23,6 +24,9 @@ async function transcribeWithPantavionEndpoint(audio: File, language: string) {
   const form = new FormData();
   form.append("file", audio, audio.name || "pantavion-voice.webm");
   if (language && language !== "auto") form.append("language", language);
+  form.append("accessibility_mode", "speech_variation_tolerant");
+  form.append("preserve_meaning", "true");
+  form.append("speech_variations", "stutter,repetition,articulation");
 
   const headers: Record<string, string> = {};
   const apiKey =
@@ -96,10 +100,42 @@ async function transcribeWithOpenAI(audio: File, language: string) {
   return null;
 }
 
+async function finalizeAccessibleTranscript(
+  result: { ok: true; text: string; provider: string },
+  language: string,
+) {
+  const normalized = await normalizePantavionAccessibleSpeechTranscript({
+    transcript: result.text,
+    language,
+    accessibilityMode: true,
+  });
+
+  return {
+    ...result,
+    text: normalized.normalizedText,
+    rawText: normalized.rawText,
+    normalizedText: normalized.normalizedText,
+    speechAccessibility: {
+      enabled: true,
+      changed: normalized.changed,
+      normalizer: normalized.provider,
+      stutterTolerance: true,
+      articulationVariationTolerance: true,
+      preservedRawTranscript: true,
+    },
+  };
+}
+
 export async function GET() {
   return NextResponse.json({
     ok: true,
     browserSpeechRecognitionFallback: true,
+    speechAccessibility: {
+      enabled: true,
+      stutterTolerance: true,
+      articulationVariationTolerance: true,
+      preserveRawTranscript: true,
+    },
     serverProviderConfigured: Boolean(
       process.env.PANTAVION_SPEECH_TO_TEXT_ENDPOINT || process.env.OPENAI_API_KEY,
     ),
@@ -133,10 +169,18 @@ export async function POST(request: Request) {
   }
 
   const pantavionResult = await transcribeWithPantavionEndpoint(audio, language);
-  if (pantavionResult) return NextResponse.json(pantavionResult);
+  if (pantavionResult) {
+    return NextResponse.json(
+      await finalizeAccessibleTranscript(pantavionResult, language),
+    );
+  }
 
   const openAiResult = await transcribeWithOpenAI(audio, language);
-  if (openAiResult) return NextResponse.json(openAiResult);
+  if (openAiResult) {
+    return NextResponse.json(
+      await finalizeAccessibleTranscript(openAiResult, language),
+    );
+  }
 
   return NextResponse.json(
     {
