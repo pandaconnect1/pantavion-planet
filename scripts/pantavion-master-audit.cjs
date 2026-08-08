@@ -44,16 +44,19 @@ requireIncludes("core/translation/pantavion-natural-language-universe.ts", [
   "practicalWorldMenuMinimum",
 ]);
 
-// Public translation UI must point to the real Pantavion runtime and provide
-// direct text input, bidirectional direction swapping and browser voice helpers.
+// Public translation UI must use Pantavion's shared global catalog instead of a
+// short hard-coded language list and must keep text + bidirectional voice turns.
 requireIncludes("app/translate/page.tsx", [
+  'globalEmergencyLanguages',
   'fetch("/api/pantavion/translate"',
   "sourceLanguage",
   "targetLanguage",
   "swapDirection",
   "startListening",
   "speechSynthesis",
-  "Κείμενο προς μετάφραση",
+  "Μίλα & Μετάφραση",
+  "Επόμενος ομιλητής",
+  "7 ήπειροι",
 ]);
 
 // The runtime must fall through to a real public text provider when the primary
@@ -96,9 +99,9 @@ if (!practicalMinimum) {
 }
 
 if (practicalLanguageCount < 250) {
-  failures.push("[FAIL] Practical emergency language menu below 250 entries: " + practicalLanguageCount);
+  failures.push("[FAIL] Practical world language catalog below 250 entries: " + practicalLanguageCount);
 } else {
-  console.log("[OK] Practical emergency language menu has " + practicalLanguageCount + " entries.");
+  console.log("[OK] Practical world language catalog has " + practicalLanguageCount + " entries.");
 }
 
 if (failures.length > 0) {
