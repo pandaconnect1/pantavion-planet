@@ -37,6 +37,7 @@ type SpeechRecognitionLike = {
   stop: () => void;
 };
 type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
+type MicrophonePermissionState = "unknown" | "requesting" | "granted" | "denied";
 
 declare global {
   interface Window {
@@ -79,6 +80,8 @@ function audioExtension(mimeType: string) {
   return "webm";
 }
 
+const tapClass = "select-none touch-manipulation [-webkit-touch-callout:none]";
+
 export default function TranslatePage() {
   const [fromLanguage, setFromLanguage] = useState("el");
   const [toLanguage, setToLanguage] = useState("en");
@@ -91,6 +94,7 @@ export default function TranslatePage() {
   const [recording, setRecording] = useState(false);
   const [transcribing, setTranscribing] = useState(false);
   const [voiceStatus, setVoiceStatus] = useState("");
+  const [microphonePermission, setMicrophonePermission] = useState<MicrophonePermissionState>("unknown");
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -100,7 +104,7 @@ export default function TranslatePage() {
 
   const fromMeta = useMemo(() => languageByCode(fromLanguage), [fromLanguage]);
   const toMeta = useMemo(() => languageByCode(toLanguage), [toLanguage]);
-  const voiceBusy = listening || recording || transcribing;
+  const voiceBusy = listening || recording || transcribing || microphonePermission === "requesting";
 
   useEffect(() => {
     return () => {
@@ -110,6 +114,35 @@ export default function TranslatePage() {
       mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
     };
   }, []);
+
+  async function requestMicrophonePermission() {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setMicrophonePermission("denied");
+      setVoiceStatus("");
+      setError("Ο browser δεν δίνει πρόσβαση στο μικρόφωνο. Άνοιξε το Pantavion σε Safari, Chrome ή άλλο πλήρη browser.");
+      return false;
+    }
+
+    setMicrophonePermission("requesting");
+    setError("");
+    setVoiceStatus("Ζητώ άδεια μικροφώνου…");
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((track) => track.stop());
+      setMicrophonePermission("granted");
+      setError("");
+      setVoiceStatus("✓ Το μικρόφωνο είναι ενεργό για το Pantavion.");
+      return true;
+    } catch {
+      setMicrophonePermission("denied");
+      setVoiceStatus("");
+      setError(
+        "Το μικρόφωνο είναι μπλοκαρισμένο για το pantavion.com. Αν είχες πατήσει Απαγόρευση, άνοιξε τις Ρυθμίσεις/Δικαιώματα του ιστοτόπου και επίλεξε Μικρόφωνο → Επιτρέπεται.",
+      );
+      return false;
+    }
+  }
 
   function speak(text: string, languageCode: string) {
     if (!text.trim()) return;
@@ -187,10 +220,6 @@ export default function TranslatePage() {
     }
   }
 
-  function translate() {
-    void translateText(sourceText, false);
-  }
-
   function swapDirection(clearForNextSpeaker = false) {
     const oldFrom = fromLanguage;
     const oldTo = toLanguage;
@@ -227,27 +256,16 @@ export default function TranslatePage() {
     try {
       const form = new FormData();
       const mimeType = blob.type || "audio/webm";
-      form.append(
-        "audio",
-        new File([blob], `pantavion-voice.${audioExtension(mimeType)}`, {
-          type: mimeType,
-        }),
-      );
+      form.append("audio", new File([blob], `pantavion-voice.${audioExtension(mimeType)}`, { type: mimeType }));
       form.append("language", fromLanguage);
 
-      const response = await fetch("/api/pantavion/speech-to-text", {
-        method: "POST",
-        body: form,
-      });
+      const response = await fetch("/api/pantavion/speech-to-text", { method: "POST", body: form });
       const result = (await response.json().catch(() => ({}))) as SpeechToTextResponse;
       const transcript = String(result.text || "").trim();
 
       if (!response.ok || !transcript) {
         setVoiceStatus("");
-        setError(
-          result.error ||
-            "Η φωνή καταγράφηκε, αλλά δεν επέστρεψε κείμενο. Έλεγξε την άδεια μικροφώνου ή δοκίμασε ξανά.",
-        );
+        setError(result.error || "Η φωνή καταγράφηκε, αλλά δεν επέστρεψε κείμενο. Δοκίμασε ξανά.");
         return;
       }
 
@@ -264,36 +282,28 @@ export default function TranslatePage() {
 
   async function startServerRecording(autoTranslate: boolean) {
     if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
-      setError("Ο browser δεν δίνει πρόσβαση σε μικρόφωνο/ηχογράφηση. Άνοιξε τη σελίδα σε Chrome ή άλλο πλήρη browser.");
+      setError("Ο browser δεν δίνει πρόσβαση σε μικρόφωνο/ηχογράφηση. Άνοιξε τη σελίδα σε Safari, Chrome ή άλλο πλήρη browser.");
       return;
     }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      setMicrophonePermission("granted");
       mediaStreamRef.current = stream;
       mediaChunksRef.current = [];
 
-      const preferredMimeType = [
-        "audio/webm;codecs=opus",
-        "audio/webm",
-        "audio/mp4",
-        "audio/ogg;codecs=opus",
-      ].find((mimeType) => MediaRecorder.isTypeSupported(mimeType));
-
-      const recorder = preferredMimeType
-        ? new MediaRecorder(stream, { mimeType: preferredMimeType })
-        : new MediaRecorder(stream);
+      const preferredMimeType = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"]
+        .find((mimeType) => MediaRecorder.isTypeSupported(mimeType));
+      const recorder = preferredMimeType ? new MediaRecorder(stream, { mimeType: preferredMimeType }) : new MediaRecorder(stream);
 
       recorder.ondataavailable = (event) => {
         if (event.data.size > 0) mediaChunksRef.current.push(event.data);
       };
-
       recorder.onerror = () => {
         cleanupMediaStream();
         setVoiceStatus("");
         setError("Η εγγραφή μικροφώνου απέτυχε. Έλεγξε την άδεια μικροφώνου.");
       };
-
       recorder.onstop = () => {
         const mimeType = recorder.mimeType || preferredMimeType || "audio/webm";
         const blob = new Blob(mediaChunksRef.current, { type: mimeType });
@@ -305,21 +315,18 @@ export default function TranslatePage() {
       recorder.start(250);
       setRecording(true);
       setError("");
-      setVoiceStatus(
-        autoTranslate
-          ? "Ηχογραφώ… μίλα τώρα. Πάτησε ξανά για Τέλος & Μετάφραση."
-          : "Ηχογραφώ… μίλα τώρα. Πάτησε ξανά για Τέλος.",
-      );
+      setVoiceStatus(autoTranslate
+        ? "Ηχογραφώ… μίλα τώρα. Πάτησε ξανά για Τέλος & Μετάφραση."
+        : "Ηχογραφώ… μίλα τώρα. Πάτησε ξανά για Τέλος.");
 
       recordingTimerRef.current = setTimeout(() => {
-        if (mediaRecorderRef.current?.state === "recording") {
-          mediaRecorderRef.current.stop();
-        }
+        if (mediaRecorderRef.current?.state === "recording") mediaRecorderRef.current.stop();
       }, 15_000);
     } catch {
       cleanupMediaStream();
+      setMicrophonePermission("denied");
       setVoiceStatus("");
-      setError("Δεν δόθηκε πρόσβαση στο μικρόφωνο. Ενεργοποίησε την άδεια μικροφώνου για το pantavion.com.");
+      setError("Το μικρόφωνο είναι μπλοκαρισμένο. Πάτησε «Ενεργοποίηση μικροφώνου» ή άλλαξε τα Δικαιώματα ιστοτόπου αν το είχες απαγορεύσει.");
     }
   }
 
@@ -330,15 +337,20 @@ export default function TranslatePage() {
     }
   }
 
-  function startListening(autoTranslate = false) {
+  async function startListening(autoTranslate = false) {
     if (recording) {
       stopServerRecording();
       return;
     }
 
+    if (microphonePermission !== "granted") {
+      const allowed = await requestMicrophonePermission();
+      if (!allowed) return;
+    }
+
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!Recognition) {
-      void startServerRecording(autoTranslate);
+      await startServerRecording(autoTranslate);
       return;
     }
 
@@ -361,7 +373,6 @@ export default function TranslatePage() {
         .map((result) => result?.[0]?.transcript || "")
         .join(" ")
         .trim();
-
       if (!transcript) return;
       receivedTranscript = true;
       setSourceText(transcript);
@@ -373,12 +384,14 @@ export default function TranslatePage() {
       const code = event?.error || "unknown";
 
       if (code === "not-allowed" || code === "service-not-allowed") {
+        fallbackStarted = true;
+        setMicrophonePermission("denied");
         setVoiceStatus("");
-        setError("Δεν δόθηκε άδεια μικροφώνου. Ενεργοποίησε το μικρόφωνο για το pantavion.com και δοκίμασε ξανά.");
+        setError("Το μικρόφωνο είναι μπλοκαρισμένο για το pantavion.com. Άλλαξε τα Δικαιώματα ιστοτόπου σε Μικρόφωνο → Επιτρέπεται.");
         return;
       }
-
       if (code === "audio-capture") {
+        fallbackStarted = true;
         setVoiceStatus("");
         setError("Δεν βρέθηκε διαθέσιμο μικρόφωνο στη συσκευή.");
         return;
@@ -394,6 +407,7 @@ export default function TranslatePage() {
         startFallback();
       }
     };
+
     recognitionRef.current = recognition;
     setListening(true);
     setError("");
@@ -406,6 +420,12 @@ export default function TranslatePage() {
       startFallback();
     }
   }
+
+  const microphoneLabel = microphonePermission === "requesting"
+    ? "🎙️ Ζητώ άδεια…"
+    : microphonePermission === "granted"
+      ? "✓ Μικρόφωνο ενεργό"
+      : "🎙️ Ενεργοποίηση μικροφώνου";
 
   return (
     <main className="min-h-screen bg-[#102a56] px-4 py-4 text-white sm:px-6 sm:py-6">
@@ -425,52 +445,56 @@ export default function TranslatePage() {
             <select value={fromLanguage} onChange={(event) => setFromLanguage(event.target.value)} className="min-w-0 rounded-xl border border-blue-300/30 bg-[#214784] px-3 py-3 text-sm font-bold text-white outline-none">
               {LANGUAGES.map((language) => <option key={language.code} value={language.code}>{language.label}</option>)}
             </select>
-            <button type="button" onClick={() => swapDirection(false)} aria-label="Αντιστροφή γλωσσών" className="h-11 w-11 rounded-full border border-cyan-200/30 bg-[#245b92] text-xl font-black text-cyan-100">↔</button>
+            <button type="button" onClick={() => swapDirection(false)} onContextMenu={(event) => event.preventDefault()} aria-label="Αντιστροφή γλωσσών" className={`${tapClass} h-11 w-11 rounded-full border border-cyan-200/30 bg-[#245b92] text-xl font-black text-cyan-100`}>↔</button>
             <select value={toLanguage} onChange={(event) => setToLanguage(event.target.value)} className="min-w-0 rounded-xl border border-[#f6c85f]/35 bg-[#3a4d79] px-3 py-3 text-sm font-bold text-white outline-none">
               {LANGUAGES.map((language) => <option key={language.code} value={language.code}>{language.label}</option>)}
             </select>
           </div>
 
           <div className="px-4 py-4 sm:px-6">
-            <textarea
-              value={sourceText}
-              onChange={(event) => setSourceText(event.target.value)}
-              placeholder="Γράψε εδώ…"
-              dir={fromMeta.direction}
-              autoFocus
-              className="min-h-40 w-full resize-y rounded-2xl border border-white/10 bg-[#0f2b59] p-4 text-lg text-white outline-none placeholder:text-blue-100/45 focus:border-cyan-300/55"
-            />
+            <textarea value={sourceText} onChange={(event) => setSourceText(event.target.value)} placeholder="Γράψε εδώ…" dir={fromMeta.direction} autoFocus className="min-h-40 w-full resize-y rounded-2xl border border-white/10 bg-[#0f2b59] p-4 text-lg text-white outline-none placeholder:text-blue-100/45 focus:border-cyan-300/55" />
 
-            <div className="mt-3 grid gap-2 sm:grid-cols-3">
-              <button type="button" onClick={() => startListening(false)} disabled={transcribing || loading} className="rounded-full border border-blue-200/30 bg-[#245b92] px-4 py-3 font-black text-white disabled:opacity-60">
+            <button
+              type="button"
+              onClick={() => void requestMicrophonePermission()}
+              onContextMenu={(event) => event.preventDefault()}
+              disabled={microphonePermission === "requesting" || recording || listening || transcribing}
+              className={`${tapClass} mt-3 w-full rounded-full border border-emerald-200/30 bg-emerald-300/15 px-4 py-3 font-black text-emerald-50 disabled:opacity-60`}
+            >
+              {microphoneLabel}
+            </button>
+
+            <div className="mt-2 grid gap-2 sm:grid-cols-3">
+              <button type="button" onClick={() => void startListening(false)} onContextMenu={(event) => event.preventDefault()} disabled={transcribing || loading || microphonePermission === "requesting"} className={`${tapClass} rounded-full border border-blue-200/30 bg-[#245b92] px-4 py-3 font-black text-white disabled:opacity-60`}>
                 {recording ? "⏹ Τέλος" : listening ? "🎙️ Ακούω…" : "🎙️ Μίλα"}
               </button>
-              <button type="button" onClick={() => startListening(true)} disabled={transcribing || loading} className="rounded-full border border-cyan-200/30 bg-[#1d6388] px-4 py-3 font-black text-white disabled:opacity-60">
+              <button type="button" onClick={() => void startListening(true)} onContextMenu={(event) => event.preventDefault()} disabled={transcribing || loading || microphonePermission === "requesting"} className={`${tapClass} rounded-full border border-cyan-200/30 bg-[#1d6388] px-4 py-3 font-black text-white disabled:opacity-60`}>
                 {recording ? "⏹ Τέλος & Μετάφραση" : listening ? "🎙️ Ακούω…" : "🎙️ Μίλα & Μετάφραση"}
               </button>
-              <button type="button" onClick={translate} disabled={loading || voiceBusy} className="rounded-full bg-cyan-300 px-5 py-3 font-black text-[#102a56] disabled:opacity-60">
+              <button type="button" onClick={() => void translateText(sourceText, false)} onContextMenu={(event) => event.preventDefault()} disabled={loading || voiceBusy} className={`${tapClass} rounded-full bg-cyan-300 px-5 py-3 font-black text-[#102a56] disabled:opacity-60`}>
                 {loading ? "Μεταφράζω…" : transcribing ? "Μεταγράφω…" : "Μετάφραση"}
               </button>
             </div>
 
-            {voiceStatus ? (
-              <div className="mt-3 rounded-xl border border-cyan-200/20 bg-cyan-200/10 px-3 py-2 text-sm font-bold text-cyan-50">
-                {voiceStatus}
-              </div>
+            {microphonePermission === "denied" ? (
+              <p className="mt-2 text-xs font-semibold leading-5 text-white/70">
+                Αν η άδεια είχε ήδη απορριφθεί, ο browser δεν επιτρέπει στο Pantavion να την αλλάξει μόνο του. Άνοιξε τα Δικαιώματα ιστοτόπου για το pantavion.com και επίλεξε Μικρόφωνο → Επιτρέπεται.
+              </p>
             ) : null}
 
+            {voiceStatus ? <div className="mt-3 rounded-xl border border-cyan-200/20 bg-cyan-200/10 px-3 py-2 text-sm font-bold text-cyan-50">{voiceStatus}</div> : null}
             {error ? <div className="mt-4 rounded-xl border border-red-200/30 bg-red-300/10 p-3 text-sm font-bold text-red-50">{error}</div> : null}
 
             <div className="mt-4 rounded-2xl border border-[#f6c85f]/25 bg-[#203b6e] p-4" dir={toMeta.direction}>
               <div className="flex items-center justify-between gap-3">
                 <span className="text-xs font-black uppercase tracking-wider text-[#f6c85f]">{toMeta.label}</span>
-                <button type="button" onClick={() => speak(translatedText, toLanguage)} disabled={!translatedText} className="rounded-full border border-[#f6c85f]/25 px-3 py-1.5 text-xs font-black text-[#ffe29a] disabled:opacity-30">🔊 Άκου</button>
+                <button type="button" onClick={() => speak(translatedText, toLanguage)} onContextMenu={(event) => event.preventDefault()} disabled={!translatedText} className={`${tapClass} rounded-full border border-[#f6c85f]/25 px-3 py-1.5 text-xs font-black text-[#ffe29a] disabled:opacity-30`}>🔊 Άκου</button>
               </div>
               <p className="mt-3 min-h-16 whitespace-pre-wrap text-xl font-bold leading-8 text-white">{translatedText || "Η μετάφραση θα εμφανιστεί εδώ."}</p>
               {provider ? <p className="mt-2 text-[10px] text-white/35">{provider}</p> : null}
             </div>
 
-            <button type="button" onClick={() => swapDirection(true)} className="mt-3 w-full rounded-full border border-white/15 bg-white/5 px-4 py-3 text-sm font-black text-white/90">
+            <button type="button" onClick={() => swapDirection(true)} onContextMenu={(event) => event.preventDefault()} className={`${tapClass} mt-3 w-full rounded-full border border-white/15 bg-white/5 px-4 py-3 text-sm font-black text-white/90`}>
               Επόμενος ομιλητής ↔
             </button>
           </div>
