@@ -33,6 +33,29 @@ function safeCode(payload: any) {
   return cleaned || undefined;
 }
 
+function normalizeGatewayMediaType(rawMimeType: string) {
+  const base = String(rawMimeType || "")
+    .split(";", 1)[0]
+    .trim()
+    .toLowerCase();
+
+  if (!base) return "audio/webm";
+  if (base === "audio/x-m4a" || base === "audio/m4a") return "audio/mp4";
+  if (base === "audio/mp3" || base === "audio/mpga") return "audio/mpeg";
+  if (base === "audio/x-wav" || base === "audio/wave") return "audio/wav";
+  if (base === "video/webm") return "audio/webm";
+
+  const allowed = new Set([
+    "audio/webm",
+    "audio/mp4",
+    "audio/ogg",
+    "audio/mpeg",
+    "audio/wav",
+    "audio/flac",
+  ]);
+  return allowed.has(base) ? base : "audio/webm";
+}
+
 function primaryProviderAttempts(attempts: Attempt[]) {
   const attempted = attempts.filter((item) => item.attempted);
   const gateway = attempted.filter((item) => item.provider.startsWith("vercel_ai_gateway"));
@@ -128,6 +151,7 @@ async function transcribeWithVercelAiGateway(
     ),
   );
   const audioBase64 = Buffer.from(await audio.arrayBuffer()).toString("base64");
+  const mediaType = normalizeGatewayMediaType(audio.type || "audio/webm");
 
   for (const [credentialName, token] of credentials) {
     for (const model of models) {
@@ -142,7 +166,7 @@ async function transcribeWithVercelAiGateway(
           },
           body: JSON.stringify({
             audio: audioBase64,
-            mediaType: audio.type || "audio/webm",
+            mediaType,
           }),
           signal: AbortSignal.timeout(30_000),
         });
