@@ -8,10 +8,31 @@ function languageBase(value: string) {
   return value.trim().toLowerCase().split("-")[0];
 }
 
+function likelyRegionLocale(code: string) {
+  const cleanCode = String(code || "").trim();
+  if (!cleanCode) return "";
+  if (cleanCode.includes("-")) return cleanCode;
+
+  try {
+    if (typeof Intl !== "undefined" && "Locale" in Intl) {
+      const maximized = new Intl.Locale(cleanCode).maximize();
+      const language = maximized.language || cleanCode;
+      const region = maximized.region;
+      if (region) return `${language}-${region}`;
+    }
+  } catch {
+    // Fall through to the language code. Some rare language tags are not known to Intl.Locale.
+  }
+
+  return cleanCode;
+}
+
 export function normalizePantavionSpeechLanguage(code: string, preferred?: string) {
   const cleanPreferred = String(preferred || "").trim();
   if (cleanPreferred) return cleanPreferred;
-  return String(code || "en").trim() || "en";
+
+  const cleanCode = String(code || "en").trim() || "en";
+  return likelyRegionLocale(cleanCode) || cleanCode;
 }
 
 export function choosePantavionDeviceVoice<T extends PantavionVoiceCandidate>(
@@ -36,8 +57,9 @@ export function choosePantavionDeviceVoice<T extends PantavionVoiceCandidate>(
 }
 
 export const pantavionDeviceVoicePolicy = {
-  id: "pantavion_device_voice_global_v1",
+  id: "pantavion_device_voice_global_v2",
   useDeviceVoicesDynamically: true,
+  useIntlLikelyRegionForSpeechRecognition: true,
   neverLimitWorldCatalogToManualLocaleMap: true,
   fallbackToLanguageCode: true,
   fallbackToServerSpeechRuntime: true,

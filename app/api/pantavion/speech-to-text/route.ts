@@ -55,6 +55,48 @@ async function transcribeWithPantavionEndpoint(audio: File, language: string) {
   }
 }
 
+async function transcribeWithVercelAiGateway(audio: File) {
+  const token =
+    process.env.AI_GATEWAY_API_KEY ||
+    process.env.VERCEL_OIDC_TOKEN;
+  if (!token) return null;
+
+  const model =
+    process.env.PANTAVION_SPEECH_TO_TEXT_GATEWAY_MODEL || "openai/whisper-1";
+
+  try {
+    const audioBase64 = Buffer.from(await audio.arrayBuffer()).toString("base64");
+    const response = await fetch(
+      "https://ai-gateway.vercel.sh/v4/ai/transcription-model",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "ai-model-id": model,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          audio: audioBase64,
+          mediaType: audio.type || "audio/webm",
+        }),
+        signal: AbortSignal.timeout(30_000),
+      },
+    );
+
+    const payload = await response.json().catch(() => ({}));
+    const text = textFromPayload(payload);
+    if (!response.ok || !text) return null;
+
+    return {
+      ok: true,
+      text,
+      provider: `vercel_ai_gateway:${model}`,
+    } as const;
+  } catch {
+    return null;
+  }
+}
+
 async function transcribeWithOpenAI(audio: File, language: string) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
@@ -137,7 +179,13 @@ export async function GET() {
       preserveRawTranscript: true,
     },
     serverProviderConfigured: Boolean(
-      process.env.PANTAVION_SPEECH_TO_TEXT_ENDPOINT || process.env.OPENAI_API_KEY,
+      process.env.PANTAVION_SPEECH_TO_TEXT_ENDPOINT ||
+        process.env.AI_GATEWAY_API_KEY ||
+        process.env.VERCEL_OIDC_TOKEN ||
+        process.env.OPENAI_API_KEY,
+    ),
+    vercelGatewayFallback: Boolean(
+      process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN,
     ),
   });
 }
@@ -175,6 +223,13 @@ export async function POST(request: Request) {
     );
   }
 
+  const gatewayResult = await transcribeWithVercelAiGateway(audio);
+  if (gatewayResult) {
+    return NextResponse.json(
+      await finalizeAccessibleTranscript(gatewayResult, language),
+    );
+  }
+
   const openAiResult = await transcribeWithOpenAI(audio, language);
   if (openAiResult) {
     return NextResponse.json(
@@ -186,7 +241,7 @@ export async function POST(request: Request) {
     {
       ok: false,
       error:
-        "Η συσκευή δεν επέστρεψε αναγνώριση φωνής και δεν υπάρχει διαθέσιμο server speech-to-text provider.",
+        "Η συσκευή δεν επέστρεψε αναγνώριση φωνής και το server speech-to-text fallback δεν μπόρεσε να ολοκληρώσει τη μεταγραφή.",
       code: "speech_provider_unavailable",
     },
     { status: 503 },
