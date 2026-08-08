@@ -32,8 +32,22 @@ function safeCode(payload: any) {
   return cleaned || undefined;
 }
 
+function primaryProviderAttempts(attempts: Attempt[]) {
+  const attempted = attempts.filter((item) => item.attempted);
+  const gateway = attempted.filter((item) => item.provider.startsWith("vercel_ai_gateway"));
+  if (gateway.length) return gateway;
+
+  const pantavion = attempted.filter((item) => item.provider === "pantavion_speech_provider");
+  if (pantavion.length) return pantavion;
+
+  const directOpenAi = attempted.filter((item) => item.provider.startsWith("openai_audio"));
+  if (directOpenAi.length) return directOpenAi;
+
+  return attempted;
+}
+
 function publicFailureCode(attempts: Attempt[]) {
-  const failed = attempts.filter((item) => item.attempted && !item.ok);
+  const failed = primaryProviderAttempts(attempts).filter((item) => !item.ok);
   if (!failed.length) return "STT_PROVIDER_UNAVAILABLE";
 
   if (failed.some((item) => item.status === 401 || item.status === 403)) {
@@ -190,8 +204,9 @@ async function transcribeWithOpenAI(
   language: string,
   attempts: Attempt[],
 ): Promise<SpeechResult | null> {
+  const directOpenAiEnabled = process.env.PANTAVION_ENABLE_DIRECT_OPENAI_STT === "true";
   const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
+  if (!directOpenAiEnabled || !apiKey) {
     attempts.push({ provider: "openai_audio", attempted: false, ok: false });
     return null;
   }
@@ -262,6 +277,9 @@ async function finalizeAccessibleTranscript(result: SpeechResult, language: stri
 }
 
 export async function GET() {
+  const directOpenAiEnabled =
+    process.env.PANTAVION_ENABLE_DIRECT_OPENAI_STT === "true" && Boolean(process.env.OPENAI_API_KEY);
+
   return NextResponse.json({
     ok: true,
     browserSpeechRecognitionFallback: true,
@@ -275,9 +293,10 @@ export async function GET() {
       process.env.VERCEL_OIDC_TOKEN ||
         process.env.AI_GATEWAY_API_KEY ||
         process.env.PANTAVION_SPEECH_TO_TEXT_ENDPOINT ||
-        process.env.OPENAI_API_KEY,
+        directOpenAiEnabled,
     ),
     gatewayPreferred: true,
+    directOpenAiFallbackEnabled: directOpenAiEnabled,
   });
 }
 
@@ -313,13 +332,14 @@ export async function POST(request: Request) {
   }
 
   const publicCode = publicFailureCode(attempts);
+  const primaryDiagnostics = primaryProviderAttempts(attempts);
   return NextResponse.json(
     {
       ok: false,
       error: `Η φωνή καταγράφηκε, αλλά η υπηρεσία αναγνώρισης φωνής δεν ολοκλήρωσε τη μεταγραφή. Κωδικός: ${publicCode}.`,
       code: "speech_provider_unavailable",
       publicCode,
-      diagnostics: attempts.map(({ provider, attempted, ok, status, code }) => ({
+      primaryDiagnostics: primaryDiagnostics.map(({ provider, attempted, ok, status, code }) => ({
         provider,
         attempted,
         ok,
