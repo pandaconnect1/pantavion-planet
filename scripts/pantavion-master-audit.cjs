@@ -44,10 +44,8 @@ requireIncludes("core/translation/pantavion-natural-language-universe.ts", [
   "practicalWorldMenuMinimum",
 ]);
 
-// Public translation UI must use Pantavion's shared global catalog instead of a
-// short hard-coded language list and must keep text + bidirectional voice turns.
 requireIncludes("app/translate/page.tsx", [
-  'globalEmergencyLanguages',
+  "globalEmergencyLanguages",
   'fetch("/api/pantavion/translate"',
   "sourceLanguage",
   "targetLanguage",
@@ -59,13 +57,25 @@ requireIncludes("app/translate/page.tsx", [
   "7 ήπειροι",
 ]);
 
-// The runtime must fall through to a real public text provider when the primary
-// provider is unavailable instead of returning a decorative/static response.
+// Translation must be one shared engine before Social/Chat/Voice/Video are built
+// on top of it. Group rooms fan out one original message to unique target languages.
+requireIncludes("core/translation/pantavion-shared-translation-service.ts", [
+  "PANTAVION_SHARED_TRANSLATION_SERVICE_ID",
+  "translateWithPantavionSharedService",
+  "translatePantavionMessageForTargets",
+  "multiUserLanguageFanout",
+  '"social"',
+  '"chat"',
+  '"voice"',
+  '"video"',
+  '"group_room"',
+]);
+
 requireIncludes("app/api/pantavion/translate/route.ts", [
-  "translateThroughPantavionFallbacks",
-  "translateWithPantavionPublicTextFallback",
+  "translateWithPantavionSharedService",
+  "normalizePantavionTranslationSurface",
+  "pantavionSharedTranslationCapabilities",
   "publicTextFallback: true",
-  "translatedText",
 ]);
 
 requireIncludes("core/translation/pantavion-public-text-fallback.ts", [
@@ -75,8 +85,6 @@ requireIncludes("core/translation/pantavion-public-text-fallback.ts", [
   "mymemory_public_fallback",
 ]);
 
-// The public homepage should remain product-facing; development-only modules
-// are not required to be advertised there.
 requireIncludes("app/pantavion-home-client.tsx", [
   "PANTAVION ONE",
   "Here We Are One. For All Humanity.",
