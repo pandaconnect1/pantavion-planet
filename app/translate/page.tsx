@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { globalEmergencyLanguages } from "@/core/emergency/global-emergency-languages";
 
 type TranslationResponse = {
@@ -15,14 +15,23 @@ type TranslationResponse = {
   provider?: string;
 };
 
+type SpeechToTextResponse = {
+  ok?: boolean;
+  text?: string;
+  error?: string;
+  code?: string;
+  provider?: string;
+};
+
 type SpeechRecognitionResultLike = { 0?: { transcript?: string } };
 type SpeechRecognitionEventLike = { results?: ArrayLike<SpeechRecognitionResultLike> };
+type SpeechRecognitionErrorEventLike = { error?: string; message?: string };
 type SpeechRecognitionLike = {
   lang: string;
   continuous: boolean;
   interimResults: boolean;
   onresult: ((event: SpeechRecognitionEventLike) => void) | null;
-  onerror: (() => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEventLike) => void) | null;
   onend: (() => void) | null;
   start: () => void;
   stop: () => void;
@@ -63,6 +72,13 @@ function languageByCode(code: string) {
   return LANGUAGES.find((language) => language.code === code) || LANGUAGES[0];
 }
 
+function audioExtension(mimeType: string) {
+  if (mimeType.includes("mp4")) return "m4a";
+  if (mimeType.includes("ogg")) return "ogg";
+  if (mimeType.includes("wav")) return "wav";
+  return "webm";
+}
+
 export default function TranslatePage() {
   const [fromLanguage, setFromLanguage] = useState("el");
   const [toLanguage, setToLanguage] = useState("en");
@@ -72,16 +88,42 @@ export default function TranslatePage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [listening, setListening] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [transcribing, setTranscribing] = useState(false);
+  const [voiceStatus, setVoiceStatus] = useState("");
+
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const mediaChunksRef = useRef<Blob[]>([]);
+  const recordingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const fromMeta = useMemo(() => languageByCode(fromLanguage), [fromLanguage]);
   const toMeta = useMemo(() => languageByCode(toLanguage), [toLanguage]);
+  const voiceBusy = listening || recording || transcribing;
+
+  useEffect(() => {
+    return () => {
+      recognitionRef.current?.stop();
+      if (recordingTimerRef.current) clearTimeout(recordingTimerRef.current);
+      mediaRecorderRef.current?.stop();
+      mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
+    };
+  }, []);
 
   function speak(text: string, languageCode: string) {
-    if (!text.trim() || !("speechSynthesis" in window)) return;
+    if (!text.trim()) return;
+    if (!("speechSynthesis" in window)) {
+      setError("Η συσκευή δεν υποστηρίζει φωνητική αναπαραγωγή σε αυτόν τον browser.");
+      return;
+    }
+
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = languageByCode(languageCode).speech;
+    utterance.onerror = () => {
+      setVoiceStatus("Η μετάφραση εμφανίστηκε, αλλά η συσκευή δεν μπόρεσε να την εκφωνήσει.");
+    };
     window.speechSynthesis.speak(utterance);
   }
 
@@ -99,6 +141,7 @@ export default function TranslatePage() {
     setLoading(true);
     setError("");
     setProvider("");
+    setVoiceStatus(autoSpeak ? "Μεταφράζω…" : "");
 
     try {
       const response = await fetch("/api/pantavion/translate", {
@@ -121,6 +164,7 @@ export default function TranslatePage() {
 
       if (!response.ok || !output.trim()) {
         setTranslatedText("");
+        setVoiceStatus("");
         setError(result.message || result.error || "Η μετάφραση δεν επέστρεψε αποτέλεσμα για αυτό το ζεύγος γλωσσών.");
         return "";
       }
@@ -128,10 +172,14 @@ export default function TranslatePage() {
       const translated = output.trim();
       setTranslatedText(translated);
       setProvider(result.provider || "Pantavion");
-      if (autoSpeak) speak(translated, toLanguage);
+      if (autoSpeak) {
+        setVoiceStatus("Μεταφράστηκε. Αναπαράγω τη μετάφραση…");
+        speak(translated, toLanguage);
+      }
       return translated;
     } catch {
       setTranslatedText("");
+      setVoiceStatus("");
       setError("Δεν ήταν δυνατή η σύνδεση με τη μετάφραση. Δοκίμασε ξανά.");
       return "";
     } finally {
@@ -152,17 +200,159 @@ export default function TranslatePage() {
     setTranslatedText("");
     setError("");
     setProvider("");
+    setVoiceStatus("");
+  }
+
+  function cleanupMediaStream() {
+    if (recordingTimerRef.current) {
+      clearTimeout(recordingTimerRef.current);
+      recordingTimerRef.current = null;
+    }
+    mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
+    mediaStreamRef.current = null;
+    mediaRecorderRef.current = null;
+    setRecording(false);
+  }
+
+  async function sendAudioForTranscription(blob: Blob, autoTranslate: boolean) {
+    if (!blob.size) {
+      setError("Δεν καταγράφηκε ήχος. Δοκίμασε ξανά.");
+      return;
+    }
+
+    setTranscribing(true);
+    setError("");
+    setVoiceStatus("Μετατρέπω τη φωνή σε κείμενο…");
+
+    try {
+      const form = new FormData();
+      const mimeType = blob.type || "audio/webm";
+      form.append(
+        "audio",
+        new File([blob], `pantavion-voice.${audioExtension(mimeType)}`, {
+          type: mimeType,
+        }),
+      );
+      form.append("language", fromLanguage);
+
+      const response = await fetch("/api/pantavion/speech-to-text", {
+        method: "POST",
+        body: form,
+      });
+      const result = (await response.json().catch(() => ({}))) as SpeechToTextResponse;
+      const transcript = String(result.text || "").trim();
+
+      if (!response.ok || !transcript) {
+        setVoiceStatus("");
+        setError(
+          result.error ||
+            "Η φωνή καταγράφηκε, αλλά δεν επέστρεψε κείμενο. Έλεγξε την άδεια μικροφώνου ή δοκίμασε ξανά.",
+        );
+        return;
+      }
+
+      setSourceText(transcript);
+      setVoiceStatus(`Άκουσα: ${transcript}`);
+      if (autoTranslate) await translateText(transcript, true);
+    } catch {
+      setVoiceStatus("");
+      setError("Δεν ήταν δυνατή η αποστολή της φωνής για αναγνώριση.");
+    } finally {
+      setTranscribing(false);
+    }
+  }
+
+  async function startServerRecording(autoTranslate: boolean) {
+    if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
+      setError("Ο browser δεν δίνει πρόσβαση σε μικρόφωνο/ηχογράφηση. Άνοιξε τη σελίδα σε Chrome ή άλλο πλήρη browser.");
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStreamRef.current = stream;
+      mediaChunksRef.current = [];
+
+      const preferredMimeType = [
+        "audio/webm;codecs=opus",
+        "audio/webm",
+        "audio/mp4",
+        "audio/ogg;codecs=opus",
+      ].find((mimeType) => MediaRecorder.isTypeSupported(mimeType));
+
+      const recorder = preferredMimeType
+        ? new MediaRecorder(stream, { mimeType: preferredMimeType })
+        : new MediaRecorder(stream);
+
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) mediaChunksRef.current.push(event.data);
+      };
+
+      recorder.onerror = () => {
+        cleanupMediaStream();
+        setVoiceStatus("");
+        setError("Η εγγραφή μικροφώνου απέτυχε. Έλεγξε την άδεια μικροφώνου.");
+      };
+
+      recorder.onstop = () => {
+        const mimeType = recorder.mimeType || preferredMimeType || "audio/webm";
+        const blob = new Blob(mediaChunksRef.current, { type: mimeType });
+        cleanupMediaStream();
+        void sendAudioForTranscription(blob, autoTranslate);
+      };
+
+      mediaRecorderRef.current = recorder;
+      recorder.start(250);
+      setRecording(true);
+      setError("");
+      setVoiceStatus(
+        autoTranslate
+          ? "Ηχογραφώ… μίλα τώρα. Πάτησε ξανά για Τέλος & Μετάφραση."
+          : "Ηχογραφώ… μίλα τώρα. Πάτησε ξανά για Τέλος.",
+      );
+
+      recordingTimerRef.current = setTimeout(() => {
+        if (mediaRecorderRef.current?.state === "recording") {
+          mediaRecorderRef.current.stop();
+        }
+      }, 15_000);
+    } catch {
+      cleanupMediaStream();
+      setVoiceStatus("");
+      setError("Δεν δόθηκε πρόσβαση στο μικρόφωνο. Ενεργοποίησε την άδεια μικροφώνου για το pantavion.com.");
+    }
+  }
+
+  function stopServerRecording() {
+    if (mediaRecorderRef.current?.state === "recording") {
+      setVoiceStatus("Ολοκληρώνω την εγγραφή…");
+      mediaRecorderRef.current.stop();
+    }
   }
 
   function startListening(autoTranslate = false) {
+    if (recording) {
+      stopServerRecording();
+      return;
+    }
+
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!Recognition) {
-      setError("Η φωνητική αναγνώριση δεν υποστηρίζεται από αυτόν τον browser.");
+      void startServerRecording(autoTranslate);
       return;
     }
 
     recognitionRef.current?.stop();
     const recognition = new Recognition();
+    let receivedTranscript = false;
+    let fallbackStarted = false;
+
+    const startFallback = () => {
+      if (fallbackStarted || receivedTranscript) return;
+      fallbackStarted = true;
+      void startServerRecording(autoTranslate);
+    };
+
     recognition.lang = fromMeta.speech;
     recognition.continuous = false;
     recognition.interimResults = false;
@@ -173,18 +363,48 @@ export default function TranslatePage() {
         .trim();
 
       if (!transcript) return;
+      receivedTranscript = true;
       setSourceText(transcript);
+      setVoiceStatus(`Άκουσα: ${transcript}`);
       if (autoTranslate) void translateText(transcript, true);
     };
-    recognition.onerror = () => {
+    recognition.onerror = (event) => {
       setListening(false);
-      setError("Δεν μπόρεσα να ακούσω καθαρά. Δοκίμασε ξανά ή γράψε το κείμενο.");
+      const code = event?.error || "unknown";
+
+      if (code === "not-allowed" || code === "service-not-allowed") {
+        setVoiceStatus("");
+        setError("Δεν δόθηκε άδεια μικροφώνου. Ενεργοποίησε το μικρόφωνο για το pantavion.com και δοκίμασε ξανά.");
+        return;
+      }
+
+      if (code === "audio-capture") {
+        setVoiceStatus("");
+        setError("Δεν βρέθηκε διαθέσιμο μικρόφωνο στη συσκευή.");
+        return;
+      }
+
+      setVoiceStatus("Η αναγνώριση του browser δεν επέστρεψε κείμενο. Περνάω σε εφεδρική εγγραφή…");
+      startFallback();
     };
-    recognition.onend = () => setListening(false);
+    recognition.onend = () => {
+      setListening(false);
+      if (!receivedTranscript && !fallbackStarted) {
+        setVoiceStatus("Δεν έλαβα κείμενο από τον browser. Περνάω σε εφεδρική εγγραφή…");
+        startFallback();
+      }
+    };
     recognitionRef.current = recognition;
     setListening(true);
     setError("");
-    recognition.start();
+    setVoiceStatus("Ακούω… μίλα τώρα.");
+
+    try {
+      recognition.start();
+    } catch {
+      setListening(false);
+      startFallback();
+    }
   }
 
   return (
@@ -222,10 +442,22 @@ export default function TranslatePage() {
             />
 
             <div className="mt-3 grid gap-2 sm:grid-cols-3">
-              <button type="button" onClick={() => startListening(false)} className="rounded-full border border-blue-200/30 bg-[#245b92] px-4 py-3 font-black text-white">{listening ? "🎙️ Ακούω…" : "🎙️ Μίλα"}</button>
-              <button type="button" onClick={() => startListening(true)} disabled={loading} className="rounded-full border border-cyan-200/30 bg-[#1d6388] px-4 py-3 font-black text-white disabled:opacity-60">🎙️ Μίλα & Μετάφραση</button>
-              <button type="button" onClick={translate} disabled={loading} className="rounded-full bg-cyan-300 px-5 py-3 font-black text-[#102a56] disabled:opacity-60">{loading ? "Μεταφράζω…" : "Μετάφραση"}</button>
+              <button type="button" onClick={() => startListening(false)} disabled={transcribing || loading} className="rounded-full border border-blue-200/30 bg-[#245b92] px-4 py-3 font-black text-white disabled:opacity-60">
+                {recording ? "⏹ Τέλος" : listening ? "🎙️ Ακούω…" : "🎙️ Μίλα"}
+              </button>
+              <button type="button" onClick={() => startListening(true)} disabled={transcribing || loading} className="rounded-full border border-cyan-200/30 bg-[#1d6388] px-4 py-3 font-black text-white disabled:opacity-60">
+                {recording ? "⏹ Τέλος & Μετάφραση" : listening ? "🎙️ Ακούω…" : "🎙️ Μίλα & Μετάφραση"}
+              </button>
+              <button type="button" onClick={translate} disabled={loading || voiceBusy} className="rounded-full bg-cyan-300 px-5 py-3 font-black text-[#102a56] disabled:opacity-60">
+                {loading ? "Μεταφράζω…" : transcribing ? "Μεταγράφω…" : "Μετάφραση"}
+              </button>
             </div>
+
+            {voiceStatus ? (
+              <div className="mt-3 rounded-xl border border-cyan-200/20 bg-cyan-200/10 px-3 py-2 text-sm font-bold text-cyan-50">
+                {voiceStatus}
+              </div>
+            ) : null}
 
             {error ? <div className="mt-4 rounded-xl border border-red-200/30 bg-red-300/10 p-3 text-sm font-bold text-red-50">{error}</div> : null}
 
