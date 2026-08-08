@@ -1,63 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
-type PantavionLanguageOption = {
-  code: string;
-  label: string;
-  nativeLabel: string;
-  htmlLang: string;
+type Language = { code: string; label: string; speech: string };
+type TranslationResponse = {
+  ok?: boolean;
+  translatedText?: string;
+  translation?: string;
+  text?: string;
+  output?: string;
+  message?: string;
+  error?: string;
+  provider?: string;
 };
-
-type UiText = {
-  back: string;
-  layer: string;
-  title: string;
-  subtitle: string;
-  naturalTarget: string;
-  selectableNow: string;
-  modes: string;
-  me: string;
-  myLanguage: string;
-  mySearch: string;
-  myPlaceholder: string;
-  speak: string;
-  translateToOther: string;
-  speakTranslation: string;
-  other: string;
-  otherLanguage: string;
-  otherSearch: string;
-  otherPlaceholder: string;
-  otherSpeaks: string;
-  translateBack: string;
-  speakBack: string;
-  userHears: string;
-  cameraTitle: string;
-  cameraText: string;
-  statusTitle: string;
-  truth: string;
-  providerRequired: string;
-  providerMissing: string;
-  listening: string;
-  speechUnavailable: string;
-  writeFirst: string;
-  translationRequested: string;
-  translated: string;
-  globalSelectorSynced: string;
-};
-
+type SpeechRecognitionResultLike = { 0?: { transcript?: string } };
+type SpeechRecognitionEventLike = { results?: ArrayLike<SpeechRecognitionResultLike> };
 type SpeechRecognitionLike = {
   lang: string;
   continuous: boolean;
   interimResults: boolean;
-  onresult: ((event: any) => void) | null;
-  onend: (() => void) | null;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
   onerror: (() => void) | null;
+  onend: (() => void) | null;
   start: () => void;
   stop: () => void;
 };
-
 type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
 
 declare global {
@@ -67,603 +35,204 @@ declare global {
   }
 }
 
-const STORAGE_KEY = "pantavion.ui.language";
+const LANGUAGES: Language[] = [
+  { code: "el", label: "Ελληνικά", speech: "el-GR" },
+  { code: "en", label: "English", speech: "en-US" },
+  { code: "ar", label: "العربية", speech: "ar-SA" },
+  { code: "tr", label: "Türkçe", speech: "tr-TR" },
+  { code: "fr", label: "Français", speech: "fr-FR" },
+  { code: "es", label: "Español", speech: "es-ES" },
+  { code: "pt", label: "Português", speech: "pt-PT" },
+  { code: "de", label: "Deutsch", speech: "de-DE" },
+  { code: "it", label: "Italiano", speech: "it-IT" },
+  { code: "ru", label: "Русский", speech: "ru-RU" },
+  { code: "uk", label: "Українська", speech: "uk-UA" },
+  { code: "zh", label: "中文", speech: "zh-CN" },
+  { code: "ja", label: "日本語", speech: "ja-JP" },
+  { code: "ko", label: "한국어", speech: "ko-KR" },
+  { code: "hi", label: "हिन्दी", speech: "hi-IN" },
+  { code: "ur", label: "اردو", speech: "ur-PK" },
+  { code: "bn", label: "বাংলা", speech: "bn-BD" },
+  { code: "pa", label: "ਪੰਜਾਬੀ", speech: "pa-IN" },
+  { code: "id", label: "Bahasa Indonesia", speech: "id-ID" },
+  { code: "ms", label: "Bahasa Melayu", speech: "ms-MY" },
+  { code: "th", label: "ไทย", speech: "th-TH" },
+  { code: "vi", label: "Tiếng Việt", speech: "vi-VN" },
+  { code: "fa", label: "فارسی", speech: "fa-IR" },
+  { code: "he", label: "עברית", speech: "he-IL" },
+  { code: "sw", label: "Kiswahili", speech: "sw-KE" },
+  { code: "af", label: "Afrikaans", speech: "af-ZA" },
+  { code: "nl", label: "Nederlands", speech: "nl-NL" },
+  { code: "pl", label: "Polski", speech: "pl-PL" },
+  { code: "ro", label: "Română", speech: "ro-RO" },
+  { code: "bg", label: "Български", speech: "bg-BG" },
+  { code: "sr", label: "Српски", speech: "sr-RS" },
+  { code: "hr", label: "Hrvatski", speech: "hr-HR" },
+  { code: "cs", label: "Čeština", speech: "cs-CZ" },
+  { code: "hu", label: "Magyar", speech: "hu-HU" },
+  { code: "sv", label: "Svenska", speech: "sv-SE" },
+  { code: "no", label: "Norsk", speech: "nb-NO" },
+  { code: "da", label: "Dansk", speech: "da-DK" },
+  { code: "fi", label: "Suomi", speech: "fi-FI" },
+];
 
-const PRIORITY_LABELS: Record<string, string> = {
-  el: "Greek / Ελληνικά",
-  en: "English",
-  fr: "French / Français",
-  es: "Spanish / Español",
-  de: "German / Deutsch",
-  it: "Italian / Italiano",
-  pt: "Portuguese / Português",
-  ru: "Russian / Русский",
-  ar: "Arabic / العربية",
-  he: "Hebrew / עברית",
-  tr: "Turkish / Türkçe",
-  zh: "Chinese / 中文",
-  ja: "Japanese / 日本語",
-  ko: "Korean / 한국어",
-  hi: "Hindi / हिन्दी",
-  ur: "Urdu / اردو",
-  fa: "Persian / فارسی",
-  sw: "Swahili / Kiswahili",
-};
-
-const STARTER_LANGUAGE_CODES = Array.from(
-  new Set(
-    "aa ab ae af ak am an ar as av ay az ba be bg bh bi bm bn bo br bs ca ce ch co cr cs cu cv cy da de dv dz ee el en eo es et eu fa ff fi fj fo fr fy ga gd gl gn gu gv ha he hi ho hr ht hu hy hz ia id ie ig ii ik io is it iu ja jv ka kg ki kj kk kl km kn ko kr ks ku kv kw ky la lb lg li ln lo lt lu lv mg mh mi mk ml mn mr ms mt my na nb nd ne ng nl nn no nr nv ny oc oj om or os pa pi pl ps pt qu rm rn ro ru rw sa sc sd se sg si sk sl sm sn so sq sr ss st su sv sw ta te tg th ti tk tl tn to tr ts tt tw ty ug uk ur uz ve vi vo wa wo xh yi yo za zh zu ace ach ada ady agq ain alt arn asa ast awa bal ban bas bem bez bho bik bin bla brx bug byn ceb cgg chr ckb cop crh dav doi dsb dua dyo ebu efi fil fon fur gaa gez gil gom gor haw hmn hsb iba ibb ilo kam kab kcg kfo kha khq kok kpe kri ksb ksf ksh lag lah lkt lua luo lus luy mai mak mas mdf mer mfe mgh mgo mni moh mua mus naq nds nso nus nyn pap pcm quc raj rof rom rup rwk sad sah saq sat sbp scn sco ses shi sid smn sms syr tem teo tig tiv tpi twq vai vun wae xog yav ybb yue zgh".split(/\s+/)
-  )
-).filter(Boolean);
-
-function displayLanguageName(code: string): string {
-  if (PRIORITY_LABELS[code]) return PRIORITY_LABELS[code];
-
-  try {
-    const displayNamesConstructor = (Intl as typeof Intl & {
-      DisplayNames?: new (
-        locales: string[],
-        options: { type: "language"; languageDisplay?: "standard" | "dialect" }
-      ) => { of: (code: string) => string | undefined };
-    }).DisplayNames;
-
-    if (displayNamesConstructor) {
-      const displayNames = new displayNamesConstructor(["en"], {
-        type: "language",
-        languageDisplay: "standard",
-      });
-
-      return displayNames.of(code) || code.toUpperCase();
-    }
-  } catch {
-    return code.toUpperCase();
-  }
-
-  return code.toUpperCase();
-}
-
-const LANGUAGE_OPTIONS: PantavionLanguageOption[] = STARTER_LANGUAGE_CODES.map((code) => {
-  const label = displayLanguageName(code);
-  return {
-    code,
-    label,
-    nativeLabel: label,
-    htmlLang: code,
-  };
-}).sort((a, b) =>
-  a.label.localeCompare(b.label, undefined, {
-    sensitivity: "base",
-    numeric: true,
-  })
-);
-
-function isKnownLanguage(code: string): boolean {
-  return LANGUAGE_OPTIONS.some((language) => language.code === code);
-}
-
-function getLanguageMeta(code: string): PantavionLanguageOption {
-  return LANGUAGE_OPTIONS.find((language) => language.code === code) || LANGUAGE_OPTIONS.find((language) => language.code === "en") || LANGUAGE_OPTIONS[0];
-}
-
-const UI_TEXT: Record<"en" | "el", UiText> = {
-  en: {
-    back: "Back to Pantavion",
-    layer: "PantaTranslate / Universal Interpreter",
-    title: "Speak naturally. Let Pantavion interpret the world.",
-    subtitle:
-      "Platform-level translation for travel, work, social, accessibility, camera scan, PantaAI and SOS. SOS only uses this system in emergency mode.",
-    naturalTarget: "Natural-language universe target",
-    selectableNow: "Selectable practical menu now",
-    modes: "Voice • Text • Subtitles • Camera • SOS",
-    me: "Me / User",
-    myLanguage: "My language",
-    mySearch: "Search my language",
-    myPlaceholder: "Speak or write in your natural language...",
-    speak: "Speak",
-    translateToOther: "Translate to other person",
-    speakTranslation: "Speak translation",
-    other: "Other person",
-    otherLanguage: "Other person's language",
-    otherSearch: "Search other language",
-    otherPlaceholder: "The other person speaks or writes here...",
-    otherSpeaks: "Other speaks",
-    translateBack: "Translate back to me",
-    speakBack: "Speak back",
-    userHears: "User hears / reads in",
-    cameraTitle: "Camera / signs / menus / accessibility",
-    cameraText:
-      "Select an image from camera or files. Real OCR requires OCR provider configuration. This route is ready without pretending the provider exists.",
-    statusTitle: "Status",
-    truth:
-      "Truth boundary: translation is assistive. Legal, medical, emergency and certified interpretation require configured providers, agreements and human/professional review where required.",
-    providerRequired: "Provider required",
-    providerMissing:
-      "Live translation provider is not configured yet. Connect Google, Azure, DeepL, OpenAI or another approved provider before presenting this as fully live.",
-    listening: "Listening...",
-    speechUnavailable: "Speech recognition is not available in this browser.",
-    writeFirst: "Write or speak text first.",
-    translationRequested: "Translation requested. Checking provider...",
-    translated: "Translation returned by configured provider.",
-    globalSelectorSynced: "Global Pantavion language synced.",
-  },
-  el: {
-    back: "Πίσω στο Pantavion",
-    layer: "PantaTranslate / Παγκόσμιος Διερμηνέας",
-    title: "Μίλα φυσικά. Άφησε το Pantavion να ερμηνεύσει τον κόσμο.",
-    subtitle:
-      "Μετάφραση επιπέδου πλατφόρμας για ταξίδι, εργασία, κοινωνική χρήση, προσβασιμότητα, κάμερα, PantaAI και SOS. Το SOS χρησιμοποιεί αυτό το σύστημα μόνο σε λειτουργία ανάγκης.",
-    naturalTarget: "Πλανητικός στόχος φυσικών γλωσσών",
-    selectableNow: "Πρακτικές επιλογές τώρα",
-    modes: "Φωνή • Κείμενο • Υπότιτλοι • Κάμερα • SOS",
-    me: "Εγώ / Χρήστης",
-    myLanguage: "Η γλώσσα μου",
-    mySearch: "Αναζήτηση γλώσσας μου",
-    myPlaceholder: "Μίλησε ή γράψε στη φυσική σου γλώσσα...",
-    speak: "Μίλησε",
-    translateToOther: "Μετάφραση προς τον άλλο",
-    speakTranslation: "Άκου μετάφραση",
-    other: "Άλλο άτομο",
-    otherLanguage: "Γλώσσα άλλου ατόμου",
-    otherSearch: "Αναζήτηση άλλης γλώσσας",
-    otherPlaceholder: "Το άλλο άτομο μιλά ή γράφει εδώ...",
-    otherSpeaks: "Μιλά ο άλλος",
-    translateBack: "Μετάφραση πίσω σε μένα",
-    speakBack: "Άκου πίσω",
-    userHears: "Ο χρήστης ακούει / διαβάζει σε",
-    cameraTitle: "Κάμερα / πινακίδες / μενού / προσβασιμότητα",
-    cameraText:
-      "Επίλεξε εικόνα από κάμερα ή αρχεία. Η πραγματική OCR ανάγνωση χρειάζεται provider. Η διαδρομή είναι έτοιμη χωρίς να προσποιείται ότι ο provider υπάρχει.",
-    statusTitle: "Κατάσταση",
-    truth:
-      "Όριο αλήθειας: η μετάφραση είναι βοηθητική. Νομική, ιατρική, έκτακτη και πιστοποιημένη διερμηνεία απαιτεί ρυθμισμένους providers, συμφωνίες και ανθρώπινο/επαγγελματικό έλεγχο όπου χρειάζεται.",
-    providerRequired: "Απαιτείται provider",
-    providerMissing:
-      "Δεν έχει ρυθμιστεί ακόμα live translation provider. Σύνδεσε Google, Azure, DeepL, OpenAI ή άλλον εγκεκριμένο provider πριν εμφανιστεί ως πλήρως ζωντανή μετάφραση.",
-    listening: "Ακούω...",
-    speechUnavailable: "Η αναγνώριση ομιλίας δεν είναι διαθέσιμη σε αυτόν τον browser.",
-    writeFirst: "Γράψε ή μίλησε πρώτα.",
-    translationRequested: "Ζητήθηκε μετάφραση. Έλεγχος provider...",
-    translated: "Η μετάφραση επιστράφηκε από ρυθμισμένο provider.",
-    globalSelectorSynced: "Η παγκόσμια γλώσσα Pantavion συγχρονίστηκε.",
-  },
-};
-
-function getUiLanguage(globalLanguage: string): "en" | "el" {
-  return globalLanguage === "el" ? "el" : "en";
-}
-
-function filterLanguageOptions(query: string, selectedCode: string): PantavionLanguageOption[] {
-  const normalizedQuery = query.trim().toLowerCase();
-  const filtered = normalizedQuery
-    ? LANGUAGE_OPTIONS.filter((language) => {
-        return (
-          language.code.toLowerCase().includes(normalizedQuery) ||
-          language.label.toLowerCase().includes(normalizedQuery) ||
-          language.nativeLabel.toLowerCase().includes(normalizedQuery)
-        );
-      })
-    : LANGUAGE_OPTIONS;
-
-  const selected = LANGUAGE_OPTIONS.find((language) => language.code === selectedCode);
-  const withSelected = selected && !filtered.some((language) => language.code === selected.code)
-    ? [selected, ...filtered]
-    : filtered;
-
-  return withSelected.slice(0, 320);
-}
-
-function normalizeGlobalLanguage(value: string | null): string {
-  if (!value) return "auto";
-  if (value === "auto" || value === "world") return value;
-  return isKnownLanguage(value) ? value : "auto";
-}
-
-function getStoredLanguage(): string {
-  if (typeof window === "undefined") return "auto";
-
-  try {
-    return normalizeGlobalLanguage(window.localStorage.getItem(STORAGE_KEY));
-  } catch {
-    return "auto";
-  }
+function languageByCode(code: string) {
+  return LANGUAGES.find((language) => language.code === code) || LANGUAGES[0];
 }
 
 export default function TranslatePage() {
-  const [globalLanguage, setGlobalLanguage] = useState("auto");
-  const [myLanguage, setMyLanguage] = useState("el");
-  const [otherLanguage, setOtherLanguage] = useState("en");
-  const [mySearch, setMySearch] = useState("");
-  const [otherSearch, setOtherSearch] = useState("");
-  const [userText, setUserText] = useState("");
-  const [otherText, setOtherText] = useState("");
-  const [userTranslation, setUserTranslation] = useState("");
-  const [otherTranslation, setOtherTranslation] = useState("");
-  const [status, setStatus] = useState("Ready.");
-  const [providerMessage, setProviderMessage] = useState("");
+  const [fromLanguage, setFromLanguage] = useState("el");
+  const [toLanguage, setToLanguage] = useState("en");
+  const [sourceText, setSourceText] = useState("");
+  const [translatedText, setTranslatedText] = useState("");
+  const [provider, setProvider] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [listening, setListening] = useState(false);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
-  const uiLanguage = getUiLanguage(globalLanguage);
-  const t = UI_TEXT[uiLanguage];
+  const fromMeta = useMemo(() => languageByCode(fromLanguage), [fromLanguage]);
+  const toMeta = useMemo(() => languageByCode(toLanguage), [toLanguage]);
 
-  const myLanguageMeta = getLanguageMeta(myLanguage);
-  const otherLanguageMeta = getLanguageMeta(otherLanguage);
-
-  const myOptions = useMemo(() => filterLanguageOptions(mySearch, myLanguage), [mySearch, myLanguage]);
-  const otherOptions = useMemo(() => filterLanguageOptions(otherSearch, otherLanguage), [otherSearch, otherLanguage]);
-
-  useEffect(() => {
-    const initialLanguage = getStoredLanguage();
-    setGlobalLanguage(initialLanguage);
-
-    if (isKnownLanguage(initialLanguage)) {
-      setMyLanguage(initialLanguage);
-      setStatus(UI_TEXT[getUiLanguage(initialLanguage)].globalSelectorSynced);
+  async function translate() {
+    const text = sourceText.trim();
+    if (!text) {
+      setError("Γράψε ή μίλα πρώτα το κείμενο που θέλεις να μεταφραστεί.");
+      return;
     }
-
-    function applyLanguage(value: string | null) {
-      const nextLanguage = normalizeGlobalLanguage(value);
-      setGlobalLanguage(nextLanguage);
-
-      if (isKnownLanguage(nextLanguage)) {
-        setMyLanguage(nextLanguage);
-      }
-
-      setStatus(UI_TEXT[getUiLanguage(nextLanguage)].globalSelectorSynced);
-    }
-
-    function onStorage(event: StorageEvent) {
-      if (event.key === STORAGE_KEY) applyLanguage(event.newValue);
-    }
-
-    function onPantavionLanguageChange(event: Event) {
-      const customEvent = event as CustomEvent<{ language?: string }>;
-      applyLanguage(customEvent.detail?.language || getStoredLanguage());
-    }
-
-    window.addEventListener("storage", onStorage);
-    window.addEventListener("pantavion:language-change", onPantavionLanguageChange);
-
-    return () => {
-      window.removeEventListener("storage", onStorage);
-      window.removeEventListener("pantavion:language-change", onPantavionLanguageChange);
-      recognitionRef.current?.stop();
-    };
-  }, []);
-
-  function speak(text: string, languageCode: string) {
-    if (typeof window === "undefined" || !text.trim()) return;
-
-    if (!("speechSynthesis" in window)) {
-      setStatus(t.speechUnavailable);
+    if (fromLanguage === toLanguage) {
+      setError("Επίλεξε δύο διαφορετικές γλώσσες.");
       return;
     }
 
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = getLanguageMeta(languageCode).htmlLang;
-    window.speechSynthesis.speak(utterance);
-  }
-
-  function startListening(target: "user" | "other") {
-    if (typeof window === "undefined") return;
-
-    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!Recognition) {
-      setStatus(t.speechUnavailable);
-      return;
-    }
-
-    recognitionRef.current?.stop();
-
-    const recognition = new Recognition();
-    recognition.lang = target === "user" ? myLanguageMeta.htmlLang : otherLanguageMeta.htmlLang;
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    recognition.onresult = (event: any) => {
-      const transcript = Array.from(event.results || [])
-        .map((result: any) => result?.[0]?.transcript || "")
-        .join(" ")
-        .trim();
-
-      if (!transcript) return;
-
-      if (target === "user") {
-        setUserText((current) => [current, transcript].filter(Boolean).join(" "));
-      } else {
-        setOtherText((current) => [current, transcript].filter(Boolean).join(" "));
-      }
-    };
-
-    recognition.onerror = () => {
-      setStatus(t.speechUnavailable);
-      setListening(null);
-    };
-
-    recognition.onend = () => {
-      setListening(null);
-    };
-
-    recognitionRef.current = recognition;
-    recognition.start();
-    setListening(target);
-    setStatus(t.listening);
-  }
-
-  const [listening, setListening] = useState<"user" | "other" | null>(null);
-
-  async function requestTranslation(direction: "userToOther" | "otherToUser") {
-    const sourceText = direction === "userToOther" ? userText.trim() : otherText.trim();
-    const from = direction === "userToOther" ? myLanguage : otherLanguage;
-    const to = direction === "userToOther" ? otherLanguage : myLanguage;
-
-    if (!sourceText) {
-      setStatus(t.writeFirst);
-      return;
-    }
-
-    setStatus(t.translationRequested);
-    setProviderMessage("");
+    setLoading(true);
+    setError("");
+    setProvider("");
 
     try {
       const response = await fetch("/api/pantavion/translate", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          text: sourceText,
-          from,
-          to,
+          text,
+          from: fromLanguage,
+          to: toLanguage,
+          sourceLanguage: fromLanguage,
+          targetLanguage: toLanguage,
+          bidirectional: true,
           mode: "assistive",
           surface: "pantavion-translate",
         }),
       });
 
-      const result = await response.json().catch(() => ({}));
+      const result = (await response.json().catch(() => ({}))) as TranslationResponse;
+      const output = result.translatedText || result.translation || result.text || result.output || "";
 
-      const translatedText =
-        result.translatedText ||
-        result.translation ||
-        result.text ||
-        result.output ||
-        "";
-
-      if (!response.ok || !translatedText) {
-        setStatus(t.providerRequired);
-        setProviderMessage(result.message || result.error || t.providerMissing);
+      if (!response.ok || !output.trim()) {
+        setTranslatedText("");
+        setError(result.message || result.error || "Η μετάφραση δεν επέστρεψε αποτέλεσμα.");
         return;
       }
 
-      if (direction === "userToOther") {
-        setUserTranslation(translatedText);
-      } else {
-        setOtherTranslation(translatedText);
-      }
-
-      setStatus(t.translated);
+      setTranslatedText(output.trim());
+      setProvider(result.provider || "Pantavion");
     } catch {
-      setStatus(t.providerRequired);
-      setProviderMessage(t.providerMissing);
+      setTranslatedText("");
+      setError("Δεν ήταν δυνατή η σύνδεση με τη μετάφραση. Δοκίμασε ξανά.");
+    } finally {
+      setLoading(false);
     }
   }
 
-  function handleCameraFile(file: File | null) {
-    if (!file) return;
+  function swapDirection() {
+    setFromLanguage(toLanguage);
+    setToLanguage(fromLanguage);
+    setSourceText(translatedText.trim() || sourceText);
+    setTranslatedText("");
+    setError("");
+    setProvider("");
+  }
 
-    setStatus("Camera/image selected. OCR provider is required for real text extraction.");
-    setProviderMessage(
-      "PantaTranslate camera scan route is ready, but OCR provider is not configured yet."
-    );
+  function startListening() {
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Recognition) {
+      setError("Η φωνητική αναγνώριση δεν υποστηρίζεται από αυτόν τον browser.");
+      return;
+    }
+
+    recognitionRef.current?.stop();
+    const recognition = new Recognition();
+    recognition.lang = fromMeta.speech;
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.onresult = (event) => {
+      const transcript = Array.from(event.results || [])
+        .map((result) => result?.[0]?.transcript || "")
+        .join(" ")
+        .trim();
+      if (transcript) setSourceText((current) => [current, transcript].filter(Boolean).join(" "));
+    };
+    recognition.onerror = () => {
+      setListening(false);
+      setError("Δεν μπόρεσα να ακούσω καθαρά. Δοκίμασε ξανά ή γράψε το κείμενο.");
+    };
+    recognition.onend = () => setListening(false);
+    recognitionRef.current = recognition;
+    setListening(true);
+    setError("");
+    recognition.start();
+  }
+
+  function speakResult() {
+    if (!translatedText.trim() || !("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(translatedText);
+    utterance.lang = toMeta.speech;
+    window.speechSynthesis.speak(utterance);
   }
 
   return (
-    <main className="min-h-screen bg-[#050816] px-5 py-8 text-white">
-      <section className="mx-auto flex max-w-7xl flex-col gap-6">
-        <div className="rounded-[2rem] border border-cyan-300/30 bg-gradient-to-br from-[#071528] via-[#08111f] to-black p-6 shadow-2xl">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <Link
-              href="/"
-              className="rounded-full border border-yellow-300/30 px-4 py-2 text-sm font-bold text-yellow-100"
-            >
-              {t.back}
-            </Link>
-            <div className="rounded-2xl border border-yellow-300/30 bg-yellow-300/10 px-4 py-3 text-xs text-yellow-100">
-              <strong>World Language Layer</strong>
-              <br />
-              250+ starter language/locales now. 7,000+ natural languages in Pantavion scope.
-            </div>
+    <main className="min-h-screen bg-[#102a56] px-4 py-4 text-white sm:px-6 sm:py-6">
+      <section className="mx-auto max-w-3xl">
+        <header className="flex items-center justify-between gap-3 py-1">
+          <Link href="/" className="text-sm font-bold text-white/85 no-underline">← Pantavion</Link>
+          <span className="text-sm font-black tracking-wide text-[#f6c85f]">PantaTranslate</span>
+        </header>
+
+        <section className="mt-4 overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#17376d] shadow-xl">
+          <div className="border-b border-white/10 px-4 py-4 sm:px-6">
+            <h1 className="text-2xl font-black sm:text-3xl">Μετάφραση</h1>
           </div>
 
-          <p className="mt-8 text-xs font-black uppercase tracking-[0.35em] text-cyan-200">
-            {t.layer}
-          </p>
-          <h1 className="mt-4 max-w-5xl text-5xl font-black leading-none sm:text-6xl">
-            {t.title}
-          </h1>
-          <p className="mt-6 max-w-4xl text-lg leading-8 text-slate-100">
-            {t.subtitle}
-          </p>
-
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <p className="text-sm text-slate-200">{t.naturalTarget}</p>
-              <p className="mt-2 text-3xl font-black text-yellow-200">7,000+</p>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <p className="text-sm text-slate-200">{t.selectableNow}</p>
-              <p className="mt-2 text-3xl font-black text-cyan-200">
-                {LANGUAGE_OPTIONS.length}+
-              </p>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <p className="text-sm text-slate-200">Modes</p>
-              <p className="mt-2 text-lg font-black text-emerald-100">{t.modes}</p>
-            </div>
-          </div>
-        </div>
-
-        <section className="grid gap-5 lg:grid-cols-2">
-          <div className="rounded-[2rem] border border-blue-300/30 bg-blue-950/30 p-5">
-            <h2 className="text-2xl font-black">{t.me}</h2>
-
-            <label className="mt-5 block text-sm font-bold text-blue-100">
-              {t.mySearch}
-              <input
-                value={mySearch}
-                onChange={(event) => setMySearch(event.target.value)}
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 p-3 text-white outline-none"
-                placeholder="Greek, Ελληνικά, el..."
-              />
-            </label>
-
-            <label className="mt-4 block text-sm font-bold text-blue-100">
-              {t.myLanguage}
-              <select
-                value={myLanguage}
-                onChange={(event) => setMyLanguage(event.target.value)}
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 p-3 text-white outline-none"
-              >
-                {myOptions.map((language) => (
-                  <option key={language.code} value={language.code}>
-                    {language.label} - {language.code}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <textarea
-              value={userText}
-              onChange={(event) => setUserText(event.target.value)}
-              placeholder={t.myPlaceholder}
-              className="mt-4 min-h-40 w-full rounded-3xl border border-white/10 bg-black/40 p-4 text-white"
-            />
-
-            <div className="mt-4 flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() => startListening("user")}
-                className="rounded-full bg-blue-400 px-5 py-3 font-black text-slate-950"
-              >
-                {listening === "user" ? t.listening : t.speak}
-              </button>
-              <button
-                type="button"
-                onClick={() => requestTranslation("userToOther")}
-                className="rounded-full bg-cyan-300 px-5 py-3 font-black text-slate-950"
-              >
-                {t.translateToOther}
-              </button>
-              <button
-                type="button"
-                onClick={() => speak(userTranslation, otherLanguage)}
-                className="rounded-full border border-cyan-200 px-5 py-3 font-black text-cyan-100"
-              >
-                {t.speakTranslation}
-              </button>
-            </div>
-
-            <div className="mt-4 rounded-3xl border border-cyan-300/20 bg-black/30 p-4">
-              <p className="text-sm font-bold text-cyan-100">
-                Other person hears / reads in {otherLanguageMeta.label}
-              </p>
-              <p className="mt-2 whitespace-pre-wrap text-xl font-bold">
-                {userTranslation || "—"}
-              </p>
-            </div>
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-white/10 px-4 py-4 sm:px-6">
+            <select value={fromLanguage} onChange={(event) => setFromLanguage(event.target.value)} className="min-w-0 rounded-xl border border-blue-300/30 bg-[#214784] px-3 py-3 text-sm font-bold text-white outline-none">
+              {LANGUAGES.map((language) => <option key={language.code} value={language.code}>{language.label}</option>)}
+            </select>
+            <button type="button" onClick={swapDirection} aria-label="Αντιστροφή γλωσσών" className="h-11 w-11 rounded-full border border-cyan-200/30 bg-[#245b92] text-xl font-black text-cyan-100">↔</button>
+            <select value={toLanguage} onChange={(event) => setToLanguage(event.target.value)} className="min-w-0 rounded-xl border border-[#f6c85f]/35 bg-[#3a4d79] px-3 py-3 text-sm font-bold text-white outline-none">
+              {LANGUAGES.map((language) => <option key={language.code} value={language.code}>{language.label}</option>)}
+            </select>
           </div>
 
-          <div className="rounded-[2rem] border border-yellow-300/30 bg-yellow-950/10 p-5">
-            <h2 className="text-2xl font-black">{t.other}</h2>
+          <div className="px-4 py-4 sm:px-6">
+            <textarea value={sourceText} onChange={(event) => setSourceText(event.target.value)} placeholder="Γράψε εδώ…" autoFocus className="min-h-40 w-full resize-y rounded-2xl border border-white/10 bg-[#0f2b59] p-4 text-lg text-white outline-none placeholder:text-blue-100/45 focus:border-cyan-300/55" />
 
-            <label className="mt-5 block text-sm font-bold text-yellow-100">
-              {t.otherSearch}
-              <input
-                value={otherSearch}
-                onChange={(event) => setOtherSearch(event.target.value)}
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 p-3 text-white outline-none"
-                placeholder="English, Turkish, Arabic..."
-              />
-            </label>
-
-            <label className="mt-4 block text-sm font-bold text-yellow-100">
-              {t.otherLanguage}
-              <select
-                value={otherLanguage}
-                onChange={(event) => setOtherLanguage(event.target.value)}
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 p-3 text-white outline-none"
-              >
-                {otherOptions.map((language) => (
-                  <option key={language.code} value={language.code}>
-                    {language.label} - {language.code}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <textarea
-              value={otherText}
-              onChange={(event) => setOtherText(event.target.value)}
-              placeholder={t.otherPlaceholder}
-              className="mt-4 min-h-40 w-full rounded-3xl border border-white/10 bg-black/40 p-4 text-white"
-            />
-
-            <div className="mt-4 flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() => startListening("other")}
-                className="rounded-full bg-orange-300 px-5 py-3 font-black text-slate-950"
-              >
-                {listening === "other" ? t.listening : t.otherSpeaks}
-              </button>
-              <button
-                type="button"
-                onClick={() => requestTranslation("otherToUser")}
-                className="rounded-full bg-yellow-300 px-5 py-3 font-black text-slate-950"
-              >
-                {t.translateBack}
-              </button>
-              <button
-                type="button"
-                onClick={() => speak(otherTranslation, myLanguage)}
-                className="rounded-full border border-yellow-200 px-5 py-3 font-black text-yellow-100"
-              >
-                {t.speakBack}
-              </button>
+            <div className="mt-3 flex gap-3">
+              <button type="button" onClick={startListening} className="rounded-full border border-blue-200/30 bg-[#245b92] px-4 py-3 font-black text-white">{listening ? "🎙️ Ακούω…" : "🎙️ Μίλα"}</button>
+              <button type="button" onClick={translate} disabled={loading} className="flex-1 rounded-full bg-cyan-300 px-5 py-3 font-black text-[#102a56] disabled:opacity-60">{loading ? "Μεταφράζω…" : "Μετάφραση"}</button>
             </div>
 
-            <div className="mt-4 rounded-3xl border border-yellow-300/20 bg-black/30 p-4">
-              <p className="text-sm font-bold text-yellow-100">
-                {t.userHears} {myLanguageMeta.label}
-              </p>
-              <p className="mt-2 whitespace-pre-wrap text-xl font-bold">
-                {otherTranslation || "—"}
-              </p>
+            {error ? <div className="mt-4 rounded-xl border border-red-200/30 bg-red-300/10 p-3 text-sm font-bold text-red-50">{error}</div> : null}
+
+            <div className="mt-4 rounded-2xl border border-[#f6c85f]/25 bg-[#203b6e] p-4">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-xs font-black uppercase tracking-wider text-[#f6c85f]">{toMeta.label}</span>
+                <button type="button" onClick={speakResult} disabled={!translatedText} className="rounded-full border border-[#f6c85f]/25 px-3 py-1.5 text-xs font-black text-[#ffe29a] disabled:opacity-30">🔊 Άκου</button>
+              </div>
+              <p className="mt-3 min-h-16 whitespace-pre-wrap text-xl font-bold leading-8 text-white">{translatedText || "Η μετάφραση θα εμφανιστεί εδώ."}</p>
+              {provider ? <p className="mt-2 text-[10px] text-white/35">{provider}</p> : null}
             </div>
           </div>
-        </section>
-
-        <section className="rounded-[2rem] border border-emerald-300/30 bg-emerald-950/20 p-5">
-          <h2 className="text-2xl font-black">{t.cameraTitle}</h2>
-          <p className="mt-2 text-slate-200">{t.cameraText}</p>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(event) => handleCameraFile(event.target.files?.[0] || null)}
-            className="mt-4 block w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-white"
-          />
-        </section>
-
-        <section className="rounded-[2rem] border border-white/10 bg-white/5 p-5">
-          <h2 className="text-xl font-black">{t.statusTitle}</h2>
-          <p className="mt-2 text-cyan-100">{status}</p>
-          {providerMessage ? (
-            <p className="mt-3 rounded-2xl border border-yellow-300/30 bg-yellow-300/10 p-3 text-yellow-100">
-              {providerMessage}
-            </p>
-          ) : null}
-          <p className="mt-4 text-sm text-slate-300">{t.truth}</p>
         </section>
       </section>
     </main>
