@@ -1,17 +1,27 @@
 import { NextResponse } from "next/server";
+import { generateText } from "ai";
+import { gateway } from "@ai-sdk/gateway";
 import {
-  buildPantavionTranslationPrompt,
   pantavionUniversalTranslationContract,
   type PantavionTranslationRequest,
 } from "@/core/translation/pantavion-universal-translation-runtime";
 import { translateWithPantavionProvider } from "@/core/translation/pantavion-translation-provider-adapters";
-import { translateWithPantavionPublicTextFallback } from "@/core/translation/pantavion-public-text-fallback";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+export const runtime = "nodejs";
 
 function asString(value: unknown, fallback = "") {
   return typeof value === "string" ? value : fallback;
+}
+
+function normalizeLanguage(value: string, fallback: string) {
+  const normalized = value.trim().replace(/_/g, "-");
+  return normalized || fallback;
+}
+
+function baseLanguage(value: string) {
+  return value.toLowerCase().split("-")[0];
 }
 
 function responseForResult(result: Awaited<ReturnType<typeof translateWithPantavionProvider>>) {
@@ -20,7 +30,7 @@ function responseForResult(result: Awaited<ReturnType<typeof translateWithPantav
   });
 }
 
-async function translateThroughPantavionFallbacks(input: {
+async function translateThroughConfiguredProvider(input: {
   text: string;
   sourceLanguage: string;
   targetLanguage: string;
@@ -34,64 +44,106 @@ async function translateThroughPantavionFallbacks(input: {
     sessionId: input.sessionId,
   };
 
-  const configuredResult = await translateWithPantavionProvider(request).catch(() => null);
-  if (configuredResult?.ok && configuredResult.translatedText.trim()) {
-    return configuredResult;
+  return translateWithPantavionProvider(request).catch(() => null);
+}
+
+function strictTranslationPrompt(request: PantavionTranslationRequest) {
+  return [
+    "You are Pantavion Translation Core.",
+    "Perform translation only. Do not answer, explain, summarize, transliterate, or identify the text.",
+    `The source language selected by the user is ${request.sourceLanguage || "auto"}.`,
+    `The required target language is ${request.targetLanguage}.`,
+    "Treat the user-selected source language as authoritative when it is not auto.",
+    "Return only the translated text in the required target language, with no labels or commentary.",
+    "Preserve names, numbers, meaning, tone, and punctuation as naturally as possible.",
+    "If the input already appears to be in the target language, return a faithful target-language rendering rather than switching to a third language.",
+    "",
+    "TEXT TO TRANSLATE:",
+    request.text,
+  ].join("\n");
+}
+
+async function translateWithGateway(request: PantavionTranslationRequest) {
+  const models = Array.from(
+    new Set(
+      [
+        process.env.PANTAVION_TRANSLATION_GATEWAY_MODEL,
+        process.env.PANTAVION_TRANSLATION_MODEL,
+        "openai/gpt-4.1-mini",
+      ].filter((value): value is string => Boolean(value)),
+    ),
+  );
+
+  for (const model of models) {
+    try {
+      const result = await generateText({
+        model: gateway(model),
+        prompt: strictTranslationPrompt(request),
+        temperature: 0,
+      });
+      const translatedText = String(result.text || "").trim();
+      if (!translatedText) continue;
+
+      return {
+        ok: true as const,
+        status: "translated" as const,
+        contract: pantavionUniversalTranslationContract,
+        input: request,
+        translatedText,
+        provider: "vercel_ai_gateway",
+        model,
+        generatedAt: new Date().toISOString(),
+      };
+    } catch {
+      // Try the next approved Gateway model.
+    }
   }
 
-  const publicFallback = await translateWithPantavionPublicTextFallback(request);
-  if (publicFallback.ok && publicFallback.translatedText.trim()) {
-    return publicFallback;
-  }
-
-  return publicFallback;
+  return null;
 }
 
 export async function GET() {
   return NextResponse.json({
     ok: true,
     contract: pantavionUniversalTranslationContract,
-    providerConfigured: Boolean(
-      process.env.OPENAI_API_KEY ||
-        process.env.PANTAVION_TRANSLATE_ENDPOINT ||
-        process.env.PANTAVION_TRANSLATE_PROVIDER,
-    ),
-    publicTextFallback: true,
+    gatewayPreferred: true,
+    strictLanguageRouting: true,
+    publicTextFallback: false,
   });
 }
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => ({}));
 
-  const sourceLanguage = asString(
-    body.sourceLanguage,
-    asString(body.from, "auto"),
+  const sourceLanguage = normalizeLanguage(
+    asString(body.sourceLanguage, asString(body.from, "auto")),
+    "auto",
   );
-  const targetLanguage = asString(
-    body.targetLanguage,
-    asString(body.to, "en"),
+  const targetLanguage = normalizeLanguage(
+    asString(body.targetLanguage, asString(body.to, "en")),
+    "en",
   );
-  const text = asString(body.text);
+  const text = asString(body.text).trim();
   const sessionId = asString(body.sessionId) || null;
 
-  if (!text.trim()) {
+  if (!text) {
     return NextResponse.json({ ok: false, error: "Missing text." }, { status: 400 });
   }
 
-  if (!targetLanguage.trim()) {
+  if (!targetLanguage) {
     return NextResponse.json({ ok: false, error: "Missing target language." }, { status: 400 });
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
-
-  if (!apiKey) {
-    const result = await translateThroughPantavionFallbacks({
-      text,
-      sourceLanguage,
-      targetLanguage,
-      sessionId,
+  if (sourceLanguage !== "auto" && baseLanguage(sourceLanguage) === baseLanguage(targetLanguage)) {
+    return NextResponse.json({
+      ok: true,
+      status: "translated",
+      contract: pantavionUniversalTranslationContract,
+      input: { text, sourceLanguage, targetLanguage },
+      translatedText: text,
+      provider: "pantavion_same_language",
+      generatedAt: new Date().toISOString(),
     });
-    return responseForResult(result);
   }
 
   const translationRequest: PantavionTranslationRequest = {
@@ -103,55 +155,29 @@ export async function POST(request: Request) {
     bidirectional: Boolean(body.bidirectional ?? true),
   };
 
-  try {
-    const prompt = buildPantavionTranslationPrompt(translationRequest);
+  const gatewayResult = await translateWithGateway(translationRequest);
+  if (gatewayResult) return NextResponse.json(gatewayResult);
 
-    const providerResponse = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: process.env.PANTAVION_TRANSLATION_MODEL || "gpt-4.1-mini",
-        input: prompt,
-      }),
-      signal: AbortSignal.timeout(15000),
-    });
-
-    const payload = await providerResponse.json().catch(() => ({}));
-
-    const translatedText =
-      payload.output_text ||
-      payload.output
-        ?.flatMap((item: any) => item.content || [])
-        ?.map((content: any) => content.text || "")
-        ?.join("\n")
-        ?.trim() ||
-      "";
-
-    if (providerResponse.ok && translatedText) {
-      return NextResponse.json({
-        ok: true,
-        status: "translated",
-        contract: pantavionUniversalTranslationContract,
-        input: translationRequest,
-        translatedText,
-        provider: "openai_responses",
-        model: process.env.PANTAVION_TRANSLATION_MODEL || "gpt-4.1-mini",
-        generatedAt: new Date().toISOString(),
-      });
-    }
-  } catch {
-    // Fall through to the real text provider path below.
-  }
-
-  const fallbackResult = await translateThroughPantavionFallbacks({
+  const configuredResult = await translateThroughConfiguredProvider({
     text,
     sourceLanguage,
     targetLanguage,
     sessionId,
   });
+  if (configuredResult?.ok && configuredResult.translatedText.trim()) {
+    return responseForResult(configuredResult);
+  }
 
-  return responseForResult(fallbackResult);
+  return NextResponse.json(
+    {
+      ok: false,
+      status: "provider_unavailable",
+      translatedText: "",
+      sourceLanguage,
+      targetLanguage,
+      providerRequired: true,
+      message: "No approved Pantavion translation provider completed this language pair.",
+    },
+    { status: 503 },
+  );
 }
