@@ -59,15 +59,21 @@ requireIncludes("app/translate/page.tsx", [
   "7 ήπειροι",
 ]);
 
-// The runtime must fall through to a real public text provider when the primary
-// provider is unavailable instead of returning a decorative/static response.
+// Production translation must use strict source/target routing through the
+// approved Gateway/provider path. Public fallback must not silently masquerade
+// as a successful production translation in an unrelated third language.
 requireIncludes("app/api/pantavion/translate/route.ts", [
-  "translateThroughPantavionFallbacks",
-  "translateWithPantavionPublicTextFallback",
-  "publicTextFallback: true",
+  "translateWithGateway",
+  "strictTranslationPrompt",
+  "strictLanguageRouting: true",
+  "publicTextFallback: false",
+  "Treat the user-selected source language as authoritative",
+  "Return only the translated text in the required target language",
   "translatedText",
 ]);
 
+// Keep the public fallback implementation available as a separately auditable
+// component, but it is intentionally not the default production route.
 requireIncludes("core/translation/pantavion-public-text-fallback.ts", [
   "api.mymemory.translated.net/get",
   "langpair",
