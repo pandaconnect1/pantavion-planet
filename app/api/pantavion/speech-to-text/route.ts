@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getVercelOidcToken } from "@vercel/oidc";
 import { normalizePantavionAccessibleSpeechTranscript } from "@/core/translation/pantavion-speech-accessibility";
 
 export const dynamic = "force-dynamic";
@@ -49,7 +50,9 @@ function primaryProviderAttempts(attempts: Attempt[]) {
 function publicFailureCode(attempts: Attempt[]) {
   const failed = primaryProviderAttempts(attempts).filter((item) => !item.ok);
   if (!failed.length) return "STT_PROVIDER_UNAVAILABLE";
-
+  if (failed.some((item) => item.code === "oidc_token_unavailable")) {
+    return "STT_OIDC_TOKEN_UNAVAILABLE";
+  }
   if (failed.some((item) => item.status === 401 || item.status === 403)) {
     return "STT_AUTH_FAILED";
   }
@@ -71,19 +74,47 @@ function publicFailureCode(attempts: Attempt[]) {
   return "STT_PROVIDER_UNAVAILABLE";
 }
 
+async function resolveGatewayCredentials(attempts?: Attempt[]) {
+  const credentials: Array<[string, string]> = [];
+
+  try {
+    const oidcToken = await getVercelOidcToken();
+    if (oidcToken) credentials.push(["vercel_oidc_helper", oidcToken]);
+    else if (attempts) {
+      attempts.push({
+        provider: "vercel_ai_gateway:oidc_helper",
+        attempted: true,
+        ok: false,
+        code: "oidc_token_unavailable",
+      });
+    }
+  } catch {
+    if (attempts) {
+      attempts.push({
+        provider: "vercel_ai_gateway:oidc_helper",
+        attempted: true,
+        ok: false,
+        code: "oidc_token_unavailable",
+      });
+    }
+  }
+
+  const gatewayKey = process.env.AI_GATEWAY_API_KEY;
+  if (gatewayKey) credentials.push(["ai_gateway_key", gatewayKey]);
+
+  const deduped = new Map<string, [string, string]>();
+  for (const entry of credentials) {
+    if (!deduped.has(entry[1])) deduped.set(entry[1], entry);
+  }
+  return Array.from(deduped.values());
+}
+
 async function transcribeWithVercelAiGateway(
   audio: File,
   attempts: Attempt[],
 ): Promise<SpeechResult | null> {
-  const credentials = [
-    ["vercel_oidc", process.env.VERCEL_OIDC_TOKEN],
-    ["ai_gateway_key", process.env.AI_GATEWAY_API_KEY],
-  ].filter((entry): entry is [string, string] => Boolean(entry[1]));
-
-  if (!credentials.length) {
-    attempts.push({ provider: "vercel_ai_gateway", attempted: false, ok: false });
-    return null;
-  }
+  const credentials = await resolveGatewayCredentials(attempts);
+  if (!credentials.length) return null;
 
   const requested = process.env.PANTAVION_SPEECH_TO_TEXT_GATEWAY_MODEL;
   const models = Array.from(
@@ -96,29 +127,25 @@ async function transcribeWithVercelAiGateway(
       ].filter((value): value is string => Boolean(value)),
     ),
   );
-
   const audioBase64 = Buffer.from(await audio.arrayBuffer()).toString("base64");
 
   for (const [credentialName, token] of credentials) {
     for (const model of models) {
       const provider = `vercel_ai_gateway:${credentialName}:${model}`;
       try {
-        const response = await fetch(
-          "https://ai-gateway.vercel.sh/v4/ai/transcription-model",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "ai-model-id": model,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              audio: audioBase64,
-              mediaType: audio.type || "audio/webm",
-            }),
-            signal: AbortSignal.timeout(30_000),
+        const response = await fetch("https://ai-gateway.vercel.sh/v4/ai/transcription-model", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "ai-model-id": model,
+            "Content-Type": "application/json",
           },
-        );
+          body: JSON.stringify({
+            audio: audioBase64,
+            mediaType: audio.type || "audio/webm",
+          }),
+          signal: AbortSignal.timeout(30_000),
+        });
         const payload = await response.json().catch(() => ({}));
         const text = textFromPayload(payload);
         attempts.push({
@@ -152,10 +179,7 @@ async function transcribeWithPantavionEndpoint(
   attempts: Attempt[],
 ): Promise<SpeechResult | null> {
   const endpoint = process.env.PANTAVION_SPEECH_TO_TEXT_ENDPOINT;
-  if (!endpoint) {
-    attempts.push({ provider: "pantavion_speech_provider", attempted: false, ok: false });
-    return null;
-  }
+  if (!endpoint) return null;
 
   const form = new FormData();
   form.append("file", audio, audio.name || "pantavion-voice.webm");
@@ -166,8 +190,7 @@ async function transcribeWithPantavionEndpoint(
 
   const headers: Record<string, string> = {};
   const apiKey =
-    process.env.PANTAVION_SPEECH_TO_TEXT_API_KEY ||
-    process.env.PANTAVION_TRANSLATE_API_KEY;
+    process.env.PANTAVION_SPEECH_TO_TEXT_API_KEY || process.env.PANTAVION_TRANSLATE_API_KEY;
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
 
   try {
@@ -204,12 +227,9 @@ async function transcribeWithOpenAI(
   language: string,
   attempts: Attempt[],
 ): Promise<SpeechResult | null> {
-  const directOpenAiEnabled = process.env.PANTAVION_ENABLE_DIRECT_OPENAI_STT === "true";
+  const enabled = process.env.PANTAVION_ENABLE_DIRECT_OPENAI_STT === "true";
   const apiKey = process.env.OPENAI_API_KEY;
-  if (!directOpenAiEnabled || !apiKey) {
-    attempts.push({ provider: "openai_audio", attempted: false, ok: false });
-    return null;
-  }
+  if (!enabled || !apiKey) return null;
 
   const requestedModel =
     process.env.PANTAVION_SPEECH_TO_TEXT_MODEL || "gpt-4o-mini-transcribe";
@@ -277,6 +297,7 @@ async function finalizeAccessibleTranscript(result: SpeechResult, language: stri
 }
 
 export async function GET() {
+  const gatewayCredentials = await resolveGatewayCredentials();
   const directOpenAiEnabled =
     process.env.PANTAVION_ENABLE_DIRECT_OPENAI_STT === "true" && Boolean(process.env.OPENAI_API_KEY);
 
@@ -290,11 +311,9 @@ export async function GET() {
       preserveRawTranscript: true,
     },
     serverProviderConfigured: Boolean(
-      process.env.VERCEL_OIDC_TOKEN ||
-        process.env.AI_GATEWAY_API_KEY ||
-        process.env.PANTAVION_SPEECH_TO_TEXT_ENDPOINT ||
-        directOpenAiEnabled,
+      gatewayCredentials.length || process.env.PANTAVION_SPEECH_TO_TEXT_ENDPOINT || directOpenAiEnabled,
     ),
+    gatewayRuntimeAvailable: gatewayCredentials.length > 0,
     gatewayPreferred: true,
     directOpenAiFallbackEnabled: directOpenAiEnabled,
   });
@@ -332,20 +351,12 @@ export async function POST(request: Request) {
   }
 
   const publicCode = publicFailureCode(attempts);
-  const primaryDiagnostics = primaryProviderAttempts(attempts);
   return NextResponse.json(
     {
       ok: false,
       error: `Η φωνή καταγράφηκε, αλλά η υπηρεσία αναγνώρισης φωνής δεν ολοκλήρωσε τη μεταγραφή. Κωδικός: ${publicCode}.`,
       code: "speech_provider_unavailable",
       publicCode,
-      primaryDiagnostics: primaryDiagnostics.map(({ provider, attempted, ok, status, code }) => ({
-        provider,
-        attempted,
-        ok,
-        status,
-        code,
-      })),
     },
     { status: 503 },
   );
