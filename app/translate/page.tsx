@@ -3,12 +3,7 @@
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 
-type Language = {
-  code: string;
-  label: string;
-  speech: string;
-};
-
+type Language = { code: string; label: string; speech: string };
 type TranslationResponse = {
   ok?: boolean;
   translatedText?: string;
@@ -19,15 +14,8 @@ type TranslationResponse = {
   error?: string;
   provider?: string;
 };
-
-type SpeechRecognitionResultLike = {
-  0?: { transcript?: string };
-};
-
-type SpeechRecognitionEventLike = {
-  results?: ArrayLike<SpeechRecognitionResultLike>;
-};
-
+type SpeechRecognitionResultLike = { 0?: { transcript?: string } };
+type SpeechRecognitionEventLike = { results?: ArrayLike<SpeechRecognitionResultLike> };
 type SpeechRecognitionLike = {
   lang: string;
   continuous: boolean;
@@ -38,7 +26,6 @@ type SpeechRecognitionLike = {
   start: () => void;
   stop: () => void;
 };
-
 type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
 
 declare global {
@@ -49,44 +36,44 @@ declare global {
 }
 
 const LANGUAGES: Language[] = [
-  { code: "el", label: "Ελληνικά / Greek", speech: "el-GR" },
+  { code: "el", label: "Ελληνικά", speech: "el-GR" },
   { code: "en", label: "English", speech: "en-US" },
-  { code: "ar", label: "العربية / Arabic", speech: "ar-SA" },
-  { code: "tr", label: "Türkçe / Turkish", speech: "tr-TR" },
-  { code: "fr", label: "Français / French", speech: "fr-FR" },
-  { code: "es", label: "Español / Spanish", speech: "es-ES" },
-  { code: "pt", label: "Português / Portuguese", speech: "pt-PT" },
-  { code: "de", label: "Deutsch / German", speech: "de-DE" },
-  { code: "it", label: "Italiano / Italian", speech: "it-IT" },
-  { code: "ru", label: "Русский / Russian", speech: "ru-RU" },
-  { code: "uk", label: "Українська / Ukrainian", speech: "uk-UA" },
-  { code: "zh", label: "中文 / Chinese", speech: "zh-CN" },
-  { code: "ja", label: "日本語 / Japanese", speech: "ja-JP" },
-  { code: "ko", label: "한국어 / Korean", speech: "ko-KR" },
-  { code: "hi", label: "हिन्दी / Hindi", speech: "hi-IN" },
-  { code: "ur", label: "اردو / Urdu", speech: "ur-PK" },
-  { code: "bn", label: "বাংলা / Bengali", speech: "bn-BD" },
-  { code: "pa", label: "ਪੰਜਾਬੀ / Punjabi", speech: "pa-IN" },
+  { code: "ar", label: "العربية", speech: "ar-SA" },
+  { code: "tr", label: "Türkçe", speech: "tr-TR" },
+  { code: "fr", label: "Français", speech: "fr-FR" },
+  { code: "es", label: "Español", speech: "es-ES" },
+  { code: "pt", label: "Português", speech: "pt-PT" },
+  { code: "de", label: "Deutsch", speech: "de-DE" },
+  { code: "it", label: "Italiano", speech: "it-IT" },
+  { code: "ru", label: "Русский", speech: "ru-RU" },
+  { code: "uk", label: "Українська", speech: "uk-UA" },
+  { code: "zh", label: "中文", speech: "zh-CN" },
+  { code: "ja", label: "日本語", speech: "ja-JP" },
+  { code: "ko", label: "한국어", speech: "ko-KR" },
+  { code: "hi", label: "हिन्दी", speech: "hi-IN" },
+  { code: "ur", label: "اردو", speech: "ur-PK" },
+  { code: "bn", label: "বাংলা", speech: "bn-BD" },
+  { code: "pa", label: "ਪੰਜਾਬੀ", speech: "pa-IN" },
   { code: "id", label: "Bahasa Indonesia", speech: "id-ID" },
-  { code: "ms", label: "Bahasa Melayu / Malay", speech: "ms-MY" },
-  { code: "th", label: "ไทย / Thai", speech: "th-TH" },
-  { code: "vi", label: "Tiếng Việt / Vietnamese", speech: "vi-VN" },
-  { code: "fa", label: "فارسی / Persian", speech: "fa-IR" },
-  { code: "he", label: "עברית / Hebrew", speech: "he-IL" },
-  { code: "sw", label: "Kiswahili / Swahili", speech: "sw-KE" },
+  { code: "ms", label: "Bahasa Melayu", speech: "ms-MY" },
+  { code: "th", label: "ไทย", speech: "th-TH" },
+  { code: "vi", label: "Tiếng Việt", speech: "vi-VN" },
+  { code: "fa", label: "فارسی", speech: "fa-IR" },
+  { code: "he", label: "עברית", speech: "he-IL" },
+  { code: "sw", label: "Kiswahili", speech: "sw-KE" },
   { code: "af", label: "Afrikaans", speech: "af-ZA" },
-  { code: "nl", label: "Nederlands / Dutch", speech: "nl-NL" },
-  { code: "pl", label: "Polski / Polish", speech: "pl-PL" },
-  { code: "ro", label: "Română / Romanian", speech: "ro-RO" },
-  { code: "bg", label: "Български / Bulgarian", speech: "bg-BG" },
-  { code: "sr", label: "Српски / Serbian", speech: "sr-RS" },
-  { code: "hr", label: "Hrvatski / Croatian", speech: "hr-HR" },
-  { code: "cs", label: "Čeština / Czech", speech: "cs-CZ" },
-  { code: "hu", label: "Magyar / Hungarian", speech: "hu-HU" },
-  { code: "sv", label: "Svenska / Swedish", speech: "sv-SE" },
-  { code: "no", label: "Norsk / Norwegian", speech: "nb-NO" },
-  { code: "da", label: "Dansk / Danish", speech: "da-DK" },
-  { code: "fi", label: "Suomi / Finnish", speech: "fi-FI" },
+  { code: "nl", label: "Nederlands", speech: "nl-NL" },
+  { code: "pl", label: "Polski", speech: "pl-PL" },
+  { code: "ro", label: "Română", speech: "ro-RO" },
+  { code: "bg", label: "Български", speech: "bg-BG" },
+  { code: "sr", label: "Српски", speech: "sr-RS" },
+  { code: "hr", label: "Hrvatski", speech: "hr-HR" },
+  { code: "cs", label: "Čeština", speech: "cs-CZ" },
+  { code: "hu", label: "Magyar", speech: "hu-HU" },
+  { code: "sv", label: "Svenska", speech: "sv-SE" },
+  { code: "no", label: "Norsk", speech: "nb-NO" },
+  { code: "da", label: "Dansk", speech: "da-DK" },
+  { code: "fi", label: "Suomi", speech: "fi-FI" },
 ];
 
 function languageByCode(code: string) {
@@ -109,12 +96,10 @@ export default function TranslatePage() {
 
   async function translate() {
     const text = sourceText.trim();
-
     if (!text) {
-      setError("Γράψε ή μίλησε πρώτα το κείμενο που θέλεις να μεταφραστεί.");
+      setError("Γράψε ή μίλα πρώτα το κείμενο που θέλεις να μεταφραστεί.");
       return;
     }
-
     if (fromLanguage === toLanguage) {
       setError("Επίλεξε δύο διαφορετικές γλώσσες.");
       return;
@@ -141,12 +126,7 @@ export default function TranslatePage() {
       });
 
       const result = (await response.json().catch(() => ({}))) as TranslationResponse;
-      const output =
-        result.translatedText ||
-        result.translation ||
-        result.text ||
-        result.output ||
-        "";
+      const output = result.translatedText || result.translation || result.text || result.output || "";
 
       if (!response.ok || !output.trim()) {
         setTranslatedText("");
@@ -155,7 +135,7 @@ export default function TranslatePage() {
       }
 
       setTranslatedText(output.trim());
-      setProvider(result.provider || "Pantavion translation runtime");
+      setProvider(result.provider || "Pantavion");
     } catch {
       setTranslatedText("");
       setError("Δεν ήταν δυνατή η σύνδεση με τη μετάφραση. Δοκίμασε ξανά.");
@@ -165,13 +145,9 @@ export default function TranslatePage() {
   }
 
   function swapDirection() {
-    const nextFrom = toLanguage;
-    const nextTo = fromLanguage;
-    const nextSource = translatedText.trim() || sourceText;
-
-    setFromLanguage(nextFrom);
-    setToLanguage(nextTo);
-    setSourceText(nextSource);
+    setFromLanguage(toLanguage);
+    setToLanguage(fromLanguage);
+    setSourceText(translatedText.trim() || sourceText);
     setTranslatedText("");
     setError("");
     setProvider("");
@@ -179,37 +155,28 @@ export default function TranslatePage() {
 
   function startListening() {
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
     if (!Recognition) {
       setError("Η φωνητική αναγνώριση δεν υποστηρίζεται από αυτόν τον browser.");
       return;
     }
 
     recognitionRef.current?.stop();
-
     const recognition = new Recognition();
     recognition.lang = fromMeta.speech;
     recognition.continuous = false;
     recognition.interimResults = false;
-
     recognition.onresult = (event) => {
       const transcript = Array.from(event.results || [])
         .map((result) => result?.[0]?.transcript || "")
         .join(" ")
         .trim();
-
-      if (transcript) {
-        setSourceText((current) => [current, transcript].filter(Boolean).join(" "));
-      }
+      if (transcript) setSourceText((current) => [current, transcript].filter(Boolean).join(" "));
     };
-
     recognition.onerror = () => {
       setListening(false);
       setError("Δεν μπόρεσα να ακούσω καθαρά. Δοκίμασε ξανά ή γράψε το κείμενο.");
     };
-
     recognition.onend = () => setListening(false);
-
     recognitionRef.current = recognition;
     setListening(true);
     setError("");
@@ -218,7 +185,6 @@ export default function TranslatePage() {
 
   function speakResult() {
     if (!translatedText.trim() || !("speechSynthesis" in window)) return;
-
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(translatedText);
     utterance.lang = toMeta.speech;
@@ -226,131 +192,47 @@ export default function TranslatePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#192b55_0,#071020_48%,#02040b_100%)] px-4 py-5 text-white sm:px-6 sm:py-8">
+    <main className="min-h-screen bg-[#102a56] px-4 py-4 text-white sm:px-6 sm:py-6">
       <section className="mx-auto max-w-3xl">
-        <header className="flex items-center justify-between gap-3">
-          <Link
-            href="/"
-            className="rounded-full border border-[#f6c85f]/25 bg-white/5 px-4 py-2 text-sm font-bold text-white no-underline"
-          >
-            ← Pantavion
-          </Link>
-          <span className="text-xs font-black uppercase tracking-[0.22em] text-[#f6c85f]">
-            PantaTranslate
-          </span>
+        <header className="flex items-center justify-between gap-3 py-1">
+          <Link href="/" className="text-sm font-bold text-white/85 no-underline">← Pantavion</Link>
+          <span className="text-sm font-black tracking-wide text-[#f6c85f]">PantaTranslate</span>
         </header>
 
-        <section className="mt-5 rounded-[1.75rem] border border-[#f6c85f]/25 bg-[#071020]/92 p-4 shadow-2xl sm:p-6">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.25em] text-[#f6c85f]">
-              Αμφίδρομη μετάφραση ↔
-            </p>
-            <h1 className="mt-2 text-3xl font-black sm:text-4xl">
-              Γράψε ή μίλα. Πάρε τη μετάφραση αμέσως.
-            </h1>
+        <section className="mt-4 overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#17376d] shadow-xl">
+          <div className="border-b border-white/10 px-4 py-4 sm:px-6">
+            <h1 className="text-2xl font-black sm:text-3xl">Μετάφραση</h1>
           </div>
 
-          <div className="mt-6 grid grid-cols-[1fr_auto_1fr] items-end gap-2">
-            <label className="block text-xs font-bold text-blue-200">
-              Από
-              <select
-                value={fromLanguage}
-                onChange={(event) => setFromLanguage(event.target.value)}
-                className="mt-2 w-full rounded-xl border border-blue-300/30 bg-blue-950/25 px-3 py-3 text-sm font-bold text-white outline-none"
-              >
-                {LANGUAGES.map((language) => (
-                  <option key={language.code} value={language.code}>
-                    {language.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <button
-              type="button"
-              onClick={swapDirection}
-              aria-label="Αντιστροφή γλωσσών"
-              className="mb-0.5 h-12 w-12 rounded-full border border-cyan-300/35 bg-cyan-300/10 text-xl font-black text-cyan-100"
-            >
-              ↔
-            </button>
-
-            <label className="block text-xs font-bold text-yellow-100">
-              Προς
-              <select
-                value={toLanguage}
-                onChange={(event) => setToLanguage(event.target.value)}
-                className="mt-2 w-full rounded-xl border border-yellow-300/30 bg-yellow-950/15 px-3 py-3 text-sm font-bold text-white outline-none"
-              >
-                {LANGUAGES.map((language) => (
-                  <option key={language.code} value={language.code}>
-                    {language.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-white/10 px-4 py-4 sm:px-6">
+            <select value={fromLanguage} onChange={(event) => setFromLanguage(event.target.value)} className="min-w-0 rounded-xl border border-blue-300/30 bg-[#214784] px-3 py-3 text-sm font-bold text-white outline-none">
+              {LANGUAGES.map((language) => <option key={language.code} value={language.code}>{language.label}</option>)}
+            </select>
+            <button type="button" onClick={swapDirection} aria-label="Αντιστροφή γλωσσών" className="h-11 w-11 rounded-full border border-cyan-200/30 bg-[#245b92] text-xl font-black text-cyan-100">↔</button>
+            <select value={toLanguage} onChange={(event) => setToLanguage(event.target.value)} className="min-w-0 rounded-xl border border-[#f6c85f]/35 bg-[#3a4d79] px-3 py-3 text-sm font-bold text-white outline-none">
+              {LANGUAGES.map((language) => <option key={language.code} value={language.code}>{language.label}</option>)}
+            </select>
           </div>
 
-          <label className="mt-6 block text-sm font-black text-blue-100">
-            Κείμενο προς μετάφραση
-            <textarea
-              value={sourceText}
-              onChange={(event) => setSourceText(event.target.value)}
-              placeholder="π.χ. Καλησπέρα, πώς είσαι;"
-              autoFocus
-              className="mt-2 min-h-36 w-full resize-y rounded-2xl border border-blue-300/25 bg-[#020711] p-4 text-lg text-white outline-none placeholder:text-slate-500 focus:border-blue-300/60"
-            />
-          </label>
+          <div className="px-4 py-4 sm:px-6">
+            <textarea value={sourceText} onChange={(event) => setSourceText(event.target.value)} placeholder="Γράψε εδώ…" autoFocus className="min-h-40 w-full resize-y rounded-2xl border border-white/10 bg-[#0f2b59] p-4 text-lg text-white outline-none placeholder:text-blue-100/45 focus:border-cyan-300/55" />
 
-          <div className="mt-4 grid gap-3 sm:grid-cols-[auto_1fr]">
-            <button
-              type="button"
-              onClick={startListening}
-              className="rounded-full border border-blue-300/40 bg-blue-400/15 px-5 py-3 font-black text-blue-100"
-            >
-              {listening ? "🎙️ Ακούω…" : "🎙️ Μίλα"}
-            </button>
-            <button
-              type="button"
-              onClick={translate}
-              disabled={loading}
-              className="rounded-full bg-cyan-300 px-6 py-3 text-base font-black text-slate-950 disabled:cursor-wait disabled:opacity-60"
-            >
-              {loading ? "Μεταφράζω…" : `Μετάφραση σε ${toMeta.label}`}
-            </button>
-          </div>
-
-          {error ? (
-            <div className="mt-4 rounded-2xl border border-red-300/30 bg-red-400/10 p-4 text-sm font-bold text-red-100">
-              {error}
+            <div className="mt-3 flex gap-3">
+              <button type="button" onClick={startListening} className="rounded-full border border-blue-200/30 bg-[#245b92] px-4 py-3 font-black text-white">{listening ? "🎙️ Ακούω…" : "🎙️ Μίλα"}</button>
+              <button type="button" onClick={translate} disabled={loading} className="flex-1 rounded-full bg-cyan-300 px-5 py-3 font-black text-[#102a56] disabled:opacity-60">{loading ? "Μεταφράζω…" : "Μετάφραση"}</button>
             </div>
-          ) : null}
 
-          <section className="mt-5 rounded-2xl border border-yellow-300/30 bg-yellow-950/10 p-4">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-yellow-100">
-                Αποτέλεσμα · {toMeta.label}
-              </p>
-              <button
-                type="button"
-                onClick={speakResult}
-                disabled={!translatedText}
-                className="rounded-full border border-yellow-300/30 px-3 py-1.5 text-xs font-black text-yellow-100 disabled:opacity-30"
-              >
-                🔊 Άκου
-              </button>
+            {error ? <div className="mt-4 rounded-xl border border-red-200/30 bg-red-300/10 p-3 text-sm font-bold text-red-50">{error}</div> : null}
+
+            <div className="mt-4 rounded-2xl border border-[#f6c85f]/25 bg-[#203b6e] p-4">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-xs font-black uppercase tracking-wider text-[#f6c85f]">{toMeta.label}</span>
+                <button type="button" onClick={speakResult} disabled={!translatedText} className="rounded-full border border-[#f6c85f]/25 px-3 py-1.5 text-xs font-black text-[#ffe29a] disabled:opacity-30">🔊 Άκου</button>
+              </div>
+              <p className="mt-3 min-h-16 whitespace-pre-wrap text-xl font-bold leading-8 text-white">{translatedText || "Η μετάφραση θα εμφανιστεί εδώ."}</p>
+              {provider ? <p className="mt-2 text-[10px] text-white/35">{provider}</p> : null}
             </div>
-            <p className="mt-3 min-h-16 whitespace-pre-wrap text-xl font-bold leading-8 text-white">
-              {translatedText || "Η μετάφραση θα εμφανιστεί εδώ."}
-            </p>
-            {provider ? (
-              <p className="mt-3 text-[11px] text-slate-500">Provider: {provider}</p>
-            ) : null}
-          </section>
-
-          <p className="mt-4 text-xs leading-5 text-slate-400">
-            Το ↔ αντιστρέφει αμέσως τις δύο γλώσσες για απλή συνομιλία δύο ατόμων.
-          </p>
+          </div>
         </section>
       </section>
     </main>
