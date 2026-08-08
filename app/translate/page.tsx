@@ -381,7 +381,7 @@ export default function TranslatePage() {
       };
 
       mediaRecorderRef.current = recorder;
-      recorder.start(250);
+      recorder.start();
       setRecording(true);
       setError("");
       setVoiceStatus(
