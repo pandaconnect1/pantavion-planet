@@ -45,13 +45,6 @@ type SpeechRecognitionLike = {
 };
 type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
 
-declare global {
-  interface Window {
-    SpeechRecognition?: SpeechRecognitionConstructor;
-    webkitSpeechRecognition?: SpeechRecognitionConstructor;
-  }
-}
-
 const LANGUAGES = globalEmergencyLanguages.map((language) => ({
   code: language.code,
   label:
@@ -73,12 +66,22 @@ function extension(mime: string) {
   return "webm";
 }
 
+function getSpeechRecognitionConstructor() {
+  const speechWindow = window as Window & {
+    SpeechRecognition?: SpeechRecognitionConstructor;
+    webkitSpeechRecognition?: SpeechRecognitionConstructor;
+  };
+  return speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition;
+}
+
 export default function InterpreterPage() {
   const [languageA, setLanguageA] = useState("el");
   const [languageB, setLanguageB] = useState("en");
   const [speaker, setSpeaker] = useState<Speaker>("A");
   const [sourceText, setSourceText] = useState("");
   const [translatedText, setTranslatedText] = useState("");
+  const [lastSourceCode, setLastSourceCode] = useState("el");
+  const [lastTargetCode, setLastTargetCode] = useState("en");
   const [status, setStatus] = useState("Έτοιμο για αμφίδρομη διερμηνεία.");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -99,6 +102,8 @@ export default function InterpreterPage() {
   const targetCode = speaker === "A" ? languageB : languageA;
   const sourceMeta = useMemo(() => byCode(sourceCode), [sourceCode]);
   const targetMeta = useMemo(() => byCode(targetCode), [targetCode]);
+  const lastSourceMeta = useMemo(() => byCode(lastSourceCode), [lastSourceCode]);
+  const lastTargetMeta = useMemo(() => byCode(lastTargetCode), [lastTargetCode]);
 
   async function requestMicrophone() {
     if (!navigator.mediaDevices?.getUserMedia) {
@@ -194,10 +199,13 @@ export default function InterpreterPage() {
 
       setSourceText(rawText?.trim() || clean);
       setTranslatedText(output);
+      setLastSourceCode(source);
+      setLastTargetCode(target);
       setProvider(result.provider || "Pantavion");
       speak(output, target);
 
-      const nextSpeaker: Speaker = speaker === "A" ? "B" : "A";
+      const completedSpeaker: Speaker = source === languageA ? "A" : "B";
+      const nextSpeaker: Speaker = completedSpeaker === "A" ? "B" : "A";
       setSpeaker(nextSpeaker);
       const nextSource = nextSpeaker === "A" ? languageA : languageB;
       const nextTarget = nextSpeaker === "A" ? languageB : languageA;
@@ -233,9 +241,15 @@ export default function InterpreterPage() {
     try {
       const mime = blob.type || "audio/webm";
       const form = new FormData();
-      form.append("audio", new File([blob], `pantavion-interpreter.${extension(mime)}`, { type: mime }));
+      form.append(
+        "audio",
+        new File([blob], `pantavion-interpreter.${extension(mime)}`, { type: mime }),
+      );
       form.append("language", source);
-      const response = await fetch("/api/pantavion/speech-to-text", { method: "POST", body: form });
+      const response = await fetch("/api/pantavion/speech-to-text", {
+        method: "POST",
+        body: form,
+      });
       const result = (await response.json().catch(() => ({}))) as SpeechResponse;
       const normalized = String(result.text || result.normalizedText || "").trim();
       const raw = String(result.rawText || normalized).trim();
@@ -272,20 +286,26 @@ export default function InterpreterPage() {
         "audio/mp4",
         "audio/ogg;codecs=opus",
       ].find((item) => MediaRecorder.isTypeSupported(item));
-      const recorder = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+      const recorder = mime
+        ? new MediaRecorder(stream, { mimeType: mime })
+        : new MediaRecorder(stream);
       recorder.ondataavailable = (event) => {
         if (event.data.size) chunksRef.current.push(event.data);
       };
       recorder.onstop = () => {
         const context = recordingContextRef.current;
-        const blob = new Blob(chunksRef.current, { type: recorder.mimeType || mime || "audio/webm" });
+        const blob = new Blob(chunksRef.current, {
+          type: recorder.mimeType || mime || "audio/webm",
+        });
         cleanupRecording();
         if (context) void sendRecording(blob, context.source, context.target);
       };
       recorderRef.current = recorder;
       recorder.start(250);
       setRecording(true);
-      setStatus(`Ηχογραφώ τον Ομιλητή ${speaker}… πάτησε ξανά για Τέλος & Διερμηνεία.`);
+      setStatus(
+        `Ηχογραφώ τον Ομιλητή ${speaker}… πάτησε ξανά για Τέλος & Διερμηνεία.`,
+      );
       timerRef.current = setTimeout(() => {
         if (recorderRef.current?.state === "recording") recorderRef.current.stop();
       }, 15_000);
@@ -324,7 +344,7 @@ export default function InterpreterPage() {
 
     const source = sourceCode;
     const target = targetCode;
-    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const Recognition = getSpeechRecognitionConstructor();
     if (!Recognition) {
       await startRecording(source, target);
       return;
@@ -367,7 +387,9 @@ export default function InterpreterPage() {
 
     setError("");
     setListening(true);
-    setStatus(`Ακούω τον Ομιλητή ${speaker}: ${byCode(source).label} → ${byCode(target).label}…`);
+    setStatus(
+      `Ακούω τον Ομιλητή ${speaker}: ${byCode(source).label} → ${byCode(target).label}…`,
+    );
     try {
       recognition.start();
     } catch {
@@ -383,6 +405,8 @@ export default function InterpreterPage() {
     setSourceText("");
     setTranslatedText("");
     setProvider("");
+    setLastSourceCode(languageB);
+    setLastTargetCode(languageA);
     setStatus("Οι γλώσσες αντιστράφηκαν. Ο Ομιλητής A ξεκινά.");
   }
 
@@ -398,68 +422,158 @@ export default function InterpreterPage() {
     <main className="min-h-screen bg-[#102a56] px-4 py-4 text-white sm:px-6 sm:py-6">
       <section className="mx-auto max-w-3xl">
         <header className="flex items-center justify-between gap-3 py-1">
-          <Link href="/translate" className="text-sm font-bold text-white/85 no-underline">← PantaTranslate</Link>
-          <span className="text-sm font-black tracking-wide text-[#f6c85f]">PantaInterpreter</span>
+          <Link href="/translate" className="text-sm font-bold text-white/85 no-underline">
+            ← PantaTranslate
+          </Link>
+          <span className="text-sm font-black tracking-wide text-[#f6c85f]">
+            PantaInterpreter
+          </span>
         </header>
 
         <section className="mt-4 overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#17376d] shadow-xl">
           <div className="border-b border-white/10 px-4 py-4 sm:px-6">
             <div className="flex items-center justify-between gap-3">
               <h1 className="text-2xl font-black sm:text-3xl">Αμφίδρομος Διερμηνέας</h1>
-              <span className="text-xs font-bold text-white/55">7 ήπειροι · {LANGUAGES.length}+ γλώσσες</span>
+              <span className="text-xs font-bold text-white/55">
+                7 ήπειροι · {LANGUAGES.length}+ γλώσσες
+              </span>
             </div>
-            <p className="mt-1 text-sm text-white/65">Η κατεύθυνση αλλάζει αυτόματα μετά από κάθε επιτυχημένη μετάφραση.</p>
+            <p className="mt-1 text-sm text-white/65">
+              Η κατεύθυνση αλλάζει αυτόματα μετά από κάθε επιτυχημένη μετάφραση.
+            </p>
           </div>
 
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-white/10 px-4 py-4 sm:px-6">
             <div>
               <div className="mb-1 text-xs font-black text-cyan-100">ΟΜΙΛΗΤΗΣ A</div>
-              <select value={languageA} onChange={(e) => { setLanguageA(e.target.value); setSpeaker("A"); }} className="w-full rounded-xl border border-blue-300/30 bg-[#214784] px-3 py-3 text-sm font-bold text-white outline-none">
-                {LANGUAGES.map((language) => <option key={language.code} value={language.code}>{language.label}</option>)}
+              <select
+                value={languageA}
+                onChange={(event) => {
+                  setLanguageA(event.target.value);
+                  setSpeaker("A");
+                }}
+                className="w-full rounded-xl border border-blue-300/30 bg-[#214784] px-3 py-3 text-sm font-bold text-white outline-none"
+              >
+                {LANGUAGES.map((language) => (
+                  <option key={language.code} value={language.code}>
+                    {language.label}
+                  </option>
+                ))}
               </select>
             </div>
-            <button type="button" onClick={swapPeople} className="mt-5 h-11 w-11 rounded-full border border-cyan-200/30 bg-[#245b92] text-xl font-black text-cyan-100">↔</button>
+            <button
+              type="button"
+              onClick={swapPeople}
+              className="mt-5 h-11 w-11 rounded-full border border-cyan-200/30 bg-[#245b92] text-xl font-black text-cyan-100"
+            >
+              ↔
+            </button>
             <div>
               <div className="mb-1 text-xs font-black text-[#ffe29a]">ΟΜΙΛΗΤΗΣ B</div>
-              <select value={languageB} onChange={(e) => { setLanguageB(e.target.value); setSpeaker("A"); }} className="w-full rounded-xl border border-[#f6c85f]/35 bg-[#3a4d79] px-3 py-3 text-sm font-bold text-white outline-none">
-                {LANGUAGES.map((language) => <option key={language.code} value={language.code}>{language.label}</option>)}
+              <select
+                value={languageB}
+                onChange={(event) => {
+                  setLanguageB(event.target.value);
+                  setSpeaker("A");
+                }}
+                className="w-full rounded-xl border border-[#f6c85f]/35 bg-[#3a4d79] px-3 py-3 text-sm font-bold text-white outline-none"
+              >
+                {LANGUAGES.map((language) => (
+                  <option key={language.code} value={language.code}>
+                    {language.label}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
           <div className="px-4 py-4 sm:px-6">
             <div className="rounded-2xl border border-cyan-200/20 bg-[#0f2b59] p-4">
-              <div className="text-xs font-black uppercase tracking-wider text-cyan-100">Τώρα μιλά ο Ομιλητής {speaker}</div>
-              <div className="mt-1 text-lg font-black">{sourceMeta.label} → {targetMeta.label}</div>
+              <div className="text-xs font-black uppercase tracking-wider text-cyan-100">
+                Τώρα μιλά ο Ομιλητής {speaker}
+              </div>
+              <div className="mt-1 text-lg font-black">
+                {sourceMeta.label} → {targetMeta.label}
+              </div>
             </div>
 
-            <button type="button" onClick={() => void requestMicrophone()} disabled={microphone === "requesting" || busy || listening || recording} className="mt-3 w-full rounded-full border border-emerald-200/30 bg-emerald-300/15 px-4 py-3 font-black text-emerald-50 disabled:opacity-60">
-              {microphone === "granted" ? "✓ Μικρόφωνο ενεργό" : microphone === "requesting" ? "🎙️ Ζητώ άδεια…" : "🎙️ Ενεργοποίηση μικροφώνου"}
+            <button
+              type="button"
+              onClick={() => void requestMicrophone()}
+              disabled={microphone === "requesting" || busy || listening || recording}
+              className="mt-3 w-full rounded-full border border-emerald-200/30 bg-emerald-300/15 px-4 py-3 font-black text-emerald-50 disabled:opacity-60"
+            >
+              {microphone === "granted"
+                ? "✓ Μικρόφωνο ενεργό"
+                : microphone === "requesting"
+                  ? "🎙️ Ζητώ άδεια…"
+                  : "🎙️ Ενεργοποίηση μικροφώνου"}
             </button>
 
-            <button type="button" onClick={() => void startInterpreterTurn()} disabled={busy && !recording} className="mt-2 w-full rounded-full bg-cyan-300 px-5 py-4 text-lg font-black text-[#102a56] disabled:opacity-60">
+            <button
+              type="button"
+              onClick={() => void startInterpreterTurn()}
+              disabled={busy && !recording}
+              className="mt-2 w-full rounded-full bg-cyan-300 px-5 py-4 text-lg font-black text-[#102a56] disabled:opacity-60"
+            >
               {buttonLabel}
             </button>
 
-            <div className="mt-3 rounded-xl border border-cyan-200/20 bg-cyan-200/10 px-3 py-3 text-sm font-bold text-cyan-50">{status}</div>
-            {error ? <div className="mt-3 rounded-xl border border-red-200/30 bg-red-300/10 p-3 text-sm font-bold text-red-50">{error}</div> : null}
+            <div className="mt-3 rounded-xl border border-cyan-200/20 bg-cyan-200/10 px-3 py-3 text-sm font-bold text-cyan-50">
+              {status}
+            </div>
+            {error ? (
+              <div className="mt-3 rounded-xl border border-red-200/30 bg-red-300/10 p-3 text-sm font-bold text-red-50">
+                {error}
+              </div>
+            ) : null}
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl border border-blue-200/20 bg-[#163666] p-4" dir={sourceMeta.direction}>
-                <div className="text-xs font-black uppercase text-blue-200">Τελευταία φράση</div>
-                <p className="mt-2 min-h-14 whitespace-pre-wrap text-lg font-bold">{sourceText || "—"}</p>
-              </div>
-              <div className="rounded-2xl border border-[#f6c85f]/25 bg-[#203b6e] p-4" dir={targetMeta.direction}>
-                <div className="flex items-center justify-between gap-2">
-                  <div className="text-xs font-black uppercase text-[#f6c85f]">Μετάφραση</div>
-                  <button type="button" onClick={() => speak(translatedText, speaker === "A" ? languageA : languageB)} disabled={!translatedText} className="rounded-full border border-[#f6c85f]/25 px-3 py-1 text-xs font-black text-[#ffe29a] disabled:opacity-30">🔊 Άκου</button>
+              <div
+                className="rounded-2xl border border-blue-200/20 bg-[#163666] p-4"
+                dir={lastSourceMeta.direction}
+              >
+                <div className="text-xs font-black uppercase text-blue-200">
+                  Τελευταία φράση · {lastSourceMeta.label}
                 </div>
-                <p className="mt-2 min-h-14 whitespace-pre-wrap text-lg font-bold">{translatedText || "—"}</p>
+                <p className="mt-2 min-h-14 whitespace-pre-wrap text-lg font-bold">
+                  {sourceText || "—"}
+                </p>
+              </div>
+              <div
+                className="rounded-2xl border border-[#f6c85f]/25 bg-[#203b6e] p-4"
+                dir={lastTargetMeta.direction}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-xs font-black uppercase text-[#f6c85f]">
+                    Μετάφραση · {lastTargetMeta.label}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => speak(translatedText, lastTargetCode)}
+                    disabled={!translatedText}
+                    className="rounded-full border border-[#f6c85f]/25 px-3 py-1 text-xs font-black text-[#ffe29a] disabled:opacity-30"
+                  >
+                    🔊 Άκου
+                  </button>
+                </div>
+                <p className="mt-2 min-h-14 whitespace-pre-wrap text-lg font-bold">
+                  {translatedText || "—"}
+                </p>
                 {provider ? <p className="mt-2 text-[10px] text-white/35">{provider}</p> : null}
               </div>
             </div>
 
-            <button type="button" onClick={() => { setSpeaker(speaker === "A" ? "B" : "A"); setStatus("Η σειρά ομιλητή άλλαξε χειροκίνητα."); }} className="mt-3 w-full rounded-full border border-white/15 bg-white/5 px-4 py-3 text-sm font-black text-white/90">Αλλαγή ομιλητή χειροκίνητα ↔</button>
+            <button
+              type="button"
+              onClick={() => {
+                setSpeaker(speaker === "A" ? "B" : "A");
+                setStatus("Η σειρά ομιλητή άλλαξε χειροκίνητα.");
+              }}
+              className="mt-3 w-full rounded-full border border-white/15 bg-white/5 px-4 py-3 text-sm font-black text-white/90"
+            >
+              Αλλαγή ομιλητή χειροκίνητα ↔
+            </button>
           </div>
         </section>
       </section>
