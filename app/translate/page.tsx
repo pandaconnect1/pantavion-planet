@@ -226,23 +226,23 @@ export default function TranslatePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#142a52_0,#071020_45%,#02040b_100%)] px-4 py-5 text-white sm:px-6 sm:py-8">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#192b55_0,#071020_48%,#02040b_100%)] px-4 py-5 text-white sm:px-6 sm:py-8">
       <section className="mx-auto max-w-3xl">
         <header className="flex items-center justify-between gap-3">
           <Link
             href="/"
-            className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-bold text-white no-underline"
+            className="rounded-full border border-[#f6c85f]/25 bg-white/5 px-4 py-2 text-sm font-bold text-white no-underline"
           >
             ← Pantavion
           </Link>
-          <span className="text-xs font-black uppercase tracking-[0.22em] text-cyan-200">
+          <span className="text-xs font-black uppercase tracking-[0.22em] text-[#f6c85f]">
             PantaTranslate
           </span>
         </header>
 
-        <section className="mt-5 rounded-[1.75rem] border border-cyan-300/25 bg-[#071020]/90 p-4 shadow-2xl sm:p-6">
+        <section className="mt-5 rounded-[1.75rem] border border-[#f6c85f]/25 bg-[#071020]/92 p-4 shadow-2xl sm:p-6">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.25em] text-cyan-200">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-[#f6c85f]">
               Αμφίδρομη μετάφραση ↔
             </p>
             <h1 className="mt-2 text-3xl font-black sm:text-4xl">
@@ -251,12 +251,12 @@ export default function TranslatePage() {
           </div>
 
           <div className="mt-6 grid grid-cols-[1fr_auto_1fr] items-end gap-2">
-            <label className="block text-xs font-bold text-slate-300">
+            <label className="block text-xs font-bold text-blue-200">
               Από
               <select
                 value={fromLanguage}
                 onChange={(event) => setFromLanguage(event.target.value)}
-                className="mt-2 w-full rounded-xl border border-white/15 bg-[#040914] px-3 py-3 text-sm font-bold text-white outline-none"
+                className="mt-2 w-full rounded-xl border border-blue-300/30 bg-blue-950/25 px-3 py-3 text-sm font-bold text-white outline-none"
               >
                 {LANGUAGES.map((language) => (
                   <option key={language.code} value={language.code}>
@@ -275,12 +275,12 @@ export default function TranslatePage() {
               ↔
             </button>
 
-            <label className="block text-xs font-bold text-slate-300">
+            <label className="block text-xs font-bold text-yellow-100">
               Προς
               <select
                 value={toLanguage}
                 onChange={(event) => setToLanguage(event.target.value)}
-                className="mt-2 w-full rounded-xl border border-white/15 bg-[#040914] px-3 py-3 text-sm font-bold text-white outline-none"
+                className="mt-2 w-full rounded-xl border border-yellow-300/30 bg-yellow-950/15 px-3 py-3 text-sm font-bold text-white outline-none"
               >
                 {LANGUAGES.map((language) => (
                   <option key={language.code} value={language.code}>
@@ -291,14 +291,14 @@ export default function TranslatePage() {
             </label>
           </div>
 
-          <label className="mt-6 block text-sm font-black text-white">
+          <label className="mt-6 block text-sm font-black text-blue-100">
             Κείμενο προς μετάφραση
             <textarea
               value={sourceText}
               onChange={(event) => setSourceText(event.target.value)}
               placeholder="π.χ. Καλησπέρα, πώς είσαι;"
               autoFocus
-              className="mt-2 min-h-36 w-full resize-y rounded-2xl border border-white/15 bg-[#020711] p-4 text-lg text-white outline-none placeholder:text-slate-500 focus:border-cyan-300/60"
+              className="mt-2 min-h-36 w-full resize-y rounded-2xl border border-blue-300/25 bg-[#020711] p-4 text-lg text-white outline-none placeholder:text-slate-500 focus:border-blue-300/60"
             />
           </label>
 
@@ -326,16 +326,16 @@ export default function TranslatePage() {
             </div>
           ) : null}
 
-          <section className="mt-5 rounded-2xl border border-emerald-300/25 bg-emerald-400/5 p-4">
+          <section className="mt-5 rounded-2xl border border-yellow-300/30 bg-yellow-950/10 p-4">
             <div className="flex items-center justify-between gap-3">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-200">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-yellow-100">
                 Αποτέλεσμα · {toMeta.label}
               </p>
               <button
                 type="button"
                 onClick={speakResult}
                 disabled={!translatedText}
-                className="rounded-full border border-emerald-300/25 px-3 py-1.5 text-xs font-black text-emerald-100 disabled:opacity-30"
+                className="rounded-full border border-yellow-300/30 px-3 py-1.5 text-xs font-black text-yellow-100 disabled:opacity-30"
               >
                 🔊 Άκου
               </button>
