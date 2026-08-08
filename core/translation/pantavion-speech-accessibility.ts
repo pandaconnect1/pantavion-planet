@@ -1,3 +1,6 @@
+import { generateText } from "ai";
+import { gateway } from "@ai-sdk/gateway";
+
 export type PantavionSpeechAccessibilityInput = {
   transcript: string;
   language?: string | null;
@@ -8,7 +11,7 @@ export type PantavionSpeechAccessibilityResult = {
   rawText: string;
   normalizedText: string;
   changed: boolean;
-  provider: "local_conservative" | "openai_context_normalizer";
+  provider: "local_conservative" | "vercel_ai_gateway_context_normalizer" | "openai_context_normalizer";
 };
 
 function collapseExactRepeatedWords(text: string) {
@@ -55,28 +58,62 @@ function textFromResponsesPayload(payload: any) {
   ).trim();
 }
 
-async function normalizeWithContextModel(
-  rawText: string,
-  locallyNormalized: string,
-  language: string,
-) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) return null;
-
-  const prompt = [
-    "You normalize a speech-recognition transcript for accessibility before translation.",
-    "The speaker may stutter, repeat words or syllables, pause, or have articulation differences such as difficulty pronouncing r or s sounds.",
+function buildContextNormalizationPrompt(rawText: string, locallyNormalized: string, language: string) {
+  return [
+    "You are Pantavion Speech Understanding Core.",
+    "Normalize a speech-recognition transcript before translation.",
+    "The speaker may stutter, repeat words or syllables, pause, speak quickly, use a regional accent or dialect, or have articulation differences such as difficulty pronouncing r or s sounds.",
+    "The selected language hint is authoritative unless the transcript clearly contains code-switching.",
     "Preserve the intended meaning, names, numbers, negation, tense, and important wording.",
-    "Remove only obvious disfluency repetitions and correct only high-confidence transcription noise when surrounding context makes the intended word clear.",
-    "Do not diagnose the speaker. Do not rewrite style. Do not invent missing facts.",
-    "If uncertain, keep the original wording rather than guessing.",
-    "Return only the normalized transcript, with no explanation.",
+    "Remove only obvious disfluency repetitions.",
+    "Correct transcription noise only when the surrounding context makes the intended wording high-confidence.",
+    "Do not rewrite style, summarize, translate, diagnose the speaker, or invent missing facts.",
+    "If a word is genuinely ambiguous, keep the original wording rather than guessing.",
+    "Return only the normalized transcript, with no explanation or labels.",
     `Language hint: ${language || "auto"}`,
     "Raw transcript:",
     rawText,
     "Conservative local normalization:",
     locallyNormalized,
   ].join("\n");
+}
+
+async function normalizeWithGateway(rawText: string, locallyNormalized: string, language: string) {
+  const models = Array.from(
+    new Set(
+      [
+        process.env.PANTAVION_SPEECH_NORMALIZATION_GATEWAY_MODEL,
+        process.env.PANTAVION_SPEECH_NORMALIZATION_MODEL,
+        "openai/gpt-4.1-mini",
+      ].filter((value): value is string => Boolean(value)),
+    ),
+  );
+
+  const prompt = buildContextNormalizationPrompt(rawText, locallyNormalized, language);
+
+  for (const model of models) {
+    try {
+      const result = await generateText({
+        model: gateway(model),
+        prompt,
+        temperature: 0,
+        maxRetries: 2,
+      });
+      const normalized = String(result.text || "").replace(/\s+/g, " ").trim();
+      if (normalized) return normalized;
+    } catch {
+      // Try next approved Gateway model, then direct OpenAI fallback below.
+    }
+  }
+
+  return null;
+}
+
+async function normalizeWithDirectOpenAI(rawText: string, locallyNormalized: string, language: string) {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) return null;
+
+  const prompt = buildContextNormalizationPrompt(rawText, locallyNormalized, language);
 
   try {
     const response = await fetch("https://api.openai.com/v1/responses", {
@@ -96,7 +133,7 @@ async function normalizeWithContextModel(
     const normalized = textFromResponsesPayload(payload);
     if (!response.ok || !normalized) return null;
 
-    return normalized;
+    return normalized.replace(/\s+/g, " ").trim();
   } catch {
     return null;
   }
@@ -117,25 +154,45 @@ export async function normalizePantavionAccessibleSpeechTranscript(
     };
   }
 
-  const contextual = await normalizeWithContextModel(
+  const language = String(input.language || "auto");
+  const gatewayNormalized = await normalizeWithGateway(rawText, locallyNormalized || rawText, language);
+  if (gatewayNormalized) {
+    return {
+      rawText,
+      normalizedText: gatewayNormalized,
+      changed: gatewayNormalized !== rawText,
+      provider: "vercel_ai_gateway_context_normalizer",
+    };
+  }
+
+  const directOpenAiNormalized = await normalizeWithDirectOpenAI(
     rawText,
     locallyNormalized || rawText,
-    String(input.language || "auto"),
+    language,
   );
-  const normalizedText = contextual || locallyNormalized || rawText;
+  if (directOpenAiNormalized) {
+    return {
+      rawText,
+      normalizedText: directOpenAiNormalized,
+      changed: directOpenAiNormalized !== rawText,
+      provider: "openai_context_normalizer",
+    };
+  }
 
   return {
     rawText,
-    normalizedText,
-    changed: normalizedText !== rawText,
-    provider: contextual ? "openai_context_normalizer" : "local_conservative",
+    normalizedText: locallyNormalized || rawText,
+    changed: (locallyNormalized || rawText) !== rawText,
+    provider: "local_conservative",
   };
 }
 
 export const pantavionSpeechAccessibilityPolicy = {
-  id: "pantavion_speech_accessibility_v1",
+  id: "pantavion_speech_accessibility_v2",
+  gatewayContextNormalizerPreferred: true,
   stutterTolerance: true,
   articulationVariationTolerance: true,
+  accentAndDialectTolerance: true,
   preserveRawTranscript: true,
   preserveMeaningOverFluency: true,
   neverDiagnoseSpeaker: true,
