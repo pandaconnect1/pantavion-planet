@@ -301,7 +301,7 @@ export default function InterpreterPage() {
         if (context) void sendRecording(blob, context.source, context.target);
       };
       recorderRef.current = recorder;
-      recorder.start(250);
+      recorder.start();
       setRecording(true);
       setStatus(
         `Ηχογραφώ τον Ομιλητή ${speaker}… πάτησε ξανά για Τέλος & Διερμηνεία.`,
