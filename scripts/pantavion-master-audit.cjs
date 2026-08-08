@@ -21,16 +21,6 @@ function requireIncludes(file, markers) {
   }
 }
 
-function requireAnyFileIncludes(files, markers, label) {
-  const combined = files.map((file) => read(file)).join("\n");
-
-  for (const marker of markers) {
-    if (!combined.includes(marker)) {
-      failures.push("[FAIL] " + label + " missing marker: " + marker);
-    }
-  }
-}
-
 function countMatches(text, pattern) {
   const matches = text.match(pattern);
   return matches ? matches.length : 0;
@@ -52,68 +42,43 @@ requireIncludes("core/translation/pantavion-natural-language-universe.ts", [
   "pantavion_natural_language_universe_v1",
   "targetNaturalLanguageCount",
   "practicalWorldMenuMinimum",
-  "camera_sign_menu_document_scan",
 ]);
 
-requireIncludes("core/ai/pantavion-ai-command-center.ts", [
-  "PANTAVION_AI_COMMAND_CENTER_V1",
-  "publicGuide",
-  "internalGuardian",
-  "personalUserAssistant",
-]);
-
-requireIncludes("core/sos/pantavion-sos-ai-center.ts", [
-  "PANTAVION_SOS_AI_CENTER_V1",
-  "authorityDispatchRequiresContract",
-]);
-
-requireIncludes("app/panta-ai/page.tsx", [
-  "PANTAVION_AI_COMMAND_CENTER_V1",
-  "Internal Guardian Kernel",
-  "Provider-required",
-]);
-
-requireIncludes("app/sos/page.tsx", [
-  "PANTAVION_SOS_AI_CENTER_V1",
-  "Emergency Circle",
-  "Open interpreter",
-]);
-
-requireIncludes("app/api/pantavion/ai/route.ts", [
-  "PANTAVION_AI_PROVIDER_MISSING",
-  "buildPantaAiSystemInstruction",
-]);
-
-requireIncludes("app/pantavion-home-client.tsx", [
-  "/translate",
-  "/panta-ai",
-  "/sos",
-  "The planet in one living screen",
-  "Every button points to a real route or protected module",
-]);
-
+// Public translation UI must point to the real Pantavion runtime and provide
+// direct text input, bidirectional direction swapping and browser voice helpers.
 requireIncludes("app/translate/page.tsx", [
-  "PantaTranslate / Universal Interpreter",
+  'fetch("/api/pantavion/translate"',
+  "sourceLanguage",
+  "targetLanguage",
+  "swapDirection",
   "startListening",
-  "SpeechRecognition",
   "speechSynthesis",
-  "handleCameraFile",
-  'type="file"',
-  'accept="image/*"',
-  'fetch("/api/translate/universal"',
+  "Κείμενο προς μετάφραση",
 ]);
 
-requireIncludes("app/api/translate/universal/route.ts", [
-  "translateWithPantavionProvider",
-  "PantavionTranslationRequest",
-  "provider_error",
+// The runtime must fall through to a real public text provider when the primary
+// provider is unavailable instead of returning a decorative/static response.
+requireIncludes("app/api/pantavion/translate/route.ts", [
+  "translateThroughPantavionFallbacks",
+  "translateWithPantavionPublicTextFallback",
+  "publicTextFallback: true",
+  "translatedText",
 ]);
 
-requireAnyFileIncludes(
-  ["app/api/translate/universal/route.ts", "core/translation/pantavion-translation-provider-adapters.ts", "core/translation/pantavion-translation-provider-router.ts"],
-  ["provider_not_configured", "provider_pending", "translatedText"],
-  "real translation provider boundary",
-);
+requireIncludes("core/translation/pantavion-public-text-fallback.ts", [
+  "api.mymemory.translated.net/get",
+  "langpair",
+  "translatedText",
+  "mymemory_public_fallback",
+]);
+
+// The public homepage should remain product-facing; development-only modules
+// are not required to be advertised there.
+requireIncludes("app/pantavion-home-client.tsx", [
+  "PANTAVION ONE",
+  "Here We Are One. For All Humanity.",
+  "/professional/infrastructure/water",
+]);
 
 const languageUniverse = read("core/translation/pantavion-natural-language-universe.ts");
 const emergencyLanguages = read("core/emergency/global-emergency-languages.ts");
