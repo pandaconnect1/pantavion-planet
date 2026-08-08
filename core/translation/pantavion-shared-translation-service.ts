@@ -41,6 +41,17 @@ export type PantavionSharedTranslationResult = PantavionTranslationResult & {
   generatedAt: string;
 };
 
+export type PantavionGroupTranslationResult = {
+  ok: boolean;
+  originalText: string;
+  sourceLanguage: string;
+  targetLanguages: string[];
+  translations: Record<string, PantavionSharedTranslationResult>;
+  failedLanguages: string[];
+  sharedRuntime: typeof PANTAVION_SHARED_TRANSLATION_SERVICE_ID;
+  generatedAt: string;
+};
+
 const SHARED_SURFACES: readonly PantavionTranslationSurface[] = [
   "panta_translate",
   "social",
@@ -55,6 +66,9 @@ const SHARED_SURFACES: readonly PantavionTranslationSurface[] = [
 export function normalizePantavionTranslationSurface(
   value: unknown,
 ): PantavionTranslationSurface {
+  if (value === "pantavion-translate") return "panta_translate";
+  if (value === "room" || value === "group") return "group_room";
+
   return typeof value === "string" &&
     SHARED_SURFACES.includes(value as PantavionTranslationSurface)
     ? (value as PantavionTranslationSurface)
@@ -93,7 +107,9 @@ async function translateWithOpenAI(
       sourceLanguage:
         normalized.sourceLanguage === "auto" ? undefined : normalized.sourceLanguage,
       targetLanguage: normalized.targetLanguage,
-      domain: input.domain ?? (input.surface === "social" || input.surface === "chat" ? "social" : "general"),
+      domain:
+        input.domain ??
+        (input.surface === "social" || input.surface === "chat" ? "social" : "general"),
       tone: input.tone ?? "natural",
       bidirectional: input.bidirectional ?? true,
     });
@@ -164,11 +180,51 @@ export async function translateWithPantavionSharedService(
   return withSharedMetadata(publicFallback, input.surface);
 }
 
+export async function translatePantavionMessageForTargets(
+  input: Omit<PantavionSharedTranslationInput, "targetLanguage"> & {
+    targetLanguages: string[];
+  },
+): Promise<PantavionGroupTranslationResult> {
+  const targetLanguages = Array.from(
+    new Set(input.targetLanguages.map((language) => language.trim()).filter(Boolean)),
+  );
+
+  const entries = await Promise.all(
+    targetLanguages.map(async (targetLanguage) => {
+      const result = await translateWithPantavionSharedService({
+        ...input,
+        targetLanguage,
+        surface: "group_room",
+      });
+      return [targetLanguage, result] as const;
+    }),
+  );
+
+  const translations = Object.fromEntries(entries) as Record<
+    string,
+    PantavionSharedTranslationResult
+  >;
+  const failedLanguages = entries
+    .filter(([, result]) => !result.ok)
+    .map(([language]) => language);
+
+  return {
+    ok: targetLanguages.length > 0 && failedLanguages.length === 0,
+    originalText: input.text,
+    sourceLanguage: input.sourceLanguage || "auto",
+    targetLanguages,
+    translations,
+    failedLanguages,
+    sharedRuntime: PANTAVION_SHARED_TRANSLATION_SERVICE_ID,
+    generatedAt: new Date().toISOString(),
+  };
+}
+
 export const pantavionSharedTranslationCapabilities = {
   id: PANTAVION_SHARED_TRANSLATION_SERVICE_ID,
   surfaces: SHARED_SURFACES,
   oneEngineAcrossPlatform: true,
-  groupTranslationReady: true,
+  multiUserLanguageFanout: true,
   preserveOriginalText: true,
   textTranslation: true,
   speechInputUsesClientOrConfiguredProvider: true,
