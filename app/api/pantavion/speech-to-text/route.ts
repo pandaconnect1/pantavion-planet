@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { getVercelOidcToken } from "@vercel/oidc";
+import { experimental_transcribe as transcribe } from "ai";
+import { gateway } from "@ai-sdk/gateway";
 import { normalizePantavionAccessibleSpeechTranscript } from "@/core/translation/pantavion-speech-accessibility";
 
 export const dynamic = "force-dynamic";
@@ -33,33 +35,10 @@ function safeCode(payload: any) {
   return cleaned || undefined;
 }
 
-function normalizeGatewayMediaType(rawMimeType: string) {
-  const base = String(rawMimeType || "")
-    .split(";", 1)[0]
-    .trim()
-    .toLowerCase();
-
-  if (!base) return "audio/webm";
-  if (base === "audio/x-m4a" || base === "audio/m4a") return "audio/mp4";
-  if (base === "audio/mp3" || base === "audio/mpga") return "audio/mpeg";
-  if (base === "audio/x-wav" || base === "audio/wave") return "audio/wav";
-  if (base === "video/webm") return "audio/webm";
-
-  const allowed = new Set([
-    "audio/webm",
-    "audio/mp4",
-    "audio/ogg",
-    "audio/mpeg",
-    "audio/wav",
-    "audio/flac",
-  ]);
-  return allowed.has(base) ? base : "audio/webm";
-}
-
 function primaryProviderAttempts(attempts: Attempt[]) {
   const attempted = attempts.filter((item) => item.attempted);
-  const gateway = attempted.filter((item) => item.provider.startsWith("vercel_ai_gateway"));
-  if (gateway.length) return gateway;
+  const gatewayAttempts = attempted.filter((item) => item.provider.startsWith("vercel_ai_gateway"));
+  if (gatewayAttempts.length) return gatewayAttempts;
 
   const pantavion = attempted.filter((item) => item.provider === "pantavion_speech_provider");
   if (pantavion.length) return pantavion;
@@ -97,47 +76,39 @@ function publicFailureCode(attempts: Attempt[]) {
   return "STT_PROVIDER_UNAVAILABLE";
 }
 
-async function resolveGatewayCredentials(attempts?: Attempt[]) {
-  const credentials: Array<[string, string]> = [];
+function statusFromError(error: unknown) {
+  const maybe = error as { statusCode?: number; status?: number; response?: { status?: number } };
+  return maybe?.statusCode || maybe?.status || maybe?.response?.status;
+}
 
+function codeFromError(error: unknown) {
+  const maybe = error as { code?: string; name?: string };
+  const raw = String(maybe?.code || maybe?.name || "").trim();
+  return raw.replace(/[^a-zA-Z0-9_.-]/g, "").slice(0, 80) || "provider_error";
+}
+
+async function gatewayRuntimeAvailable() {
+  if (process.env.AI_GATEWAY_API_KEY) return true;
   try {
-    const oidcToken = await getVercelOidcToken();
-    if (oidcToken) credentials.push(["vercel_oidc_helper", oidcToken]);
-    else if (attempts) {
-      attempts.push({
-        provider: "vercel_ai_gateway:oidc_helper",
-        attempted: true,
-        ok: false,
-        code: "oidc_token_unavailable",
-      });
-    }
+    return Boolean(await getVercelOidcToken());
   } catch {
-    if (attempts) {
-      attempts.push({
-        provider: "vercel_ai_gateway:oidc_helper",
-        attempted: true,
-        ok: false,
-        code: "oidc_token_unavailable",
-      });
-    }
+    return false;
   }
-
-  const gatewayKey = process.env.AI_GATEWAY_API_KEY;
-  if (gatewayKey) credentials.push(["ai_gateway_key", gatewayKey]);
-
-  const deduped = new Map<string, [string, string]>();
-  for (const entry of credentials) {
-    if (!deduped.has(entry[1])) deduped.set(entry[1], entry);
-  }
-  return Array.from(deduped.values());
 }
 
 async function transcribeWithVercelAiGateway(
   audio: File,
   attempts: Attempt[],
 ): Promise<SpeechResult | null> {
-  const credentials = await resolveGatewayCredentials(attempts);
-  if (!credentials.length) return null;
+  if (!(await gatewayRuntimeAvailable())) {
+    attempts.push({
+      provider: "vercel_ai_gateway",
+      attempted: true,
+      ok: false,
+      code: "oidc_token_unavailable",
+    });
+    return null;
+  }
 
   const requested = process.env.PANTAVION_SPEECH_TO_TEXT_GATEWAY_MODEL;
   const models = Array.from(
@@ -150,47 +121,27 @@ async function transcribeWithVercelAiGateway(
       ].filter((value): value is string => Boolean(value)),
     ),
   );
-  const audioBase64 = Buffer.from(await audio.arrayBuffer()).toString("base64");
-  const mediaType = normalizeGatewayMediaType(audio.type || "audio/webm");
 
-  for (const [credentialName, token] of credentials) {
-    for (const model of models) {
-      const provider = `vercel_ai_gateway:${credentialName}:${model}`;
-      try {
-        const response = await fetch("https://ai-gateway.vercel.sh/v4/ai/transcription-model", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "ai-model-id": model,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            audio: audioBase64,
-            mediaType,
-          }),
-          signal: AbortSignal.timeout(30_000),
-        });
-        const payload = await response.json().catch(() => ({}));
-        const text = textFromPayload(payload);
-        attempts.push({
-          provider,
-          attempted: true,
-          ok: response.ok && Boolean(text),
-          status: response.status,
-          code: safeCode(payload),
-        });
-        if (response.ok && text) {
-          return { ok: true, text, provider: `vercel_ai_gateway:${model}` };
-        }
-        if (response.status === 401 || response.status === 403) break;
-      } catch {
-        attempts.push({
-          provider,
-          attempted: true,
-          ok: false,
-          code: "network_or_timeout",
-        });
-      }
+  const audioBuffer = Buffer.from(await audio.arrayBuffer());
+
+  for (const model of models) {
+    const provider = `vercel_ai_gateway:${model}`;
+    try {
+      const result = await transcribe({
+        model: gateway.transcriptionModel(model),
+        audio: audioBuffer,
+      });
+      const text = String(result.text || "").trim();
+      attempts.push({ provider, attempted: true, ok: Boolean(text) });
+      if (text) return { ok: true, text, provider };
+    } catch (error) {
+      attempts.push({
+        provider,
+        attempted: true,
+        ok: false,
+        status: statusFromError(error),
+        code: codeFromError(error),
+      });
     }
   }
 
@@ -321,7 +272,7 @@ async function finalizeAccessibleTranscript(result: SpeechResult, language: stri
 }
 
 export async function GET() {
-  const gatewayCredentials = await resolveGatewayCredentials();
+  const gatewayAvailable = await gatewayRuntimeAvailable();
   const directOpenAiEnabled =
     process.env.PANTAVION_ENABLE_DIRECT_OPENAI_STT === "true" && Boolean(process.env.OPENAI_API_KEY);
 
@@ -335,10 +286,11 @@ export async function GET() {
       preserveRawTranscript: true,
     },
     serverProviderConfigured: Boolean(
-      gatewayCredentials.length || process.env.PANTAVION_SPEECH_TO_TEXT_ENDPOINT || directOpenAiEnabled,
+      gatewayAvailable || process.env.PANTAVION_SPEECH_TO_TEXT_ENDPOINT || directOpenAiEnabled,
     ),
-    gatewayRuntimeAvailable: gatewayCredentials.length > 0,
+    gatewayRuntimeAvailable: gatewayAvailable,
     gatewayPreferred: true,
+    gatewayTransport: "ai-sdk-transcribe",
     directOpenAiFallbackEnabled: directOpenAiEnabled,
   });
 }
