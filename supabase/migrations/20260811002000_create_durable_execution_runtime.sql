@@ -2,7 +2,7 @@
 -- Server-controlled storage for queued/running/paused/retryable long-running work.
 
 create table if not exists public.durable_executions (
-  execution_id uuid primary key,
+  execution_id text primary key,
   idempotency_key text not null unique,
   task_name text,
   status text not null check (status in ('queued','planned','running','paused','succeeded','failed','cancelled')),
@@ -22,7 +22,7 @@ create index if not exists durable_executions_task_updated_idx
 
 create table if not exists public.durable_execution_checkpoints (
   checkpoint_id text primary key,
-  execution_id uuid not null references public.durable_executions(execution_id) on delete cascade,
+  execution_id text not null references public.durable_executions(execution_id) on delete cascade,
   sequence integer not null check (sequence >= 1),
   label text not null,
   state jsonb not null default '{}'::jsonb,
@@ -41,7 +41,7 @@ revoke all on public.durable_executions from anon, authenticated;
 revoke all on public.durable_execution_checkpoints from anon, authenticated;
 
 create or replace function public.pantavion_claim_durable_execution(
-  p_execution_id uuid,
+  p_execution_id text,
   p_expected_statuses text[] default array['queued','planned']::text[]
 )
 returns boolean
@@ -67,7 +67,7 @@ end;
 $$;
 
 create or replace function public.pantavion_append_durable_checkpoint(
-  p_execution_id uuid,
+  p_execution_id text,
   p_label text,
   p_state jsonb default '{}'::jsonb
 )
@@ -89,7 +89,7 @@ begin
   from public.durable_execution_checkpoints
   where execution_id = p_execution_id;
 
-  new_id := p_execution_id::text || ':' || next_sequence::text;
+  new_id := p_execution_id || ':' || next_sequence::text;
 
   insert into public.durable_execution_checkpoints(checkpoint_id, execution_id, sequence, label, state)
   values (new_id, p_execution_id, next_sequence, p_label, coalesce(p_state, '{}'::jsonb));
@@ -99,5 +99,5 @@ begin
 end;
 $$;
 
-revoke all on function public.pantavion_claim_durable_execution(uuid, text[]) from public, anon, authenticated;
-revoke all on function public.pantavion_append_durable_checkpoint(uuid, text, jsonb) from public, anon, authenticated;
+revoke all on function public.pantavion_claim_durable_execution(text, text[]) from public, anon, authenticated;
+revoke all on function public.pantavion_append_durable_checkpoint(text, text, jsonb) from public, anon, authenticated;
