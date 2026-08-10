@@ -8,24 +8,22 @@ export const dynamic = "force-dynamic";
 const MODERATION_ROLES = ["founder", "admin", "moderator"] as const;
 const ACTIONS = new Set(["review", "approve", "reject", "publish", "remove", "expire", "archive"]);
 
-const TRANSITIONS: Record<string, Record<string, string>> = {
-  review: { submitted: "under_review" },
-  approve: { submitted: "approved", under_review: "approved" },
-  reject: { submitted: "rejected", under_review: "rejected", approved: "rejected" },
-  publish: { approved: "published" },
-  remove: { published: "removed", approved: "removed", under_review: "removed" },
-  expire: { published: "expired", approved: "expired" },
-  archive: { removed: "archived", expired: "archived", rejected: "archived", fulfilled: "archived", sold: "archived", rented: "archived" },
-};
-
 async function requireModerator() {
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) return { ok: false as const, response: NextResponse.json({ ok: false, error: "authentication_required" }, { status: 401 }) };
+  if (!auth.user) {
+    return {
+      ok: false as const,
+      response: NextResponse.json({ ok: false, error: "authentication_required" }, { status: 401 }),
+    };
+  }
 
   const authority = await hasPlatformAuthority(auth.user.id, [...MODERATION_ROLES]);
   if (!authority.allowed) {
-    return { ok: false as const, response: NextResponse.json({ ok: false, error: authority.reason }, { status: 403 }) };
+    return {
+      ok: false as const,
+      response: NextResponse.json({ ok: false, error: authority.reason }, { status: 403 }),
+    };
   }
 
   return { ok: true as const, user: auth.user, authority };
@@ -47,7 +45,9 @@ export async function GET(request: Request) {
     .order("created_at", { ascending: true })
     .limit(limit);
 
-  if (error) return NextResponse.json({ ok: false, error: "moderation_queue_unavailable", detail: error.message }, { status: 503 });
+  if (error) {
+    return NextResponse.json({ ok: false, error: "moderation_queue_unavailable", detail: error.message }, { status: 503 });
+  }
 
   return NextResponse.json({
     ok: true,
@@ -63,7 +63,9 @@ export async function POST(request: Request) {
   if (!gate.ok) return gate.response;
 
   const body = await request.json().catch(() => null);
-  if (!body || typeof body !== "object") return NextResponse.json({ ok: false, error: "invalid_json" }, { status: 400 });
+  if (!body || typeof body !== "object") {
+    return NextResponse.json({ ok: false, error: "invalid_json" }, { status: 400 });
+  }
 
   const listingId = typeof body.listingId === "string" ? body.listingId : "";
   const action = typeof body.action === "string" ? body.action : "";
@@ -78,68 +80,33 @@ export async function POST(request: Request) {
   }
 
   const admin = createAdminClient();
-  const { data: listing, error: fetchError } = await admin
-    .from("public_listings")
-    .select("id,lifecycle_state,published_at")
-    .eq("id", listingId)
-    .single();
-
-  if (fetchError || !listing) return NextResponse.json({ ok: false, error: "listing_not_found" }, { status: 404 });
-
-  const nextState = TRANSITIONS[action]?.[listing.lifecycle_state];
-  if (!nextState) {
-    return NextResponse.json({
-      ok: false,
-      error: "invalid_state_transition",
-      currentState: listing.lifecycle_state,
-      action,
-    }, { status: 409 });
-  }
-
-  const update: Record<string, unknown> = {
-    lifecycle_state: nextState,
-    moderation_note: reason,
-  };
-  if (nextState === "published" && !listing.published_at) update.published_at = new Date().toISOString();
-
-  const { data: updated, error: updateError } = await admin
-    .from("public_listings")
-    .update(update)
-    .eq("id", listingId)
-    .eq("lifecycle_state", listing.lifecycle_state)
-    .select("id,lifecycle_state,published_at,updated_at")
-    .single();
-
-  if (updateError || !updated) {
-    return NextResponse.json({ ok: false, error: "moderation_update_failed", detail: updateError?.message }, { status: 409 });
-  }
-
-  const auditAction = action === "review" ? "submit_review" : action;
-  const { error: auditError } = await admin.from("moderation_actions").insert({
-    actor_user_id: gate.user.id,
-    target_type: "listing",
-    target_id: listingId,
-    action: auditAction,
-    previous_state: listing.lifecycle_state,
-    next_state: nextState,
-    reason,
-    metadata: { authorityRole: gate.authority.role, authoritySource: gate.authority.source },
+  const { data, error } = await admin.rpc("pantavion_moderate_listing", {
+    p_listing_id: listingId,
+    p_actor_user_id: gate.user.id,
+    p_action: action,
+    p_reason: reason,
+    p_authority_role: gate.authority.role,
+    p_authority_source: gate.authority.source,
   });
 
-  if (auditError) {
-    // State was changed but audit persistence failed: surface this loudly rather than hiding it.
-    return NextResponse.json({
-      ok: false,
-      error: "moderation_audit_failed",
-      listing: updated,
-      detail: auditError.message,
-    }, { status: 500 });
+  if (error) {
+    const message = error.message ?? "";
+    const code = message.includes("listing_not_found")
+      ? "listing_not_found"
+      : message.includes("reason_required")
+        ? "reason_required"
+        : message.includes("invalid_state_transition")
+          ? "invalid_state_transition"
+          : "moderation_transition_failed";
+    const status = code === "listing_not_found" ? 404 : code === "reason_required" ? 400 : code === "invalid_state_transition" ? 409 : 500;
+    return NextResponse.json({ ok: false, error: code }, { status });
   }
 
+  const transition = Array.isArray(data) ? data[0] : data;
   return NextResponse.json({
     ok: true,
-    listing: updated,
-    transition: { from: listing.lifecycle_state, to: nextState, action },
+    transition,
     audited: true,
+    atomic: true,
   });
 }
