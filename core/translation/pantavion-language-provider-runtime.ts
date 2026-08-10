@@ -44,10 +44,12 @@ export async function getPantavionLanguageRuntimeSnapshot(): Promise<PantavionLa
     process.env.PANTAVION_ENABLE_DIRECT_OPENAI_STT === "true" && Boolean(process.env.OPENAI_API_KEY);
   const pantavionSttEndpoint = Boolean(process.env.PANTAVION_SPEECH_TO_TEXT_ENDPOINT);
   const publicFallbackAllowed = pantavionPublicTranslationFallbackAllowed();
+  const configuredTranslationProviderAvailable =
+    translationProvider.ok && translationProvider.provider !== "mymemory";
 
   const translationAvailable =
     gatewayAvailable ||
-    translationProvider.configuredProviderAvailable ||
+    configuredTranslationProviderAvailable ||
     (publicFallbackAllowed && translationProvider.provider === "mymemory");
 
   const speechToTextAvailable = gatewayAvailable || pantavionSttEndpoint || directOpenAiStt;
@@ -59,7 +61,7 @@ export async function getPantavionLanguageRuntimeSnapshot(): Promise<PantavionLa
       mode: translationAvailable ? "server" : "unavailable",
       providers: [
         ...(gatewayAvailable ? ["vercel_ai_gateway"] : []),
-        ...(translationProvider.configuredProviderAvailable ? [translationProvider.provider] : []),
+        ...(configuredTranslationProviderAvailable ? [translationProvider.provider] : []),
         ...(publicFallbackAllowed && translationProvider.provider === "mymemory" ? ["mymemory_public"] : []),
       ],
       notes: [
