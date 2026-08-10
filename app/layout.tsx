@@ -1,4 +1,5 @@
 import PantavionGlobalLanguageSelector from "./pantavion-global-language-selector";
+import PantavionGlobalUiTranslationRuntime from "@/components/pantavion/PantavionGlobalUiTranslationRuntime";
 import "leaflet/dist/leaflet.css";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
@@ -32,9 +33,7 @@ export const metadata: Metadata = {
   authors: [{ name: "George Nicolaou" }],
   creator: "Pantavion",
   publisher: "Pantavion",
-  alternates: {
-    canonical: "/"
-  },
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: "/",
@@ -42,14 +41,7 @@ export const metadata: Metadata = {
     title: "Pantavion | One Planet. One Living Screen.",
     description:
       "A governed global ecosystem for communication, SOS safety, universal interpretation, PantaAI, professional infrastructure, knowledge, work and protected services.",
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "Pantavion global ecosystem"
-      }
-    ],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Pantavion global ecosystem" }],
     locale: "en_US"
   },
   twitter: {
@@ -62,18 +54,9 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1
-    }
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 }
   },
-  icons: {
-    icon: "/pantavion-icon.svg",
-    apple: "/pantavion-icon.svg"
-  },
+  icons: { icon: "/pantavion-icon.svg", apple: "/pantavion-icon.svg" },
   manifest: "/manifest.webmanifest"
 };
 
@@ -85,14 +68,11 @@ export const viewport: Viewport = {
   colorScheme: "dark"
 };
 
-export default function RootLayout({
-  children
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
+        <PantavionGlobalUiTranslationRuntime />
         <PantavionGlobalLanguageSelector />
         {children}
         <Analytics />
@@ -100,5 +80,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-
