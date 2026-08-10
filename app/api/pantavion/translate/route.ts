@@ -119,7 +119,7 @@ export async function GET() {
     contract: pantavionUniversalTranslationContract,
     gatewayPreferred: languageRuntime.gatewayRuntimeAvailable,
     strictLanguageRouting: true,
-    publicTextFallback: languageRuntime.publicFallbackAllowed,
+    publicTextFallback: false,
     languageRuntime,
   });
 }
