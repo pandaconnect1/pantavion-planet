@@ -48,7 +48,7 @@ export default async function ListingsPage({ searchParams }: { searchParams: Pro
         ) : data && data.length > 0 ? (
           <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {data.map((item) => (
-              <article key={item.id} className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5">
+              <Link key={item.id} href={`/listings/${item.id}`} className="block rounded-2xl border border-slate-800 bg-slate-900/70 p-5 transition hover:-translate-y-0.5 hover:border-slate-600">
                 <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-wider text-slate-400">
                   <span>{item.listing_type}</span><span>{[item.city, item.country_code].filter(Boolean).join(", ")}</span>
                 </div>
@@ -58,7 +58,7 @@ export default async function ListingsPage({ searchParams }: { searchParams: Pro
                   <span className="text-slate-400">{item.category ?? "General"}</span>
                   {item.price_amount != null && <strong>{item.price_amount} {item.price_currency ?? ""}</strong>}
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         ) : (
