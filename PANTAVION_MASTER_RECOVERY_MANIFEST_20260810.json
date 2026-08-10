@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-08-10",
+  "canonicalRepository": "pandaconnect1/pantavion-planet",
+  "purpose": "Preserve recovered Pantavion architecture, evidence, live state and continuation order before conversation migration.",
+  "rules": {
+    "workflow": ["recover", "verify", "classify", "canonicalize", "merge", "backend_live", "ui_live", "test", "deploy", "verify_live"],
+    "doneDefinition": "DONE only when backend-live, UI-connected, tested, deployed and verified-live.",
+    "recoveryStates": ["COMPLETE", "PARTIAL", "SKELETON", "IDEA-SPEC", "DELETED-HISTORICAL"],
+    "decisions": ["KEEP", "MERGE", "EVOLVE", "REBUILD", "ARCHIVE", "INVESTIGATE"],
+    "liveStates": ["SPEC_ONLY", "UI_ONLY", "BACKEND_PARTIAL", "BACKEND_LIVE", "CONNECTED", "TESTED", "DEPLOYED", "VERIFIED_LIVE"]
+  },
+  "verifiedSources": [
+    {"path":"PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt","kind":"historical_snapshot"},
+    {"path":"data/pantavion-source-inventory/inventory.json","kind":"source_inventory","historicalEntriesApprox":939},
+    {"path":"data/runtime-reports/latest-founder-vision-ingestion.json","kind":"vision_ingestion","scannedFiles":696,"findings":13801},
+    {"path":"data/runtime-reports/latest-unfinished-plan-ingestion.json","kind":"unfinished_ingestion","scannedFiles":702,"findings":11360},
+    {"path":"core/recovery/donor-extraction-registry.ts","kind":"recovery_registry"},
+    {"path":"core/recovery/project-fragment-registry.ts","kind":"recovery_registry"},
+    {"path":"core/recovery/repository-triage-registry.ts","kind":"recovery_registry"}
+  ],
+  "majorSystems": [
+    {"id":"kernel-foundation","source":"core/kernel/kernel-foundation-lock.ts","recoveryState":"COMPLETE","decision":"KEEP","liveState":"BACKEND_PARTIAL","notes":"Authoritative foundation path locked with hardening ahead."},
+    {"id":"canonical-registry","source":"core/canonical/canonical-registry.ts","recoveryState":"COMPLETE","decision":"KEEP","liveState":"BACKEND_LIVE","notes":"Canonical zones and target placement; memory/research/build/general still historically ungrounded."},
+    {"id":"capability-registry","source":"core/registry/capability-registry.ts","recoveryState":"COMPLETE","decision":"EVOLVE","liveState":"BACKEND_PARTIAL","notes":"Health/maturity/execution/scopes matching exists; reconcile product-truth drift."},
+    {"id":"durable-execution","source":"core/runtime/durable-execution.ts","recoveryState":"PARTIAL","decision":"EVOLVE","liveState":"BACKEND_PARTIAL","notes":"Execution/checkpoint model exists but queue/execute/run are compatibility stubs."},
+    {"id":"guardian-kernel","source":"core/guardian/pantavion-guardian-kernel.ts","recoveryState":"PARTIAL","decision":"EVOLVE","liveState":"BACKEND_PARTIAL","notes":"Observe/research/propose/audit/deploy-gate doctrine and capability families."},
+    {"id":"guardian-365","source":"scripts/pantavion-guardian-365.cjs","recoveryState":"COMPLETE","decision":"EVOLVE","liveState":"TESTED","notes":"Scheduled audit foundation with GitHub workflow."},
+    {"id":"internal-ai-os","source":"core/guardian/pantavion-autonomous-internal-ai-os.ts","recoveryState":"PARTIAL","decision":"EVOLVE","liveState":"BACKEND_PARTIAL"},
+    {"id":"autonomy-policy","source":"core/runtime/pantavion-autonomy-policy.ts","recoveryState":"COMPLETE","decision":"KEEP","liveState":"BACKEND_LIVE"},
+    {"id":"autonomous-builder","source":"core/kernel/pantavion-autonomous-builder-kernel.ts","recoveryState":"PARTIAL","decision":"EVOLVE","liveState":"BACKEND_PARTIAL"},
+    {"id":"pantaai-command-center","source":"core/ai/pantavion-ai-command-center.ts","recoveryState":"PARTIAL","decision":"EVOLVE","liveState":"BACKEND_PARTIAL"},
+    {"id":"identity-model","source":"core/identity/identity-model.ts","recoveryState":"COMPLETE","decision":"KEEP","liveState":"BACKEND_LIVE"},
+    {"id":"delegation-model","source":"core/identity/delegation-model.ts","recoveryState":"COMPLETE","decision":"KEEP","liveState":"BACKEND_LIVE"},
+    {"id":"thread-continuity","source":"core/memory/thread-registry.ts","recoveryState":"PARTIAL","decision":"EVOLVE","liveState":"BACKEND_PARTIAL"},
+    {"id":"unfinished-plan-ingestion","source":"core/intelligence/pantavion-unfinished-plan-ingestion.ts","recoveryState":"COMPLETE","decision":"EVOLVE","liveState":"BACKEND_PARTIAL"},
+    {"id":"platform-registry","source":"core/platform/pantavion-registry.ts","recoveryState":"COMPLETE","decision":"EVOLVE","liveState":"BACKEND_PARTIAL"},
+    {"id":"global-capability-intake","source":"core/intelligence/global-capability-intake-registry.ts","recoveryState":"COMPLETE","decision":"KEEP","liveState":"SPEC_ONLY"},
+    {"id":"no-dead-surface-ledger","source":"core/pantavion/no-dead-surface-ledger.ts","recoveryState":"COMPLETE","decision":"EVOLVE","liveState":"BACKEND_PARTIAL"},
+    {"id":"translation-router","source":"core/translation/pantavion-translation-provider-router.ts","recoveryState":"PARTIAL","decision":"EVOLVE","liveState":"BACKEND_PARTIAL","blocker":"live provider not configured"},
+    {"id":"voice-translation-ledger","source":"core/translation/pantavion-voice-translation-completion-ledger.ts","recoveryState":"COMPLETE","decision":"KEEP","liveState":"SPEC_ONLY"},
+    {"id":"language-kernel","source":"core/kernel/language/pantavion-language-kernel.ts","recoveryState":"PARTIAL","decision":"EVOLVE","liveState":"BACKEND_PARTIAL"},
+    {"id":"auth-actions","source":"app/auth/actions.ts","recoveryState":"COMPLETE","decision":"KEEP","liveState":"CONNECTED"},
+    {"id":"profile-page","source":"app/profile/page.tsx","recoveryState":"COMPLETE","decision":"EVOLVE","liveState":"CONNECTED"},
+    {"id":"profile-client","source":"app/profile/ProfileClient.tsx","recoveryState":"COMPLETE","decision":"EVOLVE","liveState":"CONNECTED"},
+    {"id":"messages-send","source":"app/api/messages/send/route.ts","recoveryState":"SKELETON","decision":"REBUILD","liveState":"BACKEND_PARTIAL","blocker":"auth identity recipient consent abuse protection persistence"}
+  ],
+  "historicalRecoveredConcepts": [
+    "Compact Kernel v1: taxonomy, providers, recipes, orchestrator, routing",
+    "Global State Engine: navigation/workspace/project/UI persistence",
+    "People: global profiles, connections, communities, discover humanity",
+    "Pulse: realtime events/alerts/trends/city-system-human movement with graph/APIs/sensors/global sources",
+    "Deleted Pulse Chat/Voice/Elite traces requiring earlier-history excavation",
+    "Standalone Voice donor with language/locale and TTS/translation mappings"
+  ],
+  "publicFamilies": [
+    "People & Social",
+    "Communication",
+    "Work & Business",
+    "Knowledge & Creation",
+    "Maps & World",
+    "Safety & Life"
+  ],
+  "humanCoreBuildOrder": [
+    "Identity/Auth/Profile",
+    "Consent/Permissions",
+    "Contacts",
+    "Relationship Graph",
+    "Messaging persistence",
+    "Realtime Chat",
+    "Translation bridge",
+    "Voice/Video",
+    "Communities/Social",
+    "Nearby/Match"
+  ],
+  "infrastructureBuildOrder": [
+    "Kernel",
+    "Capability Registry",
+    "Identity/Delegation",
+    "Security/Policy",
+    "Provider Router",
+    "Durable Execution",
+    "Memory/Continuity",
+    "Guardian/Audit",
+    "Failover/Resilience"
+  ],
+  "safety": {
+    "preserveWaterMapsUsersNetwork": true,
+    "noDestructiveMergeWithoutBackup": true,
+    "noFakeLiveClaims": true,
+    "noUnapprovedProviderCostExposure": true,
+    "noUnauthorizedPrivateDataAccess": true
+  },
+  "nextThread": [
+    "Read PANTAVION_MASTER_RECOVERY_HANDOFF_20260810.md first",
+    "Re-verify current main before claims",
+    "Continue excavation from historical commits/backups/deletions/donor traces",
+    "Deduplicate vision and unfinished findings into canonical capabilities",
+    "Convert recovered capabilities to a live completion queue",
+    "Implement backend before decorative surfaces",
+    "Test, deploy and verify production before DONE"
+  ]
+}
