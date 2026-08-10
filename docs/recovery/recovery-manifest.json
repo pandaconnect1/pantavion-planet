@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "canonicalRepository": "pandaconnect1/pantavion-planet",
+  "workingBranch": "recovery/consolidation-20260810",
+  "recoveryStates": ["FOUND", "VERIFIED", "CLASSIFIED", "CANONICALIZED", "MERGED"],
+  "liveStates": ["SPEC_ONLY", "UI_ONLY", "BACKEND_PARTIAL", "BACKEND_LIVE", "CONNECTED", "TESTED", "DEPLOYED", "VERIFIED_LIVE"],
+  "doneRule": "DONE only after VERIFIED_LIVE",
+  "verifiedSources": [
+    "PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+    "data/pantavion-source-inventory/inventory.json",
+    "data/runtime-reports/latest-founder-vision-ingestion.json",
+    "data/runtime-reports/latest-unfinished-plan-ingestion.json",
+    "core/recovery/donor-extraction-registry.ts",
+    "core/recovery/project-fragment-registry.ts",
+    "core/recovery/repository-triage-registry.ts",
+    "core/canonical/canonical-registry.ts",
+    "core/kernel/kernel-foundation-lock.ts",
+    "core/platform/pantavion-registry.ts",
+    "core/pantavion/no-dead-surface-ledger.ts",
+    "core/intelligence/global-capability-intake-registry.ts"
+  ],
+  "workstreams": [
+    {
+      "id": "kernel-control-plane",
+      "recoveryState": "VERIFIED",
+      "liveState": "BACKEND_PARTIAL",
+      "canonicalTargets": ["core/kernel", "core/canonical", "core/registry", "core/security", "core/protocol", "core/runtime", "core/guardian", "core/intelligence"],
+      "next": ["complete durable execution", "unify provider health and failover", "surface Control Room health"]
+    },
+    {
+      "id": "identity-profile-trust",
+      "recoveryState": "VERIFIED",
+      "liveState": "BACKEND_PARTIAL",
+      "canonicalTargets": ["lib/supabase", "app/auth", "app/profile", "core/identity"],
+      "next": ["verify schema/RLS", "verify session flow", "persist consent/delegation"]
+    },
+    {
+      "id": "people-social",
+      "recoveryState": "CLASSIFIED",
+      "liveState": "UI_ONLY",
+      "canonicalTargets": ["app/people", "app/profile", "core/social"],
+      "next": ["contacts", "relationship graph", "social graph", "communities", "nearby/match"]
+    },
+    {
+      "id": "messaging-communication",
+      "recoveryState": "CLASSIFIED",
+      "liveState": "BACKEND_PARTIAL",
+      "canonicalTargets": ["app/messages", "app/api/messages", "core/messaging"],
+      "next": ["message schema", "realtime transport", "request/consent states", "moderation", "translation bridge"]
+    },
+    {
+      "id": "language-translation-voice",
+      "recoveryState": "VERIFIED",
+      "liveState": "BACKEND_PARTIAL",
+      "canonicalTargets": ["core/translation", "core/kernel/language", "core/runtime/voice-runtime.ts"],
+      "next": ["provider registry", "STT adapter", "translation adapter", "TTS adapter", "conversation runtime", "subtitle runtime", "terminology memory", "offline packs"]
+    },
+    {
+      "id": "sos-resilience",
+      "recoveryState": "VERIFIED",
+      "liveState": "BACKEND_PARTIAL",
+      "canonicalTargets": ["core/emergency", "core/runtime/resilience-runtime.ts"],
+      "next": ["trusted contacts persistence", "offline queue", "truthful delivery", "provider-backed SMS/push", "emergency language lane"]
+    },
+    {
+      "id": "work-marketplace-ads",
+      "recoveryState": "CLASSIFIED",
+      "liveState": "UI_ONLY",
+      "canonicalTargets": ["app/work", "app/services", "app/market", "app/ads"],
+      "next": ["listing persistence", "moderation", "search", "payment/provider gates"]
+    },
+    {
+      "id": "memory-continuity-research",
+      "recoveryState": "VERIFIED",
+      "liveState": "BACKEND_PARTIAL",
+      "canonicalTargets": ["core/memory", "core/intelligence", "app/memory"],
+      "next": ["dedicated canonical memory layer", "project/thread graph", "source-grounded research", "provenance"]
+    },
+    {
+      "id": "maps-water-infrastructure",
+      "recoveryState": "CLASSIFIED",
+      "liveState": "BACKEND_PARTIAL",
+      "canonicalTargets": ["app/professional/infrastructure", "core/maps", "core/water"],
+      "protected": true,
+      "next": ["inventory assets", "preserve DWG/network/users", "verify backups", "no destructive migration"]
+    }
+  ],
+  "pipeline": ["recover", "classify", "compare", "canonicalize", "merge", "complete-backend", "connect-ui", "typecheck-build", "runtime-security-audit", "deploy", "production-verify"]
+}
