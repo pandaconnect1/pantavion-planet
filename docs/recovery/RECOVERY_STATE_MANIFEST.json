@@ -1,0 +1,182 @@
+{
+  "id": "pantavion_recovery_state_manifest_v1",
+  "updatedAt": "2026-08-10",
+  "canonicalRepo": "pandaconnect1/pantavion-planet",
+  "workflow": [
+    "recover",
+    "classify",
+    "compare",
+    "canonicalize",
+    "merge",
+    "complete_backend",
+    "connect_ui",
+    "test",
+    "deploy",
+    "verify_live"
+  ],
+  "doneDefinition": "BACKEND_LIVE + CONNECTED + TESTED + DEPLOYED + VERIFIED_LIVE",
+  "recoveryStates": ["COMPLETE", "PARTIAL", "SKELETON", "IDEA-SPEC", "DELETED-HISTORICAL"],
+  "decisions": ["KEEP", "MERGE", "EVOLVE", "REBUILD", "ARCHIVE", "INVESTIGATE"],
+  "liveStates": ["SPEC_ONLY", "UI_ONLY", "BACKEND_PARTIAL", "BACKEND_LIVE", "CONNECTED", "TESTED", "DEPLOYED", "VERIFIED_LIVE"],
+  "verifiedSources": [
+    "PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+    "data/pantavion-source-inventory/inventory.json",
+    "data/runtime-reports/latest-founder-vision-ingestion.json",
+    "data/runtime-reports/latest-unfinished-plan-ingestion.json",
+    "core/recovery/donor-extraction-registry.ts",
+    "core/recovery/project-fragment-registry.ts",
+    "core/recovery/repository-triage-registry.ts"
+  ],
+  "items": [
+    {
+      "id": "kernel-foundation",
+      "canonicalTarget": "core/kernel + core/canonical + core/registry + core/protocol + core/runtime",
+      "recoveryState": "PARTIAL",
+      "decision": "KEEP",
+      "liveState": "BACKEND_PARTIAL",
+      "evidence": ["core/kernel/kernel-foundation-lock.ts", "core/canonical/canonical-registry.ts", "core/registry/capability-registry.ts"],
+      "blockers": ["runtime hardening", "provider completion", "truth drift cleanup"],
+      "nextAction": "complete real runtime paths and reconcile registry health/maturity with implementation truth"
+    },
+    {
+      "id": "guardian-ai-os",
+      "canonicalTarget": "core/guardian + core/ai + services/repo-guardian + services/build-guardian",
+      "recoveryState": "PARTIAL",
+      "decision": "EVOLVE",
+      "liveState": "BACKEND_PARTIAL",
+      "evidence": ["Guardian Kernel", "PantaAI Command Center", "Autonomous Builder", "Guardian 365"],
+      "blockers": ["unified operational state", "completion queue integration"],
+      "nextAction": "connect recovery findings, build health and approval gates into one control plane"
+    },
+    {
+      "id": "durable-execution",
+      "canonicalTarget": "core/runtime/durable-execution.ts",
+      "recoveryState": "PARTIAL",
+      "decision": "EVOLVE",
+      "liveState": "BACKEND_PARTIAL",
+      "evidence": ["execution record model", "checkpoint model", "compatibility_rescue runtime"],
+      "blockers": ["real queue", "worker", "retry", "resume", "persistence"],
+      "nextAction": "implement durable task runner and persistence"
+    },
+    {
+      "id": "continuity-memory",
+      "canonicalTarget": "core/memory + kernel memory integration",
+      "recoveryState": "PARTIAL",
+      "decision": "MERGE",
+      "liveState": "BACKEND_PARTIAL",
+      "evidence": ["core/memory/thread-registry.ts"],
+      "blockers": ["dedicated grounded memory layer", "artifact/decision/project graph"],
+      "nextAction": "evolve thread continuity into project/domain/artifact implementation graph"
+    },
+    {
+      "id": "identity-auth-profile",
+      "canonicalTarget": "lib/supabase + app/auth + app/profile + core/identity",
+      "recoveryState": "PARTIAL",
+      "decision": "KEEP",
+      "liveState": "BACKEND_LIVE",
+      "evidence": ["Supabase clients", "app/auth/actions.ts", "app/profile/page.tsx", "app/profile/ProfileClient.tsx", "core/identity/identity-model.ts", "core/identity/delegation-model.ts"],
+      "blockers": ["full profile schema audit", "consent/permissions integration", "production live verification"],
+      "nextAction": "verify production auth/profile end-to-end and connect consent scopes"
+    },
+    {
+      "id": "contacts",
+      "canonicalTarget": "People/Social contacts core",
+      "recoveryState": "SKELETON",
+      "decision": "EVOLVE",
+      "liveState": "SPEC_ONLY",
+      "evidence": ["historical contacts import API boundary"],
+      "blockers": ["auth", "explicit consent", "official source adapters", "storage"],
+      "nextAction": "build consent-first contact import and canonical contact graph"
+    },
+    {
+      "id": "relationship-graph",
+      "canonicalTarget": "People/Social relationship core",
+      "recoveryState": "IDEA-SPEC",
+      "decision": "REBUILD",
+      "liveState": "SPEC_ONLY",
+      "evidence": ["historical People intent: profiles, connections, communities, discovery"],
+      "blockers": ["schema", "privacy scopes", "block/mute/request states"],
+      "nextAction": "implement canonical relationship graph after identity/consent"
+    },
+    {
+      "id": "messaging",
+      "canonicalTarget": "Communication Core / Messages",
+      "recoveryState": "SKELETON",
+      "decision": "EVOLVE",
+      "liveState": "BACKEND_PARTIAL",
+      "evidence": ["app/api/messages/send/route.ts guarded boundary"],
+      "blockers": ["recipient consent", "abuse protection", "database persistence", "realtime transport"],
+      "nextAction": "implement conversation/message persistence then realtime delivery"
+    },
+    {
+      "id": "translation",
+      "canonicalTarget": "core/translation + Language Kernel",
+      "recoveryState": "PARTIAL",
+      "decision": "KEEP",
+      "liveState": "BACKEND_PARTIAL",
+      "evidence": ["core/translation/pantavion-translation-provider-router.ts", "core/kernel/language/pantavion-language-kernel.ts"],
+      "blockers": ["live provider registry", "keys/secrets boundary", "cost limits", "health/failover", "quality controls"],
+      "nextAction": "complete provider-backed translation routing"
+    },
+    {
+      "id": "voice-interpreter",
+      "canonicalTarget": "Voice + Translation runtime",
+      "recoveryState": "PARTIAL",
+      "decision": "MERGE",
+      "liveState": "BACKEND_PARTIAL",
+      "evidence": ["standalone historical Pantavion Voice", "voice translation completion ledger"],
+      "blockers": ["STT provider", "TTS provider", "conversation runtime", "subtitle stream", "terminology memory", "offline packs"],
+      "nextAction": "execute existing build order from provider router through subtitle runtime"
+    },
+    {
+      "id": "people-social",
+      "canonicalTarget": "People & Social family",
+      "recoveryState": "DELETED-HISTORICAL",
+      "decision": "MERGE",
+      "liveState": "UI_ONLY",
+      "evidence": ["historical People/Pulse surfaces", "platform registry"],
+      "blockers": ["contacts", "relationship graph", "messaging", "privacy", "moderation"],
+      "nextAction": "rebuild on real Human Core foundations, not static pages"
+    },
+    {
+      "id": "pulse-world-awareness",
+      "canonicalTarget": "Pulse / world-awareness intelligence fabric",
+      "recoveryState": "DELETED-HISTORICAL",
+      "decision": "EVOLVE",
+      "liveState": "SPEC_ONLY",
+      "evidence": ["historical Pulse: events, alerts, trends, city/system/human movements; graph/APIs/sensors/data sources"],
+      "blockers": ["event ingestion", "graph", "source governance", "realtime infrastructure"],
+      "nextAction": "recover remaining historical traces then canonicalize under intelligence/event fabric"
+    },
+    {
+      "id": "resilience-continuity",
+      "canonicalTarget": "resilience runtime + SOS/off-grid",
+      "recoveryState": "IDEA-SPEC",
+      "decision": "EVOLVE",
+      "liveState": "SPEC_ONLY",
+      "evidence": ["PANTAVION_LIVE_CONTINUITY_FOUNDATION.md"],
+      "blockers": ["providers", "legal partner boundaries", "certified integrations", "offline runtime"],
+      "nextAction": "implement truthful degraded/offline modes before external emergency integrations"
+    },
+    {
+      "id": "age-minors",
+      "canonicalTarget": "identity/safety age-role engine + minors surfaces",
+      "recoveryState": "PARTIAL",
+      "decision": "KEEP",
+      "liveState": "BACKEND_PARTIAL",
+      "evidence": ["core/identity/age-role-engine.ts"],
+      "blockers": ["policy enforcement across Social/Messaging", "guardian flows", "regional compliance"],
+      "nextAction": "wire age/safety posture into discovery, messaging and UI modes"
+    },
+    {
+      "id": "water-maps",
+      "canonicalTarget": "Maps / Infrastructure / Water",
+      "recoveryState": "PARTIAL",
+      "decision": "KEEP",
+      "liveState": "BACKEND_PARTIAL",
+      "evidence": ["existing water/map runtime and recovery history"],
+      "blockers": ["protect network assets during consolidation", "live verification"],
+      "nextAction": "isolate and preserve network/pipeline/user data while recovery proceeds"
+    }
+  ]
+}
