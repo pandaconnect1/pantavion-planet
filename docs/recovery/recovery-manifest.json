@@ -1,0 +1,197 @@
+{
+  "manifestId": "pantavion_recovery_manifest_v1",
+  "canonicalRepo": "pandaconnect1/pantavion-planet",
+  "branch": "feat/social-business-listings-shell",
+  "rules": {
+    "preserveIncompleteWork": true,
+    "recordIdeasAndImplementation": true,
+    "noProductionOverwriteDuringRecovery": true,
+    "pipeline": ["recover", "classify", "compare", "consolidate", "complete", "audit", "verify", "deploy"]
+  },
+  "statusValues": ["COMPLETE", "PARTIAL", "SKELETON", "IDEA_SPEC", "DELETED_HISTORICAL", "ARCHIVE"],
+  "dispositions": ["KEEP", "MERGE", "EVOLVE", "REBUILD", "ARCHIVE", "INVESTIGATE"],
+  "items": [
+    {
+      "id": "REC-0001",
+      "title": "Compact Kernel v1",
+      "sourceRepo": "pandaconnect1/pantavion-one-clean",
+      "commit": "35d28b1075389c884e71fa0a12c48bc7e120d9ea",
+      "path": "app/pantavion/pantavion-core.jsx",
+      "status": "SKELETON",
+      "disposition": "EVOLVE",
+      "capabilities": ["taxonomy", "provider_abstraction", "recipes", "orchestrator", "routing"],
+      "idea": "Capability -> Provider -> Recipe -> Orchestrator -> Result"
+    },
+    {
+      "id": "REC-0002",
+      "title": "Global State Engine v1",
+      "sourceRepo": "pandaconnect1/pantavion-one-clean",
+      "commit": "473429b1f11233181e35a3593b798888c414d4ad",
+      "path": "app/app/pantavion/pantavion-state.js",
+      "status": "PARTIAL",
+      "disposition": "MERGE",
+      "capabilities": ["navigation_state", "workspace_state", "project_memory", "ui_state", "local_persistence"],
+      "idea": "Persistent Pantavion workspace continuity"
+    },
+    {
+      "id": "REC-0003",
+      "title": "Pantavion Pulse",
+      "sourceRepo": "pandaconnect1/pantavion-one-clean",
+      "commit": "ef11d5d8964d4a0294ef0872b213e5152301089c",
+      "path": "app/app/components/components/components/app/app/elite/app/royal/app/pulse/page.js",
+      "status": "PARTIAL",
+      "disposition": "REBUILD",
+      "capabilities": ["realtime_events", "alerts", "trends", "city_system_human_movements", "graph_api_sensor_inputs"],
+      "idea": "Pulse as world-awareness intelligence fabric"
+    },
+    {
+      "id": "REC-0004",
+      "title": "Deleted Pulse Chat Voice Elite tree",
+      "sourceRepo": "pandaconnect1/pantavion-one-clean",
+      "status": "DELETED_HISTORICAL",
+      "disposition": "INVESTIGATE",
+      "commits": [
+        "3eb8ac04ea6545c5b78ebfe1ab13206a9b70297a",
+        "f02049ddeb3a8a6c46e1f1b40aaf81babb85763d",
+        "737b6e8212bd56844e12336ce6675a28058112d5"
+      ],
+      "idea": "Recover pre-deletion domain concepts and any earlier code"
+    },
+    {
+      "id": "REC-0005",
+      "title": "Deleted People module",
+      "sourceRepo": "pandaconnect1/pantavion-one-clean",
+      "commit": "bb8c9686eee0feab9e63ea52ec2efbd788787f3d",
+      "status": "DELETED_HISTORICAL",
+      "disposition": "MERGE",
+      "capabilities": ["global_profiles", "connections", "communities", "human_discovery"],
+      "idea": "People as global human discovery layer"
+    },
+    {
+      "id": "REC-0006",
+      "title": "Standalone Pantavion Voice",
+      "sourceRepo": "pandaconnect1/pantavion-voice",
+      "commit": "8e610b660a80c6ffe749271398e3190d21629f7f",
+      "status": "PARTIAL",
+      "disposition": "MERGE",
+      "capabilities": ["translation_api", "voice_ui", "language_catalog", "dialect_mapping", "tts_locale_mapping"],
+      "idea": "Language and dialect registry feeding a provider-agnostic Voice Router"
+    },
+    {
+      "id": "REC-0009",
+      "title": "Thread Registry Continuity Core",
+      "sourceRepo": "pandaconnect1/pantavion-planet",
+      "path": "core/memory/thread-registry.ts",
+      "status": "PARTIAL",
+      "disposition": "EVOLVE",
+      "capabilities": ["parent_thread", "continuation", "merge", "recall", "resolution_state", "archive_state", "tags", "metadata"],
+      "idea": "Pantavion Continuity Graph"
+    },
+    {
+      "id": "REC-0010",
+      "title": "Sovereign Guardian Kernel",
+      "sourceRepo": "pandaconnect1/pantavion-planet",
+      "path": "core/guardian/pantavion-guardian-kernel.ts",
+      "status": "PARTIAL",
+      "disposition": "KEEP",
+      "capabilities": ["observe", "collect", "compare", "diagnose", "research", "design", "propose", "founder_gate", "patch", "build", "audit", "deploy_gate", "report", "learn"],
+      "idea": "Internal digital organization for continuous Pantavion oversight and evolution"
+    },
+    {
+      "id": "REC-0011",
+      "title": "PantaAI Command Center",
+      "sourceRepo": "pandaconnect1/pantavion-planet",
+      "path": "core/ai/pantavion-ai-command-center.ts",
+      "status": "PARTIAL",
+      "disposition": "KEEP",
+      "capabilities": ["public_ai", "personal_ai", "internal_guardian_ai", "sos_ai", "work_income_ai", "creator_ai", "risk_lanes"],
+      "idea": "One organized AI capability center with multiple governed assistants"
+    },
+    {
+      "id": "REC-0012",
+      "title": "Autonomy Policy",
+      "sourceRepo": "pandaconnect1/pantavion-planet",
+      "path": "core/runtime/pantavion-autonomy-policy.ts",
+      "status": "PARTIAL",
+      "disposition": "KEEP",
+      "capabilities": ["autonomous_audits", "typescript", "build", "runtime_reports", "deterministic_repair", "issue_creation"],
+      "idea": "Autonomous inspection and repair with founder-gated destructive or production actions"
+    },
+    {
+      "id": "REC-0013",
+      "title": "Autonomous Builder Kernel",
+      "sourceRepo": "pandaconnect1/pantavion-planet",
+      "path": "core/kernel/pantavion-autonomous-builder-kernel.ts",
+      "status": "PARTIAL",
+      "disposition": "KEEP",
+      "capabilities": ["repo_truth", "code_audit", "error_repair", "scoped_patch", "internal_build", "external_app_build", "provider_integration", "verification"],
+      "idea": "Controlled agentic software factory with work orders and approval gates"
+    },
+    {
+      "id": "REC-0014",
+      "title": "Autonomous Internal AI OS",
+      "sourceRepo": "pandaconnect1/pantavion-planet",
+      "path": "core/guardian/pantavion-autonomous-internal-ai-os.ts",
+      "status": "PARTIAL",
+      "disposition": "KEEP",
+      "capabilities": ["guardian_kernel", "builder_kernel", "research_kernel", "product_truth_kernel", "language_kernel", "safety_legal_kernel", "user_ai_control_plane", "founder_approval_gate"],
+      "idea": "Federated internal AI operating system"
+    },
+    {
+      "id": "REC-0015",
+      "title": "Unfinished Plan Ingestion",
+      "sourceRepo": "pandaconnect1/pantavion-planet",
+      "path": "core/intelligence/pantavion-unfinished-plan-ingestion.ts",
+      "status": "PARTIAL",
+      "disposition": "KEEP",
+      "capabilities": ["ingest_unfinished_plans", "runtime_priorities", "api_surface", "public_surface"],
+      "idea": "Convert abandoned or partial plans into prioritized executable work"
+    },
+    {
+      "id": "REC-0016",
+      "title": "Ecosystem Interoperability Contract",
+      "sourceRepo": "pandaconnect1/pantavion-planet",
+      "path": "core/intelligence/pantavion-ecosystem-interoperability-contract.ts",
+      "status": "PARTIAL",
+      "disposition": "KEEP",
+      "capabilities": ["mcp_ready_capability_access", "a2a_agent_federation", "identity_delegation", "voice_router", "connectivity_resilience"],
+      "idea": "Provider-neutral capability fabric with agent federation and audited delegation"
+    },
+    {
+      "id": "REC-0017",
+      "title": "Repo Guardian",
+      "sourceRepo": "pandaconnect1/pantavion-planet",
+      "path": "services/repo-guardian/index.ts",
+      "status": "PARTIAL",
+      "disposition": "EVOLVE",
+      "capabilities": ["repo_path_scan", "forbidden_pattern_detection", "drift_detection", "blockers", "warnings"],
+      "idea": "Continuously prevent duplicate, archived, temporary and unsafe repository drift"
+    },
+    {
+      "id": "REC-0018",
+      "title": "Build Guardian",
+      "sourceRepo": "pandaconnect1/pantavion-planet",
+      "path": "services/build-guardian/index.ts",
+      "status": "PARTIAL",
+      "disposition": "KEEP",
+      "capabilities": ["build_health", "typecheck_health", "warnings", "blockers", "completed_or_blocked"],
+      "idea": "No feature is complete until build and type health pass"
+    }
+  ],
+  "nextRecoveryDomains": [
+    "guardian_365",
+    "autonomy_supervisor",
+    "sos_guardian_execution_bridge",
+    "ai_sovereignty_roadmap",
+    "age_role_engine",
+    "sos_gap_ledger",
+    "language_kernel",
+    "personalized_navigation",
+    "source_atlas",
+    "capability_registry",
+    "social_business_marketplace",
+    "water_maps",
+    "auth_billing_trust_moderation",
+    "learning_media_app_builder_institutional"
+  ]
+}
