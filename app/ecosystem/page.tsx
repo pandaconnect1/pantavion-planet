@@ -6,16 +6,16 @@ export const metadata = {
 };
 
 const worlds = [
-  { title: "People & Social", body: "People, contacts, relationships, communities and private social spaces.", href: "/people" },
+  { title: "People & Social", body: "People, contacts, relationships, communities and private social spaces." },
   { title: "Communication", body: "Messages, voice, video, interpretation, translation and subtitles.", href: "/messages" },
-  { title: "Work & Services", body: "Jobs, professional services, business discovery and practical work tools.", href: "/work" },
+  { title: "Work & Services", body: "Jobs, professional services, business discovery and practical work tools.", href: "/build-services" },
   { title: "Market & Listings", body: "Classifieds, services, property, events, jobs and marketplace offers.", href: "/listings" },
   { title: "News, Sports & Media", body: "News, sports, radio, podcasts, channels, events and public media.", href: "/media" },
-  { title: "Knowledge & Learning", body: "Learning, libraries, culture, research and language knowledge.", href: "/knowledge" },
-  { title: "Maps, Travel & Local Life", body: "Places, travel, local services, city information and everyday discovery.", href: "/maps" },
+  { title: "Knowledge & Learning", body: "Learning, libraries, culture, research and language knowledge." },
+  { title: "Maps, Travel & Local Life", body: "Places, travel, local services, city information and everyday discovery." },
   { title: "Safety & SOS", body: "Safety information, crisis support, alerts and resilient communication paths.", href: "/sos" },
-  { title: "Business", body: "Business presence, listings, promotion, services and commercial tools.", href: "/business" },
-  { title: "Professional Areas", body: "Protected work environments for approved professional and institutional users.", href: "/professional" },
+  { title: "Business", body: "Business presence, listings, promotion, services and commercial tools.", href: "/market" },
+  { title: "Professional Areas", body: "Protected work environments for approved professional and institutional users.", href: "/professional/infrastructure/water" },
 ];
 
 const shell = {
@@ -37,37 +37,35 @@ export default function EcosystemPage() {
   return (
     <main style={shell} data-pantavion-static-ui="true">
       <section style={{ width: "min(1180px, calc(100% - 40px))", margin: "0 auto", padding: "48px 0 96px" }}>
-        <Link href="/" style={{ color: "#f3c454", textDecoration: "none", fontWeight: 900 }}>
-          ← Home
-        </Link>
+        <Link href="/" style={{ color: "#f3c454", textDecoration: "none", fontWeight: 900 }}>← Home</Link>
 
-        <p style={{ marginTop: 34, color: "#f3c454", letterSpacing: ".24em", fontSize: 12, fontWeight: 900, textTransform: "uppercase" }}>
-          Explore Pantavion
-        </p>
-        <h1 style={{ margin: "8px 0 0", maxWidth: 900, fontSize: "clamp(42px,7vw,78px)", lineHeight: .98, letterSpacing: "-.05em" }}>
-          One place. Many parts of everyday life.
-        </h1>
-        <p style={{ maxWidth: 860, color: "#c7d4df", fontSize: 20, lineHeight: 1.65 }}>
-          Choose the area you need. Pantavion keeps the technical systems behind the scenes, while people see clear services, communication and useful everyday tools.
-        </p>
+        <p style={{ marginTop: 34, color: "#f3c454", letterSpacing: ".24em", fontSize: 12, fontWeight: 900, textTransform: "uppercase" }}>Explore Pantavion</p>
+        <h1 style={{ margin: "8px 0 0", maxWidth: 900, fontSize: "clamp(42px,7vw,78px)", lineHeight: .98, letterSpacing: "-.05em" }}>One place. Many parts of everyday life.</h1>
+        <p style={{ maxWidth: 860, color: "#c7d4df", fontSize: 20, lineHeight: 1.65 }}>Choose the area you need. Pantavion keeps the technical systems behind the scenes, while people see clear services, communication and useful everyday tools.</p>
 
         <section style={{ marginTop: 42 }}>
           <h2 style={{ fontSize: 34, marginBottom: 18 }}>Main areas</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))", gap: 16 }}>
-            {worlds.map((world) => (
-              <Link key={world.title} href={world.href} style={{ ...card, color: "inherit", textDecoration: "none" }}>
-                <h3 style={{ margin: 0, color: "#f3c454", fontSize: 22 }}>{world.title}</h3>
-                <p style={{ marginBottom: 0, color: "#c7d4df", lineHeight: 1.6 }}>{world.body}</p>
-              </Link>
-            ))}
+            {worlds.map((world) => {
+              const content = (
+                <>
+                  <h3 style={{ margin: 0, color: "#f3c454", fontSize: 22 }}>{world.title}</h3>
+                  <p style={{ marginBottom: 0, color: "#c7d4df", lineHeight: 1.6 }}>{world.body}</p>
+                  <p style={{ marginBottom: 0, color: "#8fb8dc", fontWeight: 800 }}>{world.href ? "Open →" : "In development"}</p>
+                </>
+              );
+              return world.href ? (
+                <Link key={world.title} href={world.href} style={{ ...card, color: "inherit", textDecoration: "none" }}>{content}</Link>
+              ) : (
+                <article key={world.title} style={card}>{content}</article>
+              );
+            })}
           </div>
         </section>
 
         <section style={{ marginTop: 42, ...card }}>
           <h2 style={{ marginTop: 0, fontSize: 30 }}>Your language follows you</h2>
-          <p style={{ color: "#c7d4df", lineHeight: 1.7, marginBottom: 0 }}>
-            Choose a language once from the globe button. Pantavion keeps that choice as you move between areas. You can use automatic device language or change it manually at any time.
-          </p>
+          <p style={{ color: "#c7d4df", lineHeight: 1.7, marginBottom: 0 }}>Choose a language once from the globe button. Pantavion keeps that choice as you move between areas. You can use automatic device language or change it manually at any time.</p>
         </section>
       </section>
     </main>
