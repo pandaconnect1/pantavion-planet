@@ -49,3 +49,16 @@ drop policy if exists "Profiles respect privacy and relationship visibility" on 
 create policy "Profiles respect privacy and relationship visibility"
 on public.profiles for select
 using (public.pantavion_can_view_profile(id, auth.uid()));
+
+-- Do not rely on project-level default privileges. RLS remains the row-level gate,
+-- while these grants define the operations the authenticated role may attempt.
+grant select, insert, update on table public.user_privacy_settings to authenticated;
+grant select, insert, update on table public.consent_records to authenticated;
+grant select, insert, update, delete on table public.contact_sources to authenticated;
+grant select, insert, update, delete on table public.contacts to authenticated;
+grant select, insert, update on table public.relationships to authenticated;
+grant select, insert, update, delete on table public.user_blocks to authenticated;
+grant select, insert on table public.conversations to authenticated;
+grant select, insert on table public.conversation_members to authenticated;
+grant select, insert on table public.messages to authenticated;
+grant select, insert on table public.message_receipts to authenticated;
