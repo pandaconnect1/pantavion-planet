@@ -89,16 +89,88 @@ Live State: `SPEC_ONLY | UI_ONLY | BACKEND_PARTIAL | BACKEND_LIVE | CONNECTED | 
 - Live State: BACKEND_PARTIAL
 - Verified behavior: in-memory Map-based state store with revisioning, snapshots and export.
 - Blocker: process-memory storage is not durable persistence across serverless/runtime restarts.
-- Next action: introduce an approved persistent adapter (database/object/event storage as appropriate) while retaining the in-memory adapter for tests/degraded operation.
+- Next action: introduce an approved persistent adapter while retaining the in-memory adapter for tests/degraded operation.
 
-### Thread / Continuity Memory
+### Thread Registry
 - Path: `core/memory/thread-registry.ts`
-- Supporting verified paths include `core/memory/continuity-recall-policy.ts`, `core/memory/memory-thread-kernel.ts`, `core/memory/working-memory-store.ts`, `core/memory/predictive-planning-memory-store.ts`.
 - Recovery State: PARTIAL
+- Decision: KEEP + EVOLVE
+- Live State: BACKEND_PARTIAL
+- Verified fields: `threadId`, `userId`, `parentThreadId`, `continuationOfThreadId`, `mergedIntoThreadId`, lifecycle timestamps, status, resolution state, tags and metadata.
+- Verified operations: create, get, list, list-by-user, touch/resolve/archive/merge-marker, snapshot.
+- Blocker: storage is an in-memory `Map`; no durable database persistence, foreign-key validation, project/domain linkage or provenance graph.
+- Canonical target: continuity graph layer built around stable User -> Project -> Domain -> Thread relationships while preserving these thread semantics.
+
+### Memory Event Log
+- Path: `core/memory/memory-event-log.ts`
+- Recovery State: PARTIAL
+- Decision: KEEP + EVOLVE
+- Live State: BACKEND_PARTIAL
+- Verified event classes include user/AI messages, system notes, action records, facts, reminders and commitments.
+- Verified dimensions: user, thread, session, actor role, timestamps, timezone, content/summary, tags and metadata.
+- Blocker: event storage is an in-memory array; no durable append log, retention policy, encryption boundary or cross-device synchronization.
+- Canonical target: durable memory/event ledger linked to thread, project, actor and audit provenance.
+
+### Canonical Fact Registry
+- Path: `core/memory/fact-registry.ts`
+- Recovery State: PARTIAL
+- Decision: KEEP + EVOLVE
+- Live State: BACKEND_PARTIAL
+- Verified fact types: preference, goal, decision, project-truth, identity, locale, routing-truth and other.
+- Verified semantics: fact key, user/thread scope, value, confidence, source summary, recorded/verified/effective timestamps and metadata.
+- Blocker: current store is an in-memory `Map`; fact key uniqueness is global inside the process rather than explicitly scoped by user/project/domain.
+- Canonical target: provenance-aware canonical fact store with scoped uniqueness, verification history and supersession rules.
+
+### Continuity Recall Policy
+- Path: `core/memory/continuity-recall-policy.ts`
+- Recovery State: PARTIAL
+- Decision: KEEP + EVOLVE
+- Live State: BACKEND_PARTIAL
+- Verified behavior: composes recent memory events, active threads, canonical facts, pending commitments, reminders and preparation jobs into one recall bundle.
+- Important architectural finding: continuity already spans more than chat history; it models facts, commitments, reminders and queued preparation work.
+- Blockers: all imported registries must be checked for durable persistence; recall currently uses simple list/filter/slice logic and does not yet provide relevance ranking, project/domain graph traversal or provenance-weighted retrieval.
+- Canonical direction: evolve this into the Pantavion Continuity Graph retrieval layer rather than replace it.
+
+## Verified historical commit anchors
+
+### Canonical Memory Layer
+- Commit: `b3c62790dfa44dde7dcfdb9c7bff23bbdf869739`
+- Title: `Patch 7 add canonical memory layer`
+- Date: 2026-04-11
+- Recovery State: COMPLETE as historical provenance anchor.
+- Decision: KEEP as a history checkpoint and compare its changed files against current memory implementation before recovering deleted behavior.
+
+### PantaAI Real Execution Center
+- Commit: `5aa3a82546b28e4183267de1701831aebd0cc363`
+- Title: `Implement PantaAI real execution center`
+- Date: 2026-04-24
+- Recovery State: COMPLETE as historical provenance anchor.
+- Decision: INVESTIGATE changed files and compare to current Kernel/AI command center before any merge.
+
+## Verified Human/Social backend boundaries
+
+### Auth
+- Path: `app/auth/actions.ts`
+- Recovery State: COMPLETE for current action implementation.
+- Decision: KEEP + HARDEN
+- Live State: BACKEND_LIVE at code level, pending deployed/live verification in this ledger.
+- Verified behavior: Supabase email/password signup, signin and signout, username validation, auth callback redirect path.
+
+### Contacts Import
+- Path: `app/api/contacts/import/route.ts`
+- Recovery State: SKELETON
 - Decision: EVOLVE
 - Live State: BACKEND_PARTIAL
-- Canonical direction: Pantavion Continuity Graph: User -> Project -> Domain -> Thread -> Decisions -> Artifacts -> Implementation -> Status -> Result.
-- Next action: inspect each store/policy contract, unify identifiers and persistence, then connect to Control Room and project/thread surfaces.
+- Current truth: guarded endpoint; explicitly requires consent, official API/export source, auth and storage; rejects scraping and third-party passwords.
+- Next action: inspect consent/legal matrices, define normalized contact schema + source provenance + import job model, then connect approved provider/export adapters.
+
+### Messaging Send
+- Path: `app/api/messages/send/route.ts`
+- Recovery State: SKELETON
+- Decision: EVOLVE
+- Live State: BACKEND_PARTIAL
+- Current truth: guarded endpoint; no real send. Requires auth, identity, recipient consent, abuse protection and database persistence.
+- Next action: define canonical conversations/messages/members/receipts schema, authorization and request-box policy before realtime transport.
 
 ## Current-main evolution that recovery must not overwrite
 
@@ -125,15 +197,16 @@ Kernel -> Capability Registry -> Delegation -> Provider Router -> Durable Execut
 ## First recovery wave queue
 
 1. Durable Execution persistence + compatibility contract.
-2. Continuity/Thread Memory audit and canonical graph plan.
-3. Identity/Auth/Profile direct current-state verification.
-4. Contacts API boundary and consent/storage verification.
-5. Messaging guarded route verification + required schema/runtime.
-6. Translation provider/router comparison against August 2026 AI Gateway implementation.
-7. Historical Voice donor extraction, preserving only capabilities absent from current implementation.
-8. Backups/deleted-files inventory expansion from `.pantavion-backup` and historical commits.
-9. Donor registry verification and direct repository accessibility check before any donor claim.
-10. Founder/Admin Control Room data model driven by these recovery/live states.
+2. Continuity/Thread Memory persistence and canonical graph design.
+3. Inspect commitment/reminder/preparation memory registries and classify persistence gaps.
+4. Identity/Auth/Profile direct current-state verification.
+5. Contacts consent/legal matrices + normalized storage/import job design.
+6. Messaging canonical schema + authorization/request-box runtime.
+7. Translation provider/router comparison against August 2026 AI Gateway implementation.
+8. Historical Voice donor extraction, preserving only capabilities absent from current implementation.
+9. Backups/deleted-files inventory expansion from `.pantavion-backup` and historical commits.
+10. Donor registry verification and direct repository accessibility check before any donor claim.
+11. Founder/Admin Control Room data model driven by these recovery/live states.
 
 ## DONE gate
 
