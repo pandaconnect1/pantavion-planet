@@ -1,0 +1,54 @@
+{
+  "id": "pantavion_recovery_manifest_v2",
+  "canonicalRepo": "pandaconnect1/pantavion-planet",
+  "workingBranch": "feature/social-core-runtime-v2",
+  "workflow": ["RECOVERED","VERIFIED","CLASSIFIED","CANONICALIZED","MERGED","BACKEND_LIVE","UI_LIVE","TESTED","DEPLOYED","VERIFIED_LIVE"],
+  "repositories": [
+    {"repo":"pandaconnect1/pantavion-planet","role":"canonical"},
+    {"repo":"pandaconnect1/pantavion-one-clean","role":"high_value_donor"},
+    {"repo":"pandaconnect1/pantavion-one-clean-ui","role":"ui_donor"},
+    {"repo":"pandaconnect1/pantavion-one","role":"legacy_donor"},
+    {"repo":"pandaconnect1/pantavion-one-main","role":"recovery_candidate"},
+    {"repo":"pandaconnect1/pantavion-voice","role":"voice_donor"},
+    {"repo":"pandaconnect1/pantavion-voice-","role":"recovery_candidate"},
+    {"repo":"pandaconnect1/pantavion-socialhub","role":"social_donor"},
+    {"repo":"pandaconnect1/pantavion-app.","role":"legacy_app_donor"},
+    {"repo":"pandaconnect1/pantavion.com","role":"legacy_deployment_lineage"},
+    {"repo":"pandaconnect1/pantavion","role":"early_lineage"}
+  ],
+  "verifiedSources": [
+    "PANTAVION_RECOVERY_SNAPSHOT_20260425-215458.txt",
+    "data/pantavion-source-inventory/inventory.json",
+    "data/runtime-reports/latest-founder-vision-ingestion.json",
+    "data/runtime-reports/latest-unfinished-plan-ingestion.json",
+    "core/recovery/donor-extraction-registry.ts",
+    "core/recovery/project-fragment-registry.ts",
+    "core/recovery/repository-triage-registry.ts"
+  ],
+  "capabilityGroups": {
+    "internal_control_plane":["kernel","capability_registry","policy","delegation","provider_router","durable_execution","memory_continuity","guardian","recovery_engine","resilience"],
+    "people_social":["profile","contacts","relationship_graph","messaging","realtime_chat","communities","feed_stories","nearby_match","dating"],
+    "communication":["text_translation","voice_translation","stt","tts","subtitles","video","rooms","secure_private_scopes"],
+    "work_business":["jobs","services","listings","marketplace","business_accounts","ads_center"],
+    "knowledge_creation":["mind","research","libraries","learning","media_creation","culture"],
+    "maps_world":["maps","compass","travel","water","infrastructure","city_intelligence"],
+    "safety_life":["sos","crisis","trusted_contacts","minors_guardian","identity_trust","offline_resilience"]
+  },
+  "knownGaps": [
+    {"id":"durable_execution","state":"BACKEND_PARTIAL","reason":"runtime register/enqueue/execute/run remain compatibility stubs"},
+    {"id":"translation_provider","state":"BACKEND_PARTIAL","reason":"router exists; production provider configuration and adapters incomplete"},
+    {"id":"messages_send","state":"GUARDED","reason":"requires auth identity consent abuse protection and persistence"},
+    {"id":"social_graph","state":"FOUNDATION","reason":"profile/auth foundations exist; relationship graph and realtime social backend require completion"}
+  ],
+  "nextQueue": [
+    "excavate_all_visible_repositories",
+    "recover_deleted_historical_files",
+    "extract_voice_donor",
+    "extract_socialhub_donor",
+    "extract_clean_ui_donor",
+    "reconcile_kernel_runtime_truth",
+    "complete_identity_contacts_messages_dependencies",
+    "generate_completion_matrix",
+    "integrate_test_deploy_verify"
+  ]
+}
