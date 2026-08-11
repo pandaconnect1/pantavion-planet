@@ -1,0 +1,77 @@
+-- Link Social posts to the canonical Personal Media library without duplicating files.
+
+alter table public.social_post_media
+  add column if not exists personal_media_id uuid references public.personal_media(id) on delete restrict;
+
+alter table public.social_post_media
+  alter column storage_path drop not null;
+
+create unique index if not exists social_post_media_unique_personal_item_idx
+  on public.social_post_media(post_id, personal_media_id)
+  where personal_media_id is not null;
+
+create or replace function public.pantavion_hydrate_social_post_media()
+returns trigger
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  m public.personal_media%rowtype;
+begin
+  if new.personal_media_id is null then
+    if new.storage_path is null then
+      raise exception 'social media attachment requires personal_media_id or storage_path';
+    end if;
+    return new;
+  end if;
+
+  select * into m
+  from public.personal_media
+  where id = new.personal_media_id;
+
+  if not found then
+    raise exception 'personal media item not found';
+  end if;
+
+  if m.owner_id <> new.owner_id then
+    raise exception 'personal media owner mismatch';
+  end if;
+
+  new.storage_path := m.storage_path;
+  new.mime_type := m.mime_type;
+  new.media_kind := case
+    when m.media_kind = 'photo' then 'photo'
+    when m.media_kind = 'video' then 'video'
+    when m.media_kind = 'audio' then 'audio'
+    else 'file'
+  end;
+  return new;
+end;
+$$;
+
+drop trigger if exists social_post_media_hydrate on public.social_post_media;
+create trigger social_post_media_hydrate
+before insert or update of personal_media_id, owner_id
+on public.social_post_media
+for each row execute function public.pantavion_hydrate_social_post_media();
+
+drop policy if exists social_media_insert_own on public.social_post_media;
+create policy social_media_insert_own on public.social_post_media
+for insert with check (
+  owner_id = auth.uid()
+  and exists (
+    select 1 from public.social_posts p
+    where p.id = post_id and p.author_id = auth.uid() and p.deleted_at is null
+  )
+  and (
+    personal_media_id is null
+    or exists (
+      select 1 from public.personal_media m
+      where m.id = personal_media_id and m.owner_id = auth.uid()
+    )
+  )
+);
+
+-- Media-only posts are valid. The application inserts the post first and then its attachments.
+alter table public.social_posts drop constraint if exists social_posts_body_check;
