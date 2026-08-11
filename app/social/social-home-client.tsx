@@ -17,7 +17,7 @@ export default function SocialHomeClient({ userId, profile, initialPosts, author
   const supabase = createClient();
   const [posts, setPosts] = useState(initialPosts);
   const [body, setBody] = useState("");
-  const [visibility, setVisibility] = useState("friends");
+  const [visibility, setVisibility] = useState("connections");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const authorMap = useMemo(() => new Map(authors.map((a) => [a.id, a])), [authors]);
@@ -55,7 +55,7 @@ export default function SocialHomeClient({ userId, profile, initialPosts, author
         <div className="mb-3 font-black">{profile.display_name || profile.username || "Το Social σου"}</div>
         <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={3} placeholder="Τι θέλεις να μοιραστείς;" className="w-full resize-none rounded-xl border border-slate-200 p-3 outline-none focus:border-[#2467aa]" />
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-          <select value={visibility} onChange={(e) => setVisibility(e.target.value)} className="rounded-full border border-slate-200 px-3 py-2 text-sm"><option value="friends">Φίλοι</option><option value="public">Δημόσια</option><option value="private">Μόνο εγώ</option></select>
+          <select value={visibility} onChange={(e) => setVisibility(e.target.value)} className="rounded-full border border-slate-200 px-3 py-2 text-sm"><option value="connections">Φίλοι</option><option value="public">Δημόσια</option><option value="private">Μόνο εγώ</option></select>
           <button onClick={publish} disabled={!backendReady || busy || !body.trim()} className="rounded-full bg-[#2467aa] px-5 py-2 text-sm font-black text-white disabled:opacity-40">{busy ? "Δημοσίευση…" : "Δημοσίευση"}</button>
         </div>{message && <p className="mt-2 text-sm text-red-700">{message}</p>}
       </section>
