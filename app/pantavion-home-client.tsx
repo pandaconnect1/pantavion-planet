@@ -10,6 +10,8 @@ type EcosystemItem = {
   items: string[];
 };
 
+const PANTAVION_MISSION = "Here We Are One. For All Humanity.";
+
 const ecosystem: EcosystemItem[] = [
   { title: "People & Social", subtitle: "People, relationships and communities", icon: "◎", items: ["People", "Contacts", "Connections", "Communities", "Nearby", "Dating", "Private circles"] },
   { title: "Communication", subtitle: "Talk and understand across languages", icon: "↔", href: "/messages", items: ["Messages", "Voice", "Video", "Interpreter", "Translation", "Subtitles"] },
@@ -41,8 +43,8 @@ export default function PantavionHomeClient() {
           <div className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white/75 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-[#2865a8] shadow-sm sm:text-xs" data-pantavion-no-translate>
             <span className="h-2 w-2 rounded-full bg-cyan-500" /> PANTAVION ONE
           </div>
-          <h1 className="mt-4 max-w-4xl text-[2.55rem] font-black leading-[0.98] tracking-[-0.045em] text-[#11345d] sm:text-6xl lg:text-7xl">
-            Here We Are One.<span className="mt-1 block text-[#4e77a6]">For All Humanity.</span>
+          <h1 className="mt-4 max-w-4xl text-[2.55rem] font-black leading-[0.98] tracking-[-0.045em] text-[#11345d] sm:text-6xl lg:text-7xl" data-pantavion-no-translate>
+            {PANTAVION_MISSION}
           </h1>
           <p className="mt-5 max-w-3xl text-[15px] leading-6 text-slate-600 sm:text-lg sm:leading-8">
             One global human ecosystem for communication, people, work, knowledge, safety, services and professional tools.
