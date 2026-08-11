@@ -1,100 +1,85 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  PantavionLanguageSelect,
+  detectPantavionDeviceLanguage,
+  usePantavionLanguage,
+} from "@/components/pantavion/PantavionLanguageSelect";
+import { PANTAVION_LANGUAGE_STORAGE_KEY } from "@/core/i18n/pantavion-global-language";
 
-type PantavionLanguageOption = {
-  code: "auto" | "el" | "en";
-  label: string;
-  htmlLang: string;
-};
-
-const STORAGE_KEY = "pantavion.ui.language";
-
-const LANGUAGE_OPTIONS: PantavionLanguageOption[] = [
-  { code: "auto", label: "Αυτόματα / Auto", htmlLang: "en" },
-  { code: "el", label: "Ελληνικά", htmlLang: "el" },
-  { code: "en", label: "English", htmlLang: "en" },
-];
-
-function isKnownLanguage(value: string): value is PantavionLanguageOption["code"] {
-  return LANGUAGE_OPTIONS.some((option) => option.code === value);
-}
+const AUTO_KEY = "pantavion-language-auto";
 
 export default function PantavionGlobalLanguageSelector() {
-  const [language, setLanguage] = useState<PantavionLanguageOption["code"]>("auto");
+  const [open, setOpen] = useState(false);
+  const [automatic, setAutomatic] = useState(false);
+  const { lang, setLang, language } = usePantavionLanguage();
 
   useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored && isKnownLanguage(stored)) setLanguage(stored);
-    } catch {
-      setLanguage("auto");
-    }
-  }, []);
+    const saved = window.localStorage.getItem(PANTAVION_LANGUAGE_STORAGE_KEY);
+    const autoSaved = window.localStorage.getItem(AUTO_KEY) === "1";
+    setAutomatic(autoSaved || !saved);
 
-  useEffect(() => {
-    const selected = LANGUAGE_OPTIONS.find((option) => option.code === language) || LANGUAGE_OPTIONS[0];
-
-    try {
-      window.localStorage.setItem(STORAGE_KEY, language);
-      window.dispatchEvent(
-        new CustomEvent("pantavion:language-change", {
-          detail: {
-            language,
-            htmlLang: selected.htmlLang,
-            label: selected.label,
-          },
-        }),
-      );
-      document.documentElement.lang = selected.htmlLang;
-      document.documentElement.dataset.pantavionLanguage = language;
-    } catch {
-      // Keep the selector usable even if browser storage is unavailable.
+    if (!saved || autoSaved) {
+      const detected = detectPantavionDeviceLanguage();
+      if (detected !== lang) setLang(detected);
     }
-  }, [language]);
+  }, []); // intentionally initialize once from the device/browser preference
+
+  function setAutomaticMode(enabled: boolean) {
+    setAutomatic(enabled);
+    window.localStorage.setItem(AUTO_KEY, enabled ? "1" : "0");
+    if (enabled) {
+      setLang(detectPantavionDeviceLanguage());
+      setOpen(false);
+    }
+  }
 
   return (
-    <aside
-      aria-label="Pantavion language"
-      className="fixed bottom-4 right-4 z-[90]"
-    >
-      <details className="group relative">
-        <summary
-          className="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-full border border-[#f6c85f]/35 bg-[#06111f]/95 text-lg text-[#f6c85f] shadow-lg backdrop-blur-md transition hover:border-[#f6c85f]/70"
-          title="Γλώσσα / Language"
-          aria-label="Άνοιγμα επιλογής γλώσσας"
-        >
-          <span aria-hidden="true">🌐</span>
-        </summary>
+    <aside aria-label="Pantavion language" className="fixed bottom-4 right-4 z-[90]" data-pantavion-no-translate>
+      {open ? (
+        <div className="mb-2 w-[min(19rem,calc(100vw-2rem))] rounded-2xl border border-[#f6c85f]/30 bg-[#06111f]/98 p-4 text-white shadow-2xl backdrop-blur-xl">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="m-0 text-xs font-black uppercase tracking-[0.16em] text-[#f6c85f]">Γλώσσα / Language</p>
+              <p className="mt-1 text-xs text-slate-400">Η επιλογή ισχύει σε όλο το Pantavion.</p>
+            </div>
+            <button type="button" onClick={() => setOpen(false)} className="rounded-full border border-white/15 px-3 py-1 text-sm text-white" aria-label="Κλείσιμο">×</button>
+          </div>
 
-        <div className="absolute bottom-14 right-0 w-56 rounded-2xl border border-[#f6c85f]/30 bg-[#06111f]/98 p-3 shadow-2xl">
-          <label className="block text-xs font-bold text-slate-300" htmlFor="pantavion-ui-language">
-            Γλώσσα / Language
+          <label className="mt-4 flex items-center gap-2 text-sm font-semibold text-slate-200">
+            <input
+              type="checkbox"
+              checked={automatic}
+              onChange={(event) => setAutomaticMode(event.target.checked)}
+            />
+            Αυτόματα από τη συσκευή
           </label>
-          <select
-            id="pantavion-ui-language"
-            value={language}
-            onChange={(event) => {
-              const value = event.target.value;
-              if (isKnownLanguage(value)) setLanguage(value);
-            }}
-            className="mt-2 w-full rounded-xl border border-[#f6c85f]/35 bg-[#071020] px-3 py-2 text-sm font-bold text-white outline-none"
-          >
-            {LANGUAGE_OPTIONS.map((option) => (
-              <option key={option.code} value={option.code}>
-                {option.label}
-              </option>
-            ))}
-          </select>
 
-          <a
-            href="/translate"
-            className="mt-3 block rounded-full border border-[#f6c85f]/40 px-3 py-2 text-center text-xs font-black text-[#f6c85f] no-underline"
-          >
-            Μετάφραση ↔
-          </a>
+          <div className="mt-4">
+            <PantavionLanguageSelect
+              label={automatic ? undefined : "Χειροκίνητα"}
+              onSelected={() => {
+                window.localStorage.setItem(AUTO_KEY, "0");
+                setAutomatic(false);
+                setOpen(false);
+              }}
+            />
+          </div>
         </div>
-      </details>
+      ) : null}
+
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        className="flex h-12 items-center gap-2 rounded-full border border-[#f6c85f]/35 bg-[#06111f]/95 px-3 text-sm font-black text-[#f6c85f] shadow-lg backdrop-blur-md transition hover:border-[#f6c85f]/70"
+        title="Γλώσσα / Language"
+        aria-expanded={open}
+        aria-label="Επιλογή γλώσσας"
+      >
+        <span aria-hidden="true">🌐</span>
+        <span className="max-w-24 truncate">{language.label}</span>
+      </button>
     </aside>
   );
 }

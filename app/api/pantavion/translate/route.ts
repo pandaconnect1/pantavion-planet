@@ -6,6 +6,10 @@ import {
   type PantavionTranslationRequest,
 } from "@/core/translation/pantavion-universal-translation-runtime";
 import { translateWithPantavionProvider } from "@/core/translation/pantavion-translation-provider-adapters";
+import {
+  getPantavionLanguageRuntimeSnapshot,
+  pantavionGatewayRuntimeAvailable,
+} from "@/core/translation/pantavion-language-provider-runtime";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -64,6 +68,8 @@ function strictTranslationPrompt(request: PantavionTranslationRequest) {
 }
 
 async function translateWithGateway(request: PantavionTranslationRequest) {
+  if (!(await pantavionGatewayRuntimeAvailable())) return null;
+
   const models = Array.from(
     new Set(
       [
@@ -80,6 +86,8 @@ async function translateWithGateway(request: PantavionTranslationRequest) {
         model: gateway(model),
         prompt: strictTranslationPrompt(request),
         temperature: 0,
+        maxRetries: 1,
+        abortSignal: AbortSignal.timeout(20_000),
       });
       const translatedText = String(result.text || "").trim();
       if (!translatedText) continue;
@@ -103,12 +111,16 @@ async function translateWithGateway(request: PantavionTranslationRequest) {
 }
 
 export async function GET() {
+  const languageRuntime = await getPantavionLanguageRuntimeSnapshot();
   return NextResponse.json({
-    ok: true,
+    ok: languageRuntime.capabilities.some(
+      (capability) => capability.capability === "text_translation" && capability.available,
+    ),
     contract: pantavionUniversalTranslationContract,
-    gatewayPreferred: true,
+    gatewayPreferred: languageRuntime.gatewayRuntimeAvailable,
     strictLanguageRouting: true,
     publicTextFallback: false,
+    languageRuntime,
   });
 }
 
