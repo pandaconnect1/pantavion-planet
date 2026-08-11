@@ -97,6 +97,7 @@ export default function SocialHomeClient({ userId, profile, initialPosts, author
         <div className="mt-3 flex flex-wrap gap-2">
           <button type="button" onClick={() => setShowMedia((value) => !value)} className="rounded-full border border-slate-200 px-3 py-2 text-sm font-bold text-slate-700">Φωτογραφία / Βίντεο{selectedMediaIds.length ? ` · ${selectedMediaIds.length}` : ""}</button>
           <a href="/my-media" className="rounded-full border border-slate-200 px-3 py-2 text-sm font-bold text-slate-500 no-underline">Η βιβλιοθήκη μου</a>
+          <a href="/social/map" className="rounded-full border border-slate-200 px-3 py-2 text-sm font-bold text-slate-500 no-underline">Χάρτης / Κοντά μου</a>
         </div>
 
         {showMedia && <div className="mt-3 rounded-xl bg-slate-50 p-3">
@@ -127,7 +128,7 @@ export default function SocialHomeClient({ userId, profile, initialPosts, author
         </article>;
       })}
     </div>
-    <aside className="space-y-3"><section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><h2 className="font-black">Ο κόσμος σου</h2><p className="mt-1 text-sm text-slate-500">Άνθρωποι, επαφές, media και μηνύματα ενώνονται εδώ. Τα προσωπικά σου αρχεία παραμένουν ιδιωτικά και ανοίγουν σε ένα post μόνο για όσους δικαιούνται να δουν τη δημοσίευση.</p></section></aside>
+    <aside className="space-y-3"><section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><h2 className="font-black">Ο κόσμος σου</h2><p className="mt-1 text-sm text-slate-500">Άνθρωποι, επαφές, media, μηνύματα και ο χάρτης σου ενώνονται εδώ. Τα προσωπικά σου αρχεία και η τοποθεσία σου παραμένουν ιδιωτικά εκτός αν επιλέξεις εσύ να τα μοιραστείς.</p><a href="/social/map" className="mt-3 inline-block rounded-full bg-[#123b67] px-4 py-2 text-xs font-black text-white no-underline">Άνοιγμα χάρτη</a></section></aside>
   </div>;
 }
 
