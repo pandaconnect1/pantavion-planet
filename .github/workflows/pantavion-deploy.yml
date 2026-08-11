@@ -49,6 +49,51 @@ jobs:
       - name: Build
         run: npm run build
 
+  production_schema:
+    name: Apply Production Supabase Migrations
+    needs: validate
+    if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') }}
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+
+    steps:
+      - name: Require production Supabase credentials
+        shell: bash
+        run: |
+          missing=0
+          for name in SUPABASE_ACCESS_TOKEN SUPABASE_PROJECT_REF SUPABASE_DB_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::$name is not configured. Production schema deployment cannot be verified."
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Link exact production project
+        run: supabase link --project-ref "$SUPABASE_PROJECT_REF"
+
+      - name: Preview pending migrations
+        run: supabase db push --linked --dry-run
+
+      - name: Apply pending migrations
+        run: supabase db push --linked
+
+      - name: Verify migration history
+        run: supabase migration list --linked
+
   deploy_preview_vercel:
     name: Optional Deploy Preview to Vercel
     needs: validate
@@ -98,8 +143,10 @@ jobs:
         run: vercel deploy --prebuilt --token=$VERCEL_TOKEN
 
   deploy_production:
-    name: Optional Deploy Production to Vercel + AWS
-    needs: validate
+    name: Deploy Production to Vercel + AWS
+    needs:
+      - validate
+      - production_schema
     if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') }}
     runs-on: ubuntu-latest
 
@@ -117,11 +164,11 @@ jobs:
       contents: read
 
     steps:
-      - name: Skip Vercel production if secrets are missing
+      - name: Report Vercel deployment path
         if: ${{ env.VERCEL_TOKEN == '' || env.VERCEL_ORG_ID == '' || env.VERCEL_PROJECT_ID == '' }}
         run: |
-          echo "Skipping Vercel production deploy because Vercel secrets are not configured."
-          echo "The build is still validated. Vercel Git integration may deploy production separately."
+          echo "Vercel CLI secrets are not configured in GitHub Actions."
+          echo "No CLI production deploy will be claimed by this workflow; Vercel Git integration may still deploy separately."
 
       - name: Checkout
         if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
