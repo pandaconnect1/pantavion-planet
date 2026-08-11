@@ -6,8 +6,9 @@ export const metadata = {
 };
 
 const worlds = [
-  { title: "People & Social", body: "People, contacts, relationships, communities and private social spaces." },
-  { title: "Communication", body: "Messages, voice, video, interpretation, translation and subtitles.", href: "/messages" },
+  { title: "People & Social", body: "People, profiles, connection requests and private communication.", href: "/people" },
+  { title: "Communication", body: "Messages and multilingual communication through the shared Pantavion communication core.", href: "/messages" },
+  { title: "Translation", body: "Text translation and interpreter tools with the same language choice across Pantavion.", href: "/translate" },
   { title: "Work & Services", body: "Jobs, professional services, business discovery and practical work tools.", href: "/build-services" },
   { title: "Market & Listings", body: "Classifieds, services, property, events, jobs and marketplace offers.", href: "/listings" },
   { title: "News, Sports & Media", body: "News, sports, radio, podcasts, channels, events and public media.", href: "/media" },
@@ -41,7 +42,7 @@ export default function EcosystemPage() {
 
         <p style={{ marginTop: 34, color: "#f3c454", letterSpacing: ".24em", fontSize: 12, fontWeight: 900, textTransform: "uppercase" }}>Explore Pantavion</p>
         <h1 style={{ margin: "8px 0 0", maxWidth: 900, fontSize: "clamp(42px,7vw,78px)", lineHeight: .98, letterSpacing: "-.05em" }}>One place. Many parts of everyday life.</h1>
-        <p style={{ maxWidth: 860, color: "#c7d4df", fontSize: 20, lineHeight: 1.65 }}>Choose the area you need. Pantavion keeps the technical systems behind the scenes, while people see clear services, communication and useful everyday tools.</p>
+        <p style={{ maxWidth: 860, color: "#c7d4df", fontSize: 20, lineHeight: 1.65 }}>Choose what you need. Working areas open real Pantavion services; areas still being completed are shown as information rather than dead buttons.</p>
 
         <section style={{ marginTop: 42 }}>
           <h2 style={{ fontSize: 34, marginBottom: 18 }}>Main areas</h2>
