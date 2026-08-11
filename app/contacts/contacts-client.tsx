@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ChangeEvent, FormEvent, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -14,6 +15,18 @@ type Contact = {
 };
 
 type ParsedContact = { display_name: string | null; email: string | null; phone: string | null };
+
+type DiscoveryMatch = {
+  contact_id: string;
+  user_id: string;
+  match_kind: "email" | "phone";
+  username: string | null;
+  display_name: string | null;
+  avatar_url: string | null;
+  bio: string | null;
+  country: string | null;
+  language: string | null;
+};
 
 function parseVCard(text: string): ParsedContact[] {
   return text
@@ -48,6 +61,7 @@ function parseCsv(text: string): ParsedContact[] {
 export default function ContactsClient({ initialContacts, backendReady }: { initialContacts: Contact[]; backendReady: boolean }) {
   const supabase = useMemo(() => createClient(), []);
   const [contacts, setContacts] = useState(initialContacts);
+  const [matches, setMatches] = useState<DiscoveryMatch[]>([]);
   const [message, setMessage] = useState(backendReady ? "" : "Η βάση επαφών δεν είναι ακόμη διαθέσιμη στο production.");
   const [busy, setBusy] = useState(false);
 
@@ -115,6 +129,20 @@ export default function ContactsClient({ initialContacts, backendReady }: { init
     await refresh();
   }
 
+  async function findMyPeople() {
+    if (!contacts.length || busy) return;
+    setBusy(true); setMessage(""); setMatches([]);
+    const response = await fetch("/api/people/find-from-contacts", { method: "POST" });
+    const json = await response.json().catch(() => ({}));
+    setBusy(false);
+    if (!response.ok) return setMessage(json.detail || "Δεν ολοκληρώθηκε η αναζήτηση.");
+    setMatches((json.matches ?? []) as DiscoveryMatch[]);
+    await refresh();
+    setMessage(json.matches?.length ? `Βρέθηκαν ${json.matches.length} επαφές που είναι ήδη στο Pantavion.` : "Δεν βρέθηκε ακόμη κάποια από αυτές τις επαφές στο Pantavion.");
+  }
+
+  const matchByContact = useMemo(() => new Map(matches.map((match) => [match.contact_id, match])), [matches]);
+
   return (
     <div className="grid gap-5 lg:grid-cols-[340px_1fr]">
       <aside className="rounded-[1.4rem] border border-slate-200 bg-white p-5 shadow-sm">
@@ -129,18 +157,28 @@ export default function ContactsClient({ initialContacts, backendReady }: { init
         <label className="block text-sm font-black text-slate-700">Μεταφορά από αρχείο</label>
         <p className="mt-1 text-xs leading-5 text-slate-500">Δέχεται vCard (.vcf) ή CSV που έχεις εξαγάγει εσύ από κινητό ή άλλη υπηρεσία.</p>
         <input className="mt-3 block w-full text-xs" type="file" accept=".vcf,.csv,text/vcard,text/csv" disabled={busy || !backendReady} onChange={importFile} />
+
+        <div className="my-5 h-px bg-slate-100" />
+        <h3 className="text-sm font-black text-slate-800">Βρες τους ανθρώπους σου</h3>
+        <p className="mt-1 text-xs leading-5 text-slate-500">Με δική σου επιλογή, το Pantavion ελέγχει ιδιωτικά ποιες επαφές σου έχουν λογαριασμό. Δεν εμφανίζει email ή τηλέφωνα άλλων χρηστών.</p>
+        <button type="button" disabled={busy || !backendReady || !contacts.length} onClick={findMyPeople} className="mt-3 w-full rounded-full bg-[#123b67] px-4 py-2.5 text-sm font-black text-white disabled:opacity-40">{busy ? "Αναζήτηση…" : "Βρες φίλους στο Pantavion"}</button>
         {message && <p className="mt-4 rounded-xl bg-slate-50 p-3 text-xs font-semibold text-slate-700">{message}</p>}
       </aside>
 
       <section className="rounded-[1.4rem] border border-slate-200 bg-white p-5 shadow-sm">
         <div className="flex items-center justify-between"><h2 className="text-xl font-black text-[#173f72]">Οι επαφές μου</h2><span className="text-xs font-black text-slate-400">{contacts.length}</span></div>
         <div className="mt-4 divide-y divide-slate-100">
-          {contacts.map((contact) => (
-            <div key={contact.id} className="flex items-center justify-between gap-3 py-3">
-              <div className="min-w-0"><p className="truncate font-black text-slate-900">{contact.display_name || contact.email || contact.phone || "Επαφή"}</p><p className="truncate text-xs text-slate-500">{[contact.email, contact.phone].filter(Boolean).join(" · ")}</p></div>
-              <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-black ${contact.linked_user_id ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>{contact.linked_user_id ? "Στο Pantavion" : "Εισαγμένη επαφή"}</span>
-            </div>
-          ))}
+          {contacts.map((contact) => {
+            const match = matchByContact.get(contact.id);
+            return (
+              <div key={contact.id} className="flex items-center justify-between gap-3 py-3">
+                <div className="min-w-0"><p className="truncate font-black text-slate-900">{match?.display_name || match?.username || contact.display_name || contact.email || contact.phone || "Επαφή"}</p><p className="truncate text-xs text-slate-500">{match ? [match.country, match.language].filter(Boolean).join(" · ") || "Στο Pantavion" : [contact.email, contact.phone].filter(Boolean).join(" · ")}</p></div>
+                <div className="flex shrink-0 items-center gap-2">
+                  {contact.linked_user_id || match ? <><span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black text-emerald-700">Στο Pantavion</span><Link href="/people" className="rounded-full bg-[#2467aa] px-3 py-2 text-[10px] font-black text-white no-underline">Άνοιγμα</Link></> : <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-black text-slate-500">Εισαγμένη επαφή</span>}
+                </div>
+              </div>
+            );
+          })}
           {!contacts.length && <p className="py-8 text-sm text-slate-500">Δεν έχεις μεταφέρει ακόμη επαφές.</p>}
         </div>
       </section>
