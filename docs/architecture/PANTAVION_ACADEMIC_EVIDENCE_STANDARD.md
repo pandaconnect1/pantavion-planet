@@ -8,6 +8,39 @@ Pantavion is evidence-first. It must not build authoritative knowledge from unve
 
 The goal is not to claim infallibility. The goal is to minimize error through academic depth, primary evidence, provenance, expert validation, uncertainty disclosure and continuous correction.
 
+## Global Knowledge Scale Doctrine
+Pantavion is designed to become a world-scale knowledge infrastructure spanning all seven continents and relevant global regions, languages, cultures, jurisdictions and academic traditions. The ambition is breadth plus depth: not merely a very large collection, but a high-quality, provenance-rich, continuously reviewed knowledge graph and library.
+
+Scale must never be measured only by document count. Pantavion should optimize for:
+- authority and evidence quality
+- source diversity and independence
+- geographic and linguistic coverage
+- domain depth from introductory through research/doctoral depth where appropriate
+- provenance and rights clarity
+- freshness and versioning
+- contradiction coverage
+- cultural and jurisdictional relevance
+- machine-readable structure and human-readable explanation
+
+The system should seek the strongest available global knowledge for a domain rather than the largest pile of content. A smaller set of high-quality sources can outrank millions of low-quality pages.
+
+## Multi-level Knowledge Experience
+Pantavion may serve different user needs and membership levels through different depths of explanation and tooling, but it must not create different truths for different payment tiers.
+
+Possible depth levels include:
+- Quick: concise, practical, source-grounded answer
+- Standard: explanation plus key evidence and alternatives
+- Advanced: deeper comparative analysis, methodology and limitations
+- Professional: domain-grade detail, standards, jurisdictional/contextual constraints and implementation considerations
+- Research/Doctoral: extensive evidence map, primary literature, competing theories, methodology critique, uncertainty analysis and provenance trail
+
+Paid membership may unlock greater depth, workflow tools, larger research scopes, specialist agents, saved projects, exports, collaboration, monitoring, advanced comparisons or professional-grade interfaces. It must not downgrade the factual integrity, safety or honesty of free-tier answers.
+
+## Membership Integrity Rule
+Commercial incentives must never override evidence ranking. A sponsor, advertiser, partner, affiliate, paid provider or paying user cannot purchase a higher evidence grade, suppress credible contradictory evidence or force a preferred conclusion.
+
+Where commercial relationships are relevant, they must be disclosed and kept separate from academic/evidence scoring.
+
 ## Deep International Research Doctrine
 For research, recommendations and comparisons, Pantavion must not stop at the first plausible result. When the question warrants depth, the system should conduct broad, multi-source and international retrieval across relevant regions, languages, academic traditions, institutions and jurisdictions.
 
@@ -96,6 +129,8 @@ Every knowledge claim capable of affecting a recommendation should support an ev
 10. Local/Indigenous/cultural knowledge must not be discarded merely because it does not fit a Western publication system; provenance and appropriate expert/community authority must be represented explicitly.
 11. Do not stop research merely because one high-ranking source supports the initial hypothesis when the issue is materially contested or consequential.
 12. Distinguish independent corroboration from multiple publications that ultimately depend on the same source/data.
+13. Never rank evidence higher because a commercial entity paid Pantavion.
+14. Never hide a material risk, limitation or credible contradictory finding to improve conversion, retention or revenue.
 
 ## Domain rigor
 Pantavion must route claims through domain-specific evidence policies. High-consequence domains require stronger gates, including health/medicine, legal/regulatory, safety/crisis, finance, infrastructure/engineering, child protection and security.
