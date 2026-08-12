@@ -8,6 +8,19 @@ Live state: SPEC_ONLY
 ## Human purpose
 Pantavion Music / Voice Studio exists to help a person turn emotion, memory, story and intention into music while preserving the person's own voice and authorship. AI enhances the human; it does not replace the human.
 
+## Global-by-design requirement
+Pantavion Music / Voice Studio is a global product from its foundation, not a Greece/Cyprus product later translated for other markets. Discovery, Voice Match, Emotional Match, creation and composition must be designed for users and musical cultures across all seven continents.
+
+Global coverage is not satisfied by translating labels. The capability model must be able to represent languages and dialects, local and regional genres, vocal traditions and techniques, rhythm systems, scales/modes and tuning traditions, characteristic instrumentation, performance conventions and cultural context. It must support both contemporary global music and regional/traditional forms.
+
+Examples include — without creating a closed taxonomy — Greek/Cypriot laiko, entechno and rembetiko; Arabic and regional maqam-based traditions; Turkish traditions; Indian classical, folk and contemporary/Bollywood forms; East and Southeast Asian traditions and contemporary K-pop/J-pop/C-pop; African regional traditions and contemporary forms such as Afrobeats; European folk/classical/contemporary forms; North American blues, jazz, gospel, country, rock, hip-hop and related traditions; Latin American and Caribbean forms; Oceanian and Indigenous traditions; and music made by communities connected to Antarctica. Coverage must expand through an extensible cultural/music ontology rather than a hard-coded country list.
+
+Voice Match must be culturally aware. A singer using Arabic, Indian, African, East Asian, Indigenous or other vocal traditions must not be judged solely against a Western equal-tempered/pop-vocal model. The system should distinguish technical compatibility from cultural/style conventions and avoid ranking cultures as superior or inferior.
+
+Local authenticity requires appropriate metadata, rights/provenance, regional expertise and evaluation. Pantavion should communicate uncertainty when a tradition is not yet adequately supported rather than pretending universal expertise.
+
+Principle: **Global by design, culturally aware, locally authentic.**
+
 ## Core journeys
 1. **Find what suits my voice** — capture a short spoken/sung sample, estimate comfortable vocal range and characteristics, then recommend songs/styles that can make the natural voice sound its best.
 2. **Sing any song** — recommendations never restrict choice. For a song outside the comfortable range, suggest a safer/more natural key or transposition and allow the original key when the user chooses it.
@@ -40,7 +53,7 @@ Never silently replace the user's real performance with an artificial 'perfect' 
 Voice analysis, recording, retention and sharing require clear purpose-aware controls. Private creation is the default for personal drafts/dedications. Sharing is an explicit user action. Voice-derived profiles must have deletion/reset controls. Avoid unnecessary raw-audio retention.
 
 ## Rights and provenance
-Track ownership/provenance of user lyrics, recordings, generated composition elements and licensed/catalog material. Do not imply that copyrighted catalog songs can be reproduced, distributed or transformed without the required rights/licences.
+Track ownership/provenance of user lyrics, recordings, generated composition elements and licensed/catalog material. Do not imply that copyrighted catalog songs can be reproduced, distributed or transformed without the required rights/licences. Rights/licensing must account for territorial differences where applicable.
 
 ## Product surfaces
 Primary entry points:
@@ -58,13 +71,14 @@ SPEC -> architecture/data contracts -> provider capability layer -> backend live
 
 Initial implementation slices:
 1. Voice Profile + consent/data contract.
-2. Voice Match analysis contract and recommendation engine interface.
-3. Song/style recommendation UI with transposition suggestions.
-4. Story/lyrics workspace and revision history.
-5. Composition job/provider abstraction with rights/provenance metadata.
-6. Recording/rehearsal flow and natural/assisted/creative controls.
-7. Dedication privacy/share flow.
-8. Automated tests, abuse/privacy checks, deployment and live verification.
+2. Global music/culture ontology and capability registry.
+3. Voice Match analysis contract with culture/style-aware evaluation.
+4. Recommendation engine interface and song/style UI with transposition suggestions.
+5. Story/lyrics workspace with multilingual/dialect-aware assistance and revision history.
+6. Composition job/provider abstraction with regional capability and rights/provenance metadata.
+7. Recording/rehearsal flow and natural/assisted/creative controls.
+8. Dedication privacy/share flow.
+9. Cross-region evaluation, automated tests, abuse/privacy checks, deployment and live verification.
 
 ## Definition of DONE
 DONE only when backend-live, UI-connected, tested, deployed and verified-live. Until then this feature remains PARTIAL or SPEC_ONLY according to its actual state.
