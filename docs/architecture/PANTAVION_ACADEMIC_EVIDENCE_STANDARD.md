@@ -8,6 +8,35 @@ Pantavion is evidence-first. It must not build authoritative knowledge from unve
 
 The goal is not to claim infallibility. The goal is to minimize error through academic depth, primary evidence, provenance, expert validation, uncertainty disclosure and continuous correction.
 
+## Deep International Research Doctrine
+For research, recommendations and comparisons, Pantavion must not stop at the first plausible result. When the question warrants depth, the system should conduct broad, multi-source and international retrieval across relevant regions, languages, academic traditions, institutions and jurisdictions.
+
+Search depth is proportional to consequence and ambiguity. High-consequence or contested questions require stronger source diversity, contradiction searches and independent verification. The system should actively search for evidence that challenges an initial conclusion, not only evidence that confirms it.
+
+Geographic diversity alone is not enough: Pantavion should seek methodological and institutional diversity and avoid treating repeated copies of the same underlying source as independent confirmation.
+
+## Comparative Analysis Doctrine
+When multiple credible options, theories, products, methods, interpretations or recommendations exist, Pantavion should not collapse them prematurely into one answer. It should preserve meaningful alternatives and, where useful, present a structured comparison.
+
+Comparison views should be able to show:
+- option/version/theory
+- what it is and intended use
+- supporting evidence and evidence quality
+- advantages
+- disadvantages
+- risks/limitations
+- cost/resources/time where relevant
+- populations/contexts where evidence applies
+- jurisdictions/regions/cultural constraints where relevant
+- important contradicting evidence
+- confidence/uncertainty
+- best-fit circumstances
+- source/provenance trail
+
+Tables are a preferred presentation for genuinely comparable alternatives, followed by explanatory analysis. Tables must not create false equivalence: stronger evidence should be visibly distinguished from weak, preliminary or disputed evidence.
+
+A recommendation may follow the comparison, but must state the criteria used. Where different user priorities lead to different winners, Pantavion should say so rather than manufacture a universal winner.
+
 ## Source hierarchy
 Source rank is contextual, but the default evidence order is:
 
@@ -65,6 +94,8 @@ Every knowledge claim capable of affecting a recommendation should support an ev
 8. Freshness requirements vary by domain; law, medicine, security, prices, standards and fast-moving technology require stricter review windows.
 9. Historical knowledge may appropriately rely on archival/primary historical sources rather than recent publications.
 10. Local/Indigenous/cultural knowledge must not be discarded merely because it does not fit a Western publication system; provenance and appropriate expert/community authority must be represented explicitly.
+11. Do not stop research merely because one high-ranking source supports the initial hypothesis when the issue is materially contested or consequential.
+12. Distinguish independent corroboration from multiple publications that ultimately depend on the same source/data.
 
 ## Domain rigor
 Pantavion must route claims through domain-specific evidence policies. High-consequence domains require stronger gates, including health/medicine, legal/regulatory, safety/crisis, finance, infrastructure/engineering, child protection and security.
@@ -72,7 +103,7 @@ Pantavion must route claims through domain-specific evidence policies. High-cons
 Academic depth does not mean pretending every response is doctoral research. The interface may explain simply, but the underlying evidence chain should be capable of deeper inspection.
 
 ## Knowledge pipeline
-`Question/Need -> Domain Classification -> Source Retrieval -> Source Rank -> Claim Extraction -> Cross-source Verification -> Conflict/Uncertainty Analysis -> Canonical Knowledge Record -> Recommendation/Explanation -> Citation/Provenance -> Feedback/Correction`
+`Question/Need -> Domain Classification -> Research Depth Selection -> International/Multi-source Retrieval -> Source Rank -> Claim Extraction -> Independent Corroboration -> Contradiction Search -> Cross-source Verification -> Conflict/Uncertainty Analysis -> Comparative Analysis (when alternatives exist) -> Canonical Knowledge Record -> Recommendation/Explanation -> Citation/Provenance -> Feedback/Correction`
 
 ## Wikipedia and comparable sources
 Wikipedia is a useful secondary discovery/reference surface but is not Pantavion's canonical authority. Where a Wikipedia statement matters, Pantavion should normally inspect and prefer the underlying primary/scholarly references. The long-term objective is for Pantavion's own verified knowledge infrastructure to be strong enough to serve as a high-quality upstream reference ecosystem where legally and technically appropriate; this is an aspiration, not a present claim of authority.
@@ -84,7 +115,7 @@ Knowledge is versioned, auditable and correctable. A later stronger source may s
 AI providers are reasoning/generation components, not sources of truth. A model's unsupported assertion receives no academic evidence rank. Provider answers must be grounded against the Pantavion evidence layer for evidence-sensitive claims.
 
 ## Definition of compliant
-A Pantavion feature is not PAES-compliant merely because it displays citations. Compliance requires source ranking, provenance, claim-level grounding, uncertainty/conflict handling, domain policy and auditable correction paths.
+A Pantavion feature is not PAES-compliant merely because it displays citations. Compliance requires source ranking, provenance, claim-level grounding, uncertainty/conflict handling, appropriate research depth, independent corroboration, comparative analysis where material alternatives exist, domain policy and auditable correction paths.
 
 ## Platform law
 New Pantavion modules MUST inherit this standard by default. Exceptions require an explicit documented reason and may not silently downgrade evidence quality.
