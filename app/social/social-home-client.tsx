@@ -4,44 +4,315 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-type Profile = { id:string; username:string|null; display_name:string|null; avatar_url:string|null };
-type Reaction = { user_id:string; reaction:string };
-type Comment = { id:string; author_id:string; body:string; created_at:string };
-type Attachment = { id:string; personal_media_id:string|null; media_kind:string; mime_type:string|null };
-type PersonalMedia = { id:string; original_name:string; media_kind:string; mime_type:string; created_at:string };
-type Post = { id:string; author_id:string; body:string|null; visibility:string; context:string; location_label:string|null; created_at:string; social_reactions?:Reaction[]; social_comments?:Comment[]; social_post_media?:Attachment[] };
+type Profile = { id: string; username: string | null; display_name: string | null; avatar_url: string | null };
+type Reaction = { user_id: string; reaction: string };
+type Comment = { id: string; author_id: string; body: string; created_at: string };
+type Attachment = { id: string; personal_media_id: string | null; media_kind: string; mime_type: string | null };
+type PersonalMedia = { id: string; original_name: string; media_kind: string; mime_type: string; created_at: string };
+type Post = {
+  id: string;
+  author_id: string;
+  body: string | null;
+  visibility: string;
+  context: string;
+  location_label: string | null;
+  created_at: string;
+  social_reactions?: Reaction[];
+  social_comments?: Comment[];
+  social_post_media?: Attachment[];
+};
 
-export default function SocialHomeClient({ userId, profile, initialPosts, authors, personalMedia, backendReady, backendMessage }: { userId:string; profile:Profile; initialPosts:Post[]; authors:Profile[]; personalMedia:PersonalMedia[]; backendReady:boolean; backendMessage:string|null }) {
+type Capabilities = {
+  posts: boolean;
+  reactions: boolean;
+  comments: boolean;
+  media: boolean;
+  map: boolean;
+  contactDiscovery: boolean;
+};
+
+const capabilityLabels: Array<[keyof Capabilities, string]> = [
+  ["posts", "Δημοσιεύσεις"],
+  ["reactions", "Μου αρέσει"],
+  ["comments", "Σχόλια"],
+  ["media", "Φωτογραφίες / Βίντεο"],
+  ["map", "Χάρτης / Τοποθεσία"],
+  ["contactDiscovery", "Εύρεση επαφών"],
+];
+
+export default function SocialHomeClient({
+  userId,
+  profile,
+  initialPosts,
+  authors,
+  personalMedia,
+  capabilities,
+}: {
+  userId: string;
+  profile: Profile;
+  initialPosts: Post[];
+  authors: Profile[];
+  personalMedia: PersonalMedia[];
+  capabilities: Capabilities;
+}) {
   const supabase = useMemo(() => createClient(), []);
-  const [posts,setPosts]=useState(initialPosts);
-  const [body,setBody]=useState("");
-  const [visibility,setVisibility]=useState("connections");
-  const [selectedMediaIds,setSelectedMediaIds]=useState<string[]>([]);
-  const [showMedia,setShowMedia]=useState(false);
-  const [busy,setBusy]=useState(false);
-  const [notice,setNotice]=useState("");
-  const authorMap=useMemo(()=>new Map(authors.map(a=>[a.id,a])),[authors]);
+  const [posts, setPosts] = useState(initialPosts);
+  const [body, setBody] = useState("");
+  const [visibility, setVisibility] = useState("connections");
+  const [selectedMediaIds, setSelectedMediaIds] = useState<string[]>([]);
+  const [showMedia, setShowMedia] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState("");
+  const authorMap = useMemo(() => new Map(authors.map((author) => [author.id, author])), [authors]);
+  const unavailable = capabilityLabels.filter(([key]) => !capabilities[key]);
 
-  function toggleMedia(id:string){setSelectedMediaIds(current=>current.includes(id)?current.filter(item=>item!==id):[...current,id].slice(-10));}
+  function toggleMedia(id: string) {
+    setSelectedMediaIds((current) =>
+      current.includes(id) ? current.filter((item) => item !== id) : [...current, id].slice(-10),
+    );
+  }
 
-  async function publish(){const text=body.trim();if((!text&&!selectedMediaIds.length)||busy||!backendReady)return;setBusy(true);setNotice("");const {data:post,error}=await supabase.from("social_posts").insert({author_id:userId,body:text||null,visibility,context:"social"}).select("id,author_id,body,visibility,context,location_label,created_at").single();if(error||!post){setBusy(false);setNotice(error?.message||"Η δημοσίευση απέτυχε.");return;}let attachments:Attachment[]=[];if(selectedMediaIds.length){const {data,error:mediaError}=await supabase.from("social_post_media").insert(selectedMediaIds.map(personalMediaId=>({post_id:post.id,owner_id:userId,personal_media_id:personalMediaId}))).select("id,personal_media_id,media_kind,mime_type");if(mediaError){await supabase.from("social_posts").delete().eq("id",post.id);setBusy(false);setNotice("Η δημοσίευση δεν ανέβηκε γιατί δεν μπόρεσαν να συνδεθούν τα media.");return;}attachments=(data??[]) as Attachment[];}setPosts(current=>[{...post,social_reactions:[],social_comments:[],social_post_media:attachments},...current]);setBody("");setSelectedMediaIds([]);setShowMedia(false);setBusy(false);}
+  async function publish() {
+    const text = body.trim();
+    if (!capabilities.posts || busy || (!text && !selectedMediaIds.length)) return;
+    if (selectedMediaIds.length && !capabilities.media) {
+      setNotice("Η δημοσίευση με φωτογραφία ή βίντεο δεν είναι ακόμη διαθέσιμη. Μπορείς να δημοσιεύσεις κείμενο.");
+      return;
+    }
 
-  async function toggleLike(post:Post){if(!backendReady)return;const mine=(post.social_reactions??[]).some(r=>r.user_id===userId);if(mine){const {error}=await supabase.from("social_reactions").delete().eq("post_id",post.id).eq("user_id",userId);if(!error)setPosts(items=>items.map(p=>p.id===post.id?{...p,social_reactions:(p.social_reactions??[]).filter(r=>r.user_id!==userId)}:p));}else{const {error}=await supabase.from("social_reactions").upsert({post_id:post.id,user_id:userId,reaction:"like"});if(!error)setPosts(items=>items.map(p=>p.id===post.id?{...p,social_reactions:[...(p.social_reactions??[]).filter(r=>r.user_id!==userId),{user_id:userId,reaction:"like"}]}:p));}}
+    setBusy(true);
+    setNotice("");
 
-  async function addComment(postId:string,text:string){const clean=text.trim();if(!clean||!backendReady)return;const {data,error}=await supabase.from("social_comments").insert({post_id:postId,author_id:userId,body:clean}).select("id,author_id,body,created_at").single();if(!error&&data)setPosts(items=>items.map(p=>p.id===postId?{...p,social_comments:[...(p.social_comments??[]),data]}:p));}
+    const { data: post, error } = await supabase
+      .from("social_posts")
+      .insert({ author_id: userId, body: text || null, visibility, context: "social" })
+      .select("id,author_id,body,visibility,context,location_label,created_at")
+      .single();
 
-  return <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
-    <div className="space-y-4">
-      {!backendReady&&<section className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900"><strong>Το Social backend δεν έχει ακόμη επιβεβαιωθεί στο production.</strong><p className="mt-1 text-xs">Η σελίδα μένει όρθια και τα actions απενεργοποιούνται μέχρι να ολοκληρωθεί το migration.{backendMessage?` ${backendMessage}`:""}</p></section>}
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><div className="mb-3 font-black">{profile.display_name||profile.username||"Το Social σου"}</div><textarea value={body} onChange={e=>setBody(e.target.value)} rows={3} placeholder="Τι θέλεις να μοιραστείς;" className="w-full resize-none rounded-xl border border-slate-200 p-3"/><div className="mt-3 flex flex-wrap gap-2"><button type="button" onClick={()=>setShowMedia(v=>!v)} disabled={!backendReady} className="rounded-full border border-slate-200 px-3 py-2 text-sm font-bold text-slate-700 disabled:opacity-40">Φωτογραφία / Βίντεο{selectedMediaIds.length?` · ${selectedMediaIds.length}`:""}</button><Link href="/my-media" className="rounded-full border border-slate-200 px-3 py-2 text-sm font-bold text-slate-600 no-underline">Η βιβλιοθήκη μου</Link><Link href="/social/map" className="rounded-full border border-slate-200 px-3 py-2 text-sm font-bold text-slate-600 no-underline">Χάρτης / Κοντά μου</Link></div>{showMedia&&<div className="mt-3 rounded-xl bg-slate-50 p-3">{personalMedia.length?<div className="grid gap-2 sm:grid-cols-2">{personalMedia.map(item=>{const selected=selectedMediaIds.includes(item.id);return <button key={item.id} type="button" onClick={()=>toggleMedia(item.id)} className={`rounded-xl border p-3 text-left ${selected?"border-[#2467aa] bg-white":"border-slate-200 bg-white"}`}><div className="text-sm font-black">{item.original_name}</div><div className="mt-1 text-xs text-slate-500">{item.media_kind==="photo"?"Φωτογραφία":item.media_kind==="video"?"Βίντεο":"Ήχος"}{selected?" · Επιλέχθηκε":""}</div></button>;})}</div>:<p className="text-sm text-slate-500">Δεν έχεις ακόμη media στη βιβλιοθήκη σου.</p>}</div>}<div className="mt-3 flex items-center justify-between gap-2"><select value={visibility} onChange={e=>setVisibility(e.target.value)} className="rounded-full border border-slate-200 px-3 py-2 text-sm"><option value="connections">Φίλοι</option><option value="public">Δημόσια</option><option value="private">Μόνο εγώ</option></select><button onClick={publish} disabled={!backendReady||busy||(!body.trim()&&!selectedMediaIds.length)} className="rounded-full bg-[#2467aa] px-5 py-2 text-sm font-black text-white disabled:opacity-40">{busy?"Δημοσίευση…":"Δημοσίευση"}</button></div>{notice&&<p className="mt-2 text-sm text-red-700">{notice}</p>}</section>
+    if (error || !post) {
+      setBusy(false);
+      setNotice(error?.message || "Η δημοσίευση απέτυχε.");
+      return;
+    }
 
-      {posts.map(post=>{const author=authorMap.get(post.author_id);const liked=(post.social_reactions??[]).some(r=>r.user_id===userId);return <article key={post.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><div className="font-black">{author?.display_name||author?.username||(post.author_id===userId?profile.display_name||profile.username||"Εσύ":"Pantavion member")}</div><div className="mt-1 text-xs text-slate-500">{new Date(post.created_at).toLocaleString()}</div>{post.body&&<p className="mt-3 whitespace-pre-wrap text-[15px] leading-6">{post.body}</p>}{!!post.social_post_media?.length&&<div className="mt-3 grid gap-2 sm:grid-cols-2">{post.social_post_media.map(att=><PostMedia key={att.id} attachment={att}/>)}</div>}<div className="mt-4 flex gap-3 border-t border-slate-100 pt-3"><button onClick={()=>toggleLike(post)} disabled={!backendReady} className={`text-sm font-black ${liked?"text-[#2467aa]":"text-slate-600"}`}>Μου αρέσει · {post.social_reactions?.length??0}</button><span className="text-sm text-slate-500">Σχόλια · {post.social_comments?.length??0}</span></div>{(post.social_comments??[]).map(c=><div key={c.id} className="mt-2 rounded-xl bg-slate-50 px-3 py-2 text-sm">{c.body}</div>)}<CommentBox disabled={!backendReady} onSend={text=>addComment(post.id,text)}/></article>;})}
-      {backendReady&&!posts.length&&<section className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500">Δεν υπάρχουν ακόμη δημοσιεύσεις. Κάνε την πρώτη.</section>}
+    let attachments: Attachment[] = [];
+    if (selectedMediaIds.length) {
+      const { data, error: mediaError } = await supabase
+        .from("social_post_media")
+        .insert(selectedMediaIds.map((personalMediaId) => ({ post_id: post.id, owner_id: userId, personal_media_id: personalMediaId })))
+        .select("id,personal_media_id,media_kind,mime_type");
+
+      if (mediaError) {
+        await supabase.from("social_posts").delete().eq("id", post.id);
+        setBusy(false);
+        setNotice("Η δημοσίευση δεν ανέβηκε γιατί δεν μπόρεσαν να συνδεθούν τα media.");
+        return;
+      }
+      attachments = (data ?? []) as Attachment[];
+    }
+
+    setPosts((current) => [
+      { ...post, social_reactions: [], social_comments: [], social_post_media: attachments },
+      ...current,
+    ]);
+    setBody("");
+    setSelectedMediaIds([]);
+    setShowMedia(false);
+    setBusy(false);
+  }
+
+  async function toggleLike(post: Post) {
+    if (!capabilities.reactions) return;
+    const mine = (post.social_reactions ?? []).some((reaction) => reaction.user_id === userId);
+
+    if (mine) {
+      const { error } = await supabase.from("social_reactions").delete().eq("post_id", post.id).eq("user_id", userId);
+      if (!error) {
+        setPosts((items) => items.map((item) => item.id === post.id
+          ? { ...item, social_reactions: (item.social_reactions ?? []).filter((reaction) => reaction.user_id !== userId) }
+          : item));
+      }
+      return;
+    }
+
+    const { error } = await supabase.from("social_reactions").upsert({ post_id: post.id, user_id: userId, reaction: "like" });
+    if (!error) {
+      setPosts((items) => items.map((item) => item.id === post.id
+        ? { ...item, social_reactions: [...(item.social_reactions ?? []).filter((reaction) => reaction.user_id !== userId), { user_id: userId, reaction: "like" }] }
+        : item));
+    }
+  }
+
+  async function addComment(postId: string, text: string) {
+    const clean = text.trim();
+    if (!clean || !capabilities.comments) return;
+
+    const { data, error } = await supabase
+      .from("social_comments")
+      .insert({ post_id: postId, author_id: userId, body: clean })
+      .select("id,author_id,body,created_at")
+      .single();
+
+    if (!error && data) {
+      setPosts((items) => items.map((item) => item.id === postId
+        ? { ...item, social_comments: [...(item.social_comments ?? []), data] }
+        : item));
+    }
+  }
+
+  return (
+    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
+      <div className="space-y-4">
+        {unavailable.length > 0 ? (
+          <section className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+            <strong>Το Social λειτουργεί μερικώς αυτή τη στιγμή.</strong>
+            <p className="mt-1 text-xs">Ό,τι είναι διαθέσιμο δουλεύει κανονικά. Τα υπόλοιπα ενεργοποιούνται μόλις ολοκληρωθεί το αντίστοιχο backend.</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {capabilityLabels.map(([key, label]) => (
+                <span key={key} className={`rounded-full px-2.5 py-1 text-xs font-black ${capabilities[key] ? "bg-emerald-100 text-emerald-800" : "bg-white text-amber-900"}`}>
+                  {capabilities[key] ? "✓" : "—"} {label}
+                </span>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="mb-3 font-black">{profile.display_name || profile.username || "Το Social σου"}</div>
+          <textarea
+            value={body}
+            onChange={(event) => setBody(event.target.value)}
+            rows={3}
+            disabled={!capabilities.posts}
+            placeholder={capabilities.posts ? "Τι θέλεις να μοιραστείς;" : "Οι δημοσιεύσεις δεν είναι ακόμη διαθέσιμες."}
+            className="w-full resize-none rounded-xl border border-slate-200 p-3 disabled:bg-slate-50 disabled:text-slate-400"
+          />
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {capabilities.media ? (
+              <button type="button" onClick={() => setShowMedia((value) => !value)} className="rounded-full border border-slate-200 px-3 py-2 text-sm font-bold text-slate-700">
+                Φωτογραφία / Βίντεο{selectedMediaIds.length ? ` · ${selectedMediaIds.length}` : ""}
+              </button>
+            ) : null}
+            <Link href="/my-media" className="rounded-full border border-slate-200 px-3 py-2 text-sm font-bold text-slate-600 no-underline">Η βιβλιοθήκη μου</Link>
+            {capabilities.map ? <Link href="/social/map" className="rounded-full border border-slate-200 px-3 py-2 text-sm font-bold text-slate-600 no-underline">Χάρτης / Κοντά μου</Link> : null}
+          </div>
+
+          {showMedia && capabilities.media ? (
+            <div className="mt-3 rounded-xl bg-slate-50 p-3">
+              {personalMedia.length ? (
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {personalMedia.map((item) => {
+                    const selected = selectedMediaIds.includes(item.id);
+                    return (
+                      <button key={item.id} type="button" onClick={() => toggleMedia(item.id)} className={`rounded-xl border p-3 text-left ${selected ? "border-[#2467aa] bg-white" : "border-slate-200 bg-white"}`}>
+                        <div className="text-sm font-black">{item.original_name}</div>
+                        <div className="mt-1 text-xs text-slate-500">{item.media_kind === "photo" ? "Φωτογραφία" : item.media_kind === "video" ? "Βίντεο" : "Ήχος"}{selected ? " · Επιλέχθηκε" : ""}</div>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : <p className="text-sm text-slate-500">Δεν έχεις ακόμη media στη βιβλιοθήκη σου.</p>}
+            </div>
+          ) : null}
+
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <select value={visibility} onChange={(event) => setVisibility(event.target.value)} disabled={!capabilities.posts} className="rounded-full border border-slate-200 px-3 py-2 text-sm disabled:opacity-40">
+              <option value="connections">Φίλοι</option>
+              <option value="public">Δημόσια</option>
+              <option value="private">Μόνο εγώ</option>
+            </select>
+            <button onClick={publish} disabled={!capabilities.posts || busy || (!body.trim() && !selectedMediaIds.length)} className="rounded-full bg-[#2467aa] px-5 py-2 text-sm font-black text-white disabled:opacity-40">
+              {busy ? "Δημοσίευση…" : "Δημοσίευση"}
+            </button>
+          </div>
+          {notice ? <p className="mt-2 text-sm text-red-700">{notice}</p> : null}
+        </section>
+
+        {posts.map((post) => {
+          const author = authorMap.get(post.author_id);
+          const liked = (post.social_reactions ?? []).some((reaction) => reaction.user_id === userId);
+          return (
+            <article key={post.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="font-black">{author?.display_name || author?.username || (post.author_id === userId ? profile.display_name || profile.username || "Εσύ" : "Pantavion member")}</div>
+              <div className="mt-1 text-xs text-slate-500">{new Date(post.created_at).toLocaleString()}</div>
+              {post.body ? <p className="mt-3 whitespace-pre-wrap text-[15px] leading-6">{post.body}</p> : null}
+              {capabilities.media && post.social_post_media?.length ? (
+                <div className="mt-3 grid gap-2 sm:grid-cols-2">{post.social_post_media.map((attachment) => <PostMedia key={attachment.id} attachment={attachment} />)}</div>
+              ) : null}
+              <div className="mt-4 flex gap-3 border-t border-slate-100 pt-3">
+                {capabilities.reactions ? (
+                  <button onClick={() => toggleLike(post)} className={`text-sm font-black ${liked ? "text-[#2467aa]" : "text-slate-600"}`}>Μου αρέσει · {post.social_reactions?.length ?? 0}</button>
+                ) : null}
+                {capabilities.comments ? <span className="text-sm text-slate-500">Σχόλια · {post.social_comments?.length ?? 0}</span> : null}
+              </div>
+              {capabilities.comments ? (post.social_comments ?? []).map((comment) => <div key={comment.id} className="mt-2 rounded-xl bg-slate-50 px-3 py-2 text-sm">{comment.body}</div>) : null}
+              {capabilities.comments ? <CommentBox onSend={(text) => addComment(post.id, text)} /> : null}
+            </article>
+          );
+        })}
+
+        {capabilities.posts && posts.length === 0 ? (
+          <section className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500">Δεν υπάρχουν ακόμη δημοσιεύσεις. Κάνε την πρώτη.</section>
+        ) : null}
+      </div>
+
+      <aside>
+        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <h2 className="font-black">Ο κόσμος σου</h2>
+          <p className="mt-1 text-sm text-slate-500">Social, People, Messages, Contacts, Media και Map από τον ίδιο λογαριασμό.</p>
+          <div className="mt-3 grid gap-2">
+            <Link href="/contacts" className="rounded-full bg-slate-100 px-3 py-2 text-center text-xs font-black text-slate-700 no-underline">Επαφές</Link>
+            <Link href="/profile" className="rounded-full bg-slate-100 px-3 py-2 text-center text-xs font-black text-slate-700 no-underline">Προφίλ</Link>
+          </div>
+        </section>
+      </aside>
     </div>
-    <aside><section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><h2 className="font-black">Ο κόσμος σου</h2><p className="mt-1 text-sm text-slate-500">Social, People, Messages, Contacts, Media και Map από τον ίδιο λογαριασμό.</p><div className="mt-3 grid gap-2"><Link href="/contacts" className="rounded-full bg-slate-100 px-3 py-2 text-center text-xs font-black text-slate-700 no-underline">Επαφές</Link><Link href="/profile" className="rounded-full bg-slate-100 px-3 py-2 text-center text-xs font-black text-slate-700 no-underline">Προφίλ</Link></div></section></aside>
-  </div>;
+  );
 }
 
-function PostMedia({attachment}:{attachment:Attachment}){const [url,setUrl]=useState<string|null>(null);const [failed,setFailed]=useState(false);useEffect(()=>{let active=true;fetch("/api/social/media-url",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({attachmentId:attachment.id})}).then(r=>r.ok?r.json():Promise.reject()).then(data=>{if(active)setUrl(data.url??null);}).catch(()=>{if(active)setFailed(true);});return()=>{active=false;};},[attachment.id]);if(failed)return <div className="rounded-xl bg-slate-100 p-6 text-center text-xs text-slate-500">Το media δεν είναι διαθέσιμο.</div>;if(!url)return <div className="h-40 animate-pulse rounded-xl bg-slate-100"/>;if(attachment.media_kind==="photo")return <img src={url} alt="" className="max-h-[520px] w-full rounded-xl object-cover"/>;if(attachment.media_kind==="video")return <video src={url} controls playsInline className="max-h-[520px] w-full rounded-xl bg-black"/>;if(attachment.media_kind==="audio")return <audio src={url} controls className="w-full"/>;return <a href={url} target="_blank" rel="noreferrer" className="block rounded-xl bg-slate-100 p-4 font-bold text-slate-700">Άνοιγμα αρχείου</a>;}
+function PostMedia({ attachment }: { attachment: Attachment }) {
+  const [url, setUrl] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
 
-function CommentBox({onSend,disabled}:{onSend:(text:string)=>Promise<void>;disabled:boolean}){const [text,setText]=useState("");return <div className="mt-3 flex gap-2"><input value={text} disabled={disabled} onChange={e=>setText(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&text.trim()&&!disabled){void onSend(text);setText("");}}} placeholder="Γράψε σχόλιο…" className="min-w-0 flex-1 rounded-full border border-slate-200 px-3 py-2 text-sm disabled:opacity-40"/><button disabled={disabled} onClick={()=>{if(text.trim()&&!disabled){void onSend(text);setText("");}}} className="rounded-full bg-slate-900 px-3 py-2 text-sm font-bold text-white disabled:opacity-40">Αποστολή</button></div>;}
+  useEffect(() => {
+    let active = true;
+    fetch("/api/social/media-url", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ attachmentId: attachment.id }),
+    })
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((data) => { if (active) setUrl(data.url ?? null); })
+      .catch(() => { if (active) setFailed(true); });
+    return () => { active = false; };
+  }, [attachment.id]);
+
+  if (failed) return <div className="rounded-xl bg-slate-100 p-6 text-center text-xs text-slate-500">Το media δεν είναι διαθέσιμο.</div>;
+  if (!url) return <div className="h-40 animate-pulse rounded-xl bg-slate-100" />;
+  if (attachment.media_kind === "photo") return <img src={url} alt="" className="max-h-[520px] w-full rounded-xl object-cover" />;
+  if (attachment.media_kind === "video") return <video src={url} controls playsInline className="max-h-[520px] w-full rounded-xl bg-black" />;
+  if (attachment.media_kind === "audio") return <audio src={url} controls className="w-full" />;
+  return <a href={url} target="_blank" rel="noreferrer" className="block rounded-xl bg-slate-100 p-4 font-bold text-slate-700">Άνοιγμα αρχείου</a>;
+}
+
+function CommentBox({ onSend }: { onSend: (text: string) => Promise<void> }) {
+  const [text, setText] = useState("");
+  return (
+    <div className="mt-3 flex gap-2">
+      <input
+        value={text}
+        onChange={(event) => setText(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && text.trim()) {
+            void onSend(text);
+            setText("");
+          }
+        }}
+        placeholder="Γράψε σχόλιο…"
+        className="min-w-0 flex-1 rounded-full border border-slate-200 px-3 py-2 text-sm"
+      />
+      <button onClick={() => { if (text.trim()) { void onSend(text); setText(""); } }} className="rounded-full bg-slate-900 px-3 py-2 text-sm font-bold text-white">Αποστολή</button>
+    </div>
+  );
+}
