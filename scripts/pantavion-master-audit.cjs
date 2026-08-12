@@ -60,16 +60,21 @@ requireIncludes("app/translate/page.tsx", [
 ]);
 
 // Production translation must use strict source/target routing through the
-// approved Gateway/provider path. Public fallback must not silently masquerade
-// as a successful production translation in an unrelated third language.
+// approved Gateway/provider path. Public fallback may exist only behind the
+// explicit runtime opt-in; it must never silently masquerade as production.
 requireIncludes("app/api/pantavion/translate/route.ts", [
   "translateWithGateway",
   "strictTranslationPrompt",
   "strictLanguageRouting: true",
-  "publicTextFallback: false",
+  "publicTextFallback: languageRuntime.publicFallbackAllowed",
   "Treat the user-selected source language as authoritative",
   "Return only the translated text in the required target language",
   "translatedText",
+]);
+
+requireIncludes("core/translation/pantavion-language-provider-runtime.ts", [
+  'PANTAVION_TRANSLATE_ALLOW_PUBLIC_FALLBACK === "true"',
+  "publicFallbackAllowed",
 ]);
 
 // Keep the public fallback implementation available as a separately auditable
