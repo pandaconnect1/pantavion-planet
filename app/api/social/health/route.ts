@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getSupabasePublicConfig } from "@/lib/supabase/public-config";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -72,26 +73,10 @@ function json(body: unknown, status: number) {
 
 export async function GET() {
   const revision = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? null;
-  const hasUrl = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
-  const hasPublishableKey = Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
-
-  if (!hasUrl || !hasPublishableKey) {
-    return json(
-      {
-        ok: false,
-        schema: EXPECTED_SCHEMA,
-        revision,
-        supabase: {
-          ready: false,
-          diagnostic: "missing_env" as DiagnosticCode,
-          urlConfigured: hasUrl,
-          publishableKeyConfigured: hasPublishableKey,
-        },
-        capabilities: [],
-      },
-      503,
-    );
-  }
+  const publicConfig = getSupabasePublicConfig();
+  const envConfigured = Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+  );
 
   let supabase: Awaited<ReturnType<typeof createClient>>;
   try {
@@ -105,8 +90,8 @@ export async function GET() {
         supabase: {
           ready: false,
           diagnostic: "client_init_failed" as DiagnosticCode,
-          urlConfigured: hasUrl,
-          publishableKeyConfigured: hasPublishableKey,
+          configSource: publicConfig.source,
+          environmentConfigured: envConfigured,
         },
         capabilities: [],
       },
@@ -133,8 +118,8 @@ export async function GET() {
       supabase: {
         ready: true,
         diagnostic: "ready" as DiagnosticCode,
-        urlConfigured: true,
-        publishableKeyConfigured: true,
+        configSource: publicConfig.source,
+        environmentConfigured: envConfigured,
       },
       capabilities,
     },
