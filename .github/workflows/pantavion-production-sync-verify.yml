@@ -19,6 +19,7 @@ jobs:
     env:
       HEALTH_URL: https://pantavion.com/api/social/health
       EXPECTED_SHA: ${{ github.sha }}
+      EXPECTED_SCHEMA: social-20260811-v1
 
     steps:
       - name: Wait for exact production revision and Social schema
@@ -27,52 +28,39 @@ jobs:
           set -u
 
           echo "Expected production revision: $EXPECTED_SHA"
+          echo "Expected Social schema: $EXPECTED_SCHEMA"
           echo "Health endpoint: $HEALTH_URL"
 
           for attempt in $(seq 1 40); do
             echo "Sync verification attempt $attempt/40"
 
+            rm -f /tmp/pantavion-social-health.json
             http_code=$(curl -sS -L --connect-timeout 10 --max-time 20 \
               -o /tmp/pantavion-social-health.json \
               -w "%{http_code}" \
               "$HEALTH_URL" || true)
 
+            echo "HTTP status: $http_code"
             if [ -s /tmp/pantavion-social-health.json ]; then
               cat /tmp/pantavion-social-health.json
               echo
             fi
 
-            if node <<'NODE'
-const fs = require('fs');
-const expected = process.env.EXPECTED_SHA;
-let payload;
-try {
-  payload = JSON.parse(fs.readFileSync('/tmp/pantavion-social-health.json', 'utf8'));
-} catch {
-  process.exit(1);
-}
+            observed_revision=$(jq -r '.revision // empty' /tmp/pantavion-social-health.json 2>/dev/null || true)
+            observed_schema=$(jq -r '.schema // empty' /tmp/pantavion-social-health.json 2>/dev/null || true)
+            payload_ok=$(jq -r '.ok // false' /tmp/pantavion-social-health.json 2>/dev/null || echo false)
+            capability_count=$(jq '[.capabilities[]?] | length' /tmp/pantavion-social-health.json 2>/dev/null || echo 0)
+            not_ready_count=$(jq '[.capabilities[]? | select(.ready != true)] | length' /tmp/pantavion-social-health.json 2>/dev/null || echo 999)
 
-const capabilities = Array.isArray(payload.capabilities) ? payload.capabilities : [];
-const allReady = capabilities.length >= 6 && capabilities.every((item) => item && item.ready === true);
-const exactRevision = payload.revision === expected;
-const expectedSchema = payload.schema === 'social-20260811-v1';
+            echo "Observed revision: ${observed_revision:-<none>}"
+            echo "Observed schema: ${observed_schema:-<none>}"
+            echo "Capabilities: $capability_count total, $not_ready_count not ready"
 
-if (payload.ok === true && allReady && exactRevision && expectedSchema) {
-  console.log('Pantavion production code and Social Supabase schema are synchronized.');
-  process.exit(0);
-}
-
-console.log(JSON.stringify({
-  synchronized: false,
-  expectedRevision: expected,
-  observedRevision: payload.revision ?? null,
-  expectedSchema: 'social-20260811-v1',
-  observedSchema: payload.schema ?? null,
-  capabilities,
-}, null, 2));
-process.exit(1);
-NODE
-            then
+            if [ "$payload_ok" = "true" ] \
+              && [ "$capability_count" -ge 6 ] \
+              && [ "$not_ready_count" -eq 0 ] \
+              && [ "$observed_revision" = "$EXPECTED_SHA" ] \
+              && [ "$observed_schema" = "$EXPECTED_SCHEMA" ]; then
               echo "Production synchronization VERIFIED."
               exit 0
             fi
