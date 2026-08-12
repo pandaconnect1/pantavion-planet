@@ -13,7 +13,8 @@ type EcosystemItem = {
 const PANTAVION_MISSION = "Here We Are One. For All Humanity.";
 
 const ecosystem: EcosystemItem[] = [
-  { title: "People & Social", subtitle: "People, profiles, connection requests and private communication", icon: "◎", href: "/people", items: ["People", "Profiles", "Connections", "Messages"] },
+  { title: "Social World", subtitle: "Your connected human world: feed, people, conversations, contacts, media and location", icon: "◎", href: "/social", items: ["Feed", "People", "Connections", "Messages", "Contacts", "Media", "Social Map"] },
+  { title: "People", subtitle: "Discover people, profiles and relationship requests across Pantavion", icon: "◌", href: "/people", items: ["Profiles", "Discovery", "Requests", "Connections"] },
   { title: "Messages", subtitle: "Your real Pantavion conversations in one place", icon: "↔", href: "/messages", items: ["Inbox", "Direct chat", "Requests", "Receipts"] },
   { title: "Translation", subtitle: "Understand and communicate across languages", icon: "🌐", href: "/translate", items: ["Text", "Interpreter", "Language", "Subtitles"] },
   { title: "Market & Listings", subtitle: "Buy, sell, offer, request and discover", icon: "◇", href: "/listings", items: ["Classifieds", "Jobs", "Services", "Property", "Events", "Marketplace"] },
@@ -28,11 +29,12 @@ const ecosystem: EcosystemItem[] = [
 
 export default function PantavionHomeClient() {
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_12%_0%,#d9eaff_0,#edf5ff_32%,#f7fbff_67%,#ffffff_100%)] text-slate-950" data-pantavion-static-ui="true">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_12%_0%,#d9eaff_0,#edf5ff_32%,#f7fbff_67%,#ffffff_100%)] text-slate-950" data-pantavion-live-ui="true">
       <section className="mx-auto max-w-7xl px-4 pb-14 pt-4 sm:px-8 sm:pt-6 lg:px-12">
         <nav className="flex items-center justify-between rounded-2xl border border-slate-200/80 bg-white/85 px-4 py-3 shadow-sm backdrop-blur-xl">
           <Link href="/" className="text-sm font-black tracking-[0.2em] text-[#153c6b] no-underline sm:text-base" data-pantavion-no-translate>PANTAVION</Link>
           <div className="flex items-center gap-1 text-xs font-bold text-slate-600 sm:gap-2 sm:text-sm">
+            <Link href="/social" className="rounded-full px-3 py-2 text-inherit no-underline transition hover:bg-blue-50 hover:text-blue-700">Social</Link>
             <Link href="/people" className="rounded-full px-3 py-2 text-inherit no-underline transition hover:bg-blue-50 hover:text-blue-700">People</Link>
             <Link href="/messages" className="rounded-full px-3 py-2 text-inherit no-underline transition hover:bg-blue-50 hover:text-blue-700">Messages</Link>
             <Link href="/translate" className="rounded-full px-3 py-2 text-inherit no-underline transition hover:bg-cyan-50 hover:text-cyan-700">Translation</Link>
@@ -46,7 +48,8 @@ export default function PantavionHomeClient() {
           <h1 className="mt-4 max-w-4xl text-[2.55rem] font-black leading-[0.98] tracking-[-0.045em] text-[#11345d] sm:text-6xl lg:text-7xl" data-pantavion-no-translate>{PANTAVION_MISSION}</h1>
           <p className="mt-5 max-w-3xl text-[15px] leading-6 text-slate-600 sm:text-lg sm:leading-8">One global human ecosystem for communication, people, work, knowledge, safety, services and professional tools.</p>
           <div className="mt-6 flex flex-wrap gap-2">
-            <Link href="/people" className="rounded-full bg-[#1e5f9f] px-5 py-2.5 text-sm font-black text-white no-underline shadow-sm">People & Social</Link>
+            <Link href="/social" className="rounded-full bg-[#1e5f9f] px-5 py-2.5 text-sm font-black text-white no-underline shadow-sm">Open Social World</Link>
+            <Link href="/people" className="rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-black text-slate-700 no-underline">People</Link>
             <Link href="/messages" className="rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-black text-slate-700 no-underline">Messages</Link>
             <Link href="/translate" className="rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-black text-slate-700 no-underline">Translation</Link>
           </div>
