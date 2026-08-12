@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+const EXPECTED_SCHEMA = "social-20260811-v1";
+
 type Capability = {
   id: "posts" | "reactions" | "comments" | "media" | "map" | "contact_discovery";
   label: string;
@@ -20,13 +22,6 @@ async function tableReady(
 
 export async function GET() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ ok: false, authenticated: false, capabilities: [] }, { status: 401 });
-  }
 
   const [posts, reactions, comments, media, map, contactDiscovery] = await Promise.all([
     tableReady(supabase, "social_posts"),
@@ -46,9 +41,20 @@ export async function GET() {
     { id: "contact_discovery", label: "Εύρεση επαφών", ready: contactDiscovery },
   ];
 
-  return NextResponse.json({
-    ok: capabilities.every((capability) => capability.ready),
-    authenticated: true,
-    capabilities,
-  });
+  const ok = capabilities.every((capability) => capability.ready);
+
+  return NextResponse.json(
+    {
+      ok,
+      schema: EXPECTED_SCHEMA,
+      revision: process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? null,
+      capabilities,
+    },
+    {
+      status: ok ? 200 : 503,
+      headers: {
+        "Cache-Control": "no-store, max-age=0",
+      },
+    },
+  );
 }
