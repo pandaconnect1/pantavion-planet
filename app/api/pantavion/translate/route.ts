@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { generateText } from "ai";
-import { gateway } from "@ai-sdk/gateway";
 import {
   pantavionUniversalTranslationContract,
   type PantavionTranslationRequest,
 } from "@/core/translation/pantavion-universal-translation-runtime";
-import { translateWithPantavionProvider } from "@/core/translation/pantavion-translation-provider-adapters";
+import {
+  getPantavionTranslationProviderStatus,
+  translateWithPantavionProvider,
+} from "@/core/translation/pantavion-translation-provider-adapters";
 import {
   getPantavionLanguageRuntimeSnapshot,
   pantavionGatewayRuntimeAvailable,
@@ -14,6 +16,14 @@ import {
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
+
+type GatewayAttempt = {
+  model: string;
+  ok: boolean;
+  errorClass?: string;
+  errorCode?: string;
+  httpStatus?: number;
+};
 
 function asString(value: unknown, fallback = "") {
   return typeof value === "string" ? value : fallback;
@@ -34,6 +44,30 @@ function responseForResult(result: Awaited<ReturnType<typeof translateWithPantav
   });
 }
 
+function safeGatewayFailure(error: unknown): Omit<GatewayAttempt, "model" | "ok"> {
+  if (!error || typeof error !== "object") {
+    return { errorClass: "unknown_gateway_error" };
+  }
+
+  const candidate = error as {
+    name?: unknown;
+    status?: unknown;
+    statusCode?: unknown;
+    code?: unknown;
+    cause?: { status?: unknown; statusCode?: unknown; code?: unknown };
+  };
+
+  const statusValue = candidate.status ?? candidate.statusCode ?? candidate.cause?.status ?? candidate.cause?.statusCode;
+  const parsedStatus = typeof statusValue === "number" ? statusValue : Number(statusValue);
+  const codeValue = candidate.code ?? candidate.cause?.code;
+
+  return {
+    errorClass: typeof candidate.name === "string" && candidate.name ? candidate.name : "gateway_request_failed",
+    errorCode: typeof codeValue === "string" && codeValue ? codeValue.slice(0, 80) : undefined,
+    httpStatus: Number.isFinite(parsedStatus) ? parsedStatus : undefined,
+  };
+}
+
 async function translateThroughConfiguredProvider(input: {
   text: string;
   sourceLanguage: string;
@@ -48,7 +82,16 @@ async function translateThroughConfiguredProvider(input: {
     sessionId: input.sessionId,
   };
 
-  return translateWithPantavionProvider(request).catch(() => null);
+  try {
+    return await translateWithPantavionProvider(request);
+  } catch (error) {
+    console.warn("pantavion_translation_provider_exception", {
+      sourceLanguage: input.sourceLanguage,
+      targetLanguage: input.targetLanguage,
+      errorClass: error instanceof Error ? error.name : "provider_exception",
+    });
+    return null;
+  }
 }
 
 function strictTranslationPrompt(request: PantavionTranslationRequest) {
@@ -68,7 +111,9 @@ function strictTranslationPrompt(request: PantavionTranslationRequest) {
 }
 
 async function translateWithGateway(request: PantavionTranslationRequest) {
-  if (!(await pantavionGatewayRuntimeAvailable())) return null;
+  if (!(await pantavionGatewayRuntimeAvailable())) {
+    return { result: null, attempts: [] as GatewayAttempt[], runtimeAvailable: false };
+  }
 
   const models = Array.from(
     new Set(
@@ -79,39 +124,52 @@ async function translateWithGateway(request: PantavionTranslationRequest) {
       ].filter((value): value is string => Boolean(value)),
     ),
   );
+  const attempts: GatewayAttempt[] = [];
 
   for (const model of models) {
     try {
+      // AI SDK resolves a creator/model string through Vercel AI Gateway and uses
+      // Vercel OIDC automatically in production. This keeps auth tied to the
+      // deployed project instead of depending on a separately-created provider instance.
       const result = await generateText({
-        model: gateway(model),
+        model,
         prompt: strictTranslationPrompt(request),
         temperature: 0,
         maxRetries: 1,
         abortSignal: AbortSignal.timeout(20_000),
       });
       const translatedText = String(result.text || "").trim();
-      if (!translatedText) continue;
+      if (!translatedText) {
+        attempts.push({ model, ok: false, errorClass: "empty_translation" });
+        continue;
+      }
 
+      attempts.push({ model, ok: true });
       return {
-        ok: true as const,
-        status: "translated" as const,
-        contract: pantavionUniversalTranslationContract,
-        input: request,
-        translatedText,
-        provider: "vercel_ai_gateway",
-        model,
-        generatedAt: new Date().toISOString(),
+        result: {
+          ok: true as const,
+          status: "translated" as const,
+          contract: pantavionUniversalTranslationContract,
+          input: request,
+          translatedText,
+          provider: "vercel_ai_gateway",
+          model,
+          generatedAt: new Date().toISOString(),
+        },
+        attempts,
+        runtimeAvailable: true,
       };
-    } catch {
-      // Try the next approved Gateway model.
+    } catch (error) {
+      attempts.push({ model, ok: false, ...safeGatewayFailure(error) });
     }
   }
 
-  return null;
+  return { result: null, attempts, runtimeAvailable: true };
 }
 
 export async function GET() {
   const languageRuntime = await getPantavionLanguageRuntimeSnapshot();
+  const providerStatus = getPantavionTranslationProviderStatus();
   return NextResponse.json({
     ok: languageRuntime.capabilities.some(
       (capability) => capability.capability === "text_translation" && capability.available,
@@ -119,7 +177,12 @@ export async function GET() {
     contract: pantavionUniversalTranslationContract,
     gatewayPreferred: languageRuntime.gatewayRuntimeAvailable,
     strictLanguageRouting: true,
-    publicTextFallback: false,
+    publicTextFallback: languageRuntime.publicFallbackAllowed,
+    providerStatus: {
+      provider: providerStatus.provider,
+      endpointConfigured: providerStatus.endpointConfigured,
+      apiKeyConfigured: providerStatus.apiKeyConfigured,
+    },
     languageRuntime,
   });
 }
@@ -167,8 +230,8 @@ export async function POST(request: Request) {
     bidirectional: Boolean(body.bidirectional ?? true),
   };
 
-  const gatewayResult = await translateWithGateway(translationRequest);
-  if (gatewayResult) return NextResponse.json(gatewayResult);
+  const gateway = await translateWithGateway(translationRequest);
+  if (gateway.result) return NextResponse.json(gateway.result);
 
   const configuredResult = await translateThroughConfiguredProvider({
     text,
@@ -180,6 +243,21 @@ export async function POST(request: Request) {
     return responseForResult(configuredResult);
   }
 
+  const providerStatus = getPantavionTranslationProviderStatus();
+  const diagnostic = {
+    event: "pantavion_translation_exhausted",
+    sourceLanguage,
+    targetLanguage,
+    gatewayRuntimeAvailable: gateway.runtimeAvailable,
+    gatewayAttempts: gateway.attempts,
+    configuredProvider: providerStatus.provider,
+    configuredProviderEndpoint: providerStatus.endpointConfigured,
+    configuredProviderApiKey: providerStatus.apiKeyConfigured,
+    configuredProviderStatus: configuredResult?.status || "exception_or_unavailable",
+  };
+
+  console.warn("pantavion_translation_exhausted", diagnostic);
+
   return NextResponse.json(
     {
       ok: false,
@@ -188,7 +266,13 @@ export async function POST(request: Request) {
       sourceLanguage,
       targetLanguage,
       providerRequired: true,
-      message: "No approved Pantavion translation provider completed this language pair.",
+      message: "The live translation provider is temporarily unavailable. Please retry.",
+      diagnostic: {
+        gatewayRuntimeAvailable: gateway.runtimeAvailable,
+        gatewayAttempts: gateway.attempts,
+        configuredProvider: providerStatus.provider,
+        configuredProviderStatus: configuredResult?.status || "unavailable",
+      },
     },
     { status: 503 },
   );
