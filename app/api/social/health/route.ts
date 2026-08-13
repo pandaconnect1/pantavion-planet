@@ -5,7 +5,7 @@ import { getSupabasePublicConfig } from "@/lib/supabase/public-config";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-const EXPECTED_SCHEMA = "social-20260811-v1";
+const EXPECTED_SCHEMA = "social-20260813-v2";
 
 type CapabilityId =
   | "posts"
@@ -17,7 +17,7 @@ type CapabilityId =
 
 type DiagnosticCode =
   | "ready"
-  | "missing_env"
+  | "auth_required"
   | "client_init_failed"
   | "table_missing"
   | "permission_denied"
@@ -40,7 +40,13 @@ function classifyQueryError(error: { code?: string | null; message?: string | nu
     return "table_missing";
   }
 
-  if (code === "42501" || message.includes("permission denied") || message.includes("row-level security")) {
+  if (
+    code === "42501" ||
+    message.includes("permission denied") ||
+    message.includes("row-level security") ||
+    message.includes("jwt") ||
+    message.includes("unauthorized")
+  ) {
     return "permission_denied";
   }
 
@@ -52,10 +58,16 @@ async function checkCapability(
   id: CapabilityId,
   label: string,
   table: string,
+  authenticated: boolean,
 ): Promise<Capability> {
   try {
     const { error } = await supabase.from(table).select("*", { head: true, count: "exact" }).limit(1);
     const diagnostic = classifyQueryError(error);
+
+    if (!authenticated && diagnostic === "permission_denied") {
+      return { id, label, ready: true, diagnostic: "auth_required" };
+    }
+
     return { id, label, ready: diagnostic === "ready", diagnostic };
   } catch {
     return { id, label, ready: false, diagnostic: "query_failed" };
@@ -74,9 +86,6 @@ function json(body: unknown, status: number) {
 export async function GET() {
   const revision = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? null;
   const publicConfig = getSupabasePublicConfig();
-  const envConfigured = Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-  );
 
   let supabase: Awaited<ReturnType<typeof createClient>>;
   try {
@@ -91,7 +100,6 @@ export async function GET() {
           ready: false,
           diagnostic: "client_init_failed" as DiagnosticCode,
           configSource: publicConfig.source,
-          environmentConfigured: envConfigured,
         },
         capabilities: [],
       },
@@ -99,13 +107,24 @@ export async function GET() {
     );
   }
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const authenticated = Boolean(user);
+
   const capabilities = await Promise.all([
-    checkCapability(supabase, "posts", "Δημοσιεύσεις", "social_posts"),
-    checkCapability(supabase, "reactions", "Αντιδράσεις", "social_reactions"),
-    checkCapability(supabase, "comments", "Σχόλια", "social_comments"),
-    checkCapability(supabase, "media", "Φωτογραφίες / Βίντεο", "social_post_media"),
-    checkCapability(supabase, "map", "Χάρτης / Τοποθεσία", "social_location_shares"),
-    checkCapability(supabase, "contact_discovery", "Εύρεση επαφών", "contact_discovery_tokens"),
+    checkCapability(supabase, "posts", "Δημοσιεύσεις", "social_posts", authenticated),
+    checkCapability(supabase, "reactions", "Αντιδράσεις", "social_reactions", authenticated),
+    checkCapability(supabase, "comments", "Σχόλια", "social_comments", authenticated),
+    checkCapability(supabase, "media", "Φωτογραφίες / Βίντεο", "social_post_media", authenticated),
+    checkCapability(supabase, "map", "Χάρτης / Τοποθεσία", "social_location_shares", authenticated),
+    checkCapability(
+      supabase,
+      "contact_discovery",
+      "Εύρεση επαφών",
+      "contact_discovery_tokens",
+      authenticated,
+    ),
   ]);
 
   const ok = capabilities.every((capability) => capability.ready);
@@ -119,7 +138,7 @@ export async function GET() {
         ready: true,
         diagnostic: "ready" as DiagnosticCode,
         configSource: publicConfig.source,
-        environmentConfigured: envConfigured,
+        authenticated,
       },
       capabilities,
     },
