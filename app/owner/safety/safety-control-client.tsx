@@ -1,0 +1,91 @@
+"use client";
+
+import { useMemo, useState } from "react";
+
+type SafetyCase = {
+  id: string;
+  subject_user_id: string;
+  case_kind: string;
+  severity: string;
+  sensitivity: string;
+  case_state: string;
+  reason_summary: string;
+  opened_at: string;
+};
+
+type Dossier = Record<string, unknown>;
+
+export default function SafetyControlClient({ initialCases, founder, initialError }: { initialCases: SafetyCase[]; founder: boolean; initialError: string | null }) {
+  const [cases, setCases] = useState(initialCases);
+  const [selectedId, setSelectedId] = useState<string | null>(initialCases[0]?.id ?? null);
+  const [purpose, setPurpose] = useState("");
+  const [scope, setScope] = useState("profile_and_case");
+  const [dossier, setDossier] = useState<Dossier | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState<string | null>(initialError);
+
+  const selected = useMemo(() => cases.find((item) => item.id === selectedId) ?? null, [cases, selectedId]);
+
+  async function refreshCases() {
+    const response = await fetch("/api/owner/safety/cases", { cache: "no-store" });
+    const json = await response.json();
+    if (response.ok) setCases(json.cases ?? []);
+    else setNotice(json.detail || json.error || "Case refresh failed");
+  }
+
+  async function openDossier() {
+    if (!selectedId || purpose.trim().length < 10) {
+      setNotice("Γράψε συγκεκριμένο λόγο πρόσβασης (τουλάχιστον 10 χαρακτήρες).");
+      return;
+    }
+    setBusy(true); setNotice(null); setDossier(null);
+    const response = await fetch("/api/owner/safety/dossier", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ caseId: selectedId, scope, purpose: purpose.trim() }),
+    });
+    const json = await response.json();
+    setBusy(false);
+    if (!response.ok) return setNotice(json.detail || json.error || "Privileged review denied");
+    setDossier(json.dossier ?? null);
+  }
+
+  return (
+    <div className="mt-6 grid gap-6 lg:grid-cols-[0.9fr_1.4fr]">
+      <section className="rounded-3xl border border-slate-800 bg-slate-900 p-5">
+        <div className="flex items-center justify-between gap-3">
+          <div><p className="text-xs font-black uppercase tracking-[0.22em] text-slate-400">Case Queue</p><h2 className="mt-1 text-xl font-black">{cases.length} υποθέσεις</h2></div>
+          <div className="flex gap-2"><span className="rounded-full border border-slate-700 px-3 py-1 text-xs font-black text-slate-300">{founder ? "FOUNDER" : "SAFETY"}</span><button onClick={refreshCases} className="rounded-full border border-slate-700 px-3 py-1 text-xs font-black">Refresh</button></div>
+        </div>
+        <div className="mt-4 space-y-2">
+          {cases.map((item) => (
+            <button key={item.id} onClick={() => { setSelectedId(item.id); setDossier(null); setNotice(null); }} className={`w-full rounded-2xl border p-4 text-left ${selectedId === item.id ? "border-cyan-500 bg-cyan-950/30" : "border-slate-800 bg-slate-950/50"}`}>
+              <div className="flex items-start justify-between gap-3"><strong className="text-sm">{item.case_kind}</strong><span className="text-[10px] font-black uppercase text-amber-300">{item.severity}</span></div>
+              <p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-400">{item.reason_summary}</p>
+              <p className="mt-2 text-[10px] text-slate-500">{item.case_state} · {item.sensitivity}</p>
+            </button>
+          ))}
+          {!cases.length && <div className="rounded-2xl border border-slate-800 p-4 text-sm text-slate-400">Δεν υπάρχουν ορατές υποθέσεις.</div>}
+        </div>
+      </section>
+
+      <section className="rounded-3xl border border-slate-800 bg-slate-900 p-5">
+        {!selected ? <p className="text-sm text-slate-400">Επίλεξε υπόθεση.</p> : <>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">Privileged Safety Review</p>
+          <h2 className="mt-2 text-2xl font-black">{selected.case_kind}</h2>
+          <p className="mt-2 text-sm text-slate-300">Subject: <span className="font-mono text-xs">{selected.subject_user_id}</span></p>
+          <p className="mt-3 rounded-2xl border border-slate-800 bg-slate-950 p-4 text-sm leading-6 text-slate-300">{selected.reason_summary}</p>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <label className="text-xs font-black text-slate-300">Scope<select value={scope} onChange={(e) => setScope(e.target.value)} className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm"><option value="profile_and_case">Profile + case</option><option value="reported_context">Reported context</option><option value="full_case_dossier">Full case dossier</option></select></label>
+            <label className="text-xs font-black text-slate-300">Purpose<textarea value={purpose} onChange={(e) => setPurpose(e.target.value)} placeholder="Γιατί είναι αναγκαία η πρόσβαση;" className="mt-2 min-h-24 w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm" /></label>
+          </div>
+          <button disabled={busy} onClick={openDossier} className="mt-3 rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-slate-950 disabled:opacity-40">{busy ? "Έλεγχος..." : "Άνοιγμα καταγεγραμμένου dossier"}</button>
+
+          {dossier && <pre className="mt-5 max-h-[430px] overflow-auto rounded-2xl border border-slate-800 bg-black p-4 text-xs leading-5 text-emerald-200">{JSON.stringify(dossier, null, 2)}</pre>}
+        </>}
+        {notice && <div className="mt-5 rounded-2xl border border-amber-800 bg-amber-950/30 p-4 text-sm text-amber-100">{notice}</div>}
+      </section>
+    </div>
+  );
+}
