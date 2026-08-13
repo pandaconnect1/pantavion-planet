@@ -20,7 +20,7 @@ export function ModulePage({ route }: { route: PantavionRoute }) {
 
           <div className="pv-grid" style={{ marginTop: 26 }}>
             <div className="pv-card">
-              <h3>Works now</h3>
+              <h3>Available on this route</h3>
               <ul>
                 {route.worksNow.map((item) => (
                   <li key={item}>{item}</li>
@@ -29,7 +29,7 @@ export function ModulePage({ route }: { route: PantavionRoute }) {
             </div>
 
             <div className="pv-card">
-              <h3>Next integrations</h3>
+              <h3>Still being prepared</h3>
               <ul>
                 {route.next.map((item) => (
                   <li key={item}>{item}</li>
