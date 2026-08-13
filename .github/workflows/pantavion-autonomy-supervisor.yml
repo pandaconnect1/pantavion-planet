@@ -1,4 +1,4 @@
-﻿name: pantavion-autonomy-supervisor
+name: pantavion-autonomy-supervisor
 
 on:
   workflow_dispatch:
@@ -21,7 +21,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install
         run: npm install
@@ -32,6 +32,7 @@ jobs:
         run: npm run autonomy:supervisor
 
       - name: Upload runtime reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pantavion-autonomy-reports
@@ -56,9 +57,9 @@ jobs:
             --title "Pantavion autonomy supervisor detected runtime failure" \
             --body "Autonomy supervisor failed on $(date -u). Founder review required.
 
-\`\`\`
-${BODY}
-\`\`\`" || true
+          \`\`\`
+          ${BODY}
+          \`\`\`" || true
 
       - name: Fail workflow if supervisor failed
         if: steps.supervisor.outcome == 'failure'
