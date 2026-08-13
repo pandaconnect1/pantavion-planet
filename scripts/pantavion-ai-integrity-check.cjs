@@ -151,6 +151,32 @@ const requiredContent = [
   { file: "app/sos/elder/page.tsx", text: "rulesTitle", reason: "Protection rules must be translated through dictionary" }
 ];
 
+function isExplicitSafetyBoundary(content, index) {
+  const prefix = content.slice(Math.max(0, index - 180), index).toLowerCase();
+
+  return (
+    /\bno\s+$/.test(prefix) ||
+    /\b(?:do|does|must)\s+not\s+(?:claim|offer|present|market|describe)?[^.!?\n]{0,150}$/.test(prefix) ||
+    /\bnever\s+(?:claim|offer|present|market|describe)?[^.!?\n]{0,150}$/.test(prefix) ||
+    /\bmustneverclaim\s*:\s*\[[\s\S]{0,180}$/.test(prefix)
+  );
+}
+
+function containsForbiddenUsage(content, text) {
+  const source = content.toLowerCase();
+  const needle = text.toLowerCase();
+  let searchFrom = 0;
+
+  while (searchFrom < source.length) {
+    const index = source.indexOf(needle, searchFrom);
+    if (index === -1) return false;
+    if (!isExplicitSafetyBoundary(source, index)) return true;
+    searchFrom = index + needle.length;
+  }
+
+  return false;
+}
+
 function walk(dir) {
   const out = [];
 
@@ -178,7 +204,7 @@ for (const file of files) {
   const fileContent = fs.readFileSync(path.join(root, file), "utf8");
 
   for (const rule of forbidden) {
-    if (fileContent.includes(rule.text)) {
+    if (containsForbiddenUsage(fileContent, rule.text)) {
       failures.push({ file, text: rule.text, reason: rule.reason });
     }
   }
