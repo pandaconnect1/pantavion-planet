@@ -1,18 +1,49 @@
-﻿const fs = require("fs");
+const fs = require("fs");
 const path = require("path");
 
 const root = process.cwd();
 
-const requiredF (const file of requiredFiles) {
-  read(file);
+const requiredFiles = [
+  "core/kernel/pantavion-autonomous-builder-kernel.ts",
+  "scripts/pantavion-autonomous-builder-gate.cjs",
+  "package.json",
+];
+
+const requiredMarkers = [
+  "pantavion_autonomous_builder_kernel_v1",
+  "createPantavionAutonomousWorkOrder",
+  "founderApprovalRequired",
+  "auditRequired",
+  "buildVerificationRequired",
+  "typeScriptVerificationRequired",
+  "externalAppCreationAllowed",
+  "productionDeployAllowed",
+  "blockedCommands",
+];
+
+const failures = [];
+
+function read(relativePath) {
+  const absolutePath = path.join(root, relativePath);
+
+  if (!fs.existsSync(absolutePath)) {
+    failures.push("Missing required file: " + relativePath);
+    return "";
+  }
+
+  return fs.readFileSync(absolutePath, "utf8");
 }
 
-const source = read("core/kernel/pantavion-autonomous-builder-kernel.ts");
-const packageJsonText = read("package.json");
+const files = Object.fromEntries(
+  requiredFiles.map((file) => [file, read(file)]),
+);
+
+const source = files["core/kernel/pantavion-autonomous-builder-kernel.ts"];
+const packageJsonText = files["package.json"];
 
 for (const marker of requiredMarkers) {
   if (!source.includes(marker)) {
-    failures.push(`Autonomous builder kernel missing marker: ${marker}`);
+    failures.push("Autonomous builder kernel missing marker: " + marker);
   }
 }
 
@@ -20,12 +51,12 @@ let packageJson = null;
 
 try {
   packageJson = JSON.parse(packageJsonText);
-} catch (error) {
+} catch {
   failures.push("package.json is not valid JSON.");
 }
 
 if (packageJson) {
-  const script = packageJson.scripts && packageJson.scripts["audit:autonomous-builder"];
+  const script = packageJson.scripts?.["audit:autonomous-builder"];
 
   if (script !== "node scripts/pantavion-autonomous-builder-gate.cjs") {
     failures.push(
@@ -69,5 +100,5 @@ if (failures.length > 0) {
   console.log("- work order generator present");
   console.log("- founder approval boundary present");
   console.log("- internal and external app build targets represented");
-  console.log("- audit TypeScript and build verification boundaries present");
+  console.log("- audit, TypeScript, and build verification boundaries present");
 }
