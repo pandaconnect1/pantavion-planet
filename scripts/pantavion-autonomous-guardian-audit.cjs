@@ -17,10 +17,12 @@ function mustContain(path, marker) {
 [
   "core/guardian/pantavion-autonomous-internal-ai-os.ts",
   "app/page.tsx",
+  "app/pantavion-home-client.tsx",
   "app/panta-ai/page.tsx",
   "app/sos/page.tsx",
   "app/translate/page.tsx",
-  "app/product-status/page.tsx"
+  "app/product-status/page.tsx",
+  "core/pantavion/no-dead-surface-ledger.ts"
 ].forEach(mustExist);
 
 [
@@ -35,15 +37,18 @@ function mustContain(path, marker) {
   "PANTAVION_FOUNDER_APPROVAL_GATE_V1"
 ].forEach((marker) => mustContain("core/guardian/pantavion-autonomous-internal-ai-os.ts", marker));
 
-[
-  "PANTAVION_PUBLIC_GATEWAY_V1",
-  "PANTAVION_AI_COMMAND_CENTER_V1",
-  "PANTAVION_SOS_AI_CENTER_V1",
-  "PANTAVION_PRODUCT_STATUS_V1"
-].forEach((marker) => mustContain("app/page.tsx", marker));
+mustContain("app/page.tsx", "PantavionHomeClient");
+mustContain("app/pantavion-home-client.tsx", "data-pantavion-live-ui");
+mustContain("app/panta-ai/page.tsx", "PANTAVION_AI_COMMAND_CENTER_V1");
+mustContain("app/sos/page.tsx", "PANTAVION_SOS_AI_CENTER_V1");
+mustContain("app/translate/page.tsx", "/api/pantavion/translate");
+mustContain("app/product-status/page.tsx", "Pantavion Realness Status");
+mustContain("core/pantavion/no-dead-surface-ledger.ts", "NO_DEAD_SURFACE_LEDGER");
 
-["/translate", "/panta-ai", "/sos", "/product-status"].forEach((route) => {
-  if (!read("app/page.tsx").includes(route)) failures.push(`Homepage missing route ${route}`);
+["/social", "/people", "/messages", "/translate", "/sos"].forEach((route) => {
+  if (!read("app/pantavion-home-client.tsx").includes(route)) {
+    failures.push(`Current public gateway missing route ${route}`);
+  }
 });
 
 if (failures.length) {

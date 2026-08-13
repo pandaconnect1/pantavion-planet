@@ -37,13 +37,16 @@ function requireText(pathname, text, reason) {
 
 requireFile("app/translate/page.tsx", "PantaTranslate public route must exist");
 requireFile("app/interpreter/page.tsx", "Interpreter alias route must exist");
+requireFile("app/translate/interpreter/page.tsx", "Two-speaker interpreter route must exist");
+requireFile("app/pantavion-home-client.tsx", "Current public gateway must exist");
 requireFile("app/api/translate/universal/route.ts", "Universal translation API route must exist");
 requireFile("core/translation/pantavion-natural-language-universe.ts", "Natural language universe contract must exist");
 requireFile("core/translation/pantavion-universal-interpreter-contract.ts", "Universal interpreter contract must exist");
 requireFile("core/translation/pantavion-translation-provider-router.ts", "Translation provider router must exist");
 requireFile("core/translation/pantavion-translation-provider-adapters.ts", "Real translation provider adapters must exist");
 requireFile("app/api/translate/status/route.ts", "Translation provider status API must exist");
-requireFile("components/translation/PantaTranslateFloatingWidget.tsx", "Global PantaTranslate floating widget must exist");
+requireFile("components/pantavion/PantavionGlobalUiTranslationRuntime.tsx", "Global UI translation runtime must exist");
+requireFile("app/pantavion-global-language-selector.tsx", "Global language selector must exist");
 
 requireText("core/translation/pantavion-natural-language-universe.ts", "targetNaturalLanguageCount: 7000", "7000+ natural language target must be preserved");
 requireText("core/translation/pantavion-universal-interpreter-contract.ts", "notSosOnly", "translation must not be SOS-only");
@@ -52,9 +55,13 @@ requireText("core/translation/pantavion-universal-interpreter-contract.ts", "two
 requireText("core/translation/pantavion-universal-interpreter-contract.ts", "socialMode", "social translation must be locked");
 requireText("core/translation/pantavion-universal-interpreter-contract.ts", "cameraMode", "camera/sign/menu/document scan must be locked");
 requireText("core/translation/pantavion-universal-interpreter-contract.ts", "elderSimpleMode", "elder simple interpreter must be locked");
-requireText("app/translate/page.tsx", "PantaTranslate / Universal Interpreter", "main translation route must be visible");
-requireText("app/page.tsx", "/translate", "homepage must expose translation entry");
-requireText("app/layout.tsx", "PantaTranslateFloatingWidget", "global layout must expose PantaTranslate everywhere");
+requireText("app/translate/page.tsx", "PantaTranslate", "main translation route must identify PantaTranslate");
+requireText("app/translate/page.tsx", "/api/pantavion/translate", "main translation route must call the live translation runtime");
+requireText("app/translate/interpreter/page.tsx", "pantavion-interpreter", "two-speaker interpreter must call the translation runtime");
+requireText("app/pantavion-home-client.tsx", "/translate", "current public gateway must expose translation entry");
+requireText("app/layout.tsx", "PantavionGlobalUiTranslationRuntime", "global layout must mount the UI translation runtime");
+requireText("app/layout.tsx", "PantavionGlobalLanguageSelector", "global layout must mount the language selector");
+requireText("components/pantavion/PantavionGlobalUiTranslationRuntime.tsx", "/api/pantavion/translate", "global UI runtime must call the translation route");
 requireText("core/translation/pantavion-translation-provider-adapters.ts", "translateWithPantavionProvider", "translation must call real provider adapter");
 requireText("core/translation/pantavion-translation-provider-adapters.ts", "deepl", "DeepL adapter must be present");
 requireText("core/translation/pantavion-translation-provider-adapters.ts", "azure", "Azure adapter must be present");
@@ -78,4 +85,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log("PASS: Pantavion translation kernel, PantaTranslate route, 7000-language target, 250+ practical menu, SOS binding, elder simple mode, social/camera/accessibility contracts are present.");
+console.log("PASS: Pantavion translation kernel, PantaTranslate route, current public gateway entry, global language runtime, 7000-language target, 250+ practical menu, SOS binding, elder simple mode, social/camera/accessibility contracts are present.");

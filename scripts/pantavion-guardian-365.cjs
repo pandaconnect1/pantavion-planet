@@ -23,18 +23,30 @@ const REPORT_JSON = path.join(REPORT_DIR, "report.json");
 
 const requiredFiles = [
   "package.json",
-  "app/pantavion/layout.tsx",
-  "app/pantavion/page.tsx",
-  "app/pantavion/kernel/page.tsx",
-  "app/pantavion/ai/page.tsx",
-  "app/pantavion/ai/router/page.tsx",
-  "app/pantavion/ai/agents/page.tsx",
-  "app/pantavion/protocol/page.tsx",
-  "app/pantavion/voice/page.tsx",
-  "app/pantavion/sos/page.tsx",
-  "app/pantavion/offgrid/page.tsx",
-  "app/pantavion/control-room/page.tsx",
-  "app/pantavion/readiness/page.tsx"
+  "app/layout.tsx",
+  "app/page.tsx",
+  "app/pantavion-home-client.tsx",
+  "app/social/page.tsx",
+  "app/people/page.tsx",
+  "app/messages/page.tsx",
+  "app/translate/page.tsx",
+  "app/translate/interpreter/page.tsx",
+  "app/panta-ai/page.tsx",
+  "app/sos/page.tsx",
+  "app/product-status/page.tsx",
+  "core/guardian/pantavion-autonomous-internal-ai-os.ts",
+  "core/pantavion/capability-registry.ts",
+  "core/pantavion/no-dead-surface-ledger.ts",
+  "PANTAVION_MASTER_RECOVERY_MANIFEST_20260810.json"
+];
+
+const requiredPublicGatewayRoutes = [
+  "/social",
+  "/people",
+  "/messages",
+  "/translate",
+  "/sos",
+  "/professional/infrastructure/water"
 ];
 
 const requiredPackageScripts = [
@@ -133,8 +145,24 @@ function checkRequiredFiles() {
     }));
 }
 
+function checkPublicGatewayRoutes() {
+  const gateway = "app/pantavion-home-client.tsx";
+
+  if (!exists(gateway)) return [];
+
+  const source = read(gateway);
+
+  return requiredPublicGatewayRoutes
+    .filter((route) => !source.includes(`"${route}"`))
+    .map((route) => ({
+      level: "high",
+      title: `Missing current public gateway route: ${route}`,
+      detail: "The current Pantavion home client must expose this canonical public entry."
+    }));
+}
+
 function checkPantavionRoutes() {
-  const pages = walk("app/pantavion", (rel) => rel.endsWith("/page.tsx"));
+  const pages = walk("app", (rel) => rel.endsWith("/page.tsx"));
   const findings = [];
 
   for (const page of pages) {
@@ -229,6 +257,7 @@ function main() {
   const findings = [
     ...checkPackageScripts(),
     ...checkRequiredFiles(),
+    ...checkPublicGatewayRoutes(),
     ...routeCheck.findings,
     ...checkForbiddenClaims()
   ];
