@@ -19,7 +19,7 @@ jobs:
     env:
       HEALTH_URL: https://pantavion.com/api/social/health
       EXPECTED_SHA: ${{ github.sha }}
-      EXPECTED_SCHEMA: social-20260811-v1
+      EXPECTED_SCHEMA: social-20260813-v2
 
     steps:
       - name: Wait for exact production revision and Social schema
