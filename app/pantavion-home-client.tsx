@@ -1,112 +1,89 @@
 "use client";
 
 import Link from "next/link";
-
-type EcosystemItem = {
-  title: string;
-  subtitle: string;
-  icon: string;
-  href?: string;
-  items: string[];
-};
+import { useEffect, useState } from "react";
 
 const PANTAVION_MISSION = "Here We Are One. For All Humanity.";
 
-const ecosystem: EcosystemItem[] = [
-  { title: "Human World", subtitle: "People, relationships, conversations and communities across countries and languages", icon: "◎", href: "/social", items: ["People", "Relationships", "Communities", "Media", "Discovery", "Social Map"] },
-  { title: "People", subtitle: "Discover people and build consent-based relationships across Pantavion", icon: "◌", href: "/people", items: ["Profiles", "Discovery", "Requests", "Connections"] },
-  { title: "Communication", subtitle: "Conversations designed to continue across language, context and devices", icon: "↔", href: "/messages", items: ["Inbox", "Direct chat", "Requests", "Continuity"] },
-  { title: "Universal Language", subtitle: "Understand and communicate across languages with translation and interpreter experiences", icon: "🌐", href: "/translate", items: ["Text", "Interpreter", "Language", "Subtitles"] },
-  { title: "Market & Listings", subtitle: "Buy, sell, offer, request and discover", icon: "◇", href: "/listings", items: ["Classifieds", "Jobs", "Services", "Property", "Events", "Marketplace"] },
-  { title: "News, Sports & Media", subtitle: "Information, audio, video and public media", icon: "◫", href: "/media", items: ["News", "Sports", "Radio", "Podcasts", "Channels", "Events"] },
-  { title: "Work & Services", subtitle: "Practical help for people and businesses", icon: "＋", href: "/build-services", items: ["Work", "Services", "Business", "Professional help"] },
-  { title: "Safety & SOS", subtitle: "Safety, crisis information and trusted alerts", icon: "◉", href: "/sos", items: ["SOS", "Crisis", "Alerts", "Trusted contacts"] },
-  { title: "Business", subtitle: "Presence, services, listings and promotion", icon: "€", href: "/market", items: ["Business pages", "Listings", "Services", "Promotion"] },
-  { title: "Knowledge & Learning", subtitle: "Learning, libraries, culture and research", icon: "◇", items: ["Learning", "Libraries", "Courses", "Culture", "Research"] },
-  { title: "Maps, Travel & Local Life", subtitle: "Places, travel and everyday local discovery", icon: "⌖", items: ["Maps", "Travel", "Places", "Local services"] },
-  { title: "Professional Areas", subtitle: "Protected tools for approved professional users", icon: "⌁", href: "/professional/infrastructure/water", items: ["Water", "Field tools", "Access", "Infrastructure"] },
+const journeys = [
+  ["People", "People, relationships & communities", "/people"],
+  ["Chat", "Messages, voice & connection", "/messages"],
+  ["Language", "Translate & understand", "/translate"],
+  ["Discover", "Places, events & interests", "/social"],
+  ["Work", "Jobs, business & services", "/build-services"],
+  ["Safety", "SOS, alerts & trusted help", "/sos"],
 ];
 
 export default function PantavionHomeClient() {
+  const [entered, setEntered] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setEntered(true), 80);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_12%_0%,#d9eaff_0,#edf5ff_32%,#f7fbff_67%,#ffffff_100%)] text-slate-950" data-pantavion-live-ui="true">
-      <section className="mx-auto max-w-7xl px-4 pb-14 pt-4 sm:px-8 sm:pt-6 lg:px-12">
-        <nav className="flex items-center justify-between rounded-2xl border border-slate-200/80 bg-white/85 px-4 py-3 shadow-sm backdrop-blur-xl">
-          <Link href="/" className="text-sm font-black tracking-[0.2em] text-[#153c6b] no-underline sm:text-base" data-pantavion-no-translate>PANTAVION ONE</Link>
-          <div className="flex items-center gap-1 text-xs font-bold text-slate-600 sm:gap-2 sm:text-sm">
-            <Link href="/social" className="rounded-full px-3 py-2 text-inherit no-underline transition hover:bg-blue-50 hover:text-blue-700">Human World</Link>
-            <Link href="/people" className="rounded-full px-3 py-2 text-inherit no-underline transition hover:bg-blue-50 hover:text-blue-700">People</Link>
-            <Link href="/messages" className="rounded-full px-3 py-2 text-inherit no-underline transition hover:bg-blue-50 hover:text-blue-700">Communication</Link>
-            <Link href="/translate" className="rounded-full px-3 py-2 text-inherit no-underline transition hover:bg-cyan-50 hover:text-cyan-700">Language</Link>
+    <main className="min-h-screen overflow-hidden bg-[#071a35] text-white" data-pantavion-live-ui="true">
+      <style jsx global>{`
+        @keyframes pantaEntrance {
+          0% { transform: perspective(900px) translateZ(-260px) scale(.55) rotateY(-18deg); opacity: 0; filter: blur(10px); }
+          42% { opacity: 1; }
+          68% { transform: perspective(900px) translateZ(150px) scale(1.14) rotateY(7deg); filter: blur(0); }
+          84% { transform: perspective(900px) translateZ(45px) scale(1.035) rotateY(-2deg); }
+          100% { transform: perspective(900px) translateZ(0) scale(1) rotateY(0); opacity: 1; }
+        }
+        @keyframes pantaHalo { 0%,100% { transform: scale(.94); opacity:.42 } 50% { transform:scale(1.08); opacity:.8 } }
+        @keyframes pantaOrbit { to { transform: rotate(360deg); } }
+        .panta-mark { animation: pantaEntrance 1.45s cubic-bezier(.16,1,.3,1) both; transform-style: preserve-3d; }
+        .panta-halo { animation: pantaHalo 3.8s ease-in-out infinite; }
+        .panta-orbit { animation: pantaOrbit 13s linear infinite; }
+        @media (prefers-reduced-motion: reduce) { .panta-mark,.panta-halo,.panta-orbit { animation:none!important; } }
+      `}</style>
+
+      <section className="relative mx-auto min-h-screen max-w-[1500px] px-4 pb-12 pt-4 sm:px-8 lg:px-12">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_56%_37%,rgba(35,126,255,.24),transparent_25%),radial-gradient(circle_at_68%_30%,rgba(166,74,255,.14),transparent_22%),linear-gradient(180deg,#071a35_0%,#06162e_60%,#041126_100%)]" />
+
+        <nav className="relative z-30 flex items-center justify-between gap-3 border-b border-white/10 py-3">
+          <Link href="/" className="text-sm font-black tracking-[0.16em] text-white no-underline sm:text-base">PANTAVION ONE</Link>
+          <div className="flex items-center gap-1.5 text-xs font-bold sm:text-sm">
+            <Link href="/translate" className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-white no-underline">🌐 Language</Link>
+            <Link href="/professional/infrastructure/water" className="hidden rounded-full border border-cyan-400/20 bg-cyan-400/5 px-3 py-2 text-cyan-100 no-underline sm:block">💧 Water</Link>
+            <a href="#all-pantavion" className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-white no-underline">☰ All Pantavion</a>
           </div>
         </nav>
 
-        <header className="pb-8 pt-11 sm:pb-12 sm:pt-16">
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white/75 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-[#2865a8] shadow-sm sm:text-xs" data-pantavion-no-translate>
-            <span className="h-2 w-2 rounded-full bg-cyan-500" /> ONE HUMAN WORLD · SHARED TRUSTED CONTEXT
-          </div>
-          <h1 className="mt-4 max-w-4xl text-[2.55rem] font-black leading-[0.98] tracking-[-0.045em] text-[#11345d] sm:text-6xl lg:text-7xl" data-pantavion-no-translate>{PANTAVION_MISSION}</h1>
-          <p className="mt-5 max-w-4xl text-[15px] leading-6 text-slate-600 sm:text-lg sm:leading-8">Pantavion is building a human operating layer where identity, relationships, language, consent, safety, AI capabilities and services can work together across countries and use cases.</p>
-          <p className="mt-3 max-w-3xl text-sm font-semibold leading-6 text-[#315f8f] sm:text-base">Not another social network. A shared context for people to discover, understand, communicate, trust and act — without rebuilding their digital relationship in every separate service.</p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            <Link href="/social" className="rounded-full bg-[#1e5f9f] px-5 py-2.5 text-sm font-black text-white no-underline shadow-sm">Explore Human World</Link>
-            <Link href="/people" className="rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-black text-slate-700 no-underline">People</Link>
-            <Link href="/messages" className="rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-black text-slate-700 no-underline">Communication</Link>
-            <Link href="/translate" className="rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-black text-slate-700 no-underline">Universal Language</Link>
-          </div>
-        </header>
-
-        <section className="grid gap-3 md:grid-cols-4">
-          {[
-            ["Identity & relationships", "One human identity with consent-based relationship context."],
-            ["Language & understanding", "Communication designed to cross language boundaries."],
-            ["Trust & safety", "Permissions, safety and context stay part of the relationship."],
-            ["AI & services", "Capabilities and services can operate on the same shared context."],
-          ].map(([title, text]) => (
-            <article key={title} className="rounded-[1.25rem] border border-blue-100 bg-white/90 p-4 shadow-sm">
-              <h2 className="text-sm font-black text-[#173f72]">{title}</h2>
-              <p className="mt-2 text-xs leading-5 text-slate-500">{text}</p>
-            </article>
-          ))}
-        </section>
-
-        <section className="mt-9">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.26em] text-[#3474b8] sm:text-xs">One ecosystem · multiple human needs</p>
-            <h2 className="mt-1 text-xl font-black text-[#173f72] sm:text-2xl">Pantavion worlds</h2>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">The long-term ecosystem extends a shared identity, relationship, language, trust and service context into communication, commerce, safety, knowledge and professional environments.</p>
+        <section className="relative z-10 grid min-h-[650px] items-center gap-10 py-10 lg:grid-cols-[.92fr_1.08fr] lg:py-16">
+          <div className="relative z-20 max-w-2xl">
+            <p className="text-[10px] font-black uppercase tracking-[.28em] text-cyan-300 sm:text-xs">ONE HUMAN WORLD · SHARED TRUSTED CONTEXT</p>
+            <h1 className="mt-4 text-[2.75rem] font-black leading-[.98] tracking-[-.045em] sm:text-6xl lg:text-7xl">{PANTAVION_MISSION}</h1>
+            <p className="mt-5 max-w-xl text-base leading-7 text-blue-100/80 sm:text-lg">Connect. Communicate. Discover. Learn. Work. Get help. One intelligent human ecosystem, designed to reveal what you need when you need it.</p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link href="/auth/signup" className="rounded-xl bg-gradient-to-r from-blue-500 to-violet-600 px-6 py-3 text-sm font-black text-white no-underline shadow-[0_12px_38px_rgba(61,102,255,.28)]">Join Pantavion One</Link>
+              <Link href="/social" className="rounded-xl border border-cyan-300/35 bg-white/5 px-6 py-3 text-sm font-black text-white no-underline backdrop-blur">Explore</Link>
+            </div>
+            <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-xs font-bold text-blue-100/70"><span>◉ One Identity</span><span>◇ Trust & Safety</span><span>◎ Human Centric</span><span>✦ AI-assisted</span></div>
           </div>
 
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {ecosystem.map((section) => {
-              const card = (
-                <article className="h-full rounded-[1.4rem] border border-slate-200/80 bg-white/85 p-4 shadow-[0_12px_34px_rgba(34,71,112,0.07)] transition sm:p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="text-lg font-black text-slate-900 sm:text-xl">{section.title}</h3>
-                      <p className="mt-1 text-xs font-semibold leading-5 text-slate-500 sm:text-sm">{section.subtitle}</p>
-                    </div>
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-50 text-lg text-[#1d5c9c] shadow-sm">{section.icon}</span>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-1.5">{section.items.map((item) => <span key={item} className="rounded-full border border-slate-200 bg-slate-50/80 px-2.5 py-1 text-[10px] font-bold text-slate-600 sm:text-xs">{item}</span>)}</div>
-                  <p className="mt-4 text-xs font-black text-[#2d6ca9] sm:text-sm">{section.href ? "Open →" : "In development"}</p>
-                </article>
-              );
-              return section.href ? <Link key={section.title} href={section.href} className="no-underline">{card}</Link> : <div key={section.title}>{card}</div>;
-            })}
+          <div className="relative z-10 flex min-h-[390px] items-center justify-center [perspective:900px] sm:min-h-[500px]">
+            <div className="panta-halo absolute h-[340px] w-[340px] rounded-full bg-blue-500/20 blur-[70px] sm:h-[470px] sm:w-[470px]" />
+            <div className="panta-orbit absolute h-[300px] w-[300px] rounded-full border border-cyan-300/25 sm:h-[430px] sm:w-[430px]"><span className="absolute -top-1 left-1/2 h-2 w-2 rounded-full bg-cyan-200 shadow-[0_0_18px_#67e8f9]" /></div>
+            <div className={`panta-mark relative flex h-[250px] w-[250px] items-center justify-center sm:h-[370px] sm:w-[370px] ${entered ? "" : "opacity-0"}`} aria-label="Pantavion One">
+              <div className="absolute inset-4 rounded-full bg-gradient-to-br from-cyan-300 via-blue-500 to-violet-500 p-[3px] shadow-[0_0_70px_rgba(76,132,255,.42)]">
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-[#071a35] shadow-[inset_0_0_55px_rgba(71,114,255,.35)]">
+                  <span className="translate-y-[-4%] bg-gradient-to-br from-cyan-200 via-blue-400 to-violet-400 bg-clip-text text-[10rem] font-black leading-none text-transparent drop-shadow-[0_20px_24px_rgba(0,0,0,.35)] sm:text-[15rem]">P</span>
+                </div>
+              </div>
+              <div className="absolute -bottom-10 h-16 w-[72%] rounded-[50%] bg-cyan-300/20 blur-2xl" />
+            </div>
           </div>
         </section>
 
-        <section className="mt-9 rounded-[1.5rem] border border-blue-100 bg-[#123b67] p-5 text-white shadow-xl shadow-blue-950/10 sm:p-7">
-          <p className="text-[10px] font-black uppercase tracking-[0.24em] text-blue-200">Pantavion principle</p>
-          <h2 className="mt-2 text-2xl font-black sm:text-3xl">Simple for people. Context-aware underneath.</h2>
-          <p className="mt-3 max-w-4xl text-sm leading-6 text-blue-100 sm:text-base">The public experience stays clear while identity, relationship context, language, consent, permissions, safety and service capabilities work behind the scenes. The goal is continuity: people should not have to rebuild trust and context every time they move from communication to another digital need.</p>
-        </section>
-
-        <section className="mt-8 rounded-[1.35rem] border border-slate-200 bg-white/85 p-4 shadow-sm sm:p-5">
-          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-            <div><p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#3474b8]">Professional access</p><h2 className="mt-1 text-lg font-black text-[#173f72]">Water network</h2><p className="mt-1 text-sm text-slate-500">Protected professional environment for approved users.</p></div>
-            <Link href="/professional/infrastructure/water" className="rounded-full bg-[#2467aa] px-4 py-2 text-xs font-black text-white no-underline">Open water tools</Link>
+        <section id="all-pantavion" className="relative z-20 rounded-[1.6rem] border border-white/10 bg-white/[.045] p-4 shadow-2xl backdrop-blur-xl sm:p-6">
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end"><div><p className="text-[10px] font-black uppercase tracking-[.25em] text-cyan-300">ALL PANTAVION</p><h2 className="mt-1 text-2xl font-black">Everything you need. One clear place.</h2></div><div className="rounded-full border border-white/10 bg-black/10 px-4 py-2 text-xs text-blue-100/70">What are you looking for? ⌕</div></div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{journeys.map(([title, subtitle, href]) => <Link key={title} href={href} className="rounded-2xl border border-white/10 bg-[#0a2243]/75 p-4 text-white no-underline transition hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-[#0c2a52]"><h3 className="font-black">{title}</h3><p className="mt-1 text-xs leading-5 text-blue-100/65">{subtitle}</p></Link>)}</div>
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <Link href="/professional/infrastructure/water" className="rounded-2xl border border-cyan-300/20 bg-cyan-300/[.06] p-4 text-white no-underline"><p className="text-xs font-black text-cyan-300">💧 PROFESSIONAL & INFRASTRUCTURE</p><h3 className="mt-1 font-black">Water Network</h3><p className="mt-1 text-xs text-blue-100/65">Protected infrastructure and mapping tools for approved users.</p></Link>
+            <Link href="/translate" className="rounded-2xl border border-violet-300/20 bg-violet-300/[.06] p-4 text-white no-underline"><p className="text-xs font-black text-violet-200">🌐 UNIVERSAL LANGUAGE</p><h3 className="mt-1 font-black">Language & Translation</h3><p className="mt-1 text-xs text-blue-100/65">Automatic or user-selected language experiences.</p></Link>
           </div>
         </section>
       </section>
