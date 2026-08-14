@@ -8,6 +8,11 @@ export async function POST(request: Request) {
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return NextResponse.json({ ok: false, error: "authentication_required" }, { status: 401 });
 
+  const { data: assurance, error: assuranceError } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (assuranceError || assurance?.currentLevel !== "aal2") {
+    return NextResponse.json({ ok: false, error: "aal2_required" }, { status: 403 });
+  }
+
   const body = await request.json().catch(() => ({}));
   const caseId = typeof body.caseId === "string" ? body.caseId : "";
   const scope = body.scope === "identity_review" ? "identity_review" : "standard";
