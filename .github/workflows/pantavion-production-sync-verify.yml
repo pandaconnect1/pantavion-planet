@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  verify_production_sync:
+  verify_social_production_sync:
     name: Verify Production Code + Supabase Sync
     runs-on: ubuntu-latest
     timeout-minutes: 12
@@ -32,7 +32,7 @@ jobs:
           echo "Health endpoint: $HEALTH_URL"
 
           for attempt in $(seq 1 40); do
-            echo "Sync verification attempt $attempt/40"
+            echo "Social sync verification attempt $attempt/40"
 
             rm -f /tmp/pantavion-social-health.json
             http_code=$(curl -sS -L --connect-timeout 10 --max-time 20 \
@@ -61,7 +61,7 @@ jobs:
               && [ "$not_ready_count" -eq 0 ] \
               && [ "$observed_revision" = "$EXPECTED_SHA" ] \
               && [ "$observed_schema" = "$EXPECTED_SCHEMA" ]; then
-              echo "Production synchronization VERIFIED."
+              echo "Social production synchronization VERIFIED."
               exit 0
             fi
 
@@ -70,5 +70,74 @@ jobs:
             fi
           done
 
-          echo "::error::Pantavion production did not reach synchronized code + Supabase state within 10 minutes."
+          echo "::error::Pantavion Social production did not reach synchronized code + Supabase state within 10 minutes."
+          exit 1
+
+  verify_interpreter_production_sync:
+    name: Verify Interpreter Provider + Runtime Sync
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      HEALTH_URL: https://pantavion.com/api/pantavion/interpreter/health
+      EXPECTED_SHA: ${{ github.sha }}
+      EXPECTED_SCHEMA: interpreter-20260814-v1
+
+    steps:
+      - name: Wait for exact production revision and Interpreter readiness
+        shell: bash
+        run: |
+          set -u
+
+          echo "Expected production revision: $EXPECTED_SHA"
+          echo "Expected Interpreter schema: $EXPECTED_SCHEMA"
+          echo "Health endpoint: $HEALTH_URL"
+
+          for attempt in $(seq 1 40); do
+            echo "Interpreter verification attempt $attempt/40"
+
+            rm -f /tmp/pantavion-interpreter-health.json
+            http_code=$(curl -sS -L --connect-timeout 10 --max-time 20 \
+              -o /tmp/pantavion-interpreter-health.json \
+              -w "%{http_code}" \
+              "$HEALTH_URL" || true)
+
+            echo "HTTP status: $http_code"
+            if [ -s /tmp/pantavion-interpreter-health.json ]; then
+              cat /tmp/pantavion-interpreter-health.json
+              echo
+            fi
+
+            observed_revision=$(jq -r '.revision // empty' /tmp/pantavion-interpreter-health.json 2>/dev/null || true)
+            observed_schema=$(jq -r '.schema // empty' /tmp/pantavion-interpreter-health.json 2>/dev/null || true)
+            payload_ok=$(jq -r '.ok // false' /tmp/pantavion-interpreter-health.json 2>/dev/null || echo false)
+            provider_ready=$(jq -r '.provider.ready // false' /tmp/pantavion-interpreter-health.json 2>/dev/null || echo false)
+            provider_diagnostic=$(jq -r '.provider.diagnostic // "unknown"' /tmp/pantavion-interpreter-health.json 2>/dev/null || echo unknown)
+            capability_count=$(jq '[.capabilities[]?] | length' /tmp/pantavion-interpreter-health.json 2>/dev/null || echo 0)
+            not_ready_count=$(jq '[.capabilities[]? | select(.ready != true)] | length' /tmp/pantavion-interpreter-health.json 2>/dev/null || echo 999)
+
+            echo "Observed revision: ${observed_revision:-<none>}"
+            echo "Observed schema: ${observed_schema:-<none>}"
+            echo "Provider: $provider_diagnostic (ready=$provider_ready)"
+            echo "Capabilities: $capability_count total, $not_ready_count not ready"
+
+            if [ "$payload_ok" = "true" ] \
+              && [ "$provider_ready" = "true" ] \
+              && [ "$capability_count" -ge 3 ] \
+              && [ "$not_ready_count" -eq 0 ] \
+              && [ "$observed_revision" = "$EXPECTED_SHA" ] \
+              && [ "$observed_schema" = "$EXPECTED_SCHEMA" ]; then
+              echo "Interpreter production runtime VERIFIED."
+              exit 0
+            fi
+
+            if [ "$provider_diagnostic" = "provider_not_configured" ]; then
+              echo "::warning::Interpreter provider is not configured in production yet."
+            fi
+
+            if [ "$attempt" -lt 40 ]; then
+              sleep 15
+            fi
+          done
+
+          echo "::error::Pantavion Interpreter production did not reach provider-ready synchronized state within 10 minutes."
           exit 1
