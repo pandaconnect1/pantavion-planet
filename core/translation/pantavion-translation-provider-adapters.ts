@@ -13,6 +13,10 @@ type ProviderName =
   | "google"
   | "mymemory";
 
+function publicFallbackAllowed() {
+  return process.env.PANTAVION_TRANSLATE_ALLOW_PUBLIC_FALLBACK === "true";
+}
+
 function providerName(): ProviderName {
   const raw = (process.env.PANTAVION_TRANSLATE_PROVIDER || "").toLowerCase();
 
@@ -27,10 +31,14 @@ function providerName(): ProviderName {
     return raw;
   }
 
-  // Production-safe bootstrap for real text translation without pretending that
-  // every language/mode is covered. A configured Pantavion endpoint still wins;
-  // otherwise use the public MyMemory text service for supported known pairs.
-  return process.env.PANTAVION_TRANSLATE_ENDPOINT ? "generic" : "mymemory";
+  // An external public fallback must never be selected implicitly. A configured
+  // Pantavion endpoint still wins; otherwise the provider remains pending until
+  // a route has explicit authorization to enable the public-text fallback.
+  return process.env.PANTAVION_TRANSLATE_ENDPOINT
+    ? "generic"
+    : publicFallbackAllowed()
+      ? "mymemory"
+      : "generic";
 }
 
 function endpointFor(provider: ProviderName) {
@@ -379,13 +387,18 @@ function providerError(
 
 export function getPantavionTranslationProviderStatus() {
   const status = envStatus();
+  const mymemoryAllowed = status.provider !== "mymemory" || publicFallbackAllowed();
 
   return {
-    ok: Boolean(status.endpoint || status.provider === "google" || status.provider === "deepl" || status.provider === "azure" || status.provider === "mymemory"),
+    ok: Boolean(
+      mymemoryAllowed &&
+        (status.endpoint || status.provider === "google" || status.provider === "deepl" || status.provider === "azure" || status.provider === "mymemory"),
+    ),
     provider: status.provider,
     endpointConfigured: Boolean(status.endpoint),
     apiKeyConfigured: status.hasApiKey,
     azureRegionConfigured: Boolean(status.azureRegion),
+    publicFallbackAllowed: publicFallbackAllowed(),
     supportedProviders: ["generic", "libretranslate", "deepl", "azure", "google", "mymemory"],
     requiredEnv: [
       "PANTAVION_TRANSLATE_PROVIDER",
@@ -421,7 +434,16 @@ export async function translateWithPantavionProvider(
   if (provider === "google") return callGoogle(request, endpoint, apiKey);
   if (provider === "azure") return callAzure(request, endpoint, apiKey);
   if (provider === "libretranslate") return callLibreTranslate(request, endpoint, apiKey);
-  if (provider === "mymemory") return callMyMemory(request, endpoint);
+  if (provider === "mymemory") {
+    if (!publicFallbackAllowed()) {
+      return {
+        ...createProviderPendingTranslationResult(request),
+        message: "Public translation fallback is disabled until explicitly enabled for an approved public-text flow.",
+      };
+    }
+
+    return callMyMemory(request, endpoint);
+  }
 
   return callGeneric(request, endpoint, apiKey);
 }
