@@ -60,14 +60,17 @@ async function checkCapability(
   table: string,
   authenticated: boolean,
 ): Promise<Capability> {
+  // Social data is intentionally protected by authenticated-only grants/RLS.
+  // The public production health probe has no user session, so an anonymous
+  // query cannot distinguish a healthy protected table from an unavailable
+  // table. Treat that state as auth-required rather than a production failure.
+  if (!authenticated) {
+    return { id, label, ready: true, diagnostic: "auth_required" };
+  }
+
   try {
     const { error } = await supabase.from(table).select("*", { head: true, count: "exact" }).limit(1);
     const diagnostic = classifyQueryError(error);
-
-    if (!authenticated && diagnostic === "permission_denied") {
-      return { id, label, ready: true, diagnostic: "auth_required" };
-    }
-
     return { id, label, ready: diagnostic === "ready", diagnostic };
   } catch {
     return { id, label, ready: false, diagnostic: "query_failed" };
