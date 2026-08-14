@@ -21,6 +21,11 @@ export default async function OwnerSafetyPage() {
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) redirect("/auth/login?next=/owner/safety");
 
+  const { data: assurance, error: assuranceError } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (assuranceError || assurance?.currentLevel !== "aal2") {
+    redirect("/owner/safety/verify?next=/owner/safety");
+  }
+
   const [{ data: founder }, { data: operator }, { data: cases, error: casesError }] = await Promise.all([
     supabase.rpc("pantavion_is_active_founder"),
     supabase.rpc("pantavion_is_active_trust_safety_operator"),
