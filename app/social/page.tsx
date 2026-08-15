@@ -49,13 +49,15 @@ export default async function SocialPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return <LoginScreen />;
 
-  const [postsReady, reactionsReady, commentsReady, mediaReady, mapReady, contactDiscoveryReady] = await Promise.all([
+  const [postsReady, reactionsReady, commentsReady, mediaReady, mapReady, contactDiscoveryReady, communitiesReady, notificationsReady] = await Promise.all([
     tableReady(supabase, "social_posts"),
     tableReady(supabase, "social_reactions"),
     tableReady(supabase, "social_comments"),
     tableReady(supabase, "social_post_media"),
     tableReady(supabase, "social_location_shares"),
     tableReady(supabase, "contact_discovery_tokens"),
+    tableReady(supabase, "communities"),
+    tableReady(supabase, "social_notifications"),
   ]);
 
   const capabilities: CapabilityState = {
@@ -141,6 +143,8 @@ export default async function SocialPage() {
             <Link href="/messages" className="rounded-full bg-slate-100 px-3 py-2 text-slate-700 no-underline">Μηνύματα</Link>
             <Link href="/contacts" className="rounded-full bg-slate-100 px-3 py-2 text-slate-700 no-underline">Επαφές</Link>
             <Link href="/my-media" className="rounded-full bg-slate-100 px-3 py-2 text-slate-700 no-underline">Media</Link>
+            <Link href="/social/communities" className={`rounded-full px-3 py-2 no-underline ${communitiesReady ? "bg-slate-100 text-slate-700" : "bg-amber-50 text-amber-800"}`}>Κοινότητες{communitiesReady ? "" : " · setup"}</Link>
+            <Link href="/social/notifications" className={`rounded-full px-3 py-2 no-underline ${notificationsReady ? "bg-slate-100 text-slate-700" : "bg-amber-50 text-amber-800"}`}>Ειδοποιήσεις{notificationsReady ? "" : " · setup"}</Link>
             {mapReady ? <Link href="/social/map" className="rounded-full bg-slate-100 px-3 py-2 text-slate-700 no-underline">Χάρτης</Link> : null}
             <Link href="/profile" className="rounded-full bg-[#2467aa] px-3 py-2 text-white no-underline">Προφίλ</Link>
           </nav>
