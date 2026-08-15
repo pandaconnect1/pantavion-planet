@@ -46,6 +46,7 @@ const AUDIO_CONSTRAINTS: MediaTrackConstraints = {
 // Conversation turns are deliberately long enough for natural multi-sentence speech.
 // Long-form seminar/conference mode will use streaming/chunk rotation rather than one huge blob.
 const MAX_CONVERSATION_TURN_MS = 2 * 60 * 1000;
+const MAX_CONVERSATION_TURN_SECONDS = Math.floor(MAX_CONVERSATION_TURN_MS / 1000);
 
 function byCode(code: string) {
   return LANGUAGES.find((item) => item.code === code) || LANGUAGES[0];
@@ -56,6 +57,13 @@ function extension(mime: string) {
   if (mime.includes("ogg")) return "ogg";
   if (mime.includes("wav")) return "wav";
   return "webm";
+}
+
+function formatCountdown(seconds: number) {
+  const safe = Math.max(0, seconds);
+  const minutes = Math.floor(safe / 60);
+  const remainder = safe % 60;
+  return `${String(minutes).padStart(2, "0")}:${String(remainder).padStart(2, "0")}`;
 }
 
 export default function InterpreterPage() {
@@ -72,11 +80,13 @@ export default function InterpreterPage() {
   const [recording, setRecording] = useState(false);
   const [microphone, setMicrophone] = useState<MicrophoneState>("unknown");
   const [provider, setProvider] = useState("");
+  const [remainingSeconds, setRemainingSeconds] = useState(MAX_CONVERSATION_TURN_SECONDS);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const micGrantedRef = useRef(false);
   const recordingContextRef = useRef<{ source: string; target: string } | null>(null);
 
@@ -188,10 +198,15 @@ export default function InterpreterPage() {
       clearTimeout(timerRef.current);
       timerRef.current = null;
     }
+    if (countdownRef.current) {
+      clearInterval(countdownRef.current);
+      countdownRef.current = null;
+    }
     streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
     recorderRef.current = null;
     setRecording(false);
+    setRemainingSeconds(MAX_CONVERSATION_TURN_SECONDS);
   }
 
   async function sendRecording(blob: Blob, source: string, target: string) {
@@ -266,9 +281,13 @@ export default function InterpreterPage() {
       recorderRef.current = recorder;
       recorder.start();
       setRecording(true);
+      setRemainingSeconds(MAX_CONVERSATION_TURN_SECONDS);
       setStatus(
         `Ηχογραφώ ολόκληρη τη σειρά του Ομιλητή ${speaker}… μίλα φυσικά και πάτησε ξανά όταν τελειώσεις.`,
       );
+      countdownRef.current = setInterval(() => {
+        setRemainingSeconds((current) => Math.max(0, current - 1));
+      }, 1000);
       timerRef.current = setTimeout(() => {
         if (recorderRef.current?.state === "recording") {
           setStatus("Έφτασε το όριο ασφαλείας της συνομιλίας. Ολοκληρώνω και μεταφράζω…");
@@ -424,6 +443,27 @@ export default function InterpreterPage() {
             >
               {buttonLabel}
             </button>
+
+            {recording ? (
+              <div
+                className={`mt-3 rounded-xl border px-4 py-3 text-center ${
+                  remainingSeconds <= 20
+                    ? "border-amber-200/40 bg-amber-200/15 text-amber-50"
+                    : "border-cyan-200/20 bg-cyan-200/10 text-cyan-50"
+                }`}
+                aria-live="polite"
+              >
+                <div className="text-xs font-black uppercase tracking-wider">Χρόνος που απομένει</div>
+                <div className="mt-1 text-3xl font-black tabular-nums">
+                  {formatCountdown(remainingSeconds)}
+                </div>
+                <div className="mt-1 text-xs font-bold opacity-80">
+                  {remainingSeconds <= 20
+                    ? "Ολοκλήρωσε τη φράση σου — πλησιάζει το όριο των 2 λεπτών."
+                    : "Μπορείς να πατήσεις Τέλος & Διερμηνεία οποιαδήποτε στιγμή."}
+                </div>
+              </div>
+            ) : null}
 
             <div className="mt-3 rounded-xl border border-cyan-200/20 bg-cyan-200/10 px-3 py-3 text-sm font-bold text-cyan-50">
               {status}
