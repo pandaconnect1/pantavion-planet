@@ -139,6 +139,7 @@ export default async function SocialPage() {
             <p className="text-xs text-slate-500">Ο κοινωνικός σου κόσμος σε μία οθόνη</p>
           </div>
           <nav className="flex flex-wrap gap-2 text-xs font-black">
+            <Link href="/social/global" className="rounded-full bg-blue-50 px-3 py-2 text-[#175b9c] no-underline">Global</Link>
             <Link href="/people" className="rounded-full bg-slate-100 px-3 py-2 text-slate-700 no-underline">Άνθρωποι</Link>
             <Link href="/messages" className="rounded-full bg-slate-100 px-3 py-2 text-slate-700 no-underline">Μηνύματα</Link>
             <Link href="/contacts" className="rounded-full bg-slate-100 px-3 py-2 text-slate-700 no-underline">Επαφές</Link>
