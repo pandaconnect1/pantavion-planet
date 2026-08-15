@@ -26,6 +26,7 @@
     "plans:ingest": "node scripts/pantavion-unfinished-plan-ingestion.cjs",
     "audit:unfinished-plans": "node scripts/pantavion-unfinished-plan-ingestion-gate.cjs",
     "vision:ingest": "node scripts/pantavion-founder-vision-ingestion.cjs",
+    "knowledge:excavate": "node scripts/pantavion-canonical-knowledge-excavation.cjs",
     "sources:harvest": "node scripts/pantavion-external-source-harvest.cjs",
     "audit:translation-runtime": "node scripts/pantavion-translation-runtime-gate.cjs",
     "audit:vision": "node scripts/pantavion-vision-registry-gate.cjs",
