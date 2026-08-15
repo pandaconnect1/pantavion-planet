@@ -25,25 +25,6 @@ type SpeechResponse = {
   normalizedText?: string;
   error?: string;
 };
-type NormalizeResponse = {
-  text?: string;
-  rawText?: string;
-  normalizedText?: string;
-};
-type SpeechRecognitionResultLike = { 0?: { transcript?: string } };
-type SpeechRecognitionEventLike = { results?: ArrayLike<SpeechRecognitionResultLike> };
-type SpeechRecognitionErrorEventLike = { error?: string };
-type SpeechRecognitionLike = {
-  lang: string;
-  continuous: boolean;
-  interimResults: boolean;
-  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
-  onerror: ((event: SpeechRecognitionErrorEventLike) => void) | null;
-  onend: (() => void) | null;
-  start: () => void;
-  stop: () => void;
-};
-type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
 
 const LANGUAGES = globalEmergencyLanguages.map((language) => ({
   code: language.code,
@@ -55,6 +36,17 @@ const LANGUAGES = globalEmergencyLanguages.map((language) => ({
   speech: normalizePantavionSpeechLanguage(language.code),
 }));
 
+const AUDIO_CONSTRAINTS: MediaTrackConstraints = {
+  echoCancellation: true,
+  noiseSuppression: true,
+  autoGainControl: true,
+  channelCount: 1,
+};
+
+// Conversation turns are deliberately long enough for natural multi-sentence speech.
+// Long-form seminar/conference mode will use streaming/chunk rotation rather than one huge blob.
+const MAX_CONVERSATION_TURN_MS = 2 * 60 * 1000;
+
 function byCode(code: string) {
   return LANGUAGES.find((item) => item.code === code) || LANGUAGES[0];
 }
@@ -64,14 +56,6 @@ function extension(mime: string) {
   if (mime.includes("ogg")) return "ogg";
   if (mime.includes("wav")) return "wav";
   return "webm";
-}
-
-function getSpeechRecognitionConstructor() {
-  const speechWindow = window as Window & {
-    SpeechRecognition?: SpeechRecognitionConstructor;
-    webkitSpeechRecognition?: SpeechRecognitionConstructor;
-  };
-  return speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition;
 }
 
 export default function InterpreterPage() {
@@ -85,12 +69,10 @@ export default function InterpreterPage() {
   const [status, setStatus] = useState("Έτοιμο για αμφίδρομη διερμηνεία.");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [listening, setListening] = useState(false);
   const [recording, setRecording] = useState(false);
   const [microphone, setMicrophone] = useState<MicrophoneState>("unknown");
   const [provider, setProvider] = useState("");
 
-  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -115,11 +97,11 @@ export default function InterpreterPage() {
     setError("");
     setStatus("Ζητώ άδεια μικροφώνου…");
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: AUDIO_CONSTRAINTS });
       stream.getTracks().forEach((track) => track.stop());
       micGrantedRef.current = true;
       setMicrophone("granted");
-      setStatus("✓ Μικρόφωνο ενεργό. Ο διερμηνέας είναι έτοιμος.");
+      setStatus("✓ Μικρόφωνο ενεργό με μείωση θορύβου/ηχούς όπου υποστηρίζεται.");
       return true;
     } catch {
       micGrantedRef.current = false;
@@ -139,25 +121,6 @@ export default function InterpreterPage() {
     utterance.lang = voice?.lang || meta.speech;
     if (voice) utterance.voice = voice;
     window.speechSynthesis.speak(utterance);
-  }
-
-  async function normalizeTranscript(raw: string, language: string) {
-    const clean = raw.trim();
-    if (!clean) return { rawText: "", normalizedText: "" };
-    try {
-      const response = await fetch("/api/pantavion/speech-normalize", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ transcript: clean, language, accessibilityMode: true }),
-      });
-      const result = (await response.json().catch(() => ({}))) as NormalizeResponse;
-      return {
-        rawText: String(result.rawText || clean).trim() || clean,
-        normalizedText: String(result.normalizedText || result.text || clean).trim() || clean,
-      };
-    } catch {
-      return { rawText: clean, normalizedText: clean };
-    }
   }
 
   async function translateTurn(text: string, source: string, target: string, rawText?: string) {
@@ -237,7 +200,7 @@ export default function InterpreterPage() {
       return;
     }
     setBusy(true);
-    setStatus("Μετατρέπω τη φωνή σε κείμενο…");
+    setStatus("Μετατρέπω ολόκληρη τη φωνητική σειρά σε κείμενο…");
     try {
       const mime = blob.type || "audio/webm";
       const form = new FormData();
@@ -273,7 +236,7 @@ export default function InterpreterPage() {
       return;
     }
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: AUDIO_CONSTRAINTS });
       micGrantedRef.current = true;
       setMicrophone("granted");
       streamRef.current = stream;
@@ -304,11 +267,14 @@ export default function InterpreterPage() {
       recorder.start();
       setRecording(true);
       setStatus(
-        `Ηχογραφώ τον Ομιλητή ${speaker}… πάτησε ξανά για Τέλος & Διερμηνεία.`,
+        `Ηχογραφώ ολόκληρη τη σειρά του Ομιλητή ${speaker}… μίλα φυσικά και πάτησε ξανά όταν τελειώσεις.`,
       );
       timerRef.current = setTimeout(() => {
-        if (recorderRef.current?.state === "recording") recorderRef.current.stop();
-      }, 15_000);
+        if (recorderRef.current?.state === "recording") {
+          setStatus("Έφτασε το όριο ασφαλείας της συνομιλίας. Ολοκληρώνω και μεταφράζω…");
+          recorderRef.current.stop();
+        }
+      }, MAX_CONVERSATION_TURN_MS);
     } catch {
       micGrantedRef.current = false;
       setMicrophone("denied");
@@ -318,15 +284,9 @@ export default function InterpreterPage() {
 
   function stopRecording() {
     if (recorderRef.current?.state === "recording") {
-      setStatus("Ολοκληρώνω και μεταφράζω…");
+      setStatus("Ολοκληρώνω ολόκληρη τη φράση και μεταφράζω…");
       recorderRef.current.stop();
     }
-  }
-
-  async function handleBrowserTranscript(raw: string, source: string, target: string) {
-    const normalized = await normalizeTranscript(raw, source);
-    if (!normalized.normalizedText) return;
-    await translateTurn(normalized.normalizedText, source, target, normalized.rawText);
   }
 
   async function startInterpreterTurn() {
@@ -334,7 +294,7 @@ export default function InterpreterPage() {
       stopRecording();
       return;
     }
-    if (busy || listening) return;
+    if (busy) return;
 
     let allowed = micGrantedRef.current;
     if (!allowed) {
@@ -342,60 +302,8 @@ export default function InterpreterPage() {
       if (!allowed) return;
     }
 
-    const source = sourceCode;
-    const target = targetCode;
-    const Recognition = getSpeechRecognitionConstructor();
-    if (!Recognition) {
-      await startRecording(source, target);
-      return;
-    }
-
-    const recognition = new Recognition();
-    recognitionRef.current?.stop();
-    recognitionRef.current = recognition;
-    let received = false;
-    let fallback = false;
-
-    const useRecordingFallback = () => {
-      if (fallback || received) return;
-      fallback = true;
-      setListening(false);
-      void startRecording(source, target);
-    };
-
-    recognition.lang = byCode(source).speech;
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.onresult = (event) => {
-      const transcript = Array.from(event.results || [])
-        .map((result) => result?.[0]?.transcript || "")
-        .join(" ")
-        .trim();
-      if (!transcript) return;
-      received = true;
-      setListening(false);
-      void handleBrowserTranscript(transcript, source, target);
-    };
-    recognition.onerror = () => {
-      setListening(false);
-      useRecordingFallback();
-    };
-    recognition.onend = () => {
-      setListening(false);
-      if (!received && !fallback) useRecordingFallback();
-    };
-
     setError("");
-    setListening(true);
-    setStatus(
-      `Ακούω τον Ομιλητή ${speaker}: ${byCode(source).label} → ${byCode(target).label}…`,
-    );
-    try {
-      recognition.start();
-    } catch {
-      setListening(false);
-      useRecordingFallback();
-    }
+    await startRecording(sourceCode, targetCode);
   }
 
   function swapPeople() {
@@ -412,11 +320,9 @@ export default function InterpreterPage() {
 
   const buttonLabel = recording
     ? "⏹ Τέλος & Διερμηνεία"
-    : listening
-      ? "🎙️ Ακούω…"
-      : busy
-        ? "Επεξεργάζομαι…"
-        : `🎙️ Μίλα — Ομιλητής ${speaker}`;
+    : busy
+      ? "Επεξεργάζομαι…"
+      : `🎙️ Μίλα — Ομιλητής ${speaker}`;
 
   return (
     <main className="min-h-screen bg-[#102a56] px-4 py-4 text-white sm:px-6 sm:py-6">
@@ -435,11 +341,11 @@ export default function InterpreterPage() {
             <div className="flex items-center justify-between gap-3">
               <h1 className="text-2xl font-black sm:text-3xl">Αμφίδρομος Διερμηνέας</h1>
               <span className="text-xs font-bold text-white/55">
-                7 ήπειροι · {LANGUAGES.length}+ γλώσσες
+                7 ήπειροι · {LANGUAGES.length}+ γλώσσες στο μητρώο
               </span>
             </div>
             <p className="mt-1 text-sm text-white/65">
-              Η κατεύθυνση αλλάζει αυτόματα μετά από κάθε επιτυχημένη μετάφραση.
+              Πλήρης σειρά ομιλητή με server STT. Η κατεύθυνση αλλάζει μετά από επιτυχημένη μετάφραση.
             </p>
           </div>
 
@@ -500,7 +406,7 @@ export default function InterpreterPage() {
             <button
               type="button"
               onClick={() => void requestMicrophone()}
-              disabled={microphone === "requesting" || busy || listening || recording}
+              disabled={microphone === "requesting" || busy || recording}
               className="mt-3 w-full rounded-full border border-emerald-200/30 bg-emerald-300/15 px-4 py-3 font-black text-emerald-50 disabled:opacity-60"
             >
               {microphone === "granted"
