@@ -48,6 +48,7 @@ export default async function MessagesPage() {
         <nav className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
           <Link href="/" className="font-black tracking-[0.18em] text-[#173f72] no-underline">PANTAVION</Link>
           <div className="flex gap-2">
+            <Link href="/social/global" className="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-black text-[#175b9c] no-underline">Global</Link>
             <Link href="/people" className="rounded-full border border-slate-200 px-3 py-2 text-xs font-black text-slate-600 no-underline">People</Link>
             <Link href="/profile" className="rounded-full bg-[#2467aa] px-3 py-2 text-xs font-black text-white no-underline">Profile</Link>
           </div>
