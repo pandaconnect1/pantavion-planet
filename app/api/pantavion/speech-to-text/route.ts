@@ -9,6 +9,8 @@ export const revalidate = 0;
 export const runtime = "nodejs";
 
 const MAX_AUDIO_BYTES = 15 * 1024 * 1024;
+const PRIMARY_STT_TIMEOUT_MS = 8_000;
+const FALLBACK_STT_TIMEOUT_MS = 8_000;
 
 type SpeechResult = { ok: true; text: string; provider: string; detectedLanguage?: string };
 type Attempt = {
@@ -78,6 +80,20 @@ function publicFailureCode(attempts: Attempt[]) {
   return "STT_PROVIDER_UNAVAILABLE";
 }
 
+async function withDeadline<T>(promise: Promise<T>, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((_, reject) => {
+        timer = setTimeout(() => reject(Object.assign(new Error("deadline exceeded"), { code: "network_or_timeout" })), ms);
+      }),
+    ]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 async function gatewayRuntimeAvailable() {
   if (process.env.AI_GATEWAY_API_KEY) return true;
   try {
@@ -97,53 +113,40 @@ async function transcribeWithVercelAiGateway(
     return null;
   }
 
-  const requested = process.env.PANTAVION_SPEECH_TO_TEXT_GATEWAY_MODEL;
-  const models = Array.from(
-    new Set(
-      [requested, "openai/gpt-4o-mini-transcribe", "openai/gpt-4o-transcribe", "openai/whisper-1"].filter(
-        (value): value is string => Boolean(value),
-      ),
-    ),
-  );
-
+  const model = process.env.PANTAVION_SPEECH_TO_TEXT_GATEWAY_MODEL || "openai/gpt-4o-mini-transcribe";
+  const provider = `vercel_ai_gateway:${model}`;
   const audioBuffer = Buffer.from(await audio.arrayBuffer());
   const hint = language !== "auto" ? baseLanguage(language) : "";
 
-  for (const model of models) {
-    const provider = `vercel_ai_gateway:${model}`;
-    const variants = hint ? (["hinted", "auto"] as const) : (["auto"] as const);
+  try {
+    const result = await withDeadline(
+      transcribe({
+        model: gateway.transcriptionModel(model),
+        audio: audioBuffer,
+        maxRetries: 0,
+        ...(hint
+          ? {
+              providerOptions: {
+                openai: { language: hint },
+              },
+            }
+          : {}),
+      }),
+      PRIMARY_STT_TIMEOUT_MS,
+    );
 
-    for (const variant of variants) {
-      try {
-        const result = await transcribe({
-          model: gateway.transcriptionModel(model),
-          audio: audioBuffer,
-          maxRetries: 2,
-          ...(variant === "hinted"
-            ? {
-                providerOptions: {
-                  openai: {
-                    language: hint,
-                  },
-                },
-              }
-            : {}),
-        });
-
-        const text = String(result.text || "").trim();
-        const detectedLanguage = String(result.language || "").trim() || undefined;
-        attempts.push({ provider: `${provider}:${variant}`, attempted: true, ok: Boolean(text) });
-        if (text) return { ok: true, text, provider, detectedLanguage };
-      } catch (error) {
-        attempts.push({
-          provider: `${provider}:${variant}`,
-          attempted: true,
-          ok: false,
-          status: statusFromError(error),
-          code: codeFromError(error),
-        });
-      }
-    }
+    const text = String(result.text || "").trim();
+    const detectedLanguage = String(result.language || "").trim() || undefined;
+    attempts.push({ provider, attempted: true, ok: Boolean(text) });
+    if (text) return { ok: true, text, provider, detectedLanguage };
+  } catch (error) {
+    attempts.push({
+      provider,
+      attempted: true,
+      ok: false,
+      status: statusFromError(error),
+      code: codeFromError(error),
+    });
   }
 
   return null;
@@ -173,7 +176,7 @@ async function transcribeWithPantavionEndpoint(
       method: "POST",
       headers,
       body: form,
-      signal: AbortSignal.timeout(25_000),
+      signal: AbortSignal.timeout(FALLBACK_STT_TIMEOUT_MS),
     });
     const payload = await response.json().catch(() => ({}));
     const text = textFromPayload(payload);
@@ -201,33 +204,29 @@ async function transcribeWithOpenAI(
   const apiKey = process.env.OPENAI_API_KEY;
   if (!enabled || !apiKey) return null;
 
-  const requestedModel = process.env.PANTAVION_SPEECH_TO_TEXT_MODEL || "gpt-4o-mini-transcribe";
-  const models = Array.from(new Set([requestedModel, "gpt-4o-transcribe", "whisper-1"]));
+  const model = process.env.PANTAVION_SPEECH_TO_TEXT_MODEL || "gpt-4o-mini-transcribe";
+  const provider = `openai_audio:${model}`;
 
-  for (const model of models) {
-    const provider = `openai_audio:${model}`;
-    try {
-      const form = new FormData();
-      form.append("file", audio, audio.name || "pantavion-voice.webm");
-      form.append("model", model);
-      form.append("response_format", "json");
-      const hint = baseLanguage(language);
-      if (hint) form.append("language", hint);
+  try {
+    const form = new FormData();
+    form.append("file", audio, audio.name || "pantavion-voice.webm");
+    form.append("model", model);
+    form.append("response_format", "json");
+    const hint = baseLanguage(language);
+    if (hint) form.append("language", hint);
 
-      const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${apiKey}` },
-        body: form,
-        signal: AbortSignal.timeout(30_000),
-      });
-      const payload = await response.json().catch(() => ({}));
-      const text = textFromPayload(payload);
-      attempts.push({ provider, attempted: true, ok: response.ok && Boolean(text), status: response.status, code: safeCode(payload) });
-      if (response.ok && text) return { ok: true, text, provider };
-      if (response.status === 401 || response.status === 403) break;
-    } catch {
-      attempts.push({ provider, attempted: true, ok: false, code: "network_or_timeout" });
-    }
+    const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}` },
+      body: form,
+      signal: AbortSignal.timeout(FALLBACK_STT_TIMEOUT_MS),
+    });
+    const payload = await response.json().catch(() => ({}));
+    const text = textFromPayload(payload);
+    attempts.push({ provider, attempted: true, ok: response.ok && Boolean(text), status: response.status, code: safeCode(payload) });
+    if (response.ok && text) return { ok: true, text, provider };
+  } catch {
+    attempts.push({ provider, attempted: true, ok: false, code: "network_or_timeout" });
   }
   return null;
 }
@@ -263,7 +262,7 @@ export async function GET() {
 
   return NextResponse.json({
     ok: true,
-    browserSpeechRecognitionFallback: true,
+    browserSpeechRecognitionFallback: false,
     languageAwareGateway: true,
     speechAccessibility: {
       enabled: true,
@@ -278,6 +277,7 @@ export async function GET() {
     gatewayPreferred: true,
     gatewayTransport: "ai-sdk-transcribe",
     directOpenAiFallbackEnabled: directOpenAiEnabled,
+    interactiveDeadlineMs: PRIMARY_STT_TIMEOUT_MS + FALLBACK_STT_TIMEOUT_MS,
   });
 }
 
@@ -299,19 +299,20 @@ export async function POST(request: Request) {
   const gatewayResult = await transcribeWithVercelAiGateway(audio, language, attempts);
   if (gatewayResult) return NextResponse.json(await finalizeAccessibleTranscript(gatewayResult, language));
 
-  const pantavionResult = await transcribeWithPantavionEndpoint(audio, language, attempts);
-  if (pantavionResult) return NextResponse.json(await finalizeAccessibleTranscript(pantavionResult, language));
-
-  const openAiResult = await transcribeWithOpenAI(audio, language, attempts);
-  if (openAiResult) return NextResponse.json(await finalizeAccessibleTranscript(openAiResult, language));
+  const pantavionEndpointConfigured = Boolean(process.env.PANTAVION_SPEECH_TO_TEXT_ENDPOINT);
+  const fallbackResult = pantavionEndpointConfigured
+    ? await transcribeWithPantavionEndpoint(audio, language, attempts)
+    : await transcribeWithOpenAI(audio, language, attempts);
+  if (fallbackResult) return NextResponse.json(await finalizeAccessibleTranscript(fallbackResult, language));
 
   const publicCode = publicFailureCode(attempts);
   return NextResponse.json(
     {
       ok: false,
-      error: "Δεν μπόρεσα να ολοκληρώσω την αναγνώριση φωνής. Δοκίμασε ξανά σε λίγα δευτερόλεπτα.",
+      error: "Η αναγνώριση φωνής δεν ολοκληρώθηκε μέσα στο επιτρεπτό χρονικό όριο.",
       code: "speech_provider_unavailable",
       publicCode,
+      attempts: attempts.map(({ provider, ok, status, code }) => ({ provider, ok, status, code })),
     },
     { status: 503 },
   );
