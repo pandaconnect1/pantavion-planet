@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { getPantavionPersonalizedSections, type PantavionSectionState } from "@/core/personalization/pantavion-personalized-sections";
 
 type Profile = {
   id: string;
@@ -15,18 +16,27 @@ type Profile = {
   language: string;
 };
 
-const personalAreas = [
-  { href: "/contacts", title: "Οι επαφές μου", text: "Επαφές που έχεις μεταφέρει εσύ." },
-  { href: "/people", title: "Άνθρωποι στο Pantavion", text: "Profiles, αιτήματα και συνδέσεις." },
-  { href: "/messages", title: "Τα μηνύματά μου", text: "Οι πραγματικές συνομιλίες σου." },
-  { href: "/my-media", title: "Φωτογραφίες & αρχεία", text: "Ιδιωτικός χώρος για φωτογραφίες, βίντεο, ήχο και έγγραφα." },
-];
+const stateLabel: Record<PantavionSectionState, string> = {
+  connected: "Συνδεδεμένο",
+  building: "Σε υλοποίηση",
+  foundation: "Ανακτημένο foundation",
+};
+
+const stateClass: Record<PantavionSectionState, string> = {
+  connected: "bg-emerald-50 text-emerald-800",
+  building: "bg-amber-50 text-amber-800",
+  foundation: "bg-slate-100 text-slate-600",
+};
 
 export default function ProfileClient({ profile, email }: { profile: Profile; email: string }) {
   const router = useRouter();
   const supabase = createClient();
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
+  const sections = useMemo(
+    () => getPantavionPersonalizedSections({ language: profile.language, country: profile.country }),
+    [profile.language, profile.country],
+  );
 
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -49,7 +59,7 @@ export default function ProfileClient({ profile, email }: { profile: Profile; em
       avatar_url: String(data.get("avatar_url") ?? "").trim() || null,
       bio: String(data.get("bio") ?? "").trim() || null,
       country: String(data.get("country") ?? "").trim() || null,
-      language: String(data.get("language") ?? "el")
+      language: String(data.get("language") ?? "el"),
     });
 
     setSaving(false);
@@ -70,11 +80,48 @@ export default function ProfileClient({ profile, email }: { profile: Profile; em
       <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
         <div className="flex items-center gap-4">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-blue-50 text-2xl font-black text-[#2467aa]">{initial}</div>
-          <div className="min-w-0"><p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#3474b8]">ΤΟ ΠΡΟΦΙΛ ΜΟΥ</p><h1 className="truncate text-3xl font-black text-[#173f72]">{profile.display_name || profile.username || "Pantavion User"}</h1><p className="truncate text-sm text-slate-500">{email}</p></div>
+          <div className="min-w-0">
+            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#3474b8]">ΤΟ PANTAVION ΜΟΥ</p>
+            <h1 className="truncate text-3xl font-black text-[#173f72]">{profile.display_name || profile.username || "Pantavion User"}</h1>
+            <p className="truncate text-sm text-slate-500">{email}</p>
+            <p className="mt-1 text-xs text-slate-400">Η σειρά προσαρμόζεται από τη γλώσσα και τη χώρα του προφίλ σου, χωρίς να παρουσιάζει unfinished δυνατότητες ως ολοκληρωμένες.</p>
+          </div>
         </div>
-        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {personalAreas.map((area) => <Link key={area.href} href={area.href} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 no-underline transition hover:border-blue-200 hover:bg-blue-50"><h2 className="font-black text-slate-900">{area.title}</h2><p className="mt-1 text-xs leading-5 text-slate-500">{area.text}</p></Link>)}
-        </div>
+      </section>
+
+      <section className="space-y-4">
+        {sections.map((section) => (
+          <article key={section.id} className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+            <div className="mb-4">
+              <h2 className="text-xl font-black text-[#173f72]">{section.title}</h2>
+              <p className="mt-1 text-sm leading-6 text-slate-500">{section.description}</p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {section.capabilities.map((capability) => {
+                const content = (
+                  <>
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="font-black text-slate-900">{capability.title}</h3>
+                      <span className={`shrink-0 rounded-full px-2 py-1 text-[10px] font-black ${stateClass[capability.state]}`}>{stateLabel[capability.state]}</span>
+                    </div>
+                    <p className="mt-2 text-xs leading-5 text-slate-500">{capability.description}</p>
+                    <p className="mt-3 text-[10px] font-bold text-slate-400">Recovery provenance: PR {capability.donorPrs.map((pr) => `#${pr}`).join(", ")}</p>
+                  </>
+                );
+
+                return capability.href ? (
+                  <Link key={capability.id} href={capability.href} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 no-underline transition hover:border-blue-200 hover:bg-blue-50">
+                    {content}
+                  </Link>
+                ) : (
+                  <div key={capability.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    {content}
+                  </div>
+                );
+              })}
+            </div>
+          </article>
+        ))}
       </section>
 
       <form className="pv-form pv-panel" onSubmit={save}>
