@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -20,7 +20,6 @@ export default function PeopleClient({ currentUserId, profiles, relationships: i
   const [notice, setNotice] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [blocks, setBlocks] = useState<Block[]>([]);
-  const [blocksLoaded, setBlocksLoaded] = useState(false);
   const [showBlocked, setShowBlocked] = useState(false);
 
   const relationByUser = useMemo(() => {
@@ -40,15 +39,15 @@ export default function PeopleClient({ currentUserId, profiles, relationships: i
   }), [profiles, blockedIds, normalizedQuery]);
   const blockedProfiles = useMemo(() => profiles.filter((profile) => blockedIds.has(profile.id)), [profiles, blockedIds]);
 
-  async function loadBlocks(force = false) {
-    if (blocksLoaded && !force) return;
+  async function loadBlocks() {
     const response = await fetch("/api/people/blocks", { cache: "no-store" });
     const json = await response.json().catch(() => ({}));
-    if (response.ok) {
-      setBlocks(json.blocks ?? []);
-      setBlocksLoaded(true);
-    }
+    if (response.ok) setBlocks(json.blocks ?? []);
   }
+
+  useEffect(() => {
+    void loadBlocks();
+  }, []);
 
   async function refreshRelationships() {
     const response = await fetch("/api/people/relationships", { cache: "no-store" });
@@ -80,7 +79,7 @@ export default function PeopleClient({ currentUserId, profiles, relationships: i
     const json = await response.json().catch(() => ({}));
     setBusy(null);
     if (!response.ok) return setNotice(json.detail || json.error || "Το μπλοκάρισμα απέτυχε.");
-    await loadBlocks(true);
+    await loadBlocks();
     setNotice("Ο χρήστης μπλοκαρίστηκε. Δεν μπορεί να ξεκινήσει νέα επικοινωνία μαζί σου.");
   }
 
@@ -90,7 +89,7 @@ export default function PeopleClient({ currentUserId, profiles, relationships: i
     const json = await response.json().catch(() => ({}));
     setBusy(null);
     if (!response.ok) return setNotice(json.detail || json.error || "Η άρση μπλοκαρίσματος απέτυχε.");
-    await loadBlocks(true);
+    await loadBlocks();
     setNotice("Το μπλοκάρισμα αφαιρέθηκε.");
   }
 
@@ -126,8 +125,6 @@ export default function PeopleClient({ currentUserId, profiles, relationships: i
     if (error) return setNotice(error.message);
     setNearby([]); setNearbyEnabled(false); setNotice("Η παρουσία Nearby απενεργοποιήθηκε.");
   }
-
-  void loadBlocks();
 
   return (
     <main className="min-h-screen bg-[#f5f9fd] text-slate-950">
