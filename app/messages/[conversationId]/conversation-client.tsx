@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { globalEmergencyLanguages } from "@/core/emergency/global-emergency-languages";
 
 type Message = {
   id: string;
@@ -27,47 +28,124 @@ type TranslationResult = {
   provider?: string;
 };
 
-const CHAT_LANGUAGES = [
-  ["el", "Ελληνικά"],
-  ["en", "English"],
-  ["ar", "العربية"],
-  ["ru", "Русский"],
-  ["tr", "Türkçe"],
-  ["de", "Deutsch"],
-  ["fr", "Français"],
-  ["es", "Español"],
-  ["it", "Italiano"],
-  ["zh", "中文"],
-  ["ja", "日本語"],
-  ["ko", "한국어"],
-  ["hi", "हिन्दी"],
-  ["ur", "اردو"],
-] as const;
+const CHAT_LANGUAGES = globalEmergencyLanguages.map((language) => ({
+  code: language.code,
+  label:
+    language.nativeLabel && language.nativeLabel !== language.label
+      ? `${language.nativeLabel} · ${language.label}`
+      : language.label,
+}));
+
+function baseLanguage(value: string | null | undefined) {
+  return String(value || "").toLowerCase().replace(/_/g, "-").split("-")[0];
+}
+
+function supportedLanguage(code: string | null | undefined, fallback: string) {
+  const normalized = baseLanguage(code);
+  return CHAT_LANGUAGES.some((language) => baseLanguage(language.code) === normalized)
+    ? normalized
+    : baseLanguage(fallback) || "en";
+}
 
 export default function ConversationClient({
   conversationId,
   currentUserId,
+  currentUserLanguage,
+  peerLanguage,
   initialMessages,
   backendReady,
   backendMessage,
 }: {
   conversationId: string;
   currentUserId: string;
+  currentUserLanguage: string;
+  peerLanguage: string | null;
   initialMessages: Message[];
   backendReady: boolean;
   backendMessage: string | null;
 }) {
+  const ownLanguage = supportedLanguage(currentUserLanguage, "el");
+  const otherLanguage = peerLanguage ? supportedLanguage(peerLanguage, ownLanguage) : null;
   const [messages, setMessages] = useState(initialMessages);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
-  const [sourceLanguage, setSourceLanguage] = useState("el");
-  const [targetLanguage, setTargetLanguage] = useState("en");
+  const [sourceLanguage, setSourceLanguage] = useState(ownLanguage);
+  const [targetLanguage, setTargetLanguage] = useState(ownLanguage);
+  const [autoTranslate, setAutoTranslate] = useState(true);
   const [translations, setTranslations] = useState<Record<string, string>>({});
   const [translationProviders, setTranslationProviders] = useState<Record<string, string>>({});
-  const [translatingMessageId, setTranslatingMessageId] = useState<string | null>(null);
+  const [translationErrors, setTranslationErrors] = useState<Record<string, string>>({});
+  const [translatingIds, setTranslatingIds] = useState<Record<string, boolean>>({});
+  const translatingRef = useRef(new Set<string>());
   const [realtimeState, setRealtimeState] = useState<"connecting" | "live" | "error">("connecting");
   const supabase = useMemo(() => createClient(), []);
+
+  async function performTranslation(message: Message, target: string, silent = false) {
+    const body = message.body?.trim();
+    if (!body || translatingRef.current.has(message.id)) return;
+
+    const source = baseLanguage(message.original_language) || "auto";
+    if (source !== "auto" && source === baseLanguage(target)) {
+      setTranslations((current) => ({ ...current, [message.id]: body }));
+      setTranslationProviders((current) => ({ ...current, [message.id]: "same-language" }));
+      return;
+    }
+
+    translatingRef.current.add(message.id);
+    setTranslatingIds((current) => ({ ...current, [message.id]: true }));
+    setTranslationErrors((current) => {
+      const next = { ...current };
+      delete next[message.id];
+      return next;
+    });
+    if (!silent) setNotice(null);
+
+    try {
+      const response = await fetch("/api/pantavion/translate", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          text: body,
+          sourceLanguage: source,
+          targetLanguage: target,
+          bidirectional: true,
+          domain: "social",
+          tone: "natural",
+          surface: "chat",
+          sessionId: conversationId,
+        }),
+      });
+      const result = (await response.json().catch(() => ({}))) as TranslationResult;
+      const translated = String(
+        result.translatedText || result.translation || result.text || result.output || "",
+      ).trim();
+
+      if (!response.ok || !translated) {
+        const messageText = result.message || result.error || "Η μετάφραση δεν είναι διαθέσιμη τώρα.";
+        setTranslationErrors((current) => ({ ...current, [message.id]: messageText }));
+        if (!silent) setNotice(messageText);
+        return;
+      }
+
+      setTranslations((current) => ({ ...current, [message.id]: translated }));
+      setTranslationProviders((current) => ({
+        ...current,
+        [message.id]: result.provider || "Pantavion",
+      }));
+    } catch {
+      const messageText = "Δεν ήταν δυνατή η σύνδεση με τη μετάφραση.";
+      setTranslationErrors((current) => ({ ...current, [message.id]: messageText }));
+      if (!silent) setNotice(messageText);
+    } finally {
+      translatingRef.current.delete(message.id);
+      setTranslatingIds((current) => {
+        const next = { ...current };
+        delete next[message.id];
+        return next;
+      });
+    }
+  }
 
   useEffect(() => {
     if (!backendReady) return;
@@ -95,6 +173,9 @@ export default function ConversationClient({
               p_message_id: incoming.id,
               p_state: "read",
             });
+            if (autoTranslate && incoming.body?.trim()) {
+              void performTranslation(incoming, targetLanguage, true);
+            }
           }
         },
       )
@@ -107,11 +188,9 @@ export default function ConversationClient({
     return () => {
       void supabase.removeChannel(channel);
     };
-  }, [backendReady, conversationId, currentUserId, supabase]);
+  }, [autoTranslate, backendReady, conversationId, currentUserId, supabase, targetLanguage]);
 
-  async function translateMessage(message: Message) {
-    const body = message.body?.trim();
-    if (!body || translatingMessageId) return;
+  async function toggleTranslation(message: Message) {
     if (translations[message.id]) {
       setTranslations((current) => {
         const next = { ...current };
@@ -120,40 +199,7 @@ export default function ConversationClient({
       });
       return;
     }
-
-    setTranslatingMessageId(message.id);
-    setNotice(null);
-    try {
-      const response = await fetch("/api/pantavion/translate", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          text: body,
-          sourceLanguage: message.original_language || "auto",
-          targetLanguage,
-          bidirectional: true,
-          domain: "general",
-          tone: "natural",
-          surface: "pantavion-chat",
-          sessionId: conversationId,
-        }),
-      });
-      const result = (await response.json().catch(() => ({}))) as TranslationResult;
-      const translated = String(
-        result.translatedText || result.translation || result.text || result.output || "",
-      ).trim();
-      if (!response.ok || !translated) {
-        setNotice(result.message || result.error || "Η μετάφραση δεν είναι διαθέσιμη τώρα.");
-        return;
-      }
-      setTranslations((current) => ({ ...current, [message.id]: translated }));
-      setTranslationProviders((current) => ({
-        ...current,
-        [message.id]: result.provider || "Pantavion",
-      }));
-    } finally {
-      setTranslatingMessageId(null);
-    }
+    await performTranslation(message, targetLanguage);
   }
 
   async function send(event: FormEvent) {
@@ -203,7 +249,7 @@ export default function ConversationClient({
             >
               Realtime {realtimeState === "live" ? "LIVE" : realtimeState === "error" ? "ERROR" : "…"}
             </span>
-            <Link href="/translate" className="text-xs font-black text-[#2467aa] no-underline">
+            <Link href="/translate/interpreter" className="text-xs font-black text-[#2467aa] no-underline">
               Interpreter
             </Link>
           </div>
@@ -212,31 +258,47 @@ export default function ConversationClient({
         <header className="py-5">
           <h1 className="text-2xl font-black text-[#173f72]">Pantavion Chat</h1>
           <p className="mt-1 text-xs text-slate-500">
-            Realtime συνομιλία · accepted ≠ delivered ≠ read · μετάφραση μέσα στο μήνυμα.
+            Realtime συνομιλία · πρωτότυπο μήνυμα πάντα ορατό · μετάφραση ανά παραλήπτη.
           </p>
+          {otherLanguage ? (
+            <p className="mt-1 text-xs font-bold text-[#2467aa]">Γλώσσα συνομιλητή από profile: {otherLanguage.toUpperCase()}</p>
+          ) : null}
         </header>
 
-        <div className="mb-3 flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3 text-xs shadow-sm">
-          <label className="font-black text-slate-600">Γλώσσα που γράφω</label>
-          <select
-            value={sourceLanguage}
-            onChange={(event) => setSourceLanguage(event.target.value)}
-            className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2"
-          >
-            {CHAT_LANGUAGES.map(([code, label]) => (
-              <option key={code} value={code}>{label}</option>
-            ))}
-          </select>
-          <label className="ml-auto font-black text-slate-600">Μετάφραση προς</label>
-          <select
-            value={targetLanguage}
-            onChange={(event) => setTargetLanguage(event.target.value)}
-            className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2"
-          >
-            {CHAT_LANGUAGES.map(([code, label]) => (
-              <option key={code} value={code}>{label}</option>
-            ))}
-          </select>
+        <div className="mb-3 grid gap-2 rounded-2xl border border-slate-200 bg-white p-3 text-xs shadow-sm sm:grid-cols-3">
+          <label className="grid gap-1 font-black text-slate-600">
+            Γλώσσα που γράφω
+            <select
+              value={sourceLanguage}
+              onChange={(event) => setSourceLanguage(event.target.value)}
+              className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-normal"
+            >
+              {CHAT_LANGUAGES.map((language) => (
+                <option key={language.code} value={baseLanguage(language.code)}>{language.label}</option>
+              ))}
+            </select>
+          </label>
+          <label className="grid gap-1 font-black text-slate-600">
+            Διαβάζω μεταφράσεις σε
+            <select
+              value={targetLanguage}
+              onChange={(event) => setTargetLanguage(event.target.value)}
+              className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-normal"
+            >
+              {CHAT_LANGUAGES.map((language) => (
+                <option key={language.code} value={baseLanguage(language.code)}>{language.label}</option>
+              ))}
+            </select>
+          </label>
+          <label className="flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-3 py-2 font-black text-slate-600">
+            Αυτόματη μετάφραση νέων εισερχομένων
+            <input
+              type="checkbox"
+              checked={autoTranslate}
+              onChange={(event) => setAutoTranslate(event.target.checked)}
+              className="h-5 w-5"
+            />
+          </label>
         </div>
 
         {!backendReady && (
@@ -250,10 +312,12 @@ export default function ConversationClient({
           {messages.map((message) => {
             const mine = message.sender_id === currentUserId;
             const translated = translations[message.id];
+            const translationError = translationErrors[message.id];
+            const translating = Boolean(translatingIds[message.id]);
             return (
               <div key={message.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`max-w-[82%] rounded-2xl px-4 py-2.5 text-sm leading-6 ${
+                  className={`max-w-[86%] rounded-2xl px-4 py-2.5 text-sm leading-6 ${
                     mine ? "bg-[#2467aa] text-white" : "bg-slate-100 text-slate-800"
                   }`}
                 >
@@ -261,10 +325,15 @@ export default function ConversationClient({
                   {translated ? (
                     <div className={`mt-2 rounded-xl px-3 py-2 ${mine ? "bg-white/15" : "bg-white"}`}>
                       <p className="text-[10px] font-black uppercase tracking-[0.12em] opacity-70">
-                        Pantavion Translation · {translationProviders[message.id] || "Pantavion"}
+                        Pantavion Translation · {translationProviders[message.id] || "Pantavion"} · {targetLanguage.toUpperCase()}
                       </p>
                       <p className="mt-1">{translated}</p>
                     </div>
+                  ) : null}
+                  {translationError ? (
+                    <p className={`mt-2 text-xs font-semibold ${mine ? "text-amber-100" : "text-amber-700"}`}>
+                      Μετάφραση: {translationError}
+                    </p>
                   ) : null}
                   <div className="mt-1 flex items-center justify-between gap-3">
                     <p className={`text-[10px] ${mine ? "text-blue-100" : "text-slate-400"}`}>
@@ -277,13 +346,13 @@ export default function ConversationClient({
                     {message.body ? (
                       <button
                         type="button"
-                        onClick={() => void translateMessage(message)}
-                        disabled={Boolean(translatingMessageId && translatingMessageId !== message.id)}
+                        onClick={() => void toggleTranslation(message)}
+                        disabled={translating}
                         className={`text-[10px] font-black underline underline-offset-2 disabled:opacity-40 ${
                           mine ? "text-blue-100" : "text-[#2467aa]"
                         }`}
                       >
-                        {translatingMessageId === message.id
+                        {translating
                           ? "Μεταφράζω…"
                           : translated
                             ? "Απόκρυψη"
