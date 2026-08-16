@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "pantavion-water-map-b-source-verification.v1",
+  "verifiedAt": "2026-08-16T11:25:33Z",
+  "source": {
+    "fileName": "MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg",
+    "byteSize": 205565159,
+    "sha256": "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16",
+    "dwgHeader": "AC1032"
+  },
+  "verification": {
+    "readOnlySource": true,
+    "geometryModified": false,
+    "layersRemoved": false,
+    "entitiesRemoved": false,
+    "sourceIdentityVerified": true,
+    "dwgParsed": false,
+    "crsVerified": false,
+    "alignmentVerified": false,
+    "productionVerifiedLive": false
+  },
+  "truthBoundary": "This receipt proves only the exact original source identity. It does not claim layer/entity completeness, CRS, geographic alignment, deployment, or live production verification."
+}
