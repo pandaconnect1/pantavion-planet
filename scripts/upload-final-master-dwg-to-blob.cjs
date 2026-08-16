@@ -4,6 +4,10 @@ const crypto = require("crypto");
 const { Readable } = require("stream");
 const { put } = require("@vercel/blob");
 
+const FILE_NAME = "MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg";
+const EXPECTED_SIZE_BYTES = 205565159;
+const EXPECTED_SHA256 = "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16";
+
 function loadEnv(file) {
   if (!fs.existsSync(file)) return;
   const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
@@ -13,10 +17,7 @@ function loadEnv(file) {
     const key = match[1];
     if (process.env[key]) continue;
     let value = match[2].trim();
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
       value = value.slice(1, -1);
     }
     process.env[key] = value;
@@ -35,85 +36,30 @@ function hashFile(file) {
 
 async function main() {
   loadEnv(".env.local");
-
   const token = process.env.BLOB_READ_WRITE_TOKEN || process.env.PANTAVION_BLOB_READ_WRITE_TOKEN;
-  if (!token) {
-    throw new Error("BLOB_READ_WRITE_TOKEN_MISSING_PULL_VERCEL_ENV_FIRST");
-  }
+  if (!token) throw new Error("BLOB_READ_WRITE_TOKEN_MISSING_PULL_VERCEL_ENV_FIRST");
 
-  const source = path.join(
-    process.cwd(),
-    "data",
-    "water-network-private",
-    "source-masters",
-    "master-b-c-final",
-    "GEORGE_MAP_MASTER_B_C_FINAL.dwg"
-  );
-
-  if (!fs.existsSync(source)) {
-    throw new Error("DWG_SOURCE_NOT_FOUND");
-  }
+  const source = path.join(process.cwd(), "data", "water-network-private", "source-masters", "map-b-original", FILE_NAME);
+  if (!fs.existsSync(source)) throw new Error("DWG_SOURCE_NOT_FOUND");
 
   const stat = fs.statSync(source);
-  if (stat.size < 100 * 1024 * 1024) {
-    throw new Error(`DWG_TOO_SMALL_NOT_REAL_MASTER: ${stat.size}`);
-  }
+  if (stat.size !== EXPECTED_SIZE_BYTES) throw new Error(`DWG_SIZE_MISMATCH:${stat.size}`);
 
   const sha256 = await hashFile(source);
-  const pathname = "pantavion/water/final-master/GEORGE_MAP_MASTER_B_C_FINAL.dwg";
+  if (sha256 !== EXPECTED_SHA256) throw new Error(`DWG_SHA256_MISMATCH:${sha256}`);
 
+  const pathname = `pantavion/water/map-b-original/${FILE_NAME}`;
   const webStream = Readable.toWeb(fs.createReadStream(source));
+  const blob = await put(pathname, webStream, { access: "private", addRandomSuffix: false, token });
 
-  const blob = await put(pathname, webStream, {
-    access: "private",
-    addRandomSuffix: false,
-    token,
-  });
+  const sourceTs = `export const FINAL_MASTER_DWG_BLOB_URL = ${JSON.stringify(blob.url)};\nexport const FINAL_MASTER_DWG_FILE_NAME = ${JSON.stringify(FILE_NAME)};\nexport const FINAL_MASTER_DWG_SIZE_BYTES = ${stat.size};\nexport const FINAL_MASTER_DWG_SHA256 = ${JSON.stringify(sha256)};\n`;
+  fs.writeFileSync(path.join(process.cwd(), "core", "water", "final-master-dwg-source.ts"), sourceTs, "utf8");
 
-  const sourceTs = `export const FINAL_MASTER_DWG_BLOB_URL = ${JSON.stringify(blob.url)};
-export const FINAL_MASTER_DWG_FILE_NAME = "GEORGE_MAP_MASTER_B_C_FINAL.dwg";
-export const FINAL_MASTER_DWG_SIZE_BYTES = ${stat.size};
-export const FINAL_MASTER_DWG_SHA256 = ${JSON.stringify(sha256)};
-`;
-
-  fs.mkdirSync(path.join(process.cwd(), "core", "water"), { recursive: true });
-  fs.writeFileSync(
-    path.join(process.cwd(), "core", "water", "final-master-dwg-source.ts"),
-    sourceTs,
-    "utf8"
-  );
-
-  const manifest = {
-    marker: "pantavion_final_master_dwg_uploaded_as_original_file",
-    fileName: "GEORGE_MAP_MASTER_B_C_FINAL.dwg",
-    sizeBytes: stat.size,
-    sizeMB: Math.round((stat.size / 1024 / 1024) * 100) / 100,
-    sha256,
-    blobUrl: blob.url,
-    blobPathname: blob.pathname,
-    access: "private",
-    uploadedAt: new Date().toISOString(),
-  };
-
-  fs.writeFileSync(
-    path.join(
-      process.cwd(),
-      "data",
-      "water-network-private",
-      "source-masters",
-      "master-b-c-final",
-      "final-master-dwg-blob-manifest.json"
-    ),
-    JSON.stringify(manifest, null, 2),
-    "utf8"
-  );
-
-  console.log("=== ORIGINAL DWG UPLOADED ===");
-  console.log("File:", source);
-  console.log("SizeMB:", manifest.sizeMB);
+  console.log("=== EXACT ORIGINAL MAP B DWG UPLOADED ===");
+  console.log("File:", FILE_NAME);
+  console.log("SizeBytes:", stat.size);
   console.log("SHA256:", sha256);
   console.log("Blob:", blob.url);
-  console.log("Generated: core/water/final-master-dwg-source.ts");
 }
 
 main().catch((error) => {
