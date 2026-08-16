@@ -1,31 +1,18 @@
-import fs from "fs";
-import path from "path";
-import { Readable } from "stream";
-import { get } from "@vercel/blob";
 import { hasWaterAdminSession } from "@/core/security/water-admin-session";
 import {
-  FINAL_MASTER_DWG_BLOB_URL,
   FINAL_MASTER_DWG_FILE_NAME,
-  FINAL_MASTER_DWG_SIZE_BYTES,
   FINAL_MASTER_DWG_SHA256,
+  FINAL_MASTER_DWG_SIZE_BYTES,
+  FINAL_MASTER_DWG_STORAGE_BUCKET,
+  FINAL_MASTER_DWG_STORAGE_PATH,
 } from "@/core/water/final-master-dwg-source";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const LOCAL_DWG_PATH = path.join(
-  process.cwd(),
-  "data",
-  "water-network-private",
-  "source-masters",
-  "map-b-original",
-  FINAL_MASTER_DWG_FILE_NAME,
-);
-
-function headers() {
+function privateHeaders() {
   return {
-    "Content-Type": "application/acad",
-    "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(FINAL_MASTER_DWG_FILE_NAME)}`,
     "Cache-Control": "private, no-store",
     "X-Content-Type-Options": "nosniff",
     "X-Pantavion-File-Type": "original-dwg",
@@ -39,36 +26,41 @@ export async function GET(request: Request) {
   if (!hasWaterAdminSession(request)) {
     return Response.json(
       { ok: false, status: "water_admin_session_required" },
-      { status: 403, headers: { "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" } },
+      { status: 403, headers: privateHeaders() },
     );
   }
 
-  const token = process.env.BLOB_READ_WRITE_TOKEN || process.env.PANTAVION_BLOB_READ_WRITE_TOKEN;
+  try {
+    const admin = createAdminClient();
+    const { data, error } = await admin.storage
+      .from(FINAL_MASTER_DWG_STORAGE_BUCKET)
+      .createSignedUrl(FINAL_MASTER_DWG_STORAGE_PATH, 60, {
+        download: FINAL_MASTER_DWG_FILE_NAME,
+      });
 
-  if (token && FINAL_MASTER_DWG_BLOB_URL) {
-    const blob = await get(FINAL_MASTER_DWG_BLOB_URL, { access: "private", token });
-    if (blob?.stream) {
-      return new Response(blob.stream as unknown as BodyInit, { status: 200, headers: headers() });
+    if (error || !data?.signedUrl) {
+      return Response.json(
+        {
+          ok: false,
+          status: "original_dwg_not_available",
+          fileName: FINAL_MASTER_DWG_FILE_NAME,
+          expectedSizeBytes: FINAL_MASTER_DWG_SIZE_BYTES,
+          expectedSha256: FINAL_MASTER_DWG_SHA256,
+          storagePath: FINAL_MASTER_DWG_STORAGE_PATH,
+        },
+        { status: 404, headers: privateHeaders() },
+      );
     }
-  }
 
-  if (fs.existsSync(LOCAL_DWG_PATH)) {
-    const stat = fs.statSync(LOCAL_DWG_PATH);
-    if (stat.size !== FINAL_MASTER_DWG_SIZE_BYTES) {
-      return Response.json({ ok: false, status: "original_dwg_size_mismatch" }, { status: 500 });
-    }
-    const stream = Readable.toWeb(fs.createReadStream(LOCAL_DWG_PATH));
-    return new Response(stream as BodyInit, { status: 200, headers: headers() });
+    return Response.redirect(data.signedUrl, 307);
+  } catch (error) {
+    return Response.json(
+      {
+        ok: false,
+        status: "original_dwg_storage_error",
+        message: error instanceof Error ? error.message : "unknown_error",
+      },
+      { status: 500, headers: privateHeaders() },
+    );
   }
-
-  return Response.json(
-    {
-      ok: false,
-      status: "original_dwg_not_available",
-      fileName: FINAL_MASTER_DWG_FILE_NAME,
-      expectedSizeBytes: FINAL_MASTER_DWG_SIZE_BYTES,
-      expectedSha256: FINAL_MASTER_DWG_SHA256,
-    },
-    { status: 404, headers: { "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" } },
-  );
 }
