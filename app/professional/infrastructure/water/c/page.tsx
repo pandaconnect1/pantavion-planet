@@ -1,19 +1,22 @@
-import WaterMapNavigation from "../water-map-navigation";
-import WaterDerivedMapClient from "../components/water-derived-map-client";
+import { OriginalDwgViewerBridgePanel } from "@/components/water/OriginalDwgViewerBridgePanel";
+import { assessPantavionOriginalDwgViewerBridge } from "@/core/water/original-dwg-viewer-bridge";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Pantavion Water C Intelligent Map",
-  description:
-    "Protected C intelligent water map preview with controlled engineering layers.",
-};
+export default function PantavionWaterSurfaceCPage() {
+  const bridge = assessPantavionOriginalDwgViewerBridge({
+    surface: "C",
+    founderApproved: false,
+    licenseAvailable: false,
+    cloudApproved: false,
+    actor: "page:water:c"
+  });
 
-export default function WaterCIntelligentMapPage() {
   return (
-    <>
-      <WaterMapNavigation title="C Intelligent Map" />
-      <WaterDerivedMapClient mode="c" />
-    </>
+    <main className="min-h-screen bg-[#02040b] px-6 py-8 text-white">
+      <div className="mx-auto max-w-6xl">
+        <OriginalDwgViewerBridgePanel bridge={bridge} />
+      </div>
+    </main>
   );
 }

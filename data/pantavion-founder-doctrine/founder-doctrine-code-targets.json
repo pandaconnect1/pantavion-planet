@@ -1,0 +1,174 @@
+{
+  "ok": true,
+  "codeTargets": [
+    {
+      "workOrderId": "founder_execution_system_001",
+      "category": "execution_system",
+      "priority": "P0",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "targetFiles": [
+        "core/execution/pantavion-execution-kernel.ts",
+        "app/api/pantavion/execute/route.ts",
+        "scripts/pantavion-execution-kernel-gate.cjs"
+      ],
+      "implementationMode": "safe_internal_patch_allowed"
+    },
+    {
+      "workOrderId": "founder_tool_registry_002",
+      "category": "tool_registry",
+      "priority": "P0",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "targetFiles": [
+        "core/capabilities/pantavion-capability-registry.ts",
+        "app/api/pantavion/capabilities/route.ts",
+        "scripts/pantavion-capability-registry-gate.cjs"
+      ],
+      "implementationMode": "safe_internal_patch_allowed"
+    },
+    {
+      "workOrderId": "founder_workspace_mapping_003",
+      "category": "workspace_mapping",
+      "priority": "P0",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "targetFiles": [
+        "core/workspaces/pantavion-workspace-execution-map.ts",
+        "app/api/pantavion/workspaces/map/route.ts"
+      ],
+      "implementationMode": "safe_internal_patch_allowed"
+    },
+    {
+      "workOrderId": "founder_kernel_agents_004",
+      "category": "kernel_agents",
+      "priority": "P0",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "targetFiles": [
+        "core/agents/pantavion-agent-supervisor.ts",
+        "app/api/pantavion/agents/runtime/supervisor/route.ts",
+        "scripts/pantavion-agent-supervisor.cjs"
+      ],
+      "implementationMode": "safe_internal_patch_allowed"
+    },
+    {
+      "workOrderId": "founder_auth_identity_005",
+      "category": "auth_identity",
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "targetFiles": [
+        "core/auth/pantavion-auth-plan.ts",
+        "app/api/pantavion/auth/status/route.ts"
+      ],
+      "implementationMode": "plan_only_until_founder_approval"
+    },
+    {
+      "workOrderId": "founder_dwg_water_006",
+      "category": "dwg_water",
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "targetFiles": [
+        "core/water/pantavion-dwg-source-truth-plan.ts",
+        "app/api/professional/infrastructure/water/dwg-viewer/status/route.ts"
+      ],
+      "implementationMode": "plan_only_until_founder_approval"
+    },
+    {
+      "workOrderId": "founder_sos_rescue_007",
+      "category": "sos_rescue",
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "targetFiles": [
+        "core/sos/pantavion-sos-rescue-plan.ts",
+        "app/api/pantavion/sos/status/route.ts"
+      ],
+      "implementationMode": "plan_only_until_founder_approval"
+    },
+    {
+      "workOrderId": "founder_multimodal_access_008",
+      "category": "multimodal_access",
+      "priority": "P1",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "targetFiles": [
+        "core/input/pantavion-universal-input.ts",
+        "app/api/pantavion/input/route.ts"
+      ],
+      "implementationMode": "safe_internal_patch_allowed"
+    },
+    {
+      "workOrderId": "founder_global_absorption_009",
+      "category": "global_absorption",
+      "priority": "P1",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "targetFiles": [
+        "core/research/pantavion-global-absorption.ts",
+        "app/api/pantavion/research/absorption/route.ts"
+      ],
+      "implementationMode": "safe_internal_patch_allowed"
+    },
+    {
+      "workOrderId": "founder_memory_graph_010",
+      "category": "memory_graph",
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "targetFiles": [
+        "core/memory/pantavion-memory-contract.ts",
+        "app/api/pantavion/memory/status/route.ts"
+      ],
+      "implementationMode": "plan_only_until_founder_approval"
+    },
+    {
+      "workOrderId": "founder_repo_deploy_011",
+      "category": "repo_deploy",
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "targetFiles": [
+        "core/agents/pantavion-repo-deploy-controller.ts",
+        "app/api/pantavion/agents/runtime/repo-plan/route.ts"
+      ],
+      "implementationMode": "plan_only_until_founder_approval"
+    },
+    {
+      "workOrderId": "founder_billing_vip_012",
+      "category": "billing_vip",
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "targetFiles": [
+        "core/billing/pantavion-billing-plan.ts",
+        "app/api/pantavion/billing/status/route.ts"
+      ],
+      "implementationMode": "plan_only_until_founder_approval"
+    },
+    {
+      "workOrderId": "founder_general_doctrine_013",
+      "category": "general_doctrine",
+      "priority": "P2",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "targetFiles": [
+        "docs/continuity/pantavion-general-doctrine-queue.md"
+      ],
+      "implementationMode": "safe_internal_patch_allowed"
+    },
+    {
+      "workOrderId": "founder_metadata_only_014",
+      "category": "metadata_only",
+      "priority": "P2",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "targetFiles": [
+        "docs/continuity/pantavion-general-doctrine-queue.md"
+      ],
+      "implementationMode": "safe_internal_patch_allowed"
+    }
+  ]
+}

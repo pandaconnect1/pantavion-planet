@@ -50,7 +50,16 @@ uploads/water-network/
 data/water-network-private/**
 !data/water-network-private/.gitkeep
 
-artifacts/
+/artifacts/
+# Pantavion kernel artifact intake source modules must be committed.
+!core/artifacts/
+!core/artifacts/**
 
 # Pantavion local intake scans can expose internal paths; keep local only.
 exports/project-intake/*.json
+
+.pantavion/
+
+data/private-artifacts/
+data/kernel/private-local-artifact-intake-state.json
+data/kernel/private-local-artifact-intake-audit.jsonl

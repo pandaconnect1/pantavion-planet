@@ -1,0 +1,29 @@
+{
+  "ok": true,
+  "id": "pantavion_github_sync_plan_v1",
+  "generatedAt": "2026-07-03T15:38:57.214Z",
+  "branch": "kernel-live-runtime-20260626-230235",
+  "head": "ab37211 Add Pantavion universal entry and legacy source intake",
+  "allowed": [
+    "scoped git add only",
+    "commit after build/typecheck/audits",
+    "push current branch",
+    "preview deploy after checks",
+    "production deploy only after founder approval"
+  ],
+  "blocked": [
+    "git add .",
+    "force push",
+    "secret exposure",
+    "raw old repo dump",
+    "DWG/source-truth cloud translation without approval",
+    "production deploy without approval"
+  ],
+  "requiredChecks": [
+    "npx tsc --noEmit --pretty false",
+    "npm run build",
+    "npm run audit:agent-runtime",
+    "npm run audit:agent-tick",
+    "npm run audit:archive"
+  ]
+}

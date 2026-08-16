@@ -1,0 +1,47 @@
+name: Pantavion Kernel Watch
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  kernel-watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build gate
+        run: npm run build
+
+      - name: Typecheck gate
+        run: npx tsc --noEmit --pretty false
+
+      - name: Kernel tick
+        run: node scripts/pantavion-kernel-tick.cjs
+        env:
+          PANTAVION_KERNEL_BASE_URL: ${{ secrets.PANTAVION_KERNEL_BASE_URL }}
+          PANTAVION_KERNEL_SECRET: ${{ secrets.PANTAVION_KERNEL_SECRET }}
+
+      - name: Upload kernel report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-kernel-report
+          path: .pantavion/kernel
+          if-no-files-found: ignore

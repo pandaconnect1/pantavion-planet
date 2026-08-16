@@ -1,0 +1,125 @@
+{
+  "ok": true,
+  "id": "pantavion_agent_implementation_queue_v1",
+  "generatedAt": "2026-07-03T15:38:57.214Z",
+  "rule": "Agents must turn archive evidence into route + state/data + audit + verification. Z3/Z4 need founder approval.",
+  "nextWorkOrders": [
+    {
+      "id": "kernel_agent_runtime",
+      "order": 1,
+      "priority": "P0",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    },
+    {
+      "id": "universal_entry_user_gateway",
+      "order": 2,
+      "priority": "P0",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    },
+    {
+      "id": "legacy_two_year_recovery",
+      "order": 3,
+      "priority": "P0",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    },
+    {
+      "id": "auth_identity_memory",
+      "order": 4,
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    },
+    {
+      "id": "billing_vip_payments",
+      "order": 5,
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    },
+    {
+      "id": "dwg_water_source_truth",
+      "order": 6,
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    },
+    {
+      "id": "social_messaging_dating_safety",
+      "order": 7,
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    },
+    {
+      "id": "repo_github_deploy",
+      "order": 8,
+      "priority": "P0",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    },
+    {
+      "id": "voice_translation_search",
+      "order": 9,
+      "priority": "P1",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    },
+    {
+      "id": "files_conversion_omnimodal",
+      "order": 10,
+      "priority": "P1",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    },
+    {
+      "id": "sos_rescue_recovery",
+      "order": 11,
+      "priority": "P1",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    },
+    {
+      "id": "global_research_radar_24_365",
+      "order": 12,
+      "priority": "P1",
+      "riskZone": "Z2",
+      "approvalRequired": false,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    },
+    {
+      "id": "observability_runtime_ops",
+      "order": 13,
+      "priority": "P1",
+      "riskZone": "Z3",
+      "approvalRequired": true,
+      "status": "ready_for_agent_supervisor",
+      "requiredOutcome": "Create implementation slice with real route, state/data, audit, verification and scoped repo plan."
+    }
+  ]
+}
