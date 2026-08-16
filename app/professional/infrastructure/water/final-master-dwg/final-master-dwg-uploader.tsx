@@ -1,16 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 
 type UploadUrlResponse = {
   ok?: boolean;
+  status?: string;
+  bucket?: string;
+  path?: string;
   signedUrl?: string;
   token?: string;
-  path?: string;
-  fileName?: string;
   expectedSizeBytes?: number;
   expectedSha256?: string;
-  status?: string;
   message?: string;
 };
 
@@ -19,6 +20,10 @@ type Props = {
   expectedSizeBytes: number;
   expectedSha256: string;
 };
+
+const SUPABASE_URL = "https://cxhulvwkagzufbjsdwwu.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_fwTnPNKyOhVKu0TOTljtow_QHLVtZ3m";
+const ONE_TIME_UPLOAD_BRIDGE = `${SUPABASE_URL}/functions/v1/pantavion-map-b-one-time-upload`;
 
 export default function FinalMasterDwgUploader({
   expectedFileName,
@@ -67,46 +72,47 @@ export default function FinalMasterDwgUploader({
     }
 
     setState("uploading");
-    setMessage("Creating protected upload authorization…");
+    setMessage("Creating one-time private upload authorization…");
 
     try {
-      const authResponse = await fetch(
-        "/api/professional/infrastructure/water/final-master-dwg/upload-url",
-        {
-          method: "POST",
-          credentials: "same-origin",
-          headers: { "Content-Type": "application/json" },
-          body: "{}",
-        },
-      );
-
+      const authResponse = await fetch(ONE_TIME_UPLOAD_BRIDGE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}",
+      });
       const authBody = (await authResponse.json()) as UploadUrlResponse;
 
-      if (!authResponse.ok || !authBody.ok || !authBody.signedUrl) {
+      if (!authResponse.ok || !authBody.ok) {
         throw new Error(authBody.message || authBody.status || "Unable to create upload authorization.");
       }
 
-      setMessage("Uploading directly into the private Pantavion storage vault… Keep this page open.");
-
-      const form = new FormData();
-      form.append("cacheControl", "0");
-      form.append("", file);
-
-      const uploadResponse = await fetch(authBody.signedUrl, {
-        method: "PUT",
-        headers: {
-          "x-upsert": "true",
-        },
-        body: form,
-      });
-
-      if (!uploadResponse.ok) {
-        const detail = await uploadResponse.text().catch(() => "");
-        throw new Error(`Storage upload failed (${uploadResponse.status}). ${detail}`.trim());
+      if (authBody.status === "already_present") {
+        setState("done");
+        setMessage("The exact Map B master is already present in the private vault. Open Map B now.");
+        return;
       }
 
+      if (!authBody.bucket || !authBody.path || !authBody.token) {
+        throw new Error("Upload authorization is incomplete.");
+      }
+
+      setMessage("Uploading the 196.04 MB master directly to the private Pantavion vault… Keep this page open.");
+
+      const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      });
+      const { error } = await supabase.storage
+        .from(authBody.bucket)
+        .uploadToSignedUrl(authBody.path, authBody.token, file, {
+          contentType: "application/acad",
+          upsert: true,
+          cacheControl: "0",
+        });
+
+      if (error) throw error;
+
       setState("done");
-      setMessage("Private upload completed. The protected download endpoint can now serve the original DWG.");
+      setMessage("Private upload completed. Open Map B now; the authentic DWG should load from the vault.");
     } catch (error) {
       setState("error");
       setMessage(error instanceof Error ? error.message : "Upload failed.");
