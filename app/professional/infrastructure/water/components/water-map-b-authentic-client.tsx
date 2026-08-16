@@ -15,6 +15,8 @@ type PositionState = {
 
 const MAP_B_FILE_NAME = "MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg";
 const MAP_B_URL = "/api/professional/infrastructure/water/final-master-dwg";
+const CAD_VIEWER_MODULE_URL =
+  "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/+esm";
 
 const CAD_WORKERS = {
   dxfParser:
@@ -23,7 +25,12 @@ const CAD_WORKERS = {
     "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/dist/libredwg-parser-worker.js",
   mtextRender:
     "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/dist/mtext-renderer-worker.js",
-} as const;
+};
+
+function importBrowserModule(url: string) {
+  const nativeImport = new Function("url", "return import(url)") as (value: string) => Promise<any>;
+  return nativeImport(url);
+}
 
 export default function WaterMapBAuthenticClient() {
   const cadContainerRef = useRef<HTMLDivElement | null>(null);
@@ -39,11 +46,10 @@ export default function WaterMapBAuthenticClient() {
       try {
         if (!cadContainerRef.current) return;
 
-        const { AcApDocManager } = await import("@mlightcad/cad-simple-viewer");
+        const module = await importBrowserModule(CAD_VIEWER_MODULE_URL);
+        const AcApDocManager = module?.AcApDocManager;
+        if (!AcApDocManager) throw new Error("CAD_VIEWER_MODULE_NOT_AVAILABLE");
         if (cancelled || !cadContainerRef.current) return;
-
-        const workersReady = await AcApDocManager.checkWebworkerReadiness(CAD_WORKERS);
-        if (!workersReady) throw new Error("CAD_WORKERS_NOT_READY");
 
         let manager: any;
         try {
@@ -53,7 +59,7 @@ export default function WaterMapBAuthenticClient() {
             container: cadContainerRef.current,
             autoResize: true,
             webworkerFileUrls: CAD_WORKERS,
-            checkWorkersOnInit: true,
+            checkWorkersOnInit: false,
           });
           manager = AcApDocManager.instance;
         }
@@ -65,9 +71,7 @@ export default function WaterMapBAuthenticClient() {
           headers: { Accept: "application/acad,application/octet-stream" },
         });
 
-        if (!response.ok) {
-          throw new Error(`MAP_B_DWG_HTTP_${response.status}`);
-        }
+        if (!response.ok) throw new Error(`MAP_B_DWG_HTTP_${response.status}`);
 
         const fileContent = await response.arrayBuffer();
         if (cancelled) return;
@@ -75,7 +79,7 @@ export default function WaterMapBAuthenticClient() {
         await manager.openDocument(MAP_B_FILE_NAME, fileContent, {
           minimumChunkSize: 1000,
           readOnly: true,
-        } as any);
+        });
 
         if (!cancelled) setViewerState("ready");
       } catch (error) {
