@@ -1,4 +1,6 @@
-export const FINAL_MASTER_DWG_BLOB_URL = "";
 export const FINAL_MASTER_DWG_FILE_NAME = "MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg";
 export const FINAL_MASTER_DWG_SIZE_BYTES = 205565159;
 export const FINAL_MASTER_DWG_SHA256 = "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16";
+
+export const FINAL_MASTER_DWG_STORAGE_BUCKET = "personal-media";
+export const FINAL_MASTER_DWG_STORAGE_PATH = `water-network-private/source-masters/map-b-original/${FINAL_MASTER_DWG_FILE_NAME}`;
