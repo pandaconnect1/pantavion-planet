@@ -2,23 +2,26 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-const ALLOWED = new Set([
-  "dxf-parser-worker.js",
-  "libredwg-parser-worker.js",
-  "mtext-renderer-worker.js",
-]);
+const WORKER_UPSTREAMS: Record<string, string> = {
+  "dxf-parser-worker.js":
+    "https://cdn.jsdelivr.net/npm/@mlightcad/data-model@1.5.5/dist/dxf-parser-worker.js",
+  "libredwg-parser-worker.js":
+    "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/dist/libredwg-parser-worker.js",
+  "mtext-renderer-worker.js":
+    "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/dist/mtext-renderer-worker.js",
+};
 
 export async function GET(
   _request: Request,
   context: { params: Promise<{ name: string }> },
 ) {
   const { name } = await context.params;
+  const upstream = WORKER_UPSTREAMS[name];
 
-  if (!ALLOWED.has(name)) {
+  if (!upstream) {
     return new NextResponse("Not found", { status: 404 });
   }
 
-  const upstream = `https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/dist/${name}`;
   const response = await fetch(upstream, { cache: "force-cache" });
 
   if (!response.ok) {
