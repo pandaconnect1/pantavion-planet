@@ -4,15 +4,15 @@ import WaterDerivedMapClient from "../components/water-derived-map-client";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Pantavion Water B Derived Map",
+  title: "Pantavion Water Map B — Authentic Master GIS",
   description:
-    "Protected B derived water network map preview over road base, without raw DWG exposure.",
+    "Protected Map B workspace for the authentic water-network master, preserving original geometry and layers while adding field GIS tools.",
 };
 
-export default function WaterBDerivedMapPage() {
+export default function WaterBMapPage() {
   return (
     <>
-      <WaterMapNavigation title="B Derived Map" />
+      <WaterMapNavigation title="Map B — Authentic Master GIS" />
       <WaterDerivedMapClient mode="b" />
     </>
   );
