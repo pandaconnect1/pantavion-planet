@@ -1,5 +1,5 @@
 import WaterMapNavigation from "../water-map-navigation";
-import WaterDerivedMapClient from "../components/water-derived-map-client";
+import WaterMapBAuthenticClient from "../components/water-map-b-authentic-client";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +13,7 @@ export default function WaterBMapPage() {
   return (
     <>
       <WaterMapNavigation title="Map B — Authentic Master GIS" />
-      <WaterDerivedMapClient mode="b" />
+      <WaterMapBAuthenticClient />
     </>
   );
 }
