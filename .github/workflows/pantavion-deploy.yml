@@ -128,7 +128,8 @@ jobs:
 
       - name: Confirm schema gate not required
         if: ${{ steps.migrations.outputs.changed == 'false' }}
-        run: echo "Schema gate passed: no Supabase migration changed in this release."
+        run: |
+          echo "Schema gate passed: no Supabase migration changed in this release."
 
   deploy_preview_vercel:
     name: Optional Deploy Preview to Vercel
