@@ -14,9 +14,19 @@ const links = [
     description: "αιτήσεις / approvals",
   },
   {
+    href: "/professional/infrastructure/water/maps",
+    label: "Maps A / B / C",
+    description: "ξεχωριστοί χάρτες",
+  },
+  {
     href: "/professional/infrastructure/water/live",
-    label: "A Live Map",
-    description: "πραγματικό δίκτυο",
+    label: "Map A",
+    description: "υπάρχων live",
+  },
+  {
+    href: "/professional/infrastructure/water/b",
+    label: "Map B",
+    description: "DWG + GIS",
   },
 ];
 
