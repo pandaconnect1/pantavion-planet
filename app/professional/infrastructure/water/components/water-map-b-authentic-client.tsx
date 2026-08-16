@@ -48,9 +48,6 @@ export default function WaterMapBAuthenticClient() {
         if (!AcApDocManager) throw new Error("CAD_VIEWER_MODULE_NOT_AVAILABLE");
         if (cancelled || !cadContainerRef.current) return;
 
-        const workersReady = await AcApDocManager.checkWebworkerReadiness(CAD_WORKERS);
-        if (!workersReady) throw new Error("CAD_WORKERS_NOT_READY");
-
         let manager: any;
         try {
           manager = AcApDocManager.instance;
