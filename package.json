@@ -12,6 +12,7 @@
     "audit:pantavion": "node scripts/pantavion-master-audit.cjs",
     "audit:water": "node scripts/pantavion-water-kernel-gate.cjs && node scripts/water-guardian-surface-audit.cjs && node scripts/pantavion-multimodal-language-audit.cjs",
     "audit:water:production": "node scripts/pantavion-water-guardian-production-smoke.cjs",
+    "audit:water:map-b-source": "node scripts/pantavion-water-map-b-dwg-inventory.mjs",
     "audit:implementation": "node scripts/pantavion-implementation-gate.cjs",
     "audit:autonomous-builder": "node scripts/pantavion-autonomous-builder-gate.cjs",
     "audit:implementation-runtime": "node scripts/pantavion-implementation-runtime-gate.cjs",

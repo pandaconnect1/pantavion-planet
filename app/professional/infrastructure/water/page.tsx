@@ -10,7 +10,7 @@ import WaterMapNavigation from "./water-map-navigation";
 export const metadata = {
   title: "Pantavion Water Control Center",
   description:
-    "Protected Pantavion Water entry for approved users, access management and the live water network map.",
+    "Protected Pantavion Water entry for approved users, access management and separate A, B and C water maps.",
 };
 
 const cards = [
@@ -32,12 +32,20 @@ const cards = [
     action: "Άνοιγμα Users / Access",
   },
   {
-    title: "A Live Water Map",
-    label: "LIVE MAP",
+    title: "A / B / C Water Maps",
+    label: "MAP CENTER",
     description:
-      "Ο ενεργός προστατευμένος χάρτης ύδρευσης για approved users, με ασφαλή τμηματική φόρτωση σωληνώσεων.",
+      "Ξεχωριστή επιλογή χαρτών. A = ο υπάρχων live operational χάρτης. B = ο νέος DWG/QGIS-compatible Map B. C = ξεχωριστό intelligent engineering workspace.",
+    href: "/professional/infrastructure/water/maps",
+    action: "Επιλογή Map A / B / C",
+  },
+  {
+    title: "A Live Water Map",
+    label: "MAP A • LIVE",
+    description:
+      "Ο υπάρχων προστατευμένος Map A για approved users, με ασφαλή τμηματική φόρτωση σωληνώσεων. Δεν αλλάζει από την υλοποίηση του Map B.",
     href: "/professional/infrastructure/water/live",
-    action: "Άνοιγμα A Live Map",
+    action: "Άνοιγμα Map A",
   },
 ];
 
@@ -65,10 +73,10 @@ export default async function WaterControlCenterPage() {
           </h1>
 
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300 md:text-base">
-            Εδώ εμφανίζονται μόνο οι λειτουργίες του Water που είναι πραγματικά ενεργές σήμερα. Foundations και μελλοντικοί χάρτες παραμένουν κρυμμένοι από το production μέχρι να ολοκληρωθούν.
+            Οι χάρτες A, B και C είναι ξεχωριστές προστατευμένες εμπειρίες. Ο Map A παραμένει ανέγγιχτος. Ο Map B υλοποιείται από το πραγματικό DWG με QGIS-compatible γεωαναφορά, GPS/GNSS και αναζήτηση οδού. Ο Map C παραμένει ξεχωριστό intelligent engineering workspace και δεν συγχέεται με τον B.
           </p>
 
-          <div className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {visibleCards.map((card) => (
               <article
                 key={card.href}
@@ -80,7 +88,7 @@ export default async function WaterControlCenterPage() {
 
                 <h2 className="mt-3 text-2xl font-black">{card.title}</h2>
 
-                <p className="mt-4 min-h-[96px] text-sm leading-7 text-slate-300">
+                <p className="mt-4 min-h-[120px] text-sm leading-7 text-slate-300">
                   {card.description}
                 </p>
 
