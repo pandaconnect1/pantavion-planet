@@ -3,6 +3,7 @@ import {
   FINAL_MASTER_DWG_SIZE_BYTES,
   FINAL_MASTER_DWG_SHA256,
 } from "@/core/water/final-master-dwg-source";
+import FinalMasterDwgUploader from "./final-master-dwg-uploader";
 
 export const dynamic = "force-dynamic";
 
@@ -21,8 +22,9 @@ export default function FinalMasterDwgPage() {
         </h1>
 
         <p style={{ color: "#d7d7d7", fontSize: 16, lineHeight: 1.6 }}>
-          This is the original DWG master file, served as DWG. No PDF conversion, no GeoJSON reconstruction,
-          no recolored preview.
+          This is the original DWG master file. It remains private and is delivered only through the
+          protected Water Administrator session. No PDF conversion, GeoJSON reconstruction, or
+          recolored preview is treated as the editable master.
         </p>
 
         <div
@@ -39,9 +41,14 @@ export default function FinalMasterDwgPage() {
           <div><strong>SHA256:</strong> {FINAL_MASTER_DWG_SHA256}</div>
         </div>
 
+        <FinalMasterDwgUploader
+          expectedFileName={FINAL_MASTER_DWG_FILE_NAME}
+          expectedSizeBytes={FINAL_MASTER_DWG_SIZE_BYTES}
+          expectedSha256={FINAL_MASTER_DWG_SHA256}
+        />
+
         <a
           href="/api/professional/infrastructure/water/final-master-dwg"
-          download={FINAL_MASTER_DWG_FILE_NAME}
           style={{
             display: "inline-block",
             marginTop: 24,
