@@ -1,0 +1,76 @@
+name: Pantavion Knowledge Excavation
+
+on:
+  pull_request:
+    paths:
+      - 'core/recovery/**'
+      - 'scripts/pantavion-canonical-knowledge-excavation.cjs'
+      - 'package.json'
+      - '.github/workflows/pantavion-knowledge-excavation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  excavate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run canonical knowledge excavation
+        run: npm run knowledge:excavate
+
+      - name: Verify excavation outputs
+        shell: bash
+        run: |
+          test -d data/recovery/canonical-knowledge
+          test -f data/recovery/canonical-knowledge/manifest.json
+          node <<'NODE'
+          const fs = require('fs');
+          const path = 'data/recovery/canonical-knowledge/manifest.json';
+          const m = JSON.parse(fs.readFileSync(path, 'utf8'));
+          const total = Number(m.totalRecords ?? m.recordCount ?? 0);
+          if (!Number.isFinite(total) || total <= 0) {
+            throw new Error(`Invalid total record count in ${path}: ${total}`);
+          }
+          const batches = Array.isArray(m.batches) ? m.batches : [];
+          if (!batches.length) throw new Error('No deterministic batches emitted');
+          const a = batches[0];
+          const count = Number(a.recordCount ?? 0);
+          if (!Number.isFinite(count) || count <= 0 || count > 1499) {
+            throw new Error(`Invalid Batch A count: ${count}`);
+          }
+          if (!m.corpusFingerprint && !a.corpusFingerprint) {
+            throw new Error('Missing corpus fingerprint');
+          }
+          console.log(JSON.stringify({
+            totalRecords: total,
+            batchCount: batches.length,
+            batchA: {
+              label: a.batchLabel ?? a.batchId ?? 'A',
+              startOrdinal: a.startOrdinal,
+              endOrdinal: a.endOrdinal,
+              recordCount: count,
+              corpusFingerprint: a.corpusFingerprint ?? m.corpusFingerprint,
+            }
+          }, null, 2));
+          NODE
+
+      - name: Upload excavation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-canonical-knowledge-excavation
+          path: data/recovery/canonical-knowledge
+          if-no-files-found: error
+          retention-days: 14
