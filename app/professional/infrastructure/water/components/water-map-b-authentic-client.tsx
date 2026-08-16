@@ -19,12 +19,9 @@ const CAD_VIEWER_MODULE_URL =
   "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/+esm";
 
 const CAD_WORKERS = {
-  dxfParser:
-    "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/dist/dxf-parser-worker.js",
-  dwgParser:
-    "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/dist/libredwg-parser-worker.js",
-  mtextRender:
-    "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/dist/mtext-renderer-worker.js",
+  dxfParser: "/cad-workers/dxf-parser-worker.js",
+  dwgParser: "/cad-workers/libredwg-parser-worker.js",
+  mtextRender: "/cad-workers/mtext-renderer-worker.js",
 };
 
 function importBrowserModule(url: string) {
@@ -51,6 +48,9 @@ export default function WaterMapBAuthenticClient() {
         if (!AcApDocManager) throw new Error("CAD_VIEWER_MODULE_NOT_AVAILABLE");
         if (cancelled || !cadContainerRef.current) return;
 
+        const workersReady = await AcApDocManager.checkWebworkerReadiness(CAD_WORKERS);
+        if (!workersReady) throw new Error("CAD_WORKERS_NOT_READY");
+
         let manager: any;
         try {
           manager = AcApDocManager.instance;
@@ -59,7 +59,7 @@ export default function WaterMapBAuthenticClient() {
             container: cadContainerRef.current,
             autoResize: true,
             webworkerFileUrls: CAD_WORKERS,
-            checkWorkersOnInit: false,
+            checkWorkersOnInit: true,
           });
           manager = AcApDocManager.instance;
         }
