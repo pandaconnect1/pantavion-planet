@@ -18,31 +18,19 @@ const MAP_B_URL = "/api/professional/infrastructure/water/final-master-dwg";
 const CAD_VIEWER_MODULE_URL =
   "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/+esm";
 
-const REMOTE_CAD_WORKERS = {
-  dxfParser:
-    "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/dist/dxf-parser-worker.js",
-  dwgParser:
-    "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/dist/libredwg-parser-worker.js",
-  mtextRender:
-    "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/dist/mtext-renderer-worker.js",
-};
+const CAD_WORKERS = {
+  dxfParser: "/cad-workers/dxf-parser-worker.js",
+  dwgParser: "/cad-workers/libredwg-parser-worker.js",
+  mtextRender: "/cad-workers/mtext-renderer-worker.js",
+} as const;
 
 function importBrowserModule(url: string) {
   const nativeImport = new Function("url", "return import(url)") as (value: string) => Promise<any>;
   return nativeImport(url);
 }
 
-async function makeSameOriginWorkerUrl(remoteUrl: string) {
-  const response = await fetch(remoteUrl, { cache: "force-cache", mode: "cors" });
-  if (!response.ok) throw new Error(`CAD_WORKER_HTTP_${response.status}`);
-  const source = await response.text();
-  const blob = new Blob([source], { type: "text/javascript" });
-  return URL.createObjectURL(blob);
-}
-
 export default function WaterMapBAuthenticClient() {
   const cadContainerRef = useRef<HTMLDivElement | null>(null);
-  const workerBlobUrlsRef = useRef<string[]>([]);
   const [viewerState, setViewerState] = useState<"loading" | "ready" | "error">("loading");
   const [viewerError, setViewerError] = useState("");
   const [position, setPosition] = useState<PositionState>(null);
@@ -60,15 +48,8 @@ export default function WaterMapBAuthenticClient() {
         if (!AcApDocManager) throw new Error("CAD_VIEWER_MODULE_NOT_AVAILABLE");
         if (cancelled || !cadContainerRef.current) return;
 
-        const [dxfParser, dwgParser, mtextRender] = await Promise.all([
-          makeSameOriginWorkerUrl(REMOTE_CAD_WORKERS.dxfParser),
-          makeSameOriginWorkerUrl(REMOTE_CAD_WORKERS.dwgParser),
-          makeSameOriginWorkerUrl(REMOTE_CAD_WORKERS.mtextRender),
-        ]);
-        workerBlobUrlsRef.current = [dxfParser, dwgParser, mtextRender];
-        if (cancelled || !cadContainerRef.current) return;
-
-        const workerUrls = { dxfParser, dwgParser, mtextRender };
+        const workersReady = await AcApDocManager.checkWebworkerReadiness(CAD_WORKERS);
+        if (!workersReady) throw new Error("CAD_WORKERS_NOT_READY");
 
         let manager: any;
         try {
@@ -77,8 +58,8 @@ export default function WaterMapBAuthenticClient() {
           AcApDocManager.createInstance({
             container: cadContainerRef.current,
             autoResize: true,
-            webworkerFileUrls: workerUrls,
-            checkWorkersOnInit: false,
+            webworkerFileUrls: CAD_WORKERS,
+            checkWorkersOnInit: true,
           });
           manager = AcApDocManager.instance;
         }
@@ -112,8 +93,6 @@ export default function WaterMapBAuthenticClient() {
 
     return () => {
       cancelled = true;
-      for (const url of workerBlobUrlsRef.current) URL.revokeObjectURL(url);
-      workerBlobUrlsRef.current = [];
     };
   }, []);
 
