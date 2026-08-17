@@ -2,7 +2,7 @@
   "id": "pantavion_runtime_heartbeat_v1",
   "ok": true,
   "alive": true,
-  "generatedAt": "2026-08-17T07:52:25.462Z",
+  "generatedAt": "2026-08-17T08:41:44.956Z",
   "message": "Pantavion cloud continuity heartbeat generated.",
   "pcRequired": false,
   "cloudRequired": true
