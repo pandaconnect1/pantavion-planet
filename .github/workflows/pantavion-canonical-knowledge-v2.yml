@@ -32,11 +32,11 @@ jobs:
         shell: bash
         run: |
           test -f data/recovery/canonical-knowledge-v2/manifest.json
-          test -f data/recovery/canonical-knowledge-v2/photo-marriage/summary.json
+          test -f data/recovery/canonical-knowledge-v2/photo-marriage/crosswalk.json
           node <<'NODE'
           const fs=require('fs');
           const m=JSON.parse(fs.readFileSync('data/recovery/canonical-knowledge-v2/manifest.json','utf8'));
-          const x=JSON.parse(fs.readFileSync('data/recovery/canonical-knowledge-v2/photo-marriage/summary.json','utf8'));
+          const x=JSON.parse(fs.readFileSync('data/recovery/canonical-knowledge-v2/photo-marriage/crosswalk.json','utf8'));
           if(!(m.totalRecords>0)) throw new Error('empty corpus');
           if(!(m.totalBatches>0)) throw new Error('no batches');
           const required=['founder-vision','unfinished-gap','recovery','donor','current-code','live-state'];
@@ -45,7 +45,11 @@ jobs:
           if(!m.reviewCounts || !('REVIEW_REQUIRED' in m.reviewCounts || 'CLASSIFIED' in m.reviewCounts)) throw new Error('missing semantic review state');
           if(!m.truthRule) throw new Error('missing truth rule');
           if(x.totalRecords !== m.totalRecords) throw new Error(`photo marriage count mismatch ${x.totalRecords} != ${m.totalRecords}`);
-          console.log(JSON.stringify({totalRecords:m.totalRecords,totalBatches:m.totalBatches,sourceCounts:m.sourceCounts,moduleCounts:m.moduleCounts,reviewCounts:m.reviewCounts,photoMarriage:x},null,2));
+          const batchFiles=fs.readdirSync('data/recovery/canonical-knowledge-v2/batches').filter(f=>f.endsWith('.json'));
+          const marriedBatchFiles=fs.readdirSync('data/recovery/canonical-knowledge-v2/photo-marriage/batches').filter(f=>f.endsWith('.json'));
+          if(batchFiles.length !== m.totalBatches) throw new Error(`batch file count mismatch ${batchFiles.length} != ${m.totalBatches}`);
+          if(marriedBatchFiles.length !== m.totalBatches) throw new Error(`married batch count mismatch ${marriedBatchFiles.length} != ${m.totalBatches}`);
+          console.log(JSON.stringify({totalRecords:m.totalRecords,totalBatches:m.totalBatches,sourceCounts:m.sourceCounts,moduleCounts:m.moduleCounts,reviewCounts:m.reviewCounts,photoMarriage:{totalRecords:x.totalRecords,matchedRecords:x.matchedRecords,unmatchedRecords:x.unmatchedRecords},batchFiles:batchFiles.length,marriedBatchFiles:marriedBatchFiles.length},null,2));
           NODE
       - name: Runtime safety
         run: npm run typecheck
