@@ -1,0 +1,33 @@
+{
+  "canonicalRepository": "pandaconnect1/pantavion-planet",
+  "policy": {
+    "developmentOnlyInCanonical": true,
+    "donorReposAreReadOnlyRecoverySources": true,
+    "copyWholeRepoBlindly": false,
+    "requiredFlow": [
+      "inventory",
+      "extract",
+      "classify",
+      "compare-with-canonical",
+      "keep-merge-evolve-rebuild-archive-investigate",
+      "canonical-placement",
+      "implementation",
+      "tests",
+      "deploy",
+      "verified-live"
+    ]
+  },
+  "repositories": [
+    {"repo":"pandaconnect1/pantavion","status":"DONOR_DISCOVERED","priority":"low","notes":"Repository exists but currently reports size 0; verify branches/history before archive decision."},
+    {"repo":"pandaconnect1/pantavion.com","status":"DONOR_DISCOVERED","priority":"medium","notes":"Legacy site repository; inspect domain/site history and any production-only assets."},
+    {"repo":"pandaconnect1/pantavion-app.","status":"DONOR_DISCOVERED","priority":"medium","notes":"Legacy app repository; odd trailing-dot name requires careful provenance handling."},
+    {"repo":"pandaconnect1/pantavion-one","status":"DONOR_DISCOVERED","priority":"medium","notes":"Legacy Pantavion One repository."},
+    {"repo":"pandaconnect1/pantavion-one-main","status":"DONOR_DISCOVERED","priority":"low","notes":"Repository currently reports size 0; verify history before archive decision."},
+    {"repo":"pandaconnect1/pantavion-one-clean","status":"AUDIT_STARTED","priority":"high","notes":"Contains Next.js app/components and may hold canonical UI predecessors."},
+    {"repo":"pandaconnect1/pantavion-one-clean-ui","status":"AUDIT_STARTED","priority":"critical","notes":"Contains app/chat, app/compass, app/create, app/mind, app/people, app/pulse, app/voice and therefore multiple canonical module predecessors."},
+    {"repo":"pandaconnect1/pantavion-socialhub","status":"DONOR_DISCOVERED","priority":"medium","notes":"Repository currently reports size 0; verify branches/history before archive decision."},
+    {"repo":"pandaconnect1/pantavion-voice","status":"AUDIT_STARTED","priority":"critical","notes":"Contains a substantial legacy Voice/translation UI and API surface. Must compare against current Interpreter/Translation stack, not overwrite it."},
+    {"repo":"pandaconnect1/pantavion-voice-","status":"DONOR_DISCOVERED","priority":"low","notes":"Repository currently reports size 0; verify history before archive decision."}
+  ],
+  "truthGate": "Nothing is considered migrated merely because it is listed here. A donor capability is canonical only after comparison, placement and evidence in pantavion-planet."
+}
