@@ -1,0 +1,3856 @@
+{
+  "topic": "semantic-review-required",
+  "recordCount": 77,
+  "records": [
+    {
+      "id": "pk_e274abcb645e65bba61b3f87",
+      "ordinal": 27940,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/api/billing/stripe/webhook/route.ts",
+        "sourceLine": 244,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "const signature = request.headers.get(\"stripe-signature\");\n  if (!signature) {\n    return NextResponse.json({ ok: false, error: \"missing_signature\" }, { status: 400 });\n  }",
+      "context": "const signature = request.headers.get(\"stripe-signature\");\n  if (!signature) {\n    return NextResponse.json({ ok: false, error: \"missing_signature\" }, { status: 400 });\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "API",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_e561feb07254e7c3a1949e39",
+      "ordinal": 27941,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/api/billing/stripe/webhook/route.ts",
+        "sourceLine": 244,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "const signature = request.headers.get(\"stripe-signature\");\n  if (!signature) {\n    return NextResponse.json({ ok: false, error: \"missing_signature\" }, { status: 400 });\n  }",
+      "context": "const signature = request.headers.get(\"stripe-signature\");\n  if (!signature) {\n    return NextResponse.json({ ok: false, error: \"missing_signature\" }, { status: 400 });\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "API",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_e274abcb645e65bba61b3f87",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_a86f41bfcc6353b138ddeb2e",
+      "ordinal": 27942,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/api/billing/stripe/webhook/route.ts",
+        "sourceLine": 244,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "const signature = request.headers.get(\"stripe-signature\");\n  if (!signature) {\n    return NextResponse.json({ ok: false, error: \"missing_signature\" }, { status: 400 });\n  }",
+      "context": "const signature = request.headers.get(\"stripe-signature\");\n  if (!signature) {\n    return NextResponse.json({ ok: false, error: \"missing_signature\" }, { status: 400 });\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "API",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_e274abcb645e65bba61b3f87",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_000b43204ea2315f3fb7bf50",
+      "ordinal": 28018,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/pantavion/intelligence/cloud/page.tsx",
+        "sourceLine": 30,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "<div style={{ display: \"grid\", gridTemplateColumns: \"repeat(auto-fit, minmax(240px, 1fr))\", gap: \"16px\", marginTop: \"28px\" }}>\n          <Card title=\"Cron route\" value={status.cronRoute} />\n          <Card title=\"Schedule\" value={status.cronSchedule} />\n          <Card title=\"Cron secret\" value={status.hasCronSecret ? \"configured\" : \"missing\"} />\n          <Card title=\"Durable ledger\" value={status.hasExternalLedgerEndpoint ? \"configured\" : \"pending\"} />\n        </div>",
+      "context": "<div style={{ display: \"grid\", gridTemplateColumns: \"repeat(auto-fit, minmax(240px, 1fr))\", gap: \"16px\", marginTop: \"28px\" }}>\n          <Card title=\"Cron route\" value={status.cronRoute} />\n          <Card title=\"Schedule\" value={status.cronSchedule} />\n          <Card title=\"Cron secret\" value={status.hasCronSecret ? \"configured\" : \"missing\"} />\n          <Card title=\"Durable ledger\" value={status.hasExternalLedgerEndpoint ? \"configured\" : \"pending\"} />\n        </div>",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UI",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_d041030343c4e84dd789d7ce",
+      "ordinal": 28019,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/pantavion/intelligence/cloud/page.tsx",
+        "sourceLine": 30,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "<div style={{ display: \"grid\", gridTemplateColumns: \"repeat(auto-fit, minmax(240px, 1fr))\", gap: \"16px\", marginTop: \"28px\" }}>\n          <Card title=\"Cron route\" value={status.cronRoute} />\n          <Card title=\"Schedule\" value={status.cronSchedule} />\n          <Card title=\"Cron secret\" value={status.hasCronSecret ? \"configured\" : \"missing\"} />\n          <Card title=\"Durable ledger\" value={status.hasExternalLedgerEndpoint ? \"configured\" : \"pending\"} />\n        </div>",
+      "context": "<div style={{ display: \"grid\", gridTemplateColumns: \"repeat(auto-fit, minmax(240px, 1fr))\", gap: \"16px\", marginTop: \"28px\" }}>\n          <Card title=\"Cron route\" value={status.cronRoute} />\n          <Card title=\"Schedule\" value={status.cronSchedule} />\n          <Card title=\"Cron secret\" value={status.hasCronSecret ? \"configured\" : \"missing\"} />\n          <Card title=\"Durable ledger\" value={status.hasExternalLedgerEndpoint ? \"configured\" : \"pending\"} />\n        </div>",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UI",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_000b43204ea2315f3fb7bf50",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_fd606b3f28c0f9a9991eb390",
+      "ordinal": 28020,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/pantavion/intelligence/cloud/page.tsx",
+        "sourceLine": 30,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "<div style={{ display: \"grid\", gridTemplateColumns: \"repeat(auto-fit, minmax(240px, 1fr))\", gap: \"16px\", marginTop: \"28px\" }}>\n          <Card title=\"Cron route\" value={status.cronRoute} />\n          <Card title=\"Schedule\" value={status.cronSchedule} />\n          <Card title=\"Cron secret\" value={status.hasCronSecret ? \"configured\" : \"missing\"} />\n          <Card title=\"Durable ledger\" value={status.hasExternalLedgerEndpoint ? \"configured\" : \"pending\"} />\n        </div>",
+      "context": "<div style={{ display: \"grid\", gridTemplateColumns: \"repeat(auto-fit, minmax(240px, 1fr))\", gap: \"16px\", marginTop: \"28px\" }}>\n          <Card title=\"Cron route\" value={status.cronRoute} />\n          <Card title=\"Schedule\" value={status.cronSchedule} />\n          <Card title=\"Cron secret\" value={status.hasCronSecret ? \"configured\" : \"missing\"} />\n          <Card title=\"Durable ledger\" value={status.hasExternalLedgerEndpoint ? \"configured\" : \"pending\"} />\n        </div>",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UI",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_000b43204ea2315f3fb7bf50",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_fa31b18a5d0a7e38565f3686",
+      "ordinal": 28024,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/product-status/page.tsx",
+        "sourceLine": 126,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function statusClass(status: PantavionCapabilityStatus) {\n  if (status === \"live\") return \"border-emerald-400/40 bg-emerald-400/10 text-emerald-100\";\n  if (status === \"beta\") return \"border-sky-400/40 bg-sky-400/10 text-sky-100\";\n  if (status === \"foundation\") return \"border-amber-400/40 bg-amber-400/10 text-amber-100\";\n  if (status === \"planned\") return \"border-slate-500/40 bg-slate-500/10 text-slate-200\";\n  return \"border-orange-400/40 bg-orange-400/10 text-orange-100\";\n}",
+      "context": "function statusClass(status: PantavionCapabilityStatus) {\n  if (status === \"live\") return \"border-emerald-400/40 bg-emerald-400/10 text-emerald-100\";\n  if (status === \"beta\") return \"border-sky-400/40 bg-sky-400/10 text-sky-100\";\n  if (status === \"foundation\") return \"border-amber-400/40 bg-amber-400/10 text-amber-100\";\n  if (status === \"planned\") return \"border-slate-500/40 bg-slate-500/10 text-slate-200\";\n  return \"border-orange-400/40 bg-orange-400/10 text-orange-100\";\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UI",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_31e25508270483adb321ddee",
+      "ordinal": 28025,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/product-status/page.tsx",
+        "sourceLine": 126,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function statusClass(status: PantavionCapabilityStatus) {\n  if (status === \"live\") return \"border-emerald-400/40 bg-emerald-400/10 text-emerald-100\";\n  if (status === \"beta\") return \"border-sky-400/40 bg-sky-400/10 text-sky-100\";\n  if (status === \"foundation\") return \"border-amber-400/40 bg-amber-400/10 text-amber-100\";\n  if (status === \"planned\") return \"border-slate-500/40 bg-slate-500/10 text-slate-200\";\n  return \"border-orange-400/40 bg-orange-400/10 text-orange-100\";\n}",
+      "context": "function statusClass(status: PantavionCapabilityStatus) {\n  if (status === \"live\") return \"border-emerald-400/40 bg-emerald-400/10 text-emerald-100\";\n  if (status === \"beta\") return \"border-sky-400/40 bg-sky-400/10 text-sky-100\";\n  if (status === \"foundation\") return \"border-amber-400/40 bg-amber-400/10 text-amber-100\";\n  if (status === \"planned\") return \"border-slate-500/40 bg-slate-500/10 text-slate-200\";\n  return \"border-orange-400/40 bg-orange-400/10 text-orange-100\";\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UI",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_fa31b18a5d0a7e38565f3686",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_70bb81f7283b6aba28575430",
+      "ordinal": 28026,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/product-status/page.tsx",
+        "sourceLine": 126,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function statusClass(status: PantavionCapabilityStatus) {\n  if (status === \"live\") return \"border-emerald-400/40 bg-emerald-400/10 text-emerald-100\";\n  if (status === \"beta\") return \"border-sky-400/40 bg-sky-400/10 text-sky-100\";\n  if (status === \"foundation\") return \"border-amber-400/40 bg-amber-400/10 text-amber-100\";\n  if (status === \"planned\") return \"border-slate-500/40 bg-slate-500/10 text-slate-200\";\n  return \"border-orange-400/40 bg-orange-400/10 text-orange-100\";\n}",
+      "context": "function statusClass(status: PantavionCapabilityStatus) {\n  if (status === \"live\") return \"border-emerald-400/40 bg-emerald-400/10 text-emerald-100\";\n  if (status === \"beta\") return \"border-sky-400/40 bg-sky-400/10 text-sky-100\";\n  if (status === \"foundation\") return \"border-amber-400/40 bg-amber-400/10 text-amber-100\";\n  if (status === \"planned\") return \"border-slate-500/40 bg-slate-500/10 text-slate-200\";\n  return \"border-orange-400/40 bg-orange-400/10 text-orange-100\";\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UI",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_fa31b18a5d0a7e38565f3686",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_11ef155f5e6a2f5c7c99523b",
+      "ordinal": 28027,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/product-status/page.tsx",
+        "sourceLine": 221,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "<div className=\"rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm font-bold text-amber-100\">\n              Header/corner selector: planned as global UI layer\n            </div>\n          </div>",
+      "context": "<div className=\"rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm font-bold text-amber-100\">\n              Header/corner selector: planned as global UI layer\n            </div>\n          </div>",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UI",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_edbd3913c128a86aa3236832",
+      "ordinal": 28028,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/product-status/page.tsx",
+        "sourceLine": 221,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "<div className=\"rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm font-bold text-amber-100\">\n              Header/corner selector: planned as global UI layer\n            </div>\n          </div>",
+      "context": "<div className=\"rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm font-bold text-amber-100\">\n              Header/corner selector: planned as global UI layer\n            </div>\n          </div>",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UI",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_11ef155f5e6a2f5c7c99523b",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_6cbc858da00b815109bd09ec",
+      "ordinal": 28029,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/product-status/page.tsx",
+        "sourceLine": 221,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "<div className=\"rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm font-bold text-amber-100\">\n              Header/corner selector: planned as global UI layer\n            </div>\n          </div>",
+      "context": "<div className=\"rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm font-bold text-amber-100\">\n              Header/corner selector: planned as global UI layer\n            </div>\n          </div>",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UI",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_11ef155f5e6a2f5c7c99523b",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_39f1dc545233634c2ab57eea",
+      "ordinal": 28048,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/universal-life/page.tsx",
+        "sourceLine": 69,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "<section className=\"mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-14\">\n        <div className=\"rounded-3xl border border-amber-400/20 bg-slate-950/70 p-5 sm:p-7\">\n          <h2 className=\"text-2xl font-black text-white\">No fake feature law</h2>\n          <p className=\"mt-3 max-w-5xl text-sm leading-7 text-slate-300\">\n            A capability may be visible only when it has a real route, real state/data flow,\n            real execution logic, or a clear limited status. Planned and legal-gated capabilities\n            remain part of the product constitution but are not pretended to be complete.\n          </p>\n        </div>",
+      "context": "<section className=\"mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-14\">\n        <div className=\"rounded-3xl border border-amber-400/20 bg-slate-950/70 p-5 sm:p-7\">\n          <h2 className=\"text-2xl font-black text-white\">No fake feature law</h2>\n          <p className=\"mt-3 max-w-5xl text-sm leading-7 text-slate-300\">\n            A capability may be visible only when it has a real route, real state/data flow,\n            real execution logic, or a clear limited status. Planned and legal-gated capabilities\n            remain part of the product constitution but are not pretended to be complete.\n          </p>\n        </div>",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UI",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_5ae0669d07cd4b03b6d6007c",
+      "ordinal": 28049,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/universal-life/page.tsx",
+        "sourceLine": 69,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "<section className=\"mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-14\">\n        <div className=\"rounded-3xl border border-amber-400/20 bg-slate-950/70 p-5 sm:p-7\">\n          <h2 className=\"text-2xl font-black text-white\">No fake feature law</h2>\n          <p className=\"mt-3 max-w-5xl text-sm leading-7 text-slate-300\">\n            A capability may be visible only when it has a real route, real state/data flow,\n            real execution logic, or a clear limited status. Planned and legal-gated capabilities\n            remain part of the product constitution but are not pretended to be complete.\n          </p>\n        </div>",
+      "context": "<section className=\"mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-14\">\n        <div className=\"rounded-3xl border border-amber-400/20 bg-slate-950/70 p-5 sm:p-7\">\n          <h2 className=\"text-2xl font-black text-white\">No fake feature law</h2>\n          <p className=\"mt-3 max-w-5xl text-sm leading-7 text-slate-300\">\n            A capability may be visible only when it has a real route, real state/data flow,\n            real execution logic, or a clear limited status. Planned and legal-gated capabilities\n            remain part of the product constitution but are not pretended to be complete.\n          </p>\n        </div>",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UI",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_39f1dc545233634c2ab57eea",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_9b65f2c5762e2f30c10ba4df",
+      "ordinal": 28050,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/universal-life/page.tsx",
+        "sourceLine": 69,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "<section className=\"mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-14\">\n        <div className=\"rounded-3xl border border-amber-400/20 bg-slate-950/70 p-5 sm:p-7\">\n          <h2 className=\"text-2xl font-black text-white\">No fake feature law</h2>\n          <p className=\"mt-3 max-w-5xl text-sm leading-7 text-slate-300\">\n            A capability may be visible only when it has a real route, real state/data flow,\n            real execution logic, or a clear limited status. Planned and legal-gated capabilities\n            remain part of the product constitution but are not pretended to be complete.\n          </p>\n        </div>",
+      "context": "<section className=\"mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-14\">\n        <div className=\"rounded-3xl border border-amber-400/20 bg-slate-950/70 p-5 sm:p-7\">\n          <h2 className=\"text-2xl font-black text-white\">No fake feature law</h2>\n          <p className=\"mt-3 max-w-5xl text-sm leading-7 text-slate-300\">\n            A capability may be visible only when it has a real route, real state/data flow,\n            real execution logic, or a clear limited status. Planned and legal-gated capabilities\n            remain part of the product constitution but are not pretended to be complete.\n          </p>\n        </div>",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UI",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_39f1dc545233634c2ab57eea",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_8e6dd890b10707abe23fe88c",
+      "ordinal": 28168,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "core/intelligence/panta-ai-capability-router.ts",
+        "sourceLine": 372,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "case \"summarize\":\n      return {\n        kind: \"structured\",\n        title: \"Summary generated\",\n        content: summarize(subject),\n        sections: [\n          { title: \"Key points\", items: summarizeBullets(subject) },\n          { title: \"Next\", items: [\"Verify missing context\", \"Expand if needed\"] },\n        ],\n      };",
+      "context": "case \"summarize\":\n      return {\n        kind: \"structured\",\n        title: \"Summary generated\",\n        content: summarize(subject),\n        sections: [\n          { title: \"Key points\", items: summarizeBullets(subject) },\n          { title: \"Next\", items: [\"Verify missing context\", \"Expand if needed\"] },\n        ],\n      };",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UNKNOWN",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_ae2ba9be423d6f0373a0e97c",
+      "ordinal": 28169,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "core/intelligence/panta-ai-capability-router.ts",
+        "sourceLine": 372,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "case \"summarize\":\n      return {\n        kind: \"structured\",\n        title: \"Summary generated\",\n        content: summarize(subject),\n        sections: [\n          { title: \"Key points\", items: summarizeBullets(subject) },\n          { title: \"Next\", items: [\"Verify missing context\", \"Expand if needed\"] },\n        ],\n      };",
+      "context": "case \"summarize\":\n      return {\n        kind: \"structured\",\n        title: \"Summary generated\",\n        content: summarize(subject),\n        sections: [\n          { title: \"Key points\", items: summarizeBullets(subject) },\n          { title: \"Next\", items: [\"Verify missing context\", \"Expand if needed\"] },\n        ],\n      };",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UNKNOWN",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_8e6dd890b10707abe23fe88c",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_c94e5d93b7c3454079c1fc75",
+      "ordinal": 28170,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "core/intelligence/panta-ai-capability-router.ts",
+        "sourceLine": 372,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "case \"summarize\":\n      return {\n        kind: \"structured\",\n        title: \"Summary generated\",\n        content: summarize(subject),\n        sections: [\n          { title: \"Key points\", items: summarizeBullets(subject) },\n          { title: \"Next\", items: [\"Verify missing context\", \"Expand if needed\"] },\n        ],\n      };",
+      "context": "case \"summarize\":\n      return {\n        kind: \"structured\",\n        title: \"Summary generated\",\n        content: summarize(subject),\n        sections: [\n          { title: \"Key points\", items: summarizeBullets(subject) },\n          { title: \"Next\", items: [\"Verify missing context\", \"Expand if needed\"] },\n        ],\n      };",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UNKNOWN",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_8e6dd890b10707abe23fe88c",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_c7f8a9a709718e298455cba9",
+      "ordinal": 28177,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "core/intelligence/prime-ai-orchestrator.ts",
+        "sourceLine": 150,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "complianceSensitive: boolean;\n  requiresHumanReviewForRestricted: boolean;\n  notes: string[];\n}",
+      "context": "complianceSensitive: boolean;\n  requiresHumanReviewForRestricted: boolean;\n  notes: string[];\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UNKNOWN",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_335bc8acc78339c20484ee58",
+      "ordinal": 28178,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "core/intelligence/prime-ai-orchestrator.ts",
+        "sourceLine": 150,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "complianceSensitive: boolean;\n  requiresHumanReviewForRestricted: boolean;\n  notes: string[];\n}",
+      "context": "complianceSensitive: boolean;\n  requiresHumanReviewForRestricted: boolean;\n  notes: string[];\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UNKNOWN",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_c7f8a9a709718e298455cba9",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_14376c00eb5ccc72f52cc41a",
+      "ordinal": 28179,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "core/intelligence/prime-ai-orchestrator.ts",
+        "sourceLine": 150,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "complianceSensitive: boolean;\n  requiresHumanReviewForRestricted: boolean;\n  notes: string[];\n}",
+      "context": "complianceSensitive: boolean;\n  requiresHumanReviewForRestricted: boolean;\n  notes: string[];\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UNKNOWN",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_c7f8a9a709718e298455cba9",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_1c59a3f958b831a992471ddd",
+      "ordinal": 28183,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "core/intelligence/prime-ai-orchestrator.ts",
+        "sourceLine": 1219,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (executionPlan.requiresEvidence) {\n    actions.push('attach-evidence-requirement');\n  }",
+      "context": "if (executionPlan.requiresEvidence) {\n    actions.push('attach-evidence-requirement');\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UNKNOWN",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_2a48bdb98f8a402ef58cfe99",
+      "ordinal": 28184,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "core/intelligence/prime-ai-orchestrator.ts",
+        "sourceLine": 1219,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (executionPlan.requiresEvidence) {\n    actions.push('attach-evidence-requirement');\n  }",
+      "context": "if (executionPlan.requiresEvidence) {\n    actions.push('attach-evidence-requirement');\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UNKNOWN",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_1c59a3f958b831a992471ddd",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_2a53af92d7e27c71a539e57a",
+      "ordinal": 28185,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "core/intelligence/prime-ai-orchestrator.ts",
+        "sourceLine": 1219,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (executionPlan.requiresEvidence) {\n    actions.push('attach-evidence-requirement');\n  }",
+      "context": "if (executionPlan.requiresEvidence) {\n    actions.push('attach-evidence-requirement');\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "UNKNOWN",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_1c59a3f958b831a992471ddd",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_0b12bbeebb6cf5caad247792",
+      "ordinal": 28575,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/architecture/PANTAVION_UNIFIED_MESSAGING_INTEROP.md",
+        "sourceLine": 131,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "DONE requires:",
+      "context": "DONE requires:",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "DOCS",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_8f9e0a52d2e8dd088df63a05",
+      "ordinal": 28576,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/architecture/PANTAVION_UNIFIED_MESSAGING_INTEROP.md",
+        "sourceLine": 131,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "DONE requires:",
+      "context": "DONE requires:",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "DOCS",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0b12bbeebb6cf5caad247792",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_2f648ef39f9e1be68b20c16d",
+      "ordinal": 28947,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/install-pantavion-intelligence-fabric.cjs",
+        "sourceLine": 1216,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "context": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0192cfaea7a74a974cdabe41",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_40a939880abe97a0b97de2c8",
+      "ordinal": 28948,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/install-pantavion-intelligence-fabric.cjs",
+        "sourceLine": 1216,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "context": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0192cfaea7a74a974cdabe41",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_5f10fd2c17316767136c80da",
+      "ordinal": 28949,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/install-pantavion-intelligence-fabric.cjs",
+        "sourceLine": 1216,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "context": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0192cfaea7a74a974cdabe41",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_96503e9257c94fdb31d26219",
+      "ordinal": 28950,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/install-pantavion-intelligence-fabric.cjs",
+        "sourceLine": 1249,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const marker of requiredMarkers) {\n  if (!fabric.includes(marker)) failures.push(\"Fabric missing marker: \" + marker);\n}",
+      "context": "for (const marker of requiredMarkers) {\n  if (!fabric.includes(marker)) failures.push(\"Fabric missing marker: \" + marker);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_e89ec998bf991ce40671bd7b",
+      "ordinal": 28951,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/install-pantavion-intelligence-fabric.cjs",
+        "sourceLine": 1249,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const marker of requiredMarkers) {\n  if (!fabric.includes(marker)) failures.push(\"Fabric missing marker: \" + marker);\n}",
+      "context": "for (const marker of requiredMarkers) {\n  if (!fabric.includes(marker)) failures.push(\"Fabric missing marker: \" + marker);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_96503e9257c94fdb31d26219",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_53c36b08a7a07408b78fdefa",
+      "ordinal": 28952,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/install-pantavion-intelligence-fabric.cjs",
+        "sourceLine": 1249,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const marker of requiredMarkers) {\n  if (!fabric.includes(marker)) failures.push(\"Fabric missing marker: \" + marker);\n}",
+      "context": "for (const marker of requiredMarkers) {\n  if (!fabric.includes(marker)) failures.push(\"Fabric missing marker: \" + marker);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_96503e9257c94fdb31d26219",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_08fad80e1b3fdb2e742e238d",
+      "ordinal": 28953,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-ai-integrity-check.cjs",
+        "sourceLine": 213,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const item of requiredPaths) {\n  if (!fs.existsSync(path.join(root, item.file))) {\n    failures.push({ file: item.file, text: \"missing required file\", reason: item.reason });\n  }\n}",
+      "context": "for (const item of requiredPaths) {\n  if (!fs.existsSync(path.join(root, item.file))) {\n    failures.push({ file: item.file, text: \"missing required file\", reason: item.reason });\n  }\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_b958d05c19bcf89e19d3ccc5",
+      "ordinal": 28954,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-ai-integrity-check.cjs",
+        "sourceLine": 213,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const item of requiredPaths) {\n  if (!fs.existsSync(path.join(root, item.file))) {\n    failures.push({ file: item.file, text: \"missing required file\", reason: item.reason });\n  }\n}",
+      "context": "for (const item of requiredPaths) {\n  if (!fs.existsSync(path.join(root, item.file))) {\n    failures.push({ file: item.file, text: \"missing required file\", reason: item.reason });\n  }\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_08fad80e1b3fdb2e742e238d",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_aece2ca0e2cf7e3517f1e54a",
+      "ordinal": 28955,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-ai-integrity-check.cjs",
+        "sourceLine": 213,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const item of requiredPaths) {\n  if (!fs.existsSync(path.join(root, item.file))) {\n    failures.push({ file: item.file, text: \"missing required file\", reason: item.reason });\n  }\n}",
+      "context": "for (const item of requiredPaths) {\n  if (!fs.existsSync(path.join(root, item.file))) {\n    failures.push({ file: item.file, text: \"missing required file\", reason: item.reason });\n  }\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_08fad80e1b3fdb2e742e238d",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_852b61c2cc85903ff8d0a43a",
+      "ordinal": 28956,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-ai-integrity-check.cjs",
+        "sourceLine": 222,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(absolute)) {\n    failures.push({\n      file: item.file,\n      text: item.text,\n      reason: item.reason + \" because file is missing\"\n    });\n    continue;\n  }",
+      "context": "if (!fs.existsSync(absolute)) {\n    failures.push({\n      file: item.file,\n      text: item.text,\n      reason: item.reason + \" because file is missing\"\n    });\n    continue;\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_57e91c9df84aadcd683cee5d",
+      "ordinal": 28957,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-ai-integrity-check.cjs",
+        "sourceLine": 222,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(absolute)) {\n    failures.push({\n      file: item.file,\n      text: item.text,\n      reason: item.reason + \" because file is missing\"\n    });\n    continue;\n  }",
+      "context": "if (!fs.existsSync(absolute)) {\n    failures.push({\n      file: item.file,\n      text: item.text,\n      reason: item.reason + \" because file is missing\"\n    });\n    continue;\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_852b61c2cc85903ff8d0a43a",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_e388bdbe0f0f64758606006a",
+      "ordinal": 28958,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-ai-integrity-check.cjs",
+        "sourceLine": 222,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(absolute)) {\n    failures.push({\n      file: item.file,\n      text: item.text,\n      reason: item.reason + \" because file is missing\"\n    });\n    continue;\n  }",
+      "context": "if (!fs.existsSync(absolute)) {\n    failures.push({\n      file: item.file,\n      text: item.text,\n      reason: item.reason + \" because file is missing\"\n    });\n    continue;\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_852b61c2cc85903ff8d0a43a",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_037425085012a2c3fa460648",
+      "ordinal": 28959,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-ai-integrity-check.cjs",
+        "sourceLine": 287,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const item of failures) {\n    console.log(\n      \"- \" +\n        item.file +\n        \" contains/requires \" +\n        JSON.stringify(item.text) +\n        \" -> \" +\n        item.reason\n    );\n  }",
+      "context": "for (const item of failures) {\n    console.log(\n      \"- \" +\n        item.file +\n        \" contains/requires \" +\n        JSON.stringify(item.text) +\n        \" -> \" +\n        item.reason\n    );\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_ebb69c749e602bb8b59acad3",
+      "ordinal": 28960,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-ai-integrity-check.cjs",
+        "sourceLine": 287,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const item of failures) {\n    console.log(\n      \"- \" +\n        item.file +\n        \" contains/requires \" +\n        JSON.stringify(item.text) +\n        \" -> \" +\n        item.reason\n    );\n  }",
+      "context": "for (const item of failures) {\n    console.log(\n      \"- \" +\n        item.file +\n        \" contains/requires \" +\n        JSON.stringify(item.text) +\n        \" -> \" +\n        item.reason\n    );\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_037425085012a2c3fa460648",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_0c87d9a77442ce2fc65e5280",
+      "ordinal": 28961,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-ai-integrity-check.cjs",
+        "sourceLine": 287,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const item of failures) {\n    console.log(\n      \"- \" +\n        item.file +\n        \" contains/requires \" +\n        JSON.stringify(item.text) +\n        \" -> \" +\n        item.reason\n    );\n  }",
+      "context": "for (const item of failures) {\n    console.log(\n      \"- \" +\n        item.file +\n        \" contains/requires \" +\n        JSON.stringify(item.text) +\n        \" -> \" +\n        item.reason\n    );\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_037425085012a2c3fa460648",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_9ccd4a5bca6135662fa16019",
+      "ordinal": 28962,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-autonomous-builder-gate.cjs",
+        "sourceLine": 29,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }",
+      "context": "if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_edb6c1a2e23d59eeb5dc8564",
+      "ordinal": 28963,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-autonomous-builder-gate.cjs",
+        "sourceLine": 29,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }",
+      "context": "if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_9ccd4a5bca6135662fa16019",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_6521cee3a179a660c53cb6dd",
+      "ordinal": 28964,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-autonomous-builder-gate.cjs",
+        "sourceLine": 29,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }",
+      "context": "if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_9ccd4a5bca6135662fa16019",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_29ce0e4b4a2d272b16113af0",
+      "ordinal": 29004,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-implementation-gate.cjs",
+        "sourceLine": 37,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "context": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0192cfaea7a74a974cdabe41",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_767ead42af5fd338b470a7ca",
+      "ordinal": 29005,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-implementation-gate.cjs",
+        "sourceLine": 37,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "context": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0192cfaea7a74a974cdabe41",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_d3f88be88b3f96f0b33d5a25",
+      "ordinal": 29006,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-implementation-gate.cjs",
+        "sourceLine": 37,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "context": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0192cfaea7a74a974cdabe41",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_d2de6f7d667a21c09426b926",
+      "ordinal": 29007,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-implementation-gate.cjs",
+        "sourceLine": 51,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const marker of requiredEngineMarkers) {\n  if (!engine.includes(marker)) {\n    failures.push(\"Implementation engine missing marker: \" + marker);\n  }\n}",
+      "context": "for (const marker of requiredEngineMarkers) {\n  if (!engine.includes(marker)) {\n    failures.push(\"Implementation engine missing marker: \" + marker);\n  }\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_9dcedc432197aadadc32a4c6",
+      "ordinal": 29008,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-implementation-gate.cjs",
+        "sourceLine": 51,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const marker of requiredEngineMarkers) {\n  if (!engine.includes(marker)) {\n    failures.push(\"Implementation engine missing marker: \" + marker);\n  }\n}",
+      "context": "for (const marker of requiredEngineMarkers) {\n  if (!engine.includes(marker)) {\n    failures.push(\"Implementation engine missing marker: \" + marker);\n  }\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_d2de6f7d667a21c09426b926",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_575aeb4635aa05c710b3e51b",
+      "ordinal": 29009,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-implementation-gate.cjs",
+        "sourceLine": 51,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const marker of requiredEngineMarkers) {\n  if (!engine.includes(marker)) {\n    failures.push(\"Implementation engine missing marker: \" + marker);\n  }\n}",
+      "context": "for (const marker of requiredEngineMarkers) {\n  if (!engine.includes(marker)) {\n    failures.push(\"Implementation engine missing marker: \" + marker);\n  }\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_d2de6f7d667a21c09426b926",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_3283cc5cd412f79caa409fad",
+      "ordinal": 29019,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-intelligence-fabric-gate.cjs",
+        "sourceLine": 20,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "context": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0192cfaea7a74a974cdabe41",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_a2662a09be35ec93766795e1",
+      "ordinal": 29020,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-intelligence-fabric-gate.cjs",
+        "sourceLine": 20,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "context": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0192cfaea7a74a974cdabe41",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_c3113344ccd162e6cd88b72e",
+      "ordinal": 29021,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-intelligence-fabric-gate.cjs",
+        "sourceLine": 20,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "context": "function read(relativePath) {\n  const absolutePath = path.join(root, relativePath);\n  if (!fs.existsSync(absolutePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }\n  return fs.readFileSync(absolutePath, \"utf8\");\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0192cfaea7a74a974cdabe41",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_aed7da1eafc01f83aa2bad6f",
+      "ordinal": 29022,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-intelligence-fabric-gate.cjs",
+        "sourceLine": 53,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const marker of requiredMarkers) {\n  if (!fabric.includes(marker)) failures.push(\"Fabric missing marker: \" + marker);\n}",
+      "context": "for (const marker of requiredMarkers) {\n  if (!fabric.includes(marker)) failures.push(\"Fabric missing marker: \" + marker);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_96503e9257c94fdb31d26219",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_e46b019a52a90892c276553c",
+      "ordinal": 29023,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-intelligence-fabric-gate.cjs",
+        "sourceLine": 53,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const marker of requiredMarkers) {\n  if (!fabric.includes(marker)) failures.push(\"Fabric missing marker: \" + marker);\n}",
+      "context": "for (const marker of requiredMarkers) {\n  if (!fabric.includes(marker)) failures.push(\"Fabric missing marker: \" + marker);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_96503e9257c94fdb31d26219",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_05006f916530e41a306d29c3",
+      "ordinal": 29024,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-intelligence-fabric-gate.cjs",
+        "sourceLine": 53,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const marker of requiredMarkers) {\n  if (!fabric.includes(marker)) failures.push(\"Fabric missing marker: \" + marker);\n}",
+      "context": "for (const marker of requiredMarkers) {\n  if (!fabric.includes(marker)) failures.push(\"Fabric missing marker: \" + marker);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_96503e9257c94fdb31d26219",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_5698363d4db560ab275df9a4",
+      "ordinal": 29046,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-project-intake-inventory.cjs",
+        "sourceLine": 26,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "const staticPatterns = [\n  /todo/i,\n  /fixme/i,\n  /placeholder/i,\n  /coming soon/i,\n  /not implemented/i,\n  /demo/i,\n  /prototype/i,\n  /static/i,\n  /href=[\"']#[\"']/i,\n  /alert\\(/i,\n  /disabled/i\n];",
+      "context": "const staticPatterns = [\n  /todo/i,\n  /fixme/i,\n  /placeholder/i,\n  /coming soon/i,\n  /not implemented/i,\n  /demo/i,\n  /prototype/i,\n  /static/i,\n  /href=[\"']#[\"']/i,\n  /alert\\(/i,\n  /disabled/i\n];",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_f4a22cf998678ed007400ab5",
+      "ordinal": 29047,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-project-intake-inventory.cjs",
+        "sourceLine": 26,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "const staticPatterns = [\n  /todo/i,\n  /fixme/i,\n  /placeholder/i,\n  /coming soon/i,\n  /not implemented/i,\n  /demo/i,\n  /prototype/i,\n  /static/i,\n  /href=[\"']#[\"']/i,\n  /alert\\(/i,\n  /disabled/i\n];",
+      "context": "const staticPatterns = [\n  /todo/i,\n  /fixme/i,\n  /placeholder/i,\n  /coming soon/i,\n  /not implemented/i,\n  /demo/i,\n  /prototype/i,\n  /static/i,\n  /href=[\"']#[\"']/i,\n  /alert\\(/i,\n  /disabled/i\n];",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_5698363d4db560ab275df9a4",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_b38512d41898c97a005925e0",
+      "ordinal": 29048,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-project-intake-inventory.cjs",
+        "sourceLine": 26,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "const staticPatterns = [\n  /todo/i,\n  /fixme/i,\n  /placeholder/i,\n  /coming soon/i,\n  /not implemented/i,\n  /demo/i,\n  /prototype/i,\n  /static/i,\n  /href=[\"']#[\"']/i,\n  /alert\\(/i,\n  /disabled/i\n];",
+      "context": "const staticPatterns = [\n  /todo/i,\n  /fixme/i,\n  /placeholder/i,\n  /coming soon/i,\n  /not implemented/i,\n  /demo/i,\n  /prototype/i,\n  /static/i,\n  /href=[\"']#[\"']/i,\n  /alert\\(/i,\n  /disabled/i\n];",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_5698363d4db560ab275df9a4",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_8f828d3be2de9e7d9b254404",
+      "ordinal": 29049,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-project-intake-safe-summary.cjs",
+        "sourceLine": 7,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(inventoryPath)) {\n  console.error(\"Missing local inventory. Run: node scripts\\\\pantavion-project-intake-inventory.cjs --write\");\n  process.exit(1);\n}",
+      "context": "if (!fs.existsSync(inventoryPath)) {\n  console.error(\"Missing local inventory. Run: node scripts\\\\pantavion-project-intake-inventory.cjs --write\");\n  process.exit(1);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_3e19f9d7564a63dc55f7099b",
+      "ordinal": 29050,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-project-intake-safe-summary.cjs",
+        "sourceLine": 7,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(inventoryPath)) {\n  console.error(\"Missing local inventory. Run: node scripts\\\\pantavion-project-intake-inventory.cjs --write\");\n  process.exit(1);\n}",
+      "context": "if (!fs.existsSync(inventoryPath)) {\n  console.error(\"Missing local inventory. Run: node scripts\\\\pantavion-project-intake-inventory.cjs --write\");\n  process.exit(1);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_8f828d3be2de9e7d9b254404",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_3712f2439cecdc50edd19ca0",
+      "ordinal": 29051,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-project-intake-safe-summary.cjs",
+        "sourceLine": 7,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(inventoryPath)) {\n  console.error(\"Missing local inventory. Run: node scripts\\\\pantavion-project-intake-inventory.cjs --write\");\n  process.exit(1);\n}",
+      "context": "if (!fs.existsSync(inventoryPath)) {\n  console.error(\"Missing local inventory. Run: node scripts\\\\pantavion-project-intake-inventory.cjs --write\");\n  process.exit(1);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_8f828d3be2de9e7d9b254404",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_2efd87726c4ec84296f86390",
+      "ordinal": 29079,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-unfinished-plan-ingestion-gate.cjs",
+        "sourceLine": 14,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const [file, marker] of required) {\n  const absolute = path.join(process.cwd(), file);\n  if (!fs.existsSync(absolute)) {\n    failures.push(\"Missing file: \" + file);\n    continue;\n  }",
+      "context": "for (const [file, marker] of required) {\n  const absolute = path.join(process.cwd(), file);\n  if (!fs.existsSync(absolute)) {\n    failures.push(\"Missing file: \" + file);\n    continue;\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_8cfbdbb8092c494fd10d2837",
+      "ordinal": 29080,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-unfinished-plan-ingestion-gate.cjs",
+        "sourceLine": 14,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const [file, marker] of required) {\n  const absolute = path.join(process.cwd(), file);\n  if (!fs.existsSync(absolute)) {\n    failures.push(\"Missing file: \" + file);\n    continue;\n  }",
+      "context": "for (const [file, marker] of required) {\n  const absolute = path.join(process.cwd(), file);\n  if (!fs.existsSync(absolute)) {\n    failures.push(\"Missing file: \" + file);\n    continue;\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_2efd87726c4ec84296f86390",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_d6857b07ec606af607eff057",
+      "ordinal": 29081,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-unfinished-plan-ingestion-gate.cjs",
+        "sourceLine": 14,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const [file, marker] of required) {\n  const absolute = path.join(process.cwd(), file);\n  if (!fs.existsSync(absolute)) {\n    failures.push(\"Missing file: \" + file);\n    continue;\n  }",
+      "context": "for (const [file, marker] of required) {\n  const absolute = path.join(process.cwd(), file);\n  if (!fs.existsSync(absolute)) {\n    failures.push(\"Missing file: \" + file);\n    continue;\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_2efd87726c4ec84296f86390",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_4f0468ef8f1cd2eda515aae1",
+      "ordinal": 29082,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-unfinished-plan-ingestion-gate.cjs",
+        "sourceLine": 21,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.readFileSync(absolute, \"utf8\").includes(marker)) {\n    failures.push(\"Missing marker in \" + file + \": \" + marker);\n  }\n}",
+      "context": "if (!fs.readFileSync(absolute, \"utf8\").includes(marker)) {\n    failures.push(\"Missing marker in \" + file + \": \" + marker);\n  }\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_711be6204117f0c51b44157f",
+      "ordinal": 29083,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-unfinished-plan-ingestion-gate.cjs",
+        "sourceLine": 21,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.readFileSync(absolute, \"utf8\").includes(marker)) {\n    failures.push(\"Missing marker in \" + file + \": \" + marker);\n  }\n}",
+      "context": "if (!fs.readFileSync(absolute, \"utf8\").includes(marker)) {\n    failures.push(\"Missing marker in \" + file + \": \" + marker);\n  }\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_4f0468ef8f1cd2eda515aae1",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_e585201c3f0c1edd0c7e5597",
+      "ordinal": 29084,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-unfinished-plan-ingestion-gate.cjs",
+        "sourceLine": 21,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.readFileSync(absolute, \"utf8\").includes(marker)) {\n    failures.push(\"Missing marker in \" + file + \": \" + marker);\n  }\n}",
+      "context": "if (!fs.readFileSync(absolute, \"utf8\").includes(marker)) {\n    failures.push(\"Missing marker in \" + file + \": \" + marker);\n  }\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_4f0468ef8f1cd2eda515aae1",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_b0eb04297555cc29d1696ee7",
+      "ordinal": 29091,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-vscode-real-implementation-gate.cjs",
+        "sourceLine": 15,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function read(relativePath) {\n  if (!exists(relativePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }",
+      "context": "function read(relativePath) {\n  if (!exists(relativePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_28bdff58dd36eade578d026c",
+      "ordinal": 29092,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-vscode-real-implementation-gate.cjs",
+        "sourceLine": 15,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function read(relativePath) {\n  if (!exists(relativePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }",
+      "context": "function read(relativePath) {\n  if (!exists(relativePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_b0eb04297555cc29d1696ee7",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_44758975a910c7714b170f78",
+      "ordinal": 29093,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-vscode-real-implementation-gate.cjs",
+        "sourceLine": 15,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function read(relativePath) {\n  if (!exists(relativePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }",
+      "context": "function read(relativePath) {\n  if (!exists(relativePath)) {\n    failures.push(\"Missing required file: \" + relativePath);\n    return \"\";\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_b0eb04297555cc29d1696ee7",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_f87e4699eb75cb876f931340",
+      "ordinal": 29094,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-vscode-real-implementation-gate.cjs",
+        "sourceLine": 42,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const file of requiredFiles) {\n  if (!exists(file)) failures.push(\"Missing required file: \" + file);\n}",
+      "context": "for (const file of requiredFiles) {\n  if (!exists(file)) failures.push(\"Missing required file: \" + file);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_9799001b54fdf4484ebe8151",
+      "ordinal": 29095,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-vscode-real-implementation-gate.cjs",
+        "sourceLine": 42,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const file of requiredFiles) {\n  if (!exists(file)) failures.push(\"Missing required file: \" + file);\n}",
+      "context": "for (const file of requiredFiles) {\n  if (!exists(file)) failures.push(\"Missing required file: \" + file);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_f87e4699eb75cb876f931340",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_9475e8bd89fd96646d11e8f2",
+      "ordinal": 29096,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-vscode-real-implementation-gate.cjs",
+        "sourceLine": 42,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "for (const file of requiredFiles) {\n  if (!exists(file)) failures.push(\"Missing required file: \" + file);\n}",
+      "context": "for (const file of requiredFiles) {\n  if (!exists(file)) failures.push(\"Missing required file: \" + file);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_f87e4699eb75cb876f931340",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_ba65fbb7891e7ba207ff47df",
+      "ordinal": 29097,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-vscode-real-implementation-gate.cjs",
+        "sourceLine": 146,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!cronRoute.includes('process.env.NODE_ENV !== \"production\"')) {\n  failures.push(\"Cron route must explicitly allow missing CRON_SECRET only outside production.\");\n}",
+      "context": "if (!cronRoute.includes('process.env.NODE_ENV !== \"production\"')) {\n  failures.push(\"Cron route must explicitly allow missing CRON_SECRET only outside production.\");\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_64ebcab7421af301632a87b9",
+      "ordinal": 29098,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-vscode-real-implementation-gate.cjs",
+        "sourceLine": 146,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!cronRoute.includes('process.env.NODE_ENV !== \"production\"')) {\n  failures.push(\"Cron route must explicitly allow missing CRON_SECRET only outside production.\");\n}",
+      "context": "if (!cronRoute.includes('process.env.NODE_ENV !== \"production\"')) {\n  failures.push(\"Cron route must explicitly allow missing CRON_SECRET only outside production.\");\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_ba65fbb7891e7ba207ff47df",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    },
+    {
+      "id": "pk_c591d4a1a92e8ed57b98111a",
+      "ordinal": 29099,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-vscode-real-implementation-gate.cjs",
+        "sourceLine": 146,
+        "sourceRef": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceCommit": "eeb585710085153fcbaec24e84f3ac8f6456305d",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!cronRoute.includes('process.env.NODE_ENV !== \"production\"')) {\n  failures.push(\"Cron route must explicitly allow missing CRON_SECRET only outside production.\");\n}",
+      "context": "if (!cronRoute.includes('process.env.NODE_ENV !== \"production\"')) {\n  failures.push(\"Cron route must explicitly allow missing CRON_SECRET only outside production.\");\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_ba65fbb7891e7ba207ff47df",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": [],
+      "augmentationMatches": [],
+      "archive": {
+        "module": "UNCLASSIFIED",
+        "primaryTopic": "semantic-review-required",
+        "topics": [],
+        "archiveState": "REVIEW_REQUIRED",
+        "canonicalPath": "canonical/unclassified/semantic-review-required",
+        "screenshotLearningCount": 0
+      }
+    }
+  ]
+}

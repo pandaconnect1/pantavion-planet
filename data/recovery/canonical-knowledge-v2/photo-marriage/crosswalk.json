@@ -1,0 +1,356 @@
+{
+  "generatedAt": "2026-08-18T21:29:15.524Z",
+  "totalRecords": 29192,
+  "matchedRecords": 11274,
+  "unmatchedRecords": 17918,
+  "moduleIndex": {
+    "Chat": {
+      "recordCount": 1426,
+      "matchedRecordCount": 12,
+      "insights": {
+        "multi-model-routing": 6,
+        "reasoning-work-modes": 3,
+        "ai-command-registry": 3
+      }
+    },
+    "Identity / Auth / Consent": {
+      "recordCount": 1283,
+      "matchedRecordCount": 0,
+      "insights": {}
+    },
+    "Interpreter / Translation": {
+      "recordCount": 2661,
+      "matchedRecordCount": 40,
+      "insights": {
+        "multi-model-routing": 19,
+        "ai-command-registry": 12,
+        "ai-security-observability": 9
+      }
+    },
+    "Kernel / Guardian / Runtime": {
+      "recordCount": 3286,
+      "matchedRecordCount": 3286,
+      "insights": {
+        "ai-command-registry": 3286,
+        "multi-model-routing": 3286,
+        "agent-orchestration": 3286,
+        "rag-retrieval": 3286,
+        "memory-automation": 3286,
+        "ai-security-observability": 3286,
+        "mcp-tools": 3286,
+        "inference-optimization": 3286,
+        "data-ai-engineering-map": 3286,
+        "research-source-intake": 3286,
+        "provider-economics": 3286,
+        "geo-discoverability": 3286,
+        "executive-specialists": 3286,
+        "creator-commerce": 6,
+        "reasoning-work-modes": 1
+      }
+    },
+    "Learning / Knowledge": {
+      "recordCount": 189,
+      "matchedRecordCount": 189,
+      "insights": {
+        "reasoning-work-modes": 189,
+        "rag-retrieval": 189,
+        "llm-fundamentals": 189,
+        "data-ai-engineering-map": 189,
+        "research-source-intake": 189,
+        "geo-discoverability": 189
+      }
+    },
+    "Maps / World / Water": {
+      "recordCount": 6598,
+      "matchedRecordCount": 19,
+      "insights": {
+        "multi-model-routing": 3,
+        "data-ai-engineering-map": 3,
+        "ai-security-observability": 6,
+        "creator-commerce": 3,
+        "provider-economics": 3,
+        "executive-specialists": 4
+      }
+    },
+    "Marketplace / Work / Business": {
+      "recordCount": 1259,
+      "matchedRecordCount": 1259,
+      "insights": {
+        "creator-commerce": 1259,
+        "reasoning-work-modes": 1259,
+        "provider-economics": 1259,
+        "executive-specialists": 1259,
+        "ai-security-observability": 6,
+        "memory-automation": 3,
+        "multi-model-routing": 4,
+        "data-ai-engineering-map": 7,
+        "inference-optimization": 5,
+        "llm-fundamentals": 1,
+        "research-source-intake": 1,
+        "geo-discoverability": 1
+      }
+    },
+    "Music / Media / Creation": {
+      "recordCount": 178,
+      "matchedRecordCount": 178,
+      "insights": {
+        "creator-commerce": 178,
+        "multi-model-routing": 6,
+        "geo-discoverability": 4,
+        "provider-economics": 4
+      }
+    },
+    "People": {
+      "recordCount": 1709,
+      "matchedRecordCount": 10,
+      "insights": {
+        "multi-model-routing": 7,
+        "creator-commerce": 3,
+        "ai-security-observability": 3
+      }
+    },
+    "Personal AI / PantaAI": {
+      "recordCount": 1920,
+      "matchedRecordCount": 1920,
+      "insights": {
+        "agent-orchestration": 1920,
+        "ai-command-registry": 1920,
+        "reasoning-work-modes": 1920,
+        "multi-model-routing": 1920,
+        "rag-retrieval": 1920,
+        "memory-automation": 1920,
+        "mcp-tools": 1920,
+        "provider-economics": 1920,
+        "executive-specialists": 1920,
+        "data-ai-engineering-map": 4,
+        "creator-commerce": 6,
+        "ai-security-observability": 3
+      }
+    },
+    "Resilience / Offline / Infrastructure": {
+      "recordCount": 433,
+      "matchedRecordCount": 9,
+      "insights": {
+        "multi-model-routing": 9
+      }
+    },
+    "Safety / Trust / Minors": {
+      "recordCount": 3675,
+      "matchedRecordCount": 3675,
+      "insights": {
+        "ai-security-observability": 3675,
+        "multi-model-routing": 19,
+        "executive-specialists": 9,
+        "ai-command-registry": 3,
+        "creator-commerce": 18,
+        "reasoning-work-modes": 3,
+        "provider-economics": 6
+      }
+    },
+    "Social / Pulse / Communities": {
+      "recordCount": 671,
+      "matchedRecordCount": 671,
+      "insights": {
+        "geo-discoverability": 671,
+        "ai-security-observability": 6,
+        "multi-model-routing": 3,
+        "creator-commerce": 3
+      }
+    },
+    "SOS / Crisis": {
+      "recordCount": 1695,
+      "matchedRecordCount": 3,
+      "insights": {
+        "provider-economics": 3
+      }
+    },
+    "Voice / Video": {
+      "recordCount": 952,
+      "matchedRecordCount": 3,
+      "insights": {
+        "creator-commerce": 3
+      }
+    },
+    "UNCLASSIFIED": {
+      "recordCount": 1257,
+      "matchedRecordCount": 0,
+      "insights": {}
+    }
+  },
+  "insightIndex": {
+    "multi-model-routing": {
+      "title": "Multi-model/provider routing",
+      "matchedRecordCount": 5282,
+      "modules": {
+        "Chat": 6,
+        "Interpreter / Translation": 19,
+        "Kernel / Guardian / Runtime": 3286,
+        "Maps / World / Water": 3,
+        "Marketplace / Work / Business": 4,
+        "Music / Media / Creation": 6,
+        "People": 7,
+        "Personal AI / PantaAI": 1920,
+        "Resilience / Offline / Infrastructure": 9,
+        "Safety / Trust / Minors": 19,
+        "Social / Pulse / Communities": 3
+      }
+    },
+    "reasoning-work-modes": {
+      "title": "Reusable reasoning and professional work modes",
+      "matchedRecordCount": 3375,
+      "modules": {
+        "Chat": 3,
+        "Kernel / Guardian / Runtime": 1,
+        "Learning / Knowledge": 189,
+        "Marketplace / Work / Business": 1259,
+        "Personal AI / PantaAI": 1920,
+        "Safety / Trust / Minors": 3
+      }
+    },
+    "ai-command-registry": {
+      "title": "Governed AI command/capability registry",
+      "matchedRecordCount": 5224,
+      "modules": {
+        "Chat": 3,
+        "Interpreter / Translation": 12,
+        "Kernel / Guardian / Runtime": 3286,
+        "Personal AI / PantaAI": 1920,
+        "Safety / Trust / Minors": 3
+      }
+    },
+    "ai-security-observability": {
+      "title": "AI security, guardrails, evals and observability",
+      "matchedRecordCount": 6994,
+      "modules": {
+        "Interpreter / Translation": 9,
+        "Kernel / Guardian / Runtime": 3286,
+        "Maps / World / Water": 6,
+        "Marketplace / Work / Business": 6,
+        "People": 3,
+        "Personal AI / PantaAI": 3,
+        "Safety / Trust / Minors": 3675,
+        "Social / Pulse / Communities": 6
+      }
+    },
+    "agent-orchestration": {
+      "title": "Agentic AI and multi-agent orchestration",
+      "matchedRecordCount": 5206,
+      "modules": {
+        "Kernel / Guardian / Runtime": 3286,
+        "Personal AI / PantaAI": 1920
+      }
+    },
+    "rag-retrieval": {
+      "title": "RAG, embeddings and vector retrieval",
+      "matchedRecordCount": 5395,
+      "modules": {
+        "Kernel / Guardian / Runtime": 3286,
+        "Learning / Knowledge": 189,
+        "Personal AI / PantaAI": 1920
+      }
+    },
+    "memory-automation": {
+      "title": "Memory, state and automation",
+      "matchedRecordCount": 5209,
+      "modules": {
+        "Kernel / Guardian / Runtime": 3286,
+        "Marketplace / Work / Business": 3,
+        "Personal AI / PantaAI": 1920
+      }
+    },
+    "mcp-tools": {
+      "title": "MCP/tool interoperability",
+      "matchedRecordCount": 5206,
+      "modules": {
+        "Kernel / Guardian / Runtime": 3286,
+        "Personal AI / PantaAI": 1920
+      }
+    },
+    "inference-optimization": {
+      "title": "Inference optimization workstream",
+      "matchedRecordCount": 3291,
+      "modules": {
+        "Kernel / Guardian / Runtime": 3286,
+        "Marketplace / Work / Business": 5
+      }
+    },
+    "data-ai-engineering-map": {
+      "title": "Data and AI engineering completeness map",
+      "matchedRecordCount": 3489,
+      "modules": {
+        "Kernel / Guardian / Runtime": 3286,
+        "Learning / Knowledge": 189,
+        "Maps / World / Water": 3,
+        "Marketplace / Work / Business": 7,
+        "Personal AI / PantaAI": 4
+      }
+    },
+    "research-source-intake": {
+      "title": "External learning/research source intake",
+      "matchedRecordCount": 3476,
+      "modules": {
+        "Kernel / Guardian / Runtime": 3286,
+        "Learning / Knowledge": 189,
+        "Marketplace / Work / Business": 1
+      }
+    },
+    "provider-economics": {
+      "title": "Provider/tool economics registry",
+      "matchedRecordCount": 6481,
+      "modules": {
+        "Kernel / Guardian / Runtime": 3286,
+        "Maps / World / Water": 3,
+        "Marketplace / Work / Business": 1259,
+        "Music / Media / Creation": 4,
+        "Personal AI / PantaAI": 1920,
+        "Safety / Trust / Minors": 6,
+        "SOS / Crisis": 3
+      }
+    },
+    "geo-discoverability": {
+      "title": "GEO / AI discoverability",
+      "matchedRecordCount": 4151,
+      "modules": {
+        "Kernel / Guardian / Runtime": 3286,
+        "Learning / Knowledge": 189,
+        "Marketplace / Work / Business": 1,
+        "Music / Media / Creation": 4,
+        "Social / Pulse / Communities": 671
+      }
+    },
+    "executive-specialists": {
+      "title": "Executive-function specialist AI roles",
+      "matchedRecordCount": 6478,
+      "modules": {
+        "Kernel / Guardian / Runtime": 3286,
+        "Maps / World / Water": 4,
+        "Marketplace / Work / Business": 1259,
+        "Personal AI / PantaAI": 1920,
+        "Safety / Trust / Minors": 9
+      }
+    },
+    "creator-commerce": {
+      "title": "AI-assisted creator and commercial opportunities",
+      "matchedRecordCount": 1479,
+      "modules": {
+        "Kernel / Guardian / Runtime": 6,
+        "Maps / World / Water": 3,
+        "Marketplace / Work / Business": 1259,
+        "Music / Media / Creation": 178,
+        "People": 3,
+        "Personal AI / PantaAI": 6,
+        "Safety / Trust / Minors": 18,
+        "Social / Pulse / Communities": 3,
+        "Voice / Video": 3
+      }
+    },
+    "llm-fundamentals": {
+      "title": "LLM fundamentals knowledge map",
+      "matchedRecordCount": 190,
+      "modules": {
+        "Learning / Knowledge": 189,
+        "Marketplace / Work / Business": 1
+      }
+    }
+  }
+}
