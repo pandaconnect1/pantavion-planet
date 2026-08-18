@@ -1,0 +1,50 @@
+name: Pantavion Canonical Knowledge V2
+
+on:
+  pull_request:
+    paths:
+      - 'core/recovery/**'
+      - 'scripts/pantavion-canonical-knowledge-excavation-v2.cjs'
+      - 'package.json'
+      - '.github/workflows/pantavion-canonical-knowledge-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  excavate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Generate module-aware corpus
+        run: npm run knowledge:excavate:v2
+      - name: Verify no shallow/truncated corpus contract
+        shell: bash
+        run: |
+          test -f data/recovery/canonical-knowledge-v2/manifest.json
+          node <<'NODE'
+          const fs=require('fs');
+          const m=JSON.parse(fs.readFileSync('data/recovery/canonical-knowledge-v2/manifest.json','utf8'));
+          if(!(m.totalRecords>0)) throw new Error('empty corpus');
+          if(!(m.totalBatches>0)) throw new Error('no batches');
+          const required=['founder-vision','unfinished-gap','recovery','donor','current-code','live-state'];
+          for(const family of required){ if(!(family in m.sourceCounts)) throw new Error(`missing source family ${family}`); }
+          if(!m.moduleCounts || Object.keys(m.moduleCounts).length < 5) throw new Error('insufficient module distribution');
+          if(!m.reviewCounts || !('REVIEW_REQUIRED' in m.reviewCounts || 'CLASSIFIED' in m.reviewCounts)) throw new Error('missing semantic review state');
+          if(!m.truthRule) throw new Error('missing truth rule');
+          console.log(JSON.stringify({totalRecords:m.totalRecords,totalBatches:m.totalBatches,sourceCounts:m.sourceCounts,moduleCounts:m.moduleCounts,reviewCounts:m.reviewCounts},null,2));
+          NODE
+      - name: Runtime safety
+        run: npm run typecheck
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-canonical-knowledge-v2
+          path: data/recovery/canonical-knowledge-v2
+          if-no-files-found: error
+          retention-days: 14
