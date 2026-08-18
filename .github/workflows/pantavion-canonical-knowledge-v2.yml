@@ -4,7 +4,9 @@ on:
   pull_request:
     paths:
       - 'core/recovery/**'
+      - 'data/recovery/external-learning/**'
       - 'scripts/pantavion-canonical-knowledge-excavation-v2.cjs'
+      - 'scripts/pantavion-knowledge-photo-marriage.cjs'
       - 'package.json'
       - '.github/workflows/pantavion-canonical-knowledge-v2.yml'
   workflow_dispatch:
@@ -20,17 +22,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-      - run: npm ci
+      - name: Install dependencies without lockfile
+        run: npm install --no-audit --no-fund
       - name: Generate module-aware corpus
         run: npm run knowledge:excavate:v2
+      - name: Marry screenshot learnings to every recovered record
+        run: npm run knowledge:marry:screenshots
       - name: Verify no shallow/truncated corpus contract
         shell: bash
         run: |
           test -f data/recovery/canonical-knowledge-v2/manifest.json
+          test -f data/recovery/canonical-knowledge-v2/photo-marriage/summary.json
           node <<'NODE'
           const fs=require('fs');
           const m=JSON.parse(fs.readFileSync('data/recovery/canonical-knowledge-v2/manifest.json','utf8'));
+          const x=JSON.parse(fs.readFileSync('data/recovery/canonical-knowledge-v2/photo-marriage/summary.json','utf8'));
           if(!(m.totalRecords>0)) throw new Error('empty corpus');
           if(!(m.totalBatches>0)) throw new Error('no batches');
           const required=['founder-vision','unfinished-gap','recovery','donor','current-code','live-state'];
@@ -38,7 +44,8 @@ jobs:
           if(!m.moduleCounts || Object.keys(m.moduleCounts).length < 5) throw new Error('insufficient module distribution');
           if(!m.reviewCounts || !('REVIEW_REQUIRED' in m.reviewCounts || 'CLASSIFIED' in m.reviewCounts)) throw new Error('missing semantic review state');
           if(!m.truthRule) throw new Error('missing truth rule');
-          console.log(JSON.stringify({totalRecords:m.totalRecords,totalBatches:m.totalBatches,sourceCounts:m.sourceCounts,moduleCounts:m.moduleCounts,reviewCounts:m.reviewCounts},null,2));
+          if(x.totalRecords !== m.totalRecords) throw new Error(`photo marriage count mismatch ${x.totalRecords} != ${m.totalRecords}`);
+          console.log(JSON.stringify({totalRecords:m.totalRecords,totalBatches:m.totalBatches,sourceCounts:m.sourceCounts,moduleCounts:m.moduleCounts,reviewCounts:m.reviewCounts,photoMarriage:x},null,2));
           NODE
       - name: Runtime safety
         run: npm run typecheck
