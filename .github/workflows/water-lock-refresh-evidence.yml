@@ -1,0 +1,30 @@
+name: Water Lock Refresh Evidence
+
+on:
+  push:
+    branches:
+      - fix/water-lock-refresh-evidence
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  calculate-protected-hashes:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Calculate deliberate lock refresh evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "water-guardian-production-smoke.cjs sha256:"
+          sha256sum scripts/water-guardian-production-smoke.cjs
+          echo "water-network-runtime-lock.cjs sha256:"
+          sha256sum scripts/pantavion-water-network-runtime-lock.cjs
+          echo "water-network-runtime-lock.json sha256:"
+          sha256sum core/infrastructure/water/water-network-runtime-lock.json
