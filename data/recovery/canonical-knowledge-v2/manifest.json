@@ -1,6 +1,6 @@
 {
   "id": "pantavion_canonical_knowledge_v2",
-  "generatedAt": "2026-08-18T21:29:10.608Z",
+  "generatedAt": "2026-08-19T15:02:11.861Z",
   "totalRecords": 29192,
   "batchSize": 1499,
   "totalBatches": 20,
@@ -57,7 +57,7 @@
       "classifiedCount": 748,
       "unresolvedCount": 751,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.239Z",
+      "generatedAt": "2026-08-19T15:02:11.529Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -81,7 +81,7 @@
       "classifiedCount": 1020,
       "unresolvedCount": 479,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.261Z",
+      "generatedAt": "2026-08-19T15:02:11.547Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -101,7 +101,7 @@
       "classifiedCount": 632,
       "unresolvedCount": 867,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.283Z",
+      "generatedAt": "2026-08-19T15:02:11.565Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -125,7 +125,7 @@
       "classifiedCount": 996,
       "unresolvedCount": 503,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.305Z",
+      "generatedAt": "2026-08-19T15:02:11.583Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -145,7 +145,7 @@
       "classifiedCount": 1320,
       "unresolvedCount": 179,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.324Z",
+      "generatedAt": "2026-08-19T15:02:11.599Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -170,7 +170,7 @@
       "classifiedCount": 1259,
       "unresolvedCount": 240,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.342Z",
+      "generatedAt": "2026-08-19T15:02:11.614Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -190,7 +190,7 @@
       "classifiedCount": 1001,
       "unresolvedCount": 498,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.360Z",
+      "generatedAt": "2026-08-19T15:02:11.628Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -210,7 +210,7 @@
       "classifiedCount": 1068,
       "unresolvedCount": 431,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.377Z",
+      "generatedAt": "2026-08-19T15:02:11.642Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -233,7 +233,7 @@
       "classifiedCount": 910,
       "unresolvedCount": 589,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.395Z",
+      "generatedAt": "2026-08-19T15:02:11.656Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -256,7 +256,7 @@
       "classifiedCount": 935,
       "unresolvedCount": 564,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.414Z",
+      "generatedAt": "2026-08-19T15:02:11.671Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -280,7 +280,7 @@
       "classifiedCount": 960,
       "unresolvedCount": 539,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.432Z",
+      "generatedAt": "2026-08-19T15:02:11.714Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -305,7 +305,7 @@
       "classifiedCount": 640,
       "unresolvedCount": 859,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.451Z",
+      "generatedAt": "2026-08-19T15:02:11.729Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -329,7 +329,7 @@
       "classifiedCount": 564,
       "unresolvedCount": 935,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.470Z",
+      "generatedAt": "2026-08-19T15:02:11.745Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -354,7 +354,7 @@
       "classifiedCount": 721,
       "unresolvedCount": 778,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.490Z",
+      "generatedAt": "2026-08-19T15:02:11.761Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -374,7 +374,7 @@
       "classifiedCount": 490,
       "unresolvedCount": 1009,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.509Z",
+      "generatedAt": "2026-08-19T15:02:11.777Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -397,7 +397,7 @@
       "classifiedCount": 747,
       "unresolvedCount": 752,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.528Z",
+      "generatedAt": "2026-08-19T15:02:11.793Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -422,7 +422,7 @@
       "classifiedCount": 750,
       "unresolvedCount": 749,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.549Z",
+      "generatedAt": "2026-08-19T15:02:11.811Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -445,7 +445,7 @@
       "classifiedCount": 1102,
       "unresolvedCount": 397,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.568Z",
+      "generatedAt": "2026-08-19T15:02:11.826Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -470,7 +470,7 @@
       "classifiedCount": 391,
       "unresolvedCount": 1108,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.586Z",
+      "generatedAt": "2026-08-19T15:02:11.842Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     },
     {
@@ -493,7 +493,7 @@
       "classifiedCount": 0,
       "unresolvedCount": 711,
       "crossBatchRelationCount": 0,
-      "generatedAt": "2026-08-18T21:29:10.602Z",
+      "generatedAt": "2026-08-19T15:02:11.855Z",
       "corpusFingerprint": "4c64c4c0771d9a6f2f4ab75f177679adc3f38abcd81f484d9d6687cec945778c"
     }
   ],
