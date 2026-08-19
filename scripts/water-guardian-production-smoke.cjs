@@ -5,6 +5,7 @@ const { setTimeout: delay } = require("node:timers/promises");
 const DEFAULT_BASE_URL = "https://www.pantavion.com";
 const DEFAULT_DEPLOY_WAIT_MS = 8 * 60 * 1000;
 const DEFAULT_ALIAS_WAIT_MS = 2 * 60 * 1000;
+const DEFAULT_VERCEL_CONTEXT = "Vercel – pantavion-planet";
 
 const baseUrl = (
   process.env.PANTAVION_PRODUCTION_BASE_URL || DEFAULT_BASE_URL
@@ -13,6 +14,8 @@ const repository = process.env.GITHUB_REPOSITORY || "";
 const expectedCommitSha =
   process.env.PANTAVION_EXPECTED_GITHUB_SHA || process.env.GITHUB_SHA || "";
 const githubToken = process.env.GITHUB_TOKEN || "";
+const preferredVercelContext =
+  process.env.PANTAVION_VERCEL_STATUS_CONTEXT || DEFAULT_VERCEL_CONTEXT;
 const deployWaitMs = Number(
   process.env.PANTAVION_DEPLOY_WAIT_MS || DEFAULT_DEPLOY_WAIT_MS,
 );
@@ -51,6 +54,27 @@ function deploymentIdFromTargetUrl(targetUrl) {
   return id ? `dpl_${id}` : "";
 }
 
+function pickVercelStatus(statuses) {
+  const candidates = statuses.filter((status) => {
+    const context = typeof status?.context === "string" ? status.context : "";
+    return context === "Vercel" || context.startsWith("Vercel ");
+  });
+
+  if (candidates.length === 0) return null;
+
+  return (
+    candidates.find((status) => status.context === preferredVercelContext) ||
+    candidates.find((status) => status.context === DEFAULT_VERCEL_CONTEXT) ||
+    candidates.find((status) => {
+      const context = String(status.context || "");
+      return context.includes("pantavion-planet") && !context.includes("vmxx");
+    }) ||
+    candidates.find((status) => status.context === "Vercel") ||
+    candidates.find((status) => status.state === "success") ||
+    candidates[0]
+  );
+}
+
 async function readVercelCommitStatus() {
   if (!repository || !expectedCommitSha) return null;
 
@@ -75,8 +99,17 @@ async function readVercelCommitStatus() {
 
   const payload = await response.json();
   const statuses = Array.isArray(payload.statuses) ? payload.statuses : [];
+  const selected = pickVercelStatus(statuses);
 
-  return statuses.find((status) => status.context === "Vercel") || null;
+  if (!selected && statuses.length > 0) {
+    const contexts = statuses
+      .map((status) => String(status?.context || ""))
+      .filter(Boolean)
+      .join(", ");
+    console.log(`[INFO] No matching Vercel status yet. Available contexts: ${contexts}`);
+  }
+
+  return selected;
 }
 
 async function waitForVercelDeployment() {
@@ -100,15 +133,19 @@ async function waitForVercelDeployment() {
         fail("Vercel succeeded without a valid deployment target URL");
       }
 
-      pass(`Vercel completed deployment ${deploymentId} for ${expectedCommitSha}`);
+      pass(
+        `Vercel completed deployment ${deploymentId} for ${expectedCommitSha} via ${status.context}`,
+      );
       return deploymentId;
     }
 
     if (status?.state === "failure" || status?.state === "error") {
-      fail(`Vercel deployment finished with state ${status.state}`);
+      fail(`Vercel deployment finished with state ${status.state} (${status.context || "unknown context"})`);
     }
 
-    const currentState = status?.state || "missing";
+    const currentState = status
+      ? `${status.context || "Vercel"}:${status.state || "missing"}`
+      : "missing";
     if (currentState !== lastState) {
       console.log(`[INFO] Waiting for Vercel production status: ${currentState}`);
       lastState = currentState;
