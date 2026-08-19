@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import * as tus from "tus-js-client";
 
 type UploadUrlResponse = {
   ok?: boolean;
@@ -22,8 +22,10 @@ type Props = {
 };
 
 const SUPABASE_URL = "https://cxhulvwkagzufbjsdwwu.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_fwTnPNKyOhVKu0TOTljtow_QHLVtZ3m";
+const SUPABASE_PROJECT_ID = "cxhulvwkagzufbjsdwwu";
 const ONE_TIME_UPLOAD_BRIDGE = `${SUPABASE_URL}/functions/v1/pantavion-map-b-one-time-upload`;
+const TUS_ENDPOINT = `https://${SUPABASE_PROJECT_ID}.storage.supabase.co/storage/v1/upload/resumable`;
+const TUS_CHUNK_SIZE = 6 * 1024 * 1024;
 
 export default function FinalMasterDwgUploader({
   expectedFileName,
@@ -33,6 +35,7 @@ export default function FinalMasterDwgUploader({
   const [file, setFile] = useState<File | null>(null);
   const [state, setState] = useState<"idle" | "ready" | "uploading" | "done" | "error">("idle");
   const [message, setMessage] = useState("Select the exact original DWG master file.");
+  const [progress, setProgress] = useState(0);
 
   const expectedSizeMB = useMemo(
     () => Math.round((expectedSizeBytes / 1024 / 1024) * 100) / 100,
@@ -41,6 +44,7 @@ export default function FinalMasterDwgUploader({
 
   function chooseFile(nextFile: File | null) {
     setFile(nextFile);
+    setProgress(0);
 
     if (!nextFile) {
       setState("idle");
@@ -61,7 +65,7 @@ export default function FinalMasterDwgUploader({
     }
 
     setState("ready");
-    setMessage("Exact filename and byte size match. Ready for private upload.");
+    setMessage("Exact filename and byte size match. Ready for resumable private upload.");
   }
 
   async function upload() {
@@ -72,6 +76,7 @@ export default function FinalMasterDwgUploader({
     }
 
     setState("uploading");
+    setProgress(0);
     setMessage("Creating one-time private upload authorization…");
 
     try {
@@ -87,6 +92,7 @@ export default function FinalMasterDwgUploader({
       }
 
       if (authBody.status === "already_present") {
+        setProgress(100);
         setState("done");
         setMessage("The exact Map B master is already present in the private vault. Open Map B now.");
         return;
@@ -96,23 +102,51 @@ export default function FinalMasterDwgUploader({
         throw new Error("Upload authorization is incomplete.");
       }
 
-      setMessage("Uploading the 196.04 MB master directly to the private Pantavion vault… Keep this page open.");
+      setMessage("Starting resumable upload in 6 MB chunks. Keep this page open; temporary network drops will retry automatically.");
 
-      const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-        auth: { persistSession: false, autoRefreshToken: false },
-      });
-      const { error } = await supabase.storage
-        .from(authBody.bucket)
-        .uploadToSignedUrl(authBody.path, authBody.token, file, {
-          contentType: "application/acad",
-          upsert: true,
-          cacheControl: "0",
+      await new Promise<void>((resolve, reject) => {
+        const resumable = new tus.Upload(file, {
+          endpoint: TUS_ENDPOINT,
+          retryDelays: [0, 3000, 5000, 10000, 20000],
+          chunkSize: TUS_CHUNK_SIZE,
+          uploadDataDuringCreation: true,
+          removeFingerprintOnSuccess: true,
+          headers: {
+            "x-signature": authBody.token as string,
+            "x-upsert": "true",
+          },
+          metadata: {
+            bucketName: authBody.bucket as string,
+            objectName: authBody.path as string,
+            contentType: "application/acad",
+            cacheControl: "0",
+          },
+          onError(error) {
+            reject(error);
+          },
+          onProgress(bytesUploaded, bytesTotal) {
+            const percentage = bytesTotal > 0 ? Math.min(100, (bytesUploaded / bytesTotal) * 100) : 0;
+            const rounded = Math.round(percentage * 10) / 10;
+            setProgress(rounded);
+            setMessage(`Uploading exact DWG… ${rounded.toFixed(1)}% · resumable 6 MB chunks`);
+          },
+          onSuccess() {
+            setProgress(100);
+            resolve();
+          },
         });
 
-      if (error) throw error;
+        void resumable.findPreviousUploads().then((previousUploads) => {
+          if (previousUploads.length > 0) {
+            resumable.resumeFromPreviousUpload(previousUploads[0]);
+            setMessage("Previous partial upload found. Resuming from the last confirmed chunk…");
+          }
+          resumable.start();
+        }).catch(reject);
+      });
 
       setState("done");
-      setMessage("Private upload completed. Open Map B now; the authentic DWG should load from the vault.");
+      setMessage("Private resumable upload completed. The exact Map B master is now ready for verification.");
     } catch (error) {
       setState("error");
       setMessage(error instanceof Error ? error.message : "Upload failed.");
@@ -142,6 +176,13 @@ export default function FinalMasterDwgUploader({
         style={{ display: "block", marginTop: 14, maxWidth: "100%" }}
       />
 
+      {state === "uploading" || progress > 0 ? (
+        <div style={{ marginTop: 14 }}>
+          <progress value={progress} max={100} style={{ width: "100%", height: 16 }} />
+          <div style={{ marginTop: 4, color: "#a7f3d0", fontWeight: 800 }}>{progress.toFixed(1)}%</div>
+        </div>
+      ) : null}
+
       <p style={{ color: state === "error" ? "#fecaca" : state === "done" ? "#a7f3d0" : "#d7d7d7" }}>
         {message}
       </p>
@@ -161,7 +202,7 @@ export default function FinalMasterDwgUploader({
           cursor: state === "ready" ? "pointer" : "not-allowed",
         }}
       >
-        Upload exact DWG to private vault
+        Upload exact DWG with resume
       </button>
     </section>
   );
