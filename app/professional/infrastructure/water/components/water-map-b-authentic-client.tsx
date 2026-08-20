@@ -29,6 +29,51 @@ function importBrowserModule(url: string) {
   return nativeImport(url);
 }
 
+function readStoredWaterDevice() {
+  if (typeof window === "undefined") {
+    return { deviceId: "", deviceToken: "" };
+  }
+
+  const deviceId =
+    window.localStorage.getItem("pantavion_water_device_id") ||
+    window.localStorage.getItem("pantavion-water-device-id") ||
+    window.localStorage.getItem("waterDeviceId") ||
+    "";
+
+  const deviceToken =
+    window.localStorage.getItem("pantavion_water_device_token") ||
+    window.localStorage.getItem("pantavion-water-device-token") ||
+    window.localStorage.getItem("waterDeviceToken") ||
+    "";
+
+  if (deviceId && deviceToken) return { deviceId, deviceToken };
+
+  const possibleJsonKeys = [
+    "pantavion_water_access_device",
+    "pantavion-water-access-device",
+    "waterAccessDevice",
+    "water-approved-device",
+  ];
+
+  for (const key of possibleJsonKeys) {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) continue;
+
+    try {
+      const parsed = JSON.parse(raw);
+      const parsedDeviceId = String(parsed.deviceId || parsed.id || "");
+      const parsedDeviceToken = String(parsed.deviceToken || parsed.token || "");
+      if (parsedDeviceId && parsedDeviceToken) {
+        return { deviceId: parsedDeviceId, deviceToken: parsedDeviceToken };
+      }
+    } catch {
+      // Ignore invalid legacy localStorage values and continue fail-closed.
+    }
+  }
+
+  return { deviceId: "", deviceToken: "" };
+}
+
 export default function WaterMapBAuthenticClient() {
   const cadContainerRef = useRef<HTMLDivElement | null>(null);
   const [viewerState, setViewerState] = useState<"loading" | "ready" | "error">("loading");
@@ -61,11 +106,16 @@ export default function WaterMapBAuthenticClient() {
           manager = AcApDocManager.instance;
         }
 
+        const storedDevice = readStoredWaterDevice();
         const response = await fetch(MAP_B_URL, {
           method: "GET",
           cache: "no-store",
           credentials: "include",
-          headers: { Accept: "application/acad,application/octet-stream" },
+          headers: {
+            Accept: "application/acad,application/octet-stream",
+            "x-pantavion-water-device-id": storedDevice.deviceId,
+            "x-pantavion-water-device-token": storedDevice.deviceToken,
+          },
         });
 
         if (!response.ok) throw new Error(`MAP_B_DWG_HTTP_${response.status}`);
