@@ -34,35 +34,68 @@ jobs:
         shell: bash
         run: |
           test -d data/recovery/canonical-knowledge
-          test -f data/recovery/canonical-knowledge/manifest.json
+          test -f data/recovery/canonical-knowledge/corpus-manifest.json
+          test -f data/recovery/canonical-knowledge/full-corpus.json
+          test -f data/recovery/canonical-knowledge/batch-index.json
+          test -f data/recovery/canonical-knowledge/batches/batch-a.json
           node <<'NODE'
           const fs = require('fs');
-          const path = 'data/recovery/canonical-knowledge/manifest.json';
-          const m = JSON.parse(fs.readFileSync(path, 'utf8'));
-          const total = Number(m.totalRecords ?? m.recordCount ?? 0);
+          const root = 'data/recovery/canonical-knowledge';
+          const manifest = JSON.parse(fs.readFileSync(`${root}/corpus-manifest.json`, 'utf8'));
+          const index = JSON.parse(fs.readFileSync(`${root}/batch-index.json`, 'utf8'));
+          const batchA = JSON.parse(fs.readFileSync(`${root}/batches/batch-a.json`, 'utf8'));
+
+          const total = Number(manifest.totalRecords ?? 0);
           if (!Number.isFinite(total) || total <= 0) {
-            throw new Error(`Invalid total record count in ${path}: ${total}`);
+            throw new Error(`Invalid total record count: ${total}`);
           }
-          const batches = Array.isArray(m.batches) ? m.batches : [];
+          if (index.totalRecords !== total) {
+            throw new Error(`Manifest/index total mismatch: ${total} != ${index.totalRecords}`);
+          }
+          if (index.corpusFingerprint !== manifest.corpusFingerprint) {
+            throw new Error('Corpus fingerprint mismatch between manifest and batch index');
+          }
+          const batches = Array.isArray(index.batches) ? index.batches : [];
           if (!batches.length) throw new Error('No deterministic batches emitted');
-          const a = batches[0];
-          const count = Number(a.recordCount ?? 0);
+          if (index.totalBatches !== batches.length) {
+            throw new Error(`Batch count mismatch: ${index.totalBatches} != ${batches.length}`);
+          }
+
+          const a = batchA.checkpoint;
+          const records = Array.isArray(batchA.records) ? batchA.records : [];
+          const count = Number(a?.recordCount ?? 0);
+          if (!a || a.batchLabel !== 'A') throw new Error('Batch A checkpoint missing or mislabeled');
           if (!Number.isFinite(count) || count <= 0 || count > 1499) {
             throw new Error(`Invalid Batch A count: ${count}`);
           }
-          if (!m.corpusFingerprint && !a.corpusFingerprint) {
-            throw new Error('Missing corpus fingerprint');
+          if (records.length !== count) {
+            throw new Error(`Batch A record/checkpoint mismatch: ${records.length} != ${count}`);
           }
+          if (a.startOrdinal !== 1 || a.endOrdinal !== count) {
+            throw new Error(`Unexpected Batch A boundaries: ${a.startOrdinal}-${a.endOrdinal}`);
+          }
+          if (a.corpusFingerprint !== manifest.corpusFingerprint) {
+            throw new Error('Batch A fingerprint mismatch');
+          }
+          if (records.some((record) => record.reviewStatus !== 'UNCLASSIFIED')) {
+            throw new Error('Excavation must not silently pre-classify records');
+          }
+
+          const accounted = batches.reduce((sum, batch) => sum + Number(batch.recordCount || 0), 0);
+          if (accounted !== total) {
+            throw new Error(`Batch accounting mismatch: ${accounted} != ${total}`);
+          }
+
           console.log(JSON.stringify({
             totalRecords: total,
             batchCount: batches.length,
             batchA: {
-              label: a.batchLabel ?? a.batchId ?? 'A',
               startOrdinal: a.startOrdinal,
               endOrdinal: a.endOrdinal,
               recordCount: count,
-              corpusFingerprint: a.corpusFingerprint ?? m.corpusFingerprint,
-            }
+            },
+            corpusFingerprint: manifest.corpusFingerprint,
+            accountedRecords: accounted,
           }, null, 2));
           NODE
 
