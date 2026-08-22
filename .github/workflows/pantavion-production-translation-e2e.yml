@@ -1,0 +1,64 @@
+name: Pantavion Production Translation E2E
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-translation-e2e:
+    name: Verify live bidirectional translation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PANTAVION_PRODUCTION_BASE: https://pantavion.com
+
+    steps:
+      - name: Verify production endpoint is reachable
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --max-time 30 \
+            "$PANTAVION_PRODUCTION_BASE/api/pantavion/translate" > /tmp/translation-status.json
+          cat /tmp/translation-status.json
+
+      - name: Greek to English live translation
+        shell: bash
+        run: |
+          set -euo pipefail
+          response="$(curl --fail-with-body --silent --show-error --max-time 45 \
+            -X POST "$PANTAVION_PRODUCTION_BASE/api/pantavion/translate" \
+            -H 'Content-Type: application/json' \
+            --data '{"text":"Καλημέρα, η αμφίδρομη μετάφραση του Pantavion λειτουργεί ζωντανά.","sourceLanguage":"el","targetLanguage":"en","bidirectional":true,"surface":"production-e2e"}')"
+          printf '%s\n' "$response"
+          node -e '
+            const result = JSON.parse(process.argv[1]);
+            if (result.ok !== true) throw new Error(`el-en not ok: ${result.status || result.error || "unknown"}`);
+            if (typeof result.translatedText !== "string" || !result.translatedText.trim()) throw new Error("el-en empty translatedText");
+            if (result.translatedText.includes("Καλημέρα") && result.translatedText.includes("λειτουργεί")) throw new Error("el-en output appears untranslated");
+            console.log("EL->EN PASS:", result.translatedText);
+          ' "$response"
+
+      - name: English to Greek live translation
+        shell: bash
+        run: |
+          set -euo pipefail
+          response="$(curl --fail-with-body --silent --show-error --max-time 45 \
+            -X POST "$PANTAVION_PRODUCTION_BASE/api/pantavion/translate" \
+            -H 'Content-Type: application/json' \
+            --data '{"text":"Good evening, Pantavion bidirectional translation is working live.","sourceLanguage":"en","targetLanguage":"el","bidirectional":true,"surface":"production-e2e"}')"
+          printf '%s\n' "$response"
+          node -e '
+            const result = JSON.parse(process.argv[1]);
+            if (result.ok !== true) throw new Error(`en-el not ok: ${result.status || result.error || "unknown"}`);
+            if (typeof result.translatedText !== "string" || !result.translatedText.trim()) throw new Error("en-el empty translatedText");
+            if (/\bGood evening\b|\bworking live\b/i.test(result.translatedText)) throw new Error("en-el output appears untranslated");
+            console.log("EN->EL PASS:", result.translatedText);
+          ' "$response"
+
+      - name: Production translation verdict
+        run: echo "PANTAVION PRODUCTION BIDIRECTIONAL TRANSLATION E2E PASSED"
