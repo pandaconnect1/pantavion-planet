@@ -1,12 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { globalEmergencyLanguages } from "@/core/emergency/global-emergency-languages";
 import {
   choosePantavionDeviceVoice,
   normalizePantavionSpeechLanguage,
 } from "@/core/translation/pantavion-device-voice";
+import TwoDeviceInterpreterSession, {
+  type InterpreterBroadcastFunction,
+  type InterpreterBroadcastTurn,
+} from "./two-device-session";
 
 type Speaker = "A" | "B";
 type MicrophoneState = "unknown" | "requesting" | "granted" | "denied";
@@ -89,6 +93,8 @@ export default function InterpreterPage() {
   const [recording, setRecording] = useState(false);
   const [microphone, setMicrophone] = useState<MicrophoneState>("unknown");
   const [provider, setProvider] = useState("");
+  const [twoDeviceActive, setTwoDeviceActive] = useState(false);
+  const [twoDevicePeerCount, setTwoDevicePeerCount] = useState(0);
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
@@ -97,6 +103,7 @@ export default function InterpreterPage() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const micGrantedRef = useRef(false);
   const recordingContextRef = useRef<{ source: string; target: string } | null>(null);
+  const twoDeviceBroadcasterRef = useRef<InterpreterBroadcastFunction | null>(null);
 
   const sourceCode = speaker === "A" ? languageA : languageB;
   const targetCode = speaker === "A" ? languageB : languageA;
@@ -129,7 +136,7 @@ export default function InterpreterPage() {
     }
   }
 
-  function speak(text: string, languageCode: string) {
+  const speak = useCallback((text: string, languageCode: string) => {
     if (!text.trim() || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
@@ -139,7 +146,34 @@ export default function InterpreterPage() {
     utterance.lang = voice?.lang || meta.speech;
     if (voice) utterance.voice = voice;
     window.speechSynthesis.speak(utterance);
-  }
+  }, []);
+
+  const applySessionLanguages = useCallback((nextLanguageA: string, nextLanguageB: string) => {
+    setLanguageA(nextLanguageA);
+    setLanguageB(nextLanguageB);
+    setSpeaker("A");
+    setLastSourceCode(nextLanguageA);
+    setLastTargetCode(nextLanguageB);
+    setStatus("Το language pair κλειδώθηκε από το ιδιωτικό two-device session.");
+  }, []);
+
+  const handleRemoteTurn = useCallback(
+    (turn: InterpreterBroadcastTurn) => {
+      setSourceText(turn.sourceText);
+      setTranslatedText(turn.translatedText);
+      setLastSourceCode(turn.sourceCode);
+      setLastTargetCode(turn.targetCode);
+      setProvider("Pantavion Private Realtime");
+      const nextSpeaker: Speaker = turn.speaker === "A" ? "B" : "A";
+      setSpeaker(nextSpeaker);
+      speak(turn.translatedText, turn.targetCode);
+      setStatus(
+        `✓ Λήφθηκε μεταφρασμένη φράση από το private realtime session και εκφωνήθηκε. Τώρα μιλά ο Ομιλητής ${nextSpeaker}.`,
+      );
+      setError("");
+    },
+    [speak],
+  );
 
   async function normalizeTranscript(raw: string, language: string) {
     const clean = raw.trim();
@@ -197,20 +231,37 @@ export default function InterpreterPage() {
         return;
       }
 
-      setSourceText(rawText?.trim() || clean);
+      const displayedSource = rawText?.trim() || clean;
+      setSourceText(displayedSource);
       setTranslatedText(output);
       setLastSourceCode(source);
       setLastTargetCode(target);
       setProvider(result.provider || "Pantavion");
-      speak(output, target);
 
       const completedSpeaker: Speaker = source === languageA ? "A" : "B";
+      let realtimeAccepted = false;
+      if (twoDeviceActive && twoDevicePeerCount > 0 && twoDeviceBroadcasterRef.current) {
+        realtimeAccepted = await twoDeviceBroadcasterRef.current({
+          turnId: globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`,
+          speaker: completedSpeaker,
+          sourceCode: source,
+          targetCode: target,
+          sourceText: displayedSource,
+          translatedText: output,
+          createdAt: new Date().toISOString(),
+        });
+      }
+
+      if (!realtimeAccepted) speak(output, target);
+
       const nextSpeaker: Speaker = completedSpeaker === "A" ? "B" : "A";
       setSpeaker(nextSpeaker);
       const nextSource = nextSpeaker === "A" ? languageA : languageB;
       const nextTarget = nextSpeaker === "A" ? languageB : languageA;
       setStatus(
-        `✓ Μεταφράστηκε και εκφωνήθηκε. Τώρα μιλά ο Ομιλητής ${nextSpeaker}: ${byCode(nextSource).label} → ${byCode(nextTarget).label}.`,
+        realtimeAccepted
+          ? `✓ Μεταφράστηκε. Το private realtime broadcast έγινε δεκτό και υπάρχει δεύτερη ενεργή συσκευή. Τώρα μιλά ο Ομιλητής ${nextSpeaker}: ${byCode(nextSource).label} → ${byCode(nextTarget).label}.`
+          : `✓ Μεταφράστηκε και εκφωνήθηκε τοπικά. Τώρα μιλά ο Ομιλητής ${nextSpeaker}: ${byCode(nextSource).label} → ${byCode(nextTarget).label}.`,
       );
     } catch {
       setError("Δεν ήταν δυνατή η σύνδεση με τη μετάφραση.");
@@ -399,6 +450,10 @@ export default function InterpreterPage() {
   }
 
   function swapPeople() {
+    if (twoDeviceActive) {
+      setStatus("Οι γλώσσες είναι κλειδωμένες όσο το two-device session είναι ενεργό.");
+      return;
+    }
     setLanguageA(languageB);
     setLanguageB(languageA);
     setSpeaker("A");
@@ -448,11 +503,12 @@ export default function InterpreterPage() {
               <div className="mb-1 text-xs font-black text-cyan-100">ΟΜΙΛΗΤΗΣ A</div>
               <select
                 value={languageA}
+                disabled={twoDeviceActive}
                 onChange={(event) => {
                   setLanguageA(event.target.value);
                   setSpeaker("A");
                 }}
-                className="w-full rounded-xl border border-blue-300/30 bg-[#214784] px-3 py-3 text-sm font-bold text-white outline-none"
+                className="w-full rounded-xl border border-blue-300/30 bg-[#214784] px-3 py-3 text-sm font-bold text-white outline-none disabled:cursor-not-allowed disabled:opacity-55"
               >
                 {LANGUAGES.map((language) => (
                   <option key={language.code} value={language.code}>
@@ -464,7 +520,8 @@ export default function InterpreterPage() {
             <button
               type="button"
               onClick={swapPeople}
-              className="mt-5 h-11 w-11 rounded-full border border-cyan-200/30 bg-[#245b92] text-xl font-black text-cyan-100"
+              disabled={twoDeviceActive}
+              className="mt-5 h-11 w-11 rounded-full border border-cyan-200/30 bg-[#245b92] text-xl font-black text-cyan-100 disabled:cursor-not-allowed disabled:opacity-40"
             >
               ↔
             </button>
@@ -472,11 +529,12 @@ export default function InterpreterPage() {
               <div className="mb-1 text-xs font-black text-[#ffe29a]">ΟΜΙΛΗΤΗΣ B</div>
               <select
                 value={languageB}
+                disabled={twoDeviceActive}
                 onChange={(event) => {
                   setLanguageB(event.target.value);
                   setSpeaker("A");
                 }}
-                className="w-full rounded-xl border border-[#f6c85f]/35 bg-[#3a4d79] px-3 py-3 text-sm font-bold text-white outline-none"
+                className="w-full rounded-xl border border-[#f6c85f]/35 bg-[#3a4d79] px-3 py-3 text-sm font-bold text-white outline-none disabled:cursor-not-allowed disabled:opacity-55"
               >
                 {LANGUAGES.map((language) => (
                   <option key={language.code} value={language.code}>
@@ -485,6 +543,18 @@ export default function InterpreterPage() {
                 ))}
               </select>
             </div>
+          </div>
+
+          <div className="px-4 pt-4 sm:px-6">
+            <TwoDeviceInterpreterSession
+              languageA={languageA}
+              languageB={languageB}
+              broadcasterRef={twoDeviceBroadcasterRef}
+              onRemoteTurn={handleRemoteTurn}
+              onSessionLanguages={applySessionLanguages}
+              onActiveChange={setTwoDeviceActive}
+              onPeerCountChange={setTwoDevicePeerCount}
+            />
           </div>
 
           <div className="px-4 py-4 sm:px-6">
