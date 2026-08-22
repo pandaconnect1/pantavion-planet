@@ -78,15 +78,38 @@ export default function ConversationClient({
   const [translationErrors, setTranslationErrors] = useState<Record<string, string>>({});
   const [translatingIds, setTranslatingIds] = useState<Record<string, boolean>>({});
   const translatingRef = useRef(new Set<string>());
+  const translationGenerationRef = useRef(0);
+  const lastHistoryTranslationTargetRef = useRef<string | null>(null);
   const [realtimeState, setRealtimeState] = useState<"connecting" | "live" | "error">("connecting");
   const supabase = useMemo(() => createClient(), []);
+
+  function resetTranslationCache() {
+    translationGenerationRef.current += 1;
+    translatingRef.current.clear();
+    setTranslations({});
+    setTranslationProviders({});
+    setTranslationErrors({});
+    setTranslatingIds({});
+  }
+
+  function changeTargetLanguage(nextTarget: string) {
+    const normalized = baseLanguage(nextTarget) || ownLanguage;
+    if (normalized === targetLanguage) return;
+    resetTranslationCache();
+    lastHistoryTranslationTargetRef.current = null;
+    setTargetLanguage(normalized);
+  }
 
   async function performTranslation(message: Message, target: string, silent = false) {
     const body = message.body?.trim();
     if (!body || translatingRef.current.has(message.id)) return;
 
+    const generation = translationGenerationRef.current;
+    const normalizedTarget = baseLanguage(target) || ownLanguage;
     const source = baseLanguage(message.original_language) || "auto";
-    if (source !== "auto" && source === baseLanguage(target)) {
+
+    if (source !== "auto" && source === normalizedTarget) {
+      if (generation !== translationGenerationRef.current) return;
       setTranslations((current) => ({ ...current, [message.id]: body }));
       setTranslationProviders((current) => ({ ...current, [message.id]: "same-language" }));
       return;
@@ -108,7 +131,7 @@ export default function ConversationClient({
         body: JSON.stringify({
           text: body,
           sourceLanguage: source,
-          targetLanguage: target,
+          targetLanguage: normalizedTarget,
           bidirectional: true,
           domain: "social",
           tone: "natural",
@@ -117,6 +140,8 @@ export default function ConversationClient({
         }),
       });
       const result = (await response.json().catch(() => ({}))) as TranslationResult;
+      if (generation !== translationGenerationRef.current) return;
+
       const translated = String(
         result.translatedText || result.translation || result.text || result.output || "",
       ).trim();
@@ -134,16 +159,19 @@ export default function ConversationClient({
         [message.id]: result.provider || "Pantavion",
       }));
     } catch {
+      if (generation !== translationGenerationRef.current) return;
       const messageText = "Δεν ήταν δυνατή η σύνδεση με τη μετάφραση.";
       setTranslationErrors((current) => ({ ...current, [message.id]: messageText }));
       if (!silent) setNotice(messageText);
     } finally {
       translatingRef.current.delete(message.id);
-      setTranslatingIds((current) => {
-        const next = { ...current };
-        delete next[message.id];
-        return next;
-      });
+      if (generation === translationGenerationRef.current) {
+        setTranslatingIds((current) => {
+          const next = { ...current };
+          delete next[message.id];
+          return next;
+        });
+      }
     }
   }
 
@@ -190,9 +218,28 @@ export default function ConversationClient({
     };
   }, [autoTranslate, backendReady, conversationId, currentUserId, supabase, targetLanguage]);
 
+  useEffect(() => {
+    if (!backendReady || !autoTranslate) {
+      lastHistoryTranslationTargetRef.current = null;
+      return;
+    }
+    if (lastHistoryTranslationTargetRef.current === targetLanguage) return;
+    lastHistoryTranslationTargetRef.current = targetLanguage;
+
+    for (const message of messages) {
+      if (message.sender_id === currentUserId || !message.body?.trim()) continue;
+      void performTranslation(message, targetLanguage, true);
+    }
+  }, [autoTranslate, backendReady, currentUserId, messages, targetLanguage]);
+
   async function toggleTranslation(message: Message) {
     if (translations[message.id]) {
       setTranslations((current) => {
+        const next = { ...current };
+        delete next[message.id];
+        return next;
+      });
+      setTranslationProviders((current) => {
         const next = { ...current };
         delete next[message.id];
         return next;
@@ -282,7 +329,7 @@ export default function ConversationClient({
             Διαβάζω μεταφράσεις σε
             <select
               value={targetLanguage}
-              onChange={(event) => setTargetLanguage(event.target.value)}
+              onChange={(event) => changeTargetLanguage(event.target.value)}
               className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-normal"
             >
               {CHAT_LANGUAGES.map((language) => (
@@ -291,7 +338,7 @@ export default function ConversationClient({
             </select>
           </label>
           <label className="flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-3 py-2 font-black text-slate-600">
-            Αυτόματη μετάφραση νέων εισερχομένων
+            Αυτόματη μετάφραση εισερχομένων
             <input
               type="checkbox"
               checked={autoTranslate}
