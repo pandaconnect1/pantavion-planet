@@ -30,5 +30,8 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Verify translation worker contract
+        run: node scripts/pantavion-translation-worker-gate.cjs
+
       - name: Run Pantavion runtime safety verification
         run: npm run verify:runtime-safety
