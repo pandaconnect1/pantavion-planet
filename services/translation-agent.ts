@@ -61,28 +61,24 @@ export async function startTranslationAgent() {
   console.log("[translation-agent] starting");
   const durable = createSupabaseDurableExecutionStore();
 
-  async function putRunning(exec: PantavionDurableExecutionRecord) {
-    const maxAttempts = Math.max(1, exec.maxAttempts ?? 3);
-    if (exec.attempt >= maxAttempts) {
-      const exhausted = checkpoint(
-        { ...exec, status: "failed", lastError: "execution_attempts_exhausted" },
-        "failed",
-        { reason: "execution_attempts_exhausted", maxAttempts },
-      );
-      await durable.put(exhausted);
-      return null;
-    }
+  async function claimExecution(exec: PantavionDurableExecutionRecord) {
+    const admin = createAdminClient();
+    const claim = await admin.rpc("pantavion_claim_durable_execution", {
+      p_execution_id: exec.executionId,
+      p_expected_statuses: ["queued", "planned"],
+    });
 
-    const running = checkpoint(
-      {
-        ...exec,
-        status: "running",
-        attempt: exec.attempt + 1,
-        lastError: undefined,
-      },
-      "attempt_started",
-      { attempt: exec.attempt + 1, maxAttempts },
-    );
+    if (claim.error) throw claim.error;
+    if (claim.data !== true) return null;
+
+    const claimed = await durable.get(exec.executionId);
+    if (!claimed) throw new Error("claimed_execution_not_found");
+
+    const running = checkpoint(claimed, "attempt_started", {
+      attempt: claimed.attempt,
+      maxAttempts: Math.max(1, claimed.maxAttempts ?? 3),
+      claim: "pantavion_claim_durable_execution",
+    });
     await durable.put(running);
     return running;
   }
@@ -221,7 +217,7 @@ export async function startTranslationAgent() {
           continue;
         }
 
-        const running = await putRunning(exec);
+        const running = await claimExecution(exec);
         if (running) await handleProcessMessage(running);
       }
     } catch (error) {
