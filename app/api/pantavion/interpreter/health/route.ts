@@ -1,4 +1,13 @@
 import { NextResponse } from "next/server";
+import { generateText } from "ai";
+import {
+  getPantavionTranslationProviderStatus,
+  translateWithPantavionProvider,
+} from "@/core/translation/pantavion-translation-provider-adapters";
+import {
+  getPantavionLanguageRuntimeSnapshot,
+  pantavionPublicTranslationFallbackAllowed,
+} from "@/core/translation/pantavion-language-provider-runtime";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -6,92 +15,147 @@ export const revalidate = 0;
 
 const HEALTH_SCHEMA = "interpreter-20260814-v1";
 
-async function probeLanguageProvider(apiKey: string) {
+type ProviderProbe = {
+  ready: boolean;
+  diagnostic: string;
+  provider: string | null;
+  model?: string;
+  status?: number | null;
+};
+
+async function probeGateway(gatewayRuntimeAvailable: boolean): Promise<ProviderProbe> {
+  if (!gatewayRuntimeAvailable) {
+    return { ready: false, diagnostic: "gateway_not_available", provider: null };
+  }
+
+  const models = Array.from(
+    new Set(
+      [
+        process.env.PANTAVION_TRANSLATION_GATEWAY_MODEL,
+        process.env.PANTAVION_TRANSLATION_MODEL,
+        "openai/gpt-4.1-mini",
+      ].filter((value): value is string => Boolean(value)),
+    ),
+  );
+
+  for (const model of models) {
+    try {
+      const result = await generateText({
+        model,
+        prompt: [
+          "Pantavion Interpreter production health probe.",
+          "Return exactly: ok",
+        ].join("\n"),
+        temperature: 0,
+        maxRetries: 1,
+        abortSignal: AbortSignal.timeout(10_000),
+      });
+
+      if (String(result.text || "").trim().toLowerCase() === "ok") {
+        return {
+          ready: true,
+          diagnostic: "gateway_ready",
+          provider: "vercel_ai_gateway",
+          model,
+        };
+      }
+    } catch {
+      // Try the next configured gateway model before falling back to the
+      // provider adapter used by the canonical translation runtime.
+    }
+  }
+
+  return {
+    ready: false,
+    diagnostic: "gateway_error",
+    provider: "vercel_ai_gateway",
+  };
+}
+
+async function probeConfiguredProvider(): Promise<ProviderProbe> {
+  const providerStatus = getPantavionTranslationProviderStatus();
+  const publicFallbackAllowed = pantavionPublicTranslationFallbackAllowed();
+
+  if (!providerStatus.ok) {
+    return { ready: false, diagnostic: "provider_not_configured", provider: null };
+  }
+
+  if (providerStatus.provider === "mymemory" && !publicFallbackAllowed) {
+    return {
+      ready: false,
+      diagnostic: "provider_not_configured",
+      provider: "mymemory",
+    };
+  }
+
   try {
-    const response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: process.env.PANTAVION_TRANSLATION_MODEL || "gpt-4.1-mini",
-        input: [
-          {
-            role: "system",
-            content: "Return exactly: ok",
-          },
-          {
-            role: "user",
-            content: "Pantavion interpreter health probe",
-          },
-        ],
-        max_output_tokens: 8,
-      }),
-      signal: AbortSignal.timeout(10000),
+    const result = await translateWithPantavionProvider({
+      text: "Pantavion interpreter health probe",
+      sourceLanguage: "en",
+      targetLanguage: "el",
+      mode: "text",
+      sessionId: "pantavion-interpreter-health",
     });
 
-    const payload = await response.json().catch(() => ({}));
-    const output = String(
-      payload.output_text ||
-        payload.output
-          ?.flatMap((item: { content?: Array<{ text?: string }> }) => item.content || [])
-          ?.map((content: { text?: string }) => content.text || "")
-          ?.join("") ||
-        "",
-    )
-      .trim()
-      .toLowerCase();
-
     return {
-      ready: response.ok && output === "ok",
-      diagnostic: response.ok && output === "ok" ? "ready" : "provider_error",
-      status: response.status,
+      ready: Boolean(result.ok && result.translatedText.trim()),
+      diagnostic: result.ok ? "configured_provider_ready" : result.status,
+      provider: providerStatus.provider,
     };
   } catch {
-    return { ready: false, diagnostic: "provider_unreachable", status: null };
+    return {
+      ready: false,
+      diagnostic: "provider_unreachable",
+      provider: providerStatus.provider,
+    };
   }
 }
 
 export async function GET() {
   const revision = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? null;
-  const apiKey = process.env.OPENAI_API_KEY;
+  const languageRuntime = await getPantavionLanguageRuntimeSnapshot();
 
-  if (!apiKey) {
-    return NextResponse.json(
-      {
-        ok: false,
-        schema: HEALTH_SCHEMA,
-        revision,
-        provider: { ready: false, diagnostic: "provider_not_configured" },
-        capabilities: {
-          languageDetection: { ready: true, mode: "script_first_provider_fallback" },
-          transcription: { ready: false, diagnostic: "provider_not_configured" },
-          translation: { ready: false, diagnostic: "provider_not_configured" },
-        },
-      },
-      { status: 503, headers: { "Cache-Control": "no-store, max-age=0" } },
-    );
-  }
+  const gatewayProbe = await probeGateway(languageRuntime.gatewayRuntimeAvailable);
+  const configuredProbe = gatewayProbe.ready ? null : await probeConfiguredProvider();
+  const provider = gatewayProbe.ready ? gatewayProbe : configuredProbe ?? gatewayProbe;
 
-  const provider = await probeLanguageProvider(apiKey);
-  const ok = provider.ready;
+  const translationCapability = languageRuntime.capabilities.find(
+    (capability) => capability.capability === "text_translation",
+  );
+  const transcriptionCapability = languageRuntime.capabilities.find(
+    (capability) => capability.capability === "speech_to_text",
+  );
+
+  const translationReady = Boolean(provider.ready && translationCapability?.available);
+  const transcriptionReady = Boolean(transcriptionCapability?.available);
+  const ok = translationReady && transcriptionReady;
 
   return NextResponse.json(
     {
       ok,
       schema: HEALTH_SCHEMA,
       revision,
-      provider,
+      provider: {
+        ...provider,
+        gatewayRuntimeAvailable: languageRuntime.gatewayRuntimeAvailable,
+        publicFallbackAllowed: languageRuntime.publicFallbackAllowed,
+      },
       capabilities: {
         languageDetection: { ready: true, mode: "script_first_provider_fallback" },
         transcription: {
-          ready: provider.ready,
+          ready: transcriptionReady,
+          mode: transcriptionCapability?.mode ?? "unavailable",
+          providers: transcriptionCapability?.providers ?? [],
           model: process.env.PANTAVION_TRANSCRIPTION_MODEL || "whisper-1",
         },
         translation: {
-          ready: provider.ready,
-          model: process.env.PANTAVION_TRANSLATION_MODEL || "gpt-4.1-mini",
+          ready: translationReady,
+          mode: translationCapability?.mode ?? "unavailable",
+          providers: translationCapability?.providers ?? [],
+          model:
+            provider.model ||
+            process.env.PANTAVION_TRANSLATION_MODEL ||
+            "openai/gpt-4.1-mini",
         },
       },
     },
