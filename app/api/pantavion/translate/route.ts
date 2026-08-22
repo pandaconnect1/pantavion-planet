@@ -11,6 +11,7 @@ import {
 import {
   getPantavionLanguageRuntimeSnapshot,
   pantavionGatewayRuntimeAvailable,
+  pantavionPublicTranslationFallbackAllowed,
 } from "@/core/translation/pantavion-language-provider-runtime";
 
 export const dynamic = "force-dynamic";
@@ -233,17 +234,24 @@ export async function POST(request: Request) {
   const gateway = await translateWithGateway(translationRequest);
   if (gateway.result) return NextResponse.json(gateway.result);
 
-  const configuredResult = await translateThroughConfiguredProvider({
-    text,
-    sourceLanguage,
-    targetLanguage,
-    sessionId,
-  });
+  const providerStatus = getPantavionTranslationProviderStatus();
+  const publicFallbackAllowed = pantavionPublicTranslationFallbackAllowed();
+  const configuredProviderAllowed =
+    providerStatus.provider !== "mymemory" || publicFallbackAllowed;
+
+  const configuredResult = configuredProviderAllowed
+    ? await translateThroughConfiguredProvider({
+        text,
+        sourceLanguage,
+        targetLanguage,
+        sessionId,
+      })
+    : null;
+
   if (configuredResult?.ok && configuredResult.translatedText.trim()) {
     return responseForResult(configuredResult);
   }
 
-  const providerStatus = getPantavionTranslationProviderStatus();
   const diagnostic = {
     event: "pantavion_translation_exhausted",
     sourceLanguage,
@@ -253,6 +261,8 @@ export async function POST(request: Request) {
     configuredProvider: providerStatus.provider,
     configuredProviderEndpoint: providerStatus.endpointConfigured,
     configuredProviderApiKey: providerStatus.apiKeyConfigured,
+    configuredProviderAllowed,
+    publicFallbackAllowed,
     configuredProviderStatus: configuredResult?.status || "exception_or_unavailable",
   };
 
@@ -271,6 +281,8 @@ export async function POST(request: Request) {
         gatewayRuntimeAvailable: gateway.runtimeAvailable,
         gatewayAttempts: gateway.attempts,
         configuredProvider: providerStatus.provider,
+        configuredProviderAllowed,
+        publicFallbackAllowed,
         configuredProviderStatus: configuredResult?.status || "unavailable",
       },
     },
