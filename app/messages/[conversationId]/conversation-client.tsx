@@ -17,6 +17,13 @@ type Message = {
   deleted_at: string | null;
 };
 
+type MessageReceipt = {
+  message_id: string;
+  user_id: string;
+  state: string;
+  occurred_at: string;
+};
+
 type TranslationResult = {
   ok?: boolean;
   translatedText?: string;
@@ -77,9 +84,11 @@ export default function ConversationClient({
   const [translationProviders, setTranslationProviders] = useState<Record<string, string>>({});
   const [translationErrors, setTranslationErrors] = useState<Record<string, string>>({});
   const [translatingIds, setTranslatingIds] = useState<Record<string, boolean>>({});
+  const [receiptsByMessage, setReceiptsByMessage] = useState<Record<string, MessageReceipt[]>>({});
   const translatingRef = useRef(new Set<string>());
   const translationGenerationRef = useRef(0);
   const lastHistoryTranslationTargetRef = useRef<string | null>(null);
+  const visibleMessageIdsRef = useRef(new Set(initialMessages.map((message) => message.id)));
   const [realtimeState, setRealtimeState] = useState<"connecting" | "live" | "error">("connecting");
   const supabase = useMemo(() => createClient(), []);
 
@@ -98,6 +107,52 @@ export default function ConversationClient({
     resetTranslationCache();
     lastHistoryTranslationTargetRef.current = null;
     setTargetLanguage(normalized);
+  }
+
+  function mergeReceipt(receipt: MessageReceipt) {
+    setReceiptsByMessage((current) => {
+      const rows = current[receipt.message_id] ?? [];
+      if (rows.some((row) => row.user_id === receipt.user_id && row.state === receipt.state)) {
+        return current;
+      }
+      return { ...current, [receipt.message_id]: [...rows, receipt] };
+    });
+  }
+
+  async function loadReceipts(messageIds: string[]) {
+    const ids = Array.from(new Set(messageIds.filter(Boolean)));
+    if (!ids.length) return;
+
+    const { data, error } = await supabase
+      .from("message_receipts")
+      .select("message_id,user_id,state,occurred_at")
+      .in("message_id", ids);
+
+    if (error || !data?.length) return;
+
+    setReceiptsByMessage((current) => {
+      const next = { ...current };
+      for (const row of data as MessageReceipt[]) {
+        const rows = next[row.message_id] ? [...next[row.message_id]] : [];
+        if (!rows.some((item) => item.user_id === row.user_id && item.state === row.state)) {
+          rows.push(row);
+        }
+        next[row.message_id] = rows;
+      }
+      return next;
+    });
+  }
+
+  function receiptLabel(messageId: string) {
+    const rows = receiptsByMessage[messageId] ?? [];
+    const peerRows = rows.filter((row) => row.user_id !== currentUserId);
+
+    if (peerRows.some((row) => row.state === "read")) return "✓✓ Διαβάστηκε";
+    if (peerRows.some((row) => row.state === "delivered")) return "✓✓ Παραδόθηκε";
+    if (rows.some((row) => row.user_id === currentUserId && row.state === "accepted")) {
+      return "✓ Αποθηκεύτηκε";
+    }
+    return null;
   }
 
   async function performTranslation(message: Message, target: string, silent = false) {
@@ -176,6 +231,11 @@ export default function ConversationClient({
   }
 
   useEffect(() => {
+    for (const message of messages) visibleMessageIdsRef.current.add(message.id);
+    if (backendReady) void loadReceipts(messages.map((message) => message.id));
+  }, [backendReady, messages]);
+
+  useEffect(() => {
     if (!backendReady) return;
     const channel = supabase
       .channel(`pantavion-conversation-${conversationId}`)
@@ -189,22 +249,39 @@ export default function ConversationClient({
         },
         async (payload) => {
           const incoming = payload.new as Message;
+          visibleMessageIdsRef.current.add(incoming.id);
           setMessages((current) =>
             current.some((item) => item.id === incoming.id) ? current : [...current, incoming],
           );
+          void loadReceipts([incoming.id]);
+
           if (incoming.sender_id !== currentUserId) {
             await supabase.rpc("pantavion_mark_message_receipt", {
               p_message_id: incoming.id,
               p_state: "delivered",
             });
-            await supabase.rpc("pantavion_mark_message_receipt", {
-              p_message_id: incoming.id,
-              p_state: "read",
-            });
+            if (document.visibilityState === "visible") {
+              await supabase.rpc("pantavion_mark_message_receipt", {
+                p_message_id: incoming.id,
+                p_state: "read",
+              });
+            }
             if (autoTranslate && incoming.body?.trim()) {
               void performTranslation(incoming, targetLanguage, true);
             }
           }
+        },
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "message_receipts",
+        },
+        (payload) => {
+          const receipt = payload.new as MessageReceipt;
+          if (visibleMessageIdsRef.current.has(receipt.message_id)) mergeReceipt(receipt);
         },
       )
       .subscribe((status) => {
@@ -217,6 +294,25 @@ export default function ConversationClient({
       void supabase.removeChannel(channel);
     };
   }, [autoTranslate, backendReady, conversationId, currentUserId, supabase, targetLanguage]);
+
+  useEffect(() => {
+    if (!backendReady) return;
+
+    const markVisibleIncomingAsRead = () => {
+      if (document.visibilityState !== "visible") return;
+      for (const message of messages) {
+        if (message.sender_id === currentUserId) continue;
+        void supabase.rpc("pantavion_mark_message_receipt", {
+          p_message_id: message.id,
+          p_state: "read",
+        });
+      }
+    };
+
+    markVisibleIncomingAsRead();
+    document.addEventListener("visibilitychange", markVisibleIncomingAsRead);
+    return () => document.removeEventListener("visibilitychange", markVisibleIncomingAsRead);
+  }, [backendReady, currentUserId, messages, supabase]);
 
   useEffect(() => {
     if (!backendReady || !autoTranslate) {
@@ -273,8 +369,14 @@ export default function ConversationClient({
       setNotice(json.detail || json.error || "Το μήνυμα απέτυχε.");
       return;
     }
+
+    const messageId = typeof json.messageId === "string" ? json.messageId : "";
+    if (messageId) {
+      visibleMessageIdsRef.current.add(messageId);
+      void loadReceipts([messageId]);
+    }
     setText("");
-    setNotice("Accepted από το Pantavion. Delivered/read εμφανίζονται μόνο όταν επιβεβαιωθούν.");
+    setNotice("Το μήνυμα αποθηκεύτηκε στο Pantavion. Η ένδειξη αλλάζει μόνο όταν επιβεβαιωθεί παράδοση ή ανάγνωση.");
   }
 
   return (
@@ -361,6 +463,7 @@ export default function ConversationClient({
             const translated = translations[message.id];
             const translationError = translationErrors[message.id];
             const translating = Boolean(translatingIds[message.id]);
+            const liveReceiptLabel = mine ? receiptLabel(message.id) : null;
             return (
               <div key={message.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
                 <div
@@ -407,6 +510,11 @@ export default function ConversationClient({
                       </button>
                     ) : null}
                   </div>
+                  {liveReceiptLabel ? (
+                    <p className="mt-1 text-right text-[10px] font-black text-blue-100">
+                      {liveReceiptLabel}
+                    </p>
+                  ) : null}
                 </div>
               </div>
             );
