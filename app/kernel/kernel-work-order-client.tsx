@@ -58,8 +58,9 @@ function asStoredWorkOrder(value: unknown): StoredWorkOrder | null {
   const agentSecurity = asRecord(root?.agentSecurity);
   const agentFleet = asRecord(root?.agentFleet);
   const ecosystemCell = asRecord(root?.ecosystemCell);
-  const moduleDeliveryCells = Array.isArray(root?.moduleDeliveryCells)
-    ? root?.moduleDeliveryCells
+  const moduleDeliveryCandidate = root?.moduleDeliveryCells;
+  const moduleDeliveryCells: unknown[] = Array.isArray(moduleDeliveryCandidate)
+    ? moduleDeliveryCandidate
     : [];
   const workloadPlan = asRecord(root?.workloadPlan);
   const partitionContract = asRecord(workloadPlan?.partitionContract);
