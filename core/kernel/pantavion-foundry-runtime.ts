@@ -544,7 +544,7 @@ async function attachBlockerResolutions(input: {
     updated = appendCheckpoint(
       updated,
       "pantavion_foundry_blocker_resolution_created",
-      resolution,
+      { resolution },
     );
   }
   await input.store.put(updated);
@@ -799,10 +799,12 @@ async function executeQueuedAgent(input: {
     }
     return { outcome: "succeeded", repairQueued };
   } catch {
-    const retryable = running.attempt < running.maxAttempts;
+    const maxAttempts = running.maxAttempts ?? 3;
+    const retryable = running.attempt < maxAttempts;
     let failed = appendCheckpoint(
       {
         ...running,
+        maxAttempts,
         status: retryable ? "queued" : "failed",
         lastError: "pantavion_internal_agent_runtime_failed",
         updatedAt: new Date().toISOString(),
@@ -814,7 +816,7 @@ async function executeQueuedAgent(input: {
           : "pantavion_internal_agent_failed_v1",
         role: executionInput.agent.role,
         attempt: running.attempt,
-        maxAttempts: running.maxAttempts,
+        maxAttempts,
       },
     );
     await input.store.put(failed);
@@ -924,7 +926,7 @@ export async function runPantavionFoundryTick(): Promise<PantavionFoundryTickRep
   let retriedAgents = 0;
   let skippedAgents = 0;
   let repairAgentsQueued = 0;
-  const eligibleQueuedAgents = queued.filter((item) => item.attempt < item.maxAttempts);
+  const eligibleQueuedAgents = queued.filter((item) => item.attempt < (item.maxAttempts ?? 3));
 
   for (const record of eligibleQueuedAgents.slice(0, MAX_AGENTS_PER_TICK)) {
     try {
