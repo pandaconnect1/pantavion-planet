@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { runPantavionCloudCronTick } from "@/core/intelligence/pantavion-intelligence-ledger";
+import { runPantavionFoundryTick } from "@/core/kernel/pantavion-foundry-runtime";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -72,13 +73,17 @@ export async function GET(request: Request) {
     return unauthorizedCronResponse(auth.mode);
   }
 
-  const result = await runPantavionCloudCronTick("vercel_cron");
+  const [result, foundry] = await Promise.all([
+    runPantavionCloudCronTick("vercel_cron"),
+    runPantavionFoundryTick(),
+  ]);
 
   return NextResponse.json({
     ...result,
+    foundry,
     authMode: auth.mode,
     runtimeSafety:
-      "Cron executed through an explicit authorization boundary. This is not autonomous deployment.",
+      "Cron executed through an explicit authorization boundary. Foundry runs only Pantavion-owned internal agents when its durable queue and internal runtime are configured; this is not autonomous deployment.",
   });
 }
 
@@ -89,12 +94,16 @@ export async function POST(request: Request) {
     return unauthorizedCronResponse(auth.mode);
   }
 
-  const result = await runPantavionCloudCronTick("external_scheduler");
+  const [result, foundry] = await Promise.all([
+    runPantavionCloudCronTick("external_scheduler"),
+    runPantavionFoundryTick(),
+  ]);
 
   return NextResponse.json({
     ...result,
+    foundry,
     authMode: auth.mode,
     runtimeSafety:
-      "External scheduler execution accepted through an explicit authorization boundary.",
+      "Scheduler execution accepted through an explicit authorization boundary. Foundry does not authorize merge, deploy, or external workers.",
   });
 }

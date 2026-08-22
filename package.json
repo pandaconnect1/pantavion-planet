@@ -39,6 +39,8 @@
     "audit:protected-change": "node scripts/pantavion-protected-change-gate.cjs",
     "audit:water:network-lock": "node scripts/pantavion-water-network-runtime-lock.cjs",
     "audit:kernel-lifetime": "node scripts/pantavion-kernel-lifetime-gate.cjs",
+    "audit:foundry": "node scripts/pantavion-foundry-gate.cjs",
+    "test:foundry-contract": "node --no-warnings --experimental-strip-types scripts/pantavion-foundry-contract-test.mjs",
     "safety:pantavion": "node scripts/pantavion-runtime-safety-gate.cjs",
     "audit:foundation": "node scripts/pantavion-foundation-audit.cjs"
   },
