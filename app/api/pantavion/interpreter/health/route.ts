@@ -125,9 +125,16 @@ export async function GET() {
   const transcriptionCapability = languageRuntime.capabilities.find(
     (capability) => capability.capability === "speech_to_text",
   );
+  const transcriptionProviders = transcriptionCapability?.providers ?? [];
+  const hasNonGatewayTranscriptionProvider = transcriptionProviders.some(
+    (providerName) => providerName !== "vercel_ai_gateway",
+  );
 
   const translationReady = Boolean(provider.ready && translationCapability?.available);
-  const transcriptionReady = Boolean(transcriptionCapability?.available);
+  const transcriptionReady = Boolean(
+    transcriptionCapability?.available &&
+      (gatewayProbe.ready || hasNonGatewayTranscriptionProvider),
+  );
   const ok = translationReady && transcriptionReady;
 
   return NextResponse.json(
@@ -145,7 +152,7 @@ export async function GET() {
         transcription: {
           ready: transcriptionReady,
           mode: transcriptionCapability?.mode ?? "unavailable",
-          providers: transcriptionCapability?.providers ?? [],
+          providers: transcriptionProviders,
           model: process.env.PANTAVION_TRANSCRIPTION_MODEL || "whisper-1",
         },
         translation: {
