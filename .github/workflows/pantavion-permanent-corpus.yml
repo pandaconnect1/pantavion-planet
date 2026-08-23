@@ -83,6 +83,9 @@ jobs:
             exit 0
           fi
           git commit -m 'data(recovery): materialize every canonical corpus record'
+          # Discard only uncommitted generated reports in this ephemeral runner.
+          # The complete corpus is already protected by the commit above.
+          git reset --hard HEAD
           for attempt in 1 2 3 4 5; do
             git fetch origin "${{ github.head_ref }}"
             if git rebase "origin/${{ github.head_ref }}" && git push origin "HEAD:${{ github.head_ref }}"; then
