@@ -1,0 +1,39 @@
+name: Pantavion Dating Deep Review
+on:
+  workflow_dispatch:
+  push:
+    branches: [recovery/classified-ledger-20260823]
+    paths:
+      - scripts/pantavion-dating-deep-review.cjs
+      - .github/workflows/pantavion-dating-deep-review.yml
+      - data/recovery/canonical-ledger/corpus/batches/**
+permissions:
+  contents: write
+concurrency:
+  group: pantavion-dating-deep-review-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: recovery/classified-ledger-20260823
+      - run: node scripts/pantavion-dating-deep-review.cjs
+      - name: Verify safety invariants
+        run: |
+          node -e 'const x=require("./data/recovery/canonical-ledger/dating-deep-review/manifest.json"); if(x.scannedCorpusRecords!==82413||x.corpusMutated!==false||x.verifiedComplete!==false||x.deleteAllowed!==false) throw Error("Dating review invariant failed")'
+      - name: Commit evidence review
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/recovery/canonical-ledger/dating-deep-review
+          git diff --cached --quiet && exit 0
+          git commit -m "data(recovery): deeply review Dating evidence"
+          for attempt in 1 2 3; do
+            git pull --rebase origin recovery/classified-ledger-20260823 &&
+            git push origin HEAD:recovery/classified-ledger-20260823 && exit 0
+            sleep $((attempt * 5))
+          done
+          exit 1
