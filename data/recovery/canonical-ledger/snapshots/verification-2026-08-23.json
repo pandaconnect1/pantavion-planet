@@ -1,0 +1,738 @@
+{
+  "id": "pantavion_branch_snapshot_verification_20260823",
+  "verifiedAt": "2026-08-23T04:19:51.027Z",
+  "total": 91,
+  "exactMatches": 91,
+  "mismatches": 0,
+  "deletionGate": "STILL_BLOCKED_PENDING_CONTENT_CANONICALIZATION",
+  "checks": [
+    {
+      "source": "pantavion-recovery-20260705",
+      "snapshot": "recovery/snapshots/pantavion-recovery-20260705",
+      "recordedHeadSha": "942769868bfe7baaad879b2567063a7cc3e8b6f5",
+      "currentSourceHeadSha": "942769868bfe7baaad879b2567063a7cc3e8b6f5",
+      "snapshotHeadSha": "942769868bfe7baaad879b2567063a7cc3e8b6f5",
+      "match": true
+    },
+    {
+      "source": "kernel-live-runtime-20260626-230235",
+      "snapshot": "recovery/snapshots/kernel-live-runtime-20260626-230235",
+      "recordedHeadSha": "e193fff29b97612e374ca9f03aadf237ac435113",
+      "currentSourceHeadSha": "e193fff29b97612e374ca9f03aadf237ac435113",
+      "snapshotHeadSha": "e193fff29b97612e374ca9f03aadf237ac435113",
+      "match": true
+    },
+    {
+      "source": "feature/social-core-runtime-v2",
+      "snapshot": "recovery/snapshots/feature--social-core-runtime-v2",
+      "recordedHeadSha": "799aaf71e157b2ab3c8e5981bc8891b4e4170236",
+      "currentSourceHeadSha": "799aaf71e157b2ab3c8e5981bc8891b4e4170236",
+      "snapshotHeadSha": "799aaf71e157b2ab3c8e5981bc8891b4e4170236",
+      "match": true
+    },
+    {
+      "source": "pantavion/execution-engine-v1",
+      "snapshot": "recovery/snapshots/pantavion--execution-engine-v1",
+      "recordedHeadSha": "3653c097a997b8c847157f8bc5bf5d0ce5ef9641",
+      "currentSourceHeadSha": "3653c097a997b8c847157f8bc5bf5d0ce5ef9641",
+      "snapshotHeadSha": "3653c097a997b8c847157f8bc5bf5d0ce5ef9641",
+      "match": true
+    },
+    {
+      "source": "feat/social-flagship",
+      "snapshot": "recovery/snapshots/feat--social-flagship",
+      "recordedHeadSha": "f89e82cdd0457a4283449dc7cf52a4c8d398a524",
+      "currentSourceHeadSha": "f89e82cdd0457a4283449dc7cf52a4c8d398a524",
+      "snapshotHeadSha": "f89e82cdd0457a4283449dc7cf52a4c8d398a524",
+      "match": true
+    },
+    {
+      "source": "recovery/social-people-chat-all-inside-20260815",
+      "snapshot": "recovery/snapshots/recovery--social-people-chat-all-inside-20260815",
+      "recordedHeadSha": "c00c669f9b8ac7db5c03a32ef8faa3d99e34d87f",
+      "currentSourceHeadSha": "c00c669f9b8ac7db5c03a32ef8faa3d99e34d87f",
+      "snapshotHeadSha": "c00c669f9b8ac7db5c03a32ef8faa3d99e34d87f",
+      "match": true
+    },
+    {
+      "source": "feature/water-map-b",
+      "snapshot": "recovery/snapshots/feature--water-map-b",
+      "recordedHeadSha": "f5a18e1d70dab1aef72dd73a91d6949fd33fe3f8",
+      "currentSourceHeadSha": "f5a18e1d70dab1aef72dd73a91d6949fd33fe3f8",
+      "snapshotHeadSha": "f5a18e1d70dab1aef72dd73a91d6949fd33fe3f8",
+      "match": true
+    },
+    {
+      "source": "recovery/canonical-knowledge-v2-20260818",
+      "snapshot": "recovery/snapshots/recovery--canonical-knowledge-v2-20260818",
+      "recordedHeadSha": "0cbdf29365a49f845df4e7f24075a80ee24ffe34",
+      "currentSourceHeadSha": "0cbdf29365a49f845df4e7f24075a80ee24ffe34",
+      "snapshotHeadSha": "0cbdf29365a49f845df4e7f24075a80ee24ffe34",
+      "match": true
+    },
+    {
+      "source": "feature/identity-trust-security-core",
+      "snapshot": "recovery/snapshots/feature--identity-trust-security-core",
+      "recordedHeadSha": "20d73410aa5ef8782721a4e9cb2293218b6869c5",
+      "currentSourceHeadSha": "20d73410aa5ef8782721a4e9cb2293218b6869c5",
+      "snapshotHeadSha": "20d73410aa5ef8782721a4e9cb2293218b6869c5",
+      "match": true
+    },
+    {
+      "source": "feature/social-core-foundation",
+      "snapshot": "recovery/snapshots/feature--social-core-foundation",
+      "recordedHeadSha": "cc480e9b95d46c329bf7df6fa88a2fcfac6fa957",
+      "currentSourceHeadSha": "cc480e9b95d46c329bf7df6fa88a2fcfac6fa957",
+      "snapshotHeadSha": "cc480e9b95d46c329bf7df6fa88a2fcfac6fa957",
+      "match": true
+    },
+    {
+      "source": "feat/social-business-listings-shell",
+      "snapshot": "recovery/snapshots/feat--social-business-listings-shell",
+      "recordedHeadSha": "efa5f34600ff0e45bee1f086456459e031ee999e",
+      "currentSourceHeadSha": "efa5f34600ff0e45bee1f086456459e031ee999e",
+      "snapshotHeadSha": "efa5f34600ff0e45bee1f086456459e031ee999e",
+      "match": true
+    },
+    {
+      "source": "feature/simple-universal-interpreter",
+      "snapshot": "recovery/snapshots/feature--simple-universal-interpreter",
+      "recordedHeadSha": "1101d8549a9ed95ae7d3ea291e4d387b6e51fcb7",
+      "currentSourceHeadSha": "1101d8549a9ed95ae7d3ea291e4d387b6e51fcb7",
+      "snapshotHeadSha": "1101d8549a9ed95ae7d3ea291e4d387b6e51fcb7",
+      "match": true
+    },
+    {
+      "source": "fix/core-four-verified-wave-20260815",
+      "snapshot": "recovery/snapshots/fix--core-four-verified-wave-20260815",
+      "recordedHeadSha": "41da3e0a70594a464abd49507d8056e4c72436e6",
+      "currentSourceHeadSha": "41da3e0a70594a464abd49507d8056e4c72436e6",
+      "snapshotHeadSha": "41da3e0a70594a464abd49507d8056e4c72436e6",
+      "match": true
+    },
+    {
+      "source": "fix/guardian-audit-script-repair",
+      "snapshot": "recovery/snapshots/fix--guardian-audit-script-repair",
+      "recordedHeadSha": "43c9e5271fa208b905b29be49853684db2caa59b",
+      "currentSourceHeadSha": "43c9e5271fa208b905b29be49853684db2caa59b",
+      "snapshotHeadSha": "43c9e5271fa208b905b29be49853684db2caa59b",
+      "match": true
+    },
+    {
+      "source": "agent/fix-live-translation-runtime",
+      "snapshot": "recovery/snapshots/agent--fix-live-translation-runtime",
+      "recordedHeadSha": "90ef49e9efa5ba5f89d3f740c6d3b5e54107d5a3",
+      "currentSourceHeadSha": "90ef49e9efa5ba5f89d3f740c6d3b5e54107d5a3",
+      "snapshotHeadSha": "90ef49e9efa5ba5f89d3f740c6d3b5e54107d5a3",
+      "match": true
+    },
+    {
+      "source": "feat/foundation-sprint-1",
+      "snapshot": "recovery/snapshots/feat--foundation-sprint-1",
+      "recordedHeadSha": "8dccdf599325ca76da6ee8491abd3b644d836bc2",
+      "currentSourceHeadSha": "8dccdf599325ca76da6ee8491abd3b644d836bc2",
+      "snapshotHeadSha": "8dccdf599325ca76da6ee8491abd3b644d836bc2",
+      "match": true
+    },
+    {
+      "source": "recovery/canonical-knowledge-excavation-215",
+      "snapshot": "recovery/snapshots/recovery--canonical-knowledge-excavation-215",
+      "recordedHeadSha": "6ed7d3f0f38bd0f688280d0a06563e907cbee4fc",
+      "currentSourceHeadSha": "6ed7d3f0f38bd0f688280d0a06563e907cbee4fc",
+      "snapshotHeadSha": "6ed7d3f0f38bd0f688280d0a06563e907cbee4fc",
+      "match": true
+    },
+    {
+      "source": "agent/production-real-features-only",
+      "snapshot": "recovery/snapshots/agent--production-real-features-only",
+      "recordedHeadSha": "881cca8e8aa2319e08ffda5d766c30db8b61b5eb",
+      "currentSourceHeadSha": "881cca8e8aa2319e08ffda5d766c30db8b61b5eb",
+      "snapshotHeadSha": "881cca8e8aa2319e08ffda5d766c30db8b61b5eb",
+      "match": true
+    },
+    {
+      "source": "fix/interpreter-full-turn-audio-20260815",
+      "snapshot": "recovery/snapshots/fix--interpreter-full-turn-audio-20260815",
+      "recordedHeadSha": "d4204aa900adee2c1d1e887e37f629cfc18e52be",
+      "currentSourceHeadSha": "d4204aa900adee2c1d1e887e37f629cfc18e52be",
+      "snapshotHeadSha": "d4204aa900adee2c1d1e887e37f629cfc18e52be",
+      "match": true
+    },
+    {
+      "source": "fix/water-final-master-supabase-storage",
+      "snapshot": "recovery/snapshots/fix--water-final-master-supabase-storage",
+      "recordedHeadSha": "4a88eca84d307de71e41aa2fe45db793240a4059",
+      "currentSourceHeadSha": "4a88eca84d307de71e41aa2fe45db793240a4059",
+      "snapshotHeadSha": "4a88eca84d307de71e41aa2fe45db793240a4059",
+      "match": true
+    },
+    {
+      "source": "recovery/personalized-sections-wave-20260815",
+      "snapshot": "recovery/snapshots/recovery--personalized-sections-wave-20260815",
+      "recordedHeadSha": "79e58e2727c78f63b5f4a31993ab1371f2d44937",
+      "currentSourceHeadSha": "79e58e2727c78f63b5f4a31993ab1371f2d44937",
+      "snapshotHeadSha": "79e58e2727c78f63b5f4a31993ab1371f2d44937",
+      "match": true
+    },
+    {
+      "source": "agent/release1-live-translation",
+      "snapshot": "recovery/snapshots/agent--release1-live-translation",
+      "recordedHeadSha": "1a5b74922ad554802b4c96761c68596309865fb9",
+      "currentSourceHeadSha": "1a5b74922ad554802b4c96761c68596309865fb9",
+      "snapshotHeadSha": "1a5b74922ad554802b4c96761c68596309865fb9",
+      "match": true
+    },
+    {
+      "source": "agent/shared-translation-service",
+      "snapshot": "recovery/snapshots/agent--shared-translation-service",
+      "recordedHeadSha": "9b3c30d1c1d12dbad16a531e59c972021dcf8e34",
+      "currentSourceHeadSha": "9b3c30d1c1d12dbad16a531e59c972021dcf8e34",
+      "snapshotHeadSha": "9b3c30d1c1d12dbad16a531e59c972021dcf8e34",
+      "match": true
+    },
+    {
+      "source": "agent/translation-worker-hardening-20260822",
+      "snapshot": "recovery/snapshots/agent--translation-worker-hardening-20260822",
+      "recordedHeadSha": "2aa40137855b0f5cff184de11431e58fdfcea762",
+      "currentSourceHeadSha": "2aa40137855b0f5cff184de11431e58fdfcea762",
+      "snapshotHeadSha": "2aa40137855b0f5cff184de11431e58fdfcea762",
+      "match": true
+    },
+    {
+      "source": "feature/startup-canonical-runtime-20260818",
+      "snapshot": "recovery/snapshots/feature--startup-canonical-runtime-20260818",
+      "recordedHeadSha": "1f525676d2d83a5d4de55e5cbdd1e4e9c3e480bf",
+      "currentSourceHeadSha": "1f525676d2d83a5d4de55e5cbdd1e4e9c3e480bf",
+      "snapshotHeadSha": "1f525676d2d83a5d4de55e5cbdd1e4e9c3e480bf",
+      "match": true
+    },
+    {
+      "source": "fix/supabase-public-runtime-fallback",
+      "snapshot": "recovery/snapshots/fix--supabase-public-runtime-fallback",
+      "recordedHeadSha": "aa3070158d229f158080b5d130c4d0458a16d33d",
+      "currentSourceHeadSha": "aa3070158d229f158080b5d130c4d0458a16d33d",
+      "snapshotHeadSha": "aa3070158d229f158080b5d130c4d0458a16d33d",
+      "match": true
+    },
+    {
+      "source": "recovery/donor-repo-consolidation-20260819-batch2",
+      "snapshot": "recovery/snapshots/recovery--donor-repo-consolidation-20260819-batch2",
+      "recordedHeadSha": "f89333c049b92202263a2b410ffe86bc76ebaa4a",
+      "currentSourceHeadSha": "f89333c049b92202263a2b410ffe86bc76ebaa4a",
+      "snapshotHeadSha": "f89333c049b92202263a2b410ffe86bc76ebaa4a",
+      "match": true
+    },
+    {
+      "source": "recovery/donor-repo-consolidation-20260819-batch2-work",
+      "snapshot": "recovery/snapshots/recovery--donor-repo-consolidation-20260819-batch2-work",
+      "recordedHeadSha": "f89333c049b92202263a2b410ffe86bc76ebaa4a",
+      "currentSourceHeadSha": "f89333c049b92202263a2b410ffe86bc76ebaa4a",
+      "snapshotHeadSha": "f89333c049b92202263a2b410ffe86bc76ebaa4a",
+      "match": true
+    },
+    {
+      "source": "agent/bidirectional-interpreter-mode",
+      "snapshot": "recovery/snapshots/agent--bidirectional-interpreter-mode",
+      "recordedHeadSha": "7f24d351aa5b0aa1644a903cff020a529bffe9c4",
+      "currentSourceHeadSha": "7f24d351aa5b0aa1644a903cff020a529bffe9c4",
+      "snapshotHeadSha": "7f24d351aa5b0aa1644a903cff020a529bffe9c4",
+      "match": true
+    },
+    {
+      "source": "feat/pantavion-foundry-control-plane-v1",
+      "snapshot": "recovery/snapshots/feat--pantavion-foundry-control-plane-v1",
+      "recordedHeadSha": "cb2048381518eb7941d46442b98132523ccee59d",
+      "currentSourceHeadSha": "cb2048381518eb7941d46442b98132523ccee59d",
+      "snapshotHeadSha": "cb2048381518eb7941d46442b98132523ccee59d",
+      "match": true
+    },
+    {
+      "source": "fix/social-live-backend-gate",
+      "snapshot": "recovery/snapshots/fix--social-live-backend-gate",
+      "recordedHeadSha": "b66b16615e0f2884a0f43292f710803aa1f8abf7",
+      "currentSourceHeadSha": "b66b16615e0f2884a0f43292f710803aa1f8abf7",
+      "snapshotHeadSha": "b66b16615e0f2884a0f43292f710803aa1f8abf7",
+      "match": true
+    },
+    {
+      "source": "fix/water-lock-refresh-evidence",
+      "snapshot": "recovery/snapshots/fix--water-lock-refresh-evidence",
+      "recordedHeadSha": "e3d8abe508c2314781adc1fcaedb5403a380dea5",
+      "currentSourceHeadSha": "e3d8abe508c2314781adc1fcaedb5403a380dea5",
+      "snapshotHeadSha": "e3d8abe508c2314781adc1fcaedb5403a380dea5",
+      "match": true
+    },
+    {
+      "source": "pantavion/ecosystem-readiness-gate-v1",
+      "snapshot": "recovery/snapshots/pantavion--ecosystem-readiness-gate-v1",
+      "recordedHeadSha": "084bee75d3a9d4c5c85f4dca7840dbfdeeb2ab19",
+      "currentSourceHeadSha": "084bee75d3a9d4c5c85f4dca7840dbfdeeb2ab19",
+      "snapshotHeadSha": "084bee75d3a9d4c5c85f4dca7840dbfdeeb2ab19",
+      "match": true
+    },
+    {
+      "source": "recovery/consolidation-20260810",
+      "snapshot": "recovery/snapshots/recovery--consolidation-20260810",
+      "recordedHeadSha": "6acb6d14e0976760860cbb6574831d22c65986de",
+      "currentSourceHeadSha": "6acb6d14e0976760860cbb6574831d22c65986de",
+      "snapshotHeadSha": "6acb6d14e0976760860cbb6574831d22c65986de",
+      "match": true
+    },
+    {
+      "source": "rescue-kernel-canonical-v1-20260411-194906",
+      "snapshot": "recovery/snapshots/rescue-kernel-canonical-v1-20260411-194906",
+      "recordedHeadSha": "a52744086879714f44697772221b397ee59e20df",
+      "currentSourceHeadSha": "a52744086879714f44697772221b397ee59e20df",
+      "snapshotHeadSha": "a52744086879714f44697772221b397ee59e20df",
+      "match": true
+    },
+    {
+      "source": "agent/canonical-social-flagship-wave",
+      "snapshot": "recovery/snapshots/agent--canonical-social-flagship-wave",
+      "recordedHeadSha": "6a2f0aaf1b8ef3a2fec42b3830c140343c625c7f",
+      "currentSourceHeadSha": "6a2f0aaf1b8ef3a2fec42b3830c140343c625c7f",
+      "snapshotHeadSha": "6a2f0aaf1b8ef3a2fec42b3830c140343c625c7f",
+      "match": true
+    },
+    {
+      "source": "agent/fix-water-admin-mobile-navigation-20260721",
+      "snapshot": "recovery/snapshots/agent--fix-water-admin-mobile-navigation-20260721",
+      "recordedHeadSha": "d2cafcbef615b4a02ba434579661782a03a4ccc7",
+      "currentSourceHeadSha": "d2cafcbef615b4a02ba434579661782a03a4ccc7",
+      "snapshotHeadSha": "d2cafcbef615b4a02ba434579661782a03a4ccc7",
+      "match": true
+    },
+    {
+      "source": "agent/fix-water-admin-users-20260720",
+      "snapshot": "recovery/snapshots/agent--fix-water-admin-users-20260720",
+      "recordedHeadSha": "c24016f80f7cc614e6c6ffa95d9fc0ed84aeea90",
+      "currentSourceHeadSha": "c24016f80f7cc614e6c6ffa95d9fc0ed84aeea90",
+      "snapshotHeadSha": "c24016f80f7cc614e6c6ffa95d9fc0ed84aeea90",
+      "match": true
+    },
+    {
+      "source": "agent/human-core-live-wave-1",
+      "snapshot": "recovery/snapshots/agent--human-core-live-wave-1",
+      "recordedHeadSha": "4ff58f17837df9e821b2cc6cfff01b732945d183",
+      "currentSourceHeadSha": "4ff58f17837df9e821b2cc6cfff01b732945d183",
+      "snapshotHeadSha": "4ff58f17837df9e821b2cc6cfff01b732945d183",
+      "match": true
+    },
+    {
+      "source": "agent/master-recovery-wave-1",
+      "snapshot": "recovery/snapshots/agent--master-recovery-wave-1",
+      "recordedHeadSha": "7e13acb7a4cc4685e38fbe63df081c6d6c46d76b",
+      "currentSourceHeadSha": "7e13acb7a4cc4685e38fbe63df081c6d6c46d76b",
+      "snapshotHeadSha": "7e13acb7a4cc4685e38fbe63df081c6d6c46d76b",
+      "match": true
+    },
+    {
+      "source": "agent/mobile-header-language-cleanup",
+      "snapshot": "recovery/snapshots/agent--mobile-header-language-cleanup",
+      "recordedHeadSha": "81f197d5d83134d02b86c1126d192b72ef217489",
+      "currentSourceHeadSha": "81f197d5d83134d02b86c1126d192b72ef217489",
+      "snapshotHeadSha": "81f197d5d83134d02b86c1126d192b72ef217489",
+      "match": true
+    },
+    {
+      "source": "agent/production-translation-e2e-20260822",
+      "snapshot": "recovery/snapshots/agent--production-translation-e2e-20260822",
+      "recordedHeadSha": "07d56f3c74d074115017e3cd0af806e12645f01a",
+      "currentSourceHeadSha": "07d56f3c74d074115017e3cd0af806e12645f01a",
+      "snapshotHeadSha": "07d56f3c74d074115017e3cd0af806e12645f01a",
+      "match": true
+    },
+    {
+      "source": "agent/raw-donor-preservation",
+      "snapshot": "recovery/snapshots/agent--raw-donor-preservation",
+      "recordedHeadSha": "f770444c6cc0c0878b26f3cd99a739299d3368b0",
+      "currentSourceHeadSha": "f770444c6cc0c0878b26f3cd99a739299d3368b0",
+      "snapshotHeadSha": "f770444c6cc0c0878b26f3cd99a739299d3368b0",
+      "match": true
+    },
+    {
+      "source": "agent/stt-ai-sdk",
+      "snapshot": "recovery/snapshots/agent--stt-ai-sdk",
+      "recordedHeadSha": "d9d6e4f236fa831849168378573caacfc256d809",
+      "currentSourceHeadSha": "d9d6e4f236fa831849168378573caacfc256d809",
+      "snapshotHeadSha": "d9d6e4f236fa831849168378573caacfc256d809",
+      "match": true
+    },
+    {
+      "source": "feat/language-coverage-verification-20260815",
+      "snapshot": "recovery/snapshots/feat--language-coverage-verification-20260815",
+      "recordedHeadSha": "b35550cc3fc492ab2805fa69504aa1f0c8b20606",
+      "currentSourceHeadSha": "b35550cc3fc492ab2805fa69504aa1f0c8b20606",
+      "snapshotHeadSha": "b35550cc3fc492ab2805fa69504aa1f0c8b20606",
+      "match": true
+    },
+    {
+      "source": "feature/translation-agent",
+      "snapshot": "recovery/snapshots/feature--translation-agent",
+      "recordedHeadSha": "62146d1bb801eb6c8629457f3ce1b1dfd2a982da",
+      "currentSourceHeadSha": "62146d1bb801eb6c8629457f3ce1b1dfd2a982da",
+      "snapshotHeadSha": "62146d1bb801eb6c8629457f3ce1b1dfd2a982da",
+      "match": true
+    },
+    {
+      "source": "fix/map-b-founder-approved-access",
+      "snapshot": "recovery/snapshots/fix--map-b-founder-approved-access",
+      "recordedHeadSha": "6697ae4aee0cc937eeb1678eb2432e06c33bdc2c",
+      "currentSourceHeadSha": "6697ae4aee0cc937eeb1678eb2432e06c33bdc2c",
+      "snapshotHeadSha": "6697ae4aee0cc937eeb1678eb2432e06c33bdc2c",
+      "match": true
+    },
+    {
+      "source": "fix/production-sync-verification",
+      "snapshot": "recovery/snapshots/fix--production-sync-verification",
+      "recordedHeadSha": "49c69c990c3428204b3ba5f9b320d29cd8a55206",
+      "currentSourceHeadSha": "49c69c990c3428204b3ba5f9b320d29cd8a55206",
+      "snapshotHeadSha": "49c69c990c3428204b3ba5f9b320d29cd8a55206",
+      "match": true
+    },
+    {
+      "source": "fix/production-visibility-20260822",
+      "snapshot": "recovery/snapshots/fix--production-visibility-20260822",
+      "recordedHeadSha": "c56c44218a3f16fda80a5d593fb591d9a2872fe8",
+      "currentSourceHeadSha": "c56c44218a3f16fda80a5d593fb591d9a2872fe8",
+      "snapshotHeadSha": "c56c44218a3f16fda80a5d593fb591d9a2872fe8",
+      "match": true
+    },
+    {
+      "source": "fix/water-map-b-resumable-upload",
+      "snapshot": "recovery/snapshots/fix--water-map-b-resumable-upload",
+      "recordedHeadSha": "15d5767900b2cf6891875d478431a8260709063b",
+      "currentSourceHeadSha": "15d5767900b2cf6891875d478431a8260709063b",
+      "snapshotHeadSha": "15d5767900b2cf6891875d478431a8260709063b",
+      "match": true
+    },
+    {
+      "source": "kernel-canonical-v1",
+      "snapshot": "recovery/snapshots/kernel-canonical-v1",
+      "recordedHeadSha": "2e85bf57e1577eda29780469be21bf43cb273972",
+      "currentSourceHeadSha": "2e85bf57e1577eda29780469be21bf43cb273972",
+      "snapshotHeadSha": "2e85bf57e1577eda29780469be21bf43cb273972",
+      "match": true
+    },
+    {
+      "source": "recovery/identity-registration-current-main",
+      "snapshot": "recovery/snapshots/recovery--identity-registration-current-main",
+      "recordedHeadSha": "93634f4e6d4a2c1ac91ed4f2a5ed2a417b017b74",
+      "currentSourceHeadSha": "93634f4e6d4a2c1ac91ed4f2a5ed2a417b017b74",
+      "snapshotHeadSha": "93634f4e6d4a2c1ac91ed4f2a5ed2a417b017b74",
+      "match": true
+    },
+    {
+      "source": "recovery/interpreter-backend-20260814",
+      "snapshot": "recovery/snapshots/recovery--interpreter-backend-20260814",
+      "recordedHeadSha": "b71a5a9258ac5b3a7d198f1ee12dbf24c4803538",
+      "currentSourceHeadSha": "b71a5a9258ac5b3a7d198f1ee12dbf24c4803538",
+      "snapshotHeadSha": "b71a5a9258ac5b3a7d198f1ee12dbf24c4803538",
+      "match": true
+    },
+    {
+      "source": "recovery/interpreter-language-runtime",
+      "snapshot": "recovery/snapshots/recovery--interpreter-language-runtime",
+      "recordedHeadSha": "25e05f7901e6f8bd693f555761189c87189bb341",
+      "currentSourceHeadSha": "25e05f7901e6f8bd693f555761189c87189bb341",
+      "snapshotHeadSha": "25e05f7901e6f8bd693f555761189c87189bb341",
+      "match": true
+    },
+    {
+      "source": "sandbox/global-connect-foundation-20260815-0100",
+      "snapshot": "recovery/snapshots/sandbox--global-connect-foundation-20260815-0100",
+      "recordedHeadSha": "79fc8fdb0f715f6a5957575f949a361a6ec6c7c7",
+      "currentSourceHeadSha": "79fc8fdb0f715f6a5957575f949a361a6ec6c7c7",
+      "snapshotHeadSha": "79fc8fdb0f715f6a5957575f949a361a6ec6c7c7",
+      "match": true
+    },
+    {
+      "source": "vercel-agent/canonical-control-plane-foundation",
+      "snapshot": "recovery/snapshots/vercel-agent--canonical-control-plane-foundation",
+      "recordedHeadSha": "10708538aeb70f338228e34d0b09dabc419e0046",
+      "currentSourceHeadSha": "10708538aeb70f338228e34d0b09dabc419e0046",
+      "snapshotHeadSha": "10708538aeb70f338228e34d0b09dabc419e0046",
+      "match": true
+    },
+    {
+      "source": "agent/fix-water-network-range-loading-20260723",
+      "snapshot": "recovery/snapshots/agent--fix-water-network-range-loading-20260723",
+      "recordedHeadSha": "2ac87bb6c48d1441aeb16fc9cfc8f1dc1502c486",
+      "currentSourceHeadSha": "2ac87bb6c48d1441aeb16fc9cfc8f1dc1502c486",
+      "snapshotHeadSha": "2ac87bb6c48d1441aeb16fc9cfc8f1dc1502c486",
+      "match": true
+    },
+    {
+      "source": "agent/fix-water-request-deduplication-20260721",
+      "snapshot": "recovery/snapshots/agent--fix-water-request-deduplication-20260721",
+      "recordedHeadSha": "087d4e1380a56d5c3a65622e4eff38fb8589a2c3",
+      "currentSourceHeadSha": "087d4e1380a56d5c3a65622e4eff38fb8589a2c3",
+      "snapshotHeadSha": "087d4e1380a56d5c3a65622e4eff38fb8589a2c3",
+      "match": true
+    },
+    {
+      "source": "agent/hide-water-administration-20260720",
+      "snapshot": "recovery/snapshots/agent--hide-water-administration-20260720",
+      "recordedHeadSha": "03a97c3a9ca17f5fe6d8e389f866938b92f371fe",
+      "currentSourceHeadSha": "03a97c3a9ca17f5fe6d8e389f866938b92f371fe",
+      "snapshotHeadSha": "03a97c3a9ca17f5fe6d8e389f866938b92f371fe",
+      "match": true
+    },
+    {
+      "source": "agent/production-water-only-hard-gate",
+      "snapshot": "recovery/snapshots/agent--production-water-only-hard-gate",
+      "recordedHeadSha": "e160512f9036f83ee8f151c37e933c527184dd07",
+      "currentSourceHeadSha": "e160512f9036f83ee8f151c37e933c527184dd07",
+      "snapshotHeadSha": "e160512f9036f83ee8f151c37e933c527184dd07",
+      "match": true
+    },
+    {
+      "source": "agent/realtime-chat-translation",
+      "snapshot": "recovery/snapshots/agent--realtime-chat-translation",
+      "recordedHeadSha": "334fac91f618df00d22d75cd8de66223d93c3a82",
+      "currentSourceHeadSha": "334fac91f618df00d22d75cd8de66223d93c3a82",
+      "snapshotHeadSha": "334fac91f618df00d22d75cd8de66223d93c3a82",
+      "match": true
+    },
+    {
+      "source": "agent/restore-water-stable-20260723",
+      "snapshot": "recovery/snapshots/agent--restore-water-stable-20260723",
+      "recordedHeadSha": "80d7ba6586ba768636639c4639993d4537804f90",
+      "currentSourceHeadSha": "80d7ba6586ba768636639c4639993d4537804f90",
+      "snapshotHeadSha": "80d7ba6586ba768636639c4639993d4537804f90",
+      "match": true
+    },
+    {
+      "source": "agent/social-production-hardening",
+      "snapshot": "recovery/snapshots/agent--social-production-hardening",
+      "recordedHeadSha": "4672a00f352e96220f269cda6b77e37dad3bb8d4",
+      "currentSourceHeadSha": "4672a00f352e96220f269cda6b77e37dad3bb8d4",
+      "snapshotHeadSha": "4672a00f352e96220f269cda6b77e37dad3bb8d4",
+      "match": true
+    },
+    {
+      "source": "agent/water-admin-mobile-push-20260721",
+      "snapshot": "recovery/snapshots/agent--water-admin-mobile-push-20260721",
+      "recordedHeadSha": "52344e78be1cf1d0e19496a5c37e10d81a6f4944",
+      "currentSourceHeadSha": "52344e78be1cf1d0e19496a5c37e10d81a6f4944",
+      "snapshotHeadSha": "52344e78be1cf1d0e19496a5c37e10d81a6f4944",
+      "match": true
+    },
+    {
+      "source": "docs/complete-handoff-20260816",
+      "snapshot": "recovery/snapshots/docs--complete-handoff-20260816",
+      "recordedHeadSha": "0e3618b06c47f7c207996a5b95724bd91e8e1a3b",
+      "currentSourceHeadSha": "0e3618b06c47f7c207996a5b95724bd91e8e1a3b",
+      "snapshotHeadSha": "0e3618b06c47f7c207996a5b95724bd91e8e1a3b",
+      "match": true
+    },
+    {
+      "source": "feat/guardian-extreme-sos-20260503-110153",
+      "snapshot": "recovery/snapshots/feat--guardian-extreme-sos-20260503-110153",
+      "recordedHeadSha": "ab629d6080691b516eb29f33563cc3081f483706",
+      "currentSourceHeadSha": "ab629d6080691b516eb29f33563cc3081f483706",
+      "snapshotHeadSha": "ab629d6080691b516eb29f33563cc3081f483706",
+      "match": true
+    },
+    {
+      "source": "feat/interpreter-production-sync-gate",
+      "snapshot": "recovery/snapshots/feat--interpreter-production-sync-gate",
+      "recordedHeadSha": "524f459421b5a788a5dcedbdceae827ea261d1bf",
+      "currentSourceHeadSha": "524f459421b5a788a5dcedbdceae827ea261d1bf",
+      "snapshotHeadSha": "524f459421b5a788a5dcedbdceae827ea261d1bf",
+      "match": true
+    },
+    {
+      "source": "feat/interpreter-runtime-health",
+      "snapshot": "recovery/snapshots/feat--interpreter-runtime-health",
+      "recordedHeadSha": "e48071581b4c5bcf3b3190ac8148dbc57d546e44",
+      "currentSourceHeadSha": "e48071581b4c5bcf3b3190ac8148dbc57d546e44",
+      "snapshotHeadSha": "e48071581b4c5bcf3b3190ac8148dbc57d546e44",
+      "match": true
+    },
+    {
+      "source": "feat/revenue-social-foundation",
+      "snapshot": "recovery/snapshots/feat--revenue-social-foundation",
+      "recordedHeadSha": "944327d97417bc5bbb9c96f9cc12d2020cba99e0",
+      "currentSourceHeadSha": "944327d97417bc5bbb9c96f9cc12d2020cba99e0",
+      "snapshotHeadSha": "944327d97417bc5bbb9c96f9cc12d2020cba99e0",
+      "match": true
+    },
+    {
+      "source": "feat/world-language-coverage-20260503-102839",
+      "snapshot": "recovery/snapshots/feat--world-language-coverage-20260503-102839",
+      "recordedHeadSha": "b9bb2f553171044b4b903d0877c9f37dac2ef28d",
+      "currentSourceHeadSha": "b9bb2f553171044b4b903d0877c9f37dac2ef28d",
+      "snapshotHeadSha": "b9bb2f553171044b4b903d0877c9f37dac2ef28d",
+      "match": true
+    },
+    {
+      "source": "feature/global-knowledge-vault",
+      "snapshot": "recovery/snapshots/feature--global-knowledge-vault",
+      "recordedHeadSha": "33defe9ca6c9c1aeae5d46652fdf0e5c8e44ebe9",
+      "currentSourceHeadSha": "33defe9ca6c9c1aeae5d46652fdf0e5c8e44ebe9",
+      "snapshotHeadSha": "33defe9ca6c9c1aeae5d46652fdf0e5c8e44ebe9",
+      "match": true
+    },
+    {
+      "source": "feature/music-voice-studio",
+      "snapshot": "recovery/snapshots/feature--music-voice-studio",
+      "recordedHeadSha": "1b694997b3e71abd328af49cce3a7e8c7845689b",
+      "currentSourceHeadSha": "1b694997b3e71abd328af49cce3a7e8c7845689b",
+      "snapshotHeadSha": "1b694997b3e71abd328af49cce3a7e8c7845689b",
+      "match": true
+    },
+    {
+      "source": "fix/chat-live-receipts-20260822",
+      "snapshot": "recovery/snapshots/fix--chat-live-receipts-20260822",
+      "recordedHeadSha": "aef71cba2c186eae9df3228ee895943be7182837",
+      "currentSourceHeadSha": "aef71cba2c186eae9df3228ee895943be7182837",
+      "snapshotHeadSha": "aef71cba2c186eae9df3228ee895943be7182837",
+      "match": true
+    },
+    {
+      "source": "fix/chat-translation-history-20260822",
+      "snapshot": "recovery/snapshots/fix--chat-translation-history-20260822",
+      "recordedHeadSha": "29597faf79630200ceecf2a1527533002c4f7abe",
+      "currentSourceHeadSha": "29597faf79630200ceecf2a1527533002c4f7abe",
+      "snapshotHeadSha": "29597faf79630200ceecf2a1527533002c4f7abe",
+      "match": true
+    },
+    {
+      "source": "fix/gateway-context-normalizer",
+      "snapshot": "recovery/snapshots/fix--gateway-context-normalizer",
+      "recordedHeadSha": "edee38b1243f71ea69df137cbd68fbec2393324b",
+      "currentSourceHeadSha": "edee38b1243f71ea69df137cbd68fbec2393324b",
+      "snapshotHeadSha": "edee38b1243f71ea69df137cbd68fbec2393324b",
+      "match": true
+    },
+    {
+      "source": "fix/production-sync-yaml",
+      "snapshot": "recovery/snapshots/fix--production-sync-yaml",
+      "recordedHeadSha": "f57f2ee3a2bcf506004a2dea74ba8c9718e740ff",
+      "currentSourceHeadSha": "f57f2ee3a2bcf506004a2dea74ba8c9718e740ff",
+      "snapshotHeadSha": "f57f2ee3a2bcf506004a2dea74ba8c9718e740ff",
+      "match": true
+    },
+    {
+      "source": "fix/social-health-diagnostics",
+      "snapshot": "recovery/snapshots/fix--social-health-diagnostics",
+      "recordedHeadSha": "30d1990c7aa5a41c67f56bd651ac05442f6122ab",
+      "currentSourceHeadSha": "30d1990c7aa5a41c67f56bd651ac05442f6122ab",
+      "snapshotHeadSha": "30d1990c7aa5a41c67f56bd651ac05442f6122ab",
+      "match": true
+    },
+    {
+      "source": "fix/stt-language-and-fallback",
+      "snapshot": "recovery/snapshots/fix--stt-language-and-fallback",
+      "recordedHeadSha": "621676a0a83ae19c03db3d3922105e23ad4e22b7",
+      "currentSourceHeadSha": "621676a0a83ae19c03db3d3922105e23ad4e22b7",
+      "snapshotHeadSha": "621676a0a83ae19c03db3d3922105e23ad4e22b7",
+      "match": true
+    },
+    {
+      "source": "fix/supabase-admin-runtime-fallback",
+      "snapshot": "recovery/snapshots/fix--supabase-admin-runtime-fallback",
+      "recordedHeadSha": "f91947783439f9e17b3cf0061b660f8473838ecc",
+      "currentSourceHeadSha": "f91947783439f9e17b3cf0061b660f8473838ecc",
+      "snapshotHeadSha": "f91947783439f9e17b3cf0061b660f8473838ecc",
+      "match": true
+    },
+    {
+      "source": "fix/water-guardian-vercel-context",
+      "snapshot": "recovery/snapshots/fix--water-guardian-vercel-context",
+      "recordedHeadSha": "80ad4eba5218202011d58727320089978786246e",
+      "currentSourceHeadSha": "80ad4eba5218202011d58727320089978786246e",
+      "snapshotHeadSha": "80ad4eba5218202011d58727320089978786246e",
+      "match": true
+    },
+    {
+      "source": "pantavion-clean-rescue",
+      "snapshot": "recovery/snapshots/pantavion-clean-rescue",
+      "recordedHeadSha": "29b686b3cd0f0ddd3de9749353d2c17d135a7bda",
+      "currentSourceHeadSha": "29b686b3cd0f0ddd3de9749353d2c17d135a7bda",
+      "snapshotHeadSha": "29b686b3cd0f0ddd3de9749353d2c17d135a7bda",
+      "match": true
+    },
+    {
+      "source": "pantavion-runtime-services",
+      "snapshot": "recovery/snapshots/pantavion-runtime-services",
+      "recordedHeadSha": "a8153cf04dc210eb4f1b12a60ee20788949e7ff9",
+      "currentSourceHeadSha": "a8153cf04dc210eb4f1b12a60ee20788949e7ff9",
+      "snapshotHeadSha": "a8153cf04dc210eb4f1b12a60ee20788949e7ff9",
+      "match": true
+    },
+    {
+      "source": "pantavion/evolution-engine-v2",
+      "snapshot": "recovery/snapshots/pantavion--evolution-engine-v2",
+      "recordedHeadSha": "66e6c940a906357ee1dcc1a77a143b04ea074b14",
+      "currentSourceHeadSha": "66e6c940a906357ee1dcc1a77a143b04ea074b14",
+      "snapshotHeadSha": "66e6c940a906357ee1dcc1a77a143b04ea074b14",
+      "match": true
+    },
+    {
+      "source": "phase-c-ui-port-20260411-194906",
+      "snapshot": "recovery/snapshots/phase-c-ui-port-20260411-194906",
+      "recordedHeadSha": "ac092b514451269df4d614a840a374bdfc5f45b5",
+      "currentSourceHeadSha": "ac092b514451269df4d614a840a374bdfc5f45b5",
+      "snapshotHeadSha": "ac092b514451269df4d614a840a374bdfc5f45b5",
+      "match": true
+    },
+    {
+      "source": "recovery/all-projects-safe-transfer-20260823",
+      "snapshot": "recovery/snapshots/recovery--all-projects-safe-transfer-20260823",
+      "recordedHeadSha": "322e1910d93812a9e0246da871e4f61142be76ed",
+      "currentSourceHeadSha": "322e1910d93812a9e0246da871e4f61142be76ed",
+      "snapshotHeadSha": "322e1910d93812a9e0246da871e4f61142be76ed",
+      "match": true
+    },
+    {
+      "source": "recovery/identity-auth-reconcile-20260822",
+      "snapshot": "recovery/snapshots/recovery--identity-auth-reconcile-20260822",
+      "recordedHeadSha": "e3cf88bbfba11f85da4fc5c28b4c2fe143e8d173",
+      "currentSourceHeadSha": "e3cf88bbfba11f85da4fc5c28b4c2fe143e8d173",
+      "snapshotHeadSha": "e3cf88bbfba11f85da4fc5c28b4c2fe143e8d173",
+      "match": true
+    },
+    {
+      "source": "recovery/master-inventory-20260810",
+      "snapshot": "recovery/snapshots/recovery--master-inventory-20260810",
+      "recordedHeadSha": "dcd72ddbac848b3e5c3036916ff324016343c273",
+      "currentSourceHeadSha": "dcd72ddbac848b3e5c3036916ff324016343c273",
+      "snapshotHeadSha": "dcd72ddbac848b3e5c3036916ff324016343c273",
+      "match": true
+    },
+    {
+      "source": "recovery/master-ledger-20260816",
+      "snapshot": "recovery/snapshots/recovery--master-ledger-20260816",
+      "recordedHeadSha": "afb936fb9945c2dc1904847c771bd74a14df803c",
+      "currentSourceHeadSha": "afb936fb9945c2dc1904847c771bd74a14df803c",
+      "snapshotHeadSha": "afb936fb9945c2dc1904847c771bd74a14df803c",
+      "match": true
+    },
+    {
+      "source": "sandbox/global-connect-foundation-20260815-0058",
+      "snapshot": "recovery/snapshots/sandbox--global-connect-foundation-20260815-0058",
+      "recordedHeadSha": "67ad7460ec9a474acc4ddd3fe8f78922fbb7bf35",
+      "currentSourceHeadSha": "67ad7460ec9a474acc4ddd3fe8f78922fbb7bf35",
+      "snapshotHeadSha": "67ad7460ec9a474acc4ddd3fe8f78922fbb7bf35",
+      "match": true
+    },
+    {
+      "source": "sandbox/interpreter-runtime-20260815-1057",
+      "snapshot": "recovery/snapshots/sandbox--interpreter-runtime-20260815-1057",
+      "recordedHeadSha": "3c7982f02e6e3bba2d09b6773646a043bb2f6c97",
+      "currentSourceHeadSha": "3c7982f02e6e3bba2d09b6773646a043bb2f6c97",
+      "snapshotHeadSha": "3c7982f02e6e3bba2d09b6773646a043bb2f6c97",
+      "match": true
+    },
+    {
+      "source": "vercel/install-vercel-web-analytics-0aaw0f",
+      "snapshot": "recovery/snapshots/vercel--install-vercel-web-analytics-0aaw0f",
+      "recordedHeadSha": "aed7852b6800dd443539becec48a237433a91af1",
+      "currentSourceHeadSha": "aed7852b6800dd443539becec48a237433a91af1",
+      "snapshotHeadSha": "aed7852b6800dd443539becec48a237433a91af1",
+      "match": true
+    }
+  ]
+}
