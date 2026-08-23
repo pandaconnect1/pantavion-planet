@@ -1,0 +1,12 @@
+{
+  "id": "pantavion_permanent_corpus_materialization_v1",
+  "generatedAt": "2026-08-23T15:30:38.848Z",
+  "totalRecords": 32108,
+  "totalBatches": 22,
+  "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e",
+  "countedBatchRecords": 32108,
+  "invariant": "Every manifest record is present in exactly one committed numbered batch.",
+  "tested": false,
+  "verified": false,
+  "deleteAllowed": false
+}

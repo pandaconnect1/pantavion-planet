@@ -1,0 +1,547 @@
+{
+  "id": "pantavion_canonical_knowledge_v2",
+  "generatedAt": "2026-08-23T15:30:37.869Z",
+  "totalRecords": 32108,
+  "batchSize": 1499,
+  "totalBatches": 22,
+  "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e",
+  "sourceCounts": {
+    "founder-vision": 9737,
+    "unfinished-gap": 11858,
+    "current-code": 8759,
+    "live-state": 126,
+    "donor": 441,
+    "recovery": 1187
+  },
+  "moduleCounts": {
+    "Chat": 1569,
+    "Identity / Auth / Consent": 1453,
+    "Interpreter / Translation": 3122,
+    "Kernel / Guardian / Runtime": 3506,
+    "Learning / Knowledge": 197,
+    "Maps / World / Water": 7170,
+    "Marketplace / Work / Business": 1384,
+    "Music / Media / Creation": 190,
+    "People": 1934,
+    "Personal AI / PantaAI": 2098,
+    "Resilience / Offline / Infrastructure": 456,
+    "Safety / Trust / Minors": 4167,
+    "Social / Pulse / Communities": 723,
+    "SOS / Crisis": 1861,
+    "Voice / Video": 995,
+    "UNCLASSIFIED": 1283
+  },
+  "reviewCounts": {
+    "REVIEW_REQUIRED": 14928,
+    "CLASSIFIED": 17180
+  },
+  "batches": [
+    {
+      "batchId": "batch-a",
+      "batchLabel": "A",
+      "startOrdinal": 1,
+      "endOrdinal": 1499,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 469,
+        "unfinished-gap": 516,
+        "current-code": 432,
+        "live-state": 5,
+        "donor": 25,
+        "recovery": 52
+      },
+      "moduleCounts": {
+        "Chat": 1499
+      },
+      "classifiedCount": 695,
+      "unresolvedCount": 804,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.420Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-b",
+      "batchLabel": "B",
+      "startOrdinal": 1500,
+      "endOrdinal": 2998,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 591,
+        "current-code": 409,
+        "founder-vision": 457,
+        "live-state": 8,
+        "recovery": 21,
+        "donor": 13
+      },
+      "moduleCounts": {
+        "Chat": 70,
+        "Identity / Auth / Consent": 1429
+      },
+      "classifiedCount": 1033,
+      "unresolvedCount": 466,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.443Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-c",
+      "batchLabel": "C",
+      "startOrdinal": 2999,
+      "endOrdinal": 4497,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 496,
+        "unfinished-gap": 507,
+        "current-code": 496
+      },
+      "moduleCounts": {
+        "Identity / Auth / Consent": 24,
+        "Interpreter / Translation": 1475
+      },
+      "classifiedCount": 658,
+      "unresolvedCount": 841,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.468Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-d",
+      "batchLabel": "D",
+      "startOrdinal": 4498,
+      "endOrdinal": 5996,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 351,
+        "unfinished-gap": 706,
+        "current-code": 314,
+        "donor": 34,
+        "recovery": 85,
+        "live-state": 9
+      },
+      "moduleCounts": {
+        "Interpreter / Translation": 1499
+      },
+      "classifiedCount": 658,
+      "unresolvedCount": 841,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.489Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-e",
+      "batchLabel": "E",
+      "startOrdinal": 5997,
+      "endOrdinal": 7495,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 493,
+        "unfinished-gap": 504,
+        "current-code": 502
+      },
+      "moduleCounts": {
+        "Interpreter / Translation": 148,
+        "Kernel / Guardian / Runtime": 1351
+      },
+      "classifiedCount": 1268,
+      "unresolvedCount": 231,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.515Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-f",
+      "batchLabel": "F",
+      "startOrdinal": 7496,
+      "endOrdinal": 8994,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 631,
+        "current-code": 423,
+        "founder-vision": 425,
+        "recovery": 10,
+        "donor": 10
+      },
+      "moduleCounts": {
+        "Kernel / Guardian / Runtime": 1499
+      },
+      "classifiedCount": 1206,
+      "unresolvedCount": 293,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.533Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-g",
+      "batchLabel": "G",
+      "startOrdinal": 8995,
+      "endOrdinal": 10493,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 499,
+        "founder-vision": 483,
+        "recovery": 66,
+        "donor": 45,
+        "live-state": 11,
+        "current-code": 395
+      },
+      "moduleCounts": {
+        "Kernel / Guardian / Runtime": 656,
+        "Learning / Knowledge": 197,
+        "Maps / World / Water": 646
+      },
+      "classifiedCount": 1133,
+      "unresolvedCount": 366,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.556Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-h",
+      "batchLabel": "H",
+      "startOrdinal": 10494,
+      "endOrdinal": 11992,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 500,
+        "unfinished-gap": 500,
+        "current-code": 499
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 1499
+      },
+      "classifiedCount": 1064,
+      "unresolvedCount": 435,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.573Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-i",
+      "batchLabel": "I",
+      "startOrdinal": 11993,
+      "endOrdinal": 13491,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 500,
+        "founder-vision": 500,
+        "unfinished-gap": 499
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 1499
+      },
+      "classifiedCount": 986,
+      "unresolvedCount": 513,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.591Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-j",
+      "batchLabel": "J",
+      "startOrdinal": 13492,
+      "endOrdinal": 14990,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 486,
+        "current-code": 485,
+        "founder-vision": 485,
+        "live-state": 1,
+        "recovery": 21,
+        "donor": 21
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 1499
+      },
+      "classifiedCount": 937,
+      "unresolvedCount": 562,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.609Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-k",
+      "batchLabel": "K",
+      "startOrdinal": 14991,
+      "endOrdinal": 16489,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 185,
+        "founder-vision": 361,
+        "unfinished-gap": 530,
+        "donor": 26,
+        "recovery": 388,
+        "live-state": 9
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 1499
+      },
+      "classifiedCount": 785,
+      "unresolvedCount": 714,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.626Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-l",
+      "batchLabel": "L",
+      "startOrdinal": 16490,
+      "endOrdinal": 17988,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 444,
+        "unfinished-gap": 579,
+        "current-code": 431,
+        "live-state": 7,
+        "donor": 7,
+        "recovery": 31
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 528,
+        "Marketplace / Work / Business": 971
+      },
+      "classifiedCount": 927,
+      "unresolvedCount": 572,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.654Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-m",
+      "batchLabel": "M",
+      "startOrdinal": 17989,
+      "endOrdinal": 19487,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 532,
+        "unfinished-gap": 542,
+        "recovery": 23,
+        "donor": 10,
+        "live-state": 7,
+        "current-code": 385
+      },
+      "moduleCounts": {
+        "Marketplace / Work / Business": 413,
+        "Music / Media / Creation": 190,
+        "People": 896
+      },
+      "classifiedCount": 740,
+      "unresolvedCount": 759,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.675Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-n",
+      "batchLabel": "N",
+      "startOrdinal": 19488,
+      "endOrdinal": 20986,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 325,
+        "founder-vision": 415,
+        "unfinished-gap": 565,
+        "donor": 62,
+        "recovery": 112,
+        "live-state": 20
+      },
+      "moduleCounts": {
+        "People": 1038,
+        "Personal AI / PantaAI": 461
+      },
+      "classifiedCount": 481,
+      "unresolvedCount": 1018,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.694Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-o",
+      "batchLabel": "O",
+      "startOrdinal": 20987,
+      "endOrdinal": 22485,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 393,
+        "founder-vision": 437,
+        "unfinished-gap": 597,
+        "live-state": 5,
+        "recovery": 47,
+        "donor": 20
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 492,
+      "unresolvedCount": 1007,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.716Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-p",
+      "batchLabel": "P",
+      "startOrdinal": 22486,
+      "endOrdinal": 23984,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 461,
+        "founder-vision": 488,
+        "unfinished-gap": 523,
+        "donor": 7,
+        "recovery": 19,
+        "live-state": 1
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 138,
+        "Resilience / Offline / Infrastructure": 456,
+        "Safety / Trust / Minors": 905
+      },
+      "classifiedCount": 733,
+      "unresolvedCount": 766,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.738Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-q",
+      "batchLabel": "Q",
+      "startOrdinal": 23985,
+      "endOrdinal": 25483,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 498,
+        "founder-vision": 498,
+        "unfinished-gap": 498,
+        "live-state": 5
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 1499
+      },
+      "classifiedCount": 645,
+      "unresolvedCount": 854,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.757Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-r",
+      "batchLabel": "R",
+      "startOrdinal": 25484,
+      "endOrdinal": 26982,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 229,
+        "founder-vision": 343,
+        "unfinished-gap": 743,
+        "recovery": 139,
+        "donor": 38,
+        "live-state": 7
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 1499
+      },
+      "classifiedCount": 581,
+      "unresolvedCount": 918,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.779Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-s",
+      "batchLabel": "S",
+      "startOrdinal": 26983,
+      "endOrdinal": 28481,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 514,
+        "current-code": 449,
+        "founder-vision": 470,
+        "live-state": 4,
+        "recovery": 39,
+        "donor": 23
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 264,
+        "Social / Pulse / Communities": 723,
+        "SOS / Crisis": 512
+      },
+      "classifiedCount": 825,
+      "unresolvedCount": 674,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.805Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-t",
+      "batchLabel": "T",
+      "startOrdinal": 28482,
+      "endOrdinal": 29980,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 419,
+        "founder-vision": 435,
+        "unfinished-gap": 614,
+        "live-state": 5,
+        "recovery": 14,
+        "donor": 12
+      },
+      "moduleCounts": {
+        "SOS / Crisis": 1349,
+        "Voice / Video": 150
+      },
+      "classifiedCount": 1026,
+      "unresolvedCount": 473,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.824Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-u",
+      "batchLabel": "U",
+      "startOrdinal": 29981,
+      "endOrdinal": 31479,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 459,
+        "unfinished-gap": 517,
+        "current-code": 418,
+        "recovery": 52,
+        "donor": 43,
+        "live-state": 10
+      },
+      "moduleCounts": {
+        "Voice / Video": 845,
+        "UNCLASSIFIED": 654
+      },
+      "classifiedCount": 307,
+      "unresolvedCount": 1192,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.845Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    },
+    {
+      "batchId": "batch-v",
+      "batchLabel": "V",
+      "startOrdinal": 31480,
+      "endOrdinal": 32108,
+      "recordCount": 629,
+      "sourceCounts": {
+        "unfinished-gap": 197,
+        "founder-vision": 196,
+        "recovery": 68,
+        "donor": 45,
+        "live-state": 12,
+        "current-code": 111
+      },
+      "moduleCounts": {
+        "UNCLASSIFIED": 629
+      },
+      "classifiedCount": 0,
+      "unresolvedCount": 629,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:30:37.862Z",
+      "corpusFingerprint": "e303cde8abfb45e0040bbf50a8cb2cf5585708d04dc7c780d47b46de5631ca6e"
+    }
+  ],
+  "truthRule": "Module classification is an intake seed. REVIEW_REQUIRED records must receive semantic human/AI review; no feature may be merged, deduplicated or called complete from keyword/thematic scoring alone."
+}
