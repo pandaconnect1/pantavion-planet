@@ -1,6 +1,6 @@
 # Pantavion Module Completion Audit
 
-Corpus: **82413** records · Expected modules: **30** · Empty: **15** · Verified complete: **0**
+Corpus: **82413** records · Expected modules: **30** · Empty: **undefined** · Verified complete: **0**
 
 > Evidence triage only. No module is complete until production end-to-end testing and live verification pass.
 
@@ -21,18 +21,18 @@ Corpus: **82413** records · Expected modules: **30** · Empty: **15** · Verifi
 | Learning / Knowledge | 353 | 229 | 66 | 58 | 198 | PARTIAL_WITH_MANAGEABLE_GAPS |
 | Music / Media / Creation | 422 | 294 | 67 | 58 | 186 | PARTIAL_WITH_MANAGEABLE_GAPS |
 | Resilience / Offline / Infrastructure | 957 | 643 | 165 | 148 | 169 | PARTIAL_WITH_MANAGEABLE_GAPS |
-| Dating | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| Events | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| Business | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| Ads Center | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| Compass / Discovery | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| Mind | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| PantaLearn | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| App / Service Engine | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| Institutional Workflows | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| Contacts Sync | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| Billing / Entitlements | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| Notifications | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| Search / Discovery | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| Storage / Media | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
-| Audit / Observability | 0 | 0 | 0 | 0 | 0 | EMPTY_NO_RECOVERED_RECORDS |
+| Dating | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| Events | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| Business | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| Ads Center | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| Compass / Discovery | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| Mind | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| PantaLearn | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| App / Service Engine | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| Institutional Workflows | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| Contacts Sync | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| Billing / Entitlements | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| Notifications | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| Search / Discovery | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| Storage / Media | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |
+| Audit / Observability | 0 | 0 | 0 | 0 | 0 | NO_DEDICATED_CLASSIFICATION_YET |

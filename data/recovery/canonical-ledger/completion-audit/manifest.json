@@ -1,12 +1,12 @@
 {
   "id": "pantavion_module_completion_audit_v1",
-  "generatedAt": "2026-08-23T16:02:40.404Z",
+  "generatedAt": "2026-08-23T16:04:21.438Z",
   "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d",
   "totalCorpusRecords": 82413,
   "expectedModules": 30,
-  "emptyModules": 15,
+  "noDedicatedClassificationModules": 15,
   "verifiedCompleteModules": 0,
-  "truth": "Evidence-based triage only. No module is complete until production E2E tests and live verification pass.",
+  "truth": "Evidence-based triage only. Zero dedicated records does not prove an empty module; content may be embedded in broader categories or UNCLASSIFIED. No module is complete until production E2E tests and live verification pass.",
   "verifiedLive": false,
   "deleteAllowed": false,
   "extraRecoveredCategories": [
@@ -217,7 +217,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -229,7 +229,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -241,7 +241,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -253,7 +253,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -265,7 +265,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -277,7 +277,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -289,7 +289,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -301,7 +301,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -313,7 +313,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -325,7 +325,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -337,7 +337,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -349,7 +349,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -361,7 +361,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -373,7 +373,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     },
     {
@@ -385,7 +385,7 @@
       "ideasOrSpecifications": 0,
       "reviewRequired": 0,
       "classified": 0,
-      "assessment": "EMPTY_NO_RECOVERED_RECORDS",
+      "assessment": "NO_DEDICATED_CLASSIFICATION_YET",
       "verifiedComplete": false
     }
   ]
