@@ -3,7 +3,7 @@
   "sourceRef": "recovery/snapshots/sandbox--global-connect-foundation-20260815-0100",
   "sourceHeadSha": "79fc8fdb0f715f6a5957575f949a361a6ec6c7c7",
   "theme": "global-connect",
-  "status": "BLOCKED_SHA_MISMATCH",
+  "status": "CANONICALIZED_EXACT_NOT_TESTED",
   "verificationMethod": "Fresh fetch of source and canonical destination; compare Git blob SHA for every file.",
   "files": [
     {
@@ -38,7 +38,8 @@
       "source": "scripts/verify-global-country-registry.cjs",
       "destination": "recovery/canonicalized/global-connect/sandbox-global-connect-foundation-20260815-0100/source/scripts/verify-global-country-registry.cjs",
       "sourceBlobSha": "385900e9c135118735e110d423541f65cbdb988e",
-      "exact": false
+      "exact": true,
+      "destinationBlobSha": "385900e9c135118735e110d423541f65cbdb988e"
     },
     {
       "source": "supabase/migrations/20260815010500_global_connect_foundation.sql",
@@ -56,12 +57,13 @@
     }
   ],
   "total": 7,
-  "exactMatches": 6,
+  "exactMatches": 7,
   "security": {
     "environmentDependencies": [],
     "secretValuesCopied": "none_detected"
   },
   "tested": false,
   "verified": false,
-  "deleteAllowed": false
+  "deleteAllowed": false,
+  "verificationNote": "The initially unresolved destination SHA was re-fetched directly and matched the source blob SHA."
 }
