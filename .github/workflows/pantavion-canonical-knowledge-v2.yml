@@ -92,4 +92,4 @@ jobs:
           name: pantavion-canonical-knowledge-v2
           path: data/recovery/canonical-knowledge-v2
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 90
