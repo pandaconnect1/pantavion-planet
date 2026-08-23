@@ -1,0 +1,26 @@
+{
+  "id": "pantavion_semantic_reclassification_v1",
+  "generatedAt": "2026-08-23T16:46:37.086Z",
+  "unclassifiedInput": 1289,
+  "suggestedAssignments": 125,
+  "stillRequiresDeepReview": 1164,
+  "suggestedByModule": [
+    {
+      "module": "Kernel / Guardian / Runtime",
+      "count": 112
+    },
+    {
+      "module": "Safety / Trust / Minors",
+      "count": 10
+    },
+    {
+      "module": "Maps / World / Water",
+      "count": 3
+    }
+  ],
+  "datingCandidatesAcrossCorpus": 266,
+  "truth": "Suggestions are deterministic evidence aids. They do not mutate the permanent corpus and require record-level confirmation before canonical classification.",
+  "corpusMutated": false,
+  "verifiedLive": false,
+  "deleteAllowed": false
+}
