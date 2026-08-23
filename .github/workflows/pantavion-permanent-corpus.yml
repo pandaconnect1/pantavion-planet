@@ -1,0 +1,86 @@
+name: Pantavion Permanent Corpus Materialization
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/pantavion-permanent-corpus.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Regenerate uncapped findings and canonical corpus
+        run: |
+          npm run vision:ingest
+          npm run plans:ingest
+          node <<'NODE'
+          const fs=require('fs');
+          for(const file of [
+            'data/runtime-reports/latest-founder-vision-ingestion.json',
+            'data/runtime-reports/latest-unfinished-plan-ingestion.json'
+          ]){
+            const r=JSON.parse(fs.readFileSync(file,'utf8'));
+            if(r.findings.length!==r.totals.findings) throw new Error('truncated '+file);
+          }
+          NODE
+          npm run knowledge:excavate:v2
+      - name: Materialize all numbered corpus batches permanently
+        run: |
+          set -euo pipefail
+          target='data/recovery/canonical-ledger/corpus'
+          rm -rf "$target"
+          mkdir -p "$target/batches"
+          cp data/recovery/canonical-knowledge-v2/manifest.json "$target/manifest.json"
+          cp data/recovery/canonical-knowledge-v2/batches/*.json "$target/batches/"
+          node <<'NODE'
+          const fs=require('fs');
+          const path=require('path');
+          const root='data/recovery/canonical-ledger/corpus';
+          const m=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'),'utf8'));
+          const files=fs.readdirSync(path.join(root,'batches')).filter(x=>x.endsWith('.json')).sort();
+          if(files.length!==m.totalBatches) throw new Error('batch count mismatch');
+          let records=0;
+          for(const file of files){
+            const value=JSON.parse(fs.readFileSync(path.join(root,'batches',file),'utf8'));
+            const rows=Array.isArray(value)?value:(value.records||value.findings||[]);
+            records+=rows.length;
+          }
+          if(records!==m.totalRecords) throw new Error(`record mismatch ${records} != ${m.totalRecords}`);
+          fs.writeFileSync(path.join(root,'MATERIALIZATION_RECEIPT.json'),JSON.stringify({
+            id:'pantavion_permanent_corpus_materialization_v1',
+            generatedAt:new Date().toISOString(),
+            totalRecords:m.totalRecords,
+            totalBatches:m.totalBatches,
+            corpusFingerprint:m.corpusFingerprint,
+            countedBatchRecords:records,
+            invariant:'Every manifest record is present in exactly one committed numbered batch.',
+            tested:false,
+            verified:false,
+            deleteAllowed:false
+          },null,2)+'\n');
+          console.log(JSON.stringify({records,batches:files.length,fingerprint:m.corpusFingerprint}));
+          NODE
+      - name: Commit permanent corpus
+        run: |
+          git config user.name 'pantavion-recovery-bot'
+          git config user.email 'pantavion-recovery-bot@users.noreply.github.com'
+          git add data/recovery/canonical-ledger/corpus
+          if git diff --cached --quiet; then
+            echo 'Permanent corpus already current.'
+            exit 0
+          fi
+          git commit -m 'data(recovery): materialize every canonical corpus record'
+          git push origin "HEAD:${{ github.head_ref }}"
