@@ -13,6 +13,7 @@ on:
       - 'scripts/pantavion-knowledge-photo-marriage.cjs'
       - 'scripts/pantavion-canonical-semantic-archive.cjs'
       - 'package.json'
+      - 'tsconfig.json'
       - '.github/workflows/pantavion-canonical-knowledge-v2.yml'
   workflow_dispatch:
 
