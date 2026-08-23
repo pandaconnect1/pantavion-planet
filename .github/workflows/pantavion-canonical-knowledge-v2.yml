@@ -7,6 +7,9 @@ on:
       - 'core/ai/**'
       - 'data/recovery/external-learning/**'
       - 'scripts/pantavion-canonical-knowledge-excavation-v2.cjs'
+      - 'scripts/pantavion-founder-vision-ingestion.cjs'
+      - 'scripts/pantavion-unfinished-plan-ingestion.cjs'
+      - 'data/recovery/canonical-ledger/**'
       - 'scripts/pantavion-knowledge-photo-marriage.cjs'
       - 'scripts/pantavion-canonical-semantic-archive.cjs'
       - 'package.json'
@@ -26,6 +29,26 @@ jobs:
           node-version: 22
       - name: Install dependencies without lockfile
         run: npm install --no-audit --no-fund
+      - name: Regenerate every uncapped source finding
+        run: |
+          npm run vision:ingest
+          npm run plans:ingest
+      - name: Verify no finding was omitted from persisted reports
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          for (const file of [
+            'data/runtime-reports/latest-founder-vision-ingestion.json',
+            'data/runtime-reports/latest-unfinished-plan-ingestion.json'
+          ]) {
+            const report=JSON.parse(fs.readFileSync(file,'utf8'));
+            if (!Array.isArray(report.findings)) throw new Error(`missing findings array: ${file}`);
+            if (report.findings.length !== report.totals.findings) {
+              throw new Error(`truncated report ${file}: persisted=${report.findings.length}, counted=${report.totals.findings}`);
+            }
+            console.log(`${file}: counted=${report.totals.findings}, persisted=${report.findings.length}`);
+          }
+          NODE
       - name: Generate module-aware corpus
         run: npm run knowledge:excavate:v2
       - name: Marry screenshot learnings to every recovered record
