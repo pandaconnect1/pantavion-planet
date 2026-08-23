@@ -1,0 +1,74 @@
+name: Pantavion Corpus Thematic Indexes
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - recovery/classified-ledger-20260823
+    paths:
+      - scripts/pantavion-corpus-indexes.cjs
+      - .github/workflows/pantavion-corpus-thematic-indexes.yml
+      - data/recovery/canonical-ledger/corpus/**
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pantavion-corpus-thematic-indexes-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-verify-indexes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout complete recovery branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: recovery/classified-ledger-20260823
+
+      - name: Generate pointer-only thematic indexes
+        run: node scripts/pantavion-corpus-indexes.cjs
+
+      - name: Verify corpus and index invariants
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const corpus = JSON.parse(fs.readFileSync('data/recovery/canonical-ledger/corpus/manifest.json', 'utf8'));
+          const index = JSON.parse(fs.readFileSync('data/recovery/canonical-ledger/indexes/manifest.json', 'utf8'));
+          const expected = 32108;
+          const moduleTotal = index.modules.reduce((n, x) => n + x.totalRecords, 0);
+          const stageTotal = index.implementationStages.reduce((n, x) => n + x.totalRecords, 0);
+          const failures = [];
+          if (corpus.totalRecords !== expected) failures.push(`corpus total ${corpus.totalRecords} != ${expected}`);
+          if (index.totalRecords !== expected) failures.push(`index total ${index.totalRecords} != ${expected}`);
+          if (moduleTotal !== expected) failures.push(`module total ${moduleTotal} != ${expected}`);
+          if (stageTotal !== expected) failures.push(`stage total ${stageTotal} != ${expected}`);
+          if (index.totalBatches !== 22) failures.push(`batch total ${index.totalBatches} != 22`);
+          if (index.corpusFingerprint !== corpus.corpusFingerprint) failures.push('corpus fingerprint mismatch');
+          if (index.verifiedLive !== false) failures.push('verifiedLive must remain false');
+          if (index.deleteAllowed !== false) failures.push('deleteAllowed must remain false');
+          if (failures.length) throw new Error(failures.join('; '));
+          console.log(JSON.stringify({expected, moduleTotal, stageTotal, batches:index.totalBatches, verifiedLive:index.verifiedLive, deleteAllowed:index.deleteAllowed}, null, 2));
+          NODE
+
+      - name: Commit generated indexes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/recovery/canonical-ledger/indexes
+          if git diff --cached --quiet; then
+            echo "Indexes are already current."
+            exit 0
+          fi
+          git commit -m "data(recovery): materialize thematic corpus indexes"
+          for attempt in 1 2 3; do
+            if git pull --rebase origin recovery/classified-ledger-20260823 &&
+               git push origin HEAD:recovery/classified-ledger-20260823; then
+              exit 0
+            fi
+            echo "Push attempt ${attempt} failed; retrying after rebase."
+            sleep $((attempt * 5))
+          done
+          exit 1
