@@ -31,26 +31,38 @@ jobs:
       - name: Generate pointer-only thematic indexes
         run: node scripts/pantavion-corpus-indexes.cjs
 
-      - name: Verify corpus and index invariants
+      - name: Verify corpus, receipt and index invariants
         run: |
           node <<'NODE'
           const fs = require('fs');
           const corpus = JSON.parse(fs.readFileSync('data/recovery/canonical-ledger/corpus/manifest.json', 'utf8'));
+          const receipt = JSON.parse(fs.readFileSync('data/recovery/canonical-ledger/corpus/MATERIALIZATION_RECEIPT.json', 'utf8'));
           const index = JSON.parse(fs.readFileSync('data/recovery/canonical-ledger/indexes/manifest.json', 'utf8'));
-          const expected = 32108;
           const moduleTotal = index.modules.reduce((n, x) => n + x.totalRecords, 0);
           const stageTotal = index.implementationStages.reduce((n, x) => n + x.totalRecords, 0);
           const failures = [];
-          if (corpus.totalRecords !== expected) failures.push(`corpus total ${corpus.totalRecords} != ${expected}`);
-          if (index.totalRecords !== expected) failures.push(`index total ${index.totalRecords} != ${expected}`);
-          if (moduleTotal !== expected) failures.push(`module total ${moduleTotal} != ${expected}`);
-          if (stageTotal !== expected) failures.push(`stage total ${stageTotal} != ${expected}`);
-          if (index.totalBatches !== 22) failures.push(`batch total ${index.totalBatches} != 22`);
-          if (index.corpusFingerprint !== corpus.corpusFingerprint) failures.push('corpus fingerprint mismatch');
+          if (!Number.isSafeInteger(receipt.totalRecords) || receipt.totalRecords <= 0) failures.push('invalid receipt total');
+          if (receipt.totalRecords !== receipt.countedBatchRecords) failures.push('receipt counted-batch mismatch');
+          if (corpus.totalRecords !== receipt.totalRecords) failures.push('corpus/receipt total mismatch');
+          if (index.totalRecords !== receipt.totalRecords) failures.push('index/receipt total mismatch');
+          if (moduleTotal !== receipt.totalRecords) failures.push('module total mismatch');
+          if (stageTotal !== receipt.totalRecords) failures.push('stage total mismatch');
+          if (index.totalBatches !== receipt.totalBatches) failures.push('batch total mismatch');
+          if (index.corpusFingerprint !== receipt.corpusFingerprint) failures.push('index/receipt fingerprint mismatch');
+          if (corpus.corpusFingerprint !== receipt.corpusFingerprint) failures.push('corpus/receipt fingerprint mismatch');
+          if (receipt.tested !== false || receipt.verified !== false || receipt.deleteAllowed !== false) failures.push('receipt safety flags changed');
           if (index.verifiedLive !== false) failures.push('verifiedLive must remain false');
           if (index.deleteAllowed !== false) failures.push('deleteAllowed must remain false');
           if (failures.length) throw new Error(failures.join('; '));
-          console.log(JSON.stringify({expected, moduleTotal, stageTotal, batches:index.totalBatches, verifiedLive:index.verifiedLive, deleteAllowed:index.deleteAllowed}, null, 2));
+          console.log(JSON.stringify({
+            totalRecords: receipt.totalRecords,
+            moduleTotal,
+            stageTotal,
+            totalBatches: receipt.totalBatches,
+            corpusFingerprint: receipt.corpusFingerprint,
+            verifiedLive: index.verifiedLive,
+            deleteAllowed: index.deleteAllowed
+          }, null, 2));
           NODE
 
       - name: Commit generated indexes
