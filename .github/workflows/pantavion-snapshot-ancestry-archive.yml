@@ -1,0 +1,63 @@
+name: Pantavion Snapshot Ancestry Archive
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/pantavion-snapshot-ancestry-archive.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  archive:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Fetch exact snapshot refs
+        run: git fetch --no-tags origin '+refs/heads/recovery/snapshots/*:refs/remotes/origin/recovery/snapshots/*'
+      - name: Preserve every snapshot as canonical ancestry
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'pantavion-recovery-bot'
+          git config user.email 'pantavion-recovery-bot@users.noreply.github.com'
+
+          mapfile -t refs < <(git for-each-ref --format='%(refname)' refs/remotes/origin/recovery/snapshots/ | sort)
+          test "${#refs[@]}" -eq 91
+
+          missing=0
+          for ref in "${refs[@]}"; do
+            if ! git merge-base --is-ancestor "$ref" HEAD; then
+              missing=$((missing + 1))
+            fi
+          done
+
+          if [ "$missing" -eq 0 ]; then
+            echo 'All 91 snapshot heads are already canonical ancestors.'
+            exit 0
+          fi
+
+          initial_tree="$(git rev-parse HEAD^{tree})"
+          for ref in "${refs[@]}"; do
+            if git merge-base --is-ancestor "$ref" HEAD; then
+              continue
+            fi
+            sha="$(git rev-parse "$ref^{commit}")"
+            label="${ref#refs/remotes/origin/recovery/snapshots/}"
+            git merge -s ours --no-ff --no-edit -m "archive(recovery): preserve snapshot $label at $sha" "$ref"
+            test "$(git rev-parse HEAD^{tree})" = "$initial_tree"
+            git merge-base --is-ancestor "$sha" HEAD
+          done
+
+          final_missing=0
+          for ref in "${refs[@]}"; do
+            git merge-base --is-ancestor "$ref" HEAD || final_missing=$((final_missing + 1))
+          done
+          test "$final_missing" -eq 0
+          test "$(git rev-parse HEAD^{tree})" = "$initial_tree"
+
+          git push origin "HEAD:${{ github.head_ref }}"
