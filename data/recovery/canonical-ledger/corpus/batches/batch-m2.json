@@ -1,0 +1,2421 @@
+{
+  "checkpoint": {
+    "batchId": "batch-m2",
+    "batchLabel": "M2",
+    "startOrdinal": 56963,
+    "endOrdinal": 57021,
+    "recordCount": 59,
+    "sourceCounts": {
+      "current-code": 21,
+      "founder-vision": 19,
+      "unfinished-gap": 19
+    },
+    "moduleCounts": {
+      "UNCLASSIFIED": 59
+    },
+    "classifiedCount": 0,
+    "unresolvedCount": 59,
+    "crossBatchRelationCount": 0,
+    "generatedAt": "2026-08-23T15:51:50.101Z",
+    "corpusFingerprint": "9885c08c425302814205b5645b0224546e29fa86e70ce35571809e170405f91d"
+  },
+  "records": [
+    {
+      "id": "pk_6f8df8aeee21bb1bd496682c",
+      "ordinal": 56963,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-water-network-runtime-lock.cjs",
+        "sourceLine": 158,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (typeof expectedHash !== \"string\" || !/^[a-f0-9]{64}$/.test(expectedHash)) {\n      failures.push(`Required protected path is missing or invalid: ${requiredPath}`);\n    }\n  }",
+      "context": "if (typeof expectedHash !== \"string\" || !/^[a-f0-9]{64}$/.test(expectedHash)) {\n      failures.push(`Required protected path is missing or invalid: ${requiredPath}`);\n    }\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_1d9271d9d33e54fd40339109",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_733d4fa0310867261295f10d",
+      "ordinal": 56964,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-water-network-runtime-lock.cjs",
+        "sourceLine": 171,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {\n      failures.push(`Protected file is missing: ${relativePath}`);\n      continue;\n    }",
+      "context": "if (!fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {\n      failures.push(`Protected file is missing: ${relativePath}`);\n      continue;\n    }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_51d9e532f29012b3789b3c7d",
+      "ordinal": 56965,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-water-network-runtime-lock.cjs",
+        "sourceLine": 171,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {\n      failures.push(`Protected file is missing: ${relativePath}`);\n      continue;\n    }",
+      "context": "if (!fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {\n      failures.push(`Protected file is missing: ${relativePath}`);\n      continue;\n    }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_733d4fa0310867261295f10d",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_9c5ae6e1b608b4032bcdb8fe",
+      "ordinal": 56966,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-water-network-runtime-lock.cjs",
+        "sourceLine": 171,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {\n      failures.push(`Protected file is missing: ${relativePath}`);\n      continue;\n    }",
+      "context": "if (!fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {\n      failures.push(`Protected file is missing: ${relativePath}`);\n      continue;\n    }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_733d4fa0310867261295f10d",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_635530fc94b2c3543dfdf96b",
+      "ordinal": 56967,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/run-canonical-routing-truth-wave.ts",
+        "sourceLine": 1,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "// scripts/run-canonical-routing-truth-wave.ts",
+      "context": "// scripts/run-canonical-routing-truth-wave.ts",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_059a0cabce85e372c6c3cdb8",
+      "ordinal": 56968,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/run-canonical-routing-truth-wave.ts",
+        "sourceLine": 1,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "// scripts/run-canonical-routing-truth-wave.ts",
+      "context": "// scripts/run-canonical-routing-truth-wave.ts",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_635530fc94b2c3543dfdf96b",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_34864c0c1e3e076d1269b687",
+      "ordinal": 56969,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/run-canonical-routing-truth-wave.ts",
+        "sourceLine": 1,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "// scripts/run-canonical-routing-truth-wave.ts",
+      "context": "// scripts/run-canonical-routing-truth-wave.ts",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_635530fc94b2c3543dfdf96b",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_40fe8105e025064150d13dca",
+      "ordinal": 56970,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/run-canonical-routing-truth-wave.ts",
+        "sourceLine": 3,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "import { runCanonicalRoutingTruthWave } from '../core/protocol/canonical-routing-truth-wave';",
+      "context": "import { runCanonicalRoutingTruthWave } from '../core/protocol/canonical-routing-truth-wave';",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_ab01e59f35016054f7a81a51",
+      "ordinal": 56971,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/run-canonical-routing-truth-wave.ts",
+        "sourceLine": 3,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "import { runCanonicalRoutingTruthWave } from '../core/protocol/canonical-routing-truth-wave';",
+      "context": "import { runCanonicalRoutingTruthWave } from '../core/protocol/canonical-routing-truth-wave';",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_40fe8105e025064150d13dca",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_c92a831d424eef9063683856",
+      "ordinal": 56972,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/run-canonical-routing-truth-wave.ts",
+        "sourceLine": 3,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "import { runCanonicalRoutingTruthWave } from '../core/protocol/canonical-routing-truth-wave';",
+      "context": "import { runCanonicalRoutingTruthWave } from '../core/protocol/canonical-routing-truth-wave';",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_40fe8105e025064150d13dca",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_7159a94c0bbd91b6d36d9172",
+      "ordinal": 56973,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/run-canonical-routing-truth-wave.ts",
+        "sourceLine": 5,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function main(): Promise<void> {\n  const output = await runCanonicalRoutingTruthWave();\n  console.log(output.rendered);\n}",
+      "context": "async function main(): Promise<void> {\n  const output = await runCanonicalRoutingTruthWave();\n  console.log(output.rendered);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_71b119255db5286b18b76f70",
+      "ordinal": 56974,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/run-canonical-routing-truth-wave.ts",
+        "sourceLine": 5,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function main(): Promise<void> {\n  const output = await runCanonicalRoutingTruthWave();\n  console.log(output.rendered);\n}",
+      "context": "async function main(): Promise<void> {\n  const output = await runCanonicalRoutingTruthWave();\n  console.log(output.rendered);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_7159a94c0bbd91b6d36d9172",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_b68d3c451b185a7ad75ff58d",
+      "ordinal": 56975,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/run-canonical-routing-truth-wave.ts",
+        "sourceLine": 5,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function main(): Promise<void> {\n  const output = await runCanonicalRoutingTruthWave();\n  console.log(output.rendered);\n}",
+      "context": "async function main(): Promise<void> {\n  const output = await runCanonicalRoutingTruthWave();\n  console.log(output.rendered);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_7159a94c0bbd91b6d36d9172",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_245500424b15b987279c0db9",
+      "ordinal": 56976,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/run-donor-extraction-wave.ts",
+        "sourceLine": 1,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "// scripts/run-donor-extraction-wave.ts",
+      "context": "// scripts/run-donor-extraction-wave.ts",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_52a6c73486a646d6dc21c034",
+      "ordinal": 56977,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/run-donor-extraction-wave.ts",
+        "sourceLine": 1,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "// scripts/run-donor-extraction-wave.ts",
+      "context": "// scripts/run-donor-extraction-wave.ts",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_245500424b15b987279c0db9",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_8b56293a642dc5429ccf34fc",
+      "ordinal": 56978,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/run-donor-extraction-wave.ts",
+        "sourceLine": 1,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "// scripts/run-donor-extraction-wave.ts",
+      "context": "// scripts/run-donor-extraction-wave.ts",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_245500424b15b987279c0db9",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_a089a7741029bd8ff363e0aa",
+      "ordinal": 56979,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/run-donor-extraction-wave.ts",
+        "sourceLine": 3,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "import { runDonorExtractionWave } from '../core/recovery/donor-extraction-wave';",
+      "context": "import { runDonorExtractionWave } from '../core/recovery/donor-extraction-wave';",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_e8f9289790c0d67c8f08d11c",
+      "ordinal": 56980,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/run-donor-extraction-wave.ts",
+        "sourceLine": 3,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "import { runDonorExtractionWave } from '../core/recovery/donor-extraction-wave';",
+      "context": "import { runDonorExtractionWave } from '../core/recovery/donor-extraction-wave';",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_a089a7741029bd8ff363e0aa",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_0c8c343ee962c78e902ad9d7",
+      "ordinal": 56981,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/run-donor-extraction-wave.ts",
+        "sourceLine": 3,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "import { runDonorExtractionWave } from '../core/recovery/donor-extraction-wave';",
+      "context": "import { runDonorExtractionWave } from '../core/recovery/donor-extraction-wave';",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_a089a7741029bd8ff363e0aa",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_8493a6b1700833da6a208276",
+      "ordinal": 56982,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/run-donor-extraction-wave.ts",
+        "sourceLine": 5,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function main(): Promise<void> {\n  const output = await runDonorExtractionWave();\n  console.log(output.rendered);\n}",
+      "context": "async function main(): Promise<void> {\n  const output = await runDonorExtractionWave();\n  console.log(output.rendered);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_2a0d889feecba7462dc4e783",
+      "ordinal": 56983,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/run-donor-extraction-wave.ts",
+        "sourceLine": 5,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function main(): Promise<void> {\n  const output = await runDonorExtractionWave();\n  console.log(output.rendered);\n}",
+      "context": "async function main(): Promise<void> {\n  const output = await runDonorExtractionWave();\n  console.log(output.rendered);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_8493a6b1700833da6a208276",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_1e4040e65bc2c142ec961f9f",
+      "ordinal": 56984,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/run-donor-extraction-wave.ts",
+        "sourceLine": 5,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function main(): Promise<void> {\n  const output = await runDonorExtractionWave();\n  console.log(output.rendered);\n}",
+      "context": "async function main(): Promise<void> {\n  const output = await runDonorExtractionWave();\n  console.log(output.rendered);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_8493a6b1700833da6a208276",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_0058eb0db25336bbd79b8517",
+      "ordinal": 56985,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/run-project-recovery-audit-wave.ts",
+        "sourceLine": 1,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "// scripts/run-project-recovery-audit-wave.ts",
+      "context": "// scripts/run-project-recovery-audit-wave.ts",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_fb8e7c1077c91ef5bdd69dbb",
+      "ordinal": 56986,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/run-project-recovery-audit-wave.ts",
+        "sourceLine": 1,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "// scripts/run-project-recovery-audit-wave.ts",
+      "context": "// scripts/run-project-recovery-audit-wave.ts",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0058eb0db25336bbd79b8517",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_fb7c35016a671e8719062e09",
+      "ordinal": 56987,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/run-project-recovery-audit-wave.ts",
+        "sourceLine": 1,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "// scripts/run-project-recovery-audit-wave.ts",
+      "context": "// scripts/run-project-recovery-audit-wave.ts",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0058eb0db25336bbd79b8517",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_4c50077fb62b09ba5c7351a0",
+      "ordinal": 56988,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/run-project-recovery-audit-wave.ts",
+        "sourceLine": 3,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "import { runProjectRecoveryAuditWave } from '../core/recovery/project-recovery-audit-wave';",
+      "context": "import { runProjectRecoveryAuditWave } from '../core/recovery/project-recovery-audit-wave';",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_56f26eecc9e943ac36c17147",
+      "ordinal": 56989,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/run-project-recovery-audit-wave.ts",
+        "sourceLine": 3,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "import { runProjectRecoveryAuditWave } from '../core/recovery/project-recovery-audit-wave';",
+      "context": "import { runProjectRecoveryAuditWave } from '../core/recovery/project-recovery-audit-wave';",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_4c50077fb62b09ba5c7351a0",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_80a613dd48d8dd7d1a473aa6",
+      "ordinal": 56990,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/run-project-recovery-audit-wave.ts",
+        "sourceLine": 3,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "import { runProjectRecoveryAuditWave } from '../core/recovery/project-recovery-audit-wave';",
+      "context": "import { runProjectRecoveryAuditWave } from '../core/recovery/project-recovery-audit-wave';",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_4c50077fb62b09ba5c7351a0",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_dd3af90bcddba0ab114214bb",
+      "ordinal": 56991,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/run-project-recovery-audit-wave.ts",
+        "sourceLine": 5,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function main(): Promise<void> {\n  const output = await runProjectRecoveryAuditWave();\n  console.log(output.rendered);\n}",
+      "context": "async function main(): Promise<void> {\n  const output = await runProjectRecoveryAuditWave();\n  console.log(output.rendered);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_0cfac1387e098ec76f30fabf",
+      "ordinal": 56992,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/run-project-recovery-audit-wave.ts",
+        "sourceLine": 5,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function main(): Promise<void> {\n  const output = await runProjectRecoveryAuditWave();\n  console.log(output.rendered);\n}",
+      "context": "async function main(): Promise<void> {\n  const output = await runProjectRecoveryAuditWave();\n  console.log(output.rendered);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_dd3af90bcddba0ab114214bb",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_a5e08842d9473826d9271674",
+      "ordinal": 56993,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/run-project-recovery-audit-wave.ts",
+        "sourceLine": 5,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function main(): Promise<void> {\n  const output = await runProjectRecoveryAuditWave();\n  console.log(output.rendered);\n}",
+      "context": "async function main(): Promise<void> {\n  const output = await runProjectRecoveryAuditWave();\n  console.log(output.rendered);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_dd3af90bcddba0ab114214bb",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_75ae07b6b68ccb490315b215",
+      "ordinal": 56994,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/run-repository-triage-plan-wave.ts",
+        "sourceLine": 3,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "import { runRepositoryTriagePlanWave } from '../core/recovery/repository-triage-plan-wave';",
+      "context": "import { runRepositoryTriagePlanWave } from '../core/recovery/repository-triage-plan-wave';",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_3a498ff62a892013cc20f6ef",
+      "ordinal": 56995,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/run-repository-triage-plan-wave.ts",
+        "sourceLine": 3,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "import { runRepositoryTriagePlanWave } from '../core/recovery/repository-triage-plan-wave';",
+      "context": "import { runRepositoryTriagePlanWave } from '../core/recovery/repository-triage-plan-wave';",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_75ae07b6b68ccb490315b215",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_ff1c2f2fb8cf1fba8919a02e",
+      "ordinal": 56996,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/run-repository-triage-plan-wave.ts",
+        "sourceLine": 3,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "import { runRepositoryTriagePlanWave } from '../core/recovery/repository-triage-plan-wave';",
+      "context": "import { runRepositoryTriagePlanWave } from '../core/recovery/repository-triage-plan-wave';",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "UNCLASSIFIED",
+        "decision": "INVESTIGATE",
+        "liveState": "UNCLASSIFIED",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_75ae07b6b68ccb490315b215",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_9eeb503d609abee32ae69b79",
+      "ordinal": 56997,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/upload-final-master-dwg-to-blob.cjs",
+        "sourceLine": 37,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function main() {\n  loadEnv(\".env.local\");\n  const token = process.env.BLOB_READ_WRITE_TOKEN || process.env.PANTAVION_BLOB_READ_WRITE_TOKEN;\n  if (!token) throw new Error(\"BLOB_READ_WRITE_TOKEN_MISSING_PULL_VERCEL_ENV_FIRST\");",
+      "context": "async function main() {\n  loadEnv(\".env.local\");\n  const token = process.env.BLOB_READ_WRITE_TOKEN || process.env.PANTAVION_BLOB_READ_WRITE_TOKEN;\n  if (!token) throw new Error(\"BLOB_READ_WRITE_TOKEN_MISSING_PULL_VERCEL_ENV_FIRST\");",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_e41c25b7127555368c2ba2ca",
+      "ordinal": 56998,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/upload-final-master-dwg-to-blob.cjs",
+        "sourceLine": 37,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function main() {\n  loadEnv(\".env.local\");\n  const token = process.env.BLOB_READ_WRITE_TOKEN || process.env.PANTAVION_BLOB_READ_WRITE_TOKEN;\n  if (!token) throw new Error(\"BLOB_READ_WRITE_TOKEN_MISSING_PULL_VERCEL_ENV_FIRST\");",
+      "context": "async function main() {\n  loadEnv(\".env.local\");\n  const token = process.env.BLOB_READ_WRITE_TOKEN || process.env.PANTAVION_BLOB_READ_WRITE_TOKEN;\n  if (!token) throw new Error(\"BLOB_READ_WRITE_TOKEN_MISSING_PULL_VERCEL_ENV_FIRST\");",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_9eeb503d609abee32ae69b79",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_5eb3df13103b581bfe97ed99",
+      "ordinal": 56999,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/upload-final-master-dwg-to-blob.cjs",
+        "sourceLine": 37,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function main() {\n  loadEnv(\".env.local\");\n  const token = process.env.BLOB_READ_WRITE_TOKEN || process.env.PANTAVION_BLOB_READ_WRITE_TOKEN;\n  if (!token) throw new Error(\"BLOB_READ_WRITE_TOKEN_MISSING_PULL_VERCEL_ENV_FIRST\");",
+      "context": "async function main() {\n  loadEnv(\".env.local\");\n  const token = process.env.BLOB_READ_WRITE_TOKEN || process.env.PANTAVION_BLOB_READ_WRITE_TOKEN;\n  if (!token) throw new Error(\"BLOB_READ_WRITE_TOKEN_MISSING_PULL_VERCEL_ENV_FIRST\");",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_9eeb503d609abee32ae69b79",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_d9ba5fc902378b257d24ee38",
+      "ordinal": 57000,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/water-apply-original-kmz-styles-to-private-index.cjs",
+        "sourceLine": 77,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function extractKmlFromKmz() {\n  if (!fs.existsSync(kmzPath)) {\n    fail(\"Missing KMZ: \" + kmzPath);\n  }",
+      "context": "function extractKmlFromKmz() {\n  if (!fs.existsSync(kmzPath)) {\n    fail(\"Missing KMZ: \" + kmzPath);\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_4dd5e4cc3d5d754f5fac10a8",
+      "ordinal": 57001,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/water-apply-original-kmz-styles-to-private-index.cjs",
+        "sourceLine": 77,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function extractKmlFromKmz() {\n  if (!fs.existsSync(kmzPath)) {\n    fail(\"Missing KMZ: \" + kmzPath);\n  }",
+      "context": "function extractKmlFromKmz() {\n  if (!fs.existsSync(kmzPath)) {\n    fail(\"Missing KMZ: \" + kmzPath);\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_d9ba5fc902378b257d24ee38",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_75d6dba62aa35439e9e0d84c",
+      "ordinal": 57002,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/water-apply-original-kmz-styles-to-private-index.cjs",
+        "sourceLine": 77,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function extractKmlFromKmz() {\n  if (!fs.existsSync(kmzPath)) {\n    fail(\"Missing KMZ: \" + kmzPath);\n  }",
+      "context": "function extractKmlFromKmz() {\n  if (!fs.existsSync(kmzPath)) {\n    fail(\"Missing KMZ: \" + kmzPath);\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_d9ba5fc902378b257d24ee38",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_195e4fbda29ed28519acf015",
+      "ordinal": 57003,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/water-apply-original-kmz-styles-to-private-index.cjs",
+        "sourceLine": 160,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(ndjsonPath)) {\n  fail(\"Missing private NDJSON: \" + ndjsonPath);\n}",
+      "context": "if (!fs.existsSync(ndjsonPath)) {\n  fail(\"Missing private NDJSON: \" + ndjsonPath);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_48e7b18e346236ab5aeadfe2",
+      "ordinal": 57004,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/water-apply-original-kmz-styles-to-private-index.cjs",
+        "sourceLine": 160,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(ndjsonPath)) {\n  fail(\"Missing private NDJSON: \" + ndjsonPath);\n}",
+      "context": "if (!fs.existsSync(ndjsonPath)) {\n  fail(\"Missing private NDJSON: \" + ndjsonPath);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_195e4fbda29ed28519acf015",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_7cdf15faa08fccf1f6b5da0f",
+      "ordinal": 57005,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/water-apply-original-kmz-styles-to-private-index.cjs",
+        "sourceLine": 160,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "if (!fs.existsSync(ndjsonPath)) {\n  fail(\"Missing private NDJSON: \" + ndjsonPath);\n}",
+      "context": "if (!fs.existsSync(ndjsonPath)) {\n  fail(\"Missing private NDJSON: \" + ndjsonPath);\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_195e4fbda29ed28519acf015",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_556977291c075b4c4af7eec9",
+      "ordinal": 57006,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/water-guardian-production-smoke.cjs",
+        "sourceLine": 123,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "const deadline = Date.now() + deployWaitMs;\n  let lastState = \"missing\";",
+      "context": "const deadline = Date.now() + deployWaitMs;\n  let lastState = \"missing\";",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_89ccd2c34b60a7e36cb68150",
+      "ordinal": 57007,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/water-guardian-production-smoke.cjs",
+        "sourceLine": 123,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "const deadline = Date.now() + deployWaitMs;\n  let lastState = \"missing\";",
+      "context": "const deadline = Date.now() + deployWaitMs;\n  let lastState = \"missing\";",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_556977291c075b4c4af7eec9",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_690b854d66bde8143248c1e3",
+      "ordinal": 57008,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/water-guardian-production-smoke.cjs",
+        "sourceLine": 123,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "const deadline = Date.now() + deployWaitMs;\n  let lastState = \"missing\";",
+      "context": "const deadline = Date.now() + deployWaitMs;\n  let lastState = \"missing\";",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_556977291c075b4c4af7eec9",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_72d8be87732b7e322883c5da",
+      "ordinal": 57009,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/water-guardian-production-smoke.cjs",
+        "sourceLine": 146,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "const currentState = status\n      ? `${status.context || \"Vercel\"}:${status.state || \"missing\"}`\n      : \"missing\";\n    if (currentState !== lastState) {\n      console.log(`[INFO] Waiting for Vercel production status: ${currentState}`);\n      lastState = currentState;\n    }",
+      "context": "const currentState = status\n      ? `${status.context || \"Vercel\"}:${status.state || \"missing\"}`\n      : \"missing\";\n    if (currentState !== lastState) {\n      console.log(`[INFO] Waiting for Vercel production status: ${currentState}`);\n      lastState = currentState;\n    }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_aa95e7602773cce32d7f67c3",
+      "ordinal": 57010,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/water-guardian-production-smoke.cjs",
+        "sourceLine": 146,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "const currentState = status\n      ? `${status.context || \"Vercel\"}:${status.state || \"missing\"}`\n      : \"missing\";\n    if (currentState !== lastState) {\n      console.log(`[INFO] Waiting for Vercel production status: ${currentState}`);\n      lastState = currentState;\n    }",
+      "context": "const currentState = status\n      ? `${status.context || \"Vercel\"}:${status.state || \"missing\"}`\n      : \"missing\";\n    if (currentState !== lastState) {\n      console.log(`[INFO] Waiting for Vercel production status: ${currentState}`);\n      lastState = currentState;\n    }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_72d8be87732b7e322883c5da",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_b4ea4bd35814247c1f999708",
+      "ordinal": 57011,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/water-guardian-production-smoke.cjs",
+        "sourceLine": 146,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "const currentState = status\n      ? `${status.context || \"Vercel\"}:${status.state || \"missing\"}`\n      : \"missing\";\n    if (currentState !== lastState) {\n      console.log(`[INFO] Waiting for Vercel production status: ${currentState}`);\n      lastState = currentState;\n    }",
+      "context": "const currentState = status\n      ? `${status.context || \"Vercel\"}:${status.state || \"missing\"}`\n      : \"missing\";\n    if (currentState !== lastState) {\n      console.log(`[INFO] Waiting for Vercel production status: ${currentState}`);\n      lastState = currentState;\n    }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_72d8be87732b7e322883c5da",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_0a600ff12114c14cdef8dcf3",
+      "ordinal": 57012,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/water-guardian-production-smoke.cjs",
+        "sourceLine": 198,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "console.log(\n      `[INFO] Waiting for production alias: current=${deploymentId || \"missing\"} expected=${expectedDeploymentId}`,\n    );\n    await delay(8_000);\n  }",
+      "context": "console.log(\n      `[INFO] Waiting for production alias: current=${deploymentId || \"missing\"} expected=${expectedDeploymentId}`,\n    );\n    await delay(8_000);\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_e790e98184ac77f2f2eb21f5",
+      "ordinal": 57013,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/water-guardian-production-smoke.cjs",
+        "sourceLine": 198,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "console.log(\n      `[INFO] Waiting for production alias: current=${deploymentId || \"missing\"} expected=${expectedDeploymentId}`,\n    );\n    await delay(8_000);\n  }",
+      "context": "console.log(\n      `[INFO] Waiting for production alias: current=${deploymentId || \"missing\"} expected=${expectedDeploymentId}`,\n    );\n    await delay(8_000);\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0a600ff12114c14cdef8dcf3",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_cde92be0471ef6e81610b84a",
+      "ordinal": 57014,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/water-guardian-production-smoke.cjs",
+        "sourceLine": 198,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "console.log(\n      `[INFO] Waiting for production alias: current=${deploymentId || \"missing\"} expected=${expectedDeploymentId}`,\n    );\n    await delay(8_000);\n  }",
+      "context": "console.log(\n      `[INFO] Waiting for production alias: current=${deploymentId || \"missing\"} expected=${expectedDeploymentId}`,\n    );\n    await delay(8_000);\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_0a600ff12114c14cdef8dcf3",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_ce42797dad8534817a57a0c9",
+      "ordinal": 57015,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/water-guardian-surface-audit.cjs",
+        "sourceLine": 24,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function requireFile(relativePath) {\n  if (!exists(relativePath)) {\n    fail(\"Required file missing: \" + relativePath);\n    return \"\";\n  }",
+      "context": "function requireFile(relativePath) {\n  if (!exists(relativePath)) {\n    fail(\"Required file missing: \" + relativePath);\n    return \"\";\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_de873cadfadb6f1b608f95cc",
+      "ordinal": 57016,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/water-guardian-surface-audit.cjs",
+        "sourceLine": 24,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function requireFile(relativePath) {\n  if (!exists(relativePath)) {\n    fail(\"Required file missing: \" + relativePath);\n    return \"\";\n  }",
+      "context": "function requireFile(relativePath) {\n  if (!exists(relativePath)) {\n    fail(\"Required file missing: \" + relativePath);\n    return \"\";\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_ce42797dad8534817a57a0c9",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_42eca394c732bf7ea33e4155",
+      "ordinal": 57017,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/water-guardian-surface-audit.cjs",
+        "sourceLine": 24,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function requireFile(relativePath) {\n  if (!exists(relativePath)) {\n    fail(\"Required file missing: \" + relativePath);\n    return \"\";\n  }",
+      "context": "function requireFile(relativePath) {\n  if (!exists(relativePath)) {\n    fail(\"Required file missing: \" + relativePath);\n    return \"\";\n  }",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_ce42797dad8534817a57a0c9",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_05046f6353c4031757470c57",
+      "ordinal": 57018,
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/water-guardian-surface-audit.cjs",
+        "sourceLine": 34,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function requireMarker(content, label, marker) {\n  if (content.includes(marker)) {\n    pass(\"Marker present in \" + label + \": \" + marker);\n  } else {\n    fail(\"Marker missing in \" + label + \": \" + marker);\n  }\n}",
+      "context": "function requireMarker(content, label, marker) {\n  if (content.includes(marker)) {\n    pass(\"Marker present in \" + label + \": \" + marker);\n  } else {\n    fail(\"Marker missing in \" + label + \": \" + marker);\n  }\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_cac480836be1eef2ffe38e33",
+      "ordinal": 57019,
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/water-guardian-surface-audit.cjs",
+        "sourceLine": 34,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function requireMarker(content, label, marker) {\n  if (content.includes(marker)) {\n    pass(\"Marker present in \" + label + \": \" + marker);\n  } else {\n    fail(\"Marker missing in \" + label + \": \" + marker);\n  }\n}",
+      "context": "function requireMarker(content, label, marker) {\n  if (content.includes(marker)) {\n    pass(\"Marker present in \" + label + \": \" + marker);\n  } else {\n    fail(\"Marker missing in \" + label + \": \" + marker);\n  }\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_05046f6353c4031757470c57",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_928f4b7d26583f93d306c76b",
+      "ordinal": 57020,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/water-guardian-surface-audit.cjs",
+        "sourceLine": 34,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "function requireMarker(content, label, marker) {\n  if (content.includes(marker)) {\n    pass(\"Marker present in \" + label + \": \" + marker);\n  } else {\n    fail(\"Marker missing in \" + label + \": \" + marker);\n  }\n}",
+      "context": "function requireMarker(content, label, marker) {\n  if (content.includes(marker)) {\n    pass(\"Marker present in \" + label + \": \" + marker);\n  } else {\n    fail(\"Marker missing in \" + label + \": \" + marker);\n  }\n}",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SCRIPT",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [
+        {
+          "type": "DUPLICATE_EXACT",
+          "targetId": "pk_05046f6353c4031757470c57",
+          "rationale": "Normalized source text is exact-match equivalent.",
+          "confidence": 1
+        }
+      ],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    },
+    {
+      "id": "pk_830694163f45c01b3b6ddf1a",
+      "ordinal": 57021,
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "services/translation-agent.ts",
+        "sourceLine": 64,
+        "sourceRef": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceCommit": "f24ebd86aebb54aba4eca3fc1c000c636630e15f",
+        "sourceReport": null
+      },
+      "marker": null,
+      "text": "async function claimExecution(exec: PantavionDurableExecutionRecord) {\n    const admin = createAdminClient();\n    const claim = await admin.rpc(\"pantavion_claim_durable_execution\", {\n      p_execution_id: exec.executionId,\n      p_expected_statuses: [\"queued\", \"planned\"],\n    });",
+      "context": "async function claimExecution(exec: PantavionDurableExecutionRecord) {\n    const admin = createAdminClient();\n    const claim = await admin.rpc(\"pantavion_claim_durable_execution\", {\n      p_execution_id: exec.executionId,\n      p_expected_statuses: [\"queued\", \"planned\"],\n    });",
+      "classification": {
+        "topicFamily": null,
+        "productDomain": null,
+        "module": null,
+        "subsystem": null,
+        "capability": null,
+        "feature": null,
+        "layer": "SERVICE",
+        "recoveryState": "PARTIAL",
+        "decision": "INVESTIGATE",
+        "liveState": "BACKEND_PARTIAL",
+        "canonicalTarget": null,
+        "owningKernel": null,
+        "guardianLane": null,
+        "agentLane": null,
+        "blockers": [],
+        "nextAction": "Semantic review required; do not merge or deduplicate."
+      },
+      "relations": [],
+      "reviewStatus": "REVIEW_REQUIRED",
+      "notes": []
+    }
+  ]
+}
