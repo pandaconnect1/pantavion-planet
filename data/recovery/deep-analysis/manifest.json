@@ -1,6 +1,6 @@
 {
   "id": "pantavion_deep_branch_analysis_v1",
-  "generatedAt": "2026-08-23T15:24:20.139Z",
+  "generatedAt": "2026-08-23T15:30:00.942Z",
   "truth": "Machine-generated file-level analysis of every exact snapshot against origin/main. It is evidence for review, not a claim of canonicalization, testing or live verification.",
   "totals": {
     "snapshotBranches": 91,
