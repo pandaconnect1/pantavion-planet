@@ -21,7 +21,7 @@ const rows=[];
 for(const moduleName of expectedModules){
  const entry=manifest.modules.find(x=>x.module===moduleName);
  if(!entry){
-  rows.push({module:moduleName,total:0,liveEvidenceRequiresVerification:0,codePresentUnverified:0,gapsOrBlockers:0,ideasOrSpecifications:0,reviewRequired:0,classified:0,assessment:"EMPTY_NO_RECOVERED_RECORDS",verifiedComplete:false});
+  rows.push({module:moduleName,total:0,liveEvidenceRequiresVerification:0,codePresentUnverified:0,gapsOrBlockers:0,ideasOrSpecifications:0,reviewRequired:0,classified:0,assessment:"NO_DEDICATED_CLASSIFICATION_YET",verifiedComplete:false});
   continue;
  }
  const value=JSON.parse(fs.readFileSync(path.join(indexRoot,entry.file),"utf8"));
@@ -37,7 +37,7 @@ for(const moduleName of expectedModules){
  const live=counts.LIVE_EVIDENCE_REQUIRES_VERIFICATION||0;
  const ideas=counts.IDEA_OR_SPECIFICATION||0;
  let assessment;
- if(total===0) assessment="EMPTY_NO_RECOVERED_RECORDS";
+ if(total===0) assessment="NO_DEDICATED_CLASSIFICATION_YET";
  else if(live>0 && gaps===0 && reviewRequired===0) assessment="LIVE_EVIDENCE_CANDIDATE_REQUIRES_E2E_VERIFICATION";
  else if(code>0 && gaps/total<=0.05 && reviewRequired/total<=0.10) assessment="MINOR_GAPS_CANDIDATE_UNVERIFIED";
  else if(code>0 && gaps/total<=0.25) assessment="PARTIAL_WITH_MANAGEABLE_GAPS";
@@ -53,9 +53,9 @@ const summary={
  corpusFingerprint:manifest.corpusFingerprint,
  totalCorpusRecords:manifest.totalRecords,
  expectedModules:rows.length,
- emptyModules:rows.filter(x=>x.assessment==="EMPTY_NO_RECOVERED_RECORDS").length,
+ noDedicatedClassificationModules:rows.filter(x=>x.assessment==="NO_DEDICATED_CLASSIFICATION_YET").length,
  verifiedCompleteModules:0,
- truth:"Evidence-based triage only. No module is complete until production E2E tests and live verification pass.",
+ truth:"Evidence-based triage only. Zero dedicated records does not prove an empty module; content may be embedded in broader categories or UNCLASSIFIED. No module is complete until production E2E tests and live verification pass.",
  verifiedLive:false,
  deleteAllowed:false,
  extraRecoveredCategories:extra,
