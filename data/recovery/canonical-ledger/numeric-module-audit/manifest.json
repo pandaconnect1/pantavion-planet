@@ -1,0 +1,1262 @@
+{
+  "id": "pantavion_five_module_numeric_audit_v1",
+  "generatedAt": "2026-08-23T17:02:25.575Z",
+  "modules": [
+    {
+      "module": "People",
+      "totalReferences": 2700,
+      "uniqueEvidenceUnits": 1536,
+      "uniqueSourceFiles": 205,
+      "exactDuplicateRelations": 1186,
+      "reviewRequired": 1764,
+      "classified": 936,
+      "stages": [
+        {
+          "value": "CODE_PRESENT_UNVERIFIED",
+          "count": 1409
+        },
+        {
+          "value": "GAP_OR_BLOCKER",
+          "count": 710
+        },
+        {
+          "value": "IDEA_OR_SPECIFICATION",
+          "count": 561
+        },
+        {
+          "value": "LIVE_EVIDENCE_REQUIRES_VERIFICATION",
+          "count": 20
+        }
+      ],
+      "sourceFamilies": [
+        {
+          "value": "recovery",
+          "count": 876
+        },
+        {
+          "value": "unfinished-gap",
+          "count": 710
+        },
+        {
+          "value": "founder-vision",
+          "count": 561
+        },
+        {
+          "value": "current-code",
+          "count": 471
+        },
+        {
+          "value": "donor",
+          "count": 62
+        },
+        {
+          "value": "live-state",
+          "count": 20
+        }
+      ],
+      "recoveryStates": [
+        {
+          "value": "UNCLASSIFIED",
+          "count": 1643
+        },
+        {
+          "value": "PARTIAL",
+          "count": 1057
+        }
+      ],
+      "liveStates": [
+        {
+          "value": "UNCLASSIFIED",
+          "count": 1639
+        },
+        {
+          "value": "BACKEND_PARTIAL",
+          "count": 1030
+        },
+        {
+          "value": "DEPLOYED",
+          "count": 31
+        }
+      ],
+      "layers": [
+        {
+          "value": "DATA",
+          "count": 951
+        },
+        {
+          "value": "UI",
+          "count": 705
+        },
+        {
+          "value": "UNKNOWN",
+          "count": 438
+        },
+        {
+          "value": "RECOVERY",
+          "count": 251
+        },
+        {
+          "value": "API",
+          "count": 105
+        },
+        {
+          "value": "DOCS",
+          "count": 87
+        },
+        {
+          "value": "KERNEL",
+          "count": 66
+        },
+        {
+          "value": "SCRIPT",
+          "count": 51
+        },
+        {
+          "value": "RUNTIME",
+          "count": 45
+        },
+        {
+          "value": "SERVICE",
+          "count": 1
+        }
+      ],
+      "topSourceFiles": [
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+          "count": 462
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+          "count": 244
+        },
+        {
+          "value": "app/sos/contacts/page.tsx",
+          "count": 78
+        },
+        {
+          "value": "data/runtime-reports/latest-founder-vision-ingestion.json",
+          "count": 78
+        },
+        {
+          "value": "docs/recovery/LIVE_COMPLETION_MAP.md",
+          "count": 75
+        },
+        {
+          "value": "app/pantavion/emergency/profile/page.tsx",
+          "count": 72
+        },
+        {
+          "value": "data/runtime-reports/latest-unfinished-plan-ingestion.json",
+          "count": 69
+        },
+        {
+          "value": "core/intelligence/prime-ai-orchestrator.ts",
+          "count": 66
+        },
+        {
+          "value": "app/people/people-client.tsx",
+          "count": 51
+        },
+        {
+          "value": "docs/recovery/DONOR_REPOSITORY_CONSOLIDATION_20260819.md",
+          "count": 40
+        },
+        {
+          "value": "core/emergency/sos-storage.ts",
+          "count": 39
+        },
+        {
+          "value": "app/auth/actions.ts",
+          "count": 33
+        },
+        {
+          "value": "app/people/page.tsx",
+          "count": 33
+        },
+        {
+          "value": "core/identity/identity-model.ts",
+          "count": 30
+        },
+        {
+          "value": "core/runtime/voice-geo-locale-registry.ts",
+          "count": 30
+        },
+        {
+          "value": "docs/recovery/HUMAN_COMMUNICATION_CORE_SCHEMA.md",
+          "count": 28
+        },
+        {
+          "value": "docs/recovery/PANTAVION_MASTER_RECOVERY_CONTINUATION_BRIEF.md",
+          "count": 28
+        },
+        {
+          "value": "app/auth/complete-profile/page.tsx",
+          "count": 27
+        },
+        {
+          "value": "app/api/professional/infrastructure/water/help/request/route.ts",
+          "count": 24
+        },
+        {
+          "value": "app/listings/[listingId]/page.tsx",
+          "count": 24
+        },
+        {
+          "value": "app/pantavion/emergency/guardian/page.tsx",
+          "count": 24
+        },
+        {
+          "value": "core/intelligence/ai-governance-profile.ts",
+          "count": 24
+        },
+        {
+          "value": "docs/recovery/social-people-chat-full-excavation-20260815.md",
+          "count": 24
+        },
+        {
+          "value": "scripts/apply-pantavion-global-safety-patch.cjs",
+          "count": 24
+        },
+        {
+          "value": "app/profile/ProfileClient.tsx",
+          "count": 21
+        },
+        {
+          "value": "core/intelligence/ai-authority-registry-wave.ts",
+          "count": 21
+        },
+        {
+          "value": "app/professional/infrastructure/water/access/water-access-control-client.tsx",
+          "count": 18
+        },
+        {
+          "value": "app/profile/page.tsx",
+          "count": 18
+        },
+        {
+          "value": "app/sos/page.tsx",
+          "count": 18
+        },
+        {
+          "value": "core/continuity/identity-registry.ts",
+          "count": 18
+        }
+      ],
+      "topCanonicalTargets": [
+        {
+          "value": "canonical-module:People",
+          "count": 2700
+        }
+      ],
+      "topBlockers": [
+        {
+          "value": "NONE",
+          "count": 2700
+        }
+      ],
+      "topNextActions": [
+        {
+          "value": "Semantic review required; do not merge or deduplicate.",
+          "count": 1764
+        },
+        {
+          "value": "Compare with same-module records and current canonical implementation before merge/evolve decision.",
+          "count": 936
+        }
+      ]
+    },
+    {
+      "module": "Chat",
+      "totalReferences": 2177,
+      "uniqueEvidenceUnits": 1186,
+      "uniqueSourceFiles": 190,
+      "exactDuplicateRelations": 1017,
+      "reviewRequired": 1233,
+      "classified": 944,
+      "stages": [
+        {
+          "value": "CODE_PRESENT_UNVERIFIED",
+          "count": 1148
+        },
+        {
+          "value": "GAP_OR_BLOCKER",
+          "count": 536
+        },
+        {
+          "value": "IDEA_OR_SPECIFICATION",
+          "count": 488
+        },
+        {
+          "value": "LIVE_EVIDENCE_REQUIRES_VERIFICATION",
+          "count": 5
+        }
+      ],
+      "sourceFamilies": [
+        {
+          "value": "recovery",
+          "count": 660
+        },
+        {
+          "value": "unfinished-gap",
+          "count": 536
+        },
+        {
+          "value": "founder-vision",
+          "count": 488
+        },
+        {
+          "value": "current-code",
+          "count": 463
+        },
+        {
+          "value": "donor",
+          "count": 25
+        },
+        {
+          "value": "live-state",
+          "count": 5
+        }
+      ],
+      "recoveryStates": [
+        {
+          "value": "UNCLASSIFIED",
+          "count": 1402
+        },
+        {
+          "value": "PARTIAL",
+          "count": 775
+        }
+      ],
+      "liveStates": [
+        {
+          "value": "UNCLASSIFIED",
+          "count": 1402
+        },
+        {
+          "value": "BACKEND_PARTIAL",
+          "count": 775
+        }
+      ],
+      "layers": [
+        {
+          "value": "UI",
+          "count": 684
+        },
+        {
+          "value": "DATA",
+          "count": 680
+        },
+        {
+          "value": "API",
+          "count": 237
+        },
+        {
+          "value": "UNKNOWN",
+          "count": 184
+        },
+        {
+          "value": "SCRIPT",
+          "count": 156
+        },
+        {
+          "value": "RECOVERY",
+          "count": 96
+        },
+        {
+          "value": "KERNEL",
+          "count": 81
+        },
+        {
+          "value": "DOCS",
+          "count": 33
+        },
+        {
+          "value": "RUNTIME",
+          "count": 15
+        },
+        {
+          "value": "SERVICE",
+          "count": 11
+        }
+      ],
+      "topSourceFiles": [
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-a.json",
+          "count": 421
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-b.json",
+          "count": 136
+        },
+        {
+          "value": "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx",
+          "count": 66
+        },
+        {
+          "value": "app/messages/[conversationId]/conversation-client.tsx",
+          "count": 63
+        },
+        {
+          "value": "app/professional/infrastructure/water/admin/approvals/page.tsx",
+          "count": 51
+        },
+        {
+          "value": "app/professional/infrastructure/water/final-master-dwg/final-master-dwg-uploader.tsx",
+          "count": 45
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-d.json",
+          "count": 43
+        },
+        {
+          "value": "app/professional/infrastructure/water/components/water-derived-map-client.tsx",
+          "count": 36
+        },
+        {
+          "value": "app/messages/page.tsx",
+          "count": 27
+        },
+        {
+          "value": "core/kernel/pantavion-autonomous-builder-kernel.ts",
+          "count": 27
+        },
+        {
+          "value": "data/runtime-reports/latest-founder-vision-ingestion.json",
+          "count": 25
+        },
+        {
+          "value": "data/runtime-reports/latest-unfinished-plan-ingestion.json",
+          "count": 22
+        },
+        {
+          "value": "app/api/professional/infrastructure/water/field/fault/route.ts",
+          "count": 21
+        },
+        {
+          "value": "app/professional/infrastructure/water/admin/access/page.tsx",
+          "count": 21
+        },
+        {
+          "value": "app/professional/infrastructure/water/admin/faults/page.tsx",
+          "count": 21
+        },
+        {
+          "value": "app/professional/infrastructure/water/help/inbox/page.tsx",
+          "count": 21
+        },
+        {
+          "value": "docs/recovery/LIVE_COMPLETION_MAP.md",
+          "count": 20
+        },
+        {
+          "value": "docs/recovery/social-people-chat-full-excavation-20260815.md",
+          "count": 20
+        },
+        {
+          "value": "app/api/professional/infrastructure/water/help/thread/route.ts",
+          "count": 18
+        },
+        {
+          "value": "app/messages/[conversationId]/page.tsx",
+          "count": 18
+        },
+        {
+          "value": "app/my-media/my-media-client.tsx",
+          "count": 18
+        },
+        {
+          "value": "app/professional/infrastructure/water/admin/login/page.tsx",
+          "count": 18
+        },
+        {
+          "value": "app/sos/contacts/page.tsx",
+          "count": 18
+        },
+        {
+          "value": "core/kernel/pantavion-implementation-engine.ts",
+          "count": 18
+        },
+        {
+          "value": "app/api/messages/send/route.ts",
+          "count": 15
+        },
+        {
+          "value": "app/api/professional/infrastructure/water/admin/session/route.ts",
+          "count": 15
+        },
+        {
+          "value": "app/professional/infrastructure/water/access/water-access-control-client.tsx",
+          "count": 15
+        },
+        {
+          "value": "app/professional/infrastructure/water/admin/faults/[recordNumber]/page.tsx",
+          "count": 15
+        },
+        {
+          "value": "app/translate/interpreter/two-device-session.tsx",
+          "count": 15
+        },
+        {
+          "value": "core/connectivity/connectivity-state-contract.ts",
+          "count": 15
+        }
+      ],
+      "topCanonicalTargets": [
+        {
+          "value": "canonical-module:Chat",
+          "count": 2177
+        }
+      ],
+      "topBlockers": [
+        {
+          "value": "NONE",
+          "count": 2177
+        }
+      ],
+      "topNextActions": [
+        {
+          "value": "Semantic review required; do not merge or deduplicate.",
+          "count": 1233
+        },
+        {
+          "value": "Compare with same-module records and current canonical implementation before merge/evolve decision.",
+          "count": 944
+        }
+      ]
+    },
+    {
+      "module": "Social / Pulse / Communities",
+      "totalReferences": 1864,
+      "uniqueEvidenceUnits": 1417,
+      "uniqueSourceFiles": 156,
+      "exactDuplicateRelations": 494,
+      "reviewRequired": 875,
+      "classified": 989,
+      "stages": [
+        {
+          "value": "CODE_PRESENT_UNVERIFIED",
+          "count": 1382
+        },
+        {
+          "value": "GAP_OR_BLOCKER",
+          "count": 261
+        },
+        {
+          "value": "IDEA_OR_SPECIFICATION",
+          "count": 217
+        },
+        {
+          "value": "LIVE_EVIDENCE_REQUIRES_VERIFICATION",
+          "count": 4
+        }
+      ],
+      "sourceFamilies": [
+        {
+          "value": "recovery",
+          "count": 1179
+        },
+        {
+          "value": "unfinished-gap",
+          "count": 261
+        },
+        {
+          "value": "founder-vision",
+          "count": 217
+        },
+        {
+          "value": "current-code",
+          "count": 180
+        },
+        {
+          "value": "donor",
+          "count": 23
+        },
+        {
+          "value": "live-state",
+          "count": 4
+        }
+      ],
+      "recoveryStates": [
+        {
+          "value": "PARTIAL",
+          "count": 1196
+        },
+        {
+          "value": "UNCLASSIFIED",
+          "count": 668
+        }
+      ],
+      "liveStates": [
+        {
+          "value": "BACKEND_PARTIAL",
+          "count": 1191
+        },
+        {
+          "value": "UNCLASSIFIED",
+          "count": 664
+        },
+        {
+          "value": "DEPLOYED",
+          "count": 9
+        }
+      ],
+      "layers": [
+        {
+          "value": "DATA",
+          "count": 1190
+        },
+        {
+          "value": "UI",
+          "count": 273
+        },
+        {
+          "value": "API",
+          "count": 147
+        },
+        {
+          "value": "RECOVERY",
+          "count": 95
+        },
+        {
+          "value": "UNKNOWN",
+          "count": 80
+        },
+        {
+          "value": "DOCS",
+          "count": 32
+        },
+        {
+          "value": "SCRIPT",
+          "count": 26
+        },
+        {
+          "value": "KERNEL",
+          "count": 18
+        },
+        {
+          "value": "RUNTIME",
+          "count": 3
+        }
+      ],
+      "topSourceFiles": [
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-h2.json",
+          "count": 493
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-i2.json",
+          "count": 232
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+          "count": 61
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+          "count": 53
+        },
+        {
+          "value": "docs/recovery/SOCIAL_GLOBAL_001_20260717.md",
+          "count": 48
+        },
+        {
+          "value": "app/social/page.tsx",
+          "count": 45
+        },
+        {
+          "value": "app/social/social-home-client.tsx",
+          "count": 42
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-f.json",
+          "count": 33
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-b.json",
+          "count": 30
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-a.json",
+          "count": 29
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-u.json",
+          "count": 25
+        },
+        {
+          "value": "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx",
+          "count": 21
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-k2.json",
+          "count": 21
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-d.json",
+          "count": 20
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-s.json",
+          "count": 20
+        },
+        {
+          "value": "app/social/communities/actions.ts",
+          "count": 18
+        },
+        {
+          "value": "data/runtime-reports/latest-founder-vision-ingestion.json",
+          "count": 18
+        },
+        {
+          "value": "data/runtime-reports/latest-unfinished-plan-ingestion.json",
+          "count": 18
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-t.json",
+          "count": 17
+        },
+        {
+          "value": "app/professional/infrastructure/water/admin/approvals/page.tsx",
+          "count": 15
+        },
+        {
+          "value": "app/social/communities/page.tsx",
+          "count": 15
+        },
+        {
+          "value": "core/governance/social-country-packs.ts",
+          "count": 15
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-n.json",
+          "count": 14
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-e.json",
+          "count": 13
+        },
+        {
+          "value": "app/feedback/page.tsx",
+          "count": 12
+        },
+        {
+          "value": "app/social/notifications/page.tsx",
+          "count": 12
+        },
+        {
+          "value": "core/kernel/kernel.ts",
+          "count": 12
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-g.json",
+          "count": 12
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-l.json",
+          "count": 12
+        },
+        {
+          "value": "docs/recovery/social-people-chat-full-excavation-20260815.md",
+          "count": 12
+        }
+      ],
+      "topCanonicalTargets": [
+        {
+          "value": "canonical-module:Social / Pulse / Communities",
+          "count": 1864
+        }
+      ],
+      "topBlockers": [
+        {
+          "value": "NONE",
+          "count": 1864
+        }
+      ],
+      "topNextActions": [
+        {
+          "value": "Compare with same-module records and current canonical implementation before merge/evolve decision.",
+          "count": 989
+        },
+        {
+          "value": "Semantic review required; do not merge or deduplicate.",
+          "count": 875
+        }
+      ]
+    },
+    {
+      "module": "Interpreter / Translation",
+      "totalReferences": 4976,
+      "uniqueEvidenceUnits": 3184,
+      "uniqueSourceFiles": 234,
+      "exactDuplicateRelations": 1882,
+      "reviewRequired": 3043,
+      "classified": 1933,
+      "stages": [
+        {
+          "value": "CODE_PRESENT_UNVERIFIED",
+          "count": 2834
+        },
+        {
+          "value": "GAP_OR_BLOCKER",
+          "count": 1248
+        },
+        {
+          "value": "IDEA_OR_SPECIFICATION",
+          "count": 885
+        },
+        {
+          "value": "LIVE_EVIDENCE_REQUIRES_VERIFICATION",
+          "count": 9
+        }
+      ],
+      "sourceFamilies": [
+        {
+          "value": "recovery",
+          "count": 1942
+        },
+        {
+          "value": "unfinished-gap",
+          "count": 1248
+        },
+        {
+          "value": "founder-vision",
+          "count": 885
+        },
+        {
+          "value": "current-code",
+          "count": 858
+        },
+        {
+          "value": "donor",
+          "count": 34
+        },
+        {
+          "value": "live-state",
+          "count": 9
+        }
+      ],
+      "recoveryStates": [
+        {
+          "value": "UNCLASSIFIED",
+          "count": 2854
+        },
+        {
+          "value": "PARTIAL",
+          "count": 2122
+        }
+      ],
+      "liveStates": [
+        {
+          "value": "UNCLASSIFIED",
+          "count": 2847
+        },
+        {
+          "value": "BACKEND_PARTIAL",
+          "count": 2112
+        },
+        {
+          "value": "DEPLOYED",
+          "count": 17
+        }
+      ],
+      "layers": [
+        {
+          "value": "DATA",
+          "count": 2256
+        },
+        {
+          "value": "UNKNOWN",
+          "count": 921
+        },
+        {
+          "value": "UI",
+          "count": 885
+        },
+        {
+          "value": "SCRIPT",
+          "count": 392
+        },
+        {
+          "value": "API",
+          "count": 264
+        },
+        {
+          "value": "RECOVERY",
+          "count": 111
+        },
+        {
+          "value": "KERNEL",
+          "count": 54
+        },
+        {
+          "value": "DOCS",
+          "count": 44
+        },
+        {
+          "value": "RUNTIME",
+          "count": 39
+        },
+        {
+          "value": "SERVICE",
+          "count": 10
+        }
+      ],
+      "topSourceFiles": [
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-d.json",
+          "count": 841
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-e.json",
+          "count": 421
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-g.json",
+          "count": 303
+        },
+        {
+          "value": "data/runtime-reports/latest-founder-vision-ingestion.json",
+          "count": 217
+        },
+        {
+          "value": "app/sos/elder/page.tsx",
+          "count": 183
+        },
+        {
+          "value": "core/translation/pantavion-translation-provider-adapters.ts",
+          "count": 165
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-f.json",
+          "count": 154
+        },
+        {
+          "value": "data/runtime-reports/latest-unfinished-plan-ingestion.json",
+          "count": 134
+        },
+        {
+          "value": "scripts/apply-pantavion-global-safety-patch.cjs",
+          "count": 111
+        },
+        {
+          "value": "app/translate/page.tsx",
+          "count": 84
+        },
+        {
+          "value": "app/professional/infrastructure/water/readiness/water-readiness-live-console.tsx",
+          "count": 75
+        },
+        {
+          "value": "app/translate/interpreter/page.tsx",
+          "count": 69
+        },
+        {
+          "value": "app/api/pantavion/translate/route.ts",
+          "count": 66
+        },
+        {
+          "value": "app/translate/interpreter/two-device-session.tsx",
+          "count": 66
+        },
+        {
+          "value": "scripts/global-emergency-languages-patch.cjs",
+          "count": 60
+        },
+        {
+          "value": "app/api/pantavion/speech-to-text/route.ts",
+          "count": 57
+        },
+        {
+          "value": "app/messages/[conversationId]/conversation-client.tsx",
+          "count": 57
+        },
+        {
+          "value": "app/professional/infrastructure/water/readiness/water-multimodal-language-console.tsx",
+          "count": 45
+        },
+        {
+          "value": "app/api/pantavion/interpreter/health/route.ts",
+          "count": 39
+        },
+        {
+          "value": "core/translation/pantavion-translation-provider-router.ts",
+          "count": 36
+        },
+        {
+          "value": "scripts/pantavion-master-audit.cjs",
+          "count": 36
+        },
+        {
+          "value": "docs/recovery/LIVE_COMPLETION_MAP.md",
+          "count": 35
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-k2.json",
+          "count": 34
+        },
+        {
+          "value": "core/emergency/global-emergency-languages.ts",
+          "count": 33
+        },
+        {
+          "value": "core/language/pantavion-language-atlas.ts",
+          "count": 33
+        },
+        {
+          "value": "app/pantavion-global-language-selector.tsx",
+          "count": 27
+        },
+        {
+          "value": "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx",
+          "count": 27
+        },
+        {
+          "value": "core/kernel/language/pantavion-language-kernel.ts",
+          "count": 27
+        },
+        {
+          "value": "core/runtime/voice-language-backbone.ts",
+          "count": 27
+        },
+        {
+          "value": "core/translation/pantavion-language-provider-runtime.ts",
+          "count": 27
+        }
+      ],
+      "topCanonicalTargets": [
+        {
+          "value": "canonical-module:Interpreter / Translation",
+          "count": 4976
+        }
+      ],
+      "topBlockers": [
+        {
+          "value": "NONE",
+          "count": 4976
+        }
+      ],
+      "topNextActions": [
+        {
+          "value": "Semantic review required; do not merge or deduplicate.",
+          "count": 3043
+        },
+        {
+          "value": "Compare with same-module records and current canonical implementation before merge/evolve decision.",
+          "count": 1933
+        }
+      ]
+    },
+    {
+      "module": "Dating (semantic references)",
+      "totalReferences": 266,
+      "uniqueEvidenceUnits": 154,
+      "uniqueSourceFiles": 46,
+      "reviewRequired": 74,
+      "classifiedElsewhere": 192,
+      "currentModules": [
+        {
+          "value": "People",
+          "count": 115
+        },
+        {
+          "value": "Kernel / Guardian / Runtime",
+          "count": 42
+        },
+        {
+          "value": "Personal AI / PantaAI",
+          "count": 39
+        },
+        {
+          "value": "Safety / Trust / Minors",
+          "count": 30
+        },
+        {
+          "value": "Identity / Auth / Consent",
+          "count": 12
+        },
+        {
+          "value": "Maps / World / Water",
+          "count": 11
+        },
+        {
+          "value": "Chat",
+          "count": 7
+        },
+        {
+          "value": "UNCLASSIFIED",
+          "count": 6
+        },
+        {
+          "value": "Social / Pulse / Communities",
+          "count": 2
+        },
+        {
+          "value": "Voice / Video",
+          "count": 2
+        }
+      ],
+      "matchedTerms": {
+        "relationship": 148,
+        "compatibility": 104,
+        "date app": 6,
+        "dating": 24,
+        "σχέση": 6
+      },
+      "sourceFamilies": [
+        {
+          "value": "recovery",
+          "count": 101
+        },
+        {
+          "value": "unfinished-gap",
+          "count": 60
+        },
+        {
+          "value": "founder-vision",
+          "count": 59
+        },
+        {
+          "value": "current-code",
+          "count": 35
+        },
+        {
+          "value": "donor",
+          "count": 9
+        },
+        {
+          "value": "live-state",
+          "count": 2
+        }
+      ],
+      "topSourceFiles": [
+        {
+          "value": "app/api/people/relationships/route.ts",
+          "count": 27
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+          "count": 27
+        },
+        {
+          "value": "app/people/people-client.tsx",
+          "count": 18
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+          "count": 15
+        },
+        {
+          "value": "app/listings/[listingId]/page.tsx",
+          "count": 12
+        },
+        {
+          "value": "app/people/page.tsx",
+          "count": 12
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+          "count": 12
+        },
+        {
+          "value": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+          "count": 12
+        },
+        {
+          "value": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+          "count": 12
+        },
+        {
+          "value": "docs/recovery/LIVE_COMPLETION_MAP.md",
+          "count": 10
+        },
+        {
+          "value": "docs/recovery/HUMAN_COMMUNICATION_CORE_SCHEMA.md",
+          "count": 8
+        },
+        {
+          "value": "app/social/map/page.tsx",
+          "count": 6
+        },
+        {
+          "value": "core/guardian/pantavion-guardian-kernel.ts",
+          "count": 6
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-j.json",
+          "count": 6
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-l2.json",
+          "count": 4
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-z.json",
+          "count": 4
+        },
+        {
+          "value": "docs/recovery/DONOR_BATCH_001_CLEAN_UI_SURFACES.md",
+          "count": 4
+        },
+        {
+          "value": "docs/recovery/DONOR_REPOSITORY_CONSOLIDATION_20260819.md",
+          "count": 4
+        },
+        {
+          "value": "docs/recovery/PANTAVION_MASTER_RECOVERY_CONTINUATION_BRIEF.md",
+          "count": 4
+        },
+        {
+          "value": "docs/recovery/social-people-chat-full-excavation-20260815.md",
+          "count": 4
+        },
+        {
+          "value": "app/communication/page.tsx",
+          "count": 3
+        },
+        {
+          "value": "app/intelligence/routing/page.tsx",
+          "count": 3
+        },
+        {
+          "value": "app/people/blocks/page.tsx",
+          "count": 3
+        },
+        {
+          "value": "app/professional/infrastructure/water/water-entry-client.tsx",
+          "count": 3
+        },
+        {
+          "value": "core/kernel/autonomous-build/autonomous-kernel-manifest.ts",
+          "count": 3
+        },
+        {
+          "value": "core/registry/capability-family-registry.ts",
+          "count": 3
+        },
+        {
+          "value": "core/runtime/pantavion-autonomy-policy.ts",
+          "count": 3
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-a2.json",
+          "count": 3
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-d2.json",
+          "count": 3
+        },
+        {
+          "value": "data/recovery/canonical-ledger/corpus/batches/batch-g.json",
+          "count": 3
+        }
+      ],
+      "truth": "Dating semantic references require content-level confirmation; unique evidence units remove repeated provenance-family views but do not prove unique capabilities."
+    }
+  ],
+  "totalReferences": 11983,
+  "totalUniqueEvidenceUnits": 7477,
+  "truth": "References are not completed features. Unique evidence units deduplicate by source file, line and commit; capability-level deduplication remains required.",
+  "verifiedCompleteModules": 0,
+  "verifiedLive": false,
+  "deleteAllowed": false
+}
