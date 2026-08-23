@@ -19,7 +19,7 @@ const refs = git(["for-each-ref", "--format=%(refname)", "refs/remotes/origin/re
   .split(/\r?\n/).filter(Boolean);
 
 const filenameRules = [
-  ["ENV_FILE", /(^|\\/)\\.env(?:$|\\.(?!(?:[^/]*\\.)?(?:example|sample|template)$)[^/]+$)/i],
+  ["ENV_FILE", /(^|\/)\.env(?:$|\.(?!(?:[^/]*\.)?(?:example|sample|template)$)[^/]+$)/i],
   ["PRIVATE_KEY_FILE", /(^|\/)(?:id_rsa|id_ed25519|.*\.(?:pem|p12|pfx|key))$/i],
   ["CREDENTIAL_EXPORT", /(^|\/)(?:credentials?|service[-_]?account).*\.json$/i],
 ];
