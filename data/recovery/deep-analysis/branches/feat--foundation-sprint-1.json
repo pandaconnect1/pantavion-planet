@@ -1,0 +1,280 @@
+{
+  "id": "PANT-BRANCH-6772A3B6AC13",
+  "sourceRef": "recovery/snapshots/feat--foundation-sprint-1",
+  "headSha": "8dccdf599325ca76da6ee8491abd3b644d836bc2",
+  "mergeBase": "453c0c640c1d8f1ec2c0d494aabb72d44cf707af",
+  "behindMainBy": 507,
+  "aheadOfMainBy": 6,
+  "changedFileCount": 6,
+  "topicCounts": {
+    "chat-translation": 4,
+    "maps-water": 6,
+    "ai-kernel": 4,
+    "infrastructure-deployment": 5,
+    "identity-security": 5,
+    "business-marketplace": 3,
+    "recovery-continuity": 2,
+    "media-music": 1,
+    "social-people": 1
+  },
+  "kindCounts": {
+    "api-route": 2,
+    "source-code": 3,
+    "documentation": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1,
+    "ABSENT_FROM_MAIN": 5
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/health/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--foundation-sprint-1/app/api/health/route.ts",
+      "blobSha": "05d51c259bc013e740b97560c12c1fffc9d04fbb",
+      "sizeBytes": 1964,
+      "mainBlobSha": "9cc2e547061b3dc46858a4c4a33ac106ab34efa3",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 79,
+      "contentSha256": "041e546ea5a20a95872360cf472c4301d0b974a5e82c717b1aa1ab7adae9ec44",
+      "imports": [
+        "next/server",
+        "@/lib/incidents/service"
+      ],
+      "exports": [
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/pantavion/agents/status/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--foundation-sprint-1/app/api/pantavion/agents/status/route.ts",
+      "blobSha": "668bc37a77bb4e14243ed809c0d5b0d565bc57ae",
+      "sizeBytes": 1463,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 44,
+      "contentSha256": "81070a599b7bfc0ec07124e7b2a9e46ceaee1eeb5a52c5653e5faf029ad2f7aa",
+      "imports": [
+        "next/server",
+        "@/core/agents/orchestrator"
+      ],
+      "exports": [
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 2,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/agents/orchestrator.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--foundation-sprint-1/core/agents/orchestrator.ts",
+      "blobSha": "6e71e722dd83bbcedb48e155c147074ad8b683bf",
+      "sizeBytes": 4407,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 92,
+      "contentSha256": "ca76035204103fe679f5e7fbd2cdabe18ecb5be98bfe8517cf40bb93fc60f9ac",
+      "imports": [],
+      "exports": [
+        "AgentRole",
+        "AgentCapability",
+        "AgentStatus",
+        "PantavionAgent",
+        "OrchestratorTask",
+        "OrchestrationPlan",
+        "getAgentRegistry",
+        "planTask"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 4,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/audits/FOUNDATION_SPRINT_1_INITIAL_AUDIT.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--foundation-sprint-1/docs/audits/FOUNDATION_SPRINT_1_INITIAL_AUDIT.md",
+      "blobSha": "0bbadedb7cb2165db2c5735267d378cebd2c5f03",
+      "sizeBytes": 1794,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 35,
+      "contentSha256": "f3e1329f678ae9155ab209367783ab33d73b681175dd5aaecfbb7c014b814167",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "lib/incidents/service.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--foundation-sprint-1/lib/incidents/service.ts",
+      "blobSha": "9eebd6e1bea98b445667c9e264b3482a566ba3ac",
+      "sizeBytes": 2541,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 97,
+      "contentSha256": "563d8bd8e02d531bf0b2254ffcf8aac142a0d2e878db4439e123f66d04b05826",
+      "imports": [
+        "node:crypto",
+        "@/lib/incidents/types"
+      ],
+      "exports": [
+        "redactSensitiveText",
+        "createIncidentRecord",
+        "formatAlertMessage",
+        "ConsoleAlertChannel",
+        "dispatchIncident"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "lib/incidents/types.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--foundation-sprint-1/lib/incidents/types.ts",
+      "blobSha": "13e94303b8ee9d753ae82ab90084ad8cd52c712e",
+      "sizeBytes": 1031,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 54,
+      "contentSha256": "d0aba5e47dac40f235497fe11f415320b20a6b7ab7e1733c51553088a7e449da",
+      "imports": [],
+      "exports": [
+        "IncidentSeverity",
+        "IncidentStatus",
+        "IncidentModule",
+        "IncidentInput",
+        "IncidentRecord",
+        "AlertMessage",
+        "AlertChannel"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

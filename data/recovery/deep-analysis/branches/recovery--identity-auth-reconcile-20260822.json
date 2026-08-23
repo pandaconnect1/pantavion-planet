@@ -1,0 +1,64 @@
+{
+  "id": "PANT-BRANCH-C947D9F771FB",
+  "sourceRef": "recovery/snapshots/recovery--identity-auth-reconcile-20260822",
+  "headSha": "e3cf88bbfba11f85da4fc5c28b4c2fe143e8d173",
+  "mergeBase": "ee5e4d8e42d5ceb32d4a60f0cbd44fc2048a2cc1",
+  "behindMainBy": 50,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "business-marketplace": 1,
+    "ai-kernel": 1,
+    "recovery-continuity": 1,
+    "governance-safety": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "documentation": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "docs/recovery/IDENTITY_AUTH_PROFILE_RECONCILIATION_2026-08-22.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/recovery--identity-auth-reconcile-20260822/docs/recovery/IDENTITY_AUTH_PROFILE_RECONCILIATION_2026-08-22.md",
+      "blobSha": "08f90c9fd72e6bc3d7187464341a28187f9ba508",
+      "sizeBytes": 5355,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 112,
+      "contentSha256": "cd7afef1db3b5622501a707527f13958d107644b22901864367558ad58ff822b",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "business-marketplace",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

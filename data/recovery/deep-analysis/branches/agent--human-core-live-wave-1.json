@@ -1,0 +1,128 @@
+{
+  "id": "PANT-BRANCH-2786A01FF561",
+  "sourceRef": "recovery/snapshots/agent--human-core-live-wave-1",
+  "headSha": "4ff58f17837df9e821b2cc6cfff01b732945d183",
+  "mergeBase": "17d4801a4348130bbd39587fae16367a4fa500b7",
+  "behindMainBy": 426,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "identity-security": 2,
+    "social-people": 2,
+    "chat-translation": 2,
+    "governance-safety": 2,
+    "infrastructure-deployment": 2,
+    "maps-water": 1,
+    "recovery-continuity": 1
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "database-migration": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/consent/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/governance-safety/agent--human-core-live-wave-1/app/api/consent/route.ts",
+      "blobSha": "9a1981fd936c0d28ef9526541a7282cd89ce89f6",
+      "sizeBytes": 2029,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 57,
+      "contentSha256": "4e2be7b0fc1ed585f7913688fc43e052d97903c180329fda9a35bad24cd09529",
+      "imports": [
+        "next/server",
+        "@/lib/supabase/server"
+      ],
+      "exports": [
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260810_human_core_wave_1.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/agent--human-core-live-wave-1/supabase/migrations/20260810_human_core_wave_1.sql",
+      "blobSha": "6beddf82613078dde4f721581053f3247e455968",
+      "sizeBytes": 5720,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 107,
+      "contentSha256": "42272501a62ff3cbef1666b49933311a3792f2a967de7303a969657071369d25",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [
+        "user_consents",
+        "relationships",
+        "conversations",
+        "conversation_members",
+        "messages"
+      ],
+      "sqlPolicies": [
+        "consents_owner_read",
+        "consents_owner_insert",
+        "consents_owner_update",
+        "relationships_participant_read",
+        "relationships_actor_insert",
+        "relationships_actor_update",
+        "relationships_actor_delete",
+        "conversations_member_read",
+        "conversations_creator_insert",
+        "conversation_members_member_read",
+        "conversation_members_owner_insert",
+        "messages_member_read",
+        "messages_member_insert"
+      ],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

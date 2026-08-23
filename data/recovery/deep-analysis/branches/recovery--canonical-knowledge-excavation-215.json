@@ -1,0 +1,193 @@
+{
+  "id": "PANT-BRANCH-B989C006BE05",
+  "sourceRef": "recovery/snapshots/recovery--canonical-knowledge-excavation-215",
+  "headSha": "6ed7d3f0f38bd0f688280d0a06563e907cbee4fc",
+  "mergeBase": "0f611b94dda5d8ce22bdd52083926ac9bdea420a",
+  "behindMainBy": 224,
+  "aheadOfMainBy": 6,
+  "changedFileCount": 4,
+  "topicCounts": {
+    "identity-security": 2,
+    "recovery-continuity": 4,
+    "infrastructure-deployment": 4,
+    "business-marketplace": 3,
+    "ai-kernel": 3,
+    "chat-translation": 2,
+    "maps-water": 2,
+    "social-people": 1,
+    "media-music": 1
+  },
+  "kindCounts": {
+    "ci-workflow": 1,
+    "source-code": 2,
+    "configuration-data": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 2,
+    "DIFFERS_FROM_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": ".github/workflows/pantavion-knowledge-excavation.yml",
+      "previousPath": null,
+      "kind": "ci-workflow",
+      "canonicalPathProposal": "recovery/canonicalized/infrastructure-deployment/recovery--canonical-knowledge-excavation-215/.github/workflows/pantavion-knowledge-excavation.yml",
+      "blobSha": "8d9dc63c10b3f76f92d622e4c06a12cbe3f08752",
+      "sizeBytes": 4328,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 109,
+      "contentSha256": "0c1354e7126a364aeb309e1d66bda9608aaa01a36c68350ed87819a2370953ca",
+      "imports": [
+        "fs"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/recovery/canonical-knowledge-classification.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--canonical-knowledge-excavation-215/core/recovery/canonical-knowledge-classification.ts",
+      "blobSha": "8397d9d6b6d457b90b480e5bfaa1acacbc153a5a",
+      "sizeBytes": 2968,
+      "mainBlobSha": "a0902e481e061a574f187609b83af019f18772f0",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 141,
+      "contentSha256": "472b775f04b93e1be8b27d081ee6addca751dba5ccf59129ebeda81b6190fde5",
+      "imports": [],
+      "exports": [
+        "KnowledgeSourceFamily",
+        "KnowledgeRelationType",
+        "KnowledgeLayer",
+        "RecoveryState",
+        "RecoveryDecision",
+        "LiveState",
+        "KnowledgeProvenance",
+        "KnowledgeRelation",
+        "CanonicalKnowledgeClassification",
+        "CanonicalKnowledgeRecord",
+        "KnowledgeBatchCheckpoint",
+        "CANONICAL_KNOWLEDGE_BATCH_SIZE",
+        "EMPTY_KNOWLEDGE_CLASSIFICATION"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 1,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/recovery--canonical-knowledge-excavation-215/package.json",
+      "blobSha": "105070306e572e2532d9d8de960b4811c293649d",
+      "sizeBytes": 3594,
+      "mainBlobSha": "f3147714826462b5c76338ad6bcfb831d6df5a06",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 70,
+      "contentSha256": "b216186ffb942d1986596a22167be97a1855772c8055b7eddabec485514b7fd5",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 3,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-canonical-knowledge-excavation.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/recovery--canonical-knowledge-excavation-215/scripts/pantavion-canonical-knowledge-excavation.cjs",
+      "blobSha": "feac4a0d1d0c7b6181cb946a5b8fa8b78f6dc248",
+      "sizeBytes": 8557,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 266,
+      "contentSha256": "2a83996476eaddf923f1a8ac4d108af024847dabd09898ebc40f62a2bfef456d",
+      "imports": [
+        "fs",
+        "path",
+        "crypto"
+      ],
+      "exports": [],
+      "envDependencies": [
+        "GITHUB_SHA"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 1,
+        "fixme": 1,
+        "blocked": 5,
+        "unfinished": 2,
+        "providerPending": 2
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

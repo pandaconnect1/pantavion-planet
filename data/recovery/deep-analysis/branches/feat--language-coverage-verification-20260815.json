@@ -1,0 +1,109 @@
+{
+  "id": "PANT-BRANCH-DF61109B75D6",
+  "sourceRef": "recovery/snapshots/feat--language-coverage-verification-20260815",
+  "headSha": "b35550cc3fc492ab2805fa69504aa1f0c8b20606",
+  "mergeBase": "9b4aa62a98843eacde611fa7d03fc6718edf0549",
+  "behindMainBy": 230,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "chat-translation": 2,
+    "ai-kernel": 2,
+    "business-marketplace": 1,
+    "maps-water": 1
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "source-code": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/pantavion/language-coverage/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--language-coverage-verification-20260815/app/api/pantavion/language-coverage/route.ts",
+      "blobSha": "9f26c264304cd377eb91f753b4e8e6943b370dfe",
+      "sizeBytes": 1366,
+      "mainBlobSha": "9f26c264304cd377eb91f753b4e8e6943b370dfe",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 45,
+      "contentSha256": "36c64c816d06d5412d19436df854ed884e97b42cb9577d74ce3a618beca344f6",
+      "imports": [
+        "next/server",
+        "@/core/translation/pantavion-language-coverage-matrix"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "runtime",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/translation/pantavion-language-coverage-matrix.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/feat--language-coverage-verification-20260815/core/translation/pantavion-language-coverage-matrix.ts",
+      "blobSha": "467441f5908827eadb055eea2f1e329a76ea6eeb",
+      "sizeBytes": 3975,
+      "mainBlobSha": "467441f5908827eadb055eea2f1e329a76ea6eeb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 104,
+      "contentSha256": "64330e3a9816dd5e4bedfa1394a4c923d997e526ddf65307a0420447fa3160fe",
+      "imports": [
+        "../emergency/global-emergency-languages",
+        "./pantavion-language-provider-runtime",
+        "./pantavion-natural-language-universe"
+      ],
+      "exports": [
+        "PantavionLanguageVerificationState",
+        "PantavionLanguageCoverageRow",
+        "PantavionLanguageCoverageSnapshot",
+        "getPantavionLanguageCoverageSnapshot"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel"
+      ]
+    }
+  ]
+}

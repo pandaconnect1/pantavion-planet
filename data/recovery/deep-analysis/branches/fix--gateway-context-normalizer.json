@@ -1,0 +1,79 @@
+{
+  "id": "PANT-BRANCH-41C4879916B5",
+  "sourceRef": "recovery/snapshots/fix--gateway-context-normalizer",
+  "headSha": "edee38b1243f71ea69df137cbd68fbec2393324b",
+  "mergeBase": "ab42fb309a9f28d5f4437b39b92f6b42d143a55e",
+  "behindMainBy": 434,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "chat-translation": 1,
+    "maps-water": 1,
+    "ai-kernel": 1,
+    "governance-safety": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "source-code": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "core/translation/pantavion-speech-accessibility.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/fix--gateway-context-normalizer/core/translation/pantavion-speech-accessibility.ts",
+      "blobSha": "ade5805e3896965b1d6613f9f1d67f6e42c8adf4",
+      "sizeBytes": 6542,
+      "mainBlobSha": "ade5805e3896965b1d6613f9f1d67f6e42c8adf4",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 202,
+      "contentSha256": "2a47c7f89e2af7d8ba2d34fbbd6e1a6a619f0657e870fca9426bf8d53fd73287",
+      "imports": [
+        "ai",
+        "@ai-sdk/gateway"
+      ],
+      "exports": [
+        "PantavionSpeechAccessibilityInput",
+        "PantavionSpeechAccessibilityResult",
+        "normalizeSpeechTranscriptConservatively",
+        "normalizePantavionAccessibleSpeechTranscript",
+        "pantavionSpeechAccessibilityPolicy"
+      ],
+      "envDependencies": [
+        "PANTAVION_SPEECH_NORMALIZATION_GATEWAY_MODEL",
+        "PANTAVION_SPEECH_NORMALIZATION_MODEL",
+        "OPENAI_API_KEY"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

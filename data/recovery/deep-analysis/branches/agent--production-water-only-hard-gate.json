@@ -1,0 +1,80 @@
+{
+  "id": "PANT-BRANCH-393FC9D3D80B",
+  "sourceRef": "recovery/snapshots/agent--production-water-only-hard-gate",
+  "headSha": "e160512f9036f83ee8f151c37e933c527184dd07",
+  "mergeBase": "73d13a72203aec56bddf48c7e706631e4246823d",
+  "behindMainBy": 503,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "business-marketplace": 1,
+    "maps-water": 1,
+    "ai-kernel": 1,
+    "recovery-continuity": 1,
+    "governance-safety": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "source-code": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "middleware.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--production-water-only-hard-gate/middleware.ts",
+      "blobSha": "a438434c5b55d165782ca7213d90b7dfc438bf0d",
+      "sizeBytes": 6647,
+      "mainBlobSha": "fa626d7cd9c45e73c209815bae577aef042eae76",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 217,
+      "contentSha256": "6828738459188688cee457518b510e22f30e293f0709d8b36bfee087327434da",
+      "imports": [
+        "next/server",
+        "@/lib/supabase/middleware"
+      ],
+      "exports": [
+        "middleware",
+        "config"
+      ],
+      "envDependencies": [
+        "PANTAVION_WATER_ADMIN_SESSION_SECRET",
+        "PANTAVION_WATER_ADMIN_ACCESS_CODE",
+        "PANTAVION_WATER_FOUNDER_ACCESS_CODE",
+        "PANTAVION_ADMIN_ACCESS_CODE",
+        "NODE_ENV"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 1,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

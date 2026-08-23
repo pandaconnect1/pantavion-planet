@@ -1,0 +1,4627 @@
+{
+  "id": "PANT-BRANCH-9E4F74CE0926",
+  "sourceRef": "recovery/snapshots/recovery--all-projects-safe-transfer-20260823",
+  "headSha": "322e1910d93812a9e0246da871e4f61142be76ed",
+  "mergeBase": "6260665e44ff6a3c76ccd2e2c4106ea580898de2",
+  "behindMainBy": 3,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 142,
+  "topicCounts": {
+    "ai-kernel": 8,
+    "recovery-continuity": 142,
+    "identity-security": 12,
+    "business-marketplace": 12,
+    "infrastructure-deployment": 17,
+    "social-people": 22,
+    "chat-translation": 33,
+    "governance-safety": 2,
+    "media-music": 13,
+    "maps-water": 15
+  },
+  "kindCounts": {
+    "documentation": 10,
+    "source-code": 46,
+    "configuration-data": 19,
+    "asset-or-other": 34,
+    "ui-page": 27,
+    "ui-layout": 5,
+    "api-route": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 142
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/Pantaai/README.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/Pantaai/README.md",
+      "blobSha": "0d4d1be1f46ffede34fec4438e17254265485184",
+      "sizeBytes": 39,
+      "mainBlobSha": "0d4d1be1f46ffede34fec4438e17254265485184",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 3,
+      "contentSha256": "52c56feb27bc84dc167051aa3ca1d4da14129367a1a08cc739585f8be5cb0b2d",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/Pantaai/index.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/Pantaai/index.js",
+      "blobSha": "49134057342877a65817db36968bb1c0dc7350e4",
+      "sizeBytes": 72,
+      "mainBlobSha": "49134057342877a65817db36968bb1c0dc7350e4",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 3,
+      "contentSha256": "725ad977ae736b5b6652dc75b52bcfd08dda94dff68eba90d7a2d5db0939f298",
+      "imports": [],
+      "exports": [
+        "Home"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/README.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/README.md",
+      "blobSha": "fd1b0273092c302c8ab192207b63279742b1b4de",
+      "sizeBytes": 845,
+      "mainBlobSha": "fd1b0273092c302c8ab192207b63279742b1b4de",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 15,
+      "contentSha256": "733731892342fb1cf2eb93c9b5efcb919c07704a84b08b8c680d2871ad6d4703",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/manifest.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/manifest.json",
+      "blobSha": "9e101cbefa4e5261cf1f3bb51977ff7992ff94fb",
+      "sizeBytes": 27034,
+      "mainBlobSha": "9e101cbefa4e5261cf1f3bb51977ff7992ff94fb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 960,
+      "contentSha256": "1eff941046f273c0bad905c9f7971b3121d5f816133c694f446e78af652caa70",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/.gitignore",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/.gitignore",
+      "blobSha": "5ef6a520780202a1d6addd833d800ccb1ecac0bb",
+      "sizeBytes": 480,
+      "mainBlobSha": "5ef6a520780202a1d6addd833d800ccb1ecac0bb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 42,
+      "contentSha256": "207e265ff4901f9ad9f96d8ce08530e04f9fc600815472a66d0a446096d654cd",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/README.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/README.md",
+      "blobSha": "e215bc4ccf138bbc38ad58ad57e92135484b3c0f",
+      "sizeBytes": 1450,
+      "mainBlobSha": "e215bc4ccf138bbc38ad58ad57e92135484b3c0f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 37,
+      "contentSha256": "60b55ff7df79af72590f9524208e46642bc32bdc175cdad41349681c0e2f958f",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/app/compass/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/app/compass/page.tsx",
+      "blobSha": "72ecd6f6df338e2fca892ded8f65295b26b6f610",
+      "sizeBytes": 538,
+      "mainBlobSha": "72ecd6f6df338e2fca892ded8f65295b26b6f610",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "4431ba85513643595e01b5e0824b5ecab48f56db256a18cfe6257e46ded97375",
+      "imports": [],
+      "exports": [
+        "CompassPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/app/contacts/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/app/contacts/page.tsx",
+      "blobSha": "76eadb8b34045e14954cd35dbc39cdcd4c23ba63",
+      "sizeBytes": 1789,
+      "mainBlobSha": "76eadb8b34045e14954cd35dbc39cdcd4c23ba63",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 48,
+      "contentSha256": "37c9078017142c719dce5383abd75f3dbe89fa7d10d70f225a21c445b9b97b38",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "ContactsPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/app/favicon.ico",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/app/favicon.ico",
+      "blobSha": "718d6fea4835ec2d246af9800eddb7ffb276240c",
+      "sizeBytes": 25931,
+      "mainBlobSha": "718d6fea4835ec2d246af9800eddb7ffb276240c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": true
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/app/globals.css",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/app/globals.css",
+      "blobSha": "86203a363fede86966a70446e77df46ea790e2da",
+      "sizeBytes": 4238,
+      "mainBlobSha": "86203a363fede86966a70446e77df46ea790e2da",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 248,
+      "contentSha256": "990de5e44638d6eca29119e80c8a18917d6ba36735cfb49c81c98dcc783594cc",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/app/layout.tsx",
+      "previousPath": null,
+      "kind": "ui-layout",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/app/layout.tsx",
+      "blobSha": "c56fbfd86b792f061946fa37f362963e3d206df8",
+      "sizeBytes": 834,
+      "mainBlobSha": "c56fbfd86b792f061946fa37f362963e3d206df8",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 27,
+      "contentSha256": "f5716a73e40d909f83e3c11517ee343d20e709d71545f501bd57539c5a29efcb",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "metadata",
+        "RootLayout"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/app/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/app/page.tsx",
+      "blobSha": "1899dfc1ba186fa5240bc23200badabe8ddff200",
+      "sizeBytes": 2946,
+      "mainBlobSha": "1899dfc1ba186fa5240bc23200badabe8ddff200",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 81,
+      "contentSha256": "9f7e739a6fe1d770f0bbf8ce45926b60eefe4c2e1adc071197f73b5bfb830dcd",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "HomePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "recovery-continuity",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/app/people/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/app/people/page.tsx",
+      "blobSha": "0c1b209a4699051eaabf5a8329a454509e9cc682",
+      "sizeBytes": 476,
+      "mainBlobSha": "0c1b209a4699051eaabf5a8329a454509e9cc682",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 12,
+      "contentSha256": "11939fe9094164f89b49d7eaaf090ef902b7ccf7797cf74adbaa15e9922763ca",
+      "imports": [],
+      "exports": [
+        "PeoplePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/app/voice/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/app/voice/page.tsx",
+      "blobSha": "c192541290a676f8e67bfd3ae7fac17252e11d77",
+      "sizeBytes": 1839,
+      "mainBlobSha": "c192541290a676f8e67bfd3ae7fac17252e11d77",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 54,
+      "contentSha256": "e1704e382961c35582f43ab39a33c7f0017436904a564056794683437456de9c",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "VoiceInterpreterPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/eslint.config.mjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/eslint.config.mjs",
+      "blobSha": "64ce842f32555f880ae7246b1fd8ad9ff71d08cc",
+      "sizeBytes": 85,
+      "mainBlobSha": "64ce842f32555f880ae7246b1fd8ad9ff71d08cc",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 6,
+      "contentSha256": "45d218e524d8659473a2b3f68859552833b7ddaa6daee38d226635e9bd9743ba",
+      "imports": [
+        "eslint-config-next"
+      ],
+      "exports": [
+        "default"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/next.config.mjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/next.config.mjs",
+      "blobSha": "de85e9e4b26d45a5449d9a1e26a0bb07bb184aa3",
+      "sizeBytes": 157,
+      "mainBlobSha": "de85e9e4b26d45a5449d9a1e26a0bb07bb184aa3",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 10,
+      "contentSha256": "d1f8df0fa80b0f7279c3440136278097e45367bedab74feeae2ac1cea25beee7",
+      "imports": [],
+      "exports": [
+        "nextConfig"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/next.config.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/next.config.ts",
+      "blobSha": "e9ffa3083ad279ecf95fd8eae59cb253e9a539c4",
+      "sizeBytes": 133,
+      "mainBlobSha": "e9ffa3083ad279ecf95fd8eae59cb253e9a539c4",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 8,
+      "contentSha256": "614bce25b089c3f19b1e17a6346c74b858034040154c6621e7d35303004767cc",
+      "imports": [
+        "next"
+      ],
+      "exports": [
+        "nextConfig"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/package-lock.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/package-lock.json",
+      "blobSha": "490717f542c5d2c76c405d8b8809a76c1ff64500",
+      "sizeBytes": 228264,
+      "mainBlobSha": "490717f542c5d2c76c405d8b8809a76c1ff64500",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 6578,
+      "contentSha256": "00035d9fd61d374a2b75ee2136941a98e3701bdc116c31dbede0ace5c74d3ea6",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/package.json",
+      "blobSha": "d062244794b05b5989870298b1db0e22702295a8",
+      "sizeBytes": 502,
+      "mainBlobSha": "d062244794b05b5989870298b1db0e22702295a8",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 25,
+      "contentSha256": "908c77248dc1a96a183e2c93c11ff7562f21c097d5234b1ad117fdebe9f7947e",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/postcss.config.mjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/postcss.config.mjs",
+      "blobSha": "61e36849cf7cfa9f1f71b4a3964a4953e3e243d3",
+      "sizeBytes": 94,
+      "mainBlobSha": "61e36849cf7cfa9f1f71b4a3964a4953e3e243d3",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 8,
+      "contentSha256": "dfac7ac2d86d326a0e5adb024e7943c181393ed17a5fcb8f0315b24c7da6ddde",
+      "imports": [],
+      "exports": [
+        "config"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/public/file.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/public/file.svg",
+      "blobSha": "004145cddf3f9db91b57b9cb596683c8eb420862",
+      "sizeBytes": 391,
+      "mainBlobSha": "004145cddf3f9db91b57b9cb596683c8eb420862",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "2b67812c325c199a02536cdbeea0c593a72f707d323b72ee3e08dbab06753bd4",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/public/globe.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/public/globe.svg",
+      "blobSha": "567f17b0d7c7fb662c16d4357dd74830caf2dccb",
+      "sizeBytes": 1035,
+      "mainBlobSha": "567f17b0d7c7fb662c16d4357dd74830caf2dccb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "b614b9bf183925957661ac851498fe1d8029fd43a62fbfed86f9e2624a57e7cf",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/public/next.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/public/next.svg",
+      "blobSha": "5174b28c565c285e3e312ec5178be64fbeca8398",
+      "sizeBytes": 1375,
+      "mainBlobSha": "5174b28c565c285e3e312ec5178be64fbeca8398",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "55995dfad6ecb4945a1e856ddca03c5e16aa5bf13fd21b4df6a74ae79357bcfc",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/public/vercel.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/public/vercel.svg",
+      "blobSha": "77053960334e2e34dc584dea8019925c3b4ccca9",
+      "sizeBytes": 128,
+      "mainBlobSha": "77053960334e2e34dc584dea8019925c3b4ccca9",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "f081337b2fee635b455b63275406a3e7f39d6a014e25ad90dab5a67e62a12ac4",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/public/window.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/public/window.svg",
+      "blobSha": "b2b2a44f6ebc70c450043c05a002e7a93ba5d651",
+      "sizeBytes": 385,
+      "mainBlobSha": "b2b2a44f6ebc70c450043c05a002e7a93ba5d651",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "644768c4aaeb4767bce293344eeb0c125fb804a94d801440424072202d85e3a1",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/nextjs-boilerplate/tsconfig.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/nextjs-boilerplate/tsconfig.json",
+      "blobSha": "f85b1181f4c1441fee55b58e44e19da51b855701",
+      "sizeBytes": 493,
+      "mainBlobSha": "f85b1181f4c1441fee55b58e44e19da51b855701",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 21,
+      "contentSha256": "2af25dc591450654a32d7712b69e7512c44595754a50528c15ab7328421a9b83",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/README.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/README.md",
+      "blobSha": "1c2c4df14931cd4989746960d5c6c66fe1c4887c",
+      "sizeBytes": 815,
+      "mainBlobSha": "1c2c4df14931cd4989746960d5c6c66fe1c4887c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 20,
+      "contentSha256": "453f3cf7dc5b4902dbdcf9cb2fc38f598a8b2c117b811b0e5c0bde7cf25cf412",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/components/LanguageProvider.jsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/components/LanguageProvider.jsx",
+      "blobSha": "01a66fddacb56d1ea6861b633c93260c5d0dc61b",
+      "sizeBytes": 1099,
+      "mainBlobSha": "01a66fddacb56d1ea6861b633c93260c5d0dc61b",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 40,
+      "contentSha256": "e62bb5a964b93640fb7f5130cb67c4ced214238c35fa2c59067884b41f0ba44c",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "LanguageProvider",
+        "useLang"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/components/LanguageSwitcher.jsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/components/LanguageSwitcher.jsx",
+      "blobSha": "96f2ba969b8dde13b456ad83158ce5c36921ca42",
+      "sizeBytes": 630,
+      "mainBlobSha": "96f2ba969b8dde13b456ad83158ce5c36921ca42",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 25,
+      "contentSha256": "253f074d6a60899d8139a287c471c07f4cf06e15f55efd6551a7b20122e1fcda",
+      "imports": [
+        "./LanguageProvider"
+      ],
+      "exports": [
+        "LanguageSwitcher"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/index.html",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/index.html",
+      "blobSha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sizeBytes": 0,
+      "mainBlobSha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/lib/locale.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/lib/locale.js",
+      "blobSha": "1e9b43e3dff26fa8429b492943a1976d2de4c95b",
+      "sizeBytes": 536,
+      "mainBlobSha": "1e9b43e3dff26fa8429b492943a1976d2de4c95b",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 16,
+      "contentSha256": "20d6e5b0bb7e44d59850e43c17b8b7ff078675b2e77ced58be9dfad5edbeb56e",
+      "imports": [],
+      "exports": [
+        "detectInitialLocale"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/next.config.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/next.config.js",
+      "blobSha": "d86f7e0ccc89c62c904a97e79ce853568b9b4c72",
+      "sizeBytes": 251,
+      "mainBlobSha": "d86f7e0ccc89c62c904a97e79ce853568b9b4c72",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "9c42c4e90dbde8a7402fe333c577904d5009e2cc9572ca6c85ec4cde1922c1af",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/package.json",
+      "blobSha": "66fa1bcde24a7112ed5ad74659d023a00513c2ef",
+      "sizeBytes": 380,
+      "mainBlobSha": "66fa1bcde24a7112ed5ad74659d023a00513c2ef",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 20,
+      "contentSha256": "c916972f032ce28dfdbe444b1b5df2ec4b257bc04ee5eaeda43c4e408a855b12",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/pages/_app.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/pages/_app.js",
+      "blobSha": "b98e6ef866dabbb5c705eb5827e25019d82f46df",
+      "sizeBytes": 575,
+      "mainBlobSha": "b98e6ef866dabbb5c705eb5827e25019d82f46df",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 18,
+      "contentSha256": "bd326bdb9e961e272ebaf5a13db10b7b79655c7e56558b75052bbccfd0361fad",
+      "imports": [
+        "@/components/LanguageProvider"
+      ],
+      "exports": [
+        "App"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/pages/_document.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/pages/_document.js",
+      "blobSha": "74ba6b2d699bf3e45c9d8922503a7a1a5ada2fa7",
+      "sizeBytes": 684,
+      "mainBlobSha": "74ba6b2d699bf3e45c9d8922503a7a1a5ada2fa7",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 20,
+      "contentSha256": "43e313fabb5d9ee59725ee5198a43f5a68239a1bcc985d6b6fc7de6c07f8163c",
+      "imports": [
+        "next/document"
+      ],
+      "exports": [
+        "Document"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "recovery-continuity",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/pages/index.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/pages/index.js",
+      "blobSha": "de53ba0fc849fc67e6a49873d4a0a80cd7f3b6c1",
+      "sizeBytes": 2785,
+      "mainBlobSha": "de53ba0fc849fc67e6a49873d4a0a80cd7f3b6c1",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 69,
+      "contentSha256": "ddbe56fd83eef8192d24dba0a9ff4db330c488da08d316064a3d1d2dde9dbdb8",
+      "imports": [
+        "next/link",
+        "next/image",
+        "@/components/LanguageSwitcher",
+        "@/components/LanguageProvider",
+        "@/lib/locale"
+      ],
+      "exports": [
+        "getServerSideProps",
+        "Home"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "recovery-continuity",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/pages/login.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/pages/login.js",
+      "blobSha": "a085501e7eec41af55a0e1df15e751121a956985",
+      "sizeBytes": 1089,
+      "mainBlobSha": "a085501e7eec41af55a0e1df15e751121a956985",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 28,
+      "contentSha256": "bf3005d6fba2159f7277cddd35f392d23a067b0cdab1492e4ff1493c69390739",
+      "imports": [
+        "next/link",
+        "@/components/LanguageProvider",
+        "@/lib/locale"
+      ],
+      "exports": [
+        "getServerSideProps",
+        "Login"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/pages/signup.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/pages/signup.js",
+      "blobSha": "30de063f7d4136eb1e24cecf441627159f9f8ab0",
+      "sizeBytes": 1504,
+      "mainBlobSha": "30de063f7d4136eb1e24cecf441627159f9f8ab0",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 34,
+      "contentSha256": "11599cd4fb785af8fb43993a37c4ddb5954ac2ab0011ed54e654e2d618397f2f",
+      "imports": [
+        "next/link",
+        "@/components/LanguageProvider",
+        "@/lib/locale"
+      ],
+      "exports": [
+        "getServerSideProps",
+        "Signup"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/postcss.config.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/postcss.config.js",
+      "blobSha": "12a703d900da8159c30e75acbd2c4d87ae177f62",
+      "sizeBytes": 83,
+      "mainBlobSha": "12a703d900da8159c30e75acbd2c4d87ae177f62",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 7,
+      "contentSha256": "fa650b380adfabb151a0b352f7135e107e6352345f899060f1c5c231228f94bf",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/public/locales/el/common.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/public/locales/el/common.json",
+      "blobSha": "56f5cce6a8863a3102762bd324edeb5bc4cce219",
+      "sizeBytes": 1816,
+      "mainBlobSha": "56f5cce6a8863a3102762bd324edeb5bc4cce219",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 46,
+      "contentSha256": "6d5e883e29293362cdd29426d462c98a40ae54c1ac191f94035ad376bb1cfd1e",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "recovery-continuity",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/public/locales/en/common.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/public/locales/en/common.json",
+      "blobSha": "a116c48cab54a20cb2a7126eabb5a3c4a2f52687",
+      "sizeBytes": 1257,
+      "mainBlobSha": "a116c48cab54a20cb2a7126eabb5a3c4a2f52687",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 46,
+      "contentSha256": "a75a5da29659f2bab8a0735ddf0ca615b01a3e7fd9b80d9dc4a421327eef9fe4",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "business-marketplace",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/public/locales/es/common.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/public/locales/es/common.json",
+      "blobSha": "0e3f504cb47a82ba790a5c20fa3b01c6e269b803",
+      "sizeBytes": 1322,
+      "mainBlobSha": "0e3f504cb47a82ba790a5c20fa3b01c6e269b803",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 46,
+      "contentSha256": "46c1e4a25c93d5c76401039eb556f35d0182d76d21c89e5bdedc891dbbc9e694",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 1,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "business-marketplace",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/public/logo.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/public/logo.svg",
+      "blobSha": "cfe03165e9fc70f99f4aae046a321696ab2a539c",
+      "sizeBytes": 611,
+      "mainBlobSha": "cfe03165e9fc70f99f4aae046a321696ab2a539c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 16,
+      "contentSha256": "10d57e2f4385e6ddd6deead846afec141378d6f0b634d58fe4a30862096cca3a",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/script.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/script.js",
+      "blobSha": "a006be9bb67a07cfc6dd8d6f0510c28a45898e67",
+      "sizeBytes": 42,
+      "mainBlobSha": "a006be9bb67a07cfc6dd8d6f0510c28a45898e67",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 2,
+      "contentSha256": "872df4de530e723d75e04bc84a3ff126797d164ce0d897d33d4816ac93a1477a",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/style.css",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/style.css",
+      "blobSha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sizeBytes": 0,
+      "mainBlobSha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/styles/globals.css",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/styles/globals.css",
+      "blobSha": "a37e8a8c4301f954b94b534f722d9a0d8a53dc00",
+      "sizeBytes": 552,
+      "mainBlobSha": "a37e8a8c4301f954b94b534f722d9a0d8a53dc00",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 26,
+      "contentSha256": "1354cfbf3516444be7780e49d12795b84d8aee8579fb9f1512effeb2cd0c0898",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-app-dot/tailwind.config.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-app-dot/tailwind.config.js",
+      "blobSha": "9ea7fff6ecb0e134a7c1d90d45cf5202872d36d7",
+      "sizeBytes": 346,
+      "mainBlobSha": "9ea7fff6ecb0e134a7c1d90d45cf5202872d36d7",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 20,
+      "contentSha256": "a7a778e94e0d69829fb13fc7b35b9c92a2513306d90a8f0d00f0d4fdb05183ee",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/.gitignore",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/.gitignore",
+      "blobSha": "5ef6a520780202a1d6addd833d800ccb1ecac0bb",
+      "sizeBytes": 480,
+      "mainBlobSha": "5ef6a520780202a1d6addd833d800ccb1ecac0bb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 42,
+      "contentSha256": "207e265ff4901f9ad9f96d8ce08530e04f9fc600815472a66d0a446096d654cd",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/README.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/README.md",
+      "blobSha": "e215bc4ccf138bbc38ad58ad57e92135484b3c0f",
+      "sizeBytes": 1450,
+      "mainBlobSha": "e215bc4ccf138bbc38ad58ad57e92135484b3c0f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 37,
+      "contentSha256": "60b55ff7df79af72590f9524208e46642bc32bdc175cdad41349681c0e2f958f",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/app/chat/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/app/chat/page.tsx",
+      "blobSha": "c4e4b82174d0c622f375b06b29219394cb385c5f",
+      "sizeBytes": 1903,
+      "mainBlobSha": "c4e4b82174d0c622f375b06b29219394cb385c5f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 68,
+      "contentSha256": "ba10d97542efe9387a77dd6c9008dba69b719584b31f3013ae62c68bdee85584",
+      "imports": [],
+      "exports": [
+        "ChatPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/app/compass/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/app/compass/page.tsx",
+      "blobSha": "bcceab6e5f27eee9bb8eee409b3f364d2d8a879a",
+      "sizeBytes": 2274,
+      "mainBlobSha": "bcceab6e5f27eee9bb8eee409b3f364d2d8a879a",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 81,
+      "contentSha256": "536064a7494bf4e1f3cc45df2be1fe11462c4574d39caea4ad02308a0f685b00",
+      "imports": [],
+      "exports": [
+        "CompassPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/app/create/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/app/create/page.tsx",
+      "blobSha": "cab350aec2fcb8bc199143f6107e25588190c530",
+      "sizeBytes": 2211,
+      "mainBlobSha": "cab350aec2fcb8bc199143f6107e25588190c530",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 78,
+      "contentSha256": "17ffad57059dd9132214b2058c3ddff38818ed3ab4072b4197c0774d98e5b0a6",
+      "imports": [],
+      "exports": [
+        "CreatePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "maps-water",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/app/favicon.ico",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/app/favicon.ico",
+      "blobSha": "718d6fea4835ec2d246af9800eddb7ffb276240c",
+      "sizeBytes": 25931,
+      "mainBlobSha": "718d6fea4835ec2d246af9800eddb7ffb276240c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": true
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/app/globals.css",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/app/globals.css",
+      "blobSha": "aa0b3e7822e3c492b399827a98aae2d0a7f2821e",
+      "sizeBytes": 422,
+      "mainBlobSha": "aa0b3e7822e3c492b399827a98aae2d0a7f2821e",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 33,
+      "contentSha256": "4b577682f2099712666469b67ab8000dbed1cf1bfeaba9e6bd08a35f108451fe",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/app/layout.tsx",
+      "previousPath": null,
+      "kind": "ui-layout",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/app/layout.tsx",
+      "blobSha": "2aa3458b126578e4d85a15fc3bd57c59c2791959",
+      "sizeBytes": 2724,
+      "mainBlobSha": "2aa3458b126578e4d85a15fc3bd57c59c2791959",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 95,
+      "contentSha256": "957665e7c56c9cdcd78411358dcb619eb1f509e36e5d363b1f013c924e88ed22",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "metadata",
+        "RootLayout"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/app/mind/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/app/mind/page.tsx",
+      "blobSha": "c8e04316df1073f0668d2b698d7f5f4f38eeb909",
+      "sizeBytes": 1973,
+      "mainBlobSha": "c8e04316df1073f0668d2b698d7f5f4f38eeb909",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 69,
+      "contentSha256": "e13969c85a9a378caff361b3148b79078ae1be3db77bbe4ed87064700fefbf77",
+      "imports": [],
+      "exports": [
+        "MindPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/app/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/app/page.tsx",
+      "blobSha": "76a26942925c9556fe2d0188183d58686dd6bb37",
+      "sizeBytes": 5687,
+      "mainBlobSha": "76a26942925c9556fe2d0188183d58686dd6bb37",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 186,
+      "contentSha256": "a02356ab6c3dbc1dba984f64ca551e450101bca6ebe928982ce3925ea52baf16",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "Home"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/app/people/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/app/people/page.tsx",
+      "blobSha": "8061c1d27c40196232eab5e8020a4fc7ac846fb1",
+      "sizeBytes": 4010,
+      "mainBlobSha": "8061c1d27c40196232eab5e8020a4fc7ac846fb1",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 128,
+      "contentSha256": "06726684f5c29086de5b21ab2a88ad73baa5524fb5b9ed25f16c08e58ddc803b",
+      "imports": [],
+      "exports": [
+        "PeoplePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/app/pulse/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/app/pulse/page.tsx",
+      "blobSha": "29a22efb6a7ef0229174c2b46a5cd833929f6f1f",
+      "sizeBytes": 2593,
+      "mainBlobSha": "29a22efb6a7ef0229174c2b46a5cd833929f6f1f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 89,
+      "contentSha256": "cf317f95091c26e3255e8bce59c301ead014f2bbc0f97c7034b4f6bbcdb6c219",
+      "imports": [],
+      "exports": [
+        "PulsePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/app/voice/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/app/voice/page.tsx",
+      "blobSha": "818bfd8c2d551530d5fa0bc7944e3aa03d73c746",
+      "sizeBytes": 9241,
+      "mainBlobSha": "818bfd8c2d551530d5fa0bc7944e3aa03d73c746",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 274,
+      "contentSha256": "cd79a8d04e4f0dad9c9dd5676dd163e5d66f835a899bfd7a1247556313e22907",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "VoicePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/eslint.config.mjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/eslint.config.mjs",
+      "blobSha": "05e726d1b4201bc8c7716d2b058279676582e8c0",
+      "sizeBytes": 465,
+      "mainBlobSha": "05e726d1b4201bc8c7716d2b058279676582e8c0",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 19,
+      "contentSha256": "870f1adccecf3051cbcd9fd307cef51d7633cf510979c181a81f4b1797273493",
+      "imports": [
+        "eslint/config",
+        "eslint-config-next/core-web-vitals",
+        "eslint-config-next/typescript"
+      ],
+      "exports": [
+        "eslintConfig"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/next.config.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/next.config.ts",
+      "blobSha": "e9ffa3083ad279ecf95fd8eae59cb253e9a539c4",
+      "sizeBytes": 133,
+      "mainBlobSha": "e9ffa3083ad279ecf95fd8eae59cb253e9a539c4",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 8,
+      "contentSha256": "614bce25b089c3f19b1e17a6346c74b858034040154c6621e7d35303004767cc",
+      "imports": [
+        "next"
+      ],
+      "exports": [
+        "nextConfig"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/package-lock.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/package-lock.json",
+      "blobSha": "9cc29b287b486a92af39f99cf9d1e9b9887d3348",
+      "sizeBytes": 227420,
+      "mainBlobSha": "9cc29b287b486a92af39f99cf9d1e9b9887d3348",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 6559,
+      "contentSha256": "39c0e2aed15fc9167f0d2d6dc1c8fc8f2df19f68f84bb7e88016997e1c534a02",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/package.json",
+      "blobSha": "bcb2b86cd9b92f304acc89ab101b72a3ddbaf9ae",
+      "sizeBytes": 541,
+      "mainBlobSha": "bcb2b86cd9b92f304acc89ab101b72a3ddbaf9ae",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 27,
+      "contentSha256": "dc13bf124d7c11f28fe5af84565f85733d45de18c3d1ff58a9d21cb581885b93",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/postcss.config.mjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/postcss.config.mjs",
+      "blobSha": "61e36849cf7cfa9f1f71b4a3964a4953e3e243d3",
+      "sizeBytes": 94,
+      "mainBlobSha": "61e36849cf7cfa9f1f71b4a3964a4953e3e243d3",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 8,
+      "contentSha256": "dfac7ac2d86d326a0e5adb024e7943c181393ed17a5fcb8f0315b24c7da6ddde",
+      "imports": [],
+      "exports": [
+        "config"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/public/file.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/public/file.svg",
+      "blobSha": "004145cddf3f9db91b57b9cb596683c8eb420862",
+      "sizeBytes": 391,
+      "mainBlobSha": "004145cddf3f9db91b57b9cb596683c8eb420862",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "2b67812c325c199a02536cdbeea0c593a72f707d323b72ee3e08dbab06753bd4",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/public/globe.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/public/globe.svg",
+      "blobSha": "567f17b0d7c7fb662c16d4357dd74830caf2dccb",
+      "sizeBytes": 1035,
+      "mainBlobSha": "567f17b0d7c7fb662c16d4357dd74830caf2dccb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "b614b9bf183925957661ac851498fe1d8029fd43a62fbfed86f9e2624a57e7cf",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/public/next.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/public/next.svg",
+      "blobSha": "5174b28c565c285e3e312ec5178be64fbeca8398",
+      "sizeBytes": 1375,
+      "mainBlobSha": "5174b28c565c285e3e312ec5178be64fbeca8398",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "55995dfad6ecb4945a1e856ddca03c5e16aa5bf13fd21b4df6a74ae79357bcfc",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/public/vercel.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/public/vercel.svg",
+      "blobSha": "77053960334e2e34dc584dea8019925c3b4ccca9",
+      "sizeBytes": 128,
+      "mainBlobSha": "77053960334e2e34dc584dea8019925c3b4ccca9",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "f081337b2fee635b455b63275406a3e7f39d6a014e25ad90dab5a67e62a12ac4",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/public/window.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/public/window.svg",
+      "blobSha": "b2b2a44f6ebc70c450043c05a002e7a93ba5d651",
+      "sizeBytes": 385,
+      "mainBlobSha": "b2b2a44f6ebc70c450043c05a002e7a93ba5d651",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "644768c4aaeb4767bce293344eeb0c125fb804a94d801440424072202d85e3a1",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean-ui/tsconfig.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean-ui/tsconfig.json",
+      "blobSha": "3a13f90a773b0facb675bf5b1a8239c8f33d36f5",
+      "sizeBytes": 666,
+      "mainBlobSha": "3a13f90a773b0facb675bf5b1a8239c8f33d36f5",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 35,
+      "contentSha256": "be18523b23b78b6e1a876ddd107d330f0168bddf09d751b57e0b5edce69c66f3",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/.gitignore",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/.gitignore",
+      "blobSha": "9a5acedff56aee2e6731a444d283bf6071c49bcc",
+      "sizeBytes": 2152,
+      "mainBlobSha": "9a5acedff56aee2e6731a444d283bf6071c49bcc",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 140,
+      "contentSha256": "ac80a6e11ddd192eb092b45b09045246d3ebfdc5b8aee4cbe7473cf89bd5609c",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel",
+        "recovery-continuity",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/README.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/README.md",
+      "blobSha": "e0e0e2ec66312ee840e8d15d0923e6f560197a64",
+      "sizeBytes": 21,
+      "mainBlobSha": "e0e0e2ec66312ee840e8d15d0923e6f560197a64",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "73e20eb89a21c80b1bff39d1bc313caa28f75fbaec6dd293a1a9125627c7bac9",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/app/pantavion/pantavion-state.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/app/pantavion/pantavion-state.js",
+      "blobSha": "d47a86cae01794fab8aa01c386297e59a420976e",
+      "sizeBytes": 2019,
+      "mainBlobSha": "d47a86cae01794fab8aa01c386297e59a420976e",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 91,
+      "contentSha256": "2583b3cfbd8035d03cf0171537fe83e717ee9659a8748cc4fca587a7c95d4c52",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "usePantavionState"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/chat/page.js",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/chat/page.js",
+      "blobSha": "71a7dbecd82bf64f154a474337f13de51acac186",
+      "sizeBytes": 678,
+      "mainBlobSha": "71a7dbecd82bf64f154a474337f13de51acac186",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 26,
+      "contentSha256": "ae1e4d8dacafc05649aa0d86e3a88c225ff98aec0c368df5d5d63202591b7b8f",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "metadata",
+        "ChatPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/compass/page.js",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/compass/page.js",
+      "blobSha": "0ddfe87c443cf5113d345399cf023978af026c5c",
+      "sizeBytes": 2068,
+      "mainBlobSha": "0ddfe87c443cf5113d345399cf023978af026c5c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 65,
+      "contentSha256": "736ddb81b4aa0cfa5f4cb4eb349723a54fd120ab33e7ecbb0a7eedf5bc3e50f4",
+      "imports": [
+        "react",
+        "framer-motion",
+        "../../components/ui/card"
+      ],
+      "exports": [
+        "CompassPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "maps-water",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/create/page.js",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/create/page.js",
+      "blobSha": "f2c8b40ee84d09019e43fe5cbd2ab4551bcc7584",
+      "sizeBytes": 839,
+      "mainBlobSha": "f2c8b40ee84d09019e43fe5cbd2ab4551bcc7584",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 28,
+      "contentSha256": "ff3f80c6fce5cb2744d7d189cb29514773bda9dcd94d71dbb5761a01017d2c58",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "metadata",
+        "CreatePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/elite/page.js",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/elite/page.js",
+      "blobSha": "3a29d4fb1a966dc65e2d3fb38c440a2c9c362778",
+      "sizeBytes": 795,
+      "mainBlobSha": "3a29d4fb1a966dc65e2d3fb38c440a2c9c362778",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 29,
+      "contentSha256": "9a495d4595d7ba9f9dad2c04c3aa0d3c6b67b3cc5989c1c99749735dbf580589",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "metadata",
+        "ElitePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/globals.css",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/globals.css",
+      "blobSha": "1deaa078b089fda961c997e87bd9df28c8bbe2f1",
+      "sizeBytes": 225,
+      "mainBlobSha": "1deaa078b089fda961c997e87bd9df28c8bbe2f1",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 11,
+      "contentSha256": "b79e04274816da8352ee263b9e2bd4f3fb1c011056d1c9211f8b944e94c1f903",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/layout.js",
+      "previousPath": null,
+      "kind": "ui-layout",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/layout.js",
+      "blobSha": "4a3b00f479c87b6cabdbe92f8b97e12f29efa097",
+      "sizeBytes": 439,
+      "mainBlobSha": "4a3b00f479c87b6cabdbe92f8b97e12f29efa097",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 19,
+      "contentSha256": "f9a04c2ca47fdd09b306526f39686e8e6e158321497d48b7adf3cc74648dc904",
+      "imports": [],
+      "exports": [
+        "metadata",
+        "RootLayout"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/mind/page.js",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/mind/page.js",
+      "blobSha": "a6526fb1a0e7b68e358836c4fddf6dc0980e6677",
+      "sizeBytes": 871,
+      "mainBlobSha": "a6526fb1a0e7b68e358836c4fddf6dc0980e6677",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 28,
+      "contentSha256": "4b5fb3989792a7ba4241240478ee36056969b0c43b8d66ef491a49f1d657480e",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "metadata",
+        "MindPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/page.js",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/page.js",
+      "blobSha": "8038c3613a4f1902ffbf04518078681f2f8af178",
+      "sizeBytes": 429,
+      "mainBlobSha": "8038c3613a4f1902ffbf04518078681f2f8af178",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 17,
+      "contentSha256": "33a5def437a4fa01f8546d8f6bb85cf2019bbd6a08d7fc7d53e0ab0ce87904d6",
+      "imports": [
+        "../components/MainNav",
+        "../components/Hero",
+        "../components/SectionOverview"
+      ],
+      "exports": [
+        "HomePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/pantavion/page.js",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/pantavion/page.js",
+      "blobSha": "812adef54b05e2807daafa5b508dc9e05b52e991",
+      "sizeBytes": 719,
+      "mainBlobSha": "812adef54b05e2807daafa5b508dc9e05b52e991",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 21,
+      "contentSha256": "4f5d0368785ec3da5fcc8a65688787885bcf15428e83050cc706b6f5dd0f4494",
+      "imports": [],
+      "exports": [
+        "PantavionPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/pantavion/pantavion-core.jsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/pantavion/pantavion-core.jsx",
+      "blobSha": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "sizeBytes": 1,
+      "mainBlobSha": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 2,
+      "contentSha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/people/page.js",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/people/page.js",
+      "blobSha": "dfeea4808353a9f3e29a414c60e9f3ef24c071ba",
+      "sizeBytes": 704,
+      "mainBlobSha": "dfeea4808353a9f3e29a414c60e9f3ef24c071ba",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 26,
+      "contentSha256": "631a02612f472d869662cc45a0bca36338becc7b3847223ecbaca23147fa4b06",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "metadata",
+        "PeoplePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/pulse/page.js",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/pulse/page.js",
+      "blobSha": "f170532d743c733a6b88f8015da8c7c63591336f",
+      "sizeBytes": 692,
+      "mainBlobSha": "f170532d743c733a6b88f8015da8c7c63591336f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 26,
+      "contentSha256": "df6b3dd61ae664ff8874660f28f91830d761c86180cb2b7a35b106fbd4d89461",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "metadata",
+        "PulsePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/app/voice/page.js",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/app/voice/page.js",
+      "blobSha": "6f655bef553328cc1b7e0d94b4b7c35573dad8e6",
+      "sizeBytes": 680,
+      "mainBlobSha": "6f655bef553328cc1b7e0d94b4b7c35573dad8e6",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 26,
+      "contentSha256": "4853cbee77f972bcc72de2efbcae7bf66b50f983ba0016161b24c9baabb529d9",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "metadata",
+        "VoicePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/components/Hero.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/components/Hero.js",
+      "blobSha": "b900e64d3f326ebe00f79a4fc343c8549928df08",
+      "sizeBytes": 782,
+      "mainBlobSha": "b900e64d3f326ebe00f79a4fc343c8549928df08",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 23,
+      "contentSha256": "304113c4646be23764e40188d539bbaa82c603dd0b89bc93a5b268759037f67b",
+      "imports": [],
+      "exports": [
+        "Hero"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/components/MainNav.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/components/MainNav.js",
+      "blobSha": "02e48878e7375b3e69e8daea1b2cd11a2a86e549",
+      "sizeBytes": 1706,
+      "mainBlobSha": "02e48878e7375b3e69e8daea1b2cd11a2a86e549",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 48,
+      "contentSha256": "ae451ff07ba111a45c96cec08a63f58d69bb64f61831492ff6bd9daa350974e8",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "MainNav"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/components/SectionOverview.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/components/SectionOverview.js",
+      "blobSha": "c04af09def07298b34a752e2a49300cf020d5f4a",
+      "sizeBytes": 1073,
+      "mainBlobSha": "c04af09def07298b34a752e2a49300cf020d5f4a",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 35,
+      "contentSha256": "c52bda58569410d3354c4527a71800de80c44ccfb1e0475f3dc8b19fd2c6e270",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "SectionOverview"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "recovery-continuity",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/components/components/ui/card.jsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/components/components/ui/card.jsx",
+      "blobSha": "7b25665de967d96869c45166376da445354e19f6",
+      "sizeBytes": 367,
+      "mainBlobSha": "7b25665de967d96869c45166376da445354e19f6",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 16,
+      "contentSha256": "d61bab90a55419595cd555f2975eb2987374f1289560c9a8a7f652fd47359612",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "Card",
+        "CardContent"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/components/ui/card.jsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/components/ui/card.jsx",
+      "blobSha": "7b25665de967d96869c45166376da445354e19f6",
+      "sizeBytes": 367,
+      "mainBlobSha": "7b25665de967d96869c45166376da445354e19f6",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 16,
+      "contentSha256": "d61bab90a55419595cd555f2975eb2987374f1289560c9a8a7f652fd47359612",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "Card",
+        "CardContent"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/jsconfig.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/jsconfig.json",
+      "blobSha": "52d95992caaf7efdbeec9235e0e7bf45a14a4a51",
+      "sizeBytes": 133,
+      "mainBlobSha": "52d95992caaf7efdbeec9235e0e7bf45a14a4a51",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 10,
+      "contentSha256": "e9ec6861279ff3fd043a54b07e43bf6b2919ec6b2d4b1f34fa41e6e658de9027",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/next.config.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/next.config.js",
+      "blobSha": "6d32668bfbf51bc7b656230fdc862acb4c837da0",
+      "sizeBytes": 119,
+      "mainBlobSha": "6d32668bfbf51bc7b656230fdc862acb4c837da0",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 7,
+      "contentSha256": "ea91b4da7798ba5d5490a02c73764b4db874161f2d12c423cc6420c5a494a6ac",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/package.json",
+      "blobSha": "cdde1a5a90559f654c43fc795c58a045592b6475",
+      "sizeBytes": 497,
+      "mainBlobSha": "cdde1a5a90559f654c43fc795c58a045592b6475",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 25,
+      "contentSha256": "da41ead74fd6645d94aeda93bd22f59e980e8c1208cba9ca147c5758f9324b4c",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/postcss.config.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/postcss.config.js",
+      "blobSha": "5cbc2c7d8770dd519eeb059f155ee14aa9dc811a",
+      "sizeBytes": 81,
+      "mainBlobSha": "5cbc2c7d8770dd519eeb059f155ee14aa9dc811a",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 7,
+      "contentSha256": "c3275e0c1ab2639ab056915eac2a806b997a7879c31edce8898ec443a4823a06",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one-clean/tailwind.config.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one-clean/tailwind.config.js",
+      "blobSha": "f42c0e896ba6c8923aad3e7c87fb6858c0ae15ce",
+      "sizeBytes": 417,
+      "mainBlobSha": "f42c0e896ba6c8923aad3e7c87fb6858c0ae15ce",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 23,
+      "contentSha256": "3240e8e6984431287ad0f238d846e0fc781c0a6fb4ea398a628c5df757abda3a",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/.github.txt",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/.github.txt",
+      "blobSha": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "sizeBytes": 1,
+      "mainBlobSha": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 2,
+      "contentSha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/EMPTY",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/EMPTY",
+      "blobSha": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "sizeBytes": 1,
+      "mainBlobSha": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 2,
+      "contentSha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/app/globals.css",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/app/globals.css",
+      "blobSha": "1acd0a450ff25655715b3b190ad9286329aabfbb",
+      "sizeBytes": 44,
+      "mainBlobSha": "1acd0a450ff25655715b3b190ad9286329aabfbb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "bba85423af439e60996785498c3f713d082f0ba6c481d93dc9703c7b69fa0ac2",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/app/layout.tsx",
+      "previousPath": null,
+      "kind": "ui-layout",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/app/layout.tsx",
+      "blobSha": "b4e78878535524a609de85b3d200d09855c7af1a",
+      "sizeBytes": 183,
+      "mainBlobSha": "b4e78878535524a609de85b3d200d09855c7af1a",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 8,
+      "contentSha256": "7668829b913073f8edbba20d7863b58335dafdd540b60c8fd70919023bf310f6",
+      "imports": [],
+      "exports": [
+        "metadata",
+        "RootLayout"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/app/page.js",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/app/page.js",
+      "blobSha": "d17d68d195c2cf9ca6a45634ab56d6b2aefc816a",
+      "sizeBytes": 68,
+      "mainBlobSha": "d17d68d195c2cf9ca6a45634ab56d6b2aefc816a",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "76e7eea38c42dd2c5e67628cc4311ce9ba4e58d0afe60fe51c53ba558ee9610b",
+      "imports": [],
+      "exports": [
+        "Home"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/app/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/app/page.tsx",
+      "blobSha": "167af62674a82eedf18e3d8e718342cd0b96d468",
+      "sizeBytes": 10045,
+      "mainBlobSha": "167af62674a82eedf18e3d8e718342cd0b96d468",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 221,
+      "contentSha256": "f8f7a3e8b3e2f26886059ffed0368ad3636d50360ce0b4e3d8208586d4c7bc56",
+      "imports": [],
+      "exports": [
+        "Home"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "recovery-continuity",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/next.config.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/next.config.js",
+      "blobSha": "b6a40934233a505d5668c26ed2b5a5992c7af611",
+      "sizeBytes": 341,
+      "mainBlobSha": "b6a40934233a505d5668c26ed2b5a5992c7af611",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 19,
+      "contentSha256": "fb498463c6f33e39b8bd45b6b34b54ecddfe9cad7f54be7153f488099c12fd1e",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/package.json",
+      "blobSha": "655030d4441cc9989601b85f33b6d559a29ea5a2",
+      "sizeBytes": 381,
+      "mainBlobSha": "655030d4441cc9989601b85f33b6d559a29ea5a2",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 21,
+      "contentSha256": "f9b5c86be7a6df2fa5b5a9fd6c4e0f23d53880d0e2ba4989f761712c327fbf35",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/pages/create.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/pages/create.tsx",
+      "blobSha": "de8c6c5280f588a188285c4db289b9cee1ee145f",
+      "sizeBytes": 418,
+      "mainBlobSha": "de8c6c5280f588a188285c4db289b9cee1ee145f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 16,
+      "contentSha256": "d3e54e1c0de1e0584b212b87d54b7f19846dac1264d09e02778f8b23cd5d4d94",
+      "imports": [
+        "next/head"
+      ],
+      "exports": [
+        "CreatePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/pages/mind.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/pages/mind.tsx",
+      "blobSha": "ecb537e8a283939f600c33ce586094e69fea367a",
+      "sizeBytes": 431,
+      "mainBlobSha": "ecb537e8a283939f600c33ce586094e69fea367a",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 16,
+      "contentSha256": "57719b06eb767b261109f7c1efe16e3b74a1fecb0a7e275c98acb2984b576010",
+      "imports": [
+        "next/head"
+      ],
+      "exports": [
+        "MindPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/pages/pages/chat.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/pages/pages/chat.tsx",
+      "blobSha": "87dab9236e1e42a0ca91a646d2787bae6564510c",
+      "sizeBytes": 85,
+      "mainBlobSha": "87dab9236e1e42a0ca91a646d2787bae6564510c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 4,
+      "contentSha256": "0e1450d217cd894948dfe5a5b2740b88599becaa97b14ea09411d0f7791c3932",
+      "imports": [],
+      "exports": [
+        "CreatePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/pages/pages/compass.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/pages/pages/compass.tsx",
+      "blobSha": "87dab9236e1e42a0ca91a646d2787bae6564510c",
+      "sizeBytes": 85,
+      "mainBlobSha": "87dab9236e1e42a0ca91a646d2787bae6564510c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 4,
+      "contentSha256": "0e1450d217cd894948dfe5a5b2740b88599becaa97b14ea09411d0f7791c3932",
+      "imports": [],
+      "exports": [
+        "CreatePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/pages/pages/pages/mind.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/pages/pages/pages/mind.tsx",
+      "blobSha": "87dab9236e1e42a0ca91a646d2787bae6564510c",
+      "sizeBytes": 85,
+      "mainBlobSha": "87dab9236e1e42a0ca91a646d2787bae6564510c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 4,
+      "contentSha256": "0e1450d217cd894948dfe5a5b2740b88599becaa97b14ea09411d0f7791c3932",
+      "imports": [],
+      "exports": [
+        "CreatePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/pages/pages/pages/pages/create.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/pages/pages/pages/pages/create.tsx",
+      "blobSha": "87dab9236e1e42a0ca91a646d2787bae6564510c",
+      "sizeBytes": 85,
+      "mainBlobSha": "87dab9236e1e42a0ca91a646d2787bae6564510c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 4,
+      "contentSha256": "0e1450d217cd894948dfe5a5b2740b88599becaa97b14ea09411d0f7791c3932",
+      "imports": [],
+      "exports": [
+        "CreatePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/pages/people.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/pages/people.tsx",
+      "blobSha": "87dab9236e1e42a0ca91a646d2787bae6564510c",
+      "sizeBytes": 85,
+      "mainBlobSha": "87dab9236e1e42a0ca91a646d2787bae6564510c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 4,
+      "contentSha256": "0e1450d217cd894948dfe5a5b2740b88599becaa97b14ea09411d0f7791c3932",
+      "imports": [],
+      "exports": [
+        "CreatePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/pages/pulse.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/pages/pulse.tsx",
+      "blobSha": "8f88cf917f1d378e6a299e28e1a6c114d80f9f6f",
+      "sizeBytes": 83,
+      "mainBlobSha": "8f88cf917f1d378e6a299e28e1a6c114d80f9f6f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 4,
+      "contentSha256": "a251551caaf9cd7f1eee10bf2be9eb1815491e70a9112239986b041f9dfb46d2",
+      "imports": [],
+      "exports": [
+        "PulsePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/pages/voice.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/pages/voice.tsx",
+      "blobSha": "87dab9236e1e42a0ca91a646d2787bae6564510c",
+      "sizeBytes": 85,
+      "mainBlobSha": "87dab9236e1e42a0ca91a646d2787bae6564510c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 4,
+      "contentSha256": "0e1450d217cd894948dfe5a5b2740b88599becaa97b14ea09411d0f7791c3932",
+      "imports": [],
+      "exports": [
+        "CreatePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/postcss.config.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/postcss.config.js",
+      "blobSha": "b7d2d839617c08f0cfa15deea9c13350c8d73145",
+      "sizeBytes": 68,
+      "mainBlobSha": "b7d2d839617c08f0cfa15deea9c13350c8d73145",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "0eb6e36c5142ff5311d4365c69c50aef956ceacdac9b1473c43dcc756f4325bb",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/public/placeholder.txt",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/public/placeholder.txt",
+      "blobSha": "78996da2b3404f41c226cb24cb37ec366fa2e9fb",
+      "sizeBytes": 20,
+      "mainBlobSha": "78996da2b3404f41c226cb24cb37ec366fa2e9fb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "6c9761277b3e86e655f2878f6b9636e4ca0ccb43371408448b9b8a5237b89c6f",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/tailwind.config.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/tailwind.config.js",
+      "blobSha": "38d5ba007e9bcb30639a233295fa664332561df5",
+      "sizeBytes": 97,
+      "mainBlobSha": "38d5ba007e9bcb30639a233295fa664332561df5",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "10f90a6f3b98ffe4855eb265a345c5574527d32207bfa6a8c03ddda79dddf7c4",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-one/tsconfig.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-one/tsconfig.json",
+      "blobSha": "226161d57107d64073d2e2150cbbf1c288bac792",
+      "sizeBytes": 79,
+      "mainBlobSha": "226161d57107d64073d2e2150cbbf1c288bac792",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "006a82dcdbd3b4113f9798b2b424cb5bf30afcc45204b61330e2a5558fa8ebe6",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/.gitignore",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/.gitignore",
+      "blobSha": "5ef6a520780202a1d6addd833d800ccb1ecac0bb",
+      "sizeBytes": 480,
+      "mainBlobSha": "5ef6a520780202a1d6addd833d800ccb1ecac0bb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 42,
+      "contentSha256": "207e265ff4901f9ad9f96d8ce08530e04f9fc600815472a66d0a446096d654cd",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/README.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/README.md",
+      "blobSha": "e215bc4ccf138bbc38ad58ad57e92135484b3c0f",
+      "sizeBytes": 1450,
+      "mainBlobSha": "e215bc4ccf138bbc38ad58ad57e92135484b3c0f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 37,
+      "contentSha256": "60b55ff7df79af72590f9524208e46642bc32bdc175cdad41349681c0e2f958f",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/app/api/translate/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/app/api/translate/route.ts",
+      "blobSha": "5994e4409a7c5e932809e27ddc0bf18e3b0c62b4",
+      "sizeBytes": 563,
+      "mainBlobSha": "5994e4409a7c5e932809e27ddc0bf18e3b0c62b4",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 23,
+      "contentSha256": "e784dbef7d5c82b12be79d54e4480849db85437cd0f2394db77874ee861000b0",
+      "imports": [
+        "next/server"
+      ],
+      "exports": [
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/app/favicon.ico",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/app/favicon.ico",
+      "blobSha": "718d6fea4835ec2d246af9800eddb7ffb276240c",
+      "sizeBytes": 25931,
+      "mainBlobSha": "718d6fea4835ec2d246af9800eddb7ffb276240c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": true
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/app/globals.css",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/app/globals.css",
+      "blobSha": "a2dc41ecee5ec435200fe7cba2bde4107f823774",
+      "sizeBytes": 488,
+      "mainBlobSha": "a2dc41ecee5ec435200fe7cba2bde4107f823774",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 27,
+      "contentSha256": "769edf77bd0d101a2d26e6c5656defba8cd885ff37d92279fa293a2756fe5651",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/app/layout.tsx",
+      "previousPath": null,
+      "kind": "ui-layout",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/app/layout.tsx",
+      "blobSha": "f7fa87eb875260ed98651bc419c8139b5119e554",
+      "sizeBytes": 689,
+      "mainBlobSha": "f7fa87eb875260ed98651bc419c8139b5119e554",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 35,
+      "contentSha256": "e65025ca7842d1b3ec1fcb41768f974cfbb9c5ca85abb2fb2ace6dfa4ac4f860",
+      "imports": [
+        "next",
+        "next/font/google"
+      ],
+      "exports": [
+        "metadata",
+        "RootLayout"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/app/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/app/page.tsx",
+      "blobSha": "295f8fdf14fcfe6cccaa832133037157521b1890",
+      "sizeBytes": 2885,
+      "mainBlobSha": "295f8fdf14fcfe6cccaa832133037157521b1890",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 66,
+      "contentSha256": "54cfdb1174c3b81046470a867a760bee44bf2b75527504a3d8b10f24ce856a23",
+      "imports": [
+        "next/image"
+      ],
+      "exports": [
+        "Home"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/app/voice/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/app/voice/page.tsx",
+      "blobSha": "bfdcf39c78cb3d28dba541dccd2e482641c03220",
+      "sizeBytes": 13455,
+      "mainBlobSha": "bfdcf39c78cb3d28dba541dccd2e482641c03220",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 314,
+      "contentSha256": "7328086199da0fc2bbaf3448cd4a55079ee525f69d02d81415b812d8c32119d8",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "VoicePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/eslint.config.mjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/eslint.config.mjs",
+      "blobSha": "05e726d1b4201bc8c7716d2b058279676582e8c0",
+      "sizeBytes": 465,
+      "mainBlobSha": "05e726d1b4201bc8c7716d2b058279676582e8c0",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 19,
+      "contentSha256": "870f1adccecf3051cbcd9fd307cef51d7633cf510979c181a81f4b1797273493",
+      "imports": [
+        "eslint/config",
+        "eslint-config-next/core-web-vitals",
+        "eslint-config-next/typescript"
+      ],
+      "exports": [
+        "eslintConfig"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/next.config.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/next.config.ts",
+      "blobSha": "e9ffa3083ad279ecf95fd8eae59cb253e9a539c4",
+      "sizeBytes": 133,
+      "mainBlobSha": "e9ffa3083ad279ecf95fd8eae59cb253e9a539c4",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 8,
+      "contentSha256": "614bce25b089c3f19b1e17a6346c74b858034040154c6621e7d35303004767cc",
+      "imports": [
+        "next"
+      ],
+      "exports": [
+        "nextConfig"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/package-lock.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/package-lock.json",
+      "blobSha": "9ecb9f688fc74ae37bd9c788e5dbbb233a589489",
+      "sizeBytes": 227392,
+      "mainBlobSha": "9ecb9f688fc74ae37bd9c788e5dbbb233a589489",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 6558,
+      "contentSha256": "2385039ab22e5e60e976e6111a22126b6554b64a81b7eab605af1e39c0b5ab39",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/package.json",
+      "blobSha": "ddbd3d62f3985f6a976e1c7d9e139c6afb3b4918",
+      "sizeBytes": 537,
+      "mainBlobSha": "ddbd3d62f3985f6a976e1c7d9e139c6afb3b4918",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 27,
+      "contentSha256": "fb954145b0d40de15a3e021e7a0d23c58cbe9449d564da832fa3fa1fe0c51a1e",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/postcss.config.mjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/postcss.config.mjs",
+      "blobSha": "61e36849cf7cfa9f1f71b4a3964a4953e3e243d3",
+      "sizeBytes": 94,
+      "mainBlobSha": "61e36849cf7cfa9f1f71b4a3964a4953e3e243d3",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 8,
+      "contentSha256": "dfac7ac2d86d326a0e5adb024e7943c181393ed17a5fcb8f0315b24c7da6ddde",
+      "imports": [],
+      "exports": [
+        "config"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/public/file.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/public/file.svg",
+      "blobSha": "004145cddf3f9db91b57b9cb596683c8eb420862",
+      "sizeBytes": 391,
+      "mainBlobSha": "004145cddf3f9db91b57b9cb596683c8eb420862",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "2b67812c325c199a02536cdbeea0c593a72f707d323b72ee3e08dbab06753bd4",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/public/globe.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/public/globe.svg",
+      "blobSha": "567f17b0d7c7fb662c16d4357dd74830caf2dccb",
+      "sizeBytes": 1035,
+      "mainBlobSha": "567f17b0d7c7fb662c16d4357dd74830caf2dccb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "b614b9bf183925957661ac851498fe1d8029fd43a62fbfed86f9e2624a57e7cf",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/public/next.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/public/next.svg",
+      "blobSha": "5174b28c565c285e3e312ec5178be64fbeca8398",
+      "sizeBytes": 1375,
+      "mainBlobSha": "5174b28c565c285e3e312ec5178be64fbeca8398",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "55995dfad6ecb4945a1e856ddca03c5e16aa5bf13fd21b4df6a74ae79357bcfc",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/public/vercel.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/public/vercel.svg",
+      "blobSha": "77053960334e2e34dc584dea8019925c3b4ccca9",
+      "sizeBytes": 128,
+      "mainBlobSha": "77053960334e2e34dc584dea8019925c3b4ccca9",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "f081337b2fee635b455b63275406a3e7f39d6a014e25ad90dab5a67e62a12ac4",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/public/window.svg",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/public/window.svg",
+      "blobSha": "b2b2a44f6ebc70c450043c05a002e7a93ba5d651",
+      "sizeBytes": 385,
+      "mainBlobSha": "b2b2a44f6ebc70c450043c05a002e7a93ba5d651",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "644768c4aaeb4767bce293344eeb0c125fb804a94d801440424072202d85e3a1",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion-voice/tsconfig.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion-voice/tsconfig.json",
+      "blobSha": "3a13f90a773b0facb675bf5b1a8239c8f33d36f5",
+      "sizeBytes": 666,
+      "mainBlobSha": "3a13f90a773b0facb675bf5b1a8239c8f33d36f5",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 35,
+      "contentSha256": "be18523b23b78b6e1a876ddd107d330f0168bddf09d751b57e0b5edce69c66f3",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion.com/.github/workflows/static.yml",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion.com/.github/workflows/static.yml",
+      "blobSha": "4e5a47d6a50e1615a4ac3dc0083494f7f718631a",
+      "sizeBytes": 708,
+      "mainBlobSha": "4e5a47d6a50e1615a4ac3dc0083494f7f718631a",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 39,
+      "contentSha256": "4d64bec330376ff925c521ab4e4fc0a8795a6b80a982910104474f121e6973ec",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion.com/README.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion.com/README.md",
+      "blobSha": "d967fb882e67ec75e9146df0abb6b62ba5b5cf73",
+      "sizeBytes": 15,
+      "mainBlobSha": "d967fb882e67ec75e9146df0abb6b62ba5b5cf73",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "c8099d183e5a57b22104cb045f773c242d5a892d89f0ecb78ca4526cf9abf86a",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion.com/index.html",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion.com/index.html",
+      "blobSha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sizeBytes": 0,
+      "mainBlobSha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion.com/script.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion.com/script.js",
+      "blobSha": "1619840a458dde3109e632a62f4012e3fe422c7e",
+      "sizeBytes": 41,
+      "mainBlobSha": "1619840a458dde3109e632a62f4012e3fe422c7e",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 2,
+      "contentSha256": "6b91e1ae26fc1e1a57a893f55399c2a9a08e79ce3fcbaaa1614602e60fa35178",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/donor-repositories/pantavion.com/style.css",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--all-projects-safe-transfer-20260823/recovery/donor-repositories/pantavion.com/style.css",
+      "blobSha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sizeBytes": 0,
+      "mainBlobSha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "recovery-continuity"
+      ]
+    }
+  ]
+}

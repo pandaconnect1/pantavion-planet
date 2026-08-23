@@ -1,0 +1,174 @@
+{
+  "id": "PANT-BRANCH-38F84274273E",
+  "sourceRef": "recovery/snapshots/pantavion-clean-rescue",
+  "headSha": "29b686b3cd0f0ddd3de9749353d2c17d135a7bda",
+  "mergeBase": "f99ac906ed55e6abbf6d43f908688fa05e17b20f",
+  "behindMainBy": 654,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 4,
+  "topicCounts": {
+    "ai-kernel": 3,
+    "recovery-continuity": 1,
+    "identity-security": 2,
+    "business-marketplace": 1,
+    "maps-water": 1,
+    "governance-safety": 1,
+    "chat-translation": 1
+  },
+  "kindCounts": {
+    "source-code": 4
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 1,
+    "DIFFERS_FROM_MAIN": 3
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "core/recovery/pantavion-recovery-kernel.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion-clean-rescue/core/recovery/pantavion-recovery-kernel.ts",
+      "blobSha": "bef2e8a6dcc2078212e76256acf1a4ca94aa4998",
+      "sizeBytes": 3344,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 117,
+      "contentSha256": "3ef6296b60e49cf1ee1680287b4c5cd92db4d49d584df39fa08edefca30a97a8",
+      "imports": [],
+      "exports": [
+        "PantavionRecoveryIncidentCategory",
+        "PantavionRecoveryPhase",
+        "PantavionStableBaselineRef",
+        "PantavionRecoveryIncident",
+        "PantavionRecoveryAction",
+        "PantavionRecoveryPlan",
+        "classifyRecoveryIncident",
+        "createRecoveryPlan"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "core/runtime/workspace-runtime.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion-clean-rescue/core/runtime/workspace-runtime.ts",
+      "blobSha": "de162b7fa7774ed9e159c0ff4ee0d937e777de13",
+      "sizeBytes": 1039,
+      "mainBlobSha": "36fc8f1b7264c016ed3058b23b6e04a836ad7a7c",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 43,
+      "contentSha256": "b6bd22967c0ad654626e05be0b7bdd092d98e3e918aeaccebd2b2ce4b0424dbd",
+      "imports": [],
+      "exports": [
+        "PantavionWorkspaceRuntimeContext",
+        "PantavionWorkspaceRuntime",
+        "createWorkspaceRuntimeContext",
+        "workspaceRuntime"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "next.config.mjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion-clean-rescue/next.config.mjs",
+      "blobSha": "d1f2fdcdb51bdf919c33d95ff9a3faca17af75c5",
+      "sizeBytes": 680,
+      "mainBlobSha": "b2961cb65a51053c0e8acd4265baea17c5cd50b8",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 32,
+      "contentSha256": "d9605fc2e24a5d38cb12d62c0e0047525831cf63655b73516d635f6b50f50ee5",
+      "imports": [],
+      "exports": [
+        "nextConfig"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "scripts/pantavion-runtime-smoke.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion-clean-rescue/scripts/pantavion-runtime-smoke.cjs",
+      "blobSha": "880393b36f471ddd6d9b0b11b1c9278a84da690e",
+      "sizeBytes": 727,
+      "mainBlobSha": "2f23ac3356bcd2aaca38739d2650e54af39db38b",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 24,
+      "contentSha256": "27221898f4e474100bfcc22dc979f4ae81d6a34af98a915b4f01f3f7704fb885",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel"
+      ]
+    }
+  ]
+}

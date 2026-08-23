@@ -1,0 +1,208 @@
+{
+  "id": "PANT-BRANCH-7035807F356D",
+  "sourceRef": "recovery/snapshots/agent--production-real-features-only",
+  "headSha": "881cca8e8aa2319e08ffda5d766c30db8b61b5eb",
+  "mergeBase": "2dd17698d25ae22e6c1f9750f68ade07c1935997",
+  "behindMainBy": 504,
+  "aheadOfMainBy": 5,
+  "changedFileCount": 5,
+  "topicCounts": {
+    "review-unclassified": 1,
+    "business-marketplace": 3,
+    "maps-water": 4,
+    "identity-security": 1,
+    "ai-kernel": 1,
+    "governance-safety": 1
+  },
+  "kindCounts": {
+    "ui-page": 2,
+    "source-code": 2,
+    "documentation": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 4,
+    "IDENTICAL_TO_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--production-real-features-only/app/page.tsx",
+      "blobSha": "9e040b2e4a1cf875e17c09cf1e721129ed879b85",
+      "sizeBytes": 247,
+      "mainBlobSha": "ab1fdb7bed5844bc08a535c4513f85d2a6067773",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 10,
+      "contentSha256": "4297e04f40586d33ed0f83a007c7a0de97563e82af0804342ed8b20180f329ca",
+      "imports": [
+        "./pantavion-home-client"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "fetchCache",
+        "HomePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "review-unclassified"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/pantavion-home-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--production-real-features-only/app/pantavion-home-client.tsx",
+      "blobSha": "56ca90551d5354fd901ab0ceedff0be3eb69d1a4",
+      "sizeBytes": 4525,
+      "mainBlobSha": "5cab9f3897e3bff36f3a45882420605e707ad9dc",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 85,
+      "contentSha256": "cf468a684353034bd69d28c836a49373df80456a9119765287444b16b52d067c",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "PantavionHomeClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--production-real-features-only/app/professional/infrastructure/water/page.tsx",
+      "blobSha": "e4c9bab1bf52612bca48d106be3b5d26b8b31845",
+      "sizeBytes": 3865,
+      "mainBlobSha": "c9fb6e27388a0cf59711ccf50041ed8fec32faec",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 101,
+      "contentSha256": "def470183c1c3f3efc7c05acd9eb48ea375a216002ce2270c21434ac5d01c7ce",
+      "imports": [
+        "next/headers",
+        "@/core/security/water-admin-session",
+        "./water-map-navigation"
+      ],
+      "exports": [
+        "metadata",
+        "WaterControlCenterPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/water-map-navigation.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--production-real-features-only/app/professional/infrastructure/water/water-map-navigation.tsx",
+      "blobSha": "42edd1b630b9e786c6e5e346f45d8ef6a60b5889",
+      "sizeBytes": 1955,
+      "mainBlobSha": "df643817ac28326aa0eb7345555919f7231171b6",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 66,
+      "contentSha256": "503bec7eed0bc5f9dabacc5106f7667420179ad9c328839da656a4245d8b54d7",
+      "imports": [
+        "next/navigation"
+      ],
+      "exports": [
+        "WaterMapNavigation"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/production-visibility-policy.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/business-marketplace/agent--production-real-features-only/docs/production-visibility-policy.md",
+      "blobSha": "2b4e91b81bb0c13a5d95eb18f3aee885d2b5efab",
+      "sizeBytes": 726,
+      "mainBlobSha": "2b4e91b81bb0c13a5d95eb18f3aee885d2b5efab",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 10,
+      "contentSha256": "cecd994cbf5d34d4d936416910056536635b6c728afc2be0f0898ad23c5969e4",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 1,
+        "providerPending": 1
+      },
+      "topics": [
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety"
+      ]
+    }
+  ]
+}

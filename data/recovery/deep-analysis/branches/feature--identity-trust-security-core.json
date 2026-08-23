@@ -1,0 +1,339 @@
+{
+  "id": "PANT-BRANCH-926791874783",
+  "sourceRef": "recovery/snapshots/feature--identity-trust-security-core",
+  "headSha": "20d73410aa5ef8782721a4e9cb2293218b6869c5",
+  "mergeBase": "13c67d0f0740e6ae1d29e99d0f937cac22d763b6",
+  "behindMainBy": 300,
+  "aheadOfMainBy": 9,
+  "changedFileCount": 7,
+  "topicCounts": {
+    "identity-security": 7,
+    "social-people": 7,
+    "chat-translation": 4,
+    "ai-kernel": 3,
+    "infrastructure-deployment": 6,
+    "governance-safety": 6,
+    "maps-water": 4,
+    "recovery-continuity": 4,
+    "media-music": 2,
+    "business-marketplace": 2
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "source-code": 3,
+    "documentation": 1,
+    "database-migration": 2
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 1,
+    "DIFFERS_FROM_MAIN": 2,
+    "ABSENT_FROM_MAIN": 4
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/people/find-from-contacts/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feature--identity-trust-security-core/app/api/people/find-from-contacts/route.ts",
+      "blobSha": "f42cf4f0d4c0b46733fd15da7959b38365748781",
+      "sizeBytes": 1450,
+      "mainBlobSha": "f42cf4f0d4c0b46733fd15da7959b38365748781",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 58,
+      "contentSha256": "7883db6873fb81417803becd1db260ce9ecfe21e7ce8f054ed6a9cc689ab7216",
+      "imports": [
+        "next/server",
+        "@/lib/supabase/server"
+      ],
+      "exports": [
+        "dynamic",
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/auth/actions.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/feature--identity-trust-security-core/app/auth/actions.ts",
+      "blobSha": "5c3577493ab69c5a3892639067d8c101cc27bed8",
+      "sizeBytes": 3839,
+      "mainBlobSha": "058d84c456775f653a1ae0cc468f6348e54d18e1",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 100,
+      "contentSha256": "2e88159654a10296d309d1778410a43fa2e7cfcb61dff88cd839eef8511e4f07",
+      "imports": [
+        "next/navigation",
+        "../../lib/supabase/server"
+      ],
+      "exports": [
+        "signUp",
+        "signIn",
+        "signOut"
+      ],
+      "envDependencies": [
+        "NEXT_PUBLIC_SITE_URL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/auth/register/RegisterClient.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/feature--identity-trust-security-core/app/auth/register/RegisterClient.tsx",
+      "blobSha": "4c06497e0854a8554ca96713151d747ee4d49e45",
+      "sizeBytes": 5934,
+      "mainBlobSha": "d08c35079a545a52691fd8a9be16f9bd22e18fab",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 128,
+      "contentSha256": "66656bd61e918fae07cd53e78838544795f16a439113145ad42bcd8b58a8831b",
+      "imports": [
+        "next/link",
+        "react-dom",
+        "@/core/i18n/languages",
+        "../actions"
+      ],
+      "exports": [
+        "RegisterClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "maps-water",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/recovery/canonical-placement-registry.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/feature--identity-trust-security-core/core/recovery/canonical-placement-registry.ts",
+      "blobSha": "0ae9b4b2c7eb4997f9fb8343416924a593390fa4",
+      "sizeBytes": 12000,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 59,
+      "contentSha256": "8fd2808733c054da29e0238080be5f58216a4ceb21545cdd34c2c41516e3c7a7",
+      "imports": [],
+      "exports": [
+        "RecoveryState",
+        "RecoveryDecision",
+        "LiveState",
+        "PlacementState",
+        "DomainKernel",
+        "CanonicalPlacementRecord",
+        "CANONICAL_PLACEMENT_REGISTRY",
+        "listCanonicalPlacements",
+        "listPlacementBacklog",
+        "listPlacementsByKernel"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 3,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/identity-trust-security-core.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/feature--identity-trust-security-core/docs/identity-trust-security-core.md",
+      "blobSha": "f3faf9dafa8b095d22bfbbd7b4d91df122f7c393",
+      "sizeBytes": 5176,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 156,
+      "contentSha256": "a3fce2fd911a335423b6a7741e0fb1301ed8611331321f478659d4fd1d3e904e",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260813070000_create_identity_trust_security_core.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/feature--identity-trust-security-core/supabase/migrations/20260813070000_create_identity_trust_security_core.sql",
+      "blobSha": "1314083deac526c3cdb259a6d27465990fa393b7",
+      "sizeBytes": 14987,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 306,
+      "contentSha256": "bbc04fd5be99850fff65518334821409eede879280d1a27fe03bb6d3c0869593",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [
+        "user_identity_private",
+        "user_emails",
+        "user_phones",
+        "user_identity_security",
+        "identity_verifications",
+        "registration_reviews"
+      ],
+      "sqlPolicies": [
+        "identity_private_owner_select",
+        "identity_private_owner_update",
+        "user_emails_owner_select",
+        "user_emails_owner_insert",
+        "user_emails_owner_update",
+        "user_emails_owner_delete",
+        "user_phones_owner_select",
+        "user_phones_owner_insert",
+        "user_phones_owner_update",
+        "user_phones_owner_delete",
+        "identity_security_owner_select",
+        "identity_verifications_owner_select"
+      ],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "business-marketplace",
+        "maps-water",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260813070100_seed_signup_phone_and_consents.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/feature--identity-trust-security-core/supabase/migrations/20260813070100_seed_signup_phone_and_consents.sql",
+      "blobSha": "4006860ff89eaebc8f8d303a18b6edfe8f33df85",
+      "sizeBytes": 1999,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 67,
+      "contentSha256": "75aa2c8d13adea6745a17d398e150325f97da9ff28aba213bf5708e7c183d73c",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

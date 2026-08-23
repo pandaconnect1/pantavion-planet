@@ -1,0 +1,548 @@
+{
+  "id": "PANT-BRANCH-AC449CDCBFC6",
+  "sourceRef": "recovery/snapshots/pantavion--ecosystem-readiness-gate-v1",
+  "headSha": "084bee75d3a9d4c5c85f4dca7840dbfdeeb2ab19",
+  "mergeBase": "9c74f84c89f5ffc40a5722e7536368c5b5c49a09",
+  "behindMainBy": 570,
+  "aheadOfMainBy": 3,
+  "changedFileCount": 12,
+  "topicCounts": {
+    "business-marketplace": 6,
+    "ai-kernel": 9,
+    "infrastructure-deployment": 8,
+    "maps-water": 7,
+    "chat-translation": 5,
+    "recovery-continuity": 6,
+    "governance-safety": 5,
+    "identity-security": 5,
+    "social-people": 1,
+    "media-music": 1
+  },
+  "kindCounts": {
+    "api-route": 3,
+    "ui-page": 1,
+    "source-code": 7,
+    "configuration-data": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 7,
+    "DIFFERS_FROM_MAIN": 5
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/pantavion/ecosystem-signals/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--ecosystem-readiness-gate-v1/app/api/pantavion/ecosystem-signals/route.ts",
+      "blobSha": "97b80322df3e8f371e5825cec397270107ff6c41",
+      "sizeBytes": 724,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 22,
+      "contentSha256": "5dea741277e59ae68563a66cb9868ad77cf62c3eb04ea5aa37fd6e01099bdaac",
+      "imports": [
+        "@/core/intelligence/pantavion-ecosystem-signal-registry"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/professional/infrastructure/water/final-master-dwg/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/pantavion--ecosystem-readiness-gate-v1/app/api/professional/infrastructure/water/final-master-dwg/route.ts",
+      "blobSha": "56e728110e4d3186e04d58018150ef143f6a8f4a",
+      "sizeBytes": 1762,
+      "mainBlobSha": "98971ae69e681e352b53a54ff653bc1f2f579320",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 71,
+      "contentSha256": "e214672d4d8d03d9c1c652ec85d335c666bf3ccb033cfa38472e1d028024d3be",
+      "imports": [
+        "fs",
+        "path",
+        "stream",
+        "@vercel/blob",
+        "@/core/water/final-master-dwg-source"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN",
+        "PANTAVION_BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/translation/realtime/session/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/pantavion--ecosystem-readiness-gate-v1/app/api/translation/realtime/session/route.ts",
+      "blobSha": "a037ee836523162b63f166320a0aa258f95bf4df",
+      "sizeBytes": 4347,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 132,
+      "contentSha256": "10bafec75c2564df6e03a88f64bffa2983c62dafd40db90b40e71d0431dff7e3",
+      "imports": [
+        "@/core/communication/pantavion-translation-runtime-contract"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [
+        "PANTAVION_REALTIME_TRANSLATION_PROVIDER",
+        "PANTAVION_REALTIME_TRANSLATION_PROVIDER_KEY",
+        "OPENAI_API_KEY",
+        "GOOGLE_APPLICATION_CREDENTIALS",
+        "PANTAVION_REALTIME_TRANSLATION_RUNTIME_ENABLED",
+        "PANTAVION_REALTIME_TRANSLATION_SENSITIVE_CONTEXT_APPROVED"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 2
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/professional/infrastructure/water/final-master-dwg/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/pantavion--ecosystem-readiness-gate-v1/app/professional/infrastructure/water/final-master-dwg/page.tsx",
+      "blobSha": "5de700493f7d7426c156dbb63816ddc8d29db28f",
+      "sizeBytes": 1957,
+      "mainBlobSha": "4f889a87326a731b1b157d33b5822fb5a4b66aa7",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 62,
+      "contentSha256": "4e17e47c04d372cf762a7021e048ad4e969130957fdaeb9facb86ba1c5844aa2",
+      "imports": [
+        "@/core/water/final-master-dwg-source"
+      ],
+      "exports": [
+        "dynamic",
+        "FinalMasterDwgPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/ai/pantavion-agent-protocol-registry.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--ecosystem-readiness-gate-v1/core/ai/pantavion-agent-protocol-registry.ts",
+      "blobSha": "34f5869796e3d078208d462b265dcc9d55154288",
+      "sizeBytes": 6579,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 185,
+      "contentSha256": "71480ddf86f8c64c1d1ca0d9456dc7bbd14cd911fcf6989e892d17da5c4e35a7",
+      "imports": [],
+      "exports": [
+        "PantavionAgentProtocolId",
+        "PantavionAgentProtocolStatus",
+        "PantavionAgentProtocolRegistryEntry",
+        "PantavionAgentInvocationRequest",
+        "PantavionAgentInvocationDecision",
+        "pantavionAgentProtocolRegistryV1",
+        "getPantavionAgentProtocolById",
+        "evaluatePantavionAgentProtocolInvocation"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 2,
+        "unfinished": 0,
+        "providerPending": 8
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/communication/pantavion-translation-runtime-contract.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/pantavion--ecosystem-readiness-gate-v1/core/communication/pantavion-translation-runtime-contract.ts",
+      "blobSha": "8cfb78e34e46896b28c258591baa382de6af1d2f",
+      "sizeBytes": 4460,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 132,
+      "contentSha256": "2f3a4b3bf56c9d454ffdff33cda4c53a509034586e3f328c03ec95215251ecd4",
+      "imports": [],
+      "exports": [
+        "PantavionTranslationRuntimeMode",
+        "PantavionTranslationRuntimeStatus",
+        "PantavionTranslationRuntimeSessionInput",
+        "PantavionTranslationRuntimeSession",
+        "PantavionRealtimeProviderReadinessInput",
+        "pantavionTranslationRuntimeContractV1",
+        "createPantavionTranslationRuntimeSession",
+        "evaluatePantavionRealtimeTranslationProvider"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 6
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/intelligence/pantavion-ecosystem-signal-registry.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--ecosystem-readiness-gate-v1/core/intelligence/pantavion-ecosystem-signal-registry.ts",
+      "blobSha": "eb2249c52a4e62413b57f0753a292f515e2140c6",
+      "sizeBytes": 17050,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 437,
+      "contentSha256": "5827e0ff2986152fe1ecd5da3694ba2b70746ec201f4cd995304238369e3b7e5",
+      "imports": [],
+      "exports": [
+        "PantavionEcosystemSignalDomain",
+        "PantavionCapabilityStatus",
+        "PantavionSignalImportance",
+        "PantavionSourceReference",
+        "PantavionCapabilityProposal",
+        "PantavionEcosystemSignal",
+        "PantavionCapabilityEvaluation",
+        "pantavionCapabilityReadinessChecklist",
+        "pantavionEcosystemSignalRegistryV1",
+        "getPantavionEcosystemSignals",
+        "evaluatePantavionCapabilityProposal",
+        "createPantavionDailyEcosystemBrief"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 3,
+        "unfinished": 0,
+        "providerPending": 10
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/security/pantavion-agent-delegation-policy.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/pantavion--ecosystem-readiness-gate-v1/core/security/pantavion-agent-delegation-policy.ts",
+      "blobSha": "fae47fae12561515aef95cc5984372a7026bd11f",
+      "sizeBytes": 3027,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 108,
+      "contentSha256": "3f4f2ce352e87307181c61db160d3ddf2bc445be645504e22dc5eac0ad08f1cd",
+      "imports": [
+        "@/core/ai/pantavion-agent-protocol-registry"
+      ],
+      "exports": [
+        "PantavionSensitiveChangeCategory",
+        "PantavionAgentDelegationRequest",
+        "PantavionAgentDelegationDecision",
+        "requiresPantavionFounderApproval",
+        "createPantavionAgentDelegationDecision"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/water/final-master-dwg-source.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/pantavion--ecosystem-readiness-gate-v1/core/water/final-master-dwg-source.ts",
+      "blobSha": "db4f00eaa86ec5db64a99026803d8cb200d4e1d7",
+      "sizeBytes": 400,
+      "mainBlobSha": "80ef3310721ceb9071742761b88236f3164b6838",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 5,
+      "contentSha256": "cb72626f1d0932686e875ab3af726b7e9b8d58b636250c2e600f8bbd20c2be2b",
+      "imports": [],
+      "exports": [
+        "FINAL_MASTER_DWG_BLOB_URL",
+        "FINAL_MASTER_DWG_FILE_NAME",
+        "FINAL_MASTER_DWG_SIZE_BYTES",
+        "FINAL_MASTER_DWG_SHA256"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--ecosystem-readiness-gate-v1/package.json",
+      "blobSha": "c123118d120e2e50e59d436d41288dd003d94e93",
+      "sizeBytes": 2995,
+      "mainBlobSha": "f3147714826462b5c76338ad6bcfb831d6df5a06",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 58,
+      "contentSha256": "75127ce1393dd936f760a98b1ecb7535bda7f4fce2471bbd683161f75e37a21c",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 3,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-capability-readiness-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--ecosystem-readiness-gate-v1/scripts/pantavion-capability-readiness-gate.cjs",
+      "blobSha": "1e9d2eb3b82131964d7872295cc8f5dc282b829e",
+      "sizeBytes": 4671,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 161,
+      "contentSha256": "d1c422b2f291366c1025123e06837b4e3bed5369550a9790caeb5dc07749fd69",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 2
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/upload-final-master-dwg-to-blob.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/pantavion--ecosystem-readiness-gate-v1/scripts/upload-final-master-dwg-to-blob.cjs",
+      "blobSha": "060fce28b500dab8657966c19461601e7ed49879",
+      "sizeBytes": 3455,
+      "mainBlobSha": "e1dd475863e8bf2a3d3b494a0f013448b39a6907",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 123,
+      "contentSha256": "d3af30ac9c65701360a0bf4fdbf9027688a99e5ba4f483e7981af3704630f494",
+      "imports": [
+        "fs",
+        "path",
+        "crypto",
+        "stream",
+        "@vercel/blob"
+      ],
+      "exports": [
+        "FINAL_MASTER_DWG_BLOB_URL",
+        "FINAL_MASTER_DWG_FILE_NAME",
+        "FINAL_MASTER_DWG_SIZE_BYTES",
+        "FINAL_MASTER_DWG_SHA256"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN",
+        "PANTAVION_BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

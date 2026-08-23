@@ -1,0 +1,3589 @@
+{
+  "id": "PANT-BRANCH-5586948FB413",
+  "sourceRef": "recovery/snapshots/pantavion--execution-engine-v1",
+  "headSha": "3653c097a997b8c847157f8bc5bf5d0ce5ef9641",
+  "mergeBase": "9c74f84c89f5ffc40a5722e7536368c5b5c49a09",
+  "behindMainBy": 570,
+  "aheadOfMainBy": 26,
+  "changedFileCount": 85,
+  "topicCounts": {
+    "identity-security": 61,
+    "chat-translation": 50,
+    "business-marketplace": 46,
+    "maps-water": 55,
+    "ai-kernel": 74,
+    "infrastructure-deployment": 56,
+    "social-people": 16,
+    "governance-safety": 33,
+    "media-music": 14,
+    "recovery-continuity": 6
+  },
+  "kindCounts": {
+    "api-route": 14,
+    "source-code": 69,
+    "configuration-data": 2
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 83,
+    "DIFFERS_FROM_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/autonomous-engineering/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/app/api/internal/pantavion/autonomous-engineering/route.ts",
+      "blobSha": "ddbd68bf11f3226deda998328ad1d080adb90609",
+      "sizeBytes": 7561,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 261,
+      "contentSha256": "3a57809724b3254bfeee6ff59a7fd4612a96c78bb03d7bba1a498390f4a4d638",
+      "imports": [
+        "crypto",
+        "@/core/kernel/autonomous-engineering-kernel",
+        "@/core/pantaai/runtime/scheduler-guard",
+        "@/core/pantaai/runtime/scheduler-work-package-bridge",
+        "@/core/pantaai/runtime/work-package-pr-executor",
+        "@/core/pantaai/runtime/runtime-ledger"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 2,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/autonomous-repair-pr/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/app/api/internal/pantavion/autonomous-repair-pr/route.ts",
+      "blobSha": "40858caa41896c1af871c7b36f671281e189ae85",
+      "sizeBytes": 2248,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 75,
+      "contentSha256": "fb233b833703d4c2da2c709465f96a557e00ed560e78d6e8dcf640e580f8cd6c",
+      "imports": [
+        "@/core/pantaai/autonomous-code/autonomous-repair-pr-creator",
+        "@/core/pantaai/runtime/scheduler-guard",
+        "@/core/pantaai/runtime/runtime-ledger"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/autonomous-repair/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/app/api/internal/pantavion/autonomous-repair/route.ts",
+      "blobSha": "5a561abd0a10872bd4ea4d3f136284d31fa1a0b4",
+      "sizeBytes": 3009,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 95,
+      "contentSha256": "eff2088b63b1628d96b2e724e3b8768848d1ad5c2852502aa3abc6044ce06d4b",
+      "imports": [
+        "@/core/pantaai/autonomous-code/autonomous-repair-loop",
+        "@/core/pantaai/runtime/scheduler-guard",
+        "@/core/pantaai/runtime/runtime-ledger"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [
+        "NODE_ENV"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/autonomous-work-package-queue/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/app/api/internal/pantavion/autonomous-work-package-queue/route.ts",
+      "blobSha": "019a270813243dccf107c0c0d8ceff60a2e5f74d",
+      "sizeBytes": 3525,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 114,
+      "contentSha256": "c8c4b4cfc0a138134102a542c1501873e206a1cfc98d23e6d6f85aa6d156be87",
+      "imports": [
+        "@/core/pantaai/runtime/autonomous-work-package-coordinator",
+        "@/core/pantaai/runtime/scheduler-guard",
+        "@/core/pantaai/runtime/runtime-ledger"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [
+        "NODE_ENV"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/code-generation-worker/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/app/api/internal/pantavion/code-generation-worker/route.ts",
+      "blobSha": "e697902765f3d945501fb31d1b3fde76870f6b7b",
+      "sizeBytes": 2270,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 86,
+      "contentSha256": "0a7f9bb11beac6905f86f814ca80493c5a23119371cbde94ac01eb6bf2087d9b",
+      "imports": [
+        "@/core/pantaai/autonomous-code/code-generation-worker"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [
+        "PANTAVION_AUTONOMOUS_SECRET",
+        "NODE_ENV"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/ecosystem-unification/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/app/api/internal/pantavion/ecosystem-unification/route.ts",
+      "blobSha": "05edbdf975dac5b458ef3fe650fbe0d23453e645",
+      "sizeBytes": 1702,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 61,
+      "contentSha256": "1349d68d39f67dab7ff259410e2e8b2e5edbd3fc23fcb0b3840050bd9d804aac",
+      "imports": [
+        "@/core/kernel/ecosystem-unification-kernel-bridge",
+        "@/core/pantaai/ecosystem/global-ecosystem-registry"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/ecosystem-work-packages/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/app/api/internal/pantavion/ecosystem-work-packages/route.ts",
+      "blobSha": "700a7fe975635b554efd2ef01c4662f1c960d05a",
+      "sizeBytes": 2096,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 58,
+      "contentSha256": "67cf346897f232127c09f1b01caeb710b6e4b37ee4c6bfdbb639c7568fbf5ec1",
+      "imports": [
+        "@/core/pantaai/autonomous-code/ecosystem-work-package-generator",
+        "@/core/pantaai/autonomous-code/ecosystem-work-packages",
+        "@/core/pantaai/runtime/runtime-ledger"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/executor-adapters/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/app/api/internal/pantavion/executor-adapters/route.ts",
+      "blobSha": "d0eb2c46cd3e35751c2c53b66eb7b7f78c23f1d5",
+      "sizeBytes": 2315,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 66,
+      "contentSha256": "d0c8aa2bcdb01e9919fce465d28937db0dac6220db1de08aea6bfcb40e378e8c",
+      "imports": [
+        "@/core/pantaai/execution-adapters/executor-adapter-planner",
+        "@/core/pantaai/execution-adapters/executor-adapter-module-generator",
+        "@/core/pantaai/runtime/runtime-ledger"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/file-thread-locks/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/app/api/internal/pantavion/file-thread-locks/route.ts",
+      "blobSha": "d7398f7ee6e3e93390d6c7ce552e24d0779a633f",
+      "sizeBytes": 3514,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 116,
+      "contentSha256": "33dd8f2b42b77457ff4f2688b7c3079178a6f86cbd6cde9c099e3ed42272b0e0",
+      "imports": [
+        "@/core/pantaai/runtime/file-thread-lock-registry",
+        "@/core/pantaai/runtime/scheduler-guard",
+        "@/core/pantaai/runtime/runtime-ledger"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [
+        "NODE_ENV"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/model-agent-router/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/app/api/internal/pantavion/model-agent-router/route.ts",
+      "blobSha": "433fe279b7856972627808dcf6316dc7cd1624e7",
+      "sizeBytes": 3773,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 140,
+      "contentSha256": "858483b6420986f802e59ca83bc9f5ae7d48737bca4f17d45be972accbb3dfcb",
+      "imports": [
+        "@/core/pantaai/model-router/agent-task-router",
+        "@/core/pantaai/tool-substitution/tool-substitution-advisor",
+        "@/core/pantaai/runtime/runtime-ledger"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/production-env-check/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/business-marketplace/pantavion--execution-engine-v1/app/api/internal/pantavion/production-env-check/route.ts",
+      "blobSha": "30638431c6e15fff373d6ded2ceeb6a949aa1eb0",
+      "sizeBytes": 1728,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 43,
+      "contentSha256": "90cbbcbde54a89943609ca5ee40c56668e0f433ed5ed1930094f35bcb3e093de",
+      "imports": [
+        "@/core/pantaai/runtime/production-env-check",
+        "@/core/pantaai/runtime/scheduler-guard",
+        "@/core/pantaai/runtime/runtime-ledger"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/runtime-ledger/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/app/api/internal/pantavion/runtime-ledger/route.ts",
+      "blobSha": "9a2df606f4f04e199c2b8d4a2208def3329da943",
+      "sizeBytes": 3167,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 108,
+      "contentSha256": "27a34f2e2b81d5b5e2303dc7792e204ffa68df67894e04a3b18bdad052824cb1",
+      "imports": [
+        "@/core/pantaai/runtime/runtime-ledger"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [
+        "PANTAVION_AUTONOMOUS_SECRET",
+        "NODE_ENV"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/scheduler-smoke/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/app/api/internal/pantavion/scheduler-smoke/route.ts",
+      "blobSha": "cbe97acf780d9434de7a542296c46de56115df08",
+      "sizeBytes": 493,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 18,
+      "contentSha256": "798a2a6d95c1486876ccb852ed1386ffcea27923ff51e2c21d79cf70fd0a98aa",
+      "imports": [
+        "@/core/pantaai/runtime/scheduler-smoke-check"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/internal/pantavion/work-package-pr-executor/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/app/api/internal/pantavion/work-package-pr-executor/route.ts",
+      "blobSha": "c9fff577ca4f94e5dce3bb41918f19826c51578d",
+      "sizeBytes": 2362,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 75,
+      "contentSha256": "2a2ebc5255120c2900a839f6628f0091a23de90fa0f9c4b591c9069317f2ff8f",
+      "imports": [
+        "@/core/pantaai/runtime/work-package-pr-executor",
+        "@/core/pantaai/runtime/scheduler-guard",
+        "@/core/pantaai/runtime/runtime-ledger"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/agents/agent-registry.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/agents/agent-registry.ts",
+      "blobSha": "0e59c0a1101a9a4d146dcacb9ef377d6be936f11",
+      "sizeBytes": 2119,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 58,
+      "contentSha256": "0b879d6bd114ae97ef20362807c2057baaa08d0f5c15ef9e954e39acb9bbc607",
+      "imports": [],
+      "exports": [
+        "PantavionAgentPermission",
+        "PantavionAgentRegistryItem",
+        "pantavionAgentRegistry",
+        "createPantavionAgentRegistryReport"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/ai.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/domains/ai.ts",
+      "blobSha": "d43d264c04fcbc04392d5dcab3acb7e976f4d73e",
+      "sizeBytes": 681,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "49bb2d52bbe88d51a2543dce35e2ae835731aaae1572ebc81f340e2de4ad9bcd",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "aiDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/cloud.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/domains/cloud.ts",
+      "blobSha": "d99188dbc500aad79f8ce3b6601ee02cb7c7bf46",
+      "sizeBytes": 657,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "5a378ac30ceb6accae0dd3da628ca01327aa755142b793e0ae1b44225b4fc131",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "cloudDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/commerce.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/domains/commerce.ts",
+      "blobSha": "d8d72262f83a82cc8bbf4db9f23efc678fee7476",
+      "sizeBytes": 748,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "b01c646ea13820e96162fa7838a12373ff69939b28a40ed1344808c117cbc84d",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "commerceDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/communication.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/domains/communication.ts",
+      "blobSha": "03d520b468fed62a7a49c69ec0540d2617240baf",
+      "sizeBytes": 714,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "da0ab0849905cb80c6c7b31e29f40e2756ef579abb78c6dda62893c4d99821fc",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "communicationDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/databases.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/domains/databases.ts",
+      "blobSha": "462470734ae235a0afd7d9f44348f248496a5c6c",
+      "sizeBytes": 709,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "9a6ef0227b794b25e6b6eccb10c6104e57ff15960cdab23b93b98a471e6e8800",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "databasesDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/education.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/domains/education.ts",
+      "blobSha": "c007f6060d4017421bea18c0d9df63dddd7f2948",
+      "sizeBytes": 701,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "a3810cfe3297059f46851c079e9d26c4ada866b9849fc853fbeabd03fd9bf422",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "educationDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/hardware.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/domains/hardware.ts",
+      "blobSha": "0746a694ac22ae9f3459688a10c055e90fe139e9",
+      "sizeBytes": 712,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "6bfb354a2ee148016bd678c33965d91ecf83977e48787ab34f538d01e564aaaf",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "hardwareDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/health.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/domains/health.ts",
+      "blobSha": "d4db915fb236f5864a50e2bb6cdfefc29ffa87f1",
+      "sizeBytes": 742,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "13efbd5b35123cc284d641f89252c12260bb127f7b512767593cc473b04ecf12",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "healthDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/infrastructure.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/domains/infrastructure.ts",
+      "blobSha": "6e9266d75c3b314a5002d3faeddaaa4aa1f43244",
+      "sizeBytes": 740,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "01b5bd610d146b3e5bf79ef4bfbdfc49616549e8f30f0b47a162256d29973838",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "infrastructureDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/robotics.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/domains/robotics.ts",
+      "blobSha": "50dc0d28bbd27b6a69e7518c97670f3c17b89be8",
+      "sizeBytes": 689,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "86d10d0a90a01dbb6df95f411bfed0a000675e6fbc65005535df8fa7057a6518",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "roboticsDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/science.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/domains/science.ts",
+      "blobSha": "32fb5354995d12a0bbe55fbd67b7293a683af1d7",
+      "sizeBytes": 702,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "62e3307080a97a77b5a9c63bd17fb21dad2e94d39e27c69c36a1d41e3ef0d00b",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "scienceDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/security.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/pantavion--execution-engine-v1/core/evolution/domains/security.ts",
+      "blobSha": "7adbcaae81c9ff7669ba84eeeea6d46e9fd5a4f1",
+      "sizeBytes": 719,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "4c24c2d144b8518f87a08bef26e200b0d28e373ad2337e8e092e68d036429998",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "securityDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "recovery-continuity",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/evolution-types.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/evolution-types.ts",
+      "blobSha": "0eb52d545ce244cf955dcac6b448625350f176cf",
+      "sizeBytes": 780,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 32,
+      "contentSha256": "d4cad45e9fd6aafcc176b667ecfeffce5f63ad7cf59d81d76b8ed6c4d3949a85",
+      "imports": [],
+      "exports": [
+        "pantavionContinents",
+        "PantavionContinent",
+        "PantavionDomainRegistry",
+        "pantavionBaseLegalRules"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/global-domain-registry.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/core/evolution/global-domain-registry.ts",
+      "blobSha": "96e8e06e94abeb9d98567ec08527b199c30d2bd5",
+      "sizeBytes": 1942,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 61,
+      "contentSha256": "5b236d20e4e70f0ac76722cdff76a7252ce670856a3ff32c9654572f4ac307b4",
+      "imports": [
+        "./domains/ai",
+        "./domains/cloud",
+        "./domains/databases",
+        "./domains/security",
+        "./domains/infrastructure",
+        "./domains/hardware",
+        "./domains/robotics",
+        "./domains/education",
+        "./domains/health",
+        "./domains/science",
+        "./domains/communication",
+        "./domains/commerce"
+      ],
+      "exports": [
+        "pantavionGlobalDomainRegistry",
+        "pantavionMapsWaterCadScope",
+        "createPantavionGlobalDomainReport"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/kernel/autonomous-engineering-kernel.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/kernel/autonomous-engineering-kernel.ts",
+      "blobSha": "1e82f263614f330325b56145938f6de24a5df79e",
+      "sizeBytes": 8505,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 292,
+      "contentSha256": "108dfa2877d7fd5f95a08858ee0fa069be3ceb6fbd79837a5646dada1076e93b",
+      "imports": [
+        "fs",
+        "path",
+        "crypto",
+        "../pantaai/autonomous-code/autonomous-job-queue",
+        "../pantaai/autonomous-code/capability-gap-scanner",
+        "../pantaai/autonomous-code/protected-path-policy",
+        "../pantaai/autonomous-code/kernel-domain-cores",
+        "../pantaai/autonomous-code/provider-ecosystem-registry",
+        "../pantaai/autonomous-code/china-superapp-capability-map",
+        "../pantaai/autonomous-code/github-autonomous-writer"
+      ],
+      "exports": [
+        "AutonomousEngineeringWriteMode",
+        "AutonomousEngineeringRunInput",
+        "AutonomousEngineeringRunResult",
+        "$",
+        "execute_$",
+        "runAutonomousEngineeringKernel",
+        "pantavion_autonomous_engineering_kernel_v1"
+      ],
+      "envDependencies": [
+        "PANTAVION_AUTONOMOUS_WRITE_MODE"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/kernel/ecosystem-unification-kernel-bridge.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/kernel/ecosystem-unification-kernel-bridge.ts",
+      "blobSha": "698fd262181291bdb4690adbe74dacec014ca892",
+      "sizeBytes": 1649,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 47,
+      "contentSha256": "786406b5723104b7d6cbf6933b650d8fa7b0007608e473857b4e08ca09c6b3d5",
+      "imports": [
+        "../../types/pantavion",
+        "./kernel",
+        "../pantaai/ecosystem/ecosystem-unification-kernel"
+      ],
+      "exports": [
+        "processEcosystemUnificationThroughKernel",
+        "pantavion_ecosystem_unification_bridge_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/kernel/pantavion-domain-kernel-registry.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/kernel/pantavion-domain-kernel-registry.ts",
+      "blobSha": "369699d6cb400ebc403b3b04db6d6d4c5338cfa9",
+      "sizeBytes": 2079,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 79,
+      "contentSha256": "8e695ef40d61165a0ea1b94d34fb8bdfbf271002a557c79fdbb77fd3cc82a077",
+      "imports": [],
+      "exports": [
+        "pantavionDomainKernelRegistry",
+        "createPantavionDomainKernelReport"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/autonomous-job-queue.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/autonomous-code/autonomous-job-queue.ts",
+      "blobSha": "3bcc5007b2b3ce12709091aadbf1d1292af25df1",
+      "sizeBytes": 6771,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 265,
+      "contentSha256": "68aab853a88e0b6508832d543cc9dcbc55202874a5cd89e1e921edef3250336b",
+      "imports": [
+        "fs",
+        "path",
+        "crypto"
+      ],
+      "exports": [
+        "AutonomousJobKind",
+        "AutonomousJobState",
+        "AutonomousJobPriority",
+        "AutonomousEngineeringJob",
+        "AutonomousJobStore",
+        "loadAutonomousJobStore",
+        "saveAutonomousJobStore",
+        "enqueueAutonomousJob",
+        "claimAutonomousJobs",
+        "completeAutonomousJob",
+        "failAutonomousJob",
+        "ensureAutonomousSeedJobs",
+        "pantavion_autonomous_job_queue_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/autonomous-repair-loop.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/autonomous-code/autonomous-repair-loop.ts",
+      "blobSha": "27f0742af348df1848faf6861ee9c8038115ee2f",
+      "sizeBytes": 9552,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 332,
+      "contentSha256": "bb0bad58fce31ddcc152f440653af2268f2f2540a10d2df1960442b72b287c14",
+      "imports": [
+        "fs",
+        "path",
+        "crypto",
+        "../runtime/runtime-ledger",
+        "./protected-path-policy"
+      ],
+      "exports": [
+        "PantavionRepairSignalKind",
+        "PantavionRepairJobState",
+        "PantavionRepairJob",
+        "PantavionRepairQueue",
+        "PantavionRepairSignalInput",
+        "loadPantavionRepairQueue",
+        "savePantavionRepairQueue",
+        "recordPantavionFailureAndCreateRepairJob",
+        "summarizePantavionRepairQueue",
+        "pantavion_autonomous_repair_loop_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/autonomous-repair-pr-creator.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/autonomous-code/autonomous-repair-pr-creator.ts",
+      "blobSha": "f64f3bf34b0a96d5b854f503ce23730c2ada6290",
+      "sizeBytes": 11165,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 357,
+      "contentSha256": "e592805d233b4c1886aa9003dfbad36e04e9d3430d91c1c92e76d247e760b45b",
+      "imports": [
+        "./autonomous-repair-loop",
+        "./github-autonomous-writer",
+        "../runtime/runtime-ledger"
+      ],
+      "exports": [
+        "PantavionRepairPrRequest",
+        "PantavionRepairPrResult",
+        "summarizeRepairPrQueueState",
+        "createPantavionRepairPullRequest",
+        "pantavion_autonomous_repair_pr_creator_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/capability-gap-scanner.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/autonomous-code/capability-gap-scanner.ts",
+      "blobSha": "679285a5d70270e4e4155c3d54f37f7652092705",
+      "sizeBytes": 6198,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 202,
+      "contentSha256": "94ad33f0d8b849049f27cfd18137531a1b16d2ed10cdee453a7ea9f77cf4e986",
+      "imports": [
+        "fs",
+        "path",
+        "./provider-ecosystem-registry",
+        "./china-superapp-capability-map"
+      ],
+      "exports": [
+        "PantavionCapabilitySurface",
+        "PantavionCapabilityGap",
+        "REQUIRED_PANTAVION_CAPABILITY_SURFACES",
+        "scanPantavionCapabilityGaps",
+        "pantavion_capability_gap_scanner_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/china-superapp-capability-map.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/pantavion--execution-engine-v1/core/pantaai/autonomous-code/china-superapp-capability-map.ts",
+      "blobSha": "e18eb3592ba83c75fec29a2bbc9834f82eac0070",
+      "sizeBytes": 7084,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 216,
+      "contentSha256": "e503dc2695315fa47a4e62c0bebf0d404a2f36fff12227aab16931eee68680ca",
+      "imports": [],
+      "exports": [
+        "ChinaSuperAppCapability",
+        "CHINA_SUPERAPP_CAPABILITY_MAP",
+        "pantavion_china_superapp_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/code-generation-worker.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/autonomous-code/code-generation-worker.ts",
+      "blobSha": "4277cb93b31b4214909438bea9ec4797d5fbdb9b",
+      "sizeBytes": 10564,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 328,
+      "contentSha256": "b73bd4d6bc1f66715000458b599553beb5664e2ebf9719eccd1896d4e9ceff75",
+      "imports": [
+        "fs",
+        "path",
+        "crypto",
+        "./capability-gap-scanner",
+        "./protected-path-policy",
+        "../model-router/agent-task-router",
+        "../tool-substitution/tool-substitution-advisor",
+        "./github-autonomous-writer"
+      ],
+      "exports": [
+        "PantavionCodeGenerationMode",
+        "PantavionGeneratedModule",
+        "PantavionCodeGenerationWorkerInput",
+        "PantavionCodeGenerationWorkerResult",
+        "$",
+        "plan$",
+        "runPantavionCodeGenerationWorker",
+        "pantavion_code_generation_worker_marker_v1"
+      ],
+      "envDependencies": [
+        "PANTAVION_CODE_GENERATION_MODE"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/coding-provider-matrix.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/autonomous-code/coding-provider-matrix.ts",
+      "blobSha": "694e7622d9163297f767ee53d91da8d914ccffc6",
+      "sizeBytes": 4424,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 118,
+      "contentSha256": "3e0e993eef6cc24ce4beb46eb47475c5a8b105650b41d9f64b764b28cbb5e67f",
+      "imports": [],
+      "exports": [
+        "PantavionCodingProviderId",
+        "PantavionCodingTask",
+        "PantavionCodingProvider",
+        "PANTAVION_CODING_PROVIDER_MATRIX",
+        "selectCodingProvider",
+        "pantavion_coding_provider_matrix_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/ecosystem-work-package-generator.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/autonomous-code/ecosystem-work-package-generator.ts",
+      "blobSha": "08b7df928772861560befaa013e987ef2710546d",
+      "sizeBytes": 3344,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 101,
+      "contentSha256": "4e49050359bc4378101c18787c6ac8a56c12e6f66fb2c7273ebb4cf5853ea086",
+      "imports": [
+        "./ecosystem-work-packages",
+        "./protected-path-policy",
+        "../model-router/agent-task-router"
+      ],
+      "exports": [
+        "PantavionWorkPackagePlan",
+        "createPantavionWorkPackagePlans",
+        "pantavion_work_package_generator_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/ecosystem-work-packages.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/autonomous-code/ecosystem-work-packages.ts",
+      "blobSha": "b2fdc3ac29a9ed58e59a4feda1273c36f3333b55",
+      "sizeBytes": 8061,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 183,
+      "contentSha256": "fe400a3d31799171e63512eb1534805d1a7b052ada6985c7947b587a40e00204",
+      "imports": [],
+      "exports": [
+        "PantavionWorkPackagePriority",
+        "PantavionWorkPackageStatus",
+        "PantavionEcosystemWorkPackage",
+        "PANTAVION_ECOSYSTEM_WORK_PACKAGES",
+        "getPantavionEcosystemWorkPackages",
+        "getReadyPantavionWorkPackages",
+        "pantavion_ecosystem_work_packages_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/github-autonomous-writer.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/autonomous-code/github-autonomous-writer.ts",
+      "blobSha": "9490f7e3411d2e26eb52a19b9eb7e9d8b5dba9d1",
+      "sizeBytes": 10814,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 367,
+      "contentSha256": "3958c69119a13bd5924f84ca7a52590ad16f6985bd3f53d829226e6e7acc7de7",
+      "imports": [
+        "buffer",
+        "./protected-path-policy"
+      ],
+      "exports": [
+        "GithubPatchFile",
+        "GithubAutonomousPreflightFile",
+        "GithubAutonomousPreflight",
+        "GithubPrResult",
+        "preflightAutonomousGithubPullRequest",
+        "createAutonomousGithubPullRequest",
+        "pantavion_github_autonomous_writer_marker_v1"
+      ],
+      "envDependencies": [
+        "PANTAVION_GITHUB_BASE_BRANCH",
+        "PANTAVION_AUTONOMOUS_BRANCH_PREFIX"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/kernel-domain-cores.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/autonomous-code/kernel-domain-cores.ts",
+      "blobSha": "683b95982128858b6620286c37be67e21c46a0f4",
+      "sizeBytes": 4706,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 132,
+      "contentSha256": "9bf6bd95c6949995be3b1d6669133061ec28ac00593eeaf47332351f0a69ef84",
+      "imports": [],
+      "exports": [
+        "PantavionDomainCore",
+        "PANTAVION_DOMAIN_CORES",
+        "pantavion_domain_cores_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/protected-path-policy.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/autonomous-code/protected-path-policy.ts",
+      "blobSha": "f56da6a0dcd780a39ff29c4f1b4f152e243840b5",
+      "sizeBytes": 4428,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 134,
+      "contentSha256": "27bd3b3729c1e87d3ab769e1fde8e76e95bcc095084404c79c68baa0b8997a6c",
+      "imports": [],
+      "exports": [
+        "ProtectedKernelDomain",
+        "MutationOperation",
+        "AutonomousMutationRequest",
+        "AutonomousPolicyDecision",
+        "detectProtectedDomain",
+        "evaluateAutonomousMutation",
+        "PANTAVION_PROTECTED_DOMAIN_KERNEL_RULES",
+        "pantavion_protected_path_policy_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/autonomous-code/provider-ecosystem-registry.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/autonomous-code/provider-ecosystem-registry.ts",
+      "blobSha": "deba0efdec93eb8cc7e0323999bd67d2a50de378",
+      "sizeBytes": 15847,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 589,
+      "contentSha256": "5b9741f4b3ba4630372b0d1821c549bf41d3e4f16486cfb9cffb7722dc536839",
+      "imports": [],
+      "exports": [
+        "PantavionCapabilityRisk",
+        "PantavionCapabilityStatus",
+        "PantavionCapabilityFamily",
+        "PantavionCapabilityEntry",
+        "PANTAVION_PROVIDER_ECOSYSTEM_REGISTRY",
+        "getPantavionCapabilityRegistry",
+        "getCapabilitiesByFamily",
+        "getCapabilitiesByProtectedDomain",
+        "pantavion_autonomous_registry_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/ecosystem/ecosystem-unification-kernel.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/ecosystem/ecosystem-unification-kernel.ts",
+      "blobSha": "df192f0e6f1b45387389954991c3c639ae0a57db",
+      "sizeBytes": 6788,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 174,
+      "contentSha256": "cb28ccdedadd072452369f2e5b919d08fbe44389a95e6816b5da7077211ea2aa",
+      "imports": [
+        "./pantavion-master-vision",
+        "./global-ecosystem-registry",
+        "./seven-continent-ecosystem-map"
+      ],
+      "exports": [
+        "EcosystemUnificationInput",
+        "EcosystemUnificationResult",
+        "unifyPantavionEcosystems",
+        "pantavion_ecosystem_unification_kernel_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/ecosystem/global-ecosystem-registry.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/ecosystem/global-ecosystem-registry.ts",
+      "blobSha": "ca2a05575c3deca1905604b80443129d0cf39d37",
+      "sizeBytes": 14526,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 370,
+      "contentSha256": "602577f012c4e0a9705c094c8f61309ec24f0f8b8bf9a29e6ad4de0ecfad38f8",
+      "imports": [],
+      "exports": [
+        "PantavionEcosystemDomain",
+        "PantavionExecutionStatus",
+        "PantavionEcosystemSignal",
+        "PANTAVION_GLOBAL_ECOSYSTEM_SIGNALS",
+        "getPantavionGlobalEcosystemSignals",
+        "getPantavionSignalsByDomain",
+        "pantavion_global_ecosystem_registry_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/ecosystem/pantavion-master-vision.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/ecosystem/pantavion-master-vision.ts",
+      "blobSha": "b93e76e8d5adbde8e2c5a5ea5b396ca1c1405f29",
+      "sizeBytes": 3696,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 75,
+      "contentSha256": "acabcc1325776f14730b2951f139f91869dd30b16d77b685fef0ab5815d763f6",
+      "imports": [],
+      "exports": [
+        "PantavionVisionPrinciple",
+        "PANTAVION_MASTER_VISION",
+        "PANTAVION_VISION_PRINCIPLES",
+        "pantavion_master_vision_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/ecosystem/seven-continent-ecosystem-map.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/pantavion--execution-engine-v1/core/pantaai/ecosystem/seven-continent-ecosystem-map.ts",
+      "blobSha": "61aa90096a76d067e04f2a08d38517710e7a260d",
+      "sizeBytes": 6302,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 282,
+      "contentSha256": "ef0ac3617a076ba563861650bd1a664b4a015792b7a53aaec754da516c37f7c5",
+      "imports": [],
+      "exports": [
+        "ContinentCode",
+        "ContinentEcosystemLayer",
+        "SEVEN_CONTINENT_ECOSYSTEM_MAP",
+        "getSevenContinentEcosystemMap",
+        "getContinentEcosystemLayer",
+        "pantavion_seven_continent_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/execution-adapters/executor-adapter-module-generator.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/execution-adapters/executor-adapter-module-generator.ts",
+      "blobSha": "db14450c869481067351f9849479fc6986f66602",
+      "sizeBytes": 3603,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 106,
+      "contentSha256": "cea2f1a58cba962eba85052395a878930b7352aa3e575cf5c192a45d7d8257cc",
+      "imports": [
+        "./executor-adapter-planner"
+      ],
+      "exports": [
+        "PantavionGeneratedExecutorAdapterDraft",
+        "$",
+        "execute$",
+        "createPantavionGeneratedExecutorAdapterDrafts",
+        "pantavion_executor_adapter_module_generator_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/execution-adapters/executor-adapter-planner.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/execution-adapters/executor-adapter-planner.ts",
+      "blobSha": "ba5ce1a1c01fb627f808c1beb087a513376f144c",
+      "sizeBytes": 3542,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 105,
+      "contentSha256": "d6536b303c8dafe4cb125738aec476836b10071fd5baaac9bf97e1844b682224",
+      "imports": [
+        "../autonomous-code/ecosystem-work-package-generator"
+      ],
+      "exports": [
+        "PantavionExecutorAdapterKind",
+        "PantavionExecutorAdapterStatus",
+        "PantavionExecutorAdapterPlan",
+        "createPantavionExecutorAdapterPlans",
+        "pantavion_executor_adapter_planner_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 2
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/model-router/agent-task-router.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/model-router/agent-task-router.ts",
+      "blobSha": "c9cd2e56be4bba5e33000ab853cb17c33ab08248",
+      "sizeBytes": 4593,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 162,
+      "contentSha256": "8a0833b3280b49478dc691abec2b392174be05fdf7dcdddea6e269a1e67e2075",
+      "imports": [
+        "./provider-capability-matrix",
+        "../autonomous-code/coding-provider-matrix"
+      ],
+      "exports": [
+        "PantavionAgentTaskKind",
+        "PantavionAgentTaskRequest",
+        "PantavionAgentTaskRoute",
+        "routePantavionAgentTask",
+        "pantavion_agent_task_router_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/model-router/provider-capability-matrix.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/model-router/provider-capability-matrix.ts",
+      "blobSha": "657bdb3486f8e6ce838a644bdb1c4d13c87928f9",
+      "sizeBytes": 10138,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 356,
+      "contentSha256": "85a671f2e7b29792cbb1fef3427a8b3a5d9cc99b500ed04ece226b8266dde84c",
+      "imports": [],
+      "exports": [
+        "PantavionModelProviderId",
+        "PantavionModelLane",
+        "PantavionProviderStatus",
+        "PantavionSensitivity",
+        "PantavionModelProvider",
+        "PantavionModelSelectionRequest",
+        "PantavionModelSelectionResult",
+        "PANTAVION_MODEL_PROVIDER_MATRIX",
+        "selectPantavionModelProvider",
+        "pantavion_model_provider_matrix_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 3,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/runtime/autonomous-work-package-coordinator.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/runtime/autonomous-work-package-coordinator.ts",
+      "blobSha": "1e5ff11b68d27e108a17a2a48842534bf2a9c20e",
+      "sizeBytes": 26939,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 843,
+      "contentSha256": "fb550625c7572b86b32527883c670ed4507575f58bd8bdf03b5ef6a78ac33e6a",
+      "imports": [
+        "fs",
+        "path",
+        "crypto",
+        "../autonomous-code/protected-path-policy",
+        "./file-thread-lock-registry",
+        "./runtime-ledger"
+      ],
+      "exports": [
+        "PantavionWorkPackageState",
+        "PantavionWorkPackagePriority",
+        "PantavionWorkPackageRisk",
+        "PantavionWorkPackage",
+        "PantavionWorkPackageQueue",
+        "PantavionWorkPackageSeed",
+        "PantavionClaimWorkPackageInput",
+        "PantavionClaimWorkPackageResult",
+        "loadPantavionWorkPackageQueue",
+        "savePantavionWorkPackageQueue",
+        "seedPantavionAutonomousWorkPackages",
+        "claimNextPantavionWorkPackage",
+        "completePantavionWorkPackage",
+        "failPantavionWorkPackage",
+        "summarizePantavionWorkPackageQueue",
+        "pantavion_autonomous_work_package_coordinator_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 7,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/runtime/file-thread-lock-registry.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/runtime/file-thread-lock-registry.ts",
+      "blobSha": "5a33300a093e6ab16b53259b0e36976bd88c9231",
+      "sizeBytes": 14077,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 484,
+      "contentSha256": "e34f0a75252c3992f6bfc64a66f878020354cb770370afe0f773dee16232bd74",
+      "imports": [
+        "fs",
+        "path",
+        "crypto",
+        "../autonomous-code/protected-path-policy",
+        "./runtime-ledger"
+      ],
+      "exports": [
+        "PantavionLockOwnerKind",
+        "PantavionThreadLockStatus",
+        "PantavionThreadLockFile",
+        "PantavionThreadLockConflict",
+        "PantavionThreadLock",
+        "PantavionThreadLockRegistry",
+        "PantavionAcquireThreadLockInput",
+        "PantavionAcquireThreadLockResult",
+        "PantavionReleaseThreadLockResult",
+        "loadPantavionThreadLockRegistry",
+        "savePantavionThreadLockRegistry",
+        "acquirePantavionThreadLock",
+        "releasePantavionThreadLock",
+        "summarizePantavionThreadLocks",
+        "pantavion_file_thread_lock_registry_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/runtime/production-env-check.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/business-marketplace/pantavion--execution-engine-v1/core/pantaai/runtime/production-env-check.ts",
+      "blobSha": "9f49b64deafc4f3d8d74d38027695a0cfff9dc7e",
+      "sizeBytes": 3589,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 96,
+      "contentSha256": "4d1a449a7c660bdd0d10341ea742b94c6f5bc75934fff03cbf4a1a26539026a4",
+      "imports": [
+        "@/core/kernel/autonomous-engineering-kernel"
+      ],
+      "exports": [
+        "PantavionProductionEnvCheck",
+        "checkPantavionProductionAutonomyEnvironment",
+        "pantavion_production_env_check_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/runtime/runtime-ledger.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/runtime/runtime-ledger.ts",
+      "blobSha": "fca0fcfa4ea7f508fb54446ebe6bf380fd76a6b2",
+      "sizeBytes": 4276,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 170,
+      "contentSha256": "6fc3136d90db3cc34ef2184d2b328e071529c78cded2254ac8d278edf76dbfb6",
+      "imports": [
+        "fs",
+        "path",
+        "crypto"
+      ],
+      "exports": [
+        "PantavionRuntimeLedgerEventType",
+        "PantavionRuntimeLedgerSeverity",
+        "PantavionRuntimeLedgerEvent",
+        "PantavionRuntimeLedgerSnapshot",
+        "PantavionRuntimeLedgerAppendInput",
+        "loadPantavionRuntimeLedger",
+        "savePantavionRuntimeLedger",
+        "appendPantavionRuntimeLedgerEvent",
+        "summarizePantavionRuntimeLedger",
+        "pantavion_runtime_ledger_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/runtime/scheduler-guard.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/runtime/scheduler-guard.ts",
+      "blobSha": "2b086b28b3598056b27a7b09a6de698a0af1e7d1",
+      "sizeBytes": 4128,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 138,
+      "contentSha256": "d81da29ddc0cc9e95fcab7990966683181d89ef626791aab863239fdf368a56e",
+      "imports": [
+        "@/core/kernel/autonomous-engineering-kernel"
+      ],
+      "exports": [
+        "PantavionSchedulerTrigger",
+        "PantavionSchedulerDecision",
+        "isPantavionSchedulerAuthorized",
+        "decidePantavionSchedulerRun",
+        "pantavion_scheduler_guard_marker_v1"
+      ],
+      "envDependencies": [
+        "PANTAVION_AUTONOMOUS_SECRET",
+        "CRON_SECRET",
+        "NODE_ENV",
+        "PANTAVION_AUTONOMOUS_WRITE_MODE"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/runtime/scheduler-smoke-check.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/runtime/scheduler-smoke-check.ts",
+      "blobSha": "0563471fc8d293d3b43754f08f0f3be94fcb29a2",
+      "sizeBytes": 1625,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 45,
+      "contentSha256": "8b388fab96e3c08cd4535dd94692653e3c748c2244bfe99d4f9f837ab5bbe123",
+      "imports": [
+        "./runtime-ledger",
+        "./scheduler-guard"
+      ],
+      "exports": [
+        "PantavionSchedulerSmokeResult",
+        "runPantavionSchedulerSmokeCheck",
+        "pantavion_scheduler_smoke_check_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/runtime/scheduler-work-package-bridge.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/runtime/scheduler-work-package-bridge.ts",
+      "blobSha": "5bcc5a3ecbe0b3e59609cf60b8263794c9d74ad9",
+      "sizeBytes": 3760,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 113,
+      "contentSha256": "edabf09155ecc7ff389923ab1f305e166ebc5dd7b3536bbfc89428a7ae60a264",
+      "imports": [
+        "@/core/kernel/autonomous-engineering-kernel",
+        "./autonomous-work-package-coordinator",
+        "./runtime-ledger"
+      ],
+      "exports": [
+        "PantavionSchedulerWorkPackageBridgeInput",
+        "runPantavionSchedulerWorkPackageBridge",
+        "pantavion_scheduler_work_package_bridge_marker_v1"
+      ],
+      "envDependencies": [
+        "PANTAVION_AUTONOMOUS_BRANCH_PREFIX"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/runtime/work-package-pr-executor.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/runtime/work-package-pr-executor.ts",
+      "blobSha": "0f8f208977afc6d197bbcdabdbaeae01919686ac",
+      "sizeBytes": 12558,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 392,
+      "contentSha256": "53d17d9229749c5e75c1035e33baa2518fde183850d09f8dce6ddfd8f8e8da77",
+      "imports": [
+        "./autonomous-work-package-coordinator",
+        "../autonomous-code/github-autonomous-writer",
+        "./runtime-ledger"
+      ],
+      "exports": [
+        "PantavionWorkPackagePrMode",
+        "PantavionWorkPackagePrExecutorInput",
+        "PantavionWorkPackagePrExecutorResult",
+        "$",
+        "plan$",
+        "summarizeWorkPackagePrExecutorQueue",
+        "executeClaimedPantavionWorkPackageAsPr",
+        "pantavion_work_package_pr_executor_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/pantaai/tool-substitution/tool-substitution-advisor.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/core/pantaai/tool-substitution/tool-substitution-advisor.ts",
+      "blobSha": "2be0c461196132ff043f7d2da41c0fdecc7ee758",
+      "sizeBytes": 8470,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 226,
+      "contentSha256": "b1d471b3c0203c767ddce71ba6c78c636b85ce86a8e22a4d508d4e7a85e3d130",
+      "imports": [],
+      "exports": [
+        "PantavionToolNeed",
+        "PantavionPreference",
+        "PantavionToolSubstitutionEntry",
+        "PantavionToolSubstitutionRequest",
+        "PantavionToolSubstitutionResult",
+        "PANTAVION_TOOL_SUBSTITUTION_REGISTRY",
+        "advisePantavionToolSubstitution",
+        "pantavion_tool_substitution_advisor_marker_v1"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 6
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/package.json",
+      "blobSha": "74af62d4912df1a86fed9b57cdf9ce727be3ddbd",
+      "sizeBytes": 2949,
+      "mainBlobSha": "f3147714826462b5c76338ad6bcfb831d6df5a06",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 58,
+      "contentSha256": "33a0a90f4f9412b9746b84251065f490265aa8552ee8b7e5ef3b8c31add779e3",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 3,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-autonomous-engineering-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-autonomous-engineering-gate.cjs",
+      "blobSha": "b81e2a08bb9c0b1ea363adeda2847608e9c4ca4c",
+      "sizeBytes": 2645,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 83,
+      "contentSha256": "f46fa294028da37809f64eea6f4d9b818fb1e49dc5299e8eb6b3a6f42b3807a4",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-autonomous-repair-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-autonomous-repair-gate.cjs",
+      "blobSha": "d5d633e872bc1f575facfa66583d74d77929a532",
+      "sizeBytes": 2168,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 86,
+      "contentSha256": "aefd98ff33905ac42a72e9ffb7671f88a77c628d71230a786a028c86a3515d79",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [
+        "pantavion_"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-autonomous-repair-pr-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-autonomous-repair-pr-gate.cjs",
+      "blobSha": "e031c4f4587eb4a18806f44b8e2cd3c9036b7107",
+      "sizeBytes": 2231,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 84,
+      "contentSha256": "5c7d1dfb9d0c0701d8fb8c610de7b2ebf59a7dda3e147a7b20e952e37e595477",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [
+        "pantavion_"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-code-generation-ledger-integration-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-code-generation-ledger-integration-gate.cjs",
+      "blobSha": "07a7e8a4e7d6d0359614678486fa171c94cc6c67",
+      "sizeBytes": 1317,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 55,
+      "contentSha256": "bbb06482e291aef8a1e09bed55b3829b1e87097cf7e9f6ce038ba0fa6323898e",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-code-generation-worker-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-code-generation-worker-gate.cjs",
+      "blobSha": "61afa17798b5002a60833ee93671044bf1c8ce27",
+      "sizeBytes": 2257,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 89,
+      "contentSha256": "cf354f29a678230298c4f2e061e7c2a25816e9b97b627aa86ca60ff5fe7d776f",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-ecosystem-unification-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-ecosystem-unification-gate.cjs",
+      "blobSha": "fd7a91f70fc16640d6fa861d3f49cc69f1af2d43",
+      "sizeBytes": 2474,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 105,
+      "contentSha256": "9e0e27733310e49023d4c4e8c2fb2e39573facfa949e186090b668d75009bd31",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-ecosystem-work-packages-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-ecosystem-work-packages-gate.cjs",
+      "blobSha": "5ce77c3da3ccda4cf87da75ebedb1b9346998815",
+      "sizeBytes": 2107,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 94,
+      "contentSha256": "70f48e0452c1e4d629021bb95cb94d90b491d0709fe18929f4deb73d994d04c0",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-executor-adapter-route-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-executor-adapter-route-gate.cjs",
+      "blobSha": "6284f7f1f3683852b8f6e560746c5fe984dac563",
+      "sizeBytes": 1917,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 75,
+      "contentSha256": "47c1aa65c9f8861f13539505e06f4277ed71dfbf18151272a1cff480aec8e685",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-executor-adapters-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-executor-adapters-gate.cjs",
+      "blobSha": "dae8f690ec3a8c956a44bf5e22a7a1115f745aa3",
+      "sizeBytes": 1471,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 64,
+      "contentSha256": "06899b8059adfd353ceaab63403c5fa40ad67cb87420ec0318aee0d67b010f70",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-file-thread-locks-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-file-thread-locks-gate.cjs",
+      "blobSha": "d0f85d6e5c914f21411a1e00aea33156de208b66",
+      "sizeBytes": 2133,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 84,
+      "contentSha256": "7e4c84af415683473b385293c4dc721d46ced0c3b0d81a7ba631c8254a28247d",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [
+        "pantavion_"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-github-pr-writer-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/infrastructure-deployment/pantavion--execution-engine-v1/scripts/pantavion-github-pr-writer-gate.cjs",
+      "blobSha": "e56c1910499f6ba130a0708b9df1c8cbb789dc60",
+      "sizeBytes": 1822,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 68,
+      "contentSha256": "ae8a3bc91354832120418009d266f6fdc9d49ec8560b5047cf8f2bae436d2b69",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-master-backlog-improvements-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-master-backlog-improvements-gate.cjs",
+      "blobSha": "2e19d68ae2b5fb0b815d01c6d1424f94b55fcb11",
+      "sizeBytes": 2424,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 83,
+      "contentSha256": "5218d966dfbb3353d1d9638b409b27118f3272254d2c19076db5177483ea6448",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-model-agent-router-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/scripts/pantavion-model-agent-router-gate.cjs",
+      "blobSha": "b9d2925531e70cc7eb3468b886f6b8fd7b6b351a",
+      "sizeBytes": 2678,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 123,
+      "contentSha256": "9ce70414e0d652c42275e1f9b6f1a76d48f32f01ddb1356ad73a1bc6bedfa639",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-router-ledger-integration-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-router-ledger-integration-gate.cjs",
+      "blobSha": "521bb4413679f4c3de1b756acc421e47b08b1b46",
+      "sizeBytes": 2198,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 73,
+      "contentSha256": "41aef7d1c4b64e2a1c295580d868bfc8263e27ba7b3c5a0160755091eef04542",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [
+        "pantavion_"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-runtime-ledger-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--execution-engine-v1/scripts/pantavion-runtime-ledger-gate.cjs",
+      "blobSha": "2c7163f820d3a2df03b2743c8b224a705d0d21b6",
+      "sizeBytes": 1775,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 74,
+      "contentSha256": "4a192884537d8277738f84373b0d941f66ba57c628687ab43c4a1a05d7bb9445",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-scheduler-auto-pr-flow-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-scheduler-auto-pr-flow-gate.cjs",
+      "blobSha": "6fd8d0826b4d417d8bbf23e2449e95caa1b871f1",
+      "sizeBytes": 2065,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 77,
+      "contentSha256": "089e5f7dea99cc00b1f185bc03340c8787856c6f7d5fd097a32961b9cf294245",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [
+        "pantavion_"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-scheduler-hardening-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-scheduler-hardening-gate.cjs",
+      "blobSha": "e6e14b21b75a7998745e1386cc3017cae7c5dec4",
+      "sizeBytes": 1631,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 67,
+      "contentSha256": "2d1d1e5b1085fe96879a06c6a9e0505addf1403ec756301777ef05bcee5fa045",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [
+        "pantavion_"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-scheduler-smoke-env-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-scheduler-smoke-env-gate.cjs",
+      "blobSha": "015747fa96967682ae841db995555f9892c7aceb",
+      "sizeBytes": 2264,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 82,
+      "contentSha256": "9f7f4495e510f60ee57263a5fce673f8612190ab453e965a8ff6ec4615596695",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [
+        "pantavion_"
+      ],
+      "envDependencies": [
+        "PANTAVION_GITHUB_TOKEN",
+        "PANTAVION_AUTONOMOUS_SECRET",
+        "CRON_SECRET"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-scheduler-work-package-bridge-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-scheduler-work-package-bridge-gate.cjs",
+      "blobSha": "56de6da04e2e30ec7ea2c3c91fb418a8c1ea321c",
+      "sizeBytes": 1328,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 44,
+      "contentSha256": "3ec2b3045519fd42317315f7d75a0bd0c3248b7d09b2cf717d5cfbccbf94d070",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-work-package-coordinator-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-work-package-coordinator-gate.cjs",
+      "blobSha": "916fe801ba089097c5c4e112fe0a5b6e7c31ca05",
+      "sizeBytes": 2791,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 99,
+      "contentSha256": "cbe3aa704b2e9b0380e071e90c23502a31fb69298e519152cb114f21da6dc749",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [
+        "pantavion_"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-work-package-pr-executor-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--execution-engine-v1/scripts/pantavion-work-package-pr-executor-gate.cjs",
+      "blobSha": "8e69c05959b904bdb5a9b016a97ac407f4223e60",
+      "sizeBytes": 2178,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 79,
+      "contentSha256": "2f88a16384dd182dfcbd2281de6bd3d4ec890b590c97f0d1594ae6eba6a87c34",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [
+        "pantavion_"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "vercel.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/infrastructure-deployment/pantavion--execution-engine-v1/vercel.json",
+      "blobSha": "6053c86d2e948c03bc85cea4be7f718867426094",
+      "sizeBytes": 222,
+      "mainBlobSha": "1141cec58f5da0c7b971af123972d5fe902cea10",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "b5498808b19cd2515bed934eb866c83eb95df78c3831c09c9b550aa159ec67b1",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

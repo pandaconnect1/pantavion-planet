@@ -1,0 +1,84 @@
+{
+  "id": "PANT-BRANCH-A14CFC4FBF6E",
+  "sourceRef": "recovery/snapshots/fix--stt-language-and-fallback",
+  "headSha": "621676a0a83ae19c03db3d3922105e23ad4e22b7",
+  "mergeBase": "e94a65d82e4d02618612e3f22db52afb7c54486c",
+  "behindMainBy": 435,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "chat-translation": 1,
+    "ai-kernel": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "api-route": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/pantavion/speech-to-text/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/fix--stt-language-and-fallback/app/api/pantavion/speech-to-text/route.ts",
+      "blobSha": "fe43114bab9fd1e47bdf236ccedc61db022ad169",
+      "sizeBytes": 11565,
+      "mainBlobSha": "fe43114bab9fd1e47bdf236ccedc61db022ad169",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 319,
+      "contentSha256": "b97a2ff5aea35cf06d02922227874498b224d7e71d908d4c880e53d74cd0be46",
+      "imports": [
+        "next/server",
+        "@vercel/oidc",
+        "ai",
+        "@ai-sdk/gateway",
+        "@/core/translation/pantavion-speech-accessibility"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "runtime",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [
+        "AI_GATEWAY_API_KEY",
+        "PANTAVION_SPEECH_TO_TEXT_GATEWAY_MODEL",
+        "PANTAVION_SPEECH_TO_TEXT_ENDPOINT",
+        "PANTAVION_SPEECH_TO_TEXT_API_KEY",
+        "PANTAVION_TRANSLATE_API_KEY",
+        "PANTAVION_ENABLE_DIRECT_OPENAI_STT",
+        "OPENAI_API_KEY",
+        "PANTAVION_SPEECH_TO_TEXT_MODEL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "id": "PANT-BRANCH-10C221FC4840",
+  "sourceRef": "recovery/snapshots/fix--map-b-founder-approved-access",
+  "headSha": "6697ae4aee0cc937eeb1678eb2432e06c33bdc2c",
+  "mergeBase": "e58738bd6a3fe1a722a1bb8138039c9112187d07",
+  "behindMainBy": 93,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "identity-security": 2,
+    "chat-translation": 2,
+    "maps-water": 2,
+    "ai-kernel": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "source-code": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/final-master-dwg/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/fix--map-b-founder-approved-access/app/api/professional/infrastructure/water/final-master-dwg/route.ts",
+      "blobSha": "98971ae69e681e352b53a54ff653bc1f2f579320",
+      "sizeBytes": 5961,
+      "mainBlobSha": "98971ae69e681e352b53a54ff653bc1f2f579320",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 203,
+      "contentSha256": "6e53b3296a462f3fb158bb9a202c3a60427e0890c9ef53efd5ce3e7409c23e9c",
+      "imports": [
+        "crypto",
+        "@vercel/blob",
+        "@/core/security/water-admin-session",
+        "@/core/water/final-master-dwg-source"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/components/water-map-b-authentic-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/fix--map-b-founder-approved-access/app/professional/infrastructure/water/components/water-map-b-authentic-client.tsx",
+      "blobSha": "588b67a6ece9eaa35f62e333841cc41ddb037e95",
+      "sizeBytes": 6942,
+      "mainBlobSha": "588b67a6ece9eaa35f62e333841cc41ddb037e95",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 211,
+      "contentSha256": "042aa6864884d4117481c180237d7ad1944978a32c99316586fa281eb01c15e6",
+      "imports": [
+        "react",
+        "@/core/water/water-map-b-position-truth"
+      ],
+      "exports": [
+        "WaterMapBAuthenticClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water"
+      ]
+    }
+  ]
+}

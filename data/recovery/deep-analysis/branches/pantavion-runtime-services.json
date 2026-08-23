@@ -1,0 +1,362 @@
+{
+  "id": "PANT-BRANCH-B6AA0BB6EBD3",
+  "sourceRef": "recovery/snapshots/pantavion-runtime-services",
+  "headSha": "a8153cf04dc210eb4f1b12a60ee20788949e7ff9",
+  "mergeBase": "a61a1cda5c2726e2835d63d6140a5464f0961591",
+  "behindMainBy": 690,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 9,
+  "topicCounts": {
+    "identity-security": 2,
+    "ai-kernel": 9,
+    "infrastructure-deployment": 2,
+    "governance-safety": 2,
+    "maps-water": 3,
+    "chat-translation": 2,
+    "recovery-continuity": 1
+  },
+  "kindCounts": {
+    "ci-workflow": 1,
+    "database-sql": 1,
+    "source-code": 7
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 3,
+    "IDENTICAL_TO_MAIN": 6
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": ".github/workflows/pantavion-runtime-services.yml",
+      "previousPath": null,
+      "kind": "ci-workflow",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion-runtime-services/.github/workflows/pantavion-runtime-services.yml",
+      "blobSha": "47fc9f96a8c0cc40b300fdc24dee0a08021834b7",
+      "sizeBytes": 1760,
+      "mainBlobSha": "fad54cf1f52d27015f6d79c28e9600cd196d5be5",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 69,
+      "contentSha256": "01e69c4e718c211f431cd52636c5b8f6b605ede1fb38bba1dfcc800d556fc622",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "db/schema/pantavion-runtime.sql",
+      "previousPath": null,
+      "kind": "database-sql",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion-runtime-services/db/schema/pantavion-runtime.sql",
+      "blobSha": "148a000fd5c31dbf80877fb53b94d3408888198a",
+      "sizeBytes": 1453,
+      "mainBlobSha": "148a000fd5c31dbf80877fb53b94d3408888198a",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 57,
+      "contentSha256": "f5a0cfa4f7b65295414e3ba560ef8f11cee54e4a3b5c7ec74946310b9bb8e3b1",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [
+        "kernel_events",
+        "kernel_decisions",
+        "repo_findings",
+        "build_runs",
+        "approvals"
+      ],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-runtime-smoke.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion-runtime-services/scripts/pantavion-runtime-smoke.cjs",
+      "blobSha": "2f23ac3356bcd2aaca38739d2650e54af39db38b",
+      "sizeBytes": 705,
+      "mainBlobSha": "2f23ac3356bcd2aaca38739d2650e54af39db38b",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 23,
+      "contentSha256": "fb1dc234e660bbdff3cf06ed01a63a3b9f2f1980fe154d9cfefd18631d56a0c0",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "services/approval-inbox/index.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion-runtime-services/services/approval-inbox/index.ts",
+      "blobSha": "d4c1563bf234f496b7a9dd274cc065dab12984eb",
+      "sizeBytes": 814,
+      "mainBlobSha": "d4c1563bf234f496b7a9dd274cc065dab12984eb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 22,
+      "contentSha256": "3296abe9d66c5174ee249b5294a015bb83ec4096dec0b7caf130efbd119839b4",
+      "imports": [
+        "../runtime-types"
+      ],
+      "exports": [
+        "ApprovalInboxPayload",
+        "ApprovalInboxJob",
+        "queueApprovals"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "services/build-guardian/index.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion-runtime-services/services/build-guardian/index.ts",
+      "blobSha": "8de37fa9c188d7a457aa83e8c85dae8644eafb7c",
+      "sizeBytes": 1024,
+      "mainBlobSha": "8de37fa9c188d7a457aa83e8c85dae8644eafb7c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 30,
+      "contentSha256": "82000aab133805625025426f4f8f751101a45c6f1f114807a96ed5141b9e3162",
+      "imports": [
+        "../runtime-types"
+      ],
+      "exports": [
+        "BuildGuardianPayload",
+        "BuildGuardianJob",
+        "summarizeBuildHealth"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "services/control-room-api/index.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion-runtime-services/services/control-room-api/index.ts",
+      "blobSha": "382dafedd4b86c68ea1b7e4bb7b2721c419e29b4",
+      "sizeBytes": 828,
+      "mainBlobSha": "382dafedd4b86c68ea1b7e4bb7b2721c419e29b4",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 25,
+      "contentSha256": "a4072dd2a92be98a1d725e7c17db4fa1d99016921fb62657e009759b61327205",
+      "imports": [
+        "../runtime-types"
+      ],
+      "exports": [
+        "createControlRoomSnapshot"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "services/kernel-governor/index.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion-runtime-services/services/kernel-governor/index.ts",
+      "blobSha": "91c605a1ee1ec9bb560d8548e7fc05d697e3bef3",
+      "sizeBytes": 838,
+      "mainBlobSha": "91c605a1ee1ec9bb560d8548e7fc05d697e3bef3",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 22,
+      "contentSha256": "2f150a5e1e9dc39a5c8ffa4cde3e3aecba4ee1e6c9c9d37b2331464892e1c436",
+      "imports": [
+        "../../types/pantavion",
+        "../../core/kernel/kernel",
+        "../runtime-types"
+      ],
+      "exports": [
+        "KernelGovernorPayload",
+        "KernelGovernorJob",
+        "runKernelGovernorCycle"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "ai-kernel",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "services/repo-guardian/index.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion-runtime-services/services/repo-guardian/index.ts",
+      "blobSha": "f8cb9375205d2bfb5769983dcd3e268bbd06b480",
+      "sizeBytes": 1721,
+      "mainBlobSha": "5a71eab79e391cd7e6046fccbbe0acce7088542e",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 46,
+      "contentSha256": "8d2b4ea4d2840d580789f4af56323534139874996edbf0019e16887edf7d0844",
+      "imports": [
+        "../runtime-types"
+      ],
+      "exports": [
+        "RepoGuardianPayload",
+        "RepoGuardianJob",
+        "scanRepoPaths"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "services/runtime-types.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion-runtime-services/services/runtime-types.ts",
+      "blobSha": "84e2621f5b96145f384ee57bc437fbba63d55872",
+      "sizeBytes": 1470,
+      "mainBlobSha": "b4ea5463b93eeb153b1292d6b43c6ad0b14c2359",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 60,
+      "contentSha256": "5b34d3de8ec3d1d07dc98addfefdbbcff666eeff1166fe284a1c74dcd6dd1e8f",
+      "imports": [],
+      "exports": [
+        "RuntimeJobType",
+        "RuntimeJobPriority",
+        "RuntimeJobStatus",
+        "RuntimeJobEnvelope",
+        "RuntimeJobResult",
+        "RepoFinding",
+        "BuildHealthReport",
+        "ApprovalItem",
+        "ControlRoomSnapshot"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel"
+      ]
+    }
+  ]
+}

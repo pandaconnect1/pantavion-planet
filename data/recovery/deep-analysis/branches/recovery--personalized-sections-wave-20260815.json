@@ -1,0 +1,160 @@
+{
+  "id": "PANT-BRANCH-7F265D8255B6",
+  "sourceRef": "recovery/snapshots/recovery--personalized-sections-wave-20260815",
+  "headSha": "79e58e2727c78f63b5f4a31993ab1371f2d44937",
+  "mergeBase": "417e8c9cc68adacc99adba1d75c7d3ef2cfd8aeb",
+  "behindMainBy": 231,
+  "aheadOfMainBy": 5,
+  "changedFileCount": 3,
+  "topicCounts": {
+    "identity-security": 3,
+    "social-people": 3,
+    "chat-translation": 3,
+    "maps-water": 3,
+    "recovery-continuity": 3,
+    "infrastructure-deployment": 3,
+    "business-marketplace": 2,
+    "ai-kernel": 2,
+    "governance-safety": 2,
+    "media-music": 2
+  },
+  "kindCounts": {
+    "source-code": 2,
+    "documentation": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 3
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/profile/ProfileClient.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--personalized-sections-wave-20260815/app/profile/ProfileClient.tsx",
+      "blobSha": "ee90af792e3bcfb33947bdb8d1843d1900b512a8",
+      "sizeBytes": 7405,
+      "mainBlobSha": "ee90af792e3bcfb33947bdb8d1843d1900b512a8",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 147,
+      "contentSha256": "58c038cdd793af931f6abbb179b7d15b03071ac46cee06341d7ad583e55e5997",
+      "imports": [
+        "next/link",
+        "react",
+        "next/navigation",
+        "@/lib/supabase/client",
+        "@/core/personalization/pantavion-personalized-sections"
+      ],
+      "exports": [
+        "ProfileClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 1,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/personalization/pantavion-personalized-sections.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/recovery--personalized-sections-wave-20260815/core/personalization/pantavion-personalized-sections.ts",
+      "blobSha": "22e206ada05619c3932fdcd56d5f2b525ef198d6",
+      "sizeBytes": 11060,
+      "mainBlobSha": "22e206ada05619c3932fdcd56d5f2b525ef198d6",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 154,
+      "contentSha256": "bc0297d5d1d190584630fe0b973b2f289acb2c4b4c33f6b7bdfae09d122330bd",
+      "imports": [],
+      "exports": [
+        "PantavionSectionState",
+        "PantavionPersonalizationContext",
+        "PantavionRecoveredCapability",
+        "PantavionPersonalizedSection",
+        "getPantavionPersonalizedSections",
+        "getRecoveredDonorPrs"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 1,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/recovery/PERSONALIZED_SECTION_ALLOCATION_20260815.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/recovery--personalized-sections-wave-20260815/docs/recovery/PERSONALIZED_SECTION_ALLOCATION_20260815.md",
+      "blobSha": "a637d77beeb1fbdd5d20c0c14f5ec6ea1f6255a2",
+      "sizeBytes": 8347,
+      "mainBlobSha": "a637d77beeb1fbdd5d20c0c14f5ec6ea1f6255a2",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 192,
+      "contentSha256": "7382a02303c54553c06dbf797e28aac200ddc440f68c409c2b60aed02aae6f22",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 2,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

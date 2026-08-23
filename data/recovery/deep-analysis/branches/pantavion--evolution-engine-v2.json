@@ -1,0 +1,576 @@
+{
+  "id": "PANT-BRANCH-CA8B377AFE49",
+  "sourceRef": "recovery/snapshots/pantavion--evolution-engine-v2",
+  "headSha": "66e6c940a906357ee1dcc1a77a143b04ea074b14",
+  "mergeBase": "9c74f84c89f5ffc40a5722e7536368c5b5c49a09",
+  "behindMainBy": 570,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 15,
+  "topicCounts": {
+    "identity-security": 8,
+    "maps-water": 4,
+    "ai-kernel": 5,
+    "infrastructure-deployment": 3,
+    "business-marketplace": 4,
+    "recovery-continuity": 3,
+    "chat-translation": 2,
+    "governance-safety": 4,
+    "social-people": 1,
+    "media-music": 1
+  },
+  "kindCounts": {
+    "source-code": 15
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 15
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "core/agents/agent-registry.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/pantavion--evolution-engine-v2/core/agents/agent-registry.ts",
+      "blobSha": "0e59c0a1101a9a4d146dcacb9ef377d6be936f11",
+      "sizeBytes": 2119,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 58,
+      "contentSha256": "0b879d6bd114ae97ef20362807c2057baaa08d0f5c15ef9e954e39acb9bbc607",
+      "imports": [],
+      "exports": [
+        "PantavionAgentPermission",
+        "PantavionAgentRegistryItem",
+        "pantavionAgentRegistry",
+        "createPantavionAgentRegistryReport"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/ai.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/domains/ai.ts",
+      "blobSha": "d43d264c04fcbc04392d5dcab3acb7e976f4d73e",
+      "sizeBytes": 681,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "49bb2d52bbe88d51a2543dce35e2ae835731aaae1572ebc81f340e2de4ad9bcd",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "aiDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/cloud.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/domains/cloud.ts",
+      "blobSha": "d99188dbc500aad79f8ce3b6601ee02cb7c7bf46",
+      "sizeBytes": 657,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "5a378ac30ceb6accae0dd3da628ca01327aa755142b793e0ae1b44225b4fc131",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "cloudDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/commerce.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/domains/commerce.ts",
+      "blobSha": "d8d72262f83a82cc8bbf4db9f23efc678fee7476",
+      "sizeBytes": 748,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "b01c646ea13820e96162fa7838a12373ff69939b28a40ed1344808c117cbc84d",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "commerceDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/communication.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/domains/communication.ts",
+      "blobSha": "03d520b468fed62a7a49c69ec0540d2617240baf",
+      "sizeBytes": 714,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "da0ab0849905cb80c6c7b31e29f40e2756ef579abb78c6dda62893c4d99821fc",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "communicationDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/databases.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/domains/databases.ts",
+      "blobSha": "462470734ae235a0afd7d9f44348f248496a5c6c",
+      "sizeBytes": 709,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "9a6ef0227b794b25e6b6eccb10c6104e57ff15960cdab23b93b98a471e6e8800",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "databasesDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/education.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/domains/education.ts",
+      "blobSha": "c007f6060d4017421bea18c0d9df63dddd7f2948",
+      "sizeBytes": 701,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "a3810cfe3297059f46851c079e9d26c4ada866b9849fc853fbeabd03fd9bf422",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "educationDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/hardware.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/domains/hardware.ts",
+      "blobSha": "0746a694ac22ae9f3459688a10c055e90fe139e9",
+      "sizeBytes": 712,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "6bfb354a2ee148016bd678c33965d91ecf83977e48787ab34f538d01e564aaaf",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "hardwareDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/health.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/domains/health.ts",
+      "blobSha": "d4db915fb236f5864a50e2bb6cdfefc29ffa87f1",
+      "sizeBytes": 742,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "13efbd5b35123cc284d641f89252c12260bb127f7b512767593cc473b04ecf12",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "healthDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/infrastructure.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/domains/infrastructure.ts",
+      "blobSha": "6e9266d75c3b314a5002d3faeddaaa4aa1f43244",
+      "sizeBytes": 740,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "01b5bd610d146b3e5bf79ef4bfbdfc49616549e8f30f0b47a162256d29973838",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "infrastructureDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/robotics.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/domains/robotics.ts",
+      "blobSha": "50dc0d28bbd27b6a69e7518c97670f3c17b89be8",
+      "sizeBytes": 689,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "86d10d0a90a01dbb6df95f411bfed0a000675e6fbc65005535df8fa7057a6518",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "roboticsDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/science.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/domains/science.ts",
+      "blobSha": "32fb5354995d12a0bbe55fbd67b7293a683af1d7",
+      "sizeBytes": 702,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "62e3307080a97a77b5a9c63bd17fb21dad2e94d39e27c69c36a1d41e3ef0d00b",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "scienceDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/domains/security.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/pantavion--evolution-engine-v2/core/evolution/domains/security.ts",
+      "blobSha": "7adbcaae81c9ff7669ba84eeeea6d46e9fd5a4f1",
+      "sizeBytes": 719,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "4c24c2d144b8518f87a08bef26e200b0d28e373ad2337e8e092e68d036429998",
+      "imports": [
+        "../evolution-types"
+      ],
+      "exports": [
+        "securityDomain"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "recovery-continuity",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/evolution-types.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/evolution-types.ts",
+      "blobSha": "0eb52d545ce244cf955dcac6b448625350f176cf",
+      "sizeBytes": 780,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 32,
+      "contentSha256": "d4cad45e9fd6aafcc176b667ecfeffce5f63ad7cf59d81d76b8ed6c4d3949a85",
+      "imports": [],
+      "exports": [
+        "pantavionContinents",
+        "PantavionContinent",
+        "PantavionDomainRegistry",
+        "pantavionBaseLegalRules"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/evolution/global-domain-registry.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/pantavion--evolution-engine-v2/core/evolution/global-domain-registry.ts",
+      "blobSha": "96e8e06e94abeb9d98567ec08527b199c30d2bd5",
+      "sizeBytes": 1942,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 61,
+      "contentSha256": "5b236d20e4e70f0ac76722cdff76a7252ce670856a3ff32c9654572f4ac307b4",
+      "imports": [
+        "./domains/ai",
+        "./domains/cloud",
+        "./domains/databases",
+        "./domains/security",
+        "./domains/infrastructure",
+        "./domains/hardware",
+        "./domains/robotics",
+        "./domains/education",
+        "./domains/health",
+        "./domains/science",
+        "./domains/communication",
+        "./domains/commerce"
+      ],
+      "exports": [
+        "pantavionGlobalDomainRegistry",
+        "pantavionMapsWaterCadScope",
+        "createPantavionGlobalDomainReport"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water"
+      ]
+    }
+  ]
+}

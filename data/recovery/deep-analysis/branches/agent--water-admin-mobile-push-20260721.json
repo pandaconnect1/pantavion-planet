@@ -1,0 +1,344 @@
+{
+  "id": "PANT-BRANCH-17321121516A",
+  "sourceRef": "recovery/snapshots/agent--water-admin-mobile-push-20260721",
+  "headSha": "52344e78be1cf1d0e19496a5c37e10d81a6f4944",
+  "mergeBase": "9e40305baee27cdfe85291fea30a6327abbac94d",
+  "behindMainBy": 538,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 8,
+  "topicCounts": {
+    "identity-security": 5,
+    "chat-translation": 6,
+    "maps-water": 8,
+    "ai-kernel": 5,
+    "infrastructure-deployment": 4,
+    "social-people": 2,
+    "business-marketplace": 1,
+    "recovery-continuity": 1
+  },
+  "kindCounts": {
+    "api-route": 2,
+    "ui-page": 1,
+    "source-code": 3,
+    "configuration-data": 2
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 5,
+    "DIFFERS_FROM_MAIN": 3
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/professional/infrastructure/water/access/admin/notifications/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--water-admin-mobile-push-20260721/app/api/professional/infrastructure/water/access/admin/notifications/route.ts",
+      "blobSha": "0633b1091bb27c7da2f4dd29350b7da2f39f3154",
+      "sizeBytes": 3564,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 140,
+      "contentSha256": "858e785b7cd6fc61aba58173695715363c58d51b9be35646c126d28570e4d439",
+      "imports": [
+        "next/server",
+        "@/core/infrastructure/water/water-admin-push",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "dynamic",
+        "runtime",
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/access/request/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--water-admin-mobile-push-20260721/app/api/professional/infrastructure/water/access/request/route.ts",
+      "blobSha": "4a16b6f58d697ac75d6e9c3e2cb04027ee6e1def",
+      "sizeBytes": 5096,
+      "mainBlobSha": "5249968c494b6bfe602cf28f6d009de524122720",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 186,
+      "contentSha256": "bcbdf3db5bc9a8516dee33100ce9cc873fc56113e2372ccb29980e6b5e6aebfe",
+      "imports": [
+        "crypto",
+        "@vercel/blob",
+        "next/server",
+        "@/core/infrastructure/water/water-admin-push"
+      ],
+      "exports": [
+        "runtime",
+        "POST"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/admin/approvals/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--water-admin-mobile-push-20260721/app/professional/infrastructure/water/admin/approvals/page.tsx",
+      "blobSha": "b079eb3898b78873f92c4c960365ad987cc87900",
+      "sizeBytes": 31828,
+      "mainBlobSha": "058c1672e98b27013cc7b9982d2f8dbc39b43e14",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 751,
+      "contentSha256": "28223084941f4e15ee0d776533f6f7a669068c7da7b3d1c219ca5b7547588630",
+      "imports": [
+        "next/link",
+        "react",
+        "./water-admin-push-controls"
+      ],
+      "exports": [
+        "WaterApprovalInboxPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 6,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/professional/infrastructure/water/admin/approvals/water-admin-push-controls.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--water-admin-mobile-push-20260721/app/professional/infrastructure/water/admin/approvals/water-admin-push-controls.tsx",
+      "blobSha": "6a5cc8f4b5c19f0aed69eba577874e412f2374f8",
+      "sizeBytes": 10631,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 305,
+      "contentSha256": "43fd40bec27097fc5bb65c95eeef6c49a6dfd6fb8eb7b70e75181f8ece7c3213",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "WaterAdminPushControls"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 4,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/infrastructure/water/water-admin-push.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--water-admin-mobile-push-20260721/core/infrastructure/water/water-admin-push.ts",
+      "blobSha": "1635354619d0bc04b3bc5c22d27aeab03e1c6193",
+      "sizeBytes": 8853,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 335,
+      "contentSha256": "b5f9ce0f3d71464e59d7a22d9989560e3b59e861e9d8fd1e5eb2c88a5b61780c",
+      "imports": [
+        "crypto",
+        "@vercel/blob",
+        "web-push"
+      ],
+      "exports": [
+        "WaterAdminPushPayload",
+        "WaterAdminPushDelivery",
+        "getOrCreateWaterAdminVapidKeys",
+        "saveWaterAdminPushSubscription",
+        "removeWaterAdminPushSubscription",
+        "hasWaterAdminPushSubscription",
+        "getWaterAdminPushSubscriptionCount",
+        "sendWaterAdminPushNotification"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "package-lock.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--water-admin-mobile-push-20260721/package-lock.json",
+      "blobSha": "4bf21bffaf17e41e5eb472dc053200c35943a79f",
+      "sizeBytes": 236181,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 6770,
+      "contentSha256": "dcebdc69c2eda19db7f73ddee6103eed05054db58350d8aaf3f42cec15d449c1",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--water-admin-mobile-push-20260721/package.json",
+      "blobSha": "3e9138d7df3ec06dcca3f934d5cc1b03ef959bdb",
+      "sizeBytes": 3277,
+      "mainBlobSha": "f3147714826462b5c76338ad6bcfb831d6df5a06",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 65,
+      "contentSha256": "059727376b62f49dfed00ce4bff9ae14da569f2066ef0fe61a100ec74b1c8833",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 3,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "public/water-admin-push-sw.js",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--water-admin-mobile-push-20260721/public/water-admin-push-sw.js",
+      "blobSha": "937ed0ec265e63df34d621d8c2bb97455c9c4959",
+      "sizeBytes": 1760,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 70,
+      "contentSha256": "0c9e7b93b1f6144ae62a52696854ae7165f53ad8b53294261dc5cb91094c1468",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    }
+  ]
+}

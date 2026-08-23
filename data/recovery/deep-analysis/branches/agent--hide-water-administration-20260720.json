@@ -1,0 +1,1301 @@
+{
+  "id": "PANT-BRANCH-6624048C3323",
+  "sourceRef": "recovery/snapshots/agent--hide-water-administration-20260720",
+  "headSha": "03a97c3a9ca17f5fe6d8e389f866938b92f371fe",
+  "mergeBase": "03ae20725edaaedfaeb16242511b7dfa0d892127",
+  "behindMainBy": 542,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 31,
+  "topicCounts": {
+    "identity-security": 22,
+    "chat-translation": 20,
+    "maps-water": 31,
+    "ai-kernel": 13,
+    "infrastructure-deployment": 15,
+    "recovery-continuity": 5,
+    "media-music": 3,
+    "business-marketplace": 2,
+    "governance-safety": 3
+  },
+  "kindCounts": {
+    "api-route": 13,
+    "source-code": 10,
+    "ui-page": 7,
+    "ui-layout": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 18,
+    "DIFFERS_FROM_MAIN": 13
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/access/admin/approve/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/access/admin/approve/route.ts",
+      "blobSha": "a1270055e0eb3448112a4555c08a4a94e9ec91c1",
+      "sizeBytes": 6560,
+      "mainBlobSha": "a1270055e0eb3448112a4555c08a4a94e9ec91c1",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 243,
+      "contentSha256": "fda38d7d7e732fbf70fdc32b047e39883804dc1beb2b3e2d663b3da7b0bd5c7a",
+      "imports": [
+        "@vercel/blob",
+        "next/server",
+        "crypto",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/access/admin/approved/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/access/admin/approved/route.ts",
+      "blobSha": "ac112cc9b0da85da164ffef416a90cf8dcdf3250",
+      "sizeBytes": 3633,
+      "mainBlobSha": "7e49b0e9848dc075176a6f6d50789a5d7584b6f6",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 154,
+      "contentSha256": "c514b1ecb781f4bff4e598463e1e5ab7f34b876c194766547d657645d3ea587e",
+      "imports": [
+        "@vercel/blob",
+        "next/server",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "dynamic",
+        "runtime",
+        "POST"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+      "blobSha": "fbccbac88bb01abac1a622066f98d9abc96cd7eb",
+      "sizeBytes": 10313,
+      "mainBlobSha": "db6fb19d5f5f3b29ebee676863d604ef65a9aa43",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 427,
+      "contentSha256": "4d2bb13e5eb445a81c7a0d1c4d8651daea3ad79eff58eabb3770f5894caba168",
+      "imports": [
+        "@vercel/blob",
+        "next/server",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "POST"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/access/admin/requests/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/access/admin/requests/route.ts",
+      "blobSha": "2675faa59e1499406d8f4c3172bcf5db04a594d0",
+      "sizeBytes": 2699,
+      "mainBlobSha": "3d2cdbd3ad5ef6c90ee9fc1d2c2eac16af89d238",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 109,
+      "contentSha256": "97a61218dc1eef50a8f2d7a3c9ba4aab12f201b672a75ba8e1bb62acc7b345a5",
+      "imports": [
+        "@vercel/blob",
+        "next/server",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "POST"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/access/authorize/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/access/authorize/route.ts",
+      "blobSha": "82352f51fec81676184484e458c7041c16c486c4",
+      "sizeBytes": 2816,
+      "mainBlobSha": "bf140cf169458b8ad16b0ed2ae472d0f3de8b458",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 109,
+      "contentSha256": "8670daac8ae4d3a5c35a25599eada4af6df71b906d623147664f55b35a773d9c",
+      "imports": [
+        "crypto",
+        "@vercel/blob",
+        "next/server",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "POST"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+      "blobSha": "ce2c3743f1f8b2107cdd10c60fcbd7d8ea10984b",
+      "sizeBytes": 7732,
+      "mainBlobSha": "ce2c3743f1f8b2107cdd10c60fcbd7d8ea10984b",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 227,
+      "contentSha256": "4bbc78d6c41e20cf8de9ad0456fdf79d0038305a960b2512500d1afa97ae9cfc",
+      "imports": [
+        "@vercel/blob",
+        "next/server",
+        "@/core/security/water-admin-session",
+        "@/core/water/water-ai-operations-kernel",
+        "@/core/water/water-ai-map-intelligence-kernel"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "blobSha": "6fe217790e148cd0c17a193490c0d63b511c7b39",
+      "sizeBytes": 6013,
+      "mainBlobSha": "6fe217790e148cd0c17a193490c0d63b511c7b39",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 201,
+      "contentSha256": "7e37480ef782ff663d0156339631829786f23e5d86e00654a8a0cecad73f68c5",
+      "imports": [
+        "@vercel/blob",
+        "next/server",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/admin/session/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/admin/session/route.ts",
+      "blobSha": "643f995b560525e6c5a0dd6d884af386b7cae68d",
+      "sizeBytes": 3169,
+      "mainBlobSha": "4682b347ef16cf8c7bc35d7b7fd3c54761d2cc10",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 132,
+      "contentSha256": "14e0d4af027b013bb7fb3f77a519ec2746e5c4b87c8462f929d2c00d6f620f4a",
+      "imports": [
+        "next/server",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "POST",
+        "GET",
+        "DELETE"
+      ],
+      "envDependencies": [
+        "NODE_ENV"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST",
+        "GET",
+        "DELETE"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/field/admin/submissions/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/field/admin/submissions/route.ts",
+      "blobSha": "daffaf68f4f0f28fb575e0569af13391f5c885e9",
+      "sizeBytes": 3522,
+      "mainBlobSha": "daffaf68f4f0f28fb575e0569af13391f5c885e9",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 128,
+      "contentSha256": "a6a7c55cc6d739427bc8cbb0856cb8b74a32e1f6de9f9a757196405f351375ba",
+      "imports": [
+        "@vercel/blob",
+        "next/server",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "POST"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/maps/registry/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/maps/registry/route.ts",
+      "blobSha": "baf2f24cc30f1516414ca3bebbe7192f270bcf5d",
+      "sizeBytes": 4470,
+      "mainBlobSha": "baf2f24cc30f1516414ca3bebbe7192f270bcf5d",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 177,
+      "contentSha256": "77201f97a1ce7fcd2e0d148226497f0b3f09abd5e69a51a35eeac5572ce2139a",
+      "imports": [
+        "crypto",
+        "@vercel/blob",
+        "next/server",
+        "@/core/infrastructure/water/water-abc-map-system-contract",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "POST"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN",
+        "PANTAVION_WATER_B_MASTER_BLOB_PATH",
+        "PANTAVION_WATER_DTX_BLOB_PATH",
+        "PANTAVION_WATER_DWG_BLOB_PATH",
+        "PANTAVION_WATER_SOURCE_BLOB_PATH",
+        "PANTAVION_WATER_TELEMETRY_PROVIDER"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/master-dwg/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/master-dwg/route.ts",
+      "blobSha": "71365b67d0915d31dfa3709dee077486cf3d6091",
+      "sizeBytes": 5451,
+      "mainBlobSha": "71365b67d0915d31dfa3709dee077486cf3d6091",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 209,
+      "contentSha256": "88b5a30077359661ba01f4304eb24ca38315cce1d90657eddab24d09ac109061",
+      "imports": [
+        "crypto",
+        "@vercel/blob",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN",
+        "PANTAVION_WATER_MASTER_DWG_BLOB_PATH"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/master/b/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/master/b/route.ts",
+      "blobSha": "8ff25caf022f3aed9af5b8c7d2b3b25aae3de0a5",
+      "sizeBytes": 3828,
+      "mainBlobSha": "8ff25caf022f3aed9af5b8c7d2b3b25aae3de0a5",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 155,
+      "contentSha256": "9e3bfd50c0d5fb140612e6c88dd7ce836159decb75a3eca7e0241bc756f71baf",
+      "imports": [
+        "@vercel/blob",
+        "next/server",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "dynamic",
+        "runtime",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/segment/bbox/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/api/professional/infrastructure/water/segment/bbox/route.ts",
+      "blobSha": "80488b2b9f18005b1867f35cb7fc437396c648fc",
+      "sizeBytes": 4638,
+      "mainBlobSha": "3c49eb9cd21e705a116bbe8e37deb0032e76cf86",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 183,
+      "contentSha256": "157bfac9fd0e9a0618b1a2f9a6b427c26a9b3edbb34d27d6c09396263a76d7e9",
+      "imports": [
+        "crypto",
+        "@vercel/blob",
+        "next/server",
+        "@/core/infrastructure/water/controlled-water-segment-index-provider",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/access/water-access-control-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/access/water-access-control-client.tsx",
+      "blobSha": "90c47e9661ef1ebbeccc67e04968d235e90e8eec",
+      "sizeBytes": 10464,
+      "mainBlobSha": "62138e18ef4d23f233517abda853af9b3d120191",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 304,
+      "contentSha256": "9ef10212457d2df4e03fd7c55cbfef9da477d5a887d65ed212f9c1425b13c843",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "WaterAccessControlClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/admin/access/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/admin/access/page.tsx",
+      "blobSha": "a9912e1acb8fd76b1e7b4aca6612a4dede4a955c",
+      "sizeBytes": 5055,
+      "mainBlobSha": "da63ed45a7f8862835031d6d1d0a31cd25817cd4",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 151,
+      "contentSha256": "f1216d7b8d4076a2154c0166fbd059e4a1b5f485e0a409078dcaff65eb7f23fc",
+      "imports": [
+        "next/link",
+        "react"
+      ],
+      "exports": [
+        "WaterAdminAccessPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/admin/approvals/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/admin/approvals/page.tsx",
+      "blobSha": "8b824ea01343899802366ba2c3b02b9d30941323",
+      "sizeBytes": 15925,
+      "mainBlobSha": "058c1672e98b27013cc7b9982d2f8dbc39b43e14",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 397,
+      "contentSha256": "2d8c1da3847cf9bbb64dbe3b0cf3d5441200279ab00f58b3617ef812e7d2aee7",
+      "imports": [
+        "next/link",
+        "react"
+      ],
+      "exports": [
+        "WaterApprovalInboxPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/admin/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/admin/page.tsx",
+      "blobSha": "44da32b05b2f4831f5fcd75e866058016393aec8",
+      "sizeBytes": 153,
+      "mainBlobSha": "d013d8fec4f2fbfc7a0de61834a22d454ae48a76",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 6,
+      "contentSha256": "a1e4cb0682d09507f9a28507c9f5b398cc6144e67ec9bf26e927f148abbbadeb",
+      "imports": [
+        "next/navigation"
+      ],
+      "exports": [
+        "WaterAdminPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/components/water-derived-map-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/components/water-derived-map-client.tsx",
+      "blobSha": "e2601651d7c41f9172b2ea07a3a3f8f373930035",
+      "sizeBytes": 26890,
+      "mainBlobSha": "e2601651d7c41f9172b2ea07a3a3f8f373930035",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 820,
+      "contentSha256": "8172a80edce21a36513f873f7905e0815f469fb819b49634a5f1b91018a75760",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "WaterDerivedMapClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/help/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/help/page.tsx",
+      "blobSha": "b547646314757c6eeaf81b2425a961714d71c1ed",
+      "sizeBytes": 18104,
+      "mainBlobSha": "b547646314757c6eeaf81b2425a961714d71c1ed",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 410,
+      "contentSha256": "583f64e0dff81116cbe85cd22ad0b6ca07815f99eba413533c9abb7a28a19dd1",
+      "imports": [
+        "next/link",
+        "react"
+      ],
+      "exports": [
+        "WaterHelpResolutionPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/intelligence/water-intelligence-command-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/intelligence/water-intelligence-command-client.tsx",
+      "blobSha": "0b45c6a6d9f346fdde7a00f0ad85dca9f8f642d0",
+      "sizeBytes": 16738,
+      "mainBlobSha": "0b45c6a6d9f346fdde7a00f0ad85dca9f8f642d0",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 411,
+      "contentSha256": "f3e3466363f90743385d4e3853375107fecc219849f0cfe14a65f9537e495f18",
+      "imports": [
+        "next/link",
+        "react",
+        "@/core/water/water-intelligence-master-contract"
+      ],
+      "exports": [
+        "WaterIntelligenceCommandClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/professional/infrastructure/water/layout.tsx",
+      "previousPath": null,
+      "kind": "ui-layout",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/layout.tsx",
+      "blobSha": "3300f0e67fd41f880595ff47c3abfb643ce0d945",
+      "sizeBytes": 268,
+      "mainBlobSha": "3300f0e67fd41f880595ff47c3abfb643ce0d945",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 13,
+      "contentSha256": "56992db71bbaac40b0478993228430d6d7e87438ae75911294ef46779ef2f092",
+      "imports": [
+        "react",
+        "./legacy-secret-cleanup"
+      ],
+      "exports": [
+        "WaterLayout"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/professional/infrastructure/water/legacy-secret-cleanup.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/agent--hide-water-administration-20260720/app/professional/infrastructure/water/legacy-secret-cleanup.tsx",
+      "blobSha": "0e28dad1862854dea573211687a695507d49d2e6",
+      "sizeBytes": 540,
+      "mainBlobSha": "0e28dad1862854dea573211687a695507d49d2e6",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 23,
+      "contentSha256": "555cbe95ef18cefa7e815d45f517c84ddedc3206ecd57d0dcf066983012bd79b",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "WaterLegacySecretCleanup"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/live/controlled-water-segment-client.tsx",
+      "blobSha": "dbd116f94a4f9a2d115561d0725279afb7123c5e",
+      "sizeBytes": 42134,
+      "mainBlobSha": "9c7e3ce2dfc8b729eb3f93af610d38cba53b8f66",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 1165,
+      "contentSha256": "e82c043e3c519bebea0e2b4e1d5fb1f2dd48c620241df3016737d1c9afb3be26",
+      "imports": [
+        "react",
+        "@/core/language/pantavion-language-catalog"
+      ],
+      "exports": [
+        "ControlledWaterSegmentClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/master-dwg/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/master-dwg/page.tsx",
+      "blobSha": "8e103e4769f566f872be62a1ab21de0da488af8c",
+      "sizeBytes": 4938,
+      "mainBlobSha": "8e103e4769f566f872be62a1ab21de0da488af8c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 160,
+      "contentSha256": "8342fdfe47f58c048535584e46743a6958a0e9b5c6f3e3671143db0fcdd4303c",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "WaterMasterDwgPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/master/b-master-status-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/master/b-master-status-client.tsx",
+      "blobSha": "324c6fcd999d01fb8b2153be67bca406ea9dcfce",
+      "sizeBytes": 9338,
+      "mainBlobSha": "324c6fcd999d01fb8b2153be67bca406ea9dcfce",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 246,
+      "contentSha256": "5900b68c0de5dc02dc3b7fd7618f0da21f7b3534a35b6f2ac489879c258038e7",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "BMasterStatusClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water",
+        "recovery-continuity",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/mobile-founder/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/mobile-founder/page.tsx",
+      "blobSha": "90a76371f6caf418d6761718ed84aefddc417558",
+      "sizeBytes": 161,
+      "mainBlobSha": "90a76371f6caf418d6761718ed84aefddc417558",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 6,
+      "contentSha256": "5f1ca4c0dd50813ed80b9ef4c56e23df4ea41ba8371ee603864f736ee069818f",
+      "imports": [
+        "next/navigation"
+      ],
+      "exports": [
+        "WaterMobileFounderPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/page.tsx",
+      "blobSha": "db97aa3759af5d4611359d4f4407a1454b2239cc",
+      "sizeBytes": 5122,
+      "mainBlobSha": "c9fb6e27388a0cf59711ccf50041ed8fec32faec",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 134,
+      "contentSha256": "d582bd8c345ccbde35a99de9a31f521d964eac2e3cb9a6a3023aed1db9b3bdd3",
+      "imports": [
+        "next/headers",
+        "@/core/security/water-admin-session",
+        "./water-map-navigation"
+      ],
+      "exports": [
+        "metadata",
+        "WaterControlCenterPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/water-entry-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--hide-water-administration-20260720/app/professional/infrastructure/water/water-entry-client.tsx",
+      "blobSha": "6cb886480f4534ab17048d9e0c2f23c1c5728f52",
+      "sizeBytes": 201,
+      "mainBlobSha": "6cb886480f4534ab17048d9e0c2f23c1c5728f52",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 4,
+      "contentSha256": "03577ae4cfdb2012b67f4c987e1566e159941aa88450079a80afbe2dde102025",
+      "imports": [
+        "./access/water-access-control-client"
+      ],
+      "exports": [
+        "for"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/robots.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--hide-water-administration-20260720/app/robots.ts",
+      "blobSha": "7eda0a55ec1825fc87ceb0d2cb08dae105d5fc5e",
+      "sizeBytes": 587,
+      "mainBlobSha": "7eda0a55ec1825fc87ceb0d2cb08dae105d5fc5e",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 22,
+      "contentSha256": "b4a5063d7b45f5f5dbaa073cbea40910194b0cadb1d11bb1956f0c715b013ab1",
+      "imports": [
+        "next"
+      ],
+      "exports": [
+        "robots"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/security/water-admin-session.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/agent--hide-water-administration-20260720/core/security/water-admin-session.ts",
+      "blobSha": "db49842a0d5d925ed1b7d6b37c8e06b6779b9b36",
+      "sizeBytes": 2201,
+      "mainBlobSha": "db49842a0d5d925ed1b7d6b37c8e06b6779b9b36",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 83,
+      "contentSha256": "cadec0b86d93acbbb2b7c95ce5ae35fa7eef7e9707136a960d405197613446ac",
+      "imports": [
+        "crypto"
+      ],
+      "exports": [
+        "WATER_ADMIN_SESSION_COOKIE",
+        "getWaterAdminAccessCode",
+        "getWaterAdminSessionSecret",
+        "createWaterAdminSessionValue",
+        "safeSecretEqual",
+        "hasWaterAdminSession",
+        "isWaterAdminSessionValue"
+      ],
+      "envDependencies": [
+        "PANTAVION_WATER_ADMIN_SESSION_SECRET"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "middleware.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--hide-water-administration-20260720/middleware.ts",
+      "blobSha": "62f1edce69d2e4155ed47879e24475583d9aec52",
+      "sizeBytes": 5203,
+      "mainBlobSha": "fa626d7cd9c45e73c209815bae577aef042eae76",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 173,
+      "contentSha256": "5f988380727c1e6b052c8bd65b8d3ac67bc910973d5cf686afba6e1a7f73ee84",
+      "imports": [
+        "next/server"
+      ],
+      "exports": [
+        "middleware",
+        "config"
+      ],
+      "envDependencies": [
+        "PANTAVION_WATER_ADMIN_SESSION_SECRET",
+        "PANTAVION_WATER_ADMIN_ACCESS_CODE",
+        "PANTAVION_WATER_FOUNDER_ACCESS_CODE",
+        "PANTAVION_ADMIN_ACCESS_CODE",
+        "NODE_ENV"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "governance-safety",
+        "media-music"
+      ]
+    }
+  ]
+}

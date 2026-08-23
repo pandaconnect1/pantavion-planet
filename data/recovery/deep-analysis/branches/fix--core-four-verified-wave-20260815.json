@@ -1,0 +1,232 @@
+{
+  "id": "PANT-BRANCH-1B4C9B93A5F1",
+  "sourceRef": "recovery/snapshots/fix--core-four-verified-wave-20260815",
+  "headSha": "41da3e0a70594a464abd49507d8056e4c72436e6",
+  "mergeBase": "d47aa0e4eca250075149d9147a5821a1becb80d1",
+  "behindMainBy": 232,
+  "aheadOfMainBy": 7,
+  "changedFileCount": 5,
+  "topicCounts": {
+    "social-people": 5,
+    "chat-translation": 5,
+    "maps-water": 4,
+    "infrastructure-deployment": 5,
+    "identity-security": 2,
+    "media-music": 2,
+    "business-marketplace": 1,
+    "ai-kernel": 1,
+    "recovery-continuity": 1
+  },
+  "kindCounts": {
+    "source-code": 3,
+    "ui-page": 1,
+    "documentation": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1,
+    "IDENTICAL_TO_MAIN": 3,
+    "ABSENT_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/messages/[conversationId]/conversation-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/fix--core-four-verified-wave-20260815/app/messages/[conversationId]/conversation-client.tsx",
+      "blobSha": "d551cf79ad5cba9aaad8e7649a79f8e76ee5f6cf",
+      "sizeBytes": 16135,
+      "mainBlobSha": "533bbb6242f9f0be7f5b105f34f11156057071c6",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 402,
+      "contentSha256": "f601b06c0c4acc86674f9c7ca087ea962ce31e0ed6ffa54698a949db9d8a5cdb",
+      "imports": [
+        "next/link",
+        "react",
+        "@/lib/supabase/client",
+        "@/core/emergency/global-emergency-languages"
+      ],
+      "exports": [
+        "ConversationClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/messages/[conversationId]/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/fix--core-four-verified-wave-20260815/app/messages/[conversationId]/page.tsx",
+      "blobSha": "1c6ab0f4c062c1ef0ddff314f118535b2d34543f",
+      "sizeBytes": 2470,
+      "mainBlobSha": "1c6ab0f4c062c1ef0ddff314f118535b2d34543f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 69,
+      "contentSha256": "3a16a264e78a1a89f9698f791ae337569f92aa216fe88f0db1de8e95ee504744",
+      "imports": [
+        "next/link",
+        "@/lib/supabase/server",
+        "./conversation-client"
+      ],
+      "exports": [
+        "dynamic",
+        "ConversationPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/people/people-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/fix--core-four-verified-wave-20260815/app/people/people-client.tsx",
+      "blobSha": "bbb54039134cf76e4be3fc3b93c9b54dcb4017c4",
+      "sizeBytes": 14976,
+      "mainBlobSha": "bbb54039134cf76e4be3fc3b93c9b54dcb4017c4",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 176,
+      "contentSha256": "4645f94645327ec54b3c68a472ed492cad3ef05ad26c5455746fdce7939dc845",
+      "imports": [
+        "next/link",
+        "react",
+        "next/navigation",
+        "@/lib/supabase/client"
+      ],
+      "exports": [
+        "PeopleClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/social/social-home-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/fix--core-four-verified-wave-20260815/app/social/social-home-client.tsx",
+      "blobSha": "b0f4d15d16120c7ac424b9c26ac6f6a79bec4c5c",
+      "sizeBytes": 17481,
+      "mainBlobSha": "b0f4d15d16120c7ac424b9c26ac6f6a79bec4c5c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 147,
+      "contentSha256": "1c386950f13392be2c9e75ba05df3e1c40ced1cb7771942e8a8e8b912983f855",
+      "imports": [
+        "next/link",
+        "react",
+        "@/lib/supabase/client"
+      ],
+      "exports": [
+        "SocialHomeClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/runtime/chat-translation-verification-20260815.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/fix--core-four-verified-wave-20260815/docs/runtime/chat-translation-verification-20260815.md",
+      "blobSha": "8947a0099bc7f85fca0a655cbe458a73b9082fe0",
+      "sizeBytes": 2780,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 44,
+      "contentSha256": "e334b54280e5424b98b50955e3d784f07f1c5b816551eae81e5815761a8eb820",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "recovery-continuity",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

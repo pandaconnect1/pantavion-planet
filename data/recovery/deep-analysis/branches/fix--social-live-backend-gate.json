@@ -1,0 +1,155 @@
+{
+  "id": "PANT-BRANCH-A1F448F8108C",
+  "sourceRef": "recovery/snapshots/fix--social-live-backend-gate",
+  "headSha": "b66b16615e0f2884a0f43292f710803aa1f8abf7",
+  "mergeBase": "92acddf92fb3cc74912f952a2f4846d2466235d6",
+  "behindMainBy": 319,
+  "aheadOfMainBy": 3,
+  "changedFileCount": 3,
+  "topicCounts": {
+    "identity-security": 3,
+    "social-people": 3,
+    "maps-water": 3,
+    "media-music": 3,
+    "infrastructure-deployment": 3,
+    "chat-translation": 2
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "ui-page": 1,
+    "source-code": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 3
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/social/health/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/fix--social-live-backend-gate/app/api/social/health/route.ts",
+      "blobSha": "1aa04978ebd7c6aa75fc74f65dc740bf23cb9c48",
+      "sizeBytes": 1843,
+      "mainBlobSha": "69b58962c2e0c4ca6f6085999d59b75feb3846c1",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 55,
+      "contentSha256": "3de91ae41e80df6754a888889d4e76205abd9427fe22efd811a3cd0e4c639c27",
+      "imports": [
+        "next/server",
+        "@/lib/supabase/server"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "maps-water",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/social/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/fix--social-live-backend-gate/app/social/page.tsx",
+      "blobSha": "a0acb85dfa156da8f47e5919707cec8cd4edde2e",
+      "sizeBytes": 6911,
+      "mainBlobSha": "2f5471d6302368abc0bb002098455b2674bd6f22",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 161,
+      "contentSha256": "5da8b4a9cbbdc932da33dd2a5b817c449a46674dff317ff02f6273e0632e77d1",
+      "imports": [
+        "next/link",
+        "@/lib/supabase/server",
+        "./social-home-client"
+      ],
+      "exports": [
+        "dynamic",
+        "SocialPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/social/social-home-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/fix--social-live-backend-gate/app/social/social-home-client.tsx",
+      "blobSha": "3c6ebf3a84365fb563df259d6a89b7596d6df179",
+      "sizeBytes": 15636,
+      "mainBlobSha": "b0f4d15d16120c7ac424b9c26ac6f6a79bec4c5c",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 319,
+      "contentSha256": "66bfd3175ec598c75420a90dfb0d6974fe292e6d7743c892ec7814661fc92078",
+      "imports": [
+        "next/link",
+        "react",
+        "@/lib/supabase/client"
+      ],
+      "exports": [
+        "SocialHomeClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

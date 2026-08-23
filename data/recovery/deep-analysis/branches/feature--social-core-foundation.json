@@ -1,0 +1,315 @@
+{
+  "id": "PANT-BRANCH-EB5AF7448364",
+  "sourceRef": "recovery/snapshots/feature--social-core-foundation",
+  "headSha": "cc480e9b95d46c329bf7df6fa88a2fcfac6fa957",
+  "mergeBase": "9068d3ff34149ccc1cdbe89c27a82b62113afcb7",
+  "behindMainBy": 525,
+  "aheadOfMainBy": 9,
+  "changedFileCount": 7,
+  "topicCounts": {
+    "social-people": 7,
+    "business-marketplace": 6,
+    "ai-kernel": 2,
+    "identity-security": 5,
+    "chat-translation": 4,
+    "maps-water": 1,
+    "recovery-continuity": 4,
+    "governance-safety": 6,
+    "media-music": 4,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "ui-page": 2,
+    "documentation": 1,
+    "source-code": 4
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1,
+    "ABSENT_FROM_MAIN": 6
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--social-core-foundation/app/page.tsx",
+      "blobSha": "a6bef1122d9ef4e3edaddcc62da924b6b2c55896",
+      "sizeBytes": 1477,
+      "mainBlobSha": "ab1fdb7bed5844bc08a535c4513f85d2a6067773",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 45,
+      "contentSha256": "f50fa5e8d1c20e42b771e32a56f38b7fde7f694f5da6988df5e285ffea66369e",
+      "imports": [
+        "next/link",
+        "./pantavion-home-client"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "fetchCache",
+        "HomePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "business-marketplace",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/social-core/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feature--social-core-foundation/app/social-core/page.tsx",
+      "blobSha": "a6c432606e0483c6e87fb5d89297d99b36eb0a2b",
+      "sizeBytes": 8333,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 191,
+      "contentSha256": "02c4a3143243e0a492296fd10c16d9f3e00d8f1a5d2a2d53fd91c32d33dc2158",
+      "imports": [
+        "next/link",
+        "@/lib/social-core"
+      ],
+      "exports": [
+        "metadata",
+        "SocialCorePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/social/pantavion-secure-circles-architecture.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feature--social-core-foundation/docs/social/pantavion-secure-circles-architecture.md",
+      "blobSha": "952c2d03868e9fbc77a02cd96a8862f8843dbd49",
+      "sizeBytes": 6744,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 125,
+      "contentSha256": "c17373e595761bac68d49208b800225b5f1852ce2ebbf30f831c3899bbe0ad5f",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "lib/social-core/contracts.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feature--social-core-foundation/lib/social-core/contracts.ts",
+      "blobSha": "f06ee83401fbe1408464e48676f0814a3c78a0fd",
+      "sizeBytes": 2199,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 108,
+      "contentSha256": "29041e6f24310460ceea23730ed7efb61ce203a8aa4f4fc19ecba6f5a7773208",
+      "imports": [],
+      "exports": [
+        "AgeBand",
+        "AccountKind",
+        "SocialCapability",
+        "VerificationLevel",
+        "Jurisdiction",
+        "SocialActor",
+        "PolicyContext",
+        "PolicyDecisionCode",
+        "PolicyDecision",
+        "SocialCoreModule"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "lib/social-core/index.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feature--social-core-foundation/lib/social-core/index.ts",
+      "blobSha": "05e9aeb1227772ac3531fe2ddcb9eedb88e2a395",
+      "sizeBytes": 89,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 4,
+      "contentSha256": "89567bebf71f62599dafcec9f7d780f15e796df16432a9e57b058dfe5030cb61",
+      "imports": [
+        "./contracts",
+        "./modules",
+        "./policy-engine"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "lib/social-core/modules.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feature--social-core-foundation/lib/social-core/modules.ts",
+      "blobSha": "78d710cfb8f2ebd4ddd71ecde9642008a42d8594",
+      "sizeBytes": 2338,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 110,
+      "contentSha256": "53d7cd7c6dd8539b9c0984c703073a0aa6231160a29073e0a609f89843f43fb4",
+      "imports": [
+        "./contracts"
+      ],
+      "exports": [
+        "SOCIAL_CORE_MODULES",
+        "getSocialCoreModule"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "lib/social-core/policy-engine.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feature--social-core-foundation/lib/social-core/policy-engine.ts",
+      "blobSha": "d2a8070c3f49379878452c1531faa8c01bb7b2fd",
+      "sizeBytes": 3008,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 108,
+      "contentSha256": "0505a46a17e66ac7b0a005b91c91f412a9b2aae11956d64045bd13ee339d4d30",
+      "imports": [
+        "./contracts"
+      ],
+      "exports": [
+        "evaluateSocialPolicy"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "business-marketplace",
+        "governance-safety"
+      ]
+    }
+  ]
+}

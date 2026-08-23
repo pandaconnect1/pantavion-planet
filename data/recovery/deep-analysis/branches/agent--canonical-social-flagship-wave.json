@@ -1,0 +1,66 @@
+{
+  "id": "PANT-BRANCH-34E609EFEE0D",
+  "sourceRef": "recovery/snapshots/agent--canonical-social-flagship-wave",
+  "headSha": "6a2f0aaf1b8ef3a2fec42b3830c140343c625c7f",
+  "mergeBase": "812502d0ae4234cc52cefc050a19fe8f51583e60",
+  "behindMainBy": 305,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "chat-translation": 1,
+    "business-marketplace": 1,
+    "maps-water": 1,
+    "media-music": 1
+  },
+  "kindCounts": {
+    "source-code": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/pantavion-home-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--canonical-social-flagship-wave/app/pantavion-home-client.tsx",
+      "blobSha": "d1db0fa4f7b68e0dfcadca945df1593adb8f6121",
+      "sizeBytes": 8756,
+      "mainBlobSha": "5cab9f3897e3bff36f3a45882420605e707ad9dc",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 100,
+      "contentSha256": "4acc2ff5aff6e65554110bc6d9339de1049b2ffa5ce808a7377b6767287e9c25",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "PantavionHomeClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "media-music"
+      ]
+    }
+  ]
+}

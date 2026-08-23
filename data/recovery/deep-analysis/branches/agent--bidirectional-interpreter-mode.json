@@ -1,0 +1,112 @@
+{
+  "id": "PANT-BRANCH-F104FA79914C",
+  "sourceRef": "recovery/snapshots/agent--bidirectional-interpreter-mode",
+  "headSha": "7f24d351aa5b0aa1644a903cff020a529bffe9c4",
+  "mergeBase": "054d6ac6b29a110bad970eb2308d3e9478976890",
+  "behindMainBy": 470,
+  "aheadOfMainBy": 3,
+  "changedFileCount": 3,
+  "topicCounts": {
+    "review-unclassified": 3
+  },
+  "kindCounts": {
+    "asset-or-other": 3
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 3
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "docs/.temp-locale-fix",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--bidirectional-interpreter-mode/docs/.temp-locale-fix",
+      "blobSha": "3602361dafeea2cbec159128f5166a8428c0795c",
+      "sizeBytes": 4,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "a6864eb339b0e1f6e00d75293a8840abf069a2c0fe82e6e53af6ac099793c1d5",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "review-unclassified"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/.temp-locale-fix-2",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--bidirectional-interpreter-mode/docs/.temp-locale-fix-2",
+      "blobSha": "3602361dafeea2cbec159128f5166a8428c0795c",
+      "sizeBytes": 4,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "a6864eb339b0e1f6e00d75293a8840abf069a2c0fe82e6e53af6ac099793c1d5",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "review-unclassified"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/.temp-locale-fix-3",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--bidirectional-interpreter-mode/docs/.temp-locale-fix-3",
+      "blobSha": "3602361dafeea2cbec159128f5166a8428c0795c",
+      "sizeBytes": 4,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 1,
+      "contentSha256": "a6864eb339b0e1f6e00d75293a8840abf069a2c0fe82e6e53af6ac099793c1d5",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "review-unclassified"
+      ]
+    }
+  ]
+}

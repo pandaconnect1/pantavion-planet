@@ -1,0 +1,124 @@
+{
+  "id": "PANT-BRANCH-E1F631F32623",
+  "sourceRef": "recovery/snapshots/agent--fix-water-network-range-loading-20260723",
+  "headSha": "2ac87bb6c48d1441aeb16fc9cfc8f1dc1502c486",
+  "mergeBase": "152c1b54630d78238abb9fce73e918fbd82bb235",
+  "behindMainBy": 537,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "identity-security": 2,
+    "chat-translation": 1,
+    "maps-water": 2,
+    "ai-kernel": 2,
+    "infrastructure-deployment": 2,
+    "business-marketplace": 1,
+    "recovery-continuity": 1
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "source-code": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/segment/bbox/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--fix-water-network-range-loading-20260723/app/api/professional/infrastructure/water/segment/bbox/route.ts",
+      "blobSha": "e03e7ec9f86cf644c0cac5425cd2296ec4b782f6",
+      "sizeBytes": 4669,
+      "mainBlobSha": "3c49eb9cd21e705a116bbe8e37deb0032e76cf86",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 184,
+      "contentSha256": "f3badda318ddab02a5782899f131318b675de9bc9b780f1ead2def62fa2ebebc",
+      "imports": [
+        "crypto",
+        "@vercel/blob",
+        "next/server",
+        "@/core/infrastructure/water/controlled-water-segment-index-provider",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "maxDuration",
+        "GET"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "core/infrastructure/water/controlled-water-segment-index-provider.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--fix-water-network-range-loading-20260723/core/infrastructure/water/controlled-water-segment-index-provider.ts",
+      "blobSha": "d0a2d657dff8d4ba2088e5e759477d16d229badf",
+      "sizeBytes": 16763,
+      "mainBlobSha": "ba37d7de464cc7ee084c7249ef97bc9742b363f2",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 585,
+      "contentSha256": "dbd863a5a99fd6eed020628432f7d22312299acb9f71980b610658268791cbf3",
+      "imports": [
+        "@vercel/blob",
+        "fs",
+        "path"
+      ],
+      "exports": [
+        "parseWaterSegmentBbox",
+        "parseWaterSegmentLimit",
+        "getControlledWaterSegmentFromPrivateIndex"
+      ],
+      "envDependencies": [
+        "VERCEL",
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

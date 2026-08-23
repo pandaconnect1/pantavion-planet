@@ -1,0 +1,231 @@
+{
+  "id": "PANT-BRANCH-4F6D7814421A",
+  "sourceRef": "recovery/snapshots/feat--social-business-listings-shell",
+  "headSha": "efa5f34600ff0e45bee1f086456459e031ee999e",
+  "mergeBase": "863c7c27ea147f0ac5afd59a042a7b602362600a",
+  "behindMainBy": 432,
+  "aheadOfMainBy": 8,
+  "changedFileCount": 5,
+  "topicCounts": {
+    "chat-translation": 5,
+    "business-marketplace": 5,
+    "maps-water": 5,
+    "social-people": 4,
+    "media-music": 4,
+    "identity-security": 3,
+    "recovery-continuity": 3,
+    "governance-safety": 3,
+    "infrastructure-deployment": 3,
+    "ai-kernel": 2
+  },
+  "kindCounts": {
+    "ui-page": 1,
+    "source-code": 1,
+    "documentation": 2,
+    "configuration-data": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 2,
+    "ABSENT_FROM_MAIN": 3
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/discovery/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--social-business-listings-shell/app/discovery/page.tsx",
+      "blobSha": "a877fd0596c3d4b710621180c08825d376e15544",
+      "sizeBytes": 6361,
+      "mainBlobSha": "6e314134e2bc7fe9751ba8ab660f47a526d6998f",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 61,
+      "contentSha256": "52dc769e203a197502f1cebfd1da23613b5576407277a9e88dd07960e61fb289",
+      "imports": [
+        "next/link",
+        "react"
+      ],
+      "exports": [
+        "DiscoveryPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/pantavion-home-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--social-business-listings-shell/app/pantavion-home-client.tsx",
+      "blobSha": "3fc53c7726c696c4bd554b9931d0cf78357393b6",
+      "sizeBytes": 6706,
+      "mainBlobSha": "5cab9f3897e3bff36f3a45882420605e707ad9dc",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 52,
+      "contentSha256": "58d1019abf58928a35e2904c47358dff930dc54f420841d1b203569c9440d8e5",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "PantavionHomeClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/pantavion-backlog/README.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--social-business-listings-shell/docs/pantavion-backlog/README.md",
+      "blobSha": "00972512b2d782a41b9614c8c90465339b88fb9d",
+      "sizeBytes": 3081,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 60,
+      "contentSha256": "58d18941864e64764852abc518538d961d2ef40055bcc5d8f603e7559b4b782f",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 2,
+        "unfinished": 1,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/recovery/MASTER_RECOVERY_LEDGER.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/feat--social-business-listings-shell/docs/recovery/MASTER_RECOVERY_LEDGER.md",
+      "blobSha": "b2a3e22c66ce2e88acd9712a861338ca1684e57b",
+      "sizeBytes": 10323,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 350,
+      "contentSha256": "4df35cfa2fb9008ff5fb2bb483d5968c3da78ad0e3dd225b38ba807854ff38ea",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "PantavionCore",
+        "usePantavionState"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/recovery/recovery-manifest.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/feat--social-business-listings-shell/docs/recovery/recovery-manifest.json",
+      "blobSha": "063d5a9dbc8110c9b2c235fbdcdf8dff6a70d0d3",
+      "sizeBytes": 8598,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 198,
+      "contentSha256": "343498b0ae85af1fdf70ffe7b8a577019e67a79acdb806c2b141277459c6e774",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 2,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "id": "PANT-BRANCH-33041DF4D534",
+  "sourceRef": "recovery/snapshots/agent--production-translation-e2e-20260822",
+  "headSha": "07d56f3c74d074115017e3cd0af806e12645f01a",
+  "mergeBase": "ffdf3a21113a4a20a6418f9b51812bd423521b71",
+  "behindMainBy": 8,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "chat-translation": 1,
+    "business-marketplace": 1,
+    "maps-water": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "ci-workflow": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": ".github/workflows/pantavion-production-translation-e2e.yml",
+      "previousPath": null,
+      "kind": "ci-workflow",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/agent--production-translation-e2e-20260822/.github/workflows/pantavion-production-translation-e2e.yml",
+      "blobSha": "05cb83b5047a066a1c061ba9d93105eb50f61e22",
+      "sizeBytes": 3124,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 65,
+      "contentSha256": "d3b8b759c09e59aef6f034a13c64a53517ceb0561eb506404a2b4ef479ecb667",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

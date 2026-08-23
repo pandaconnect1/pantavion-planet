@@ -1,0 +1,185 @@
+{
+  "id": "PANT-BRANCH-1E36A522BCEB",
+  "sourceRef": "recovery/snapshots/fix--supabase-public-runtime-fallback",
+  "headSha": "aa3070158d229f158080b5d130c4d0458a16d33d",
+  "mergeBase": "213f3fd74335341c070be46021eeae13d22bc9b6",
+  "behindMainBy": 303,
+  "aheadOfMainBy": 4,
+  "changedFileCount": 4,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "chat-translation": 1,
+    "maps-water": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 4
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "source-code": 3
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 2,
+    "IDENTICAL_TO_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/social/health/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/fix--supabase-public-runtime-fallback/app/api/social/health/route.ts",
+      "blobSha": "684d271cbf1855e916fd66aa89dbec0b47666946",
+      "sizeBytes": 3605,
+      "mainBlobSha": "69b58962c2e0c4ca6f6085999d59b75feb3846c1",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 129,
+      "contentSha256": "fdb51a737ac7efa3b0a56e0fd0735ea879687c0f4dd945fb012410c75b4b887c",
+      "imports": [
+        "next/server",
+        "@/lib/supabase/server",
+        "@/lib/supabase/public-config"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "GET"
+      ],
+      "envDependencies": [
+        "VERCEL_GIT_COMMIT_SHA",
+        "GITHUB_SHA",
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "lib/supabase/client.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/infrastructure-deployment/fix--supabase-public-runtime-fallback/lib/supabase/client.ts",
+      "blobSha": "509d84730282502406eb08cd2fbfcd0d7f1ba6bf",
+      "sizeBytes": 260,
+      "mainBlobSha": "509d84730282502406eb08cd2fbfcd0d7f1ba6bf",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 8,
+      "contentSha256": "a22694b641d02adf11f846d9d97849d3551b2d4d53376c48e06c574485be41be",
+      "imports": [
+        "@supabase/ssr",
+        "./public-config"
+      ],
+      "exports": [
+        "createClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "lib/supabase/public-config.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/infrastructure-deployment/fix--supabase-public-runtime-fallback/lib/supabase/public-config.ts",
+      "blobSha": "521fb8b1053bfd3fd95ee00f9496a06975c051d2",
+      "sizeBytes": 635,
+      "mainBlobSha": "5e0acd976dc92d9bee42ebb7fe06df60141feb01",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 18,
+      "contentSha256": "45670369ef18b54c1a0b2b6521af996c6ad9897e1b8043da124e981887a13ced",
+      "imports": [],
+      "exports": [
+        "getSupabasePublicConfig"
+      ],
+      "envDependencies": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "lib/supabase/server.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/infrastructure-deployment/fix--supabase-public-runtime-fallback/lib/supabase/server.ts",
+      "blobSha": "a38b45ba26ec86ab81415c8dfc93512cc05ea351",
+      "sizeBytes": 725,
+      "mainBlobSha": "a38b45ba26ec86ab81415c8dfc93512cc05ea351",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 26,
+      "contentSha256": "1597d8ab3cfd3a417900557c6ae736b9b55d4bfa5b5c083239842043a735a4e4",
+      "imports": [
+        "@supabase/ssr",
+        "next/headers",
+        "./public-config"
+      ],
+      "exports": [
+        "createClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

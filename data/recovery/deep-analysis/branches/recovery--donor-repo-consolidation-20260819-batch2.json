@@ -1,0 +1,142 @@
+{
+  "id": "PANT-BRANCH-6D7AD0660622",
+  "sourceRef": "recovery/snapshots/recovery--donor-repo-consolidation-20260819-batch2",
+  "headSha": "f89333c049b92202263a2b410ffe86bc76ebaa4a",
+  "mergeBase": "c0984ed5d85796f2736c434b8e2d92f0985cd64d",
+  "behindMainBy": 127,
+  "aheadOfMainBy": 4,
+  "changedFileCount": 3,
+  "topicCounts": {
+    "social-people": 3,
+    "chat-translation": 3,
+    "business-marketplace": 3,
+    "recovery-continuity": 3,
+    "governance-safety": 3,
+    "infrastructure-deployment": 3,
+    "identity-security": 2,
+    "maps-water": 2,
+    "ai-kernel": 2
+  },
+  "kindCounts": {
+    "configuration-data": 1,
+    "documentation": 2
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 3
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "data/recovery/donor-repositories.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--donor-repo-consolidation-20260819-batch2/data/recovery/donor-repositories.json",
+      "blobSha": "bd3056955bf610b0b762810ecf967e342ec1e35c",
+      "sizeBytes": 2615,
+      "mainBlobSha": "bd3056955bf610b0b762810ecf967e342ec1e35c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 34,
+      "contentSha256": "c92b70cdb1478783d222b0df7cc63c3579ba0f5809e312ba7f54d1a14e7bcca2",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/recovery/DONOR_BATCH_001_CLEAN_UI_SURFACES.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--donor-repo-consolidation-20260819-batch2/docs/recovery/DONOR_BATCH_001_CLEAN_UI_SURFACES.md",
+      "blobSha": "101f620a2e7182810e5b28dc486edda0be870646",
+      "sizeBytes": 5052,
+      "mainBlobSha": "101f620a2e7182810e5b28dc486edda0be870646",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 44,
+      "contentSha256": "d30bf3b75e29cce1b64019e120bbca91aedc5f05a359a2a85d23dcba92ba1c02",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/recovery/DONOR_REPOSITORY_CONSOLIDATION_20260819.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--donor-repo-consolidation-20260819-batch2/docs/recovery/DONOR_REPOSITORY_CONSOLIDATION_20260819.md",
+      "blobSha": "15df502df716c23e804f617c22a6fb43a688370f",
+      "sizeBytes": 9363,
+      "mainBlobSha": "15df502df716c23e804f617c22a6fb43a688370f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 140,
+      "contentSha256": "8897d63490cea0e6cc28401a63cdeadff558e400e8cd52346c4b529b12955acd",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

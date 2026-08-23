@@ -1,0 +1,70 @@
+{
+  "id": "PANT-BRANCH-E5EB9EDEDC2C",
+  "sourceRef": "recovery/snapshots/docs--complete-handoff-20260816",
+  "headSha": "0e3618b06c47f7c207996a5b95724bd91e8e1a3b",
+  "mergeBase": "9d24b36cc00f53b9886bb13c7fb226cdf0e941b6",
+  "behindMainBy": 212,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "chat-translation": 1,
+    "business-marketplace": 1,
+    "maps-water": 1,
+    "ai-kernel": 1,
+    "recovery-continuity": 1,
+    "governance-safety": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "documentation": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "docs/handoff/PANTAVION_COMPLETE_PROJECT_HANDOFF_20260816.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/docs--complete-handoff-20260816/docs/handoff/PANTAVION_COMPLETE_PROJECT_HANDOFF_20260816.md",
+      "blobSha": "17bdf905b48516e33f6da7e36c79bf9561bc80b5",
+      "sizeBytes": 8802,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 179,
+      "contentSha256": "fe71457dbba421649c831622712a19d4f99ee3b595599c5e5ea5dffb7870460d",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 2,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

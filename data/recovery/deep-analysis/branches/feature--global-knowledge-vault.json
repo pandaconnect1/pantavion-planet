@@ -1,0 +1,62 @@
+{
+  "id": "PANT-BRANCH-2B4C89B57551",
+  "sourceRef": "recovery/snapshots/feature--global-knowledge-vault",
+  "headSha": "33defe9ca6c9c1aeae5d46652fdf0e5c8e44ebe9",
+  "mergeBase": "ced7d621c4c99dc470bd382ea21f0dc0c0c49f90",
+  "behindMainBy": 310,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "maps-water": 1,
+    "recovery-continuity": 1,
+    "governance-safety": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "documentation": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "docs/architecture/PANTAVION_GLOBAL_KNOWLEDGE_VAULT.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--global-knowledge-vault/docs/architecture/PANTAVION_GLOBAL_KNOWLEDGE_VAULT.md",
+      "blobSha": "8f444bda3063d3d4d3b729bea56459489d303f68",
+      "sizeBytes": 7144,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 158,
+      "contentSha256": "5002e9c36e3d5551b42cf7cb8a21718254da25276c814655fd6ce50df39c0b11",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

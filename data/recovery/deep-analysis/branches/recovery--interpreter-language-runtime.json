@@ -1,0 +1,116 @@
+{
+  "id": "PANT-BRANCH-152959108207",
+  "sourceRef": "recovery/snapshots/recovery--interpreter-language-runtime",
+  "headSha": "25e05f7901e6f8bd693f555761189c87189bb341",
+  "mergeBase": "0e2a7d921befbb146ae7a4ff10066b357a09850b",
+  "behindMainBy": 257,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "identity-security": 2,
+    "chat-translation": 2,
+    "maps-water": 1,
+    "ai-kernel": 2,
+    "media-music": 1
+  },
+  "kindCounts": {
+    "api-route": 2
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/pantavion/detect-language/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/recovery--interpreter-language-runtime/app/api/pantavion/detect-language/route.ts",
+      "blobSha": "a254d75f764d1d9aa6817846165d75f6793a4717",
+      "sizeBytes": 3540,
+      "mainBlobSha": "a254d75f764d1d9aa6817846165d75f6793a4717",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 67,
+      "contentSha256": "be9ebf0e6b7c699f846febaa18671ca84f7a0c26af4fce362f03a8bd9f114a31",
+      "imports": [
+        "next/server"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "revalidate",
+        "POST"
+      ],
+      "envDependencies": [
+        "OPENAI_API_KEY",
+        "PANTAVION_TRANSLATION_MODEL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/pantavion/transcribe/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/recovery--interpreter-language-runtime/app/api/pantavion/transcribe/route.ts",
+      "blobSha": "ae89302f5bda1feb74ca108588a4f672aaaddac8",
+      "sizeBytes": 2200,
+      "mainBlobSha": "ae89302f5bda1feb74ca108588a4f672aaaddac8",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 36,
+      "contentSha256": "f5fd9f9791ba4cddc6df93131778c6cee829a7fdfaac872423a9eeab84dfb023",
+      "imports": [
+        "next/server"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "revalidate",
+        "POST"
+      ],
+      "envDependencies": [
+        "OPENAI_API_KEY",
+        "PANTAVION_TRANSCRIPTION_MODEL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel",
+        "media-music"
+      ]
+    }
+  ]
+}

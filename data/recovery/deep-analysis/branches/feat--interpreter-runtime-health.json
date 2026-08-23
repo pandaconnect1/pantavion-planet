@@ -1,0 +1,75 @@
+{
+  "id": "PANT-BRANCH-FC20A66D4294",
+  "sourceRef": "recovery/snapshots/feat--interpreter-runtime-health",
+  "headSha": "e48071581b4c5bcf3b3190ac8148dbc57d546e44",
+  "mergeBase": "7209578cdae5959904955772a037b4cd51f9b174",
+  "behindMainBy": 255,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "chat-translation": 1,
+    "maps-water": 1,
+    "ai-kernel": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "api-route": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/pantavion/interpreter/health/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/feat--interpreter-runtime-health/app/api/pantavion/interpreter/health/route.ts",
+      "blobSha": "62af4e15b21347ae645608e92b6742162027be06",
+      "sizeBytes": 2982,
+      "mainBlobSha": "0ce8f3e07ddaa4bf2c45ae9fa1696f9bcd6fd716",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 101,
+      "contentSha256": "8779b79000cebec3e92f6f9062fe7da84ed73e923d630189f16bb2c1ceda9cc8",
+      "imports": [
+        "next/server"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "revalidate",
+        "GET"
+      ],
+      "envDependencies": [
+        "PANTAVION_TRANSLATION_MODEL",
+        "VERCEL_GIT_COMMIT_SHA",
+        "GITHUB_SHA",
+        "OPENAI_API_KEY",
+        "PANTAVION_TRANSCRIPTION_MODEL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

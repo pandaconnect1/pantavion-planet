@@ -1,0 +1,91 @@
+{
+  "id": "PANT-BRANCH-94BAFF432051",
+  "sourceRef": "recovery/snapshots/fix--production-visibility-20260822",
+  "headSha": "c56c44218a3f16fda80a5d593fb591d9a2872fe8",
+  "mergeBase": "b194ceb367974e27c410674c109933b82439aba6",
+  "behindMainBy": 49,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "review-unclassified": 1,
+    "business-marketplace": 1
+  },
+  "kindCounts": {
+    "ui-page": 1,
+    "documentation": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/fix--production-visibility-20260822/app/page.tsx",
+      "blobSha": "ab1fdb7bed5844bc08a535c4513f85d2a6067773",
+      "sizeBytes": 563,
+      "mainBlobSha": "ab1fdb7bed5844bc08a535c4513f85d2a6067773",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 17,
+      "contentSha256": "dcaa196058d96d845fd7ab5e3ff2c069435cc59fb8e87b2db37ea2bda2f78b28",
+      "imports": [
+        "./pantavion-home-client"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "fetchCache",
+        "HomePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "review-unclassified"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/production/visibility-note.txt",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/business-marketplace/fix--production-visibility-20260822/docs/production/visibility-note.txt",
+      "blobSha": "2d7324e76f72a49a1028326c29152fc2c0b92189",
+      "sizeBytes": 33,
+      "mainBlobSha": "2d7324e76f72a49a1028326c29152fc2c0b92189",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 2,
+      "contentSha256": "d4a092bf3c3481790595850bda23351e60c93a0014b99e0f65414896ec7a1729",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "id": "PANT-BRANCH-64059756990A",
+  "sourceRef": "recovery/snapshots/feat--world-language-coverage-20260503-102839",
+  "headSha": "b9bb2f553171044b4b903d0877c9f37dac2ef28d",
+  "mergeBase": "8d9b2004fb9a30ea7e1faf501e109809d31db25b",
+  "behindMainBy": 925,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "social-people": 2,
+    "chat-translation": 2,
+    "maps-water": 2
+  },
+  "kindCounts": {
+    "source-code": 2
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1,
+    "ABSENT_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "core/emergency/global-emergency-languages.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--world-language-coverage-20260503-102839/core/emergency/global-emergency-languages.ts",
+      "blobSha": "22a18472571ec30b5fdcb763756c6039dfc09465",
+      "sizeBytes": 10453,
+      "mainBlobSha": "499687ee102a435259e9acc004e87c44b8f9d4c3",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 207,
+      "contentSha256": "917641479d3ad507db7c5fe251df76cdddc8a00caa7cb270443504b509ca3dc3",
+      "imports": [],
+      "exports": [
+        "globalEmergencyLanguages",
+        "GlobalEmergencyLanguage",
+        "globalEmergencyLanguageCodes",
+        "globalEmergencyLanguageRegions",
+        "normalizeGlobalEmergencyLanguage",
+        "globalEmergencyLanguageCoverageDoctrine"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/expand-world-language-coverage.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--world-language-coverage-20260503-102839/scripts/expand-world-language-coverage.cjs",
+      "blobSha": "93ba7afebea899ecccf8748ed390f78e620a9757",
+      "sizeBytes": 7920,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 244,
+      "contentSha256": "a63e220463d2d06410ec68829e0068589701e4c5bc04249f9fe2653a7e343a3c",
+      "imports": [
+        "fs"
+      ],
+      "exports": [
+        "globalEmergencyLanguages",
+        "GlobalEmergencyLanguage",
+        "globalEmergencyLanguageCodes",
+        "globalEmergencyLanguageRegions",
+        "normalizeGlobalEmergencyLanguage",
+        "globalEmergencyLanguageCoverageDoctrine"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water"
+      ]
+    }
+  ]
+}

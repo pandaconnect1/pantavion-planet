@@ -1,0 +1,588 @@
+{
+  "id": "PANT-BRANCH-ECD895D0A2A8",
+  "sourceRef": "recovery/snapshots/feat--social-flagship",
+  "headSha": "f89e82cdd0457a4283449dc7cf52a4c8d398a524",
+  "mergeBase": "df01bff6e1a8e773285ca78e86531dee9399b4bc",
+  "behindMainBy": 337,
+  "aheadOfMainBy": 17,
+  "changedFileCount": 13,
+  "topicCounts": {
+    "identity-security": 12,
+    "social-people": 13,
+    "chat-translation": 5,
+    "governance-safety": 8,
+    "infrastructure-deployment": 13,
+    "ai-kernel": 1,
+    "media-music": 6,
+    "business-marketplace": 1,
+    "maps-water": 9,
+    "recovery-continuity": 6
+  },
+  "kindCounts": {
+    "api-route": 2,
+    "source-code": 3,
+    "ui-page": 2,
+    "database-migration": 6
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 7,
+    "IDENTICAL_TO_MAIN": 6
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/people/find-from-contacts/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feat--social-flagship/app/api/people/find-from-contacts/route.ts",
+      "blobSha": "216a8643d98369b5a1ce5eaf4834217de2ee4626",
+      "sizeBytes": 1378,
+      "mainBlobSha": "f42cf4f0d4c0b46733fd15da7959b38365748781",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 37,
+      "contentSha256": "dcaeaf0106fbec70a2373ec9055af5e3ff89ed8c46b6e5916e8c2dc50a826c86",
+      "imports": [
+        "next/server",
+        "@/lib/supabase/server"
+      ],
+      "exports": [
+        "dynamic",
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/social/media-url/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feat--social-flagship/app/api/social/media-url/route.ts",
+      "blobSha": "ce31cff7b8bd4e538daee4e15602503fde53e17d",
+      "sizeBytes": 1744,
+      "mainBlobSha": "6310f975b5b9e0e5571e4123be5bfb3f5ac2cb13",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 45,
+      "contentSha256": "8014d588651b48b9f8de70ef8d863c09d8065c7eb53d74206e95744a185a42ed",
+      "imports": [
+        "next/server",
+        "@/lib/supabase/server",
+        "@/lib/supabase/admin"
+      ],
+      "exports": [
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "ai-kernel",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/contacts/contacts-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--social-flagship/app/contacts/contacts-client.tsx",
+      "blobSha": "b4979685a00588b7f9781924c0bce109a2b85cd6",
+      "sizeBytes": 10546,
+      "mainBlobSha": "1f09e06347a32496e008d2a36dd55f3ec193a353",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 188,
+      "contentSha256": "9a3a9ba72245e40af24206d4fd55ef325b12097af0f5e2c4c3e8886f293a0543",
+      "imports": [
+        "next/link",
+        "react",
+        "@/lib/supabase/client"
+      ],
+      "exports": [
+        "ContactsClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/social/map/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feat--social-flagship/app/social/map/page.tsx",
+      "blobSha": "ae38e6025f9be4b63d16740e5dfc4b657e2a275e",
+      "sizeBytes": 2119,
+      "mainBlobSha": "f45ccf6fcab9ad89bd0690787eb374736017e32e",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 51,
+      "contentSha256": "2d9766eabc79c961529964027ebf78f407fef88572298277e5de9268c8f38ec5",
+      "imports": [
+        "next/link",
+        "next/navigation",
+        "@/lib/supabase/server",
+        "./social-map-client"
+      ],
+      "exports": [
+        "dynamic",
+        "SocialMapPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/social/map/social-map-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feat--social-flagship/app/social/map/social-map-client.tsx",
+      "blobSha": "96d78176ddcba67c5beac91389093bc751cff029",
+      "sizeBytes": 12881,
+      "mainBlobSha": "411b2daa13f5b7a45a35f74f26f075221c93893a",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 194,
+      "contentSha256": "987e42037122d7335cb0fa2d40dfd31f1b204fcf92cc4c6ee573b37c05575ac2",
+      "imports": [
+        "react",
+        "@/lib/supabase/client"
+      ],
+      "exports": [
+        "SocialMapClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/social/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feat--social-flagship/app/social/page.tsx",
+      "blobSha": "65aaeeeb95389706ee22c23d6e6f678a62d1db1c",
+      "sizeBytes": 3131,
+      "mainBlobSha": "2f5471d6302368abc0bb002098455b2674bd6f22",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 63,
+      "contentSha256": "6ce2f3557d0f9254fe8b4415a17c00dac0ed163fa94c6135a9e9b8db1670c1be",
+      "imports": [
+        "next/link",
+        "next/navigation",
+        "@/lib/supabase/server",
+        "./social-home-client"
+      ],
+      "exports": [
+        "dynamic",
+        "SocialPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/social/social-home-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feat--social-flagship/app/social/social-home-client.tsx",
+      "blobSha": "b5bb9842493670fc31e2401d3a879d188893be57",
+      "sizeBytes": 12316,
+      "mainBlobSha": "b0f4d15d16120c7ac424b9c26ac6f6a79bec4c5c",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 160,
+      "contentSha256": "190fb0b438c9d31186837037b39676f0934f28725b92df6b831b6a6c64cc8c99",
+      "imports": [
+        "react",
+        "@/lib/supabase/client"
+      ],
+      "exports": [
+        "SocialHomeClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260811050000_create_social_flagship_core.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feat--social-flagship/supabase/migrations/20260811050000_create_social_flagship_core.sql",
+      "blobSha": "e9f381b15762dda64807b5a1332e686cf41ee9a4",
+      "sizeBytes": 7385,
+      "mainBlobSha": "e9f381b15762dda64807b5a1332e686cf41ee9a4",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 147,
+      "contentSha256": "e619abe3e2cec756e53ad5543754eea66c391927d66e5839733b2f1c4e8f1c67",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [
+        "social_posts",
+        "social_post_media",
+        "social_reactions",
+        "social_comments",
+        "social_location_shares"
+      ],
+      "sqlPolicies": [
+        "social_posts_select_visible on public.social_posts",
+        "social_posts_insert_own on public.social_posts for insert with check (author_id = auth.uid());",
+        "social_posts_update_own on public.social_posts for update using (author_id = auth.uid()) with check (author_id = auth.uid());",
+        "social_posts_delete_own on public.social_posts for delete using (author_id = auth.uid());",
+        "social_media_select_visible on public.social_post_media",
+        "social_media_insert_own on public.social_post_media for insert with check (owner_id = auth.uid());",
+        "social_media_delete_own on public.social_post_media for delete using (owner_id = auth.uid());",
+        "social_reactions_select_visible on public.social_reactions",
+        "social_reactions_insert_self on public.social_reactions for insert with check (user_id = auth.uid() and public.pantavion_can_view_social_post(post_id));",
+        "social_reactions_update_self on public.social_reactions for update using (user_id = auth.uid()) with check (user_id = auth.uid());",
+        "social_reactions_delete_self on public.social_reactions for delete using (user_id = auth.uid());",
+        "social_comments_select_visible on public.social_comments",
+        "social_comments_insert_self on public.social_comments for insert with check (author_id = auth.uid() and public.pantavion_can_view_social_post(post_id));",
+        "social_comments_update_self on public.social_comments for update using (author_id = auth.uid()) with check (author_id = auth.uid());",
+        "social_comments_delete_self on public.social_comments for delete using (author_id = auth.uid());",
+        "social_location_select_self on public.social_location_shares for select using (user_id = auth.uid());",
+        "social_location_insert_self on public.social_location_shares for insert with check (user_id = auth.uid());",
+        "social_location_update_self on public.social_location_shares for update using (user_id = auth.uid()) with check (user_id = auth.uid());",
+        "social_location_delete_self on public.social_location_shares for delete using (user_id = auth.uid());"
+      ],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "maps-water",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260811050500_create_social_location_sharing.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feat--social-flagship/supabase/migrations/20260811050500_create_social_location_sharing.sql",
+      "blobSha": "519baed233d965a1dec44e1f6e275798556b8846",
+      "sizeBytes": 2830,
+      "mainBlobSha": "519baed233d965a1dec44e1f6e275798556b8846",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 62,
+      "contentSha256": "15af7f30bd63fde260b9fe41b8374b092b6d0d210e6429e455d5e1eefb2152e0",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [
+        "user_location_settings",
+        "location_shares",
+        "user_live_locations"
+      ],
+      "sqlPolicies": [
+        "location settings owner only",
+        "location shares participants read",
+        "location shares owner write",
+        "live location owner write",
+        "live location approved viewers read"
+      ],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "maps-water",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260811051200_create_emergency_location_core.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/feat--social-flagship/supabase/migrations/20260811051200_create_emergency_location_core.sql",
+      "blobSha": "90cc2d299107c5672738acb357389123bbbc3c27",
+      "sizeBytes": 3192,
+      "mainBlobSha": "90cc2d299107c5672738acb357389123bbbc3c27",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 67,
+      "contentSha256": "e8c58fd7c64efb53cf93b3c7fb4d380dd99924afe1c673d4f9044573fb932a46",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [
+        "emergency_location_settings",
+        "emergency_location_observations",
+        "emergency_contacts"
+      ],
+      "sqlPolicies": [
+        "emergency settings owner only",
+        "emergency observations owner read",
+        "emergency observations owner insert",
+        "emergency contacts owner only"
+      ],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "maps-water",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260811084000_link_social_posts_to_personal_media.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feat--social-flagship/supabase/migrations/20260811084000_link_social_posts_to_personal_media.sql",
+      "blobSha": "a333b1468f4a85398b23f70a58fa70119ffc6e99",
+      "sizeBytes": 2417,
+      "mainBlobSha": "a333b1468f4a85398b23f70a58fa70119ffc6e99",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 78,
+      "contentSha256": "8fcec6e45b353d535e358b3d1ed0f4488aa7ec493d1b1fca0722061f68295a2c",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [
+        "social_media_insert_own on public.social_post_media"
+      ],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260811100000_create_private_contact_discovery.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/feat--social-flagship/supabase/migrations/20260811100000_create_private_contact_discovery.sql",
+      "blobSha": "7dff8c7624020ba36e8c33eadeae8d2f79fe6b0d",
+      "sizeBytes": 7035,
+      "mainBlobSha": "7dff8c7624020ba36e8c33eadeae8d2f79fe6b0d",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 199,
+      "contentSha256": "db988f1543d8e67478673617f588a4049a4dcdd583cbba1dd617b2163bda5130",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [
+        "user_discovery_identifiers"
+      ],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260811101500_social_map_visibility_and_selected_audience.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/feat--social-flagship/supabase/migrations/20260811101500_social_map_visibility_and_selected_audience.sql",
+      "blobSha": "d7bdb66e0d88d155283495779ace29aff9d9feee",
+      "sizeBytes": 2929,
+      "mainBlobSha": "d7bdb66e0d88d155283495779ace29aff9d9feee",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 80,
+      "contentSha256": "a372ebadf9a76a214dcdfeb0278ae510c87effbc1e5b9ed5c24bad3b1d5446ed",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [
+        "social_location_share_members"
+      ],
+      "sqlPolicies": [
+        "social_location_members_owner_all",
+        "social_location_select_self"
+      ],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "maps-water",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

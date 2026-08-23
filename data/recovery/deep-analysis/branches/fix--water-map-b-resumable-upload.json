@@ -1,0 +1,104 @@
+{
+  "id": "PANT-BRANCH-DA28F2758F8B",
+  "sourceRef": "recovery/snapshots/fix--water-map-b-resumable-upload",
+  "headSha": "15d5767900b2cf6891875d478431a8260709063b",
+  "mergeBase": "365758baf5e73930aef5348a243c94c653fc590e",
+  "behindMainBy": 119,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "identity-security": 1,
+    "chat-translation": 2,
+    "maps-water": 2,
+    "media-music": 1,
+    "infrastructure-deployment": 2,
+    "business-marketplace": 1,
+    "ai-kernel": 1,
+    "recovery-continuity": 1
+  },
+  "kindCounts": {
+    "source-code": 1,
+    "configuration-data": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/final-master-dwg/final-master-dwg-uploader.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/fix--water-map-b-resumable-upload/app/professional/infrastructure/water/final-master-dwg/final-master-dwg-uploader.tsx",
+      "blobSha": "e06d73d845a237ce1db9322d994af6b89c54611d",
+      "sizeBytes": 6796,
+      "mainBlobSha": "e06d73d845a237ce1db9322d994af6b89c54611d",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 210,
+      "contentSha256": "e81a17c41e81aed6c2602a6b3bad3e611befd54a8f46602112866c962e9a4a52",
+      "imports": [
+        "react",
+        "tus-js-client"
+      ],
+      "exports": [
+        "FinalMasterDwgUploader"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/fix--water-map-b-resumable-upload/package.json",
+      "blobSha": "f3147714826462b5c76338ad6bcfb831d6df5a06",
+      "sizeBytes": 4045,
+      "mainBlobSha": "f3147714826462b5c76338ad6bcfb831d6df5a06",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 75,
+      "contentSha256": "34a86caed8751803c7b5d6968db8c1fe2cf54cb67dfe055ee7ba474b4a605e7f",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 3,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}
