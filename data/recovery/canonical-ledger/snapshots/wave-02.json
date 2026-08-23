@@ -1,0 +1,818 @@
+{
+  "id": "pantavion_branch_snapshot_wave_2",
+  "createdAt": "2026-08-23T04:18:03.051Z",
+  "method": "Exact Git reference preservation. Snapshot refs were created from each source branch current immutable head SHA; no source ref was modified or deleted.",
+  "requested": 89,
+  "preserved": 89,
+  "failed": 0,
+  "excluded": [
+    {
+      "branch": "recovery/classified-ledger-20260823",
+      "reason": "active PR branch; its commits are already the current canonicalization work"
+    }
+  ],
+  "deletionGate": "BLOCKED_UNTIL_SHA_REVERIFICATION_AND_CONTENT_CANONICALIZATION",
+  "snapshots": [
+    {
+      "source": "feature/social-core-runtime-v2",
+      "snapshot": "recovery/snapshots/feature--social-core-runtime-v2",
+      "headSha": "799aaf71e157b2ab3c8e5981bc8891b4e4170236",
+      "aheadBy": 49,
+      "changedFiles": 34,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "pantavion/execution-engine-v1",
+      "snapshot": "recovery/snapshots/pantavion--execution-engine-v1",
+      "headSha": "3653c097a997b8c847157f8bc5bf5d0ce5ef9641",
+      "aheadBy": 26,
+      "changedFiles": 85,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feat/social-flagship",
+      "snapshot": "recovery/snapshots/feat--social-flagship",
+      "headSha": "f89e82cdd0457a4283449dc7cf52a4c8d398a524",
+      "aheadBy": 17,
+      "changedFiles": 13,
+      "category": "MAP",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/social-people-chat-all-inside-20260815",
+      "snapshot": "recovery/snapshots/recovery--social-people-chat-all-inside-20260815",
+      "headSha": "c00c669f9b8ac7db5c03a32ef8faa3d99e34d87f",
+      "aheadBy": 16,
+      "changedFiles": 18,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feature/water-map-b",
+      "snapshot": "recovery/snapshots/feature--water-map-b",
+      "headSha": "f5a18e1d70dab1aef72dd73a91d6949fd33fe3f8",
+      "aheadBy": 14,
+      "changedFiles": 12,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/canonical-knowledge-v2-20260818",
+      "snapshot": "recovery/snapshots/recovery--canonical-knowledge-v2-20260818",
+      "headSha": "0cbdf29365a49f845df4e7f24075a80ee24ffe34",
+      "aheadBy": 13,
+      "changedFiles": 8,
+      "category": "AIK",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feature/identity-trust-security-core",
+      "snapshot": "recovery/snapshots/feature--identity-trust-security-core",
+      "headSha": "20d73410aa5ef8782721a4e9cb2293218b6869c5",
+      "aheadBy": 9,
+      "changedFiles": 7,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feature/social-core-foundation",
+      "snapshot": "recovery/snapshots/feature--social-core-foundation",
+      "headSha": "cc480e9b95d46c329bf7df6fa88a2fcfac6fa957",
+      "aheadBy": 9,
+      "changedFiles": 7,
+      "category": "SOC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feat/social-business-listings-shell",
+      "snapshot": "recovery/snapshots/feat--social-business-listings-shell",
+      "headSha": "efa5f34600ff0e45bee1f086456459e031ee999e",
+      "aheadBy": 8,
+      "changedFiles": 5,
+      "category": "REC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feature/simple-universal-interpreter",
+      "snapshot": "recovery/snapshots/feature--simple-universal-interpreter",
+      "headSha": "1101d8549a9ed95ae7d3ea291e4d387b6e51fcb7",
+      "aheadBy": 8,
+      "changedFiles": 3,
+      "category": "REV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/core-four-verified-wave-20260815",
+      "snapshot": "recovery/snapshots/fix--core-four-verified-wave-20260815",
+      "headSha": "41da3e0a70594a464abd49507d8056e4c72436e6",
+      "aheadBy": 7,
+      "changedFiles": 5,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/guardian-audit-script-repair",
+      "snapshot": "recovery/snapshots/fix--guardian-audit-script-repair",
+      "headSha": "43c9e5271fa208b905b29be49853684db2caa59b",
+      "aheadBy": 7,
+      "changedFiles": 6,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/fix-live-translation-runtime",
+      "snapshot": "recovery/snapshots/agent--fix-live-translation-runtime",
+      "headSha": "90ef49e9efa5ba5f89d3f740c6d3b5e54107d5a3",
+      "aheadBy": 6,
+      "changedFiles": 2,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feat/foundation-sprint-1",
+      "snapshot": "recovery/snapshots/feat--foundation-sprint-1",
+      "headSha": "8dccdf599325ca76da6ee8491abd3b644d836bc2",
+      "aheadBy": 6,
+      "changedFiles": 6,
+      "category": "AIK",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/canonical-knowledge-excavation-215",
+      "snapshot": "recovery/snapshots/recovery--canonical-knowledge-excavation-215",
+      "headSha": "6ed7d3f0f38bd0f688280d0a06563e907cbee4fc",
+      "aheadBy": 6,
+      "changedFiles": 4,
+      "category": "REC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/production-real-features-only",
+      "snapshot": "recovery/snapshots/agent--production-real-features-only",
+      "headSha": "881cca8e8aa2319e08ffda5d766c30db8b61b5eb",
+      "aheadBy": 5,
+      "changedFiles": 5,
+      "category": "MAP",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/interpreter-full-turn-audio-20260815",
+      "snapshot": "recovery/snapshots/fix--interpreter-full-turn-audio-20260815",
+      "headSha": "d4204aa900adee2c1d1e887e37f629cfc18e52be",
+      "aheadBy": 5,
+      "changedFiles": 4,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/water-final-master-supabase-storage",
+      "snapshot": "recovery/snapshots/fix--water-final-master-supabase-storage",
+      "headSha": "4a88eca84d307de71e41aa2fe45db793240a4059",
+      "aheadBy": 5,
+      "changedFiles": 5,
+      "category": "MAP",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/personalized-sections-wave-20260815",
+      "snapshot": "recovery/snapshots/recovery--personalized-sections-wave-20260815",
+      "headSha": "79e58e2727c78f63b5f4a31993ab1371f2d44937",
+      "aheadBy": 5,
+      "changedFiles": 3,
+      "category": "SOC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/release1-live-translation",
+      "snapshot": "recovery/snapshots/agent--release1-live-translation",
+      "headSha": "1a5b74922ad554802b4c96761c68596309865fb9",
+      "aheadBy": 4,
+      "changedFiles": 4,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/shared-translation-service",
+      "snapshot": "recovery/snapshots/agent--shared-translation-service",
+      "headSha": "9b3c30d1c1d12dbad16a531e59c972021dcf8e34",
+      "aheadBy": 4,
+      "changedFiles": 3,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/translation-worker-hardening-20260822",
+      "snapshot": "recovery/snapshots/agent--translation-worker-hardening-20260822",
+      "headSha": "2aa40137855b0f5cff184de11431e58fdfcea762",
+      "aheadBy": 4,
+      "changedFiles": 3,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feature/startup-canonical-runtime-20260818",
+      "snapshot": "recovery/snapshots/feature--startup-canonical-runtime-20260818",
+      "headSha": "1f525676d2d83a5d4de55e5cbdd1e4e9c3e480bf",
+      "aheadBy": 4,
+      "changedFiles": 4,
+      "category": "REV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/supabase-public-runtime-fallback",
+      "snapshot": "recovery/snapshots/fix--supabase-public-runtime-fallback",
+      "headSha": "aa3070158d229f158080b5d130c4d0458a16d33d",
+      "aheadBy": 4,
+      "changedFiles": 4,
+      "category": "SOC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/donor-repo-consolidation-20260819-batch2",
+      "snapshot": "recovery/snapshots/recovery--donor-repo-consolidation-20260819-batch2",
+      "headSha": "f89333c049b92202263a2b410ffe86bc76ebaa4a",
+      "aheadBy": 4,
+      "changedFiles": 3,
+      "category": "REC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/donor-repo-consolidation-20260819-batch2-work",
+      "snapshot": "recovery/snapshots/recovery--donor-repo-consolidation-20260819-batch2-work",
+      "headSha": "f89333c049b92202263a2b410ffe86bc76ebaa4a",
+      "aheadBy": 4,
+      "changedFiles": 3,
+      "category": "REC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/bidirectional-interpreter-mode",
+      "snapshot": "recovery/snapshots/agent--bidirectional-interpreter-mode",
+      "headSha": "7f24d351aa5b0aa1644a903cff020a529bffe9c4",
+      "aheadBy": 3,
+      "changedFiles": 3,
+      "category": "DOC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feat/pantavion-foundry-control-plane-v1",
+      "snapshot": "recovery/snapshots/feat--pantavion-foundry-control-plane-v1",
+      "headSha": "cb2048381518eb7941d46442b98132523ccee59d",
+      "aheadBy": 3,
+      "changedFiles": 23,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/social-live-backend-gate",
+      "snapshot": "recovery/snapshots/fix--social-live-backend-gate",
+      "headSha": "b66b16615e0f2884a0f43292f710803aa1f8abf7",
+      "aheadBy": 3,
+      "changedFiles": 3,
+      "category": "SOC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/water-lock-refresh-evidence",
+      "snapshot": "recovery/snapshots/fix--water-lock-refresh-evidence",
+      "headSha": "e3d8abe508c2314781adc1fcaedb5403a380dea5",
+      "aheadBy": 3,
+      "changedFiles": 2,
+      "category": "MAP",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "pantavion/ecosystem-readiness-gate-v1",
+      "snapshot": "recovery/snapshots/pantavion--ecosystem-readiness-gate-v1",
+      "headSha": "084bee75d3a9d4c5c85f4dca7840dbfdeeb2ab19",
+      "aheadBy": 3,
+      "changedFiles": 12,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/consolidation-20260810",
+      "snapshot": "recovery/snapshots/recovery--consolidation-20260810",
+      "headSha": "6acb6d14e0976760860cbb6574831d22c65986de",
+      "aheadBy": 3,
+      "changedFiles": 3,
+      "category": "MAP",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "rescue-kernel-canonical-v1-20260411-194906",
+      "snapshot": "recovery/snapshots/rescue-kernel-canonical-v1-20260411-194906",
+      "headSha": "a52744086879714f44697772221b397ee59e20df",
+      "aheadBy": 3,
+      "changedFiles": 2,
+      "category": "AIK",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/canonical-social-flagship-wave",
+      "snapshot": "recovery/snapshots/agent--canonical-social-flagship-wave",
+      "headSha": "6a2f0aaf1b8ef3a2fec42b3830c140343c625c7f",
+      "aheadBy": 2,
+      "changedFiles": 1,
+      "category": "REV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/fix-water-admin-mobile-navigation-20260721",
+      "snapshot": "recovery/snapshots/agent--fix-water-admin-mobile-navigation-20260721",
+      "headSha": "d2cafcbef615b4a02ba434579661782a03a4ccc7",
+      "aheadBy": 2,
+      "changedFiles": 4,
+      "category": "MAP",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/fix-water-admin-users-20260720",
+      "snapshot": "recovery/snapshots/agent--fix-water-admin-users-20260720",
+      "headSha": "c24016f80f7cc614e6c6ffa95d9fc0ed84aeea90",
+      "aheadBy": 2,
+      "changedFiles": 5,
+      "category": "MAP",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/human-core-live-wave-1",
+      "snapshot": "recovery/snapshots/agent--human-core-live-wave-1",
+      "headSha": "4ff58f17837df9e821b2cc6cfff01b732945d183",
+      "aheadBy": 2,
+      "changedFiles": 2,
+      "category": "GOV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/master-recovery-wave-1",
+      "snapshot": "recovery/snapshots/agent--master-recovery-wave-1",
+      "headSha": "7e13acb7a4cc4685e38fbe63df081c6d6c46d76b",
+      "aheadBy": 2,
+      "changedFiles": 1,
+      "category": "REC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/mobile-header-language-cleanup",
+      "snapshot": "recovery/snapshots/agent--mobile-header-language-cleanup",
+      "headSha": "81f197d5d83134d02b86c1126d192b72ef217489",
+      "aheadBy": 2,
+      "changedFiles": 2,
+      "category": "REV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/production-translation-e2e-20260822",
+      "snapshot": "recovery/snapshots/agent--production-translation-e2e-20260822",
+      "headSha": "07d56f3c74d074115017e3cd0af806e12645f01a",
+      "aheadBy": 2,
+      "changedFiles": 1,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/raw-donor-preservation",
+      "snapshot": "recovery/snapshots/agent--raw-donor-preservation",
+      "headSha": "f770444c6cc0c0878b26f3cd99a739299d3368b0",
+      "aheadBy": 2,
+      "changedFiles": 2,
+      "category": "REC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/stt-ai-sdk",
+      "snapshot": "recovery/snapshots/agent--stt-ai-sdk",
+      "headSha": "d9d6e4f236fa831849168378573caacfc256d809",
+      "aheadBy": 2,
+      "changedFiles": 2,
+      "category": "REV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feat/language-coverage-verification-20260815",
+      "snapshot": "recovery/snapshots/feat--language-coverage-verification-20260815",
+      "headSha": "b35550cc3fc492ab2805fa69504aa1f0c8b20606",
+      "aheadBy": 2,
+      "changedFiles": 2,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feature/translation-agent",
+      "snapshot": "recovery/snapshots/feature--translation-agent",
+      "headSha": "62146d1bb801eb6c8629457f3ce1b1dfd2a982da",
+      "aheadBy": 2,
+      "changedFiles": 7,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/map-b-founder-approved-access",
+      "snapshot": "recovery/snapshots/fix--map-b-founder-approved-access",
+      "headSha": "6697ae4aee0cc937eeb1678eb2432e06c33bdc2c",
+      "aheadBy": 2,
+      "changedFiles": 2,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/production-sync-verification",
+      "snapshot": "recovery/snapshots/fix--production-sync-verification",
+      "headSha": "49c69c990c3428204b3ba5f9b320d29cd8a55206",
+      "aheadBy": 2,
+      "changedFiles": 2,
+      "category": "SOC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/production-visibility-20260822",
+      "snapshot": "recovery/snapshots/fix--production-visibility-20260822",
+      "headSha": "c56c44218a3f16fda80a5d593fb591d9a2872fe8",
+      "aheadBy": 2,
+      "changedFiles": 2,
+      "category": "DOC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/water-map-b-resumable-upload",
+      "snapshot": "recovery/snapshots/fix--water-map-b-resumable-upload",
+      "headSha": "15d5767900b2cf6891875d478431a8260709063b",
+      "aheadBy": 2,
+      "changedFiles": 2,
+      "category": "MAP",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "kernel-canonical-v1",
+      "snapshot": "recovery/snapshots/kernel-canonical-v1",
+      "headSha": "2e85bf57e1577eda29780469be21bf43cb273972",
+      "aheadBy": 2,
+      "changedFiles": 1,
+      "category": "AIK",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/identity-registration-current-main",
+      "snapshot": "recovery/snapshots/recovery--identity-registration-current-main",
+      "headSha": "93634f4e6d4a2c1ac91ed4f2a5ed2a417b017b74",
+      "aheadBy": 2,
+      "changedFiles": 2,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/interpreter-backend-20260814",
+      "snapshot": "recovery/snapshots/recovery--interpreter-backend-20260814",
+      "headSha": "b71a5a9258ac5b3a7d198f1ee12dbf24c4803538",
+      "aheadBy": 2,
+      "changedFiles": 2,
+      "category": "REV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/interpreter-language-runtime",
+      "snapshot": "recovery/snapshots/recovery--interpreter-language-runtime",
+      "headSha": "25e05f7901e6f8bd693f555761189c87189bb341",
+      "aheadBy": 2,
+      "changedFiles": 2,
+      "category": "REV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "sandbox/global-connect-foundation-20260815-0100",
+      "snapshot": "recovery/snapshots/sandbox--global-connect-foundation-20260815-0100",
+      "headSha": "79fc8fdb0f715f6a5957575f949a361a6ec6c7c7",
+      "aheadBy": 2,
+      "changedFiles": 7,
+      "category": "INF",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "vercel-agent/canonical-control-plane-foundation",
+      "snapshot": "recovery/snapshots/vercel-agent--canonical-control-plane-foundation",
+      "headSha": "10708538aeb70f338228e34d0b09dabc419e0046",
+      "aheadBy": 2,
+      "changedFiles": 4,
+      "category": "REC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/fix-water-network-range-loading-20260723",
+      "snapshot": "recovery/snapshots/agent--fix-water-network-range-loading-20260723",
+      "headSha": "2ac87bb6c48d1441aeb16fc9cfc8f1dc1502c486",
+      "aheadBy": 1,
+      "changedFiles": 2,
+      "category": "MAP",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/fix-water-request-deduplication-20260721",
+      "snapshot": "recovery/snapshots/agent--fix-water-request-deduplication-20260721",
+      "headSha": "087d4e1380a56d5c3a65622e4eff38fb8589a2c3",
+      "aheadBy": 1,
+      "changedFiles": 6,
+      "category": "MAP",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/hide-water-administration-20260720",
+      "snapshot": "recovery/snapshots/agent--hide-water-administration-20260720",
+      "headSha": "03a97c3a9ca17f5fe6d8e389f866938b92f371fe",
+      "aheadBy": 1,
+      "changedFiles": 31,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/production-water-only-hard-gate",
+      "snapshot": "recovery/snapshots/agent--production-water-only-hard-gate",
+      "headSha": "e160512f9036f83ee8f151c37e933c527184dd07",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "REV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/realtime-chat-translation",
+      "snapshot": "recovery/snapshots/agent--realtime-chat-translation",
+      "headSha": "334fac91f618df00d22d75cd8de66223d93c3a82",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/restore-water-stable-20260723",
+      "snapshot": "recovery/snapshots/agent--restore-water-stable-20260723",
+      "headSha": "80d7ba6586ba768636639c4639993d4537804f90",
+      "aheadBy": 1,
+      "changedFiles": 10,
+      "category": "MAP",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/social-production-hardening",
+      "snapshot": "recovery/snapshots/agent--social-production-hardening",
+      "headSha": "4672a00f352e96220f269cda6b77e37dad3bb8d4",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "SOC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "agent/water-admin-mobile-push-20260721",
+      "snapshot": "recovery/snapshots/agent--water-admin-mobile-push-20260721",
+      "headSha": "52344e78be1cf1d0e19496a5c37e10d81a6f4944",
+      "aheadBy": 1,
+      "changedFiles": 8,
+      "category": "MAP",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "docs/complete-handoff-20260816",
+      "snapshot": "recovery/snapshots/docs--complete-handoff-20260816",
+      "headSha": "0e3618b06c47f7c207996a5b95724bd91e8e1a3b",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "DOC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feat/guardian-extreme-sos-20260503-110153",
+      "snapshot": "recovery/snapshots/feat--guardian-extreme-sos-20260503-110153",
+      "headSha": "ab629d6080691b516eb29f33563cc3081f483706",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "REV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feat/interpreter-production-sync-gate",
+      "snapshot": "recovery/snapshots/feat--interpreter-production-sync-gate",
+      "headSha": "524f459421b5a788a5dcedbdceae827ea261d1bf",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "INF",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feat/interpreter-runtime-health",
+      "snapshot": "recovery/snapshots/feat--interpreter-runtime-health",
+      "headSha": "e48071581b4c5bcf3b3190ac8148dbc57d546e44",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feat/revenue-social-foundation",
+      "snapshot": "recovery/snapshots/feat--revenue-social-foundation",
+      "headSha": "944327d97417bc5bbb9c96f9cc12d2020cba99e0",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "REV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feat/world-language-coverage-20260503-102839",
+      "snapshot": "recovery/snapshots/feat--world-language-coverage-20260503-102839",
+      "headSha": "b9bb2f553171044b4b903d0877c9f37dac2ef28d",
+      "aheadBy": 1,
+      "changedFiles": 2,
+      "category": "REV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feature/global-knowledge-vault",
+      "snapshot": "recovery/snapshots/feature--global-knowledge-vault",
+      "headSha": "33defe9ca6c9c1aeae5d46652fdf0e5c8e44ebe9",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "DOC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "feature/music-voice-studio",
+      "snapshot": "recovery/snapshots/feature--music-voice-studio",
+      "headSha": "1b694997b3e71abd328af49cce3a7e8c7845689b",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/chat-live-receipts-20260822",
+      "snapshot": "recovery/snapshots/fix--chat-live-receipts-20260822",
+      "headSha": "aef71cba2c186eae9df3228ee895943be7182837",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/chat-translation-history-20260822",
+      "snapshot": "recovery/snapshots/fix--chat-translation-history-20260822",
+      "headSha": "29597faf79630200ceecf2a1527533002c4f7abe",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/gateway-context-normalizer",
+      "snapshot": "recovery/snapshots/fix--gateway-context-normalizer",
+      "headSha": "edee38b1243f71ea69df137cbd68fbec2393324b",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/production-sync-yaml",
+      "snapshot": "recovery/snapshots/fix--production-sync-yaml",
+      "headSha": "f57f2ee3a2bcf506004a2dea74ba8c9718e740ff",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "INF",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/social-health-diagnostics",
+      "snapshot": "recovery/snapshots/fix--social-health-diagnostics",
+      "headSha": "30d1990c7aa5a41c67f56bd651ac05442f6122ab",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "SOC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/stt-language-and-fallback",
+      "snapshot": "recovery/snapshots/fix--stt-language-and-fallback",
+      "headSha": "621676a0a83ae19c03db3d3922105e23ad4e22b7",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "REV",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/supabase-admin-runtime-fallback",
+      "snapshot": "recovery/snapshots/fix--supabase-admin-runtime-fallback",
+      "headSha": "f91947783439f9e17b3cf0061b660f8473838ecc",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "INF",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "fix/water-guardian-vercel-context",
+      "snapshot": "recovery/snapshots/fix--water-guardian-vercel-context",
+      "headSha": "80ad4eba5218202011d58727320089978786246e",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "pantavion-clean-rescue",
+      "snapshot": "recovery/snapshots/pantavion-clean-rescue",
+      "headSha": "29b686b3cd0f0ddd3de9749353d2c17d135a7bda",
+      "aheadBy": 1,
+      "changedFiles": 4,
+      "category": "AIK",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "pantavion-runtime-services",
+      "snapshot": "recovery/snapshots/pantavion-runtime-services",
+      "headSha": "a8153cf04dc210eb4f1b12a60ee20788949e7ff9",
+      "aheadBy": 1,
+      "changedFiles": 9,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "pantavion/evolution-engine-v2",
+      "snapshot": "recovery/snapshots/pantavion--evolution-engine-v2",
+      "headSha": "66e6c940a906357ee1dcc1a77a143b04ea074b14",
+      "aheadBy": 1,
+      "changedFiles": 15,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "phase-c-ui-port-20260411-194906",
+      "snapshot": "recovery/snapshots/phase-c-ui-port-20260411-194906",
+      "headSha": "ac092b514451269df4d614a840a374bdfc5f45b5",
+      "aheadBy": 1,
+      "changedFiles": 9,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/all-projects-safe-transfer-20260823",
+      "snapshot": "recovery/snapshots/recovery--all-projects-safe-transfer-20260823",
+      "headSha": "322e1910d93812a9e0246da871e4f61142be76ed",
+      "aheadBy": 1,
+      "changedFiles": 142,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/identity-auth-reconcile-20260822",
+      "snapshot": "recovery/snapshots/recovery--identity-auth-reconcile-20260822",
+      "headSha": "e3cf88bbfba11f85da4fc5c28b4c2fe143e8d173",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/master-inventory-20260810",
+      "snapshot": "recovery/snapshots/recovery--master-inventory-20260810",
+      "headSha": "dcd72ddbac848b3e5c3036916ff324016343c273",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "REC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "recovery/master-ledger-20260816",
+      "snapshot": "recovery/snapshots/recovery--master-ledger-20260816",
+      "headSha": "afb936fb9945c2dc1904847c771bd74a14df803c",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "REC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "sandbox/global-connect-foundation-20260815-0058",
+      "snapshot": "recovery/snapshots/sandbox--global-connect-foundation-20260815-0058",
+      "headSha": "67ad7460ec9a474acc4ddd3fe8f78922fbb7bf35",
+      "aheadBy": 1,
+      "changedFiles": 16,
+      "category": "SEC",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "sandbox/interpreter-runtime-20260815-1057",
+      "snapshot": "recovery/snapshots/sandbox--interpreter-runtime-20260815-1057",
+      "headSha": "3c7982f02e6e3bba2d09b6773646a043bb2f6c97",
+      "aheadBy": 1,
+      "changedFiles": 1,
+      "category": "CHT",
+      "status": "PRESERVED"
+    },
+    {
+      "source": "vercel/install-vercel-web-analytics-0aaw0f",
+      "snapshot": "recovery/snapshots/vercel--install-vercel-web-analytics-0aaw0f",
+      "headSha": "aed7852b6800dd443539becec48a237433a91af1",
+      "aheadBy": 1,
+      "changedFiles": 3,
+      "category": "REV",
+      "status": "PRESERVED"
+    }
+  ]
+}
