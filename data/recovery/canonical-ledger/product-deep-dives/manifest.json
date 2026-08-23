@@ -1,0 +1,37 @@
+{
+  "id": "pantavion_priority_products_and_innovation_registry_v1",
+  "generatedAt": "2026-08-23T16:15:50.629Z",
+  "totalRecords": 11744,
+  "modules": [
+    {
+      "module": "Interpreter / Translation",
+      "totalRecords": 4976,
+      "file": "interpreter-translation.json"
+    },
+    {
+      "module": "Chat",
+      "totalRecords": 2177,
+      "file": "chat.json"
+    },
+    {
+      "module": "People",
+      "totalRecords": 2700,
+      "file": "people.json"
+    },
+    {
+      "module": "Social / Pulse / Communities",
+      "totalRecords": 1864,
+      "file": "social-pulse-communities.json"
+    },
+    {
+      "module": "Dating",
+      "totalRecords": 27,
+      "file": "dating.json"
+    }
+  ],
+  "innovationCandidates": 6,
+  "datingSemanticCandidates": 27,
+  "truth": "Innovation candidates are evidence-indexed working hypotheses, not unverified grant claims.",
+  "verifiedLive": false,
+  "deleteAllowed": false
+}
