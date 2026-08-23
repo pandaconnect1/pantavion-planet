@@ -1,0 +1,67 @@
+{
+  "id": "PANT-CANON-WAVE-002",
+  "sourceRef": "recovery/snapshots/sandbox--global-connect-foundation-20260815-0100",
+  "sourceHeadSha": "79fc8fdb0f715f6a5957575f949a361a6ec6c7c7",
+  "theme": "global-connect",
+  "status": "BLOCKED_SHA_MISMATCH",
+  "verificationMethod": "Fresh fetch of source and canonical destination; compare Git blob SHA for every file.",
+  "files": [
+    {
+      "source": "app/api/capabilities/global-connect/route.ts",
+      "destination": "recovery/canonicalized/global-connect/sandbox-global-connect-foundation-20260815-0100/source/app/api/capabilities/global-connect/route.ts",
+      "sourceBlobSha": "e04a6168d3dddcf995bba570f2326f104f848752",
+      "destinationBlobSha": "e04a6168d3dddcf995bba570f2326f104f848752",
+      "exact": true
+    },
+    {
+      "source": "core/global-connect/contracts.ts",
+      "destination": "recovery/canonicalized/global-connect/sandbox-global-connect-foundation-20260815-0100/source/core/global-connect/contracts.ts",
+      "sourceBlobSha": "bef9441c26e39251ab89a5349a3481b08ada34ae",
+      "destinationBlobSha": "bef9441c26e39251ab89a5349a3481b08ada34ae",
+      "exact": true
+    },
+    {
+      "source": "data/global/countries.iso3166.json",
+      "destination": "recovery/canonicalized/global-connect/sandbox-global-connect-foundation-20260815-0100/source/data/global/countries.iso3166.json",
+      "sourceBlobSha": "e26cf3c80ab738f526b7387ed57abfef0038f841",
+      "destinationBlobSha": "e26cf3c80ab738f526b7387ed57abfef0038f841",
+      "exact": true
+    },
+    {
+      "source": "docs/global-connect/FOUNDATION_CYCLE.md",
+      "destination": "recovery/canonicalized/global-connect/sandbox-global-connect-foundation-20260815-0100/source/docs/global-connect/FOUNDATION_CYCLE.md",
+      "sourceBlobSha": "c9342443b0ba53cfef91dd9429b5d72a1fc84177",
+      "destinationBlobSha": "c9342443b0ba53cfef91dd9429b5d72a1fc84177",
+      "exact": true
+    },
+    {
+      "source": "scripts/verify-global-country-registry.cjs",
+      "destination": "recovery/canonicalized/global-connect/sandbox-global-connect-foundation-20260815-0100/source/scripts/verify-global-country-registry.cjs",
+      "sourceBlobSha": "385900e9c135118735e110d423541f65cbdb988e",
+      "exact": false
+    },
+    {
+      "source": "supabase/migrations/20260815010500_global_connect_foundation.sql",
+      "destination": "recovery/canonicalized/global-connect/sandbox-global-connect-foundation-20260815-0100/source/supabase/migrations/20260815010500_global_connect_foundation.sql",
+      "sourceBlobSha": "a3e2e757d60cf2f282bafb9f1bb3b7fc182685f6",
+      "destinationBlobSha": "a3e2e757d60cf2f282bafb9f1bb3b7fc182685f6",
+      "exact": true
+    },
+    {
+      "source": "supabase/rollback/20260815010500_global_connect_foundation.down.sql",
+      "destination": "recovery/canonicalized/global-connect/sandbox-global-connect-foundation-20260815-0100/source/supabase/rollback/20260815010500_global_connect_foundation.down.sql",
+      "sourceBlobSha": "3911197e993f4a6d5f8b0199c8b6cc2f95f4f379",
+      "destinationBlobSha": "3911197e993f4a6d5f8b0199c8b6cc2f95f4f379",
+      "exact": true
+    }
+  ],
+  "total": 7,
+  "exactMatches": 6,
+  "security": {
+    "environmentDependencies": [],
+    "secretValuesCopied": "none_detected"
+  },
+  "tested": false,
+  "verified": false,
+  "deleteAllowed": false
+}
