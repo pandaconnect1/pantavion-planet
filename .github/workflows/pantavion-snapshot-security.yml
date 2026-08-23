@@ -1,0 +1,39 @@
+name: Pantavion Snapshot Security Gate
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/pantavion-branch-snapshot-security-scan.cjs'
+      - '.github/workflows/pantavion-snapshot-security.yml'
+      - 'data/recovery/canonical-ledger/snapshots/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Fetch exact recovery snapshot refs
+        run: git fetch --no-tags origin '+refs/heads/recovery/snapshots/*:refs/remotes/origin/recovery/snapshots/*'
+      - name: Scan snapshot filenames and unique blobs
+        id: security_scan
+        continue-on-error: true
+        run: node scripts/pantavion-branch-snapshot-security-scan.cjs
+      - name: Upload redacted security report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-snapshot-security-report
+          path: data/runtime-reports/latest-branch-snapshot-security-scan.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Enforce quarantine gate
+        if: steps.security_scan.outcome != 'success'
+        run: |
+          echo 'Snapshot security findings require quarantine review. Secret values were not printed.'
+          exit 1
