@@ -1,0 +1,24 @@
+{
+  "id": "pantavion_branch_snapshot_wave_1",
+  "createdAt": "2026-08-23T04:14:20.386Z",
+  "method": "Exact Git reference preservation; source and snapshot refs point to the identical immutable commit SHA. No files were rewritten and no source refs were deleted.",
+  "status": "PRESERVED_NOT_YET_CANONICALIZED",
+  "snapshots": [
+    {
+      "source": "pantavion-recovery-20260705",
+      "snapshot": "recovery/snapshots/pantavion-recovery-20260705",
+      "headSha": "942769868bfe7baaad879b2567063a7cc3e8b6f5",
+      "aheadBy": 73,
+      "changedFiles": 259
+    },
+    {
+      "source": "kernel-live-runtime-20260626-230235",
+      "snapshot": "recovery/snapshots/kernel-live-runtime-20260626-230235",
+      "headSha": "e193fff29b97612e374ca9f03aadf237ac435113",
+      "aheadBy": 66,
+      "changedFiles": 252
+    }
+  ],
+  "verificationRule": "For every row, source head SHA must equal snapshot head SHA before any source ref deletion.",
+  "deletionGate": "BLOCKED"
+}
