@@ -1,0 +1,23 @@
+{
+  "id": "pantavion_canonical_knowledge_v2_run_21",
+  "workflowRunId": 32614414998,
+  "workflowName": "Pantavion Canonical Knowledge V2",
+  "result": "success",
+  "headSha": "6ec61b7970873a14e06dd01496bc6999212cc224",
+  "generatedAt": "2026-08-23T03:05:10.299Z",
+  "totalRecords": 31362,
+  "totalBatches": 21,
+  "classified": 16934,
+  "reviewRequired": 14428,
+  "unclassified": 1234,
+  "corpusFingerprint": "50860a9f2733eb564397db274c8000d53177ee2c99844d4cb882d7751012cb72",
+  "artifact": {
+    "id": 9486505694,
+    "name": "pantavion-canonical-knowledge-v2",
+    "sizeBytes": 33921055,
+    "sha256": "ef16e3413ff9e316f9ee4627e41b4f2e43f6f15efd780252c814fa807da3b1b1",
+    "expiresAt": "2026-09-06T03:05:37Z"
+  },
+  "invariant": "Every counted source finding was persisted before corpus generation; canonical corpus, photo marriage, semantic archive, batch counts and typecheck all passed.",
+  "deletionGate": "BLOCKED_UNTIL_ALL_REPOSITORIES_AND_BRANCHES_ARE_RECONCILED"
+}
