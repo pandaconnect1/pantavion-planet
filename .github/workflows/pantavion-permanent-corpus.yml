@@ -83,4 +83,13 @@ jobs:
             exit 0
           fi
           git commit -m 'data(recovery): materialize every canonical corpus record'
-          git push origin "HEAD:${{ github.head_ref }}"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin "${{ github.head_ref }}"
+            if git rebase "origin/${{ github.head_ref }}" && git push origin "HEAD:${{ github.head_ref }}"; then
+              exit 0
+            fi
+            git rebase --abort || true
+            sleep $((attempt * 2))
+          done
+          echo 'Unable to push permanent corpus after five safe rebase attempts.'
+          exit 1
