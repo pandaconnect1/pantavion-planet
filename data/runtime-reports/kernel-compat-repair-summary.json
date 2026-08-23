@@ -1,7 +1,7 @@
 {
   "id": "pantavion_kernel_compat_repair_v1",
-  "generatedAt": "2026-08-23T01:13:34.717Z",
+  "generatedAt": "2026-08-23T03:01:19.892Z",
   "repairedExports": 0,
   "touchedFiles": [],
-  "finalTscPassed": true
+  "finalTscPassed": false
 }
