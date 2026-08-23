@@ -1,0 +1,40 @@
+name: Pantavion Critical Modules Deep Dive
+on:
+  workflow_dispatch:
+  push:
+    branches: [recovery/classified-ledger-20260823]
+    paths:
+      - scripts/pantavion-critical-modules-deep-dive.cjs
+      - .github/workflows/pantavion-critical-modules-deep-dive.yml
+      - data/recovery/canonical-ledger/indexes/modules/interpreter-translation.json
+      - data/recovery/canonical-ledger/indexes/modules/sos-crisis.json
+permissions:
+  contents: write
+concurrency:
+  group: pantavion-critical-modules-deep-dive-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: recovery/classified-ledger-20260823
+      - run: node scripts/pantavion-critical-modules-deep-dive.cjs
+      - name: Verify invariants
+        run: |
+          node -e 'const x=require("./data/recovery/canonical-ledger/deep-dives/manifest.json"); if(x.totalRecords!==7752||x.modules.length!==2||x.verifiedLive!==false||x.deleteAllowed!==false) throw Error("deep-dive invariant failed")'
+      - name: Commit deep dive
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/recovery/canonical-ledger/deep-dives
+          git diff --cached --quiet && exit 0
+          git commit -m "data(recovery): deep dive interpreter and SOS"
+          for attempt in 1 2 3; do
+            git pull --rebase origin recovery/classified-ledger-20260823 &&
+            git push origin HEAD:recovery/classified-ledger-20260823 && exit 0
+            sleep $((attempt * 5))
+          done
+          exit 1
