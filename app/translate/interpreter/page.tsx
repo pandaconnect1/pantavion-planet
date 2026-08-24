@@ -407,7 +407,7 @@ export default function InterpreterPage() {
     let received = false;
     let fallback = false;
 
-    const useRecordingFallback = () => {
+    const startRecordingFallback = () => {
       if (fallback || received) return;
       fallback = true;
       setListening(false);
@@ -429,11 +429,11 @@ export default function InterpreterPage() {
     };
     recognition.onerror = () => {
       setListening(false);
-      useRecordingFallback();
+      startRecordingFallback();
     };
     recognition.onend = () => {
       setListening(false);
-      if (!received && !fallback) useRecordingFallback();
+      if (!received && !fallback) startRecordingFallback();
     };
 
     setError("");
@@ -445,7 +445,7 @@ export default function InterpreterPage() {
       recognition.start();
     } catch {
       setListening(false);
-      useRecordingFallback();
+      startRecordingFallback();
     }
   }
 

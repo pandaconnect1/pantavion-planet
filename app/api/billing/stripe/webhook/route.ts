@@ -80,7 +80,7 @@ async function processStripeEvent(event: StripeEvent) {
   const supabase = createAdminClient();
   const object = event.data?.object ?? {};
   const metadata = objectValue(object.metadata);
-  const module = stringValue(metadata.pantavion_module) ?? "platform";
+  const pantavionModule = stringValue(metadata.pantavion_module) ?? "platform";
   const revenueClass =
     stringValue(metadata.pantavion_revenue_class) ?? "DIRECT_REVENUE";
   const userId = stringValue(metadata.pantavion_user_id);
@@ -136,7 +136,7 @@ async function processStripeEvent(event: StripeEvent) {
         provider_event_id: event.id,
         provider_object_id: stringValue(object.id),
         user_id: userId,
-        module,
+        module: pantavionModule,
         revenue_class: revenueClass,
         event_kind: eventKind,
         amount_minor: amountMinor ?? null,
