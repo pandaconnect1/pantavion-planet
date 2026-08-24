@@ -37,6 +37,9 @@ const requiredFiles = [
   "scripts/pantavion-vscode-real-implementation-gate.cjs",
   ".github/workflows/pantavion-runtime-safety.yml",
   ".vscode/tasks.json",
+  "core/runtime/secure-scheduled-worker.ts",
+  "supabase/migrations/20260824104500_create_secure_scheduled_worker.sql",
+  "scripts/pantavion-secure-scheduled-worker-gate.cjs",
 ];
 
 for (const file of requiredFiles) {
@@ -143,21 +146,41 @@ if (cronRoute.includes("unprotected_until_cron_secret_is_configured")) {
   failures.push("Cron route must not allow unprotected production cron without CRON_SECRET.");
 }
 
-if (!cronRoute.includes('process.env.NODE_ENV !== "production"')) {
-  failures.push("Cron route must explicitly allow missing CRON_SECRET only outside production.");
+if (!cronRoute.includes('process.env.NODE_ENV === "production"')) {
+  failures.push("Cron route must explicitly identify the production boundary.");
 }
 
-if (!cronRoute.includes("production_blocked_missing_cron_secret")) {
-  failures.push("Cron route must block production when CRON_SECRET is missing.");
+if (!cronRoute.includes("blocked_missing_cron_secret")) {
+  failures.push("Cron route must fail closed when CRON_SECRET is missing.");
 }
 
-if (!cronRoute.includes("PANTAVION_ALLOW_VERCEL_CRON_USER_AGENT")) {
-  failures.push("Cron route must expose explicit Vercel cron user-agent boundary.");
+if (!cronRoute.includes("blocked_invalid_cron_secret")) {
+  failures.push("Cron route must fail closed when CRON_SECRET is invalid.");
+}
+
+if (!cronRoute.includes("timingSafeEqual")) {
+  failures.push("Cron route must compare the secret with a timing-safe operation.");
+}
+
+if (!cronRoute.includes("runSecureScheduledWorker")) {
+  failures.push("Cron route must execute through the secure scheduled-worker wrapper.");
+}
+
+if (
+  cronRoute.includes("PANTAVION_ALLOW_VERCEL_CRON_USER_AGENT") ||
+  cronRoute.includes("vercel-cron/1.0")
+) {
+  failures.push("Cron route must not authorize production requests by user-agent.");
 }
 
 const workflow = read(".github/workflows/pantavion-runtime-safety.yml");
 const workflowMarkers = [
-  "npm run verify:runtime-safety",
+  "npm run audit:water:network-lock",
+  "npm run audit:implementation",
+  "npm run audit:scheduled-worker",
+  "node scripts/pantavion-vscode-real-implementation-gate.cjs",
+  "npm run typecheck",
+  "npm run build",
   "pull_request",
   "push",
   "workflow_dispatch",
