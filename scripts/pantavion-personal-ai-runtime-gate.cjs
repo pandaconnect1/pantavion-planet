@@ -42,6 +42,7 @@ expect('core/intelligence/personal-ai-runtime.ts', [
   'personal_ai_relationship_contexts',
   'truthState = "BLOCKED"',
   'HANDS-FREE DRIVING MODE',
+  'disallowPromptTraining: true',
 ]);
 
 for (const route of [
@@ -58,10 +59,20 @@ expect('app/api/personal-ai/execute/route.ts', ['executePersonalAI', 'executionS
 expect('app/api/personal-ai/memory/route.ts', ['deleted_at', 'user_explicit']);
 expect('app/api/personal-ai/items/route.ts', ['birthday', 'appointment', 'reminder', 'follow_up']);
 expect('app/api/personal-ai/relationships/route.ts', ['relationship_type', 'subject_key']);
+expect('app/my-ai/page.tsx', ['auth.getUser()', 'redirect("/auth/login?next=/my-ai")', 'PersonalAIConsole']);
+expect('app/my-ai/PersonalAIConsole.tsx', [
+  '/api/personal-ai/execute',
+  '/api/personal-ai/memory',
+  '/api/personal-ai/items',
+  '/api/personal-ai/relationships',
+  'Νέο νήμα με ίδια μνήμη',
+  'handoffFrom',
+  'handsFree',
+]);
 
 console.log(JSON.stringify({
   ok: true,
   gate: 'pantavion-personal-ai-runtime',
   checked: checks.length,
-  truth: 'This gate verifies implementation contracts and safety boundaries. It does not claim provider or production deployment availability.',
+  truth: 'This gate verifies implementation contracts, authenticated UI wiring and safety boundaries. It does not claim provider or production deployment availability.',
 }, null, 2));
