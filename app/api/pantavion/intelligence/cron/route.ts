@@ -1,6 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { runPantavionCloudCronTick } from "@/core/intelligence/pantavion-intelligence-ledger";
+import { runPantavionFoundryTick } from "@/core/kernel/pantavion-foundry-runtime";
 import { runSecureScheduledWorker } from "@/core/runtime/secure-scheduled-worker";
 
 export const runtime = "nodejs";
@@ -63,6 +64,8 @@ async function executeScheduledTick(
       "pantavion-intelligence-hourly",
       async () => {
         const tick = await runPantavionCloudCronTick(source);
+        const foundry = await runPantavionFoundryTick();
+
         return {
           ok: tick.ok,
           route: tick.route,
@@ -71,6 +74,7 @@ async function executeScheduledTick(
           buildQueueCount: tick.ledgerEvent.buildQueueCount,
           ledgerStatus: tick.ledgerEvent.status,
           ledgerStorageMode: tick.ledgerEvent.storageMode,
+          foundry,
         };
       },
     );
@@ -83,6 +87,8 @@ async function executeScheduledTick(
         concurrency: "Supabase atomic lease prevents overlapping executions",
         idempotency: "one run key per worker per UTC hour",
         audit: "durable run status and bounded summary stored in Supabase",
+        foundry:
+          "runs only Pantavion-owned internal agents when its durable queue and runtime configuration are present",
         destructiveActions: "disabled",
       },
     });

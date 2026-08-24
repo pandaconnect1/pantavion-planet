@@ -60,6 +60,26 @@ function recordFromRow(row: ExecutionRow, checkpoints: CheckpointRow[]): Pantavi
 }
 
 export class PantavionSupabaseDurableExecutionStore implements PantavionDurableExecutionStore {
+  /**
+   * Atomically claims a queued execution through the server-only SQL function.
+   * This prevents two scheduler ticks from starting the same internal agent.
+   */
+  async claim(
+    executionId: string,
+    expectedStatuses: PantavionDurableExecutionRecord["status"][] = ["queued"],
+  ) {
+    const admin = createAdminClient();
+    const claimed = await admin.rpc("pantavion_claim_durable_execution", {
+      p_execution_id: executionId,
+      p_expected_statuses: expectedStatuses,
+    });
+
+    if (claimed.error) throw claimed.error;
+    if (claimed.data !== true) return null;
+
+    return this.get(executionId);
+  }
+
   async get(executionId: string) {
     const admin = createAdminClient();
     const execution = await admin
