@@ -1,0 +1,41 @@
+name: Pantavion Personal AI Runtime
+
+on:
+  pull_request:
+    paths:
+      - 'core/intelligence/personal-ai-runtime.ts'
+      - 'app/api/personal-ai/**'
+      - 'app/my-ai/**'
+      - 'supabase/migrations/*personal_ai_runtime_v1.sql'
+      - 'scripts/pantavion-personal-ai-runtime-gate.cjs'
+      - '.github/workflows/pantavion-personal-ai-runtime.yml'
+  push:
+    branches: [main, feature/personal-ai-runtime-v1]
+    paths:
+      - 'core/intelligence/personal-ai-runtime.ts'
+      - 'app/api/personal-ai/**'
+      - 'app/my-ai/**'
+      - 'supabase/migrations/*personal_ai_runtime_v1.sql'
+      - 'scripts/pantavion-personal-ai-runtime-gate.cjs'
+      - '.github/workflows/pantavion-personal-ai-runtime.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-personal-ai:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Personal AI implementation gate
+        run: node scripts/pantavion-personal-ai-runtime-gate.cjs
+      - name: TypeScript
+        run: npm run typecheck
+      - name: Production build
+        run: npm run build
