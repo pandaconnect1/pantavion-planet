@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 
+import KernelWorkOrderClient from "./kernel-work-order-client";
+
 type KernelApiKey = "heartbeat" | "gap" | "product" | "research" | "waterHistory";
 
 interface KernelApiTarget {
@@ -222,6 +224,8 @@ export default function KernelLivePanelClient() {
           </a>
         </div>
       </section>
+
+      <KernelWorkOrderClient />
 
       <section className="mx-auto mt-8 grid max-w-7xl gap-6 lg:grid-cols-[420px_1fr]">
         <div className="space-y-4">
