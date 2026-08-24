@@ -1,2 +1,1 @@
-recovery/donor-repositories/pantavion-one/app/layout.tsx(2,38): error TS7031: Binding element 'children' implicitly has an 'any' type.
-
+TSC PASSED
