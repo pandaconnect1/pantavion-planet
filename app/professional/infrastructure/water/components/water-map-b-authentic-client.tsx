@@ -88,8 +88,8 @@ export default function WaterMapBAuthenticClient() {
       try {
         if (!cadContainerRef.current) return;
 
-        const module = await importBrowserModule(CAD_VIEWER_MODULE_URL);
-        const AcApDocManager = module?.AcApDocManager;
+        const cadViewerModule = await importBrowserModule(CAD_VIEWER_MODULE_URL);
+        const AcApDocManager = cadViewerModule?.AcApDocManager;
         if (!AcApDocManager) throw new Error("CAD_VIEWER_MODULE_NOT_AVAILABLE");
         if (cancelled || !cadContainerRef.current) return;
 
