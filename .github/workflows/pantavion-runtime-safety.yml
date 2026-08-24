@@ -33,5 +33,30 @@ jobs:
       - name: Verify translation worker contract
         run: node scripts/pantavion-translation-worker-gate.cjs
 
-      - name: Run Pantavion runtime safety verification
-        run: npm run verify:runtime-safety
+      - name: Verify water network lock
+        run: npm run audit:water:network-lock
+
+      - name: Verify implementation evidence
+        run: npm run audit:implementation
+
+      - name: Verify secure scheduled worker
+        run: npm run audit:scheduled-worker
+
+      - name: Verify real implementation gate
+        run: node scripts/pantavion-vscode-real-implementation-gate.cjs
+
+      - name: Typecheck
+        shell: bash
+        run: |
+          set +e
+          npm run typecheck 2>&1 | tee typecheck.log
+          status=${PIPESTATUS[0]}
+          if [ "${status}" -ne 0 ]; then
+            head -n 20 typecheck.log | sed 's/%/%25/g' | while IFS= read -r line; do
+              echo "::error title=TypeScript compiler::${line}"
+            done
+            exit "${status}"
+          fi
+
+      - name: Production build
+        run: npm run build
