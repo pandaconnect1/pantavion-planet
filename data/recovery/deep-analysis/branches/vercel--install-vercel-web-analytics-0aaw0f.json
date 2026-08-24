@@ -1,0 +1,140 @@
+{
+  "id": "PANT-BRANCH-58BCE8B274D9",
+  "sourceRef": "recovery/snapshots/vercel--install-vercel-web-analytics-0aaw0f",
+  "headSha": "aed7852b6800dd443539becec48a237433a91af1",
+  "mergeBase": "0e9585ef98d3b1f176871ae13c64cd848d6a5b38",
+  "behindMainBy": 962,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 3,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "chat-translation": 2,
+    "maps-water": 2,
+    "ai-kernel": 2,
+    "recovery-continuity": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 3
+  },
+  "kindCounts": {
+    "ui-layout": 1,
+    "configuration-data": 2
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 2,
+    "ABSENT_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/layout.tsx",
+      "previousPath": null,
+      "kind": "ui-layout",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/vercel--install-vercel-web-analytics-0aaw0f/app/layout.tsx",
+      "blobSha": "47b26582bf3d6cf90ba53514d6c1533b86d36773",
+      "sizeBytes": 2471,
+      "mainBlobSha": "91adae180be8fcce4ba36a89bbc8641f95881e91",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 110,
+      "contentSha256": "0204a6234f64ff8ae08c0c0ef208d28b90d19a0b8afb2efd1a0275a46433acfa",
+      "imports": [
+        "next",
+        "@vercel/analytics/next"
+      ],
+      "exports": [
+        "metadata",
+        "viewport",
+        "RootLayout"
+      ],
+      "envDependencies": [
+        "NEXT_PUBLIC_SITE_URL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "package-lock.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/vercel--install-vercel-web-analytics-0aaw0f/package-lock.json",
+      "blobSha": "e4ca0e5f7d22233c896562c52f097d0a79f2d9eb",
+      "sizeBytes": 72814,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 2177,
+      "contentSha256": "3ef7e986d99e11688fb168afa4f4286bc6dc799e57dbd53c5508abd7241d78d6",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/vercel--install-vercel-web-analytics-0aaw0f/package.json",
+      "blobSha": "971b134fdf1f612325bf1aec1585d44113ce79da",
+      "sizeBytes": 500,
+      "mainBlobSha": "f3147714826462b5c76338ad6bcfb831d6df5a06",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 25,
+      "contentSha256": "be93e103d5e815b27235616a2d57ca1dc4f870fb745a096b1d0365bf8b2334cd",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

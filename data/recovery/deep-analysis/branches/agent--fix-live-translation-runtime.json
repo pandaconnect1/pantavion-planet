@@ -1,0 +1,113 @@
+{
+  "id": "PANT-BRANCH-D2D9ACC4DA26",
+  "sourceRef": "recovery/snapshots/agent--fix-live-translation-runtime",
+  "headSha": "90ef49e9efa5ba5f89d3f740c6d3b5e54107d5a3",
+  "mergeBase": "2bbd3438e5c081c8e5129f29216a4bb48558a071",
+  "behindMainBy": 512,
+  "aheadOfMainBy": 6,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "identity-security": 1,
+    "chat-translation": 2,
+    "maps-water": 1,
+    "ai-kernel": 2
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "source-code": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1,
+    "IDENTICAL_TO_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/pantavion/translate/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--fix-live-translation-runtime/app/api/pantavion/translate/route.ts",
+      "blobSha": "8411c2cd4893c0fc5b2b23d709fbb5a8b43aeaf6",
+      "sizeBytes": 4650,
+      "mainBlobSha": "9795c2f097afdaa0223df2f4762744d32c3c1551",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 158,
+      "contentSha256": "16750e3d60280db26488f0c59bcdf0f19db48badaa7876657b2b0df5ca1acc9d",
+      "imports": [
+        "next/server",
+        "@/core/translation/pantavion-universal-translation-runtime",
+        "@/core/translation/pantavion-translation-provider-adapters",
+        "@/core/translation/pantavion-public-text-fallback"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [
+        "OPENAI_API_KEY",
+        "PANTAVION_TRANSLATE_ENDPOINT",
+        "PANTAVION_TRANSLATE_PROVIDER",
+        "PANTAVION_TRANSLATION_MODEL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/translation/pantavion-public-text-fallback.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/agent--fix-live-translation-runtime/core/translation/pantavion-public-text-fallback.ts",
+      "blobSha": "ac33790130ebd4acbb1d8f65b95b3883de1664e7",
+      "sizeBytes": 3176,
+      "mainBlobSha": "ac33790130ebd4acbb1d8f65b95b3883de1664e7",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 108,
+      "contentSha256": "6160aa900fd86d5f420aab16ccc8805f918502751a047a2608b1ca69d947c59b",
+      "imports": [
+        "./pantavion-translation-provider-router"
+      ],
+      "exports": [
+        "translateWithPantavionPublicTextFallback"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 6
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel"
+      ]
+    }
+  ]
+}

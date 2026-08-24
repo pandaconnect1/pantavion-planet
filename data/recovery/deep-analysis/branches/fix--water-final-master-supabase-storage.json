@@ -1,0 +1,228 @@
+{
+  "id": "PANT-BRANCH-D573D0E4B8E9",
+  "sourceRef": "recovery/snapshots/fix--water-final-master-supabase-storage",
+  "headSha": "4a88eca84d307de71e41aa2fe45db793240a4059",
+  "mergeBase": "2c41ee12f1889acf5e5c4ddb6430df0cd78e7dd9",
+  "behindMainBy": 193,
+  "aheadOfMainBy": 5,
+  "changedFileCount": 5,
+  "topicCounts": {
+    "identity-security": 3,
+    "chat-translation": 3,
+    "maps-water": 5,
+    "ai-kernel": 2,
+    "infrastructure-deployment": 2,
+    "media-music": 2
+  },
+  "kindCounts": {
+    "api-route": 2,
+    "source-code": 2,
+    "ui-page": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 2,
+    "IDENTICAL_TO_MAIN": 3
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/final-master-dwg/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/fix--water-final-master-supabase-storage/app/api/professional/infrastructure/water/final-master-dwg/route.ts",
+      "blobSha": "e4ac74c44cbe42720ed3db66a6f84027af1134fd",
+      "sizeBytes": 2007,
+      "mainBlobSha": "98971ae69e681e352b53a54ff653bc1f2f579320",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 67,
+      "contentSha256": "0199d33df19fd2a2872a128e8deeba755d93e0ab61049e08c29880d435dc372b",
+      "imports": [
+        "@/core/security/water-admin-session",
+        "@/core/water/final-master-dwg-source",
+        "@/lib/supabase/admin"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/professional/infrastructure/water/final-master-dwg/upload-url/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/fix--water-final-master-supabase-storage/app/api/professional/infrastructure/water/final-master-dwg/upload-url/route.ts",
+      "blobSha": "834d266d2015c28703230083c43eb70e7a1d7647",
+      "sizeBytes": 1963,
+      "mainBlobSha": "834d266d2015c28703230083c43eb70e7a1d7647",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 63,
+      "contentSha256": "612b2b290c7b04ceb2c9f9353f05fa9d4bf5178b94d615217887aff2aa6cae75",
+      "imports": [
+        "@/core/security/water-admin-session",
+        "@/core/water/final-master-dwg-source",
+        "@/lib/supabase/admin"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/professional/infrastructure/water/final-master-dwg/final-master-dwg-uploader.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/fix--water-final-master-supabase-storage/app/professional/infrastructure/water/final-master-dwg/final-master-dwg-uploader.tsx",
+      "blobSha": "6b04dd30d88f2f953c85fe78815311744918fc72",
+      "sizeBytes": 4683,
+      "mainBlobSha": "e06d73d845a237ce1db9322d994af6b89c54611d",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 163,
+      "contentSha256": "fff8590e8b309eed61e57c2fe1587418ae2ca651158559748198ab6a775ba441",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "FinalMasterDwgUploader"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "media-music"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/final-master-dwg/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/fix--water-final-master-supabase-storage/app/professional/infrastructure/water/final-master-dwg/page.tsx",
+      "blobSha": "4f889a87326a731b1b157d33b5822fb5a4b66aa7",
+      "sizeBytes": 2302,
+      "mainBlobSha": "4f889a87326a731b1b157d33b5822fb5a4b66aa7",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 69,
+      "contentSha256": "71650641c8c0f9d589d22c1b2eb5e85117ce48bad558a02e3886f55c2693d4df",
+      "imports": [
+        "@/core/water/final-master-dwg-source",
+        "./final-master-dwg-uploader"
+      ],
+      "exports": [
+        "dynamic",
+        "FinalMasterDwgPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "core/water/final-master-dwg-source.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/fix--water-final-master-supabase-storage/core/water/final-master-dwg-source.ts",
+      "blobSha": "80ef3310721ceb9071742761b88236f3164b6838",
+      "sizeBytes": 452,
+      "mainBlobSha": "80ef3310721ceb9071742761b88236f3164b6838",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 7,
+      "contentSha256": "046844d6226ae8519a5005b41fc5e89e6da164313238c68e4f677a8f5cd8aea5",
+      "imports": [],
+      "exports": [
+        "FINAL_MASTER_DWG_FILE_NAME",
+        "FINAL_MASTER_DWG_SIZE_BYTES",
+        "FINAL_MASTER_DWG_SHA256",
+        "FINAL_MASTER_DWG_STORAGE_BUCKET",
+        "FINAL_MASTER_DWG_STORAGE_PATH"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "media-music"
+      ]
+    }
+  ]
+}

@@ -79,7 +79,7 @@ const report = {
     "Offline phrase packs for SOS and travel",
     "Social, work, media, marketplace, education, SOS integration"
   ],
-  findings: findings.slice(0, 1500)
+  findings
 };
 
 fs.writeFileSync(

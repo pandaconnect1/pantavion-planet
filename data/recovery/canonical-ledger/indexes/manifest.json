@@ -1,0 +1,120 @@
+{
+  "id": "pantavion_corpus_indexes_v1",
+  "generatedAt": "2026-08-23T15:56:03.709Z",
+  "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d",
+  "totalRecords": 82413,
+  "totalBatches": 55,
+  "totals": {
+    "records": 82413,
+    "duplicatesExact": 20816,
+    "reviewRequired": 24701,
+    "classified": 57712
+  },
+  "modules": [
+    {
+      "module": "Chat",
+      "totalRecords": 2177,
+      "file": "modules/chat.json"
+    },
+    {
+      "module": "Identity / Auth / Consent",
+      "totalRecords": 2542,
+      "file": "modules/identity-auth-consent.json"
+    },
+    {
+      "module": "Interpreter / Translation",
+      "totalRecords": 4976,
+      "file": "modules/interpreter-translation.json"
+    },
+    {
+      "module": "Kernel / Guardian / Runtime",
+      "totalRecords": 6927,
+      "file": "modules/kernel-guardian-runtime.json"
+    },
+    {
+      "module": "Learning / Knowledge",
+      "totalRecords": 353,
+      "file": "modules/learning-knowledge.json"
+    },
+    {
+      "module": "Maps / World / Water",
+      "totalRecords": 12678,
+      "file": "modules/maps-world-water.json"
+    },
+    {
+      "module": "Marketplace / Work / Business",
+      "totalRecords": 2474,
+      "file": "modules/marketplace-work-business.json"
+    },
+    {
+      "module": "Music / Media / Creation",
+      "totalRecords": 422,
+      "file": "modules/music-media-creation.json"
+    },
+    {
+      "module": "People",
+      "totalRecords": 2700,
+      "file": "modules/people.json"
+    },
+    {
+      "module": "Personal AI / PantaAI",
+      "totalRecords": 24662,
+      "file": "modules/personal-ai-pantaai.json"
+    },
+    {
+      "module": "Resilience / Offline / Infrastructure",
+      "totalRecords": 957,
+      "file": "modules/resilience-offline-infrastructure.json"
+    },
+    {
+      "module": "Safety / Trust / Minors",
+      "totalRecords": 14236,
+      "file": "modules/safety-trust-minors.json"
+    },
+    {
+      "module": "Social / Pulse / Communities",
+      "totalRecords": 1864,
+      "file": "modules/social-pulse-communities.json"
+    },
+    {
+      "module": "SOS / Crisis",
+      "totalRecords": 2776,
+      "file": "modules/sos-crisis.json"
+    },
+    {
+      "module": "UNCLASSIFIED",
+      "totalRecords": 1289,
+      "file": "modules/unclassified.json"
+    },
+    {
+      "module": "Voice / Video",
+      "totalRecords": 1380,
+      "file": "modules/voice-video.json"
+    }
+  ],
+  "implementationStages": [
+    {
+      "implementationStage": "CODE_PRESENT_UNVERIFIED",
+      "totalRecords": 60679,
+      "file": "implementation-stages/code-present-unverified.json"
+    },
+    {
+      "implementationStage": "GAP_OR_BLOCKER",
+      "totalRecords": 11867,
+      "file": "implementation-stages/gap-or-blocker.json"
+    },
+    {
+      "implementationStage": "IDEA_OR_SPECIFICATION",
+      "totalRecords": 9741,
+      "file": "implementation-stages/idea-or-specification.json"
+    },
+    {
+      "implementationStage": "LIVE_EVIDENCE_REQUIRES_VERIFICATION",
+      "totalRecords": 126,
+      "file": "implementation-stages/live-evidence-requires-verification.json"
+    }
+  ],
+  "truth": "Indexes point to the single permanent corpus copy by batch and ordinal. Implementation stages are evidence classifications, not claims of live functionality.",
+  "verifiedLive": false,
+  "deleteAllowed": false
+}

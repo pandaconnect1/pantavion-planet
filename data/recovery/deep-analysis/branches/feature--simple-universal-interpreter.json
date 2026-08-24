@@ -1,0 +1,155 @@
+{
+  "id": "PANT-BRANCH-0A21CDF5575D",
+  "sourceRef": "recovery/snapshots/feature--simple-universal-interpreter",
+  "headSha": "1101d8549a9ed95ae7d3ea291e4d387b6e51fcb7",
+  "mergeBase": "2f8e042fb9b9ab11867031cedeb82edfe6e87b95",
+  "behindMainBy": 511,
+  "aheadOfMainBy": 8,
+  "changedFileCount": 3,
+  "topicCounts": {
+    "identity-security": 3,
+    "chat-translation": 3,
+    "maps-water": 2,
+    "ai-kernel": 2,
+    "media-music": 2
+  },
+  "kindCounts": {
+    "api-route": 2,
+    "ui-page": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 3
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/pantavion/detect-language/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--simple-universal-interpreter/app/api/pantavion/detect-language/route.ts",
+      "blobSha": "afdbc71dbfae04fd8fc92f72cc9e1efdd907145d",
+      "sizeBytes": 3921,
+      "mainBlobSha": "a254d75f764d1d9aa6817846165d75f6793a4717",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 122,
+      "contentSha256": "19567790b3f6fb9d0143ee78024cda3a7d7f9c8df18e0a9b641f118466ef4eb7",
+      "imports": [
+        "next/server"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "revalidate",
+        "POST"
+      ],
+      "envDependencies": [
+        "OPENAI_API_KEY",
+        "PANTAVION_TRANSLATION_MODEL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/pantavion/transcribe/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--simple-universal-interpreter/app/api/pantavion/transcribe/route.ts",
+      "blobSha": "aea53279ac53bc21e3a0582ce349277c9fd9323a",
+      "sizeBytes": 2527,
+      "mainBlobSha": "ae89302f5bda1feb74ca108588a4f672aaaddac8",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 89,
+      "contentSha256": "e6f2bdcc7f74af6e8a51f14e7fdd91cca19810a6192050fde60c494fbcde7ccb",
+      "imports": [
+        "next/server"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "revalidate",
+        "POST"
+      ],
+      "envDependencies": [
+        "OPENAI_API_KEY",
+        "PANTAVION_TRANSCRIPTION_MODEL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel",
+        "media-music"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/translate/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--simple-universal-interpreter/app/translate/page.tsx",
+      "blobSha": "8405e100eebae1f6b34b893e968968df8438d5da",
+      "sizeBytes": 21639,
+      "mainBlobSha": "380e32c04e8ea146a04225a866895eddafb43933",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 540,
+      "contentSha256": "ac8eda8f4dd4ed4a1b9b32861765974d4997f00c84aa084ee93435eaeecefbde",
+      "imports": [
+        "next/link",
+        "react"
+      ],
+      "exports": [
+        "TranslatePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "media-music"
+      ]
+    }
+  ]
+}

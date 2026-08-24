@@ -1,0 +1,1008 @@
+{
+  "manifest": {
+    "id": "pantavion_priority_products_and_innovation_registry_v1",
+    "generatedAt": "2026-08-23T16:15:50.629Z",
+    "totalRecords": 11744,
+    "modules": [
+      {
+        "module": "Interpreter / Translation",
+        "totalRecords": 4976,
+        "file": "interpreter-translation.json"
+      },
+      {
+        "module": "Chat",
+        "totalRecords": 2177,
+        "file": "chat.json"
+      },
+      {
+        "module": "People",
+        "totalRecords": 2700,
+        "file": "people.json"
+      },
+      {
+        "module": "Social / Pulse / Communities",
+        "totalRecords": 1864,
+        "file": "social-pulse-communities.json"
+      },
+      {
+        "module": "Dating",
+        "totalRecords": 27,
+        "file": "dating.json"
+      }
+    ],
+    "innovationCandidates": 6,
+    "datingSemanticCandidates": 27,
+    "truth": "Innovation candidates are evidence-indexed working hypotheses, not unverified grant claims.",
+    "verifiedLive": false,
+    "deleteAllowed": false
+  },
+  "innovations": [
+    {
+      "module": "Interpreter / Translation",
+      "innovationCandidate": "Interpreter / Translation",
+      "evidenceRecords": 4976,
+      "codeEvidenceUnverified": 2834,
+      "liveEvidenceRequiresVerification": 9,
+      "gapsOrBlockers": 1248,
+      "evidenceStrength": "LIVE_EVIDENCE_REQUIRES_VERIFICATION",
+      "sourcePointers": [
+        {
+          "id": "pk_386805aa82525f71a5f3ea16",
+          "batch": "batch-d.json",
+          "ordinal": 4720,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_7bb199af2e688a474f8940ad",
+          "batch": "batch-d.json",
+          "ordinal": 4721,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_984777976783dd06644a5db4",
+          "batch": "batch-d.json",
+          "ordinal": 4722,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_ee9ef0bc31a5bdbbe9145ce6",
+          "batch": "batch-d.json",
+          "ordinal": 4723,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_3aa165850b2ffcddfad6b7be",
+          "batch": "batch-d.json",
+          "ordinal": 4724,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_37a8a5f78ca9aa4aaec8341b",
+          "batch": "batch-d.json",
+          "ordinal": 4725,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_f56ed4e22b2c7c83d72fe7a5",
+          "batch": "batch-d.json",
+          "ordinal": 4726,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_86d5feca8bea953800d94807",
+          "batch": "batch-d.json",
+          "ordinal": 4727,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_612a9a0a3cd119563fa2fef2",
+          "batch": "batch-d.json",
+          "ordinal": 4728,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_09f53f351aabe855243cffef",
+          "batch": "batch-d.json",
+          "ordinal": 4729,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_23f77f3533edf54f58c77d97",
+          "batch": "batch-d.json",
+          "ordinal": 4730,
+          "sourceFile": ".github/workflows/pantavion-runtime-safety.yml",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_c0f94b3839fbf9ac155f145c",
+          "batch": "batch-d.json",
+          "ordinal": 4731,
+          "sourceFile": "app/_pantavion/ui.tsx",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_f13ad9000e26dc87ddcf7d7c",
+          "batch": "batch-d.json",
+          "ordinal": 4732,
+          "sourceFile": "app/_pantavion/ui.tsx",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_c54f16013ba2bb6e26a5dd53",
+          "batch": "batch-d.json",
+          "ordinal": 4733,
+          "sourceFile": "app/_pantavion/ui.tsx",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_835d20ef3a512e72bced2757",
+          "batch": "batch-d.json",
+          "ordinal": 4734,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_9b8f08566b7253bc755e367c",
+          "batch": "batch-d.json",
+          "ordinal": 4735,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_9a945061ad121ff03a60b860",
+          "batch": "batch-d.json",
+          "ordinal": 4736,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_25a542a8196b710dd0db78aa",
+          "batch": "batch-d.json",
+          "ordinal": 4737,
+          "sourceFile": "app/admin/moderation/page.tsx",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_ce1793fc4a129e68785ed6ae",
+          "batch": "batch-d.json",
+          "ordinal": 4738,
+          "sourceFile": "app/admin/moderation/page.tsx",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_d2ffdc7fdda4e53224052c62",
+          "batch": "batch-d.json",
+          "ordinal": 4739,
+          "sourceFile": "app/admin/moderation/page.tsx",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_03d701780568b261b49d467f",
+          "batch": "batch-d.json",
+          "ordinal": 4740,
+          "sourceFile": "app/advertise/page.tsx",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_f2e948397dbd01ba3b7f125a",
+          "batch": "batch-d.json",
+          "ordinal": 4741,
+          "sourceFile": "app/advertise/page.tsx",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_c2c0a2100fe9bd7da1d82708",
+          "batch": "batch-d.json",
+          "ordinal": 4742,
+          "sourceFile": "app/advertise/page.tsx",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_8f9d7d90a28c262910cb7b1e",
+          "batch": "batch-d.json",
+          "ordinal": 4743,
+          "sourceFile": "app/api/admin/moderation/listings/route.ts",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        },
+        {
+          "id": "pk_d53b2b2d7ad6ebd43a7b9e8e",
+          "batch": "batch-d.json",
+          "ordinal": 4744,
+          "sourceFile": "app/api/admin/moderation/listings/route.ts",
+          "canonicalTarget": "canonical-module:Interpreter / Translation"
+        }
+      ],
+      "grantClaimAllowed": false,
+      "nextRequirement": "Run production E2E verification and capture dated evidence"
+    },
+    {
+      "module": "Chat",
+      "innovationCandidate": "Chat",
+      "evidenceRecords": 2177,
+      "codeEvidenceUnverified": 1148,
+      "liveEvidenceRequiresVerification": 5,
+      "gapsOrBlockers": 536,
+      "evidenceStrength": "LIVE_EVIDENCE_REQUIRES_VERIFICATION",
+      "sourcePointers": [
+        {
+          "id": "pk_56122fe6e6b7adb3f41941b1",
+          "batch": "batch-a.json",
+          "ordinal": 1,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_255ede429407e529e5e76e24",
+          "batch": "batch-a.json",
+          "ordinal": 2,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_b106fce698170f79a51839c1",
+          "batch": "batch-a.json",
+          "ordinal": 3,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_f21f98baa6db62168bb1bc51",
+          "batch": "batch-a.json",
+          "ordinal": 4,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_4904b8299995b7cd374dedce",
+          "batch": "batch-a.json",
+          "ordinal": 5,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_cd7c708716573edf67d6b4dc",
+          "batch": "batch-a.json",
+          "ordinal": 6,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_f2476b654dcab35da2c9747c",
+          "batch": "batch-a.json",
+          "ordinal": 7,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_5231b5d1cb971661f1e7af34",
+          "batch": "batch-a.json",
+          "ordinal": 8,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_e29c18c242545b52cb7017dc",
+          "batch": "batch-a.json",
+          "ordinal": 9,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_b9306d6eee0d1e1987cdd9c3",
+          "batch": "batch-a.json",
+          "ordinal": 10,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_991a1eff63d58a4986d0bb9e",
+          "batch": "batch-a.json",
+          "ordinal": 11,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_8ce0c4eb9a3fcebab419a076",
+          "batch": "batch-a.json",
+          "ordinal": 12,
+          "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_bc8427f43e8d1b3b10be4d8a",
+          "batch": "batch-a.json",
+          "ordinal": 13,
+          "sourceFile": "app/api/admin/moderation/listings/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_746c3cca274ad80f77dc15bf",
+          "batch": "batch-a.json",
+          "ordinal": 14,
+          "sourceFile": "app/api/admin/moderation/listings/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_3e1c95c35eb94386fe417485",
+          "batch": "batch-a.json",
+          "ordinal": 15,
+          "sourceFile": "app/api/admin/moderation/listings/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_6ff610cf74cd780cde454a6d",
+          "batch": "batch-a.json",
+          "ordinal": 16,
+          "sourceFile": "app/api/admin/moderation/listings/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_e808dabe9544371ee50e316a",
+          "batch": "batch-a.json",
+          "ordinal": 17,
+          "sourceFile": "app/api/admin/moderation/listings/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_094f08e9b651bc8b92df427d",
+          "batch": "batch-a.json",
+          "ordinal": 18,
+          "sourceFile": "app/api/admin/moderation/listings/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_74f4047f8dd637e5f59a2d7d",
+          "batch": "batch-a.json",
+          "ordinal": 19,
+          "sourceFile": "app/api/emergency/partner-interest/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_44282a91181442d02f472b1a",
+          "batch": "batch-a.json",
+          "ordinal": 20,
+          "sourceFile": "app/api/emergency/partner-interest/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_2d469a77eab43d3d72cc9b55",
+          "batch": "batch-a.json",
+          "ordinal": 21,
+          "sourceFile": "app/api/emergency/partner-interest/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_2ae461532691c03c04391cf3",
+          "batch": "batch-a.json",
+          "ordinal": 22,
+          "sourceFile": "app/api/emergency/partner-interest/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_75e535d59152a6f6d3227c4f",
+          "batch": "batch-a.json",
+          "ordinal": 23,
+          "sourceFile": "app/api/emergency/partner-interest/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_981a4f042d664a4bfdea773a",
+          "batch": "batch-a.json",
+          "ordinal": 24,
+          "sourceFile": "app/api/emergency/partner-interest/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        },
+        {
+          "id": "pk_b0e6687bedd2e953776b23ff",
+          "batch": "batch-a.json",
+          "ordinal": 25,
+          "sourceFile": "app/api/emergency/partner-interest/route.ts",
+          "canonicalTarget": "canonical-module:Chat"
+        }
+      ],
+      "grantClaimAllowed": false,
+      "nextRequirement": "Run production E2E verification and capture dated evidence"
+    },
+    {
+      "module": "People",
+      "innovationCandidate": "People",
+      "evidenceRecords": 2700,
+      "codeEvidenceUnverified": 1409,
+      "liveEvidenceRequiresVerification": 20,
+      "gapsOrBlockers": 710,
+      "evidenceStrength": "LIVE_EVIDENCE_REQUIRES_VERIFICATION",
+      "sourcePointers": [
+        {
+          "id": "pk_d51cbe4939bc388f49ff93e9",
+          "batch": "batch-v.json",
+          "ordinal": 32550,
+          "sourceFile": "app/advertise/page.tsx",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_6ab7500d5c84ad67562c550e",
+          "batch": "batch-v.json",
+          "ordinal": 32551,
+          "sourceFile": "app/advertise/page.tsx",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_92e3f9399ea64343b2b2e732",
+          "batch": "batch-v.json",
+          "ordinal": 32552,
+          "sourceFile": "app/advertise/page.tsx",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_39c8c93e8ed061b2c9d4340d",
+          "batch": "batch-v.json",
+          "ordinal": 32553,
+          "sourceFile": "app/api/contacts/import/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_5cb4becabda97128989612bc",
+          "batch": "batch-v.json",
+          "ordinal": 32554,
+          "sourceFile": "app/api/contacts/import/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_cdc37a4967b3947e1f08661d",
+          "batch": "batch-v.json",
+          "ordinal": 32555,
+          "sourceFile": "app/api/contacts/import/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_8ed31c84dc0bf40fa06975bd",
+          "batch": "batch-v.json",
+          "ordinal": 32556,
+          "sourceFile": "app/api/listings/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_15ab484ec5ca6102be347d1d",
+          "batch": "batch-v.json",
+          "ordinal": 32557,
+          "sourceFile": "app/api/listings/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_9f0b7f1264b254fb5b30ee71",
+          "batch": "batch-v.json",
+          "ordinal": 32558,
+          "sourceFile": "app/api/listings/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_77fc540a6b5393717e661754",
+          "batch": "batch-v.json",
+          "ordinal": 32559,
+          "sourceFile": "app/api/owner/safety/dossier/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_6a529f979e8d33f5cb3d4aef",
+          "batch": "batch-v.json",
+          "ordinal": 32560,
+          "sourceFile": "app/api/owner/safety/dossier/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_851b205d687b1fb6e4da42f1",
+          "batch": "batch-v.json",
+          "ordinal": 32561,
+          "sourceFile": "app/api/owner/safety/dossier/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_b8e948518cdcf823904c95d3",
+          "batch": "batch-v.json",
+          "ordinal": 32562,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_d18e6bea3e6a1da109105706",
+          "batch": "batch-v.json",
+          "ordinal": 32563,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_0d99830a052cdfc0b751ac3e",
+          "batch": "batch-v.json",
+          "ordinal": 32564,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_4a90586e5db0840240329657",
+          "batch": "batch-v.json",
+          "ordinal": 32565,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_c1f59528c4b467ee41f52697",
+          "batch": "batch-v.json",
+          "ordinal": 32566,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_ee69dfc40fe2fcd34c8e2613",
+          "batch": "batch-v.json",
+          "ordinal": 32567,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_0075294314b4c84bf49f2e8c",
+          "batch": "batch-v.json",
+          "ordinal": 32568,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_28e4760f0108f731e756c6b0",
+          "batch": "batch-v.json",
+          "ordinal": 32569,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_2d3294fd19a0eb7eae0ea3e5",
+          "batch": "batch-v.json",
+          "ordinal": 32570,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_e8ecea196928dafdf2a00f9e",
+          "batch": "batch-v.json",
+          "ordinal": 32571,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_2bf87960fcfa33cb1931feda",
+          "batch": "batch-v.json",
+          "ordinal": 32572,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_bce3c6753241d471e6640470",
+          "batch": "batch-v.json",
+          "ordinal": 32573,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_89073790cf32b9676b2f7615",
+          "batch": "batch-v.json",
+          "ordinal": 32574,
+          "sourceFile": "app/api/people/find-from-contacts/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        }
+      ],
+      "grantClaimAllowed": false,
+      "nextRequirement": "Run production E2E verification and capture dated evidence"
+    },
+    {
+      "module": "Social / Pulse / Communities",
+      "innovationCandidate": "Social / Pulse / Communities",
+      "evidenceRecords": 1864,
+      "codeEvidenceUnverified": 1382,
+      "liveEvidenceRequiresVerification": 4,
+      "gapsOrBlockers": 261,
+      "evidenceStrength": "LIVE_EVIDENCE_REQUIRES_VERIFICATION",
+      "sourcePointers": [
+        {
+          "id": "pk_81fb7023ed5c686f45a039ab",
+          "batch": "batch-y2.json",
+          "ordinal": 75105,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_993dcdccb5dc257e7f0d9623",
+          "batch": "batch-y2.json",
+          "ordinal": 75106,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_1701c7aa1d1e3c6e36952e5b",
+          "batch": "batch-y2.json",
+          "ordinal": 75107,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_89466c9069b20d1539a821d1",
+          "batch": "batch-y2.json",
+          "ordinal": 75108,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_8f5b1676b0118e7326f60fec",
+          "batch": "batch-y2.json",
+          "ordinal": 75109,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_a0d81002f6882d64628dd604",
+          "batch": "batch-y2.json",
+          "ordinal": 75110,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_d824ff36a9c07feaa335e276",
+          "batch": "batch-y2.json",
+          "ordinal": 75111,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_94991aab444e7e138848787e",
+          "batch": "batch-y2.json",
+          "ordinal": 75112,
+          "sourceFile": ".github/workflows/pantavion-production-sync-verify.yml",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_ddffbc00e2fd7cf3eb35f87b",
+          "batch": "batch-y2.json",
+          "ordinal": 75113,
+          "sourceFile": "app/api/admin/moderation/listings/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_e3d4a0e9a60053c68773dfd5",
+          "batch": "batch-y2.json",
+          "ordinal": 75114,
+          "sourceFile": "app/api/admin/moderation/listings/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_e6069b106c95bd1d401be8ad",
+          "batch": "batch-y2.json",
+          "ordinal": 75115,
+          "sourceFile": "app/api/admin/moderation/listings/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_022d8ad233a360083c0c108a",
+          "batch": "batch-y2.json",
+          "ordinal": 75116,
+          "sourceFile": "app/api/admission/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_bf874d50f2a146c270810e55",
+          "batch": "batch-y2.json",
+          "ordinal": 75117,
+          "sourceFile": "app/api/admission/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_4c3189c5fc7c773cffc675b6",
+          "batch": "batch-y2.json",
+          "ordinal": 75118,
+          "sourceFile": "app/api/admission/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_f243171943dbc3d05c1e19c7",
+          "batch": "batch-y2.json",
+          "ordinal": 75119,
+          "sourceFile": "app/api/billing/stripe/webhook/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_ba416d43dd7714a6e0215582",
+          "batch": "batch-y2.json",
+          "ordinal": 75120,
+          "sourceFile": "app/api/billing/stripe/webhook/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_4e3e53125390fc3c8c9096db",
+          "batch": "batch-y2.json",
+          "ordinal": 75121,
+          "sourceFile": "app/api/billing/stripe/webhook/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_ec3e2b7f6c9f9ec94a21ab9d",
+          "batch": "batch-y2.json",
+          "ordinal": 75122,
+          "sourceFile": "app/api/contacts/import/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_072942a867aabac7814291d7",
+          "batch": "batch-y2.json",
+          "ordinal": 75123,
+          "sourceFile": "app/api/contacts/import/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_7eb148832581eac16cdf2a58",
+          "batch": "batch-y2.json",
+          "ordinal": 75124,
+          "sourceFile": "app/api/contacts/import/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_179bb77325bce2e06c999585",
+          "batch": "batch-y2.json",
+          "ordinal": 75125,
+          "sourceFile": "app/api/emergency/partner-interest/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_49607c8191662dee92d61761",
+          "batch": "batch-y2.json",
+          "ordinal": 75126,
+          "sourceFile": "app/api/emergency/partner-interest/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_b842fc3cbce675cb929d8797",
+          "batch": "batch-y2.json",
+          "ordinal": 75127,
+          "sourceFile": "app/api/emergency/partner-interest/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_f6d63100b7770a14d4f35669",
+          "batch": "batch-y2.json",
+          "ordinal": 75128,
+          "sourceFile": "app/api/emergency/partner-interest/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        },
+        {
+          "id": "pk_5a0fb682b0592a683ff0c529",
+          "batch": "batch-y2.json",
+          "ordinal": 75129,
+          "sourceFile": "app/api/emergency/partner-interest/route.ts",
+          "canonicalTarget": "canonical-module:Social / Pulse / Communities"
+        }
+      ],
+      "grantClaimAllowed": false,
+      "nextRequirement": "Run production E2E verification and capture dated evidence"
+    },
+    {
+      "module": "Dating",
+      "innovationCandidate": "People",
+      "evidenceRecords": 15,
+      "codeEvidenceUnverified": 5,
+      "liveEvidenceRequiresVerification": 0,
+      "gapsOrBlockers": 5,
+      "evidenceStrength": "CODE_EVIDENCE_UNVERIFIED",
+      "sourcePointers": [
+        {
+          "id": "pk_66de7444808ee69674fc1d1c",
+          "batch": "batch-v.json",
+          "ordinal": 32577,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_5c63e27249b4b7f66cc7b247",
+          "batch": "batch-v.json",
+          "ordinal": 32578,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_f314531aabb0b46a83fdfe94",
+          "batch": "batch-v.json",
+          "ordinal": 32579,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_47d1ff0b56e4b635ed0d2780",
+          "batch": "batch-v.json",
+          "ordinal": 32580,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_014f7fcda53f8c2bfe9b95f4",
+          "batch": "batch-v.json",
+          "ordinal": 32581,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_78577f2495b87fdfde5445cb",
+          "batch": "batch-v.json",
+          "ordinal": 32582,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_cec8b606a1975841c60ff0a5",
+          "batch": "batch-v.json",
+          "ordinal": 32583,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_6544ed42560708a3feebe755",
+          "batch": "batch-v.json",
+          "ordinal": 32584,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_34e89bbfa4d68eead0a0d5ad",
+          "batch": "batch-v.json",
+          "ordinal": 32585,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_3d7983cb5d47ace070a630fe",
+          "batch": "batch-v.json",
+          "ordinal": 32586,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_68589f7c1f6059365ffd64ca",
+          "batch": "batch-v.json",
+          "ordinal": 32587,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_5c1c571c7ad3fe070ca4791d",
+          "batch": "batch-v.json",
+          "ordinal": 32588,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_c8ddaad1f3e22b821f69bb13",
+          "batch": "batch-v.json",
+          "ordinal": 32589,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_7e9d8610fa5da710f040a5d3",
+          "batch": "batch-v.json",
+          "ordinal": 32590,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        },
+        {
+          "id": "pk_8bd887df99ca9f7aa34dc7bc",
+          "batch": "batch-v.json",
+          "ordinal": 32591,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:People"
+        }
+      ],
+      "grantClaimAllowed": false,
+      "nextRequirement": "Map code to user outcome, test, and capture measurable evidence"
+    },
+    {
+      "module": "Dating",
+      "innovationCandidate": "Identity / Auth / Consent",
+      "evidenceRecords": 12,
+      "codeEvidenceUnverified": 4,
+      "liveEvidenceRequiresVerification": 0,
+      "gapsOrBlockers": 4,
+      "evidenceStrength": "CODE_EVIDENCE_UNVERIFIED",
+      "sourcePointers": [
+        {
+          "id": "pk_d8d912ec0a0672f4e516dcb6",
+          "batch": "batch-b.json",
+          "ordinal": 2298,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:Identity / Auth / Consent"
+        },
+        {
+          "id": "pk_2b0570b41430d98d686341f6",
+          "batch": "batch-b.json",
+          "ordinal": 2299,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:Identity / Auth / Consent"
+        },
+        {
+          "id": "pk_1b1b3fde66cb67451f0680da",
+          "batch": "batch-b.json",
+          "ordinal": 2300,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:Identity / Auth / Consent"
+        },
+        {
+          "id": "pk_ae622bb4aa75663e19641c89",
+          "batch": "batch-b.json",
+          "ordinal": 2301,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:Identity / Auth / Consent"
+        },
+        {
+          "id": "pk_2c413405d3525d8f44cdc869",
+          "batch": "batch-b.json",
+          "ordinal": 2302,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:Identity / Auth / Consent"
+        },
+        {
+          "id": "pk_f47643666c54d174f9b44f90",
+          "batch": "batch-b.json",
+          "ordinal": 2303,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:Identity / Auth / Consent"
+        },
+        {
+          "id": "pk_b1a912d84bdaaab2062716de",
+          "batch": "batch-b.json",
+          "ordinal": 2304,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:Identity / Auth / Consent"
+        },
+        {
+          "id": "pk_09467e8c888cd38160487ff7",
+          "batch": "batch-b.json",
+          "ordinal": 2305,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:Identity / Auth / Consent"
+        },
+        {
+          "id": "pk_b28cc579b5a7468ce822d2e8",
+          "batch": "batch-b.json",
+          "ordinal": 2306,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:Identity / Auth / Consent"
+        },
+        {
+          "id": "pk_2708d44099cbc743bbe67e22",
+          "batch": "batch-b.json",
+          "ordinal": 2307,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:Identity / Auth / Consent"
+        },
+        {
+          "id": "pk_de24fa4d942e77ea9184824d",
+          "batch": "batch-b.json",
+          "ordinal": 2308,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:Identity / Auth / Consent"
+        },
+        {
+          "id": "pk_a725f95bbf89bfdc42feb1ea",
+          "batch": "batch-b.json",
+          "ordinal": 2309,
+          "sourceFile": "app/api/people/relationships/route.ts",
+          "canonicalTarget": "canonical-module:Identity / Auth / Consent"
+        }
+      ],
+      "grantClaimAllowed": false,
+      "nextRequirement": "Map code to user outcome, test, and capture measurable evidence"
+    }
+  ]
+}

@@ -1,0 +1,291 @@
+{
+  "id": "PANT-BRANCH-298374BD10FC",
+  "sourceRef": "recovery/snapshots/feature--translation-agent",
+  "headSha": "62146d1bb801eb6c8629457f3ce1b1dfd2a982da",
+  "mergeBase": "ea6d235a4484a5b068120adeab8938bca66644e8",
+  "behindMainBy": 262,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 7,
+  "topicCounts": {
+    "identity-security": 5,
+    "chat-translation": 6,
+    "ai-kernel": 6,
+    "infrastructure-deployment": 4,
+    "recovery-continuity": 1
+  },
+  "kindCounts": {
+    "asset-or-other": 1,
+    "api-route": 1,
+    "source-code": 4,
+    "documentation": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 2,
+    "ABSENT_FROM_MAIN": 5
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": ".env.example",
+      "previousPath": null,
+      "kind": "asset-or-other",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--translation-agent/.env.example",
+      "blobSha": "5f737086e0d8fbd8190ecdec9540ee67ec70fabe",
+      "sizeBytes": 199,
+      "mainBlobSha": "b9d24b3496f2ae1d10affa7de11f9dfda8adb2fc",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 8,
+      "contentSha256": "e244194e1a1a0e18169e8972738686c9a855752ee112a4352f5c20aa4302bc3f",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/agents/translation/control/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/feature--translation-agent/app/api/agents/translation/control/route.ts",
+      "blobSha": "fdbb207b825031addc4f290e85bbff82397596bf",
+      "sizeBytes": 1951,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 57,
+      "contentSha256": "a1143e06cec4d3767b66ba39e896fa06959836ee7fc0c5450d736a88e14caea7",
+      "imports": [
+        "next/server",
+        "@/lib/supabase/admin",
+        "crypto"
+      ],
+      "exports": [
+        "dynamic",
+        "POST"
+      ],
+      "envDependencies": [
+        "PANTAVION_CONTROL_SHARED_SECRET"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/control/control-store.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--translation-agent/core/control/control-store.ts",
+      "blobSha": "182d72692b074f61ecda9356275ba32fb2ddd592",
+      "sizeBytes": 906,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 29,
+      "contentSha256": "8cd736cb31f89bb4b84ad82c437177c8590c2d8c7470dd50a80f842edd860f30",
+      "imports": [
+        "@/lib/supabase/admin"
+      ],
+      "exports": [
+        "createControlRequestRecord",
+        "markControlRequest"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/translation-agent/README.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/feature--translation-agent/docs/translation-agent/README.md",
+      "blobSha": "081ea528da2e229324ee155b0c890fe49e771eaa",
+      "sizeBytes": 2070,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 45,
+      "contentSha256": "5b777b9c04752f927f3e7b1e56b80f5ba7387be3349501f83399174a67ddd2be",
+      "imports": [
+        "crypto",
+        "node-fetch"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "services/translation-agent.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/feature--translation-agent/services/translation-agent.ts",
+      "blobSha": "7f4ef33ce450233b42e1f477fea69f7fecc4f697",
+      "sizeBytes": 7831,
+      "mainBlobSha": "fb60b3f0c13bee20d11401149566543253bd2d2e",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 243,
+      "contentSha256": "33e6e3e2fb8927e26efda4b20ce2e1a4ef832528056bf3a91edf79dd927d9145",
+      "imports": [
+        "@/lib/supabase/admin",
+        "@/core/runtime/supabase-durable-execution-store",
+        "@/core/runtime/durable-execution"
+      ],
+      "exports": [
+        "startTranslationAgent"
+      ],
+      "envDependencies": [
+        "TRANSLATION_AGENT_POLL_MS",
+        "PANTAVION_INTERNAL_BASE"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "services/translation-agent/control-client.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/feature--translation-agent/services/translation-agent/control-client.ts",
+      "blobSha": "61200ff87be28004a8ad61351cf48feb7a2d1c67",
+      "sizeBytes": 644,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 20,
+      "contentSha256": "b7e178c4ba761ecfe179f55b1ac6a0106c89454f23e81b983d7c6c03269e39ca",
+      "imports": [],
+      "exports": [
+        "sendToMyGpt"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "tests/control-endpoint.test.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--translation-agent/tests/control-endpoint.test.ts",
+      "blobSha": "869d01a715859e266bc041218604e67e0bdcfeef",
+      "sizeBytes": 1295,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 25,
+      "contentSha256": "46ab0ecb4c8dc96973d448930ce35ad188d82e1e045c2a677c9f7b2fdeed1c3d",
+      "imports": [
+        "vitest",
+        "node-fetch",
+        "crypto"
+      ],
+      "exports": [],
+      "envDependencies": [
+        "PANTAVION_CONTROL_SHARED_SECRET"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "id": "PANT-BRANCH-3BE9BB569AE0",
+  "sourceRef": "recovery/snapshots/recovery--identity-registration-current-main",
+  "headSha": "93634f4e6d4a2c1ac91ed4f2a5ed2a417b017b74",
+  "mergeBase": "89d6de137b754f63fe582bc78e802ab2c727654e",
+  "behindMainBy": 263,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "identity-security": 2,
+    "social-people": 2,
+    "chat-translation": 1,
+    "governance-safety": 2,
+    "infrastructure-deployment": 1,
+    "business-marketplace": 1,
+    "maps-water": 1
+  },
+  "kindCounts": {
+    "source-code": 2
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/auth/actions.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/recovery--identity-registration-current-main/app/auth/actions.ts",
+      "blobSha": "4a099647b2776334078fa64e9b9a32e4da30d2a9",
+      "sizeBytes": 3257,
+      "mainBlobSha": "058d84c456775f653a1ae0cc468f6348e54d18e1",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 91,
+      "contentSha256": "6f8d25f01082aefc54b27a3e72064502b2dde09ab3ad9a8c8ea9b16c1beedb2e",
+      "imports": [
+        "next/navigation",
+        "../../lib/supabase/server"
+      ],
+      "exports": [
+        "signUp",
+        "signIn",
+        "signOut"
+      ],
+      "envDependencies": [
+        "NEXT_PUBLIC_SITE_URL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/auth/register/RegisterClient.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/recovery--identity-registration-current-main/app/auth/register/RegisterClient.tsx",
+      "blobSha": "9f549e62a3708868cb26e4a4e67696fb099fef2a",
+      "sizeBytes": 3843,
+      "mainBlobSha": "d08c35079a545a52691fd8a9be16f9bd22e18fab",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 96,
+      "contentSha256": "13f7671cba8aeadddc978ee1c0a2616bf1c16783a16c9cb725545ff62e3d976d",
+      "imports": [
+        "next/link",
+        "react-dom",
+        "@/core/i18n/languages",
+        "../actions"
+      ],
+      "exports": [
+        "RegisterClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "business-marketplace",
+        "maps-water",
+        "governance-safety"
+      ]
+    }
+  ]
+}

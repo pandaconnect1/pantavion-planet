@@ -1,0 +1,1183 @@
+{
+  "id": "pantavion_canonical_knowledge_v2",
+  "generatedAt": "2026-08-23T15:54:15.193Z",
+  "totalRecords": 82413,
+  "batchSize": 1499,
+  "totalBatches": 55,
+  "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d",
+  "sourceCounts": {
+    "founder-vision": 9741,
+    "unfinished-gap": 11867,
+    "current-code": 8763,
+    "live-state": 126,
+    "donor": 441,
+    "recovery": 51475
+  },
+  "moduleCounts": {
+    "Chat": 2177,
+    "Identity / Auth / Consent": 2542,
+    "Interpreter / Translation": 4976,
+    "Kernel / Guardian / Runtime": 6927,
+    "Learning / Knowledge": 353,
+    "Maps / World / Water": 12678,
+    "Marketplace / Work / Business": 2474,
+    "Music / Media / Creation": 422,
+    "People": 2700,
+    "Personal AI / PantaAI": 24662,
+    "Resilience / Offline / Infrastructure": 957,
+    "Safety / Trust / Minors": 14236,
+    "Social / Pulse / Communities": 1864,
+    "SOS / Crisis": 2776,
+    "Voice / Video": 1380,
+    "UNCLASSIFIED": 1289
+  },
+  "reviewCounts": {
+    "REVIEW_REQUIRED": 24701,
+    "CLASSIFIED": 57712
+  },
+  "batches": [
+    {
+      "batchId": "batch-a",
+      "batchLabel": "A",
+      "startOrdinal": 1,
+      "endOrdinal": 1499,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 400,
+        "unfinished-gap": 400,
+        "current-code": 400,
+        "live-state": 1,
+        "donor": 2,
+        "recovery": 296
+      },
+      "moduleCounts": {
+        "Chat": 1499
+      },
+      "classifiedCount": 660,
+      "unresolvedCount": 839,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.183Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-b",
+      "batchLabel": "B",
+      "startOrdinal": 1500,
+      "endOrdinal": 2998,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 364,
+        "unfinished-gap": 419,
+        "founder-vision": 357,
+        "donor": 23,
+        "live-state": 5,
+        "current-code": 331
+      },
+      "moduleCounts": {
+        "Chat": 678,
+        "Identity / Auth / Consent": 821
+      },
+      "classifiedCount": 871,
+      "unresolvedCount": 628,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.210Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-c",
+      "batchLabel": "C",
+      "startOrdinal": 2999,
+      "endOrdinal": 4497,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 216,
+        "current-code": 80,
+        "founder-vision": 95,
+        "recovery": 1098,
+        "donor": 6,
+        "live-state": 4
+      },
+      "moduleCounts": {
+        "Identity / Auth / Consent": 1499
+      },
+      "classifiedCount": 923,
+      "unresolvedCount": 576,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.237Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-d",
+      "batchLabel": "D",
+      "startOrdinal": 4498,
+      "endOrdinal": 5996,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "donor": 7,
+        "live-state": 3,
+        "founder-vision": 504,
+        "unfinished-gap": 515,
+        "recovery": 10,
+        "current-code": 460
+      },
+      "moduleCounts": {
+        "Identity / Auth / Consent": 222,
+        "Interpreter / Translation": 1277
+      },
+      "classifiedCount": 744,
+      "unresolvedCount": 755,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.275Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-e",
+      "batchLabel": "E",
+      "startOrdinal": 5997,
+      "endOrdinal": 7495,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 299,
+        "unfinished-gap": 299,
+        "current-code": 299,
+        "donor": 8,
+        "recovery": 594
+      },
+      "moduleCounts": {
+        "Interpreter / Translation": 1499
+      },
+      "classifiedCount": 592,
+      "unresolvedCount": 907,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.294Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-f",
+      "batchLabel": "F",
+      "startOrdinal": 7496,
+      "endOrdinal": 8994,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1302,
+        "unfinished-gap": 197
+      },
+      "moduleCounts": {
+        "Interpreter / Translation": 1499
+      },
+      "classifiedCount": 496,
+      "unresolvedCount": 1003,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.325Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-g",
+      "batchLabel": "G",
+      "startOrdinal": 8995,
+      "endOrdinal": 10493,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 593,
+        "founder-vision": 426,
+        "recovery": 46,
+        "donor": 26,
+        "live-state": 9,
+        "current-code": 399
+      },
+      "moduleCounts": {
+        "Interpreter / Translation": 701,
+        "Kernel / Guardian / Runtime": 798
+      },
+      "classifiedCount": 984,
+      "unresolvedCount": 515,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.370Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-h",
+      "batchLabel": "H",
+      "startOrdinal": 10494,
+      "endOrdinal": 11992,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 496,
+        "unfinished-gap": 496,
+        "current-code": 495,
+        "recovery": 6,
+        "donor": 6
+      },
+      "moduleCounts": {
+        "Kernel / Guardian / Runtime": 1499
+      },
+      "classifiedCount": 1304,
+      "unresolvedCount": 195,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.392Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-i",
+      "batchLabel": "I",
+      "startOrdinal": 11993,
+      "endOrdinal": 13491,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 112,
+        "founder-vision": 111,
+        "unfinished-gap": 111,
+        "donor": 4,
+        "recovery": 1161
+      },
+      "moduleCounts": {
+        "Kernel / Guardian / Runtime": 1499
+      },
+      "classifiedCount": 1214,
+      "unresolvedCount": 285,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.411Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-j",
+      "batchLabel": "J",
+      "startOrdinal": 13492,
+      "endOrdinal": 14990,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Kernel / Guardian / Runtime": 1499
+      },
+      "classifiedCount": 1226,
+      "unresolvedCount": 273,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.446Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-k",
+      "batchLabel": "K",
+      "startOrdinal": 14991,
+      "endOrdinal": 16489,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 810,
+        "unfinished-gap": 382,
+        "founder-vision": 175,
+        "donor": 29,
+        "live-state": 11,
+        "current-code": 92
+      },
+      "moduleCounts": {
+        "Kernel / Guardian / Runtime": 1499
+      },
+      "classifiedCount": 617,
+      "unresolvedCount": 882,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.489Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-l",
+      "batchLabel": "L",
+      "startOrdinal": 16490,
+      "endOrdinal": 17988,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 449,
+        "current-code": 425,
+        "founder-vision": 434,
+        "recovery": 175,
+        "donor": 16
+      },
+      "moduleCounts": {
+        "Kernel / Guardian / Runtime": 133,
+        "Learning / Knowledge": 353,
+        "Maps / World / Water": 1013
+      },
+      "classifiedCount": 946,
+      "unresolvedCount": 553,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.522Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-m",
+      "batchLabel": "M",
+      "startOrdinal": 17989,
+      "endOrdinal": 19487,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 500,
+        "current-code": 500,
+        "founder-vision": 499
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 1499
+      },
+      "classifiedCount": 1044,
+      "unresolvedCount": 455,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.544Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-n",
+      "batchLabel": "N",
+      "startOrdinal": 19488,
+      "endOrdinal": 20986,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 500,
+        "unfinished-gap": 500,
+        "current-code": 499
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 1499
+      },
+      "classifiedCount": 887,
+      "unresolvedCount": 612,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.563Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-o",
+      "batchLabel": "O",
+      "startOrdinal": 20987,
+      "endOrdinal": 22485,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 486,
+        "founder-vision": 485,
+        "unfinished-gap": 485,
+        "live-state": 1,
+        "recovery": 21,
+        "donor": 21
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 1499
+      },
+      "classifiedCount": 1074,
+      "unresolvedCount": 425,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.581Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-p",
+      "batchLabel": "P",
+      "startOrdinal": 22486,
+      "endOrdinal": 23984,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 40,
+        "unfinished-gap": 40,
+        "current-code": 40,
+        "donor": 5,
+        "recovery": 1374
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 1499
+      },
+      "classifiedCount": 570,
+      "unresolvedCount": 929,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.599Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-q",
+      "batchLabel": "Q",
+      "startOrdinal": 23985,
+      "endOrdinal": 25483,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 1499
+      },
+      "classifiedCount": 470,
+      "unresolvedCount": 1029,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.639Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-r",
+      "batchLabel": "R",
+      "startOrdinal": 25484,
+      "endOrdinal": 26982,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 1499
+      },
+      "classifiedCount": 781,
+      "unresolvedCount": 718,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.680Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-s",
+      "batchLabel": "S",
+      "startOrdinal": 26983,
+      "endOrdinal": 28481,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1485,
+        "unfinished-gap": 14
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 1499
+      },
+      "classifiedCount": 589,
+      "unresolvedCount": 910,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.723Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-t",
+      "batchLabel": "T",
+      "startOrdinal": 28482,
+      "endOrdinal": 29980,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 665,
+        "founder-vision": 473,
+        "recovery": 36,
+        "donor": 21,
+        "live-state": 9,
+        "current-code": 295
+      },
+      "moduleCounts": {
+        "Maps / World / Water": 1172,
+        "Marketplace / Work / Business": 327
+      },
+      "classifiedCount": 818,
+      "unresolvedCount": 681,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.765Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-u",
+      "batchLabel": "U",
+      "startOrdinal": 29981,
+      "endOrdinal": 31479,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 159,
+        "founder-vision": 158,
+        "unfinished-gap": 158,
+        "live-state": 5,
+        "donor": 1,
+        "recovery": 1018
+      },
+      "moduleCounts": {
+        "Marketplace / Work / Business": 1499
+      },
+      "classifiedCount": 798,
+      "unresolvedCount": 701,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.786Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-v",
+      "batchLabel": "V",
+      "startOrdinal": 31480,
+      "endOrdinal": 32978,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 355,
+        "unfinished-gap": 500,
+        "founder-vision": 389,
+        "donor": 16,
+        "live-state": 9,
+        "current-code": 230
+      },
+      "moduleCounts": {
+        "Marketplace / Work / Business": 648,
+        "Music / Media / Creation": 422,
+        "People": 429
+      },
+      "classifiedCount": 787,
+      "unresolvedCount": 712,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.822Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-w",
+      "batchLabel": "W",
+      "startOrdinal": 32979,
+      "endOrdinal": 34477,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 310,
+        "unfinished-gap": 310,
+        "current-code": 310,
+        "donor": 3,
+        "recovery": 566
+      },
+      "moduleCounts": {
+        "People": 1499
+      },
+      "classifiedCount": 490,
+      "unresolvedCount": 1009,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.851Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-x",
+      "batchLabel": "X",
+      "startOrdinal": 34478,
+      "endOrdinal": 35976,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 310,
+        "unfinished-gap": 501,
+        "founder-vision": 350,
+        "donor": 59,
+        "live-state": 20,
+        "current-code": 259
+      },
+      "moduleCounts": {
+        "People": 772,
+        "Personal AI / PantaAI": 727
+      },
+      "classifiedCount": 614,
+      "unresolvedCount": 885,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.881Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-y",
+      "batchLabel": "Y",
+      "startOrdinal": 35977,
+      "endOrdinal": 37475,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 285,
+        "current-code": 285,
+        "founder-vision": 284,
+        "live-state": 1,
+        "recovery": 639,
+        "donor": 5
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 944,
+      "unresolvedCount": 555,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.909Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-z",
+      "batchLabel": "Z",
+      "startOrdinal": 37476,
+      "endOrdinal": 38974,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1499,
+      "unresolvedCount": 0,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.940Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-a2",
+      "batchLabel": "A2",
+      "startOrdinal": 38975,
+      "endOrdinal": 40473,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1499,
+      "unresolvedCount": 0,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:13.986Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-b2",
+      "batchLabel": "B2",
+      "startOrdinal": 40474,
+      "endOrdinal": 41972,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1499,
+      "unresolvedCount": 0,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.035Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-c2",
+      "batchLabel": "C2",
+      "startOrdinal": 41973,
+      "endOrdinal": 43471,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1499,
+      "unresolvedCount": 0,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.083Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-d2",
+      "batchLabel": "D2",
+      "startOrdinal": 43472,
+      "endOrdinal": 44970,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1499,
+      "unresolvedCount": 0,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.134Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-e2",
+      "batchLabel": "E2",
+      "startOrdinal": 44971,
+      "endOrdinal": 46469,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1499,
+      "unresolvedCount": 0,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.182Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-f2",
+      "batchLabel": "F2",
+      "startOrdinal": 46470,
+      "endOrdinal": 47968,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1463,
+      "unresolvedCount": 36,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.230Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-g2",
+      "batchLabel": "G2",
+      "startOrdinal": 47969,
+      "endOrdinal": 49467,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1471,
+      "unresolvedCount": 28,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.277Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-h2",
+      "batchLabel": "H2",
+      "startOrdinal": 49468,
+      "endOrdinal": 50966,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1499,
+      "unresolvedCount": 0,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.325Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-i2",
+      "batchLabel": "I2",
+      "startOrdinal": 50967,
+      "endOrdinal": 52465,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1499,
+      "unresolvedCount": 0,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.373Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-j2",
+      "batchLabel": "J2",
+      "startOrdinal": 52466,
+      "endOrdinal": 53964,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1498,
+      "unresolvedCount": 1,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.423Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-k2",
+      "batchLabel": "K2",
+      "startOrdinal": 53965,
+      "endOrdinal": 55463,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1496,
+      "unresolvedCount": 3,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.474Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-l2",
+      "batchLabel": "L2",
+      "startOrdinal": 55464,
+      "endOrdinal": 56962,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1496,
+      "unresolvedCount": 3,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.521Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-m2",
+      "batchLabel": "M2",
+      "startOrdinal": 56963,
+      "endOrdinal": 58461,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1499
+      },
+      "classifiedCount": 1498,
+      "unresolvedCount": 1,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.567Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-n2",
+      "batchLabel": "N2",
+      "startOrdinal": 58462,
+      "endOrdinal": 59960,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 987,
+        "unfinished-gap": 283,
+        "founder-vision": 125,
+        "donor": 15,
+        "live-state": 4,
+        "current-code": 85
+      },
+      "moduleCounts": {
+        "Personal AI / PantaAI": 1450,
+        "Resilience / Offline / Infrastructure": 49
+      },
+      "classifiedCount": 1118,
+      "unresolvedCount": 381,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.614Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-o2",
+      "batchLabel": "O2",
+      "startOrdinal": 59961,
+      "endOrdinal": 61459,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 358,
+        "current-code": 291,
+        "founder-vision": 322,
+        "donor": 7,
+        "recovery": 520,
+        "live-state": 1
+      },
+      "moduleCounts": {
+        "Resilience / Offline / Infrastructure": 908,
+        "Safety / Trust / Minors": 591
+      },
+      "classifiedCount": 958,
+      "unresolvedCount": 541,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.655Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-p2",
+      "batchLabel": "P2",
+      "startOrdinal": 61460,
+      "endOrdinal": 62958,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 500,
+        "unfinished-gap": 500,
+        "current-code": 499
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 1499
+      },
+      "classifiedCount": 521,
+      "unresolvedCount": 978,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.686Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-q2",
+      "batchLabel": "Q2",
+      "startOrdinal": 62959,
+      "endOrdinal": 64457,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 246,
+        "founder-vision": 245,
+        "unfinished-gap": 245,
+        "live-state": 5,
+        "recovery": 742,
+        "donor": 16
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 1499
+      },
+      "classifiedCount": 1142,
+      "unresolvedCount": 357,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.708Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-r2",
+      "batchLabel": "R2",
+      "startOrdinal": 64458,
+      "endOrdinal": 65956,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 1499
+      },
+      "classifiedCount": 1491,
+      "unresolvedCount": 8,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.740Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-s2",
+      "batchLabel": "S2",
+      "startOrdinal": 65957,
+      "endOrdinal": 67455,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 1499
+      },
+      "classifiedCount": 1497,
+      "unresolvedCount": 2,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.783Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-t2",
+      "batchLabel": "T2",
+      "startOrdinal": 67456,
+      "endOrdinal": 68954,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 1499
+      },
+      "classifiedCount": 1498,
+      "unresolvedCount": 1,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.827Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-u2",
+      "batchLabel": "U2",
+      "startOrdinal": 68955,
+      "endOrdinal": 70453,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 1499
+      },
+      "classifiedCount": 1495,
+      "unresolvedCount": 4,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.876Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-v2",
+      "batchLabel": "V2",
+      "startOrdinal": 70454,
+      "endOrdinal": 71952,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 1499
+      },
+      "classifiedCount": 1493,
+      "unresolvedCount": 6,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.924Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-w2",
+      "batchLabel": "W2",
+      "startOrdinal": 71953,
+      "endOrdinal": 73451,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 1499
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 1499
+      },
+      "classifiedCount": 1457,
+      "unresolvedCount": 42,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:14.971Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-x2",
+      "batchLabel": "X2",
+      "startOrdinal": 73452,
+      "endOrdinal": 74950,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 474,
+        "unfinished-gap": 634,
+        "founder-vision": 238,
+        "donor": 22,
+        "live-state": 7,
+        "current-code": 124
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 1499
+      },
+      "classifiedCount": 778,
+      "unresolvedCount": 721,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:15.019Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-y2",
+      "batchLabel": "Y2",
+      "startOrdinal": 74951,
+      "endOrdinal": 76449,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "founder-vision": 220,
+        "unfinished-gap": 228,
+        "current-code": 236,
+        "live-state": 2,
+        "recovery": 812,
+        "donor": 1
+      },
+      "moduleCounts": {
+        "Safety / Trust / Minors": 154,
+        "Social / Pulse / Communities": 1345
+      },
+      "classifiedCount": 846,
+      "unresolvedCount": 653,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:15.054Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-z2",
+      "batchLabel": "Z2",
+      "startOrdinal": 76450,
+      "endOrdinal": 77948,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "recovery": 367,
+        "unfinished-gap": 406,
+        "founder-vision": 370,
+        "donor": 22,
+        "live-state": 2,
+        "current-code": 332
+      },
+      "moduleCounts": {
+        "Social / Pulse / Communities": 519,
+        "SOS / Crisis": 980
+      },
+      "classifiedCount": 918,
+      "unresolvedCount": 581,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:15.088Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-a3",
+      "batchLabel": "A3",
+      "startOrdinal": 77949,
+      "endOrdinal": 79447,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "current-code": 156,
+        "founder-vision": 155,
+        "unfinished-gap": 262,
+        "live-state": 2,
+        "recovery": 917,
+        "donor": 7
+      },
+      "moduleCounts": {
+        "SOS / Crisis": 1499
+      },
+      "classifiedCount": 566,
+      "unresolvedCount": 933,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:15.115Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-b3",
+      "batchLabel": "B3",
+      "startOrdinal": 79448,
+      "endOrdinal": 80946,
+      "recordCount": 1499,
+      "sourceCounts": {
+        "unfinished-gap": 440,
+        "founder-vision": 328,
+        "recovery": 402,
+        "donor": 15,
+        "live-state": 3,
+        "current-code": 311
+      },
+      "moduleCounts": {
+        "SOS / Crisis": 297,
+        "Voice / Video": 1202
+      },
+      "classifiedCount": 489,
+      "unresolvedCount": 1010,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:15.150Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    },
+    {
+      "batchId": "batch-c3",
+      "batchLabel": "C3",
+      "startOrdinal": 80947,
+      "endOrdinal": 82413,
+      "recordCount": 1467,
+      "sourceCounts": {
+        "unfinished-gap": 476,
+        "founder-vision": 453,
+        "recovery": 111,
+        "donor": 78,
+        "live-state": 22,
+        "current-code": 327
+      },
+      "moduleCounts": {
+        "Voice / Video": 178,
+        "UNCLASSIFIED": 1289
+      },
+      "classifiedCount": 88,
+      "unresolvedCount": 1379,
+      "crossBatchRelationCount": 0,
+      "generatedAt": "2026-08-23T15:54:15.178Z",
+      "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d"
+    }
+  ],
+  "truthRule": "Module classification is an intake seed. REVIEW_REQUIRED records must receive semantic human/AI review; no feature may be merged, deduplicated or called complete from keyword/thematic scoring alone."
+}

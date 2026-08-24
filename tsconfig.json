@@ -43,6 +43,8 @@
     "**/*.backup",
     "_local_backups/**",
     ".pantavion-backups/**",
-    "_pantavion_quarantine/**"
+    "_pantavion_quarantine/**",
+    "recovery/donor-repositories/**",
+    "recovery/canonicalized/**"
   ]
 }

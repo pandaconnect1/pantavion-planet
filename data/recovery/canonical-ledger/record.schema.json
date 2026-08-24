@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pantavion.com/schemas/canonical-ledger-record.schema.json",
+  "title": "Pantavion canonical ledger record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id","category","topic","subtopic","source","destination","status","checksum","classificationReason"],
+  "properties": {
+    "id": {"type":"string","pattern":"^PANT-(SEC|SOC|CHT|BUS|MAP|AIK|REC|GOV|MED|INF|DOC|REV)-[A-F0-9]{12}$"},
+    "category": {"enum":["SEC","SOC","CHT","BUS","MAP","AIK","REC","GOV","MED","INF","DOC","REV"]},
+    "topic": {"type":"string","minLength":1},
+    "subtopic": {"type":"string","minLength":1},
+    "source": {
+      "type":"object",
+      "additionalProperties": false,
+      "required":["family","path"],
+      "properties":{
+        "family":{"type":"string","minLength":1},
+        "repository":{"type":["string","null"]},
+        "ref":{"type":["string","null"]},
+        "path":{"type":"string","minLength":1}
+      }
+    },
+    "destination":{"type":"string","minLength":1},
+    "status":{"enum":["INDEXED","REVIEWED","ACCEPTED","MIGRATED","VERIFIED","DUPLICATE","QUARANTINED","REJECTED_WITH_REASON"]},
+    "checksum":{"type":"string","pattern":"^sha256:[a-f0-9]{64}$"},
+    "duplicateOf":{"type":["string","null"]},
+    "classificationReason":{"type":"string","minLength":1},
+    "notes":{"type":["string","null"]}
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "pantavion_critical_modules_deep_dive_v1",
+  "generatedAt": "2026-08-23T16:09:31.086Z",
+  "modules": [
+    {
+      "module": "Interpreter / Translation",
+      "totalRecords": 4976,
+      "file": "interpreter-translation.json"
+    },
+    {
+      "module": "SOS / Crisis",
+      "totalRecords": 2776,
+      "file": "sos-crisis.json"
+    }
+  ],
+  "totalRecords": 7752,
+  "globalReadiness": "NOT_YET_VERIFIED",
+  "verifiedLive": false,
+  "deleteAllowed": false
+}

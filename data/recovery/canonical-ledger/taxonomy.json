@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "defaultCategory": "REV",
+  "categories": [
+    {"order":1,"code":"SEC","name":"Identity & Security","destination":"domains/security","keywords":["auth","identity","rls","jwt","secret","permission","security","supabase"]},
+    {"order":2,"code":"SOC","name":"Social & People","destination":"domains/social","keywords":["social","profile","people","follow","feed","community"]},
+    {"order":3,"code":"CHT","name":"Chat & Translation","destination":"domains/chat","keywords":["chat","message","voice","translation","translate"]},
+    {"order":4,"code":"BUS","name":"Business & Marketplace","destination":"domains/business","keywords":["business","marketplace","product","payment","shop"]},
+    {"order":5,"code":"MAP","name":"Maps & Water","destination":"domains/maps-water","keywords":["map","geo","location","water","environment"]},
+    {"order":6,"code":"AIK","name":"AI & Kernel","destination":"domains/ai-kernel","keywords":["agent","artificial-intelligence","kernel","runtime","orchestration"]},
+    {"order":7,"code":"REC","name":"Recovery & Continuity","destination":"recovery","keywords":["recovery","backup","restore","migration","manifest","archive"]},
+    {"order":8,"code":"GOV","name":"Governance & Safety","destination":"domains/governance","keywords":["governance","policy","moderation","audit","compliance","safety"]},
+    {"order":9,"code":"MED","name":"Media & Music","destination":"domains/media","keywords":["audio","video","image","music","media"]},
+    {"order":10,"code":"INF","name":"Infrastructure & Deployment","destination":"infrastructure","keywords":["github","vercel","deploy","workflow","ci","docker","terraform"]},
+    {"order":11,"code":"DOC","name":"Documentation","destination":"docs","keywords":["documentation","specification","report","readme","notes"]},
+    {"order":99,"code":"REV","name":"Review queue","destination":"review/unclassified","keywords":[]}
+  ],
+  "precedence":["SEC","GOV","REC","INF","AIK","SOC","CHT","BUS","MAP","MED","DOC","REV"],
+  "numbering":{"format":"PANT-<CATEGORY>-<12_HEX>","stable":true,"basis":["source.family","source.repository","source.ref","source.path","checksum"]},
+  "deduplication":{"key":"checksum","keepOneCanonicalCopy":true,"retainAllSourceReferences":true},
+  "security":{"denyPlaintextPatterns":[".env","private-key","service-role-key","access-token","refresh-token"],"quarantineInsteadOfDrop":true}
+}

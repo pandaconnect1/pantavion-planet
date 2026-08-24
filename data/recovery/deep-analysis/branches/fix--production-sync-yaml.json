@@ -1,0 +1,56 @@
+{
+  "id": "PANT-BRANCH-0F4A459DE13B",
+  "sourceRef": "recovery/snapshots/fix--production-sync-yaml",
+  "headSha": "f57f2ee3a2bcf506004a2dea74ba8c9718e740ff",
+  "mergeBase": "60efa9291f39a5378ebc7a75825af9a17013a451",
+  "behindMainBy": 330,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "social-people": 1,
+    "business-marketplace": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "ci-workflow": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": ".github/workflows/pantavion-production-sync-verify.yml",
+      "previousPath": null,
+      "kind": "ci-workflow",
+      "canonicalPathProposal": "recovery/canonicalized/business-marketplace/fix--production-sync-yaml/.github/workflows/pantavion-production-sync-verify.yml",
+      "blobSha": "abf5704e0e174319b07440b4874fb35c6f114f38",
+      "sizeBytes": 2744,
+      "mainBlobSha": "a5c7b49a014ca5b8db1bd76e5779457328fd0f63",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 75,
+      "contentSha256": "a0f6c2cafa5e9852f22e3a56f453fbf878b7642ee0f04754e29ce7ac1574d5b4",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "business-marketplace",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

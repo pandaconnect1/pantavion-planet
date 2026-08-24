@@ -1,0 +1,29 @@
+{
+  "id": "pantavion_global_innovation_portfolio_v1",
+  "generatedAt": "2026-08-23T16:17:59.128Z",
+  "corpusRecords": 82413,
+  "candidateClusters": 148,
+  "topEvidenceCandidates": 12,
+  "modulesRepresented": [
+    "Chat",
+    "Identity / Auth / Consent",
+    "Interpreter / Translation",
+    "Kernel / Guardian / Runtime",
+    "Learning / Knowledge",
+    "Maps / World / Water",
+    "Marketplace / Work / Business",
+    "Music / Media / Creation",
+    "People",
+    "Personal AI / PantaAI",
+    "Resilience / Offline / Infrastructure",
+    "SOS / Crisis",
+    "Safety / Trust / Minors",
+    "Social / Pulse / Communities",
+    "UNCLASSIFIED",
+    "Voice / Video"
+  ],
+  "truth": "Portfolio ranks evidence clusters for further grant substantiation. Scores do not prove novelty, eligibility, implementation completion, or grant entitlement.",
+  "verifiedClaims": 0,
+  "verifiedLive": false,
+  "deleteAllowed": false
+}

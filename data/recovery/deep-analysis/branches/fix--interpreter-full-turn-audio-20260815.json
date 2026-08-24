@@ -1,0 +1,203 @@
+{
+  "id": "PANT-BRANCH-A00453BBEA2E",
+  "sourceRef": "recovery/snapshots/fix--interpreter-full-turn-audio-20260815",
+  "headSha": "d4204aa900adee2c1d1e887e37f629cfc18e52be",
+  "mergeBase": "d63a97aacef9fcb64a07982972aee5e16db1d44a",
+  "behindMainBy": 251,
+  "aheadOfMainBy": 5,
+  "changedFileCount": 4,
+  "topicCounts": {
+    "identity-security": 2,
+    "chat-translation": 4,
+    "maps-water": 3,
+    "ai-kernel": 3,
+    "media-music": 3,
+    "infrastructure-deployment": 3,
+    "social-people": 2,
+    "recovery-continuity": 2,
+    "business-marketplace": 1
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "ui-page": 1,
+    "documentation": 2
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 2,
+    "ABSENT_FROM_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/pantavion/speech-to-text/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/fix--interpreter-full-turn-audio-20260815/app/api/pantavion/speech-to-text/route.ts",
+      "blobSha": "8ea452d8c0a7926f1d513282d95d98aaee15441f",
+      "sizeBytes": 11520,
+      "mainBlobSha": "fe43114bab9fd1e47bdf236ccedc61db022ad169",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 320,
+      "contentSha256": "c32d8f85ab9ed68dfbc6fa5b7174814d303231c9064292da8d917b6cb1fa7b4a",
+      "imports": [
+        "next/server",
+        "@vercel/oidc",
+        "ai",
+        "@ai-sdk/gateway",
+        "@/core/translation/pantavion-speech-accessibility"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "runtime",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [
+        "AI_GATEWAY_API_KEY",
+        "PANTAVION_SPEECH_TO_TEXT_GATEWAY_MODEL",
+        "PANTAVION_SPEECH_TO_TEXT_ENDPOINT",
+        "PANTAVION_SPEECH_TO_TEXT_API_KEY",
+        "PANTAVION_TRANSLATE_API_KEY",
+        "PANTAVION_ENABLE_DIRECT_OPENAI_STT",
+        "OPENAI_API_KEY",
+        "PANTAVION_SPEECH_TO_TEXT_MODEL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/translate/interpreter/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/fix--interpreter-full-turn-audio-20260815/app/translate/interpreter/page.tsx",
+      "blobSha": "03718140e264885e69653e961d71a6a47b1e9e93",
+      "sizeBytes": 21341,
+      "mainBlobSha": "16274e6ee2dd0af2af4114303544b78ee0b44245",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 528,
+      "contentSha256": "6ed93b22dc69f4f326edb1d6ef9543f71e72bb651b04ff518a62e29d677e86e8",
+      "imports": [
+        "next/link",
+        "react",
+        "@/core/emergency/global-emergency-languages",
+        "@/core/translation/pantavion-device-voice"
+      ],
+      "exports": [
+        "InterpreterPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/recovery/interpreter-full-turn-audio-20260815.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/fix--interpreter-full-turn-audio-20260815/docs/recovery/interpreter-full-turn-audio-20260815.md",
+      "blobSha": "b23d1e0223fa95716da8bfd93abcd1249d24eaaf",
+      "sizeBytes": 1381,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 26,
+      "contentSha256": "38f4767468aac85cb1a2af98bc281340e62577d643b0e3c8c45e1beae7325cde",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel",
+        "recovery-continuity",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/runtime/core-four-verification-20260815.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/fix--interpreter-full-turn-audio-20260815/docs/runtime/core-four-verification-20260815.md",
+      "blobSha": "4438a6c92e31bc1aa608488257857677f9e4b48f",
+      "sizeBytes": 1670,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 42,
+      "contentSha256": "8560c41176cf65b609fcb631a293aa8716902e92bbefa4c70b904e915378d705",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5081 @@
+{
+  "total": 266,
+  "records": [
+    {
+      "id": "pk_6c553b26eb8a219650ac0d31",
+      "batch": "batch-a.json",
+      "ordinal": 271,
+      "currentModule": "Chat",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/listings/[listingId]/page.tsx",
+        "sourceLine": 24,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_6a6d697b8f12a8dcc5e79d05",
+      "batch": "batch-a.json",
+      "ordinal": 272,
+      "currentModule": "Chat",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/listings/[listingId]/page.tsx",
+        "sourceLine": 24,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_86e3fae3676701743e57e20f",
+      "batch": "batch-a.json",
+      "ordinal": 273,
+      "currentModule": "Chat",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/listings/[listingId]/page.tsx",
+        "sourceLine": 24,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_d1afa3c5ab93c5b4102c17ed",
+      "batch": "batch-a2.json",
+      "ordinal": 39300,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-d2.json",
+        "sourceLine": 7917,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_c3126c9e4819c33da3cd2d6d",
+      "batch": "batch-a2.json",
+      "ordinal": 39301,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-d2.json",
+        "sourceLine": 7964,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_b6e3e03e9873fa60693014a1",
+      "batch": "batch-a2.json",
+      "ordinal": 39708,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-d2.json",
+        "sourceLine": 68257,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_29f40af60bbde994bb3f9b7d",
+      "batch": "batch-b.json",
+      "ordinal": 1992,
+      "currentModule": "Chat",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/recovery/social-people-chat-full-excavation-20260815.md",
+        "sourceLine": 67,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_e28f85c501ed3689ed52be78",
+      "batch": "batch-b.json",
+      "ordinal": 1993,
+      "currentModule": "Chat",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/recovery/social-people-chat-full-excavation-20260815.md",
+        "sourceLine": 67,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_c40a8da60e123e7a560c849a",
+      "batch": "batch-b.json",
+      "ordinal": 1994,
+      "currentModule": "Chat",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "docs/recovery/social-people-chat-full-excavation-20260815.md",
+        "sourceLine": 67,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_5ba9d4e1cb433e225ac93e97",
+      "batch": "batch-b.json",
+      "ordinal": 1995,
+      "currentModule": "Chat",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "donor",
+        "sourceFile": "docs/recovery/social-people-chat-full-excavation-20260815.md",
+        "sourceLine": 67,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_d8d912ec0a0672f4e516dcb6",
+      "batch": "batch-b.json",
+      "ordinal": 2298,
+      "currentModule": "Identity / Auth / Consent",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 6,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_2b0570b41430d98d686341f6",
+      "batch": "batch-b.json",
+      "ordinal": 2299,
+      "currentModule": "Identity / Auth / Consent",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 6,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_1b1b3fde66cb67451f0680da",
+      "batch": "batch-b.json",
+      "ordinal": 2300,
+      "currentModule": "Identity / Auth / Consent",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 6,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_ae622bb4aa75663e19641c89",
+      "batch": "batch-b.json",
+      "ordinal": 2301,
+      "currentModule": "Identity / Auth / Consent",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 13,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_2c413405d3525d8f44cdc869",
+      "batch": "batch-b.json",
+      "ordinal": 2302,
+      "currentModule": "Identity / Auth / Consent",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 13,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_f47643666c54d174f9b44f90",
+      "batch": "batch-b.json",
+      "ordinal": 2303,
+      "currentModule": "Identity / Auth / Consent",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 13,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_b1a912d84bdaaab2062716de",
+      "batch": "batch-b.json",
+      "ordinal": 2304,
+      "currentModule": "Identity / Auth / Consent",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 27,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_09467e8c888cd38160487ff7",
+      "batch": "batch-b.json",
+      "ordinal": 2305,
+      "currentModule": "Identity / Auth / Consent",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 27,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_b28cc579b5a7468ce822d2e8",
+      "batch": "batch-b.json",
+      "ordinal": 2306,
+      "currentModule": "Identity / Auth / Consent",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 27,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_2708d44099cbc743bbe67e22",
+      "batch": "batch-b.json",
+      "ordinal": 2307,
+      "currentModule": "Identity / Auth / Consent",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 40,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_de24fa4d942e77ea9184824d",
+      "batch": "batch-b.json",
+      "ordinal": 2308,
+      "currentModule": "Identity / Auth / Consent",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 40,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_a725f95bbf89bfdc42feb1ea",
+      "batch": "batch-b.json",
+      "ordinal": 2309,
+      "currentModule": "Identity / Auth / Consent",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 40,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_5c5930571a7a2d24805dab13",
+      "batch": "batch-c2.json",
+      "ordinal": 42837,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-f2.json",
+        "sourceLine": 64685,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_40fa41bf51b66ee8fab6864e",
+      "batch": "batch-c3.json",
+      "ordinal": 81016,
+      "currentModule": "Voice / Video",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/requirements/PANTAVION_MUSIC_VOICE_STUDIO.md",
+        "sourceLine": 18,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_cab5e8232d7c95bccc1d4a25",
+      "batch": "batch-c3.json",
+      "ordinal": 81017,
+      "currentModule": "Voice / Video",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/requirements/PANTAVION_MUSIC_VOICE_STUDIO.md",
+        "sourceLine": 18,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_83bfd14935b09172c32d5780",
+      "batch": "batch-c3.json",
+      "ordinal": 81823,
+      "currentModule": "UNCLASSIFIED",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 22,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_4fcb1850638b359e430e40dc",
+      "batch": "batch-c3.json",
+      "ordinal": 81824,
+      "currentModule": "UNCLASSIFIED",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 22,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_0abf9672e1bd7acffc88e9ac",
+      "batch": "batch-c3.json",
+      "ordinal": 81825,
+      "currentModule": "UNCLASSIFIED",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 10,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_9064cadb4cd384746808378e",
+      "batch": "batch-c3.json",
+      "ordinal": 81826,
+      "currentModule": "UNCLASSIFIED",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 10,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_baa78b6ca4c267045f6c8771",
+      "batch": "batch-c3.json",
+      "ordinal": 81827,
+      "currentModule": "UNCLASSIFIED",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 13,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_14c4fef69a557b3c74832f41",
+      "batch": "batch-c3.json",
+      "ordinal": 81828,
+      "currentModule": "UNCLASSIFIED",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 13,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_46ffabb8b4b9305338f23fea",
+      "batch": "batch-e2.json",
+      "ordinal": 45899,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-j.json",
+        "sourceLine": 32859,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_d64db04a89f77c27a74fe4c7",
+      "batch": "batch-e2.json",
+      "ordinal": 45901,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-j.json",
+        "sourceLine": 32953,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_bd002cbe9bc2b1cea50570e9",
+      "batch": "batch-e2.json",
+      "ordinal": 45902,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-j.json",
+        "sourceLine": 33000,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_b9d90df912a721c291c0eda2",
+      "batch": "batch-e2.json",
+      "ordinal": 45904,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-j.json",
+        "sourceLine": 33094,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_71a493a55241af8de2aa2d0c",
+      "batch": "batch-e2.json",
+      "ordinal": 45911,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-j.json",
+        "sourceLine": 33423,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_769ee35d1089995102caf41e",
+      "batch": "batch-f2.json",
+      "ordinal": 47587,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 6453,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_3d75c98cb544cfa06bd1c9dd",
+      "batch": "batch-f2.json",
+      "ordinal": 47588,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 6500,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_ce392328c7f76f92ac4e8355",
+      "batch": "batch-f2.json",
+      "ordinal": 47589,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 6547,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_4eb58ed682c169ab517757c5",
+      "batch": "batch-g.json",
+      "ordinal": 10332,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "core/guardian/pantavion-guardian-kernel.ts",
+        "sourceLine": 24,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_35f81f53ea002ac03ea12613",
+      "batch": "batch-g.json",
+      "ordinal": 10333,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "core/guardian/pantavion-guardian-kernel.ts",
+        "sourceLine": 24,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_38b4ff64da2c8fe7cec37cb3",
+      "batch": "batch-g.json",
+      "ordinal": 10334,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "core/guardian/pantavion-guardian-kernel.ts",
+        "sourceLine": 24,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_ea23f0d1e807dc94f1dc366a",
+      "batch": "batch-i2.json",
+      "ordinal": 51932,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "date app"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-r.json",
+        "sourceLine": 15757,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_062d0f4895b224797d8592f4",
+      "batch": "batch-j.json",
+      "ordinal": 14352,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-j.json",
+        "sourceLine": 35389,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_70063515608642c49d853eae",
+      "batch": "batch-j.json",
+      "ordinal": 14542,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 34293,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_18dfbf12ce0501bcffa4f5d5",
+      "batch": "batch-j.json",
+      "ordinal": 14543,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 34368,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_a11321092a18e9abace8eaa4",
+      "batch": "batch-j.json",
+      "ordinal": 14544,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 34444,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_1d7ba9c7be542c2579ed17af",
+      "batch": "batch-j.json",
+      "ordinal": 14545,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 34519,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_5d5c8b42da056fd44fb17cee",
+      "batch": "batch-j.json",
+      "ordinal": 14546,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 34596,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_9d2cfa05d9995da68b616dbf",
+      "batch": "batch-j.json",
+      "ordinal": 14547,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 34671,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_b9592f60634bd950e18625b4",
+      "batch": "batch-j.json",
+      "ordinal": 14548,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 34742,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_0b448c3eb664756fa10f0c3d",
+      "batch": "batch-j.json",
+      "ordinal": 14549,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 34820,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_84bc020adfa9aabdcd89e81c",
+      "batch": "batch-j.json",
+      "ordinal": 14554,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 35168,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_5df3d460eac84af40a7fed6d",
+      "batch": "batch-j.json",
+      "ordinal": 14595,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 39784,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_f36e90cda9c77d4a3644cc7d",
+      "batch": "batch-j.json",
+      "ordinal": 14596,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 39853,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_984a8f694b5c30bb5facba06",
+      "batch": "batch-j.json",
+      "ordinal": 14597,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+        "sourceLine": 39919,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_a9fcdfb66a463991035e2c43",
+      "batch": "batch-k.json",
+      "ordinal": 15380,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-l2.json",
+        "sourceLine": 41669,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_ee2e07039d9df9dbb92683f4",
+      "batch": "batch-k.json",
+      "ordinal": 15381,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-l2.json",
+        "sourceLine": 41752,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_fc43208c27c2e521a3fb9e0f",
+      "batch": "batch-k.json",
+      "ordinal": 15382,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-l2.json",
+        "sourceLine": 41833,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_34799e5afec6bf19b6403a82",
+      "batch": "batch-k.json",
+      "ordinal": 15383,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-l2.json",
+        "sourceLine": 41915,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_38cb3eab2b360a659dd1acf3",
+      "batch": "batch-k.json",
+      "ordinal": 16044,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 3,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_05fe2a6cba543aa3d8b2a164",
+      "batch": "batch-k.json",
+      "ordinal": 16045,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 3,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_a584d1722a7b82a77e4340f9",
+      "batch": "batch-k.json",
+      "ordinal": 16046,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 6,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_ed58de88a4a66d98e5059408",
+      "batch": "batch-k.json",
+      "ordinal": 16047,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 6,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_5393375663a118b4ac97d093",
+      "batch": "batch-k.json",
+      "ordinal": 16048,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 10,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_4ac0ddb08aee162de6487cd5",
+      "batch": "batch-k.json",
+      "ordinal": 16049,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 10,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_96995accdf03f552fdaf80a6",
+      "batch": "batch-k.json",
+      "ordinal": 16050,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 13,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_e81bff8c2b9da0c93fe728ed",
+      "batch": "batch-k.json",
+      "ordinal": 16051,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 13,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_c72a12df89035f2fde79717a",
+      "batch": "batch-k.json",
+      "ordinal": 16052,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 3,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_5ea02e7879b440daeaf43f87",
+      "batch": "batch-k.json",
+      "ordinal": 16053,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 3,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_38aecc010413de6d022ce7b8",
+      "batch": "batch-k.json",
+      "ordinal": 16054,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 6,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_c2567edf96a2eda2a0d9b7a0",
+      "batch": "batch-k.json",
+      "ordinal": 16055,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 6,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_e9ffdd8da0f4cd32f5ff59a9",
+      "batch": "batch-k.json",
+      "ordinal": 16062,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_6_STORE_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 3,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_a9867fa1f7b8e40e884d80d7",
+      "batch": "batch-k.json",
+      "ordinal": 16063,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_6_STORE_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 3,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_c13bf5c191984d32c9ad00b1",
+      "batch": "batch-k.json",
+      "ordinal": 16152,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/recovery/PANTAVION_MASTER_RECOVERY_CONTINUATION_BRIEF.md",
+        "sourceLine": 96,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_9864bd6d157669b25d60ca2c",
+      "batch": "batch-k.json",
+      "ordinal": 16153,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/recovery/PANTAVION_MASTER_RECOVERY_CONTINUATION_BRIEF.md",
+        "sourceLine": 96,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_71eb5a4318ebba68cec07cad",
+      "batch": "batch-k.json",
+      "ordinal": 16154,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "docs/recovery/PANTAVION_MASTER_RECOVERY_CONTINUATION_BRIEF.md",
+        "sourceLine": 96,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_6118d596bdf0ee4fad177288",
+      "batch": "batch-k.json",
+      "ordinal": 16155,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "donor",
+        "sourceFile": "docs/recovery/PANTAVION_MASTER_RECOVERY_CONTINUATION_BRIEF.md",
+        "sourceLine": 96,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_c9a3930154fdd0a77c939ef2",
+      "batch": "batch-k.json",
+      "ordinal": 16204,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "PANTAVION_MASTER_RECOVERY_HANDOFF_20260810.md",
+        "sourceLine": 132,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_b4a13bf22873202ae38bd49e",
+      "batch": "batch-k.json",
+      "ordinal": 16411,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "scripts/pantavion-kernel-compat-repair.cjs",
+        "sourceLine": 50,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_f8dd87723161869d1f4d6818",
+      "batch": "batch-k.json",
+      "ordinal": 16412,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "scripts/pantavion-kernel-compat-repair.cjs",
+        "sourceLine": 50,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_8f20b81b3b84796e4903bad1",
+      "batch": "batch-k.json",
+      "ordinal": 16413,
+      "currentModule": "Kernel / Guardian / Runtime",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "scripts/pantavion-kernel-compat-repair.cjs",
+        "sourceLine": 50,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_c8302719948b8b729252f54a",
+      "batch": "batch-k2.json",
+      "ordinal": 54595,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 5668,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_fa9599851e5957c87ef00a66",
+      "batch": "batch-k2.json",
+      "ordinal": 54633,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 7673,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_47356172c2b95b9d66366ab8",
+      "batch": "batch-k2.json",
+      "ordinal": 54727,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 13036,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_807164187e30b48a91d98ca0",
+      "batch": "batch-k2.json",
+      "ordinal": 54737,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 13718,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_b3747aff8e0097a9418f2462",
+      "batch": "batch-k2.json",
+      "ordinal": 54738,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 13766,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_09c849cca7730000df41026c",
+      "batch": "batch-k2.json",
+      "ordinal": 54741,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 13912,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_9c28cda786823f7c66ae6a69",
+      "batch": "batch-k2.json",
+      "ordinal": 54981,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 30724,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_984fadcaf18062e0eedc228d",
+      "batch": "batch-k2.json",
+      "ordinal": 54982,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 30772,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_7e6158b5479bf66c0fb378f2",
+      "batch": "batch-k2.json",
+      "ordinal": 54983,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 30820,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_3b8d528a9b1e186ecd372dea",
+      "batch": "batch-k2.json",
+      "ordinal": 55029,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 40304,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_2e7052178cc6bd7ab3ce5e15",
+      "batch": "batch-k2.json",
+      "ordinal": 55199,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 73905,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_db0b657067e166f20941b40d",
+      "batch": "batch-k2.json",
+      "ordinal": 55200,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 73968,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_3fa21f655cf5cf81a70cbf46",
+      "batch": "batch-k2.json",
+      "ordinal": 55201,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 74031,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_99c1f68cc9ec85d69892f4ad",
+      "batch": "batch-m.json",
+      "ordinal": 18993,
+      "currentModule": "Maps / World / Water",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/professional/infrastructure/water/water-entry-client.tsx",
+        "sourceLine": 1,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_86e1ca843ccf327f94c4ff14",
+      "batch": "batch-m.json",
+      "ordinal": 18994,
+      "currentModule": "Maps / World / Water",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/professional/infrastructure/water/water-entry-client.tsx",
+        "sourceLine": 1,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_63a92a8e59b2a022458354df",
+      "batch": "batch-m.json",
+      "ordinal": 18995,
+      "currentModule": "Maps / World / Water",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/professional/infrastructure/water/water-entry-client.tsx",
+        "sourceLine": 1,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_307600c4dbb7aaccce4d986e",
+      "batch": "batch-m2.json",
+      "ordinal": 57298,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-y.json",
+        "sourceLine": 41809,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_b919ad6f78271dcaa009160a",
+      "batch": "batch-m2.json",
+      "ordinal": 57299,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-y.json",
+        "sourceLine": 41856,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_4cc89577b64c9e40ad3b5437",
+      "batch": "batch-n2.json",
+      "ordinal": 58619,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-z.json",
+        "sourceLine": 30531,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_a8723266582519e97e0e01fb",
+      "batch": "batch-n2.json",
+      "ordinal": 59256,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-z.json",
+        "sourceLine": 62065,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_af501ef022d70259e31d7edc",
+      "batch": "batch-n2.json",
+      "ordinal": 59263,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-z.json",
+        "sourceLine": 62599,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_3e607fe4f0f78ae54aa71f2b",
+      "batch": "batch-n2.json",
+      "ordinal": 59264,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-z.json",
+        "sourceLine": 62679,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_2704c7ef10ac856815fac384",
+      "batch": "batch-n2.json",
+      "ordinal": 59604,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 22,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_62206d622659561d59e6fd37",
+      "batch": "batch-n2.json",
+      "ordinal": 59605,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 22,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_10f300d95e1cbacab6f60f14",
+      "batch": "batch-n2.json",
+      "ordinal": 59616,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_7_CANONICAL_MEMORY_LAYER.md",
+        "sourceLine": 15,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_8aa2f089bdcd2d17da7f6018",
+      "batch": "batch-n2.json",
+      "ordinal": 59617,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_7_CANONICAL_MEMORY_LAYER.md",
+        "sourceLine": 15,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_092aa8cc236464fa801d2a60",
+      "batch": "batch-o.json",
+      "ordinal": 21799,
+      "currentModule": "Maps / World / Water",
+      "datingScore": 1,
+      "matchedTerms": [
+        "date app"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "core/registry/capability-family-registry.ts",
+        "sourceLine": 350,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_09f8eeca3e784d63cbb5f762",
+      "batch": "batch-o.json",
+      "ordinal": 21800,
+      "currentModule": "Maps / World / Water",
+      "datingScore": 1,
+      "matchedTerms": [
+        "date app"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "core/registry/capability-family-registry.ts",
+        "sourceLine": 350,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_1ccc71d622bf8b10572f7351",
+      "batch": "batch-o.json",
+      "ordinal": 21801,
+      "currentModule": "Maps / World / Water",
+      "datingScore": 1,
+      "matchedTerms": [
+        "date app"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "core/registry/capability-family-registry.ts",
+        "sourceLine": 350,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_54431b76be6d80d29218e71e",
+      "batch": "batch-o2.json",
+      "ordinal": 61304,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "σχέση"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/people/blocks/page.tsx",
+        "sourceLine": 31,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_10d74acf2654b64ebb40cfe0",
+      "batch": "batch-o2.json",
+      "ordinal": 61305,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "σχέση"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/people/blocks/page.tsx",
+        "sourceLine": 31,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_e4de7558b8b4851e52fd6d24",
+      "batch": "batch-o2.json",
+      "ordinal": 61306,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "σχέση"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/people/blocks/page.tsx",
+        "sourceLine": 31,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_0e767e7bb0e3d024a4f50ddf",
+      "batch": "batch-p.json",
+      "ordinal": 22609,
+      "currentModule": "Maps / World / Water",
+      "datingScore": 1,
+      "matchedTerms": [
+        "dating"
+      ],
+      "provenance": {
+        "sourceFamily": "donor",
+        "sourceFile": "data/pantavion-source-inventory/inventory.json",
+        "sourceLine": 2171,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_64c0aa81691b21f6825913ea",
+      "batch": "batch-p2.json",
+      "ordinal": 61931,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "core/guardian/pantavion-guardian-kernel.ts",
+        "sourceLine": 76,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_53cf57f6abdb0781cdb88a81",
+      "batch": "batch-p2.json",
+      "ordinal": 61932,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "core/guardian/pantavion-guardian-kernel.ts",
+        "sourceLine": 76,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_a85753c5842cb88e3a934675",
+      "batch": "batch-p2.json",
+      "ordinal": 61933,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "core/guardian/pantavion-guardian-kernel.ts",
+        "sourceLine": 76,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_88a1322abee452914d82f060",
+      "batch": "batch-p2.json",
+      "ordinal": 62504,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "core/kernel/autonomous-build/autonomous-kernel-manifest.ts",
+        "sourceLine": 242,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_526d0bcc469b69e984c2140c",
+      "batch": "batch-p2.json",
+      "ordinal": 62505,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "core/kernel/autonomous-build/autonomous-kernel-manifest.ts",
+        "sourceLine": 242,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_e917b8930199f1b89eee3051",
+      "batch": "batch-p2.json",
+      "ordinal": 62506,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "core/kernel/autonomous-build/autonomous-kernel-manifest.ts",
+        "sourceLine": 242,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_021dad5e1b6df6f659a93865",
+      "batch": "batch-q2.json",
+      "ordinal": 63402,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "core/runtime/pantavion-autonomy-policy.ts",
+        "sourceLine": 1,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_97321a3049327cae3ca6aded",
+      "batch": "batch-q2.json",
+      "ordinal": 63403,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "core/runtime/pantavion-autonomy-policy.ts",
+        "sourceLine": 1,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_ec04bc9df0b3f080721d24d6",
+      "batch": "batch-q2.json",
+      "ordinal": 63404,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "core/runtime/pantavion-autonomy-policy.ts",
+        "sourceLine": 1,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_f7180a3aae7d882bf4cdbafa",
+      "batch": "batch-q2.json",
+      "ordinal": 64270,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "σχέση"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-a2.json",
+        "sourceLine": 70563,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_13580721232a00e51e42a9d5",
+      "batch": "batch-q2.json",
+      "ordinal": 64271,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "σχέση"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-a2.json",
+        "sourceLine": 70611,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_f23d408dfaa7afa9494a74fd",
+      "batch": "batch-q2.json",
+      "ordinal": 64272,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "σχέση"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-a2.json",
+        "sourceLine": 70657,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_41ac15e8abd434babf93a6ae",
+      "batch": "batch-r.json",
+      "ordinal": 26398,
+      "currentModule": "Maps / World / Water",
+      "datingScore": 1,
+      "matchedTerms": [
+        "date app"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-o.json",
+        "sourceLine": 23334,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_8ffd6d3bba6b37882238506e",
+      "batch": "batch-r.json",
+      "ordinal": 26399,
+      "currentModule": "Maps / World / Water",
+      "datingScore": 1,
+      "matchedTerms": [
+        "date app"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-o.json",
+        "sourceLine": 23404,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_302b25e6e4c5bff6f0417b8a",
+      "batch": "batch-s.json",
+      "ordinal": 27495,
+      "currentModule": "Maps / World / Water",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-s.json",
+        "sourceLine": 65791,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_f1fe69a78b7981f44fd581ec",
+      "batch": "batch-s2.json",
+      "ordinal": 66295,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-c2.json",
+        "sourceLine": 26492,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_702453345b1eb16848d566cc",
+      "batch": "batch-s2.json",
+      "ordinal": 66296,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-c2.json",
+        "sourceLine": 26541,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_8678c44c5aca6405644b9b97",
+      "batch": "batch-t.json",
+      "ordinal": 29047,
+      "currentModule": "Maps / World / Water",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "PANTAVION_MASTER_RECOVERY_HANDOFF_20260810.md",
+        "sourceLine": 140,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_aed7139b44c04e779f74bce1",
+      "batch": "batch-u2.json",
+      "ordinal": 70085,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-g.json",
+        "sourceLine": 60056,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_94a6d3f8cf5402305b46150c",
+      "batch": "batch-u2.json",
+      "ordinal": 70086,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-g.json",
+        "sourceLine": 60128,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_422e6973eae7bf7def6436d2",
+      "batch": "batch-u2.json",
+      "ordinal": 70087,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-g.json",
+        "sourceLine": 60208,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_66de7444808ee69674fc1d1c",
+      "batch": "batch-v.json",
+      "ordinal": 32577,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 17,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_5c63e27249b4b7f66cc7b247",
+      "batch": "batch-v.json",
+      "ordinal": 32578,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 17,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_f314531aabb0b46a83fdfe94",
+      "batch": "batch-v.json",
+      "ordinal": 32579,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 17,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_47d1ff0b56e4b635ed0d2780",
+      "batch": "batch-v.json",
+      "ordinal": 32580,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 23,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_014f7fcda53f8c2bfe9b95f4",
+      "batch": "batch-v.json",
+      "ordinal": 32581,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 23,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_78577f2495b87fdfde5445cb",
+      "batch": "batch-v.json",
+      "ordinal": 32582,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 23,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_cec8b606a1975841c60ff0a5",
+      "batch": "batch-v.json",
+      "ordinal": 32583,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 35,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_6544ed42560708a3feebe755",
+      "batch": "batch-v.json",
+      "ordinal": 32584,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 35,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_34e89bbfa4d68eead0a0d5ad",
+      "batch": "batch-v.json",
+      "ordinal": 32585,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 35,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_3d7983cb5d47ace070a630fe",
+      "batch": "batch-v.json",
+      "ordinal": 32586,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 44,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_68589f7c1f6059365ffd64ca",
+      "batch": "batch-v.json",
+      "ordinal": 32587,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 44,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_5c1c571c7ad3fe070ca4791d",
+      "batch": "batch-v.json",
+      "ordinal": 32588,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 44,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_c8ddaad1f3e22b821f69bb13",
+      "batch": "batch-v.json",
+      "ordinal": 32589,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 49,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_7e9d8610fa5da710f040a5d3",
+      "batch": "batch-v.json",
+      "ordinal": 32590,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 49,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_8bd887df99ca9f7aa34dc7bc",
+      "batch": "batch-v.json",
+      "ordinal": 32591,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/api/people/relationships/route.ts",
+        "sourceLine": 49,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_b554d8b6555a8e88a4b68fa8",
+      "batch": "batch-v.json",
+      "ordinal": 32733,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/communication/page.tsx",
+        "sourceLine": 7,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_51938c092db773a9b1873f16",
+      "batch": "batch-v.json",
+      "ordinal": 32734,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/communication/page.tsx",
+        "sourceLine": 7,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_cf3d06b23a2922866e022cc3",
+      "batch": "batch-v.json",
+      "ordinal": 32735,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/communication/page.tsx",
+        "sourceLine": 7,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_f25c9bd541b0d09b25fe67e4",
+      "batch": "batch-v.json",
+      "ordinal": 32817,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/listings/[listingId]/page.tsx",
+        "sourceLine": 18,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_e6eaa3be6c965fe838eab561",
+      "batch": "batch-v.json",
+      "ordinal": 32818,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/listings/[listingId]/page.tsx",
+        "sourceLine": 18,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_f3ab4daff2ecf902af393189",
+      "batch": "batch-v.json",
+      "ordinal": 32819,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/listings/[listingId]/page.tsx",
+        "sourceLine": 18,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_b59b5c05003752eb3aee3a33",
+      "batch": "batch-v.json",
+      "ordinal": 32820,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/listings/[listingId]/page.tsx",
+        "sourceLine": 30,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_9a65528566f446575f0bf54d",
+      "batch": "batch-v.json",
+      "ordinal": 32821,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/listings/[listingId]/page.tsx",
+        "sourceLine": 30,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_06c8b87ae5c7d989101abf3c",
+      "batch": "batch-v.json",
+      "ordinal": 32822,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/listings/[listingId]/page.tsx",
+        "sourceLine": 30,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_30b5f3d86c00b20ec14b967f",
+      "batch": "batch-v.json",
+      "ordinal": 32829,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/listings/[listingId]/page.tsx",
+        "sourceLine": 53,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_e39f4075d7956ae5408db453",
+      "batch": "batch-v.json",
+      "ordinal": 32830,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/listings/[listingId]/page.tsx",
+        "sourceLine": 53,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_8056f7eb4a241e9dd7258d46",
+      "batch": "batch-v.json",
+      "ordinal": 32831,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/listings/[listingId]/page.tsx",
+        "sourceLine": 53,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_267bf3abd4382bd2fbf82ce2",
+      "batch": "batch-v2.json",
+      "ordinal": 71038,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-g2.json",
+        "sourceLine": 64513,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_5a8439aa40a72310136648a4",
+      "batch": "batch-v2.json",
+      "ordinal": 71039,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-g2.json",
+        "sourceLine": 64589,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_120362118b296085d5190493",
+      "batch": "batch-v2.json",
+      "ordinal": 71040,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-g2.json",
+        "sourceLine": 64654,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_8923de99fdc05a22d64073f8",
+      "batch": "batch-w.json",
+      "ordinal": 33012,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/people/page.tsx",
+        "sourceLine": 56,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_01ddb8d675431fe706f23e67",
+      "batch": "batch-w.json",
+      "ordinal": 33013,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/people/page.tsx",
+        "sourceLine": 56,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_899e60aa587e92b11d9a817f",
+      "batch": "batch-w.json",
+      "ordinal": 33014,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/people/page.tsx",
+        "sourceLine": 56,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_16800c358e92d902a12fa92f",
+      "batch": "batch-w.json",
+      "ordinal": 33015,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/people/page.tsx",
+        "sourceLine": 62,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_159e1ea8b77573bdb2665bfe",
+      "batch": "batch-w.json",
+      "ordinal": 33016,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/people/page.tsx",
+        "sourceLine": 62,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_e22ee71fc06735d26e7afdc8",
+      "batch": "batch-w.json",
+      "ordinal": 33017,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/people/page.tsx",
+        "sourceLine": 62,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_b9e38e7242f8fd8ae15ce9fb",
+      "batch": "batch-w.json",
+      "ordinal": 33018,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/people/page.tsx",
+        "sourceLine": 67,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_1d7c4c762141190b19fe7008",
+      "batch": "batch-w.json",
+      "ordinal": 33019,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/people/page.tsx",
+        "sourceLine": 67,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_1edc10d8048d403f13ee6ac5",
+      "batch": "batch-w.json",
+      "ordinal": 33020,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/people/page.tsx",
+        "sourceLine": 67,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_235ed0349ce08c07645aaa23",
+      "batch": "batch-w.json",
+      "ordinal": 33021,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/people/page.tsx",
+        "sourceLine": 72,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_438fbe70f9d7ef261369b681",
+      "batch": "batch-w.json",
+      "ordinal": 33022,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/people/page.tsx",
+        "sourceLine": 72,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_be19110a55f2b75c8f545f1b",
+      "batch": "batch-w.json",
+      "ordinal": 33023,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/people/page.tsx",
+        "sourceLine": 72,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_7cbbb09fb75cca2157e7c987",
+      "batch": "batch-w.json",
+      "ordinal": 33027,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 8,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_dfee4c8f5e510a9f28e5972c",
+      "batch": "batch-w.json",
+      "ordinal": 33028,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 8,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_718f6edab518aba672406732",
+      "batch": "batch-w.json",
+      "ordinal": 33029,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 8,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_8da3fdfb83a5d2035074d39b",
+      "batch": "batch-w.json",
+      "ordinal": 33030,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 13,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_3345fdb0232822f51ee52620",
+      "batch": "batch-w.json",
+      "ordinal": 33031,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 13,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_330d3e404b407bc7d2678e5a",
+      "batch": "batch-w.json",
+      "ordinal": 33032,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 13,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_d09b6f4c2fd01a4b9c668e10",
+      "batch": "batch-w.json",
+      "ordinal": 33033,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 25,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_695d14e7239d02f7e7453ca1",
+      "batch": "batch-w.json",
+      "ordinal": 33034,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 25,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_57576dec6ba79514c96cf316",
+      "batch": "batch-w.json",
+      "ordinal": 33035,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 25,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_0c90134cc7a5a5b9eebb13ba",
+      "batch": "batch-w.json",
+      "ordinal": 33042,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 52,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_990009c4a98b91dabd2b46ec",
+      "batch": "batch-w.json",
+      "ordinal": 33043,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 52,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_5dde76ae13d3942c0fc7e0dd",
+      "batch": "batch-w.json",
+      "ordinal": 33044,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 52,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_7d4d44e1b655675cd1917db0",
+      "batch": "batch-w.json",
+      "ordinal": 33045,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 58,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_39e8efef0112cf6fdf846429",
+      "batch": "batch-w.json",
+      "ordinal": 33046,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 58,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_f02bf69079aeba94ca353218",
+      "batch": "batch-w.json",
+      "ordinal": 33047,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 58,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_8ba8a377371407e9257ef6e1",
+      "batch": "batch-w.json",
+      "ordinal": 33048,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 67,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_0e09a200d1ec739b4e9c5c84",
+      "batch": "batch-w.json",
+      "ordinal": 33049,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 67,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_c903299f19906aea11e171de",
+      "batch": "batch-w.json",
+      "ordinal": 33050,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/people/people-client.tsx",
+        "sourceLine": 67,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_52cdf442011435b70a5d666f",
+      "batch": "batch-w.json",
+      "ordinal": 33216,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/social/map/page.tsx",
+        "sourceLine": 28,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_a6e0d973e78a489f5a42c09c",
+      "batch": "batch-w.json",
+      "ordinal": 33217,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/social/map/page.tsx",
+        "sourceLine": 28,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_c34972824ae6e17dcd0ef4b6",
+      "batch": "batch-w.json",
+      "ordinal": 33218,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/social/map/page.tsx",
+        "sourceLine": 28,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_7e633c4515a6e356bdb0a0c0",
+      "batch": "batch-w.json",
+      "ordinal": 33219,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/social/map/page.tsx",
+        "sourceLine": 41,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_2f299fcf8a9030801c891397",
+      "batch": "batch-w.json",
+      "ordinal": 33220,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/social/map/page.tsx",
+        "sourceLine": 41,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_add084cb7b284a23cbf80136",
+      "batch": "batch-w.json",
+      "ordinal": 33221,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/social/map/page.tsx",
+        "sourceLine": 41,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_e7d03b9fee08f7c4f46659a0",
+      "batch": "batch-w.json",
+      "ordinal": 33989,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+        "sourceLine": 10461,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_0b6a39282afc87d4e2ca11ee",
+      "batch": "batch-w.json",
+      "ordinal": 33995,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+        "sourceLine": 10891,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_b757864c9dcc8775a87afa04",
+      "batch": "batch-w.json",
+      "ordinal": 34035,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+        "sourceLine": 18186,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_2d3c9e51d05f1cfa09e40988",
+      "batch": "batch-w.json",
+      "ordinal": 34036,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+        "sourceLine": 18253,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_4ff82eeae2365da7d8482dea",
+      "batch": "batch-w.json",
+      "ordinal": 34037,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+        "sourceLine": 18327,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_8db25c1f3a48ec5300b14463",
+      "batch": "batch-w.json",
+      "ordinal": 34145,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+        "sourceLine": 32485,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_42bf0fe1bc9090a298ac7038",
+      "batch": "batch-w.json",
+      "ordinal": 34146,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+        "sourceLine": 32571,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_f5b83a143eb86ed90178a13c",
+      "batch": "batch-w.json",
+      "ordinal": 34147,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+        "sourceLine": 32632,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_34bb4d95678dfd2a7e9f5913",
+      "batch": "batch-w.json",
+      "ordinal": 34148,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+        "sourceLine": 32694,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_2a9dddb2b1b736f2d2f87948",
+      "batch": "batch-w.json",
+      "ordinal": 34159,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+        "sourceLine": 33796,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_2ec633f4c957280eb4880761",
+      "batch": "batch-w.json",
+      "ordinal": 34160,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+        "sourceLine": 33870,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_f97d8100f9167ea5a2ee4e12",
+      "batch": "batch-w.json",
+      "ordinal": 34163,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+        "sourceLine": 34182,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_5dec4c187868f00cd2873297",
+      "batch": "batch-x.json",
+      "ordinal": 34493,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 31602,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_2afb69100e1732e490bb2735",
+      "batch": "batch-x.json",
+      "ordinal": 34494,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 31700,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_b357c4da7a388464db123ef6",
+      "batch": "batch-x.json",
+      "ordinal": 34495,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 31749,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_1a8e0726a0f19d8b54980dd0",
+      "batch": "batch-x.json",
+      "ordinal": 34512,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 33904,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_bbac7d4d45218a723f18e51b",
+      "batch": "batch-x.json",
+      "ordinal": 34590,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 50959,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_eeaf046566f09ccedfe37c81",
+      "batch": "batch-x.json",
+      "ordinal": 34591,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 51045,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_af7ba97171547f12075e92ea",
+      "batch": "batch-x.json",
+      "ordinal": 34592,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 51128,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_7709b78d84e9ffa6780d8d4a",
+      "batch": "batch-x.json",
+      "ordinal": 34593,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 51208,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_9831910a7caae88d98800cd4",
+      "batch": "batch-x.json",
+      "ordinal": 34609,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 53510,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_56b1ce96b1db1b4927773f85",
+      "batch": "batch-x.json",
+      "ordinal": 34610,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 53586,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_8ab425057496ef59acf2bbbb",
+      "batch": "batch-x.json",
+      "ordinal": 34611,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 53664,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_1a5f77b9598134823f7c5dc5",
+      "batch": "batch-x.json",
+      "ordinal": 34612,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 53744,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_2faa0e9e72e8e269113e78c6",
+      "batch": "batch-x.json",
+      "ordinal": 34860,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/architecture/PANTAVION_ACADEMIC_EVIDENCE_STANDARD.md",
+        "sourceLine": 42,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_f01e4ed06483c8df37cdce59",
+      "batch": "batch-x.json",
+      "ordinal": 34861,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/architecture/PANTAVION_ACADEMIC_EVIDENCE_STANDARD.md",
+        "sourceLine": 42,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_d2ff8d199baf8a0abc472bb9",
+      "batch": "batch-x.json",
+      "ordinal": 34916,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/recovery/DONOR_BATCH_001_CLEAN_UI_SURFACES.md",
+        "sourceLine": 33,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_08ddcef316ec37957e8245c6",
+      "batch": "batch-x.json",
+      "ordinal": 34917,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/recovery/DONOR_BATCH_001_CLEAN_UI_SURFACES.md",
+        "sourceLine": 33,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_9995e5d20493b698294a461c",
+      "batch": "batch-x.json",
+      "ordinal": 34918,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "docs/recovery/DONOR_BATCH_001_CLEAN_UI_SURFACES.md",
+        "sourceLine": 33,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_ae4507cf29033f5cb77e5ca0",
+      "batch": "batch-x.json",
+      "ordinal": 34919,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "donor",
+        "sourceFile": "docs/recovery/DONOR_BATCH_001_CLEAN_UI_SURFACES.md",
+        "sourceLine": 33,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_bc8fab1266629f14a5583345",
+      "batch": "batch-x.json",
+      "ordinal": 34940,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/recovery/DONOR_REPOSITORY_CONSOLIDATION_20260819.md",
+        "sourceLine": 75,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_e3c821bb6dd8b904fda8c66e",
+      "batch": "batch-x.json",
+      "ordinal": 34941,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/recovery/DONOR_REPOSITORY_CONSOLIDATION_20260819.md",
+        "sourceLine": 75,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_13f18fe3c234820ebc9b3234",
+      "batch": "batch-x.json",
+      "ordinal": 34942,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "docs/recovery/DONOR_REPOSITORY_CONSOLIDATION_20260819.md",
+        "sourceLine": 75,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_311e29dfd5635b70657bc732",
+      "batch": "batch-x.json",
+      "ordinal": 34943,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "donor",
+        "sourceFile": "docs/recovery/DONOR_REPOSITORY_CONSOLIDATION_20260819.md",
+        "sourceLine": 75,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_951252bd536791e0f9d28f21",
+      "batch": "batch-x.json",
+      "ordinal": 34988,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/recovery/HUMAN_COMMUNICATION_CORE_SCHEMA.md",
+        "sourceLine": 17,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_423b57bba0b501a9fac7f9e2",
+      "batch": "batch-x.json",
+      "ordinal": 34989,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/recovery/HUMAN_COMMUNICATION_CORE_SCHEMA.md",
+        "sourceLine": 17,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_c7cdeb5ffda1ca4b9728f448",
+      "batch": "batch-x.json",
+      "ordinal": 34990,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "docs/recovery/HUMAN_COMMUNICATION_CORE_SCHEMA.md",
+        "sourceLine": 17,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_f095a0cf32d9262d31bb7d94",
+      "batch": "batch-x.json",
+      "ordinal": 34991,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "donor",
+        "sourceFile": "docs/recovery/HUMAN_COMMUNICATION_CORE_SCHEMA.md",
+        "sourceLine": 17,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_8ca5e90034be94a46e86675f",
+      "batch": "batch-x.json",
+      "ordinal": 34992,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/recovery/HUMAN_COMMUNICATION_CORE_SCHEMA.md",
+        "sourceLine": 19,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_66e83f785061725d91b40b57",
+      "batch": "batch-x.json",
+      "ordinal": 34993,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/recovery/HUMAN_COMMUNICATION_CORE_SCHEMA.md",
+        "sourceLine": 19,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_68765de61ab658b1055d2cbd",
+      "batch": "batch-x.json",
+      "ordinal": 34994,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "docs/recovery/HUMAN_COMMUNICATION_CORE_SCHEMA.md",
+        "sourceLine": 19,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_aeac609052517d70bed0078e",
+      "batch": "batch-x.json",
+      "ordinal": 34995,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "donor",
+        "sourceFile": "docs/recovery/HUMAN_COMMUNICATION_CORE_SCHEMA.md",
+        "sourceLine": 19,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_e28f332b8ee62a3626b75060",
+      "batch": "batch-x.json",
+      "ordinal": 35025,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/recovery/LIVE_COMPLETION_MAP.md",
+        "sourceLine": 135,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_5c07d4206df6d76b49f01cc1",
+      "batch": "batch-x.json",
+      "ordinal": 35026,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/recovery/LIVE_COMPLETION_MAP.md",
+        "sourceLine": 135,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_f999ae9c05fed607774156d3",
+      "batch": "batch-x.json",
+      "ordinal": 35027,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "docs/recovery/LIVE_COMPLETION_MAP.md",
+        "sourceLine": 135,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_032503728277847469d8f22f",
+      "batch": "batch-x.json",
+      "ordinal": 35028,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "donor",
+        "sourceFile": "docs/recovery/LIVE_COMPLETION_MAP.md",
+        "sourceLine": 135,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_e922b4f9b68a3e588e0aa84c",
+      "batch": "batch-x.json",
+      "ordinal": 35029,
+      "currentModule": "People",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "live-state",
+        "sourceFile": "docs/recovery/LIVE_COMPLETION_MAP.md",
+        "sourceLine": 135,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_f7894127676ed540ddd55dbc",
+      "batch": "batch-x.json",
+      "ordinal": 35040,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/recovery/LIVE_COMPLETION_MAP.md",
+        "sourceLine": 166,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_6a0ad2e87ba6ad71773a57c0",
+      "batch": "batch-x.json",
+      "ordinal": 35041,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/recovery/LIVE_COMPLETION_MAP.md",
+        "sourceLine": 166,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_e18527fc062d3591e57b7b4a",
+      "batch": "batch-x.json",
+      "ordinal": 35042,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "docs/recovery/LIVE_COMPLETION_MAP.md",
+        "sourceLine": 166,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_ca50b35952fa9869d31831f9",
+      "batch": "batch-x.json",
+      "ordinal": 35043,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "donor",
+        "sourceFile": "docs/recovery/LIVE_COMPLETION_MAP.md",
+        "sourceLine": 166,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_c5b5b47449db43163874d5c9",
+      "batch": "batch-x.json",
+      "ordinal": 35044,
+      "currentModule": "People",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "live-state",
+        "sourceFile": "docs/recovery/LIVE_COMPLETION_MAP.md",
+        "sourceLine": 166,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_51fc441eff146140da95b60f",
+      "batch": "batch-x.json",
+      "ordinal": 35442,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "app/intelligence/routing/page.tsx",
+        "sourceLine": 298,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_a03f4de72d33c1121ed04454",
+      "batch": "batch-x.json",
+      "ordinal": 35443,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "app/intelligence/routing/page.tsx",
+        "sourceLine": 298,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_dcfa55f1e0ac8706fd43004e",
+      "batch": "batch-x.json",
+      "ordinal": 35444,
+      "currentModule": "Personal AI / PantaAI",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "current-code",
+        "sourceFile": "app/intelligence/routing/page.tsx",
+        "sourceLine": 298,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_391dc265d84da9491b0bd35d",
+      "batch": "batch-x2.json",
+      "ordinal": 73692,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 47233,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_5b5dfee6a5fec9c381c47ec3",
+      "batch": "batch-x2.json",
+      "ordinal": 73693,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+        "sourceLine": 47308,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_93571b0909f9dc68695375dc",
+      "batch": "batch-x2.json",
+      "ordinal": 73950,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "data/runtime-reports/latest-founder-vision-ingestion.json",
+        "sourceLine": 32872,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "pk_6f60d8477e0e850d230512bc",
+      "batch": "batch-x2.json",
+      "ordinal": 74305,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 16,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_e480fca0d6a34f4c56a1f98c",
+      "batch": "batch-x2.json",
+      "ordinal": 74306,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_3_TYPES_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 16,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_908979aa72e0535946f602b8",
+      "batch": "batch-x2.json",
+      "ordinal": 74307,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "founder-vision",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 16,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_58c9a89444e1a96e9f310cd4",
+      "batch": "batch-x2.json",
+      "ordinal": 74308,
+      "currentModule": "Safety / Trust / Minors",
+      "datingScore": 1,
+      "matchedTerms": [
+        "compatibility"
+      ],
+      "provenance": {
+        "sourceFamily": "unfinished-gap",
+        "sourceFile": "docs/kernel-canonicalization/PATCH_4_AUDIT_COMPATIBILITY_BRIDGE.md",
+        "sourceLine": 16,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_28b00bb3cd8854a32cf7d73c",
+      "batch": "batch-y2.json",
+      "ordinal": 76380,
+      "currentModule": "Social / Pulse / Communities",
+      "datingScore": 2,
+      "matchedTerms": [
+        "dating",
+        "relationship"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-i2.json",
+        "sourceLine": 18948,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    },
+    {
+      "id": "pk_27c277eaea1b600b52c4fa8d",
+      "batch": "batch-z2.json",
+      "ordinal": 76950,
+      "currentModule": "Social / Pulse / Communities",
+      "datingScore": 1,
+      "matchedTerms": [
+        "dating"
+      ],
+      "provenance": {
+        "sourceFamily": "recovery",
+        "sourceFile": "PANTAVION_MASTER_RECOVERY_HANDOFF_20260810.md",
+        "sourceLine": 249,
+        "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+        "sourceReport": null
+      },
+      "reviewStatus": "CLASSIFIED"
+    }
+  ]
+}

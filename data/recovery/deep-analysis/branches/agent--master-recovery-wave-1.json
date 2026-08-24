@@ -1,0 +1,74 @@
+{
+  "id": "PANT-BRANCH-D15AC5644CC1",
+  "sourceRef": "recovery/snapshots/agent--master-recovery-wave-1",
+  "headSha": "7e13acb7a4cc4685e38fbe63df081c6d6c46d76b",
+  "mergeBase": "863c7c27ea147f0ac5afd59a042a7b602362600a",
+  "behindMainBy": 445,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "chat-translation": 1,
+    "business-marketplace": 1,
+    "maps-water": 1,
+    "ai-kernel": 1,
+    "recovery-continuity": 1,
+    "governance-safety": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "documentation": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "docs/recovery/MASTER_RECOVERY_LEDGER.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/agent--master-recovery-wave-1/docs/recovery/MASTER_RECOVERY_LEDGER.md",
+      "blobSha": "c899fb2bd345f0dae340e5c2d7eb321e55be3015",
+      "sizeBytes": 11845,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 215,
+      "contentSha256": "7b0766f3d85d767847e789885fb38e90b0569ae7e5daad7a80896479acd02818",
+      "imports": [],
+      "exports": [
+        "names",
+        "source",
+        "adapters"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 5,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

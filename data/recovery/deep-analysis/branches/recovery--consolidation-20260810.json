@@ -1,0 +1,148 @@
+{
+  "id": "PANT-BRANCH-4B5DA82A6DD2",
+  "sourceRef": "recovery/snapshots/recovery--consolidation-20260810",
+  "headSha": "6acb6d14e0976760860cbb6574831d22c65986de",
+  "mergeBase": "17d4801a4348130bbd39587fae16367a4fa500b7",
+  "behindMainBy": 439,
+  "aheadOfMainBy": 3,
+  "changedFileCount": 3,
+  "topicCounts": {
+    "identity-security": 3,
+    "social-people": 3,
+    "chat-translation": 3,
+    "business-marketplace": 3,
+    "maps-water": 3,
+    "ai-kernel": 3,
+    "recovery-continuity": 3,
+    "governance-safety": 3,
+    "media-music": 2,
+    "infrastructure-deployment": 3
+  },
+  "kindCounts": {
+    "documentation": 2,
+    "configuration-data": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 3
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "docs/recovery/LIVE_PLACEMENT_MAP.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/recovery--consolidation-20260810/docs/recovery/LIVE_PLACEMENT_MAP.md",
+      "blobSha": "3fa6e3a18d586faf5e1805e1530332aadd95163e",
+      "sizeBytes": 4280,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 161,
+      "contentSha256": "b903a9e48fc48eb958d2bdb4df487051d240ba25d9b059ecf6eb1e4881808dc5",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/recovery/MASTER_RECOVERY_LEDGER.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--consolidation-20260810/docs/recovery/MASTER_RECOVERY_LEDGER.md",
+      "blobSha": "2f2d6f792ed709649c20481737462acf814d4137",
+      "sizeBytes": 8899,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 140,
+      "contentSha256": "0ef53d9d3a6d6c9ac89ca91aacf51ef91e8d9b7f4ad82b495804cff960192a96",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 5,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/recovery/recovery-manifest.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--consolidation-20260810/docs/recovery/recovery-manifest.json",
+      "blobSha": "f3ecd8b9a7ad775601b815ca45fde2c53e0cab63",
+      "sizeBytes": 4280,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 90,
+      "contentSha256": "b0e4829b298143c4995844928390cb8614b36bf3caccf6b4816c8c45070f1a6f",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 1,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

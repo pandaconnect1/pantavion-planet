@@ -1,0 +1,44 @@
+name: Pantavion Module Completion Audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - recovery/classified-ledger-20260823
+    paths:
+      - scripts/pantavion-module-completion-audit.cjs
+      - .github/workflows/pantavion-module-completion-audit.yml
+      - data/recovery/canonical-ledger/indexes/**
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pantavion-module-completion-audit-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: recovery/classified-ledger-20260823
+      - run: node scripts/pantavion-module-completion-audit.cjs
+      - name: Verify safety invariants
+        run: |
+          node -e 'const x=require("./data/recovery/canonical-ledger/completion-audit/manifest.json"); if(x.totalCorpusRecords!==82413||x.verifiedCompleteModules!==0||x.verifiedLive!==false||x.deleteAllowed!==false) throw Error("completion audit invariant failed")'
+      - name: Commit audit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/recovery/canonical-ledger/completion-audit
+          git diff --cached --quiet && exit 0
+          git commit -m "data(recovery): audit module completion evidence"
+          for attempt in 1 2 3; do
+            git pull --rebase origin recovery/classified-ledger-20260823 &&
+            git push origin HEAD:recovery/classified-ledger-20260823 && exit 0
+            sleep $((attempt * 5))
+          done
+          exit 1

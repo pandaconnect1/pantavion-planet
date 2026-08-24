@@ -128,7 +128,7 @@ const plan = {
     "Marketplace/work/services backend foundation",
   ],
   gitStatus,
-  findings: findings.slice(0, 800),
+  findings,
 };
 
 fs.writeFileSync(

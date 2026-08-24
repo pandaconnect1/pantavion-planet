@@ -1,0 +1,53 @@
+name: Pantavion Deep Branch Analysis
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/pantavion-deep-branch-analysis.cjs'
+      - '.github/workflows/pantavion-deep-branch-analysis.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Fetch main and exact snapshot refs
+        run: |
+          git fetch --no-tags origin '+refs/heads/main:refs/remotes/origin/main'
+          git fetch --no-tags origin '+refs/heads/recovery/snapshots/*:refs/remotes/origin/recovery/snapshots/*'
+      - name: Analyze every changed file in every snapshot
+        run: node scripts/pantavion-deep-branch-analysis.cjs
+      - name: Verify manifest truth state
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const m=JSON.parse(fs.readFileSync('data/recovery/deep-analysis/manifest.json','utf8'));
+          if(m.totals.snapshotBranches !== 91) throw new Error('snapshot count mismatch');
+          if(!m.stages.preserved || !m.stages.deeplyAnalyzedMachinePass) throw new Error('analysis stages missing');
+          if(m.stages.canonicalized || m.stages.tested || m.stages.verified || m.stages.deleteAllowed) throw new Error('premature completion claim');
+          if(m.branches.length !== 91) throw new Error('branch report count mismatch');
+          for(const b of m.branches) {
+            if(!fs.existsSync(b.report)) throw new Error('missing report '+b.report);
+            const r=JSON.parse(fs.readFileSync(b.report,'utf8'));
+            if(r.changedFileCount !== r.files.length) throw new Error('file count mismatch '+b.sourceRef);
+          }
+          console.log(JSON.stringify(m.totals));
+          NODE
+      - name: Commit transparent analysis reports
+        run: |
+          git config user.name 'pantavion-recovery-bot'
+          git config user.email 'pantavion-recovery-bot@users.noreply.github.com'
+          git add data/recovery/deep-analysis
+          if git diff --cached --quiet; then
+            echo 'Deep-analysis reports already current.'
+            exit 0
+          fi
+          git commit -m 'data(recovery): deep-analyze all 91 snapshot branches'
+          git push origin "HEAD:${{ github.head_ref }}"

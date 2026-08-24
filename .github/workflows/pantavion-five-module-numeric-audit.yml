@@ -1,0 +1,34 @@
+name: Pantavion Five Module Numeric Audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [recovery/classified-ledger-20260823]
+    paths:
+      - scripts/pantavion-five-module-numeric-audit.cjs
+      - .github/workflows/pantavion-five-module-numeric-audit.yml
+      - data/recovery/canonical-ledger/indexes/modules/**
+      - data/recovery/canonical-ledger/semantic-reclassification/dating-candidates.json
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: recovery/classified-ledger-20260823
+      - run: node scripts/pantavion-five-module-numeric-audit.cjs
+      - run: node -e 'const x=require("./data/recovery/canonical-ledger/numeric-module-audit/manifest.json"); if(x.modules.length!==5||x.verifiedCompleteModules!==0||x.deleteAllowed!==false) throw Error("numeric audit invariant failed")'
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/recovery/canonical-ledger/numeric-module-audit
+          git diff --cached --quiet && exit 0
+          git commit -m "data(recovery): publish five-module numeric audit"
+          for attempt in 1 2 3; do
+            git pull --rebase origin recovery/classified-ledger-20260823 &&
+            git push origin HEAD:recovery/classified-ledger-20260823 && exit 0
+            sleep $((attempt * 5))
+          done
+          exit 1

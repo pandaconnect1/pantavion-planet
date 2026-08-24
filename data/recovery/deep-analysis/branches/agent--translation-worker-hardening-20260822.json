@@ -1,0 +1,137 @@
+{
+  "id": "PANT-BRANCH-D109FE0E1CCB",
+  "sourceRef": "recovery/snapshots/agent--translation-worker-hardening-20260822",
+  "headSha": "2aa40137855b0f5cff184de11431e58fdfcea762",
+  "mergeBase": "ee5e4d8e42d5ceb32d4a60f0cbd44fc2048a2cc1",
+  "behindMainBy": 63,
+  "aheadOfMainBy": 4,
+  "changedFileCount": 3,
+  "topicCounts": {
+    "identity-security": 1,
+    "chat-translation": 3,
+    "ai-kernel": 3,
+    "infrastructure-deployment": 3,
+    "recovery-continuity": 1
+  },
+  "kindCounts": {
+    "ci-workflow": 1,
+    "source-code": 2
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 3
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": ".github/workflows/pantavion-runtime-safety.yml",
+      "previousPath": null,
+      "kind": "ci-workflow",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/agent--translation-worker-hardening-20260822/.github/workflows/pantavion-runtime-safety.yml",
+      "blobSha": "87668ed8fab998fddec935d0880f749b69251289",
+      "sizeBytes": 762,
+      "mainBlobSha": "87668ed8fab998fddec935d0880f749b69251289",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 38,
+      "contentSha256": "d634a34e06067215ddbc5fdbcdccc3f3d68ba9de83ef6bc42aa103b46541a8c6",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-translation-worker-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/agent--translation-worker-hardening-20260822/scripts/pantavion-translation-worker-gate.cjs",
+      "blobSha": "0fc0d3ae1870a91ba8ad2a38cc9048bd214052c4",
+      "sizeBytes": 3012,
+      "mainBlobSha": "0fc0d3ae1870a91ba8ad2a38cc9048bd214052c4",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 82,
+      "contentSha256": "4bbcf8f332297a6fdac8ee518ccb38f999075a8a00be2f3f96da4cff04e187ce",
+      "imports": [
+        "node:fs",
+        "node:path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "services/translation-agent.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/agent--translation-worker-hardening-20260822/services/translation-agent.ts",
+      "blobSha": "fb60b3f0c13bee20d11401149566543253bd2d2e",
+      "sizeBytes": 7855,
+      "mainBlobSha": "fb60b3f0c13bee20d11401149566543253bd2d2e",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 239,
+      "contentSha256": "f79c2d39082b21e4a8695e2c5879f020b30331ffc7dff6ccb7629a01578f2337",
+      "imports": [
+        "@/lib/supabase/admin",
+        "@/core/runtime/supabase-durable-execution-store",
+        "@/core/runtime/durable-execution"
+      ],
+      "exports": [
+        "startTranslationAgent"
+      ],
+      "envDependencies": [
+        "TRANSLATION_AGENT_POLL_MS",
+        "PANTAVION_INTERNAL_BASE"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

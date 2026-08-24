@@ -1,0 +1,2246 @@
+{
+  "id": "pantavion_branch_reconciliation_20260823",
+  "generatedAt": "2026-08-23T03:10:17.545Z",
+  "base": "main",
+  "baseNote": "Branch comparison metadata; no branch was deleted or modified.",
+  "totals": {
+    "branches": 158,
+    "uniqueAhead": 92,
+    "coveredByMain": 66,
+    "reviewRequired": 0
+  },
+  "records": [
+    {
+      "branch": "pantavion-recovery-20260705",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 73,
+      "behindBy": 541,
+      "compareStatus": "diverged",
+      "fileCount": 259,
+      "category": "SEC",
+      "sampleFiles": [
+        ".github/workflows/pantavion-evolution-pr.yml",
+        ".github/workflows/pantavion-kernel-watch.yml",
+        ".gitignore",
+        "AGENTS.md",
+        "app/api/kernel/agent-execution-reliability/route.ts",
+        "app/api/kernel/artifact-intake-registry/route.ts",
+        "app/api/kernel/cad-viewer-adapters/route.ts",
+        "app/api/kernel/conversion-matrix/route.ts",
+        "app/api/kernel/conversion/jobs/route.ts",
+        "app/api/kernel/conversion/matrix/route.ts",
+        "app/api/kernel/conversion/options/route.ts",
+        "app/api/kernel/device-geo-status/route.ts"
+      ],
+      "mergeBaseSha": "03ae20725edaaedfaeb16242511b7dfa0d892127"
+    },
+    {
+      "branch": "kernel-live-runtime-20260626-230235",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 66,
+      "behindBy": 541,
+      "compareStatus": "diverged",
+      "fileCount": 252,
+      "category": "SEC",
+      "sampleFiles": [
+        ".github/workflows/pantavion-evolution-pr.yml",
+        ".github/workflows/pantavion-kernel-watch.yml",
+        ".gitignore",
+        "AGENTS.md",
+        "app/api/kernel/agent-execution-reliability/route.ts",
+        "app/api/kernel/artifact-intake-registry/route.ts",
+        "app/api/kernel/cad-viewer-adapters/route.ts",
+        "app/api/kernel/conversion-matrix/route.ts",
+        "app/api/kernel/conversion/jobs/route.ts",
+        "app/api/kernel/conversion/matrix/route.ts",
+        "app/api/kernel/conversion/options/route.ts",
+        "app/api/kernel/device-geo-status/route.ts"
+      ],
+      "mergeBaseSha": "03ae20725edaaedfaeb16242511b7dfa0d892127"
+    },
+    {
+      "branch": "feature/social-core-runtime-v2",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 49,
+      "behindBy": 503,
+      "compareStatus": "diverged",
+      "fileCount": 34,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/ads/page.tsx",
+        "app/business/ads/actions.ts",
+        "app/business/ads/page.tsx",
+        "app/daily/feed/actions.ts",
+        "app/daily/feed/page.tsx",
+        "app/dashboard/page.tsx",
+        "app/social-core/cultural-bridge/page.tsx",
+        "app/social-core/layout.tsx",
+        "app/social-core/page.tsx",
+        "app/social/chat/actions.ts",
+        "app/social/chat/page.tsx",
+        "app/social/communities/actions.ts"
+      ],
+      "mergeBaseSha": "2dd17698d25ae22e6c1f9750f68ade07c1935997"
+    },
+    {
+      "branch": "pantavion/execution-engine-v1",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 26,
+      "behindBy": 569,
+      "compareStatus": "diverged",
+      "fileCount": 85,
+      "category": "SEC",
+      "sampleFiles": [
+        "app/api/internal/pantavion/autonomous-engineering/route.ts",
+        "app/api/internal/pantavion/autonomous-repair-pr/route.ts",
+        "app/api/internal/pantavion/autonomous-repair/route.ts",
+        "app/api/internal/pantavion/autonomous-work-package-queue/route.ts",
+        "app/api/internal/pantavion/code-generation-worker/route.ts",
+        "app/api/internal/pantavion/ecosystem-unification/route.ts",
+        "app/api/internal/pantavion/ecosystem-work-packages/route.ts",
+        "app/api/internal/pantavion/executor-adapters/route.ts",
+        "app/api/internal/pantavion/file-thread-locks/route.ts",
+        "app/api/internal/pantavion/model-agent-router/route.ts",
+        "app/api/internal/pantavion/production-env-check/route.ts",
+        "app/api/internal/pantavion/runtime-ledger/route.ts"
+      ],
+      "mergeBaseSha": "9c74f84c89f5ffc40a5722e7536368c5b5c49a09"
+    },
+    {
+      "branch": "feat/social-flagship",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 17,
+      "behindBy": 336,
+      "compareStatus": "diverged",
+      "fileCount": 13,
+      "category": "MAP",
+      "sampleFiles": [
+        "app/api/people/find-from-contacts/route.ts",
+        "app/api/social/media-url/route.ts",
+        "app/contacts/contacts-client.tsx",
+        "app/social/map/page.tsx",
+        "app/social/map/social-map-client.tsx",
+        "app/social/page.tsx",
+        "app/social/social-home-client.tsx",
+        "supabase/migrations/20260811050000_create_social_flagship_core.sql",
+        "supabase/migrations/20260811050500_create_social_location_sharing.sql",
+        "supabase/migrations/20260811051200_create_emergency_location_core.sql",
+        "supabase/migrations/20260811084000_link_social_posts_to_personal_media.sql",
+        "supabase/migrations/20260811100000_create_private_contact_discovery.sql"
+      ],
+      "mergeBaseSha": "df01bff6e1a8e773285ca78e86531dee9399b4bc"
+    },
+    {
+      "branch": "recovery/social-people-chat-all-inside-20260815",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 16,
+      "behindBy": 228,
+      "compareStatus": "diverged",
+      "fileCount": 18,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/api/pantavion/social-global/route.ts",
+        "app/messages/[conversationId]/conversation-client.tsx",
+        "app/messages/[conversationId]/page.tsx",
+        "app/messages/page.tsx",
+        "app/people/people-client.tsx",
+        "app/social/communities/actions.ts",
+        "app/social/communities/page.tsx",
+        "app/social/global/page.tsx",
+        "app/social/notifications/actions.ts",
+        "app/social/notifications/page.tsx",
+        "app/social/page.tsx",
+        "app/social/social-home-client.tsx"
+      ],
+      "mergeBaseSha": "286b11a4e3f354f47f8465733d3d83626ee99677"
+    },
+    {
+      "branch": "feature/water-map-b",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 14,
+      "behindBy": 209,
+      "compareStatus": "diverged",
+      "fileCount": 12,
+      "category": "SEC",
+      "sampleFiles": [
+        "app/api/professional/infrastructure/water/final-master-dwg/route.ts",
+        "app/professional/infrastructure/water/b/page.tsx",
+        "app/professional/infrastructure/water/components/water-map-b-authentic-client.tsx",
+        "app/professional/infrastructure/water/page.tsx",
+        "app/professional/infrastructure/water/water-map-navigation.tsx",
+        "core/water/water-map-b-alignment-contract.ts",
+        "core/water/water-map-b-master-contract.ts",
+        "core/water/water-map-b-position-truth.ts",
+        "core/water/water-map-b-source-identity.ts",
+        "evidence/water/map-b/source-verification-2026-08-16.json",
+        "package.json",
+        "scripts/pantavion-water-map-b-dwg-inventory.mjs"
+      ],
+      "mergeBaseSha": "a5d29057908d9db4ba58c50e735b02d28707f2c3"
+    },
+    {
+      "branch": "recovery/canonical-knowledge-v2-20260818",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 13,
+      "behindBy": 137,
+      "compareStatus": "diverged",
+      "fileCount": 8,
+      "category": "AIK",
+      "sampleFiles": [
+        ".github/workflows/pantavion-canonical-knowledge-v2.yml",
+        "core/ai/pantaai-agent-protocol.ts",
+        "core/recovery/canonical-knowledge-classification.ts",
+        "data/recovery/external-learning/20260818-ai-screenshot-insights.json",
+        "package.json",
+        "scripts/pantavion-canonical-knowledge-excavation-v2.cjs",
+        "scripts/pantavion-canonical-semantic-archive.cjs",
+        "scripts/pantavion-knowledge-photo-marriage.cjs"
+      ],
+      "mergeBaseSha": "f75de673e1fc24944988834c3a3329b7852db709"
+    },
+    {
+      "branch": "recovery/classified-ledger-20260823",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 11,
+      "behindBy": 1,
+      "compareStatus": "diverged",
+      "fileCount": 9,
+      "category": "REC",
+      "sampleFiles": [
+        ".github/workflows/pantavion-canonical-knowledge-v2.yml",
+        "data/recovery/canonical-ledger/README.md",
+        "data/recovery/canonical-ledger/record.schema.json",
+        "data/recovery/canonical-ledger/runs/2026-08-23-run-21-manifest.json",
+        "data/recovery/canonical-ledger/runs/2026-08-23-run-21-receipt.json",
+        "data/recovery/canonical-ledger/taxonomy.json",
+        "scripts/pantavion-founder-vision-ingestion.cjs",
+        "scripts/pantavion-unfinished-plan-ingestion.cjs",
+        "tsconfig.json"
+      ],
+      "mergeBaseSha": "4735c45f846664d54b1d894e56710d0fbb4c4d2d"
+    },
+    {
+      "branch": "feature/identity-trust-security-core",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 9,
+      "behindBy": 299,
+      "compareStatus": "diverged",
+      "fileCount": 7,
+      "category": "SEC",
+      "sampleFiles": [
+        "app/api/people/find-from-contacts/route.ts",
+        "app/auth/actions.ts",
+        "app/auth/register/RegisterClient.tsx",
+        "core/recovery/canonical-placement-registry.ts",
+        "docs/identity-trust-security-core.md",
+        "supabase/migrations/20260813070000_create_identity_trust_security_core.sql",
+        "supabase/migrations/20260813070100_seed_signup_phone_and_consents.sql"
+      ],
+      "mergeBaseSha": "13c67d0f0740e6ae1d29e99d0f937cac22d763b6"
+    },
+    {
+      "branch": "feature/social-core-foundation",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 9,
+      "behindBy": 524,
+      "compareStatus": "diverged",
+      "fileCount": 7,
+      "category": "SOC",
+      "sampleFiles": [
+        "app/page.tsx",
+        "app/social-core/page.tsx",
+        "docs/social/pantavion-secure-circles-architecture.md",
+        "lib/social-core/contracts.ts",
+        "lib/social-core/index.ts",
+        "lib/social-core/modules.ts",
+        "lib/social-core/policy-engine.ts"
+      ],
+      "mergeBaseSha": "9068d3ff34149ccc1cdbe89c27a82b62113afcb7"
+    },
+    {
+      "branch": "feat/social-business-listings-shell",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 8,
+      "behindBy": 431,
+      "compareStatus": "diverged",
+      "fileCount": 5,
+      "category": "REC",
+      "sampleFiles": [
+        "app/discovery/page.tsx",
+        "app/pantavion-home-client.tsx",
+        "docs/pantavion-backlog/README.md",
+        "docs/recovery/MASTER_RECOVERY_LEDGER.md",
+        "docs/recovery/recovery-manifest.json"
+      ],
+      "mergeBaseSha": "863c7c27ea147f0ac5afd59a042a7b602362600a"
+    },
+    {
+      "branch": "feature/simple-universal-interpreter",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 8,
+      "behindBy": 497,
+      "compareStatus": "diverged",
+      "fileCount": 3,
+      "category": "REV",
+      "sampleFiles": [
+        "app/api/pantavion/detect-language/route.ts",
+        "app/api/pantavion/transcribe/route.ts",
+        "app/translate/page.tsx"
+      ],
+      "mergeBaseSha": "2f8e042fb9b9ab11867031cedeb82edfe6e87b95"
+    },
+    {
+      "branch": "fix/core-four-verified-wave-20260815",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 7,
+      "behindBy": 231,
+      "compareStatus": "diverged",
+      "fileCount": 5,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/messages/[conversationId]/conversation-client.tsx",
+        "app/messages/[conversationId]/page.tsx",
+        "app/people/people-client.tsx",
+        "app/social/social-home-client.tsx",
+        "docs/runtime/chat-translation-verification-20260815.md"
+      ],
+      "mergeBaseSha": "d47aa0e4eca250075149d9147a5821a1becb80d1"
+    },
+    {
+      "branch": "fix/guardian-audit-script-repair",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 7,
+      "behindBy": 294,
+      "compareStatus": "diverged",
+      "fileCount": 6,
+      "category": "SEC",
+      "sampleFiles": [
+        "components/ModulePage.tsx",
+        "scripts/pantavion-ai-integrity-check.cjs",
+        "scripts/pantavion-autonomous-builder-gate.cjs",
+        "scripts/pantavion-autonomous-guardian-audit.cjs",
+        "scripts/pantavion-guardian-365.cjs",
+        "scripts/pantavion-translation-integrity-check.cjs"
+      ],
+      "mergeBaseSha": "571d349a04143e0cc8194130f81cdf2594259a67"
+    },
+    {
+      "branch": "agent/fix-live-translation-runtime",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 6,
+      "behindBy": 498,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/api/pantavion/translate/route.ts",
+        "core/translation/pantavion-public-text-fallback.ts"
+      ],
+      "mergeBaseSha": "2bbd3438e5c081c8e5129f29216a4bb48558a071"
+    },
+    {
+      "branch": "feat/foundation-sprint-1",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 6,
+      "behindBy": 506,
+      "compareStatus": "diverged",
+      "fileCount": 6,
+      "category": "AIK",
+      "sampleFiles": [
+        "app/api/health/route.ts",
+        "app/api/pantavion/agents/status/route.ts",
+        "core/agents/orchestrator.ts",
+        "docs/audits/FOUNDATION_SPRINT_1_INITIAL_AUDIT.md",
+        "lib/incidents/service.ts",
+        "lib/incidents/types.ts"
+      ],
+      "mergeBaseSha": "453c0c640c1d8f1ec2c0d494aabb72d44cf707af"
+    },
+    {
+      "branch": "recovery/canonical-knowledge-excavation-215",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 6,
+      "behindBy": 223,
+      "compareStatus": "diverged",
+      "fileCount": 4,
+      "category": "REC",
+      "sampleFiles": [
+        ".github/workflows/pantavion-knowledge-excavation.yml",
+        "core/recovery/canonical-knowledge-classification.ts",
+        "package.json",
+        "scripts/pantavion-canonical-knowledge-excavation.cjs"
+      ],
+      "mergeBaseSha": "0f611b94dda5d8ce22bdd52083926ac9bdea420a"
+    },
+    {
+      "branch": "agent/production-real-features-only",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 5,
+      "behindBy": 503,
+      "compareStatus": "diverged",
+      "fileCount": 5,
+      "category": "MAP",
+      "sampleFiles": [
+        "app/page.tsx",
+        "app/pantavion-home-client.tsx",
+        "app/professional/infrastructure/water/page.tsx",
+        "app/professional/infrastructure/water/water-map-navigation.tsx",
+        "docs/production-visibility-policy.md"
+      ],
+      "mergeBaseSha": "2dd17698d25ae22e6c1f9750f68ade07c1935997"
+    },
+    {
+      "branch": "fix/interpreter-full-turn-audio-20260815",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 5,
+      "behindBy": 237,
+      "compareStatus": "diverged",
+      "fileCount": 4,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/api/pantavion/speech-to-text/route.ts",
+        "app/translate/interpreter/page.tsx",
+        "docs/recovery/interpreter-full-turn-audio-20260815.md",
+        "docs/runtime/core-four-verification-20260815.md"
+      ],
+      "mergeBaseSha": "d63a97aacef9fcb64a07982972aee5e16db1d44a"
+    },
+    {
+      "branch": "fix/water-final-master-supabase-storage",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 5,
+      "behindBy": 179,
+      "compareStatus": "diverged",
+      "fileCount": 5,
+      "category": "MAP",
+      "sampleFiles": [
+        "app/api/professional/infrastructure/water/final-master-dwg/route.ts",
+        "app/api/professional/infrastructure/water/final-master-dwg/upload-url/route.ts",
+        "app/professional/infrastructure/water/final-master-dwg/final-master-dwg-uploader.tsx",
+        "app/professional/infrastructure/water/final-master-dwg/page.tsx",
+        "core/water/final-master-dwg-source.ts"
+      ],
+      "mergeBaseSha": "2c41ee12f1889acf5e5c4ddb6430df0cd78e7dd9"
+    },
+    {
+      "branch": "recovery/personalized-sections-wave-20260815",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 5,
+      "behindBy": 230,
+      "compareStatus": "diverged",
+      "fileCount": 3,
+      "category": "SOC",
+      "sampleFiles": [
+        "app/profile/ProfileClient.tsx",
+        "core/personalization/pantavion-personalized-sections.ts",
+        "docs/recovery/PERSONALIZED_SECTION_ALLOCATION_20260815.md"
+      ],
+      "mergeBaseSha": "417e8c9cc68adacc99adba1d75c7d3ef2cfd8aeb"
+    },
+    {
+      "branch": "agent/release1-live-translation",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 4,
+      "behindBy": 502,
+      "compareStatus": "diverged",
+      "fileCount": 4,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/api/pantavion/translate/route.ts",
+        "app/pantavion-global-language-selector.tsx",
+        "app/pantavion-home-client.tsx",
+        "core/translation/pantavion-translation-provider-adapters.ts"
+      ],
+      "mergeBaseSha": "73d13a72203aec56bddf48c7e706631e4246823d"
+    },
+    {
+      "branch": "agent/shared-translation-service",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 4,
+      "behindBy": 489,
+      "compareStatus": "diverged",
+      "fileCount": 3,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/api/pantavion/translate/route.ts",
+        "core/translation/pantavion-shared-translation-service.ts",
+        "scripts/pantavion-master-audit.cjs"
+      ],
+      "mergeBaseSha": "120339fdfb37d39eba978238ce2cfbb63feea954"
+    },
+    {
+      "branch": "agent/translation-worker-hardening-20260822",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 4,
+      "behindBy": 49,
+      "compareStatus": "diverged",
+      "fileCount": 3,
+      "category": "SEC",
+      "sampleFiles": [
+        ".github/workflows/pantavion-runtime-safety.yml",
+        "scripts/pantavion-translation-worker-gate.cjs",
+        "services/translation-agent.ts"
+      ],
+      "mergeBaseSha": "ee5e4d8e42d5ceb32d4a60f0cbd44fc2048a2cc1"
+    },
+    {
+      "branch": "feature/startup-canonical-runtime-20260818",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 4,
+      "behindBy": 133,
+      "compareStatus": "diverged",
+      "fileCount": 4,
+      "category": "REV",
+      "sampleFiles": [
+        "app/api/pantavion/startup/route.ts",
+        "app/startup/StartupClient.tsx",
+        "app/startup/page.tsx",
+        "core/startup/pantavion-startup-engine.ts"
+      ],
+      "mergeBaseSha": "074ac612df3bd0a68fcaec4b01b81d289a61da03"
+    },
+    {
+      "branch": "fix/supabase-public-runtime-fallback",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 4,
+      "behindBy": 302,
+      "compareStatus": "diverged",
+      "fileCount": 4,
+      "category": "SOC",
+      "sampleFiles": [
+        "app/api/social/health/route.ts",
+        "lib/supabase/client.ts",
+        "lib/supabase/public-config.ts",
+        "lib/supabase/server.ts"
+      ],
+      "mergeBaseSha": "213f3fd74335341c070be46021eeae13d22bc9b6"
+    },
+    {
+      "branch": "recovery/donor-repo-consolidation-20260819-batch2",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 4,
+      "behindBy": 126,
+      "compareStatus": "diverged",
+      "fileCount": 3,
+      "category": "REC",
+      "sampleFiles": [
+        "data/recovery/donor-repositories.json",
+        "docs/recovery/DONOR_BATCH_001_CLEAN_UI_SURFACES.md",
+        "docs/recovery/DONOR_REPOSITORY_CONSOLIDATION_20260819.md"
+      ],
+      "mergeBaseSha": "c0984ed5d85796f2736c434b8e2d92f0985cd64d"
+    },
+    {
+      "branch": "recovery/donor-repo-consolidation-20260819-batch2-work",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 4,
+      "behindBy": 126,
+      "compareStatus": "diverged",
+      "fileCount": 3,
+      "category": "REC",
+      "sampleFiles": [
+        "data/recovery/donor-repositories.json",
+        "docs/recovery/DONOR_BATCH_001_CLEAN_UI_SURFACES.md",
+        "docs/recovery/DONOR_REPOSITORY_CONSOLIDATION_20260819.md"
+      ],
+      "mergeBaseSha": "c0984ed5d85796f2736c434b8e2d92f0985cd64d"
+    },
+    {
+      "branch": "agent/bidirectional-interpreter-mode",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 3,
+      "behindBy": 469,
+      "compareStatus": "diverged",
+      "fileCount": 3,
+      "category": "DOC",
+      "sampleFiles": [
+        "docs/.temp-locale-fix",
+        "docs/.temp-locale-fix-2",
+        "docs/.temp-locale-fix-3"
+      ],
+      "mergeBaseSha": "054d6ac6b29a110bad970eb2308d3e9478976890"
+    },
+    {
+      "branch": "feat/pantavion-foundry-control-plane-v1",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 3,
+      "behindBy": 6,
+      "compareStatus": "diverged",
+      "fileCount": 23,
+      "category": "SEC",
+      "sampleFiles": [
+        "app/api/kernel/audit-memory/route.ts",
+        "app/api/kernel/continuity-memory/route.ts",
+        "app/api/kernel/gap-intelligence/route.ts",
+        "app/api/kernel/heartbeat/route.ts",
+        "app/api/kernel/product-dna/route.ts",
+        "app/api/kernel/research-assimilation/route.ts",
+        "app/api/kernel/work-orders/route.ts",
+        "app/api/pantavion/intelligence/cron/route.ts",
+        "app/kernel/kernel-live-panel-client.tsx",
+        "app/kernel/kernel-work-order-client.tsx",
+        "core/kernel/agent-security-policy.ts",
+        "core/kernel/kernel-access-guard.ts"
+      ],
+      "mergeBaseSha": "e1a92f0a24e030e15393fd4118ae6d29260afa34"
+    },
+    {
+      "branch": "fix/social-live-backend-gate",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 3,
+      "behindBy": 318,
+      "compareStatus": "diverged",
+      "fileCount": 3,
+      "category": "SOC",
+      "sampleFiles": [
+        "app/api/social/health/route.ts",
+        "app/social/page.tsx",
+        "app/social/social-home-client.tsx"
+      ],
+      "mergeBaseSha": "92acddf92fb3cc74912f952a2f4846d2466235d6"
+    },
+    {
+      "branch": "fix/water-lock-refresh-evidence",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 3,
+      "behindBy": 102,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "MAP",
+      "sampleFiles": [
+        ".github/workflows/water-lock-refresh-evidence.yml",
+        "core/infrastructure/water/water-network-runtime-lock.json"
+      ],
+      "mergeBaseSha": "8dfc7a82a5e752e358555c53be8c1a562e26b100"
+    },
+    {
+      "branch": "pantavion/ecosystem-readiness-gate-v1",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 3,
+      "behindBy": 569,
+      "compareStatus": "diverged",
+      "fileCount": 12,
+      "category": "SEC",
+      "sampleFiles": [
+        "app/api/pantavion/ecosystem-signals/route.ts",
+        "app/api/professional/infrastructure/water/final-master-dwg/route.ts",
+        "app/api/translation/realtime/session/route.ts",
+        "app/professional/infrastructure/water/final-master-dwg/page.tsx",
+        "core/ai/pantavion-agent-protocol-registry.ts",
+        "core/communication/pantavion-translation-runtime-contract.ts",
+        "core/intelligence/pantavion-ecosystem-signal-registry.ts",
+        "core/security/pantavion-agent-delegation-policy.ts",
+        "core/water/final-master-dwg-source.ts",
+        "package.json",
+        "scripts/pantavion-capability-readiness-gate.cjs",
+        "scripts/upload-final-master-dwg-to-blob.cjs"
+      ],
+      "mergeBaseSha": "9c74f84c89f5ffc40a5722e7536368c5b5c49a09"
+    },
+    {
+      "branch": "recovery/consolidation-20260810",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 3,
+      "behindBy": 425,
+      "compareStatus": "diverged",
+      "fileCount": 3,
+      "category": "MAP",
+      "sampleFiles": [
+        "docs/recovery/LIVE_PLACEMENT_MAP.md",
+        "docs/recovery/MASTER_RECOVERY_LEDGER.md",
+        "docs/recovery/recovery-manifest.json"
+      ],
+      "mergeBaseSha": "17d4801a4348130bbd39587fae16367a4fa500b7"
+    },
+    {
+      "branch": "rescue-kernel-canonical-v1-20260411-194906",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 3,
+      "behindBy": 1041,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "AIK",
+      "sampleFiles": [
+        "kernel/audit.ts",
+        "kernel/types.ts"
+      ],
+      "mergeBaseSha": "6ef6398bf219de227cb3ba1bce536a485b95a54f"
+    },
+    {
+      "branch": "agent/canonical-social-flagship-wave",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 304,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "REV",
+      "sampleFiles": [
+        "app/pantavion-home-client.tsx"
+      ],
+      "mergeBaseSha": "812502d0ae4234cc52cefc050a19fe8f51583e60"
+    },
+    {
+      "branch": "agent/fix-water-admin-mobile-navigation-20260721",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 539,
+      "compareStatus": "diverged",
+      "fileCount": 4,
+      "category": "MAP",
+      "sampleFiles": [
+        "app/professional/infrastructure/water/access/page.tsx",
+        "app/professional/infrastructure/water/access/water-access-control-client.tsx",
+        "app/professional/infrastructure/water/admin/approvals/page.tsx",
+        "app/professional/infrastructure/water/page.tsx"
+      ],
+      "mergeBaseSha": "c1ef45b8d893d1270ebdf403bc0a95118f0e43ae"
+    },
+    {
+      "branch": "agent/fix-water-admin-users-20260720",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 540,
+      "compareStatus": "diverged",
+      "fileCount": 5,
+      "category": "MAP",
+      "sampleFiles": [
+        "app/api/professional/infrastructure/water/admin/session/route.ts",
+        "app/professional/infrastructure/water/admin/access/page.tsx",
+        "app/professional/infrastructure/water/admin/approvals/page.tsx",
+        "app/professional/infrastructure/water/admin/faults/page.tsx",
+        "app/professional/infrastructure/water/admin/page.tsx"
+      ],
+      "mergeBaseSha": "9dd432db494553664bb2ce5d8a20acb66636e4c1"
+    },
+    {
+      "branch": "agent/human-core-live-wave-1",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 425,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "GOV",
+      "sampleFiles": [
+        "app/api/consent/route.ts",
+        "supabase/migrations/20260810_human_core_wave_1.sql"
+      ],
+      "mergeBaseSha": "17d4801a4348130bbd39587fae16367a4fa500b7"
+    },
+    {
+      "branch": "agent/master-recovery-wave-1",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 431,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "REC",
+      "sampleFiles": [
+        "docs/recovery/MASTER_RECOVERY_LEDGER.md"
+      ],
+      "mergeBaseSha": "863c7c27ea147f0ac5afd59a042a7b602362600a"
+    },
+    {
+      "branch": "agent/mobile-header-language-cleanup",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 501,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "REV",
+      "sampleFiles": [
+        "app/pantavion-global-language-selector.tsx",
+        "app/pantavion-home-client.tsx"
+      ],
+      "mergeBaseSha": "473d5f61c83f1d2ee0518b2d7c1b31cc9040c095"
+    },
+    {
+      "branch": "agent/production-translation-e2e-20260822",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 7,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "CHT",
+      "sampleFiles": [
+        ".github/workflows/pantavion-production-translation-e2e.yml"
+      ],
+      "mergeBaseSha": "ffdf3a21113a4a20a6418f9b51812bd423521b71"
+    },
+    {
+      "branch": "agent/raw-donor-preservation",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 2,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "REC",
+      "sampleFiles": [
+        "recovery/raw-donors/DONOR_SCOPE_LOCK.md",
+        "recovery/raw-donors/PRESERVATION_POLICY.md"
+      ],
+      "mergeBaseSha": "6260665e44ff6a3c76ccd2e2c4106ea580898de2"
+    },
+    {
+      "branch": "agent/stt-ai-sdk",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 438,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "REV",
+      "sampleFiles": [
+        "app/api/pantavion/speech-to-text/route.ts",
+        "package.json"
+      ],
+      "mergeBaseSha": "5e5ef89d1993c5fd4fc350d99f23d728ca1b9553"
+    },
+    {
+      "branch": "feat/language-coverage-verification-20260815",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 229,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/api/pantavion/language-coverage/route.ts",
+        "core/translation/pantavion-language-coverage-matrix.ts"
+      ],
+      "mergeBaseSha": "9b4aa62a98843eacde611fa7d03fc6718edf0549"
+    },
+    {
+      "branch": "feature/translation-agent",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 248,
+      "compareStatus": "diverged",
+      "fileCount": 7,
+      "category": "CHT",
+      "sampleFiles": [
+        ".env.example",
+        "app/api/agents/translation/control/route.ts",
+        "core/control/control-store.ts",
+        "docs/translation-agent/README.md",
+        "services/translation-agent.ts",
+        "services/translation-agent/control-client.ts",
+        "tests/control-endpoint.test.ts"
+      ],
+      "mergeBaseSha": "ea6d235a4484a5b068120adeab8938bca66644e8"
+    },
+    {
+      "branch": "fix/map-b-founder-approved-access",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 92,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "SEC",
+      "sampleFiles": [
+        "app/api/professional/infrastructure/water/final-master-dwg/route.ts",
+        "app/professional/infrastructure/water/components/water-map-b-authentic-client.tsx"
+      ],
+      "mergeBaseSha": "e58738bd6a3fe1a722a1bb8138039c9112187d07"
+    },
+    {
+      "branch": "fix/production-sync-verification",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 317,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "SOC",
+      "sampleFiles": [
+        ".github/workflows/pantavion-production-sync-verify.yml",
+        "app/api/social/health/route.ts"
+      ],
+      "mergeBaseSha": "80613d3461a968dd20fc9f363eb5de4462553158"
+    },
+    {
+      "branch": "fix/production-visibility-20260822",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 48,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "DOC",
+      "sampleFiles": [
+        "app/page.tsx",
+        "docs/production/visibility-note.txt"
+      ],
+      "mergeBaseSha": "b194ceb367974e27c410674c109933b82439aba6"
+    },
+    {
+      "branch": "fix/water-map-b-resumable-upload",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 118,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "MAP",
+      "sampleFiles": [
+        "app/professional/infrastructure/water/final-master-dwg/final-master-dwg-uploader.tsx",
+        "package.json"
+      ],
+      "mergeBaseSha": "365758baf5e73930aef5348a243c94c653fc590e"
+    },
+    {
+      "branch": "kernel-canonical-v1",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 1041,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "AIK",
+      "sampleFiles": [
+        "kernel/types.ts"
+      ],
+      "mergeBaseSha": "6ef6398bf219de227cb3ba1bce536a485b95a54f"
+    },
+    {
+      "branch": "recovery/identity-registration-current-main",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 249,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "SEC",
+      "sampleFiles": [
+        "app/auth/actions.ts",
+        "app/auth/register/RegisterClient.tsx"
+      ],
+      "mergeBaseSha": "89d6de137b754f63fe582bc78e802ab2c727654e"
+    },
+    {
+      "branch": "recovery/interpreter-backend-20260814",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 256,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "REV",
+      "sampleFiles": [
+        "app/api/pantavion/detect-language/route.ts",
+        "app/api/pantavion/transcribe/route.ts"
+      ],
+      "mergeBaseSha": "0e2a7d921befbb146ae7a4ff10066b357a09850b"
+    },
+    {
+      "branch": "recovery/interpreter-language-runtime",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 256,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "REV",
+      "sampleFiles": [
+        "app/api/pantavion/detect-language/route.ts",
+        "app/api/pantavion/transcribe/route.ts"
+      ],
+      "mergeBaseSha": "0e2a7d921befbb146ae7a4ff10066b357a09850b"
+    },
+    {
+      "branch": "sandbox/global-connect-foundation-20260815-0100",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 248,
+      "compareStatus": "diverged",
+      "fileCount": 7,
+      "category": "INF",
+      "sampleFiles": [
+        "app/api/capabilities/global-connect/route.ts",
+        "core/global-connect/contracts.ts",
+        "data/global/countries.iso3166.json",
+        "docs/global-connect/FOUNDATION_CYCLE.md",
+        "scripts/verify-global-country-registry.cjs",
+        "supabase/migrations/20260815010500_global_connect_foundation.sql",
+        "supabase/rollback/20260815010500_global_connect_foundation.down.sql"
+      ],
+      "mergeBaseSha": "ea6d235a4484a5b068120adeab8938bca66644e8"
+    },
+    {
+      "branch": "vercel-agent/canonical-control-plane-foundation",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 2,
+      "behindBy": 102,
+      "compareStatus": "diverged",
+      "fileCount": 4,
+      "category": "REC",
+      "sampleFiles": [
+        "core/control-plane/canonical-control-plane.ts",
+        "docs/recovery/CANONICAL_CONTROL_PLANE_INVENTORY_20260819.md",
+        "supabase/migrations/20260819181000_create_canonical_control_plane.sql",
+        "supabase/migrations/20260819181100_harden_canonical_control_plane.sql"
+      ],
+      "mergeBaseSha": "8dfc7a82a5e752e358555c53be8c1a562e26b100"
+    },
+    {
+      "branch": "agent/fix-water-network-range-loading-20260723",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 536,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "MAP",
+      "sampleFiles": [
+        "app/api/professional/infrastructure/water/segment/bbox/route.ts",
+        "core/infrastructure/water/controlled-water-segment-index-provider.ts"
+      ],
+      "mergeBaseSha": "152c1b54630d78238abb9fce73e918fbd82bb235"
+    },
+    {
+      "branch": "agent/fix-water-request-deduplication-20260721",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 538,
+      "compareStatus": "diverged",
+      "fileCount": 6,
+      "category": "MAP",
+      "sampleFiles": [
+        "app/api/professional/infrastructure/water/access/admin/approved/route.ts",
+        "app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+        "app/api/professional/infrastructure/water/access/admin/requests/route.ts",
+        "app/api/professional/infrastructure/water/access/request/route.ts",
+        "app/professional/infrastructure/water/access/water-access-control-client.tsx",
+        "app/professional/infrastructure/water/admin/approvals/page.tsx"
+      ],
+      "mergeBaseSha": "306fc0e29b0cac33d7fa0517d871c1a4a23a05fe"
+    },
+    {
+      "branch": "agent/hide-water-administration-20260720",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 541,
+      "compareStatus": "diverged",
+      "fileCount": 31,
+      "category": "SEC",
+      "sampleFiles": [
+        "app/api/professional/infrastructure/water/access/admin/approve/route.ts",
+        "app/api/professional/infrastructure/water/access/admin/approved/route.ts",
+        "app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+        "app/api/professional/infrastructure/water/access/admin/requests/route.ts",
+        "app/api/professional/infrastructure/water/access/authorize/route.ts",
+        "app/api/professional/infrastructure/water/admin/faults/[recordNumber]/route.ts",
+        "app/api/professional/infrastructure/water/admin/faults/route.ts",
+        "app/api/professional/infrastructure/water/admin/session/route.ts",
+        "app/api/professional/infrastructure/water/field/admin/submissions/route.ts",
+        "app/api/professional/infrastructure/water/maps/registry/route.ts",
+        "app/api/professional/infrastructure/water/master-dwg/route.ts",
+        "app/api/professional/infrastructure/water/master/b/route.ts"
+      ],
+      "mergeBaseSha": "03ae20725edaaedfaeb16242511b7dfa0d892127"
+    },
+    {
+      "branch": "agent/production-water-only-hard-gate",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 502,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "REV",
+      "sampleFiles": [
+        "middleware.ts"
+      ],
+      "mergeBaseSha": "73d13a72203aec56bddf48c7e706631e4246823d"
+    },
+    {
+      "branch": "agent/realtime-chat-translation",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 302,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/messages/[conversationId]/conversation-client.tsx"
+      ],
+      "mergeBaseSha": "213f3fd74335341c070be46021eeae13d22bc9b6"
+    },
+    {
+      "branch": "agent/restore-water-stable-20260723",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 535,
+      "compareStatus": "diverged",
+      "fileCount": 10,
+      "category": "MAP",
+      "sampleFiles": [
+        "app/api/professional/infrastructure/water/access/admin/notifications/route.ts",
+        "app/api/professional/infrastructure/water/access/request/route.ts",
+        "app/api/professional/infrastructure/water/segment/bbox/route.ts",
+        "app/professional/infrastructure/water/admin/approvals/page.tsx",
+        "app/professional/infrastructure/water/admin/approvals/water-admin-push-controls.tsx",
+        "core/infrastructure/water/controlled-water-segment-index-provider.ts",
+        "core/infrastructure/water/water-admin-push.ts",
+        "package-lock.json",
+        "package.json",
+        "public/water-admin-push-sw.js"
+      ],
+      "mergeBaseSha": "c4ae9c5a2de941f635e95a47494b60cc5ca90c56"
+    },
+    {
+      "branch": "agent/social-production-hardening",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 303,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "SOC",
+      "sampleFiles": [
+        "supabase/migrations/20260812205000_harden_social_data_api_access.sql"
+      ],
+      "mergeBaseSha": "2ad64ea5ae2f887a9766f40bb051155bdbef5c05"
+    },
+    {
+      "branch": "agent/water-admin-mobile-push-20260721",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 537,
+      "compareStatus": "diverged",
+      "fileCount": 8,
+      "category": "MAP",
+      "sampleFiles": [
+        "app/api/professional/infrastructure/water/access/admin/notifications/route.ts",
+        "app/api/professional/infrastructure/water/access/request/route.ts",
+        "app/professional/infrastructure/water/admin/approvals/page.tsx",
+        "app/professional/infrastructure/water/admin/approvals/water-admin-push-controls.tsx",
+        "core/infrastructure/water/water-admin-push.ts",
+        "package-lock.json",
+        "package.json",
+        "public/water-admin-push-sw.js"
+      ],
+      "mergeBaseSha": "9e40305baee27cdfe85291fea30a6327abbac94d"
+    },
+    {
+      "branch": "docs/complete-handoff-20260816",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 211,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "DOC",
+      "sampleFiles": [
+        "docs/handoff/PANTAVION_COMPLETE_PROJECT_HANDOFF_20260816.md"
+      ],
+      "mergeBaseSha": "9d24b36cc00f53b9886bb13c7fb226cdf0e941b6"
+    },
+    {
+      "branch": "feat/guardian-extreme-sos-20260503-110153",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 922,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "REV",
+      "sampleFiles": [
+        "app/page.tsx"
+      ],
+      "mergeBaseSha": "778059d743c150e4fcab328f0d013e9f37b4f4e2"
+    },
+    {
+      "branch": "feat/interpreter-production-sync-gate",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 252,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "INF",
+      "sampleFiles": [
+        ".github/workflows/pantavion-production-sync-verify.yml"
+      ],
+      "mergeBaseSha": "4be11947da32693c8c8669cb7275fd914bcb94ed"
+    },
+    {
+      "branch": "feat/interpreter-runtime-health",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 254,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/api/pantavion/interpreter/health/route.ts"
+      ],
+      "mergeBaseSha": "7209578cdae5959904955772a037b4cd51f9b174"
+    },
+    {
+      "branch": "feat/revenue-social-foundation",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 432,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "REV",
+      "sampleFiles": [
+        "app/pantavion-home-client.tsx"
+      ],
+      "mergeBaseSha": "8c04afaf426e4870dcf00f2f7a81ecfc1ab33821"
+    },
+    {
+      "branch": "feat/world-language-coverage-20260503-102839",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 924,
+      "compareStatus": "diverged",
+      "fileCount": 2,
+      "category": "REV",
+      "sampleFiles": [
+        "core/emergency/global-emergency-languages.ts",
+        "scripts/expand-world-language-coverage.cjs"
+      ],
+      "mergeBaseSha": "8d9b2004fb9a30ea7e1faf501e109809d31db25b"
+    },
+    {
+      "branch": "feature/global-knowledge-vault",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 309,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "DOC",
+      "sampleFiles": [
+        "docs/architecture/PANTAVION_GLOBAL_KNOWLEDGE_VAULT.md"
+      ],
+      "mergeBaseSha": "ced7d621c4c99dc470bd382ea21f0dc0c0c49f90"
+    },
+    {
+      "branch": "feature/music-voice-studio",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 313,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "CHT",
+      "sampleFiles": [
+        "docs/architecture/PANTAVION_MUSIC_VOICE_DATA_MODEL.md"
+      ],
+      "mergeBaseSha": "05971fd86ff8902e0f7115b1726aea69924d678a"
+    },
+    {
+      "branch": "fix/chat-live-receipts-20260822",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 46,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/messages/[conversationId]/conversation-client.tsx"
+      ],
+      "mergeBaseSha": "4bda2030263cd3625f1c7db7cef3f1f42866526f"
+    },
+    {
+      "branch": "fix/chat-translation-history-20260822",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 47,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/messages/[conversationId]/conversation-client.tsx"
+      ],
+      "mergeBaseSha": "b43ea5359015804bf735e230705832956744087b"
+    },
+    {
+      "branch": "fix/gateway-context-normalizer",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 433,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "CHT",
+      "sampleFiles": [
+        "core/translation/pantavion-speech-accessibility.ts"
+      ],
+      "mergeBaseSha": "ab42fb309a9f28d5f4437b39b92f6b42d143a55e"
+    },
+    {
+      "branch": "fix/production-sync-yaml",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 316,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "INF",
+      "sampleFiles": [
+        ".github/workflows/pantavion-production-sync-verify.yml"
+      ],
+      "mergeBaseSha": "60efa9291f39a5378ebc7a75825af9a17013a451"
+    },
+    {
+      "branch": "fix/social-health-diagnostics",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 315,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "SOC",
+      "sampleFiles": [
+        "app/api/social/health/route.ts"
+      ],
+      "mergeBaseSha": "0a7dc2ceb98ea8931105456544ce685c17a418f4"
+    },
+    {
+      "branch": "fix/stt-language-and-fallback",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 434,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "REV",
+      "sampleFiles": [
+        "app/api/pantavion/speech-to-text/route.ts"
+      ],
+      "mergeBaseSha": "e94a65d82e4d02618612e3f22db52afb7c54486c"
+    },
+    {
+      "branch": "fix/supabase-admin-runtime-fallback",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 114,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "INF",
+      "sampleFiles": [
+        "lib/supabase/admin.ts"
+      ],
+      "mergeBaseSha": "d283b7b702a61985c57c25d72628e7b4ad9809c4"
+    },
+    {
+      "branch": "fix/water-guardian-vercel-context",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 107,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "SEC",
+      "sampleFiles": [
+        "scripts/water-guardian-production-smoke.cjs"
+      ],
+      "mergeBaseSha": "29f8d21d61b77bc77660114c71dd92e8daf9d5b6"
+    },
+    {
+      "branch": "pantavion-clean-rescue",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 653,
+      "compareStatus": "diverged",
+      "fileCount": 4,
+      "category": "AIK",
+      "sampleFiles": [
+        "core/recovery/pantavion-recovery-kernel.ts",
+        "core/runtime/workspace-runtime.ts",
+        "next.config.mjs",
+        "scripts/pantavion-runtime-smoke.cjs"
+      ],
+      "mergeBaseSha": "f99ac906ed55e6abbf6d43f908688fa05e17b20f"
+    },
+    {
+      "branch": "pantavion-runtime-services",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 689,
+      "compareStatus": "diverged",
+      "fileCount": 9,
+      "category": "SEC",
+      "sampleFiles": [
+        ".github/workflows/pantavion-runtime-services.yml",
+        "db/schema/pantavion-runtime.sql",
+        "scripts/pantavion-runtime-smoke.cjs",
+        "services/approval-inbox/index.ts",
+        "services/build-guardian/index.ts",
+        "services/control-room-api/index.ts",
+        "services/kernel-governor/index.ts",
+        "services/repo-guardian/index.ts",
+        "services/runtime-types.ts"
+      ],
+      "mergeBaseSha": "a61a1cda5c2726e2835d63d6140a5464f0961591"
+    },
+    {
+      "branch": "pantavion/evolution-engine-v2",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 569,
+      "compareStatus": "diverged",
+      "fileCount": 15,
+      "category": "SEC",
+      "sampleFiles": [
+        "core/agents/agent-registry.ts",
+        "core/evolution/domains/ai.ts",
+        "core/evolution/domains/cloud.ts",
+        "core/evolution/domains/commerce.ts",
+        "core/evolution/domains/communication.ts",
+        "core/evolution/domains/databases.ts",
+        "core/evolution/domains/education.ts",
+        "core/evolution/domains/hardware.ts",
+        "core/evolution/domains/health.ts",
+        "core/evolution/domains/infrastructure.ts",
+        "core/evolution/domains/robotics.ts",
+        "core/evolution/domains/science.ts"
+      ],
+      "mergeBaseSha": "9c74f84c89f5ffc40a5722e7536368c5b5c49a09"
+    },
+    {
+      "branch": "phase-c-ui-port-20260411-194906",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 1041,
+      "compareStatus": "diverged",
+      "fileCount": 9,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/chat/page.tsx",
+        "app/compass/page.tsx",
+        "app/create/page.tsx",
+        "app/mind/page.tsx",
+        "app/pantavion-clean-ui.tsx",
+        "app/people/page.tsx",
+        "app/pulse/page.tsx",
+        "app/voice/page.tsx",
+        "docs/phase-c/PHASE_C_VISUAL_BASELINE.md"
+      ],
+      "mergeBaseSha": "6ef6398bf219de227cb3ba1bce536a485b95a54f"
+    },
+    {
+      "branch": "recovery/all-projects-safe-transfer-20260823",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 2,
+      "compareStatus": "diverged",
+      "fileCount": 142,
+      "category": "CHT",
+      "sampleFiles": [
+        "recovery/donor-repositories/Pantaai/README.md",
+        "recovery/donor-repositories/Pantaai/index.js",
+        "recovery/donor-repositories/README.md",
+        "recovery/donor-repositories/manifest.json",
+        "recovery/donor-repositories/nextjs-boilerplate/.gitignore",
+        "recovery/donor-repositories/nextjs-boilerplate/README.md",
+        "recovery/donor-repositories/nextjs-boilerplate/app/compass/page.tsx",
+        "recovery/donor-repositories/nextjs-boilerplate/app/contacts/page.tsx",
+        "recovery/donor-repositories/nextjs-boilerplate/app/favicon.ico",
+        "recovery/donor-repositories/nextjs-boilerplate/app/globals.css",
+        "recovery/donor-repositories/nextjs-boilerplate/app/layout.tsx",
+        "recovery/donor-repositories/nextjs-boilerplate/app/page.tsx"
+      ],
+      "mergeBaseSha": "6260665e44ff6a3c76ccd2e2c4106ea580898de2"
+    },
+    {
+      "branch": "recovery/identity-auth-reconcile-20260822",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 49,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "SEC",
+      "sampleFiles": [
+        "docs/recovery/IDENTITY_AUTH_PROFILE_RECONCILIATION_2026-08-22.md"
+      ],
+      "mergeBaseSha": "ee5e4d8e42d5ceb32d4a60f0cbd44fc2048a2cc1"
+    },
+    {
+      "branch": "recovery/master-inventory-20260810",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 431,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "REC",
+      "sampleFiles": [
+        "docs/recovery/PANTAVION_MASTER_RECOVERY_CATALOG.md"
+      ],
+      "mergeBaseSha": "863c7c27ea147f0ac5afd59a042a7b602362600a"
+    },
+    {
+      "branch": "recovery/master-ledger-20260816",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 177,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "REC",
+      "sampleFiles": [
+        "docs/recovery/MASTER_RECOVERY_LEDGER.md"
+      ],
+      "mergeBaseSha": "0f5193ab1e3479d33d59dc5f6ea21cc743a54597"
+    },
+    {
+      "branch": "sandbox/global-connect-foundation-20260815-0058",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 248,
+      "compareStatus": "diverged",
+      "fileCount": 16,
+      "category": "SEC",
+      "sampleFiles": [
+        "app/api/platform/global-connect/countries/route.ts",
+        "app/api/platform/global-connect/readiness/route.ts",
+        "core/global-connect/country-registry.test.ts",
+        "core/global-connect/country-registry.ts",
+        "core/global-connect/foundation-contract.test.ts",
+        "core/global-connect/foundation-contract.ts",
+        "core/translation/pantavion-translation-provider-adapters.ts",
+        "docs/implementation/GLOBAL_CONNECT_FOUNDATION_CYCLE_1.md",
+        "docs/implementation/runtime-safety-and-capability-broker.md",
+        "scripts/global-connect-foundation-schema-test.cjs",
+        "scripts/global-connect-public-fallback-smoke.cjs",
+        "scripts/pantavion-runtime-safety-gate.cjs"
+      ],
+      "mergeBaseSha": "ea6d235a4484a5b068120adeab8938bca66644e8"
+    },
+    {
+      "branch": "sandbox/interpreter-runtime-20260815-1057",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 239,
+      "compareStatus": "diverged",
+      "fileCount": 1,
+      "category": "CHT",
+      "sampleFiles": [
+        "app/pantavion/live-interpreter/page.tsx"
+      ],
+      "mergeBaseSha": "6c2d099ed0fb74c6026fa19b647877311f57e63a"
+    },
+    {
+      "branch": "vercel/install-vercel-web-analytics-0aaw0f",
+      "status": "UNIQUE_AHEAD",
+      "aheadBy": 1,
+      "behindBy": 948,
+      "compareStatus": "diverged",
+      "fileCount": 3,
+      "category": "REV",
+      "sampleFiles": [
+        "app/layout.tsx",
+        "package-lock.json",
+        "package.json"
+      ],
+      "mergeBaseSha": "0e9585ef98d3b1f176871ae13c64cd848d6a5b38"
+    },
+    {
+      "branch": "agent/accessibility-speech-normalization",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 481,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "4620afef5e7af5b7dc265b648e162db64f4f73c9"
+    },
+    {
+      "branch": "agent/bidirectional-interpreter-implementation",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 467,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "1867f9c7c7ab80a3a7b252c4f3af9af8b6f5fd36"
+    },
+    {
+      "branch": "agent/bidirectional-interpreter-live",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 469,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "054d6ac6b29a110bad970eb2308d3e9478976890"
+    },
+    {
+      "branch": "agent/bidirectional-interpreter-mode-final",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 469,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "054d6ac6b29a110bad970eb2308d3e9478976890"
+    },
+    {
+      "branch": "agent/bidirectional-interpreter-mode-v2",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 469,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "054d6ac6b29a110bad970eb2308d3e9478976890"
+    },
+    {
+      "branch": "agent/bidirectional-interpreter-mode-v3",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 469,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "054d6ac6b29a110bad970eb2308d3e9478976890"
+    },
+    {
+      "branch": "agent/bidirectional-interpreter-mode-v4",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 469,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "054d6ac6b29a110bad970eb2308d3e9478976890"
+    },
+    {
+      "branch": "agent/bidirectional-interpreter-mode-v5",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 469,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "054d6ac6b29a110bad970eb2308d3e9478976890"
+    },
+    {
+      "branch": "agent/diagnose-and-retry-server-stt",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 461,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "21777842f17e8c5e0463be3e0be6d80420b7be40"
+    },
+    {
+      "branch": "agent/finalize-mobile-mediarecorder",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 439,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "7c9a9dcd37efe23656043d32579487da2568e4f1"
+    },
+    {
+      "branch": "agent/fix-global-speech-locale-and-interpreter-entry",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 463,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "7fcf752e01d171338a0c69c53914a984533bd685"
+    },
+    {
+      "branch": "agent/fix-granted-mic-voice-fallback",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 470,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "76b1024fde6091bddc2b33ca06fc2724dbbee0d3"
+    },
+    {
+      "branch": "agent/fix-mobile-voice-translation",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 487,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "4acc9dc10653a3c02e2aacf8f5277ea975086761"
+    },
+    {
+      "branch": "agent/fix-stt-audio-mime",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 442,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "e8011de1d42a9bce85cf05f234fa830e0aa36062"
+    },
+    {
+      "branch": "agent/fix-water-private-range-loading-20260724",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 531,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "84a877e6e80e1d98f67927b172e0a1d8656dbf40"
+    },
+    {
+      "branch": "agent/global-device-voice-catalog",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 485,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "e9c0108c4b7bd2cbcf15b791e70b53c6f17e0270"
+    },
+    {
+      "branch": "agent/global-device-voice-catalog-v2",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 480,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "b96d09e9a9bf3eb517fecb69c27085861c7bd498"
+    },
+    {
+      "branch": "agent/harden-water-network-runtime-20260724",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 525,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "512ae8c72a6c5cfc1663b650b8f7988b116427e3"
+    },
+    {
+      "branch": "agent/isolate-primary-stt-provider",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 453,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "827bb1553c41e48af9dbc0d56f22685da3da5634"
+    },
+    {
+      "branch": "agent/lock-water-network-runtime-20260723",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 533,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "51285dbd4f1176645b8da19a2906f2d4fc572808"
+    },
+    {
+      "branch": "agent/one-tap-microphone-permission",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 479,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "000db5dd1d48cc0b18f940df8bc25a640646ea9c"
+    },
+    {
+      "branch": "agent/owner-safety-live-controls",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 290,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "566431b07f359f3f39dbe0b7b7fb9d4433b36f5a"
+    },
+    {
+      "branch": "agent/sanitize-stt-auth",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 455,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "e7a3455e3bbb83f7c11fb32dc625ffa1a3c33d0f"
+    },
+    {
+      "branch": "agent/social-messaging-persistence",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 224,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "f5daf1b918ac92f4da12f8de81cfd49d227ee657"
+    },
+    {
+      "branch": "agent/translate-global-voice-v1",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 490,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "7abd51445dbfd7630243f45b1e85a5a96127a047"
+    },
+    {
+      "branch": "agent/translate-mobile-real-flow",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 493,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "6bb954bdc82a0ca06116601d4f03f99fb75b8b17"
+    },
+    {
+      "branch": "agent/use-vercel-oidc-runtime-helper",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 450,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "6f41f460d3cef83a0622b6bdb3a0b36cbf50f9f4"
+    },
+    {
+      "branch": "agent/water-lock-deploy-retrigger-20260724",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 527,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "641601e9b4e621f6e1c9300431a7421901230339"
+    },
+    {
+      "branch": "agent/water-pipe-stream-fallback-20260724",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 529,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "940a2d1b1d5e3cb3805a2b928f3b070ff349ec73"
+    },
+    {
+      "branch": "feat/continuity-graph-runtime",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 363,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "c3bd89b7f4bd75ca1ce24d071a9a86afdbbae191"
+    },
+    {
+      "branch": "feat/durable-execution-runtime",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 367,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "66787c378479e31a91992092af246dda29075400"
+    },
+    {
+      "branch": "feat/full-ecosystem-live-wave-1",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 408,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "4a90f3b46f633a0d9a1a57ae009e37f23e76dca8"
+    },
+    {
+      "branch": "feat/full-ecosystem-live-wave-2",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 394,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "d54980414503b768402cf7938c63723a812bafb1"
+    },
+    {
+      "branch": "feat/global-emergency-languages-20260503-000515",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 925,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "295259bb15a79456761e5f379b2a34094d4f24be"
+    },
+    {
+      "branch": "feat/guardian-extreme-sos-20260503-105728",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 924,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "8d9b2004fb9a30ea7e1faf501e109809d31db25b"
+    },
+    {
+      "branch": "feat/human-communication-core",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 420,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "584ae01ff77270db73c8d9bd60e948a3a358b80a"
+    },
+    {
+      "branch": "feat/interpreter-continuous-sessions",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 432,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "8c04afaf426e4870dcf00f2f7a81ecfc1ab33821"
+    },
+    {
+      "branch": "feat/interpreter-two-device-20260822",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 17,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "e2a290f719ca4a1b02bf8a0e71db97a530af0091"
+    },
+    {
+      "branch": "feat/language-provider-runtime",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 348,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "9e15955d8316dec5e9e96a04232cdeb6ceca5c5b"
+    },
+    {
+      "branch": "feat/personal-space",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 337,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "f12cf21f040c484460ec74a6d380fc6e3e227593"
+    },
+    {
+      "branch": "feature/owner-safety-control-plane",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 291,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "f993f4d72ccd728ff218a1f3c6a3c22ae24e3b3e"
+    },
+    {
+      "branch": "fix/force-canonical-supabase-auth",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 298,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "9aea8dd7c063557f29fca4afb4cf3854f95e3256"
+    },
+    {
+      "branch": "fix/identity-registration-flow-20260822",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 9,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "0200b258ec361ab37cc7c6bc0a1725d7587d9dbc"
+    },
+    {
+      "branch": "fix/interpreter-health-runtime-alignment-20260822",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 24,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "e3c8660ec58952a00edd17258e024ae460c37037"
+    },
+    {
+      "branch": "fix/interpreter-two-device-session-sync-20260822",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 16,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "df6edcfae54994d4c97d8fe9af4b18d45c8d5d09"
+    },
+    {
+      "branch": "fix/public-functional-routes",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 344,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "279267435b11f6741db99655fc0f966f66e7f702"
+    },
+    {
+      "branch": "fix/social-health-auth-aware",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 295,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "8a46625b468f137834e4265727559aee065be7a3"
+    },
+    {
+      "branch": "fix/supabase-anon-compat",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 300,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "bb4b6a3856872960d5a6df52373d463e1cee1e22"
+    },
+    {
+      "branch": "fix/translation-audit-node22",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 305,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "8caa8f1b4f7d3834576eb0b6f37e66350be6c37d"
+    },
+    {
+      "branch": "fix/translation-language-routing",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 435,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "56349d0a442d8dd7a8801fb8a6873b338bcd78aa"
+    },
+    {
+      "branch": "fix/translation-provider-runtime-diagnostics",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 308,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "3b6a4180f3a19a8c5412a53e5d93d48c3dc90460"
+    },
+    {
+      "branch": "fix/translation-safety-node22",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 307,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "468feaf8c314ab101f1dffd64dc61f45ae8920ed"
+    },
+    {
+      "branch": "kernel-canonicalization-20260411-200129",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 1009,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "252805672949c163ca4df4d1152c4b221d645cf1"
+    },
+    {
+      "branch": "pandaconnect1/pantavion-planet",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 880,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "cd95cb79cdf6cb2fede426e65e603cdc5002f450"
+    },
+    {
+      "branch": "pantavion-agent/evolution-engine-v1",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 570,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "b80cf8accb0ebafd05b14ba142c3decd73a3d91d"
+    },
+    {
+      "branch": "pantavion-foundation-runtime",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 690,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "3aa3b61f64b5c72ecbaefc608a294ad4323ed2ce"
+    },
+    {
+      "branch": "pantavion-runtime-stabilize",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 688,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "f6bcfd238b1c2f363d56fb1e20dd85d08bb2e95e"
+    },
+    {
+      "branch": "pantavion/real-runtime-safety-gate",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 574,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "538500e757d5e0a30c87dc55ce1feb7d42e20a8a"
+    },
+    {
+      "branch": "real/live-sos-20260502-173628",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 933,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "9323c58e889509265016db97df4043b74ed33ab0"
+    },
+    {
+      "branch": "real/sos-live-i18n-actions-20260502-174153",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 932,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "74c62ab8ecfc0dab5f9dd5841eb87cc6f6666732"
+    },
+    {
+      "branch": "real/sos-live-i18n-actions-20260502-174345",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 932,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "74c62ab8ecfc0dab5f9dd5841eb87cc6f6666732"
+    },
+    {
+      "branch": "real/sos-live-i18n-actions-20260502-215306",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 930,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "a7e1d63098f9384049b5df84dcc570b85a8013b8"
+    },
+    {
+      "branch": "recovery/donor-repo-consolidation-20260819",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": null,
+      "behindBy": null,
+      "compareStatus": null,
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": null
+    },
+    {
+      "branch": "sandbox/global-connect-foundation-20260815-0025",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 246,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "0e4cbc303af0d073dd9537c2d7c53905aea3fb71"
+    },
+    {
+      "branch": "save/lifeshield-emergency-20260502-170020",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 935,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "982dd037c868bc9f2f9dd6cba9dd594143a58b0d"
+    },
+    {
+      "branch": "save/lifeshield-emergency-device-support-20260502-170452",
+      "status": "COVERED_BY_MAIN",
+      "aheadBy": 0,
+      "behindBy": 934,
+      "compareStatus": "behind",
+      "fileCount": 0,
+      "category": "REV",
+      "sampleFiles": [],
+      "mergeBaseSha": "a3f118369336d78099be3fdf03f5a07083446195"
+    }
+  ]
+}
