@@ -33,5 +33,20 @@ jobs:
       - name: Verify translation worker contract
         run: node scripts/pantavion-translation-worker-gate.cjs
 
-      - name: Run Pantavion runtime safety verification
-        run: npm run verify:runtime-safety
+      - name: Verify water network lock
+        run: npm run audit:water:network-lock
+
+      - name: Verify implementation evidence
+        run: npm run audit:implementation
+
+      - name: Verify secure scheduled worker
+        run: npm run audit:scheduled-worker
+
+      - name: Verify real implementation gate
+        run: node scripts/pantavion-vscode-real-implementation-gate.cjs
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Production build
+        run: npm run build
