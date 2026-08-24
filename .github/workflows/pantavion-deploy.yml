@@ -12,6 +12,12 @@ on:
       - master
       - develop
   workflow_dispatch:
+    inputs:
+      production_approval:
+        description: "Type PROMOTE_PANTAVION_PRODUCTION to authorize an intentional main-only production promotion"
+        required: false
+        default: ""
+        type: string
 
 concurrency:
   group: pantavion-${{ github.ref }}
@@ -54,7 +60,7 @@ jobs:
   production_schema:
     name: Apply Production Supabase Migrations
     needs: validate
-    if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') }}
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.production_approval == 'PROMOTE_PANTAVION_PRODUCTION' }}
     runs-on: ubuntu-latest
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
@@ -184,7 +190,7 @@ jobs:
     needs:
       - validate
       - production_schema
-    if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') }}
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.production_approval == 'PROMOTE_PANTAVION_PRODUCTION' }}
     runs-on: ubuntu-latest
 
     env:
