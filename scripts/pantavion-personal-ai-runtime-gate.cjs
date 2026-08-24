@@ -31,6 +31,13 @@ expect('supabase/migrations/20260824184042_create_personal_ai_runtime_v1.sql', [
   'revoke all on table public.personal_ai_profiles from anon',
 ]);
 
+expect('supabase/migrations/20260824185510_harden_personal_ai_runtime_v1.sql', [
+  'personal_ai_threads_parent_owner_fk',
+  'foreign key (parent_thread_id, user_id)',
+  "truth_state in ('KNOWN','INFERRED')",
+  "truth_state in ('KNOWN','INFERRED','UNVERIFIED','PARTIAL','BLOCKED')",
+]);
+
 expect('core/intelligence/personal-ai-runtime.ts', [
   'AI_GATEWAY_API_KEY',
   'PANTAVION_AI_MODEL',
@@ -56,7 +63,7 @@ for (const route of [
 }
 
 expect('app/api/personal-ai/execute/route.ts', ['executePersonalAI', 'executionStatus === "blocked"']);
-expect('app/api/personal-ai/memory/route.ts', ['deleted_at', 'user_explicit']);
+expect('app/api/personal-ai/memory/route.ts', ['USER_MEMORY_TRUTH_STATES', 'deleted_at', 'user_explicit']);
 expect('app/api/personal-ai/items/route.ts', ['birthday', 'appointment', 'reminder', 'follow_up']);
 expect('app/api/personal-ai/relationships/route.ts', ['relationship_type', 'subject_key']);
 expect('app/my-ai/page.tsx', ['auth.getUser()', 'redirect("/auth/login?next=/my-ai")', 'PersonalAIConsole']);
