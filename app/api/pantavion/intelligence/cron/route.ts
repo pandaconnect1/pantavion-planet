@@ -1,53 +1,43 @@
+import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { runPantavionCloudCronTick } from "@/core/intelligence/pantavion-intelligence-ledger";
+import { runSecureScheduledWorker } from "@/core/runtime/secure-scheduled-worker";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 240;
 
 type PantavionCronAuthMode =
-  | "cron_secret_required"
-  | "local_development_unprotected"
-  | "production_blocked_missing_cron_secret"
-  | "production_vercel_cron_user_agent_explicitly_allowed";
+  | "cron_secret_verified"
+  | "local_development_explicitly_allowed"
+  | "blocked_missing_cron_secret"
+  | "blocked_invalid_cron_secret";
 
-type PantavionCronAuthResult = {
-  ok: boolean;
-  mode: PantavionCronAuthMode;
-};
+function secretsMatch(actual: string, expected: string) {
+  const actualBytes = Buffer.from(actual);
+  const expectedBytes = Buffer.from(expected);
+  return actualBytes.length === expectedBytes.length
+    && timingSafeEqual(actualBytes, expectedBytes);
+}
 
-function isAuthorizedCronRequest(request: Request): PantavionCronAuthResult {
-  const secret = process.env.CRON_SECRET || "";
-  const authorization = request.headers.get("authorization") || "";
-  const userAgent = request.headers.get("user-agent") || "";
-  const isDevelopment = process.env.NODE_ENV !== "production";
-  const allowVercelCronUserAgent =
-    process.env.PANTAVION_ALLOW_VERCEL_CRON_USER_AGENT === "true";
+function authorizeCronRequest(request: Request) {
+  const secret = process.env.CRON_SECRET?.trim() ?? "";
+  const authorization = request.headers.get("authorization") ?? "";
+  const isProduction = process.env.NODE_ENV === "production";
 
-  if (secret) {
-    return {
-      ok: authorization === "Bearer " + secret,
-      mode: "cron_secret_required",
-    };
+  if (!secret) {
+    if (!isProduction && process.env.PANTAVION_ALLOW_LOCAL_CRON === "true") {
+      return { ok: true, mode: "local_development_explicitly_allowed" as const };
+    }
+    return { ok: false, mode: "blocked_missing_cron_secret" as const };
   }
 
-  if (isDevelopment) {
-    return {
-      ok: true,
-      mode: "local_development_unprotected",
-    };
+  const expected = "Bearer " + secret;
+  if (!secretsMatch(authorization, expected)) {
+    return { ok: false, mode: "blocked_invalid_cron_secret" as const };
   }
 
-  if (allowVercelCronUserAgent && userAgent.includes("vercel-cron/1.0")) {
-    return {
-      ok: true,
-      mode: "production_vercel_cron_user_agent_explicitly_allowed",
-    };
-  }
-
-  return {
-    ok: false,
-    mode: "production_blocked_missing_cron_secret",
-  };
+  return { ok: true, mode: "cron_secret_verified" as const };
 }
 
 function unauthorizedCronResponse(mode: PantavionCronAuthMode) {
@@ -55,46 +45,73 @@ function unauthorizedCronResponse(mode: PantavionCronAuthMode) {
     {
       ok: false,
       route: "/api/pantavion/intelligence/cron",
-      error:
-        "Unauthorized cron request. Configure CRON_SECRET or explicitly allow the Vercel cron user-agent boundary.",
+      error: "Unauthorized scheduled-worker request.",
       mode,
       runtimeSafety:
-        "Production cron execution is blocked unless a real authorization boundary is configured.",
+        "Execution is fail-closed. Production requires an exact CRON_SECRET bearer token.",
     },
     { status: 401 },
   );
 }
 
-export async function GET(request: Request) {
-  const auth = isAuthorizedCronRequest(request);
+async function executeScheduledTick(
+  source: "vercel_cron" | "external_scheduler",
+  authMode: PantavionCronAuthMode,
+) {
+  try {
+    const worker = await runSecureScheduledWorker(
+      "pantavion-intelligence-hourly",
+      async () => {
+        const tick = await runPantavionCloudCronTick(source);
+        return {
+          ok: tick.ok,
+          route: tick.route,
+          executedAt: tick.cron.executedAt,
+          opportunityCount: tick.ledgerEvent.opportunityCount,
+          buildQueueCount: tick.ledgerEvent.buildQueueCount,
+          ledgerStatus: tick.ledgerEvent.status,
+          ledgerStorageMode: tick.ledgerEvent.storageMode,
+        };
+      },
+    );
 
-  if (!auth.ok) {
-    return unauthorizedCronResponse(auth.mode);
+    return NextResponse.json({
+      ...worker,
+      authMode,
+      runtimeSafety: {
+        authorization: "exact CRON_SECRET bearer token",
+        concurrency: "Supabase atomic lease prevents overlapping executions",
+        idempotency: "one run key per worker per UTC hour",
+        audit: "durable run status and bounded summary stored in Supabase",
+        destructiveActions: "disabled",
+      },
+    });
+  } catch (error) {
+    console.error("pantavion_secure_scheduled_worker_failed", {
+      source,
+      error: error instanceof Error ? error.message : String(error),
+    });
+
+    return NextResponse.json(
+      {
+        ok: false,
+        route: "/api/pantavion/intelligence/cron",
+        error: "Scheduled worker failed. See protected server logs and Supabase audit state.",
+        authMode,
+      },
+      { status: 500 },
+    );
   }
+}
 
-  const result = await runPantavionCloudCronTick("vercel_cron");
-
-  return NextResponse.json({
-    ...result,
-    authMode: auth.mode,
-    runtimeSafety:
-      "Cron executed through an explicit authorization boundary. This is not autonomous deployment.",
-  });
+export async function GET(request: Request) {
+  const auth = authorizeCronRequest(request);
+  if (!auth.ok) return unauthorizedCronResponse(auth.mode);
+  return executeScheduledTick("vercel_cron", auth.mode);
 }
 
 export async function POST(request: Request) {
-  const auth = isAuthorizedCronRequest(request);
-
-  if (!auth.ok) {
-    return unauthorizedCronResponse(auth.mode);
-  }
-
-  const result = await runPantavionCloudCronTick("external_scheduler");
-
-  return NextResponse.json({
-    ...result,
-    authMode: auth.mode,
-    runtimeSafety:
-      "External scheduler execution accepted through an explicit authorization boundary.",
-  });
+  const auth = authorizeCronRequest(request);
+  if (!auth.ok) return unauthorizedCronResponse(auth.mode);
+  return executeScheduledTick("external_scheduler", auth.mode);
 }
