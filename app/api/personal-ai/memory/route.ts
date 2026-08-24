@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 const MEMORY_TYPES = new Set(["working", "thread", "episodic", "semantic", "task", "artifact", "relationship", "preference"]);
 const MEMORY_SCOPES = new Set(["private", "thread", "project", "shared_space", "organization", "public"]);
-const TRUTH_STATES = new Set(["KNOWN", "INFERRED", "UNVERIFIED", "PARTIAL", "BLOCKED", "VERIFIED", "VERIFIED_LIVE"]);
+const USER_MEMORY_TRUTH_STATES = new Set(["KNOWN", "INFERRED"]);
 
 async function authenticatedClient() {
   const supabase = await createClient();
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   if (!user) return NextResponse.json({ ok: false, error: "authentication_required" }, { status: 401 });
 
   const url = new URL(request.url);
-  const q = (url.searchParams.get("q") || "").trim().slice(0, 200);
+  const q = (url.searchParams.get("q") || "").trim().slice(0, 200).replace(/[%_]/g, "");
   const type = (url.searchParams.get("type") || "").trim();
 
   let query = supabase
@@ -29,7 +29,7 @@ export async function GET(request: Request) {
     .order("updated_at", { ascending: false })
     .limit(100);
 
-  if (q) query = query.ilike("content", `%${q.replace(/[%_]/g, "")} %`.replace(" %", "%"));
+  if (q) query = query.ilike("content", `%${q}%`);
   if (type && MEMORY_TYPES.has(type)) query = query.eq("memory_type", type);
 
   const { data, error } = await query;
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
   const confidence = typeof body.confidence === "number" ? Math.min(1, Math.max(0, body.confidence)) : 1;
 
   if (!content) return NextResponse.json({ ok: false, error: "memory_content_required" }, { status: 400 });
-  if (!MEMORY_TYPES.has(memoryType) || !MEMORY_SCOPES.has(scope) || !TRUTH_STATES.has(truthState)) {
+  if (!MEMORY_TYPES.has(memoryType) || !MEMORY_SCOPES.has(scope) || !USER_MEMORY_TRUTH_STATES.has(truthState)) {
     return NextResponse.json({ ok: false, error: "invalid_memory_classification" }, { status: 400 });
   }
 
