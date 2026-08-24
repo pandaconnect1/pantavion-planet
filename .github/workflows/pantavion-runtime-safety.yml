@@ -46,7 +46,24 @@ jobs:
         run: node scripts/pantavion-vscode-real-implementation-gate.cjs
 
       - name: Typecheck
-        run: npm run typecheck
+        shell: bash
+        run: |
+          set +e
+          npm run typecheck 2>&1 | tee typecheck.log
+          status=${PIPESTATUS[0]}
+          if [ "${status}" -ne 0 ]; then
+            head -n 20 typecheck.log | while IFS= read -r line; do
+              safe_line=${line//'%'/'%25'}
+              safe_line=${safe_line//
+        run: npm run build
+\r'/'%0D'}
+              safe_line=${safe_line//
+        run: npm run build
+\n'/'%0A'}
+              echo "::error title=TypeScript compiler::${safe_line}"
+            done
+            exit "${status}"
+          fi
 
       - name: Production build
         run: npm run build
