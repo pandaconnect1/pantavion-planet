@@ -75,19 +75,33 @@ function normalize(value: string | undefined): string | undefined {
   return value?.trim().toUpperCase() || undefined;
 }
 
+function wildcardMatch(resourceValue: string | undefined, queryValue: string | undefined): boolean {
+  if (!queryValue) return true;
+  const normalizedResource = normalize(resourceValue);
+  return normalizedResource === "*" || normalizedResource === normalize(queryValue);
+}
+
 function resourceMatches(resource: PantavionCurriculumResource, query: PantavionCurriculumQuery): boolean {
   if (normalize(resource.countryCode) !== normalize(query.countryCode)) return false;
-  if (query.regionCode && normalize(resource.regionCode) !== normalize(query.regionCode)) return false;
-  if (query.schoolSystem && resource.schoolSystem !== query.schoolSystem) return false;
-  if (query.academicYear && resource.academicYear !== query.academicYear) return false;
-  if (query.gradeCode && normalize(resource.gradeCode) !== normalize(query.gradeCode)) return false;
-  if (query.subjectCode && normalize(resource.subjectCode) !== normalize(query.subjectCode)) return false;
-  if (query.languageCode && normalize(resource.languageCode) !== normalize(query.languageCode)) return false;
+  if (query.regionCode && !wildcardMatch(resource.regionCode, query.regionCode)) return false;
+  if (query.schoolSystem && resource.schoolSystem !== "*" && resource.schoolSystem !== query.schoolSystem) return false;
+  if (query.academicYear && resource.academicYear !== "*" && resource.academicYear !== query.academicYear) return false;
+  if (!wildcardMatch(resource.gradeCode, query.gradeCode)) return false;
+  if (!wildcardMatch(resource.subjectCode, query.subjectCode)) return false;
+  if (!wildcardMatch(resource.languageCode, query.languageCode)) return false;
   return true;
 }
 
 function isVerified(resource: PantavionCurriculumResource): boolean {
   return resource.verificationStatus === "verified_current";
+}
+
+function isExactForQuery(resource: PantavionCurriculumResource, query: PantavionCurriculumQuery): boolean {
+  if (query.gradeCode && normalize(resource.gradeCode) !== normalize(query.gradeCode)) return false;
+  if (query.subjectCode && normalize(resource.subjectCode) !== normalize(query.subjectCode)) return false;
+  if (query.languageCode && normalize(resource.languageCode) !== normalize(query.languageCode)) return false;
+  if (query.academicYear && resource.academicYear !== query.academicYear) return false;
+  return true;
 }
 
 function permitsFullText(resource: PantavionCurriculumResource): boolean {
@@ -112,15 +126,17 @@ export function resolvePantavionCurriculum(
 ): PantavionCurriculumDecision {
   const matches = registry.filter((resource) => resourceMatches(resource, query));
   const verified = matches.filter(isVerified);
+  const exactVerified = verified.filter((resource) => isExactForQuery(resource, query));
 
-  const exactEnough = Boolean(query.gradeCode && query.subjectCode && query.countryCode);
-  const coverage: PantavionCurriculumCoverage = verified.length > 0
-    ? exactEnough
-      ? "verified_match"
-      : "verified_partial"
-    : "coverage_missing";
+  const wantsSpecificCurriculum = Boolean(query.gradeCode || query.subjectCode || query.languageCode || query.academicYear);
+  const coverage: PantavionCurriculumCoverage = exactVerified.length > 0
+    ? "verified_match"
+    : verified.length > 0
+      ? "verified_partial"
+      : "coverage_missing";
 
-  const canUseOfficialCurriculumStructure = verified.some((resource) =>
+  const usableForInstruction = wantsSpecificCurriculum ? exactVerified : verified;
+  const canUseOfficialCurriculumStructure = usableForInstruction.some((resource) =>
     resource.sourceKind === "official_curriculum" || resource.sourceKind === "official_open_textbook",
   );
 
@@ -129,23 +145,27 @@ export function resolvePantavionCurriculum(
     notes.push("No verified current curriculum source is registered for this query.");
     notes.push("Pantavion must not claim alignment to a school curriculum until an official or licensed source is verified.");
   }
+  if (coverage === "verified_partial") {
+    notes.push("An authoritative country-level source is known, but exact grade/subject alignment is not yet verified.");
+    notes.push("Pantavion must not claim exact curriculum alignment for this query until the exact source mapping is registered.");
+  }
 
   if (matches.some((resource) => resource.license === "metadata_only")) {
     notes.push("Metadata-only resources may identify a book or curriculum but must not expose copyrighted full text.");
   }
 
-  notes.push("Original explanations and practice may be generated from verified curriculum objectives without copying protected textbook expression.");
+  notes.push("Original explanations and practice may be generated only from verified curriculum objectives, without copying protected textbook expression.");
 
   return {
     coverage,
     resources: verified,
     canUseOfficialCurriculumStructure,
-    canShowFullBookText: verified.some(permitsFullText),
-    canShowLicensedExercises: verified.some(permitsExerciseContent),
+    canShowFullBookText: exactVerified.some(permitsFullText),
+    canShowLicensedExercises: exactVerified.some(permitsExerciseContent),
     canGenerateOriginalPractice: canUseOfficialCurriculumStructure,
     canGenerateOriginalExplanations: canUseOfficialCurriculumStructure,
     mustNotReproduceCopyrightedBook: true,
-    sourceVerificationRequired: coverage === "coverage_missing",
+    sourceVerificationRequired: coverage !== "verified_match",
     notes,
   };
 }
