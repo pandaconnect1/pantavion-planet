@@ -76,6 +76,16 @@ export default function Page() {
         <YouthPolicyClient />
         <CurriculumClient />
 
+        <div style={{ marginTop: 28, padding: 18, border: "1px solid rgba(247,217,139,0.2)", borderRadius: 16, background: "rgba(247,217,139,0.04)" }}>
+          <strong>PantaLearn · Scan‑to‑Learn</strong>
+          <p style={{ color: "#c7d5ef", lineHeight: 1.6, marginBottom: 12 }}>
+            Φωτογραφία, σκανάρισμα, PDF ή κείμενο μετατρέπονται σε καθοδηγούμενη μάθηση: έννοια, νύξη, προσπάθεια, feedback και νέο πρόβλημα για πραγματική εμπέδωση.
+          </p>
+          <a href="/pantalearn" style={{ color: "#f7d98b", fontWeight: 700, textDecoration: "none" }}>
+            Άνοιγμα PantaLearn →
+          </a>
+        </div>
+
         <div style={{ marginTop: "48px" }}>
           <a href="/" style={{
             color: "#9fb6df",
