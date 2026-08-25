@@ -5,6 +5,8 @@ on:
     paths:
       - "core/governance/adaptive-ecosystem-policy.ts"
       - "core/governance/country-adaptive-policy-registry.ts"
+      - "core/governance/developmental-content-policy.ts"
+      - "core/governance/experience-policy.ts"
       - "core/commerce/billing-truth-engine.ts"
       - "core/intelligence/provider-neutral-routing-policy.ts"
       - "scripts/pantavion-adaptive-policy-gate.ts"
@@ -48,6 +50,8 @@ jobs:
             core/identity/age-role-engine.ts \
             core/governance/adaptive-ecosystem-policy.ts \
             core/governance/country-adaptive-policy-registry.ts \
+            core/governance/developmental-content-policy.ts \
+            core/governance/experience-policy.ts \
             core/commerce/billing-truth-engine.ts \
             core/intelligence/provider-neutral-routing-policy.ts \
             scripts/pantavion-adaptive-policy-gate.ts
