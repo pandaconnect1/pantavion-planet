@@ -73,13 +73,25 @@ export default function SocialHomeClient({ userId, profile, initialPosts, author
     if (!capabilities.posts || busy || (!text && !selectedMediaIds.length)) return;
     if (selectedMediaIds.length && !capabilities.media) { setNotice("Η δημοσίευση με φωτογραφία ή βίντεο δεν είναι ακόμη διαθέσιμη. Μπορείς να δημοσιεύσεις κείμενο."); return; }
     setBusy(true); setNotice("");
-    const { data: post, error } = await supabase.from("social_posts").insert({ author_id: userId, body: text || null, visibility, context: "social" }).select("id,author_id,body,visibility,context,location_label,created_at").single();
-    if (error || !post) { setBusy(false); setNotice(error?.message || "Η δημοσίευση απέτυχε."); return; }
+    const { data: postId, error: createError } = await supabase.rpc("pantavion_create_social_post", {
+      p_body: text || null,
+      p_visibility: visibility,
+      p_context: "social",
+      p_location_label: null,
+    });
+    if (createError || !postId) { setBusy(false); setNotice(createError?.message || "Η δημοσίευση απέτυχε."); return; }
+
+    const { data: post, error: readError } = await supabase
+      .from("social_posts")
+      .select("id,author_id,body,visibility,context,location_label,created_at")
+      .eq("id", postId)
+      .single();
+    if (readError || !post) { setBusy(false); setNotice(readError?.message || "Η δημοσίευση αποθηκεύτηκε, αλλά δεν μπόρεσε να φορτωθεί."); return; }
 
     let attachments: Attachment[] = [];
     if (selectedMediaIds.length) {
       const { data, error: mediaError } = await supabase.from("social_post_media").insert(selectedMediaIds.map((personalMediaId) => ({ post_id: post.id, owner_id: userId, personal_media_id: personalMediaId }))).select("id,personal_media_id,media_kind,mime_type");
-      if (mediaError) { await supabase.from("social_posts").delete().eq("id", post.id); setBusy(false); setNotice("Η δημοσίευση δεν ανέβηκε γιατί δεν μπόρεσαν να συνδεθούν τα media."); return; }
+      if (mediaError) { await supabase.rpc("pantavion_delete_social_post", { p_post_id: post.id }); setBusy(false); setNotice("Η δημοσίευση δεν ανέβηκε γιατί δεν μπόρεσαν να συνδεθούν τα media."); return; }
       attachments = (data ?? []) as Attachment[];
     }
     setPosts((current) => current.some((item) => item.id === post.id) ? current.map((item) => item.id === post.id ? { ...item, social_post_media: attachments } : item) : [{ ...post, social_reactions: [], social_comments: [], social_post_media: attachments }, ...current]);
@@ -90,18 +102,20 @@ export default function SocialHomeClient({ userId, profile, initialPosts, author
     if (!capabilities.reactions) return;
     const mine = (post.social_reactions ?? []).some((reaction) => reaction.user_id === userId);
     if (mine) {
-      const { error } = await supabase.from("social_reactions").delete().eq("post_id", post.id).eq("user_id", userId);
+      const { error } = await supabase.rpc("pantavion_remove_social_reaction", { p_post_id: post.id });
       if (!error) setPosts((items) => items.map((item) => item.id === post.id ? { ...item, social_reactions: (item.social_reactions ?? []).filter((reaction) => reaction.user_id !== userId) } : item));
       return;
     }
-    const { error } = await supabase.from("social_reactions").upsert({ post_id: post.id, user_id: userId, reaction: "like" });
+    const { error } = await supabase.rpc("pantavion_set_social_reaction", { p_post_id: post.id, p_reaction: "like" });
     if (!error) setPosts((items) => items.map((item) => item.id === post.id ? { ...item, social_reactions: [...(item.social_reactions ?? []).filter((reaction) => reaction.user_id !== userId), { user_id: userId, reaction: "like" }] } : item));
   }
 
   async function addComment(postId: string, text: string) {
     const clean = text.trim(); if (!clean || !capabilities.comments) return;
-    const { data, error } = await supabase.from("social_comments").insert({ post_id: postId, author_id: userId, body: clean }).select("id,author_id,body,created_at").single();
-    if (!error && data) setPosts((items) => items.map((item) => item.id === postId && !(item.social_comments ?? []).some((comment) => comment.id === data.id) ? { ...item, social_comments: [...(item.social_comments ?? []), data] } : item));
+    const { data: commentId, error } = await supabase.rpc("pantavion_add_social_comment", { p_post_id: postId, p_body: clean, p_parent_comment_id: null });
+    if (error || !commentId) { setNotice(error?.message || "Το σχόλιο δεν στάλθηκε."); return; }
+    const { data } = await supabase.from("social_comments").select("id,author_id,body,created_at").eq("id", commentId).single();
+    if (data) setPosts((items) => items.map((item) => item.id === postId && !(item.social_comments ?? []).some((comment) => comment.id === data.id) ? { ...item, social_comments: [...(item.social_comments ?? []), data] } : item));
   }
 
   return <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">

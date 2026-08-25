@@ -47,7 +47,8 @@
     "test:foundry-contract": "node --no-warnings --experimental-strip-types scripts/pantavion-foundry-contract-test.mjs",
     "safety:pantavion": "node scripts/pantavion-runtime-safety-gate.cjs",
     "audit:foundation": "node scripts/pantavion-foundation-audit.cjs",
-    "audit:scheduled-worker": "node scripts/pantavion-secure-scheduled-worker-gate.cjs"
+    "audit:scheduled-worker": "node scripts/pantavion-secure-scheduled-worker-gate.cjs",
+    "audit:social-chat": "node scripts/pantavion-social-chat-contract-gate.cjs"
   },
   "dependencies": {
     "@ai-sdk/gateway": "4.0.28",
