@@ -19,6 +19,30 @@ type StatePayload = {
   relationships?: Array<{ id: string; display_name: string; relationship_type: string; notes: string }>;
 };
 
+type MemoryHealthPayload = {
+  health?: {
+    score: number;
+    status: string;
+    expiredCount: number;
+    reviewSuggestedCount: number;
+    possibleConflictCount: number;
+    supersessionLinkCount: number;
+  };
+  truth?: string;
+};
+
+type ContextCapsule = {
+  sourceThreadId: string;
+  generatedAt: string;
+  continuitySummary: string;
+  integrity?: {
+    turnCountCaptured?: number;
+    memoryCountCaptured?: number;
+    openItemCountCaptured?: number;
+    relationshipCountCaptured?: number;
+  };
+};
+
 type ChatMessage = {
   role: "user" | "assistant";
   content: string;
@@ -35,8 +59,9 @@ async function getPayload(response: Response) {
 
 export default function PersonalAIConsole({ displayName, language, country }: Props) {
   const [state, setState] = useState<StatePayload>({});
+  const [memoryHealth, setMemoryHealth] = useState<MemoryHealthPayload>({});
   const [threadId, setThreadId] = useState<string | null>(null);
-  const [handoffFrom, setHandoffFrom] = useState<string | null>(null);
+  const [lastCapsule, setLastCapsule] = useState<ContextCapsule | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [memoryText, setMemoryText] = useState("");
@@ -50,8 +75,12 @@ export default function PersonalAIConsole({ displayName, language, country }: Pr
   const [error, setError] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
-    const data = await getPayload(await fetch("/api/personal-ai/state", { cache: "no-store" }));
-    setState(data);
+    const [stateData, healthData] = await Promise.all([
+      getPayload(await fetch("/api/personal-ai/state", { cache: "no-store" })),
+      getPayload(await fetch("/api/personal-ai/memory-health", { cache: "no-store" })),
+    ]);
+    setState(stateData);
+    setMemoryHealth(healthData);
   }, []);
 
   useEffect(() => {
@@ -75,17 +104,13 @@ export default function PersonalAIConsole({ displayName, language, country }: Pr
         body: JSON.stringify({
           input: text,
           threadId,
-          parentThreadId: threadId ? null : handoffFrom,
           inputMode: handsFree ? "voice" : "text",
           originalLanguage: language,
           metadata: { driving: handsFree, handsFree },
         }),
       }));
 
-      if (typeof data.threadId === "string") {
-        setThreadId(data.threadId);
-        setHandoffFrom(null);
-      }
+      if (typeof data.threadId === "string") setThreadId(data.threadId);
       setMessages((current) => [...current, {
         role: "assistant",
         content: data.reply || "No response returned.",
@@ -101,12 +126,26 @@ export default function PersonalAIConsole({ displayName, language, country }: Pr
     }
   }
 
-  function handoffThread() {
-    if (!threadId) return;
-    setHandoffFrom(threadId);
-    setThreadId(null);
-    setMessages([]);
+  async function handoffThread() {
+    if (!threadId || busy) return;
+    setBusy(true);
     setError(null);
+    try {
+      const data = await getPayload(await fetch("/api/personal-ai/handoff", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ sourceThreadId: threadId }),
+      }));
+      if (typeof data?.thread?.id !== "string") throw new Error("handoff_thread_missing");
+      setThreadId(data.thread.id);
+      setLastCapsule(data.capsule || null);
+      setMessages([]);
+      await refresh();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "handoff_failed");
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function remember(event: FormEvent<HTMLFormElement>) {
@@ -191,6 +230,8 @@ export default function PersonalAIConsole({ displayName, language, country }: Pr
     }
   }
 
+  const health = memoryHealth.health;
+
   return (
     <div style={{ display: "grid", gap: 24 }}>
       <div className="pv-panel">
@@ -203,11 +244,22 @@ export default function PersonalAIConsole({ displayName, language, country }: Pr
           <button className="pv-button" type="button" onClick={() => setHandsFree((value) => !value)}>
             Hands-free: {handsFree ? "ON" : "OFF"}
           </button>
-          <button className="pv-button blue" type="button" disabled={!threadId} onClick={handoffThread}>
-            Νέο νήμα με ίδια μνήμη
+          <button className="pv-button blue" type="button" disabled={!threadId || busy} onClick={handoffThread}>
+            Νέο νήμα με Context Capsule
           </button>
         </div>
       </div>
+
+      {lastCapsule ? (
+        <div className="pv-panel">
+          <p className="pv-kicker">Context Capsule v2</p>
+          <h3>Η συνέχεια μεταφέρθηκε χωρίς να ξαναρχίσει από το μηδέν.</h3>
+          <p className="pv-muted" style={{ whiteSpace: "pre-wrap" }}>{lastCapsule.continuitySummary}</p>
+          <small>
+            turns {lastCapsule.integrity?.turnCountCaptured || 0} · memories {lastCapsule.integrity?.memoryCountCaptured || 0} · open items {lastCapsule.integrity?.openItemCountCaptured || 0} · relationships {lastCapsule.integrity?.relationshipCountCaptured || 0}
+          </small>
+        </div>
+      ) : null}
 
       <div className="pv-panel">
         <p className="pv-kicker">Conversation</p>
@@ -229,6 +281,17 @@ export default function PersonalAIConsole({ displayName, language, country }: Pr
       {error ? <div className="pv-panel"><span className="pv-status">BLOCKED</span><p>{error}</p></div> : null}
 
       <div className="pv-grid">
+        <div className="pv-card">
+          <p className="pv-kicker">Memory Health</p>
+          <h3>{health ? `${health.score}/100 · ${health.status}` : "Έλεγχος μνήμης"}</h3>
+          {health ? (
+            <p>
+              Ληγμένες: {health.expiredCount} · review: {health.reviewSuggestedCount} · πιθανές συγκρούσεις: {health.possibleConflictCount} · supersession links: {health.supersessionLinkCount}
+            </p>
+          ) : <p className="pv-muted">Φόρτωση...</p>}
+          <small>{memoryHealth.truth || "Δεν αλλάζει μνήμες αυτόματα."}</small>
+        </div>
+
         <div className="pv-card">
           <p className="pv-kicker">Memory</p>
           <h3>Θυμήσου / ξέχνα</h3>
