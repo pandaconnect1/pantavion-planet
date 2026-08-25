@@ -75,6 +75,25 @@ const HIGH_RISK_FEATURES = new Set<PantavionAdaptiveFeature>([
   "adult_restricted",
 ]);
 
+const ACCESS_RANK: Record<PantavionAccessDecision, number> = {
+  allowed: 0,
+  restricted: 1,
+  requires_guardian: 2,
+  requires_age_proof: 2,
+  blocked: 3,
+};
+
+/**
+ * Access decisions are monotonic: later policy layers may make access stricter,
+ * but must never weaken an earlier restriction or block.
+ */
+function stricterAccess(
+  current: PantavionAccessDecision,
+  next: PantavionAccessDecision,
+): PantavionAccessDecision {
+  return ACCESS_RANK[next] > ACCESS_RANK[current] ? next : current;
+}
+
 function resolveMaturityLevel(ageBand: PantavionAgeBand): PantavionMaturityLevel {
   if (ageBand === "guardianManagedChild") return "early_childhood";
   if (ageBand === "child") return "child";
@@ -176,35 +195,39 @@ export function resolvePantavionAdaptivePolicy(input: {
   const reasons: string[] = [];
   let access: PantavionAccessDecision = "allowed";
 
+  const tighten = (next: PantavionAccessDecision) => {
+    access = stricterAccess(access, next);
+  };
+
   if (age === null) {
     reasons.push("age-unverified");
     protections.push("age-assurance-required-for-risky-surfaces");
     if (HIGH_RISK_FEATURES.has(input.feature) || input.feature === "personalized_ads") {
-      access = "requires_age_proof";
+      tighten("requires_age_proof");
     } else if (SOCIAL_FEATURES.has(input.feature)) {
-      access = "restricted";
+      tighten("restricted");
     }
   }
 
   if (isMinor(age)) {
     if (input.feature === "personalized_ads") {
-      access = "blocked";
+      tighten("blocked");
       reasons.push("minor-targeted-ads-disabled");
     }
     if (input.feature === "dating" || input.feature === "adult_restricted") {
-      access = "blocked";
+      tighten("blocked");
       reasons.push("adult-only-surface");
     }
     if (input.feature === "payments") {
-      access = "blocked";
+      tighten("blocked");
       reasons.push("minor-payment-surface-disabled-by-safe-baseline");
     }
     if (ageRole.requiresGuardian && ["social_publish", "direct_message", "video"].includes(input.feature)) {
-      access = input.guardianConsent ? "restricted" : "requires_guardian";
+      tighten(input.guardianConsent ? "restricted" : "requires_guardian");
       reasons.push("guardian-control-required");
     }
     if (SOCIAL_FEATURES.has(input.feature) && access === "allowed") {
-      access = "restricted";
+      tighten("restricted");
       reasons.push("minor-social-protection-mode");
     }
   }
@@ -218,52 +241,52 @@ export function resolvePantavionAdaptivePolicy(input: {
       reasons.push("jurisdiction-rule-not-effective-no-automatic-enforcement");
     } else {
       if (rule.blockedFeatures?.includes(input.feature)) {
-        access = "blocked";
+        tighten("blocked");
         reasons.push("jurisdiction-feature-block");
       }
 
       if (typeof age === "number" && rule.guardianConsentBelow && age < rule.guardianConsentBelow && !input.guardianConsent) {
-        if (access !== "blocked") access = "requires_guardian";
+        tighten("requires_guardian");
         reasons.push("jurisdiction-guardian-consent-threshold");
       }
 
       if (SOCIAL_FEATURES.has(input.feature) && typeof age === "number" && rule.minimumSocialAge && age < rule.minimumSocialAge) {
         protections.push("country-social-age-threshold");
         if (input.feature === "social_publish") {
-          access = "blocked";
+          tighten("blocked");
           reasons.push("public-social-publishing-below-country-threshold");
         } else if (input.feature === "direct_message") {
-          access = input.guardianConsent ? "restricted" : "requires_guardian";
+          tighten(input.guardianConsent ? "restricted" : "requires_guardian");
           reasons.push("messaging-limited-to-approved-contacts-below-country-threshold");
         } else {
-          access = "restricted";
+          tighten("restricted");
           reasons.push("social-surface-transformed-to-education-mode-below-country-threshold");
         }
       }
 
       if (input.feature === "dating" && rule.minimumDatingAge) {
         if (!ageProofSatisfies(input.ageProof, rule.minimumDatingAge)) {
-          access = typeof age === "number" && age < rule.minimumDatingAge ? "blocked" : "requires_age_proof";
+          tighten(typeof age === "number" && age < rule.minimumDatingAge ? "blocked" : "requires_age_proof");
           reasons.push("dating-age-threshold");
         }
       }
 
       if (input.feature === "payments" && rule.minimumPaymentAge) {
         if (!ageProofSatisfies(input.ageProof, rule.minimumPaymentAge)) {
-          access = typeof age === "number" && age < rule.minimumPaymentAge ? "blocked" : "requires_age_proof";
+          tighten(typeof age === "number" && age < rule.minimumPaymentAge ? "blocked" : "requires_age_proof");
           reasons.push("payment-age-threshold");
         }
       }
 
       if (rule.requireAgeAssuranceForSocial && SOCIAL_FEATURES.has(input.feature) && rule.minimumSocialAge) {
         if (!ageProofSatisfies(input.ageProof, rule.minimumSocialAge) && typeof age === "number" && age >= rule.minimumSocialAge) {
-          access = "requires_age_proof";
+          tighten("requires_age_proof");
           reasons.push("country-social-age-assurance-required");
         }
       }
 
       if (rule.minorTargetedAdsProhibited && isMinor(age) && input.feature === "personalized_ads") {
-        access = "blocked";
+        tighten("blocked");
         reasons.push("jurisdiction-minor-targeted-ads-prohibited");
       }
     }
@@ -271,7 +294,7 @@ export function resolvePantavionAdaptivePolicy(input: {
 
   if (input.feature === "panta_learn" || input.feature === "interpreter") {
     if (access !== "blocked" && access !== "requires_age_proof") {
-      access = ageRole.requiresGuardian ? "restricted" : "allowed";
+      tighten(ageRole.requiresGuardian ? "restricted" : "allowed");
       reasons.push("ecosystem-access-preserved-with-age-appropriate-mode");
     }
   }
