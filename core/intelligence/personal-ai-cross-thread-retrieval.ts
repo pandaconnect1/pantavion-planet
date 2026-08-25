@@ -1,9 +1,14 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import {
+  conversationIndexPublicSummary,
+  extractConversationIndexSearchText,
+} from "@/core/intelligence/personal-ai-conversation-index";
 
 type ThreadRow = {
   id: string;
   title: string | null;
   continuity_summary: string;
+  state: unknown;
   status: string;
   last_activity_at: string;
 };
@@ -25,8 +30,11 @@ export type PersonalAICrossThreadSource = {
   lastActivityAt: string;
   relevanceScore: number;
   lexicalScore: number;
+  indexLexicalScore: number;
   recencyScore: number;
   matchedTerms: string[];
+  conversationIndexUsed: boolean;
+  conversationIndex: ReturnType<typeof conversationIndexPublicSummary>;
   representativeTurns: Array<{
     turnId: string;
     role: string;
@@ -38,11 +46,12 @@ export type PersonalAICrossThreadSource = {
 
 export type PersonalAICrossThreadRetrieval = {
   query: string;
-  mode: "lexical_recency_v1";
+  mode: "indexed_lexical_recency_v2";
   userBound: true;
   currentThreadExcluded: boolean;
   searchedThreadCount: number;
   searchedTurnCount: number;
+  indexedThreadCount: number;
   sources: PersonalAICrossThreadSource[];
 };
 
@@ -119,6 +128,19 @@ function representativeTurns(queryTokens: string[], turns: TurnRow[]) {
     }));
 }
 
+function emptyResult(query: string, currentThreadId?: string | null): PersonalAICrossThreadRetrieval {
+  return {
+    query,
+    mode: "indexed_lexical_recency_v2",
+    userBound: true,
+    currentThreadExcluded: Boolean(currentThreadId),
+    searchedThreadCount: 0,
+    searchedTurnCount: 0,
+    indexedThreadCount: 0,
+    sources: [],
+  };
+}
+
 export async function retrieveRelevantPersonalAIThreads(
   supabase: SupabaseClient,
   userId: string,
@@ -127,21 +149,11 @@ export async function retrieveRelevantPersonalAIThreads(
 ): Promise<PersonalAICrossThreadRetrieval> {
   const normalizedQuery = clean(query, 8_000);
   const queryTokens = uniqueTokens(normalizedQuery);
-  if (!normalizedQuery || !queryTokens.length) {
-    return {
-      query: normalizedQuery,
-      mode: "lexical_recency_v1",
-      userBound: true,
-      currentThreadExcluded: Boolean(currentThreadId),
-      searchedThreadCount: 0,
-      searchedTurnCount: 0,
-      sources: [],
-    };
-  }
+  if (!normalizedQuery || !queryTokens.length) return emptyResult(normalizedQuery, currentThreadId);
 
   let threadQuery = supabase
     .from("personal_ai_threads")
-    .select("id,title,continuity_summary,status,last_activity_at")
+    .select("id,title,continuity_summary,state,status,last_activity_at")
     .eq("user_id", userId)
     .order("last_activity_at", { ascending: false })
     .limit(MAX_CANDIDATE_THREADS);
@@ -150,17 +162,7 @@ export async function retrieveRelevantPersonalAIThreads(
   const threadsResult = await threadQuery;
   if (threadsResult.error) throw new Error(`personal_ai_cross_thread_threads_failed:${threadsResult.error.message}`);
   const threads = (threadsResult.data || []) as ThreadRow[];
-  if (!threads.length) {
-    return {
-      query: normalizedQuery,
-      mode: "lexical_recency_v1",
-      userBound: true,
-      currentThreadExcluded: Boolean(currentThreadId),
-      searchedThreadCount: 0,
-      searchedTurnCount: 0,
-      sources: [],
-    };
-  }
+  if (!threads.length) return emptyResult(normalizedQuery, currentThreadId);
 
   const candidateIds = threads.map((thread) => thread.id);
   const turnsResult = await supabase
@@ -180,18 +182,33 @@ export async function retrieveRelevantPersonalAIThreads(
     turnsByThread.set(turn.thread_id, bucket);
   }
 
+  let indexedThreadCount = 0;
   const sources = threads
     .map((thread) => {
       const threadTurns = turnsByThread.get(thread.id) || [];
-      const searchable = [
+      const baseSearchable = [
         thread.title || "",
         thread.continuity_summary || "",
         ...threadTurns.slice(0, 16).map((turn) => turn.content),
       ].join(" ");
-      const lexical = lexicalRelevance(queryTokens, searchable);
+      const indexSearchText = extractConversationIndexSearchText(thread.state);
+      const indexSummary = conversationIndexPublicSummary(thread.state);
+      if (indexSummary) indexedThreadCount += 1;
+
+      const baseLexical = lexicalRelevance(queryTokens, baseSearchable);
+      const indexLexical = lexicalRelevance(queryTokens, indexSearchText);
+      const combinedLexicalScore = Math.min(
+        1,
+        Math.max(
+          baseLexical.score,
+          indexLexical.score * 0.92,
+          baseLexical.score * 0.72 + indexLexical.score * 0.28,
+        ),
+      );
+      const matchedTerms = Array.from(new Set([...baseLexical.matchedTerms, ...indexLexical.matchedTerms])).slice(0, 20);
       const recency = recencyScore(thread.last_activity_at);
-      const relevanceScore = lexical.score > 0
-        ? Math.min(1, lexical.score * 0.9 + recency * 0.1)
+      const relevanceScore = combinedLexicalScore > 0
+        ? Math.min(1, combinedLexicalScore * 0.9 + recency * 0.1)
         : 0;
 
       return {
@@ -202,9 +219,12 @@ export async function retrieveRelevantPersonalAIThreads(
         status: thread.status,
         lastActivityAt: thread.last_activity_at,
         relevanceScore: rounded(relevanceScore),
-        lexicalScore: rounded(lexical.score),
+        lexicalScore: rounded(combinedLexicalScore),
+        indexLexicalScore: rounded(indexLexical.score),
         recencyScore: rounded(recency),
-        matchedTerms: Array.from(new Set(lexical.matchedTerms)).slice(0, 20),
+        matchedTerms,
+        conversationIndexUsed: Boolean(indexSearchText && indexLexical.score > 0),
+        conversationIndex: indexSummary,
         representativeTurns: representativeTurns(queryTokens, threadTurns),
       } satisfies PersonalAICrossThreadSource;
     })
@@ -214,11 +234,12 @@ export async function retrieveRelevantPersonalAIThreads(
 
   return {
     query: normalizedQuery,
-    mode: "lexical_recency_v1",
+    mode: "indexed_lexical_recency_v2",
     userBound: true,
     currentThreadExcluded: Boolean(currentThreadId),
     searchedThreadCount: threads.length,
     searchedTurnCount: turns.length,
+    indexedThreadCount,
     sources,
   };
 }
