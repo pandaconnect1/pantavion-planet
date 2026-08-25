@@ -16,7 +16,7 @@ const sourceSpecs = [
 ];
 
 const allowedExtensions = new Set(['.md','.txt','.json','.ts','.tsx','.js','.jsx','.cjs','.mjs','.yml','.yaml','.html']);
-const blockedRoots = ['.next','node_modules','data/water-network-private','data/recovery/canonical-knowledge','data/recovery/canonical-knowledge-v2'];
+const blockedRoots = ['.next','node_modules','data/water-network-private','data/recovery/canonical-knowledge','data/recovery/canonical-knowledge-v2','data/recovery/imported-pr248'];
 
 const modules = [
   ['Personal AI / PantaAI', ['personal ai','personal assistant','pantaai','assistant','agent','agents','memory','personal_memory','goals','workflow planner','tool executor']],
