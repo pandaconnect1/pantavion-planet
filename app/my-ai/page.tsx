@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import PersonalAIConsole from "./PersonalAIConsole";
 import MultimodalUploadPanel from "./MultimodalUploadPanel";
+import PersonalAIVoicePanel from "./PersonalAIVoicePanel";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,7 @@ export default async function MyAIPage() {
             <p className="pv-kicker">Pantavion Personal AI</p>
             <h1 className="pv-title">Το δικό σου AI, με συνέχεια.</h1>
             <p className="pv-lead">
-              Απομονωμένο ανά χρήστη, με μνήμη ανά νήμα, επιτρεπόμενη συνέχεια μεταξύ νημάτων,
+              Απομονωμένο ανά χρήστη, με μνήμη ανά νήμα, συνέχεια μεταξύ νημάτων, φωνή,
               προσωπικές σημειώσεις, relationship context και πραγματική multimodal ανάλυση.
             </p>
           </div>
@@ -37,6 +38,7 @@ export default async function MyAIPage() {
             language={profile?.language || null}
             country={profile?.country || null}
           />
+          <PersonalAIVoicePanel language={profile?.language || null} />
           <MultimodalUploadPanel language={profile?.language || null} />
         </div>
       </div>
