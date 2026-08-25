@@ -1,4 +1,5 @@
 export type PantavionDevelopmentalStage =
+  | "infant_care"
   | "pre_literate_early_literacy"
   | "core_primary"
   | "transition_years"
@@ -7,6 +8,7 @@ export type PantavionDevelopmentalStage =
   | "adult";
 
 export type PantavionDirectUseMode =
+  | "caregiver_only"
   | "guardian_co_use"
   | "guardian_managed"
   | "protected_independent"
@@ -19,8 +21,8 @@ export type PantavionDevelopmentalContentProfile = {
   contentCeilingAge: number;
   yearlyProgressionLevel: number;
   learningPriority: "highest" | "high" | "balanced" | "optional";
-  discoveryMode: "guardian_curated" | "curated" | "bounded" | "standard";
-  communicationMode: "guardian_only" | "approved_contacts" | "protected_contacts" | "standard";
+  discoveryMode: "caregiver_curated" | "guardian_curated" | "curated" | "bounded" | "standard";
+  communicationMode: "none" | "guardian_only" | "approved_contacts" | "protected_contacts" | "standard";
   publicProfile: "off" | "limited" | "standard";
   baselineProtections: readonly string[];
   recommendedContentDomains: readonly string[];
@@ -36,6 +38,38 @@ function normalizeAge(age: number): number {
 export function resolvePantavionDevelopmentalContent(ageInput: number): PantavionDevelopmentalContentProfile {
   const age = normalizeAge(ageInput);
   const cappedProgression = Math.min(age, 17);
+
+  if (age === 0) {
+    return {
+      age,
+      stage: "infant_care",
+      directUseMode: "caregiver_only",
+      contentCeilingAge: 0,
+      yearlyProgressionLevel: 0,
+      learningPriority: "highest",
+      discoveryMode: "caregiver_curated",
+      communicationMode: "none",
+      publicProfile: "off",
+      baselineProtections: [
+        "no-infant-direct-account-use",
+        "caregiver-mediated-only",
+        "no-public-social",
+        "no-direct-messaging",
+        "no-targeted-ads",
+        "no-behavioural-profiling-for-engagement",
+        "minimal-dependent-data",
+      ],
+      recommendedContentDomains: [
+        "newborn-and-infant-care-for-caregivers",
+        "feeding-and-routines-general-guidance",
+        "developmental-milestones-general-guidance",
+        "safe-home-and-travel-guidance",
+        "parent-learning-and-support",
+        "when-to-seek-qualified-help",
+      ],
+      recomputeOnBirthday: true,
+    };
+  }
 
   if (age <= 5) {
     return {
