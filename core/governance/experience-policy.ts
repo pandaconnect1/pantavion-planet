@@ -13,6 +13,7 @@ import {
 export type PantavionExperiencePolicyDecision = {
   access: PantavionAdaptivePolicyDecision;
   content: PantavionDevelopmentalContentProfile | null;
+  directUsePermitted: boolean;
   childFirstBaseline: true;
   legalOverrideRequired: boolean;
   rationale: readonly string[];
@@ -33,6 +34,7 @@ export function resolvePantavionExperiencePolicy(input: {
   const content = typeof access.ageRole.age === "number"
     ? resolvePantavionDevelopmentalContent(access.ageRole.age)
     : null;
+  const directUsePermitted = content?.directUseMode !== "caregiver_only";
 
   const rationale = [
     "experience-adapts-to-age-without-removing-the-user-from-the-ecosystem",
@@ -40,13 +42,16 @@ export function resolvePantavionExperiencePolicy(input: {
     "effective-law-can-restrict-a-feature-without-erasing-legal-learning-or-support-surfaces",
   ];
 
-  if (content?.directUseMode === "guardian_co_use") {
-    rationale.push("youngest-stage-is-guardian-mediated-not-independent-social-use");
+  if (content?.directUseMode === "caregiver_only") {
+    rationale.push("infant-stage-content-is-for-caregiver-guidance-not-infant-platform-use");
+  } else if (content?.directUseMode === "guardian_co_use") {
+    rationale.push("young-child-stage-is-guardian-mediated-not-independent-social-use");
   }
 
   return {
     access,
     content,
+    directUsePermitted,
     childFirstBaseline: true,
     legalOverrideRequired: access.jurisdictionReviewRequired,
     rationale,
