@@ -1,4 +1,6 @@
 import { resolvePantavionAdaptivePolicy, type PantavionCountryAdaptiveRule } from "../core/governance/adaptive-ecosystem-policy";
+import { resolvePantavionDevelopmentalContent } from "../core/governance/developmental-content-policy";
+import { resolvePantavionExperiencePolicy } from "../core/governance/experience-policy";
 import { buildPantavionBillingTruth } from "../core/commerce/billing-truth-engine";
 import { selectPantavionAIProvider, type PantavionProviderCandidate } from "../core/intelligence/provider-neutral-routing-policy";
 
@@ -19,6 +21,21 @@ function throws(fn: () => unknown, contains: string, label: string): void {
   }
   throw new Error(`${label}: expected error containing ${contains}`);
 }
+
+const infantContent = resolvePantavionDevelopmentalContent(0);
+equal(infantContent.stage, "infant_care", "age-zero content stage");
+equal(infantContent.directUseMode, "caregiver_only", "age-zero caregiver-only mode");
+equal(infantContent.communicationMode, "none", "age-zero no direct communication");
+equal(infantContent.publicProfile, "off", "age-zero no public profile");
+
+const infantExperience = resolvePantavionExperiencePolicy({ countryCode: "CY", feature: "panta_learn", age: 0, guardianConsent: true });
+equal(infantExperience.directUsePermitted, false, "infant direct use disabled");
+
+const age16Content = resolvePantavionDevelopmentalContent(16);
+const age17Content = resolvePantavionDevelopmentalContent(17);
+equal(age16Content.contentCeilingAge, 16, "16-year content ceiling");
+equal(age17Content.contentCeilingAge, 17, "17-year content ceiling");
+notEqual(age16Content.contentCeilingAge, age17Content.contentCeilingAge, "yearly content progression remains distinct");
 
 const monitoringNzRule: PantavionCountryAdaptiveRule = {
   countryCode: "NZ",
@@ -102,7 +119,9 @@ equal(red.requiresHumanControl, true, "red-zone human control");
 
 console.log(JSON.stringify({
   status: "PASS",
-  checks: 19,
+  checks: 28,
+  infantCaregiverOnly: true,
+  yearlyContentProgression: true,
   ageProgression: [15, 16, 17, 18],
   protectedMinorSocial: true,
   ecosystemPreserved: true,
