@@ -3,19 +3,19 @@ name: Pantavion Personal AI Runtime
 on:
   pull_request:
     paths:
-      - 'core/intelligence/personal-ai-runtime.ts'
+      - 'core/intelligence/personal-ai-*.ts'
       - 'app/api/personal-ai/**'
       - 'app/my-ai/**'
-      - 'supabase/migrations/*personal_ai_runtime_v1.sql'
+      - 'supabase/migrations/*personal_ai*.sql'
       - 'scripts/pantavion-personal-ai-runtime-gate.cjs'
       - '.github/workflows/pantavion-personal-ai-runtime.yml'
   push:
-    branches: [main, feature/personal-ai-runtime-v1]
+    branches: [main, feature/personal-ai-runtime-v1, feature/personal-ai-advanced-memory-v2]
     paths:
-      - 'core/intelligence/personal-ai-runtime.ts'
+      - 'core/intelligence/personal-ai-*.ts'
       - 'app/api/personal-ai/**'
       - 'app/my-ai/**'
-      - 'supabase/migrations/*personal_ai_runtime_v1.sql'
+      - 'supabase/migrations/*personal_ai*.sql'
       - 'scripts/pantavion-personal-ai-runtime-gate.cjs'
       - '.github/workflows/pantavion-personal-ai-runtime.yml'
 
