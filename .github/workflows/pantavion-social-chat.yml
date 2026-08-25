@@ -1,0 +1,32 @@
+name: Pantavion Social Chat
+
+on:
+  pull_request:
+    paths:
+      - "app/social/**"
+      - "app/messages/**"
+      - "app/api/messages/**"
+      - "app/api/people/**"
+      - "supabase/migrations/**"
+      - "scripts/pantavion-social-chat-contract-gate.cjs"
+      - "package.json"
+      - ".github/workflows/pantavion-social-chat.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  social-chat-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run audit:social-chat
+      - run: npm run typecheck
+      - run: npm run build
