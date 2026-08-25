@@ -11,6 +11,7 @@ import {
   retrieveRelevantPersonalAIThreads,
   type PersonalAICrossThreadRetrieval,
 } from "@/core/intelligence/personal-ai-cross-thread-retrieval";
+import { buildAndPersistPersonalAIConversationIndex } from "@/core/intelligence/personal-ai-conversation-index";
 
 type JsonObject = Record<string, unknown>;
 
@@ -40,6 +41,7 @@ type ExecuteInput = {
 };
 
 type RetrievalStatus = "completed" | "empty" | "disabled" | "failed";
+type ConversationIndexStatus = "completed" | "failed";
 
 const ALLOWED_MEDIA_TYPES = new Set([
   "image/jpeg",
@@ -125,11 +127,12 @@ function preservedLanguageUnderstanding(
 function emptyRetrieval(query: string, currentThreadId: string | null): PersonalAICrossThreadRetrieval {
   return {
     query,
-    mode: "lexical_recency_v1",
+    mode: "indexed_lexical_recency_v2",
     userBound: true,
     currentThreadExcluded: Boolean(currentThreadId),
     searchedThreadCount: 0,
     searchedTurnCount: 0,
+    indexedThreadCount: 0,
     sources: [],
   };
 }
@@ -184,12 +187,16 @@ function crossThreadContext(retrieval: PersonalAICrossThreadRetrieval) {
     const turns = source.representativeTurns
       .map((turn) => `[turn:${turn.turnId} relevance=${turn.relevanceScore}] ${turn.role}: ${cleanText(turn.content, 700)}`)
       .join("\n");
+    const indexLine = source.conversationIndex
+      ? `conversation_index=v${source.conversationIndex.version}; used=${source.conversationIndexUsed}; topics=${source.conversationIndex.topics.join(",")}; entities=${source.conversationIndex.entities.join(",")}; decisions=${source.conversationIndex.decisionCount}; open_tasks=${source.conversationIndex.openTaskCount}; attachments=${source.conversationIndex.attachmentCount}`
+      : "conversation_index=unavailable";
     return compact([
-      `[thread:${source.threadId} relevance=${source.relevanceScore} lexical=${source.lexicalScore}] ${source.title || "Untitled thread"}`,
+      `[thread:${source.threadId} relevance=${source.relevanceScore} lexical=${source.lexicalScore} index_lexical=${source.indexLexicalScore}] ${source.title || "Untitled thread"}`,
       `matched_terms=${source.matchedTerms.join(",") || "none"}; last_activity=${source.lastActivityAt}`,
+      indexLine,
       source.continuitySummary ? `summary: ${cleanText(source.continuitySummary, 1600)}` : "",
       turns,
-    ], 3600);
+    ], 4000);
   }).join("\n---\n");
 }
 
@@ -230,7 +237,8 @@ function systemPrompt(state: Awaited<ReturnType<typeof getPersonalAIState>>, met
   return compact([
     "You are the authenticated Pantavion Personal AI for exactly one user. Never mix data across users.",
     "Use only authorized supplied context. If information is missing, stale or conflicting, say so instead of inventing it.",
-    "Cross-thread context may be supplied with explicit thread and turn provenance. Use only relevant retrieved sources, prefer higher relevance, and never pretend a source exists when it was not supplied.",
+    "Cross-thread context may be supplied with explicit thread and turn provenance. A deterministic conversation index may help retrieval, but the actual source turns remain the evidentiary source-of-truth.",
+    "Use only relevant retrieved sources, prefer higher relevance, and never pretend a source exists when it was not supplied.",
     "A separate HLU layer may provide NORMALIZED MEANING alongside ORIGINAL USER TEXT. The original text remains source-of-truth; normalization is only an interpretation aid and never grants new intent or authorization.",
     "Understand dialect, slang, transliteration, mixed languages, abbreviations, incomplete wording and likely typing errors before translating or answering.",
     `Preferred locale=${state.profile.preferred_locale || "unknown"}; timezone=${state.profile.timezone}; assistance=${state.profile.assistance_level}.`,
@@ -240,7 +248,7 @@ function systemPrompt(state: Awaited<ReturnType<typeof getPersonalAIState>>, met
     "For health, legal, financial and safety-sensitive matters, communicate uncertainty and appropriate limits.",
     driving ? "HANDS-FREE DRIVING MODE: be brief and voice-first; never ask the user to read, type, tap or inspect a screen while driving." : "",
     "Answer in the user's language unless they request another language.",
-  ], 6400);
+  ], 6600);
 }
 
 function nextSummary(previous: string, input: string, reply: string, attachmentCount: number) {
@@ -293,10 +301,13 @@ export async function executePersonalAIMultimodal(
     userBound: true,
     searchedThreadCount: crossThreadRetrieval.searchedThreadCount,
     searchedTurnCount: crossThreadRetrieval.searchedTurnCount,
+    indexedThreadCount: crossThreadRetrieval.indexedThreadCount,
     sourceCount: crossThreadRetrieval.sources.length,
     sources: crossThreadRetrieval.sources.map((source) => ({
       threadId: source.threadId,
       relevanceScore: source.relevanceScore,
+      indexLexicalScore: source.indexLexicalScore,
+      conversationIndexUsed: source.conversationIndexUsed,
       matchedTerms: source.matchedTerms,
       turnIds: source.representativeTurns.map((turn) => turn.turnId),
     })),
@@ -381,6 +392,7 @@ export async function executePersonalAIMultimodal(
               attachments.length ? "multimodal" : "text",
               "hlu-v5",
               crossThreadRetrieval.sources.length ? "cross-thread-v6" : "no-cross-thread-match",
+              "conversation-index-v7",
             ],
             disallowPromptTraining: true,
           },
@@ -449,6 +461,33 @@ export async function executePersonalAIMultimodal(
     .eq("user_id", userId);
   if (threadUpdate.error) throw new Error(`personal_ai_multimodal_thread_update_failed:${threadUpdate.error.message}`);
 
+  let conversationIndexStatus: ConversationIndexStatus = "completed";
+  let conversationIndexError: string | null = null;
+  let conversationIndexSummary: {
+    version: 1;
+    generatedAt: string;
+    topicCount: number;
+    entityCount: number;
+    decisionCount: number;
+    openTaskCount: number;
+    attachmentCount: number;
+  } | null = null;
+  try {
+    const index = await buildAndPersistPersonalAIConversationIndex(supabase, userId, thread.id);
+    conversationIndexSummary = {
+      version: 1,
+      generatedAt: index.generatedAt,
+      topicCount: index.topics.length,
+      entityCount: index.entities.length,
+      decisionCount: index.decisions.length,
+      openTaskCount: index.openTasks.length,
+      attachmentCount: index.attachments.length,
+    };
+  } catch (cause) {
+    conversationIndexStatus = "failed";
+    conversationIndexError = cause instanceof Error ? cause.message.slice(0, 1000) : "conversation_index_failed";
+  }
+
   const audit = await supabase.from("personal_ai_action_audit").insert({
     user_id: userId,
     thread_id: thread.id,
@@ -478,6 +517,11 @@ export async function executePersonalAIMultimodal(
         integrityAccepted: languageUnderstanding.integrityAccepted,
       },
       crossThreadRetrieval: retrievalMetadata,
+      conversationIndex: {
+        status: conversationIndexStatus,
+        error: conversationIndexError,
+        summary: conversationIndexSummary,
+      },
     },
   });
   if (audit.error) throw new Error(`personal_ai_multimodal_audit_failed:${audit.error.message}`);
@@ -501,9 +545,15 @@ export async function executePersonalAIMultimodal(
       userBound: true,
       searchedThreadCount: crossThreadRetrieval.searchedThreadCount,
       searchedTurnCount: crossThreadRetrieval.searchedTurnCount,
+      indexedThreadCount: crossThreadRetrieval.indexedThreadCount,
       sourceCount: crossThreadRetrieval.sources.length,
     },
     contextSources: crossThreadRetrieval.sources,
+    conversationIndex: {
+      status: conversationIndexStatus,
+      error: conversationIndexError,
+      summary: conversationIndexSummary,
+    },
     multimodal: {
       analyzedAttachmentCount: executionStatus === "completed" ? attachments.length : 0,
       rawAttachmentBytesPersisted: false,
