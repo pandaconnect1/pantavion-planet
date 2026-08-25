@@ -1,3 +1,4 @@
+import Link from "next/link";
 import ScanToLearnClient from "./scan-to-learn-client";
 
 export default function Page() {
@@ -24,8 +25,8 @@ export default function Page() {
         </div>
         <ScanToLearnClient />
         <div style={{ marginTop: 36, display: "flex", gap: 16, flexWrap: "wrap" }}>
-          <a href="/minors" style={{ color: "#9fb6df", textDecoration: "none" }}>Youth Safe Architecture</a>
-          <a href="/" style={{ color: "#9fb6df", textDecoration: "none" }}>← Pantavion</a>
+          <Link href="/minors" style={{ color: "#9fb6df", textDecoration: "none" }}>Youth Safe Architecture</Link>
+          <Link href="/" style={{ color: "#9fb6df", textDecoration: "none" }}>← Pantavion</Link>
         </div>
       </section>
     </main>
