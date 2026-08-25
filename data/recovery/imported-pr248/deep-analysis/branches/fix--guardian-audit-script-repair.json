@@ -1,0 +1,264 @@
+{
+  "id": "PANT-BRANCH-C3717B80755C",
+  "sourceRef": "recovery/snapshots/fix--guardian-audit-script-repair",
+  "headSha": "43c9e5271fa208b905b29be49853684db2caa59b",
+  "mergeBase": "571d349a04143e0cc8194130f81cdf2594259a67",
+  "behindMainBy": 308,
+  "aheadOfMainBy": 7,
+  "changedFileCount": 6,
+  "topicCounts": {
+    "maps-water": 4,
+    "ai-kernel": 5,
+    "identity-security": 2,
+    "social-people": 4,
+    "chat-translation": 5,
+    "business-marketplace": 4,
+    "recovery-continuity": 2,
+    "governance-safety": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 3
+  },
+  "kindCounts": {
+    "source-code": 6
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 6
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "components/ModulePage.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/fix--guardian-audit-script-repair/components/ModulePage.tsx",
+      "blobSha": "3250891466595bceac833a490a70d97ea46a64c2",
+      "sizeBytes": 1839,
+      "mainBlobSha": "3250891466595bceac833a490a70d97ea46a64c2",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 54,
+      "contentSha256": "a1fc9f1b71a9e527b786344e49d5b783fecfb5d35860f5dcb96f5e5580e5a898",
+      "imports": [
+        "next/link",
+        "@/components/StatusBadge",
+        "@/core/platform/pantavion-registry"
+      ],
+      "exports": [
+        "ModulePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "scripts/pantavion-ai-integrity-check.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/fix--guardian-audit-script-repair/scripts/pantavion-ai-integrity-check.cjs",
+      "blobSha": "85fd24364f73e78186b1c2448739630f8784060e",
+      "sizeBytes": 23461,
+      "mainBlobSha": "85fd24364f73e78186b1c2448739630f8784060e",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 304,
+      "contentSha256": "311dfa2debe3bdc907c8b796390056e5dbc05b3a60a6108250016c18c95a0490",
+      "imports": [
+        "fs",
+        "path",
+        "./pantavion-translation-integrity-check.cjs"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 3,
+        "unfinished": 0,
+        "providerPending": 3
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "scripts/pantavion-autonomous-builder-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/fix--guardian-audit-script-repair/scripts/pantavion-autonomous-builder-gate.cjs",
+      "blobSha": "0b8e0c163acd890d93e36f2632874bbc9e5208eb",
+      "sizeBytes": 2731,
+      "mainBlobSha": "0b8e0c163acd890d93e36f2632874bbc9e5208eb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 104,
+      "contentSha256": "fa3808625b5492c85599b385fc547563fec9bf440a5715456a9c64468d474b88",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "scripts/pantavion-autonomous-guardian-audit.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/fix--guardian-audit-script-repair/scripts/pantavion-autonomous-guardian-audit.cjs",
+      "blobSha": "e05193ea35a16990b41dd0e1be1cd1cfce726946",
+      "sizeBytes": 2027,
+      "mainBlobSha": "e05193ea35a16990b41dd0e1be1cd1cfce726946",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 61,
+      "contentSha256": "23b3734b5f7d80b69b751fba21e9dbf8ae3ec4ed9106fee171d953d6885b5989",
+      "imports": [
+        "fs"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "scripts/pantavion-guardian-365.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/fix--guardian-audit-script-repair/scripts/pantavion-guardian-365.cjs",
+      "blobSha": "1fbf65f9568e12ab2b4ec62cd5dbaff37bf9a1f1",
+      "sizeBytes": 7816,
+      "mainBlobSha": "1fbf65f9568e12ab2b4ec62cd5dbaff37bf9a1f1",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 286,
+      "contentSha256": "8a1569924738ac125f9d385cb6ac4b272301b52a671a6b5e2569f4b024794877",
+      "imports": [
+        "fs",
+        "path",
+        "child_process"
+      ],
+      "exports": [
+        "default",
+        "a"
+      ],
+      "envDependencies": [
+        "GITHUB_REPOSITORY",
+        "GITHUB_SHA"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "scripts/pantavion-translation-integrity-check.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/fix--guardian-audit-script-repair/scripts/pantavion-translation-integrity-check.cjs",
+      "blobSha": "99498ae768d4edb19e2ab4726d207caf460a1b1c",
+      "sizeBytes": 5390,
+      "mainBlobSha": "99498ae768d4edb19e2ab4726d207caf460a1b1c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 89,
+      "contentSha256": "d36a4a2c13da68fc8cbdeaf8171cca1d5635f91554780fb396660bb474be1190",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "ai-kernel"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "id": "PANT-BRANCH-537A0A749490",
+  "sourceRef": "recovery/snapshots/agent--shared-translation-service",
+  "headSha": "9b3c30d1c1d12dbad16a531e59c972021dcf8e34",
+  "mergeBase": "120339fdfb37d39eba978238ce2cfbb63feea954",
+  "behindMainBy": 503,
+  "aheadOfMainBy": 4,
+  "changedFileCount": 3,
+  "topicCounts": {
+    "social-people": 3,
+    "chat-translation": 3,
+    "ai-kernel": 2,
+    "media-music": 3,
+    "identity-security": 1,
+    "business-marketplace": 1,
+    "maps-water": 2
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "source-code": 2
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 2,
+    "ABSENT_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/pantavion/translate/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--shared-translation-service/app/api/pantavion/translate/route.ts",
+      "blobSha": "491ea5839254c83dc682e71ab50d23f1ef8f25dd",
+      "sizeBytes": 2122,
+      "mainBlobSha": "9795c2f097afdaa0223df2f4762744d32c3c1551",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 68,
+      "contentSha256": "5c522b79cdcfd37bbcc544f2b1e281ed6f1d039922abf02b12d6f07f9e513fe3",
+      "imports": [
+        "next/server",
+        "@/core/translation/pantavion-universal-translation-runtime",
+        "@/core/translation/pantavion-shared-translation-service"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [
+        "OPENAI_API_KEY",
+        "PANTAVION_TRANSLATE_ENDPOINT",
+        "PANTAVION_TRANSLATE_PROVIDER"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "ai-kernel",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/translation/pantavion-shared-translation-service.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/agent--shared-translation-service/core/translation/pantavion-shared-translation-service.ts",
+      "blobSha": "e07c2c5a72b2c2b604c8e2baada7638567b4ed75",
+      "sizeBytes": 7085,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 233,
+      "contentSha256": "b947c2fd0a4eb0e49b855345c4f2ed0788fb2a3bb2ae587367869e426b3ea144",
+      "imports": [
+        "./pantavion-universal-translation-runtime",
+        "./pantavion-translation-provider-adapters",
+        "./pantavion-public-text-fallback",
+        "./pantavion-translation-provider-router"
+      ],
+      "exports": [
+        "PANTAVION_SHARED_TRANSLATION_SERVICE_ID",
+        "PantavionTranslationSurface",
+        "PantavionSharedTranslationInput",
+        "PantavionSharedTranslationResult",
+        "PantavionGroupTranslationResult",
+        "normalizePantavionTranslationSurface",
+        "translateWithPantavionSharedService",
+        "translatePantavionMessageForTargets",
+        "pantavionSharedTranslationCapabilities"
+      ],
+      "envDependencies": [
+        "OPENAI_API_KEY",
+        "PANTAVION_TRANSLATION_MODEL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "media-music"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "scripts/pantavion-master-audit.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--shared-translation-service/scripts/pantavion-master-audit.cjs",
+      "blobSha": "1247cf4f6105443f96f227334910d4519502bbbb",
+      "sizeBytes": 3607,
+      "mainBlobSha": "fea67cc6b700f2519c02992faf703e5d3606d247",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 122,
+      "contentSha256": "b03a38c48f80576bf70d788190e651b60c3a811ba24097b4296fe591b5a3d792",
+      "imports": [
+        "fs"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "media-music"
+      ]
+    }
+  ]
+}

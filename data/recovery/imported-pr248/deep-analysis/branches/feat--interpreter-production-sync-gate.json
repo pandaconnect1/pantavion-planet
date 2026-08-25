@@ -1,0 +1,60 @@
+{
+  "id": "PANT-BRANCH-7F2EE9DF984E",
+  "sourceRef": "recovery/snapshots/feat--interpreter-production-sync-gate",
+  "headSha": "524f459421b5a788a5dcedbdceae827ea261d1bf",
+  "mergeBase": "4be11947da32693c8c8669cb7275fd914bcb94ed",
+  "behindMainBy": 266,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "social-people": 1,
+    "chat-translation": 1,
+    "business-marketplace": 1,
+    "ai-kernel": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "ci-workflow": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": ".github/workflows/pantavion-production-sync-verify.yml",
+      "previousPath": null,
+      "kind": "ci-workflow",
+      "canonicalPathProposal": "recovery/canonicalized/business-marketplace/feat--interpreter-production-sync-gate/.github/workflows/pantavion-production-sync-verify.yml",
+      "blobSha": "a5c7b49a014ca5b8db1bd76e5779457328fd0f63",
+      "sizeBytes": 5989,
+      "mainBlobSha": "a5c7b49a014ca5b8db1bd76e5779457328fd0f63",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 144,
+      "contentSha256": "4388faed644344d0685f98f3fef1ba051c787870a4ebafac6db3ce9aaab1dd28",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

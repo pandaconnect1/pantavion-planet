@@ -1,0 +1,693 @@
+{
+  "id": "PANT-BRANCH-312DE74B93E1",
+  "sourceRef": "recovery/snapshots/sandbox--global-connect-foundation-20260815-0058",
+  "headSha": "67ad7460ec9a474acc4ddd3fe8f78922fbb7bf35",
+  "mergeBase": "ea6d235a4484a5b068120adeab8938bca66644e8",
+  "behindMainBy": 262,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 16,
+  "topicCounts": {
+    "business-marketplace": 10,
+    "maps-water": 8,
+    "ai-kernel": 9,
+    "chat-translation": 12,
+    "recovery-continuity": 9,
+    "governance-safety": 9,
+    "infrastructure-deployment": 8,
+    "identity-security": 9,
+    "social-people": 3,
+    "media-music": 2
+  },
+  "kindCounts": {
+    "api-route": 2,
+    "source-code": 9,
+    "documentation": 2,
+    "database-migration": 1,
+    "database-sql": 1,
+    "configuration-data": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 11,
+    "DIFFERS_FROM_MAIN": 5
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/platform/global-connect/countries/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/sandbox--global-connect-foundation-20260815-0058/app/api/platform/global-connect/countries/route.ts",
+      "blobSha": "ac304b33cf0783e0b29d5f10cde03a1fdb28e949",
+      "sizeBytes": 2846,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 93,
+      "contentSha256": "5580ee4fd002f305dfb77fb3bc3343d990a1b2ae825e537378cf30987743206f",
+      "imports": [
+        "next/server",
+        "@/core/global-connect/country-registry"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "runtime",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/platform/global-connect/readiness/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/sandbox--global-connect-foundation-20260815-0058/app/api/platform/global-connect/readiness/route.ts",
+      "blobSha": "b56522cdd3e0c334e9381704f0252d40bef80bc0",
+      "sizeBytes": 1322,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 40,
+      "contentSha256": "bad158de8f9b00bac30cd386ba9f2f699f0a4207ee5263624dffe50c853f92a4",
+      "imports": [
+        "next/server",
+        "@/core/global-connect/country-registry",
+        "@/core/global-connect/foundation-contract"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "runtime",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 1
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/global-connect/country-registry.test.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/sandbox--global-connect-foundation-20260815-0058/core/global-connect/country-registry.test.ts",
+      "blobSha": "53b4da2a7b730a4822889b12e096f801a36ae2c4",
+      "sizeBytes": 1452,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 33,
+      "contentSha256": "22c3b425389139a24505351d418471e0f485fd8285822eb1c306fbeed37e5648",
+      "imports": [
+        "node:assert/strict",
+        "./country-registry.ts"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/global-connect/country-registry.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/sandbox--global-connect-foundation-20260815-0058/core/global-connect/country-registry.ts",
+      "blobSha": "afb3dd479a9f165ef8c1988bec0bbb437368b0af",
+      "sizeBytes": 10460,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 187,
+      "contentSha256": "2c452c2b05e264ae099f9632cc22d7fe2cfe4f801d0062ee232f628eaa32a894",
+      "imports": [],
+      "exports": [
+        "GLOBAL_CONNECT_COUNTRY_REGISTRY_VERSION",
+        "ISO3166_SNAPSHOT_REFERENCE",
+        "GLOBAL_CONNECT_CONTINENTS",
+        "GlobalConnectContinent",
+        "CountryEvidenceStatus",
+        "GlobalConnectCountryRecord",
+        "GLOBAL_CONNECT_COUNTRY_REGISTRY",
+        "localizedGlobalConnectCountryName",
+        "listGlobalConnectCountries",
+        "globalConnectCountryRegistryMetrics"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 2,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "maps-water",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/global-connect/foundation-contract.test.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/sandbox--global-connect-foundation-20260815-0058/core/global-connect/foundation-contract.test.ts",
+      "blobSha": "183910208c80caa3d0516e3d599f75bef9a274a7",
+      "sizeBytes": 2604,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 79,
+      "contentSha256": "3493320c1931e9a9018525144cdee256cf9f1cac9dfb14df8ed38ed58f4dd317",
+      "imports": [
+        "node:assert/strict",
+        "./foundation-contract.ts"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/global-connect/foundation-contract.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/sandbox--global-connect-foundation-20260815-0058/core/global-connect/foundation-contract.ts",
+      "blobSha": "961b22dcd8f732ebfd12db9da75ae32c01a5e8d6",
+      "sizeBytes": 10996,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 322,
+      "contentSha256": "eb618bba9d5531550e68acd7b625649b912c38e6eb800126b530660f07c89782",
+      "imports": [],
+      "exports": [
+        "GLOBAL_CONNECT_FOUNDATION_VERSION",
+        "GlobalConnectCapabilityState",
+        "GlobalConnectDataBoundary",
+        "TranslationArtifactKind",
+        "TranslationLaneDirection",
+        "ConsentDecision",
+        "PolicyDecisionState",
+        "GlobalConnectCapability",
+        "GLOBAL_CONNECT_CAPABILITIES",
+        "NormalizedHandle",
+        "normalizeGlobalConnectHandle",
+        "PasskeyCredentialContract",
+        "AuthChallengeStorageContract",
+        "DeviceSessionContract",
+        "TranslationLane",
+        "TranslationChannel",
+        "CreateTranslationChannelInput",
+        "createBidirectionalTranslationChannel",
+        "ExternalTranslationDispatchInput",
+        "ExternalTranslationDispatchPlan",
+        "planExternalTranslationDispatch",
+        "TranslationJobContract",
+        "createTranslationJobContract",
+        "globalConnectReadinessSnapshot"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 2
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "core/translation/pantavion-translation-provider-adapters.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/sandbox--global-connect-foundation-20260815-0058/core/translation/pantavion-translation-provider-adapters.ts",
+      "blobSha": "ef93da2e673e4b3785d209d8dc15d816b653d749",
+      "sizeBytes": 13234,
+      "mainBlobSha": "eed00bb527fff0a8c02aa02ddde9f7ece8e2a981",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 450,
+      "contentSha256": "6e6e607702b5aae71439fad4464b312c9fc13d319cd8204e1a50c1829e369b24",
+      "imports": [
+        "./pantavion-translation-provider-router"
+      ],
+      "exports": [
+        "getPantavionTranslationProviderStatus",
+        "translateWithPantavionProvider"
+      ],
+      "envDependencies": [
+        "PANTAVION_TRANSLATE_ALLOW_PUBLIC_FALLBACK",
+        "PANTAVION_TRANSLATE_PROVIDER",
+        "PANTAVION_TRANSLATE_ENDPOINT",
+        "DEEPL_TRANSLATE_ENDPOINT",
+        "AZURE_TRANSLATOR_ENDPOINT",
+        "PANTAVION_TRANSLATE_API_KEY",
+        "DEEPL_API_KEY",
+        "GOOGLE_TRANSLATE_API_KEY",
+        "AZURE_TRANSLATOR_KEY",
+        "AZURE_TRANSLATOR_REGION"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 10
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/implementation/GLOBAL_CONNECT_FOUNDATION_CYCLE_1.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/sandbox--global-connect-foundation-20260815-0058/docs/implementation/GLOBAL_CONNECT_FOUNDATION_CYCLE_1.md",
+      "blobSha": "2e4622d513c4ecc941649f07c41aa6ac4c65cd8b",
+      "sizeBytes": 6058,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 113,
+      "contentSha256": "51347d29234cb6b631c1d0f97d8de43c7a77c8838aab0dd62f8910a389425047",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 3,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "docs/implementation/runtime-safety-and-capability-broker.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/sandbox--global-connect-foundation-20260815-0058/docs/implementation/runtime-safety-and-capability-broker.md",
+      "blobSha": "e645e83ca7adba86292849c21cc9f3c8108fe589",
+      "sizeBytes": 1868,
+      "mainBlobSha": "520db21ccb7181906b80c2f86ad104fa99048f9c",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 51,
+      "contentSha256": "03e777ac3bbe6634a688c64b428b22a438a9c71c625d763aabb170e8745ca67b",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/global-connect-foundation-schema-test.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/sandbox--global-connect-foundation-20260815-0058/scripts/global-connect-foundation-schema-test.cjs",
+      "blobSha": "f7052f0bd8d743c37fd4568c8e0a5b7e17136035",
+      "sizeBytes": 3201,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 93,
+      "contentSha256": "f02ddf9f402b76c1c531ed42be0c067a17e0cd6f4015ea68bbe9b1c25cc617eb",
+      "imports": [
+        "node:fs",
+        "node:path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [
+        "public"
+      ],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/global-connect-public-fallback-smoke.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/sandbox--global-connect-foundation-20260815-0058/scripts/global-connect-public-fallback-smoke.cjs",
+      "blobSha": "3cedddc0350baaddf472a2154bf6f66b246da7d8",
+      "sizeBytes": 2150,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 69,
+      "contentSha256": "62e9fdd70556bbde726585abc994c312a58a49249cea18774c4311785f2e2105",
+      "imports": [
+        "node:assert/strict",
+        "node:path"
+      ],
+      "exports": [],
+      "envDependencies": [
+        "PANTAVION_TRANSLATE_PROVIDER"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 2
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "scripts/pantavion-runtime-safety-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/sandbox--global-connect-foundation-20260815-0058/scripts/pantavion-runtime-safety-gate.cjs",
+      "blobSha": "54df5c842da45621f4309763b8f51e95f0af4117",
+      "sizeBytes": 4948,
+      "mainBlobSha": "e5bf452e90c1d1b70bdc2523b784e4287c66024f",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 176,
+      "contentSha256": "b847f7d3074bcccee79b00ba1a020e322c7b5e1237a558c6916c3d28cd404679",
+      "imports": [
+        "node:child_process",
+        "node:fs",
+        "node:path"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "scripts/pantavion-translation-runtime-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/sandbox--global-connect-foundation-20260815-0058/scripts/pantavion-translation-runtime-gate.cjs",
+      "blobSha": "794ae6643e04af4b53209d64fe301dac2beee30d",
+      "sizeBytes": 2185,
+      "mainBlobSha": "9fa0e3c54a49570831e74109a2976c1934046b70",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 49,
+      "contentSha256": "645f5d79b239398fb51aec3464793c5d96d543d1e79208cdf8f514618891cf67",
+      "imports": [
+        "node:fs",
+        "node:path"
+      ],
+      "exports": [],
+      "envDependencies": [
+        "PANTAVION_TRANSLATE_ENDPOINT"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "ai-kernel",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260815010000_create_global_connect_foundation.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/sandbox--global-connect-foundation-20260815-0058/supabase/migrations/20260815010000_create_global_connect_foundation.sql",
+      "blobSha": "0edad4f42a5ff7bd994042cdeb56a019228e365b",
+      "sizeBytes": 68611,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 643,
+      "contentSha256": "3bcf3fafc6aa80a36a63e38f59c55347cc9bc2b72c698b0005b3d54787f60edb",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [
+        "global_connect_handles",
+        "global_connect_passkey_credentials",
+        "global_connect_auth_challenges",
+        "global_connect_recovery_codes",
+        "global_connect_devices",
+        "global_connect_sessions",
+        "global_connect_country_registry",
+        "global_connect_translation_channels",
+        "global_connect_translation_lanes",
+        "global_connect_translation_jobs",
+        "global_connect_translation_outputs",
+        "global_connect_command_receipts",
+        "global_connect_outbox_events",
+        "global_connect_audit_references"
+      ],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 2,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/rollback/20260815010000_create_global_connect_foundation.down.sql",
+      "previousPath": null,
+      "kind": "database-sql",
+      "canonicalPathProposal": "recovery/canonicalized/infrastructure-deployment/sandbox--global-connect-foundation-20260815-0058/supabase/rollback/20260815010000_create_global_connect_foundation.down.sql",
+      "blobSha": "b8786b981e60313e3b6c5db96064d595b8dff34c",
+      "sizeBytes": 2145,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 36,
+      "contentSha256": "9f6e4d51cf8f168a628ee89e53a9b162e666e058b0e80d71fe73382daabaaf17",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "tsconfig.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/sandbox--global-connect-foundation-20260815-0058/tsconfig.json",
+      "blobSha": "f73e2739b9d8ae8e646121ad1bb7016877c3d387",
+      "sizeBytes": 892,
+      "mainBlobSha": "f393988687c0b6875ad4f14ea9d7a019e28c4a02",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 50,
+      "contentSha256": "8cc13cd7299970a2b776c067f87203b38619828b39c9f4d22a70edec474a9602",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel",
+        "recovery-continuity"
+      ]
+    }
+  ]
+}

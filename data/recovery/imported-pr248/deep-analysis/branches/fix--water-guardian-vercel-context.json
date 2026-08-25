@@ -1,0 +1,75 @@
+{
+  "id": "PANT-BRANCH-C1C11B29F756",
+  "sourceRef": "recovery/snapshots/fix--water-guardian-vercel-context",
+  "headSha": "80ad4eba5218202011d58727320089978786246e",
+  "mergeBase": "29f8d21d61b77bc77660114c71dd92e8daf9d5b6",
+  "behindMainBy": 121,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "chat-translation": 1,
+    "business-marketplace": 1,
+    "maps-water": 1,
+    "ai-kernel": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "source-code": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "scripts/water-guardian-production-smoke.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/business-marketplace/fix--water-guardian-vercel-context/scripts/water-guardian-production-smoke.cjs",
+      "blobSha": "a1f618ba139027737c0566d5eaf88c67aa7af684",
+      "sizeBytes": 9569,
+      "mainBlobSha": "a1f618ba139027737c0566d5eaf88c67aa7af684",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 305,
+      "contentSha256": "bee43272dafce5ea6b4fa31c64ba77c80ae6d7cfccf3e46731da202d2df6b568",
+      "imports": [
+        "node:timers/promises"
+      ],
+      "exports": [],
+      "envDependencies": [
+        "PANTAVION_PRODUCTION_BASE_URL",
+        "GITHUB_REPOSITORY",
+        "PANTAVION_EXPECTED_GITHUB_SHA",
+        "GITHUB_SHA",
+        "GITHUB_TOKEN",
+        "PANTAVION_VERCEL_STATUS_CONTEXT",
+        "PANTAVION_DEPLOY_WAIT_MS",
+        "PANTAVION_ALIAS_WAIT_MS"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

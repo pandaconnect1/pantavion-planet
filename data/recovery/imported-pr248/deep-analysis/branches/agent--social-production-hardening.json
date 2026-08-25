@@ -1,0 +1,64 @@
+{
+  "id": "PANT-BRANCH-A83EE1AD7C0A",
+  "sourceRef": "recovery/snapshots/agent--social-production-hardening",
+  "headSha": "4672a00f352e96220f269cda6b77e37dad3bb8d4",
+  "mergeBase": "2ad64ea5ae2f887a9766f40bb051155bdbef5c05",
+  "behindMainBy": 317,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "business-marketplace": 1,
+    "maps-water": 1,
+    "recovery-continuity": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "database-migration": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260812205000_harden_social_data_api_access.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/agent--social-production-hardening/supabase/migrations/20260812205000_harden_social_data_api_access.sql",
+      "blobSha": "52016ae90dbceaa234b5073120aa481a1307c997",
+      "sizeBytes": 2048,
+      "mainBlobSha": "52016ae90dbceaa234b5073120aa481a1307c997",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 32,
+      "contentSha256": "842571415477f2aefb4a56745495a3195314a185cefed414d7739c1dd701c358",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "business-marketplace",
+        "maps-water",
+        "recovery-continuity",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

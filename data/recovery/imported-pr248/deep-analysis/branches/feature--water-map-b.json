@@ -1,0 +1,488 @@
+{
+  "id": "PANT-BRANCH-F2B3E5B87E67",
+  "sourceRef": "recovery/snapshots/feature--water-map-b",
+  "headSha": "f5a18e1d70dab1aef72dd73a91d6949fd33fe3f8",
+  "mergeBase": "a5d29057908d9db4ba58c50e735b02d28707f2c3",
+  "behindMainBy": 223,
+  "aheadOfMainBy": 14,
+  "changedFileCount": 12,
+  "topicCounts": {
+    "identity-security": 7,
+    "maps-water": 12,
+    "ai-kernel": 4,
+    "infrastructure-deployment": 4,
+    "chat-translation": 2,
+    "recovery-continuity": 3,
+    "business-marketplace": 2
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "ui-page": 2,
+    "source-code": 7,
+    "configuration-data": 2
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 4,
+    "IDENTICAL_TO_MAIN": 8
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/final-master-dwg/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/feature--water-map-b/app/api/professional/infrastructure/water/final-master-dwg/route.ts",
+      "blobSha": "3b60bafef04a1ef35a19ab721d23e4c386f62f7a",
+      "sizeBytes": 2481,
+      "mainBlobSha": "98971ae69e681e352b53a54ff653bc1f2f579320",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 94,
+      "contentSha256": "67c0fd4154d79bb5707ea983272250bbe0be16f954a68506a2bfc24c3cc4ac5f",
+      "imports": [
+        "fs",
+        "path",
+        "stream",
+        "@vercel/blob",
+        "@/core/security/water-admin-session",
+        "@/core/water/final-master-dwg-source"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN",
+        "PANTAVION_BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/b/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/feature--water-map-b/app/professional/infrastructure/water/b/page.tsx",
+      "blobSha": "c15395f6395c3210d23233bf45262702d8f7e4c3",
+      "sizeBytes": 608,
+      "mainBlobSha": "c15395f6395c3210d23233bf45262702d8f7e4c3",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 20,
+      "contentSha256": "5de19b23cabc9d5e162bc597e93f089dbe76eba73aed4172b9cda2738147be7d",
+      "imports": [
+        "../water-map-navigation",
+        "../components/water-map-b-authentic-client"
+      ],
+      "exports": [
+        "dynamic",
+        "metadata",
+        "WaterBMapPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/professional/infrastructure/water/components/water-map-b-authentic-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/feature--water-map-b/app/professional/infrastructure/water/components/water-map-b-authentic-client.tsx",
+      "blobSha": "f6016829422fc7f8b407b03eeca69387361f7e6a",
+      "sizeBytes": 17184,
+      "mainBlobSha": "588b67a6ece9eaa35f62e333841cc41ddb037e95",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 352,
+      "contentSha256": "e5c939d116d9d8b9456410388fc586701dd22190f836c998a5545177e51e6eeb",
+      "imports": [
+        "react",
+        "@/core/water/water-map-b-position-truth"
+      ],
+      "exports": [
+        "WaterMapBAuthenticClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/feature--water-map-b/app/professional/infrastructure/water/page.tsx",
+      "blobSha": "b76e6ff6a5a4982bc5a8a8d16a0716e156f7dddd",
+      "sizeBytes": 4449,
+      "mainBlobSha": "c9fb6e27388a0cf59711ccf50041ed8fec32faec",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 109,
+      "contentSha256": "97339546e80f6fcd2b9ce59e581e13da4d4517208fad54bab43a873755007c9c",
+      "imports": [
+        "next/headers",
+        "@/core/security/water-admin-session",
+        "./water-map-navigation"
+      ],
+      "exports": [
+        "metadata",
+        "WaterControlCenterPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/water-map-navigation.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/feature--water-map-b/app/professional/infrastructure/water/water-map-navigation.tsx",
+      "blobSha": "df643817ac28326aa0eb7345555919f7231171b6",
+      "sizeBytes": 2190,
+      "mainBlobSha": "df643817ac28326aa0eb7345555919f7231171b6",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 76,
+      "contentSha256": "5d8f7f64b27184013b3e713f32c040cbbf71302f6c011cd2c24a90bd1a0111f5",
+      "imports": [
+        "next/navigation"
+      ],
+      "exports": [
+        "WaterMapNavigation"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/water/water-map-b-alignment-contract.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/feature--water-map-b/core/water/water-map-b-alignment-contract.ts",
+      "blobSha": "3168d217ebbb58d645ca749af74c1314dfe55f79",
+      "sizeBytes": 2158,
+      "mainBlobSha": "3168d217ebbb58d645ca749af74c1314dfe55f79",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 73,
+      "contentSha256": "02a60e81be25a2a7b36ec29e591b58e71ca138ed353f54f58c59bc3de34ef7e9",
+      "imports": [],
+      "exports": [
+        "WATER_MAP_B_ALIGNMENT_CONTRACT_VERSION",
+        "WaterMapBControlPoint",
+        "WaterMapBAlignmentInput",
+        "WaterMapBAlignmentDecision",
+        "validateWaterMapBAlignment"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/water/water-map-b-master-contract.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/feature--water-map-b/core/water/water-map-b-master-contract.ts",
+      "blobSha": "bc8ed213474c5e1c3fbf2207aa6d3c5833bf0204",
+      "sizeBytes": 4803,
+      "mainBlobSha": "bc8ed213474c5e1c3fbf2207aa6d3c5833bf0204",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 145,
+      "contentSha256": "584fd52f8628c3ab37010fac18e6e8a91db835474443d4e7c5651509827af86f",
+      "imports": [],
+      "exports": [
+        "WATER_MAP_B_MASTER_CONTRACT_VERSION",
+        "WaterMapBSourceFormat",
+        "WaterMapBLayerManifestEntry",
+        "WaterMapBMasterManifest",
+        "WaterMapBMasterValidation",
+        "validateWaterMapBMasterManifest",
+        "WaterMapBFieldOverlayRecord",
+        "isWaterMapBFieldOverlayBoundToMaster"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/water/water-map-b-position-truth.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/feature--water-map-b/core/water/water-map-b-position-truth.ts",
+      "blobSha": "bebdceb98f200f26a576df88e91ab065f0751a7e",
+      "sizeBytes": 1571,
+      "mainBlobSha": "bebdceb98f200f26a576df88e91ab065f0751a7e",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 64,
+      "contentSha256": "3ffbf1e443fddd7ec66806fa88c75b0694fb831ecb9d098f126c355dd860fd65",
+      "imports": [],
+      "exports": [
+        "WATER_MAP_B_POSITION_TRUTH_VERSION",
+        "WaterMapBPositionTruth",
+        "WaterMapBPositionAssessment",
+        "assessWaterMapBPosition"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/water/water-map-b-source-identity.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/feature--water-map-b/core/water/water-map-b-source-identity.ts",
+      "blobSha": "0d54487fa7aa4b76da0ed0d43c6a69190fc769a0",
+      "sizeBytes": 2320,
+      "mainBlobSha": "0d54487fa7aa4b76da0ed0d43c6a69190fc769a0",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 68,
+      "contentSha256": "89c95bb26dae299aa43207f0db297a6dc6ab300722a4b57ac08b2c5e86158351",
+      "imports": [],
+      "exports": [
+        "WATER_MAP_B_SOURCE_IDENTITY_VERSION",
+        "WATER_MAP_B_EXPECTED_SOURCE",
+        "WaterMapBSourceIdentityInput",
+        "WaterMapBSourceIdentityCheck",
+        "validateWaterMapBExpectedSourceIdentity"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "evidence/water/map-b/source-verification-2026-08-16.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/feature--water-map-b/evidence/water/map-b/source-verification-2026-08-16.json",
+      "blobSha": "6c2c1db2331d9dd22be384f4180717c4f5d16130",
+      "sizeBytes": 829,
+      "mainBlobSha": "6c2c1db2331d9dd22be384f4180717c4f5d16130",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 23,
+      "contentSha256": "ed6b31062140ee46d19f348e49752b3c928527cff1dc1b9177076560b475ab07",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--water-map-b/package.json",
+      "blobSha": "0f092ab0fbe4fb2e1e600e35899b6f36fdfb8035",
+      "sizeBytes": 3595,
+      "mainBlobSha": "f3147714826462b5c76338ad6bcfb831d6df5a06",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 70,
+      "contentSha256": "4674e8886782591aa5f6a4d3468557f8d059ec48a91e7003d0ddd12c5c7dfaa2",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 3,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-water-map-b-dwg-inventory.mjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/feature--water-map-b/scripts/pantavion-water-map-b-dwg-inventory.mjs",
+      "blobSha": "6c6cefd13c41820d21f36dac9db707c802e6d76e",
+      "sizeBytes": 4893,
+      "mainBlobSha": "6c6cefd13c41820d21f36dac9db707c802e6d76e",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 137,
+      "contentSha256": "a836283cfd581867be3f5898ab819f1b00ef7255136b04a22c131144a8ed819e",
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:crypto",
+        "node:url",
+        "@mlightcad/libredwg-web"
+      ],
+      "exports": [],
+      "envDependencies": [
+        "PANTAVION_WATER_MAP_B_DWG_PATH",
+        "PANTAVION_WATER_MAP_B_INVENTORY_OUT"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity"
+      ]
+    }
+  ]
+}

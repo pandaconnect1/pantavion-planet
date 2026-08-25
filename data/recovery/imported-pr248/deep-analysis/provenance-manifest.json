@@ -1,0 +1,381 @@
+{
+  "id": "pantavion_pr248_deep_analysis_snapshot_20260825",
+  "sourcePullRequest": 248,
+  "sourceBranch": "recovery/classified-ledger-20260823",
+  "sourceCommit": "22e07b47dc24b2ad78ebc5f3b180c2f0b381e41e",
+  "sourceCommitMessage": "data(recovery): deep-analyze all 91 snapshot branches",
+  "preservedFileCount": 92,
+  "preservationMode": "immutable-path-copy",
+  "destinationRoot": "data/recovery/imported-pr248/deep-analysis",
+  "truthRule": "This snapshot preserves recovery evidence only. It is not proof that any recovered feature is implemented, deployed, or VERIFIED_LIVE.",
+  "sourcePaths": [
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--bidirectional-interpreter-mode.json",
+      "blobSha": "dff293ab8832e5afe738359238144ea42785fa66"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--canonical-social-flagship-wave.json",
+      "blobSha": "ff453bb8620fe70fd4d56b76e1043ab9dd0372c4"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--fix-live-translation-runtime.json",
+      "blobSha": "4319c5d8000164647bbd49546958257ebaa97711"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--fix-water-admin-mobile-navigation-20260721.json",
+      "blobSha": "1362cf5d43afa1e2d3cdfee40a5c36b65b1e7935"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--fix-water-admin-users-20260720.json",
+      "blobSha": "c888e0379a79ad7423b5b7ebdd8cab4f454eca05"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--fix-water-network-range-loading-20260723.json",
+      "blobSha": "403b4a52f28dec74383d0634bb2967f9907ef617"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--fix-water-request-deduplication-20260721.json",
+      "blobSha": "f61099ca7f817ff797702293fb072a45dd5fd709"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--hide-water-administration-20260720.json",
+      "blobSha": "e0fc6b2dfef1371f1599905a552232aff133ba73"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--human-core-live-wave-1.json",
+      "blobSha": "824669ed6972cebf6cadff12bbf5352d81f2367a"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--master-recovery-wave-1.json",
+      "blobSha": "ebf54db1813c5aad1c99b27eb1f568bc5f494ed8"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--mobile-header-language-cleanup.json",
+      "blobSha": "3fbb3e08ceede4e1f10371310c81585bc8aa841a"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--production-real-features-only.json",
+      "blobSha": "75361e21fcee31e0f48be5a9223ce943f0dcf977"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--production-translation-e2e-20260822.json",
+      "blobSha": "6e562c3403d0735b81a2a7dd9c34c99d1fd468a5"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--production-water-only-hard-gate.json",
+      "blobSha": "c13e3df732a38818eb841b950cb55bfc4d5e11aa"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--raw-donor-preservation.json",
+      "blobSha": "b86f5bfab88f67cd6ead6473e08ac7b5d08ec7e4"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--realtime-chat-translation.json",
+      "blobSha": "4d64ccec68577fddf659bc474d988b452f74cab4"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--release1-live-translation.json",
+      "blobSha": "c39d3859d2936d95fe4fa5a551908355ab4fa0fc"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--restore-water-stable-20260723.json",
+      "blobSha": "2d00036f35e479cae560d21008c622594a6a6253"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--shared-translation-service.json",
+      "blobSha": "c554a44ccd3e179ccefc86942d480c190a2cfdfc"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--social-production-hardening.json",
+      "blobSha": "2a213b3b002f1d084ed19ea0b5af538ab35ce090"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--stt-ai-sdk.json",
+      "blobSha": "eea940c0c69600e18e88e6c1c623ed6afa3b417b"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--translation-worker-hardening-20260822.json",
+      "blobSha": "86c315e2ab3fe5a7bfc43481e6472c69fef012c7"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/agent--water-admin-mobile-push-20260721.json",
+      "blobSha": "786939d97be597bc8b1f68614957ac78db305e62"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/docs--complete-handoff-20260816.json",
+      "blobSha": "1a7e9929cf548ae00eb3fc304bbec9ccaf93fa3c"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feat--foundation-sprint-1.json",
+      "blobSha": "05c3a55b624ecf43b6ee16f0613cc44d132864a2"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feat--guardian-extreme-sos-20260503-110153.json",
+      "blobSha": "c63be6c7da7ef76dabfa6b924db9f6c30b27d755"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feat--interpreter-production-sync-gate.json",
+      "blobSha": "572551419006f4f5d0057a4b19e23515b9d41058"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feat--interpreter-runtime-health.json",
+      "blobSha": "282a6c750de9201c57913842daa987e7ce50d08f"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feat--language-coverage-verification-20260815.json",
+      "blobSha": "0041aa460662335463f3c9652dc60d6ef4106d05"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feat--pantavion-foundry-control-plane-v1.json",
+      "blobSha": "6c50bf27fbd2f59440f3eef7f18e5807b3720fac"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feat--revenue-social-foundation.json",
+      "blobSha": "7685a923915f066e3ce191fc34d0b528292e23c9"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feat--social-business-listings-shell.json",
+      "blobSha": "a0a97390b485172a8252909033a3ecf12d2dfc7c"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feat--social-flagship.json",
+      "blobSha": "035e7bf93f7bef774cc86bfe7e611b7088d9ade3"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feat--world-language-coverage-20260503-102839.json",
+      "blobSha": "5884b4d6629e09d3046fadb7810ddcbf3fe5da0d"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feature--global-knowledge-vault.json",
+      "blobSha": "7badf100486b6fba49aa5ed489a103e3db16235d"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feature--identity-trust-security-core.json",
+      "blobSha": "4b169ecc01112e53815dbbc41316d52b70f9c885"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feature--music-voice-studio.json",
+      "blobSha": "8ac10aceb566d1f779ee8a0d0186d54026c135b8"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feature--simple-universal-interpreter.json",
+      "blobSha": "3e251be7d1aa13daf7ebc676e0fa91b5ac7d5a7c"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feature--social-core-foundation.json",
+      "blobSha": "bef3145f21f2d8af7e56f7b74b621d1160bc0cbe"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feature--social-core-runtime-v2.json",
+      "blobSha": "11038a75a2621a18529440e20593ac0d4548c8a8"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feature--startup-canonical-runtime-20260818.json",
+      "blobSha": "27123b95081ba3582d34423189b78909240f7132"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feature--translation-agent.json",
+      "blobSha": "c8755bf2485cd68289609ab495cb44b0dfe5fa07"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/feature--water-map-b.json",
+      "blobSha": "7e5187c8de2af3fe55ddec2932f4a221e92d2b27"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--chat-live-receipts-20260822.json",
+      "blobSha": "73387449c935ac0932533b2b35c11f294a55875d"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--chat-translation-history-20260822.json",
+      "blobSha": "96f92f0b9b7e7f7c19485689e0d34fee394a6949"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--core-four-verified-wave-20260815.json",
+      "blobSha": "d0e669effcf5c05e07b5312cb23a8e962417d79a"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--gateway-context-normalizer.json",
+      "blobSha": "42e4827462b359c80f6218474af07d674f1a53aa"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--guardian-audit-script-repair.json",
+      "blobSha": "738e7028344bfb4b33240512f948132f6d9cb87b"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--interpreter-full-turn-audio-20260815.json",
+      "blobSha": "7a445a5405b466d9579f63c8d6c90fd8bb5506c9"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--map-b-founder-approved-access.json",
+      "blobSha": "e7472355f58a6a6de5c10f73738facbf97602e48"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--production-sync-verification.json",
+      "blobSha": "aaaab833e4cec774f06b2e8ec5ff10674b1a8168"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--production-sync-yaml.json",
+      "blobSha": "112bf837620897d5633b3e64c026019c23c606a8"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--production-visibility-20260822.json",
+      "blobSha": "5334abfe8dc7de2d0517ae5250c06768f8984103"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--social-health-diagnostics.json",
+      "blobSha": "8cd94d9cc5792cb253f6c69c7bf69b988e8ac2dc"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--social-live-backend-gate.json",
+      "blobSha": "df8aff1a44b0dfcfaabdb9e7e72ef145271fee71"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--stt-language-and-fallback.json",
+      "blobSha": "8620f70cf743c9371a9c8609a8af1d2a29a525d9"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--supabase-admin-runtime-fallback.json",
+      "blobSha": "c3eb3a397daf8d4712b731a02c439e4b88197989"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--supabase-public-runtime-fallback.json",
+      "blobSha": "80a63cfc328c15b6ea6cc6ade991d210983c6333"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--water-final-master-supabase-storage.json",
+      "blobSha": "a7aaf98b59c86bc7ad7c956c204af03ad3e8c393"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--water-guardian-vercel-context.json",
+      "blobSha": "92da82350ba87bbe63f0c1b47116530a40744a83"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--water-lock-refresh-evidence.json",
+      "blobSha": "3087935b2ab2544e7bc530bf39a55896721bdc83"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/fix--water-map-b-resumable-upload.json",
+      "blobSha": "8f01663209dbeff8a7077fe6e6ec08b013806bc8"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/kernel-canonical-v1.json",
+      "blobSha": "af29f490ef293d3cb329989683f44ceed16b2b39"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/kernel-live-runtime-20260626-230235.json",
+      "blobSha": "5abe1ce31ef14572aef088689256eebb0b799d1b"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/pantavion--ecosystem-readiness-gate-v1.json",
+      "blobSha": "8e05903faea0f98e0d47e58d38dfa4b0f34fb524"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/pantavion--evolution-engine-v2.json",
+      "blobSha": "2ba1289246d45475b3cb3bda2883ffaf56a4c99e"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/pantavion--execution-engine-v1.json",
+      "blobSha": "976b0be941e47948bfc72e8dc6903ce5f11af5d3"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/pantavion-clean-rescue.json",
+      "blobSha": "cc27201ef019b785caa3c9ab4efd907281620ef1"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/pantavion-recovery-20260705.json",
+      "blobSha": "bac998cdb1fe4c6370678b9355e19771b9c4e49d"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/pantavion-runtime-services.json",
+      "blobSha": "3aa49fa4debdc1f5ccd80ed7fa30b4f871580845"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/phase-c-ui-port-20260411-194906.json",
+      "blobSha": "3f0c75a3604f67433c077088e3d4cc758b25fe49"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--all-projects-safe-transfer-20260823.json",
+      "blobSha": "30fca70745133b045346a0eec3c7a1401e661cb5"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--canonical-knowledge-excavation-215.json",
+      "blobSha": "76e89fab4aca9ba829402997d5cb7d38104f122b"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--canonical-knowledge-v2-20260818.json",
+      "blobSha": "15fe4a5a01bc68dbcd6d761814bb3f1be3b6bf00"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--consolidation-20260810.json",
+      "blobSha": "7e2996d07624ee15908e21d8c61b78ed890c3be2"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--donor-repo-consolidation-20260819-batch2-work.json",
+      "blobSha": "c1d3e2e51e9305cc17376d2699869bcefde95596"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--donor-repo-consolidation-20260819-batch2.json",
+      "blobSha": "2df88792b8aabc53d9f527aef36cc2b96f3c01e9"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--identity-auth-reconcile-20260822.json",
+      "blobSha": "67932636b623ced0cc04cb3f928b4fbfa70c5e05"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--identity-registration-current-main.json",
+      "blobSha": "9acf760743ca7df2569f2426dfe28419a9022d07"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--interpreter-backend-20260814.json",
+      "blobSha": "7fdd62358280ba663298d80e59b079d3258107bc"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--interpreter-language-runtime.json",
+      "blobSha": "d4a9567e8a529e744e0c82b07c79cbd0fd976271"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--master-inventory-20260810.json",
+      "blobSha": "8e71f3351c99ebab321afcef8c2ba4e5b8196b3e"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--master-ledger-20260816.json",
+      "blobSha": "e79596acc894d41cbbb7a0efbe2f1019c35d8640"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--personalized-sections-wave-20260815.json",
+      "blobSha": "cbe778a9649c46a4e360923e2e2f877588646024"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/recovery--social-people-chat-all-inside-20260815.json",
+      "blobSha": "8407f0676ca1a7dff2755d78ece116213e199c28"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/rescue-kernel-canonical-v1-20260411-194906.json",
+      "blobSha": "69f7b7c7ceb51d900ff270fc9f21a001d83a56fa"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/sandbox--global-connect-foundation-20260815-0058.json",
+      "blobSha": "03efd29e1291c73b4f386b8e5399a3c8313c8e14"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/sandbox--global-connect-foundation-20260815-0100.json",
+      "blobSha": "b7a01f032f703cea06a532b20c333a7a957e5b7c"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/sandbox--interpreter-runtime-20260815-1057.json",
+      "blobSha": "5be3d2c4406e08cc097003a06423a93dab291b3e"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/vercel--install-vercel-web-analytics-0aaw0f.json",
+      "blobSha": "9eed9d5493a89c7e74ca7b2a275d494f14c28f3c"
+    },
+    {
+      "path": "data/recovery/deep-analysis/branches/vercel-agent--canonical-control-plane-foundation.json",
+      "blobSha": "f3b8050462e8d2165dc7eb93ff83ac7a4cb45405"
+    },
+    {
+      "path": "data/recovery/deep-analysis/manifest.json",
+      "blobSha": "f12f16d2d481bd0d6a87415c0fe1f2580430aaa7"
+    }
+  ]
+}

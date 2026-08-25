@@ -1,0 +1,70 @@
+{
+  "id": "PANT-BRANCH-819844A2776E",
+  "sourceRef": "recovery/snapshots/recovery--master-inventory-20260810",
+  "headSha": "dcd72ddbac848b3e5c3036916ff324016343c273",
+  "mergeBase": "863c7c27ea147f0ac5afd59a042a7b602362600a",
+  "behindMainBy": 445,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "chat-translation": 1,
+    "business-marketplace": 1,
+    "maps-water": 1,
+    "ai-kernel": 1,
+    "recovery-continuity": 1,
+    "governance-safety": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "documentation": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "docs/recovery/PANTAVION_MASTER_RECOVERY_CATALOG.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--master-inventory-20260810/docs/recovery/PANTAVION_MASTER_RECOVERY_CATALOG.md",
+      "blobSha": "fa58a26d9a09584a7d900199d10b367dd73d6710",
+      "sizeBytes": 17165,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 519,
+      "contentSha256": "136bb2224c2dcd2d0cf0664cb02492abbe7d61d06ce9ac7768e1b45c4238ef3f",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

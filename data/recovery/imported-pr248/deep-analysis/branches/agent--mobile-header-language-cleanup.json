@@ -1,0 +1,92 @@
+{
+  "id": "PANT-BRANCH-74EFADB4D8CC",
+  "sourceRef": "recovery/snapshots/agent--mobile-header-language-cleanup",
+  "headSha": "81f197d5d83134d02b86c1126d192b72ef217489",
+  "mergeBase": "473d5f61c83f1d2ee0518b2d7c1b31cc9040c095",
+  "behindMainBy": 515,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "maps-water": 2,
+    "business-marketplace": 1
+  },
+  "kindCounts": {
+    "source-code": 2
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/pantavion-global-language-selector.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--mobile-header-language-cleanup/app/pantavion-global-language-selector.tsx",
+      "blobSha": "3410e85c656d77f52d3e37e7d74a4f6add0103b7",
+      "sizeBytes": 3416,
+      "mainBlobSha": "c2dbf555b0cb4b7283acb6765bff64dba110d640",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 101,
+      "contentSha256": "c3125cf16d5a24b458cf2044559cba292ccbeeeb7fe62d6c6e2e77185d0a1538",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "PantavionGlobalLanguageSelector"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/pantavion-home-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--mobile-header-language-cleanup/app/pantavion-home-client.tsx",
+      "blobSha": "c816447bcb611acf449852c7c9520fc6d5414163",
+      "sizeBytes": 3787,
+      "mainBlobSha": "5cab9f3897e3bff36f3a45882420605e707ad9dc",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 80,
+      "contentSha256": "90d25ed6c76bb96ffd5cb24e1c25ae6a80b39b83b18a92cb251c5ffeec440b11",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "PantavionHomeClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "maps-water"
+      ]
+    }
+  ]
+}

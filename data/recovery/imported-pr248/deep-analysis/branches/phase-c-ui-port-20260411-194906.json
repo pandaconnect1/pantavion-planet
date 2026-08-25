@@ -1,0 +1,346 @@
+{
+  "id": "PANT-BRANCH-04D3B9B2F999",
+  "sourceRef": "recovery/snapshots/phase-c-ui-port-20260411-194906",
+  "headSha": "ac092b514451269df4d614a840a374bdfc5f45b5",
+  "mergeBase": "6ef6398bf219de227cb3ba1bce536a485b95a54f",
+  "behindMainBy": 1055,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 9,
+  "topicCounts": {
+    "chat-translation": 4,
+    "media-music": 1,
+    "maps-water": 3,
+    "business-marketplace": 1,
+    "social-people": 5,
+    "ai-kernel": 2,
+    "recovery-continuity": 4,
+    "identity-security": 1
+  },
+  "kindCounts": {
+    "ui-page": 7,
+    "source-code": 1,
+    "documentation": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 8,
+    "DIFFERS_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/chat/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/phase-c-ui-port-20260411-194906/app/chat/page.tsx",
+      "blobSha": "b5b0afcadb5500917a1c28705b4f625f9d6323dc",
+      "sizeBytes": 944,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 25,
+      "contentSha256": "8f3a870b12880c65a701395ab462c7cadd74bc625d19f75728a122685ac30c1f",
+      "imports": [
+        "../pantavion-clean-ui"
+      ],
+      "exports": [
+        "ChatPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/compass/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/phase-c-ui-port-20260411-194906/app/compass/page.tsx",
+      "blobSha": "52309f3c93f12d7be772b398e1e9493944580ee7",
+      "sizeBytes": 1075,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 30,
+      "contentSha256": "a3f559f454430d53c6fe4e337323abfd213d3a1cfd2e1915b2eb38985a2eaac3",
+      "imports": [
+        "../pantavion-clean-ui"
+      ],
+      "exports": [
+        "CompassPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/create/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/phase-c-ui-port-20260411-194906/app/create/page.tsx",
+      "blobSha": "dfe177bf3926cfbb1b7921cca7430940a61b9650",
+      "sizeBytes": 870,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 26,
+      "contentSha256": "792b0a019dd9ab93782f698303a01064a93823e91034a8c6c5a22cb08b01726d",
+      "imports": [
+        "../pantavion-clean-ui"
+      ],
+      "exports": [
+        "CreatePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/mind/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/phase-c-ui-port-20260411-194906/app/mind/page.tsx",
+      "blobSha": "cc053a273389a80d4e3c54d156571acd77216e94",
+      "sizeBytes": 875,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 25,
+      "contentSha256": "c3e8f88359588d90c9d208feb47dc0260e1486034803720a6c1fb05de13c8358",
+      "imports": [
+        "../pantavion-clean-ui"
+      ],
+      "exports": [
+        "MindPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "ai-kernel",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/pantavion-clean-ui.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/phase-c-ui-port-20260411-194906/app/pantavion-clean-ui.tsx",
+      "blobSha": "00f81686ab9fe27cd9fd57603e7337d44d234222",
+      "sizeBytes": 5797,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 192,
+      "contentSha256": "f628f12c751f8cd35c99fdc6f620c5ec06ee50dac424ed65afae27aac30cff6b",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "PantavionPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/people/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/phase-c-ui-port-20260411-194906/app/people/page.tsx",
+      "blobSha": "005d88c326f89519d1769933a6e585c0edd98975",
+      "sizeBytes": 1446,
+      "mainBlobSha": "2bbf7c1b2bbb7800e5d44b03e64a1a459bf30e68",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 38,
+      "contentSha256": "5780d95e7692aee0c762a6ee03758e34f6fc71212928b05f0e606246434f0661",
+      "imports": [
+        "../pantavion-clean-ui"
+      ],
+      "exports": [
+        "PeoplePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "maps-water",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/pulse/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/phase-c-ui-port-20260411-194906/app/pulse/page.tsx",
+      "blobSha": "f1dacab356d4fd42a215761e601a2e4f4239c35d",
+      "sizeBytes": 1054,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 29,
+      "contentSha256": "dbd543994a7fc1857f9633d79a54d86b7409145cc96bdb9b70f4c59669a6a922",
+      "imports": [
+        "../pantavion-clean-ui"
+      ],
+      "exports": [
+        "PulsePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/voice/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/phase-c-ui-port-20260411-194906/app/voice/page.tsx",
+      "blobSha": "6d469b2c050235512285786de94dd5a2bce3a5fe",
+      "sizeBytes": 1253,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 26,
+      "contentSha256": "1c4d10824d59b2ff9f827cc314d2d933dbd98b6dd40823c36ebd402e5fc1e73d",
+      "imports": [
+        "../pantavion-clean-ui"
+      ],
+      "exports": [
+        "VoicePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/phase-c/PHASE_C_VISUAL_BASELINE.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/phase-c-ui-port-20260411-194906/docs/phase-c/PHASE_C_VISUAL_BASELINE.md",
+      "blobSha": "e9b301347b1f851e24fa327e384fdb9952deccd9",
+      "sizeBytes": 515,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 26,
+      "contentSha256": "c3ccf68fa1530d1f8417a7f0c355e3bfbb80815059a199fa31fe28ca3eea1fe6",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "ai-kernel"
+      ]
+    }
+  ]
+}

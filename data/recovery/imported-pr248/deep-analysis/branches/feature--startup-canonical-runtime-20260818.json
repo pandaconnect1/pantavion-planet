@@ -1,0 +1,191 @@
+{
+  "id": "PANT-BRANCH-EF0E6E9DA87D",
+  "sourceRef": "recovery/snapshots/feature--startup-canonical-runtime-20260818",
+  "headSha": "1f525676d2d83a5d4de55e5cbdd1e4e9c3e480bf",
+  "mergeBase": "074ac612df3bd0a68fcaec4b01b81d289a61da03",
+  "behindMainBy": 147,
+  "aheadOfMainBy": 4,
+  "changedFileCount": 4,
+  "topicCounts": {
+    "review-unclassified": 1,
+    "chat-translation": 2,
+    "business-marketplace": 2,
+    "maps-water": 2,
+    "governance-safety": 3,
+    "ai-kernel": 2,
+    "identity-security": 1,
+    "social-people": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "source-code": 2,
+    "ui-page": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 4
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/pantavion/startup/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--startup-canonical-runtime-20260818/app/api/pantavion/startup/route.ts",
+      "blobSha": "a5c00825495e369310d510ec7b1a4dd676c1c941",
+      "sizeBytes": 709,
+      "mainBlobSha": "a5c00825495e369310d510ec7b1a4dd676c1c941",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 29,
+      "contentSha256": "fe85af2680c96f0c9ce047adb525c9908400d3033f77568b429d40295bd1be81",
+      "imports": [
+        "next/server",
+        "../../../../core/startup/pantavion-startup-engine"
+      ],
+      "exports": [
+        "dynamic",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "review-unclassified"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/startup/StartupClient.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--startup-canonical-runtime-20260818/app/startup/StartupClient.tsx",
+      "blobSha": "92fd0794f4d5896c9e30e5c55a62d3f42a0de9fb",
+      "sizeBytes": 5148,
+      "mainBlobSha": "92fd0794f4d5896c9e30e5c55a62d3f42a0de9fb",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 133,
+      "contentSha256": "15e01303ff94b9067c399fb10e95d009b506cd2135026eaec22c2d7a4ccf492d",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "StartupClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/startup/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--startup-canonical-runtime-20260818/app/startup/page.tsx",
+      "blobSha": "a3663f2d21882750ed9cd940bc517699d99646a9",
+      "sizeBytes": 252,
+      "mainBlobSha": "a3663f2d21882750ed9cd940bc517699d99646a9",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 11,
+      "contentSha256": "6062bc3665ea67872c45ad22ae1d9f68bfcf55ac39bc86bab8e70c44b07b00b5",
+      "imports": [
+        "./StartupClient"
+      ],
+      "exports": [
+        "metadata",
+        "StartupPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/startup/pantavion-startup-engine.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feature--startup-canonical-runtime-20260818/core/startup/pantavion-startup-engine.ts",
+      "blobSha": "b88903409e3d412275c98675a5c0d391cfbf1530",
+      "sizeBytes": 9360,
+      "mainBlobSha": "b88903409e3d412275c98675a5c0d391cfbf1530",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 241,
+      "contentSha256": "9dde1d50787007190207004c100834d4215ea70e699feb0f987d1d46fe3b42d4",
+      "imports": [],
+      "exports": [
+        "StartupStageKey",
+        "StartupStageDefinition",
+        "StartupIntake",
+        "StartupExecutionPacket",
+        "PANTAVION_STARTUP_STAGES",
+        "createStartupExecutionPacket"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

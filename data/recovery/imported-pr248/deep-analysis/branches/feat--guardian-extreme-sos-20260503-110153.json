@@ -1,0 +1,64 @@
+{
+  "id": "PANT-BRANCH-FB109AD20C1A",
+  "sourceRef": "recovery/snapshots/feat--guardian-extreme-sos-20260503-110153",
+  "headSha": "ab629d6080691b516eb29f33563cc3081f483706",
+  "mergeBase": "778059d743c150e4fcab328f0d013e9f37b4f4e2",
+  "behindMainBy": 936,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "social-people": 1,
+    "maps-water": 1,
+    "ai-kernel": 1,
+    "media-music": 1
+  },
+  "kindCounts": {
+    "ui-page": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--guardian-extreme-sos-20260503-110153/app/page.tsx",
+      "blobSha": "b6aa51d3a11ffba8e72c0451c27ff27bfbd34e53",
+      "sizeBytes": 8586,
+      "mainBlobSha": "ab1fdb7bed5844bc08a535c4513f85d2a6067773",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 87,
+      "contentSha256": "53e1b949d3ce1e94631a7183a9c551a2c04ca7cfa8b68131afed685ad9948e71",
+      "imports": [
+        "next/link",
+        "next/image",
+        "react"
+      ],
+      "exports": [
+        "HomePage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "maps-water",
+        "ai-kernel",
+        "media-music"
+      ]
+    }
+  ]
+}

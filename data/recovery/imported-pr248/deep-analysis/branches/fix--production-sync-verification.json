@@ -1,0 +1,108 @@
+{
+  "id": "PANT-BRANCH-5606089550F6",
+  "sourceRef": "recovery/snapshots/fix--production-sync-verification",
+  "headSha": "49c69c990c3428204b3ba5f9b320d29cd8a55206",
+  "mergeBase": "80613d3461a968dd20fc9f363eb5de4462553158",
+  "behindMainBy": 331,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "social-people": 2,
+    "business-marketplace": 1,
+    "infrastructure-deployment": 2,
+    "maps-water": 1,
+    "media-music": 1
+  },
+  "kindCounts": {
+    "ci-workflow": 1,
+    "api-route": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": ".github/workflows/pantavion-production-sync-verify.yml",
+      "previousPath": null,
+      "kind": "ci-workflow",
+      "canonicalPathProposal": "recovery/canonicalized/business-marketplace/fix--production-sync-verification/.github/workflows/pantavion-production-sync-verify.yml",
+      "blobSha": "40bad164ed8984787a200672aae4ceea81904471",
+      "sizeBytes": 2470,
+      "mainBlobSha": "a5c7b49a014ca5b8db1bd76e5779457328fd0f63",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 87,
+      "contentSha256": "0754ce000b57697679ec088586ec61f466e10e24b190e447cc52b30452312469",
+      "imports": [
+        "fs"
+      ],
+      "exports": [],
+      "envDependencies": [
+        "EXPECTED_SHA"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "business-marketplace",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/social/health/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/fix--production-sync-verification/app/api/social/health/route.ts",
+      "blobSha": "a658b1a272ed3259b6701b2bb4ecc21644496448",
+      "sizeBytes": 1938,
+      "mainBlobSha": "69b58962c2e0c4ca6f6085999d59b75feb3846c1",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 61,
+      "contentSha256": "9e84e5f8f39877eb02c3199844baaeecf1f12dada1443f7187d8187e17ed74c5",
+      "imports": [
+        "next/server",
+        "@/lib/supabase/server"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "GET"
+      ],
+      "envDependencies": [
+        "VERCEL_GIT_COMMIT_SHA",
+        "GITHUB_SHA"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "maps-water",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": "PANT-BRANCH-4190B8D61906",
+  "sourceRef": "recovery/snapshots/recovery--master-ledger-20260816",
+  "headSha": "afb936fb9945c2dc1904847c771bd74a14df803c",
+  "mergeBase": "0f5193ab1e3479d33d59dc5f6ea21cc743a54597",
+  "behindMainBy": 191,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "chat-translation": 1,
+    "business-marketplace": 1,
+    "maps-water": 1,
+    "ai-kernel": 1,
+    "recovery-continuity": 1,
+    "governance-safety": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "documentation": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "docs/recovery/MASTER_RECOVERY_LEDGER.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/recovery--master-ledger-20260816/docs/recovery/MASTER_RECOVERY_LEDGER.md",
+      "blobSha": "2396f804798cc821ad0e5dc02ed912844eb5d009",
+      "sizeBytes": 10465,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 64,
+      "contentSha256": "dcb43e16a19d99bd9c8bc56c657703fb4c9de9248dd1ab56a3383a19ccbaeaab",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

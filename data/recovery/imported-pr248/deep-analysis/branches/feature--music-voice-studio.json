@@ -1,0 +1,64 @@
+{
+  "id": "PANT-BRANCH-4BE0ABE087B6",
+  "sourceRef": "recovery/snapshots/feature--music-voice-studio",
+  "headSha": "1b694997b3e71abd328af49cce3a7e8c7845689b",
+  "mergeBase": "05971fd86ff8902e0f7115b1726aea69924d678a",
+  "behindMainBy": 327,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "chat-translation": 1,
+    "ai-kernel": 1,
+    "recovery-continuity": 1,
+    "governance-safety": 1,
+    "media-music": 1
+  },
+  "kindCounts": {
+    "documentation": 1
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "docs/architecture/PANTAVION_MUSIC_VOICE_DATA_MODEL.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/feature--music-voice-studio/docs/architecture/PANTAVION_MUSIC_VOICE_DATA_MODEL.md",
+      "blobSha": "056e2a7ae7541e03f03da1792235e7f8d21dab68",
+      "sizeBytes": 4960,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 192,
+      "contentSha256": "cf31598b531418e4e8edc7348eab93638b782de164ce35b9fd2504a251b7e5f7",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "id": "PANT-BRANCH-6BA1E7099DA6",
+  "sourceRef": "recovery/snapshots/agent--stt-ai-sdk",
+  "headSha": "d9d6e4f236fa831849168378573caacfc256d809",
+  "mergeBase": "5e5ef89d1993c5fd4fc350d99f23d728ca1b9553",
+  "behindMainBy": 452,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "identity-security": 1,
+    "chat-translation": 2,
+    "ai-kernel": 2,
+    "media-music": 1,
+    "infrastructure-deployment": 2,
+    "business-marketplace": 1,
+    "maps-water": 1,
+    "recovery-continuity": 1
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "configuration-data": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/pantavion/speech-to-text/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/agent--stt-ai-sdk/app/api/pantavion/speech-to-text/route.ts",
+      "blobSha": "c509f31c600e2979a7792db6050de2e055576499",
+      "sizeBytes": 10993,
+      "mainBlobSha": "fe43114bab9fd1e47bdf236ccedc61db022ad169",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 340,
+      "contentSha256": "c2061a4430a37f47437f66c848203d1da0c7a120158334e342e244ebb6e1a6dd",
+      "imports": [
+        "next/server",
+        "@vercel/oidc",
+        "ai",
+        "@ai-sdk/gateway",
+        "@/core/translation/pantavion-speech-accessibility"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "runtime",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [
+        "AI_GATEWAY_API_KEY",
+        "PANTAVION_SPEECH_TO_TEXT_GATEWAY_MODEL",
+        "PANTAVION_SPEECH_TO_TEXT_ENDPOINT",
+        "PANTAVION_SPEECH_TO_TEXT_API_KEY",
+        "PANTAVION_TRANSLATE_API_KEY",
+        "PANTAVION_ENABLE_DIRECT_OPENAI_STT",
+        "OPENAI_API_KEY",
+        "PANTAVION_SPEECH_TO_TEXT_MODEL"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "ai-kernel",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/agent--stt-ai-sdk/package.json",
+      "blobSha": "530895969a6259f2197d52ffa80d74e1bed44716",
+      "sizeBytes": 3509,
+      "mainBlobSha": "f3147714826462b5c76338ad6bcfb831d6df5a06",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 69,
+      "contentSha256": "22a4049090fea6110e560ffd9bd2db12bc5efabe7393eef45fe2b0819626874d",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 3,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}
