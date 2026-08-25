@@ -1,0 +1,110 @@
+name: Pantavion Adaptive Policy Gate
+
+on:
+  pull_request:
+    paths:
+      - "core/governance/adaptive-ecosystem-policy.ts"
+      - "core/governance/country-adaptive-policy-registry.ts"
+      - "core/governance/developmental-content-policy.ts"
+      - "core/governance/human-support-adaptation-policy.ts"
+      - "core/governance/adaptive-assistance-signal-policy.ts"
+      - "core/governance/support-network-routing-policy.ts"
+      - "core/governance/experience-policy.ts"
+      - "core/governance/youth-capability-benefit-engine.ts"
+      - "core/learning/country-curriculum-policy.ts"
+      - "core/learning/country-curriculum-registry.ts"
+      - "core/learning/mastery-learning-policy.ts"
+      - "core/learning/scan-to-learn-policy.ts"
+      - "core/learning/scan-to-learn-runtime.ts"
+      - "core/commerce/billing-truth-engine.ts"
+      - "core/intelligence/provider-neutral-routing-policy.ts"
+      - "app/api/pantavion/youth-policy/route.ts"
+      - "app/api/pantavion/curriculum/route.ts"
+      - "app/api/pantavion/learn/scan/route.ts"
+      - "app/minors/page.tsx"
+      - "app/minors/youth-policy-client.tsx"
+      - "app/minors/curriculum-client.tsx"
+      - "app/pantalearn/page.tsx"
+      - "app/pantalearn/scan-to-learn-client.tsx"
+      - "scripts/pantavion-adaptive-policy-gate.ts"
+      - "scripts/pantavion-adaptive-assistance-gate.ts"
+      - "scripts/pantavion-support-network-gate.ts"
+      - "scripts/pantavion-youth-curriculum-gate.ts"
+      - "scripts/pantavion-mastery-learning-gate.ts"
+      - "scripts/pantavion-access-monotonicity-gate.ts"
+      - ".github/workflows/pantavion-adaptive-policy-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  adaptive-policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Repository typecheck
+        run: npm run typecheck
+
+      - name: Compile adaptive policy gates
+        run: |
+          rm -rf .tmp-adaptive-policy
+          npx tsc \
+            --target ES2022 \
+            --module commonjs \
+            --moduleResolution node \
+            --esModuleInterop true \
+            --strict \
+            --skipLibCheck \
+            --outDir .tmp-adaptive-policy \
+            core/identity/age-role-engine.ts \
+            core/governance/adaptive-ecosystem-policy.ts \
+            core/governance/country-adaptive-policy-registry.ts \
+            core/governance/developmental-content-policy.ts \
+            core/governance/human-support-adaptation-policy.ts \
+            core/governance/adaptive-assistance-signal-policy.ts \
+            core/governance/support-network-routing-policy.ts \
+            core/governance/experience-policy.ts \
+            core/governance/youth-capability-benefit-engine.ts \
+            core/learning/country-curriculum-policy.ts \
+            core/learning/country-curriculum-registry.ts \
+            core/learning/mastery-learning-policy.ts \
+            core/learning/scan-to-learn-policy.ts \
+            core/commerce/billing-truth-engine.ts \
+            core/intelligence/provider-neutral-routing-policy.ts \
+            scripts/pantavion-adaptive-policy-gate.ts \
+            scripts/pantavion-adaptive-assistance-gate.ts \
+            scripts/pantavion-support-network-gate.ts \
+            scripts/pantavion-youth-curriculum-gate.ts \
+            scripts/pantavion-mastery-learning-gate.ts \
+            scripts/pantavion-access-monotonicity-gate.ts
+
+      - name: Execute adaptive policy checks
+        run: node .tmp-adaptive-policy/scripts/pantavion-adaptive-policy-gate.js
+
+      - name: Execute discreet adaptation checks
+        run: node .tmp-adaptive-policy/scripts/pantavion-adaptive-assistance-gate.js
+
+      - name: Execute support network routing checks
+        run: node .tmp-adaptive-policy/scripts/pantavion-support-network-gate.js
+
+      - name: Execute youth and curriculum checks
+        run: node .tmp-adaptive-policy/scripts/pantavion-youth-curriculum-gate.js
+
+      - name: Execute mastery learning checks
+        run: node .tmp-adaptive-policy/scripts/pantavion-mastery-learning-gate.js
+
+      - name: Execute access monotonicity checks
+        run: node .tmp-adaptive-policy/scripts/pantavion-access-monotonicity-gate.js
