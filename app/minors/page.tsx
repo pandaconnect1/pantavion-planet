@@ -1,4 +1,5 @@
 import YouthPolicyClient from "./youth-policy-client";
+import CurriculumClient from "./curriculum-client";
 
 export default function Page() {
   return (
@@ -73,6 +74,7 @@ export default function Page() {
         </div>
 
         <YouthPolicyClient />
+        <CurriculumClient />
 
         <div style={{ marginTop: "48px" }}>
           <a href="/" style={{
