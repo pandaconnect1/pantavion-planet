@@ -121,6 +121,7 @@ async function translateWithGateway(request: PantavionTranslationRequest) {
       [
         process.env.PANTAVION_TRANSLATION_GATEWAY_MODEL,
         process.env.PANTAVION_TRANSLATION_MODEL,
+        process.env.PANTAVION_TRANSLATION_FALLBACK_MODEL,
         "openai/gpt-4.1-mini",
       ].filter((value): value is string => Boolean(value)),
     ),
@@ -130,14 +131,15 @@ async function translateWithGateway(request: PantavionTranslationRequest) {
   for (const model of models) {
     try {
       // AI SDK resolves a creator/model string through Vercel AI Gateway and uses
-      // Vercel OIDC automatically in production. This keeps auth tied to the
-      // deployed project instead of depending on a separately-created provider instance.
+      // Vercel OIDC automatically in production. Retries remain bounded by one
+      // request-level timeout so transient 5xx/provider errors do not immediately
+      // fail a live translation while privacy fallback policy stays unchanged.
       const result = await generateText({
         model,
         prompt: strictTranslationPrompt(request),
         temperature: 0,
-        maxRetries: 1,
-        abortSignal: AbortSignal.timeout(20_000),
+        maxRetries: 3,
+        abortSignal: AbortSignal.timeout(30_000),
       });
       const translatedText = String(result.text || "").trim();
       if (!translatedText) {
