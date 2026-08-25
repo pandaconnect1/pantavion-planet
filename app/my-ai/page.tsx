@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import PersonalAIConsole from "./PersonalAIConsole";
 import MultimodalUploadPanel from "./MultimodalUploadPanel";
 import PersonalAIVoicePanel from "./PersonalAIVoicePanel";
+import CrossThreadSearchPanel from "./CrossThreadSearchPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -25,8 +26,8 @@ export default async function MyAIPage() {
             <p className="pv-kicker">Pantavion Personal AI</p>
             <h1 className="pv-title">Το δικό σου AI, με συνέχεια.</h1>
             <p className="pv-lead">
-              Απομονωμένο ανά χρήστη, με μνήμη ανά νήμα, συνέχεια μεταξύ νημάτων, φωνή,
-              προσωπικές σημειώσεις, relationship context και πραγματική multimodal ανάλυση.
+              Απομονωμένο ανά χρήστη, με μνήμη ανά νήμα, relevance-based συνέχεια μεταξύ νημάτων,
+              φωνή, προσωπικές σημειώσεις, relationship context και πραγματική multimodal ανάλυση.
             </p>
           </div>
           <span className="pv-status gold">Authenticated · {profile?.language || "language auto"}</span>
@@ -38,6 +39,7 @@ export default async function MyAIPage() {
             language={profile?.language || null}
             country={profile?.country || null}
           />
+          <CrossThreadSearchPanel />
           <PersonalAIVoicePanel language={profile?.language || null} />
           <MultimodalUploadPanel language={profile?.language || null} />
         </div>
