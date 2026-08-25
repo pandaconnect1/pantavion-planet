@@ -81,6 +81,22 @@ expect('core/intelligence/personal-ai-multimodal-runtime.ts', [
   'providerAuth: authMode',
 ]);
 
+expect('app/api/pantavion/speech-to-text/route.ts', [
+  'getVercelOidcToken',
+  'experimental_transcribe',
+  'normalizePantavionAccessibleSpeechTranscript',
+  'preserveRawTranscript: true',
+  'MAX_AUDIO_BYTES',
+]);
+
+expect('core/translation/pantavion-speech-accessibility.ts', [
+  'rawText',
+  'normalizedText',
+  'preserveMeaningOverFluency: true',
+  'accentAndDialectTolerance: true',
+  'neverGuessWhenAmbiguous: true',
+]);
+
 for (const route of [
   'app/api/personal-ai/execute/route.ts',
   'app/api/personal-ai/state/route.ts',
@@ -107,6 +123,7 @@ expect('app/my-ai/page.tsx', [
   'auth.getUser()',
   'redirect("/auth/login?next=/my-ai")',
   'PersonalAIConsole',
+  'PersonalAIVoicePanel',
   'MultimodalUploadPanel',
 ]);
 expect('app/my-ai/PersonalAIConsole.tsx', [
@@ -129,10 +146,24 @@ expect('app/my-ai/MultimodalUploadPanel.tsx', [
   'providerAuth',
   'rawAttachmentBytesPersisted',
 ]);
+expect('app/my-ai/PersonalAIVoicePanel.tsx', [
+  'MAX_RECORDING_MS = 60_000',
+  'navigator.mediaDevices?.getUserMedia',
+  'echoCancellation: true',
+  'noiseSuppression: true',
+  'autoGainControl: true',
+  '/api/pantavion/speech-to-text',
+  '/api/personal-ai/execute',
+  'rawTranscript',
+  'normalizedTranscript',
+  'rawAudioPersisted: false',
+  'driving: handsFree',
+  'Αν οδηγείς, μην κοιτάζεις ή χειρίζεσαι την οθόνη.',
+]);
 
 console.log(JSON.stringify({
   ok: true,
   gate: 'pantavion-personal-ai-runtime',
   checked: checks.length,
-  truth: 'This gate verifies authenticated Personal AI, continuity, memory health, OIDC-aware provider routing and bounded image/PDF input contracts. It does not claim provider availability or authenticated production smoke.',
+  truth: 'This gate verifies authenticated Personal AI, continuity, memory health, OIDC multimodal input, and bounded voice-to-STT-to-Personal-AI wiring. It does not claim microphone permission, provider availability, or authenticated production smoke.',
 }, null, 2));
