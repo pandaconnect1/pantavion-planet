@@ -80,9 +80,29 @@ expect('core/intelligence/personal-ai-language-understanding.ts', [
   'disallowPromptTraining: true',
 ]);
 
+expect('core/intelligence/personal-ai-cross-thread-retrieval.ts', [
+  'retrieveRelevantPersonalAIThreads',
+  'MAX_CANDIDATE_THREADS = 80',
+  'MAX_CANDIDATE_TURNS = 600',
+  'MIN_LEXICAL_SCORE',
+  '.eq("user_id", userId)',
+  '.neq("id", currentThreadId)',
+  'lexical_recency_v1',
+  'userBound: true',
+  'turnId: turn.id',
+  'threadId: thread.id',
+  'matchedTerms',
+  '.filter((source) => source.lexicalScore >= MIN_LEXICAL_SCORE)',
+]);
+
 expect('core/intelligence/personal-ai-multimodal-runtime.ts', [
   'executePersonalAIMultimodal',
   'understandPersonalAIText',
+  'retrieveRelevantPersonalAIThreads',
+  'RELEVANT OTHER THREADS — WITH PROVENANCE',
+  'crossThreadRetrieval',
+  'contextSources: crossThreadRetrieval.sources',
+  'crossThreadRetrievalStatus',
   'ORIGINAL USER TEXT — SOURCE OF TRUTH',
   'languageUnderstanding',
   'normalizationApplied',
@@ -125,6 +145,7 @@ for (const route of [
   'app/api/personal-ai/relationships/route.ts',
   'app/api/personal-ai/handoff/route.ts',
   'app/api/personal-ai/memory-health/route.ts',
+  'app/api/personal-ai/thread-search/route.ts',
 ]) {
   expect(route, ['auth.getUser()', 'authentication_required']);
 }
@@ -133,6 +154,12 @@ expect('app/api/personal-ai/execute/route.ts', [
   'executePersonalAIMultimodal',
   'input_or_attachment_required',
   'executionStatus === "blocked"',
+]);
+expect('app/api/personal-ai/thread-search/route.ts', [
+  'retrieveRelevantPersonalAIThreads',
+  'query_required',
+  'auth.user.id',
+  'currentThreadId',
 ]);
 expect('app/api/personal-ai/memory/route.ts', ['USER_MEMORY_TRUTH_STATES', 'deleted_at', 'user_explicit']);
 expect('app/api/personal-ai/items/route.ts', ['birthday', 'appointment', 'reminder', 'follow_up']);
@@ -143,6 +170,7 @@ expect('app/my-ai/page.tsx', [
   'auth.getUser()',
   'redirect("/auth/login?next=/my-ai")',
   'PersonalAIConsole',
+  'CrossThreadSearchPanel',
   'PersonalAIVoicePanel',
   'MultimodalUploadPanel',
 ]);
@@ -156,6 +184,14 @@ expect('app/my-ai/PersonalAIConsole.tsx', [
   'Νέο νήμα με Context Capsule',
   'Memory Health',
   'handsFree',
+]);
+expect('app/my-ai/CrossThreadSearchPanel.tsx', [
+  '/api/personal-ai/thread-search',
+  'relevanceScore',
+  'matchedTerms',
+  'turnId',
+  'Δεν βρέθηκε σχετικό νήμα.',
+  'δεν πρόσθεσε άσχετη πρόσφατη συνομιλία',
 ]);
 expect('app/my-ai/MultimodalUploadPanel.tsx', [
   'image/jpeg,image/png,image/webp,image/gif,application/pdf',
@@ -185,5 +221,5 @@ console.log(JSON.stringify({
   ok: true,
   gate: 'pantavion-personal-ai-runtime',
   checked: checks.length,
-  truth: 'This gate verifies authenticated Personal AI, continuity, memory health, OIDC multimodal input, voice continuity, and conservative HLU with original-text preservation. It does not claim provider availability or authenticated production smoke.',
+  truth: 'This gate verifies authenticated Personal AI, continuity, memory health, HLU, voice/multimodal input, and user-bound relevance-ranked cross-thread retrieval with inspectable thread/turn provenance. It does not claim authenticated production retrieval smoke.',
 }, null, 2));
