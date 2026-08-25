@@ -1,6 +1,7 @@
 import { resolvePantavionAdaptivePolicy, type PantavionCountryAdaptiveRule } from "../core/governance/adaptive-ecosystem-policy";
 import { resolvePantavionDevelopmentalContent } from "../core/governance/developmental-content-policy";
 import { resolvePantavionExperiencePolicy } from "../core/governance/experience-policy";
+import { resolvePantavionSupportAdaptation } from "../core/governance/human-support-adaptation-policy";
 import { buildPantavionBillingTruth } from "../core/commerce/billing-truth-engine";
 import { selectPantavionAIProvider, type PantavionProviderCandidate } from "../core/intelligence/provider-neutral-routing-policy";
 
@@ -36,6 +37,66 @@ const age17Content = resolvePantavionDevelopmentalContent(17);
 equal(age16Content.contentCeilingAge, 16, "16-year content ceiling");
 equal(age17Content.contentCeilingAge, 17, "17-year content ceiling");
 notEqual(age16Content.contentCeilingAge, age17Content.contentCeilingAge, "yearly content progression remains distinct");
+
+const primaryLearning = resolvePantavionExperiencePolicy({
+  countryCode: "CY",
+  feature: "panta_learn",
+  age: 9,
+  guardianConsent: true,
+  supportContext: {
+    source: "guardian_selected",
+    needs: ["reading_support", "attention_and_structure", "language_newcomer_support"],
+    readingLevelPreference: "simpler",
+    prefersStepByStep: true,
+    prefersVoice: true,
+  },
+});
+equal(primaryLearning.support.enabled, true, "primary learning support enabled");
+equal(primaryLearning.support.allowedAIRoles.includes("adaptive_tutor"), true, "adaptive tutor available");
+equal(primaryLearning.support.accommodations.includes("step-by-step-instructions"), true, "step-by-step learning available");
+equal(primaryLearning.support.accommodations.includes("bilingual-explanations"), true, "bilingual newcomer support available");
+equal(primaryLearning.support.neverDiagnose, true, "learning support never diagnoses");
+equal(primaryLearning.support.neverStigmatize, true, "learning support never stigmatizes");
+
+const accessibilitySupport = resolvePantavionSupportAdaptation({
+  age: 14,
+  context: {
+    source: "self_selected",
+    needs: ["speech_and_communication_support", "hearing_accessibility", "sensory_accessibility"],
+    prefersCaptions: true,
+    prefersReducedSensoryLoad: true,
+  },
+});
+equal(accessibilitySupport.allowedAIRoles.includes("accessibility_assistant"), true, "accessibility assistant available");
+equal(accessibilitySupport.accommodations.includes("captions-by-default-option"), true, "caption support available");
+equal(accessibilitySupport.accommodations.includes("reduced-motion-and-stimulation-option"), true, "reduced sensory load available");
+
+const minorFamilySafety = resolvePantavionExperiencePolicy({
+  countryCode: "CY",
+  feature: "panta_learn",
+  age: 11,
+  guardianConsent: true,
+  supportContext: {
+    source: "self_selected",
+    needs: ["family_safety_support", "emotional_wellbeing_support"],
+  },
+});
+equal(minorFamilySafety.support.humanSupportRecommended, true, "sensitive support keeps human path");
+equal(minorFamilySafety.support.urgentHumanEscalationPathRequired, true, "minor family safety requires escalation path");
+equal(minorFamilySafety.support.safeguards.includes("no-clinical-or-psychological-diagnosis"), true, "no psychological diagnosis");
+equal(minorFamilySafety.support.safeguards.includes("no-secret-keeping-or-concealment-instructions"), true, "no concealment instructions");
+
+const displacedLearner = resolvePantavionSupportAdaptation({
+  age: 13,
+  context: {
+    source: "self_selected",
+    needs: ["displacement_refugee_support", "conflict_disruption_support", "language_newcomer_support"],
+    preferredLanguage: "el",
+  },
+});
+equal(displacedLearner.accommodations.includes("interrupted-learning-recovery-path"), true, "interrupted education recovery available");
+equal(displacedLearner.safeguards.includes("do-not-expose-sensitive-location-by-default"), true, "sensitive location protected");
+equal(displacedLearner.safeguards.includes("avoid-assuming-legal-or-residency-status"), true, "no residency assumption");
 
 const monitoringNzRule: PantavionCountryAdaptiveRule = {
   countryCode: "NZ",
@@ -119,9 +180,13 @@ equal(red.requiresHumanControl, true, "red-zone human control");
 
 console.log(JSON.stringify({
   status: "PASS",
-  checks: 28,
+  checks: 45,
   infantCaregiverOnly: true,
   yearlyContentProgression: true,
+  inclusiveLearningSupport: true,
+  accessibilityAdaptation: true,
+  safeguardingHumanPath: true,
+  displacementContinuitySupport: true,
   ageProgression: [15, 16, 17, 18],
   protectedMinorSocial: true,
   ecosystemPreserved: true,
