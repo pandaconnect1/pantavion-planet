@@ -12,6 +12,7 @@ on:
       - "core/commerce/billing-truth-engine.ts"
       - "core/intelligence/provider-neutral-routing-policy.ts"
       - "scripts/pantavion-adaptive-policy-gate.ts"
+      - "scripts/pantavion-adaptive-assistance-gate.ts"
       - ".github/workflows/pantavion-adaptive-policy-gate.yml"
   workflow_dispatch:
 
@@ -38,7 +39,7 @@ jobs:
       - name: Repository typecheck
         run: npm run typecheck
 
-      - name: Compile adaptive policy gate
+      - name: Compile adaptive policy gates
         run: |
           rm -rf .tmp-adaptive-policy
           npx tsc \
@@ -58,7 +59,11 @@ jobs:
             core/governance/experience-policy.ts \
             core/commerce/billing-truth-engine.ts \
             core/intelligence/provider-neutral-routing-policy.ts \
-            scripts/pantavion-adaptive-policy-gate.ts
+            scripts/pantavion-adaptive-policy-gate.ts \
+            scripts/pantavion-adaptive-assistance-gate.ts
 
       - name: Execute adaptive policy checks
         run: node .tmp-adaptive-policy/scripts/pantavion-adaptive-policy-gate.js
+
+      - name: Execute discreet adaptation checks
+        run: node .tmp-adaptive-policy/scripts/pantavion-adaptive-assistance-gate.js
