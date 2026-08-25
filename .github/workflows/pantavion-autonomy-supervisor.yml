@@ -6,10 +6,9 @@ on:
     - cron: "0 * * * *"
 
 permissions:
-  contents: write
+  contents: read
   issues: write
   actions: read
-  pull-requests: write
 
 jobs:
   autonomy-supervisor:
@@ -37,15 +36,7 @@ jobs:
         with:
           name: pantavion-autonomy-reports
           path: data/runtime-reports
-
-      - name: Commit runtime reports
-        if: always()
-        run: |
-          git config user.name "pantavion-autonomy-bot"
-          git config user.email "actions@github.com"
-          git add data/runtime-reports || true
-          git diff --cached --quiet || git commit -m "chore(runtime): update autonomy reports"
-          git push || true
+          retention-days: 30
 
       - name: Open failure issue
         if: steps.supervisor.outcome == 'failure'
