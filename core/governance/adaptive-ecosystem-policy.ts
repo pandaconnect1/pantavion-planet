@@ -293,10 +293,8 @@ export function resolvePantavionAdaptivePolicy(input: {
   }
 
   if (input.feature === "panta_learn" || input.feature === "interpreter") {
-    if (access !== "blocked" && access !== "requires_age_proof") {
-      tighten(ageRole.requiresGuardian ? "restricted" : "allowed");
-      reasons.push("ecosystem-access-preserved-with-age-appropriate-mode");
-    }
+    tighten(ageRole.requiresGuardian ? "restricted" : "allowed");
+    reasons.push("ecosystem-access-preserved-with-age-appropriate-mode");
   }
 
   const nextBirthdayAge = typeof age === "number" && age < 130 ? age + 1 : null;
