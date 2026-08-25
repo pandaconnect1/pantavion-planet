@@ -8,11 +8,13 @@ on:
       - "core/governance/developmental-content-policy.ts"
       - "core/governance/human-support-adaptation-policy.ts"
       - "core/governance/adaptive-assistance-signal-policy.ts"
+      - "core/governance/support-network-routing-policy.ts"
       - "core/governance/experience-policy.ts"
       - "core/commerce/billing-truth-engine.ts"
       - "core/intelligence/provider-neutral-routing-policy.ts"
       - "scripts/pantavion-adaptive-policy-gate.ts"
       - "scripts/pantavion-adaptive-assistance-gate.ts"
+      - "scripts/pantavion-support-network-gate.ts"
       - ".github/workflows/pantavion-adaptive-policy-gate.yml"
   workflow_dispatch:
 
@@ -56,14 +58,19 @@ jobs:
             core/governance/developmental-content-policy.ts \
             core/governance/human-support-adaptation-policy.ts \
             core/governance/adaptive-assistance-signal-policy.ts \
+            core/governance/support-network-routing-policy.ts \
             core/governance/experience-policy.ts \
             core/commerce/billing-truth-engine.ts \
             core/intelligence/provider-neutral-routing-policy.ts \
             scripts/pantavion-adaptive-policy-gate.ts \
-            scripts/pantavion-adaptive-assistance-gate.ts
+            scripts/pantavion-adaptive-assistance-gate.ts \
+            scripts/pantavion-support-network-gate.ts
 
       - name: Execute adaptive policy checks
         run: node .tmp-adaptive-policy/scripts/pantavion-adaptive-policy-gate.js
 
       - name: Execute discreet adaptation checks
         run: node .tmp-adaptive-policy/scripts/pantavion-adaptive-assistance-gate.js
+
+      - name: Execute support network routing checks
+        run: node .tmp-adaptive-policy/scripts/pantavion-support-network-gate.js
