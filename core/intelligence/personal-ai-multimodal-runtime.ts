@@ -7,6 +7,10 @@ import {
   understandPersonalAIText,
   type PersonalAILanguageUnderstanding,
 } from "@/core/intelligence/personal-ai-language-understanding";
+import {
+  retrieveRelevantPersonalAIThreads,
+  type PersonalAICrossThreadRetrieval,
+} from "@/core/intelligence/personal-ai-cross-thread-retrieval";
 
 type JsonObject = Record<string, unknown>;
 
@@ -34,6 +38,8 @@ type ExecuteInput = {
   attachments?: RawAttachment[];
   metadata?: JsonObject;
 };
+
+type RetrievalStatus = "completed" | "empty" | "disabled" | "failed";
 
 const ALLOWED_MEDIA_TYPES = new Set([
   "image/jpeg",
@@ -116,6 +122,18 @@ function preservedLanguageUnderstanding(
   };
 }
 
+function emptyRetrieval(query: string, currentThreadId: string | null): PersonalAICrossThreadRetrieval {
+  return {
+    query,
+    mode: "lexical_recency_v1",
+    userBound: true,
+    currentThreadExcluded: Boolean(currentThreadId),
+    searchedThreadCount: 0,
+    searchedTurnCount: 0,
+    sources: [],
+  };
+}
+
 async function resolveThread(
   supabase: SupabaseClient,
   userId: string,
@@ -160,6 +178,21 @@ async function resolveThread(
   return created.data;
 }
 
+function crossThreadContext(retrieval: PersonalAICrossThreadRetrieval) {
+  if (!retrieval.sources.length) return "";
+  return retrieval.sources.map((source) => {
+    const turns = source.representativeTurns
+      .map((turn) => `[turn:${turn.turnId} relevance=${turn.relevanceScore}] ${turn.role}: ${cleanText(turn.content, 700)}`)
+      .join("\n");
+    return compact([
+      `[thread:${source.threadId} relevance=${source.relevanceScore} lexical=${source.lexicalScore}] ${source.title || "Untitled thread"}`,
+      `matched_terms=${source.matchedTerms.join(",") || "none"}; last_activity=${source.lastActivityAt}`,
+      source.continuitySummary ? `summary: ${cleanText(source.continuitySummary, 1600)}` : "",
+      turns,
+    ], 3600);
+  }).join("\n---\n");
+}
+
 async function buildContext(
   supabase: SupabaseClient,
   userId: string,
@@ -167,6 +200,7 @@ async function buildContext(
   state: Awaited<ReturnType<typeof getPersonalAIState>>,
   normalizedInput: string,
   originalInput: string,
+  crossThreadRetrieval: PersonalAICrossThreadRetrieval,
 ) {
   const currentTurns = await supabase
     .from("personal_ai_turns")
@@ -177,30 +211,18 @@ async function buildContext(
     .limit(20);
   if (currentTurns.error) throw new Error(`personal_ai_multimodal_current_context_failed:${currentTurns.error.message}`);
 
-  let crossTurns: Array<{ role: string; content: string; thread_id: string; created_at: string }> = [];
-  if (state.profile.cross_thread_enabled) {
-    const cross = await supabase
-      .from("personal_ai_turns")
-      .select("role,content,thread_id,created_at")
-      .eq("user_id", userId)
-      .neq("thread_id", threadId)
-      .order("created_at", { ascending: false })
-      .limit(30);
-    if (cross.error) throw new Error(`personal_ai_multimodal_cross_context_failed:${cross.error.message}`);
-    crossTurns = (cross.data || []).slice(0, 12);
-  }
-
   const current = ((currentTurns.data || []) as Array<{ role: string; content: string; created_at: string }>).reverse();
+  const relevantThreads = crossThreadContext(crossThreadRetrieval);
   return compact([
     normalizedInput !== originalInput
       ? `CURRENT REQUEST — NORMALIZED MEANING:\n${normalizedInput}\nORIGINAL USER TEXT — SOURCE OF TRUTH:\n${originalInput}`
       : `CURRENT REQUEST:\n${originalInput}`,
     current.length ? `CURRENT THREAD:\n${current.map((row) => `${row.role}: ${cleanText(row.content, 900)}`).join("\n")}` : "",
-    crossTurns.length ? `RECENT AUTHORIZED OTHER THREADS:\n${crossTurns.map((row) => `[${row.thread_id}] ${row.role}: ${cleanText(row.content, 600)}`).join("\n")}` : "",
+    relevantThreads ? `RELEVANT OTHER THREADS — WITH PROVENANCE:\n${relevantThreads}` : "",
     state.memories.length ? `USER MEMORIES:\n${state.memories.slice(0, 16).map((row) => `[${row.memory_type}/${row.truth_state}] ${cleanText(row.content, 600)}`).join("\n")}` : "",
     state.items.length ? `LIFE ITEMS:\n${state.items.filter((row) => row.status === "open").slice(0, 16).map((row) => `[${row.kind}] ${cleanText(row.title || row.body, 500)}`).join("\n")}` : "",
     state.relationships.length ? `RELATIONSHIPS:\n${state.relationships.slice(0, 12).map((row) => `${row.display_name} (${row.relationship_type}): ${cleanText(row.notes, 400)}`).join("\n")}` : "",
-  ], 18_000);
+  ], 22_000);
 }
 
 function systemPrompt(state: Awaited<ReturnType<typeof getPersonalAIState>>, metadata: JsonObject) {
@@ -208,6 +230,7 @@ function systemPrompt(state: Awaited<ReturnType<typeof getPersonalAIState>>, met
   return compact([
     "You are the authenticated Pantavion Personal AI for exactly one user. Never mix data across users.",
     "Use only authorized supplied context. If information is missing, stale or conflicting, say so instead of inventing it.",
+    "Cross-thread context may be supplied with explicit thread and turn provenance. Use only relevant retrieved sources, prefer higher relevance, and never pretend a source exists when it was not supplied.",
     "A separate HLU layer may provide NORMALIZED MEANING alongside ORIGINAL USER TEXT. The original text remains source-of-truth; normalization is only an interpretation aid and never grants new intent or authorization.",
     "Understand dialect, slang, transliteration, mixed languages, abbreviations, incomplete wording and likely typing errors before translating or answering.",
     `Preferred locale=${state.profile.preferred_locale || "unknown"}; timezone=${state.profile.timezone}; assistance=${state.profile.assistance_level}.`,
@@ -217,7 +240,7 @@ function systemPrompt(state: Awaited<ReturnType<typeof getPersonalAIState>>, met
     "For health, legal, financial and safety-sensitive matters, communicate uncertainty and appropriate limits.",
     driving ? "HANDS-FREE DRIVING MODE: be brief and voice-first; never ask the user to read, type, tap or inspect a screen while driving." : "",
     "Answer in the user's language unless they request another language.",
-  ], 6000);
+  ], 6400);
 }
 
 function nextSummary(previous: string, input: string, reply: string, attachmentCount: number) {
@@ -250,7 +273,35 @@ export async function executePersonalAIMultimodal(
   const input = languageUnderstanding.normalizedText || sourceInput;
 
   const thread = await resolveThread(supabase, userId, body);
+  let crossThreadRetrieval = emptyRetrieval(input, thread.id);
+  let retrievalStatus: RetrievalStatus = state.profile.cross_thread_enabled ? "empty" : "disabled";
+  let retrievalError: string | null = null;
+  if (state.profile.cross_thread_enabled) {
+    try {
+      crossThreadRetrieval = await retrieveRelevantPersonalAIThreads(supabase, userId, input, thread.id);
+      retrievalStatus = crossThreadRetrieval.sources.length ? "completed" : "empty";
+    } catch (cause) {
+      retrievalStatus = "failed";
+      retrievalError = cause instanceof Error ? cause.message.slice(0, 1000) : "cross_thread_retrieval_failed";
+    }
+  }
+
   const attachmentMetadata = attachments.map(({ name, mediaType, size, sha256 }) => ({ name, mediaType, size, sha256 }));
+  const retrievalMetadata = {
+    status: retrievalStatus,
+    mode: crossThreadRetrieval.mode,
+    userBound: true,
+    searchedThreadCount: crossThreadRetrieval.searchedThreadCount,
+    searchedTurnCount: crossThreadRetrieval.searchedTurnCount,
+    sourceCount: crossThreadRetrieval.sources.length,
+    sources: crossThreadRetrieval.sources.map((source) => ({
+      threadId: source.threadId,
+      relevanceScore: source.relevanceScore,
+      matchedTerms: source.matchedTerms,
+      turnIds: source.representativeTurns.map((turn) => turn.turnId),
+    })),
+    error: retrievalError,
+  };
   const turnMetadata: JsonObject = {
     ...(body.metadata || {}),
     languageUnderstanding: {
@@ -267,6 +318,7 @@ export async function executePersonalAIMultimodal(
       translated: false,
       integrityAccepted: languageUnderstanding.integrityAccepted,
     },
+    crossThreadRetrieval: retrievalMetadata,
   };
 
   const userTurn = await supabase.from("personal_ai_turns").insert({
@@ -282,7 +334,15 @@ export async function executePersonalAIMultimodal(
   });
   if (userTurn.error) throw new Error(`personal_ai_multimodal_user_turn_failed:${userTurn.error.message}`);
 
-  const contextText = await buildContext(supabase, userId, thread.id, state, input, sourceInput);
+  const contextText = await buildContext(
+    supabase,
+    userId,
+    thread.id,
+    state,
+    input,
+    sourceInput,
+    crossThreadRetrieval,
+  );
   const modelName = process.env.PANTAVION_AI_MODEL?.trim() || "openai/gpt-5.6-sol";
   const hasApiKey = Boolean(process.env.AI_GATEWAY_API_KEY?.trim());
   const hasOidc = Boolean(process.env.VERCEL_OIDC_TOKEN?.trim());
@@ -316,7 +376,12 @@ export async function executePersonalAIMultimodal(
         providerOptions: {
           gateway: {
             user: userId,
-            tags: ["pantavion-personal-ai", attachments.length ? "multimodal" : "text", "hlu-v5"],
+            tags: [
+              "pantavion-personal-ai",
+              attachments.length ? "multimodal" : "text",
+              "hlu-v5",
+              crossThreadRetrieval.sources.length ? "cross-thread-v6" : "no-cross-thread-match",
+            ],
             disallowPromptTraining: true,
           },
         },
@@ -344,6 +409,7 @@ export async function executePersonalAIMultimodal(
             normalizationApplied: languageUnderstanding.normalizationApplied,
             integrityAccepted: languageUnderstanding.integrityAccepted,
           },
+          crossThreadRetrieval: retrievalMetadata,
         },
       });
     }
@@ -366,6 +432,8 @@ export async function executePersonalAIMultimodal(
       authMode,
       attachmentCount: attachments.length,
       languageUnderstandingProvider: languageUnderstanding.provider,
+      crossThreadRetrievalStatus: retrievalStatus,
+      crossThreadSourceCount: crossThreadRetrieval.sources.length,
     },
     truth_state: truthState,
   });
@@ -409,6 +477,7 @@ export async function executePersonalAIMultimodal(
         translated: false,
         integrityAccepted: languageUnderstanding.integrityAccepted,
       },
+      crossThreadRetrieval: retrievalMetadata,
     },
   });
   if (audit.error) throw new Error(`personal_ai_multimodal_audit_failed:${audit.error.message}`);
@@ -425,6 +494,16 @@ export async function executePersonalAIMultimodal(
     executionStatus,
     attachments: attachmentMetadata,
     languageUnderstanding,
+    crossThreadRetrieval: {
+      status: retrievalStatus,
+      error: retrievalError,
+      mode: crossThreadRetrieval.mode,
+      userBound: true,
+      searchedThreadCount: crossThreadRetrieval.searchedThreadCount,
+      searchedTurnCount: crossThreadRetrieval.searchedTurnCount,
+      sourceCount: crossThreadRetrieval.sources.length,
+    },
+    contextSources: crossThreadRetrieval.sources,
     multimodal: {
       analyzedAttachmentCount: executionStatus === "completed" ? attachments.length : 0,
       rawAttachmentBytesPersisted: false,
