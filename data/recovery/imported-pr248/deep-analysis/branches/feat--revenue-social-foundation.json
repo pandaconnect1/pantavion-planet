@@ -1,0 +1,56 @@
+{
+  "id": "PANT-BRANCH-FEC37FFBB65C",
+  "sourceRef": "recovery/snapshots/feat--revenue-social-foundation",
+  "headSha": "944327d97417bc5bbb9c96f9cc12d2020cba99e0",
+  "mergeBase": "8c04afaf426e4870dcf00f2f7a81ecfc1ab33821",
+  "behindMainBy": 446,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "maps-water": 1
+  },
+  "kindCounts": {
+    "source-code": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/pantavion-home-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--revenue-social-foundation/app/pantavion-home-client.tsx",
+      "blobSha": "86e8f78fd83222be9255d712ae7b81e123fa0013",
+      "sizeBytes": 5948,
+      "mainBlobSha": "5cab9f3897e3bff36f3a45882420605e707ad9dc",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 114,
+      "contentSha256": "e386893bc87478e48fd451d041a21509db7ad6b779db23c433522ba4831b2563",
+      "imports": [
+        "next/link"
+      ],
+      "exports": [
+        "PantavionHomeClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water"
+      ]
+    }
+  ]
+}

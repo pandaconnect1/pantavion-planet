@@ -1,0 +1,65 @@
+{
+  "id": "PANT-BRANCH-C3C374164A1C",
+  "sourceRef": "recovery/snapshots/fix--supabase-admin-runtime-fallback",
+  "headSha": "f91947783439f9e17b3cf0061b660f8473838ecc",
+  "mergeBase": "d283b7b702a61985c57c25d72628e7b4ad9809c4",
+  "behindMainBy": 128,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "ai-kernel": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "source-code": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "lib/supabase/admin.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/infrastructure-deployment/fix--supabase-admin-runtime-fallback/lib/supabase/admin.ts",
+      "blobSha": "bf6c7210462a27c0f3fbd3dd9b829737c5647d89",
+      "sizeBytes": 922,
+      "mainBlobSha": "bf6c7210462a27c0f3fbd3dd9b829737c5647d89",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 37,
+      "contentSha256": "71d16cfd19c1c5175089ffe7d6e048da402da87f54eaa81792da0de5ecfa652a",
+      "imports": [
+        "@supabase/supabase-js"
+      ],
+      "exports": [
+        "createAdminClient"
+      ],
+      "envDependencies": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "SUPABASE_URL",
+        "SUPABASE_SECRET_KEY",
+        "SUPABASE_SERVICE_ROLE_KEY"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

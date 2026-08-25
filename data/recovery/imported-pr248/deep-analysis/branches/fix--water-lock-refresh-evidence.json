@@ -1,0 +1,95 @@
+{
+  "id": "PANT-BRANCH-881F7EF4086A",
+  "sourceRef": "recovery/snapshots/fix--water-lock-refresh-evidence",
+  "headSha": "e3d8abe508c2314781adc1fcaedb5403a380dea5",
+  "mergeBase": "8dfc7a82a5e752e358555c53be8c1a562e26b100",
+  "behindMainBy": 116,
+  "aheadOfMainBy": 3,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "identity-security": 2,
+    "business-marketplace": 2,
+    "maps-water": 2,
+    "ai-kernel": 2,
+    "infrastructure-deployment": 2
+  },
+  "kindCounts": {
+    "ci-workflow": 1,
+    "configuration-data": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": ".github/workflows/water-lock-refresh-evidence.yml",
+      "previousPath": null,
+      "kind": "ci-workflow",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/fix--water-lock-refresh-evidence/.github/workflows/water-lock-refresh-evidence.yml",
+      "blobSha": "86bcd2a37b4484161cd08401c12fd2e6c5a55a9b",
+      "sizeBytes": 843,
+      "mainBlobSha": "86bcd2a37b4484161cd08401c12fd2e6c5a55a9b",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 31,
+      "contentSha256": "18195bee4da88e0525347e808b58b48788edb82fa09454add203e4691e4d84a9",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "core/infrastructure/water/water-network-runtime-lock.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/fix--water-lock-refresh-evidence/core/infrastructure/water/water-network-runtime-lock.json",
+      "blobSha": "12bb153259fd82741e06683cabd7a3ef5860550d",
+      "sizeBytes": 2318,
+      "mainBlobSha": "12bb153259fd82741e06683cabd7a3ef5860550d",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 34,
+      "contentSha256": "ad330683d07a768b0f24b4b5091ae55e6fc0e296f3cc64d5084c208445a700ae",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

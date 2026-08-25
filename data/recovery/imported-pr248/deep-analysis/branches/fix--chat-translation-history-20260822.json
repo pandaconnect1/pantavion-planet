@@ -1,0 +1,65 @@
+{
+  "id": "PANT-BRANCH-48E41E7F3FA2",
+  "sourceRef": "recovery/snapshots/fix--chat-translation-history-20260822",
+  "headSha": "29597faf79630200ceecf2a1527533002c4f7abe",
+  "mergeBase": "b43ea5359015804bf735e230705832956744087b",
+  "behindMainBy": 61,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "social-people": 1,
+    "chat-translation": 1,
+    "maps-water": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "source-code": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/messages/[conversationId]/conversation-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/fix--chat-translation-history-20260822/app/messages/[conversationId]/conversation-client.tsx",
+      "blobSha": "6fa34dc0e03a3e6c0ce992c86f2af376e979fb5a",
+      "sizeBytes": 17868,
+      "mainBlobSha": "533bbb6242f9f0be7f5b105f34f11156057071c6",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 449,
+      "contentSha256": "2e0066b2c97998b64ad71da6df77723e10cba29de73e2c07c30ad063d19407b6",
+      "imports": [
+        "next/link",
+        "react",
+        "@/lib/supabase/client",
+        "@/core/emergency/global-emergency-languages"
+      ],
+      "exports": [
+        "ConversationClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

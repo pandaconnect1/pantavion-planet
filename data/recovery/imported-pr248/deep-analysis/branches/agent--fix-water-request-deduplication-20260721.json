@@ -1,0 +1,282 @@
+{
+  "id": "PANT-BRANCH-6B45644DB428",
+  "sourceRef": "recovery/snapshots/agent--fix-water-request-deduplication-20260721",
+  "headSha": "087d4e1380a56d5c3a65622e4eff38fb8589a2c3",
+  "mergeBase": "306fc0e29b0cac33d7fa0517d871c1a4a23a05fe",
+  "behindMainBy": 552,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 6,
+  "topicCounts": {
+    "identity-security": 5,
+    "chat-translation": 6,
+    "maps-water": 6,
+    "ai-kernel": 3,
+    "infrastructure-deployment": 4,
+    "recovery-continuity": 1,
+    "social-people": 2
+  },
+  "kindCounts": {
+    "api-route": 4,
+    "source-code": 1,
+    "ui-page": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 6
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/access/admin/approved/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--fix-water-request-deduplication-20260721/app/api/professional/infrastructure/water/access/admin/approved/route.ts",
+      "blobSha": "7e49b0e9848dc075176a6f6d50789a5d7584b6f6",
+      "sizeBytes": 4206,
+      "mainBlobSha": "7e49b0e9848dc075176a6f6d50789a5d7584b6f6",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 169,
+      "contentSha256": "c63c6666f54020f7377fd28d9e926ea4e5eac6b2d53a31a4be8f6b27b4ac1dae",
+      "imports": [
+        "@vercel/blob",
+        "next/server",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "dynamic",
+        "runtime",
+        "POST"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--fix-water-request-deduplication-20260721/app/api/professional/infrastructure/water/access/admin/decision/route.ts",
+      "blobSha": "db6fb19d5f5f3b29ebee676863d604ef65a9aa43",
+      "sizeBytes": 10527,
+      "mainBlobSha": "db6fb19d5f5f3b29ebee676863d604ef65a9aa43",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 434,
+      "contentSha256": "1f9bd7ee3392e2e580eafc1564486df02479e58bfca23b84a08fa666956354fe",
+      "imports": [
+        "@vercel/blob",
+        "next/server",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "POST"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/access/admin/requests/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--fix-water-request-deduplication-20260721/app/api/professional/infrastructure/water/access/admin/requests/route.ts",
+      "blobSha": "3d2cdbd3ad5ef6c90ee9fc1d2c2eac16af89d238",
+      "sizeBytes": 4727,
+      "mainBlobSha": "3d2cdbd3ad5ef6c90ee9fc1d2c2eac16af89d238",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 175,
+      "contentSha256": "2020937954ee8356edfbf8917865a24867c5b1cafd9774ab34013d3acc0c5568",
+      "imports": [
+        "@vercel/blob",
+        "next/server",
+        "@/core/security/water-admin-session"
+      ],
+      "exports": [
+        "POST"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/professional/infrastructure/water/access/request/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--fix-water-request-deduplication-20260721/app/api/professional/infrastructure/water/access/request/route.ts",
+      "blobSha": "5249968c494b6bfe602cf28f6d009de524122720",
+      "sizeBytes": 4371,
+      "mainBlobSha": "5249968c494b6bfe602cf28f6d009de524122720",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 168,
+      "contentSha256": "b0d893c33fb08b487868e0c5105b873ca3bc75db67040c087a5b850288428a25",
+      "imports": [
+        "crypto",
+        "@vercel/blob",
+        "next/server"
+      ],
+      "exports": [
+        "POST"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/access/water-access-control-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--fix-water-request-deduplication-20260721/app/professional/infrastructure/water/access/water-access-control-client.tsx",
+      "blobSha": "62138e18ef4d23f233517abda853af9b3d120191",
+      "sizeBytes": 11438,
+      "mainBlobSha": "62138e18ef4d23f233517abda853af9b3d120191",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 322,
+      "contentSha256": "6d6f31fa5b1aef2b3bcded96e0adbcb40d7dea34217d367e6f43d2e556e0092c",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "WaterAccessControlClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/admin/approvals/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--fix-water-request-deduplication-20260721/app/professional/infrastructure/water/admin/approvals/page.tsx",
+      "blobSha": "058c1672e98b27013cc7b9982d2f8dbc39b43e14",
+      "sizeBytes": 31725,
+      "mainBlobSha": "058c1672e98b27013cc7b9982d2f8dbc39b43e14",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 747,
+      "contentSha256": "9ccc1877ddfd8991648f8f57457092ce1986abc871fecb95cf3acb3a8386f137",
+      "imports": [
+        "next/link",
+        "react"
+      ],
+      "exports": [
+        "WaterApprovalInboxPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 6,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water"
+      ]
+    }
+  ]
+}

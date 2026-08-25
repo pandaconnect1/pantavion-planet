@@ -1,0 +1,788 @@
+{
+  "id": "PANT-BRANCH-94D5A7188C58",
+  "sourceRef": "recovery/snapshots/recovery--social-people-chat-all-inside-20260815",
+  "headSha": "c00c669f9b8ac7db5c03a32ef8faa3d99e34d87f",
+  "mergeBase": "286b11a4e3f354f47f8465733d3d83626ee99677",
+  "behindMainBy": 242,
+  "aheadOfMainBy": 16,
+  "changedFileCount": 18,
+  "topicCounts": {
+    "identity-security": 16,
+    "social-people": 18,
+    "chat-translation": 15,
+    "business-marketplace": 10,
+    "ai-kernel": 6,
+    "governance-safety": 8,
+    "maps-water": 10,
+    "infrastructure-deployment": 15,
+    "media-music": 6,
+    "recovery-continuity": 4
+  },
+  "kindCounts": {
+    "api-route": 1,
+    "source-code": 7,
+    "ui-page": 6,
+    "documentation": 2,
+    "database-migration": 2
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 17,
+    "DIFFERS_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "app/api/pantavion/social-global/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/app/api/pantavion/social-global/route.ts",
+      "blobSha": "12aaee8ee490732dce601ea0b6c1ce10a3478428",
+      "sizeBytes": 1459,
+      "mainBlobSha": "12aaee8ee490732dce601ea0b6c1ce10a3478428",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 37,
+      "contentSha256": "c8525c0abd7fb026350e4fb2977e82792aa71e2801aace5d2dd53e5a3bbf233a",
+      "imports": [
+        "next/server",
+        "@/core/governance/social-country-pack-contract",
+        "@/core/governance/social-country-packs"
+      ],
+      "exports": [
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/messages/[conversationId]/conversation-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--social-people-chat-all-inside-20260815/app/messages/[conversationId]/conversation-client.tsx",
+      "blobSha": "d551cf79ad5cba9aaad8e7649a79f8e76ee5f6cf",
+      "sizeBytes": 16135,
+      "mainBlobSha": "533bbb6242f9f0be7f5b105f34f11156057071c6",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 402,
+      "contentSha256": "f601b06c0c4acc86674f9c7ca087ea962ce31e0ed6ffa54698a949db9d8a5cdb",
+      "imports": [
+        "next/link",
+        "react",
+        "@/lib/supabase/client",
+        "@/core/emergency/global-emergency-languages"
+      ],
+      "exports": [
+        "ConversationClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/messages/[conversationId]/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--social-people-chat-all-inside-20260815/app/messages/[conversationId]/page.tsx",
+      "blobSha": "1c6ab0f4c062c1ef0ddff314f118535b2d34543f",
+      "sizeBytes": 2470,
+      "mainBlobSha": "1c6ab0f4c062c1ef0ddff314f118535b2d34543f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 69,
+      "contentSha256": "3a16a264e78a1a89f9698f791ae337569f92aa216fe88f0db1de8e95ee504744",
+      "imports": [
+        "next/link",
+        "@/lib/supabase/server",
+        "./conversation-client"
+      ],
+      "exports": [
+        "dynamic",
+        "ConversationPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/messages/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/recovery--social-people-chat-all-inside-20260815/app/messages/page.tsx",
+      "blobSha": "4b47aba567e4e46e5cf97071ae2039675270f99d",
+      "sizeBytes": 5012,
+      "mainBlobSha": "4b47aba567e4e46e5cf97071ae2039675270f99d",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 95,
+      "contentSha256": "482c2748a402c236b0780f71563c8ae59ea0e307a78ada486143610095cb78b2",
+      "imports": [
+        "next/link",
+        "next/navigation",
+        "@/lib/supabase/server"
+      ],
+      "exports": [
+        "dynamic",
+        "MessagesPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/people/people-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/app/people/people-client.tsx",
+      "blobSha": "bbb54039134cf76e4be3fc3b93c9b54dcb4017c4",
+      "sizeBytes": 14976,
+      "mainBlobSha": "bbb54039134cf76e4be3fc3b93c9b54dcb4017c4",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 176,
+      "contentSha256": "4645f94645327ec54b3c68a472ed492cad3ef05ad26c5455746fdce7939dc845",
+      "imports": [
+        "next/link",
+        "react",
+        "next/navigation",
+        "@/lib/supabase/client"
+      ],
+      "exports": [
+        "PeopleClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/social/communities/actions.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/app/social/communities/actions.ts",
+      "blobSha": "1f346046088d5a70902d2477e6d3c58394d8547f",
+      "sizeBytes": 2403,
+      "mainBlobSha": "1f346046088d5a70902d2477e6d3c58394d8547f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 60,
+      "contentSha256": "6bee1567b42bc4d6ce3703fed0c28df426c4b3feee2736a30ca156434bb64646",
+      "imports": [
+        "next/cache",
+        "next/navigation",
+        "@/lib/supabase/server"
+      ],
+      "exports": [
+        "createCommunity",
+        "joinCommunity"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/social/communities/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/app/social/communities/page.tsx",
+      "blobSha": "9c90c540599caf637a92d00afb2d3b49493a356e",
+      "sizeBytes": 4606,
+      "mainBlobSha": "9c90c540599caf637a92d00afb2d3b49493a356e",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 33,
+      "contentSha256": "848eb92645e932338f499b652ee5dbc04523b3613acf698ece7fc4d385cc4e05",
+      "imports": [
+        "next/link",
+        "next/navigation",
+        "@/lib/supabase/server",
+        "./actions"
+      ],
+      "exports": [
+        "dynamic",
+        "CommunitiesPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/social/global/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/app/social/global/page.tsx",
+      "blobSha": "4db2c6f3c2c2d093a06271f0152414aa759e8297",
+      "sizeBytes": 6359,
+      "mainBlobSha": "4db2c6f3c2c2d093a06271f0152414aa759e8297",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 79,
+      "contentSha256": "b3ae88fbbaf628f6c804cbf4403025dba6cf750fa19a4c7f4ff962ff8439d72a",
+      "imports": [
+        "next/link",
+        "@/lib/supabase/server",
+        "@/core/governance/social-country-packs"
+      ],
+      "exports": [
+        "dynamic",
+        "GlobalSocialPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 2,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/social/notifications/actions.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/app/social/notifications/actions.ts",
+      "blobSha": "6822bd895db2c0cdade2e73d9c1965517781baea",
+      "sizeBytes": 1218,
+      "mainBlobSha": "6822bd895db2c0cdade2e73d9c1965517781baea",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 29,
+      "contentSha256": "0dc182a273b7bbd7a04609661c5ba2bad1ecbe41d7d9eaeead559277ee5dfdfd",
+      "imports": [
+        "next/cache",
+        "next/navigation",
+        "@/lib/supabase/server"
+      ],
+      "exports": [
+        "markNotificationRead",
+        "markAllNotificationsRead"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/social/notifications/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/app/social/notifications/page.tsx",
+      "blobSha": "8d5aa0fdae4efd563f8d64d942f9f3b91e0e5357",
+      "sizeBytes": 4403,
+      "mainBlobSha": "8d5aa0fdae4efd563f8d64d942f9f3b91e0e5357",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 38,
+      "contentSha256": "292a56bc45aaba3d6c04786eb71c134db3036a1eb7525e93431e40b394a59440",
+      "imports": [
+        "next/link",
+        "next/navigation",
+        "@/lib/supabase/server",
+        "./actions"
+      ],
+      "exports": [
+        "dynamic",
+        "NotificationsPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/social/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/app/social/page.tsx",
+      "blobSha": "2f5471d6302368abc0bb002098455b2674bd6f22",
+      "sizeBytes": 7664,
+      "mainBlobSha": "2f5471d6302368abc0bb002098455b2674bd6f22",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 166,
+      "contentSha256": "b94f45fb22b8de162b75ea21bc39de961fc3ad6c03c4fd5d8efe0f2938b4008b",
+      "imports": [
+        "next/link",
+        "@/lib/supabase/server",
+        "./social-home-client"
+      ],
+      "exports": [
+        "dynamic",
+        "SocialPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/social/social-home-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/app/social/social-home-client.tsx",
+      "blobSha": "b0f4d15d16120c7ac424b9c26ac6f6a79bec4c5c",
+      "sizeBytes": 17481,
+      "mainBlobSha": "b0f4d15d16120c7ac424b9c26ac6f6a79bec4c5c",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 147,
+      "contentSha256": "1c386950f13392be2c9e75ba05df3e1c40ced1cb7771942e8a8e8b912983f855",
+      "imports": [
+        "next/link",
+        "react",
+        "@/lib/supabase/client"
+      ],
+      "exports": [
+        "SocialHomeClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/governance/social-country-pack-contract.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/core/governance/social-country-pack-contract.ts",
+      "blobSha": "dc999fc123ee9f093fdad443a8b3eb8feb23087e",
+      "sizeBytes": 4411,
+      "mainBlobSha": "dc999fc123ee9f093fdad443a8b3eb8feb23087e",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 126,
+      "contentSha256": "96e5d3f18a6135a0302276ad7d308d50520e44cf5f43971779a0922529bae20f",
+      "imports": [],
+      "exports": [
+        "CountryPackStatus",
+        "TextDirection",
+        "ProvenanceEntry",
+        "AgeBandRule",
+        "ConsentRule",
+        "CountryPack",
+        "GLOBAL_SOCIAL_SECURITY_INVARIANTS",
+        "validateCountryPack",
+        "countryPackIsRuntimeEligible"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "governance-safety",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/governance/social-country-packs.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/core/governance/social-country-packs.ts",
+      "blobSha": "cd6c8512830d258ed6acc1426628df2af4656c85",
+      "sizeBytes": 5913,
+      "mainBlobSha": "cd6c8512830d258ed6acc1426628df2af4656c85",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 115,
+      "contentSha256": "fffae3f72b397f5ebd3b67f78aef7d48035bfb4d61e8d6629a75296b50b9140f",
+      "imports": [
+        "./social-country-pack-contract"
+      ],
+      "exports": [
+        "CYPRUS_SOCIAL_COUNTRY_PACK",
+        "GREECE_SOCIAL_COUNTRY_PACK",
+        "SOCIAL_COUNTRY_PACKS",
+        "normalizeSocialCountryCode",
+        "getSocialCountryPack",
+        "getSocialCountryPackRuntimeState"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 2,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "governance-safety",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/recovery/SOCIAL_GLOBAL_001_20260717.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/docs/recovery/SOCIAL_GLOBAL_001_20260717.md",
+      "blobSha": "5cd8b26699453c794ea6a0d0a9d1fc50c6142e4d",
+      "sizeBytes": 11462,
+      "mainBlobSha": "5cd8b26699453c794ea6a0d0a9d1fc50c6142e4d",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 171,
+      "contentSha256": "c262333605b72822bf7ac03bc2efec91c88571594ae304cd12068612edc20ce8",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "docs/recovery/social-people-chat-full-excavation-20260815.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/docs/recovery/social-people-chat-full-excavation-20260815.md",
+      "blobSha": "9f5cf719395f4f42e154ff525b67a3b767ec7f4f",
+      "sizeBytes": 6311,
+      "mainBlobSha": "9f5cf719395f4f42e154ff525b67a3b767ec7f4f",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 106,
+      "contentSha256": "c7c5b66aa0e7543eebd38f6befd0d06a1dd5700c6bff13f058a2edc4f59a4fc3",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260815164000_recover_social_communities_notifications.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/supabase/migrations/20260815164000_recover_social_communities_notifications.sql",
+      "blobSha": "0af29b287d774da0b392187f199ab85ddb90e538",
+      "sizeBytes": 5684,
+      "mainBlobSha": "0af29b287d774da0b392187f199ab85ddb90e538",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 129,
+      "contentSha256": "737aa701b61c5dc421ac8271f8b1d09b404fd47a64de730f306272e5f0e6388c",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [
+        "communities",
+        "community_members",
+        "social_notifications"
+      ],
+      "sqlPolicies": [
+        "communities_read on public.communities",
+        "communities_create on public.communities",
+        "communities_owner_update on public.communities",
+        "community_members_read on public.community_members",
+        "community_members_join_public on public.community_members",
+        "community_members_leave on public.community_members",
+        "social_notifications_recipient_read on public.social_notifications",
+        "social_notifications_recipient_update on public.social_notifications"
+      ],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "business-marketplace",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "supabase/migrations/20260815171500_harden_social_communities_notifications.sql",
+      "previousPath": null,
+      "kind": "database-migration",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/recovery--social-people-chat-all-inside-20260815/supabase/migrations/20260815171500_harden_social_communities_notifications.sql",
+      "blobSha": "ecf8568dfce7be224ed5e52586687f38dd69b90b",
+      "sizeBytes": 1850,
+      "mainBlobSha": "ecf8568dfce7be224ed5e52586687f38dd69b90b",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 51,
+      "contentSha256": "6c959955351a20c677b0d4f7b0794b427ab80f31870ec7b6eb4d5c9e1dbaf879",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [
+        "communities_read on public.communities",
+        "community_members_read on public.community_members"
+      ],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

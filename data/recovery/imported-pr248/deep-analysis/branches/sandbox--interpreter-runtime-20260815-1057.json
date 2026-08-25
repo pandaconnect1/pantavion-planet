@@ -1,0 +1,56 @@
+{
+  "id": "PANT-BRANCH-FB99E7002194",
+  "sourceRef": "recovery/snapshots/sandbox--interpreter-runtime-20260815-1057",
+  "headSha": "3c7982f02e6e3bba2d09b6773646a043bb2f6c97",
+  "mergeBase": "6c2d099ed0fb74c6026fa19b647877311f57e63a",
+  "behindMainBy": 253,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "chat-translation": 1
+  },
+  "kindCounts": {
+    "ui-page": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/pantavion/live-interpreter/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/chat-translation/sandbox--interpreter-runtime-20260815-1057/app/pantavion/live-interpreter/page.tsx",
+      "blobSha": "bf1b2befbd4adaa4b5dba1e7c3bab8f9ba8370ef",
+      "sizeBytes": 148,
+      "mainBlobSha": "bf1b2befbd4adaa4b5dba1e7c3bab8f9ba8370ef",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 6,
+      "contentSha256": "3e8bd546eed94505e3eda226f927e8f76e08183e6931503d0fc4d19d1432292d",
+      "imports": [
+        "next/navigation"
+      ],
+      "exports": [
+        "PantavionLiveInterpreterLegacyPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation"
+      ]
+    }
+  ]
+}

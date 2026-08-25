@@ -1,0 +1,95 @@
+{
+  "id": "PANT-BRANCH-5CBEF12A1608",
+  "sourceRef": "recovery/snapshots/agent--raw-donor-preservation",
+  "headSha": "f770444c6cc0c0878b26f3cd99a739299d3368b0",
+  "mergeBase": "6260665e44ff6a3c76ccd2e2c4106ea580898de2",
+  "behindMainBy": 16,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 2,
+  "topicCounts": {
+    "social-people": 1,
+    "chat-translation": 1,
+    "ai-kernel": 2,
+    "recovery-continuity": 2,
+    "identity-security": 1,
+    "governance-safety": 1,
+    "media-music": 1
+  },
+  "kindCounts": {
+    "documentation": 2
+  },
+  "relationCounts": {
+    "ABSENT_FROM_MAIN": 2
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "A",
+      "file": "recovery/raw-donors/DONOR_SCOPE_LOCK.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/agent--raw-donor-preservation/recovery/raw-donors/DONOR_SCOPE_LOCK.md",
+      "blobSha": "2bd6ef2147339c7bc151616ab18a17f86e1ba1c2",
+      "sizeBytes": 1065,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 19,
+      "contentSha256": "a4ae3dbf74cbbcd96161fad9e11515313e8be341e8812a26e2286044d21945f0",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "ai-kernel",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "recovery/raw-donors/PRESERVATION_POLICY.md",
+      "previousPath": null,
+      "kind": "documentation",
+      "canonicalPathProposal": "recovery/canonicalized/recovery-continuity/agent--raw-donor-preservation/recovery/raw-donors/PRESERVATION_POLICY.md",
+      "blobSha": "e3a559d75500166957534b5f3996bdc087316c62",
+      "sizeBytes": 1369,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 15,
+      "contentSha256": "089fedbef6baab1b74d999c070e655b4bc34334a432d06ac6ebc2cd02a2aa1b5",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music"
+      ]
+    }
+  ]
+}

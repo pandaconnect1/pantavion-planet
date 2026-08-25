@@ -1,0 +1,76 @@
+{
+  "id": "PANT-BRANCH-A48826ECE13E",
+  "sourceRef": "recovery/snapshots/fix--social-health-diagnostics",
+  "headSha": "30d1990c7aa5a41c67f56bd651ac05442f6122ab",
+  "mergeBase": "0a7dc2ceb98ea8931105456544ce685c17a418f4",
+  "behindMainBy": 329,
+  "aheadOfMainBy": 1,
+  "changedFileCount": 1,
+  "topicCounts": {
+    "identity-security": 1,
+    "social-people": 1,
+    "chat-translation": 1,
+    "maps-water": 1,
+    "media-music": 1,
+    "infrastructure-deployment": 1
+  },
+  "kindCounts": {
+    "api-route": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 1
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/social/health/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/social-people/fix--social-health-diagnostics/app/api/social/health/route.ts",
+      "blobSha": "2c7547de3d587f55689b1927f2bed5d3affe787c",
+      "sizeBytes": 3867,
+      "mainBlobSha": "69b58962c2e0c4ca6f6085999d59b75feb3846c1",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 144,
+      "contentSha256": "6e3b327bb26fa17db731676f566018ebe23056e0514282c838a4d37840fe918b",
+      "imports": [
+        "next/server",
+        "@/lib/supabase/server"
+      ],
+      "exports": [
+        "dynamic",
+        "revalidate",
+        "GET"
+      ],
+      "envDependencies": [
+        "VERCEL_GIT_COMMIT_SHA",
+        "GITHUB_SHA",
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "maps-water",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "id": "PANT-BRANCH-FDF00C889A0B",
+  "sourceRef": "recovery/snapshots/agent--fix-water-admin-mobile-navigation-20260721",
+  "headSha": "d2cafcbef615b4a02ba434579661782a03a4ccc7",
+  "mergeBase": "c1ef45b8d893d1270ebdf403bc0a95118f0e43ae",
+  "behindMainBy": 553,
+  "aheadOfMainBy": 2,
+  "changedFileCount": 4,
+  "topicCounts": {
+    "identity-security": 3,
+    "maps-water": 4,
+    "chat-translation": 2,
+    "ai-kernel": 1,
+    "recovery-continuity": 1
+  },
+  "kindCounts": {
+    "ui-page": 3,
+    "source-code": 1
+  },
+  "relationCounts": {
+    "IDENTICAL_TO_MAIN": 1,
+    "DIFFERS_FROM_MAIN": 3
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/access/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--fix-water-admin-mobile-navigation-20260721/app/professional/infrastructure/water/access/page.tsx",
+      "blobSha": "77313b22f1821d280e39d74bbd53e16730346374",
+      "sizeBytes": 792,
+      "mainBlobSha": "77313b22f1821d280e39d74bbd53e16730346374",
+      "relationToMain": "IDENTICAL_TO_MAIN",
+      "binary": false,
+      "lineCount": 30,
+      "contentSha256": "ee494da93a40399fe11e5614c6d0f48db9c2b49312d3ed36add111abb23d6d87",
+      "imports": [
+        "next/headers",
+        "@/core/security/water-admin-session",
+        "../water-map-navigation",
+        "./water-access-control-client"
+      ],
+      "exports": [
+        "metadata",
+        "WaterUsersAccessPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/access/water-access-control-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--fix-water-admin-mobile-navigation-20260721/app/professional/infrastructure/water/access/water-access-control-client.tsx",
+      "blobSha": "25089ac69950ac9b94d11822fb831e63ace122b6",
+      "sizeBytes": 11386,
+      "mainBlobSha": "62138e18ef4d23f233517abda853af9b3d120191",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 322,
+      "contentSha256": "c59d81b2ecd15ed91ac419ac5e9ab4a402a1539c6c452d7f287637755f56ff97",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "WaterAccessControlClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/admin/approvals/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--fix-water-admin-mobile-navigation-20260721/app/professional/infrastructure/water/admin/approvals/page.tsx",
+      "blobSha": "331ffd542512079f125c68058895ddaf9f413b50",
+      "sizeBytes": 29056,
+      "mainBlobSha": "058c1672e98b27013cc7b9982d2f8dbc39b43e14",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 714,
+      "contentSha256": "c5b58b26934b5b6d52ff32e4765490471db910155e810e6ba96eebf3e05551d7",
+      "imports": [
+        "next/link",
+        "react"
+      ],
+      "exports": [
+        "WaterApprovalInboxPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "maps-water"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/professional/infrastructure/water/page.tsx",
+      "previousPath": null,
+      "kind": "ui-page",
+      "canonicalPathProposal": "recovery/canonicalized/maps-water/agent--fix-water-admin-mobile-navigation-20260721/app/professional/infrastructure/water/page.tsx",
+      "blobSha": "8017b1740800e4236e9bfd586809135e26f931dd",
+      "sizeBytes": 5478,
+      "mainBlobSha": "c9fb6e27388a0cf59711ccf50041ed8fec32faec",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 143,
+      "contentSha256": "60e0c3de792d4dc3729cceb91dad08f0d55fd9c4a38901c14a9511e766cb2cf0",
+      "imports": [
+        "next/headers",
+        "@/core/security/water-admin-session",
+        "./water-map-navigation"
+      ],
+      "exports": [
+        "metadata",
+        "WaterControlCenterPage"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "maps-water",
+        "recovery-continuity"
+      ]
+    }
+  ]
+}

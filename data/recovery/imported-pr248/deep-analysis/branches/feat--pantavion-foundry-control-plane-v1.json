@@ -1,0 +1,1055 @@
+{
+  "id": "PANT-BRANCH-B478D96A02AF",
+  "sourceRef": "recovery/snapshots/feat--pantavion-foundry-control-plane-v1",
+  "headSha": "cb2048381518eb7941d46442b98132523ccee59d",
+  "mergeBase": "e1a92f0a24e030e15393fd4118ae6d29260afa34",
+  "behindMainBy": 20,
+  "aheadOfMainBy": 3,
+  "changedFileCount": 23,
+  "topicCounts": {
+    "ai-kernel": 23,
+    "recovery-continuity": 11,
+    "infrastructure-deployment": 14,
+    "business-marketplace": 16,
+    "social-people": 9,
+    "chat-translation": 12,
+    "maps-water": 14,
+    "identity-security": 13,
+    "governance-safety": 10,
+    "media-music": 4
+  },
+  "kindCounts": {
+    "api-route": 8,
+    "source-code": 14,
+    "configuration-data": 1
+  },
+  "relationCounts": {
+    "DIFFERS_FROM_MAIN": 11,
+    "ABSENT_FROM_MAIN": 12
+  },
+  "status": "DEEPLY_ANALYZED_MACHINE_PASS",
+  "verificationState": "NOT_CANONICALIZED_NOT_TESTED",
+  "files": [
+    {
+      "status": "M",
+      "file": "app/api/kernel/audit-memory/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/app/api/kernel/audit-memory/route.ts",
+      "blobSha": "d83803d89fd8e9bb1ba5c21400242ee7551edf5f",
+      "sizeBytes": 732,
+      "mainBlobSha": "32ae01a5138f9658c4aad8f1d0ebe969c8adbaab",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 28,
+      "contentSha256": "534c2a6a7a47dcc77482eb1cb94a97258d6c858723cbf6f578caaff7620c9768",
+      "imports": [
+        "next/server",
+        "@/core/kernel/kernel-audit-memory",
+        "@/core/kernel/kernel-access-guard"
+      ],
+      "exports": [
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/kernel/continuity-memory/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/app/api/kernel/continuity-memory/route.ts",
+      "blobSha": "f8a7802011f80e58115b48a50bc12f47a9fa6ec8",
+      "sizeBytes": 735,
+      "mainBlobSha": "dd6634ff3fa1c4b56572c948addfe946daeb3de6",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 28,
+      "contentSha256": "44a40e5f30941666ff7b1ac74a446411534ef91351b9d3c0fd07caf0ab49d344",
+      "imports": [
+        "next/server",
+        "@/core/kernel/kernel-continuity-memory",
+        "@/core/kernel/kernel-access-guard"
+      ],
+      "exports": [
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel",
+        "recovery-continuity"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/kernel/gap-intelligence/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/app/api/kernel/gap-intelligence/route.ts",
+      "blobSha": "273ed29ea1b9862177a480391b3283821f7a634e",
+      "sizeBytes": 749,
+      "mainBlobSha": "3090fd9135d3f5363631c60603e21901e4976c55",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 28,
+      "contentSha256": "078634c3953ba1f7714f426a31a226883f5dca30fe4db0774393c534a127189c",
+      "imports": [
+        "next/server",
+        "@/core/kernel/kernel-access-guard",
+        "@/core/kernel/kernel-gap-intelligence"
+      ],
+      "exports": [
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/kernel/heartbeat/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/app/api/kernel/heartbeat/route.ts",
+      "blobSha": "87deaa75f049acf8b67b46ee50a50cf0f0033b69",
+      "sizeBytes": 1378,
+      "mainBlobSha": "bd086c4819b0a984454cbc27d29db4039087a5e6",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 49,
+      "contentSha256": "3a81bfae93216f04e5bb22bf7cc05cd9e3fb86ce0ef75bac6a4f4257dd2edf34",
+      "imports": [
+        "next/server",
+        "@/core/kernel/kernel-access-guard",
+        "@/core/kernel/kernel-heartbeat"
+      ],
+      "exports": [
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [
+        "PANTAVION_RESERVE_KERNEL_COUNT",
+        "VERCEL",
+        "VERCEL_REGION",
+        "PANTAVION_KERNEL_REGION",
+        "VERCEL_ENV",
+        "NODE_ENV"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/kernel/product-dna/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/business-marketplace/feat--pantavion-foundry-control-plane-v1/app/api/kernel/product-dna/route.ts",
+      "blobSha": "0d11ebe328a02d4ead2cd7320213fca7ac1d0898",
+      "sizeBytes": 734,
+      "mainBlobSha": "3072486ec9faee51b6a8d43837135a2677cb5d90",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 28,
+      "contentSha256": "c8a1e70e4308442d9ec64f7ee62d9bb65a36858028a5156ac2bf8c3350132220",
+      "imports": [
+        "next/server",
+        "@/core/kernel/kernel-access-guard",
+        "@/core/kernel/kernel-product-dna"
+      ],
+      "exports": [
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "business-marketplace",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/kernel/research-assimilation/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/app/api/kernel/research-assimilation/route.ts",
+      "blobSha": "96e16797c0c4ea6a289651b93d343b464e94173f",
+      "sizeBytes": 764,
+      "mainBlobSha": "2e173e8605a99758a0f715edf694ab866cf6398c",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 28,
+      "contentSha256": "f1a7a49c225469f0baa8db971474c862149c85aa311f5c173a61e958006186f5",
+      "imports": [
+        "next/server",
+        "@/core/kernel/kernel-access-guard",
+        "@/core/kernel/kernel-research-assimilation"
+      ],
+      "exports": [
+        "dynamic",
+        "GET"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/api/kernel/work-orders/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/app/api/kernel/work-orders/route.ts",
+      "blobSha": "685b9b05a4cfbde5701ef5b5123939a1adf66e3c",
+      "sizeBytes": 12049,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 390,
+      "contentSha256": "20b8f5cddd82b88d063b593d83e52fcde915c7a167de8e114b90a53f53954e51",
+      "imports": [
+        "next/server",
+        "@/core/kernel/kernel-access-guard",
+        "@/core/kernel/pantavion-work-order-runtime",
+        "@/core/kernel/pantavion-autonomous-builder-kernel",
+        "@/core/kernel/pantavion-foundry-workload-planner"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET",
+        "POST",
+        "PATCH"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST",
+        "PATCH"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/api/pantavion/intelligence/cron/route.ts",
+      "previousPath": null,
+      "kind": "api-route",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--pantavion-foundry-control-plane-v1/app/api/pantavion/intelligence/cron/route.ts",
+      "blobSha": "1107f59bc4aea8af47d229920d06f17522465161",
+      "sizeBytes": 3149,
+      "mainBlobSha": "4192558d204736b833fffc370a3a3210ebacfca8",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 110,
+      "contentSha256": "1d37ba0b659332f34a0bcac29bc69b97161795b3eba2578a22fca7672f371174",
+      "imports": [
+        "next/server",
+        "@/core/intelligence/pantavion-intelligence-ledger",
+        "@/core/kernel/pantavion-foundry-runtime"
+      ],
+      "exports": [
+        "runtime",
+        "dynamic",
+        "GET",
+        "POST"
+      ],
+      "envDependencies": [
+        "CRON_SECRET",
+        "NODE_ENV",
+        "PANTAVION_ALLOW_VERCEL_CRON_USER_AGENT"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [
+        "GET",
+        "POST"
+      ],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "app/kernel/kernel-live-panel-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/app/kernel/kernel-live-panel-client.tsx",
+      "blobSha": "769e5f05e68bb6beb3e56563b04b1093bad488de",
+      "sizeBytes": 10869,
+      "mainBlobSha": "8a87bfa84d561046de204e5996ce027e3c1d8601",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 319,
+      "contentSha256": "dcb6ff319e9c062c8f48e264290822a09a63e58c8e52039d8347e16a809f476b",
+      "imports": [
+        "react",
+        "./kernel-work-order-client"
+      ],
+      "exports": [
+        "KernelLivePanelClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "media-music"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "app/kernel/kernel-work-order-client.tsx",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/app/kernel/kernel-work-order-client.tsx",
+      "blobSha": "f59be440fa85c385fa8dcc8dc46748529d5e0602",
+      "sizeBytes": 22052,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 507,
+      "contentSha256": "ddc5d47172f9972f73d3c41fcdaf8fa5e6461a50195a63400bdebb26dcc690c6",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "KernelWorkOrderClient"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/kernel/agent-security-policy.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/identity-security/feat--pantavion-foundry-control-plane-v1/core/kernel/agent-security-policy.ts",
+      "blobSha": "eacbd5355860d50fad0ed1bb9c943ee6233df853",
+      "sizeBytes": 5373,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 158,
+      "contentSha256": "d905d06c45af3e64125b044e3108ad7657df5b52aa0ea3ce57766dd38d8e8d9d",
+      "imports": [
+        "./pantavion-autonomous-builder-kernel"
+      ],
+      "exports": [
+        "PantavionAgentWorkAuthority",
+        "PantavionAgentWorkMode",
+        "PantavionAgentSecurityProfile",
+        "isPantavionProtectedAgentTarget",
+        "createPantavionAgentSecurityProfile"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "core/kernel/kernel-access-guard.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/core/kernel/kernel-access-guard.ts",
+      "blobSha": "2230d9270f03cff1fffbca8c1b7129cd3079d03a",
+      "sizeBytes": 2192,
+      "mainBlobSha": "aae66a1c2a2aaeeb56062fdf0f069d40a38d9b43",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 70,
+      "contentSha256": "5896e5d9c2475f1329403eb03812da525fc0c58cd81553a9ae081fc6bd29a3a6",
+      "imports": [],
+      "exports": [
+        "PANTAVION_KERNEL_ACCESS_QUERY",
+        "PANTAVION_KERNEL_FOUNDER_QUERY",
+        "PANTAVION_KERNEL_SESSION_COOKIE",
+        "PantavionKernelAccessDeniedReport",
+        "isPantavionKernelAccessAllowed",
+        "isPantavionKernelRequestAllowed",
+        "createPantavionKernelAccessDeniedReport"
+      ],
+      "envDependencies": [
+        "NODE_ENV",
+        "PANTAVION_KERNEL_PANEL_TOKEN"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/kernel/pantavion-agent-factory.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/core/kernel/pantavion-agent-factory.ts",
+      "blobSha": "466941cdf6d746f368238cf751523feac7cc6ce6",
+      "sizeBytes": 9676,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 275,
+      "contentSha256": "8c2e5a8d6d824a77513041759307c512520298701a081a3cae9eb1968eaca916",
+      "imports": [
+        "./agent-security-policy",
+        "./pantavion-autonomous-builder-kernel"
+      ],
+      "exports": [
+        "PantavionOwnedAgentRole",
+        "PantavionOwnedAgentState",
+        "PantavionOwnedAgentBlueprint",
+        "PantavionOwnedAgentFleet",
+        "createPantavionOwnedAgentFleet"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 4,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "ai-kernel",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/kernel/pantavion-blocker-resolution.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/core/kernel/pantavion-blocker-resolution.ts",
+      "blobSha": "db65733ba8b18fbbd5d78260aad2e7d62eb04474",
+      "sizeBytes": 5747,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 167,
+      "contentSha256": "df90e7f855899a1985efb683f749d0a9c18729c5d29c5404f4362162a092a96d",
+      "imports": [
+        "./pantavion-agent-factory"
+      ],
+      "exports": [
+        "PantavionFoundryBlockerKind",
+        "PantavionFoundryBlockerDisposition",
+        "PantavionFoundryBlockerResolution",
+        "createPantavionFoundryBlockerResolution"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/kernel/pantavion-ecosystem-cell-factory.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/core/kernel/pantavion-ecosystem-cell-factory.ts",
+      "blobSha": "9cd9531dd26b6b38bd58229497c16536ab00d3e3",
+      "sizeBytes": 7863,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 188,
+      "contentSha256": "aaaac96caddd025235f3d488bd84c1de6580eaf1ba42afc1c0ba1a8e6973d30c",
+      "imports": [
+        "./pantavion-autonomous-builder-kernel"
+      ],
+      "exports": [
+        "PantavionEcosystemServiceId",
+        "isPantavionEcosystemServiceId",
+        "PantavionEcosystemServiceNeed",
+        "PantavionEcosystemServiceContract",
+        "PantavionEcosystemCell",
+        "createPantavionEcosystemCell"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/kernel/pantavion-foundry-runtime.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/core/kernel/pantavion-foundry-runtime.ts",
+      "blobSha": "96636062cf3ece92a68d4d4b08aff8104c656976",
+      "sizeBytes": 31912,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 961,
+      "contentSha256": "78af7d2dc75559b1dd7cc03eb420101b78e4248a26fb0f1f9fa9fc9d824c3f57",
+      "imports": [
+        "@/core/runtime/durable-execution",
+        "@/core/runtime/supabase-durable-execution-store",
+        "./pantavion-work-order-runtime",
+        "./pantavion-blocker-resolution",
+        "./pantavion-module-delivery-factory",
+        "./pantavion-ecosystem-cell-factory",
+        "./pantavion-agent-factory",
+        "./pantavion-foundry-workload-planner"
+      ],
+      "exports": [
+        "PantavionFoundryTickReport",
+        "runPantavionFoundryTick"
+      ],
+      "envDependencies": [
+        "PANTAVION_INTERNAL_AGENT_RUNTIME_URL",
+        "PANTAVION_INTERNAL_AGENT_RUNTIME_TOKEN",
+        "PANTAVION_INTERNAL_AGENT_RUNTIME_OWNERSHIP",
+        "NODE_ENV"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 9,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/kernel/pantavion-foundry-workload-planner.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/core/kernel/pantavion-foundry-workload-planner.ts",
+      "blobSha": "8d1b94285107efe28d93c898576897feb56c2e76",
+      "sizeBytes": 9260,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 228,
+      "contentSha256": "343a73f8f02fee6215e4fbdba55846c0889647e95210ce8a151c07c17e49f7bd",
+      "imports": [
+        "./pantavion-agent-factory"
+      ],
+      "exports": [
+        "PantavionFoundryWorkloadKind",
+        "PantavionFoundryWorkloadStageId",
+        "PantavionFoundryWorkloadRequest",
+        "PantavionFoundryWorkloadStage",
+        "PantavionFoundryInternalLane",
+        "PantavionFoundryPartitionContract",
+        "PantavionFoundryWorkloadPlan",
+        "PantavionAgentWorkloadAssignment",
+        "createPantavionFoundryWorkloadPlan",
+        "createPantavionAgentWorkloadAssignment",
+        "describePantavionFoundryPartition"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/kernel/pantavion-module-delivery-factory.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/core/kernel/pantavion-module-delivery-factory.ts",
+      "blobSha": "c6f788947249589c3abcee755243d90027013b7e",
+      "sizeBytes": 14347,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 221,
+      "contentSha256": "c2520d5b311e651d04531d0c799562149dc30dad5bb8d81d8b38963db40aea8f",
+      "imports": [
+        "./pantavion-agent-factory",
+        "./pantavion-autonomous-builder-kernel",
+        "./pantavion-ecosystem-cell-factory"
+      ],
+      "exports": [
+        "PantavionModuleId",
+        "PantavionModuleDeliveryCell",
+        "PantavionAgentModuleDeliveryAssignment",
+        "createPantavionModuleDeliveryCells",
+        "createPantavionAgentModuleDeliveryAssignment",
+        "pantavionModuleDeliveryCatalog",
+        "isPantavionModuleId"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "core/kernel/pantavion-work-order-runtime.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/core/kernel/pantavion-work-order-runtime.ts",
+      "blobSha": "7cf8a79b3505df1d689ea95eba247ac4027c6df7",
+      "sizeBytes": 19212,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 575,
+      "contentSha256": "d2b32e5af67733511f34ca8a8410b1707c34850282eb749b00846b0d13fed6f3",
+      "imports": [
+        "./agent-security-policy",
+        "./pantavion-agent-factory",
+        "./pantavion-ecosystem-cell-factory",
+        "./pantavion-module-delivery-factory",
+        "./pantavion-foundry-workload-planner",
+        "./pantavion-autonomous-builder-kernel",
+        "./pantavion-implementation-engine",
+        "@/core/runtime/durable-execution",
+        "@/core/runtime/supabase-durable-execution-store"
+      ],
+      "exports": [
+        "PANTAVION_WORK_ORDER_TASK_NAME",
+        "PANTAVION_OWNED_AGENT_TASK_NAME",
+        "PantavionFounderApprovalScope",
+        "PantavionFounderWorkOrderSubmission",
+        "PantavionPersistedWorkOrder",
+        "persistPantavionFounderWorkOrder",
+        "listPantavionFounderWorkOrders",
+        "cancelPantavionFounderWorkOrder"
+      ],
+      "envDependencies": [
+        "PANTAVION_INTERNAL_AGENT_RUNTIME_URL",
+        "PANTAVION_INTERNAL_AGENT_RUNTIME_TOKEN",
+        "PANTAVION_INTERNAL_AGENT_RUNTIME_OWNERSHIP"
+      ],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 1,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "governance-safety",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "core/runtime/supabase-durable-execution-store.ts",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/ai-kernel/feat--pantavion-foundry-control-plane-v1/core/runtime/supabase-durable-execution-store.ts",
+      "blobSha": "e5251e27cd3331ecbd28739febb181ed8e1e9d55",
+      "sizeBytes": 5913,
+      "mainBlobSha": "e3348e1549cd2bf21bc8016dd2e8094c1fcc3a82",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 179,
+      "contentSha256": "d86525434b0db2ef3a5d575263008325c48f381d13f066fd1697ae9a1d1b8ad5",
+      "imports": [
+        "@/lib/supabase/admin",
+        "./durable-execution"
+      ],
+      "exports": [
+        "PantavionSupabaseDurableExecutionStore",
+        "createSupabaseDurableExecutionStore"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "maps-water",
+        "ai-kernel",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "M",
+      "file": "package.json",
+      "previousPath": null,
+      "kind": "configuration-data",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--pantavion-foundry-control-plane-v1/package.json",
+      "blobSha": "e6a8de43ead2c216eabf40741d7be642053b2941",
+      "sizeBytes": 4231,
+      "mainBlobSha": "f3147714826462b5c76338ad6bcfb831d6df5a06",
+      "relationToMain": "DIFFERS_FROM_MAIN",
+      "binary": false,
+      "lineCount": 77,
+      "contentSha256": "7f3527f3b06ea2f9f8a31abce833c93983691be3eee26052a8445bf21466f31a",
+      "imports": [],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 3,
+        "providerPending": 0
+      },
+      "topics": [
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-foundry-contract-test.mjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--pantavion-foundry-control-plane-v1/scripts/pantavion-foundry-contract-test.mjs",
+      "blobSha": "5c97dee378fd015c0382f54d3e8a87dd59607485",
+      "sizeBytes": 4806,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 126,
+      "contentSha256": "364133e206248ffd1612b7f743161fbf1307e558f51f48db54a9b1feac8a0880",
+      "imports": [
+        "../core/kernel/pantavion-foundry-workload-planner.ts",
+        "../core/kernel/pantavion-agent-factory.ts",
+        "../core/kernel/pantavion-module-delivery-factory.ts",
+        "../core/kernel/pantavion-blocker-resolution.ts"
+      ],
+      "exports": [],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "social-people",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "infrastructure-deployment"
+      ]
+    },
+    {
+      "status": "A",
+      "file": "scripts/pantavion-foundry-gate.cjs",
+      "previousPath": null,
+      "kind": "source-code",
+      "canonicalPathProposal": "recovery/canonicalized/review-unclassified/feat--pantavion-foundry-control-plane-v1/scripts/pantavion-foundry-gate.cjs",
+      "blobSha": "3e82dcde2362291751d743d89b852e4ab7f8df86",
+      "sizeBytes": 7142,
+      "mainBlobSha": null,
+      "relationToMain": "ABSENT_FROM_MAIN",
+      "binary": false,
+      "lineCount": 185,
+      "contentSha256": "78afe1375e609e8043b21cd84c6841ca57bf31a62648df20f2204e2be77759d0",
+      "imports": [
+        "fs",
+        "path"
+      ],
+      "exports": [
+        "private"
+      ],
+      "envDependencies": [],
+      "sqlTables": [],
+      "sqlPolicies": [],
+      "apiMethods": [],
+      "markers": {
+        "todo": 0,
+        "fixme": 0,
+        "blocked": 0,
+        "unfinished": 0,
+        "providerPending": 0
+      },
+      "topics": [
+        "identity-security",
+        "chat-translation",
+        "business-marketplace",
+        "maps-water",
+        "ai-kernel",
+        "recovery-continuity",
+        "governance-safety",
+        "media-music",
+        "infrastructure-deployment"
+      ]
+    }
+  ]
+}
