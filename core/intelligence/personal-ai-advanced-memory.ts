@@ -125,11 +125,13 @@ export async function createPersonalAIContextHandoff(
   if (relationships.error) throw new Error(`personal_ai_handoff_relationships_failed:${relationships.error.message}`);
 
   const orderedTurns = ((turns.data || []) as TurnRow[]).reverse();
+  const threadMemories = (memories.data || []) as Array<Pick<MemoryRow, "memory_type" | "content" | "truth_state">>;
+  const openItems = (items.data || []) as ItemRow[];
   const corpus = normalizeComparable(
     [
       sourceThread.data.continuity_summary || "",
       ...orderedTurns.map((row) => row.content),
-      ...((memories.data || []) as Array<{ content: string }>).map((row) => row.content),
+      ...threadMemories.map((row) => row.content),
     ].join(" "),
   );
 
@@ -142,11 +144,11 @@ export async function createPersonalAIContextHandoff(
     orderedTurns.length
       ? `RECENT EXCHANGES:\n${orderedTurns.slice(-8).map((row) => `${row.role}: ${clean(row.content, 700)}`).join("\n")}`
       : "",
-    (memories.data || []).length
-      ? `THREAD MEMORIES:\n${(memories.data || []).slice(0, 10).map((row: any) => `[${row.memory_type}/${row.truth_state}] ${clean(row.content, 500)}`).join("\n")}`
+    threadMemories.length
+      ? `THREAD MEMORIES:\n${threadMemories.slice(0, 10).map((row) => `[${row.memory_type}/${row.truth_state}] ${clean(row.content, 500)}`).join("\n")}`
       : "",
-    (items.data || []).length
-      ? `OPEN ITEMS:\n${(items.data || []).slice(0, 10).map((row: any) => `[${row.kind}${row.due_at ? ` due ${row.due_at}` : ""}] ${clean(row.title || row.body, 400)}`).join("\n")}`
+    openItems.length
+      ? `OPEN ITEMS:\n${openItems.slice(0, 10).map((row) => `[${row.kind}${row.due_at ? ` due ${row.due_at}` : ""}] ${clean(row.title || row.body, 400)}`).join("\n")}`
       : "",
     relevantRelationships.length
       ? `PEOPLE IN CONTEXT:\n${relevantRelationships.map((row) => `${row.display_name} (${row.relationship_type})`).join(", ")}`
@@ -163,13 +165,13 @@ export async function createPersonalAIContextHandoff(
     truthState: "KNOWN",
     continuitySummary,
     lastExchanges: orderedTurns.slice(-12),
-    memories: (memories.data || []).slice(0, 16),
-    openItems: (items.data || []).slice(0, 16),
+    memories: threadMemories.slice(0, 16),
+    openItems: openItems.slice(0, 16),
     relationships: relevantRelationships,
     integrity: {
       turnCountCaptured: Math.min(orderedTurns.length, 12),
-      memoryCountCaptured: Math.min((memories.data || []).length, 16),
-      openItemCountCaptured: Math.min((items.data || []).length, 16),
+      memoryCountCaptured: Math.min(threadMemories.length, 16),
+      openItemCountCaptured: Math.min(openItems.length, 16),
       relationshipCountCaptured: relevantRelationships.length,
       sourceBoundToSameUser: true,
     },
