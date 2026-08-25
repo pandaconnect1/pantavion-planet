@@ -1,0 +1,241 @@
+{
+  "id": "pantavion_pr248_canonical_corpus_snapshot_20260825",
+  "sourcePullRequest": 248,
+  "sourceBranch": "recovery/classified-ledger-20260823",
+  "sourceCommit": "da6fb9f70937f2f63b0d30204a22023ac72e1544",
+  "sourceCommitMessage": "data(recovery): materialize every canonical corpus record",
+  "preservedFileCount": 57,
+  "preservationMode": "immutable-path-copy",
+  "destinationRoot": "data/recovery/imported-pr248/canonical-ledger/corpus",
+  "truthRule": "This corpus is preserved byte-for-byte by Git blob SHA. Classification or deployment status inside historical records is evidence to review, not a current VERIFIED_LIVE claim.",
+  "sourcePaths": [
+    {
+      "path": "data/recovery/canonical-ledger/corpus/MATERIALIZATION_RECEIPT.json",
+      "blobSha": "ac4b1673139b5c1fedc7677d333bf6f752c5b6d4"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-a.json",
+      "blobSha": "35c698d1d527d06895625170032f7fd16c230b48"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-a2.json",
+      "blobSha": "e56ce51b71bb0ffa822dc318b78a1b832904424a"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-a3.json",
+      "blobSha": "147ca7f0c7425efe3ee3f56e654ade8e313421dd"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-b.json",
+      "blobSha": "dbe489d8a35cf98e06bdc75b681cf31b5efb5d95"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-b2.json",
+      "blobSha": "67e3ce97805a7ecaf785e4e9258b56e1f19cf834"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-b3.json",
+      "blobSha": "41460cf4a5064ade634a1fb7293904d2d33cdb48"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-c.json",
+      "blobSha": "9d50a109ef1a7c3195053eb6d7ea2d41dc2d1150"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-c2.json",
+      "blobSha": "45e618f5a73e23b5608e5de8ba476deefb04d6c5"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-c3.json",
+      "blobSha": "9d8280a385774bd2b8953f717b93be661f5800a9"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-d.json",
+      "blobSha": "a55695f56fbf483508651b8bdc8b4667ec63e1cf"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-d2.json",
+      "blobSha": "8db678caba1cd08829741df09e05fabec038d0b3"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-e.json",
+      "blobSha": "33c1116aea592593140406fe1b8adbf7acee3e02"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-e2.json",
+      "blobSha": "fefe0de086b84af3fd9c8bc57cc4e85cb0d53a28"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-f.json",
+      "blobSha": "7a9efa7bb561f1a83d4d375d637dad08cf5c5e6e"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-f2.json",
+      "blobSha": "05a5c8c93f479024f588ea2976e1fbedfe6955e8"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-g.json",
+      "blobSha": "94dec4ef4ec1db784359530e3d40f210d69dbbd9"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-g2.json",
+      "blobSha": "47343817cb0ed642494deee8590f391a3e3ee862"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-h.json",
+      "blobSha": "c77e65998f6855a214fcbe2e4c877057051ec763"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-h2.json",
+      "blobSha": "ec4e56306e5f9cb70f81595fbc2e3ce8a3cf0531"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-i.json",
+      "blobSha": "82995c483e36d8e89d9956985309fb4cde9de2c5"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-i2.json",
+      "blobSha": "134db78e05d0816942bab7f2823ace48adc7df50"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-j.json",
+      "blobSha": "1b1324b398d41afe2949501e2b612765552d5f46"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-j2.json",
+      "blobSha": "7cbbd847a9cc49a7639b2cd0a892d544da32e019"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-k.json",
+      "blobSha": "bc0cd4b8b6426391b96bb8ae8c1a6db53662f400"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-k2.json",
+      "blobSha": "e33b2f47019a2c43e35de8b66407caf5928da9e0"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-l.json",
+      "blobSha": "1ce01d9b4c16e79aa9b970ef94186efc695f452b"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-l2.json",
+      "blobSha": "ffe90f98ce22d9da08cc97fc13a30234e9202708"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-m.json",
+      "blobSha": "a2ece4aa44f0fe73584d3deec8520ce686d72fd2"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-m2.json",
+      "blobSha": "33249acff036d302c0989ac2d589dfd95522af2f"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-n.json",
+      "blobSha": "310d87eeb681ebc07d88e18af4e8d0aab45f75fa"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-n2.json",
+      "blobSha": "e68fcc3bd43cd423b54b7a291fd48e670d289147"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-o.json",
+      "blobSha": "3d769854ee57821f2ec3cee5f101645bcda4f5c5"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-o2.json",
+      "blobSha": "11290ac359572c866837d710416cecf19739cd71"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-p.json",
+      "blobSha": "0da4d1ca3ea98db57a5e4a820e507635c2ed28f4"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-p2.json",
+      "blobSha": "f28f4d10c6663980d2e00ea8dfce56ffbec4c0da"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-q.json",
+      "blobSha": "26734ba32a6544ef1974dbb8926ca6e80678480d"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-q2.json",
+      "blobSha": "e6e0c7857ee7616a53ae490860ea3ef628f42741"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-r.json",
+      "blobSha": "9a80d71fb6eb77691da4d546369f1636af7e7971"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-r2.json",
+      "blobSha": "94c06759c8bd32975f227965877c71866db625ec"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-s.json",
+      "blobSha": "9d5afd33e7a83300964cd6c78218c63fadc64f26"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-s2.json",
+      "blobSha": "72b5d32241f71d704cfd96e24cfce8ae5a7b4dde"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-t.json",
+      "blobSha": "cf65f3834caf4e67f65579b75dac3783bf62d28b"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-t2.json",
+      "blobSha": "42be4a810a6d4a733c6002a8cb0c03a8061d336a"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-u.json",
+      "blobSha": "39f499be37605a3918b974efbddfb5d9acbba938"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-u2.json",
+      "blobSha": "894d11f97c3bacf001169a2c3927cb99fac8bbcc"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-v.json",
+      "blobSha": "d403846c8de929226ec31168e27ba88e552a2d31"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-v2.json",
+      "blobSha": "909254f6662bb4f86195256f860fb5dbd4b13a91"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-w.json",
+      "blobSha": "f867a402323f2ba41d46f0c0f53c3030c412b5e7"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-w2.json",
+      "blobSha": "2762deb9f9b07a211c900dc1a3885fc8c4170893"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-x.json",
+      "blobSha": "ad75c076c1e0f6fd6bb9d9fa85d757b17f642425"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-x2.json",
+      "blobSha": "6ba6bd1da441ed408f5dd46418cfc34309b8a3b9"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-y.json",
+      "blobSha": "f056c5b2b8bc88ba30b488b86a2e17b141019593"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-y2.json",
+      "blobSha": "2cd9c8d8fca30f69dd2183e6344080dcfcc7581f"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-z.json",
+      "blobSha": "af8dfcd2643421cef8cb98a620084aaccc627038"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/batches/batch-z2.json",
+      "blobSha": "d8e19d44d99e5e78eb13fabb249fad34786abcaf"
+    },
+    {
+      "path": "data/recovery/canonical-ledger/corpus/manifest.json",
+      "blobSha": "6ee80e3b99634bd56d6b25019bac6046b1c5996e"
+    }
+  ]
+}
