@@ -30,7 +30,7 @@ function PeopleLogin() {
         <p className="text-xs font-black uppercase tracking-[0.2em] text-[#3474b8]">PEOPLE & SOCIAL</p>
         <h1 className="mt-2 text-3xl font-black text-[#173f72]">Σύνδεση ανθρώπων με πραγματική ταυτότητα.</h1>
         <p className="mt-3 text-slate-600">Για People, requests και messages χρειάζεται λογαριασμός Pantavion.</p>
-        <div className="mt-6 flex gap-2"><Link href="/auth/login" className="rounded-full bg-[#2467aa] px-5 py-2.5 text-sm font-black text-white no-underline">Σύνδεση</Link><Link href="/auth/sign-up" className="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-black text-slate-700 no-underline">Εγγραφή</Link></div>
+        <div className="mt-6 flex gap-2"><Link href="/auth/login" className="rounded-full bg-[#2467aa] px-5 py-2.5 text-sm font-black text-white no-underline">Σύνδεση</Link><Link href="/auth/register" className="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-black text-slate-700 no-underline">Εγγραφή</Link></div>
       </section>
     </main>
   );
