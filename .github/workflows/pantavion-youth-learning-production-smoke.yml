@@ -1,0 +1,114 @@
+name: Pantavion Youth Learning Production Smoke
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/pantalearn/**"
+      - "app/minors/**"
+      - "app/api/pantavion/learn/**"
+      - "app/api/pantavion/curriculum/**"
+      - "app/api/pantavion/youth-policy/**"
+      - "core/learning/**"
+      - "core/governance/adaptive-ecosystem-policy.ts"
+      - "core/governance/youth-capability-benefit-engine.ts"
+      - ".github/workflows/pantavion-youth-learning-production-smoke.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/pantavion-youth-learning-production-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  youth-learning-production-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      BASE_URL: https://pantavion.com
+    steps:
+      - name: Wait for exact main revision in production
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 40); do
+            echo "Production revision attempt $attempt/40"
+            code=$(curl -sS -L --connect-timeout 10 --max-time 20 \
+              -o /tmp/social-health.json -w "%{http_code}" \
+              "$BASE_URL/api/social/health" || true)
+            revision=$(jq -r '.revision // empty' /tmp/social-health.json 2>/dev/null || true)
+            ok=$(jq -r '.ok // false' /tmp/social-health.json 2>/dev/null || echo false)
+            echo "HTTP=$code revision=${revision:-<none>} expected=$GITHUB_SHA"
+            if [ "$code" = "200" ] && [ "$ok" = "true" ] && [ "$revision" = "$GITHUB_SHA" ]; then
+              echo "Exact production revision verified."
+              break
+            fi
+            if [ "$attempt" = "40" ]; then
+              echo "::error::Production did not reach exact main revision $GITHUB_SHA."
+              exit 1
+            fi
+            sleep 15
+          done
+
+      - name: Verify PantaLearn live surface
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -L --connect-timeout 10 --max-time 30 \
+            -o /tmp/pantalearn.html -w "%{http_code}" \
+            "$BASE_URL/pantalearn")
+          test "$code" = "200"
+          grep -q "PantaLearn" /tmp/pantalearn.html
+          echo "PantaLearn live surface VERIFIED."
+
+      - name: Verify Youth Safe live surface
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -L --connect-timeout 10 --max-time 30 \
+            -o /tmp/minors.html -w "%{http_code}" \
+            "$BASE_URL/minors")
+          test "$code" = "200"
+          grep -q "Youth Safe Architecture" /tmp/minors.html
+          echo "Youth Safe live surface VERIFIED."
+
+      - name: Verify Country Curriculum runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sS -L --fail-with-body --connect-timeout 10 --max-time 30 \
+            "$BASE_URL/api/pantavion/curriculum?country=CY&language=el" \
+            -o /tmp/curriculum.json
+          jq -e '.ok == true and .contract == "pantavion-country-curriculum-v1" and (.decision != null)' \
+            /tmp/curriculum.json >/dev/null
+          echo "Country Curriculum runtime VERIFIED."
+
+      - name: Verify Youth Policy runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sS -L --fail-with-body --connect-timeout 10 --max-time 30 \
+            "$BASE_URL/api/pantavion/youth-policy?country=CY&age=12" \
+            -o /tmp/youth-policy.json
+          jq -e '.ok == true and .contract == "pantavion-youth-policy-v1" and (.decisions | length > 0)' \
+            /tmp/youth-policy.json >/dev/null
+          echo "Youth Policy runtime VERIFIED."
+
+      - name: Verify Scan-to-Learn authentication boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -L --connect-timeout 10 --max-time 30 \
+            -o /tmp/scan-to-learn.json -w "%{http_code}" \
+            -X POST "$BASE_URL/api/pantavion/learn/scan" \
+            -H 'Content-Type: application/json' \
+            --data '{"learnerRequest":"Explain this concept step by step."}' || true)
+          echo "Scan-to-Learn HTTP=$code"
+          cat /tmp/scan-to-learn.json || true
+          test "$code" = "401"
+          jq -e '.ok == false and .error == "authentication_required"' \
+            /tmp/scan-to-learn.json >/dev/null
+          echo "Scan-to-Learn route + auth boundary VERIFIED."
