@@ -3,6 +3,13 @@ import { executePersonalAIMultimodal } from "@/core/intelligence/personal-ai-mul
 import { buildPantavionMasterySystemInstruction } from "@/core/learning/mastery-learning-policy";
 import { resolvePantavionScanLearningPolicy } from "@/core/learning/scan-to-learn-policy";
 
+export type PantavionScanAttachment = {
+  name?: unknown;
+  mediaType?: unknown;
+  dataBase64?: unknown;
+  size?: unknown;
+};
+
 export type PantavionScanToLearnInput = {
   learnerRequest?: string;
   source?: "camera_photo" | "uploaded_image" | "uploaded_pdf" | "screenshot" | "typed_text" | "handwritten_notes" | "worksheet" | "textbook_page" | "teacher_board" | "unknown";
@@ -12,7 +19,7 @@ export type PantavionScanToLearnInput = {
   curriculumCoverage?: "verified_match" | "verified_partial" | "coverage_missing";
   originalLanguage?: string | null;
   threadId?: string | null;
-  attachments?: unknown[];
+  attachments?: PantavionScanAttachment[];
 };
 
 function clean(value: unknown, max = 160): string {
