@@ -66,8 +66,28 @@ expect('core/intelligence/personal-ai-advanced-memory.ts', [
   'never rewrites, deletes, verifies or resolves a memory automatically',
 ]);
 
+expect('core/intelligence/personal-ai-language-understanding.ts', [
+  'understandPersonalAIText',
+  'PANTAVION_HLU_MODEL',
+  'PANTAVION_HLU_ENABLED',
+  'Greeklish',
+  'code-switching',
+  'Never translate the message into another language',
+  'protectedTokens',
+  'integrityAccepted',
+  'preservedOriginal: true',
+  'translated: false',
+  'disallowPromptTraining: true',
+]);
+
 expect('core/intelligence/personal-ai-multimodal-runtime.ts', [
   'executePersonalAIMultimodal',
+  'understandPersonalAIText',
+  'ORIGINAL USER TEXT — SOURCE OF TRUTH',
+  'languageUnderstanding',
+  'normalizationApplied',
+  'integrityAccepted',
+  'content: sourceInput',
   'VERCEL_OIDC_TOKEN',
   'AI_GATEWAY_API_KEY',
   'MAX_ATTACHMENT_BYTES',
@@ -165,5 +185,5 @@ console.log(JSON.stringify({
   ok: true,
   gate: 'pantavion-personal-ai-runtime',
   checked: checks.length,
-  truth: 'This gate verifies authenticated Personal AI, continuity, memory health, OIDC multimodal input, and bounded voice-to-STT-to-Personal-AI wiring. It does not claim microphone permission, provider availability, or authenticated production smoke.',
+  truth: 'This gate verifies authenticated Personal AI, continuity, memory health, OIDC multimodal input, voice continuity, and conservative HLU with original-text preservation. It does not claim provider availability or authenticated production smoke.',
 }, null, 2));
