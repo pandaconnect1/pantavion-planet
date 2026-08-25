@@ -696,7 +696,7 @@ async function executeQueuedAgent(input: {
   const executionInput = parseAgentExecutionInput(claimed.input);
 
   if (!executionInput || executionInput.agent.state !== "ready_for_internal_runtime") {
-    let failed = appendCheckpoint(
+    const failed = appendCheckpoint(
       {
         ...claimed,
         status: "failed",
@@ -719,7 +719,7 @@ async function executeQueuedAgent(input: {
           summary: "The queued agent input failed validation and was preserved for bounded repair.",
         })
       : null;
-    failed = await attachBlockerResolutions({
+    await attachBlockerResolutions({
       record: failed,
       resolutions: resolution ? [resolution] : [],
       store: input.store,
@@ -739,7 +739,7 @@ async function executeQueuedAgent(input: {
     return { outcome: "failed", repairQueued };
   }
 
-  let running = appendCheckpoint(
+  const running = appendCheckpoint(
     {
       ...claimed,
       status: "running",

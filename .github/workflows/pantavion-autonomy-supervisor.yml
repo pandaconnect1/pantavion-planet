@@ -24,7 +24,7 @@ jobs:
           node-version: 22
 
       - name: Install
-        run: npm install
+        run: npm ci --no-audit --no-fund
 
       - name: Run Pantavion autonomy supervisor
         id: supervisor

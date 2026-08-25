@@ -19,10 +19,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install
-        run: npm install
+        run: npm ci --no-audit --no-fund
 
       - name: Pantavion continuity audit
         run: npm run audit:continuity-runtime

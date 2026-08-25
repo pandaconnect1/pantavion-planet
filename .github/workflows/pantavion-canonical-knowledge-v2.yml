@@ -24,8 +24,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Install dependencies without lockfile
-        run: npm install --no-audit --no-fund
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
       - name: Generate module-aware corpus
         run: npm run knowledge:excavate:v2
       - name: Marry screenshot learnings to every recovered record
