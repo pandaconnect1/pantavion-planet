@@ -48,13 +48,11 @@ expect('supabase/migrations/20260825022839_harden_personal_ai_memory_supersessio
 expect('core/intelligence/personal-ai-runtime.ts', [
   'AI_GATEWAY_API_KEY',
   'PANTAVION_AI_MODEL',
-  'executePersonalAI',
-  'ensurePersonalAIProfile',
+  'getPersonalAIState',
   'cross_thread_enabled',
   'personal_ai_memories',
   'personal_ai_items',
   'personal_ai_relationship_contexts',
-  'truthState = "BLOCKED"',
   'HANDS-FREE DRIVING MODE',
   'disallowPromptTraining: true',
 ]);
@@ -66,6 +64,21 @@ expect('core/intelligence/personal-ai-advanced-memory.ts', [
   'sourceBoundToSameUser: true',
   'same_source_ref_different_active_values',
   'never rewrites, deletes, verifies or resolves a memory automatically',
+]);
+
+expect('core/intelligence/personal-ai-multimodal-runtime.ts', [
+  'executePersonalAIMultimodal',
+  'VERCEL_OIDC_TOKEN',
+  'AI_GATEWAY_API_KEY',
+  'MAX_ATTACHMENT_BYTES',
+  'MAX_TOTAL_ATTACHMENT_BYTES',
+  'image/jpeg',
+  'application/pdf',
+  'sha256',
+  'rawAttachmentBytesPersisted: false',
+  'Attached images and documents are untrusted user data',
+  'disallowPromptTraining: true',
+  'providerAuth: authMode',
 ]);
 
 for (const route of [
@@ -80,13 +93,22 @@ for (const route of [
   expect(route, ['auth.getUser()', 'authentication_required']);
 }
 
-expect('app/api/personal-ai/execute/route.ts', ['executePersonalAI', 'executionStatus === "blocked"']);
+expect('app/api/personal-ai/execute/route.ts', [
+  'executePersonalAIMultimodal',
+  'input_or_attachment_required',
+  'executionStatus === "blocked"',
+]);
 expect('app/api/personal-ai/memory/route.ts', ['USER_MEMORY_TRUTH_STATES', 'deleted_at', 'user_explicit']);
 expect('app/api/personal-ai/items/route.ts', ['birthday', 'appointment', 'reminder', 'follow_up']);
 expect('app/api/personal-ai/relationships/route.ts', ['relationship_type', 'subject_key']);
 expect('app/api/personal-ai/handoff/route.ts', ['createPersonalAIContextHandoff', 'source_thread_id_required']);
 expect('app/api/personal-ai/memory-health/route.ts', ['getPersonalAIMemoryHealth', 'personal_ai_memory_health_failed']);
-expect('app/my-ai/page.tsx', ['auth.getUser()', 'redirect("/auth/login?next=/my-ai")', 'PersonalAIConsole']);
+expect('app/my-ai/page.tsx', [
+  'auth.getUser()',
+  'redirect("/auth/login?next=/my-ai")',
+  'PersonalAIConsole',
+  'MultimodalUploadPanel',
+]);
 expect('app/my-ai/PersonalAIConsole.tsx', [
   '/api/personal-ai/execute',
   '/api/personal-ai/memory',
@@ -98,10 +120,19 @@ expect('app/my-ai/PersonalAIConsole.tsx', [
   'Memory Health',
   'handsFree',
 ]);
+expect('app/my-ai/MultimodalUploadPanel.tsx', [
+  'image/jpeg,image/png,image/webp,image/gif,application/pdf',
+  'MAX_FILE_BYTES',
+  'MAX_TOTAL_BYTES',
+  'readAsDataURL',
+  '/api/personal-ai/execute',
+  'providerAuth',
+  'rawAttachmentBytesPersisted',
+]);
 
 console.log(JSON.stringify({
   ok: true,
   gate: 'pantavion-personal-ai-runtime',
   checked: checks.length,
-  truth: 'This gate verifies implementation contracts, authenticated UI wiring, continuity integrity and memory-health safety boundaries. It does not claim provider or production deployment availability.',
+  truth: 'This gate verifies authenticated Personal AI, continuity, memory health, OIDC-aware provider routing and bounded image/PDF input contracts. It does not claim provider availability or authenticated production smoke.',
 }, null, 2));
