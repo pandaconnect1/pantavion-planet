@@ -1,0 +1,56 @@
+name: Pantavion Adaptive Policy Gate
+
+on:
+  pull_request:
+    paths:
+      - "core/governance/adaptive-ecosystem-policy.ts"
+      - "core/governance/country-adaptive-policy-registry.ts"
+      - "core/commerce/billing-truth-engine.ts"
+      - "core/intelligence/provider-neutral-routing-policy.ts"
+      - "scripts/pantavion-adaptive-policy-gate.ts"
+      - ".github/workflows/pantavion-adaptive-policy-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  adaptive-policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Repository typecheck
+        run: npm run typecheck
+
+      - name: Compile adaptive policy gate
+        run: |
+          rm -rf .tmp-adaptive-policy
+          npx tsc \
+            --target ES2022 \
+            --module commonjs \
+            --moduleResolution node \
+            --esModuleInterop true \
+            --strict \
+            --skipLibCheck \
+            --outDir .tmp-adaptive-policy \
+            core/identity/age-role-engine.ts \
+            core/governance/adaptive-ecosystem-policy.ts \
+            core/governance/country-adaptive-policy-registry.ts \
+            core/commerce/billing-truth-engine.ts \
+            core/intelligence/provider-neutral-routing-policy.ts \
+            scripts/pantavion-adaptive-policy-gate.ts
+
+      - name: Execute adaptive policy checks
+        run: node .tmp-adaptive-policy/scripts/pantavion-adaptive-policy-gate.js
