@@ -13,17 +13,25 @@ on:
       - "core/governance/youth-capability-benefit-engine.ts"
       - "core/learning/country-curriculum-policy.ts"
       - "core/learning/country-curriculum-registry.ts"
+      - "core/learning/mastery-learning-policy.ts"
+      - "core/learning/scan-to-learn-policy.ts"
+      - "core/learning/scan-to-learn-runtime.ts"
       - "core/commerce/billing-truth-engine.ts"
       - "core/intelligence/provider-neutral-routing-policy.ts"
       - "app/api/pantavion/youth-policy/route.ts"
       - "app/api/pantavion/curriculum/route.ts"
+      - "app/api/pantavion/learn/scan/route.ts"
       - "app/minors/page.tsx"
       - "app/minors/youth-policy-client.tsx"
       - "app/minors/curriculum-client.tsx"
+      - "app/pantalearn/page.tsx"
+      - "app/pantalearn/scan-to-learn-client.tsx"
       - "scripts/pantavion-adaptive-policy-gate.ts"
       - "scripts/pantavion-adaptive-assistance-gate.ts"
       - "scripts/pantavion-support-network-gate.ts"
       - "scripts/pantavion-youth-curriculum-gate.ts"
+      - "scripts/pantavion-mastery-learning-gate.ts"
+      - "scripts/pantavion-access-monotonicity-gate.ts"
       - ".github/workflows/pantavion-adaptive-policy-gate.yml"
   workflow_dispatch:
 
@@ -72,12 +80,16 @@ jobs:
             core/governance/youth-capability-benefit-engine.ts \
             core/learning/country-curriculum-policy.ts \
             core/learning/country-curriculum-registry.ts \
+            core/learning/mastery-learning-policy.ts \
+            core/learning/scan-to-learn-policy.ts \
             core/commerce/billing-truth-engine.ts \
             core/intelligence/provider-neutral-routing-policy.ts \
             scripts/pantavion-adaptive-policy-gate.ts \
             scripts/pantavion-adaptive-assistance-gate.ts \
             scripts/pantavion-support-network-gate.ts \
-            scripts/pantavion-youth-curriculum-gate.ts
+            scripts/pantavion-youth-curriculum-gate.ts \
+            scripts/pantavion-mastery-learning-gate.ts \
+            scripts/pantavion-access-monotonicity-gate.ts
 
       - name: Execute adaptive policy checks
         run: node .tmp-adaptive-policy/scripts/pantavion-adaptive-policy-gate.js
@@ -90,3 +102,9 @@ jobs:
 
       - name: Execute youth and curriculum checks
         run: node .tmp-adaptive-policy/scripts/pantavion-youth-curriculum-gate.js
+
+      - name: Execute mastery learning checks
+        run: node .tmp-adaptive-policy/scripts/pantavion-mastery-learning-gate.js
+
+      - name: Execute access monotonicity checks
+        run: node .tmp-adaptive-policy/scripts/pantavion-access-monotonicity-gate.js
