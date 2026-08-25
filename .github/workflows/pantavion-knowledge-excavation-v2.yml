@@ -1,0 +1,103 @@
+name: Pantavion Knowledge Excavation v2
+
+on:
+  pull_request:
+    paths:
+      - 'data/founder-vision-vault/**'
+      - 'data/runtime-reports/**'
+      - 'data/recovery/**'
+      - 'docs/**'
+      - 'app/**'
+      - 'core/**'
+      - 'services/**'
+      - 'scripts/pantavion-canonical-knowledge-excavation-v2.cjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/pantavion-knowledge-excavation-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  excavate:
+    name: Pantavion Knowledge Excavation
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout current canonical head
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Generate canonical knowledge corpus v2
+        run: npm run knowledge:excavate:v2
+
+      - name: Verify complete deterministic output
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const root = path.join('data', 'recovery', 'canonical-knowledge-v2');
+          const manifestPath = path.join(root, 'manifest.json');
+          const corpusPath = path.join(root, 'full-corpus.json');
+          if (!fs.existsSync(manifestPath) || !fs.existsSync(corpusPath)) {
+            throw new Error('Canonical knowledge v2 outputs are missing');
+          }
+          const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+          const corpus = JSON.parse(fs.readFileSync(corpusPath, 'utf8'));
+          const records = Array.isArray(corpus.records) ? corpus.records : [];
+          const batches = Array.isArray(manifest.batches) ? manifest.batches : [];
+          if (!Number.isInteger(manifest.totalRecords) || manifest.totalRecords <= 0) {
+            throw new Error(`Invalid totalRecords: ${manifest.totalRecords}`);
+          }
+          if (records.length !== manifest.totalRecords) {
+            throw new Error(`Corpus accounting mismatch: ${records.length} != ${manifest.totalRecords}`);
+          }
+          if (batches.length !== manifest.totalBatches || batches.length === 0) {
+            throw new Error('Batch accounting mismatch');
+          }
+          const accounted = batches.reduce((sum, batch) => sum + Number(batch.recordCount || 0), 0);
+          if (accounted !== manifest.totalRecords) {
+            throw new Error(`Unaccounted records: ${accounted} != ${manifest.totalRecords}`);
+          }
+          if (!/^[a-f0-9]{64}$/.test(String(manifest.corpusFingerprint || ''))) {
+            throw new Error('Invalid corpus fingerprint');
+          }
+          for (const batch of batches) {
+            const file = path.join(root, 'batches', `batch-${String(batch.batchLabel).toLowerCase()}.json`);
+            if (!fs.existsSync(file)) throw new Error(`Missing batch artifact: ${file}`);
+            const payload = JSON.parse(fs.readFileSync(file, 'utf8'));
+            if (!Array.isArray(payload.records) || payload.records.length !== batch.recordCount) {
+              throw new Error(`Batch record mismatch: ${batch.batchLabel}`);
+            }
+            if (batch.corpusFingerprint !== manifest.corpusFingerprint) {
+              throw new Error(`Batch fingerprint mismatch: ${batch.batchLabel}`);
+            }
+          }
+          console.log(JSON.stringify({
+            totalRecords: manifest.totalRecords,
+            totalBatches: manifest.totalBatches,
+            sourceCounts: manifest.sourceCounts,
+            moduleCounts: manifest.moduleCounts,
+            reviewCounts: manifest.reviewCounts,
+            corpusFingerprint: manifest.corpusFingerprint,
+            accountedRecords: accounted
+          }, null, 2));
+          NODE
+
+      - name: Upload immutable excavation evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-canonical-knowledge-v2-${{ github.sha }}
+          path: data/recovery/canonical-knowledge-v2
+          if-no-files-found: error
+          retention-days: 30
