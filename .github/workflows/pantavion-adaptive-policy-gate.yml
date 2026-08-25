@@ -10,11 +10,20 @@ on:
       - "core/governance/adaptive-assistance-signal-policy.ts"
       - "core/governance/support-network-routing-policy.ts"
       - "core/governance/experience-policy.ts"
+      - "core/governance/youth-capability-benefit-engine.ts"
+      - "core/learning/country-curriculum-policy.ts"
+      - "core/learning/country-curriculum-registry.ts"
       - "core/commerce/billing-truth-engine.ts"
       - "core/intelligence/provider-neutral-routing-policy.ts"
+      - "app/api/pantavion/youth-policy/route.ts"
+      - "app/api/pantavion/curriculum/route.ts"
+      - "app/minors/page.tsx"
+      - "app/minors/youth-policy-client.tsx"
+      - "app/minors/curriculum-client.tsx"
       - "scripts/pantavion-adaptive-policy-gate.ts"
       - "scripts/pantavion-adaptive-assistance-gate.ts"
       - "scripts/pantavion-support-network-gate.ts"
+      - "scripts/pantavion-youth-curriculum-gate.ts"
       - ".github/workflows/pantavion-adaptive-policy-gate.yml"
   workflow_dispatch:
 
@@ -60,11 +69,15 @@ jobs:
             core/governance/adaptive-assistance-signal-policy.ts \
             core/governance/support-network-routing-policy.ts \
             core/governance/experience-policy.ts \
+            core/governance/youth-capability-benefit-engine.ts \
+            core/learning/country-curriculum-policy.ts \
+            core/learning/country-curriculum-registry.ts \
             core/commerce/billing-truth-engine.ts \
             core/intelligence/provider-neutral-routing-policy.ts \
             scripts/pantavion-adaptive-policy-gate.ts \
             scripts/pantavion-adaptive-assistance-gate.ts \
-            scripts/pantavion-support-network-gate.ts
+            scripts/pantavion-support-network-gate.ts \
+            scripts/pantavion-youth-curriculum-gate.ts
 
       - name: Execute adaptive policy checks
         run: node .tmp-adaptive-policy/scripts/pantavion-adaptive-policy-gate.js
@@ -74,3 +87,6 @@ jobs:
 
       - name: Execute support network routing checks
         run: node .tmp-adaptive-policy/scripts/pantavion-support-network-gate.js
+
+      - name: Execute youth and curriculum checks
+        run: node .tmp-adaptive-policy/scripts/pantavion-youth-curriculum-gate.js
