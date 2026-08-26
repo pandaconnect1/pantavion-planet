@@ -6,6 +6,7 @@ on:
       - "scripts/pantavion-canonical-semantic-classification-v3.cjs"
       - ".github/workflows/pantavion-semantic-classification-v3.yml"
       - "data/recovery/imported-pr248/**"
+      - "data/recovery/production-truth/**"
   workflow_dispatch:
 
 permissions:
@@ -37,6 +38,17 @@ jobs:
           const source = fs.readdirSync(path.join(corpusRoot,"batches")).filter(x=>x.endsWith(".json")).sort().flatMap(name=>JSON.parse(fs.readFileSync(path.join(corpusRoot,"batches",name),"utf8")).records);
           const readline = require("readline");
           const manifest = JSON.parse(fs.readFileSync("data/recovery/canonical-semantic-v3/manifest.json","utf8"));
+          const productionTruth = JSON.parse(fs.readFileSync("data/recovery/production-truth/supabase-repository-evidence-20260826.json","utf8"));
+          const repoMigrations = productionTruth.repository.migrationFiles;
+          const appliedMigrations = productionTruth.supabase.appliedMigrations;
+          if (repoMigrations.count !== repoMigrations.items.length || appliedMigrations.count !== appliedMigrations.items.length) throw new Error("Production truth migration count mismatch");
+          const appliedNames = new Set(appliedMigrations.items.map(item=>item.name));
+          const exactMatches = repoMigrations.items.filter(item=>appliedNames.has(item.file.replace(/^\\d+_/,"").replace(/\\.sql$/,""))).length;
+          if (exactMatches !== productionTruth.reconciliation.exactMigrationNameMatches) throw new Error("Migration reconciliation exact-match mismatch");
+          if (productionTruth.reconciliation.decision !== "HOLD_NON_EXACT") throw new Error("Non-exact migrations must remain HOLD");
+          if (!productionTruth.supabase.publicTables.allRlsEnabled) throw new Error("Production truth reports a public table without RLS");
+          if (productionTruth.supabase.registrationGate.publicRegistrationEnabled) throw new Error("Public registration truth gate unexpectedly enabled");
+          if (!manifest.externalProductionTruth || manifest.externalProductionTruth.repositoryMigrationFiles !== repoMigrations.count || manifest.externalProductionTruth.appliedMigrations !== appliedMigrations.count) throw new Error("Manifest omitted repository/Supabase truth evidence");
           if (receipt.totalRecords !== 82413 || source.length !== 82413) throw new Error("82,413-record source preservation mismatch");
           if (manifest.sourceFingerprint !== receipt.corpusFingerprint || manifest.recordCount !== 82413 || manifest.preservedRecordCount !== 82413) throw new Error("Manifest/receipt mismatch");
           (async () => {
@@ -81,7 +93,13 @@ jobs:
             const manifestAnchored = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathAnchored || 0),0);
             const manifestReassigned = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathReassigned || 0),0);
             if (manifestAnchored !== pathAnchored || manifestReassigned !== pathReassigned) throw new Error("Path-anchor manifest accounting mismatch");
-            console.log(JSON.stringify({ ...manifest.completion, pathAnchored, pathReassigned }));
+            const criticalModules = ['Identity / Auth / Consent','Safety / Trust / Minors','Kernel / Guardian / Runtime','People','Social / Pulse / Communities','Chat','Interpreter / Translation'];
+            for (const module of criticalModules) {
+              const gap = manifest.moduleSummary[module];
+              if (!gap || !gap.externalEvidence || !gap.externalEvidence.repositoryMigrationFiles.length || !gap.externalEvidence.appliedMigrations.length) throw new Error("Missing external migration evidence for "+module);
+              if (!productionTruth.repository.verificationArtifacts.conventionalTests.count && !gap.missingCombinedEvidenceCategories.includes("tests")) throw new Error("Gates/audits were incorrectly treated as conventional tests for "+module);
+            }
+            console.log(JSON.stringify({ ...manifest.completion, pathAnchored, pathReassigned, externalProductionTruth:manifest.externalProductionTruth }));
           })().catch(error => { console.error(error); process.exit(1); });
           NODE
       - name: Upload semantic ledger and module gap map
