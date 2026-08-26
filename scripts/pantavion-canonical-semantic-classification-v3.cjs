@@ -3,7 +3,8 @@ const path = require('path');
 const crypto = require('crypto');
 
 const root = process.cwd();
-const inputPath = path.join(root, 'data/recovery/canonical-knowledge-v2/full-corpus.json');
+const generatedInputPath = path.join(root, 'data/recovery/canonical-knowledge-v2/full-corpus.json');
+const committedCorpusRoot = path.join(root, 'data/recovery/imported-pr248/canonical-ledger/corpus');
 const outRoot = path.join(root, 'data/recovery/canonical-semantic-v3');
 
 const ontology = {
@@ -67,8 +68,28 @@ function classify(record) {
 }
 function fingerprint(records) { return crypto.createHash('sha256').update(records.map(r => r.id).join('\n')).digest('hex'); }
 
-if (!fs.existsSync(inputPath)) throw new Error('Missing canonical input: ' + inputPath);
-const input = JSON.parse(fs.readFileSync(inputPath, 'utf8'));
+function loadCanonicalInput() {
+  const receiptPath = path.join(committedCorpusRoot, 'MATERIALIZATION_RECEIPT.json');
+  const batchesRoot = path.join(committedCorpusRoot, 'batches');
+  if (fs.existsSync(receiptPath) && fs.existsSync(batchesRoot)) {
+    const receipt = JSON.parse(fs.readFileSync(receiptPath, 'utf8'));
+    const batchFiles = fs.readdirSync(batchesRoot).filter(name => name.endsWith('.json')).sort();
+    const records = [];
+    for (const name of batchFiles) {
+      const batch = JSON.parse(fs.readFileSync(path.join(batchesRoot, name), 'utf8'));
+      if (!Array.isArray(batch.records)) throw new Error('Committed batch has no records: ' + name);
+      records.push(...batch.records);
+    }
+    if (records.length !== receipt.totalRecords || batchFiles.length !== receipt.totalBatches) {
+      throw new Error('Committed corpus receipt mismatch: records=' + records.length + ', batches=' + batchFiles.length);
+    }
+    return { manifest: { id:receipt.id, corpusFingerprint:receipt.corpusFingerprint }, records, source:'committed-canonical-ledger' };
+  }
+  if (!fs.existsSync(generatedInputPath)) throw new Error('Missing canonical corpus ledger and generated fallback');
+  return { ...JSON.parse(fs.readFileSync(generatedInputPath, 'utf8')), source:'generated-v2-fallback' };
+}
+
+const input = loadCanonicalInput();
 if (!Array.isArray(input.records)) throw new Error('Canonical input records are missing');
 const before = input.records.map(r => r.id);
 if (new Set(before).size !== before.length) throw new Error('Input contains duplicate record IDs');
