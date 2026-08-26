@@ -117,15 +117,20 @@ if (before.length !== after.length || before.some((id,i) => id !== after[i])) th
 
 const counts = records.reduce((a,r) => { a[r.reviewStatus] = (a[r.reviewStatus] || 0) + 1; return a; }, {});
 const moduleSummary = {};
+const reviewReasonSummary = {};
 for (const r of records) {
   const module = r.classification.module || 'UNCLASSIFIED';
-  const target = moduleSummary[module] ||= { total:0, classified:0, reviewRequired:0, subsystems:{}, capabilities:{} };
+  const target = moduleSummary[module] ||= { total:0, classified:0, reviewRequired:0, subsystems:{}, capabilities:{}, reviewReasons:{} };
   target.total++;
   if (r.reviewStatus === 'SEMANTICALLY_CLASSIFIED') target.classified++; else target.reviewRequired++;
   if (r.classification.subsystem) target.subsystems[r.classification.subsystem] = (target.subsystems[r.classification.subsystem] || 0) + 1;
   if (r.classification.capability) target.capabilities[r.classification.capability] = (target.capabilities[r.classification.capability] || 0) + 1;
+  for (const reason of r.semanticReviewReasons || []) {
+    reviewReasonSummary[reason] = (reviewReasonSummary[reason] || 0) + 1;
+    target.reviewReasons[reason] = (target.reviewReasons[reason] || 0) + 1;
+  }
 }
-const manifest = { id:'pantavion_canonical_semantic_v3', generatedAt:new Date().toISOString(), sourceManifest:input.manifest && input.manifest.id, sourceFingerprint:input.manifest && input.manifest.corpusFingerprint, recordCount:records.length, preservedRecordCount:before.length, idFingerprint:fingerprint(records), counts, moduleSummary, completion:{ complete:!counts.REVIEW_REQUIRED, semanticallyClassified:counts.SEMANTICALLY_CLASSIFIED || 0, reviewRequired:counts.REVIEW_REQUIRED || 0 }, truthRule:'No record is final, mergeable, deletable, implemented, deployed, or live merely because deterministic routing succeeded. Semantic review and implementation evidence remain mandatory.' };
+const manifest = { id:'pantavion_canonical_semantic_v3', generatedAt:new Date().toISOString(), sourceManifest:input.manifest && input.manifest.id, sourceFingerprint:input.manifest && input.manifest.corpusFingerprint, recordCount:records.length, preservedRecordCount:before.length, idFingerprint:fingerprint(records), counts, reviewReasonSummary, moduleSummary, completion:{ complete:!counts.REVIEW_REQUIRED, semanticallyClassified:counts.SEMANTICALLY_CLASSIFIED || 0, reviewRequired:counts.REVIEW_REQUIRED || 0 }, truthRule:'No record is final, mergeable, deletable, implemented, deployed, or live merely because deterministic routing succeeded. Semantic review and implementation evidence remain mandatory.' };
 fs.mkdirSync(outRoot,{recursive:true});
 fs.writeFileSync(path.join(outRoot,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');
 const ledgerPath = path.join(outRoot,'semantic-ledger.ndjson');
