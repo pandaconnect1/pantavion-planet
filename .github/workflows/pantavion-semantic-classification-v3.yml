@@ -44,6 +44,7 @@ jobs:
             const lines = readline.createInterface({input,crlfDelay:Infinity});
             let index = 0;
             let falselyFinal = 0;
+            let recursiveArtifacts = 0;
             for await (const line of lines) {
               if (!line.trim()) continue;
               if (index >= source.length) throw new Error("Semantic ledger contains extra records");
@@ -51,10 +52,16 @@ jobs:
               if (source[index].id !== record.id) throw new Error("Record ID/order changed at "+index);
               if (JSON.stringify(source[index].provenance) !== JSON.stringify(record.provenance)) throw new Error("Provenance changed at "+index);
               if (record.reviewStatus==="SEMANTICALLY_CLASSIFIED"&&(!record.classification.subsystem||!record.classification.capability||!record.classification.feature||!record.classification.canonicalTarget)) falselyFinal++;
+              const recursiveSource = String(record.provenance && record.provenance.sourceFile || "").startsWith("data/recovery/canonical-ledger/corpus/batches/");
+              if (record.reviewStatus==="PRESERVED_RECURSIVE_ARTIFACT") {
+                if (!recursiveSource || record.semanticDecision!=="PRESERVE_QUARANTINE") throw new Error("Invalid recursive artifact disposition at "+index);
+                recursiveArtifacts++;
+              } else if (recursiveSource) throw new Error("Recursive ledger artifact escaped quarantine at "+index);
               index++;
             }
             if (index !== 82413) throw new Error("Semantic ledger record count mismatch: "+index);
             if (falselyFinal) throw new Error("Found falsely classified records: "+falselyFinal);
+            if (recursiveArtifacts !== 50279 || manifest.completion.preservedRecursiveArtifacts !== 50279) throw new Error("Recursive artifact quarantine mismatch: "+recursiveArtifacts);
             console.log(JSON.stringify(manifest.completion));
           })().catch(error => { console.error(error); process.exit(1); });
           NODE
