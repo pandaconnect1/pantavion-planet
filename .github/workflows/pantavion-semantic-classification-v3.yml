@@ -45,6 +45,10 @@ jobs:
             let index = 0;
             let falselyFinal = 0;
             let recursiveArtifacts = 0;
+            let pathAnchored = 0;
+            let pathReassigned = 0;
+            let pathAnchorMismatches = 0;
+            let artifactTypeMismatches = 0;
             for await (const line of lines) {
               if (!line.trim()) continue;
               if (index >= source.length) throw new Error("Semantic ledger contains extra records");
@@ -52,6 +56,16 @@ jobs:
               if (source[index].id !== record.id) throw new Error("Record ID/order changed at "+index);
               if (JSON.stringify(source[index].provenance) !== JSON.stringify(record.provenance)) throw new Error("Provenance changed at "+index);
               if (record.reviewStatus==="SEMANTICALLY_CLASSIFIED"&&(!record.classification.subsystem||!record.classification.capability||!record.classification.feature||!record.classification.canonicalTarget)) falselyFinal++;
+              const evidence = record.classification && record.classification.classificationEvidence;
+              const anchor = evidence && evidence.pathAnchor;
+              if (anchor) {
+                pathAnchored++;
+                if (record.classification.module !== anchor.module || record.classification.subsystem !== anchor.subsystem) pathAnchorMismatches++;
+                if (evidence.seedModule !== record.classification.module) pathReassigned++;
+              }
+              const sourceFile = String(record.provenance && record.provenance.sourceFile || "");
+              if (sourceFile.startsWith(".github/") && record.classification.artifactType !== "automation") artifactTypeMismatches++;
+              if (sourceFile.startsWith("data/runtime-reports/") && record.classification.artifactType !== "runtime-evidence") artifactTypeMismatches++;
               const recursiveSource = String(record.provenance && record.provenance.sourceFile || "").startsWith("data/recovery/canonical-ledger/corpus/batches/");
               if (record.reviewStatus==="PRESERVED_RECURSIVE_ARTIFACT") {
                 if (!recursiveSource || record.semanticDecision!=="PRESERVE_QUARANTINE") throw new Error("Invalid recursive artifact disposition at "+index);
@@ -62,7 +76,12 @@ jobs:
             if (index !== 82413) throw new Error("Semantic ledger record count mismatch: "+index);
             if (falselyFinal) throw new Error("Found falsely classified records: "+falselyFinal);
             if (recursiveArtifacts !== 50279 || manifest.completion.preservedRecursiveArtifacts !== 50279) throw new Error("Recursive artifact quarantine mismatch: "+recursiveArtifacts);
-            console.log(JSON.stringify(manifest.completion));
+            if (!pathAnchored || pathAnchorMismatches) throw new Error("Source-path anchor regression: anchored="+pathAnchored+", mismatches="+pathAnchorMismatches);
+            if (artifactTypeMismatches) throw new Error("Artifact-type path regression: "+artifactTypeMismatches);
+            const manifestAnchored = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathAnchored || 0),0);
+            const manifestReassigned = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathReassigned || 0),0);
+            if (manifestAnchored !== pathAnchored || manifestReassigned !== pathReassigned) throw new Error("Path-anchor manifest accounting mismatch");
+            console.log(JSON.stringify({ ...manifest.completion, pathAnchored, pathReassigned }));
           })().catch(error => { console.error(error); process.exit(1); });
           NODE
       - name: Upload semantic ledger and module gap map
