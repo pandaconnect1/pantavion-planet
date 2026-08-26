@@ -128,6 +128,12 @@ for (const r of records) {
 const manifest = { id:'pantavion_canonical_semantic_v3', generatedAt:new Date().toISOString(), sourceManifest:input.manifest && input.manifest.id, sourceFingerprint:input.manifest && input.manifest.corpusFingerprint, recordCount:records.length, preservedRecordCount:before.length, idFingerprint:fingerprint(records), counts, moduleSummary, completion:{ complete:!counts.REVIEW_REQUIRED, semanticallyClassified:counts.SEMANTICALLY_CLASSIFIED || 0, reviewRequired:counts.REVIEW_REQUIRED || 0 }, truthRule:'No record is final, mergeable, deletable, implemented, deployed, or live merely because deterministic routing succeeded. Semantic review and implementation evidence remain mandatory.' };
 fs.mkdirSync(outRoot,{recursive:true});
 fs.writeFileSync(path.join(outRoot,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');
-fs.writeFileSync(path.join(outRoot,'semantic-ledger.json'),JSON.stringify({manifest,records},null,2)+'\n');
+const ledgerPath = path.join(outRoot,'semantic-ledger.ndjson');
+const ledgerFd = fs.openSync(ledgerPath,'w');
+try {
+  for (const record of records) fs.writeSync(ledgerFd,JSON.stringify(record)+'\n');
+} finally {
+  fs.closeSync(ledgerFd);
+}
 fs.writeFileSync(path.join(outRoot,'module-gap-map.json'),JSON.stringify(moduleSummary,null,2)+'\n');
 console.log(JSON.stringify(manifest,null,2));
