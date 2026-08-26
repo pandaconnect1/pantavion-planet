@@ -1,0 +1,904 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-26T21:52:14Z",
+  "truthBoundary": "Read-only evidence snapshot. Repository presence is not proof of application; Supabase migration history is not proof of authenticated E2E or VERIFIED_LIVE. Non-exact migration names remain REVIEW_REQUIRED.",
+  "repository": {
+    "fullName": "pandaconnect1/pantavion-planet",
+    "revision": "668cee1aef1e61b487b8fc7ed2fb4b87aa0dcccb",
+    "treeEntries": 2049,
+    "blobs": 1540,
+    "migrationFiles": {
+      "count": 63,
+      "items": [
+        {
+          "file": "20260725155000_create_profiles.sql",
+          "sha": "8b9b67129285525dbcda802ea821422e90dc9e2d",
+          "size": 1977
+        },
+        {
+          "file": "20260810200000_create_human_communication_core.sql",
+          "sha": "c4be132fdf5aec5e0980e8296df34c8ad189f0ac",
+          "size": 18561
+        },
+        {
+          "file": "20260810200100_fix_profile_visibility_rls.sql",
+          "sha": "aa84f5d87db6e2669c30d9f500cb4913b4efe57d",
+          "size": 2747
+        },
+        {
+          "file": "20260810214500_add_human_communication_runtime_rpcs.sql",
+          "sha": "e512a00c53abe306ee6e597b61e028f936ef794e",
+          "size": 7591
+        },
+        {
+          "file": "20260810223000_create_media_news_listings_core.sql",
+          "sha": "129187dca378351b14135bf62637b27b2d4a972f",
+          "size": 8741
+        },
+        {
+          "file": "20260810232000_create_billing_entitlements_revenue_core.sql",
+          "sha": "64501b08aea17e01e28b292e790e2ed391f471d4",
+          "size": 4722
+        },
+        {
+          "file": "20260810234500_create_platform_roles_and_moderation_audit.sql",
+          "sha": "e1a2df2d3817318fcd78644d2635df1747a03aea",
+          "size": 3147
+        },
+        {
+          "file": "20260810235000_create_atomic_listing_moderation.sql",
+          "sha": "39ea03959268f192eb7495789797d0ebba7514a6",
+          "size": 3126
+        },
+        {
+          "file": "20260811000000_create_listing_promotion_orders.sql",
+          "sha": "4800652219be822ff657650e3a18c800a4a7147e",
+          "size": 3489
+        },
+        {
+          "file": "20260811001000_apply_listing_promotion_from_verified_webhook.sql",
+          "sha": "1d43d3345d001c93bd38b9ee33d299f31eab2820",
+          "size": 2363
+        },
+        {
+          "file": "20260811002000_create_durable_execution_runtime.sql",
+          "sha": "e3fa840081c91b46a58c88d294830f747c3d340c",
+          "size": 3650
+        },
+        {
+          "file": "20260811003000_create_continuity_graph_runtime.sql",
+          "sha": "0e906830339fb02d380b2a2309a20fc71199d31d",
+          "size": 3957
+        },
+        {
+          "file": "20260811042500_create_personal_media_library.sql",
+          "sha": "75c27cced3568ed39809d8e5ac58159f8d555ec6",
+          "size": 2435
+        },
+        {
+          "file": "20260811050000_create_social_flagship_core.sql",
+          "sha": "e9f381b15762dda64807b5a1332e686cf41ee9a4",
+          "size": 7385
+        },
+        {
+          "file": "20260811050500_create_social_location_sharing.sql",
+          "sha": "519baed233d965a1dec44e1f6e275798556b8846",
+          "size": 2830
+        },
+        {
+          "file": "20260811051200_create_emergency_location_core.sql",
+          "sha": "90cc2d299107c5672738acb357389123bbbc3c27",
+          "size": 3192
+        },
+        {
+          "file": "20260811084000_link_social_posts_to_personal_media.sql",
+          "sha": "a333b1468f4a85398b23f70a58fa70119ffc6e99",
+          "size": 2417
+        },
+        {
+          "file": "20260811100000_create_private_contact_discovery.sql",
+          "sha": "7dff8c7624020ba36e8c33eadeae8d2f79fe6b0d",
+          "size": 7035
+        },
+        {
+          "file": "20260811101500_social_map_visibility_and_selected_audience.sql",
+          "sha": "d7bdb66e0d88d155283495779ace29aff9d9feee",
+          "size": 2929
+        },
+        {
+          "file": "20260812205000_harden_social_data_api_access.sql",
+          "sha": "52016ae90dbceaa234b5073120aa481a1307c997",
+          "size": 2048
+        },
+        {
+          "file": "20260813082000_fix_public_listing_anon_read.sql",
+          "sha": "60cc6bd556387646c9f7e0850b7e34f511fd532d",
+          "size": 211
+        },
+        {
+          "file": "20260813171740_secure_identity_registration_core.sql",
+          "sha": "3726a860ca07b79b11e3adff93f2efdc4244e099",
+          "size": 10741
+        },
+        {
+          "file": "20260813172301_restrict_identity_profile_rpc_to_authenticated.sql",
+          "sha": "c7f85f0834f0fa9c3fddcf94514129665a3b89e6",
+          "size": 242
+        },
+        {
+          "file": "20260813172532_restrict_identity_trigger_functions.sql",
+          "sha": "34720373ffcf91222d33b9cda5069c829e1692ca",
+          "size": 306
+        },
+        {
+          "file": "20260813181512_founder_profile_governance.sql",
+          "sha": "df741c6205aa25f29ce80fab2ff333918dec11ed",
+          "size": 8523
+        },
+        {
+          "file": "20260813183008_trust_safety_profile_controls.sql",
+          "sha": "060b0540e26a8fe7a28aa856fa3cbd9a44818f95",
+          "size": 39612
+        },
+        {
+          "file": "20260813183617_trust_safety_hardening.sql",
+          "sha": "39124aba9be01a32a55fd90c0eae45412f157ece",
+          "size": 2583
+        },
+        {
+          "file": "20260813184024_trust_safety_internal_listing_helper.sql",
+          "sha": "5040fd019c82ff5b14d163c98ceac0013307020a",
+          "size": 1231
+        },
+        {
+          "file": "20260813184312_trust_safety_api_boundary.sql",
+          "sha": "1d8a11404622e8051b74fdb29d4dde6edfa4024e",
+          "size": 1809
+        },
+        {
+          "file": "20260813184645_trust_safety_policy_helpers.sql",
+          "sha": "a03449819fbf6560f0a14d9996bf252c990201a4",
+          "size": 4985
+        },
+        {
+          "file": "20260813221114_owner_aal2_access_gate.sql",
+          "sha": "600c3ef5fbe79b2c5ece7cab5884ead2da04d9ca",
+          "size": 914
+        },
+        {
+          "file": "20260813221741_audit_trust_safety_profile_search.sql",
+          "sha": "13e4363c0454886bd25d89f2995988adbc4a6bf7",
+          "size": 2828
+        },
+        {
+          "file": "20260813222121_identity_security_launch_gate.sql",
+          "sha": "835ac7d34502a451f50fe18bfcf5cc7ba3ccf8e1",
+          "size": 3056
+        },
+        {
+          "file": "20260813222316_identity_contacts_age_assurance_and_admin_stats.sql",
+          "sha": "4cd01b35cada4a7ea2f7fb565f7556c18481d0b2",
+          "size": 5269
+        },
+        {
+          "file": "20260813222543_lock_trust_safety_search_audit.sql",
+          "sha": "101c47badd7c50df860673897ed6dfda9716e2ff",
+          "size": 228
+        },
+        {
+          "file": "20260813222636_identity_security_advisor_hardening.sql",
+          "sha": "ae4f0ee67d32c86cfc5d98355b177b50f4c9c490",
+          "size": 3056
+        },
+        {
+          "file": "20260813223002_relationship_messaging_boundary_hardening.sql",
+          "sha": "40460ce235015d53de455b51542f126ba8a1ee11",
+          "size": 3300
+        },
+        {
+          "file": "20260813223229_social_identity_command_boundary_hardening.sql",
+          "sha": "5ce677e29bde8422f64a0fa64a85adf9f8bfac00",
+          "size": 6468
+        },
+        {
+          "file": "20260813223528_protected_profiles_privacy_publication_enforcement.sql",
+          "sha": "de407eb7aa5c0e484abe00af558761052b074a56",
+          "size": 4834
+        },
+        {
+          "file": "20260813223700_profile_review_protected_decision_hardening.sql",
+          "sha": "8d6eb2dc3d0afdd270136aae57e7d536aa3a97ad",
+          "size": 3130
+        },
+        {
+          "file": "20260814045750_social_command_boundary_hardening.sql",
+          "sha": "2327abcf957821841712efda83dea5467c33f268",
+          "size": 7194
+        },
+        {
+          "file": "20260814045914_minor_privacy_contact_messaging_enforcement.sql",
+          "sha": "7edee70f0a90e558a9a9b1f7a1dd15ae9adad8b6",
+          "size": 4626
+        },
+        {
+          "file": "20260814050442_chat_recipient_privacy_helper.sql",
+          "sha": "24f3778522a9df30ba4c4ce334387b4b164399b2",
+          "size": 1048
+        },
+        {
+          "file": "20260814050449_chat_direct_conversation_privacy_gate.sql",
+          "sha": "ea0fb0d2e8c4add39f63b20ca2d78ebbad989390",
+          "size": 1639
+        },
+        {
+          "file": "20260814050455_chat_message_privacy_gate.sql",
+          "sha": "1ed8c583ef424a7de636db87161e1a143be7b5a9",
+          "size": 1934
+        },
+        {
+          "file": "20260814054715_people_multi_contact_points_foundation.sql",
+          "sha": "a97c49f2883f1455ff16001ce0d8e8ed06e07dc1",
+          "size": 4596
+        },
+        {
+          "file": "20260814055445_people_contact_matching_runtime.sql",
+          "sha": "c9b8e756955c0b454d668d632cbae2a44e3c0fcd",
+          "size": 1559
+        },
+        {
+          "file": "20260814055628_people_contact_discovery_command_boundary.sql",
+          "sha": "e3cca75050868d0f0c9f83ea5b6e48aee68c0512",
+          "size": 1956
+        },
+        {
+          "file": "20260814060732_people_contact_import_command_boundary.sql",
+          "sha": "841cdeac13fd0e3d7536886f68e96c16c1b6a0fa",
+          "size": 3673
+        },
+        {
+          "file": "20260814063300_people_nearby_location_evolution.sql",
+          "sha": "cc29d7604dfdea6c007278acabcac5c2b071d200",
+          "size": 5400
+        },
+        {
+          "file": "20260815164000_recover_social_communities_notifications.sql",
+          "sha": "0af29b287d774da0b392187f199ab85ddb90e538",
+          "size": 5684
+        },
+        {
+          "file": "20260815171500_harden_social_communities_notifications.sql",
+          "sha": "ecf8568dfce7be224ed5e52586687f38dd69b90b",
+          "size": 1850
+        },
+        {
+          "file": "20260822191122_add_interpreter_two_device_sessions.sql",
+          "sha": "65f4e2f5aafc23a375f3ad28a8746e971447f594",
+          "size": 10869
+        },
+        {
+          "file": "20260822191159_harden_interpreter_two_device_exposure.sql",
+          "sha": "845cadfb3e1d5d012d4edd5995d35adaa40eb6e2",
+          "size": 1052
+        },
+        {
+          "file": "20260822191314_index_interpreter_pairing_attempt_session.sql",
+          "sha": "eb8ace6cf0fbc92fd71554bea181e47705a8b17a",
+          "size": 153
+        },
+        {
+          "file": "20260822191505_add_interpreter_session_leave.sql",
+          "sha": "1091b3fa428b14511a55361db9719f330d7e1c88",
+          "size": 1309
+        },
+        {
+          "file": "20260822195320_add_identity_registration_completion_rpc.sql",
+          "sha": "aaefdc3337992839ad39f756ecb0512ebd0b4e04",
+          "size": 4452
+        },
+        {
+          "file": "20260824104500_create_secure_scheduled_worker.sql",
+          "sha": "9d95ad9e7719a81843b51dde7d7744ae2040d883",
+          "size": 5243
+        },
+        {
+          "file": "20260824184042_create_personal_ai_runtime_v1.sql",
+          "sha": "5498143f7f6bc258cc0f88d7f46003f24c824b21",
+          "size": 14243
+        },
+        {
+          "file": "20260824185510_harden_personal_ai_runtime_v1.sql",
+          "sha": "d7cc83cbee43574ed25499b3cca54d9c42d857f5",
+          "size": 894
+        },
+        {
+          "file": "20260825022839_harden_personal_ai_memory_supersession_v2.sql",
+          "sha": "35c0adf3e15fff34906c0b9df394fbbf30132bd2",
+          "size": 443
+        },
+        {
+          "file": "20260825190000_harden_social_block_visibility_and_media_posts.sql",
+          "sha": "b26ce9d7c302798bd7fcf1d32bef11e211bfc7be",
+          "size": 5159
+        },
+        {
+          "file": "20260826134500_create_owner_decision_control_center.sql",
+          "sha": "beaf8f4af08dd027f6b8c6f615ec0ba063ebc03a",
+          "size": 2479
+        }
+      ]
+    },
+    "verificationArtifacts": {
+      "conventionalTests": {
+        "count": 0,
+        "items": []
+      },
+      "gatesAuditsSmokes": {
+        "count": 43,
+        "items": [
+          {
+            "path": "scripts/export-final-closure-audit-wave.ts",
+            "sha": "092403f7268cdc34a2b89b87e9c74ad5ab75a759",
+            "size": 843
+          },
+          {
+            "path": "scripts/export-project-recovery-audit-wave.ts",
+            "sha": "4d64423e61f4943cef5b66ee668e20d48f8310df",
+            "size": 866
+          },
+          {
+            "path": "scripts/pantavion-access-monotonicity-gate.ts",
+            "sha": "5745853116086a7a6a5daee08829f01014070cfc",
+            "size": 1808
+          },
+          {
+            "path": "scripts/pantavion-adaptive-assistance-gate.ts",
+            "sha": "079d4882208377522783b74e830da3801b573377",
+            "size": 1733
+          },
+          {
+            "path": "scripts/pantavion-adaptive-policy-gate.ts",
+            "sha": "ee664932db29b94cabc69cea8b98821d4156f712",
+            "size": 10068
+          },
+          {
+            "path": "scripts/pantavion-ai-integrity-check.cjs",
+            "sha": "85fd24364f73e78186b1c2448739630f8784060e",
+            "size": 23461
+          },
+          {
+            "path": "scripts/pantavion-autonomous-builder-gate.cjs",
+            "sha": "0b8e0c163acd890d93e36f2632874bbc9e5208eb",
+            "size": 2731
+          },
+          {
+            "path": "scripts/pantavion-autonomous-guardian-audit.cjs",
+            "sha": "e05193ea35a16990b41dd0e1be1cd1cfce726946",
+            "size": 2027
+          },
+          {
+            "path": "scripts/pantavion-continuity-runtime-gate.cjs",
+            "sha": "deddf770d7b78ddb73c52189408279458a98ae19",
+            "size": 1466
+          },
+          {
+            "path": "scripts/pantavion-emergency-guardian-gate.cjs",
+            "sha": "ef9f1790a884d7b464a25d43f4cd52f67f58e83e",
+            "size": 10917
+          },
+          {
+            "path": "scripts/pantavion-foundation-audit.cjs",
+            "sha": "0925a3bcbe78a6d6eae6e413fc92df07d1c22514",
+            "size": 4752
+          },
+          {
+            "path": "scripts/pantavion-foundry-gate.cjs",
+            "sha": "3e82dcde2362291751d743d89b852e4ab7f8df86",
+            "size": 7142
+          },
+          {
+            "path": "scripts/pantavion-implementation-gate.cjs",
+            "sha": "48cb6de7ff0938e145f236b4efffaa355f51ae6a",
+            "size": 3480
+          },
+          {
+            "path": "scripts/pantavion-implementation-runtime-gate.cjs",
+            "sha": "4bb18e101f796b7fe4d23c8f45fd4e372e668691",
+            "size": 2428
+          },
+          {
+            "path": "scripts/pantavion-intelligence-cloud-runtime-gate.cjs",
+            "sha": "b3edd303a458c63d5b2242ee3077800058bb77e5",
+            "size": 4016
+          },
+          {
+            "path": "scripts/pantavion-intelligence-fabric-gate.cjs",
+            "sha": "44b04d72281159e3920336c57f0f6c9edc6d7668",
+            "size": 3887
+          },
+          {
+            "path": "scripts/pantavion-master-audit.cjs",
+            "sha": "fea67cc6b700f2519c02992faf703e5d3606d247",
+            "size": 4108
+          },
+          {
+            "path": "scripts/pantavion-mastery-learning-gate.ts",
+            "sha": "6a53d353cf83d33bc110729a3b4fba4c5b559512",
+            "size": 3105
+          },
+          {
+            "path": "scripts/pantavion-multimodal-language-audit.cjs",
+            "sha": "bd3ac1b1b4fc8b1d8256d2ef19e9e120eda23e66",
+            "size": 2651
+          },
+          {
+            "path": "scripts/pantavion-personal-ai-runtime-gate.cjs",
+            "sha": "f53887f997305c5343078ebc444d37f4a216eb51",
+            "size": 7476
+          },
+          {
+            "path": "scripts/pantavion-product-truth-audit.cjs",
+            "sha": "da77af8ddc77afdf18540e3d46825fa61695bcf8",
+            "size": 1886
+          },
+          {
+            "path": "scripts/pantavion-protected-change-gate.cjs",
+            "sha": "c26f8f2e7c011f82545b031b8a449bb56ccd0ed3",
+            "size": 6538
+          },
+          {
+            "path": "scripts/pantavion-public-growth-audit.cjs",
+            "sha": "94357268c160168fad35b7133be519d3dd10a40d",
+            "size": 3538
+          },
+          {
+            "path": "scripts/pantavion-real-translation-smoke.cjs",
+            "sha": "0e1eb96e3aa6cbbc2d5a7e0bbdbf877bc4a19ce8",
+            "size": 3218
+          },
+          {
+            "path": "scripts/pantavion-runtime-safety-gate.cjs",
+            "sha": "e5bf452e90c1d1b70bdc2523b784e4287c66024f",
+            "size": 3122
+          },
+          {
+            "path": "scripts/pantavion-runtime-smoke.cjs",
+            "sha": "2f23ac3356bcd2aaca38739d2650e54af39db38b",
+            "size": 705
+          },
+          {
+            "path": "scripts/pantavion-secure-scheduled-worker-gate.cjs",
+            "sha": "0ecad3b22a73f0bd5dad25671284f84d2a86e685",
+            "size": 1737
+          },
+          {
+            "path": "scripts/pantavion-social-chat-contract-gate.cjs",
+            "sha": "bef8c3842f2cd9719123fa3d3984e4f705aef57a",
+            "size": 1568
+          },
+          {
+            "path": "scripts/pantavion-support-network-gate.ts",
+            "sha": "af895eadf5e818c60e0291cc4db453360510b046",
+            "size": 4121
+          },
+          {
+            "path": "scripts/pantavion-translation-integrity-check.cjs",
+            "sha": "99498ae768d4edb19e2ab4726d207caf460a1b1c",
+            "size": 5390
+          },
+          {
+            "path": "scripts/pantavion-translation-runtime-gate.cjs",
+            "sha": "9fa0e3c54a49570831e74109a2976c1934046b70",
+            "size": 965
+          },
+          {
+            "path": "scripts/pantavion-translation-worker-gate.cjs",
+            "sha": "0fc0d3ae1870a91ba8ad2a38cc9048bd214052c4",
+            "size": 3012
+          },
+          {
+            "path": "scripts/pantavion-unfinished-plan-ingestion-gate.cjs",
+            "sha": "53ff70baedeb26c731e67cc8473e8d20661b2f17",
+            "size": 1196
+          },
+          {
+            "path": "scripts/pantavion-vision-registry-gate.cjs",
+            "sha": "397c1c7689dfa9f2e4cdb25a95c1acf7d68386e3",
+            "size": 1302
+          },
+          {
+            "path": "scripts/pantavion-vscode-real-implementation-gate.cjs",
+            "sha": "cc092a7f758c9aac78b7b9773a1419eac5acebf1",
+            "size": 7535
+          },
+          {
+            "path": "scripts/pantavion-water-abc-map-system-gate.cjs",
+            "sha": "4928cc362711f37b60a9b95980b5275d58747c19",
+            "size": 2559
+          },
+          {
+            "path": "scripts/pantavion-water-kernel-gate.cjs",
+            "sha": "fb1c2d6129d20aa7c49d739c7b068afb9018520b",
+            "size": 19341
+          },
+          {
+            "path": "scripts/pantavion-youth-curriculum-gate.ts",
+            "sha": "1f6321443d705e13992751dec0848839464835ea",
+            "size": 5508
+          },
+          {
+            "path": "scripts/run-final-closure-audit-wave.ts",
+            "sha": "c111e64bbcd55c4552d52187d4ff8eec3aaeb079",
+            "size": 270
+          },
+          {
+            "path": "scripts/run-project-recovery-audit-wave.ts",
+            "sha": "d11e2afd2a8c4d9fb99dfd7762f802f3cebc6c21",
+            "size": 284
+          },
+          {
+            "path": "scripts/water-guardian-production-smoke.cjs",
+            "sha": "a1f618ba139027737c0566d5eaf88c67aa7af684",
+            "size": 9569
+          },
+          {
+            "path": "scripts/water-guardian-surface-audit.cjs",
+            "sha": "62ec139a50f2e9396fb5812b04b271373a45b3aa",
+            "size": 3840
+          },
+          {
+            "path": "scripts/water-private-index-runtime-smoke.cjs",
+            "sha": "6de40340bc58015899ae90d819bca4fc93099087",
+            "size": 3176
+          }
+        ]
+      }
+    }
+  },
+  "supabase": {
+    "projectRef": "cxhulvwkagzufbjsdwwu",
+    "projectStatus": "ACTIVE_HEALTHY",
+    "region": "eu-west-1",
+    "postgresVersion": "17.6.1.063",
+    "publicTables": {
+      "count": 56,
+      "allRlsEnabled": true,
+      "nonEmpty": [
+        {
+          "name": "public.public_registration_gate",
+          "rows": 1
+        }
+      ]
+    },
+    "appliedMigrations": {
+      "count": 56,
+      "items": [
+        {
+          "version": "20260812205302",
+          "name": "profiles_secure_baseline"
+        },
+        {
+          "version": "20260812205420",
+          "name": "human_communication_core"
+        },
+        {
+          "version": "20260812205431",
+          "name": "personal_media_core"
+        },
+        {
+          "version": "20260812205439",
+          "name": "social_flagship_core"
+        },
+        {
+          "version": "20260812210107",
+          "name": "production_security_hardening"
+        },
+        {
+          "version": "20260812210515",
+          "name": "social_ui_capabilities"
+        },
+        {
+          "version": "20260812210533",
+          "name": "social_media_hydration"
+        },
+        {
+          "version": "20260812211417",
+          "name": "contact_discovery_tokens"
+        },
+        {
+          "version": "20260812211628",
+          "name": "communication_runtime_core"
+        },
+        {
+          "version": "20260812212902",
+          "name": "realtime_chat_social_publication"
+        },
+        {
+          "version": "20260813082338",
+          "name": "create_media_news_listings_core"
+        },
+        {
+          "version": "20260813082408",
+          "name": "grant_public_listing_read_to_anon"
+        },
+        {
+          "version": "20260813171740",
+          "name": "secure_identity_registration_core"
+        },
+        {
+          "version": "20260813172301",
+          "name": "restrict_identity_profile_rpc_to_authenticated"
+        },
+        {
+          "version": "20260813172532",
+          "name": "restrict_identity_trigger_functions"
+        },
+        {
+          "version": "20260813181512",
+          "name": "founder_profile_governance"
+        },
+        {
+          "version": "20260813183008",
+          "name": "trust_safety_profile_controls"
+        },
+        {
+          "version": "20260813183617",
+          "name": "trust_safety_hardening"
+        },
+        {
+          "version": "20260813184024",
+          "name": "trust_safety_internal_listing_helper"
+        },
+        {
+          "version": "20260813184312",
+          "name": "trust_safety_api_boundary"
+        },
+        {
+          "version": "20260813184645",
+          "name": "trust_safety_policy_helpers"
+        },
+        {
+          "version": "20260813221114",
+          "name": "owner_aal2_access_gate"
+        },
+        {
+          "version": "20260813221741",
+          "name": "audit_trust_safety_profile_search"
+        },
+        {
+          "version": "20260813222121",
+          "name": "identity_security_launch_gate"
+        },
+        {
+          "version": "20260813222316",
+          "name": "identity_contacts_age_assurance_and_admin_stats"
+        },
+        {
+          "version": "20260813222543",
+          "name": "lock_trust_safety_search_audit"
+        },
+        {
+          "version": "20260813222636",
+          "name": "identity_security_advisor_hardening"
+        },
+        {
+          "version": "20260813223002",
+          "name": "relationship_messaging_boundary_hardening"
+        },
+        {
+          "version": "20260813223229",
+          "name": "social_identity_command_boundary_hardening"
+        },
+        {
+          "version": "20260813223528",
+          "name": "protected_profiles_privacy_publication_enforcement"
+        },
+        {
+          "version": "20260813223700",
+          "name": "profile_review_protected_decision_hardening"
+        },
+        {
+          "version": "20260814045750",
+          "name": "social_command_boundary_hardening"
+        },
+        {
+          "version": "20260814045914",
+          "name": "minor_privacy_contact_messaging_enforcement"
+        },
+        {
+          "version": "20260814050442",
+          "name": "chat_recipient_privacy_helper"
+        },
+        {
+          "version": "20260814050449",
+          "name": "chat_direct_conversation_privacy_gate"
+        },
+        {
+          "version": "20260814050455",
+          "name": "chat_message_privacy_gate"
+        },
+        {
+          "version": "20260814054715",
+          "name": "people_multi_contact_points_foundation"
+        },
+        {
+          "version": "20260814055445",
+          "name": "people_contact_matching_runtime"
+        },
+        {
+          "version": "20260814055628",
+          "name": "people_contact_discovery_command_boundary"
+        },
+        {
+          "version": "20260814060732",
+          "name": "people_contact_import_command_boundary"
+        },
+        {
+          "version": "20260814063300",
+          "name": "people_nearby_location_evolution"
+        },
+        {
+          "version": "20260815171533",
+          "name": "recover_social_communities_notifications"
+        },
+        {
+          "version": "20260815171620",
+          "name": "harden_social_communities_notifications"
+        },
+        {
+          "version": "20260822191122",
+          "name": "add_interpreter_two_device_sessions"
+        },
+        {
+          "version": "20260822191159",
+          "name": "harden_interpreter_two_device_exposure"
+        },
+        {
+          "version": "20260822191314",
+          "name": "index_interpreter_pairing_attempt_session"
+        },
+        {
+          "version": "20260822191505",
+          "name": "add_interpreter_session_leave"
+        },
+        {
+          "version": "20260822194957",
+          "name": "create_durable_execution_runtime"
+        },
+        {
+          "version": "20260822195320",
+          "name": "add_identity_registration_completion_rpc"
+        },
+        {
+          "version": "20260824134053",
+          "name": "create_secure_scheduled_worker"
+        },
+        {
+          "version": "20260824184042",
+          "name": "create_personal_ai_runtime_v1"
+        },
+        {
+          "version": "20260824185447",
+          "name": "harden_personal_ai_runtime_v1"
+        },
+        {
+          "version": "20260825022839",
+          "name": "harden_personal_ai_memory_supersession_v2"
+        },
+        {
+          "version": "20260825162513",
+          "name": "harden_social_block_visibility_and_media_posts"
+        },
+        {
+          "version": "20260826133946",
+          "name": "owner_decision_control_center"
+        },
+        {
+          "version": "20260826134022",
+          "name": "owner_decision_queue_server_only"
+        }
+      ]
+    },
+    "registrationGate": {
+      "publicRegistrationEnabled": false,
+      "requiredLaunchState": "VERIFIED_LIVE",
+      "updatedAt": "2026-08-13T22:21:21.7646Z"
+    },
+    "securityAdvisors": {
+      "count": 98,
+      "byRule": {
+        "rls_enabled_no_policy": 5,
+        "pg_graphql_anon_table_exposed": 3,
+        "pg_graphql_authenticated_table_exposed": 42,
+        "anon_security_definer_function_executable": 2,
+        "authenticated_security_definer_function_executable": 46
+      }
+    }
+  },
+  "reconciliation": {
+    "exactMigrationNameMatches": 43,
+    "repositoryMigrationsWithoutExactAppliedName": {
+      "count": 20,
+      "items": [
+        "20260725155000_create_profiles.sql",
+        "20260810200000_create_human_communication_core.sql",
+        "20260810200100_fix_profile_visibility_rls.sql",
+        "20260810214500_add_human_communication_runtime_rpcs.sql",
+        "20260810232000_create_billing_entitlements_revenue_core.sql",
+        "20260810234500_create_platform_roles_and_moderation_audit.sql",
+        "20260810235000_create_atomic_listing_moderation.sql",
+        "20260811000000_create_listing_promotion_orders.sql",
+        "20260811001000_apply_listing_promotion_from_verified_webhook.sql",
+        "20260811003000_create_continuity_graph_runtime.sql",
+        "20260811042500_create_personal_media_library.sql",
+        "20260811050000_create_social_flagship_core.sql",
+        "20260811050500_create_social_location_sharing.sql",
+        "20260811051200_create_emergency_location_core.sql",
+        "20260811084000_link_social_posts_to_personal_media.sql",
+        "20260811100000_create_private_contact_discovery.sql",
+        "20260811101500_social_map_visibility_and_selected_audience.sql",
+        "20260812205000_harden_social_data_api_access.sql",
+        "20260813082000_fix_public_listing_anon_read.sql",
+        "20260826134500_create_owner_decision_control_center.sql"
+      ]
+    },
+    "appliedMigrationsWithoutExactRepositoryName": {
+      "count": 13,
+      "items": [
+        {
+          "version": "20260812205302",
+          "name": "profiles_secure_baseline"
+        },
+        {
+          "version": "20260812205420",
+          "name": "human_communication_core"
+        },
+        {
+          "version": "20260812205431",
+          "name": "personal_media_core"
+        },
+        {
+          "version": "20260812205439",
+          "name": "social_flagship_core"
+        },
+        {
+          "version": "20260812210107",
+          "name": "production_security_hardening"
+        },
+        {
+          "version": "20260812210515",
+          "name": "social_ui_capabilities"
+        },
+        {
+          "version": "20260812210533",
+          "name": "social_media_hydration"
+        },
+        {
+          "version": "20260812211417",
+          "name": "contact_discovery_tokens"
+        },
+        {
+          "version": "20260812211628",
+          "name": "communication_runtime_core"
+        },
+        {
+          "version": "20260812212902",
+          "name": "realtime_chat_social_publication"
+        },
+        {
+          "version": "20260813082408",
+          "name": "grant_public_listing_read_to_anon"
+        },
+        {
+          "version": "20260826133946",
+          "name": "owner_decision_control_center"
+        },
+        {
+          "version": "20260826134022",
+          "name": "owner_decision_queue_server_only"
+        }
+      ]
+    },
+    "decision": "HOLD_NON_EXACT",
+    "note": "Timestamp or naming divergence may represent equivalent migrations, rebased migrations, or unapplied repository files. No equivalence is asserted without SQL checksum/content evidence."
+  }
+}
