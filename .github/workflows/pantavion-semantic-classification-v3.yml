@@ -4,8 +4,9 @@ on:
   pull_request:
     paths:
       - "scripts/pantavion-canonical-semantic-classification-v3.cjs"
+      - "scripts/pantavion-canonical-knowledge-excavation-v2.cjs"
       - ".github/workflows/pantavion-semantic-classification-v3.yml"
-      - "data/recovery/canonical-knowledge-v2/**"
+      - "data/recovery/imported-pr248/**"
   workflow_dispatch:
 
 permissions:
@@ -19,12 +20,14 @@ jobs:
   semantic-classification:
     name: Preserve and classify all 82,413 records
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Rebuild canonical v2 corpus from preserved sources
+        run: node scripts/pantavion-canonical-knowledge-excavation-v2.cjs
       - name: Run fail-closed semantic classification
         run: node scripts/pantavion-canonical-semantic-classification-v3.cjs
       - name: Verify preservation and truth boundary
