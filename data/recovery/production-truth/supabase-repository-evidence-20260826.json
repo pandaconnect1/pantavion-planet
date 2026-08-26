@@ -899,6 +899,1456 @@
       ]
     },
     "decision": "HOLD_NON_EXACT",
-    "note": "Timestamp or naming divergence may represent equivalent migrations, rebased migrations, or unapplied repository files. No equivalence is asserted without SQL checksum/content evidence."
+    "note": "Timestamp or naming divergence may represent equivalent migrations, rebased migrations, or unapplied repository files. No equivalence is asserted without SQL checksum/content evidence.",
+    "objectLevelProductionEvidence": {
+      "capturedAt": "2026-08-26T22:50:57.124Z",
+      "truthBoundary": "Read-only pg_catalog, information_schema, pg_policies, and role grants from Supabase project cxhulvwkagzufbjsdwwu compared with repository migration SQL at main revision 668cee1aef1e61b487b8fc7ed2fb4b87aa0dcccb.",
+      "method": "All 20 repository migrations without exact production migration-name matches were parsed for declared public relations, functions, exact policy names, and explicit table grant/revoke effects. Object presence is production evidence but is not SQL equivalence.",
+      "examinedRepositoryMigrations": 20,
+      "statusCounts": {
+        "SCHEMA_OBJECTS_PARTIAL": 3,
+        "SCHEMA_OBJECTS_NOT_OBSERVED": 10,
+        "SCHEMA_OBJECTS_ALL_PRESENT": 5,
+        "OBSERVABLE_EFFECTS_PARTIAL": 1,
+        "OBSERVABLE_EFFECTS_ALL_PRESENT": 1
+      },
+      "equivalenceDecision": "HOLD_NON_EXACT",
+      "caveat": "No migration is declared equivalent or safely deployable from object presence alone. Renamed/rebased migrations, later replacement migrations, altered function bodies, policy expressions, constraints, triggers, and data effects require SQL-definition or checksum reconciliation.",
+      "items": [
+        {
+          "repositoryMigration": "20260725155000_create_profiles.sql",
+          "repositoryBlobSha": "8b9b67129285525dbcda802ea821422e90dc9e2d",
+          "status": "SCHEMA_OBJECTS_PARTIAL",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 1,
+            "total": 3,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.profiles",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "function",
+                "name": "public.handle_new_user",
+                "present": false
+              },
+              {
+                "kind": "function",
+                "name": "public.set_updated_at",
+                "present": false
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 3,
+            "items": [
+              {
+                "name": "public profiles are readable",
+                "table": "public.profiles",
+                "exactNamePresent": false
+              },
+              {
+                "name": "users can create their own profile",
+                "table": "public.profiles",
+                "exactNamePresent": false
+              },
+              {
+                "name": "users can update their own profile",
+                "table": "public.profiles",
+                "exactNamePresent": false
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 0,
+            "total": 0,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260810200000_create_human_communication_core.sql",
+          "repositoryBlobSha": "c4be132fdf5aec5e0980e8296df34c8ad189f0ac",
+          "status": "SCHEMA_OBJECTS_PARTIAL",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 14,
+            "total": 18,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.user_privacy_settings",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.consent_records",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.contact_sources",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.contacts",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.relationships",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.user_blocks",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.conversations",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.conversation_members",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.messages",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.message_receipts",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_touch_updated_at",
+                "present": false
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_is_conversation_member",
+                "present": true
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_is_conversation_creator",
+                "present": false
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_has_block_between",
+                "present": true
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_can_send_to_conversation",
+                "present": true
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_can_access_message",
+                "present": true
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_enforce_relationship_transition",
+                "present": false
+              },
+              {
+                "kind": "function",
+                "name": "public.initialize_pantavion_user_settings",
+                "present": false
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 21,
+            "items": [
+              {
+                "name": "privacy owner read",
+                "table": "public.user_privacy_settings",
+                "exactNamePresent": false
+              },
+              {
+                "name": "privacy owner insert",
+                "table": "public.user_privacy_settings",
+                "exactNamePresent": false
+              },
+              {
+                "name": "privacy owner update",
+                "table": "public.user_privacy_settings",
+                "exactNamePresent": false
+              },
+              {
+                "name": "consent owner read",
+                "table": "public.consent_records",
+                "exactNamePresent": false
+              },
+              {
+                "name": "consent owner insert",
+                "table": "public.consent_records",
+                "exactNamePresent": false
+              },
+              {
+                "name": "consent owner update",
+                "table": "public.consent_records",
+                "exactNamePresent": false
+              },
+              {
+                "name": "contact sources owner all",
+                "table": "public.contact_sources",
+                "exactNamePresent": false
+              },
+              {
+                "name": "contacts owner all",
+                "table": "public.contacts",
+                "exactNamePresent": false
+              },
+              {
+                "name": "relationships participants read",
+                "table": "public.relationships",
+                "exactNamePresent": false
+              },
+              {
+                "name": "relationships requester insert",
+                "table": "public.relationships",
+                "exactNamePresent": false
+              },
+              {
+                "name": "relationships participants update",
+                "table": "public.relationships",
+                "exactNamePresent": false
+              },
+              {
+                "name": "blocks owner all",
+                "table": "public.user_blocks",
+                "exactNamePresent": false
+              },
+              {
+                "name": "conversations members read",
+                "table": "public.conversations",
+                "exactNamePresent": false
+              },
+              {
+                "name": "conversations creator insert",
+                "table": "public.conversations",
+                "exactNamePresent": false
+              },
+              {
+                "name": "conversation members participant read",
+                "table": "public.conversation_members",
+                "exactNamePresent": false
+              },
+              {
+                "name": "conversation creator adds members",
+                "table": "public.conversation_members",
+                "exactNamePresent": false
+              },
+              {
+                "name": "messages members read",
+                "table": "public.messages",
+                "exactNamePresent": false
+              },
+              {
+                "name": "messages sender insert",
+                "table": "public.messages",
+                "exactNamePresent": false
+              },
+              {
+                "name": "receipts participants read",
+                "table": "public.message_receipts",
+                "exactNamePresent": false
+              },
+              {
+                "name": "receipts self insert",
+                "table": "public.message_receipts",
+                "exactNamePresent": false
+              },
+              {
+                "name": "profiles respect privacy and relationship visibility",
+                "table": "public.profiles",
+                "exactNamePresent": false
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 0,
+            "total": 0,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260810200100_fix_profile_visibility_rls.sql",
+          "repositoryBlobSha": "aa84f5d87db6e2669c30d9f500cb4913b4efe57d",
+          "status": "SCHEMA_OBJECTS_NOT_OBSERVED",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 0,
+            "total": 1,
+            "items": [
+              {
+                "kind": "function",
+                "name": "public.pantavion_can_view_profile",
+                "present": false
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 1,
+            "items": [
+              {
+                "name": "profiles respect privacy and relationship visibility",
+                "table": "public.profiles",
+                "exactNamePresent": false
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 12,
+            "total": 29,
+            "unsatisfied": [
+              {
+                "action": "grant",
+                "table": "public.consent_records",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.consent_records",
+                "role": "authenticated",
+                "privilege": "UPDATE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.contact_sources",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.contact_sources",
+                "role": "authenticated",
+                "privilege": "UPDATE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.contact_sources",
+                "role": "authenticated",
+                "privilege": "DELETE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.contacts",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.contacts",
+                "role": "authenticated",
+                "privilege": "UPDATE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.contacts",
+                "role": "authenticated",
+                "privilege": "DELETE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.relationships",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.relationships",
+                "role": "authenticated",
+                "privilege": "UPDATE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.user_blocks",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.user_blocks",
+                "role": "authenticated",
+                "privilege": "UPDATE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.user_blocks",
+                "role": "authenticated",
+                "privilege": "DELETE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.conversations",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.conversation_members",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.messages",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.message_receipts",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              }
+            ]
+          }
+        },
+        {
+          "repositoryMigration": "20260810214500_add_human_communication_runtime_rpcs.sql",
+          "repositoryBlobSha": "e512a00c53abe306ee6e597b61e028f936ef794e",
+          "status": "SCHEMA_OBJECTS_ALL_PRESENT",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 5,
+            "total": 5,
+            "items": [
+              {
+                "kind": "function",
+                "name": "public.pantavion_request_relationship",
+                "present": true
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_respond_relationship",
+                "present": true
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_create_direct_conversation",
+                "present": true
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_send_message",
+                "present": true
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_mark_message_receipt",
+                "present": true
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 0,
+            "items": []
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 0,
+            "total": 0,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260810232000_create_billing_entitlements_revenue_core.sql",
+          "repositoryBlobSha": "64501b08aea17e01e28b292e790e2ed391f471d4",
+          "status": "SCHEMA_OBJECTS_NOT_OBSERVED",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 0,
+            "total": 5,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.billing_customers",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "relation",
+                "name": "public.entitlements",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "relation",
+                "name": "public.provider_webhook_events",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "relation",
+                "name": "public.revenue_events",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_billing_touch_updated_at",
+                "present": false
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 3,
+            "items": [
+              {
+                "name": "billing customer owner read",
+                "table": "public.billing_customers",
+                "exactNamePresent": false
+              },
+              {
+                "name": "entitlements owner read",
+                "table": "public.entitlements",
+                "exactNamePresent": false
+              },
+              {
+                "name": "revenue owner read",
+                "table": "public.revenue_events",
+                "exactNamePresent": false
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 26,
+            "total": 26,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260810234500_create_platform_roles_and_moderation_audit.sql",
+          "repositoryBlobSha": "e1a2df2d3817318fcd78644d2635df1747a03aea",
+          "status": "SCHEMA_OBJECTS_NOT_OBSERVED",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 0,
+            "total": 3,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.platform_roles",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "relation",
+                "name": "public.moderation_actions",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_has_platform_role",
+                "present": false
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 1,
+            "items": [
+              {
+                "name": "users read own platform roles",
+                "table": "public.platform_roles",
+                "exactNamePresent": false
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 16,
+            "total": 17,
+            "unsatisfied": [
+              {
+                "action": "grant",
+                "table": "public.platform_roles",
+                "role": "authenticated",
+                "privilege": "SELECT",
+                "satisfied": false
+              }
+            ]
+          }
+        },
+        {
+          "repositoryMigration": "20260810235000_create_atomic_listing_moderation.sql",
+          "repositoryBlobSha": "39ea03959268f192eb7495789797d0ebba7514a6",
+          "status": "SCHEMA_OBJECTS_NOT_OBSERVED",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 0,
+            "total": 1,
+            "items": [
+              {
+                "kind": "function",
+                "name": "public.pantavion_moderate_listing",
+                "present": false
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 0,
+            "items": []
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 0,
+            "total": 0,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260811000000_create_listing_promotion_orders.sql",
+          "repositoryBlobSha": "4800652219be822ff657650e3a18c800a4a7147e",
+          "status": "SCHEMA_OBJECTS_NOT_OBSERVED",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 0,
+            "total": 2,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.listing_promotion_orders",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_apply_listing_promotion",
+                "present": false
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 1,
+            "items": [
+              {
+                "name": "promotion order owner read",
+                "table": "public.listing_promotion_orders",
+                "exactNamePresent": false
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 6,
+            "total": 7,
+            "unsatisfied": [
+              {
+                "action": "grant",
+                "table": "public.listing_promotion_orders",
+                "role": "authenticated",
+                "privilege": "SELECT",
+                "satisfied": false
+              }
+            ]
+          }
+        },
+        {
+          "repositoryMigration": "20260811001000_apply_listing_promotion_from_verified_webhook.sql",
+          "repositoryBlobSha": "1d43d3345d001c93bd38b9ee33d299f31eab2820",
+          "status": "SCHEMA_OBJECTS_NOT_OBSERVED",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 0,
+            "total": 1,
+            "items": [
+              {
+                "kind": "function",
+                "name": "public.pantavion_apply_processed_listing_promotion",
+                "present": false
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 0,
+            "items": []
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 0,
+            "total": 0,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260811003000_create_continuity_graph_runtime.sql",
+          "repositoryBlobSha": "0e906830339fb02d380b2a2309a20fc71199d31d",
+          "status": "SCHEMA_OBJECTS_NOT_OBSERVED",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 0,
+            "total": 5,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.continuity_threads",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "relation",
+                "name": "public.continuity_edges",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "relation",
+                "name": "public.continuity_decisions",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "relation",
+                "name": "public.continuity_artifacts",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "relation",
+                "name": "public.continuity_execution_links",
+                "present": false,
+                "rls": null
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 0,
+            "items": []
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 40,
+            "total": 40,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260811042500_create_personal_media_library.sql",
+          "repositoryBlobSha": "75c27cced3568ed39809d8e5ac58159f8d555ec6",
+          "status": "SCHEMA_OBJECTS_ALL_PRESENT",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 1,
+            "total": 1,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.personal_media",
+                "present": true,
+                "rls": true
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 8,
+            "items": [
+              {
+                "name": "personal media owner read",
+                "table": "public.personal_media",
+                "exactNamePresent": false
+              },
+              {
+                "name": "personal media owner insert",
+                "table": "public.personal_media",
+                "exactNamePresent": false
+              },
+              {
+                "name": "personal media owner update",
+                "table": "public.personal_media",
+                "exactNamePresent": false
+              },
+              {
+                "name": "personal media owner delete",
+                "table": "public.personal_media",
+                "exactNamePresent": false
+              },
+              {
+                "name": "personal media storage owner read",
+                "table": "storage.objects",
+                "exactNamePresent": false
+              },
+              {
+                "name": "personal media storage owner insert",
+                "table": "storage.objects",
+                "exactNamePresent": false
+              },
+              {
+                "name": "personal media storage owner update",
+                "table": "storage.objects",
+                "exactNamePresent": false
+              },
+              {
+                "name": "personal media storage owner delete",
+                "table": "storage.objects",
+                "exactNamePresent": false
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 0,
+            "total": 0,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260811050000_create_social_flagship_core.sql",
+          "repositoryBlobSha": "e9f381b15762dda64807b5a1332e686cf41ee9a4",
+          "status": "SCHEMA_OBJECTS_ALL_PRESENT",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 7,
+            "total": 7,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.social_posts",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.social_post_media",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.social_reactions",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.social_comments",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "relation",
+                "name": "public.social_location_shares",
+                "present": true,
+                "rls": true
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_are_connections",
+                "present": true
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_can_view_social_post",
+                "present": true
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 4,
+            "total": 19,
+            "items": [
+              {
+                "name": "social_posts_select_visible",
+                "table": "public.social_posts",
+                "exactNamePresent": true
+              },
+              {
+                "name": "social_posts_insert_own",
+                "table": "public.social_posts",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_posts_update_own",
+                "table": "public.social_posts",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_posts_delete_own",
+                "table": "public.social_posts",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_media_select_visible",
+                "table": "public.social_post_media",
+                "exactNamePresent": true
+              },
+              {
+                "name": "social_media_insert_own",
+                "table": "public.social_post_media",
+                "exactNamePresent": true
+              },
+              {
+                "name": "social_media_delete_own",
+                "table": "public.social_post_media",
+                "exactNamePresent": true
+              },
+              {
+                "name": "social_reactions_select_visible",
+                "table": "public.social_reactions",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_reactions_insert_self",
+                "table": "public.social_reactions",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_reactions_update_self",
+                "table": "public.social_reactions",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_reactions_delete_self",
+                "table": "public.social_reactions",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_comments_select_visible",
+                "table": "public.social_comments",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_comments_insert_self",
+                "table": "public.social_comments",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_comments_update_self",
+                "table": "public.social_comments",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_comments_delete_self",
+                "table": "public.social_comments",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_location_select_self",
+                "table": "public.social_location_shares",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_location_insert_self",
+                "table": "public.social_location_shares",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_location_update_self",
+                "table": "public.social_location_shares",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_location_delete_self",
+                "table": "public.social_location_shares",
+                "exactNamePresent": false
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 0,
+            "total": 0,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260811050500_create_social_location_sharing.sql",
+          "repositoryBlobSha": "519baed233d965a1dec44e1f6e275798556b8846",
+          "status": "SCHEMA_OBJECTS_NOT_OBSERVED",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 0,
+            "total": 3,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.user_location_settings",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "relation",
+                "name": "public.location_shares",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "relation",
+                "name": "public.user_live_locations",
+                "present": false,
+                "rls": null
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 5,
+            "items": [
+              {
+                "name": "location settings owner only",
+                "table": "public.user_location_settings",
+                "exactNamePresent": false
+              },
+              {
+                "name": "location shares participants read",
+                "table": "public.location_shares",
+                "exactNamePresent": false
+              },
+              {
+                "name": "location shares owner write",
+                "table": "public.location_shares",
+                "exactNamePresent": false
+              },
+              {
+                "name": "live location owner write",
+                "table": "public.user_live_locations",
+                "exactNamePresent": false
+              },
+              {
+                "name": "live location approved viewers read",
+                "table": "public.user_live_locations",
+                "exactNamePresent": false
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 0,
+            "total": 0,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260811051200_create_emergency_location_core.sql",
+          "repositoryBlobSha": "90cc2d299107c5672738acb357389123bbbc3c27",
+          "status": "SCHEMA_OBJECTS_NOT_OBSERVED",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 0,
+            "total": 3,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.emergency_location_settings",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "relation",
+                "name": "public.emergency_location_observations",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "relation",
+                "name": "public.emergency_contacts",
+                "present": false,
+                "rls": null
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 4,
+            "items": [
+              {
+                "name": "emergency settings owner only",
+                "table": "public.emergency_location_settings",
+                "exactNamePresent": false
+              },
+              {
+                "name": "emergency observations owner read",
+                "table": "public.emergency_location_observations",
+                "exactNamePresent": false
+              },
+              {
+                "name": "emergency observations owner insert",
+                "table": "public.emergency_location_observations",
+                "exactNamePresent": false
+              },
+              {
+                "name": "emergency contacts owner only",
+                "table": "public.emergency_contacts",
+                "exactNamePresent": false
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 0,
+            "total": 0,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260811084000_link_social_posts_to_personal_media.sql",
+          "repositoryBlobSha": "a333b1468f4a85398b23f70a58fa70119ffc6e99",
+          "status": "SCHEMA_OBJECTS_ALL_PRESENT",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 1,
+            "total": 1,
+            "items": [
+              {
+                "kind": "function",
+                "name": "public.pantavion_hydrate_social_post_media",
+                "present": true
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 1,
+            "total": 1,
+            "items": [
+              {
+                "name": "social_media_insert_own",
+                "table": "public.social_post_media",
+                "exactNamePresent": true
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 0,
+            "total": 0,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260811100000_create_private_contact_discovery.sql",
+          "repositoryBlobSha": "7dff8c7624020ba36e8c33eadeae8d2f79fe6b0d",
+          "status": "SCHEMA_OBJECTS_PARTIAL",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 1,
+            "total": 6,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.user_discovery_identifiers",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_normalize_email",
+                "present": false
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_normalize_phone",
+                "present": false
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_identifier_hash",
+                "present": false
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_sync_auth_discovery_identifiers",
+                "present": false
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_find_people_from_my_contacts",
+                "present": true
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 0,
+            "items": []
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 0,
+            "total": 0,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260811101500_social_map_visibility_and_selected_audience.sql",
+          "repositoryBlobSha": "d7bdb66e0d88d155283495779ace29aff9d9feee",
+          "status": "SCHEMA_OBJECTS_NOT_OBSERVED",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 0,
+            "total": 2,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.social_location_share_members",
+                "present": false,
+                "rls": null
+              },
+              {
+                "kind": "function",
+                "name": "public.pantavion_visible_social_locations",
+                "present": false
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 2,
+            "items": [
+              {
+                "name": "social_location_members_owner_all",
+                "table": "public.social_location_share_members",
+                "exactNamePresent": false
+              },
+              {
+                "name": "social_location_select_self",
+                "table": "public.social_location_shares",
+                "exactNamePresent": false
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 0,
+            "total": 0,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260812205000_harden_social_data_api_access.sql",
+          "repositoryBlobSha": "52016ae90dbceaa234b5073120aa481a1307c997",
+          "status": "OBSERVABLE_EFFECTS_PARTIAL",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 0,
+            "total": 0,
+            "items": []
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 0,
+            "items": []
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 23,
+            "total": 39,
+            "unsatisfied": [
+              {
+                "action": "grant",
+                "table": "public.social_posts",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_posts",
+                "role": "authenticated",
+                "privilege": "UPDATE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_posts",
+                "role": "authenticated",
+                "privilege": "DELETE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_reactions",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_reactions",
+                "role": "authenticated",
+                "privilege": "UPDATE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_reactions",
+                "role": "authenticated",
+                "privilege": "DELETE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_comments",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_comments",
+                "role": "authenticated",
+                "privilege": "UPDATE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_comments",
+                "role": "authenticated",
+                "privilege": "DELETE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_location_shares",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_location_shares",
+                "role": "authenticated",
+                "privilege": "UPDATE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_location_shares",
+                "role": "authenticated",
+                "privilege": "DELETE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_location_share_members",
+                "role": "authenticated",
+                "privilege": "SELECT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_location_share_members",
+                "role": "authenticated",
+                "privilege": "INSERT",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_location_share_members",
+                "role": "authenticated",
+                "privilege": "UPDATE",
+                "satisfied": false
+              },
+              {
+                "action": "grant",
+                "table": "public.social_location_share_members",
+                "role": "authenticated",
+                "privilege": "DELETE",
+                "satisfied": false
+              }
+            ]
+          }
+        },
+        {
+          "repositoryMigration": "20260813082000_fix_public_listing_anon_read.sql",
+          "repositoryBlobSha": "60cc6bd556387646c9f7e0850b7e34f511fd532d",
+          "status": "OBSERVABLE_EFFECTS_ALL_PRESENT",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 0,
+            "total": 0,
+            "items": []
+          },
+          "exactPolicyNames": {
+            "present": 0,
+            "total": 0,
+            "items": []
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 1,
+            "total": 1,
+            "unsatisfied": []
+          }
+        },
+        {
+          "repositoryMigration": "20260826134500_create_owner_decision_control_center.sql",
+          "repositoryBlobSha": "beaf8f4af08dd027f6b8c6f615ec0ba063ebc03a",
+          "status": "SCHEMA_OBJECTS_ALL_PRESENT",
+          "equivalenceDecision": "HOLD_NON_EXACT",
+          "createdObjects": {
+            "present": 1,
+            "total": 1,
+            "items": [
+              {
+                "kind": "relation",
+                "name": "public.owner_decision_queue",
+                "present": true,
+                "rls": true
+              }
+            ]
+          },
+          "exactPolicyNames": {
+            "present": 2,
+            "total": 2,
+            "items": [
+              {
+                "name": "owner reads own decision queue",
+                "table": "public.owner_decision_queue",
+                "exactNamePresent": true
+              },
+              {
+                "name": "owner decides own pending item once",
+                "table": "public.owner_decision_queue",
+                "exactNamePresent": true
+              }
+            ]
+          },
+          "explicitTableGrantEffects": {
+            "satisfied": 12,
+            "total": 12,
+            "unsatisfied": []
+          }
+        }
+      ]
+    }
   }
 }
