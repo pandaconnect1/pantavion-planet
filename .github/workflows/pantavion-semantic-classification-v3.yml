@@ -4,7 +4,6 @@ on:
   pull_request:
     paths:
       - "scripts/pantavion-canonical-semantic-classification-v3.cjs"
-      - "scripts/pantavion-canonical-knowledge-excavation-v2.cjs"
       - ".github/workflows/pantavion-semantic-classification-v3.yml"
       - "data/recovery/imported-pr248/**"
   workflow_dispatch:
@@ -26,26 +25,26 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Rebuild canonical v2 corpus from preserved sources
-        run: node scripts/pantavion-canonical-knowledge-excavation-v2.cjs
       - name: Run fail-closed semantic classification
         run: node scripts/pantavion-canonical-semantic-classification-v3.cjs
       - name: Verify preservation and truth boundary
         run: |
           node - <<'NODE'
           const fs = require("fs");
-          const source = JSON.parse(fs.readFileSync("data/recovery/canonical-knowledge-v2/full-corpus.json", "utf8"));
-          const output = JSON.parse(fs.readFileSync("data/recovery/canonical-semantic-v3/semantic-ledger.json", "utf8"));
+          const path = require("path");
+          const corpusRoot = "data/recovery/imported-pr248/canonical-ledger/corpus";
+          const receipt = JSON.parse(fs.readFileSync(path.join(corpusRoot,"MATERIALIZATION_RECEIPT.json"),"utf8"));
+          const source = fs.readdirSync(path.join(corpusRoot,"batches")).filter(x=>x.endsWith(".json")).sort().flatMap(name=>JSON.parse(fs.readFileSync(path.join(corpusRoot,"batches",name),"utf8")).records);
+          const output = JSON.parse(fs.readFileSync("data/recovery/canonical-semantic-v3/semantic-ledger.json","utf8"));
           const manifest = output.manifest;
-          if (source.records.length !== 82413) throw new Error("Expected canonical corpus of 82,413 records");
-          if (output.records.length !== source.records.length) throw new Error("Record count changed");
-          for (let i = 0; i < source.records.length; i++) {
-            if (source.records[i].id !== output.records[i].id) throw new Error("Record ID/order changed at " + i);
-            if (JSON.stringify(source.records[i].provenance) !== JSON.stringify(output.records[i].provenance)) throw new Error("Provenance changed at " + i);
+          if (receipt.totalRecords !== 82413 || source.length !== 82413 || output.records.length !== 82413) throw new Error("82,413-record preservation mismatch");
+          for (let i=0;i<source.length;i++) {
+            if (source[i].id !== output.records[i].id) throw new Error("Record ID/order changed at "+i);
+            if (JSON.stringify(source[i].provenance) !== JSON.stringify(output.records[i].provenance)) throw new Error("Provenance changed at "+i);
           }
-          if (manifest.recordCount !== 82413 || manifest.preservedRecordCount !== 82413) throw new Error("Manifest preservation mismatch");
-          const falselyFinal = output.records.filter(r => r.reviewStatus === "SEMANTICALLY_CLASSIFIED" && (!r.classification.subsystem || !r.classification.capability || !r.classification.feature || !r.classification.canonicalTarget));
-          if (falselyFinal.length) throw new Error("Found falsely classified records: " + falselyFinal.length);
+          if (manifest.sourceFingerprint !== receipt.corpusFingerprint || manifest.recordCount !== 82413 || manifest.preservedRecordCount !== 82413) throw new Error("Manifest/receipt mismatch");
+          const falselyFinal=output.records.filter(r=>r.reviewStatus==="SEMANTICALLY_CLASSIFIED"&&(!r.classification.subsystem||!r.classification.capability||!r.classification.feature||!r.classification.canonicalTarget));
+          if (falselyFinal.length) throw new Error("Found falsely classified records: "+falselyFinal.length);
           console.log(JSON.stringify(manifest.completion));
           NODE
       - name: Upload semantic ledger and module gap map
