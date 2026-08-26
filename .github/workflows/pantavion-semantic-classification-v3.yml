@@ -35,17 +35,28 @@ jobs:
           const corpusRoot = "data/recovery/imported-pr248/canonical-ledger/corpus";
           const receipt = JSON.parse(fs.readFileSync(path.join(corpusRoot,"MATERIALIZATION_RECEIPT.json"),"utf8"));
           const source = fs.readdirSync(path.join(corpusRoot,"batches")).filter(x=>x.endsWith(".json")).sort().flatMap(name=>JSON.parse(fs.readFileSync(path.join(corpusRoot,"batches",name),"utf8")).records);
-          const output = JSON.parse(fs.readFileSync("data/recovery/canonical-semantic-v3/semantic-ledger.json","utf8"));
-          const manifest = output.manifest;
-          if (receipt.totalRecords !== 82413 || source.length !== 82413 || output.records.length !== 82413) throw new Error("82,413-record preservation mismatch");
-          for (let i=0;i<source.length;i++) {
-            if (source[i].id !== output.records[i].id) throw new Error("Record ID/order changed at "+i);
-            if (JSON.stringify(source[i].provenance) !== JSON.stringify(output.records[i].provenance)) throw new Error("Provenance changed at "+i);
-          }
+          const readline = require("readline");
+          const manifest = JSON.parse(fs.readFileSync("data/recovery/canonical-semantic-v3/manifest.json","utf8"));
+          if (receipt.totalRecords !== 82413 || source.length !== 82413) throw new Error("82,413-record source preservation mismatch");
           if (manifest.sourceFingerprint !== receipt.corpusFingerprint || manifest.recordCount !== 82413 || manifest.preservedRecordCount !== 82413) throw new Error("Manifest/receipt mismatch");
-          const falselyFinal=output.records.filter(r=>r.reviewStatus==="SEMANTICALLY_CLASSIFIED"&&(!r.classification.subsystem||!r.classification.capability||!r.classification.feature||!r.classification.canonicalTarget));
-          if (falselyFinal.length) throw new Error("Found falsely classified records: "+falselyFinal.length);
-          console.log(JSON.stringify(manifest.completion));
+          (async () => {
+            const input = fs.createReadStream("data/recovery/canonical-semantic-v3/semantic-ledger.ndjson",{encoding:"utf8"});
+            const lines = readline.createInterface({input,crlfDelay:Infinity});
+            let index = 0;
+            let falselyFinal = 0;
+            for await (const line of lines) {
+              if (!line.trim()) continue;
+              if (index >= source.length) throw new Error("Semantic ledger contains extra records");
+              const record = JSON.parse(line);
+              if (source[index].id !== record.id) throw new Error("Record ID/order changed at "+index);
+              if (JSON.stringify(source[index].provenance) !== JSON.stringify(record.provenance)) throw new Error("Provenance changed at "+index);
+              if (record.reviewStatus==="SEMANTICALLY_CLASSIFIED"&&(!record.classification.subsystem||!record.classification.capability||!record.classification.feature||!record.classification.canonicalTarget)) falselyFinal++;
+              index++;
+            }
+            if (index !== 82413) throw new Error("Semantic ledger record count mismatch: "+index);
+            if (falselyFinal) throw new Error("Found falsely classified records: "+falselyFinal);
+            console.log(JSON.stringify(manifest.completion));
+          })().catch(error => { console.error(error); process.exit(1); });
           NODE
       - name: Upload semantic ledger and module gap map
         uses: actions/upload-artifact@v4
