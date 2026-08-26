@@ -287,6 +287,8 @@ const externalProductionTruth = productionTruth ? {
   repositoryMigrationFiles:productionTruth.repository.migrationFiles.count,
   appliedMigrations:productionTruth.supabase.appliedMigrations.count,
   exactMigrationNameMatches:productionTruth.reconciliation.exactMigrationNameMatches,
+  repositoryMigrationsWithoutExactAppliedName:productionTruth.reconciliation.repositoryMigrationsWithoutExactAppliedName.count,
+  appliedMigrationsWithoutExactRepositoryName:productionTruth.reconciliation.appliedMigrationsWithoutExactRepositoryName.count,
   migrationReconciliationDecision:productionTruth.reconciliation.decision,
   conventionalTests:productionTruth.repository.verificationArtifacts.conventionalTests.count,
   gatesAuditsSmokes:productionTruth.repository.verificationArtifacts.gatesAuditsSmokes.count,
