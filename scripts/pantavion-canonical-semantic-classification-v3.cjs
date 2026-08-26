@@ -29,6 +29,44 @@ const capabilities = {
   create: ['create','insert','register','publish','send','enqueue','start'], read: ['read','list','fetch','search','discover','view','select'], update: ['update','edit','change','accept','approve','reject','decide'], delete: ['delete','remove','revoke','leave'], synchronize: ['sync','import','export','hydrate'], protect: ['secure','privacy','rls','policy','guard','block','moderation'], translate: ['translate','translation','interpreter'], execute: ['execute','worker','runtime','job','workflow','agent'], observe: ['audit','monitor','report','metrics','log','evidence']
 };
 
+const sourcePathAnchors = [
+  { module:'Maps / World / Water', subsystem:'water', patterns:[/(^|\/)app\/professional\/infrastructure\/water(\/|$)/,/(^|\/)core\/(infrastructure\/)?water(\/|$)/,/(^|\/)scripts\/water[-/]/] },
+  { module:'Interpreter / Translation', subsystem:'translation', patterns:[/(^|\/)app\/translate(\/|$)/,/(^|\/)core\/translation(\/|$)/,/(^|\/)services\/translation(\/|[-.])/] },
+  { module:'SOS / Crisis', subsystem:'emergency', patterns:[/(^|\/)app\/(sos|emergency|crisis)(\/|$)/,/(^|\/)core\/(sos|emergency|crisis)(\/|$)/] },
+  { module:'Safety / Trust / Minors', subsystem:'moderation', patterns:[/(^|\/)app\/admin\/moderation(\/|$)/,/(^|\/)core\/(safety|moderation|trust|minors)(\/|$)/,/(^|\/)scripts\/[^/]*(safety|moderation)[^/]*$/] },
+  { module:'Identity / Auth / Consent', subsystem:'authentication', patterns:[/(^|\/)app\/(auth|login|register)(\/|$)/,/(^|\/)core\/(auth|identity|consent)(\/|$)/,/(^|\/)lib\/[^/]*(auth|identity)[^/]*$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', patterns:[/(^|\/)app\/kernel(\/|$)/,/(^|\/)core\/(kernel|runtime|guardian)(\/|$)/,/(^|\/)core\/[^/]*kernel[^/]*$/,/(^|\/)scripts\/[^/]*(kernel|guardian|runtime)[^/]*$/] },
+  { module:'Personal AI / PantaAI', subsystem:'memory', patterns:[/(^|\/)core\/memory(\/|$)/,/(^|\/)app\/(panta-ai|personal-ai)(\/|$)/,/(^|\/)core\/(panta-ai|personal-ai)(\/|$)/] },
+  { module:'People', subsystem:'profile', patterns:[/(^|\/)app\/(people|profile|contacts)(\/|$)/,/(^|\/)core\/(people|profile|contacts)(\/|$)/] },
+  { module:'Social / Pulse / Communities', subsystem:'publishing', patterns:[/(^|\/)app\/(social|pulse|communities)(\/|$)/,/(^|\/)core\/(social|pulse|communities)(\/|$)/] },
+  { module:'Chat', subsystem:'messaging', patterns:[/(^|\/)app\/(chat|messages|messaging)(\/|$)/,/(^|\/)core\/(chat|messages|messaging)(\/|$)/] },
+  { module:'Learning / Knowledge', subsystem:'learning', patterns:[/(^|\/)app\/(learning|pantalearn)(\/|$)/,/(^|\/)core\/(learning|knowledge)(\/|$)/] },
+  { module:'Marketplace / Work / Business', subsystem:'marketplace', patterns:[/(^|\/)app\/(marketplace|business|work)(\/|$)/,/(^|\/)core\/(marketplace|business|work)(\/|$)/] },
+  { module:'Music / Media / Creation', subsystem:'media', patterns:[/(^|\/)app\/(music|media|creation)(\/|$)/,/(^|\/)core\/(music|media|creation)(\/|$)/] },
+  { module:'Resilience / Offline / Infrastructure', subsystem:'continuity', patterns:[/(^|\/)app\/(offline|resilience)(\/|$)/,/(^|\/)core\/(offline|resilience)(\/|$)/] },
+  { module:'Voice / Video', subsystem:'calling', patterns:[/(^|\/)app\/(voice|video|calls)(\/|$)/,/(^|\/)core\/(voice|video|calls)(\/|$)/] }
+];
+
+function sourcePathAnchor(file) {
+  const sourcePath = String(file || '').toLowerCase().replace(/\\/g,'/');
+  if (!sourcePath || sourcePath.startsWith('data/runtime-reports/')) return null;
+  const matches = sourcePathAnchors.filter(anchor => anchor.patterns.some(pattern => pattern.test(sourcePath)));
+  return matches.length === 1 ? { ...matches[0], sourcePath } : null;
+}
+
+function anchoredRank(groups, text, anchor) {
+  const ranked = rank(groups, text);
+  if (!anchor || !groups[anchor.subsystem]) return ranked;
+  const existing = ranked.find(item => item.name === anchor.subsystem);
+  if (existing) {
+    existing.score += 8;
+    existing.evidence = [...new Set([...existing.evidence,'source-path:'+anchor.sourcePath])];
+  } else {
+    ranked.push({ name:anchor.subsystem, score:8, evidence:['source-path:'+anchor.sourcePath] });
+  }
+  return ranked.sort((a,b) => b.score-a.score || a.name.localeCompare(b.name));
+}
+
 function normalize(value) { return String(value || '').toLowerCase().replace(/[_/.-]+/g, ' ').replace(/\s+/g, ' ').trim(); }
 function hasTerm(text, term) { const t = normalize(term); return t.includes(' ') ? text.includes(t) : text.split(/\W+/).includes(t); }
 function rank(groups, text) { return Object.entries(groups).map(([name,terms]) => ({ name, score: terms.reduce((n,t) => n + (hasTerm(text,t) ? (normalize(t).includes(' ') ? 3 : 1) : 0), 0), evidence: terms.filter(t => hasTerm(text,t)) })).filter(x => x.score > 0).sort((a,b) => b.score-a.score || a.name.localeCompare(b.name)); }
@@ -39,8 +77,9 @@ function artifactType(file, text) {
   if (f.startsWith('app api ') || f.includes(' route ts')) return 'api';
   if (f.startsWith('app ') && /component|page|screen|button/.test(text)) return 'user-interface';
   if (f.startsWith('services ')) return 'service';
-  if (f.startsWith('scripts ') || f.startsWith(' github ')) return 'automation';
+  if (f.startsWith('scripts ') || f.startsWith('github ')) return 'automation';
   if (f.startsWith('docs ') || file.endsWith('.md')) return 'requirement-document';
+  if (f.startsWith('data runtime reports ')) return 'runtime-evidence';
   if (f.startsWith('data ')) return 'data-artifact';
   return 'implementation';
 }
@@ -49,7 +88,7 @@ function isRecursiveLedgerArtifact(record) {
   return sourceFile.startsWith('data recovery canonical ledger corpus batches ');
 }
 function classify(record) {
-  const module = record.classification && record.classification.module;
+  const seedModule = record.classification && record.classification.module;
   if (isRecursiveLedgerArtifact(record)) {
     const sourceFile = (record.provenance && record.provenance.sourceFile) || 'unknown';
     return {
@@ -70,8 +109,11 @@ function classify(record) {
       semanticReviewReasons: ['recursive_ledger_artifact']
     };
   }
-  const text = normalize([record.provenance && record.provenance.sourceFile, record.text, record.context].join('\n'));
-  const subsystems = ontology[module] ? rank(ontology[module], text) : [];
+  const sourceFile = (record.provenance && record.provenance.sourceFile) || '';
+  const pathAnchor = sourcePathAnchor(sourceFile);
+  const module = pathAnchor ? pathAnchor.module : seedModule;
+  const text = normalize([sourceFile, record.text, record.context].join('\n'));
+  const subsystems = ontology[module] ? anchoredRank(ontology[module], text, pathAnchor) : [];
   const capabilityRanks = rank(capabilities, text);
   const subsystem = subsystems[0] ? subsystems[0].name : null;
   const capability = capabilityRanks[0] ? capabilityRanks[0].name : null;
@@ -79,12 +121,13 @@ function classify(record) {
   const subsystemConflict = subsystems.length > 1 && subsystems[0].score === subsystems[1].score;
   const capabilityConflict = capabilityRanks.length > 1 && capabilityRanks[0].score === capabilityRanks[1].score;
   const competingModules = Object.entries(ontology).map(([name,groups]) => {
-    const rankedSubsystems = rank(groups, text);
+    const rankedSubsystems = name === module ? subsystems : rank(groups, text);
+    const pathScore = pathAnchor && name === pathAnchor.module ? 12 : 0;
     return {
       name,
-      score: rankedSubsystems.reduce((sum,item) => sum + item.score, 0),
+      score: rankedSubsystems.reduce((sum,item) => sum + item.score, 0) + pathScore,
       strongestSubsystemScore: rankedSubsystems[0] ? rankedSubsystems[0].score : 0,
-      evidence: rankedSubsystems.flatMap(item => item.evidence).slice(0,12)
+      evidence: [...(pathAnchor && name === pathAnchor.module ? ['source-path:'+pathAnchor.sourcePath] : []),...rankedSubsystems.flatMap(item => item.evidence)].slice(0,12)
     };
   }).filter(x => x.score > 0).sort((a,b) => b.score-a.score || b.strongestSubsystemScore-a.strongestSubsystemScore || a.name.localeCompare(b.name));
   const topModule = competingModules[0] || null;
@@ -106,7 +149,7 @@ function classify(record) {
   if (subsystemConflict) reasons.push('subsystem_conflict');
   if (capabilityConflict) reasons.push('capability_conflict');
   if (moduleConflict) reasons.push('module_conflict:' + module + '->' + topModule.name);
-  return { ...record, classification: { ...record.classification, subsystem, capability, feature: subsystem && capability ? subsystem + '.' + capability + '.' + artifact : null, artifactType: artifact, canonicalTarget: deterministic ? 'canonical/' + module + '/' + subsystem + '/' + capability : null, classificationMethod: 'semantic-v3-strict-evidence-ontology', classificationEvidence: { subsystem: subsystems.slice(0,3), capability: capabilityRanks.slice(0,3), competingModules: competingModules.slice(0,3) } }, reviewStatus: deterministic ? 'SEMANTICALLY_CLASSIFIED' : 'REVIEW_REQUIRED', semanticDecision: deterministic ? 'ROUTE_CANDIDATE' : 'HOLD', semanticReviewReasons: reasons };
+  return { ...record, classification: { ...record.classification, module, subsystem, capability, feature: subsystem && capability ? subsystem + '.' + capability + '.' + artifact : null, artifactType: artifact, canonicalTarget: deterministic ? 'canonical/' + module + '/' + subsystem + '/' + capability : null, classificationMethod: pathAnchor ? 'semantic-v3-source-path-anchored-ontology' : 'semantic-v3-strict-evidence-ontology', classificationEvidence: { seedModule, pathAnchor:pathAnchor ? { module:pathAnchor.module, subsystem:pathAnchor.subsystem, sourcePath:pathAnchor.sourcePath } : null, subsystem: subsystems.slice(0,3), capability: capabilityRanks.slice(0,3), competingModules: competingModules.slice(0,3) } }, reviewStatus: deterministic ? 'SEMANTICALLY_CLASSIFIED' : 'REVIEW_REQUIRED', semanticDecision: deterministic ? 'ROUTE_CANDIDATE' : 'HOLD', semanticReviewReasons: reasons };
 }
 function fingerprint(records) { return crypto.createHash('sha256').update(records.map(r => r.id).join('\n')).digest('hex'); }
 
@@ -144,17 +187,39 @@ const moduleSummary = {};
 const reviewReasonSummary = {};
 for (const r of records) {
   const module = r.reviewStatus === 'PRESERVED_RECURSIVE_ARTIFACT' ? 'RECOVERY / PROVENANCE QUARANTINE' : (r.classification.module || 'UNCLASSIFIED');
-  const target = moduleSummary[module] ||= { total:0, classified:0, reviewRequired:0, preservedRecursiveArtifacts:0, subsystems:{}, capabilities:{}, reviewReasons:{} };
+  const target = moduleSummary[module] ||= { total:0, classified:0, reviewRequired:0, preservedRecursiveArtifacts:0, pathAnchored:0, pathReassigned:0, subsystems:{}, capabilities:{}, artifactTypes:{}, sourceFamilies:{}, evidenceInventory:{ specification:0, schemaOrMigration:0, backendOrService:0, userInterface:0, tests:0, automation:0, runtimeEvidence:0, other:0 }, reviewReasons:{} };
   target.total++;
   if (r.reviewStatus === 'SEMANTICALLY_CLASSIFIED') target.classified++;
   else if (r.reviewStatus === 'PRESERVED_RECURSIVE_ARTIFACT') target.preservedRecursiveArtifacts++;
   else target.reviewRequired++;
   if (r.classification.subsystem) target.subsystems[r.classification.subsystem] = (target.subsystems[r.classification.subsystem] || 0) + 1;
   if (r.classification.capability) target.capabilities[r.classification.capability] = (target.capabilities[r.classification.capability] || 0) + 1;
+  const artifact = r.classification.artifactType || 'unknown';
+  const sourceFamily = (r.provenance && r.provenance.sourceFamily) || 'unknown';
+  target.artifactTypes[artifact] = (target.artifactTypes[artifact] || 0) + 1;
+  target.sourceFamilies[sourceFamily] = (target.sourceFamilies[sourceFamily] || 0) + 1;
+  const pathEvidence = r.classification.classificationEvidence && r.classification.classificationEvidence.pathAnchor;
+  if (pathEvidence) {
+    target.pathAnchored++;
+    if (r.classification.classificationEvidence.seedModule !== r.classification.module) target.pathReassigned++;
+  }
+  const evidenceLane = artifact === 'requirement-document' ? 'specification'
+    : artifact === 'database-migration' ? 'schemaOrMigration'
+    : ['api','service','implementation'].includes(artifact) ? 'backendOrService'
+    : artifact === 'user-interface' ? 'userInterface'
+    : artifact === 'test' ? 'tests'
+    : artifact === 'automation' ? 'automation'
+    : artifact === 'runtime-evidence' ? 'runtimeEvidence'
+    : 'other';
+  target.evidenceInventory[evidenceLane]++;
   for (const reason of r.semanticReviewReasons || []) {
     reviewReasonSummary[reason] = (reviewReasonSummary[reason] || 0) + 1;
     target.reviewReasons[reason] = (target.reviewReasons[reason] || 0) + 1;
   }
+}
+for (const [module,target] of Object.entries(moduleSummary)) {
+  if (module === 'RECOVERY / PROVENANCE QUARANTINE') continue;
+  target.missingRecoveredEvidenceCategories = Object.entries(target.evidenceInventory).filter(([,count]) => count === 0).map(([name]) => name);
 }
 const manifest = { id:'pantavion_canonical_semantic_v3', generatedAt:new Date().toISOString(), sourceManifest:input.manifest && input.manifest.id, sourceFingerprint:input.manifest && input.manifest.corpusFingerprint, recordCount:records.length, preservedRecordCount:before.length, idFingerprint:fingerprint(records), counts, reviewReasonSummary, moduleSummary, completion:{ complete:!counts.REVIEW_REQUIRED, semanticallyClassified:counts.SEMANTICALLY_CLASSIFIED || 0, preservedRecursiveArtifacts:counts.PRESERVED_RECURSIVE_ARTIFACT || 0, reviewRequired:counts.REVIEW_REQUIRED || 0 }, truthRule:'No record is final, mergeable, deletable, implemented, deployed, or live merely because deterministic routing succeeded. Semantic review and implementation evidence remain mandatory.' };
 fs.mkdirSync(outRoot,{recursive:true});
