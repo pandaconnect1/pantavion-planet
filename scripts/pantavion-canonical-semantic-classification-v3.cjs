@@ -54,17 +54,35 @@ function classify(record) {
   const artifact = artifactType((record.provenance && record.provenance.sourceFile) || '', text);
   const subsystemConflict = subsystems.length > 1 && subsystems[0].score === subsystems[1].score;
   const capabilityConflict = capabilityRanks.length > 1 && capabilityRanks[0].score === capabilityRanks[1].score;
-  const competingModules = Object.entries(ontology).map(([name,groups]) => ({ name, score: Object.values(groups).flat().reduce((n,t) => n + (hasTerm(text,t) ? 1 : 0), 0) })).filter(x => x.score > 0).sort((a,b) => b.score-a.score);
-  const moduleConflict = Boolean(module && competingModules[0] && competingModules[0].name !== module && competingModules[0].score >= 3);
-  const deterministic = Boolean(module && subsystem && capability && !subsystemConflict && !capabilityConflict && !moduleConflict);
+  const competingModules = Object.entries(ontology).map(([name,groups]) => {
+    const rankedSubsystems = rank(groups, text);
+    return {
+      name,
+      score: rankedSubsystems.reduce((sum,item) => sum + item.score, 0),
+      strongestSubsystemScore: rankedSubsystems[0] ? rankedSubsystems[0].score : 0,
+      evidence: rankedSubsystems.flatMap(item => item.evidence).slice(0,12)
+    };
+  }).filter(x => x.score > 0).sort((a,b) => b.score-a.score || b.strongestSubsystemScore-a.strongestSubsystemScore || a.name.localeCompare(b.name));
+  const topModule = competingModules[0] || null;
+  const secondModule = competingModules[1] || null;
+  const moduleMatches = Boolean(module && topModule && topModule.name === module);
+  const moduleEvidenceStrong = Boolean(topModule && topModule.score >= 3 && topModule.strongestSubsystemScore >= 2);
+  const moduleMarginStrong = Boolean(topModule && (!secondModule || topModule.score - secondModule.score >= 2));
+  const subsystemEvidenceStrong = Boolean(subsystems[0] && subsystems[0].score >= 2);
+  const moduleConflict = Boolean(module && topModule && topModule.name !== module);
+  const deterministic = Boolean(module && subsystem && capability && moduleMatches && moduleEvidenceStrong && moduleMarginStrong && subsystemEvidenceStrong && !subsystemConflict && !capabilityConflict && !moduleConflict);
   const reasons = [];
   if (!module) reasons.push('module_missing');
   if (!subsystem) reasons.push('subsystem_missing');
   if (!capability) reasons.push('capability_missing');
+  if (!moduleMatches) reasons.push('module_not_confirmed');
+  if (!moduleEvidenceStrong) reasons.push('module_evidence_weak');
+  if (!moduleMarginStrong) reasons.push('module_margin_ambiguous');
+  if (!subsystemEvidenceStrong) reasons.push('subsystem_evidence_weak');
   if (subsystemConflict) reasons.push('subsystem_conflict');
   if (capabilityConflict) reasons.push('capability_conflict');
-  if (moduleConflict) reasons.push('module_conflict:' + module + '->' + competingModules[0].name);
-  return { ...record, classification: { ...record.classification, subsystem, capability, feature: subsystem && capability ? subsystem + '.' + capability + '.' + artifact : null, artifactType: artifact, canonicalTarget: deterministic ? 'canonical/' + module + '/' + subsystem + '/' + capability : null, classificationMethod: 'semantic-v3-deterministic-ontology', classificationEvidence: { subsystem: subsystems.slice(0,3), capability: capabilityRanks.slice(0,3), competingModules: competingModules.slice(0,3) } }, reviewStatus: deterministic ? 'SEMANTICALLY_CLASSIFIED' : 'REVIEW_REQUIRED', semanticDecision: deterministic ? 'ROUTE_CANDIDATE' : 'HOLD', semanticReviewReasons: reasons };
+  if (moduleConflict) reasons.push('module_conflict:' + module + '->' + topModule.name);
+  return { ...record, classification: { ...record.classification, subsystem, capability, feature: subsystem && capability ? subsystem + '.' + capability + '.' + artifact : null, artifactType: artifact, canonicalTarget: deterministic ? 'canonical/' + module + '/' + subsystem + '/' + capability : null, classificationMethod: 'semantic-v3-strict-evidence-ontology', classificationEvidence: { subsystem: subsystems.slice(0,3), capability: capabilityRanks.slice(0,3), competingModules: competingModules.slice(0,3) } }, reviewStatus: deterministic ? 'SEMANTICALLY_CLASSIFIED' : 'REVIEW_REQUIRED', semanticDecision: deterministic ? 'ROUTE_CANDIDATE' : 'HOLD', semanticReviewReasons: reasons };
 }
 function fingerprint(records) { return crypto.createHash('sha256').update(records.map(r => r.id).join('\n')).digest('hex'); }
 
