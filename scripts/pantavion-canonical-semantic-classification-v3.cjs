@@ -44,8 +44,32 @@ function artifactType(file, text) {
   if (f.startsWith('data ')) return 'data-artifact';
   return 'implementation';
 }
+function isRecursiveLedgerArtifact(record) {
+  const sourceFile = normalize(record.provenance && record.provenance.sourceFile);
+  return sourceFile.startsWith('data recovery canonical ledger corpus batches ');
+}
 function classify(record) {
   const module = record.classification && record.classification.module;
+  if (isRecursiveLedgerArtifact(record)) {
+    const sourceFile = (record.provenance && record.provenance.sourceFile) || 'unknown';
+    return {
+      ...record,
+      classification: {
+        ...record.classification,
+        semanticDomain: 'Recovery / Provenance',
+        subsystem: 'recursive-ledger',
+        capability: 'preserve',
+        feature: 'recursive-ledger.preserve.recovery-wrapper',
+        artifactType: 'recovery-ledger-wrapper',
+        canonicalTarget: 'canonical/recovery/quarantine/' + path.basename(sourceFile,'.json'),
+        classificationMethod: 'semantic-v3-recursive-ledger-quarantine',
+        classificationEvidence: { sourcePath: sourceFile, rule: 'source-is-canonical-ledger-batch' }
+      },
+      reviewStatus: 'PRESERVED_RECURSIVE_ARTIFACT',
+      semanticDecision: 'PRESERVE_QUARANTINE',
+      semanticReviewReasons: ['recursive_ledger_artifact']
+    };
+  }
   const text = normalize([record.provenance && record.provenance.sourceFile, record.text, record.context].join('\n'));
   const subsystems = ontology[module] ? rank(ontology[module], text) : [];
   const capabilityRanks = rank(capabilities, text);
@@ -119,10 +143,12 @@ const counts = records.reduce((a,r) => { a[r.reviewStatus] = (a[r.reviewStatus] 
 const moduleSummary = {};
 const reviewReasonSummary = {};
 for (const r of records) {
-  const module = r.classification.module || 'UNCLASSIFIED';
-  const target = moduleSummary[module] ||= { total:0, classified:0, reviewRequired:0, subsystems:{}, capabilities:{}, reviewReasons:{} };
+  const module = r.reviewStatus === 'PRESERVED_RECURSIVE_ARTIFACT' ? 'RECOVERY / PROVENANCE QUARANTINE' : (r.classification.module || 'UNCLASSIFIED');
+  const target = moduleSummary[module] ||= { total:0, classified:0, reviewRequired:0, preservedRecursiveArtifacts:0, subsystems:{}, capabilities:{}, reviewReasons:{} };
   target.total++;
-  if (r.reviewStatus === 'SEMANTICALLY_CLASSIFIED') target.classified++; else target.reviewRequired++;
+  if (r.reviewStatus === 'SEMANTICALLY_CLASSIFIED') target.classified++;
+  else if (r.reviewStatus === 'PRESERVED_RECURSIVE_ARTIFACT') target.preservedRecursiveArtifacts++;
+  else target.reviewRequired++;
   if (r.classification.subsystem) target.subsystems[r.classification.subsystem] = (target.subsystems[r.classification.subsystem] || 0) + 1;
   if (r.classification.capability) target.capabilities[r.classification.capability] = (target.capabilities[r.classification.capability] || 0) + 1;
   for (const reason of r.semanticReviewReasons || []) {
@@ -130,7 +156,7 @@ for (const r of records) {
     target.reviewReasons[reason] = (target.reviewReasons[reason] || 0) + 1;
   }
 }
-const manifest = { id:'pantavion_canonical_semantic_v3', generatedAt:new Date().toISOString(), sourceManifest:input.manifest && input.manifest.id, sourceFingerprint:input.manifest && input.manifest.corpusFingerprint, recordCount:records.length, preservedRecordCount:before.length, idFingerprint:fingerprint(records), counts, reviewReasonSummary, moduleSummary, completion:{ complete:!counts.REVIEW_REQUIRED, semanticallyClassified:counts.SEMANTICALLY_CLASSIFIED || 0, reviewRequired:counts.REVIEW_REQUIRED || 0 }, truthRule:'No record is final, mergeable, deletable, implemented, deployed, or live merely because deterministic routing succeeded. Semantic review and implementation evidence remain mandatory.' };
+const manifest = { id:'pantavion_canonical_semantic_v3', generatedAt:new Date().toISOString(), sourceManifest:input.manifest && input.manifest.id, sourceFingerprint:input.manifest && input.manifest.corpusFingerprint, recordCount:records.length, preservedRecordCount:before.length, idFingerprint:fingerprint(records), counts, reviewReasonSummary, moduleSummary, completion:{ complete:!counts.REVIEW_REQUIRED, semanticallyClassified:counts.SEMANTICALLY_CLASSIFIED || 0, preservedRecursiveArtifacts:counts.PRESERVED_RECURSIVE_ARTIFACT || 0, reviewRequired:counts.REVIEW_REQUIRED || 0 }, truthRule:'No record is final, mergeable, deletable, implemented, deployed, or live merely because deterministic routing succeeded. Semantic review and implementation evidence remain mandatory.' };
 fs.mkdirSync(outRoot,{recursive:true});
 fs.writeFileSync(path.join(outRoot,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');
 const ledgerPath = path.join(outRoot,'semantic-ledger.ndjson');
