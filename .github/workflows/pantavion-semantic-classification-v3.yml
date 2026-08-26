@@ -43,7 +43,7 @@ jobs:
           const appliedMigrations = productionTruth.supabase.appliedMigrations;
           if (repoMigrations.count !== repoMigrations.items.length || appliedMigrations.count !== appliedMigrations.items.length) throw new Error("Production truth migration count mismatch");
           const appliedNames = new Set(appliedMigrations.items.map(item=>item.name));
-          const exactMatches = repoMigrations.items.filter(item=>appliedNames.has(item.file.replace(/^\\d+_/,"").replace(/\\.sql$/,""))).length;
+          const exactMatches = repoMigrations.items.filter(item=>appliedNames.has(item.file.replace(/^\d+_/,"").replace(/\.sql$/,""))).length;
           if (exactMatches !== productionTruth.reconciliation.exactMigrationNameMatches) throw new Error("Migration reconciliation exact-match mismatch");
           if (productionTruth.reconciliation.decision !== "HOLD_NON_EXACT") throw new Error("Non-exact migrations must remain HOLD");
           if (!productionTruth.supabase.publicTables.allRlsEnabled) throw new Error("Production truth reports a public table without RLS");
