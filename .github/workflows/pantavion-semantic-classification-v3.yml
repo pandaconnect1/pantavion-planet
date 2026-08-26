@@ -46,9 +46,17 @@ jobs:
           const exactMatches = repoMigrations.items.filter(item=>appliedNames.has(item.file.replace(/^\d+_/,"").replace(/\.sql$/,""))).length;
           if (exactMatches !== productionTruth.reconciliation.exactMigrationNameMatches) throw new Error("Migration reconciliation exact-match mismatch");
           if (productionTruth.reconciliation.decision !== "HOLD_NON_EXACT") throw new Error("Non-exact migrations must remain HOLD");
+          const objectEvidence = productionTruth.reconciliation.objectLevelProductionEvidence;
+          if (!objectEvidence || objectEvidence.examinedRepositoryMigrations !== 20 || objectEvidence.items.length !== 20) throw new Error("Object-level reconciliation must cover all 20 non-exact repository migrations");
+          if (objectEvidence.equivalenceDecision !== "HOLD_NON_EXACT" || objectEvidence.items.some(item => item.equivalenceDecision !== "HOLD_NON_EXACT")) throw new Error("Object presence must not be promoted to migration equivalence");
+          const objectStatusTotal = Object.values(objectEvidence.statusCounts).reduce((sum,count) => sum + count,0);
+          if (objectStatusTotal !== 20) throw new Error("Object-level reconciliation status accounting mismatch");
+          const expectedObjectStatuses = { SCHEMA_OBJECTS_ALL_PRESENT:5, SCHEMA_OBJECTS_PARTIAL:3, SCHEMA_OBJECTS_NOT_OBSERVED:10, OBSERVABLE_EFFECTS_ALL_PRESENT:1, OBSERVABLE_EFFECTS_PARTIAL:1 };
+          for (const [status,count] of Object.entries(expectedObjectStatuses)) if (objectEvidence.statusCounts[status] !== count) throw new Error("Unexpected object-level status "+status+": "+objectEvidence.statusCounts[status]);
           if (!productionTruth.supabase.publicTables.allRlsEnabled) throw new Error("Production truth reports a public table without RLS");
           if (productionTruth.supabase.registrationGate.publicRegistrationEnabled) throw new Error("Public registration truth gate unexpectedly enabled");
           if (!manifest.externalProductionTruth || manifest.externalProductionTruth.repositoryMigrationFiles !== repoMigrations.count || manifest.externalProductionTruth.appliedMigrations !== appliedMigrations.count) throw new Error("Manifest omitted repository/Supabase truth evidence");
+          if (!manifest.externalProductionTruth.objectLevelMigrationEvidence || manifest.externalProductionTruth.objectLevelMigrationEvidence.examinedRepositoryMigrations !== 20 || manifest.externalProductionTruth.objectLevelMigrationEvidence.equivalenceDecision !== "HOLD_NON_EXACT") throw new Error("Manifest omitted object-level migration truth evidence");
           if (receipt.totalRecords !== 82413 || source.length !== 82413) throw new Error("82,413-record source preservation mismatch");
           if (manifest.sourceFingerprint !== receipt.corpusFingerprint || manifest.recordCount !== 82413 || manifest.preservedRecordCount !== 82413) throw new Error("Manifest/receipt mismatch");
           (async () => {
