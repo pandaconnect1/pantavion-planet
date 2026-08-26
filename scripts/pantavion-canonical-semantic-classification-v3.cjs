@@ -96,6 +96,10 @@ function loadProductionTruthEvidence() {
   const appliedMigrations = evidence.supabase && evidence.supabase.appliedMigrations;
   if (!repoMigrations || repoMigrations.count !== repoMigrations.items.length) throw new Error('Repository migration evidence count mismatch');
   if (!appliedMigrations || appliedMigrations.count !== appliedMigrations.items.length) throw new Error('Applied migration evidence count mismatch');
+  const objectEvidence = evidence.reconciliation && evidence.reconciliation.objectLevelProductionEvidence;
+  if (!objectEvidence || objectEvidence.examinedRepositoryMigrations !== objectEvidence.items.length) throw new Error('Object-level migration evidence count mismatch');
+  if (objectEvidence.examinedRepositoryMigrations !== evidence.reconciliation.repositoryMigrationsWithoutExactAppliedName.count) throw new Error('Object-level migration evidence does not cover every non-exact repository migration');
+  if (objectEvidence.equivalenceDecision !== 'HOLD_NON_EXACT' || objectEvidence.items.some(item => item.equivalenceDecision !== 'HOLD_NON_EXACT')) throw new Error('Object-level evidence must not assert migration equivalence');
   return evidence;
 }
 
@@ -250,7 +254,7 @@ for (const r of records) {
   }
 }
 const productionTruth = loadProductionTruthEvidence();
-const unassignedExternalEvidence = { repositoryMigrationFiles:[], appliedMigrations:[], conventionalTests:[], gatesAuditsSmokes:[] };
+const unassignedExternalEvidence = { repositoryMigrationFiles:[], appliedMigrations:[], migrationObjectReconciliation:[], conventionalTests:[], gatesAuditsSmokes:[] };
 function attachExternalEvidence(kind, item, value) {
   const modules = evidenceModules(value);
   if (!modules.length) {
@@ -260,19 +264,20 @@ function attachExternalEvidence(kind, item, value) {
   for (const module of modules) {
     const target = moduleSummary[module];
     if (!target) continue;
-    target.externalEvidence ||= { repositoryMigrationFiles:[], appliedMigrations:[], conventionalTests:[], gatesAuditsSmokes:[] };
+    target.externalEvidence ||= { repositoryMigrationFiles:[], appliedMigrations:[], migrationObjectReconciliation:[], conventionalTests:[], gatesAuditsSmokes:[] };
     target.externalEvidence[kind].push(item);
   }
 }
 if (productionTruth) {
   for (const item of productionTruth.repository.migrationFiles.items) attachExternalEvidence('repositoryMigrationFiles',item,item.file);
   for (const item of productionTruth.supabase.appliedMigrations.items) attachExternalEvidence('appliedMigrations',item,item.name);
+  for (const item of productionTruth.reconciliation.objectLevelProductionEvidence.items) attachExternalEvidence('migrationObjectReconciliation',item,item.repositoryMigration);
   for (const item of productionTruth.repository.verificationArtifacts.conventionalTests.items) attachExternalEvidence('conventionalTests',item,item.path);
   for (const item of productionTruth.repository.verificationArtifacts.gatesAuditsSmokes.items) attachExternalEvidence('gatesAuditsSmokes',item,item.path);
 }
 for (const [module,target] of Object.entries(moduleSummary)) {
   if (module === 'RECOVERY / PROVENANCE QUARANTINE') continue;
-  target.externalEvidence ||= { repositoryMigrationFiles:[], appliedMigrations:[], conventionalTests:[], gatesAuditsSmokes:[] };
+  target.externalEvidence ||= { repositoryMigrationFiles:[], appliedMigrations:[], migrationObjectReconciliation:[], conventionalTests:[], gatesAuditsSmokes:[] };
   target.missingRecoveredEvidenceCategories = Object.entries(target.evidenceInventory).filter(([,count]) => count === 0).map(([name]) => name);
   target.missingCombinedEvidenceCategories = target.missingRecoveredEvidenceCategories.filter(name => {
     if (name === 'schemaOrMigration') return !target.externalEvidence.repositoryMigrationFiles.length && !target.externalEvidence.appliedMigrations.length;
@@ -290,6 +295,7 @@ const externalProductionTruth = productionTruth ? {
   repositoryMigrationsWithoutExactAppliedName:productionTruth.reconciliation.repositoryMigrationsWithoutExactAppliedName.count,
   appliedMigrationsWithoutExactRepositoryName:productionTruth.reconciliation.appliedMigrationsWithoutExactRepositoryName.count,
   migrationReconciliationDecision:productionTruth.reconciliation.decision,
+  objectLevelMigrationEvidence:{ examinedRepositoryMigrations:productionTruth.reconciliation.objectLevelProductionEvidence.examinedRepositoryMigrations, statusCounts:productionTruth.reconciliation.objectLevelProductionEvidence.statusCounts, equivalenceDecision:productionTruth.reconciliation.objectLevelProductionEvidence.equivalenceDecision },
   conventionalTests:productionTruth.repository.verificationArtifacts.conventionalTests.count,
   gatesAuditsSmokes:productionTruth.repository.verificationArtifacts.gatesAuditsSmokes.count,
   publicTables:productionTruth.supabase.publicTables,
