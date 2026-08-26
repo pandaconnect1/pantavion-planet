@@ -6,6 +6,7 @@ const root = process.cwd();
 const generatedInputPath = path.join(root, 'data/recovery/canonical-knowledge-v2/full-corpus.json');
 const committedCorpusRoot = path.join(root, 'data/recovery/imported-pr248/canonical-ledger/corpus');
 const outRoot = path.join(root, 'data/recovery/canonical-semantic-v3');
+const productionTruthPath = path.join(root, 'data/recovery/production-truth/supabase-repository-evidence-20260826.json');
 
 const ontology = {
   'Personal AI / PantaAI': { memory: ['memory','remember','context','personal context','preference','goal'], orchestration: ['agent','router','tool call','workflow','planner','assistant'], personalization: ['personalized','adaptive','communication style','accessibility'] },
@@ -65,6 +66,37 @@ function anchoredRank(groups, text, anchor) {
     ranked.push({ name:anchor.subsystem, score:8, evidence:['source-path:'+anchor.sourcePath] });
   }
   return ranked.sort((a,b) => b.score-a.score || a.name.localeCompare(b.name));
+}
+
+function evidenceModules(value) {
+  const text = normalize(value);
+  const modules = [];
+  const add = name => { if (!modules.includes(name)) modules.push(name); };
+  if (/identity|auth|registration|profile|consent|aal2|account/.test(text)) add('Identity / Auth / Consent');
+  if (/trust|safety|minor|privacy|protected|moderation|block|guardian/.test(text)) add('Safety / Trust / Minors');
+  if (/durable execution|scheduled worker|owner decision|kernel|runtime/.test(text)) add('Kernel / Guardian / Runtime');
+  if (/people|contact|nearby|relationship/.test(text)) add('People');
+  if (/social|communit|post|reaction|notification|personal media|media item|media source/.test(text)) add('Social / Pulse / Communities');
+  if (/chat|messag|conversation|receipt/.test(text)) add('Chat');
+  if (/interpreter|translat|speech|language/.test(text)) add('Interpreter / Translation');
+  if (/personal ai|memory|panta ai/.test(text)) add('Personal AI / PantaAI');
+  if (/emergency|sos|crisis/.test(text)) add('SOS / Crisis');
+  if (/listing|billing|entitlement|revenue|promotion|marketplace/.test(text)) add('Marketplace / Work / Business');
+  if (/voice|video|call/.test(text)) add('Voice / Video');
+  if (/water|dwg|geospatial|map system/.test(text)) add('Maps / World / Water');
+  if (/continuity|offline|resilience/.test(text)) add('Resilience / Offline / Infrastructure');
+  if (/learning|curriculum|mastery/.test(text)) add('Learning / Knowledge');
+  return modules;
+}
+
+function loadProductionTruthEvidence() {
+  if (!fs.existsSync(productionTruthPath)) return null;
+  const evidence = JSON.parse(fs.readFileSync(productionTruthPath,'utf8'));
+  const repoMigrations = evidence.repository && evidence.repository.migrationFiles;
+  const appliedMigrations = evidence.supabase && evidence.supabase.appliedMigrations;
+  if (!repoMigrations || repoMigrations.count !== repoMigrations.items.length) throw new Error('Repository migration evidence count mismatch');
+  if (!appliedMigrations || appliedMigrations.count !== appliedMigrations.items.length) throw new Error('Applied migration evidence count mismatch');
+  return evidence;
 }
 
 function normalize(value) { return String(value || '').toLowerCase().replace(/[_/.-]+/g, ' ').replace(/\s+/g, ' ').trim(); }
@@ -217,11 +249,53 @@ for (const r of records) {
     target.reviewReasons[reason] = (target.reviewReasons[reason] || 0) + 1;
   }
 }
+const productionTruth = loadProductionTruthEvidence();
+const unassignedExternalEvidence = { repositoryMigrationFiles:[], appliedMigrations:[], conventionalTests:[], gatesAuditsSmokes:[] };
+function attachExternalEvidence(kind, item, value) {
+  const modules = evidenceModules(value);
+  if (!modules.length) {
+    unassignedExternalEvidence[kind].push(item);
+    return;
+  }
+  for (const module of modules) {
+    const target = moduleSummary[module];
+    if (!target) continue;
+    target.externalEvidence ||= { repositoryMigrationFiles:[], appliedMigrations:[], conventionalTests:[], gatesAuditsSmokes:[] };
+    target.externalEvidence[kind].push(item);
+  }
+}
+if (productionTruth) {
+  for (const item of productionTruth.repository.migrationFiles.items) attachExternalEvidence('repositoryMigrationFiles',item,item.file);
+  for (const item of productionTruth.supabase.appliedMigrations.items) attachExternalEvidence('appliedMigrations',item,item.name);
+  for (const item of productionTruth.repository.verificationArtifacts.conventionalTests.items) attachExternalEvidence('conventionalTests',item,item.path);
+  for (const item of productionTruth.repository.verificationArtifacts.gatesAuditsSmokes.items) attachExternalEvidence('gatesAuditsSmokes',item,item.path);
+}
 for (const [module,target] of Object.entries(moduleSummary)) {
   if (module === 'RECOVERY / PROVENANCE QUARANTINE') continue;
+  target.externalEvidence ||= { repositoryMigrationFiles:[], appliedMigrations:[], conventionalTests:[], gatesAuditsSmokes:[] };
   target.missingRecoveredEvidenceCategories = Object.entries(target.evidenceInventory).filter(([,count]) => count === 0).map(([name]) => name);
+  target.missingCombinedEvidenceCategories = target.missingRecoveredEvidenceCategories.filter(name => {
+    if (name === 'schemaOrMigration') return !target.externalEvidence.repositoryMigrationFiles.length && !target.externalEvidence.appliedMigrations.length;
+    if (name === 'tests') return !target.externalEvidence.conventionalTests.length;
+    return true;
+  });
 }
-const manifest = { id:'pantavion_canonical_semantic_v3', generatedAt:new Date().toISOString(), sourceManifest:input.manifest && input.manifest.id, sourceFingerprint:input.manifest && input.manifest.corpusFingerprint, recordCount:records.length, preservedRecordCount:before.length, idFingerprint:fingerprint(records), counts, reviewReasonSummary, moduleSummary, completion:{ complete:!counts.REVIEW_REQUIRED, semanticallyClassified:counts.SEMANTICALLY_CLASSIFIED || 0, preservedRecursiveArtifacts:counts.PRESERVED_RECURSIVE_ARTIFACT || 0, reviewRequired:counts.REVIEW_REQUIRED || 0 }, truthRule:'No record is final, mergeable, deletable, implemented, deployed, or live merely because deterministic routing succeeded. Semantic review and implementation evidence remain mandatory.' };
+const externalProductionTruth = productionTruth ? {
+  source:path.relative(root,productionTruthPath),
+  capturedAt:productionTruth.capturedAt,
+  repositoryRevision:productionTruth.repository.revision,
+  repositoryMigrationFiles:productionTruth.repository.migrationFiles.count,
+  appliedMigrations:productionTruth.supabase.appliedMigrations.count,
+  exactMigrationNameMatches:productionTruth.reconciliation.exactMigrationNameMatches,
+  migrationReconciliationDecision:productionTruth.reconciliation.decision,
+  conventionalTests:productionTruth.repository.verificationArtifacts.conventionalTests.count,
+  gatesAuditsSmokes:productionTruth.repository.verificationArtifacts.gatesAuditsSmokes.count,
+  publicTables:productionTruth.supabase.publicTables,
+  registrationGate:productionTruth.supabase.registrationGate,
+  securityAdvisors:productionTruth.supabase.securityAdvisors,
+  unassignedExternalEvidence
+} : null;
+const manifest = { id:'pantavion_canonical_semantic_v3', generatedAt:new Date().toISOString(), sourceManifest:input.manifest && input.manifest.id, sourceFingerprint:input.manifest && input.manifest.corpusFingerprint, recordCount:records.length, preservedRecordCount:before.length, idFingerprint:fingerprint(records), counts, reviewReasonSummary, moduleSummary, externalProductionTruth, completion:{ complete:!counts.REVIEW_REQUIRED, semanticallyClassified:counts.SEMANTICALLY_CLASSIFIED || 0, preservedRecursiveArtifacts:counts.PRESERVED_RECURSIVE_ARTIFACT || 0, reviewRequired:counts.REVIEW_REQUIRED || 0 }, truthRule:'No record is final, mergeable, deletable, implemented, deployed, or live merely because deterministic routing succeeded. Semantic review and implementation evidence remain mandatory.' };
 fs.mkdirSync(outRoot,{recursive:true});
 fs.writeFileSync(path.join(outRoot,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');
 const ledgerPath = path.join(outRoot,'semantic-ledger.ndjson');
