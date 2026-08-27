@@ -174,7 +174,10 @@ export function synchronizeImplementationItems(
 }
 
 const codedAt = "2026-08-27T20:45:00.000Z";
+const testedAt = "2026-08-27T23:06:30.000Z";
 const branch = "feature/sovereign-technology-factory-foundation";
+const sovereignContractRun =
+  "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33124896375";
 
 function codedItem(
   id: string,
@@ -195,17 +198,40 @@ function codedItem(
   };
 }
 
+function testedItem(
+  id: string,
+  title: string,
+  domain: string,
+  source: string,
+): ImplementationSyncItem {
+  const coded = codedItem(id, title, domain, source);
+  return {
+    ...coded,
+    state: "tested",
+    evidenceRecords: [
+      ...(coded.evidenceRecords ?? []),
+      {
+        kind: "test",
+        reference: sovereignContractRun,
+        recordedAt: testedAt,
+        revision: "ab1800acfa6261a874949ed8a20b134379a7df5d",
+      },
+    ],
+    updatedAt: testedAt,
+  };
+}
+
 export const sovereignFactoryImplementationItems: ImplementationSyncItem[] = [
-  codedItem("sovereign-technology-factory", "Sovereign Technology Factory", "sovereign", "core/sovereign/technology-factory.ts"),
-  codedItem("intent-to-outcome-fabric", "Intent-to-Outcome Fabric", "sovereign", "core/sovereign/intent-to-outcome-fabric.ts"),
-  codedItem("ephemeral-agent-swarm", "Ephemeral Agent Swarm", "sovereign", "core/sovereign/ephemeral-agent-swarm.ts"),
-  codedItem("intent-firewall", "Intent Firewall", "sovereign", "core/sovereign/intent-firewall.ts"),
-  codedItem("agent-capability-budget", "Agent Capability & Budget Control", "sovereign", "core/sovereign/agent-capability-budget-control.ts"),
-  codedItem("disconnected-edge-execution", "Disconnected / Edge Execution", "sovereign", "core/sovereign/edge-execution.ts"),
-  codedItem("technology-library", "Technology Library", "sovereign", "core/sovereign/technology-library.ts"),
+  testedItem("sovereign-technology-factory", "Sovereign Technology Factory", "sovereign", "core/sovereign/technology-factory.ts"),
+  testedItem("intent-to-outcome-fabric", "Intent-to-Outcome Fabric", "sovereign", "core/sovereign/intent-to-outcome-fabric.ts"),
+  testedItem("ephemeral-agent-swarm", "Ephemeral Agent Swarm", "sovereign", "core/sovereign/ephemeral-agent-swarm.ts"),
+  testedItem("intent-firewall", "Intent Firewall", "sovereign", "core/sovereign/intent-firewall.ts"),
+  testedItem("agent-capability-budget", "Agent Capability & Budget Control", "sovereign", "core/sovereign/agent-capability-budget-control.ts"),
+  testedItem("disconnected-edge-execution", "Disconnected / Edge Execution", "sovereign", "core/sovereign/edge-execution.ts"),
+  testedItem("technology-library", "Technology Library", "sovereign", "core/sovereign/technology-library.ts"),
   codedItem("sovereign-capability-kernel", "Sovereign Capability Kernel", "kernel", "core/sovereign/sovereign-capability-kernel.ts"),
-  codedItem("implementation-sync", "Automatic Implementation Sync", "kernel", "core/pantavion/implementation-sync-registry.ts"),
-  codedItem("owner-implementation-surface", "Founder-only Implementation Truth", "owner_control", "app/owner/control/implementation/page.tsx"),
+  testedItem("implementation-sync", "Automatic Implementation Sync", "kernel", "core/pantavion/implementation-sync-registry.ts"),
+  testedItem("owner-implementation-surface", "Founder-only Implementation Truth", "owner_control", "app/owner/control/implementation/page.tsx"),
   {
     id: "production-verification",
     title: "Production verification",
