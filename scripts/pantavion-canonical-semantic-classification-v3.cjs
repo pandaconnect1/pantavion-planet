@@ -33,6 +33,7 @@ const capabilities = {
 };
 
 const sourcePathAnchors = [
+  { module:'Recovery / Provenance', subsystem:'evidence', capability:'observe', patterns:[/^data\/runtime-reports\//] },
   { module:'Maps / World / Water', subsystem:'water', capability:'operate', patterns:[/(^|\/)app\/(api\/)?professional\/infrastructure\/water(\/|$)/,/(^|\/)core\/(infrastructure\/)?water(\/|$)/,/(^|\/)docs\/requirements\/pantavion-(professional-infrastructure-)?water[^/]*\.md$/,/(^|\/)scripts\/[^/]*water[^/]*\.(cjs|mjs|ts|js)$/,/^scripts\/upload-final-master-dwg-to-blob\.cjs$/] },
   { module:'Interpreter / Translation', subsystem:'translation', capability:'translate', patterns:[/(^|\/)app\/translate(\/|$)/,/(^|\/)app\/api\/pantavion\/(translate|speech-normalize)(\/|$)/,/(^|\/)core\/translation(\/|$)/,/(^|\/)services\/translation(\/|[-.])/,/(^|\/)scripts\/[^/]*translation[^/]*\.(cjs|mjs|ts|js)$/] },
   { module:'SOS / Crisis', subsystem:'emergency', capability:'execute', patterns:[/(^|\/)app\/(pantavion\/)?(sos|emergency|crisis)(\/|$)/,/(^|\/)core\/(sos|emergency|crisis)(\/|$)/] },
@@ -68,7 +69,7 @@ const sourcePathAnchors = [
 
 function sourcePathAnchor(file) {
   const sourcePath = String(file || '').toLowerCase().replace(/\\/g,'/');
-  if (!sourcePath || sourcePath.startsWith('data/runtime-reports/')) return null;
+  if (!sourcePath) return null;
   const matches = sourcePathAnchors.filter(anchor => anchor.patterns.some(pattern => pattern.test(sourcePath)));
   return matches.length === 1 ? { ...matches[0], sourcePath } : null;
 }
