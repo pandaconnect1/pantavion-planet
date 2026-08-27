@@ -4,9 +4,12 @@ import {
   createWaterAdminSessionValue,
   getWaterAdminAccessCode,
   getWaterAdminSessionSecret,
+  hasDedicatedWaterAdminSessionSecret,
   hasWaterAdminSession,
   safeSecretEqual,
   WATER_ADMIN_SESSION_COOKIE,
+  WATER_ADMIN_SESSION_TTL_SECONDS,
+  WATER_ADMIN_SESSION_VERSION,
 } from "@/core/security/water-admin-session";
 
 export const runtime = "nodejs";
@@ -30,9 +33,9 @@ export async function POST(request: Request) {
         {
           ok: false,
           error: "admin_secret_not_configured",
-          message: "Δεν έχει ρυθμιστεί το founder/admin secret στο Vercel.",
+          message: "Δεν έχει ρυθμιστεί σωστά το founder/admin security secret στο Vercel.",
         },
-        { status: 500 },
+        { status: 500, headers: { "Cache-Control": "no-store" } },
       );
     }
 
@@ -46,15 +49,23 @@ export async function POST(request: Request) {
           error: "invalid_admin_access_code",
           message: "Λάθος founder/admin access code.",
         },
-        { status: 401 },
+        { status: 401, headers: { "Cache-Control": "no-store" } },
       );
     }
 
-    const response = NextResponse.json({
-      ok: true,
-      message: "Το founder/admin session ενεργοποιήθηκε.",
-      redirectTo: "/professional/infrastructure/water/admin/approvals",
-    });
+    const response = NextResponse.json(
+      {
+        ok: true,
+        message: "Το founder/admin session ενεργοποιήθηκε με περιορισμένη διάρκεια.",
+        redirectTo: "/professional/infrastructure/water/admin/approvals",
+        session: {
+          version: WATER_ADMIN_SESSION_VERSION,
+          expiresInSeconds: WATER_ADMIN_SESSION_TTL_SECONDS,
+          dedicatedSessionSecret: hasDedicatedWaterAdminSessionSecret(),
+        },
+      },
+      { headers: { "Cache-Control": "no-store" } },
+    );
 
     response.cookies.set({
       name: WATER_ADMIN_SESSION_COOKIE,
@@ -63,17 +74,17 @@ export async function POST(request: Request) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
-      maxAge: 60 * 60 * 8,
+      maxAge: WATER_ADMIN_SESSION_TTL_SECONDS,
     });
 
     return response;
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       {
         ok: false,
-        error: error instanceof Error ? error.message : "admin_session_failed",
+        error: "admin_session_failed",
       },
-      { status: 500 },
+      { status: 500, headers: { "Cache-Control": "no-store" } },
     );
   }
 }
@@ -85,6 +96,7 @@ export async function GET(request: Request) {
     {
       ok: authorized,
       authenticated: authorized,
+      sessionVersion: WATER_ADMIN_SESSION_VERSION,
     },
     {
       status: authorized ? 200 : 401,
@@ -96,10 +108,13 @@ export async function GET(request: Request) {
 }
 
 export async function DELETE() {
-  const response = NextResponse.json({
-    ok: true,
-    message: "Το founder/admin session έκλεισε.",
-  });
+  const response = NextResponse.json(
+    {
+      ok: true,
+      message: "Το founder/admin session έκλεισε.",
+    },
+    { headers: { "Cache-Control": "no-store" } },
+  );
 
   response.cookies.set({
     name: WATER_ADMIN_SESSION_COOKIE,
