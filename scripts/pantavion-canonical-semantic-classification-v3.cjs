@@ -90,17 +90,22 @@ function capabilityFromPath(file, anchor) {
   const source = String(file || '').toLowerCase().replace(/\\/g,'/');
   if (source.startsWith('data/runtime-reports/')) return 'observe';
   if (!anchor) return null;
-  if (anchor.module !== 'Maps / World / Water') return anchor.capability || null;
   const lanes = [
     { capability:'observe', pattern:/(^|[-/])(audit|logging|readiness|health|report|evidence|status|monitor|smoke)([-/.]|$)/ },
-    { capability:'protect', pattern:/(^|[-/])(access|authorized|authorization|privacy|security|policy|filtering|session)([-/.]|$)/ },
+    { capability:'protect', pattern:/(^|[-/])(access|authorized|authorization|privacy|security|policy|filtering|session|guard|guardian|moderation|block)([-/.]|$)/ },
     { capability:'update', pattern:/(^|[-/])(approve|decision|update|edit|lifecycle|transition)([-/.]|$)/ },
-    { capability:'read', pattern:/(^|[-/])(search|reader|query|bbox|lookup|view|index|serving|sources?)([-/.]|$)/ },
-    { capability:'configure', pattern:/(^|[-/])(registry|config|manifest|technology|contract|model)([-/.]|$)/ },
-    { capability:'execute', pattern:/(^|[-/])(runtime|worker|execute|assistant|processing)([-/.]|$)/ }
+    { capability:'read', pattern:/(^|[-/])(search|reader|query|bbox|lookup|view|index|serving|sources?|fetch|list|discover)([-/.]|$)/ },
+    { capability:'configure', pattern:/(^|[-/])(registry|config|manifest|technology|contract|model|taxonomy|settings)([-/.]|$)/ },
+    { capability:'execute', pattern:/(^|[-/])(runtime|worker|execute|assistant|processing|dispatch|orchestrator|bootstrap)([-/.]|$)/ },
+    { capability:'create', pattern:/(^|[-/])(create|publish|post|new)([-/.]|$)/ },
+    { capability:'synchronize', pattern:/(^|[-/])(sync|import|export|hydrate)([-/.]|$)/ },
+    { capability:'translate', pattern:/(^|[-/])(translate|translation|interpreter)([-/.]|$)/ },
+    { capability:'adapt', pattern:/(^|[-/])(personalization|adaptive)([-/.]|$)/ }
   ];
   const matches = lanes.filter(lane => lane.pattern.test(source));
-  return matches.length === 1 ? matches[0].capability : null;
+  if (matches.length === 1) return matches[0].capability;
+  if (matches.length === 0 && anchor.module !== 'Maps / World / Water') return anchor.capability || null;
+  return null;
 }
 
 function anchoredCapabilityRank(text, anchor, sourceFile) {
