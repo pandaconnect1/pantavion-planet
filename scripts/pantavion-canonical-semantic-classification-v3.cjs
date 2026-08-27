@@ -120,7 +120,21 @@ const sourcePathAnchors = [
   { module:'Social / Pulse / Communities', subsystem:'publishing', capability:'read', strict:true, patterns:[/^app\/social\/(global|notifications)\/page\.tsx$/] },
   { module:'Music / Media / Creation', subsystem:'media', capability:'present', strict:true, patterns:[/^app\/twitter-image\.tsx$/] },
   { module:'Experience / Navigation', subsystem:'shell', capability:'present', strict:true, patterns:[/^app\/layout\.tsx$/,/^core\/public-surface\/human-first-homepage-(spec|wave)\.ts$/] },
-  { module:'Learning / Knowledge', subsystem:'knowledge', capability:'configure', strict:true, patterns:[/^docs\/architecture\/pantavion_academic_evidence_standard\.md$/] }
+  { module:'Learning / Knowledge', subsystem:'knowledge', capability:'configure', strict:true, patterns:[/^docs\/architecture\/pantavion_academic_evidence_standard\.md$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'observe', strict:true, patterns:[/^core\/kernel\/kernel-usage-harness\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^core\/kernel\/autonomous-build\/autonomous-kernel-types\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'synchronize', strict:true, patterns:[/^core\/kernel\/kernel-continuity-memory\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'memory', capability:'synchronize', strict:true, patterns:[/^core\/memory\/pantavion-founder-vision-memory\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'execute', strict:true, patterns:[/^app\/api\/pantavion\/intelligence\/cron\/route\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'observe', strict:true, patterns:[/^app\/api\/pantavion\/intelligence\/ledger\/route\.ts$/] },
+  { module:'Interpreter / Translation', subsystem:'translation', capability:'observe', strict:true, patterns:[/^scripts\/pantavion-translation-runtime-gate\.cjs$/,/^\.github\/workflows\/pantavion-production-sync-verify\.ya?ml$/] },
+  { module:'Safety / Trust / Minors', subsystem:'moderation', capability:'observe', strict:true, patterns:[/^core\/admin\/admin-alerts\.ts$/] },
+  { module:'Identity / Auth / Consent', subsystem:'authentication', capability:'protect', strict:true, patterns:[/^app\/owner\/safety\/verify\/verify-client\.tsx$/] },
+  { module:'Resilience / Offline / Infrastructure', subsystem:'continuity', capability:'observe', strict:true, patterns:[/^core\/connectivity\/connectivity-state-contract\.ts$/] },
+  { module:'Social / Pulse / Communities', subsystem:'publishing', capability:'update', strict:true, patterns:[/^app\/api\/social\/media-url\/route\.ts$/] },
+  { module:'Safety / Trust / Minors', subsystem:'policy', capability:'present', strict:true, patterns:[/^app\/safety\/page\.tsx$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'present', strict:true, patterns:[/^app\/pantaai\/page\.tsx$/] },
+  { module:'Experience / Navigation', subsystem:'shell', capability:'present', strict:true, patterns:[/^app\/planet\/page\.tsx$/] }
 ];
 
 function sourcePathAnchor(file) {
