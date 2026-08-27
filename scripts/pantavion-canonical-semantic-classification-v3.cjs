@@ -64,7 +64,12 @@ const sourcePathAnchors = [
   { module:'Chat', subsystem:'messaging', capability:'synchronize', patterns:[/^docs\/architecture\/pantavion_unified_messaging_interop\.md$/] },
   { module:'Social / Pulse / Communities', subsystem:'publishing', capability:'create', patterns:[/^docs\/recovery\/social_global_\d+_\d+\.md$/] },
   { module:'Music / Media / Creation', subsystem:'creation', capability:'create', patterns:[/^docs\/requirements\/pantavion_music_voice_studio\.md$/] },
-  { module:'Experience / Navigation', subsystem:'shell', capability:'present', patterns:[/^app\/page\.tsx$/] }
+  { module:'Experience / Navigation', subsystem:'shell', capability:'present', patterns:[/^app\/page\.tsx$/] },
+  { module:'Interpreter / Translation', subsystem:'speech', capability:'translate', patterns:[/^app\/api\/pantavion\/speech-to-text\/route\.ts$/] },
+  { module:'Interpreter / Translation', subsystem:'translation', capability:'configure', patterns:[/^core\/(i18n\/pantavion-global-language|language\/pantavion-language-(atlas|catalog)|i18n\/languages)\.ts$/,/^app\/pantavion-global-language-selector\.tsx$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'execute', patterns:[/^app\/api\/intelligence\/actions\/route\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'personalization', capability:'present', patterns:[/^core\/public-surface\/panta-ai-(public-surface-spec|visible-surface)\.ts$/] },
+  { module:'Safety / Trust / Minors', subsystem:'policy', capability:'protect', patterns:[/^core\/app\/(deploy-readiness-gate|vercel-public-deploy-gate|app-route-guard)\.ts$/] }
 ];
 
 function sourcePathAnchor(file) {
@@ -141,7 +146,31 @@ function capabilityFromPath(file, anchor) {
     { capability:'read', pattern:/^core\/infrastructure\/water\/(water-map-kernel|water-street-history-ledger)\.ts$/ },
     { capability:'read', pattern:/^app\/api\/professional\/infrastructure\/water\/tiles\/viewport\/route\.ts$/ },
     { capability:'update', pattern:/^app\/professional\/infrastructure\/water\/(admin\/faults\/\[recordnumber\]|field\/fault)\/page\.tsx$/ },
-    { capability:'read', pattern:/^app\/professional\/infrastructure\/water\/(b-map|maps|help)\/page\.tsx$/ }
+    { capability:'read', pattern:/^app\/professional\/infrastructure\/water\/(b-map|maps|help)\/page\.tsx$/ },
+    { capability:'observe', pattern:/^core\/(pantavion-kernel-completion|kernel\/kernel-evolution-proposal-log|runtime\/runtime-health-matrix|kernel\/kernel-gap-matrix|kernel\/kernel-run-artifact|kernel\/kernel-heartbeat)\.ts$/ },
+    { capability:'read', pattern:/^app\/kernel\/(intake|completion|hardening|prime-law)\/page\.tsx$/ },
+    { capability:'read', pattern:/^app\/kernel\/page\.tsx$/ },
+    { capability:'protect', pattern:/^core\/(identity\/age-role-engine|app\/public-surface-access-gate)\.ts$/ },
+    { capability:'read', pattern:/^app\/social\/map\/(page|social-map-client)\.tsx$/ },
+    { capability:'read', pattern:/^core\/memory\/(working-memory-store|cognitive-memory-stratification-wave|predictive-planning-memory-store|episodic-memory-store|long-horizon-memory-store)\.ts$/ },
+    { capability:'synchronize', pattern:/^core\/memory\/(supabase-continuity-store|pantavion-continuity-thread-memory)\.ts$/ },
+    { capability:'configure', pattern:/^core\/(kernel\/kernel-script-surface|kernel-store|kernel\/kernel-constitution-regeneration-wave)\.ts$/ },
+    { capability:'execute', pattern:/^app\/kernel\/run\/page\.tsx$/ },
+    { capability:'protect', pattern:/^app\/auth\/(callback\/route|register\/registerclient)\.tsx?$/ },
+    { capability:'translate', pattern:/^core\/translation\/pantavion-universal-translation-runtime\.ts$/ },
+    { capability:'synchronize', pattern:/^core\/continuity\/sync-state-registry\.ts$/ },
+    { capability:'observe', pattern:/^scripts\/(pantavion-water-abc-map-system-gate|water-private-index-runtime-smoke)\.cjs$/ },
+    { capability:'synchronize', pattern:/^scripts\/upload-final-master-dwg-to-blob\.cjs$/ },
+    { capability:'read', pattern:/^app\/api\/professional\/infrastructure\/water\/master\/b\/route\.ts$/ },
+    { capability:'protect', pattern:/^app\/professional\/infrastructure\/water\/admin\/login\/page\.tsx$/ },
+    { capability:'update', pattern:/^app\/professional\/infrastructure\/water\/admin\/faults\/page\.tsx$/ },
+    { capability:'execute', pattern:/^app\/professional\/infrastructure\/water\/intelligence\/water-intelligence-command-client\.tsx$/ },
+    { capability:'observe', pattern:/^app\/api\/professional\/infrastructure\/water\/sentinel\/route\.ts$/ },
+    { capability:'create', pattern:/^app\/api\/professional\/infrastructure\/water\/field\/(submission|admin\/submissions)\/route\.ts$/ },
+    { capability:'synchronize', pattern:/^app\/api\/professional\/infrastructure\/water\/final-master-dwg\/upload-url\/route\.ts$/ },
+    { capability:'protect', pattern:/^core\/water\/water-user-device-access-model\.ts$/ },
+    { capability:'read', pattern:/^app\/professional\/infrastructure\/water\/(master-b-mobile|b|c|final-master-dwg|live|master-dwg|master|workspaces)\/page\.tsx$/ },
+    { capability:'read', pattern:/^app\/professional\/infrastructure\/water\/page\.tsx$/ }
   ];
   const exactMatches = [...new Set(exactLanes.filter(lane => lane.pattern.test(source)).map(lane => lane.capability))];
   if (exactMatches.length === 1) return exactMatches[0];
