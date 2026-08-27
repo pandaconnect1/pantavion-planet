@@ -1,0 +1,40 @@
+name: Pantavion Multi-Kernel Gate
+
+on:
+  pull_request:
+    paths:
+      - "kernel/**"
+      - "scripts/pantavion-kernel-*.mjs"
+      - "scripts/pantavion-multi-kernel-*.mjs"
+      - ".github/workflows/pantavion-multi-kernel-gate.yml"
+  push:
+    paths:
+      - "kernel/**"
+      - "scripts/pantavion-kernel-*.mjs"
+      - "scripts/pantavion-multi-kernel-*.mjs"
+      - ".github/workflows/pantavion-multi-kernel-gate.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  kernel-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Verify hierarchy contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-hierarchy-test.mjs
+
+      - name: Verify resilience contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-multi-kernel-resilience-test.mjs
+
+      - name: Verify nervous-system contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-nervous-system-test.mjs
