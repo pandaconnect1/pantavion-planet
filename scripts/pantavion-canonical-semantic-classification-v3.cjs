@@ -86,10 +86,35 @@ function anchoredRank(groups, text, anchor) {
   return ranked.sort((a,b) => b.score-a.score || a.name.localeCompare(b.name));
 }
 
-function anchoredCapabilityRank(text, anchor) {
+function capabilityFromPath(file, anchor) {
+  const source = String(file || '').toLowerCase().replace(/\\/g,'/');
+  if (source.startsWith('data/runtime-reports/')) return 'observe';
+  if (!anchor) return null;
+  if (anchor.module !== 'Maps / World / Water') return anchor.capability || null;
+  const lanes = [
+    { capability:'observe', pattern:/(^|[-/])(audit|logging|readiness|health|report|evidence|status|monitor|smoke)([-/.]|$)/ },
+    { capability:'protect', pattern:/(^|[-/])(access|authorized|authorization|privacy|security|policy|filtering|session)([-/.]|$)/ },
+    { capability:'update', pattern:/(^|[-/])(approve|decision|update|edit|lifecycle|transition)([-/.]|$)/ },
+    { capability:'read', pattern:/(^|[-/])(search|reader|query|bbox|lookup|view|index|serving|sources?)([-/.]|$)/ },
+    { capability:'configure', pattern:/(^|[-/])(registry|config|manifest|technology|contract|model)([-/.]|$)/ },
+    { capability:'execute', pattern:/(^|[-/])(runtime|worker|execute|assistant|processing)([-/.]|$)/ }
+  ];
+  const matches = lanes.filter(lane => lane.pattern.test(source));
+  return matches.length === 1 ? matches[0].capability : null;
+}
+
+function anchoredCapabilityRank(text, anchor, sourceFile) {
   const ranked = rank(capabilities, text);
-  if (ranked.length || !anchor || !anchor.capability || !capabilities[anchor.capability]) return ranked;
-  return [{ name:anchor.capability, score:8, evidence:['source-path-capability:'+anchor.sourcePath] }];
+  const pathCapability = capabilityFromPath(sourceFile, anchor);
+  if (!pathCapability || !capabilities[pathCapability]) return ranked;
+  const existing = ranked.find(item => item.name === pathCapability);
+  if (existing) {
+    existing.score += 8;
+    existing.evidence = [...new Set([...existing.evidence,'source-path-capability:'+String(sourceFile || '')])];
+  } else {
+    ranked.push({ name:pathCapability, score:8, evidence:['source-path-capability:'+String(sourceFile || '')] });
+  }
+  return ranked.sort((a,b) => b.score-a.score || a.name.localeCompare(b.name));
 }
 
 function evidenceModules(value) {
@@ -179,11 +204,12 @@ function classify(record) {
   const pathAnchor = sourcePathAnchor(sourceFile);
   const module = pathAnchor ? pathAnchor.module : seedModule;
   const text = normalize([sourceFile, record.text, record.context].join('\n'));
+  const artifact = artifactType(sourceFile, text);
   const subsystems = ontology[module] ? anchoredRank(ontology[module], text, pathAnchor) : [];
-  const capabilityRanks = anchoredCapabilityRank(text, pathAnchor);
+  const capabilityPath = capabilityFromPath(sourceFile, pathAnchor);
+  const capabilityRanks = anchoredCapabilityRank(text, pathAnchor, sourceFile);
   const subsystem = subsystems[0] ? subsystems[0].name : null;
   const capability = capabilityRanks[0] ? capabilityRanks[0].name : null;
-  const artifact = artifactType((record.provenance && record.provenance.sourceFile) || '', text);
   const subsystemConflict = subsystems.length > 1 && subsystems[0].score === subsystems[1].score;
   const capabilityConflict = capabilityRanks.length > 1 && capabilityRanks[0].score === capabilityRanks[1].score;
   const competingModules = Object.entries(ontology).map(([name,groups]) => {
@@ -215,7 +241,7 @@ function classify(record) {
   if (subsystemConflict) reasons.push('subsystem_conflict');
   if (capabilityConflict) reasons.push('capability_conflict');
   if (moduleConflict) reasons.push('module_conflict:' + module + '->' + topModule.name);
-  return { ...record, classification: { ...record.classification, module, subsystem, capability, feature: subsystem && capability ? subsystem + '.' + capability + '.' + artifact : null, artifactType: artifact, canonicalTarget: deterministic ? 'canonical/' + module + '/' + subsystem + '/' + capability : null, classificationMethod: pathAnchor ? 'semantic-v3-source-path-anchored-ontology' : 'semantic-v3-strict-evidence-ontology', classificationEvidence: { seedModule, pathAnchor:pathAnchor ? { module:pathAnchor.module, subsystem:pathAnchor.subsystem, capabilityFallback:pathAnchor.capability || null, sourcePath:pathAnchor.sourcePath } : null, subsystem: subsystems.slice(0,3), capability: capabilityRanks.slice(0,3), competingModules: competingModules.slice(0,3) } }, reviewStatus: deterministic ? 'SEMANTICALLY_CLASSIFIED' : 'REVIEW_REQUIRED', semanticDecision: deterministic ? 'ROUTE_CANDIDATE' : 'HOLD', semanticReviewReasons: reasons };
+  return { ...record, classification: { ...record.classification, module, subsystem, capability, feature: subsystem && capability ? subsystem + '.' + capability + '.' + artifact : null, artifactType: artifact, canonicalTarget: deterministic ? 'canonical/' + module + '/' + subsystem + '/' + capability : null, classificationMethod: pathAnchor ? 'semantic-v3-source-path-anchored-ontology' : 'semantic-v3-strict-evidence-ontology', classificationEvidence: { seedModule, pathAnchor:pathAnchor ? { module:pathAnchor.module, subsystem:pathAnchor.subsystem, capabilityFallback:pathAnchor.capability || null, sourcePath:pathAnchor.sourcePath } : null, capabilityPath:capabilityPath ? { capability:capabilityPath, sourcePath } : null, subsystem: subsystems.slice(0,3), capability: capabilityRanks.slice(0,3), competingModules: competingModules.slice(0,3) } }, reviewStatus: deterministic ? 'SEMANTICALLY_CLASSIFIED' : 'REVIEW_REQUIRED', semanticDecision: deterministic ? 'ROUTE_CANDIDATE' : 'HOLD', semanticReviewReasons: reasons };
 }
 function fingerprint(records) { return crypto.createHash('sha256').update(records.map(r => r.id).join('\n')).digest('hex'); }
 
