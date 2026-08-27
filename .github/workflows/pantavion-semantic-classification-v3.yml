@@ -80,6 +80,9 @@ jobs:
             let artifactTypeMismatches = 0;
             let moduleMissingResolved = 0;
             let remainingModuleMissing = 0;
+            let capabilityConflicts = 0;
+            let capabilityPathEvidence = 0;
+            let capabilityPathMismatches = 0;
             for await (const line of lines) {
               if (!line.trim()) continue;
               if (index >= source.length) throw new Error("Semantic ledger contains extra records");
@@ -96,6 +99,13 @@ jobs:
                 if (record.reviewStatus !== "PRESERVED_RECURSIVE_ARTIFACT" && !evidence.seedModule && record.classification.module) moduleMissingResolved++;
               }
               if (record.reviewStatus !== "PRESERVED_RECURSIVE_ARTIFACT" && (record.semanticReviewReasons || []).includes("module_missing")) remainingModuleMissing++;
+              if ((record.semanticReviewReasons || []).includes("capability_conflict")) capabilityConflicts++;
+              const capabilityPath = evidence && evidence.capabilityPath;
+              if (capabilityPath) {
+                capabilityPathEvidence++;
+                const rankedCapability = evidence.capability && evidence.capability[0] && evidence.capability[0].name;
+                if (record.classification.capability !== capabilityPath.capability || rankedCapability !== capabilityPath.capability || capabilityPath.sourcePath !== String(record.provenance && record.provenance.sourceFile || "")) capabilityPathMismatches++;
+              }
               const sourceFile = String(record.provenance && record.provenance.sourceFile || "");
               if (sourceFile.startsWith(".github/") && record.classification.artifactType !== "automation") artifactTypeMismatches++;
               if (sourceFile.startsWith("data/runtime-reports/") && record.classification.artifactType !== "runtime-evidence") artifactTypeMismatches++;
@@ -115,6 +125,8 @@ jobs:
             if (moduleMissingResolved !== 1288) throw new Error("Module-missing resolution accounting mismatch: "+moduleMissingResolved);
             const manifestModuleMissingResolved = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.moduleMissingResolved || 0),0);
             if (manifest.moduleMissingResolved !== moduleMissingResolved || manifestModuleMissingResolved !== moduleMissingResolved) throw new Error("Manifest module-missing accounting mismatch");
+            if (capabilityConflicts !== 5116 || manifest.reviewReasonSummary.capability_conflict !== capabilityConflicts) throw new Error("Capability-conflict wave accounting mismatch: "+capabilityConflicts);
+            if (!capabilityPathEvidence || capabilityPathMismatches) throw new Error("Capability-path evidence regression: evidence="+capabilityPathEvidence+", mismatches="+capabilityPathMismatches);
             const manifestAnchored = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathAnchored || 0),0);
             const manifestReassigned = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathReassigned || 0),0);
             if (manifestAnchored !== pathAnchored || manifestReassigned !== pathReassigned) throw new Error("Path-anchor manifest accounting mismatch");
@@ -124,7 +136,7 @@ jobs:
               if (!gap || !gap.externalEvidence || !gap.externalEvidence.repositoryMigrationFiles.length || !gap.externalEvidence.appliedMigrations.length) throw new Error("Missing external migration evidence for "+module);
               if (!productionTruth.repository.verificationArtifacts.conventionalTests.count && !gap.missingCombinedEvidenceCategories.includes("tests")) throw new Error("Gates/audits were incorrectly treated as conventional tests for "+module);
             }
-            console.log(JSON.stringify({ ...manifest.completion, pathAnchored, pathReassigned, moduleMissingResolved, remainingModuleMissing, externalProductionTruth:manifest.externalProductionTruth }));
+            console.log(JSON.stringify({ ...manifest.completion, pathAnchored, pathReassigned, moduleMissingResolved, remainingModuleMissing, capabilityConflicts, capabilityPathEvidence, externalProductionTruth:manifest.externalProductionTruth }));
           })().catch(error => { console.error(error); process.exit(1); });
           NODE
       - name: Upload semantic ledger and module gap map
