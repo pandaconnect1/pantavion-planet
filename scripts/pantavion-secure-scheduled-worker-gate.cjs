@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const route = fs.readFileSync("app/api/pantavion/intelligence/cron/route.ts", "utf8");
 const worker = fs.readFileSync("core/runtime/secure-scheduled-worker.ts", "utf8");
 const migration = fs.readFileSync(
-  "supabase/migrations/20260824104500_create_secure_scheduled_worker.sql",
+  "supabase/migrations/20260824134053_create_secure_scheduled_worker.sql",
   "utf8",
 );
 const vercel = JSON.parse(fs.readFileSync("vercel.json", "utf8"));

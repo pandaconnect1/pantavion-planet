@@ -38,7 +38,7 @@ const requiredFiles = [
   ".github/workflows/pantavion-runtime-safety.yml",
   ".vscode/tasks.json",
   "core/runtime/secure-scheduled-worker.ts",
-  "supabase/migrations/20260824104500_create_secure_scheduled_worker.sql",
+  "supabase/migrations/20260824134053_create_secure_scheduled_worker.sql",
   "scripts/pantavion-secure-scheduled-worker-gate.cjs",
 ];
 
