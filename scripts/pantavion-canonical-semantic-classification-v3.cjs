@@ -69,13 +69,23 @@ const sourcePathAnchors = [
   { module:'Interpreter / Translation', subsystem:'translation', capability:'configure', strict:true, patterns:[/^core\/(i18n\/pantavion-global-language|language\/pantavion-language-(atlas|catalog)|i18n\/languages)\.ts$/,/^app\/pantavion-global-language-selector\.tsx$/] },
   { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'execute', patterns:[/^app\/api\/intelligence\/actions\/route\.ts$/] },
   { module:'Personal AI / PantaAI', subsystem:'personalization', capability:'present', strict:true, patterns:[/^core\/public-surface\/panta-ai-(public-surface-spec|visible-surface)\.ts$/] },
-  { module:'Safety / Trust / Minors', subsystem:'policy', capability:'protect', strict:true, patterns:[/^core\/app\/(deploy-readiness-gate|vercel-public-deploy-gate|app-route-guard)\.ts$/] }
+  { module:'Safety / Trust / Minors', subsystem:'policy', capability:'protect', strict:true, patterns:[/^core\/app\/(deploy-readiness-gate|vercel-public-deploy-gate|app-route-guard)\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'synchronize', strict:true, patterns:[/^core\/storage\/kernel-(report|admission|artifact|state)-store\.ts$/,/^core\/storage\/kernel-persistence-orchestrator\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'observe', strict:true, patterns:[/^app\/api\/kernel\/(audit-memory|heartbeat|state)(\/route)?\.ts$/,/^app\/api\/kernel\/(founder-session|route)\.ts$/] },
+  { module:'Identity / Auth / Consent', subsystem:'authentication', capability:'protect', strict:true, patterns:[/^(core\/app\/app-auth-role-session-integration-wave|scripts\/(export|run)-app-auth-role-session-integration-wave)\.ts$/] },
+  { module:'People', subsystem:'profile', capability:'read', strict:true, patterns:[/^app\/(profile\/page|contacts\/contacts-client)\.tsx$/] },
+  { module:'Interpreter / Translation', subsystem:'interpretation', capability:'observe', strict:true, patterns:[/^app\/api\/pantavion\/interpreter\/health\/route\.ts$/] },
+  { module:'Interpreter / Translation', subsystem:'translation', capability:'translate', strict:true, patterns:[/^app\/api\/pantavion\/detect-language\/route\.ts$/,/^app\/api\/translate\/universal\/route\.ts$/] },
+  { module:'Interpreter / Translation', subsystem:'translation', capability:'configure', strict:true, patterns:[/^app\/api\/pantavion\/language\/route\.ts$/,/^app\/language\/(languageclient|page)\.tsx$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'read', strict:true, patterns:[/^app\/intelligence\/(page|routing\/page|capabilities\/page)\.tsx$/,/^app\/pantavion\/intelligence\/page\.tsx$/] }
 ];
 
 function sourcePathAnchor(file) {
   const sourcePath = String(file || '').toLowerCase().replace(/\\/g,'/');
   if (!sourcePath) return null;
   const matches = sourcePathAnchors.filter(anchor => anchor.patterns.some(pattern => pattern.test(sourcePath)));
+  const strictMatches = matches.filter(anchor => anchor.strict);
+  if (strictMatches.length === 1) return { ...strictMatches[0], sourcePath };
   return matches.length === 1 ? { ...matches[0], sourcePath } : null;
 }
 
@@ -170,7 +180,22 @@ function capabilityFromPath(file, anchor) {
     { capability:'synchronize', pattern:/^app\/api\/professional\/infrastructure\/water\/final-master-dwg\/upload-url\/route\.ts$/ },
     { capability:'protect', pattern:/^core\/water\/water-user-device-access-model\.ts$/ },
     { capability:'read', pattern:/^app\/professional\/infrastructure\/water\/(master-b-mobile|b|c|final-master-dwg|live|master-dwg|master|workspaces)\/page\.tsx$/ },
-    { capability:'read', pattern:/^app\/professional\/infrastructure\/water\/page\.tsx$/ }
+    { capability:'read', pattern:/^app\/professional\/infrastructure\/water\/page\.tsx$/ },
+    { capability:'observe', pattern:/^core\/storage\/kernel-report-store\.ts$/ },
+    { capability:'protect', pattern:/^core\/storage\/kernel-admission-store\.ts$/ },
+    { capability:'synchronize', pattern:/^core\/storage\/(kernel-artifact-store|kernel-state-store|kernel-persistence-orchestrator)\.ts$/ },
+    { capability:'update', pattern:/^app\/profile\/profileclient\.tsx$/ },
+    { capability:'synchronize', pattern:/^app\/people\/people-client\.tsx$/ },
+    { capability:'execute', pattern:/^scripts\/pantavion-project-intake-autonomous-dispatch\.cjs$/ },
+    { capability:'observe', pattern:/^scripts\/pantavion-autonomous-guardian-audit\.cjs$/ },
+    { capability:'observe', pattern:/^app\/api\/pantavion\/interpreter\/health\/route\.ts$/ },
+    { capability:'read', pattern:/^app\/messages\/\[conversationid\]\/page\.tsx$/ },
+    { capability:'protect', pattern:/^core\/kernel\/agent-authorization-contract\.ts$/ },
+    { capability:'configure', pattern:/^core\/kernel\/(kernel-bootstrap-manifest|kernel-foundation-lock|kernel-types)\.ts$/ },
+    { capability:'read', pattern:/^core\/kernel\/common\/pantavion-common-services\.ts$/ },
+    { capability:'configure', pattern:/^core\/kernel\/language\/pantavion-language-kernel\.ts$/ },
+    { capability:'read', pattern:/^app\/media\/page\.tsx$/ },
+    { capability:'update', pattern:/^app\/auth\/complete-profile\/page\.tsx$/ }
   ];
   const exactMatches = [...new Set(exactLanes.filter(lane => lane.pattern.test(source)).map(lane => lane.capability))];
   if (exactMatches.length === 1) return exactMatches[0];
