@@ -41,3 +41,6 @@ jobs:
 
       - name: Verify truth-ledger contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-truth-ledger-test.mjs
+
+      - name: Verify zero-trust contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-zero-trust-test.mjs
