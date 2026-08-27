@@ -15,7 +15,7 @@ const ontology = {
   'Interpreter / Translation': { translation: ['translate','translation','translator','language pair'], speech: ['stt','tts','speech-to-text','text-to-speech'], interpretation: ['interpreter','two-device','subtitle','dialect'] },
   'Voice / Video': { calling: ['call','webrtc','voice call','video call'], media: ['microphone','camera','audio stream','video stream'] },
   'Social / Pulse / Communities': { publishing: ['post','publish','feed','timeline'], engagement: ['comment','reaction','like','share'], communities: ['community','group','membership'], pulse: ['pulse','news','trend'] },
-  'Safety / Trust / Minors': { moderation: ['moderation','report','abuse','review queue'], minors: ['minor','child','teen','guardian','age band'], trust: ['trust','verification','risk','suspicious'], blocking: ['block','blocked','isolation'] },
+  'Safety / Trust / Minors': { policy: ['policy','gate','access control','route guard','deployment readiness'], moderation: ['moderation','report','abuse','review queue'], minors: ['minor','child','teen','guardian','age band'], trust: ['trust','verification','risk','suspicious'], blocking: ['block','blocked','isolation'] },
   'SOS / Crisis': { emergency: ['sos','emergency','panic'], incident: ['incident','crisis','humanitarian'], response: ['responder','trusted contact','dispatch'] },
   'Maps / World / Water': { mapping: ['map','gis','geospatial','gps','location'], water: ['water','utility','pipe','network','dwg'], city: ['city intelligence','infrastructure'] },
   'Marketplace / Work / Business': { marketplace: ['marketplace','listing','seller','buyer'], work: ['job','work','career','employment'], business: ['business','commerce','income'], advertising: ['ads center','campaign','advertising'] },
