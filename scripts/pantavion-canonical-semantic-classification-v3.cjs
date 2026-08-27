@@ -101,7 +101,16 @@ const sourcePathAnchors = [
   { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'present', strict:true, patterns:[/^app\/(evolution|sovereignty)\/page\.tsx$/] },
   { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'present', strict:true, patterns:[/^app\/panta-ai\/page\.tsx$/] },
   { module:'Maps / World / Water', subsystem:'mapping', capability:'read', strict:true, patterns:[/^app\/shared\/location\/uselocationengine\.ts$/] },
-  { module:'Social / Pulse / Communities', subsystem:'communities', capability:'read', strict:true, patterns:[/^app\/social\/communities\/page\.tsx$/] }
+  { module:'Social / Pulse / Communities', subsystem:'communities', capability:'read', strict:true, patterns:[/^app\/social\/communities\/page\.tsx$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^(scripts\/export-ai-authority-registry-wave|core\/intelligence\/ai-authority-registry-wave)\.ts$/,/^core\/intelligence\/ai-governance-profile\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'providers', capability:'configure', strict:true, patterns:[/^core\/app\/product-surface-registry\.ts$/] },
+  { module:'Identity / Auth / Consent', subsystem:'authentication', capability:'configure', strict:true, patterns:[/^core\/app\/app-session-registry\.ts$/] },
+  { module:'Resilience / Offline / Infrastructure', subsystem:'infrastructure', capability:'configure', strict:true, patterns:[/^core\/app\/deployment-environment-registry\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'providers', capability:'protect', strict:true, patterns:[/^core\/pantavion\/provider-sovereignty-ledger\.ts$/] },
+  { module:'Interpreter / Translation', subsystem:'translation', capability:'configure', strict:true, patterns:[/^core\/intelligence\/ai-locale-authority\.ts$/,/^core\/i18n\/pantavion-multimodal-language-contract\.ts$/,/^scripts\/fix-global-language-pr\.cjs$/] },
+  { module:'Interpreter / Translation', subsystem:'translation', capability:'translate', strict:true, patterns:[/^core\/language\/pantavion-global-language-runtime\.ts$/] },
+  { module:'Maps / World / Water', subsystem:'water', capability:'protect', strict:true, patterns:[/^docs\/requirements\/pantavion-water-network-kernel-lock-v1\.md$/] },
+  { module:'Maps / World / Water', subsystem:'water', capability:'synchronize', strict:true, patterns:[/^docs\/requirements\/pantavion-water-production-cloud-bridge\.md$/] }
 ];
 
 function sourcePathAnchor(file) {
