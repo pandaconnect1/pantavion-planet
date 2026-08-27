@@ -1,0 +1,71 @@
+name: Pantavion Privileged Session Security
+
+on:
+  pull_request:
+    paths:
+      - "core/security/water-admin-session.ts"
+      - "middleware.ts"
+      - "app/api/professional/infrastructure/water/admin/session/route.ts"
+      - "core/infrastructure/water/water-network-runtime-lock.json"
+      - "next.config.mjs"
+      - "scripts/pantavion-privileged-session-security-test.mjs"
+      - ".github/workflows/pantavion-privileged-session-security.yml"
+  push:
+    paths:
+      - "core/security/water-admin-session.ts"
+      - "middleware.ts"
+      - "app/api/professional/infrastructure/water/admin/session/route.ts"
+      - "core/infrastructure/water/water-network-runtime-lock.json"
+      - "next.config.mjs"
+      - "scripts/pantavion-privileged-session-security-test.mjs"
+      - ".github/workflows/pantavion-privileged-session-security.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  privileged-session-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Verify privileged session security contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-privileged-session-security-test.mjs
+
+      - name: Verify water runtime integrity lock
+        run: node scripts/pantavion-water-network-runtime-lock.cjs
+
+      - name: Reject deterministic v1 session generation
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -R --line-number --fixed-string 'pantavion-water-admin-session-v1:' core/security middleware.ts app/api/professional/infrastructure/water/admin/session/route.ts; then
+            echo 'Legacy deterministic privileged-session generator found.' >&2
+            exit 1
+          fi
+
+      - name: Reject privileged cookie without HTTP-only + strict same-site
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'httpOnly: true' app/api/professional/infrastructure/water/admin/session/route.ts
+          grep -q 'sameSite: "strict"' app/api/professional/infrastructure/water/admin/session/route.ts
+
+      - name: Verify enforced browser security headers
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'Strict-Transport-Security' next.config.mjs
+          grep -q 'max-age=31536000' next.config.mjs
+          grep -q 'Cross-Origin-Opener-Policy' next.config.mjs
+          grep -q 'X-Frame-Options' next.config.mjs
+          grep -q 'X-Content-Type-Options' next.config.mjs
+          grep -q 'X-Permitted-Cross-Domain-Policies' next.config.mjs
+          grep -q 'Permissions-Policy' next.config.mjs

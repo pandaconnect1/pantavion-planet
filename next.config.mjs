@@ -7,6 +7,18 @@ const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   {
+    key: "Strict-Transport-Security",
+    value: "max-age=31536000",
+  },
+  {
+    key: "Cross-Origin-Opener-Policy",
+    value: "same-origin",
+  },
+  {
+    key: "X-Permitted-Cross-Domain-Policies",
+    value: "none",
+  },
+  {
     key: "Referrer-Policy",
     value: "strict-origin-when-cross-origin",
   },
