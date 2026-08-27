@@ -65,3 +65,8 @@ for (const file of files) {
 }
 
 console.log(JSON.stringify({ productionCount: index.migrations.length, repositoryMigrationCount: files.length, localOnlyCount: localOnly.length, localOnly }, null, 2));
+
+if (files.length !== index.migrations.length || localOnly.length !== 0) {
+  console.error(`Migration history drift remains: repository=${files.length}, production=${index.migrations.length}, localOnly=${localOnly.length}`);
+  process.exit(1);
+}

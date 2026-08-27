@@ -1,0 +1,40 @@
+{
+  "productionMigrationCount": 56,
+  "localOnlyBefore": 27,
+  "archivedSuperseded": [
+    "20260725155000_create_profiles.sql",
+    "20260810200000_create_human_communication_core.sql",
+    "20260810200100_fix_profile_visibility_rls.sql",
+    "20260810214500_add_human_communication_runtime_rpcs.sql",
+    "20260810223000_create_media_news_listings_core.sql",
+    "20260811002000_create_durable_execution_runtime.sql",
+    "20260811042500_create_personal_media_library.sql",
+    "20260811050000_create_social_flagship_core.sql",
+    "20260811050500_create_social_location_sharing.sql",
+    "20260811084000_link_social_posts_to_personal_media.sql",
+    "20260811100000_create_private_contact_discovery.sql",
+    "20260812205000_harden_social_data_api_access.sql",
+    "20260813082000_fix_public_listing_anon_read.sql",
+    "20260815164000_recover_social_communities_notifications.sql",
+    "20260815171500_harden_social_communities_notifications.sql",
+    "20260824104500_create_secure_scheduled_worker.sql",
+    "20260824185510_harden_personal_ai_runtime_v1.sql",
+    "20260825190000_harden_social_block_visibility_and_media_posts.sql",
+    "20260826134500_create_owner_decision_control_center.sql"
+  ],
+  "pendingFutureSecurityReview": [
+    "20260810232000_create_billing_entitlements_revenue_core.sql",
+    "20260810234500_create_platform_roles_and_moderation_audit.sql",
+    "20260810235000_create_atomic_listing_moderation.sql",
+    "20260811000000_create_listing_promotion_orders.sql",
+    "20260811001000_apply_listing_promotion_from_verified_webhook.sql",
+    "20260811003000_create_continuity_graph_runtime.sql",
+    "20260811051200_create_emergency_location_core.sql",
+    "20260811101500_social_map_visibility_and_selected_audience.sql"
+  ],
+  "safety": {
+    "productionDatabaseModified": false,
+    "legacySqlDeleted": false,
+    "preReconcileArchiveBranch": "archive/supabase-migrations-pre-reconcile-20260827"
+  }
+}
