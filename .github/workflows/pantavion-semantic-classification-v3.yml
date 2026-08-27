@@ -133,7 +133,7 @@ jobs:
             if (manifest.moduleMissingResolved !== moduleMissingResolved || manifestModuleMissingResolved !== moduleMissingResolved) throw new Error("Manifest module-missing accounting mismatch");
             if (capabilityConflicts !== 2030 || manifest.reviewReasonSummary.capability_conflict !== capabilityConflicts) throw new Error("Capability-conflict wave accounting mismatch: "+capabilityConflicts);
             if (manifest.reviewReasonSummary.capability_missing !== 1101) throw new Error("Capability-missing wave accounting mismatch: "+manifest.reviewReasonSummary.capability_missing);
-            if (manifest.completion.semanticallyClassified !== 27226 || manifest.completion.reviewRequired !== 4908) throw new Error("Strict-ownership completion accounting mismatch");
+            if (manifest.completion.semanticallyClassified !== 27343 || manifest.completion.reviewRequired !== 4791) throw new Error("Strict-ownership completion accounting mismatch");
             if (runtimeReports !== 2003 || runtimeReportMismatches) throw new Error("Runtime-report provenance routing mismatch: reports="+runtimeReports+", mismatches="+runtimeReportMismatches);
             if (!capabilityPathEvidence || capabilityPathMismatches) throw new Error("Capability-path evidence regression: evidence="+capabilityPathEvidence+", mismatches="+capabilityPathMismatches);
             const manifestAnchored = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathAnchored || 0),0);
