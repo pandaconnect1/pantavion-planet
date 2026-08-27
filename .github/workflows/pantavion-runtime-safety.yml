@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
+      - name: Verify founder-only Kernel API surface
+        run: node scripts/pantavion-kernel-founder-access-gate.cjs
+
       - name: Verify translation worker contract
         run: node scripts/pantavion-translation-worker-gate.cjs
 
