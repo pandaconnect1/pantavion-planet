@@ -91,7 +91,17 @@ const sourcePathAnchors = [
   { module:'People', subsystem:'relationships', capability:'read', strict:true, patterns:[/^app\/api\/people\/(relationships|find-from-contacts)\/route\.ts$/] },
   { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^core\/kernel\/(kernel-printable-foundation-pack|kernel-product-dna)\.ts$/] },
   { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'execute', strict:true, patterns:[/^core\/kernel\/(kernel-terminal-runner|kernel-research-assimilation)\.ts$/,/^core\/pantavion-kernel-executor\.ts$/] },
-  { module:'Personal AI / PantaAI', subsystem:'memory', capability:'synchronize', strict:true, patterns:[/^core\/memory\/(reminder-scheduler|semantic-memory-store)\.ts$/] }
+  { module:'Personal AI / PantaAI', subsystem:'memory', capability:'synchronize', strict:true, patterns:[/^core\/memory\/(reminder-scheduler|semantic-memory-store)\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'execute', strict:true, patterns:[/^scripts\/pantavion-project-intake-autonomous-dispatch\.cjs$/] },
+  { module:'Personal AI / PantaAI', subsystem:'memory', capability:'synchronize', strict:true, patterns:[/^scripts\/export-cognitive-memory-stratification-wave\.ts$/,/^core\/pantavion-memory\.ts$/] },
+  { module:'Resilience / Offline / Infrastructure', subsystem:'continuity', capability:'synchronize', strict:true, patterns:[/^scripts\/export-cross-device-continuity-wave\.ts$/] },
+  { module:'Recovery / Provenance', subsystem:'evidence', capability:'observe', strict:true, patterns:[/^scripts\/export-project-recovery-audit-wave\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'guardian', capability:'protect', strict:true, patterns:[/^core\/protocol\/direct-dispatch-promotion-policy\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^core\/kernel-types\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'present', strict:true, patterns:[/^app\/(evolution|sovereignty)\/page\.tsx$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'present', strict:true, patterns:[/^app\/panta-ai\/page\.tsx$/] },
+  { module:'Maps / World / Water', subsystem:'mapping', capability:'read', strict:true, patterns:[/^app\/shared\/location\/uselocationengine\.ts$/] },
+  { module:'Social / Pulse / Communities', subsystem:'communities', capability:'read', strict:true, patterns:[/^app\/social\/communities\/page\.tsx$/] }
 ];
 
 function sourcePathAnchor(file) {
