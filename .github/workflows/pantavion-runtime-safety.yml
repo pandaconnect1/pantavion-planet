@@ -46,7 +46,7 @@ jobs:
         run: node scripts/pantavion-vscode-real-implementation-gate.cjs
 
       - name: Verify sovereign factory contracts
-        run: npm run test:foundry-contract && npm run test:sovereign-factory-contract
+        run: npm run test:foundry-contract && npm run test:sovereign-factory-contract && npm run test:sovereign-kernel-integration
 
       - name: Typecheck
         shell: bash
@@ -63,4 +63,3 @@ jobs:
 
       - name: Production build
         run: npm run build
-

@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "eslint app components core lib services src types middleware.ts --max-warnings=114",
     "typecheck": "tsc --noEmit",
-    "verify:runtime-safety": "npm run lint && npm run test:foundry-contract && npm run test:sovereign-factory-contract && npm run audit:water:network-lock && npm run audit:implementation && npm run audit:scheduled-worker && node scripts/pantavion-vscode-real-implementation-gate.cjs && npm run typecheck && npm run build",
+    "verify:runtime-safety": "npm run lint && npm run test:foundry-contract && npm run test:sovereign-factory-contract && npm run test:sovereign-kernel-integration && npm run audit:water:network-lock && npm run audit:implementation && npm run audit:scheduled-worker && node scripts/pantavion-vscode-real-implementation-gate.cjs && npm run typecheck && npm run build",
     "verify:runtime-safety:ci": "npm run verify:runtime-safety",
     "audit:pantavion": "node scripts/pantavion-master-audit.cjs",
     "audit:water": "node scripts/pantavion-water-kernel-gate.cjs && node scripts/water-guardian-surface-audit.cjs && node scripts/pantavion-multimodal-language-audit.cjs",
@@ -49,7 +49,8 @@
     "audit:foundation": "node scripts/pantavion-foundation-audit.cjs",
     "audit:scheduled-worker": "node scripts/pantavion-secure-scheduled-worker-gate.cjs",
     "audit:social-chat": "node scripts/pantavion-social-chat-contract-gate.cjs",
-    "test:sovereign-factory-contract": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-factory-contract-test.mjs"
+    "test:sovereign-factory-contract": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-factory-contract-test.mjs",
+    "test:sovereign-kernel-integration": "node scripts/pantavion-sovereign-kernel-integration-test.cjs"
   },
   "dependencies": {
     "@ai-sdk/gateway": "4.0.28",
@@ -82,4 +83,3 @@
     "typescript": "5.2.2"
   }
 }
-
