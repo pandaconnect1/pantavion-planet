@@ -20,6 +20,10 @@ const WATER_ADMIN_PREFIX = '/professional/infrastructure/water/admin';
 const WATER_ADMIN_ACCESS_PATH = `${WATER_ADMIN_PREFIX}/access`;
 const WATER_MOBILE_FOUNDER_PATH = '/professional/infrastructure/water/mobile-founder';
 const WATER_ADMIN_SESSION_COOKIE = 'pantavion_water_admin_session';
+const WATER_ADMIN_SESSION_VERSION = 'v2';
+const WATER_ADMIN_SESSION_TTL_SECONDS = 60 * 60 * 2;
+const WATER_ADMIN_SESSION_CONTEXT = 'pantavion-water-admin-session-v2';
+const WATER_ADMIN_CLOCK_SKEW_SECONDS = 60;
 const WATER_ADMIN_ONLY_PATHS = [
   '/professional/infrastructure/water/intelligence',
   '/professional/infrastructure/water/master',
@@ -61,15 +65,60 @@ function readWaterAdminSessionSecret() {
   ).trim();
 }
 
-async function createWaterAdminSessionValue(secret: string) {
-  const bytes = new TextEncoder().encode(
-    `pantavion-water-admin-session-v1:${secret}`,
-  );
-  const digest = await crypto.subtle.digest('SHA-256', bytes);
+function decodeBase64Url(value: string) {
+  try {
+    const normalized = value.replace(/-/g, '+').replace(/_/g, '/');
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=');
+    const binary = atob(padded);
+    return Uint8Array.from(binary, (character) => character.charCodeAt(0));
+  } catch {
+    return null;
+  }
+}
 
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
+async function verifyWaterAdminSessionValue(
+  suppliedSession: string,
+  secret: string,
+  nowMs = Date.now(),
+) {
+  if (!suppliedSession || !secret) return false;
+
+  const parts = suppliedSession.split('.');
+  if (parts.length !== 5) return false;
+
+  const [version, issuedRaw, expiresRaw, nonce, signatureRaw] = parts;
+  if (version !== WATER_ADMIN_SESSION_VERSION) return false;
+
+  const issuedAt = Number(issuedRaw);
+  const expiresAt = Number(expiresRaw);
+  const nowSeconds = Math.floor(nowMs / 1000);
+
+  if (!Number.isSafeInteger(issuedAt) || !Number.isSafeInteger(expiresAt) || expiresAt <= issuedAt) {
+    return false;
+  }
+  if (issuedAt > nowSeconds + WATER_ADMIN_CLOCK_SKEW_SECONDS) return false;
+  if (expiresAt <= nowSeconds) return false;
+  if (expiresAt - issuedAt > WATER_ADMIN_SESSION_TTL_SECONDS) return false;
+  if (!/^[A-Za-z0-9_-]{20,64}$/.test(nonce)) return false;
+
+  const signature = decodeBase64Url(signatureRaw);
+  if (!signature) return false;
+
+  const payload = `${issuedAt}.${expiresAt}.${nonce}`;
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['verify'],
+  );
+
+  return crypto.subtle.verify(
+    'HMAC',
+    key,
+    signature,
+    new TextEncoder().encode(`${WATER_ADMIN_SESSION_CONTEXT}:${payload}`),
+  );
 }
 
 function waterAdminAccessRedirect(request: NextRequest) {
@@ -101,11 +150,9 @@ export async function middleware(request: NextRequest) {
   if (isProtectedWaterAdminPath) {
     const secret = readWaterAdminSessionSecret();
     const suppliedSession = request.cookies.get(WATER_ADMIN_SESSION_COOKIE)?.value || '';
-    const expectedSession = secret
-      ? await createWaterAdminSessionValue(secret)
-      : '';
+    const authorized = await verifyWaterAdminSessionValue(suppliedSession, secret);
 
-    if (!expectedSession || suppliedSession !== expectedSession) {
+    if (!authorized) {
       return waterAdminAccessRedirect(request);
     }
   }
