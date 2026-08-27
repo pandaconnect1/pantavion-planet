@@ -295,6 +295,7 @@ function capabilityFromPath(file, anchor) {
   ];
   const exactMatches = [...new Set(exactLanes.filter(lane => lane.pattern.test(source)).map(lane => lane.capability))];
   if (exactMatches.length === 1) return exactMatches[0];
+  if (anchor.strict && anchor.capability) return anchor.capability;
   const lanes = [
     { capability:'observe', pattern:/(^|[-/])(audit|logging|readiness|health|report|evidence|status|monitor|smoke)([-/.]|$)/ },
     { capability:'protect', pattern:/(^|[-/])(access|authorized|authorization|privacy|security|policy|filtering|session|guard|guardian|moderation|block)([-/.]|$)/ },
@@ -317,12 +318,13 @@ function anchoredCapabilityRank(text, anchor, sourceFile) {
   const ranked = rank(capabilities, text);
   const pathCapability = capabilityFromPath(sourceFile, anchor);
   if (!pathCapability || !capabilities[pathCapability]) return ranked;
+  const pathWeight = anchor && anchor.strict ? 100 : 8;
   const existing = ranked.find(item => item.name === pathCapability);
   if (existing) {
-    existing.score += 8;
+    existing.score += pathWeight;
     existing.evidence = [...new Set([...existing.evidence,'source-path-capability:'+String(sourceFile || '')])];
   } else {
-    ranked.push({ name:pathCapability, score:8, evidence:['source-path-capability:'+String(sourceFile || '')] });
+    ranked.push({ name:pathCapability, score:pathWeight, evidence:['source-path-capability:'+String(sourceFile || '')] });
   }
   return ranked.sort((a,b) => b.score-a.score || a.name.localeCompare(b.name));
 }
