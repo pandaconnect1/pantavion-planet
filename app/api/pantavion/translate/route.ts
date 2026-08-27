@@ -69,6 +69,46 @@ function safeGatewayFailure(error: unknown): Omit<GatewayAttempt, "model" | "ok"
   };
 }
 
+function gatewayModelPlan() {
+  const configured = [
+    process.env.PANTAVION_TRANSLATION_GATEWAY_MODEL,
+    process.env.PANTAVION_TRANSLATION_MODEL,
+    process.env.PANTAVION_TRANSLATION_FALLBACK_MODEL,
+    process.env.PANTAVION_TRANSLATION_SECONDARY_MODEL,
+  ]
+    .map((value) => value?.trim())
+    .filter((value): value is string => Boolean(value));
+
+  // Defaults are current AI Gateway model IDs verified against Vercel documentation.
+  // Environment configuration always has priority; the defaults provide provider
+  // diversity so one provider outage does not make translation unavailable.
+  const ordered = Array.from(
+    new Set([
+      ...configured,
+      "openai/gpt-5.6-sol",
+      "google/gemini-3.6-flash",
+      "anthropic/claude-sonnet-5",
+    ]),
+  );
+
+  return {
+    primaryModel: ordered[0],
+    fallbackModels: ordered.slice(1),
+  };
+}
+
+function resolvedGatewayModel(providerMetadata: unknown, fallback: string) {
+  if (!providerMetadata || typeof providerMetadata !== "object") return fallback;
+  const gateway = (providerMetadata as Record<string, unknown>).gateway;
+  if (!gateway || typeof gateway !== "object") return fallback;
+  const routing = (gateway as Record<string, unknown>).routing;
+  if (!routing || typeof routing !== "object") return fallback;
+
+  const routingRecord = routing as Record<string, unknown>;
+  const candidate = routingRecord.modelId ?? routingRecord.model ?? routingRecord.canonicalSlug;
+  return typeof candidate === "string" && candidate.trim() ? candidate : fallback;
+}
+
 async function translateThroughConfiguredProvider(input: {
   text: string;
   sourceLanguage: string;
@@ -116,69 +156,75 @@ async function translateWithGateway(request: PantavionTranslationRequest) {
     return { result: null, attempts: [] as GatewayAttempt[], runtimeAvailable: false };
   }
 
-  const models = Array.from(
-    new Set(
-      [
-        process.env.PANTAVION_TRANSLATION_GATEWAY_MODEL,
-        process.env.PANTAVION_TRANSLATION_MODEL,
-        process.env.PANTAVION_TRANSLATION_FALLBACK_MODEL,
-        "openai/gpt-4.1-mini",
-      ].filter((value): value is string => Boolean(value)),
-    ),
-  );
+  const { primaryModel, fallbackModels } = gatewayModelPlan();
   const attempts: GatewayAttempt[] = [];
 
-  for (const model of models) {
-    try {
-      // AI SDK resolves a creator/model string through Vercel AI Gateway and uses
-      // Vercel OIDC automatically in production. Retries remain bounded by one
-      // request-level timeout so transient 5xx/provider errors do not immediately
-      // fail a live translation while privacy fallback policy stays unchanged.
-      const result = await generateText({
-        model,
-        prompt: strictTranslationPrompt(request),
-        temperature: 0,
-        maxRetries: 3,
-        abortSignal: AbortSignal.timeout(30_000),
-      });
-      const translatedText = String(result.text || "").trim();
-      if (!translatedText) {
-        attempts.push({ model, ok: false, errorClass: "empty_translation" });
-        continue;
-      }
-
-      attempts.push({ model, ok: true });
-      return {
-        result: {
-          ok: true as const,
-          status: "translated" as const,
-          contract: pantavionUniversalTranslationContract,
-          input: request,
-          translatedText,
-          provider: "vercel_ai_gateway",
-          model,
-          generatedAt: new Date().toISOString(),
+  try {
+    // Use AI Gateway's native model failover in one bounded request. This avoids
+    // serial 30-second model attempts that could consume the entire HTTP budget
+    // before a fallback model gets a chance to run.
+    const result = await generateText({
+      model: primaryModel,
+      prompt: strictTranslationPrompt(request),
+      temperature: 0,
+      maxRetries: 1,
+      abortSignal: AbortSignal.timeout(38_000),
+      providerOptions: {
+        gateway: {
+          models: fallbackModels,
+          tags: ["feature:translation", "env:production", "runtime:pantavion"],
         },
-        attempts,
-        runtimeAvailable: true,
-      };
-    } catch (error) {
-      attempts.push({ model, ok: false, ...safeGatewayFailure(error) });
-    }
-  }
+      },
+    });
 
-  return { result: null, attempts, runtimeAvailable: true };
+    const translatedText = String(result.text || "").trim();
+    const servedModel = resolvedGatewayModel(result.providerMetadata, primaryModel);
+
+    if (!translatedText) {
+      attempts.push({ model: servedModel, ok: false, errorClass: "empty_translation" });
+      return { result: null, attempts, runtimeAvailable: true };
+    }
+
+    attempts.push({ model: servedModel, ok: true });
+    return {
+      result: {
+        ok: true as const,
+        status: "translated" as const,
+        contract: pantavionUniversalTranslationContract,
+        input: request,
+        translatedText,
+        provider: "vercel_ai_gateway",
+        model: servedModel,
+        generatedAt: new Date().toISOString(),
+      },
+      attempts,
+      runtimeAvailable: true,
+    };
+  } catch (error) {
+    attempts.push({
+      model: `${primaryModel} + ${fallbackModels.join(" + ")}`,
+      ok: false,
+      ...safeGatewayFailure(error),
+    });
+    return { result: null, attempts, runtimeAvailable: true };
+  }
 }
 
 export async function GET() {
   const languageRuntime = await getPantavionLanguageRuntimeSnapshot();
   const providerStatus = getPantavionTranslationProviderStatus();
+  const modelPlan = gatewayModelPlan();
+
   return NextResponse.json({
     ok: languageRuntime.capabilities.some(
       (capability) => capability.capability === "text_translation" && capability.available,
     ),
     contract: pantavionUniversalTranslationContract,
     gatewayPreferred: languageRuntime.gatewayRuntimeAvailable,
+    gatewayFailover: {
+      nativeModelFallback: true,
+      modelCount: 1 + modelPlan.fallbackModels.length,
+    },
     strictLanguageRouting: true,
     publicTextFallback: languageRuntime.publicFallbackAllowed,
     providerStatus: {
