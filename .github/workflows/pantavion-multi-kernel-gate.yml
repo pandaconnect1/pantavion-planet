@@ -38,3 +38,6 @@ jobs:
 
       - name: Verify nervous-system contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-nervous-system-test.mjs
+
+      - name: Verify truth-ledger contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-truth-ledger-test.mjs
