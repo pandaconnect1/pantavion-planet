@@ -91,6 +91,21 @@ function capabilityFromPath(file, anchor) {
   const source = String(file || '').toLowerCase().replace(/\\/g,'/');
   if (source.startsWith('data/runtime-reports/')) return 'observe';
   if (!anchor) return null;
+  const exactLanes = [
+    { capability:'protect', pattern:/^scripts\/apply-pantavion-global-safety-patch\.cjs$/ },
+    { capability:'observe', pattern:/^app\/kernel\/kernel-live-panel-client\.tsx$/ },
+    { capability:'execute', pattern:/^core\/kernel\/kernel-control-plane\.ts$/ },
+    { capability:'protect', pattern:/^core\/kernel\/kernel-admission\.ts$/ },
+    { capability:'configure', pattern:/^core\/pantavion-kernel-foundation\.ts$/ },
+    { capability:'observe', pattern:/^core\/memory\/memory-event-log\.ts$/ },
+    { capability:'synchronize', pattern:/^core\/memory\/continuity-graph\.ts$/ },
+    { capability:'update', pattern:/^app\/(api\/)?professional\/infrastructure\/water\/(admin\/approvals|access\/admin\/(approve|decision))(\/|$)/ },
+    { capability:'observe', pattern:/^scripts\/(pantavion-water-kernel-gate|water-guardian-production-smoke|pantavion-water-map-b-dwg-inventory)\.(cjs|mjs)$/ },
+    { capability:'execute', pattern:/^core\/water\/water-ai-operations-kernel\.ts$/ },
+    { capability:'read', pattern:/^core\/water\/water-ai-map-intelligence-kernel\.ts$/ }
+  ];
+  const exactMatches = [...new Set(exactLanes.filter(lane => lane.pattern.test(source)).map(lane => lane.capability))];
+  if (exactMatches.length === 1) return exactMatches[0];
   const lanes = [
     { capability:'observe', pattern:/(^|[-/])(audit|logging|readiness|health|report|evidence|status|monitor|smoke)([-/.]|$)/ },
     { capability:'protect', pattern:/(^|[-/])(access|authorized|authorization|privacy|security|policy|filtering|session|guard|guardian|moderation|block)([-/.]|$)/ },
