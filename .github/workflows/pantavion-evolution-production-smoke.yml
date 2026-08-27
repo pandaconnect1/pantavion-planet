@@ -1,0 +1,80 @@
+name: Pantavion Evolution Production Smoke
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "core/kernel/pantavion-evolution-engine.ts"
+      - "core/kernel/pantavion-evolution-current-signals.ts"
+      - "app/api/pantavion/evolution/**"
+      - "app/evolution/**"
+      - ".github/workflows/pantavion-evolution-signal-gate.yml"
+      - ".github/workflows/pantavion-evolution-production-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evolution-production-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      BASE_URL: https://pantavion.com
+    steps:
+      - name: Wait for exact main revision in production
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 40); do
+            echo "Production revision attempt $attempt/40"
+            code=$(curl -sS -L --connect-timeout 10 --max-time 20 \
+              -o /tmp/social-health.json -w "%{http_code}" \
+              "$BASE_URL/api/social/health" || true)
+            revision=$(jq -r '.revision // empty' /tmp/social-health.json 2>/dev/null || true)
+            ok=$(jq -r '.ok // false' /tmp/social-health.json 2>/dev/null || echo false)
+            echo "HTTP=$code revision=${revision:-<none>} expected=$GITHUB_SHA"
+            if [ "$code" = "200" ] && [ "$ok" = "true" ] && [ "$revision" = "$GITHUB_SHA" ]; then
+              echo "Exact production revision verified."
+              break
+            fi
+            if [ "$attempt" = "40" ]; then
+              echo "::error::Production did not reach exact main revision $GITHUB_SHA."
+              exit 1
+            fi
+            sleep 15
+          done
+
+      - name: Verify Evolution Radar live surface
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -L --connect-timeout 10 --max-time 30 \
+            -o /tmp/evolution-radar.html -w "%{http_code}" \
+            "$BASE_URL/evolution/radar")
+          test "$code" = "200"
+          grep -q "Technology Signal &amp; Horizon Radar\|Technology Signal & Horizon Radar" /tmp/evolution-radar.html
+          grep -q "Blind Prod Mutation" /tmp/evolution-radar.html
+          echo "Evolution Radar live surface VERIFIED."
+
+      - name: Verify Evolution Intelligence V2 runtime truth
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sS -L --fail-with-body --connect-timeout 10 --max-time 30 \
+            "$BASE_URL/api/pantavion/evolution" \
+            -o /tmp/evolution.json
+
+          jq -e '
+            .ok == true and
+            .contract == "pantavion-evolution-intelligence-v2" and
+            (.currentSignals | length >= 3) and
+            all(.currentSignals[];
+              .decision.productionMutationAllowed == false and
+              (.decision.foresight | length <= 10) and
+              all(.decision.foresight[]; .truthStatus == "hypothesis_not_fact")
+            )
+          ' /tmp/evolution.json >/dev/null
+
+          echo "Evolution Intelligence V2 production truth VERIFIED."
