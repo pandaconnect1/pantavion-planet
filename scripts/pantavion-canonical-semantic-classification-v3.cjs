@@ -110,7 +110,17 @@ const sourcePathAnchors = [
   { module:'Interpreter / Translation', subsystem:'translation', capability:'configure', strict:true, patterns:[/^core\/intelligence\/ai-locale-authority\.ts$/,/^core\/i18n\/pantavion-multimodal-language-contract\.ts$/,/^scripts\/fix-global-language-pr\.cjs$/] },
   { module:'Interpreter / Translation', subsystem:'translation', capability:'translate', strict:true, patterns:[/^core\/language\/pantavion-global-language-runtime\.ts$/] },
   { module:'Maps / World / Water', subsystem:'water', capability:'protect', strict:true, patterns:[/^docs\/requirements\/pantavion-water-network-kernel-lock-v1\.md$/] },
-  { module:'Maps / World / Water', subsystem:'water', capability:'synchronize', strict:true, patterns:[/^docs\/requirements\/pantavion-water-production-cloud-bridge\.md$/] }
+  { module:'Maps / World / Water', subsystem:'water', capability:'synchronize', strict:true, patterns:[/^docs\/requirements\/pantavion-water-production-cloud-bridge\.md$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'synchronize', strict:true, patterns:[/^app\/api\/kernel\/continuity-memory\/route\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'observe', strict:true, patterns:[/^app\/api\/kernel\/founder-session\/route\.ts$/,/^core\/kernel\/kernel-artifact-summary\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'observe', strict:true, patterns:[/^app\/api\/pantavion\/(intelligence\/ecosystem-radar|runtime\/heartbeat)\/route\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'configure', strict:true, patterns:[/^core\/app\/secret-runtime-binding-registry\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'observe', strict:true, patterns:[/^core\/app\/secrets-deploy-observability-integration-wave\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'create', strict:true, patterns:[/^scripts\/pantavion-project-intake-autonomous-draft-workspace\.cjs$/] },
+  { module:'Social / Pulse / Communities', subsystem:'publishing', capability:'read', strict:true, patterns:[/^app\/social\/(global|notifications)\/page\.tsx$/] },
+  { module:'Music / Media / Creation', subsystem:'media', capability:'present', strict:true, patterns:[/^app\/twitter-image\.tsx$/] },
+  { module:'Experience / Navigation', subsystem:'shell', capability:'present', strict:true, patterns:[/^app\/layout\.tsx$/,/^core\/public-surface\/human-first-homepage-(spec|wave)\.ts$/] },
+  { module:'Learning / Knowledge', subsystem:'knowledge', capability:'configure', strict:true, patterns:[/^docs\/architecture\/pantavion_academic_evidence_standard\.md$/] }
 ];
 
 function sourcePathAnchor(file) {
