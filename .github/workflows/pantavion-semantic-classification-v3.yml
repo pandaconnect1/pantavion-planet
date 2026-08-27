@@ -83,6 +83,8 @@ jobs:
             let capabilityConflicts = 0;
             let capabilityPathEvidence = 0;
             let capabilityPathMismatches = 0;
+            let runtimeReports = 0;
+            let runtimeReportMismatches = 0;
             for await (const line of lines) {
               if (!line.trim()) continue;
               if (index >= source.length) throw new Error("Semantic ledger contains extra records");
@@ -92,6 +94,10 @@ jobs:
               if (record.reviewStatus==="SEMANTICALLY_CLASSIFIED"&&(!record.classification.subsystem||!record.classification.capability||!record.classification.feature||!record.classification.canonicalTarget)) falselyFinal++;
               const evidence = record.classification && record.classification.classificationEvidence;
               const anchor = evidence && evidence.pathAnchor;
+              if (String(record.provenance && record.provenance.sourceFile || "").startsWith("data/runtime-reports/")) {
+                runtimeReports++;
+                if (record.classification.module !== "Recovery / Provenance" || record.classification.subsystem !== "evidence" || record.classification.capability !== "observe" || record.classification.artifactType !== "runtime-evidence" || record.reviewStatus !== "SEMANTICALLY_CLASSIFIED") runtimeReportMismatches++;
+              }
               if (anchor) {
                 pathAnchored++;
                 if (record.classification.module !== anchor.module || record.classification.subsystem !== anchor.subsystem) pathAnchorMismatches++;
@@ -127,7 +133,8 @@ jobs:
             if (manifest.moduleMissingResolved !== moduleMissingResolved || manifestModuleMissingResolved !== moduleMissingResolved) throw new Error("Manifest module-missing accounting mismatch");
             if (capabilityConflicts !== 4373 || manifest.reviewReasonSummary.capability_conflict !== capabilityConflicts) throw new Error("Capability-conflict wave accounting mismatch: "+capabilityConflicts);
             if (manifest.reviewReasonSummary.capability_missing !== 3447) throw new Error("Capability-missing wave accounting mismatch: "+manifest.reviewReasonSummary.capability_missing);
-            if (manifest.completion.semanticallyClassified !== 20126 || manifest.completion.reviewRequired !== 12008) throw new Error("Capability-path completion accounting mismatch");
+            if (manifest.completion.semanticallyClassified !== 21862 || manifest.completion.reviewRequired !== 10272) throw new Error("Runtime-evidence completion accounting mismatch");
+            if (runtimeReports !== 1736 || runtimeReportMismatches) throw new Error("Runtime-report provenance routing mismatch: reports="+runtimeReports+", mismatches="+runtimeReportMismatches);
             if (!capabilityPathEvidence || capabilityPathMismatches) throw new Error("Capability-path evidence regression: evidence="+capabilityPathEvidence+", mismatches="+capabilityPathMismatches);
             const manifestAnchored = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathAnchored || 0),0);
             const manifestReassigned = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathReassigned || 0),0);
