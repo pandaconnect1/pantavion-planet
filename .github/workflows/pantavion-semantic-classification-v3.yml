@@ -53,10 +53,19 @@ jobs:
           if (objectStatusTotal !== 20) throw new Error("Object-level reconciliation status accounting mismatch");
           const expectedObjectStatuses = { SCHEMA_OBJECTS_ALL_PRESENT:5, SCHEMA_OBJECTS_PARTIAL:3, SCHEMA_OBJECTS_NOT_OBSERVED:10, OBSERVABLE_EFFECTS_ALL_PRESENT:1, OBSERVABLE_EFFECTS_PARTIAL:1 };
           for (const [status,count] of Object.entries(expectedObjectStatuses)) if (objectEvidence.statusCounts[status] !== count) throw new Error("Unexpected object-level status "+status+": "+objectEvidence.statusCounts[status]);
+          const definitionLineage = objectEvidence.definitionLineage;
+          if (!definitionLineage || definitionLineage.repositoryMigrationsExamined !== 8 || definitionLineage.items.length !== 8 || definitionLineage.appliedMigrationHistoryRows !== 56) throw new Error("Definition lineage must cover 8 repository migrations and all 56 applied migrations");
+          if (definitionLineage.declaredFunctions !== 23 || definitionLineage.currentLiveFunctions !== 13 || definitionLineage.missingFunctions !== 10) throw new Error("Definition lineage function accounting mismatch");
+          if (definitionLineage.currentLiveFunctionsMatchingLatestAppliedDefinition !== 13 || definitionLineage.repositoryFunctionsMatchingCurrentLiveDefinition !== 3 || definitionLineage.repositoryFunctionsDifferingFromCurrentLiveDefinition !== 10) throw new Error("Definition lineage comparison mismatch");
+          if (definitionLineage.declaredRelations !== 19 || definitionLineage.currentLiveRelations !== 18 || definitionLineage.missingRelations !== 1 || definitionLineage.currentLiveRelationsWithAppliedCreateLineage !== 18) throw new Error("Definition lineage relation accounting mismatch");
+          if (definitionLineage.statusCounts.CURRENT_PRODUCTION_LINEAGE_CONFIRMED !== 5 || definitionLineage.statusCounts.PARTIAL_CURRENT_PRODUCTION_LINEAGE !== 3) throw new Error("Definition lineage migration status mismatch");
+          if (definitionLineage.equivalenceDecision !== "HOLD_NON_EXACT") throw new Error("Definition lineage must remain HOLD_NON_EXACT");
           if (!productionTruth.supabase.publicTables.allRlsEnabled) throw new Error("Production truth reports a public table without RLS");
           if (productionTruth.supabase.registrationGate.publicRegistrationEnabled) throw new Error("Public registration truth gate unexpectedly enabled");
           if (!manifest.externalProductionTruth || manifest.externalProductionTruth.repositoryMigrationFiles !== repoMigrations.count || manifest.externalProductionTruth.appliedMigrations !== appliedMigrations.count) throw new Error("Manifest omitted repository/Supabase truth evidence");
           if (!manifest.externalProductionTruth.objectLevelMigrationEvidence || manifest.externalProductionTruth.objectLevelMigrationEvidence.examinedRepositoryMigrations !== 20 || manifest.externalProductionTruth.objectLevelMigrationEvidence.equivalenceDecision !== "HOLD_NON_EXACT") throw new Error("Manifest omitted object-level migration truth evidence");
+          const manifestLineage = manifest.externalProductionTruth.objectLevelMigrationEvidence.definitionLineage;
+          if (!manifestLineage || manifestLineage.repositoryMigrationsExamined !== 8 || manifestLineage.currentLiveFunctionsMatchingLatestAppliedDefinition !== 13 || manifestLineage.currentLiveRelations !== 18 || manifestLineage.equivalenceDecision !== "HOLD_NON_EXACT") throw new Error("Manifest omitted definition lineage evidence");
           if (receipt.totalRecords !== 82413 || source.length !== 82413) throw new Error("82,413-record source preservation mismatch");
           if (manifest.sourceFingerprint !== receipt.corpusFingerprint || manifest.recordCount !== 82413 || manifest.preservedRecordCount !== 82413) throw new Error("Manifest/receipt mismatch");
           (async () => {
