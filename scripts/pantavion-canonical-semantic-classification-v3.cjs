@@ -162,7 +162,18 @@ const sourcePathAnchors = [
   { module:'Identity / Auth / Consent', subsystem:'authorization', capability:'configure', strict:true, patterns:[/^core\/app\/app-role-registry\.ts$/] },
   { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^core\/ai\/(pantaai-agent-protocol|pantaai-sovereign-public-ai)\.ts$/] },
   { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'execute', strict:true, patterns:[/^core\/pantavion\/pantai-local-executor\.ts$/] },
-  { module:'Kernel / Guardian / Runtime', subsystem:'providers', capability:'configure', strict:true, patterns:[/^core\/intelligence\/pantavion-ecosystem-interoperability-contract\.ts$/] }
+  { module:'Kernel / Guardian / Runtime', subsystem:'providers', capability:'configure', strict:true, patterns:[/^core\/intelligence\/pantavion-ecosystem-interoperability-contract\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'guardian', capability:'observe', strict:true, patterns:[/^core\/product\/pantavion-product-truth-ledger\.ts$/,/^core\/pantavion\/route-status-registry\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'guardian', capability:'protect', strict:true, patterns:[/^core\/pantavion\/kernel-hardening-ledger\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'execute', strict:true, patterns:[/^app\/api\/pantavion\/ai\/route\.ts$/,/^app\/intelligence\/execute\/pantaaiexecuteclient\.tsx$/] },
+  { module:'Recovery / Provenance', subsystem:'evidence', capability:'observe', strict:true, patterns:[/^scripts\/pantavion-(canonical-semantic-archive|founder-vision-ingestion)\.cjs$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'observe', strict:true, patterns:[/^core\/inspector\/intelligence-visibility-inspector\.ts$/] },
+  { module:'Safety / Trust / Minors', subsystem:'policy', capability:'configure', strict:true, patterns:[/^core\/global\/country-registry\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'observe', strict:true, patterns:[/^core\/app\/observability-signal-registry\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'guardian', capability:'present', strict:true, patterns:[/^app\/no-dead-surfaces\/page\.tsx$/] },
+  { module:'Music / Media / Creation', subsystem:'media', capability:'present', strict:true, patterns:[/^app\/my-media\/page\.tsx$/] },
+  { module:'Interpreter / Translation', subsystem:'translation', capability:'present', strict:true, patterns:[/^app\/pantavion\/translate-live\/page\.tsx$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^core\/ai\/pantavion-ai-layer-separation\.ts$/] }
 ];
 
 function sourcePathAnchor(file) {
