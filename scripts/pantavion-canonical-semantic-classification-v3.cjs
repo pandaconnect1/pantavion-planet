@@ -38,7 +38,7 @@ const sourcePathAnchors = [
   { module:'SOS / Crisis', subsystem:'emergency', capability:'execute', patterns:[/(^|\/)app\/(pantavion\/)?(sos|emergency|crisis)(\/|$)/,/(^|\/)core\/(sos|emergency|crisis)(\/|$)/] },
   { module:'Safety / Trust / Minors', subsystem:'moderation', patterns:[/(^|\/)app\/admin\/moderation(\/|$)/,/(^|\/)core\/(safety|moderation|trust|minors)(\/|$)/,/(^|\/)scripts\/[^/]*(safety|moderation)[^/]*$/] },
   { module:'Identity / Auth / Consent', subsystem:'authentication', patterns:[/(^|\/)app\/(auth|login|register)(\/|$)/,/(^|\/)core\/(auth|identity|consent)(\/|$)/,/(^|\/)lib\/[^/]*(auth|identity)[^/]*$/] },
-  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', patterns:[/(^|\/)app\/kernel(\/|$)/,/(^|\/)core\/(kernel|runtime|guardian)(\/|$)/,/(^|\/)core\/[^/]*kernel[^/]*$/,/(^|\/)scripts\/(?![^/]*water-guardian)[^/]*(kernel|guardian|runtime)[^/]*$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', patterns:[/(^|\/)app\/kernel(\/|$)/,/(^|\/)core\/(kernel|runtime|guardian)(\/|$)/,/(^|\/)core\/[^/]*kernel[^/]*$/,/(^|\/)scripts\/(?![^/]*(?:water|translation))[^/]*(kernel|guardian|runtime)[^/]*$/] },
   { module:'Personal AI / PantaAI', subsystem:'memory', patterns:[/(^|\/)core\/memory(\/|$)/,/(^|\/)app\/(panta-ai|personal-ai)(\/|$)/,/(^|\/)core\/(panta-ai|personal-ai)(\/|$)/] },
   { module:'People', subsystem:'profile', patterns:[/(^|\/)app\/(people|profile|contacts)(\/|$)/,/(^|\/)core\/(people|profile|contacts)(\/|$)/] },
   { module:'Social / Pulse / Communities', subsystem:'publishing', patterns:[/(^|\/)app\/(social|pulse|communities)(\/|$)/,/(^|\/)core\/(social|pulse|communities)(\/|$)/] },
