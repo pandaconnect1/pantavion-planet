@@ -8,7 +8,7 @@ let terminalLfMatches = 0;
 let scopedSemanticMatches = 0;
 
 const md5Of = (text) => createHash('md5').update(text, 'utf8').digest('hex');
-const whitespaceNormalized = (text) => text.replace(/\s+/g, ' ');
+const whitespaceNormalized = (text) => text.trim().replace(/\s+/g, ' ');
 
 for (const entry of baseline.entries) {
   const path = `supabase/migrations/${entry.version}_${entry.name}.sql`;
