@@ -139,7 +139,14 @@ const sourcePathAnchors = [
   { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'execute', strict:true, patterns:[/^scripts\/pantavion-kernel-compat-repair\.cjs$/] },
   { module:'Kernel / Guardian / Runtime', subsystem:'guardian', capability:'observe', strict:true, patterns:[/^(core\/inspector\/visibility-inspector-surface|scripts\/export-visibility-inspector-surface)\.ts$/] },
   { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'observe', strict:true, patterns:[/^core\/intelligence\/pantavion-ecosystem-radar-runtime\.ts$/] },
-  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^core\/pantavion-intelligence-registry\.ts$/] }
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^core\/pantavion-intelligence-registry\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^core\/intelligence\/pantavion-sovereign-intelligence-fabric\.ts$/,/^core\/ai\/pantavion-ai-command-center\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'execute', strict:true, patterns:[/^scripts\/pantavion-project-intake-prioritize-work-orders\.cjs$/] },
+  { module:'Resilience / Offline / Infrastructure', subsystem:'infrastructure', capability:'configure', strict:true, patterns:[/^core\/pantavion\/internal-infrastructure-registry\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'observe', strict:true, patterns:[/^core\/pantavion\/kernel-completion-spine\.ts$/] },
+  { module:'Recovery / Provenance', subsystem:'evidence', capability:'observe', strict:true, patterns:[/^scripts\/pantavion-unfinished-plan-ingestion\.cjs$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'create', strict:true, patterns:[/^app\/api\/pantavion\/implementation-plan\/route\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'execute', strict:true, patterns:[/^scripts\/pantavion-safe-git-autopilot\.cjs$/] }
 ];
 
 function sourcePathAnchor(file) {
