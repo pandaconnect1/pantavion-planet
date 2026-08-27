@@ -1,0 +1,27 @@
+{
+  "source": "supabase_migrations.schema_migrations production ledger",
+  "projectRef": "cxhulvwkagzufbjsdwwu",
+  "capturedAtUtc": "2026-08-27T17:20:00Z",
+  "entries": [
+    {"version":"20260812205302","name":"profiles_secure_baseline","md5":"e0d3e289af5b82cb61c201c3cf20826a","chars":864},
+    {"version":"20260812205420","name":"human_communication_core","md5":"34ca4221ae7bbe94d2745975b6a72055","chars":9519},
+    {"version":"20260812205431","name":"personal_media_core","md5":"76368ef6d183eeb0c5c0237582186fa5","chars":1856},
+    {"version":"20260812205439","name":"social_flagship_core","md5":"74f4c9c48676a0e29d0f0b569813645f","chars":3798},
+    {"version":"20260812210107","name":"production_security_hardening","md5":"59e3c84de6fe89f905dfb0aebe1b750c","chars":2412},
+    {"version":"20260812210515","name":"social_ui_capabilities","md5":"54b3a13794f25adcf417c3398805dcf4","chars":2596},
+    {"version":"20260812210533","name":"social_media_hydration","md5":"648b4d400106815ff41ea0ff15e4fee3","chars":1244},
+    {"version":"20260812211417","name":"contact_discovery_tokens","md5":"6af10a47c5c1cb6b9083718807da321e","chars":780},
+    {"version":"20260812211628","name":"communication_runtime_core","md5":"fde0209a856a0a6d30ae9f916ae66c8e","chars":6774},
+    {"version":"20260812212902","name":"realtime_chat_social_publication","md5":"9702205441ebc674359f36408e5be431","chars":1714},
+    {"version":"20260813082338","name":"create_media_news_listings_core","md5":"bdc31302a0644f63aaf135d6fde47e97","chars":9080},
+    {"version":"20260813082408","name":"grant_public_listing_read_to_anon","md5":"d2d925101a647ab3490c3f177ce9a843","chars":47},
+    {"version":"20260815171533","name":"recover_social_communities_notifications","md5":"8f8fc1660f7ff612db23be613352d5a0","chars":5457},
+    {"version":"20260815171620","name":"harden_social_communities_notifications","md5":"cf7940835fae2cdd3f27a9df1322618f","chars":1616},
+    {"version":"20260822194957","name":"create_durable_execution_runtime","md5":"51e74b4147944bfc4c53f6026972383a","chars":3650},
+    {"version":"20260824134053","name":"create_secure_scheduled_worker","md5":"a601fdbcf75a2ca3ac3c5087cb30e730","chars":5243},
+    {"version":"20260824185447","name":"harden_personal_ai_runtime_v1","md5":"774df7a5bc0e254070031985e38e625a","chars":893},
+    {"version":"20260825162513","name":"harden_social_block_visibility_and_media_posts","md5":"391e7275fd389008b188d2e2607b11d1","chars":5159},
+    {"version":"20260826133946","name":"owner_decision_control_center","md5":"6dc3f549e31c07391cc41affcfb8eed1","chars":2447},
+    {"version":"20260826134022","name":"owner_decision_queue_server_only","md5":"77dcd2897083b812e998fff49e719f30","chars":389}
+  ]
+}
