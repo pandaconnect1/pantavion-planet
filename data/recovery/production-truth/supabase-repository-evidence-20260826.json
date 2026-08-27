@@ -967,6 +967,44 @@
             "satisfied": 0,
             "total": 0,
             "unsatisfied": []
+          },
+          "definitionLineage": {
+            "status": "PARTIAL_CURRENT_PRODUCTION_LINEAGE",
+            "objects": {
+              "live": 1,
+              "total": 3,
+              "items": [
+                {
+                  "kind": "relation",
+                  "name": "public.profiles",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "profiles_secure_baseline",
+                      "version": "20260812205302"
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.handle_new_user",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.set_updated_at",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                }
+              ]
+            }
           }
         },
         {
@@ -1195,6 +1233,238 @@
             "satisfied": 0,
             "total": 0,
             "unsatisfied": []
+          },
+          "definitionLineage": {
+            "status": "PARTIAL_CURRENT_PRODUCTION_LINEAGE",
+            "objects": {
+              "live": 14,
+              "total": 18,
+              "items": [
+                {
+                  "kind": "relation",
+                  "name": "public.user_privacy_settings",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.consent_records",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.contact_sources",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.contacts",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.relationships",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.user_blocks",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.conversations",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.conversation_members",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.messages",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.message_receipts",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_touch_updated_at",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_is_conversation_member",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260812205420",
+                    "migration": "human_communication_core"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812205420",
+                      "migration": "human_communication_core",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_is_conversation_creator",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_has_block_between",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260812205420",
+                    "migration": "human_communication_core"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812205420",
+                      "migration": "human_communication_core",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_can_send_to_conversation",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260813183008",
+                    "migration": "trust_safety_profile_controls"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260813183008",
+                      "migration": "trust_safety_profile_controls",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_can_access_message",
+                  "repositoryDefinitionVsLive": "NORMALIZED_DEFINITION_MATCH",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260812211628",
+                    "migration": "communication_runtime_core"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_enforce_relationship_transition",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.initialize_pantavion_user_settings",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                }
+              ]
+            }
           }
         },
         {
@@ -1395,6 +1665,130 @@
             "satisfied": 0,
             "total": 0,
             "unsatisfied": []
+          },
+          "definitionLineage": {
+            "status": "CURRENT_PRODUCTION_LINEAGE_CONFIRMED",
+            "objects": {
+              "live": 5,
+              "total": 5,
+              "items": [
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_request_relationship",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260813183008",
+                    "migration": "trust_safety_profile_controls"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260813183008",
+                      "migration": "trust_safety_profile_controls",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_respond_relationship",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260813223002",
+                    "migration": "relationship_messaging_boundary_hardening"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260813223002",
+                      "migration": "relationship_messaging_boundary_hardening",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_create_direct_conversation",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260814050449",
+                    "migration": "chat_direct_conversation_privacy_gate"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260813183008",
+                      "migration": "trust_safety_profile_controls",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260814050449",
+                      "migration": "chat_direct_conversation_privacy_gate",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_send_message",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260814050455",
+                    "migration": "chat_message_privacy_gate"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260814050455",
+                      "migration": "chat_message_privacy_gate",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_mark_message_receipt",
+                  "repositoryDefinitionVsLive": "NORMALIZED_DEFINITION_MATCH",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260812211628",
+                    "migration": "communication_runtime_core"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                }
+              ]
+            }
           }
         },
         {
@@ -1737,6 +2131,26 @@
             "satisfied": 0,
             "total": 0,
             "unsatisfied": []
+          },
+          "definitionLineage": {
+            "status": "CURRENT_PRODUCTION_LINEAGE_CONFIRMED",
+            "objects": {
+              "live": 1,
+              "total": 1,
+              "items": [
+                {
+                  "kind": "relation",
+                  "name": "public.personal_media",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "personal_media_core",
+                      "version": "20260812205431"
+                    }
+                  ]
+                }
+              ]
+            }
           }
         },
         {
@@ -1895,6 +2309,111 @@
             "satisfied": 0,
             "total": 0,
             "unsatisfied": []
+          },
+          "definitionLineage": {
+            "status": "CURRENT_PRODUCTION_LINEAGE_CONFIRMED",
+            "objects": {
+              "live": 7,
+              "total": 7,
+              "items": [
+                {
+                  "kind": "relation",
+                  "name": "public.social_posts",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "social_flagship_core",
+                      "version": "20260812205439"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.social_post_media",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "social_ui_capabilities",
+                      "version": "20260812210515"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.social_reactions",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "social_flagship_core",
+                      "version": "20260812205439"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.social_comments",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "social_flagship_core",
+                      "version": "20260812205439"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.social_location_shares",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "social_flagship_core",
+                      "version": "20260812205439"
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_are_connections",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260812205439",
+                    "migration": "social_flagship_core"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812205439",
+                      "migration": "social_flagship_core",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_can_view_social_post",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260825162513",
+                    "migration": "harden_social_block_visibility_and_media_posts"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812210515",
+                      "migration": "social_ui_capabilities",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260825162513",
+                      "migration": "harden_social_block_visibility_and_media_posts",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                }
+              ]
+            }
           }
         },
         {
@@ -2055,6 +2574,33 @@
             "satisfied": 0,
             "total": 0,
             "unsatisfied": []
+          },
+          "definitionLineage": {
+            "status": "CURRENT_PRODUCTION_LINEAGE_CONFIRMED",
+            "objects": {
+              "live": 1,
+              "total": 1,
+              "items": [
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_hydrate_social_post_media",
+                  "repositoryDefinitionVsLive": "NORMALIZED_DEFINITION_MATCH",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260812210533",
+                    "migration": "social_media_hydration"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812210533",
+                      "migration": "social_media_hydration",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                }
+              ]
+            }
           }
         },
         {
@@ -2108,6 +2654,75 @@
             "satisfied": 0,
             "total": 0,
             "unsatisfied": []
+          },
+          "definitionLineage": {
+            "status": "PARTIAL_CURRENT_PRODUCTION_LINEAGE",
+            "objects": {
+              "live": 1,
+              "total": 6,
+              "items": [
+                {
+                  "kind": "relation",
+                  "name": "public.user_discovery_identifiers",
+                  "livePresent": false,
+                  "appliedCreateLineage": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_normalize_email",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_normalize_phone",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_identifier_hash",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_sync_auth_discovery_identifiers",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_find_people_from_my_contacts",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260814055445",
+                    "migration": "people_contact_matching_runtime"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260814055445",
+                      "migration": "people_contact_matching_runtime",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                }
+              ]
+            }
           }
         },
         {
@@ -2346,9 +2961,696 @@
             "satisfied": 12,
             "total": 12,
             "unsatisfied": []
+          },
+          "definitionLineage": {
+            "status": "CURRENT_PRODUCTION_LINEAGE_CONFIRMED",
+            "objects": {
+              "live": 1,
+              "total": 1,
+              "items": [
+                {
+                  "kind": "relation",
+                  "name": "public.owner_decision_queue",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "owner_decision_control_center",
+                      "version": "20260826133946"
+                    }
+                  ]
+                }
+              ]
+            }
           }
         }
-      ]
+      ],
+      "definitionLineage": {
+        "capturedAt": "2026-08-27T00:04:02.425Z",
+        "scope": "All 8 non-exact repository migrations previously found to have complete or partial production object presence; checked against the complete 56-row Supabase migration history and current pg_catalog definitions.",
+        "appliedMigrationHistoryRows": 56,
+        "repositoryMigrationsExamined": 8,
+        "declaredFunctions": 23,
+        "currentLiveFunctions": 13,
+        "missingFunctions": 10,
+        "currentLiveFunctionsMatchingLatestAppliedDefinition": 13,
+        "repositoryFunctionsMatchingCurrentLiveDefinition": 3,
+        "repositoryFunctionsDifferingFromCurrentLiveDefinition": 10,
+        "declaredRelations": 19,
+        "currentLiveRelations": 18,
+        "missingRelations": 1,
+        "currentLiveRelationsWithAppliedCreateLineage": 18,
+        "statusCounts": {
+          "PARTIAL_CURRENT_PRODUCTION_LINEAGE": 3,
+          "CURRENT_PRODUCTION_LINEAGE_CONFIRMED": 5
+        },
+        "equivalenceDecision": "HOLD_NON_EXACT",
+        "caveat": "This confirms provenance of the current live definitions through applied migration history. It does not make an older repository migration equivalent, deployable, or safe to replay. Table constraints, indexes, triggers, policy expressions, data effects, and full ordered SQL still require separate reconciliation.",
+        "items": [
+          {
+            "repositoryMigration": "20260725155000_create_profiles.sql",
+            "status": "PARTIAL_CURRENT_PRODUCTION_LINEAGE",
+            "objects": {
+              "live": 1,
+              "total": 3,
+              "items": [
+                {
+                  "kind": "relation",
+                  "name": "public.profiles",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "profiles_secure_baseline",
+                      "version": "20260812205302"
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.handle_new_user",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.set_updated_at",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                }
+              ]
+            }
+          },
+          {
+            "repositoryMigration": "20260810200000_create_human_communication_core.sql",
+            "status": "PARTIAL_CURRENT_PRODUCTION_LINEAGE",
+            "objects": {
+              "live": 14,
+              "total": 18,
+              "items": [
+                {
+                  "kind": "relation",
+                  "name": "public.user_privacy_settings",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.consent_records",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.contact_sources",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.contacts",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.relationships",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.user_blocks",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.conversations",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.conversation_members",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.messages",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.message_receipts",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "human_communication_core",
+                      "version": "20260812205420"
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_touch_updated_at",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_is_conversation_member",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260812205420",
+                    "migration": "human_communication_core"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812205420",
+                      "migration": "human_communication_core",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_is_conversation_creator",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_has_block_between",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260812205420",
+                    "migration": "human_communication_core"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812205420",
+                      "migration": "human_communication_core",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_can_send_to_conversation",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260813183008",
+                    "migration": "trust_safety_profile_controls"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260813183008",
+                      "migration": "trust_safety_profile_controls",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_can_access_message",
+                  "repositoryDefinitionVsLive": "NORMALIZED_DEFINITION_MATCH",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260812211628",
+                    "migration": "communication_runtime_core"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_enforce_relationship_transition",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.initialize_pantavion_user_settings",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                }
+              ]
+            }
+          },
+          {
+            "repositoryMigration": "20260810214500_add_human_communication_runtime_rpcs.sql",
+            "status": "CURRENT_PRODUCTION_LINEAGE_CONFIRMED",
+            "objects": {
+              "live": 5,
+              "total": 5,
+              "items": [
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_request_relationship",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260813183008",
+                    "migration": "trust_safety_profile_controls"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260813183008",
+                      "migration": "trust_safety_profile_controls",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_respond_relationship",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260813223002",
+                    "migration": "relationship_messaging_boundary_hardening"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260813223002",
+                      "migration": "relationship_messaging_boundary_hardening",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_create_direct_conversation",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260814050449",
+                    "migration": "chat_direct_conversation_privacy_gate"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260813183008",
+                      "migration": "trust_safety_profile_controls",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260814050449",
+                      "migration": "chat_direct_conversation_privacy_gate",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_send_message",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260814050455",
+                    "migration": "chat_message_privacy_gate"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260814050455",
+                      "migration": "chat_message_privacy_gate",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_mark_message_receipt",
+                  "repositoryDefinitionVsLive": "NORMALIZED_DEFINITION_MATCH",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260812211628",
+                    "migration": "communication_runtime_core"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812211628",
+                      "migration": "communication_runtime_core",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "repositoryMigration": "20260811042500_create_personal_media_library.sql",
+            "status": "CURRENT_PRODUCTION_LINEAGE_CONFIRMED",
+            "objects": {
+              "live": 1,
+              "total": 1,
+              "items": [
+                {
+                  "kind": "relation",
+                  "name": "public.personal_media",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "personal_media_core",
+                      "version": "20260812205431"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "repositoryMigration": "20260811050000_create_social_flagship_core.sql",
+            "status": "CURRENT_PRODUCTION_LINEAGE_CONFIRMED",
+            "objects": {
+              "live": 7,
+              "total": 7,
+              "items": [
+                {
+                  "kind": "relation",
+                  "name": "public.social_posts",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "social_flagship_core",
+                      "version": "20260812205439"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.social_post_media",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "social_ui_capabilities",
+                      "version": "20260812210515"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.social_reactions",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "social_flagship_core",
+                      "version": "20260812205439"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.social_comments",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "social_flagship_core",
+                      "version": "20260812205439"
+                    }
+                  ]
+                },
+                {
+                  "kind": "relation",
+                  "name": "public.social_location_shares",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "social_flagship_core",
+                      "version": "20260812205439"
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_are_connections",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260812205439",
+                    "migration": "social_flagship_core"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812205439",
+                      "migration": "social_flagship_core",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_can_view_social_post",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260825162513",
+                    "migration": "harden_social_block_visibility_and_media_posts"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812210515",
+                      "migration": "social_ui_capabilities",
+                      "matchesCurrentLive": false
+                    },
+                    {
+                      "version": "20260825162513",
+                      "migration": "harden_social_block_visibility_and_media_posts",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "repositoryMigration": "20260811084000_link_social_posts_to_personal_media.sql",
+            "status": "CURRENT_PRODUCTION_LINEAGE_CONFIRMED",
+            "objects": {
+              "live": 1,
+              "total": 1,
+              "items": [
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_hydrate_social_post_media",
+                  "repositoryDefinitionVsLive": "NORMALIZED_DEFINITION_MATCH",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260812210533",
+                    "migration": "social_media_hydration"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260812210533",
+                      "migration": "social_media_hydration",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "repositoryMigration": "20260811100000_create_private_contact_discovery.sql",
+            "status": "PARTIAL_CURRENT_PRODUCTION_LINEAGE",
+            "objects": {
+              "live": 1,
+              "total": 6,
+              "items": [
+                {
+                  "kind": "relation",
+                  "name": "public.user_discovery_identifiers",
+                  "livePresent": false,
+                  "appliedCreateLineage": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_normalize_email",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_normalize_phone",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_identifier_hash",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_sync_auth_discovery_identifiers",
+                  "repositoryDefinitionVsLive": "MISSING_IN_PRODUCTION",
+                  "livePresent": false,
+                  "currentLiveMatchesLatestAppliedDefinition": false,
+                  "latestAppliedDefinition": null,
+                  "appliedDefinitionHistory": []
+                },
+                {
+                  "kind": "function",
+                  "name": "public.pantavion_find_people_from_my_contacts",
+                  "repositoryDefinitionVsLive": "DEFINITION_DIFFERENCE",
+                  "livePresent": true,
+                  "currentLiveMatchesLatestAppliedDefinition": true,
+                  "latestAppliedDefinition": {
+                    "version": "20260814055445",
+                    "migration": "people_contact_matching_runtime"
+                  },
+                  "appliedDefinitionHistory": [
+                    {
+                      "version": "20260814055445",
+                      "migration": "people_contact_matching_runtime",
+                      "matchesCurrentLive": true
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "repositoryMigration": "20260826134500_create_owner_decision_control_center.sql",
+            "status": "CURRENT_PRODUCTION_LINEAGE_CONFIRMED",
+            "objects": {
+              "live": 1,
+              "total": 1,
+              "items": [
+                {
+                  "kind": "relation",
+                  "name": "public.owner_decision_queue",
+                  "livePresent": true,
+                  "appliedCreateLineage": [
+                    {
+                      "migration": "owner_decision_control_center",
+                      "version": "20260826133946"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
     }
   }
 }
