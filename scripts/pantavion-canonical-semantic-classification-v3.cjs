@@ -59,17 +59,17 @@ const sourcePathAnchors = [
   { module:'Safety / Trust / Minors', subsystem:'trust', capability:'protect', patterns:[/^core\/(governance|security)\//,/^core\/pantavion-constitution\.ts$/] },
   { module:'Marketplace / Work / Business', subsystem:'business', capability:'configure', patterns:[/^core\/commercial\//,/^app\/api\/billing\//] },
   { module:'Resilience / Offline / Infrastructure', subsystem:'continuity', capability:'protect', patterns:[/^core\/continuity\//,/^docs\/(continuity\/|pantavion_live_continuity_foundation\.md$)/] },
-  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'execute', patterns:[/^core\/intelligence\/(panta-ai|pantavion-intelligence)[^/]*\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'execute', strict:true, patterns:[/^core\/intelligence\/(panta-ai|pantavion-intelligence)[^/]*\.ts$/] },
   { module:'Personal AI / PantaAI', subsystem:'personalization', capability:'adapt', patterns:[/^core\/personalization\//,/^(app\/universal-life\/page\.tsx|core\/product\/pantavion-universal-life-capabilities\.ts)$/,/^docs\/recovery\/personalized_section_allocation_\d+\.md$/] },
   { module:'Chat', subsystem:'messaging', capability:'synchronize', patterns:[/^docs\/architecture\/pantavion_unified_messaging_interop\.md$/] },
   { module:'Social / Pulse / Communities', subsystem:'publishing', capability:'create', patterns:[/^docs\/recovery\/social_global_\d+_\d+\.md$/] },
   { module:'Music / Media / Creation', subsystem:'creation', capability:'create', patterns:[/^docs\/requirements\/pantavion_music_voice_studio\.md$/] },
   { module:'Experience / Navigation', subsystem:'shell', capability:'present', patterns:[/^app\/page\.tsx$/] },
-  { module:'Interpreter / Translation', subsystem:'speech', capability:'translate', patterns:[/^app\/api\/pantavion\/speech-to-text\/route\.ts$/] },
-  { module:'Interpreter / Translation', subsystem:'translation', capability:'configure', patterns:[/^core\/(i18n\/pantavion-global-language|language\/pantavion-language-(atlas|catalog)|i18n\/languages)\.ts$/,/^app\/pantavion-global-language-selector\.tsx$/] },
+  { module:'Interpreter / Translation', subsystem:'speech', capability:'translate', strict:true, patterns:[/^app\/api\/pantavion\/speech-to-text\/route\.ts$/] },
+  { module:'Interpreter / Translation', subsystem:'translation', capability:'configure', strict:true, patterns:[/^core\/(i18n\/pantavion-global-language|language\/pantavion-language-(atlas|catalog)|i18n\/languages)\.ts$/,/^app\/pantavion-global-language-selector\.tsx$/] },
   { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'execute', patterns:[/^app\/api\/intelligence\/actions\/route\.ts$/] },
-  { module:'Personal AI / PantaAI', subsystem:'personalization', capability:'present', patterns:[/^core\/public-surface\/panta-ai-(public-surface-spec|visible-surface)\.ts$/] },
-  { module:'Safety / Trust / Minors', subsystem:'policy', capability:'protect', patterns:[/^core\/app\/(deploy-readiness-gate|vercel-public-deploy-gate|app-route-guard)\.ts$/] }
+  { module:'Personal AI / PantaAI', subsystem:'personalization', capability:'present', strict:true, patterns:[/^core\/public-surface\/panta-ai-(public-surface-spec|visible-surface)\.ts$/] },
+  { module:'Safety / Trust / Minors', subsystem:'policy', capability:'protect', strict:true, patterns:[/^core\/app\/(deploy-readiness-gate|vercel-public-deploy-gate|app-route-guard)\.ts$/] }
 ];
 
 function sourcePathAnchor(file) {
@@ -84,10 +84,10 @@ function anchoredRank(groups, text, anchor) {
   if (!anchor || !groups[anchor.subsystem]) return ranked;
   const existing = ranked.find(item => item.name === anchor.subsystem);
   if (existing) {
-    existing.score += 8;
+    existing.score += anchor.strict ? 100 : 8;
     existing.evidence = [...new Set([...existing.evidence,'source-path:'+anchor.sourcePath])];
   } else {
-    ranked.push({ name:anchor.subsystem, score:8, evidence:['source-path:'+anchor.sourcePath] });
+    ranked.push({ name:anchor.subsystem, score:anchor.strict ? 100 : 8, evidence:['source-path:'+anchor.sourcePath] });
   }
   return ranked.sort((a,b) => b.score-a.score || a.name.localeCompare(b.name));
 }
