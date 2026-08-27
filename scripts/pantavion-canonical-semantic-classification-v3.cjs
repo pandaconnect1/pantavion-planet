@@ -102,7 +102,24 @@ function capabilityFromPath(file, anchor) {
     { capability:'update', pattern:/^app\/(api\/)?professional\/infrastructure\/water\/(admin\/approvals|access\/admin\/(approve|decision))(\/|$)/ },
     { capability:'observe', pattern:/^scripts\/(pantavion-water-kernel-gate|water-guardian-production-smoke|pantavion-water-map-b-dwg-inventory)\.(cjs|mjs)$/ },
     { capability:'execute', pattern:/^core\/water\/water-ai-operations-kernel\.ts$/ },
-    { capability:'read', pattern:/^core\/water\/water-ai-map-intelligence-kernel\.ts$/ }
+    { capability:'read', pattern:/^core\/water\/water-ai-map-intelligence-kernel\.ts$/ },
+    { capability:'read', pattern:/^core\/infrastructure\/water\/(water-address-candidate-disambiguation|controlled-water-segment-provider|water-target-viewport)\.ts$/ },
+    { capability:'read', pattern:/^core\/water\/water-map-view-mode-model\.ts$/ },
+    { capability:'configure', pattern:/^core\/infrastructure\/water\/(water-abc-tile-foundation|water-serving-contract)\.ts$/ },
+    { capability:'execute', pattern:/^core\/infrastructure\/water\/water-dxf-private-source-processing-plan\.ts$/ },
+    { capability:'configure', pattern:/^core\/runtime\/(voice-geo-locale-registry|runtime-scenario-registry)\.ts$/ },
+    { capability:'protect', pattern:/^core\/runtime\/(voice-hardening-policy|runtime-hardening-policy)\.ts$/ },
+    { capability:'observe', pattern:/^app\/api\/professional\/infrastructure\/water\/serving\/readiness\/route\.ts$/ },
+    { capability:'execute', pattern:/^core\/memory\/background-preparation-queue\.ts$/ },
+    { capability:'synchronize', pattern:/^scripts\/(water-convert-kml-to-authentic-geojson|pantavion-water-kml-to-geojson)\.cjs$/ },
+    { capability:'translate', pattern:/^core\/translation\/pantavion-language-provider-runtime\.ts$/ },
+    { capability:'observe', pattern:/^core\/infrastructure\/water\/water-spatial-serving-readiness\.ts$/ },
+    { capability:'update', pattern:/^core\/water\/water-fault-lifecycle-model\.ts$/ },
+    { capability:'protect', pattern:/^core\/security\/(authorization-policy-registry|auth-identity-security-registry|runtime-abuse-protection-policy|audit-integrity-policy)\.ts$/ },
+    { capability:'observe', pattern:/^core\/kernel\/final-closure-audit-policy\.ts$/ },
+    { capability:'protect', pattern:/^core\/infrastructure\/water\/water-access-control-readiness\.ts$/ },
+    { capability:'execute', pattern:/^core\/kernel\/kernel-(exported|one-shot|real|integration)-runner\.ts$/ },
+    { capability:'observe', pattern:/^scripts\/(pantavion-translation-worker-gate|pantavion-real-translation-smoke)\.cjs$/ }
   ];
   const exactMatches = [...new Set(exactLanes.filter(lane => lane.pattern.test(source)).map(lane => lane.capability))];
   if (exactMatches.length === 1) return exactMatches[0];
