@@ -328,7 +328,7 @@ function classify(record) {
   const capabilityConflict = capabilityRanks.length > 1 && capabilityRanks[0].score === capabilityRanks[1].score;
   const competingModules = Object.entries(ontology).map(([name,groups]) => {
     const rankedSubsystems = name === module ? subsystems : rank(groups, text);
-    const pathScore = pathAnchor && name === pathAnchor.module ? 12 : 0;
+    const pathScore = pathAnchor && name === pathAnchor.module ? (pathAnchor.strict ? 100 : 12) : 0;
     return {
       name,
       score: rankedSubsystems.reduce((sum,item) => sum + item.score, 0) + pathScore,
