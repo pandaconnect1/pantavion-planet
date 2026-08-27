@@ -1,39 +1,48 @@
-import { implementationSyncDoctrine } from "@/core/pantavion/implementation-sync-registry";
+import { redirect } from "next/navigation";
 
-const currentItems = [
-  {
-    title: "Sovereign Technology Factory",
-    state: "CODED",
-    detail: "Provider-neutral replacement evaluation, sovereignty gates and lifecycle foundation are in PR #315.",
-  },
-  {
-    title: "Intent-to-Outcome Fabric",
-    state: "CODED",
-    detail: "Goal-oriented planning and execution foundation is being integrated in the current branch.",
-  },
-  {
-    title: "Ephemeral Agent Swarm",
-    state: "CODED",
-    detail: "Temporary bounded specialist agents are being integrated in the current branch.",
-  },
-  {
-    title: "Automatic Implementation Sync",
-    state: "CODED",
-    detail: "Shared registry truth drives this owner-visible implementation surface.",
-  },
-  {
-    title: "Production verification",
-    state: "BLOCKED",
-    detail: "Nothing is marked VERIFIED_LIVE until deployment and runtime evidence exist.",
-  },
-];
+import {
+  implementationSyncDoctrine,
+  sovereignFactoryImplementationItems,
+  synchronizeImplementationItems,
+} from "@/core/pantavion/implementation-sync-registry";
+import { requireFounderIdentity } from "@/lib/owner-control/decision-queue";
+import { createClient } from "@/lib/supabase/server";
 
-export default function OwnerImplementationPage() {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+const stateStyles: Record<string, string> = {
+  coded: "text-cyan-300",
+  tested: "text-emerald-300",
+  merged: "text-indigo-300",
+  deployed: "text-amber-300",
+  verified_live: "text-green-300",
+  blocked: "text-rose-300",
+};
+
+export default async function OwnerImplementationPage() {
+  const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) redirect("/auth/login?next=/owner/control/implementation");
+
+  try {
+    requireFounderIdentity(auth.user.id);
+  } catch {
+    redirect("/");
+  }
+
+  const { data: assurance } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (assurance?.currentLevel !== "aal2") {
+    redirect("/owner/safety/verify?next=/owner/control/implementation");
+  }
+
+  const currentItems = synchronizeImplementationItems(sovereignFactoryImplementationItems);
+
   return (
     <main className="mx-auto min-h-screen max-w-6xl px-4 py-8 text-slate-100">
       <div className="rounded-3xl border border-slate-800 bg-slate-950 p-6 shadow-2xl">
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400">
-          Owner Control · Automatic Sync
+          Founder Control · Private Truth Surface
         </p>
         <h1 className="mt-3 text-3xl font-semibold">Pantavion Implementation Truth</h1>
         <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300">
@@ -45,27 +54,35 @@ export default function OwnerImplementationPage() {
           <div className="mt-2 text-sm font-medium text-slate-100">
             IDEA → CODED → TESTED → MERGED → DEPLOYED → VERIFIED_LIVE
           </div>
-          <div className="mt-2 text-xs text-slate-400">
-            Blocked work stays visible while independent work continues.
+          <div className="mt-2 text-xs leading-5 text-slate-400">
+            {implementationSyncDoctrine.releaseRule}
           </div>
         </div>
 
         <section className="mt-6 grid gap-3">
           {currentItems.map((item) => (
-            <article key={item.title} className="rounded-2xl border border-slate-800 bg-slate-900/50 p-4">
+            <article key={item.id} className="rounded-2xl border border-slate-800 bg-slate-900/50 p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <h2 className="font-medium text-slate-100">{item.title}</h2>
-                <span className="rounded-full border border-slate-700 px-3 py-1 text-xs font-semibold text-cyan-300">
-                  {item.state}
+                <span className={`rounded-full border border-slate-700 px-3 py-1 text-xs font-semibold ${stateStyles[item.state] ?? "text-slate-300"}`}>
+                  {item.state.toUpperCase()}
                 </span>
               </div>
-              <p className="mt-2 text-sm leading-6 text-slate-400">{item.detail}</p>
+              <p className="mt-2 text-sm text-slate-400">Canonical source: {item.source}</p>
+              {item.blocker ? <p className="mt-2 text-sm leading-6 text-rose-300">{item.blocker}</p> : null}
+              <div className="mt-3 flex flex-wrap gap-2">
+                {(item.evidenceRecords ?? []).map((evidence) => (
+                  <span key={`${evidence.kind}:${evidence.reference}`} className="rounded-lg bg-slate-950 px-2 py-1 text-xs text-slate-400">
+                    {evidence.kind}: {evidence.reference}
+                  </span>
+                ))}
+              </div>
             </article>
           ))}
         </section>
 
         <div className="mt-6 text-xs text-slate-500">
-          This page is a coded synchronization surface foundation. Runtime GitHub, CI, Supabase and deployment adapters must provide evidence before states advance automatically.
+          Founder identity and AAL2 MFA are checked server-side on every request. This surface does not authorize merge, deployment or public exposure.
         </div>
       </div>
     </main>

@@ -7,6 +7,24 @@ export type ImplementationState =
   | "verified_live"
   | "blocked";
 
+export type ImplementationEvidenceKind =
+  | "code"
+  | "test"
+  | "merge"
+  | "deployment"
+  | "exact_revision"
+  | "authenticated_e2e"
+  | "rls_isolation"
+  | "rollback"
+  | "audit";
+
+export type ImplementationEvidence = {
+  kind: ImplementationEvidenceKind;
+  reference: string;
+  recordedAt: string;
+  revision?: string;
+};
+
 export type ImplementationSyncItem = {
   id: string;
   title: string;
@@ -16,11 +34,12 @@ export type ImplementationSyncItem = {
   branch?: string;
   pr?: number;
   evidence?: string[];
+  evidenceRecords?: ImplementationEvidence[];
   blocker?: string;
   updatedAt: string;
 };
 
-const stateOrder: ImplementationState[] = [
+const stateOrder: Exclude<ImplementationState, "blocked">[] = [
   "idea",
   "coded",
   "tested",
@@ -29,13 +48,82 @@ const stateOrder: ImplementationState[] = [
   "verified_live",
 ];
 
+const requiredEvidence: Record<Exclude<ImplementationState, "blocked">, ImplementationEvidenceKind[]> = {
+  idea: [],
+  coded: ["code"],
+  tested: ["code", "test"],
+  merged: ["code", "test", "merge"],
+  deployed: ["code", "test", "merge", "deployment", "exact_revision"],
+  verified_live: [
+    "code",
+    "test",
+    "merge",
+    "deployment",
+    "exact_revision",
+    "authenticated_e2e",
+    "rls_isolation",
+    "rollback",
+    "audit",
+  ],
+};
+
+export function requiredEvidenceForState(state: ImplementationState): ImplementationEvidenceKind[] {
+  return state === "blocked" ? [] : [...requiredEvidence[state]];
+}
+
+export function validateImplementationTruth(item: ImplementationSyncItem): string[] {
+  const blockers: string[] = [];
+  if (!item.id.trim() || !item.title.trim() || !item.source.trim()) blockers.push("identity_or_source_missing");
+  if (!Number.isFinite(Date.parse(item.updatedAt))) blockers.push("updated_at_invalid");
+  if (item.state === "blocked") {
+    if (!item.blocker?.trim()) blockers.push("blocked_state_without_blocker");
+    return blockers;
+  }
+
+  const evidenceKinds = new Set((item.evidenceRecords ?? []).map((record) => record.kind));
+  for (const required of requiredEvidence[item.state]) {
+    if (!evidenceKinds.has(required)) blockers.push(`evidence_missing:${required}`);
+  }
+  if (item.state === "deployed" || item.state === "verified_live") {
+    const exactRevision = (item.evidenceRecords ?? []).find((record) => record.kind === "exact_revision");
+    if (!exactRevision?.revision?.trim()) blockers.push("exact_deployed_revision_missing");
+  }
+  return blockers;
+}
+
 export function canAdvanceImplementationState(
   current: ImplementationState,
   next: ImplementationState,
 ) {
   if (next === "blocked") return true;
-  if (current === "blocked") return next !== "idea";
-  return stateOrder.indexOf(next) >= stateOrder.indexOf(current);
+  if (current === "blocked") return false;
+  const currentRank = stateOrder.indexOf(current);
+  const nextRank = stateOrder.indexOf(next);
+  return nextRank === currentRank || nextRank === currentRank + 1;
+}
+
+export function advanceImplementationItem(
+  current: ImplementationSyncItem,
+  next: ImplementationState,
+  evidenceRecords: ImplementationEvidence[],
+  updatedAt: string,
+): ImplementationSyncItem {
+  if (!canAdvanceImplementationState(current.state, next)) {
+    throw new Error(`invalid implementation transition:${current.state}->${next}`);
+  }
+  const candidate: ImplementationSyncItem = {
+    ...current,
+    state: next,
+    evidenceRecords: [...(current.evidenceRecords ?? []), ...evidenceRecords],
+    updatedAt,
+  };
+  const blockers = validateImplementationTruth(candidate);
+  if (blockers.length) throw new Error(`implementation truth rejected:${blockers.join(",")}`);
+  return candidate;
+}
+
+function stateRank(state: ImplementationState) {
+  return state === "blocked" ? -1 : stateOrder.indexOf(state);
 }
 
 export function synchronizeImplementationItems(
@@ -44,26 +132,40 @@ export function synchronizeImplementationItems(
   const merged = new Map<string, ImplementationSyncItem>();
 
   for (const item of sources.flat()) {
-    const existing = merged.get(item.id);
+    const truthBlockers = validateImplementationTruth(item);
+    const safeItem = truthBlockers.length
+      ? { ...item, state: "blocked" as const, blocker: `truth_gate:${truthBlockers.join("|")}` }
+      : item;
+    const existing = merged.get(safeItem.id);
     if (!existing) {
-      merged.set(item.id, item);
+      merged.set(safeItem.id, safeItem);
       continue;
     }
 
-    const existingRank = existing.state === "blocked" ? -1 : stateOrder.indexOf(existing.state);
-    const incomingRank = item.state === "blocked" ? -1 : stateOrder.indexOf(item.state);
-    const newer = Date.parse(item.updatedAt) >= Date.parse(existing.updatedAt);
+    const incomingRank = stateRank(safeItem.state);
+    const existingRank = stateRank(existing.state);
+    const newer = Date.parse(safeItem.updatedAt) >= Date.parse(existing.updatedAt);
+    const mergedEvidenceRecords = [...(existing.evidenceRecords ?? []), ...(safeItem.evidenceRecords ?? [])]
+      .filter((record, index, all) =>
+        all.findIndex((candidate) =>
+          candidate.kind === record.kind &&
+          candidate.reference === record.reference &&
+          candidate.revision === record.revision,
+        ) === index,
+      );
 
     if (incomingRank > existingRank || (incomingRank === existingRank && newer)) {
-      merged.set(item.id, {
+      merged.set(safeItem.id, {
         ...existing,
-        ...item,
-        evidence: Array.from(new Set([...(existing.evidence ?? []), ...(item.evidence ?? [])])),
+        ...safeItem,
+        evidence: [...new Set([...(existing.evidence ?? []), ...(safeItem.evidence ?? [])])],
+        evidenceRecords: mergedEvidenceRecords,
       });
-    } else if (item.evidence?.length) {
-      merged.set(item.id, {
+    } else {
+      merged.set(safeItem.id, {
         ...existing,
-        evidence: Array.from(new Set([...(existing.evidence ?? []), ...item.evidence])),
+        evidence: [...new Set([...(existing.evidence ?? []), ...(safeItem.evidence ?? [])])],
+        evidenceRecords: mergedEvidenceRecords,
       });
     }
   }
@@ -71,11 +173,57 @@ export function synchronizeImplementationItems(
   return [...merged.values()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
 
+const codedAt = "2026-08-27T20:45:00.000Z";
+const branch = "feature/sovereign-technology-factory-foundation";
+
+function codedItem(
+  id: string,
+  title: string,
+  domain: string,
+  source: string,
+): ImplementationSyncItem {
+  return {
+    id,
+    title,
+    domain,
+    state: "coded",
+    source,
+    branch,
+    pr: 315,
+    evidenceRecords: [{ kind: "code", reference: source, recordedAt: codedAt }],
+    updatedAt: codedAt,
+  };
+}
+
+export const sovereignFactoryImplementationItems: ImplementationSyncItem[] = [
+  codedItem("sovereign-technology-factory", "Sovereign Technology Factory", "sovereign", "core/sovereign/technology-factory.ts"),
+  codedItem("intent-to-outcome-fabric", "Intent-to-Outcome Fabric", "sovereign", "core/sovereign/intent-to-outcome-fabric.ts"),
+  codedItem("ephemeral-agent-swarm", "Ephemeral Agent Swarm", "sovereign", "core/sovereign/ephemeral-agent-swarm.ts"),
+  codedItem("intent-firewall", "Intent Firewall", "sovereign", "core/sovereign/intent-firewall.ts"),
+  codedItem("agent-capability-budget", "Agent Capability & Budget Control", "sovereign", "core/sovereign/agent-capability-budget-control.ts"),
+  codedItem("disconnected-edge-execution", "Disconnected / Edge Execution", "sovereign", "core/sovereign/edge-execution.ts"),
+  codedItem("technology-library", "Technology Library", "sovereign", "core/sovereign/technology-library.ts"),
+  codedItem("sovereign-capability-kernel", "Sovereign Capability Kernel", "kernel", "core/sovereign/sovereign-capability-kernel.ts"),
+  codedItem("implementation-sync", "Automatic Implementation Sync", "kernel", "core/pantavion/implementation-sync-registry.ts"),
+  codedItem("owner-implementation-surface", "Founder-only Implementation Truth", "owner_control", "app/owner/control/implementation/page.tsx"),
+  {
+    id: "production-verification",
+    title: "Production verification",
+    domain: "release",
+    state: "blocked",
+    source: "owner_green_light",
+    blocker: "Founder approval, merge, exact deployment revision and live evidence do not exist.",
+    updatedAt: codedAt,
+  },
+];
+
 export const implementationSyncDoctrine = {
   title: "Pantavion Automatic Implementation Synchronization",
   rule:
-    "Every capability, module, agent, kernel, migration and deployment must publish its implementation state into the shared registry. The owner surface reads registry truth instead of manually maintained completion claims.",
+    "Every capability, module, agent, kernel, migration and deployment publishes evidence into the shared registry. The founder surface reads registry truth and never infers completion from code alone.",
   truthChain: ["idea", "coded", "tested", "merged", "deployed", "verified_live"] as const,
   blockedRule:
-    "A blocked path remains visible with its blocker while independent work continues.",
+    "A blocked path remains visible with its exact blocker while independent safe work continues.",
+  releaseRule:
+    "No public exposure, production mutation, deployment or VERIFIED_LIVE transition occurs without explicit founder authorization and the required evidence chain.",
 };
