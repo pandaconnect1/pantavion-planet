@@ -153,7 +153,16 @@ const sourcePathAnchors = [
   { module:'SOS / Crisis', subsystem:'emergency', capability:'observe', strict:true, patterns:[/^core\/admin\/sos-admin-(operations|readiness-queue)\.ts$/] },
   { module:'Chat', subsystem:'messaging', capability:'present', strict:true, patterns:[/^app\/unified-inbox\/page\.tsx$/] },
   { module:'Interpreter / Translation', subsystem:'speech', capability:'translate', strict:true, patterns:[/^app\/api\/pantavion\/transcribe\/route\.ts$/] },
-  { module:'Recovery / Provenance', subsystem:'evidence', capability:'observe', strict:true, patterns:[/^app\/deep-audit\/page\.tsx$/] }
+  { module:'Recovery / Provenance', subsystem:'evidence', capability:'observe', strict:true, patterns:[/^app\/deep-audit\/page\.tsx$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'guardian', capability:'protect', strict:true, patterns:[/^scripts\/pantavion-(runtime-safety|protected-change)-gate\.cjs$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'execute', strict:true, patterns:[/^scripts\/pantavion-(autonomy-supervisor|cloud-agent)\.cjs$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'guardian', capability:'observe', strict:true, patterns:[/^core\/pantavion\/no-dead-surface-ledger\.ts$/] },
+  { module:'Safety / Trust / Minors', subsystem:'policy', capability:'configure', strict:true, patterns:[/^core\/pantavion\/global-jurisdiction-matrix\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'memory', capability:'observe', strict:true, patterns:[/^core\/inspector\/memory-visibility-inspector\.ts$/] },
+  { module:'Identity / Auth / Consent', subsystem:'authorization', capability:'configure', strict:true, patterns:[/^core\/app\/app-role-registry\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^core\/ai\/(pantaai-agent-protocol|pantaai-sovereign-public-ai)\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'execute', strict:true, patterns:[/^core\/pantavion\/pantai-local-executor\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'providers', capability:'configure', strict:true, patterns:[/^core\/intelligence\/pantavion-ecosystem-interoperability-contract\.ts$/] }
 ];
 
 function sourcePathAnchor(file) {
