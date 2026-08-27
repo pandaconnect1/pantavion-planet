@@ -119,7 +119,29 @@ function capabilityFromPath(file, anchor) {
     { capability:'observe', pattern:/^core\/kernel\/final-closure-audit-policy\.ts$/ },
     { capability:'protect', pattern:/^core\/infrastructure\/water\/water-access-control-readiness\.ts$/ },
     { capability:'execute', pattern:/^core\/kernel\/kernel-(exported|one-shot|real|integration)-runner\.ts$/ },
-    { capability:'observe', pattern:/^scripts\/(pantavion-translation-worker-gate|pantavion-real-translation-smoke)\.cjs$/ }
+    { capability:'observe', pattern:/^scripts\/(pantavion-translation-worker-gate|pantavion-real-translation-smoke)\.cjs$/ },
+    { capability:'protect', pattern:/^app\/auth\/actions\.ts$/ },
+    { capability:'translate', pattern:/^app\/api\/pantavion\/speech-to-text\/route\.ts$/ },
+    { capability:'read', pattern:/^app\/people\/page\.tsx$/ },
+    { capability:'read', pattern:/^app\/social\/(page|social-home-client)\.tsx$/ },
+    { capability:'read', pattern:/^app\/messages\/page\.tsx$/ },
+    { capability:'synchronize', pattern:/^app\/messages\/\[conversationid\]\/conversation-client\.tsx$/ },
+    { capability:'execute', pattern:/^core\/(kernel\/kernel|kernel-planner|pantavion-kernel-intake|kernel\/kernel-command-surface|kernel\/pantavion-autonomous-builder-kernel|kernel\/pantavion-implementation-engine|kernel\/kernel-priority-queue|pantavion-kernel-intelligence|kernel\/kernel-entrypoint)\.ts$/ },
+    { capability:'synchronize', pattern:/^core\/memory\/memory-thread-kernel\.ts$/ },
+    { capability:'execute', pattern:/^core\/emergency\/sos-provider-dispatch-contract\.ts$/ },
+    { capability:'read', pattern:/^app\/professional\/infrastructure\/water\/live\/controlled-water-segment-client\.tsx$/ },
+    { capability:'update', pattern:/^app\/api\/professional\/infrastructure\/water\/(admin\/faults(\/\[recordnumber\])?|field\/fault)\/route\.ts$/ },
+    { capability:'read', pattern:/^core\/infrastructure\/water\/water-intelligence-sidebar\.ts$/ },
+    { capability:'synchronize', pattern:/^app\/professional\/infrastructure\/water\/final-master-dwg\/final-master-dwg-uploader\.tsx$/ },
+    { capability:'execute', pattern:/^core\/infrastructure\/water\/water-network-kernel\.ts$/ },
+    { capability:'update', pattern:/^core\/infrastructure\/water\/water-approval-inbox\.ts$/ },
+    { capability:'configure', pattern:/^core\/infrastructure\/water\/water-kernel-constitution\.ts$/ },
+    { capability:'synchronize', pattern:/^app\/api\/professional\/infrastructure\/water\/(final-master-dwg|master-dwg)\/route\.ts$/ },
+    { capability:'read', pattern:/^app\/professional\/infrastructure\/water\/(water-map-navigation|components\/water-derived-map-client|components\/water-map-b-authentic-client)\.tsx$/ },
+    { capability:'read', pattern:/^core\/infrastructure\/water\/(water-map-kernel|water-street-history-ledger)\.ts$/ },
+    { capability:'read', pattern:/^app\/api\/professional\/infrastructure\/water\/tiles\/viewport\/route\.ts$/ },
+    { capability:'update', pattern:/^app\/professional\/infrastructure\/water\/(admin\/faults\/\[recordnumber\]|field\/fault)\/page\.tsx$/ },
+    { capability:'read', pattern:/^app\/professional\/infrastructure\/water\/(b-map|maps|help)\/page\.tsx$/ }
   ];
   const exactMatches = [...new Set(exactLanes.filter(lane => lane.pattern.test(source)).map(lane => lane.capability))];
   if (exactMatches.length === 1) return exactMatches[0];
