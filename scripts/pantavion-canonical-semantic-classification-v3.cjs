@@ -102,8 +102,8 @@ function capabilityFromPath(file, anchor) {
     { capability:'translate', pattern:/(^|[-/])(translate|translation|interpreter)([-/.]|$)/ },
     { capability:'adapt', pattern:/(^|[-/])(personalization|adaptive)([-/.]|$)/ }
   ];
-  const matches = lanes.filter(lane => lane.pattern.test(source));
-  if (matches.length === 1) return matches[0].capability;
+  const matches = [...new Set(lanes.filter(lane => lane.pattern.test(source)).map(lane => lane.capability))];
+  if (matches.length === 1) return matches[0];
   if (matches.length === 0 && anchor.module !== 'Maps / World / Water') return anchor.capability || null;
   return null;
 }
