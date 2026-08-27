@@ -1,8 +1,8 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import {
   createPantavionKernelAccessDeniedReport,
-  isPantavionKernelRequestAllowed,
+  isPantavionKernelFounderRequestAllowed,
 } from "@/core/kernel/kernel-access-guard";
 import { createPantavionKernelHeartbeat } from "@/core/kernel/kernel-heartbeat";
 
@@ -17,7 +17,7 @@ function parseReserveKernelCount(): number {
 }
 
 export async function GET(request: NextRequest) {
-  if (!isPantavionKernelRequestAllowed(request)) {
+  if (!(await isPantavionKernelFounderRequestAllowed(request))) {
     return NextResponse.json(createPantavionKernelAccessDeniedReport(), {
       status: 404,
       headers: {
