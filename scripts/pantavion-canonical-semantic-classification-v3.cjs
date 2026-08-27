@@ -77,7 +77,21 @@ const sourcePathAnchors = [
   { module:'Interpreter / Translation', subsystem:'interpretation', capability:'observe', strict:true, patterns:[/^app\/api\/pantavion\/interpreter\/health\/route\.ts$/] },
   { module:'Interpreter / Translation', subsystem:'translation', capability:'translate', strict:true, patterns:[/^app\/api\/pantavion\/detect-language\/route\.ts$/,/^app\/api\/translate\/universal\/route\.ts$/] },
   { module:'Interpreter / Translation', subsystem:'translation', capability:'configure', strict:true, patterns:[/^app\/api\/pantavion\/language\/route\.ts$/,/^app\/language\/(languageclient|page)\.tsx$/] },
-  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'read', strict:true, patterns:[/^app\/intelligence\/(page|routing\/page|capabilities\/page)\.tsx$/,/^app\/pantavion\/intelligence\/page\.tsx$/] }
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'read', strict:true, patterns:[/^app\/intelligence\/(page|routing\/page|capabilities\/page)\.tsx$/,/^app\/pantavion\/intelligence\/page\.tsx$/] },
+  { module:'Identity / Auth / Consent', subsystem:'authorization', capability:'protect', strict:true, patterns:[/^core\/app\/public-surface-access-gate\.ts$/,/^scripts\/(export|run)-founder-human-final-authority-wave\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^core\/intelligence\/(ai-capability-authority|global-capability-intake-registry)\.ts$/] },
+  { module:'Social / Pulse / Communities', subsystem:'publishing', capability:'observe', strict:true, patterns:[/^app\/api\/social\/health\/route\.ts$/] },
+  { module:'SOS / Crisis', subsystem:'response', capability:'execute', strict:true, patterns:[/^app\/api\/(sos\/dispatch|emergency\/partner-interest)\/route\.ts$/] },
+  { module:'Safety / Trust / Minors', subsystem:'moderation', capability:'protect', strict:true, patterns:[/^app\/api\/admin\/moderation\/listings\/route\.ts$/] },
+  { module:'Music / Media / Creation', subsystem:'media', capability:'read', strict:true, patterns:[/^app\/my-media\/my-media-client\.tsx$/,/^app\/api\/media\/feed\/route\.ts$/] },
+  { module:'Recovery / Provenance', subsystem:'evidence', capability:'observe', strict:true, patterns:[/^scripts\/pantavion-source-inventory\.cjs$/,/^app\/api\/pantavion\/source-inventory\/route\.ts$/] },
+  { module:'Chat', subsystem:'conversations', capability:'synchronize', strict:true, patterns:[/^app\/api\/messages\/conversations(?:\/\[conversationid\])?\/route\.ts$/] },
+  { module:'Chat', subsystem:'messaging', capability:'create', strict:true, patterns:[/^app\/api\/messages\/send\/route\.ts$/] },
+  { module:'People', subsystem:'relationships', capability:'protect', strict:true, patterns:[/^app\/api\/people\/blocks\/route\.ts$/] },
+  { module:'People', subsystem:'relationships', capability:'read', strict:true, patterns:[/^app\/api\/people\/(relationships|find-from-contacts)\/route\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^core\/kernel\/(kernel-printable-foundation-pack|kernel-product-dna)\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'execute', strict:true, patterns:[/^core\/kernel\/(kernel-terminal-runner|kernel-research-assimilation)\.ts$/,/^core\/pantavion-kernel-executor\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'memory', capability:'synchronize', strict:true, patterns:[/^core\/memory\/(reminder-scheduler|semantic-memory-store)\.ts$/] }
 ];
 
 function sourcePathAnchor(file) {
