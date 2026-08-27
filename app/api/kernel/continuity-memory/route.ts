@@ -1,15 +1,15 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { createPantavionContinuityMemoryReport } from "@/core/kernel/kernel-continuity-memory";
 import {
   createPantavionKernelAccessDeniedReport,
-  isPantavionKernelRequestAllowed,
+  isPantavionKernelFounderRequestAllowed,
 } from "@/core/kernel/kernel-access-guard";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
-  if (!isPantavionKernelRequestAllowed(request)) {
+  if (!(await isPantavionKernelFounderRequestAllowed(request))) {
     return NextResponse.json(createPantavionKernelAccessDeniedReport(), {
       status: 404,
       headers: {
