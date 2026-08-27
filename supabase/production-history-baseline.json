@@ -53,7 +53,7 @@
     {"version":"20260822194957","name":"create_durable_execution_runtime","md5":"51e74b4147944bfc4c53f6026972383a","chars":3650},
     {"version":"20260822195320","name":"add_identity_registration_completion_rpc","md5":"fc39ff78c1e05c09c5ce9cfb73781896","chars":4451},
     {"version":"20260824134053","name":"create_secure_scheduled_worker","md5":"a601fdbcf75a2ca3ac3c5087cb30e730","chars":5243},
-    {"version":"20260824184042","name":"create_personal_ai_runtime_v1","md5":"c34bf54d49355fac595322e62ffd74cf","chars":14242},
+    {"version":"20260824184042","name":"create_personal_ai_runtime_v1","md5":"c34bf54d49355fac595322e62ffd74cf","chars":14242,"verificationMode":"whitespace_normalized","whitespaceNormalizedMd5":"89329f38a06578a75cd70a2057f0efba","normalizedChars":13944},
     {"version":"20260824185447","name":"harden_personal_ai_runtime_v1","md5":"774df7a5bc0e254070031985e38e625a","chars":893},
     {"version":"20260825022839","name":"harden_personal_ai_memory_supersession_v2","md5":"472e7e8fa6d0790f785a7f147e83c2c9","chars":442},
     {"version":"20260825162513","name":"harden_social_block_visibility_and_media_posts","md5":"391e7275fd389008b188d2e2607b11d1","chars":5159},
