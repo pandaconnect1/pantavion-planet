@@ -1,0 +1,63 @@
+name: Pantavion Evolution Signal Gate
+
+on:
+  pull_request:
+    paths:
+      - "core/kernel/pantavion-evolution-engine.ts"
+      - "core/kernel/pantavion-evolution-current-signals.ts"
+      - "app/api/pantavion/evolution/**"
+      - "app/evolution/**"
+      - "scripts/pantavion-evolution-signal-gate.ts"
+      - ".github/workflows/pantavion-evolution-signal-gate.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "core/kernel/pantavion-evolution-engine.ts"
+      - "core/kernel/pantavion-evolution-current-signals.ts"
+      - "app/api/pantavion/evolution/**"
+      - "app/evolution/**"
+      - "scripts/pantavion-evolution-signal-gate.ts"
+      - ".github/workflows/pantavion-evolution-signal-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evolution-signal-truth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Repository typecheck
+        run: npm run typecheck
+
+      - name: Compile evolution signal gate
+        run: |
+          rm -rf .tmp-evolution-signal
+          npx tsc \
+            --target ES2022 \
+            --module commonjs \
+            --moduleResolution node \
+            --esModuleInterop true \
+            --strict \
+            --skipLibCheck \
+            --outDir .tmp-evolution-signal \
+            core/kernel/pantavion-evolution-engine.ts \
+            core/kernel/pantavion-evolution-current-signals.ts \
+            scripts/pantavion-evolution-signal-gate.ts
+
+      - name: Execute evolution truth and foresight checks
+        run: node .tmp-evolution-signal/scripts/pantavion-evolution-signal-gate.js

@@ -4,6 +4,14 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
+    paths:
+      - "app/api/pantavion/translate/**"
+      - "core/translation/**"
+      - "scripts/pantavion-translation-runtime-gate.cjs"
+      - ".github/workflows/pantavion-production-translation-e2e.yml"
   workflow_dispatch:
 
 permissions:
@@ -13,11 +21,35 @@ jobs:
   production-translation-e2e:
     name: Verify live bidirectional translation
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     env:
       PANTAVION_PRODUCTION_BASE: https://pantavion.com
 
     steps:
+      - name: Wait for exact main revision in production
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 40); do
+            echo "Production revision attempt $attempt/40"
+            code=$(curl -sS -L --connect-timeout 10 --max-time 20 \
+              -o /tmp/social-health.json -w "%{http_code}" \
+              "$PANTAVION_PRODUCTION_BASE/api/social/health" || true)
+            revision=$(jq -r '.revision // empty' /tmp/social-health.json 2>/dev/null || true)
+            ok=$(jq -r '.ok // false' /tmp/social-health.json 2>/dev/null || echo false)
+            echo "HTTP=$code revision=${revision:-<none>} expected=$GITHUB_SHA"
+            if [ "$code" = "200" ] && [ "$ok" = "true" ] && [ "$revision" = "$GITHUB_SHA" ]; then
+              echo "Exact production revision verified."
+              break
+            fi
+            if [ "$attempt" = "40" ]; then
+              echo "::error::Production did not reach exact main revision $GITHUB_SHA."
+              exit 1
+            fi
+            sleep 15
+          done
+
       - name: Verify production endpoint is reachable
         shell: bash
         run: |
