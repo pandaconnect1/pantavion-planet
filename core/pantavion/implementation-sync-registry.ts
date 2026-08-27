@@ -178,6 +178,9 @@ const testedAt = "2026-08-27T23:06:30.000Z";
 const branch = "feature/sovereign-technology-factory-foundation";
 const sovereignContractRun =
   "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33124896375";
+const sovereignKernelIntegrationRun =
+  "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33125460286";
+const sovereignKernelTestedAt = "2026-08-27T23:13:36.164Z";
 
 function codedItem(
   id: string,
@@ -221,6 +224,29 @@ function testedItem(
   };
 }
 
+function testedKernelItem(): ImplementationSyncItem {
+  const coded = codedItem(
+    "sovereign-capability-kernel",
+    "Sovereign Capability Kernel",
+    "kernel",
+    "core/sovereign/sovereign-capability-kernel.ts",
+  );
+  return {
+    ...coded,
+    state: "tested",
+    evidenceRecords: [
+      ...(coded.evidenceRecords ?? []),
+      {
+        kind: "test",
+        reference: sovereignKernelIntegrationRun,
+        recordedAt: sovereignKernelTestedAt,
+        revision: "73cbfb22d5fff8e66965f59f92f2df18c44dbc72",
+      },
+    ],
+    updatedAt: sovereignKernelTestedAt,
+  };
+}
+
 export const sovereignFactoryImplementationItems: ImplementationSyncItem[] = [
   testedItem("sovereign-technology-factory", "Sovereign Technology Factory", "sovereign", "core/sovereign/technology-factory.ts"),
   testedItem("intent-to-outcome-fabric", "Intent-to-Outcome Fabric", "sovereign", "core/sovereign/intent-to-outcome-fabric.ts"),
@@ -229,7 +255,7 @@ export const sovereignFactoryImplementationItems: ImplementationSyncItem[] = [
   testedItem("agent-capability-budget", "Agent Capability & Budget Control", "sovereign", "core/sovereign/agent-capability-budget-control.ts"),
   testedItem("disconnected-edge-execution", "Disconnected / Edge Execution", "sovereign", "core/sovereign/edge-execution.ts"),
   testedItem("technology-library", "Technology Library", "sovereign", "core/sovereign/technology-library.ts"),
-  codedItem("sovereign-capability-kernel", "Sovereign Capability Kernel", "kernel", "core/sovereign/sovereign-capability-kernel.ts"),
+  testedKernelItem(),
   testedItem("implementation-sync", "Automatic Implementation Sync", "kernel", "core/pantavion/implementation-sync-registry.ts"),
   testedItem("owner-implementation-surface", "Founder-only Implementation Truth", "owner_control", "app/owner/control/implementation/page.tsx"),
   {
