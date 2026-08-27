@@ -23,17 +23,19 @@ const ontology = {
   'Music / Media / Creation': { music: ['music','song','lyrics'], creation: ['creator','generation','studio'], media: ['image','audio','video','media'] },
   'Kernel / Guardian / Runtime': { orchestration: ['kernel','orchestration','router','control plane'], guardian: ['guardian','supervisor','policy gate'], execution: ['durable execution','checkpoint','worker','runtime'], providers: ['provider routing','capability registry'] },
   'Identity / Auth / Consent': { authentication: ['auth','authentication','login','passkey','aal2','mfa'], authorization: ['permission','role','entitlement','access gate'], consent: ['consent','privacy choice'], identity: ['identity','registration','account'] },
-  'Resilience / Offline / Infrastructure': { offline: ['offline','sms','mms','mesh'], continuity: ['failover','continuity','redundancy','resilience'], infrastructure: ['infrastructure','satellite','deployment'] }
+  'Resilience / Offline / Infrastructure': { offline: ['offline','sms','mms','mesh'], continuity: ['failover','continuity','redundancy','resilience'], infrastructure: ['infrastructure','satellite','deployment'] },
+  'Recovery / Provenance': { recovery: ['recovery','restore','excavation','donor','triage','canonicalization'], evidence: ['evidence','audit','receipt','fingerprint','lineage'], 'cross-module': ['cross-module','human communication core','social people chat'] },
+  'Experience / Navigation': { shell: ['application shell','homepage','navigation','entry page'] }
 };
 
 const capabilities = {
-  create: ['create','insert','register','publish','send','enqueue','start'], read: ['read','list','fetch','search','discover','view','select'], update: ['update','edit','change','accept','approve','reject','decide'], delete: ['delete','remove','revoke','leave'], synchronize: ['sync','import','export','hydrate'], protect: ['secure','privacy','rls','policy','guard','block','moderation'], translate: ['translate','translation','interpreter'], execute: ['execute','worker','runtime','job','workflow','agent'], observe: ['audit','monitor','report','metrics','log','evidence']
+  create: ['create','insert','register','publish','send','enqueue','start'], read: ['read','list','fetch','search','discover','view','select'], update: ['update','edit','change','accept','approve','reject','decide'], delete: ['delete','remove','revoke','leave'], synchronize: ['sync','import','export','hydrate'], protect: ['secure','privacy','rls','policy','guard','block','moderation'], translate: ['translate','translation','interpreter'], execute: ['execute','worker','runtime','job','workflow','agent'], observe: ['audit','monitor','report','metrics','log','evidence'], recover: ['recovery','recover','restore','excavation','donor','triage','canonicalization','handoff','consolidation','lineage','snapshot'], configure: ['configure','configuration','registry','provider'], adapt: ['personalized','adaptive','adaptation'], operate: ['operate','operation','infrastructure'], present: ['homepage','application shell','navigation','entry page']
 };
 
 const sourcePathAnchors = [
-  { module:'Maps / World / Water', subsystem:'water', patterns:[/(^|\/)app\/professional\/infrastructure\/water(\/|$)/,/(^|\/)core\/(infrastructure\/)?water(\/|$)/,/(^|\/)scripts\/water[-/]/] },
-  { module:'Interpreter / Translation', subsystem:'translation', patterns:[/(^|\/)app\/translate(\/|$)/,/(^|\/)core\/translation(\/|$)/,/(^|\/)services\/translation(\/|[-.])/] },
-  { module:'SOS / Crisis', subsystem:'emergency', patterns:[/(^|\/)app\/(sos|emergency|crisis)(\/|$)/,/(^|\/)core\/(sos|emergency|crisis)(\/|$)/] },
+  { module:'Maps / World / Water', subsystem:'water', capability:'operate', patterns:[/(^|\/)app\/(api\/)?professional\/infrastructure\/water(\/|$)/,/(^|\/)core\/(infrastructure\/)?water(\/|$)/,/(^|\/)docs\/requirements\/pantavion-(professional-infrastructure-)?water[^/]*\.md$/,/(^|\/)scripts\/[^/]*water[^/]*\.(cjs|mjs|ts|js)$/,/^scripts\/upload-final-master-dwg-to-blob\.cjs$/] },
+  { module:'Interpreter / Translation', subsystem:'translation', capability:'translate', patterns:[/(^|\/)app\/translate(\/|$)/,/(^|\/)app\/api\/pantavion\/(translate|speech-normalize)(\/|$)/,/(^|\/)core\/translation(\/|$)/,/(^|\/)services\/translation(\/|[-.])/,/(^|\/)scripts\/[^/]*translation[^/]*\.(cjs|mjs|ts|js)$/] },
+  { module:'SOS / Crisis', subsystem:'emergency', capability:'execute', patterns:[/(^|\/)app\/(pantavion\/)?(sos|emergency|crisis)(\/|$)/,/(^|\/)core\/(sos|emergency|crisis)(\/|$)/] },
   { module:'Safety / Trust / Minors', subsystem:'moderation', patterns:[/(^|\/)app\/admin\/moderation(\/|$)/,/(^|\/)core\/(safety|moderation|trust|minors)(\/|$)/,/(^|\/)scripts\/[^/]*(safety|moderation)[^/]*$/] },
   { module:'Identity / Auth / Consent', subsystem:'authentication', patterns:[/(^|\/)app\/(auth|login|register)(\/|$)/,/(^|\/)core\/(auth|identity|consent)(\/|$)/,/(^|\/)lib\/[^/]*(auth|identity)[^/]*$/] },
   { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', patterns:[/(^|\/)app\/kernel(\/|$)/,/(^|\/)core\/(kernel|runtime|guardian)(\/|$)/,/(^|\/)core\/[^/]*kernel[^/]*$/,/(^|\/)scripts\/[^/]*(kernel|guardian|runtime)[^/]*$/] },
@@ -45,7 +47,23 @@ const sourcePathAnchors = [
   { module:'Marketplace / Work / Business', subsystem:'marketplace', patterns:[/(^|\/)app\/(marketplace|business|work)(\/|$)/,/(^|\/)core\/(marketplace|business|work)(\/|$)/] },
   { module:'Music / Media / Creation', subsystem:'media', patterns:[/(^|\/)app\/(music|media|creation)(\/|$)/,/(^|\/)core\/(music|media|creation)(\/|$)/] },
   { module:'Resilience / Offline / Infrastructure', subsystem:'continuity', patterns:[/(^|\/)app\/(offline|resilience)(\/|$)/,/(^|\/)core\/(offline|resilience)(\/|$)/] },
-  { module:'Voice / Video', subsystem:'calling', patterns:[/(^|\/)app\/(voice|video|calls)(\/|$)/,/(^|\/)core\/(voice|video|calls)(\/|$)/] }
+  { module:'Voice / Video', subsystem:'calling', patterns:[/(^|\/)app\/(voice|video|calls)(\/|$)/,/(^|\/)core\/(voice|video|calls)(\/|$)/] },
+  { module:'Recovery / Provenance', subsystem:'recovery', capability:'recover', patterns:[/^(core|data)\/recovery\//,/^docs\/recovery\/(live_completion_map|pantavion_master_recovery_continuation_brief|donor_|ai_screenshot_inflow)[^/]*\.md$/,/^pantavion[^/]*recovery[^/]*\.(md|json)$/,/^pantavion_live_completion_map[^/]*\.md$/,/^scripts\/[^/]*(recovery|excavat|corpus|snapshot|donor|triage|canonical-routing)[^/]*\.(cjs|mjs|ts|js)$/,/^\.github\/workflows\/[^/]*(recovery|excavat|corpus|snapshot)[^/]*\.ya?ml$/,/^docs\/funding\/pantavion_innovation_evidence_pack[^/]*\.md$/] },
+  { module:'Recovery / Provenance', subsystem:'cross-module', capability:'recover', patterns:[/^docs\/recovery\/(human_communication_core_(migration_notes|schema)|social-people-chat-full-excavation-\d+)\.md$/] },
+  { module:'Recovery / Provenance', subsystem:'evidence', capability:'observe', patterns:[/^docs\/implementation\/full_ecosystem_live_wave_1\.md$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'execute', patterns:[/^core\/(protocol|intake)\//,/^docs\/kernel-canonicalization\//,/^app\/product-status\//] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'providers', capability:'configure', patterns:[/^core\/registry\//,/^core\/intelligence\/(ai-provider-registry|prime-ai-orchestrator)\.ts$/,/^app\/pantavion\/intelligence\/cloud\/page\.tsx$/,/^scripts\/install-pantavion-intelligence-fabric\.cjs$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'execute', patterns:[/^docs\/production\//,/^\.github\/workflows\/pantavion-deploy\.ya?ml$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'guardian', capability:'protect', patterns:[/^scripts\/pantavion-(ai-integrity-check|deep-branch-analysis|foundation-audit|vscode-real-implementation-gate|implementation-gate|intelligence-fabric-gate|master-audit|multimodal-language-audit|product-truth-audit|project-intake-(work-orders|inventory|safe-summary)|public-growth-audit|unfinished-plan-ingestion-gate|vision-registry-gate|autonomous-builder-gate)\.cjs$/,/^core\/inspector\/kernel-visibility-inspector\.ts$/] },
+  { module:'Safety / Trust / Minors', subsystem:'trust', capability:'protect', patterns:[/^core\/(governance|security)\//,/^core\/pantavion-constitution\.ts$/] },
+  { module:'Marketplace / Work / Business', subsystem:'business', capability:'configure', patterns:[/^core\/commercial\//,/^app\/api\/billing\//] },
+  { module:'Resilience / Offline / Infrastructure', subsystem:'continuity', capability:'protect', patterns:[/^core\/continuity\//,/^docs\/(continuity\/|pantavion_live_continuity_foundation\.md$)/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'execute', patterns:[/^core\/intelligence\/(panta-ai|pantavion-intelligence)[^/]*\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'personalization', capability:'adapt', patterns:[/^core\/personalization\//,/^(app\/universal-life\/page\.tsx|core\/product\/pantavion-universal-life-capabilities\.ts)$/,/^docs\/recovery\/personalized_section_allocation_\d+\.md$/] },
+  { module:'Chat', subsystem:'messaging', capability:'synchronize', patterns:[/^docs\/architecture\/pantavion_unified_messaging_interop\.md$/] },
+  { module:'Social / Pulse / Communities', subsystem:'publishing', capability:'create', patterns:[/^docs\/recovery\/social_global_\d+_\d+\.md$/] },
+  { module:'Music / Media / Creation', subsystem:'creation', capability:'create', patterns:[/^docs\/requirements\/pantavion_music_voice_studio\.md$/] },
+  { module:'Experience / Navigation', subsystem:'shell', capability:'present', patterns:[/^app\/page\.tsx$/] }
 ];
 
 function sourcePathAnchor(file) {
@@ -66,6 +84,12 @@ function anchoredRank(groups, text, anchor) {
     ranked.push({ name:anchor.subsystem, score:8, evidence:['source-path:'+anchor.sourcePath] });
   }
   return ranked.sort((a,b) => b.score-a.score || a.name.localeCompare(b.name));
+}
+
+function anchoredCapabilityRank(text, anchor) {
+  const ranked = rank(capabilities, text);
+  if (ranked.length || !anchor || !anchor.capability || !capabilities[anchor.capability]) return ranked;
+  return [{ name:anchor.capability, score:8, evidence:['source-path-capability:'+anchor.sourcePath] }];
 }
 
 function evidenceModules(value) {
@@ -156,7 +180,7 @@ function classify(record) {
   const module = pathAnchor ? pathAnchor.module : seedModule;
   const text = normalize([sourceFile, record.text, record.context].join('\n'));
   const subsystems = ontology[module] ? anchoredRank(ontology[module], text, pathAnchor) : [];
-  const capabilityRanks = rank(capabilities, text);
+  const capabilityRanks = anchoredCapabilityRank(text, pathAnchor);
   const subsystem = subsystems[0] ? subsystems[0].name : null;
   const capability = capabilityRanks[0] ? capabilityRanks[0].name : null;
   const artifact = artifactType((record.provenance && record.provenance.sourceFile) || '', text);
@@ -191,7 +215,7 @@ function classify(record) {
   if (subsystemConflict) reasons.push('subsystem_conflict');
   if (capabilityConflict) reasons.push('capability_conflict');
   if (moduleConflict) reasons.push('module_conflict:' + module + '->' + topModule.name);
-  return { ...record, classification: { ...record.classification, module, subsystem, capability, feature: subsystem && capability ? subsystem + '.' + capability + '.' + artifact : null, artifactType: artifact, canonicalTarget: deterministic ? 'canonical/' + module + '/' + subsystem + '/' + capability : null, classificationMethod: pathAnchor ? 'semantic-v3-source-path-anchored-ontology' : 'semantic-v3-strict-evidence-ontology', classificationEvidence: { seedModule, pathAnchor:pathAnchor ? { module:pathAnchor.module, subsystem:pathAnchor.subsystem, sourcePath:pathAnchor.sourcePath } : null, subsystem: subsystems.slice(0,3), capability: capabilityRanks.slice(0,3), competingModules: competingModules.slice(0,3) } }, reviewStatus: deterministic ? 'SEMANTICALLY_CLASSIFIED' : 'REVIEW_REQUIRED', semanticDecision: deterministic ? 'ROUTE_CANDIDATE' : 'HOLD', semanticReviewReasons: reasons };
+  return { ...record, classification: { ...record.classification, module, subsystem, capability, feature: subsystem && capability ? subsystem + '.' + capability + '.' + artifact : null, artifactType: artifact, canonicalTarget: deterministic ? 'canonical/' + module + '/' + subsystem + '/' + capability : null, classificationMethod: pathAnchor ? 'semantic-v3-source-path-anchored-ontology' : 'semantic-v3-strict-evidence-ontology', classificationEvidence: { seedModule, pathAnchor:pathAnchor ? { module:pathAnchor.module, subsystem:pathAnchor.subsystem, capabilityFallback:pathAnchor.capability || null, sourcePath:pathAnchor.sourcePath } : null, subsystem: subsystems.slice(0,3), capability: capabilityRanks.slice(0,3), competingModules: competingModules.slice(0,3) } }, reviewStatus: deterministic ? 'SEMANTICALLY_CLASSIFIED' : 'REVIEW_REQUIRED', semanticDecision: deterministic ? 'ROUTE_CANDIDATE' : 'HOLD', semanticReviewReasons: reasons };
 }
 function fingerprint(records) { return crypto.createHash('sha256').update(records.map(r => r.id).join('\n')).digest('hex'); }
 
@@ -229,7 +253,7 @@ const moduleSummary = {};
 const reviewReasonSummary = {};
 for (const r of records) {
   const module = r.reviewStatus === 'PRESERVED_RECURSIVE_ARTIFACT' ? 'RECOVERY / PROVENANCE QUARANTINE' : (r.classification.module || 'UNCLASSIFIED');
-  const target = moduleSummary[module] ||= { total:0, classified:0, reviewRequired:0, preservedRecursiveArtifacts:0, pathAnchored:0, pathReassigned:0, subsystems:{}, capabilities:{}, artifactTypes:{}, sourceFamilies:{}, evidenceInventory:{ specification:0, schemaOrMigration:0, backendOrService:0, userInterface:0, tests:0, automation:0, runtimeEvidence:0, other:0 }, reviewReasons:{} };
+  const target = moduleSummary[module] ||= { total:0, classified:0, reviewRequired:0, preservedRecursiveArtifacts:0, pathAnchored:0, pathReassigned:0, moduleMissingResolved:0, subsystems:{}, capabilities:{}, artifactTypes:{}, sourceFamilies:{}, evidenceInventory:{ specification:0, schemaOrMigration:0, backendOrService:0, userInterface:0, tests:0, automation:0, runtimeEvidence:0, other:0 }, reviewReasons:{} };
   target.total++;
   if (r.reviewStatus === 'SEMANTICALLY_CLASSIFIED') target.classified++;
   else if (r.reviewStatus === 'PRESERVED_RECURSIVE_ARTIFACT') target.preservedRecursiveArtifacts++;
@@ -244,6 +268,7 @@ for (const r of records) {
   if (pathEvidence) {
     target.pathAnchored++;
     if (r.classification.classificationEvidence.seedModule !== r.classification.module) target.pathReassigned++;
+    if (r.reviewStatus !== 'PRESERVED_RECURSIVE_ARTIFACT' && !r.classification.classificationEvidence.seedModule && r.classification.module) target.moduleMissingResolved++;
   }
   const evidenceLane = artifact === 'requirement-document' ? 'specification'
     : artifact === 'database-migration' ? 'schemaOrMigration'
@@ -309,7 +334,8 @@ const externalProductionTruth = productionTruth ? {
   securityAdvisors:productionTruth.supabase.securityAdvisors,
   unassignedExternalEvidence
 } : null;
-const manifest = { id:'pantavion_canonical_semantic_v3', generatedAt:new Date().toISOString(), sourceManifest:input.manifest && input.manifest.id, sourceFingerprint:input.manifest && input.manifest.corpusFingerprint, recordCount:records.length, preservedRecordCount:before.length, idFingerprint:fingerprint(records), counts, reviewReasonSummary, moduleSummary, externalProductionTruth, completion:{ complete:!counts.REVIEW_REQUIRED, semanticallyClassified:counts.SEMANTICALLY_CLASSIFIED || 0, preservedRecursiveArtifacts:counts.PRESERVED_RECURSIVE_ARTIFACT || 0, reviewRequired:counts.REVIEW_REQUIRED || 0 }, truthRule:'No record is final, mergeable, deletable, implemented, deployed, or live merely because deterministic routing succeeded. Semantic review and implementation evidence remain mandatory.' };
+const moduleMissingResolved = Object.values(moduleSummary).reduce((sum,item) => sum + (item.moduleMissingResolved || 0),0);
+const manifest = { id:'pantavion_canonical_semantic_v3', generatedAt:new Date().toISOString(), sourceManifest:input.manifest && input.manifest.id, sourceFingerprint:input.manifest && input.manifest.corpusFingerprint, recordCount:records.length, preservedRecordCount:before.length, idFingerprint:fingerprint(records), counts, reviewReasonSummary, moduleMissingResolved, moduleSummary, externalProductionTruth, completion:{ complete:!counts.REVIEW_REQUIRED, semanticallyClassified:counts.SEMANTICALLY_CLASSIFIED || 0, preservedRecursiveArtifacts:counts.PRESERVED_RECURSIVE_ARTIFACT || 0, reviewRequired:counts.REVIEW_REQUIRED || 0 }, truthRule:'No record is final, mergeable, deletable, implemented, deployed, or live merely because deterministic routing succeeded. Semantic review and implementation evidence remain mandatory.' };
 fs.mkdirSync(outRoot,{recursive:true});
 fs.writeFileSync(path.join(outRoot,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');
 const ledgerPath = path.join(outRoot,'semantic-ledger.ndjson');
