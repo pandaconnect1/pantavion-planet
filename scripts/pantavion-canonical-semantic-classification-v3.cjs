@@ -146,7 +146,14 @@ const sourcePathAnchors = [
   { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'observe', strict:true, patterns:[/^core\/pantavion\/kernel-completion-spine\.ts$/] },
   { module:'Recovery / Provenance', subsystem:'evidence', capability:'observe', strict:true, patterns:[/^scripts\/pantavion-unfinished-plan-ingestion\.cjs$/] },
   { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'create', strict:true, patterns:[/^app\/api\/pantavion\/implementation-plan\/route\.ts$/] },
-  { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'execute', strict:true, patterns:[/^scripts\/pantavion-safe-git-autopilot\.cjs$/] }
+  { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'execute', strict:true, patterns:[/^scripts\/pantavion-safe-git-autopilot\.cjs$/] },
+  { module:'Identity / Auth / Consent', subsystem:'authorization', capability:'protect', strict:true, patterns:[/^core\/app\/(tenant-data-access-storage-isolation-wave|tenant-export-access-guard)\.ts$/] },
+  { module:'Resilience / Offline / Infrastructure', subsystem:'infrastructure', capability:'present', strict:true, patterns:[/^app\/infrastructure\/page\.tsx$/] },
+  { module:'Safety / Trust / Minors', subsystem:'moderation', capability:'protect', strict:true, patterns:[/^app\/owner\/safety\/(page|safety-control-client|verify\/page)\.tsx$/] },
+  { module:'SOS / Crisis', subsystem:'emergency', capability:'observe', strict:true, patterns:[/^core\/admin\/sos-admin-(operations|readiness-queue)\.ts$/] },
+  { module:'Chat', subsystem:'messaging', capability:'present', strict:true, patterns:[/^app\/unified-inbox\/page\.tsx$/] },
+  { module:'Interpreter / Translation', subsystem:'speech', capability:'translate', strict:true, patterns:[/^app\/api\/pantavion\/transcribe\/route\.ts$/] },
+  { module:'Recovery / Provenance', subsystem:'evidence', capability:'observe', strict:true, patterns:[/^app\/deep-audit\/page\.tsx$/] }
 ];
 
 function sourcePathAnchor(file) {
