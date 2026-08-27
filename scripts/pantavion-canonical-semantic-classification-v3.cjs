@@ -297,7 +297,7 @@ function classify(record) {
   const subsystems = ontology[module] ? anchoredRank(ontology[module], text, pathAnchor) : [];
   const capabilityPath = capabilityFromPath(sourceFile, pathAnchor);
   const capabilityRanks = anchoredCapabilityRank(text, pathAnchor, sourceFile);
-  const subsystem = subsystems[0] ? subsystems[0].name : null;
+  const subsystem = pathAnchor ? pathAnchor.subsystem : (subsystems[0] ? subsystems[0].name : null);
   const capability = capabilityRanks[0] ? capabilityRanks[0].name : null;
   const subsystemConflict = subsystems.length > 1 && subsystems[0].score === subsystems[1].score;
   const capabilityConflict = capabilityRanks.length > 1 && capabilityRanks[0].score === capabilityRanks[1].score;
