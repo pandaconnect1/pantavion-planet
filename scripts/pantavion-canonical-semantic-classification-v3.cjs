@@ -134,7 +134,12 @@ const sourcePathAnchors = [
   { module:'Social / Pulse / Communities', subsystem:'publishing', capability:'update', strict:true, patterns:[/^app\/api\/social\/media-url\/route\.ts$/] },
   { module:'Safety / Trust / Minors', subsystem:'policy', capability:'present', strict:true, patterns:[/^app\/safety\/page\.tsx$/] },
   { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'present', strict:true, patterns:[/^app\/pantaai\/page\.tsx$/] },
-  { module:'Experience / Navigation', subsystem:'shell', capability:'present', strict:true, patterns:[/^app\/planet\/page\.tsx$/] }
+  { module:'Experience / Navigation', subsystem:'shell', capability:'present', strict:true, patterns:[/^app\/planet\/page\.tsx$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'observe', strict:true, patterns:[/^core\/kernel\/kernel-gap-intelligence\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'orchestration', capability:'execute', strict:true, patterns:[/^scripts\/pantavion-kernel-compat-repair\.cjs$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'guardian', capability:'observe', strict:true, patterns:[/^(core\/inspector\/visibility-inspector-surface|scripts\/export-visibility-inspector-surface)\.ts$/] },
+  { module:'Kernel / Guardian / Runtime', subsystem:'execution', capability:'observe', strict:true, patterns:[/^core\/intelligence\/pantavion-ecosystem-radar-runtime\.ts$/] },
+  { module:'Personal AI / PantaAI', subsystem:'orchestration', capability:'configure', strict:true, patterns:[/^core\/pantavion-intelligence-registry\.ts$/] }
 ];
 
 function sourcePathAnchor(file) {
