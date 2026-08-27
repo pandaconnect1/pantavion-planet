@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { evaluatePrivilegedRequestBoundary } from "@/core/security/privileged-request-boundary";
 import {
   createWaterAdminSessionValue,
   getWaterAdminAccessCode,
@@ -23,7 +24,28 @@ function clean(value: unknown, maxLength = 1000) {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
 }
 
+function privilegedBoundaryDenied(request: Request) {
+  const decision = evaluatePrivilegedRequestBoundary(request);
+  if (decision.allowed) return null;
+
+  return NextResponse.json(
+    {
+      ok: false,
+      error: decision.reason === "json_required"
+        ? "application_json_required"
+        : "privileged_request_denied",
+    },
+    {
+      status: decision.reason === "json_required" ? 415 : 403,
+      headers: { "Cache-Control": "no-store" },
+    },
+  );
+}
+
 export async function POST(request: Request) {
+  const boundaryResponse = privilegedBoundaryDenied(request);
+  if (boundaryResponse) return boundaryResponse;
+
   try {
     const expectedAccessCode = getWaterAdminAccessCode();
     const sessionSecret = getWaterAdminSessionSecret();
@@ -107,7 +129,10 @@ export async function GET(request: Request) {
   );
 }
 
-export async function DELETE() {
+export async function DELETE(request: Request) {
+  const boundaryResponse = privilegedBoundaryDenied(request);
+  if (boundaryResponse) return boundaryResponse;
+
   const response = NextResponse.json(
     {
       ok: true,
