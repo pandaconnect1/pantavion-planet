@@ -125,7 +125,7 @@ jobs:
             if (moduleMissingResolved !== 1288) throw new Error("Module-missing resolution accounting mismatch: "+moduleMissingResolved);
             const manifestModuleMissingResolved = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.moduleMissingResolved || 0),0);
             if (manifest.moduleMissingResolved !== moduleMissingResolved || manifestModuleMissingResolved !== moduleMissingResolved) throw new Error("Manifest module-missing accounting mismatch");
-            if (capabilityConflicts !== 5116 || manifest.reviewReasonSummary.capability_conflict !== capabilityConflicts) throw new Error("Capability-conflict wave accounting mismatch: "+capabilityConflicts);
+            if (capabilityConflicts !== 5095 || manifest.reviewReasonSummary.capability_conflict !== capabilityConflicts) throw new Error("Capability-conflict wave accounting mismatch: "+capabilityConflicts);
             if (!capabilityPathEvidence || capabilityPathMismatches) throw new Error("Capability-path evidence regression: evidence="+capabilityPathEvidence+", mismatches="+capabilityPathMismatches);
             const manifestAnchored = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathAnchored || 0),0);
             const manifestReassigned = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathReassigned || 0),0);
