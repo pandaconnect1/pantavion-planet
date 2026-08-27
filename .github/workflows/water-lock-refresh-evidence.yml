@@ -22,6 +22,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          echo "water-admin-session route sha256:"
+          sha256sum app/api/professional/infrastructure/water/admin/session/route.ts
+          echo "privileged-request-boundary sha256:"
+          sha256sum core/security/privileged-request-boundary.ts
+          echo "water-admin-session core sha256:"
+          sha256sum core/security/water-admin-session.ts
           echo "water-guardian-production-smoke.cjs sha256:"
           sha256sum scripts/water-guardian-production-smoke.cjs
           echo "water-network-runtime-lock.cjs sha256:"

@@ -4,20 +4,24 @@ on:
   pull_request:
     paths:
       - "core/security/water-admin-session.ts"
+      - "core/security/privileged-request-boundary.ts"
       - "middleware.ts"
       - "app/api/professional/infrastructure/water/admin/session/route.ts"
       - "core/infrastructure/water/water-network-runtime-lock.json"
       - "next.config.mjs"
       - "scripts/pantavion-privileged-session-security-test.mjs"
+      - "scripts/pantavion-privileged-request-boundary-test.mjs"
       - ".github/workflows/pantavion-privileged-session-security.yml"
   push:
     paths:
       - "core/security/water-admin-session.ts"
+      - "core/security/privileged-request-boundary.ts"
       - "middleware.ts"
       - "app/api/professional/infrastructure/water/admin/session/route.ts"
       - "core/infrastructure/water/water-network-runtime-lock.json"
       - "next.config.mjs"
       - "scripts/pantavion-privileged-session-security-test.mjs"
+      - "scripts/pantavion-privileged-request-boundary-test.mjs"
       - ".github/workflows/pantavion-privileged-session-security.yml"
 
 permissions:
@@ -39,6 +43,9 @@ jobs:
       - name: Verify privileged session security contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-privileged-session-security-test.mjs
 
+      - name: Verify privileged mutation boundary contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-privileged-request-boundary-test.mjs
+
       - name: Verify water runtime integrity lock
         run: node scripts/pantavion-water-network-runtime-lock.cjs
 
@@ -57,6 +64,15 @@ jobs:
           set -euo pipefail
           grep -q 'httpOnly: true' app/api/professional/infrastructure/water/admin/session/route.ts
           grep -q 'sameSite: "strict"' app/api/professional/infrastructure/water/admin/session/route.ts
+
+      - name: Verify privileged mutation boundary wiring
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'evaluatePrivilegedRequestBoundary' app/api/professional/infrastructure/water/admin/session/route.ts
+          grep -q 'sec-fetch-site' core/security/privileged-request-boundary.ts
+          grep -q 'missing_origin' core/security/privileged-request-boundary.ts
+          grep -q 'json_required' core/security/privileged-request-boundary.ts
 
       - name: Verify enforced browser security headers
         shell: bash
