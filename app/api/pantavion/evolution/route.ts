@@ -18,7 +18,8 @@ function parseSignal(value: unknown): PantavionTechnologySignalInput {
 
   const requiredStrings = ["id", "title", "summary", "domain", "eventType", "observedAt"] as const;
   for (const key of requiredStrings) {
-    if (typeof value[key] !== "string" || value[key].trim().length === 0) {
+    const field = value[key];
+    if (typeof field !== "string" || field.trim().length === 0) {
       throw new Error(`invalid_${key}`);
     }
   }
@@ -31,7 +32,8 @@ function parseSignal(value: unknown): PantavionTechnologySignalInput {
     "reversibility",
   ] as const;
   for (const key of requiredScores) {
-    if (typeof value[key] !== "number" || !Number.isFinite(value[key])) {
+    const field = value[key];
+    if (typeof field !== "number" || !Number.isFinite(field)) {
       throw new Error(`invalid_${key}`);
     }
   }
