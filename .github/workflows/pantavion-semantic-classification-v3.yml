@@ -78,6 +78,8 @@ jobs:
             let pathReassigned = 0;
             let pathAnchorMismatches = 0;
             let artifactTypeMismatches = 0;
+            let moduleMissingResolved = 0;
+            let remainingModuleMissing = 0;
             for await (const line of lines) {
               if (!line.trim()) continue;
               if (index >= source.length) throw new Error("Semantic ledger contains extra records");
@@ -91,7 +93,9 @@ jobs:
                 pathAnchored++;
                 if (record.classification.module !== anchor.module || record.classification.subsystem !== anchor.subsystem) pathAnchorMismatches++;
                 if (evidence.seedModule !== record.classification.module) pathReassigned++;
+                if (record.reviewStatus !== "PRESERVED_RECURSIVE_ARTIFACT" && !evidence.seedModule && record.classification.module) moduleMissingResolved++;
               }
+              if (record.reviewStatus !== "PRESERVED_RECURSIVE_ARTIFACT" && (record.semanticReviewReasons || []).includes("module_missing")) remainingModuleMissing++;
               const sourceFile = String(record.provenance && record.provenance.sourceFile || "");
               if (sourceFile.startsWith(".github/") && record.classification.artifactType !== "automation") artifactTypeMismatches++;
               if (sourceFile.startsWith("data/runtime-reports/") && record.classification.artifactType !== "runtime-evidence") artifactTypeMismatches++;
@@ -107,6 +111,10 @@ jobs:
             if (recursiveArtifacts !== 50279 || manifest.completion.preservedRecursiveArtifacts !== 50279) throw new Error("Recursive artifact quarantine mismatch: "+recursiveArtifacts);
             if (!pathAnchored || pathAnchorMismatches) throw new Error("Source-path anchor regression: anchored="+pathAnchored+", mismatches="+pathAnchorMismatches);
             if (artifactTypeMismatches) throw new Error("Artifact-type path regression: "+artifactTypeMismatches);
+            if (remainingModuleMissing !== 0) throw new Error("Unresolved module_missing records remain: "+remainingModuleMissing);
+            if (moduleMissingResolved !== 1288) throw new Error("Module-missing resolution accounting mismatch: "+moduleMissingResolved);
+            const manifestModuleMissingResolved = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.moduleMissingResolved || 0),0);
+            if (manifest.moduleMissingResolved !== moduleMissingResolved || manifestModuleMissingResolved !== moduleMissingResolved) throw new Error("Manifest module-missing accounting mismatch");
             const manifestAnchored = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathAnchored || 0),0);
             const manifestReassigned = Object.values(manifest.moduleSummary).reduce((sum,item) => sum + (item.pathReassigned || 0),0);
             if (manifestAnchored !== pathAnchored || manifestReassigned !== pathReassigned) throw new Error("Path-anchor manifest accounting mismatch");
@@ -116,7 +124,7 @@ jobs:
               if (!gap || !gap.externalEvidence || !gap.externalEvidence.repositoryMigrationFiles.length || !gap.externalEvidence.appliedMigrations.length) throw new Error("Missing external migration evidence for "+module);
               if (!productionTruth.repository.verificationArtifacts.conventionalTests.count && !gap.missingCombinedEvidenceCategories.includes("tests")) throw new Error("Gates/audits were incorrectly treated as conventional tests for "+module);
             }
-            console.log(JSON.stringify({ ...manifest.completion, pathAnchored, pathReassigned, externalProductionTruth:manifest.externalProductionTruth }));
+            console.log(JSON.stringify({ ...manifest.completion, pathAnchored, pathReassigned, moduleMissingResolved, remainingModuleMissing, externalProductionTruth:manifest.externalProductionTruth }));
           })().catch(error => { console.error(error); process.exit(1); });
           NODE
       - name: Upload semantic ledger and module gap map
