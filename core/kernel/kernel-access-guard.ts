@@ -1,3 +1,8 @@
+import "server-only";
+
+import { requireFounderIdentity } from "@/lib/owner-control/decision-queue";
+import { createClient } from "@/lib/supabase/server";
+
 export const PANTAVION_KERNEL_ACCESS_QUERY = "kernelToken";
 export const PANTAVION_KERNEL_FOUNDER_QUERY = "founderToken";
 export const PANTAVION_KERNEL_SESSION_COOKIE = "pantavion_kernel_founder_session";
@@ -36,11 +41,9 @@ function readCookieValue(cookieHeader: string, name: string): string | null {
 }
 
 /**
- * Server-side guard for founder-only Kernel routes.
- *
- * The panel establishes a short-lived, httpOnly founder cookie.  API routes
- * must honour that cookie as well as the one-time query token, otherwise a
- * real signed-in founder can see the panel while its live API calls fail.
+ * Secret/session boundary for internal Kernel routes.
+ * This is deliberately not sufficient on its own for founder-level access;
+ * production callers must also pass the authenticated founder + AAL2 check.
  */
 export function isPantavionKernelRequestAllowed(request: Request): boolean {
   const url = new URL(request.url);
@@ -56,6 +59,30 @@ export function isPantavionKernelRequestAllowed(request: Request): boolean {
     isPantavionKernelAccessAllowed(queryToken) ||
     isPantavionKernelAccessAllowed(sessionToken)
   );
+}
+
+export async function isPantavionKernelFounderIdentityAllowed(): Promise<boolean> {
+  if (process.env.NODE_ENV !== "production") return true;
+
+  try {
+    const supabase = await createClient();
+    const { data: auth } = await supabase.auth.getUser();
+    if (!auth.user) return false;
+
+    requireFounderIdentity(auth.user.id);
+
+    const { data: assurance } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    return assurance?.currentLevel === "aal2";
+  } catch {
+    return false;
+  }
+}
+
+export async function isPantavionKernelFounderRequestAllowed(
+  request: Request,
+): Promise<boolean> {
+  if (!isPantavionKernelRequestAllowed(request)) return false;
+  return isPantavionKernelFounderIdentityAllowed();
 }
 
 export function createPantavionKernelAccessDeniedReport(): PantavionKernelAccessDeniedReport {
