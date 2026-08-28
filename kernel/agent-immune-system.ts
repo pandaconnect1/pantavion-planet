@@ -145,9 +145,9 @@ export function evaluateAgentExecutionAuthority(
   ];
   if (!counters.every(boundedNonNegative)) reasons.push("authority_budget_invalid");
 
-  if (intent.operationCount >= authority.maxOperations) reasons.push("operation_budget_exhausted");
-  if (intent.writeOperationCount >= authority.maxWriteOperations) reasons.push("write_budget_exhausted");
-  if (intent.externalEffectCount >= authority.maxExternalEffects) reasons.push("external_effect_budget_exhausted");
+  if (intent.operationCount > authority.maxOperations) reasons.push("operation_budget_exhausted");
+  if (intent.writeOperationCount > authority.maxWriteOperations) reasons.push("write_budget_exhausted");
+  if (intent.externalEffectCount > authority.maxExternalEffects) reasons.push("external_effect_budget_exhausted");
   if (intent.financialMinorUnits > authority.maxFinancialMinorUnits) reasons.push("financial_budget_exceeded");
 
   if (authority.provenanceRequired && !intent.provenanceVerified) reasons.push("provenance_not_verified");
