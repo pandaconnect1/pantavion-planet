@@ -3,10 +3,13 @@ const path = require("path");
 
 const required = [
   ["core/translation/pantavion-universal-translation-runtime.ts", "pantavion_universal_translation_runtime_v1"],
+  ["core/translation/pantavion-gateway-resilience.ts", "buildPantavionGatewayModelPlan"],
+  ["core/translation/pantavion-gateway-resilience.ts", "providerNamespace"],
   ["app/api/pantavion/translate/route.ts", "pantavionGatewayRuntimeAvailable"],
-  ["app/api/pantavion/translate/route.ts", "providerOptions"],
-  ["app/api/pantavion/translate/route.ts", "models: fallbackModels"],
-  ["app/api/pantavion/translate/route.ts", "nativeModelFallback: true"],
+  ["app/api/pantavion/translate/route.ts", "Promise.any"],
+  ["app/api/pantavion/translate/route.ts", "models: input.lane.fallbackModels"],
+  ["app/api/pantavion/translate/route.ts", "hedgedLanes"],
+  ["app/api/pantavion/translate/route.ts", "GATEWAY_HEDGE_DELAY_MS"],
   ["app/api/pantavion/translate/route.ts", "pantavionPublicTranslationFallbackAllowed"],
   ["app/api/pantavion/translate/route.ts", "configuredProviderAllowed"],
   ["app/pantavion/translate-live/page.tsx", "PANTAVION UNIVERSAL TRANSLATION RUNTIME"],
@@ -14,6 +17,7 @@ const required = [
 
 const forbidden = [
   ["app/api/pantavion/translate/route.ts", "publicTextFallback: true", "Public translation fallback must not be hard-enabled."],
+  ["app/api/pantavion/translate/route.ts", "publicFallbackAllowed = true", "Public fallback policy must remain configuration-controlled."],
 ];
 
 const failures = [];
@@ -35,7 +39,8 @@ if (failures.length) {
   process.exitCode = 1;
 } else {
   console.log("PANTAVION TRANSLATION RUNTIME GATE: PASSED");
-  console.log("- AI Gateway native model fallback: present");
+  console.log("- AI Gateway hedged dual-lane execution: present");
+  console.log("- Provider-diverse lane planning: present");
   console.log("- Public fallback policy remains runtime-controlled: present");
   console.log("- Provider-neutral configured fallback boundary: present");
 }
