@@ -1,9 +1,8 @@
-import {
-  evaluateKernelZeroTrustAccess,
-  type KernelPrincipal,
-  type KernelProtectedResource,
-  type KernelZeroTrustDecision,
-} from "./zero-trust.ts";
+import type {
+  KernelPrincipal,
+  KernelProtectedResource,
+  KernelZeroTrustDecision,
+} from "./zero-trust";
 
 export type AgentContainmentAction =
   | "none"
@@ -40,10 +39,6 @@ export interface AgentExecutionIntent {
   action: string;
   toolId: string;
   purpose: string;
-  transportAuthenticated: boolean;
-  jurisdictionAllowed: boolean;
-  agePolicyAllowed: boolean;
-  explicitlyDenied?: boolean;
   operationCount: number;
   writeOperationCount: number;
   externalEffectCount: number;
@@ -89,33 +84,20 @@ function containmentForRisk(risk: number, rollbackPlanRequired: boolean): AgentC
 /**
  * Agent Immune System foundation.
  *
- * This policy is deliberately monotonic: delegated authority can only narrow
- * an already-valid zero-trust decision. It can never convert a zero-trust deny
- * into an allow. High-risk behaviour is contained before execution and
- * irreversible/high-impact actions require explicit human approval.
+ * The caller must first produce a Kernel zero-trust decision. This policy is a
+ * second, monotonic gate: delegated authority may only narrow an already valid
+ * zero-trust decision and can never turn a zero-trust deny into an allow.
  */
 export function evaluateAgentExecutionAuthority(
   intent: AgentExecutionIntent,
+  zeroTrust: KernelZeroTrustDecision,
   nowMs = Date.now(),
 ): AgentImmuneSystemDecision {
-  const zeroTrust = evaluateKernelZeroTrustAccess(
-    {
-      requestId: intent.requestId,
-      principal: intent.principal,
-      resource: intent.resource,
-      action: intent.action,
-      transportAuthenticated: intent.transportAuthenticated,
-      jurisdictionAllowed: intent.jurisdictionAllowed,
-      agePolicyAllowed: intent.agePolicyAllowed,
-      explicitlyDenied: intent.explicitlyDenied,
-    },
-    nowMs,
-  );
-
   const reasons: string[] = [];
   const authority = intent.authority;
   const risk = Math.max(0, Math.min(100, Math.round(intent.behaviourRiskScore)));
 
+  if (zeroTrust.requestId !== intent.requestId) reasons.push("zero_trust_request_mismatch");
   if (!zeroTrust.allowed) reasons.push("zero_trust_denied");
   if (!isAgentWorkload(intent.principal)) reasons.push("agent_workload_principal_required");
   if (!authority.envelopeId.trim()) reasons.push("authority_envelope_id_required");
