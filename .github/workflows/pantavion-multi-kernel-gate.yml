@@ -9,6 +9,7 @@ on:
       - "scripts/pantavion-foundry-gate.cjs"
       - "scripts/pantavion-kernel-*.mjs"
       - "scripts/pantavion-multi-kernel-*.mjs"
+      - "scripts/pantavion-agent-immune-system-test.mjs"
       - ".github/workflows/pantavion-multi-kernel-gate.yml"
   push:
     paths:
@@ -18,6 +19,7 @@ on:
       - "scripts/pantavion-foundry-gate.cjs"
       - "scripts/pantavion-kernel-*.mjs"
       - "scripts/pantavion-multi-kernel-*.mjs"
+      - "scripts/pantavion-agent-immune-system-test.mjs"
       - ".github/workflows/pantavion-multi-kernel-gate.yml"
 
 permissions:
@@ -53,3 +55,6 @@ jobs:
 
       - name: Verify zero-trust contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-zero-trust-test.mjs
+
+      - name: Verify Agent Immune System contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-agent-immune-system-test.mjs

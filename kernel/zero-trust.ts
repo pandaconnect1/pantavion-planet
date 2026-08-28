@@ -36,11 +36,19 @@ export interface KernelZeroTrustRequest {
   explicitlyDenied?: boolean;
 }
 
+export interface KernelZeroTrustDecisionContext {
+  principalId: string;
+  resourceId: string;
+  environment: string;
+  action: string;
+}
+
 export interface KernelZeroTrustDecision {
   requestId: string;
   allowed: boolean;
   reasons: string[];
   matchedGrantId: string | null;
+  context: KernelZeroTrustDecisionContext;
 }
 
 const parseMillis = (value: string): number => {
@@ -63,6 +71,10 @@ const grantActive = (grant: KernelAccessGrant, nowMs: number) =>
  * Being an owner or being inside the Pantavion network is never sufficient by
  * itself. The caller still needs a valid identity, an unexpired credential,
  * policy approval and an explicit scoped grant.
+ *
+ * The resulting decision is bound to its principal/action/resource/environment
+ * context so downstream gates can reject accidental or malicious decision
+ * replay against a different execution context.
  */
 export const evaluateKernelZeroTrustAccess = (
   request: KernelZeroTrustRequest,
@@ -103,5 +115,11 @@ export const evaluateKernelZeroTrustAccess = (
     allowed: reasons.length === 0,
     reasons,
     matchedGrantId: reasons.length === 0 ? matchedGrant?.grantId ?? null : null,
+    context: {
+      principalId: principal.id,
+      resourceId: resource.id,
+      environment: resource.environment,
+      action: request.action,
+    },
   };
 };
