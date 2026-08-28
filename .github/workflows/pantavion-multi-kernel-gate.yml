@@ -5,19 +5,23 @@ on:
     paths:
       - "kernel/**"
       - "core/kernel/pantavion-foundry-nervous-system-runtime.ts"
+      - "core/runtime/durable-execution-fencing.ts"
       - "app/api/pantavion/intelligence/cron/route.ts"
       - "scripts/pantavion-foundry-gate.cjs"
       - "scripts/pantavion-kernel-*.mjs"
       - "scripts/pantavion-multi-kernel-*.mjs"
+      - "scripts/pantavion-durable-execution-*.mjs"
       - ".github/workflows/pantavion-multi-kernel-gate.yml"
   push:
     paths:
       - "kernel/**"
       - "core/kernel/pantavion-foundry-nervous-system-runtime.ts"
+      - "core/runtime/durable-execution-fencing.ts"
       - "app/api/pantavion/intelligence/cron/route.ts"
       - "scripts/pantavion-foundry-gate.cjs"
       - "scripts/pantavion-kernel-*.mjs"
       - "scripts/pantavion-multi-kernel-*.mjs"
+      - "scripts/pantavion-durable-execution-*.mjs"
       - ".github/workflows/pantavion-multi-kernel-gate.yml"
 
 permissions:
@@ -47,6 +51,9 @@ jobs:
 
       - name: Verify Foundry nervous-system dependency gate
         run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-foundry-nervous-system-test.mjs
+
+      - name: Verify durable-execution lease fencing contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-durable-execution-fencing-test.mjs
 
       - name: Verify truth-ledger contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-truth-ledger-test.mjs
