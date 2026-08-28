@@ -6,6 +6,10 @@ import type {
   PantavionDurableExecutionStore,
   PantavionExecutionCheckpoint,
 } from "./durable-execution";
+import {
+  PantavionStaleExecutionFenceError,
+  type PantavionExecutionFence,
+} from "./durable-execution-fencing";
 
 type ExecutionRow = {
   execution_id: string;
@@ -29,6 +33,18 @@ type CheckpointRow = {
   state: Record<string, unknown> | null;
   created_at: string;
 };
+
+type FencedClaimRpcData = {
+  executionId?: unknown;
+  ownerId?: unknown;
+  fencingToken?: unknown;
+  leaseExpiresAt?: unknown;
+  heartbeatAt?: unknown;
+  attempt?: unknown;
+};
+
+const MIN_LEASE_MS = 5_000;
+const MAX_LEASE_MS = 300_000;
 
 function checkpointFromRow(row: CheckpointRow): PantavionExecutionCheckpoint {
   return {
@@ -59,10 +75,41 @@ function recordFromRow(row: ExecutionRow, checkpoints: CheckpointRow[]): Pantavi
   };
 }
 
+function leaseSeconds(leaseMs: number) {
+  if (!Number.isFinite(leaseMs)) throw new Error("lease_duration_invalid");
+  const bounded = Math.max(MIN_LEASE_MS, Math.min(MAX_LEASE_MS, Math.floor(leaseMs)));
+  return Math.ceil(bounded / 1000);
+}
+
+function parseFence(executionId: string, ownerId: string, data: unknown): PantavionExecutionFence | null {
+  if (!data || typeof data !== "object" || Array.isArray(data)) return null;
+  const payload = data as FencedClaimRpcData;
+  const token = Number(payload.fencingToken);
+  if (
+    payload.executionId !== executionId ||
+    payload.ownerId !== ownerId ||
+    !Number.isSafeInteger(token) ||
+    token < 1
+  ) {
+    throw new Error("durable_fenced_claim_invalid_response");
+  }
+  return { executionId, ownerId, fencingToken: token };
+}
+
+function requireFence(fence: PantavionExecutionFence) {
+  const ownerId = fence.ownerId.trim();
+  if (!fence.executionId.trim()) throw new Error("execution_id_required");
+  if (!ownerId) throw new Error("lease_owner_required");
+  if (!Number.isSafeInteger(fence.fencingToken) || fence.fencingToken < 1) {
+    throw new Error("fencing_token_invalid");
+  }
+  return { executionId: fence.executionId, ownerId, fencingToken: fence.fencingToken };
+}
+
 export class PantavionSupabaseDurableExecutionStore implements PantavionDurableExecutionStore {
   /**
-   * Atomically claims a queued execution through the server-only SQL function.
-   * This prevents two scheduler ticks from starting the same internal agent.
+   * Legacy atomic claim retained for deployment compatibility.
+   * Worker runtimes must use claimFenced() so every later mutation is tied to a lease owner/token.
    */
   async claim(
     executionId: string,
@@ -78,6 +125,111 @@ export class PantavionSupabaseDurableExecutionStore implements PantavionDurableE
     if (claimed.data !== true) return null;
 
     return this.get(executionId);
+  }
+
+  async claimFenced(
+    executionId: string,
+    ownerId: string,
+    leaseMs = 120_000,
+    expectedStatuses: PantavionDurableExecutionRecord["status"][] = ["queued", "planned"],
+  ) {
+    const cleanExecutionId = executionId.trim();
+    const cleanOwnerId = ownerId.trim();
+    if (!cleanExecutionId) throw new Error("execution_id_required");
+    if (!cleanOwnerId) throw new Error("lease_owner_required");
+
+    const admin = createAdminClient();
+    const claimed = await admin.rpc("pantavion_claim_durable_execution_fenced", {
+      p_execution_id: cleanExecutionId,
+      p_lease_owner: cleanOwnerId,
+      p_lease_seconds: leaseSeconds(leaseMs),
+      p_expected_statuses: expectedStatuses,
+    });
+
+    if (claimed.error) throw claimed.error;
+    const fence = parseFence(cleanExecutionId, cleanOwnerId, claimed.data);
+    if (!fence) return null;
+
+    const record = await this.get(cleanExecutionId);
+    if (!record) throw new Error("claimed_execution_not_found");
+    return { record, fence };
+  }
+
+  async heartbeatFenced(fence: PantavionExecutionFence, leaseMs = 120_000) {
+    const checked = requireFence(fence);
+    const admin = createAdminClient();
+    const result = await admin.rpc("pantavion_heartbeat_durable_execution_fenced", {
+      p_execution_id: checked.executionId,
+      p_lease_owner: checked.ownerId,
+      p_fencing_token: checked.fencingToken,
+      p_lease_seconds: leaseSeconds(leaseMs),
+    });
+
+    if (result.error) throw result.error;
+    if (result.data !== true) throw new PantavionStaleExecutionFenceError();
+    return true;
+  }
+
+  async checkpointFenced(
+    fence: PantavionExecutionFence,
+    label: string,
+    state: Record<string, unknown> = {},
+  ) {
+    const checked = requireFence(fence);
+    const admin = createAdminClient();
+    const result = await admin.rpc("pantavion_append_durable_checkpoint_fenced", {
+      p_execution_id: checked.executionId,
+      p_lease_owner: checked.ownerId,
+      p_fencing_token: checked.fencingToken,
+      p_label: label,
+      p_state: state,
+    });
+
+    if (result.error) throw result.error;
+    if (typeof result.data !== "string" || !result.data) {
+      throw new PantavionStaleExecutionFenceError();
+    }
+
+    const record = await this.get(checked.executionId);
+    if (!record) throw new Error("checkpointed_execution_not_found");
+    return record;
+  }
+
+  async finishFencedSuccess(fence: PantavionExecutionFence, output: unknown) {
+    return this.finishFenced(fence, true, output, null);
+  }
+
+  async finishFencedFailure(fence: PantavionExecutionFence, error: string) {
+    const message = error.trim();
+    if (!message) throw new Error("finish_error_required");
+    return this.finishFenced(fence, false, null, message);
+  }
+
+  private async finishFenced(
+    fence: PantavionExecutionFence,
+    succeeded: boolean,
+    output: unknown,
+    error: string | null,
+  ) {
+    const checked = requireFence(fence);
+    const admin = createAdminClient();
+    const result = await admin.rpc("pantavion_finish_durable_execution_fenced", {
+      p_execution_id: checked.executionId,
+      p_lease_owner: checked.ownerId,
+      p_fencing_token: checked.fencingToken,
+      p_succeeded: succeeded,
+      p_output: output ?? null,
+      p_error: error,
+    });
+
+    if (result.error) throw result.error;
+    if (!result.data || typeof result.data !== "object" || Array.isArray(result.data)) {
+      throw new PantavionStaleExecutionFenceError();
+    }
+
+    const record = await this.get(checked.executionId);
+    if (!record) throw new Error("finished_execution_not_found");
+    return record;
   }
 
   async get(executionId: string) {
