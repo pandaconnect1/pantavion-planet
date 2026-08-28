@@ -6,7 +6,11 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-const classifierPath = path.join(__dirname, 'semantic-v3.cjs');
+const classifierPath = [
+  path.join(__dirname, 'pantavion-canonical-semantic-classification-v3.cjs'),
+  path.join(__dirname, 'semantic-v3.cjs'),
+].find((candidate) => fs.existsSync(candidate));
+assert(classifierPath, 'Canonical semantic classifier is missing.');
 const source = fs.readFileSync(classifierPath, 'utf8');
 const librarySource =
   source.split('\nconst input = loadCanonicalInput();')[0] +
