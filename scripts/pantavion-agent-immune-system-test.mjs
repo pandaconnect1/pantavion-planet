@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { evaluateAgentExecutionAuthority } from "../kernel/agent-immune-system.ts";
+import { evaluateKernelZeroTrustAccess } from "../kernel/zero-trust.ts";
 
 const now = Date.parse("2026-08-28T04:00:00.000Z");
 
@@ -55,9 +56,6 @@ const baseIntent = {
   action: "task.inspect",
   toolId: "task-reader",
   purpose: "inspect-task-state",
-  transportAuthenticated: true,
-  jurisdictionAllowed: true,
-  agePolicyAllowed: true,
   operationCount: 1,
   writeOperationCount: 0,
   externalEffectCount: 0,
@@ -69,22 +67,46 @@ const baseIntent = {
   behaviourRiskScore: 10,
 };
 
-const allowed = evaluateAgentExecutionAuthority(baseIntent, now);
+function zeroTrustFor(intent, overrides = {}) {
+  return evaluateKernelZeroTrustAccess(
+    {
+      requestId: intent.requestId,
+      principal: intent.principal,
+      resource: intent.resource,
+      action: intent.action,
+      transportAuthenticated: true,
+      jurisdictionAllowed: true,
+      agePolicyAllowed: true,
+      ...overrides,
+    },
+    now,
+  );
+}
+
+const baseZeroTrust = zeroTrustFor(baseIntent);
+const allowed = evaluateAgentExecutionAuthority(baseIntent, baseZeroTrust, now);
 assert.equal(allowed.allowed, true);
 assert.equal(allowed.zeroTrust.allowed, true);
 assert.equal(allowed.containment, "none");
 assert.equal(allowed.matchedAuthorityEnvelopeId, "authority-1");
 
-const monotonicZeroTrustDeny = evaluateAgentExecutionAuthority(
-  { ...baseIntent, explicitlyDenied: true },
-  now,
-);
+const deniedZeroTrust = zeroTrustFor(baseIntent, { explicitlyDenied: true });
+const monotonicZeroTrustDeny = evaluateAgentExecutionAuthority(baseIntent, deniedZeroTrust, now);
 assert.equal(monotonicZeroTrustDeny.zeroTrust.allowed, false);
 assert.equal(monotonicZeroTrustDeny.allowed, false);
 assert.ok(monotonicZeroTrustDeny.reasons.includes("zero_trust_denied"));
 
+const mismatchedDecision = evaluateAgentExecutionAuthority(
+  baseIntent,
+  { ...baseZeroTrust, requestId: "different-request" },
+  now,
+);
+assert.equal(mismatchedDecision.allowed, false);
+assert.ok(mismatchedDecision.reasons.includes("zero_trust_request_mismatch"));
+
 const wrongSubject = evaluateAgentExecutionAuthority(
   { ...baseIntent, authority: { ...authority, agentPrincipalId: "kernel-agent-2" } },
+  baseZeroTrust,
   now,
 );
 assert.equal(wrongSubject.allowed, false);
@@ -92,6 +114,7 @@ assert.ok(wrongSubject.reasons.includes("authority_subject_mismatch"));
 
 const wrongPurpose = evaluateAgentExecutionAuthority(
   { ...baseIntent, purpose: "publish-content" },
+  baseZeroTrust,
   now,
 );
 assert.equal(wrongPurpose.allowed, false);
@@ -99,6 +122,7 @@ assert.ok(wrongPurpose.reasons.includes("authority_purpose_mismatch"));
 
 const expired = evaluateAgentExecutionAuthority(
   { ...baseIntent, authority: { ...authority, expiresAt: "2026-08-28T03:59:59.000Z" } },
+  baseZeroTrust,
   now,
 );
 assert.equal(expired.allowed, false);
@@ -106,6 +130,7 @@ assert.ok(expired.reasons.includes("authority_expired_or_invalid"));
 
 const wrongTool = evaluateAgentExecutionAuthority(
   { ...baseIntent, toolId: "external-browser" },
+  baseZeroTrust,
   now,
 );
 assert.equal(wrongTool.allowed, false);
@@ -113,6 +138,7 @@ assert.ok(wrongTool.reasons.includes("authority_tool_denied"));
 
 const operationEscape = evaluateAgentExecutionAuthority(
   { ...baseIntent, operationCount: 11 },
+  baseZeroTrust,
   now,
 );
 assert.equal(operationEscape.allowed, false);
@@ -120,12 +146,14 @@ assert.ok(operationEscape.reasons.includes("operation_budget_exhausted"));
 
 const exactLimit = evaluateAgentExecutionAuthority(
   { ...baseIntent, operationCount: 10, writeOperationCount: 2, externalEffectCount: 0 },
+  baseZeroTrust,
   now,
 );
 assert.equal(exactLimit.allowed, true);
 
 const missingProvenance = evaluateAgentExecutionAuthority(
   { ...baseIntent, provenanceVerified: false },
+  baseZeroTrust,
   now,
 );
 assert.equal(missingProvenance.allowed, false);
@@ -133,6 +161,7 @@ assert.ok(missingProvenance.reasons.includes("provenance_not_verified"));
 
 const irreversibleWithoutApproval = evaluateAgentExecutionAuthority(
   { ...baseIntent, irreversible: true },
+  baseZeroTrust,
   now,
 );
 assert.equal(irreversibleWithoutApproval.allowed, false);
@@ -142,6 +171,7 @@ assert.ok(irreversibleWithoutApproval.reasons.includes("human_approval_required"
 
 const irreversibleWithApproval = evaluateAgentExecutionAuthority(
   { ...baseIntent, irreversible: true, humanApprovalPresent: true },
+  baseZeroTrust,
   now,
 );
 assert.equal(irreversibleWithApproval.allowed, true);
@@ -149,6 +179,7 @@ assert.equal(irreversibleWithApproval.requiresHumanApproval, true);
 
 const elevatedRisk = evaluateAgentExecutionAuthority(
   { ...baseIntent, behaviourRiskScore: 55, humanApprovalPresent: true },
+  baseZeroTrust,
   now,
 );
 assert.equal(elevatedRisk.allowed, false);
@@ -157,22 +188,21 @@ assert.ok(elevatedRisk.reasons.includes("behaviour_risk_elevated"));
 
 const highRisk = evaluateAgentExecutionAuthority(
   { ...baseIntent, behaviourRiskScore: 75, humanApprovalPresent: true },
+  baseZeroTrust,
   now,
 );
 assert.equal(highRisk.allowed, false);
 assert.equal(highRisk.containment, "quarantine");
 assert.ok(highRisk.reasons.includes("behaviour_risk_high"));
 
-const criticalRisk = evaluateAgentExecutionAuthority(
-  {
-    ...baseIntent,
-    behaviourRiskScore: 90,
-    humanApprovalPresent: true,
-    externalEffectCount: 1,
-    rollbackPlanVerified: true,
-  },
-  now,
-);
+const criticalIntent = {
+  ...baseIntent,
+  behaviourRiskScore: 90,
+  humanApprovalPresent: true,
+  externalEffectCount: 1,
+  rollbackPlanVerified: true,
+};
+const criticalRisk = evaluateAgentExecutionAuthority(criticalIntent, baseZeroTrust, now);
 assert.equal(criticalRisk.allowed, false);
 assert.equal(criticalRisk.rollbackPlanRequired, true);
 assert.equal(criticalRisk.containment, "rollback_and_quarantine");
@@ -180,6 +210,7 @@ assert.ok(criticalRisk.reasons.includes("behaviour_risk_critical"));
 
 const missingRollbackPlan = evaluateAgentExecutionAuthority(
   { ...baseIntent, externalEffectCount: 1, rollbackPlanVerified: false },
+  baseZeroTrust,
   now,
 );
 assert.equal(missingRollbackPlan.allowed, false);
@@ -188,6 +219,7 @@ assert.ok(missingRollbackPlan.reasons.includes("rollback_plan_not_verified"));
 
 const financialEscape = evaluateAgentExecutionAuthority(
   { ...baseIntent, financialMinorUnits: 1 },
+  baseZeroTrust,
   now,
 );
 assert.equal(financialEscape.allowed, false);
@@ -200,14 +232,13 @@ const ownerPrincipal = {
   workloadIdentityVerified: undefined,
   grants: [{ ...principal.grants[0] }],
 };
-const ownerAsAgent = evaluateAgentExecutionAuthority(
-  {
-    ...baseIntent,
-    principal: ownerPrincipal,
-    authority: { ...authority, agentPrincipalId: "owner-1" },
-  },
-  now,
-);
+const ownerIntent = {
+  ...baseIntent,
+  principal: ownerPrincipal,
+  authority: { ...authority, agentPrincipalId: "owner-1" },
+};
+const ownerZeroTrust = zeroTrustFor(ownerIntent);
+const ownerAsAgent = evaluateAgentExecutionAuthority(ownerIntent, ownerZeroTrust, now);
 assert.equal(ownerAsAgent.zeroTrust.allowed, true);
 assert.equal(ownerAsAgent.allowed, false);
 assert.ok(ownerAsAgent.reasons.includes("agent_workload_principal_required"));
@@ -215,6 +246,7 @@ assert.ok(ownerAsAgent.reasons.includes("agent_workload_principal_required"));
 console.log("Pantavion Agent Immune System contract: PASS");
 console.log(JSON.stringify({
   zeroTrustMonotonic: true,
+  zeroTrustRequestBound: true,
   timeBoundedAuthority: true,
   purposeBoundAuthority: true,
   toolAndResourceBoundAuthority: true,
