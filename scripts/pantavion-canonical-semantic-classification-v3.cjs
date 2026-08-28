@@ -374,6 +374,7 @@ function capabilityFromPath(file, anchor) {
     { capability:'execute', pattern:/^core\/infrastructure\/water\/water-dxf-private-source-processing-plan\.ts$/ },
     { capability:'configure', pattern:/^core\/runtime\/(voice-geo-locale-registry|runtime-scenario-registry)\.ts$/ },
     { capability:'protect', pattern:/^core\/runtime\/(voice-hardening-policy|runtime-hardening-policy)\.ts$/ },
+    { capability:'execute', pattern:/^core\/runtime\/voice-multilingual-policy\.ts$/ },
     { capability:'observe', pattern:/^app\/api\/professional\/infrastructure\/water\/serving\/readiness\/route\.ts$/ },
     { capability:'execute', pattern:/^core\/memory\/background-preparation-queue\.ts$/ },
     { capability:'synchronize', pattern:/^scripts\/(water-convert-kml-to-authentic-geojson|pantavion-water-kml-to-geojson)\.cjs$/ },
