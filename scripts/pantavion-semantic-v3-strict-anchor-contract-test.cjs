@@ -58,6 +58,16 @@ const strictOwnershipCases = [
   ['data/pantavion-source-inventory/inventory.json', 'Recovery / Provenance', 'evidence', 'observe'],
   ['app/listings/[listingid]/page.tsx', 'Marketplace / Work / Business', 'marketplace', 'read'],
   ['app/backend-claims/page.tsx', 'Kernel / Guardian / Runtime', 'guardian', 'observe'],
+  ['app/feedback/page.tsx', 'Experience / Navigation', 'shell', 'present'],
+  ['scripts/pantavion-knowledge-photo-marriage.cjs', 'Recovery / Provenance', 'recovery', 'recover'],
+  ['core/intelligence/pantaai-engine.ts', 'Personal AI / PantaAI', 'orchestration', 'execute'],
+  ['core/pantavion/sovereignty-ledger.ts', 'Kernel / Guardian / Runtime', 'providers', 'observe'],
+  ['app/api/owner/safety/cases/route.ts', 'Safety / Trust / Minors', 'moderation', 'read'],
+  ['app/social/communities/actions.ts', 'Social / Pulse / Communities', 'communities', 'create'],
+  ['app/professional/infrastructure/water/legacy-secret-cleanup.tsx', 'Maps / World / Water', 'water', 'protect'],
+  ['app/api/pantavion/intelligence/health/route.ts', 'Personal AI / PantaAI', 'orchestration', 'observe'],
+  ['core/security/audit-append-only-writer.ts', 'Recovery / Provenance', 'evidence', 'create'],
+  ['app/import-world/page.tsx', 'Identity / Auth / Consent', 'consent', 'present'],
 ];
 for (const [sourcePath, module, subsystem, capability] of strictOwnershipCases) {
   const anchor = sourcePathAnchor(sourcePath);
@@ -79,6 +89,11 @@ const ambiguousSources = [
   'app/readiness/page.tsx',
   'app/distribution/page.tsx',
   'app/api/professional/infrastructure/water/help/thread/route.ts',
+  'core/app/vercel-product-connection-public-surface-wave.ts',
+  'app/sos-interpreter/page.tsx',
+  'core/public/pantavion-public-surfaces.ts',
+  'core/communication/pantavion-unified-communication-contract.ts',
+  'docs/requirements/pantavion-pantaai-water-sentinel.md',
 ];
 for (const sourcePath of ambiguousSources) {
   const anchor = sourcePathAnchor(sourcePath);
