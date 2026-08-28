@@ -104,6 +104,34 @@ const mismatchedDecision = evaluateAgentExecutionAuthority(
 assert.equal(mismatchedDecision.allowed, false);
 assert.ok(mismatchedDecision.reasons.includes("zero_trust_request_mismatch"));
 
+const actionReplayIntent = {
+  ...baseIntent,
+  action: "task.publish",
+  authority: { ...authority, allowedActions: ["task.inspect", "task.publish"] },
+};
+const actionReplay = evaluateAgentExecutionAuthority(actionReplayIntent, baseZeroTrust, now);
+assert.equal(actionReplay.allowed, false);
+assert.ok(actionReplay.reasons.includes("zero_trust_context_mismatch"));
+
+const resourceReplayIntent = {
+  ...baseIntent,
+  resource: { ...resource, id: "kernel.other-task" },
+  authority: { ...authority, allowedResourceIds: ["kernel.task", "kernel.other-task"] },
+};
+const resourceReplay = evaluateAgentExecutionAuthority(resourceReplayIntent, baseZeroTrust, now);
+assert.equal(resourceReplay.allowed, false);
+assert.ok(resourceReplay.reasons.includes("zero_trust_context_mismatch"));
+
+const replayPrincipal = { ...principal, id: "kernel-agent-replay" };
+const principalReplayIntent = {
+  ...baseIntent,
+  principal: replayPrincipal,
+  authority: { ...authority, agentPrincipalId: replayPrincipal.id },
+};
+const principalReplay = evaluateAgentExecutionAuthority(principalReplayIntent, baseZeroTrust, now);
+assert.equal(principalReplay.allowed, false);
+assert.ok(principalReplay.reasons.includes("zero_trust_context_mismatch"));
+
 const wrongSubject = evaluateAgentExecutionAuthority(
   { ...baseIntent, authority: { ...authority, agentPrincipalId: "kernel-agent-2" } },
   baseZeroTrust,
@@ -247,6 +275,7 @@ console.log("Pantavion Agent Immune System contract: PASS");
 console.log(JSON.stringify({
   zeroTrustMonotonic: true,
   zeroTrustRequestBound: true,
+  zeroTrustContextReplayBlocked: true,
   timeBoundedAuthority: true,
   purposeBoundAuthority: true,
   toolAndResourceBoundAuthority: true,
