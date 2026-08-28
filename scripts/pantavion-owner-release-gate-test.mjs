@@ -80,7 +80,14 @@ assert.deepEqual(validTransition, []);
 
 const unsafeTransition = validateReleasePolicyTransition(
   defaultOwnerReleasePolicy,
-  { ...futurePolicy, auditRequired: false, rollbackRequired: false },
+  {
+    ...futurePolicy,
+    requireOwnerApproval: false,
+    requireApprovalIdentity: false,
+    requireApprovalTimestamp: false,
+    auditRequired: false,
+    rollbackRequired: false,
+  },
   {
     actor: "",
     changedAt: "invalid",
@@ -88,6 +95,9 @@ const unsafeTransition = validateReleasePolicyTransition(
     rollbackToVersion: 99,
   },
 );
+assert.ok(unsafeTransition.includes("release_policy_owner_approval_must_remain_enabled"));
+assert.ok(unsafeTransition.includes("release_policy_owner_identity_must_remain_enabled"));
+assert.ok(unsafeTransition.includes("release_policy_owner_timestamp_must_remain_enabled"));
 assert.ok(unsafeTransition.includes("release_policy_audit_must_remain_enabled"));
 assert.ok(unsafeTransition.includes("release_policy_rollback_must_remain_enabled"));
 assert.ok(unsafeTransition.includes("release_policy_owner_actor_missing"));

@@ -67,6 +67,9 @@ export function validateReleasePolicy(policy: VersionedReleasePolicy): string[] 
   if (!Number.isInteger(policy.version) || policy.version < 1) blockers.push("release_policy_version_invalid");
   if (!Number.isFinite(Date.parse(policy.effectiveAt))) blockers.push("release_policy_effective_at_invalid");
   if (!(policy.minimumUserState in implementationRank)) blockers.push("release_policy_minimum_state_invalid");
+  if (!policy.requireOwnerApproval) blockers.push("release_policy_owner_approval_must_remain_enabled");
+  if (!policy.requireApprovalIdentity) blockers.push("release_policy_owner_identity_must_remain_enabled");
+  if (!policy.requireApprovalTimestamp) blockers.push("release_policy_owner_timestamp_must_remain_enabled");
   if (!policy.auditRequired) blockers.push("release_policy_audit_must_remain_enabled");
   if (!policy.rollbackRequired) blockers.push("release_policy_rollback_must_remain_enabled");
   return blockers;
