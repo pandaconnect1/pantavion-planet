@@ -232,14 +232,9 @@ async function runGatewayLane(input: {
     const durationMs = Date.now() - startedAt;
 
     if (!translatedText) {
-      input.attempts.push({
-        lane: input.lane.id,
-        model: servedModel,
-        ok: false,
-        errorClass: "empty_translation",
-        durationMs,
-      });
-      throw new Error("empty_translation");
+      const emptyError = new Error("empty_translation");
+      emptyError.name = "empty_translation";
+      throw emptyError;
     }
 
     input.attempts.push({
