@@ -8,19 +8,26 @@ function assert(condition, message) {
 
 const classifierPath = [
   path.join(__dirname, 'pantavion-canonical-semantic-classification-v3.cjs'),
+  path.join(__dirname, 'canonical-v3.cjs'),
   path.join(__dirname, 'semantic-v3.cjs'),
 ].find((candidate) => fs.existsSync(candidate));
 assert(classifierPath, 'Canonical semantic classifier is missing.');
 const source = fs.readFileSync(classifierPath, 'utf8');
 const librarySource =
   source.split('\nconst input = loadCanonicalInput();')[0] +
-  '\nmodule.exports = { sourcePathAnchor, sourcePathAnchors, capabilityFromPath, anchoredCapabilityRank };';
+  '\nmodule.exports = { sourcePathAnchor, sourcePathAnchors, capabilityFromPath, capabilityFromProvenance, anchoredCapabilityRank };';
 const loaded = new Module(classifierPath);
 loaded.filename = classifierPath;
 loaded.paths = module.paths;
 loaded._compile(librarySource, classifierPath);
 
-const { sourcePathAnchor, sourcePathAnchors, capabilityFromPath, anchoredCapabilityRank } = loaded.exports;
+const {
+  sourcePathAnchor,
+  sourcePathAnchors,
+  capabilityFromPath,
+  capabilityFromProvenance,
+  anchoredCapabilityRank,
+} = loaded.exports;
 
 const sessionPath = 'core/app/app-session-registry.ts';
 const sessionAnchor = sourcePathAnchor(sessionPath);
@@ -49,6 +56,37 @@ assert(broadWaterAnchor && !broadWaterAnchor.strict, 'Generic Water master requi
 assert(
   capabilityFromPath(broadWaterPath, broadWaterAnchor) === null,
   'Generic Water master requirement must remain HOLD instead of inheriting a false capability.',
+);
+
+const lockedWaterMaster = 'docs/requirements/pantavion-professional-infrastructure-water-master-locked.md';
+const sourceLineCases = [
+  [56, 'read'],
+  [150, 'protect'],
+  [276, 'synchronize'],
+  [824, 'configure'],
+  [887, 'observe'],
+  [1587, 'create'],
+  [1699, 'execute'],
+  [2036, 'update'],
+  [2128, 'read'],
+  [2657, 'protect'],
+  [3026, 'observe'],
+];
+for (const [sourceLine, capability] of sourceLineCases) {
+  assert(
+    capabilityFromProvenance({ provenance:{ sourceFile:lockedWaterMaster, sourceLine } }) === capability,
+    `Locked Water master line ${sourceLine} must resolve only to ${capability}.`,
+  );
+}
+for (const sourceLine of [1397,1413]) {
+  assert(
+    capabilityFromProvenance({ provenance:{ sourceFile:lockedWaterMaster, sourceLine } }) === null,
+    `Broad Water master line ${sourceLine} must remain capability-unresolved.`,
+  );
+}
+assert(
+  capabilityFromProvenance({ provenance:{ sourceFile:lockedWaterMaster, sourceLine:56.5 } }) === null,
+  'Non-integral source lines must fail closed.',
 );
 
 const strictOwnershipCases = [

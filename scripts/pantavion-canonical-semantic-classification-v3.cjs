@@ -281,6 +281,29 @@ function sourcePathAnchor(file) {
   return matches.length === 1 ? { ...matches[0], sourcePath } : null;
 }
 
+const strictSourceLineCapabilities = new Map([
+  ['docs/requirements/pantavion-professional-infrastructure-water-master-locked.md', new Map([
+    ...[9,134,150,165,167,192,207,227,463,758,930,1154,1156,1180,1419,1643,1663,1687,1817,2011,2013,2023,2432,2558,2632,2655,2657,2659,2663,2692,2694,2709,2812,2874,2907].map(line => [line,'protect']),
+    ...[56,381,545,1200,1277,2120,2122,2124,2128,2130,2132,2160,2377,2399,2719,2966].map(line => [line,'read']),
+    ...[103,501,527,824,830,1030,1034,1188].map(line => [line,'configure']),
+    ...[240,257,276,316,336,1441,1445,1455,1502,1508,1519,1539,2547,2798,2841,2845].map(line => [line,'synchronize']),
+    ...[563,679,719,866,887,889,893,904,913,923,1004,1006,1054,1068,1092,1226,1296,1329,1918,1939,2179,2230,2234,2249,2261,2299,2321,2335,2358,2414,2438,2448,2454,2458,2468,2591,2776,2820,2863,2882,2898,2911,2915,2923,2933,2989,3026,3030,3046].map(line => [line,'observe']),
+    ...[1358,1543,1553,1555,1557,1647,1649,1651,1678,1699,1869,1989,1991,2000].map(line => [line,'execute']),
+    ...[299,1721,1846,1857,2034,2036,2048,2061,2063,2073,2075,2089,3020].map(line => [line,'update']),
+    ...[1587,1591].map(line => [line,'create']),
+    ...[1260].map(line => [line,'recover']),
+    ...[805].map(line => [line,'present'])
+  ])]
+]);
+
+function capabilityFromProvenance(record) {
+  const source = String(record && record.provenance && record.provenance.sourceFile || '').toLowerCase().replace(/\\/g,'/');
+  const sourceLine = Number(record && record.provenance && record.provenance.sourceLine);
+  if (!source || !Number.isInteger(sourceLine)) return null;
+  const lineMap = strictSourceLineCapabilities.get(source);
+  return lineMap ? lineMap.get(sourceLine) || null : null;
+}
+
 function anchoredRank(groups, text, anchor) {
   const ranked = rank(groups, text);
   if (!anchor || !groups[anchor.subsystem]) return ranked;
@@ -410,17 +433,21 @@ function capabilityFromPath(file, anchor) {
   return null;
 }
 
-function anchoredCapabilityRank(text, anchor, sourceFile) {
+function anchoredCapabilityRank(text, anchor, sourceFile, strictProvenanceCapability = null) {
   const ranked = rank(capabilities, text);
-  const pathCapability = capabilityFromPath(sourceFile, anchor);
+  const pathCapability = strictProvenanceCapability || capabilityFromPath(sourceFile, anchor);
   if (!pathCapability || !capabilities[pathCapability]) return ranked;
-  const pathWeight = anchor && anchor.strict ? 100 : 8;
+  const pathWeight = strictProvenanceCapability ? 100 : (anchor && anchor.strict ? 100 : 8);
   const existing = ranked.find(item => item.name === pathCapability);
   if (existing) {
     existing.score += pathWeight;
-    existing.evidence = [...new Set([...existing.evidence,'source-path-capability:'+String(sourceFile || '')])];
+    existing.evidence = [...new Set([...existing.evidence,strictProvenanceCapability
+      ? 'source-line-capability:'+String(sourceFile || '')
+      : 'source-path-capability:'+String(sourceFile || '')])];
   } else {
-    ranked.push({ name:pathCapability, score:pathWeight, evidence:['source-path-capability:'+String(sourceFile || '')] });
+    ranked.push({ name:pathCapability, score:pathWeight, evidence:[strictProvenanceCapability
+      ? 'source-line-capability:'+String(sourceFile || '')
+      : 'source-path-capability:'+String(sourceFile || '')] });
   }
   return ranked.sort((a,b) => b.score-a.score || a.name.localeCompare(b.name));
 }
@@ -514,8 +541,9 @@ function classify(record) {
   const text = normalize([sourceFile, record.text, record.context].join('\n'));
   const artifact = artifactType(sourceFile, text);
   const subsystems = ontology[module] ? anchoredRank(ontology[module], text, pathAnchor) : [];
-  const capabilityPath = capabilityFromPath(sourceFile, pathAnchor);
-  const capabilityRanks = anchoredCapabilityRank(text, pathAnchor, sourceFile);
+  const provenanceCapability = capabilityFromProvenance(record);
+  const capabilityPath = provenanceCapability || capabilityFromPath(sourceFile, pathAnchor);
+  const capabilityRanks = anchoredCapabilityRank(text, pathAnchor, sourceFile, provenanceCapability);
   const subsystem = pathAnchor ? pathAnchor.subsystem : (subsystems[0] ? subsystems[0].name : null);
   const capability = capabilityRanks[0] ? capabilityRanks[0].name : null;
   const subsystemConflict = subsystems.length > 1 && subsystems[0].score === subsystems[1].score;
