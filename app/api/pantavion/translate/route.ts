@@ -69,6 +69,15 @@ function safeGatewayFailure(error: unknown): Omit<GatewayAttempt, "model" | "ok"
   };
 }
 
+function canonicalGatewayModelId(value: string) {
+  const model = value.trim();
+  if (!model || model.includes("/")) return model;
+  if (/^(gpt-|o\d|chatgpt-)/i.test(model)) return `openai/${model}`;
+  if (/^gemini-/i.test(model)) return `google/${model}`;
+  if (/^claude-/i.test(model)) return `anthropic/${model}`;
+  return model;
+}
+
 function gatewayModelPlan() {
   const configured = [
     process.env.PANTAVION_TRANSLATION_GATEWAY_MODEL,
@@ -76,12 +85,12 @@ function gatewayModelPlan() {
     process.env.PANTAVION_TRANSLATION_FALLBACK_MODEL,
     process.env.PANTAVION_TRANSLATION_SECONDARY_MODEL,
   ]
-    .map((value) => value?.trim())
+    .map((value) => canonicalGatewayModelId(value?.trim() || ""))
     .filter((value): value is string => Boolean(value));
 
-  // Defaults are current AI Gateway model IDs verified against Vercel documentation.
-  // Environment configuration always has priority; the defaults provide provider
-  // diversity so one provider outage does not make translation unavailable.
+  // Canonical IDs follow Vercel AI Gateway's provider/model format. Environment
+  // configuration keeps priority, while provider-diverse defaults protect the
+  // translation path from a single model/provider outage.
   const ordered = Array.from(
     new Set([
       ...configured,
@@ -160,14 +169,14 @@ async function translateWithGateway(request: PantavionTranslationRequest) {
   const attempts: GatewayAttempt[] = [];
 
   try {
-    // Use AI Gateway's native model failover in one bounded request. This avoids
-    // serial 30-second model attempts that could consume the entire HTTP budget
-    // before a fallback model gets a chance to run.
+    // AI Gateway performs native model failover inside one bounded request.
+    // The AI SDK retry budget absorbs short-lived gateway/provider failures,
+    // while the shared abort signal keeps total latency strictly bounded.
     const result = await generateText({
       model: primaryModel,
       prompt: strictTranslationPrompt(request),
       temperature: 0,
-      maxRetries: 1,
+      maxRetries: 3,
       abortSignal: AbortSignal.timeout(38_000),
       providerOptions: {
         gateway: {
@@ -224,6 +233,8 @@ export async function GET() {
     gatewayFailover: {
       nativeModelFallback: true,
       modelCount: 1 + modelPlan.fallbackModels.length,
+      boundedRetries: 3,
+      totalTimeoutMs: 38_000,
     },
     strictLanguageRouting: true,
     publicTextFallback: languageRuntime.publicFallbackAllowed,
