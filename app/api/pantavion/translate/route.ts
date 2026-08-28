@@ -5,6 +5,10 @@ import {
   type PantavionTranslationRequest,
 } from "@/core/translation/pantavion-universal-translation-runtime";
 import {
+  buildPantavionGatewayModelPlan,
+  type PantavionGatewayLanePlan,
+} from "@/core/translation/pantavion-gateway-resilience";
+import {
   getPantavionTranslationProviderStatus,
   translateWithPantavionProvider,
 } from "@/core/translation/pantavion-translation-provider-adapters";
@@ -18,12 +22,22 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
 
-type GatewayAttempt = {
-  model: string;
-  ok: boolean;
+const GATEWAY_HEDGE_DELAY_MS = 4_500;
+const GATEWAY_TOTAL_TIMEOUT_MS = 36_000;
+const GATEWAY_LANE_RETRIES = 1;
+
+type GatewayFailureCause = {
   errorClass?: string;
   errorCode?: string;
   httpStatus?: number;
+};
+
+type GatewayAttempt = GatewayFailureCause & {
+  lane: PantavionGatewayLanePlan["id"];
+  model: string;
+  ok: boolean;
+  durationMs?: number;
+  causes?: GatewayFailureCause[];
 };
 
 function asString(value: unknown, fallback = "") {
@@ -45,7 +59,7 @@ function responseForResult(result: Awaited<ReturnType<typeof translateWithPantav
   });
 }
 
-function safeGatewayFailure(error: unknown): Omit<GatewayAttempt, "model" | "ok"> {
+function safeFailureCause(error: unknown): GatewayFailureCause {
   if (!error || typeof error !== "object") {
     return { errorClass: "unknown_gateway_error" };
   }
@@ -55,55 +69,39 @@ function safeGatewayFailure(error: unknown): Omit<GatewayAttempt, "model" | "ok"
     status?: unknown;
     statusCode?: unknown;
     code?: unknown;
-    cause?: { status?: unknown; statusCode?: unknown; code?: unknown };
+    cause?: { status?: unknown; statusCode?: unknown; code?: unknown; name?: unknown };
   };
 
   const statusValue = candidate.status ?? candidate.statusCode ?? candidate.cause?.status ?? candidate.cause?.statusCode;
   const parsedStatus = typeof statusValue === "number" ? statusValue : Number(statusValue);
   const codeValue = candidate.code ?? candidate.cause?.code;
+  const classValue = candidate.name ?? candidate.cause?.name;
 
   return {
-    errorClass: typeof candidate.name === "string" && candidate.name ? candidate.name : "gateway_request_failed",
+    errorClass: typeof classValue === "string" && classValue ? classValue : "gateway_request_failed",
     errorCode: typeof codeValue === "string" && codeValue ? codeValue.slice(0, 80) : undefined,
     httpStatus: Number.isFinite(parsedStatus) ? parsedStatus : undefined,
   };
 }
 
-function canonicalGatewayModelId(value: string) {
-  const model = value.trim();
-  if (!model || model.includes("/")) return model;
-  if (/^(gpt-|o\d|chatgpt-)/i.test(model)) return `openai/${model}`;
-  if (/^gemini-/i.test(model)) return `google/${model}`;
-  if (/^claude-/i.test(model)) return `anthropic/${model}`;
-  return model;
+function safeGatewayFailure(error: unknown): GatewayFailureCause & { causes?: GatewayFailureCause[] } {
+  const primary = safeFailureCause(error);
+  if (!error || typeof error !== "object") return primary;
+
+  const errors = (error as { errors?: unknown }).errors;
+  if (!Array.isArray(errors)) return primary;
+
+  const causes = errors.slice(0, 6).map((item) => safeFailureCause(item));
+  return causes.length > 0 ? { ...primary, causes } : primary;
 }
 
 function gatewayModelPlan() {
-  const configured = [
+  return buildPantavionGatewayModelPlan([
     process.env.PANTAVION_TRANSLATION_GATEWAY_MODEL,
     process.env.PANTAVION_TRANSLATION_MODEL,
     process.env.PANTAVION_TRANSLATION_FALLBACK_MODEL,
     process.env.PANTAVION_TRANSLATION_SECONDARY_MODEL,
-  ]
-    .map((value) => canonicalGatewayModelId(value?.trim() || ""))
-    .filter((value): value is string => Boolean(value));
-
-  // Canonical IDs follow Vercel AI Gateway's provider/model format. Environment
-  // configuration keeps priority, while provider-diverse defaults protect the
-  // translation path from a single model/provider outage.
-  const ordered = Array.from(
-    new Set([
-      ...configured,
-      "openai/gpt-5.6-sol",
-      "google/gemini-3.6-flash",
-      "anthropic/claude-sonnet-5",
-    ]),
-  );
-
-  return {
-    primaryModel: ordered[0],
-    fallbackModels: ordered.slice(1),
-  };
+  ]);
 }
 
 function resolvedGatewayModel(providerMetadata: unknown, fallback: string) {
@@ -160,61 +158,163 @@ function strictTranslationPrompt(request: PantavionTranslationRequest) {
   ].join("\n");
 }
 
-async function translateWithGateway(request: PantavionTranslationRequest) {
-  if (!(await pantavionGatewayRuntimeAvailable())) {
-    return { result: null, attempts: [] as GatewayAttempt[], runtimeAvailable: false };
+function combinedAbortSignal(signals: AbortSignal[]) {
+  const controller = new AbortController();
+  const abort = () => {
+    if (!controller.signal.aborted) controller.abort();
+  };
+
+  for (const signal of signals) {
+    if (signal.aborted) {
+      abort();
+      break;
+    }
+    signal.addEventListener("abort", abort, { once: true });
   }
 
-  const { primaryModel, fallbackModels } = gatewayModelPlan();
-  const attempts: GatewayAttempt[] = [];
+  return controller.signal;
+}
 
+async function delayWithAbort(delayMs: number, signal: AbortSignal) {
+  if (delayMs <= 0) return;
+  if (signal.aborted) throw new DOMException("Aborted", "AbortError");
+
+  await new Promise<void>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      signal.removeEventListener("abort", onAbort);
+      resolve();
+    }, delayMs);
+
+    const onAbort = () => {
+      clearTimeout(timer);
+      signal.removeEventListener("abort", onAbort);
+      reject(new DOMException("Aborted", "AbortError"));
+    };
+
+    signal.addEventListener("abort", onAbort, { once: true });
+  });
+}
+
+async function runGatewayLane(input: {
+  request: PantavionTranslationRequest;
+  lane: PantavionGatewayLanePlan;
+  delayMs: number;
+  globalSignal: AbortSignal;
+  laneController: AbortController;
+  attempts: GatewayAttempt[];
+}) {
+  const signal = combinedAbortSignal([input.globalSignal, input.laneController.signal]);
+  await delayWithAbort(input.delayMs, signal);
+
+  const startedAt = Date.now();
   try {
-    // AI Gateway performs native model failover inside one bounded request.
-    // The AI SDK retry budget absorbs short-lived gateway/provider failures,
-    // while the shared abort signal keeps total latency strictly bounded.
     const result = await generateText({
-      model: primaryModel,
-      prompt: strictTranslationPrompt(request),
+      model: input.lane.primaryModel,
+      prompt: strictTranslationPrompt(input.request),
       temperature: 0,
-      maxRetries: 3,
-      abortSignal: AbortSignal.timeout(38_000),
+      maxRetries: GATEWAY_LANE_RETRIES,
+      abortSignal: signal,
       providerOptions: {
         gateway: {
-          models: fallbackModels,
-          tags: ["feature:translation", "env:production", "runtime:pantavion"],
+          models: input.lane.fallbackModels,
+          tags: [
+            "feature:translation",
+            "env:production",
+            "runtime:pantavion",
+            `lane:${input.lane.id}`,
+          ],
         },
       },
     });
 
     const translatedText = String(result.text || "").trim();
-    const servedModel = resolvedGatewayModel(result.providerMetadata, primaryModel);
+    const servedModel = resolvedGatewayModel(result.providerMetadata, input.lane.primaryModel);
+    const durationMs = Date.now() - startedAt;
 
     if (!translatedText) {
-      attempts.push({ model: servedModel, ok: false, errorClass: "empty_translation" });
-      return { result: null, attempts, runtimeAvailable: true };
+      input.attempts.push({
+        lane: input.lane.id,
+        model: servedModel,
+        ok: false,
+        errorClass: "empty_translation",
+        durationMs,
+      });
+      throw new Error("empty_translation");
     }
 
-    attempts.push({ model: servedModel, ok: true });
+    input.attempts.push({
+      lane: input.lane.id,
+      model: servedModel,
+      ok: true,
+      durationMs,
+    });
+
+    return {
+      translatedText,
+      servedModel,
+      lane: input.lane.id,
+    };
+  } catch (error) {
+    if (!input.laneController.signal.aborted) {
+      input.attempts.push({
+        lane: input.lane.id,
+        model: `${input.lane.primaryModel} + ${input.lane.fallbackModels.join(" + ")}`,
+        ok: false,
+        durationMs: Date.now() - startedAt,
+        ...safeGatewayFailure(error),
+      });
+    }
+    throw error;
+  }
+}
+
+async function translateWithGateway(request: PantavionTranslationRequest) {
+  if (!(await pantavionGatewayRuntimeAvailable())) {
+    return { result: null, attempts: [] as GatewayAttempt[], runtimeAvailable: false };
+  }
+
+  const modelPlan = gatewayModelPlan();
+  const attempts: GatewayAttempt[] = [];
+  if (modelPlan.lanes.length === 0) {
+    return { result: null, attempts, runtimeAvailable: true };
+  }
+
+  const globalSignal = AbortSignal.timeout(GATEWAY_TOTAL_TIMEOUT_MS);
+  const laneControllers = modelPlan.lanes.map(() => new AbortController());
+
+  try {
+    const winner = await Promise.any(
+      modelPlan.lanes.map((lane, index) =>
+        runGatewayLane({
+          request,
+          lane,
+          delayMs: index === 0 ? 0 : GATEWAY_HEDGE_DELAY_MS,
+          globalSignal,
+          laneController: laneControllers[index],
+          attempts,
+        }),
+      ),
+    );
+
+    laneControllers.forEach((controller) => controller.abort());
+
     return {
       result: {
         ok: true as const,
         status: "translated" as const,
         contract: pantavionUniversalTranslationContract,
         input: request,
-        translatedText,
+        translatedText: winner.translatedText,
         provider: "vercel_ai_gateway",
-        model: servedModel,
+        model: winner.servedModel,
+        executionLane: winner.lane,
         generatedAt: new Date().toISOString(),
       },
       attempts,
       runtimeAvailable: true,
     };
-  } catch (error) {
-    attempts.push({
-      model: `${primaryModel} + ${fallbackModels.join(" + ")}`,
-      ok: false,
-      ...safeGatewayFailure(error),
-    });
+  } catch {
+    laneControllers.forEach((controller) => controller.abort());
     return { result: null, attempts, runtimeAvailable: true };
   }
 }
@@ -232,9 +332,11 @@ export async function GET() {
     gatewayPreferred: languageRuntime.gatewayRuntimeAvailable,
     gatewayFailover: {
       nativeModelFallback: true,
-      modelCount: 1 + modelPlan.fallbackModels.length,
-      boundedRetries: 3,
-      totalTimeoutMs: 38_000,
+      modelCount: modelPlan.orderedModels.length,
+      hedgedLanes: modelPlan.lanes.length,
+      hedgeDelayMs: GATEWAY_HEDGE_DELAY_MS,
+      perLaneRetries: GATEWAY_LANE_RETRIES,
+      totalTimeoutMs: GATEWAY_TOTAL_TIMEOUT_MS,
     },
     strictLanguageRouting: true,
     publicTextFallback: languageRuntime.publicFallbackAllowed,
