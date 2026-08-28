@@ -38,6 +38,12 @@ const allowed = evaluateKernelZeroTrustAccess(baseRequest, now);
 assert.equal(allowed.allowed, true);
 assert.equal(allowed.matchedGrantId, "grant-social-read");
 assert.deepEqual(allowed.reasons, []);
+assert.deepEqual(allowed.context, {
+  principalId: "kernel-social-1",
+  resourceId: "social.profile",
+  environment: "staging",
+  action: "read",
+});
 
 const unauthenticated = evaluateKernelZeroTrustAccess(
   { ...baseRequest, principal: { ...basePrincipal, authenticated: false } },
@@ -45,6 +51,7 @@ const unauthenticated = evaluateKernelZeroTrustAccess(
 );
 assert.equal(unauthenticated.allowed, false);
 assert.ok(unauthenticated.reasons.includes("principal_not_authenticated"));
+assert.equal(unauthenticated.context.principalId, "kernel-social-1");
 
 const expired = evaluateKernelZeroTrustAccess(
   {
@@ -89,6 +96,7 @@ const ownerWithoutGrant = evaluateKernelZeroTrustAccess(
 );
 assert.equal(ownerWithoutGrant.allowed, false);
 assert.ok(ownerWithoutGrant.reasons.includes("scoped_grant_missing"));
+assert.equal(ownerWithoutGrant.context.principalId, "owner-1");
 
 const explicitDeny = evaluateKernelZeroTrustAccess(
   { ...baseRequest, explicitlyDenied: true },
@@ -97,4 +105,20 @@ const explicitDeny = evaluateKernelZeroTrustAccess(
 assert.equal(explicitDeny.allowed, false);
 assert.ok(explicitDeny.reasons.includes("explicit_deny"));
 
+const actionBinding = evaluateKernelZeroTrustAccess(
+  {
+    ...baseRequest,
+    action: "write",
+    principal: {
+      ...basePrincipal,
+      grants: [{ ...basePrincipal.grants[0], actions: ["read", "write"] }],
+    },
+  },
+  now,
+);
+assert.equal(actionBinding.allowed, true);
+assert.equal(actionBinding.context.action, "write");
+assert.notDeepEqual(actionBinding.context, allowed.context);
+
 console.log("Pantavion kernel zero-trust contract: PASS");
+console.log(JSON.stringify({ decisionContextBound: true }, null, 2));
