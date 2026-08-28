@@ -9,6 +9,12 @@ import {
   type PantavionGatewayLanePlan,
 } from "@/core/translation/pantavion-gateway-resilience";
 import {
+  getPantavionGatewayRateLimitCircuit,
+  isPantavionGatewayRateLimitFailure,
+  markPantavionGatewayRateLimited,
+  type PantavionGatewayFailure,
+} from "@/core/translation/pantavion-gateway-rate-limit";
+import {
   getPantavionTranslationProviderStatus,
   translateWithPantavionProvider,
 } from "@/core/translation/pantavion-translation-provider-adapters";
@@ -26,18 +32,13 @@ const GATEWAY_HEDGE_DELAY_MS = 4_500;
 const GATEWAY_TOTAL_TIMEOUT_MS = 36_000;
 const GATEWAY_LANE_RETRIES = 1;
 
-type GatewayFailureCause = {
-  errorClass?: string;
-  errorCode?: string;
-  httpStatus?: number;
-};
+type GatewayFailureCause = PantavionGatewayFailure;
 
 type GatewayAttempt = GatewayFailureCause & {
   lane: PantavionGatewayLanePlan["id"];
   model: string;
   ok: boolean;
   durationMs?: number;
-  causes?: GatewayFailureCause[];
 };
 
 function asString(value: unknown, fallback = "") {
@@ -84,7 +85,7 @@ function safeFailureCause(error: unknown): GatewayFailureCause {
   };
 }
 
-function safeGatewayFailure(error: unknown): GatewayFailureCause & { causes?: GatewayFailureCause[] } {
+function safeGatewayFailure(error: unknown): GatewayFailureCause {
   const primary = safeFailureCause(error);
   if (!error || typeof error !== "object") return primary;
 
@@ -202,6 +203,7 @@ async function runGatewayLane(input: {
   globalSignal: AbortSignal;
   laneController: AbortController;
   attempts: GatewayAttempt[];
+  onGatewayRateLimit: (lane: PantavionGatewayLanePlan["id"], failure: GatewayFailureCause) => void;
 }) {
   const signal = combinedAbortSignal([input.globalSignal, input.laneController.signal]);
   await delayWithAbort(input.delayMs, signal);
@@ -251,13 +253,17 @@ async function runGatewayLane(input: {
     };
   } catch (error) {
     if (!input.laneController.signal.aborted) {
+      const failure = safeGatewayFailure(error);
       input.attempts.push({
         lane: input.lane.id,
         model: `${input.lane.primaryModel} + ${input.lane.fallbackModels.join(" + ")}`,
         ok: false,
         durationMs: Date.now() - startedAt,
-        ...safeGatewayFailure(error),
+        ...failure,
       });
+      if (isPantavionGatewayRateLimitFailure(failure)) {
+        input.onGatewayRateLimit(input.lane.id, failure);
+      }
     }
     throw error;
   }
@@ -265,17 +271,44 @@ async function runGatewayLane(input: {
 
 async function translateWithGateway(request: PantavionTranslationRequest) {
   if (!(await pantavionGatewayRuntimeAvailable())) {
-    return { result: null, attempts: [] as GatewayAttempt[], runtimeAvailable: false };
+    return {
+      result: null,
+      attempts: [] as GatewayAttempt[],
+      runtimeAvailable: false,
+      rateLimitCircuit: getPantavionGatewayRateLimitCircuit(),
+    };
+  }
+
+  const existingCircuit = getPantavionGatewayRateLimitCircuit();
+  if (existingCircuit.open) {
+    return {
+      result: null,
+      attempts: [] as GatewayAttempt[],
+      runtimeAvailable: true,
+      rateLimitCircuit: existingCircuit,
+    };
   }
 
   const modelPlan = gatewayModelPlan();
   const attempts: GatewayAttempt[] = [];
   if (modelPlan.lanes.length === 0) {
-    return { result: null, attempts, runtimeAvailable: true };
+    return {
+      result: null,
+      attempts,
+      runtimeAvailable: true,
+      rateLimitCircuit: getPantavionGatewayRateLimitCircuit(),
+    };
   }
 
   const globalSignal = AbortSignal.timeout(GATEWAY_TOTAL_TIMEOUT_MS);
   const laneControllers = modelPlan.lanes.map(() => new AbortController());
+
+  const onGatewayRateLimit = (lane: PantavionGatewayLanePlan["id"]) => {
+    markPantavionGatewayRateLimited();
+    if (lane === "primary" && laneControllers[1]) {
+      laneControllers[1].abort();
+    }
+  };
 
   try {
     const winner = await Promise.any(
@@ -287,6 +320,7 @@ async function translateWithGateway(request: PantavionTranslationRequest) {
           globalSignal,
           laneController: laneControllers[index],
           attempts,
+          onGatewayRateLimit,
         }),
       ),
     );
@@ -307,10 +341,16 @@ async function translateWithGateway(request: PantavionTranslationRequest) {
       },
       attempts,
       runtimeAvailable: true,
+      rateLimitCircuit: getPantavionGatewayRateLimitCircuit(),
     };
   } catch {
     laneControllers.forEach((controller) => controller.abort());
-    return { result: null, attempts, runtimeAvailable: true };
+    return {
+      result: null,
+      attempts,
+      runtimeAvailable: true,
+      rateLimitCircuit: getPantavionGatewayRateLimitCircuit(),
+    };
   }
 }
 
@@ -332,6 +372,7 @@ export async function GET() {
       hedgeDelayMs: GATEWAY_HEDGE_DELAY_MS,
       perLaneRetries: GATEWAY_LANE_RETRIES,
       totalTimeoutMs: GATEWAY_TOTAL_TIMEOUT_MS,
+      rateLimitCircuit: getPantavionGatewayRateLimitCircuit(),
     },
     strictLanguageRouting: true,
     publicTextFallback: languageRuntime.publicFallbackAllowed,
@@ -414,6 +455,7 @@ export async function POST(request: Request) {
     targetLanguage,
     gatewayRuntimeAvailable: gateway.runtimeAvailable,
     gatewayAttempts: gateway.attempts,
+    gatewayRateLimitCircuit: gateway.rateLimitCircuit,
     configuredProvider: providerStatus.provider,
     configuredProviderEndpoint: providerStatus.endpointConfigured,
     configuredProviderApiKey: providerStatus.apiKeyConfigured,
@@ -427,15 +469,19 @@ export async function POST(request: Request) {
   return NextResponse.json(
     {
       ok: false,
-      status: "provider_unavailable",
+      status: gateway.rateLimitCircuit.open ? "gateway_rate_limited" : "provider_unavailable",
       translatedText: "",
       sourceLanguage,
       targetLanguage,
       providerRequired: true,
-      message: "The live translation provider is temporarily unavailable. Please retry.",
+      retryAfterMs: gateway.rateLimitCircuit.remainingMs || undefined,
+      message: gateway.rateLimitCircuit.open
+        ? "The private translation gateway is temporarily rate limited. Please retry after the cooldown."
+        : "The live translation provider is temporarily unavailable. Please retry.",
       diagnostic: {
         gatewayRuntimeAvailable: gateway.runtimeAvailable,
         gatewayAttempts: gateway.attempts,
+        gatewayRateLimitCircuit: gateway.rateLimitCircuit,
         configuredProvider: providerStatus.provider,
         configuredProviderAllowed,
         publicFallbackAllowed,

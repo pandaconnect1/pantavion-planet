@@ -27,9 +27,6 @@ function providerName(): ProviderName {
     return raw;
   }
 
-  // Production-safe bootstrap for real text translation without pretending that
-  // every language/mode is covered. A configured Pantavion endpoint still wins;
-  // otherwise use the public MyMemory text service for supported known pairs.
   return process.env.PANTAVION_TRANSLATE_ENDPOINT ? "generic" : "mymemory";
 }
 
@@ -60,15 +57,21 @@ function endpointFor(provider: ProviderName) {
   return "";
 }
 
+function apiKeyFor(provider: ProviderName) {
+  const explicitPantavionOverride = process.env.PANTAVION_TRANSLATE_API_KEY || "";
+  if (explicitPantavionOverride) return explicitPantavionOverride;
+
+  if (provider === "deepl") return process.env.DEEPL_API_KEY || "";
+  if (provider === "google") return process.env.GOOGLE_TRANSLATE_API_KEY || "";
+  if (provider === "azure") return process.env.AZURE_TRANSLATOR_KEY || "";
+
+  return "";
+}
+
 function envStatus() {
   const provider = providerName();
   const endpoint = endpointFor(provider);
-  const apiKey =
-    process.env.PANTAVION_TRANSLATE_API_KEY ||
-    process.env.DEEPL_API_KEY ||
-    process.env.GOOGLE_TRANSLATE_API_KEY ||
-    process.env.AZURE_TRANSLATOR_KEY ||
-    "";
+  const apiKey = apiKeyFor(provider);
 
   return {
     provider,
@@ -410,12 +413,7 @@ export async function translateWithPantavionProvider(
 
   const provider = providerName();
   const endpoint = endpointFor(provider);
-  const apiKey =
-    process.env.PANTAVION_TRANSLATE_API_KEY ||
-    process.env.DEEPL_API_KEY ||
-    process.env.GOOGLE_TRANSLATE_API_KEY ||
-    process.env.AZURE_TRANSLATOR_KEY ||
-    "";
+  const apiKey = apiKeyFor(provider);
 
   if (provider === "deepl") return callDeepL(request, endpoint, apiKey);
   if (provider === "google") return callGoogle(request, endpoint, apiKey);
