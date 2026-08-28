@@ -1,7 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { runPantavionCloudCronTick } from "@/core/intelligence/pantavion-intelligence-ledger";
-import { runPantavionFoundryTick } from "@/core/kernel/pantavion-foundry-runtime";
+import { runPantavionNervousSystemFoundryTick } from "@/core/kernel/pantavion-foundry-nervous-system-runtime";
 import { runSecureScheduledWorker } from "@/core/runtime/secure-scheduled-worker";
 
 export const runtime = "nodejs";
@@ -64,7 +64,7 @@ async function executeScheduledTick(
       "pantavion-intelligence-hourly",
       async () => {
         const tick = await runPantavionCloudCronTick(source);
-        const foundry = await runPantavionFoundryTick();
+        const foundry = await runPantavionNervousSystemFoundryTick();
 
         return {
           ok: tick.ok,
@@ -88,7 +88,7 @@ async function executeScheduledTick(
         idempotency: "one run key per worker per UTC hour",
         audit: "durable run status and bounded summary stored in Supabase",
         foundry:
-          "runs only Pantavion-owned internal agents when its durable queue and runtime configuration are present",
+          "dependency-gated Nervous System reconciles durable Pantavion-owned agents before the existing Foundry performs its atomic SQL claim and internal runtime execution",
         destructiveActions: "disabled",
       },
     });

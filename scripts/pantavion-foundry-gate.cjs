@@ -12,11 +12,14 @@ const requiredFiles = [
   "core/kernel/pantavion-module-delivery-factory.ts",
   "core/kernel/pantavion-work-order-runtime.ts",
   "core/kernel/pantavion-foundry-runtime.ts",
+  "core/kernel/pantavion-foundry-nervous-system-runtime.ts",
   "core/runtime/supabase-durable-execution-store.ts",
+  "kernel/foundry-nervous-system.ts",
   "app/api/kernel/work-orders/route.ts",
   "app/api/pantavion/intelligence/cron/route.ts",
   "app/kernel/kernel-work-order-client.tsx",
   "scripts/pantavion-foundry-gate.cjs",
+  "scripts/pantavion-kernel-foundry-nervous-system-test.mjs",
   "package.json",
 ];
 
@@ -35,6 +38,8 @@ const blockers = files["core/kernel/pantavion-blocker-resolution.ts"];
 const planner = files["core/kernel/pantavion-foundry-workload-planner.ts"];
 const modules = files["core/kernel/pantavion-module-delivery-factory.ts"];
 const runtime = files["core/kernel/pantavion-foundry-runtime.ts"];
+const nervousRuntime = files["core/kernel/pantavion-foundry-nervous-system-runtime.ts"];
+const nervousPlan = files["kernel/foundry-nervous-system.ts"];
 const workOrders = files["core/kernel/pantavion-work-order-runtime.ts"];
 const durableStore = files["core/runtime/supabase-durable-execution-store.ts"];
 const route = files["app/api/kernel/work-orders/route.ts"];
@@ -102,6 +107,30 @@ for (const marker of [
 }
 
 for (const marker of [
+  "pantavion_foundry_dependency_plan_v1",
+  "PANTAVION_NERVOUS_SYSTEM_DEPENDENCY_BLOCKER",
+  "planPantavionFoundryDependencyGate",
+  'classifier: ["orchestrator", "sentinel"]',
+  "repairer: []",
+]) {
+  if (!nervousPlan.includes(marker)) failures.push(`Foundry nervous-system plan missing marker: ${marker}`);
+}
+
+for (const marker of [
+  "pantavion_foundry_nervous_system_tick_v1",
+  "pantavion_nervous_system_dependency_wait",
+  "pantavion_nervous_system_dependency_released",
+  "runPantavionFoundryTick",
+  "PantavionSupabaseDurableExecutionStore",
+  "dependencyGateRunsBeforeClaim: true",
+  'durableWorkerLeaseReassignment: "not_yet_enforced"',
+  "externalWorkerAllowed: false",
+  "productionDeployAllowed: false",
+]) {
+  if (!nervousRuntime.includes(marker)) failures.push(`Foundry nervous-system runtime missing marker: ${marker}`);
+}
+
+for (const marker of [
   "pantavion_claim_durable_execution",
   "Atomically claims a queued execution",
 ]) {
@@ -121,7 +150,7 @@ for (const marker of [
 }
 
 for (const marker of [
-  "isPantavionKernelRequestAllowed",
+  "isPantavionKernelFounderRequestAllowed",
   "parseWorkload",
   "recovery_excavation",
   "durable_execution_runtime_unavailable",
@@ -129,8 +158,11 @@ for (const marker of [
   if (!route.includes(marker)) failures.push(`Founder route missing marker: ${marker}`);
 }
 
-if (!cron.includes("runPantavionFoundryTick")) {
-  failures.push("Protected scheduler route does not invoke the Foundry tick.");
+if (!cron.includes("runPantavionNervousSystemFoundryTick")) {
+  failures.push("Protected scheduler route does not invoke the Nervous-System-gated Foundry tick.");
+}
+if (cron.includes('from "@/core/kernel/pantavion-foundry-runtime"')) {
+  failures.push("Protected scheduler must not bypass the Nervous System with a direct Foundry runtime import.");
 }
 
 for (const marker of [
@@ -151,6 +183,8 @@ const forbidden = [
   [runtime, /mergeAllowed:\s*true/, "Foundry runtime must not authorize merge."],
   [runtime, /privateDataExportAllowed:\s*true/, "Foundry runtime must not export private data."],
   [runtime, /unboundedShellAllowed:\s*true/, "Foundry runtime must not authorize unbounded shell."],
+  [nervousRuntime, /externalWorkerAllowed:\s*true/, "Nervous System must not authorize external workers."],
+  [nervousRuntime, /productionDeployAllowed:\s*true/, "Nervous System must not authorize production deploy."],
   [modules, /maySendExternalMessages:\s*true/, "Module cells must not authorize external messages."],
   [modules, /mayBuyMediaOrServices:\s*true/, "Module cells must not authorize buying media or services."],
   [modules, /mayPublishPublicCampaign:\s*true/, "Module cells must not authorize public campaign publishing."],
@@ -178,6 +212,7 @@ if (failures.length > 0) {
 } else {
   console.log("PANTAVION FOUNDRY GATE: PASSED");
   console.log("- internal multi-specialist Foundry topology is present");
+  console.log("- durable dependency gating runs before the existing atomic execution claim");
   console.log("- recovery work is bounded into deterministic internal partitions");
   console.log("- no third-party workers, merge, deploy, secrets, private-data export, or unbounded shell are authorized");
   console.log("- durable claim and evidence requirements are present");
