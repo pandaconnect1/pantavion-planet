@@ -1,6 +1,5 @@
 import assert from "node:assert/strict";
 
-import { createExecutionRecord } from "../core/runtime/durable-execution.ts";
 import {
   PantavionMemoryFencedExecutionStore,
   PantavionStaleExecutionFenceError,
@@ -11,11 +10,17 @@ const T0_MS = Date.parse(T0);
 const at = (offsetMs) => new Date(T0_MS + offsetMs).toISOString();
 
 function createRecord(id, key, maxAttempts = 3) {
-  const record = createExecutionRecord(id, key, "kernel:test", { marker: id }, maxAttempts);
   return {
-    ...record,
+    executionId: id,
+    idempotencyKey: key,
+    taskName: "kernel:test",
+    status: "queued",
     createdAt: T0,
     updatedAt: T0,
+    attempt: 0,
+    maxAttempts,
+    input: { marker: id },
+    checkpoints: [],
   };
 }
 
