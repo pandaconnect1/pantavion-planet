@@ -6,7 +6,14 @@ import {
 } from "@/core/translation/pantavion-universal-translation-runtime";
 import {
   buildPantavionGatewayModelPlan,
+  type PantavionGatewayLanePlan,
 } from "@/core/translation/pantavion-gateway-resilience";
+import {
+  getPantavionGatewayRateLimitCircuit,
+  isPantavionGatewayRateLimitFailure,
+  markPantavionGatewayRateLimited,
+  type PantavionGatewayFailure,
+} from "@/core/translation/pantavion-gateway-rate-limit";
 import {
   getPantavionTranslationProviderStatus,
   translateWithPantavionProvider,
@@ -21,17 +28,17 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
 
-const GATEWAY_HEDGE_DELAY_MS = 2_000;
-const GATEWAY_TOTAL_TIMEOUT_MS = 35_000;
+const GATEWAY_HEDGE_DELAY_MS = 4_500;
+const GATEWAY_TOTAL_TIMEOUT_MS = 36_000;
+const GATEWAY_LANE_RETRIES = 1;
 
-type GatewayAttempt = {
-  lane: "primary" | "hedge";
+type GatewayFailureCause = PantavionGatewayFailure;
+
+type GatewayAttempt = GatewayFailureCause & {
+  lane: PantavionGatewayLanePlan["id"];
   model: string;
   ok: boolean;
   durationMs?: number;
-  errorClass?: string;
-  errorCode?: string;
-  httpStatus?: number;
 };
 
 function asString(value: unknown, fallback = "") {
@@ -53,7 +60,7 @@ function responseForResult(result: Awaited<ReturnType<typeof translateWithPantav
   });
 }
 
-function safeGatewayFailure(error: unknown): Omit<GatewayAttempt, "lane" | "model" | "ok"> {
+function safeFailureCause(error: unknown): GatewayFailureCause {
   if (!error || typeof error !== "object") {
     return { errorClass: "unknown_gateway_error" };
   }
@@ -76,6 +83,38 @@ function safeGatewayFailure(error: unknown): Omit<GatewayAttempt, "lane" | "mode
     errorCode: typeof codeValue === "string" && codeValue ? codeValue.slice(0, 80) : undefined,
     httpStatus: Number.isFinite(parsedStatus) ? parsedStatus : undefined,
   };
+}
+
+function safeGatewayFailure(error: unknown): GatewayFailureCause {
+  const primary = safeFailureCause(error);
+  if (!error || typeof error !== "object") return primary;
+
+  const errors = (error as { errors?: unknown }).errors;
+  if (!Array.isArray(errors)) return primary;
+
+  const causes = errors.slice(0, 6).map((item) => safeFailureCause(item));
+  return causes.length > 0 ? { ...primary, causes } : primary;
+}
+
+function gatewayModelPlan() {
+  return buildPantavionGatewayModelPlan([
+    process.env.PANTAVION_TRANSLATION_GATEWAY_MODEL,
+    process.env.PANTAVION_TRANSLATION_MODEL,
+    process.env.PANTAVION_TRANSLATION_FALLBACK_MODEL,
+    process.env.PANTAVION_TRANSLATION_SECONDARY_MODEL,
+  ]);
+}
+
+function resolvedGatewayModel(providerMetadata: unknown, fallback: string) {
+  if (!providerMetadata || typeof providerMetadata !== "object") return fallback;
+  const gateway = (providerMetadata as Record<string, unknown>).gateway;
+  if (!gateway || typeof gateway !== "object") return fallback;
+  const routing = (gateway as Record<string, unknown>).routing;
+  if (!routing || typeof routing !== "object") return fallback;
+
+  const routingRecord = routing as Record<string, unknown>;
+  const candidate = routingRecord.modelId ?? routingRecord.model ?? routingRecord.canonicalSlug;
+  return typeof candidate === "string" && candidate.trim() ? candidate : fallback;
 }
 
 async function translateThroughConfiguredProvider(input: {
@@ -120,96 +159,111 @@ function strictTranslationPrompt(request: PantavionTranslationRequest) {
   ].join("\n");
 }
 
-function gatewayModelPlan() {
-  return buildPantavionGatewayModelPlan(
-    [
-      process.env.PANTAVION_TRANSLATION_GATEWAY_MODEL,
-      process.env.PANTAVION_TRANSLATION_MODEL,
-      process.env.PANTAVION_TRANSLATION_FALLBACK_MODEL,
-      process.env.PANTAVION_TRANSLATION_SECONDARY_MODEL,
-    ],
-    process.env.PANTAVION_TRANSLATION_GATEWAY_MODELS,
-  );
-}
+function combinedAbortSignal(signals: AbortSignal[]) {
+  const controller = new AbortController();
+  const abort = () => {
+    if (!controller.signal.aborted) controller.abort();
+  };
 
-function providerNamespace(model: string) {
-  const slash = model.indexOf("/");
-  return slash > 0 ? model.slice(0, slash).toLowerCase() : "unknown";
-}
+  for (const signal of signals) {
+    if (signal.aborted) {
+      abort();
+      break;
+    }
+    signal.addEventListener("abort", abort, { once: true });
+  }
 
-function chooseHedgeModel(models: string[], primaryModel: string) {
-  const primaryProvider = providerNamespace(primaryModel);
-  return (
-    models.find(
-      (model) => model !== primaryModel && providerNamespace(model) !== primaryProvider,
-    ) || models.find((model) => model !== primaryModel)
-  );
+  return controller.signal;
 }
 
 async function delayWithAbort(delayMs: number, signal: AbortSignal) {
   if (delayMs <= 0) return;
+  if (signal.aborted) throw new DOMException("Aborted", "AbortError");
+
   await new Promise<void>((resolve, reject) => {
-    const timer = setTimeout(resolve, delayMs);
+    const timer = setTimeout(() => {
+      signal.removeEventListener("abort", onAbort);
+      resolve();
+    }, delayMs);
+
     const onAbort = () => {
       clearTimeout(timer);
+      signal.removeEventListener("abort", onAbort);
       reject(new DOMException("Aborted", "AbortError"));
     };
-    if (signal.aborted) return onAbort();
+
     signal.addEventListener("abort", onAbort, { once: true });
   });
 }
 
 async function runGatewayLane(input: {
-  lane: "primary" | "hedge";
-  model: string;
-  fallbackModels: string[];
-  delayMs: number;
   request: PantavionTranslationRequest;
-  signal: AbortSignal;
+  lane: PantavionGatewayLanePlan;
+  delayMs: number;
+  globalSignal: AbortSignal;
+  laneController: AbortController;
   attempts: GatewayAttempt[];
+  onGatewayRateLimit: (lane: PantavionGatewayLanePlan["id"], failure: GatewayFailureCause) => void;
 }) {
-  await delayWithAbort(input.delayMs, input.signal);
-  const startedAt = Date.now();
+  const signal = combinedAbortSignal([input.globalSignal, input.laneController.signal]);
+  await delayWithAbort(input.delayMs, signal);
 
+  const startedAt = Date.now();
   try {
     const result = await generateText({
-      model: input.model,
+      model: input.lane.primaryModel,
       prompt: strictTranslationPrompt(input.request),
       temperature: 0,
-      maxRetries: 2,
-      abortSignal: input.signal,
+      maxRetries: GATEWAY_LANE_RETRIES,
+      abortSignal: signal,
       providerOptions: {
         gateway: {
-          models: input.fallbackModels,
-          tags: ["feature:translation", "runtime:pantavion", `lane:${input.lane}`],
+          models: input.lane.fallbackModels,
+          tags: [
+            "feature:translation",
+            "env:production",
+            "runtime:pantavion",
+            `lane:${input.lane.id}`,
+          ],
         },
       },
     });
 
     const translatedText = String(result.text || "").trim();
-    if (!translatedText) throw new Error("empty_translation");
+    const servedModel = resolvedGatewayModel(result.providerMetadata, input.lane.primaryModel);
+    const durationMs = Date.now() - startedAt;
+
+    if (!translatedText) {
+      const emptyError = new Error("empty_translation");
+      emptyError.name = "empty_translation";
+      throw emptyError;
+    }
 
     input.attempts.push({
-      lane: input.lane,
-      model: input.model,
+      lane: input.lane.id,
+      model: servedModel,
       ok: true,
-      durationMs: Date.now() - startedAt,
+      durationMs,
     });
 
     return {
       translatedText,
-      model: input.model,
-      lane: input.lane,
+      servedModel,
+      lane: input.lane.id,
     };
   } catch (error) {
-    if (!input.signal.aborted) {
+    if (!input.laneController.signal.aborted) {
+      const failure = safeGatewayFailure(error);
       input.attempts.push({
-        lane: input.lane,
-        model: input.model,
+        lane: input.lane.id,
+        model: `${input.lane.primaryModel} + ${input.lane.fallbackModels.join(" + ")}`,
         ok: false,
         durationMs: Date.now() - startedAt,
-        ...safeGatewayFailure(error),
+        ...failure,
       });
+      if (isPantavionGatewayRateLimitFailure(failure)) {
+        input.onGatewayRateLimit(input.lane.id, failure);
+      }
     }
     throw error;
   }
@@ -217,44 +271,62 @@ async function runGatewayLane(input: {
 
 async function translateWithGateway(request: PantavionTranslationRequest) {
   if (!(await pantavionGatewayRuntimeAvailable())) {
-    return { result: null, attempts: [] as GatewayAttempt[], runtimeAvailable: false };
+    return {
+      result: null,
+      attempts: [] as GatewayAttempt[],
+      runtimeAvailable: false,
+      rateLimitCircuit: getPantavionGatewayRateLimitCircuit(),
+    };
   }
 
-  const plan = gatewayModelPlan();
-  const attempts: GatewayAttempt[] = [];
-  const primaryModel = plan.primaryModel;
-  const hedgeModel = chooseHedgeModel(plan.orderedModels, primaryModel);
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), GATEWAY_TOTAL_TIMEOUT_MS);
+  const existingCircuit = getPantavionGatewayRateLimitCircuit();
+  if (existingCircuit.open) {
+    return {
+      result: null,
+      attempts: [] as GatewayAttempt[],
+      runtimeAvailable: true,
+      rateLimitCircuit: existingCircuit,
+    };
+  }
 
-  const lanes = [
-    runGatewayLane({
-      lane: "primary",
-      model: primaryModel,
-      fallbackModels: plan.orderedModels.filter((model) => model !== primaryModel),
-      delayMs: 0,
-      request,
-      signal: controller.signal,
+  const modelPlan = gatewayModelPlan();
+  const attempts: GatewayAttempt[] = [];
+  if (modelPlan.lanes.length === 0) {
+    return {
+      result: null,
       attempts,
-    }),
-    ...(hedgeModel
-      ? [
-          runGatewayLane({
-            lane: "hedge" as const,
-            model: hedgeModel,
-            fallbackModels: plan.orderedModels.filter((model) => model !== hedgeModel),
-            delayMs: GATEWAY_HEDGE_DELAY_MS,
-            request,
-            signal: controller.signal,
-            attempts,
-          }),
-        ]
-      : []),
-  ];
+      runtimeAvailable: true,
+      rateLimitCircuit: getPantavionGatewayRateLimitCircuit(),
+    };
+  }
+
+  const globalSignal = AbortSignal.timeout(GATEWAY_TOTAL_TIMEOUT_MS);
+  const laneControllers = modelPlan.lanes.map(() => new AbortController());
+
+  const onGatewayRateLimit = (lane: PantavionGatewayLanePlan["id"]) => {
+    markPantavionGatewayRateLimited();
+    if (lane === "primary" && laneControllers[1]) {
+      laneControllers[1].abort();
+    }
+  };
 
   try {
-    const winner = await Promise.any(lanes);
-    controller.abort();
+    const winner = await Promise.any(
+      modelPlan.lanes.map((lane, index) =>
+        runGatewayLane({
+          request,
+          lane,
+          delayMs: index === 0 ? 0 : GATEWAY_HEDGE_DELAY_MS,
+          globalSignal,
+          laneController: laneControllers[index],
+          attempts,
+          onGatewayRateLimit,
+        }),
+      ),
+    );
+
+    laneControllers.forEach((controller) => controller.abort());
+
     return {
       result: {
         ok: true as const,
@@ -263,25 +335,30 @@ async function translateWithGateway(request: PantavionTranslationRequest) {
         input: request,
         translatedText: winner.translatedText,
         provider: "vercel_ai_gateway",
-        model: winner.model,
+        model: winner.servedModel,
         executionLane: winner.lane,
         generatedAt: new Date().toISOString(),
       },
       attempts,
       runtimeAvailable: true,
+      rateLimitCircuit: getPantavionGatewayRateLimitCircuit(),
     };
   } catch {
-    return { result: null, attempts, runtimeAvailable: true };
-  } finally {
-    clearTimeout(timeout);
-    controller.abort();
+    laneControllers.forEach((controller) => controller.abort());
+    return {
+      result: null,
+      attempts,
+      runtimeAvailable: true,
+      rateLimitCircuit: getPantavionGatewayRateLimitCircuit(),
+    };
   }
 }
 
 export async function GET() {
   const languageRuntime = await getPantavionLanguageRuntimeSnapshot();
   const providerStatus = getPantavionTranslationProviderStatus();
-  const plan = gatewayModelPlan();
+  const modelPlan = gatewayModelPlan();
+
   return NextResponse.json({
     ok: languageRuntime.capabilities.some(
       (capability) => capability.capability === "text_translation" && capability.available,
@@ -290,10 +367,12 @@ export async function GET() {
     gatewayPreferred: languageRuntime.gatewayRuntimeAvailable,
     gatewayFailover: {
       nativeModelFallback: true,
-      modelCount: plan.orderedModels.length,
-      hedged: plan.orderedModels.length > 1,
+      modelCount: modelPlan.orderedModels.length,
+      hedgedLanes: modelPlan.lanes.length,
       hedgeDelayMs: GATEWAY_HEDGE_DELAY_MS,
+      perLaneRetries: GATEWAY_LANE_RETRIES,
       totalTimeoutMs: GATEWAY_TOTAL_TIMEOUT_MS,
+      rateLimitCircuit: getPantavionGatewayRateLimitCircuit(),
     },
     strictLanguageRouting: true,
     publicTextFallback: languageRuntime.publicFallbackAllowed,
@@ -376,6 +455,7 @@ export async function POST(request: Request) {
     targetLanguage,
     gatewayRuntimeAvailable: gateway.runtimeAvailable,
     gatewayAttempts: gateway.attempts,
+    gatewayRateLimitCircuit: gateway.rateLimitCircuit,
     configuredProvider: providerStatus.provider,
     configuredProviderEndpoint: providerStatus.endpointConfigured,
     configuredProviderApiKey: providerStatus.apiKeyConfigured,
@@ -389,15 +469,19 @@ export async function POST(request: Request) {
   return NextResponse.json(
     {
       ok: false,
-      status: "provider_unavailable",
+      status: gateway.rateLimitCircuit.open ? "gateway_rate_limited" : "provider_unavailable",
       translatedText: "",
       sourceLanguage,
       targetLanguage,
       providerRequired: true,
-      message: "The live translation provider is temporarily unavailable. Please retry.",
+      retryAfterMs: gateway.rateLimitCircuit.remainingMs || undefined,
+      message: gateway.rateLimitCircuit.open
+        ? "The private translation gateway is temporarily rate limited. Please retry after the cooldown."
+        : "The live translation provider is temporarily unavailable. Please retry.",
       diagnostic: {
         gatewayRuntimeAvailable: gateway.runtimeAvailable,
         gatewayAttempts: gateway.attempts,
+        gatewayRateLimitCircuit: gateway.rateLimitCircuit,
         configuredProvider: providerStatus.provider,
         configuredProviderAllowed,
         publicFallbackAllowed,

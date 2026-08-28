@@ -1,0 +1,18 @@
+revoke all on table public.profiles, public.user_privacy_settings, public.consent_records, public.contact_sources, public.contacts, public.relationships, public.user_blocks, public.conversations, public.conversation_members, public.messages, public.message_receipts, public.personal_media, public.social_posts, public.social_reactions, public.social_comments, public.social_location_shares from anon;
+revoke execute on function public.pantavion_is_conversation_member(uuid,uuid) from public, anon;
+revoke execute on function public.pantavion_has_block_between(uuid,uuid) from public, anon;
+revoke execute on function public.pantavion_are_connections(uuid,uuid) from public, anon;
+revoke execute on function public.pantavion_is_conversation_member(uuid,uuid) from authenticated;
+revoke execute on function public.pantavion_has_block_between(uuid,uuid) from authenticated;
+revoke execute on function public.pantavion_are_connections(uuid,uuid) from authenticated;
+drop policy if exists message_receipts_read on public.message_receipts;
+drop policy if exists message_receipts_insert on public.message_receipts;
+create policy message_receipts_read on public.message_receipts for select to authenticated using (user_id = auth.uid() or public.pantavion_is_conversation_member((select m.conversation_id from public.messages m where m.id = message_id), auth.uid()));
+create policy message_receipts_insert on public.message_receipts for insert to authenticated with check (user_id = auth.uid() and public.pantavion_is_conversation_member((select m.conversation_id from public.messages m where m.id = message_id), auth.uid()));
+create index if not exists contacts_owner_idx on public.contacts(owner_id);
+create index if not exists relationships_requester_idx on public.relationships(requester_id,status);
+create index if not exists relationships_addressee_idx on public.relationships(addressee_id,status);
+create index if not exists conversation_members_user_idx on public.conversation_members(user_id,conversation_id) where left_at is null;
+create index if not exists messages_conversation_created_idx on public.messages(conversation_id,created_at desc);
+create index if not exists social_posts_author_created_idx on public.social_posts(author_id,created_at desc) where deleted_at is null;
+create index if not exists social_comments_post_created_idx on public.social_comments(post_id,created_at) where deleted_at is null;

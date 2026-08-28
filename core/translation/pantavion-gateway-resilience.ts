@@ -1,14 +1,18 @@
-export interface PantavionGatewayModelPlan {
-  orderedModels: string[];
+export interface PantavionGatewayLanePlan {
+  id: "primary" | "hedge";
   primaryModel: string;
   fallbackModels: string[];
 }
 
+export interface PantavionGatewayModelPlan {
+  orderedModels: string[];
+  lanes: PantavionGatewayLanePlan[];
+}
+
 export const PANTAVION_GATEWAY_DEFAULT_MODELS = [
-  "openai/gpt-4.1-mini",
+  "openai/gpt-5.6-sol",
   "google/gemini-3.6-flash",
   "anthropic/claude-sonnet-5",
-  "openai/gpt-5.6-sol",
 ] as const;
 
 export function canonicalPantavionGatewayModelId(value: string) {
@@ -20,33 +24,53 @@ export function canonicalPantavionGatewayModelId(value: string) {
   return model;
 }
 
-function splitConfiguredList(value: string | null | undefined) {
-  return String(value || "")
-    .split(",")
-    .map((item) => canonicalPantavionGatewayModelId(item))
-    .filter(Boolean);
+function providerNamespace(model: string) {
+  const separator = model.indexOf("/");
+  return separator > 0 ? model.slice(0, separator).toLowerCase() : "unknown";
 }
 
 export function buildPantavionGatewayModelPlan(
   configuredModels: Array<string | null | undefined>,
-  configuredList?: string | null,
 ): PantavionGatewayModelPlan {
   const configured = configuredModels
     .map((value) => canonicalPantavionGatewayModelId(value || ""))
-    .filter(Boolean);
+    .filter((value): value is string => Boolean(value));
 
   const orderedModels = Array.from(
     new Set<string>([
       ...configured,
-      ...splitConfiguredList(configuredList),
       ...PANTAVION_GATEWAY_DEFAULT_MODELS,
     ]),
   );
 
-  const primaryModel = orderedModels[0] || "openai/gpt-4.1-mini";
-  return {
-    orderedModels,
+  if (orderedModels.length === 0) {
+    return { orderedModels: [], lanes: [] };
+  }
+
+  const primaryModel = orderedModels[0];
+  const primaryProvider = providerNamespace(primaryModel);
+  const primaryLane: PantavionGatewayLanePlan = {
+    id: "primary",
     primaryModel,
     fallbackModels: orderedModels.filter((model) => model !== primaryModel),
+  };
+
+  const hedgePrimary =
+    orderedModels.slice(1).find((model) => providerNamespace(model) !== primaryProvider)
+    ?? orderedModels[1];
+
+  if (!hedgePrimary) {
+    return { orderedModels, lanes: [primaryLane] };
+  }
+
+  const hedgeLane: PantavionGatewayLanePlan = {
+    id: "hedge",
+    primaryModel: hedgePrimary,
+    fallbackModels: orderedModels.filter((model) => model !== hedgePrimary),
+  };
+
+  return {
+    orderedModels,
+    lanes: [primaryLane, hedgeLane],
   };
 }

@@ -31,7 +31,7 @@ expect('supabase/migrations/20260824184042_create_personal_ai_runtime_v1.sql', [
   'revoke all on table public.personal_ai_profiles from anon',
 ]);
 
-expect('supabase/migrations/20260824185510_harden_personal_ai_runtime_v1.sql', [
+expect('supabase/migrations/20260824185447_harden_personal_ai_runtime_v1.sql', [
   'personal_ai_threads_parent_owner_fk',
   'foreign key (parent_thread_id, user_id)',
   "truth_state in ('KNOWN','INFERRED')",

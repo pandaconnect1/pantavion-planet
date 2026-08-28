@@ -4,7 +4,7 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 const socialClient = fs.readFileSync(path.join(root, "app/social/social-home-client.tsx"), "utf8");
 const migration = fs.readFileSync(
-  path.join(root, "supabase/migrations/20260825190000_harden_social_block_visibility_and_media_posts.sql"),
+  path.join(root, "supabase/migrations/20260825162513_harden_social_block_visibility_and_media_posts.sql"),
   "utf8",
 );
 

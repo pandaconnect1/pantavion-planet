@@ -4,6 +4,10 @@ import {
   type PantavionTranslationRequest,
   type PantavionTranslationResult,
 } from "./pantavion-translation-provider-router";
+import {
+  getPantavionDirectOpenAITranslationStatus,
+  translateWithPantavionDirectOpenAI,
+} from "./pantavion-direct-openai-translation";
 
 type ProviderName =
   | "generic"
@@ -11,6 +15,7 @@ type ProviderName =
   | "deepl"
   | "azure"
   | "google"
+  | "openai"
   | "mymemory";
 
 function providerName(): ProviderName {
@@ -21,16 +26,16 @@ function providerName(): ProviderName {
     raw === "deepl" ||
     raw === "azure" ||
     raw === "google" ||
+    raw === "openai" ||
     raw === "mymemory" ||
     raw === "generic"
   ) {
     return raw;
   }
 
-  // Production-safe bootstrap for real text translation without pretending that
-  // every language/mode is covered. A configured Pantavion endpoint still wins;
-  // otherwise use the public MyMemory text service for supported known pairs.
-  return process.env.PANTAVION_TRANSLATE_ENDPOINT ? "generic" : "mymemory";
+  if (process.env.PANTAVION_TRANSLATE_ENDPOINT) return "generic";
+  if (getPantavionDirectOpenAITranslationStatus().configured) return "openai";
+  return "mymemory";
 }
 
 function endpointFor(provider: ProviderName) {
@@ -53,8 +58,26 @@ function endpointFor(provider: ProviderName) {
     );
   }
 
+  if (provider === "openai") {
+    return "https://api.openai.com/v1/responses";
+  }
+
   if (provider === "mymemory") {
     return "https://api.mymemory.translated.net/get";
+  }
+
+  return "";
+}
+
+function apiKeyFor(provider: ProviderName) {
+  const explicitPantavionOverride = process.env.PANTAVION_TRANSLATE_API_KEY || "";
+  if (explicitPantavionOverride) return explicitPantavionOverride;
+
+  if (provider === "deepl") return process.env.DEEPL_API_KEY || "";
+  if (provider === "google") return process.env.GOOGLE_TRANSLATE_API_KEY || "";
+  if (provider === "azure") return process.env.AZURE_TRANSLATOR_KEY || "";
+  if (provider === "openai") {
+    return process.env.PANTAVION_OPENAI_API_KEY || process.env.OPENAI_API_KEY || "";
   }
 
   return "";
@@ -63,12 +86,7 @@ function endpointFor(provider: ProviderName) {
 function envStatus() {
   const provider = providerName();
   const endpoint = endpointFor(provider);
-  const apiKey =
-    process.env.PANTAVION_TRANSLATE_API_KEY ||
-    process.env.DEEPL_API_KEY ||
-    process.env.GOOGLE_TRANSLATE_API_KEY ||
-    process.env.AZURE_TRANSLATOR_KEY ||
-    "";
+  const apiKey = apiKeyFor(provider);
 
   return {
     provider,
@@ -258,6 +276,36 @@ async function callAzure(
   return providerOk(request, "azure", endpoint, translatedText);
 }
 
+async function callOpenAI(
+  request: PantavionTranslationRequest,
+): Promise<PantavionTranslationResult> {
+  const normalized = normalizeTranslationRequest(request);
+  const direct = await translateWithPantavionDirectOpenAI({
+    text: normalized.inputText,
+    sourceLanguage: normalized.sourceLanguage,
+    targetLanguage: normalized.targetLanguage,
+  });
+
+  if (direct.translatedText) {
+    return providerOk(
+      request,
+      "openai",
+      "direct-openai-responses",
+      direct.translatedText,
+    );
+  }
+
+  if (!direct.diagnostic.configured) {
+    return createProviderPendingTranslationResult(request);
+  }
+
+  return providerError(request, "openai", "direct-openai-responses", {
+    message: direct.diagnostic.httpStatus
+      ? `Direct private AI provider returned HTTP ${direct.diagnostic.httpStatus}.`
+      : "Direct private AI provider did not return translated text.",
+  });
+}
+
 async function callMyMemory(
   request: PantavionTranslationRequest,
   endpoint: string
@@ -381,16 +429,34 @@ export function getPantavionTranslationProviderStatus() {
   const status = envStatus();
 
   return {
-    ok: Boolean(status.endpoint || status.provider === "google" || status.provider === "deepl" || status.provider === "azure" || status.provider === "mymemory"),
+    ok: Boolean(
+      status.endpoint ||
+      status.provider === "google" ||
+      status.provider === "deepl" ||
+      status.provider === "azure" ||
+      status.provider === "openai" ||
+      status.provider === "mymemory"
+    ),
     provider: status.provider,
     endpointConfigured: Boolean(status.endpoint),
     apiKeyConfigured: status.hasApiKey,
     azureRegionConfigured: Boolean(status.azureRegion),
-    supportedProviders: ["generic", "libretranslate", "deepl", "azure", "google", "mymemory"],
+    supportedProviders: [
+      "generic",
+      "libretranslate",
+      "deepl",
+      "azure",
+      "google",
+      "openai",
+      "mymemory",
+    ],
     requiredEnv: [
       "PANTAVION_TRANSLATE_PROVIDER",
       "PANTAVION_TRANSLATE_ENDPOINT",
       "PANTAVION_TRANSLATE_API_KEY",
+      "PANTAVION_OPENAI_API_KEY",
+      "OPENAI_API_KEY",
+      "PANTAVION_TRANSLATION_DIRECT_OPENAI_MODEL",
       "DEEPL_API_KEY",
       "GOOGLE_TRANSLATE_API_KEY",
       "AZURE_TRANSLATOR_KEY",
@@ -410,16 +476,12 @@ export async function translateWithPantavionProvider(
 
   const provider = providerName();
   const endpoint = endpointFor(provider);
-  const apiKey =
-    process.env.PANTAVION_TRANSLATE_API_KEY ||
-    process.env.DEEPL_API_KEY ||
-    process.env.GOOGLE_TRANSLATE_API_KEY ||
-    process.env.AZURE_TRANSLATOR_KEY ||
-    "";
+  const apiKey = apiKeyFor(provider);
 
   if (provider === "deepl") return callDeepL(request, endpoint, apiKey);
   if (provider === "google") return callGoogle(request, endpoint, apiKey);
   if (provider === "azure") return callAzure(request, endpoint, apiKey);
+  if (provider === "openai") return callOpenAI(request);
   if (provider === "libretranslate") return callLibreTranslate(request, endpoint, apiKey);
   if (provider === "mymemory") return callMyMemory(request, endpoint);
 

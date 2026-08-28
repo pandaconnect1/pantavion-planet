@@ -3,17 +3,23 @@ const path = require("node:path");
 
 const root = path.resolve(__dirname, "..");
 const workerPath = path.join(root, "services", "translation-agent.ts");
-const migrationPath = path.join(
+const durableMigrationPath = path.join(
   root,
   "supabase",
   "migrations",
-  "20260811002000_create_durable_execution_runtime.sql",
+  "20260822194957_create_durable_execution_runtime.sql",
 );
-const messageMigrationPath = path.join(
+const messageCoreMigrationPath = path.join(
   root,
   "supabase",
   "migrations",
-  "20260810200000_create_human_communication_core.sql",
+  "20260812205420_human_communication_core.sql",
+);
+const messageIdempotencyMigrationPath = path.join(
+  root,
+  "supabase",
+  "migrations",
+  "20260827203215_enforce_message_translation_idempotency.sql",
 );
 
 function read(file) {
@@ -30,8 +36,9 @@ function rejectPattern(source, pattern, label) {
 }
 
 const worker = read(workerPath);
-const durableMigration = read(migrationPath);
-const messageMigration = read(messageMigrationPath);
+const durableMigration = read(durableMigrationPath);
+const messageCoreMigration = read(messageCoreMigrationPath);
+const messageIdempotencyMigration = read(messageIdempotencyMigrationPath);
 
 requirePattern(
   durableMigration,
@@ -42,6 +49,11 @@ requirePattern(
   durableMigration,
   /update public\.durable_executions[\s\S]*status = 'running'[\s\S]*attempt = attempt \+ 1[\s\S]*status = any\(p_expected_statuses\)/,
   "atomic_claim_contract_changed",
+);
+requirePattern(
+  durableMigration,
+  /revoke all on function public\.pantavion_claim_durable_execution\(text, text\[\]\) from public, anon, authenticated/,
+  "atomic_claim_rpc_exposure_regressed",
 );
 requirePattern(
   worker,
@@ -62,18 +74,25 @@ rejectPattern(worker, /status:\s*"pending"|status:\s*"done"/, "legacy_execution_
 requirePattern(worker, /if \(!res\.ok\)/, "http_failure_guard_missing");
 requirePattern(worker, /if \(!body \|\| body\.ok === false\)/, "provider_failure_guard_missing");
 requirePattern(worker, /client_message_id:\s*`translation:\$\{executionId\}`/, "translation_idempotency_key_missing");
+requirePattern(worker, /result\.error && result\.error\.code !== "23505"/, "idempotency_race_error_guard_missing");
+requirePattern(worker, /result\.error\?\.code === "23505"/, "idempotency_race_recovery_missing");
 requirePattern(worker, /message_type:\s*"system"/, "schema_valid_translation_message_type_missing");
 rejectPattern(worker, /message_type:\s*"translation"/, "invalid_translation_message_type_reintroduced");
 requirePattern(worker, /translation_system_sender_id_required/, "required_sender_guard_missing");
 requirePattern(worker, /refusing unsupported control task/, "unsupported_control_task_guard_missing");
 rejectPattern(worker, /no-op control handler placeholder/, "false_control_completion_reintroduced");
 requirePattern(
-  messageMigration,
-  /client_message_id text[\s\S]*unique index if not exists messages_sender_client_id_unique_idx/,
+  messageCoreMigration,
+  /client_message_id text/,
+  "message_client_id_schema_missing",
+);
+requirePattern(
+  messageIdempotencyMigration,
+  /create unique index if not exists messages_sender_client_id_unique_idx[\s\S]*on public\.messages\(sender_id, client_message_id\)[\s\S]*where client_message_id is not null/,
   "message_idempotency_schema_missing",
 );
 requirePattern(
-  messageMigration,
+  messageCoreMigration,
   /message_type text not null default 'text'[\s\S]*'system'/,
   "system_message_type_not_allowed",
 );

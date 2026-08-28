@@ -1,0 +1,1 @@
+grant select on public.public_listings to anon;
