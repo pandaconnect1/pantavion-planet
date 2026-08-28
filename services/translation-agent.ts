@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseDurableExecutionStore } from "@/core/runtime/supabase-durable-execution-store";
 import type { PantavionDurableExecutionRecord } from "@/core/runtime/durable-execution";
 import {
@@ -88,39 +87,22 @@ export async function startTranslationAgent() {
     await durable.finishFencedFailure(fence, errorMessage(error));
   }
 
-  async function findExistingTranslation(payload: TranslationTaskInput, executionId: string) {
-    const admin = createAdminClient();
-    const result = await admin
-      .from("messages")
-      .select("id,body,metadata")
-      .eq("sender_id", payload.systemSenderId!)
-      .eq("client_message_id", `translation:${executionId}`)
-      .maybeSingle();
-    if (result.error) throw result.error;
-    return result.data;
-  }
-
   async function persistTranslation(
     payload: TranslationTaskInput,
     executionId: string,
+    fence: PantavionExecutionFence,
     body: TranslationResponse,
   ) {
     const translatedText = typeof body.translatedText === "string" ? body.translatedText.trim() : "";
     if (!translatedText) throw new Error("translation_provider_returned_empty_text");
 
-    const existing = await findExistingTranslation(payload, executionId);
-    if (existing) return existing;
-
-    const admin = createAdminClient();
-    const result = await admin.from("messages").insert({
-      conversation_id: payload.conversationId,
-      sender_id: payload.systemSenderId,
-      client_message_id: `translation:${executionId}`,
+    return durable.persistTranslationFenced(fence, {
+      conversationId: payload.conversationId!,
+      senderId: payload.systemSenderId!,
+      clientMessageId: `translation:${executionId}`,
       body: translatedText,
-      original_language: payload.sourceLanguage || null,
-      message_type: "system",
+      originalLanguage: payload.sourceLanguage || null,
       metadata: {
-        kind: "translation",
         source_message_id: payload.messageId || null,
         target_language: payload.targetLanguage || "en",
         provenance: {
@@ -130,29 +112,13 @@ export async function startTranslationAgent() {
         },
       },
     });
-
-    if (result.error && result.error.code !== "23505") throw result.error;
-    if (result.error?.code === "23505") {
-      const raced = await findExistingTranslation(payload, executionId);
-      if (raced) return raced;
-      throw result.error;
-    }
-
-    return { clientMessageId: `translation:${executionId}`, translatedText };
   }
 
   async function handleProcessMessage(exec: PantavionDurableExecutionRecord, fence: PantavionExecutionFence) {
     const payload = requirePayload(exec.input);
 
     try {
-      const existing = await findExistingTranslation(payload, exec.executionId);
-      if (existing) {
-        await finishSuccess(fence, { ok: true, deduplicated: true, message: existing });
-        return;
-      }
-
-      // Renew immediately before the potentially slow provider call. If the provider call
-      // outlives the bounded lease, the second heartbeat below fails closed before persistence.
+      // Renew immediately before the potentially slow provider call.
       await durable.heartbeatFenced(fence, leaseMs);
 
       const res = await fetch(`${INTERNAL_BASE}/api/pantavion/translate`, {
@@ -174,9 +140,11 @@ export async function startTranslationAgent() {
         throw new Error(`translation_provider_failed:${body?.status || "unknown"}`);
       }
 
-      // A stale worker must never persist a translation after another worker reclaimed the lease.
+      // The RPC below re-checks owner + fencing token + lease expiry and performs the
+      // message dedupe/insert in the same PostgreSQL transaction. A heartbeat alone is
+      // not accepted as proof for this user-visible side effect.
       await durable.heartbeatFenced(fence, leaseMs);
-      const message = await persistTranslation(payload, exec.executionId, body);
+      const message = await persistTranslation(payload, exec.executionId, fence, body);
       await finishSuccess(fence, { providerResult: body, message });
     } catch (error) {
       if (error instanceof PantavionStaleExecutionFenceError) {
