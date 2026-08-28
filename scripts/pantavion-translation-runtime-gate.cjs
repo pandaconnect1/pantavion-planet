@@ -5,6 +5,10 @@ const required = [
   ["core/translation/pantavion-universal-translation-runtime.ts", "pantavion_universal_translation_runtime_v1"],
   ["core/translation/pantavion-gateway-resilience.ts", "buildPantavionGatewayModelPlan"],
   ["core/translation/pantavion-gateway-resilience.ts", "providerNamespace"],
+  ["core/translation/pantavion-direct-openai-translation.ts", "translateWithPantavionDirectOpenAI"],
+  ["core/translation/pantavion-direct-openai-translation.ts", "https://api.openai.com/v1/responses"],
+  ["core/translation/pantavion-translation-provider-adapters.ts", "getPantavionDirectOpenAITranslationStatus().configured"],
+  ["core/translation/pantavion-translation-provider-adapters.ts", "provider === \"openai\""],
   ["app/api/pantavion/translate/route.ts", "pantavionGatewayRuntimeAvailable"],
   ["app/api/pantavion/translate/route.ts", "Promise.any"],
   ["app/api/pantavion/translate/route.ts", "models: input.lane.fallbackModels"],
@@ -41,6 +45,7 @@ if (failures.length) {
   console.log("PANTAVION TRANSLATION RUNTIME GATE: PASSED");
   console.log("- AI Gateway hedged dual-lane execution: present");
   console.log("- Provider-diverse lane planning: present");
+  console.log("- Existing direct private AI failover path: present");
   console.log("- Public fallback policy remains runtime-controlled: present");
   console.log("- Provider-neutral configured fallback boundary: present");
 }
