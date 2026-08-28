@@ -106,7 +106,9 @@ function parseAgentRecord(record: PantavionDurableExecutionRecord): ParsedAgentR
   const agentState = agent?.state;
 
   if (
-    root?.marker !== "pantavion_owned_agent_execution_v1" ||
+    !root ||
+    !agent ||
+    root.marker !== "pantavion_owned_agent_execution_v1" ||
     typeof root.parentWorkOrderId !== "string" ||
     !OWNED_AGENT_ROLES.has(role as PantavionFoundryAgentRole) ||
     !workOrderId ||
