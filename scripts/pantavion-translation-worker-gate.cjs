@@ -3,11 +3,18 @@ const path = require("node:path");
 
 const root = path.resolve(__dirname, "..");
 const workerPath = path.join(root, "services", "translation-agent.ts");
+const storePath = path.join(root, "core", "runtime", "supabase-durable-execution-store.ts");
 const durableMigrationPath = path.join(
   root,
   "supabase",
   "migrations",
   "20260822194957_create_durable_execution_runtime.sql",
+);
+const fencingMigrationPath = path.join(
+  root,
+  "supabase",
+  "migrations",
+  "20260828062237_durable_execution_lease_fencing.sql",
 );
 const messageCoreMigrationPath = path.join(
   root,
@@ -36,10 +43,13 @@ function rejectPattern(source, pattern, label) {
 }
 
 const worker = read(workerPath);
+const store = read(storePath);
 const durableMigration = read(durableMigrationPath);
+const fencingMigration = read(fencingMigrationPath);
 const messageCoreMigration = read(messageCoreMigrationPath);
 const messageIdempotencyMigration = read(messageIdempotencyMigrationPath);
 
+// Legacy RPC remains during rollout so schema-first deployment cannot break an older worker revision.
 requirePattern(
   durableMigration,
   /create or replace function public\.pantavion_claim_durable_execution\s*\(/,
@@ -55,16 +65,72 @@ requirePattern(
   /revoke all on function public\.pantavion_claim_durable_execution\(text, text\[\]\) from public, anon, authenticated/,
   "atomic_claim_rpc_exposure_regressed",
 );
+
+// New lease/fencing schema must be durable, reclaimable and inaccessible to browser roles.
+for (const column of ["lease_owner", "lease_token", "lease_expires_at", "lease_heartbeat_at"]) {
+  requirePattern(fencingMigration, new RegExp(`add column if not exists ${column}`), `fencing_column_missing:${column}`);
+}
 requirePattern(
-  worker,
-  /\.rpc\("pantavion_claim_durable_execution"/,
-  "worker_does_not_use_atomic_claim",
+  fencingMigration,
+  /create index if not exists durable_executions_running_lease_expiry_idx[\s\S]*where status = 'running' and lease_expires_at is not null/,
+  "lease_reclaim_index_missing",
+);
+for (const rpc of [
+  "pantavion_claim_durable_execution_fenced",
+  "pantavion_heartbeat_durable_execution_fenced",
+  "pantavion_append_durable_checkpoint_fenced",
+  "pantavion_finish_durable_execution_fenced",
+]) {
+  requirePattern(
+    fencingMigration,
+    new RegExp(`create or replace function public\\.${rpc}\\s*\\(`),
+    `fenced_rpc_missing:${rpc}`,
+  );
+  requirePattern(
+    fencingMigration,
+    new RegExp(`revoke all on function public\\.${rpc}\\(`),
+    `fenced_rpc_browser_revoke_missing:${rpc}`,
+  );
+  requirePattern(
+    fencingMigration,
+    new RegExp(`grant execute on function public\\.${rpc}\\(`),
+    `fenced_rpc_service_role_grant_missing:${rpc}`,
+  );
+}
+requirePattern(
+  fencingMigration,
+  /lease_token = d\.lease_token \+ 1/,
+  "monotonic_fencing_token_missing",
 );
 requirePattern(
-  worker,
-  /if \(claim\.data !== true\) return null;/,
-  "claim_loser_must_not_execute",
+  fencingMigration,
+  /d\.status = 'running'[\s\S]*d\.lease_expires_at is null or d\.lease_expires_at <= v_now/,
+  "expired_running_reclaim_missing",
 );
+requirePattern(
+  fencingMigration,
+  /d\.lease_owner = v_owner[\s\S]*d\.lease_token = p_fencing_token[\s\S]*d\.lease_expires_at > v_now/,
+  "fenced_write_guard_missing",
+);
+
+// Supabase store must expose only owner+token guarded worker mutations.
+requirePattern(store, /async claimFenced\s*\(/, "store_fenced_claim_missing");
+requirePattern(store, /pantavion_claim_durable_execution_fenced/, "store_fenced_claim_rpc_missing");
+requirePattern(store, /pantavion_heartbeat_durable_execution_fenced/, "store_fenced_heartbeat_rpc_missing");
+requirePattern(store, /pantavion_append_durable_checkpoint_fenced/, "store_fenced_checkpoint_rpc_missing");
+requirePattern(store, /pantavion_finish_durable_execution_fenced/, "store_fenced_finish_rpc_missing");
+requirePattern(store, /PantavionStaleExecutionFenceError/, "store_stale_fence_fail_closed_missing");
+
+// The production translation worker must never fall back to the unfenced claim/write path.
+requirePattern(worker, /durable\.claimFenced\s*\(/, "worker_does_not_use_fenced_claim");
+requirePattern(worker, /durable\.checkpointFenced\s*\(/, "worker_fenced_checkpoint_missing");
+requirePattern(worker, /durable\.heartbeatFenced\s*\(/, "worker_lease_heartbeat_missing");
+requirePattern(worker, /durable\.finishFencedSuccess\s*\(/, "worker_fenced_success_missing");
+requirePattern(worker, /durable\.finishFencedFailure\s*\(/, "worker_fenced_failure_missing");
+requirePattern(worker, /PantavionStaleExecutionFenceError/, "worker_stale_fence_guard_missing");
+requirePattern(worker, /translation-agent:\$\{process\.pid\}:\$\{randomUUID\(\)\}/, "worker_identity_not_unique");
+rejectPattern(worker, /\.rpc\("pantavion_claim_durable_execution"/, "worker_legacy_claim_reintroduced");
+rejectPattern(worker, /durable\.put\s*\(/, "worker_unfenced_put_reintroduced");
 requirePattern(
   worker,
   /\["queued", "planned"\]\.includes\(exec\.status\)/,
@@ -81,6 +147,7 @@ rejectPattern(worker, /message_type:\s*"translation"/, "invalid_translation_mess
 requirePattern(worker, /translation_system_sender_id_required/, "required_sender_guard_missing");
 requirePattern(worker, /refusing unsupported control task/, "unsupported_control_task_guard_missing");
 rejectPattern(worker, /no-op control handler placeholder/, "false_control_completion_reintroduced");
+
 requirePattern(
   messageCoreMigration,
   /client_message_id text/,
