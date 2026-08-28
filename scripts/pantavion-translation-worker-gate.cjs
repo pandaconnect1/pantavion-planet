@@ -1,8 +1,9 @@
 const fs = require("node:fs");
-const path = require("node:path");
+const path = require("path");
 
 const root = path.resolve(__dirname, "..");
 const workerPath = path.join(root, "services", "translation-agent.ts");
+const translationRoutePath = path.join(root, "app", "api", "pantavion", "translate", "route.ts");
 const durableMigrationPath = path.join(
   root,
   "supabase",
@@ -36,6 +37,7 @@ function rejectPattern(source, pattern, label) {
 }
 
 const worker = read(workerPath);
+const translationRoute = read(translationRoutePath);
 const durableMigration = read(durableMigrationPath);
 const messageCoreMigration = read(messageCoreMigrationPath);
 const messageIdempotencyMigration = read(messageIdempotencyMigrationPath);
@@ -81,6 +83,58 @@ rejectPattern(worker, /message_type:\s*"translation"/, "invalid_translation_mess
 requirePattern(worker, /translation_system_sender_id_required/, "required_sender_guard_missing");
 requirePattern(worker, /refusing unsupported control task/, "unsupported_control_task_guard_missing");
 rejectPattern(worker, /no-op control handler placeholder/, "false_control_completion_reintroduced");
+
+requirePattern(
+  translationRoute,
+  /const GATEWAY_ROUND_BUDGETS_MS = \[18_000, 12_000\] as const;/,
+  "bounded_gateway_round_budgets_missing",
+);
+requirePattern(
+  translationRoute,
+  /function gatewayModelRounds\(\): GatewayRoundPlan\[\]/,
+  "gateway_model_reroute_plan_missing",
+);
+requirePattern(
+  translationRoute,
+  /const secondPrimary = ordered\[1\] \?\? ordered\[0\]/,
+  "gateway_second_round_primary_not_rotated",
+);
+requirePattern(
+  translationRoute,
+  /function retryableGatewayFailure/,
+  "retryable_gateway_failure_classifier_missing",
+);
+requirePattern(
+  translationRoute,
+  /for \(let roundIndex = 0; roundIndex < rounds\.length; roundIndex \+= 1\)/,
+  "bounded_gateway_retry_loop_missing",
+);
+requirePattern(
+  translationRoute,
+  /maxRetries:\s*0/,
+  "nested_ai_sdk_retry_must_be_disabled_for_bounded_rounds",
+);
+requirePattern(
+  translationRoute,
+  /AbortSignal\.timeout\(input\.roundBudgetMs\)/,
+  "per_round_abort_budget_missing",
+);
+requirePattern(
+  translationRoute,
+  /publicFallbackAllowed = pantavionPublicTranslationFallbackAllowed\(\)/,
+  "public_fallback_policy_guard_missing",
+);
+requirePattern(
+  translationRoute,
+  /boundedGatewayRounds:\s*rounds\.length/,
+  "gateway_round_truth_metadata_missing",
+);
+rejectPattern(
+  translationRoute,
+  /abortSignal:\s*AbortSignal\.timeout\(38_000\)/,
+  "single_round_38s_gateway_regressed",
+);
+
 requirePattern(
   messageCoreMigration,
   /client_message_id text/,

@@ -18,12 +18,20 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
 
+const GATEWAY_ROUND_BUDGETS_MS = [18_000, 12_000] as const;
+
 type GatewayAttempt = {
+  round: number;
   model: string;
   ok: boolean;
   errorClass?: string;
   errorCode?: string;
   httpStatus?: number;
+};
+
+type GatewayRoundPlan = {
+  primaryModel: string;
+  fallbackModels: string[];
 };
 
 function asString(value: unknown, fallback = "") {
@@ -45,7 +53,7 @@ function responseForResult(result: Awaited<ReturnType<typeof translateWithPantav
   });
 }
 
-function safeGatewayFailure(error: unknown): Omit<GatewayAttempt, "model" | "ok"> {
+function safeGatewayFailure(error: unknown): Omit<GatewayAttempt, "round" | "model" | "ok"> {
   if (!error || typeof error !== "object") {
     return { errorClass: "unknown_gateway_error" };
   }
@@ -67,6 +75,11 @@ function safeGatewayFailure(error: unknown): Omit<GatewayAttempt, "model" | "ok"
     errorCode: typeof codeValue === "string" && codeValue ? codeValue.slice(0, 80) : undefined,
     httpStatus: Number.isFinite(parsedStatus) ? parsedStatus : undefined,
   };
+}
+
+function retryableGatewayFailure(failure: ReturnType<typeof safeGatewayFailure>) {
+  if (failure.httpStatus === undefined) return true;
+  return [408, 425, 429, 500, 502, 503, 504].includes(failure.httpStatus);
 }
 
 function gatewayModelPlan() {
@@ -95,6 +108,23 @@ function gatewayModelPlan() {
     primaryModel: ordered[0],
     fallbackModels: ordered.slice(1),
   };
+}
+
+function gatewayModelRounds(): GatewayRoundPlan[] {
+  const first = gatewayModelPlan();
+  const ordered = [first.primaryModel, ...first.fallbackModels];
+  const secondPrimary = ordered[1] ?? ordered[0];
+  const secondFallbacks = ordered.length > 1
+    ? [...ordered.slice(2), ordered[0]]
+    : [];
+
+  return [
+    first,
+    {
+      primaryModel: secondPrimary,
+      fallbackModels: secondFallbacks,
+    },
+  ];
 }
 
 function resolvedGatewayModel(providerMetadata: unknown, fallback: string) {
@@ -151,69 +181,110 @@ function strictTranslationPrompt(request: PantavionTranslationRequest) {
   ].join("\n");
 }
 
-async function translateWithGateway(request: PantavionTranslationRequest) {
-  if (!(await pantavionGatewayRuntimeAvailable())) {
-    return { result: null, attempts: [] as GatewayAttempt[], runtimeAvailable: false };
-  }
-
-  const { primaryModel, fallbackModels } = gatewayModelPlan();
-  const attempts: GatewayAttempt[] = [];
-
+async function runGatewayRound(input: {
+  request: PantavionTranslationRequest;
+  plan: GatewayRoundPlan;
+  round: number;
+  roundBudgetMs: number;
+}) {
   try {
-    // Use AI Gateway's native model failover in one bounded request. This avoids
-    // serial 30-second model attempts that could consume the entire HTTP budget
-    // before a fallback model gets a chance to run.
     const result = await generateText({
-      model: primaryModel,
-      prompt: strictTranslationPrompt(request),
+      model: input.plan.primaryModel,
+      prompt: strictTranslationPrompt(input.request),
       temperature: 0,
-      maxRetries: 1,
-      abortSignal: AbortSignal.timeout(38_000),
+      // AI Gateway performs provider/model failover inside each request. A second
+      // bounded outer round handles transient gateway-level 5xx/429/network failures
+      // with a rotated primary rather than repeating the same first hop.
+      maxRetries: 0,
+      abortSignal: AbortSignal.timeout(input.roundBudgetMs),
       providerOptions: {
         gateway: {
-          models: fallbackModels,
+          models: input.plan.fallbackModels,
           tags: ["feature:translation", "env:production", "runtime:pantavion"],
         },
       },
     });
 
     const translatedText = String(result.text || "").trim();
-    const servedModel = resolvedGatewayModel(result.providerMetadata, primaryModel);
+    const servedModel = resolvedGatewayModel(result.providerMetadata, input.plan.primaryModel);
 
     if (!translatedText) {
-      attempts.push({ model: servedModel, ok: false, errorClass: "empty_translation" });
-      return { result: null, attempts, runtimeAvailable: true };
+      return {
+        result: null,
+        attempt: {
+          round: input.round,
+          model: servedModel,
+          ok: false,
+          errorClass: "empty_translation",
+        } satisfies GatewayAttempt,
+        retryable: true,
+      };
     }
 
-    attempts.push({ model: servedModel, ok: true });
     return {
       result: {
         ok: true as const,
         status: "translated" as const,
         contract: pantavionUniversalTranslationContract,
-        input: request,
+        input: input.request,
         translatedText,
         provider: "vercel_ai_gateway",
         model: servedModel,
         generatedAt: new Date().toISOString(),
       },
-      attempts,
-      runtimeAvailable: true,
+      attempt: {
+        round: input.round,
+        model: servedModel,
+        ok: true,
+      } satisfies GatewayAttempt,
+      retryable: false,
     };
   } catch (error) {
-    attempts.push({
-      model: `${primaryModel} + ${fallbackModels.join(" + ")}`,
-      ok: false,
-      ...safeGatewayFailure(error),
-    });
-    return { result: null, attempts, runtimeAvailable: true };
+    const failure = safeGatewayFailure(error);
+    return {
+      result: null,
+      attempt: {
+        round: input.round,
+        model: `${input.plan.primaryModel} + ${input.plan.fallbackModels.join(" + ")}`,
+        ok: false,
+        ...failure,
+      } satisfies GatewayAttempt,
+      retryable: retryableGatewayFailure(failure),
+    };
   }
+}
+
+async function translateWithGateway(request: PantavionTranslationRequest) {
+  if (!(await pantavionGatewayRuntimeAvailable())) {
+    return { result: null, attempts: [] as GatewayAttempt[], runtimeAvailable: false };
+  }
+
+  const rounds = gatewayModelRounds();
+  const attempts: GatewayAttempt[] = [];
+
+  for (let roundIndex = 0; roundIndex < rounds.length; roundIndex += 1) {
+    const outcome = await runGatewayRound({
+      request,
+      plan: rounds[roundIndex],
+      round: roundIndex + 1,
+      roundBudgetMs: GATEWAY_ROUND_BUDGETS_MS[roundIndex] ?? 10_000,
+    });
+    attempts.push(outcome.attempt);
+
+    if (outcome.result) {
+      return { result: outcome.result, attempts, runtimeAvailable: true };
+    }
+    if (!outcome.retryable) break;
+  }
+
+  return { result: null, attempts, runtimeAvailable: true };
 }
 
 export async function GET() {
   const languageRuntime = await getPantavionLanguageRuntimeSnapshot();
   const providerStatus = getPantavionTranslationProviderStatus();
   const modelPlan = gatewayModelPlan();
+  const rounds = gatewayModelRounds();
 
   return NextResponse.json({
     ok: languageRuntime.capabilities.some(
@@ -224,6 +295,9 @@ export async function GET() {
     gatewayFailover: {
       nativeModelFallback: true,
       modelCount: 1 + modelPlan.fallbackModels.length,
+      boundedGatewayRounds: rounds.length,
+      roundBudgetsMs: GATEWAY_ROUND_BUDGETS_MS,
+      rotatedPrimaryOnRetry: true,
     },
     strictLanguageRouting: true,
     publicTextFallback: languageRuntime.publicFallbackAllowed,
