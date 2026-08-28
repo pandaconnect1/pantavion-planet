@@ -36,6 +36,18 @@ jobs:
       - name: Verify translation worker contract
         run: node scripts/pantavion-translation-worker-gate.cjs
 
+      - name: Verify translation runtime architecture
+        run: npm run audit:translation-runtime
+
+      - name: Verify translation gateway resilience contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs
+
+      - name: Verify translation gateway rate-limit circuit
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-translation-rate-limit-circuit-test.mjs
+
+      - name: Verify translation provider credential isolation
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-translation-provider-credential-test.mjs
+
       - name: Verify water network lock
         run: npm run audit:water:network-lock
 
