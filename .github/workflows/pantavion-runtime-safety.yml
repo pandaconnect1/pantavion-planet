@@ -48,6 +48,9 @@ jobs:
       - name: Verify sovereign factory contracts
         run: npm run test:foundry-contract && npm run test:sovereign-factory-contract && npm run test:sovereign-kernel-integration
 
+      - name: Verify founder-only release gate
+        run: npm run test:owner-release-gate
+
       - name: Typecheck
         shell: bash
         run: |
