@@ -35,6 +35,7 @@ assert.equal(dwg.detection.adapter, "pantavion_cad_mlightcad");
 assert.equal(dwg.detection.confidence, "signature");
 assert.equal(dwg.security.directExecutionAllowed, false);
 assert.equal(dwg.truth.verifiedLive, false);
+assert.equal(dwg.file.sha256VerifiedFromBytes, false);
 assert.ok(dwg.processingPlan.includes("preserve_units_layers_blocks_coordinates"));
 const dwgCandidate = createPantavionArtifactWorkOrderCandidate(dwg);
 assert.equal(dwgCandidate.submission.target, "water_infrastructure");
@@ -53,6 +54,24 @@ assert.equal(pdf.detection.formatId, "pdf");
 assert.equal(pdf.detection.confidence, "signature");
 assert.equal(pdf.detection.supportState, "NATIVE");
 assert.equal(createPantavionArtifactWorkOrderCandidate(pdf).submission.target, "pantaai_center");
+
+const verifiedStoredPdf = createPantavionArtifactIntakeRecord({
+  sourceKind: "storage_reference",
+  sourceId: "storage:verified-pdf-1",
+  fileName: "verified.pdf",
+  sizeBytes: 4096,
+  mimeType: "application/pdf",
+  sha256: "f".repeat(64),
+  sha256VerifiedFromBytes: true,
+  firstBytesBase64: Buffer.from("%PDF-1.7\n", "latin1").toString("base64"),
+  storageReference: "personal-media/artifact-vault/verified.pdf",
+  domains: ["personal_ai"],
+});
+assert.equal(verifiedStoredPdf.file.sha256VerifiedFromBytes, true);
+assert.match(
+  createPantavionArtifactWorkOrderCandidate(verifiedStoredPdf).submission.intent,
+  /SHA-256 verified from stored bytes: yes/,
+);
 
 const kml = createPantavionArtifactIntakeRecord({
   sourceKind: "device_upload",
@@ -132,6 +151,17 @@ assert.throws(
   /artifact_size_invalid/,
 );
 
+assert.throws(
+  () => createPantavionArtifactIntakeRecord({
+    sourceKind: "storage_reference",
+    sourceId: "storage:false-verification",
+    fileName: "x.txt",
+    sizeBytes: 1,
+    sha256VerifiedFromBytes: true,
+  }),
+  /artifact_sha256_verification_without_digest/,
+);
+
 console.log("PANTAVION UNIVERSAL ARTIFACT INTAKE CONTRACT: PASSED");
 console.log(`- registered format rules: ${registry.registeredFormatRules}`);
 console.log(`- registered extensions: ${registry.registeredExtensions}`);
@@ -140,4 +170,5 @@ console.log("- DWG signature routing: yes");
 console.log("- KML/GIS conversion routing: yes");
 console.log("- executable quarantine: yes");
 console.log("- unknown-format lossless preservation: yes");
+console.log("- SHA-256 byte-verification provenance: fail-closed");
 console.log("- direct untrusted execution authority: no");

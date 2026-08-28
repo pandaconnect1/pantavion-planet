@@ -75,6 +75,7 @@ export interface PantavionArtifactIntakeInput {
   sizeBytes: number;
   mimeType?: string | null;
   sha256?: string | null;
+  sha256VerifiedFromBytes?: boolean;
   firstBytesBase64?: string | null;
   storageReference?: string | null;
   sourceDate?: string | null;
@@ -108,7 +109,7 @@ export interface PantavionArtifactIntakeRecord {
     sizeBytes: number;
     mimeType: string | null;
     sha256: string | null;
-    sha256VerifiedFromBytes: false;
+    sha256VerifiedFromBytes: boolean;
   };
   detection: PantavionArtifactDetection;
   domains: PantavionConversationDomain[];
@@ -674,6 +675,10 @@ export function createPantavionArtifactIntakeRecord(
   const sizeBytes = normalizeSize(input.sizeBytes);
   const mimeType = input.mimeType?.trim().toLowerCase() || null;
   const sha256 = normalizeSha256(input.sha256);
+  const sha256VerifiedFromBytes = input.sha256VerifiedFromBytes === true;
+  if (sha256VerifiedFromBytes && !sha256) {
+    throw new Error("artifact_sha256_verification_without_digest");
+  }
   const sourceDate = normalizeDate(input.sourceDate);
   const storageReference = input.storageReference?.trim().slice(0, 1000) || null;
   const extension = extensionOf(fileName);
@@ -708,7 +713,7 @@ export function createPantavionArtifactIntakeRecord(
       sizeBytes,
       mimeType,
       sha256,
-      sha256VerifiedFromBytes: false,
+      sha256VerifiedFromBytes,
     },
     detection,
     domains,
@@ -741,6 +746,7 @@ function workOrderIntent(record: PantavionArtifactIntakeRecord): string {
     `Bytes: ${record.file.sizeBytes}`,
     `MIME: ${record.file.mimeType ?? "unknown"}`,
     `SHA-256: ${record.file.sha256 ?? "not_yet_verified"}`,
+    `SHA-256 verified from stored bytes: ${record.file.sha256VerifiedFromBytes ? "yes" : "no"}`,
     `Detected format: ${record.detection.formatId}`,
     `Family: ${record.detection.family}`,
     `Support: ${record.detection.supportState}`,
