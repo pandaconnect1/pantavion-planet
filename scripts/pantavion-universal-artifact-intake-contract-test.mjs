@@ -69,7 +69,7 @@ const verifiedStoredPdf = createPantavionArtifactIntakeRecord({
 });
 assert.equal(verifiedStoredPdf.file.sha256VerifiedFromBytes, true);
 assert.match(
-  createPantavionArtifactWorkOrderCandidate(verifiedStoredPdf).submission.intent,
+  createPantavionArtifactWorkOrderCandidate(verifiedStoredPdf).submission.founderIntent,
   /SHA-256 verified from stored bytes: yes/,
 );
 
