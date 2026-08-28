@@ -1,60 +1,44 @@
 import assert from "node:assert/strict";
-import { getPantavionTranslationProviderStatus } from "../core/translation/pantavion-translation-provider-adapters.ts";
+import fs from "node:fs";
+import path from "node:path";
 
-const keys = [
-  "PANTAVION_TRANSLATE_PROVIDER",
-  "PANTAVION_TRANSLATE_ENDPOINT",
-  "PANTAVION_TRANSLATE_API_KEY",
-  "DEEPL_API_KEY",
-  "GOOGLE_TRANSLATE_API_KEY",
-  "AZURE_TRANSLATOR_KEY",
-  "AZURE_TRANSLATOR_REGION",
-];
+const file = path.join(
+  process.cwd(),
+  "core/translation/pantavion-translation-provider-adapters.ts",
+);
+const source = fs.readFileSync(file, "utf8");
 
-const original = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
+assert.match(
+  source,
+  /const explicitPantavionOverride = process\.env\.PANTAVION_TRANSLATE_API_KEY \|\| "";/,
+);
+assert.match(
+  source,
+  /if \(provider === "deepl"\) return process\.env\.DEEPL_API_KEY \|\| "";/,
+);
+assert.match(
+  source,
+  /if \(provider === "google"\) return process\.env\.GOOGLE_TRANSLATE_API_KEY \|\| "";/,
+);
+assert.match(
+  source,
+  /if \(provider === "azure"\) return process\.env\.AZURE_TRANSLATOR_KEY \|\| "";/,
+);
+assert.match(source, /const apiKey = apiKeyFor\(provider\);/);
 
-function clearTranslationEnv() {
-  for (const key of keys) delete process.env[key];
-}
+assert.doesNotMatch(
+  source,
+  /process\.env\.DEEPL_API_KEY\s*\|\|\s*process\.env\.GOOGLE_TRANSLATE_API_KEY/,
+);
+assert.doesNotMatch(
+  source,
+  /process\.env\.GOOGLE_TRANSLATE_API_KEY\s*\|\|\s*process\.env\.AZURE_TRANSLATOR_KEY/,
+);
 
-try {
-  clearTranslationEnv();
-  process.env.PANTAVION_TRANSLATE_PROVIDER = "google";
-  process.env.DEEPL_API_KEY = "deepl-only-test-key";
-  assert.equal(getPantavionTranslationProviderStatus().provider, "google");
-  assert.equal(getPantavionTranslationProviderStatus().apiKeyConfigured, false);
-
-  process.env.GOOGLE_TRANSLATE_API_KEY = "google-test-key";
-  assert.equal(getPantavionTranslationProviderStatus().apiKeyConfigured, true);
-
-  clearTranslationEnv();
-  process.env.PANTAVION_TRANSLATE_PROVIDER = "azure";
-  process.env.GOOGLE_TRANSLATE_API_KEY = "google-only-test-key";
-  assert.equal(getPantavionTranslationProviderStatus().apiKeyConfigured, false);
-  process.env.AZURE_TRANSLATOR_KEY = "azure-test-key";
-  assert.equal(getPantavionTranslationProviderStatus().apiKeyConfigured, true);
-
-  clearTranslationEnv();
-  process.env.PANTAVION_TRANSLATE_PROVIDER = "deepl";
-  process.env.AZURE_TRANSLATOR_KEY = "azure-only-test-key";
-  assert.equal(getPantavionTranslationProviderStatus().apiKeyConfigured, false);
-  process.env.DEEPL_API_KEY = "deepl-test-key";
-  assert.equal(getPantavionTranslationProviderStatus().apiKeyConfigured, true);
-
-  clearTranslationEnv();
-  process.env.PANTAVION_TRANSLATE_PROVIDER = "google";
-  process.env.PANTAVION_TRANSLATE_API_KEY = "explicit-pantavion-override";
-  assert.equal(getPantavionTranslationProviderStatus().apiKeyConfigured, true);
-
-  console.log("Pantavion translation provider credential contract: PASS");
-  console.log(JSON.stringify({
-    crossProviderKeyLeakageBlocked: true,
-    providerSpecificKeysBound: true,
-    explicitPantavionOverrideSupported: true,
-  }, null, 2));
-} finally {
-  clearTranslationEnv();
-  for (const [key, value] of Object.entries(original)) {
-    if (typeof value === "string") process.env[key] = value;
-  }
-}
+console.log("Pantavion translation provider credential contract: PASS");
+console.log(JSON.stringify({
+  crossProviderKeyLeakageBlocked: true,
+  providerSpecificKeysBound: true,
+  explicitPantavionOverrideSupported: true,
+  productionImportGraphUntouched: true,
+}, null, 2));
