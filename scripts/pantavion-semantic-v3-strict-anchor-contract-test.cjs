@@ -89,8 +89,31 @@ assert(
   'Non-integral source lines must fail closed.',
 );
 
+const exactLineOwnershipCases = [
+  ['app/api/listings/route.ts', 35, 'read'],
+  ['app/api/listings/route.ts', 88, 'create'],
+  ['app/api/professional/infrastructure/water/help/thread/route.ts', 191, 'read'],
+  ['app/api/professional/infrastructure/water/help/thread/route.ts', 232, 'create'],
+  ['docs/requirements/pantavion-water-full-master-strategy.md', 78, 'configure'],
+  ['docs/requirements/pantavion-water-full-master-strategy.md', 119, 'protect'],
+  ['docs/requirements/pantavion-water-serving-architecture-decision.md', 60, 'configure'],
+  ['docs/requirements/pantavion-water-serving-architecture-decision.md', 126, 'protect'],
+];
+for (const [sourceFile, sourceLine, capability] of exactLineOwnershipCases) {
+  assert(capabilityFromProvenance({ provenance:{ sourceFile, sourceLine } }) === capability, `${sourceFile}:${sourceLine} must resolve only to ${capability}.`);
+}
+for (const [sourceFile, sourceLine] of [
+  ['app/api/listings/route.ts', 57],
+  ['app/api/professional/infrastructure/water/help/thread/route.ts', 209],
+  ['docs/requirements/pantavion-water-full-master-strategy.md', 140],
+  ['docs/requirements/pantavion-water-serving-architecture-decision.md', 181],
+]) {
+  assert(capabilityFromProvenance({ provenance:{ sourceFile, sourceLine } }) === null, `${sourceFile}:${sourceLine} must remain capability-unresolved.`);
+}
+
 const strictOwnershipCases = [
   ['app/api/professional/infrastructure/water/help/request/route.ts', 'Maps / World / Water', 'water', 'create'],
+  ['app/api/listings/route.ts', 'Marketplace / Work / Business', 'marketplace', null],
   ['app/api/translate/text/route.ts', 'Interpreter / Translation', 'translation', 'translate'],
   ['core/startup/pantavion-startup-engine.ts', 'Personal AI / PantaAI', 'orchestration', 'execute'],
   ['data/pantavion-source-inventory/inventory.json', 'Recovery / Provenance', 'evidence', 'observe'],
@@ -122,7 +145,6 @@ const ambiguousSources = [
   'scripts/global-emergency-languages-patch.cjs',
   'core/runtime/voice-multilingual-policy.ts',
   'core/public/pantavion-public-surfaces.ts',
-  'app/api/listings/route.ts',
   'app/dashboard/page.tsx',
   'app/readiness/page.tsx',
   'app/distribution/page.tsx',

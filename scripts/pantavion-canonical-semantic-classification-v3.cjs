@@ -209,6 +209,7 @@ const sourcePathAnchors = [
   { module:'Experience / Navigation', subsystem:'shell', capability:'present', strict:true, patterns:[/^app\/(_pantavion\/ui|pantavion-home-client|ecosystem\/page|architecture\/page|opengraph-image|sitemap)\.tsx?$/] },
   { module:'Marketplace / Work / Business', subsystem:'advertising', capability:'present', strict:true, patterns:[/^app\/(advertise|newspaper|commercial)\/page\.tsx$/] },
   { module:'Marketplace / Work / Business', subsystem:'marketplace', capability:'read', strict:true, patterns:[/^app\/listings\/(page|mine\/page|\[listingid\]\/page)\.tsx$/] },
+  { module:'Marketplace / Work / Business', subsystem:'marketplace', strict:true, patterns:[/^app\/api\/listings\/route\.ts$/] },
   { module:'Marketplace / Work / Business', subsystem:'marketplace', capability:'create', strict:true, patterns:[/^app\/listings\/new\/page\.tsx$/] },
   { module:'Marketplace / Work / Business', subsystem:'marketplace', capability:'update', strict:true, patterns:[/^app\/api\/listings\/\[listingid\]\/promote\/route\.ts$/,/^app\/listings\/mine\/promotebutton\.tsx$/] },
   { module:'Marketplace / Work / Business', subsystem:'business', capability:'observe', strict:true, patterns:[/^app\/stripe-readiness\/page\.tsx$/,/^core\/pantavion\/stripe-readiness-ledger\.ts$/] },
@@ -282,6 +283,26 @@ function sourcePathAnchor(file) {
 }
 
 const strictSourceLineCapabilities = new Map([
+  ['app/api/listings/route.ts', new Map([
+    ...[6].map(line => [line,'configure']),
+    ...[28,32,41,66].map(line => [line,'protect']),
+    ...[35,48,52,55].map(line => [line,'read']),
+    ...[58,72,88,94,96].map(line => [line,'create'])
+  ])],
+  ['app/api/professional/infrastructure/water/help/thread/route.ts', new Map([
+    ...[6].map(line => [line,'execute']),
+    ...[9,52,101].map(line => [line,'configure']),
+    ...[191].map(line => [line,'read']),
+    ...[210,232,315].map(line => [line,'create'])
+  ])],
+  ['docs/requirements/pantavion-water-full-master-strategy.md', new Map([
+    ...[1,5,14,78,92,96,141].map(line => [line,'configure']),
+    ...[7,34,36,48,50,54,72,74,108,110,119,127,129].map(line => [line,'protect'])
+  ])],
+  ['docs/requirements/pantavion-water-serving-architecture-decision.md', new Map([
+    ...[1,5,14,60,132,176].map(line => [line,'configure']),
+    ...[18,20,36,40,94,101,114,124,126,182,184].map(line => [line,'protect'])
+  ])],
   ['docs/requirements/pantavion-professional-infrastructure-water-master-locked.md', new Map([
     ...[9,134,150,165,167,192,207,227,463,758,930,1154,1156,1180,1419,1643,1663,1687,1817,2011,2013,2023,2432,2558,2632,2655,2657,2659,2663,2692,2694,2709,2812,2874,2907].map(line => [line,'protect']),
     ...[56,381,545,1200,1277,2120,2122,2124,2128,2130,2132,2160,2377,2399,2719,2966].map(line => [line,'read']),
