@@ -6,22 +6,32 @@ on:
       - "kernel/**"
       - "core/kernel/pantavion-foundry-nervous-system-runtime.ts"
       - "core/runtime/durable-execution-fencing.ts"
+      - "core/runtime/supabase-durable-execution-store.ts"
+      - "services/translation-agent.ts"
+      - "supabase/migrations/*durable_execution*.sql"
       - "app/api/pantavion/intelligence/cron/route.ts"
       - "scripts/pantavion-foundry-gate.cjs"
       - "scripts/pantavion-kernel-*.mjs"
       - "scripts/pantavion-multi-kernel-*.mjs"
       - "scripts/pantavion-durable-execution-*.mjs"
+      - "scripts/pantavion-durable-fencing-postgres-test.sql"
+      - "scripts/pantavion-translation-worker-gate.cjs"
       - ".github/workflows/pantavion-multi-kernel-gate.yml"
   push:
     paths:
       - "kernel/**"
       - "core/kernel/pantavion-foundry-nervous-system-runtime.ts"
       - "core/runtime/durable-execution-fencing.ts"
+      - "core/runtime/supabase-durable-execution-store.ts"
+      - "services/translation-agent.ts"
+      - "supabase/migrations/*durable_execution*.sql"
       - "app/api/pantavion/intelligence/cron/route.ts"
       - "scripts/pantavion-foundry-gate.cjs"
       - "scripts/pantavion-kernel-*.mjs"
       - "scripts/pantavion-multi-kernel-*.mjs"
       - "scripts/pantavion-durable-execution-*.mjs"
+      - "scripts/pantavion-durable-fencing-postgres-test.sql"
+      - "scripts/pantavion-translation-worker-gate.cjs"
       - ".github/workflows/pantavion-multi-kernel-gate.yml"
 
 permissions:
@@ -60,3 +70,48 @@ jobs:
 
       - name: Verify zero-trust contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-zero-trust-test.mjs
+
+  durable-fencing-postgres:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pantavion_fencing_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d pantavion_fencing_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGPASSWORD: postgres
+      PGHOST: 127.0.0.1
+      PGPORT: "5432"
+      PGUSER: postgres
+      PGDATABASE: pantavion_fencing_test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare Supabase database roles
+        shell: bash
+        run: |
+          set -euo pipefail
+          psql -v ON_ERROR_STOP=1 <<'SQL'
+          create role anon nologin;
+          create role authenticated nologin;
+          create role service_role nologin bypassrls;
+          SQL
+
+      - name: Apply durable runtime migration
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20260822194957_create_durable_execution_runtime.sql
+
+      - name: Apply lease fencing migration
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20260828062237_durable_execution_lease_fencing.sql
+
+      - name: Verify real PostgreSQL fencing behavior
+        run: psql -v ON_ERROR_STOP=1 -f scripts/pantavion-durable-fencing-postgres-test.sql
