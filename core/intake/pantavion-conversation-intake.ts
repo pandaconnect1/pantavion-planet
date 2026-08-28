@@ -180,7 +180,9 @@ export function createPantavionConversationIntakeRecord(
   const sourceId = normalizeSourceId(input.sourceId);
   const sourceDate = normalizeDate(input.sourceDate);
   const sourceThreadTitle = input.sourceThreadTitle?.trim().slice(0, 240) || null;
-  const domains = Array.from(new Set(input.domains ?? ["general"]));
+  const domains: PantavionConversationDomain[] = Array.from(
+    new Set<PantavionConversationDomain>(input.domains ?? ["general"]),
+  );
   const sha256 = sourceFingerprint({
     sourceKind: input.sourceKind,
     sourceId,
