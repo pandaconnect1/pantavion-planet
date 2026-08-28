@@ -43,6 +43,22 @@ type FencedClaimRpcData = {
   attempt?: unknown;
 };
 
+export type PantavionFencedTranslationMessageInput = {
+  conversationId: string;
+  senderId: string;
+  clientMessageId: string;
+  body: string;
+  originalLanguage?: string | null;
+  metadata?: Record<string, unknown>;
+};
+
+export type PantavionFencedTranslationMessage = {
+  messageId: string;
+  clientMessageId: string;
+  translatedText: string;
+  deduplicated: boolean;
+};
+
 const MIN_LEASE_MS = 5_000;
 const MAX_LEASE_MS = 300_000;
 
@@ -104,6 +120,28 @@ function requireFence(fence: PantavionExecutionFence) {
     throw new Error("fencing_token_invalid");
   }
   return { executionId: fence.executionId, ownerId, fencingToken: fence.fencingToken };
+}
+
+function parseFencedTranslationMessage(data: unknown): PantavionFencedTranslationMessage | null {
+  if (!data || typeof data !== "object" || Array.isArray(data)) return null;
+  const payload = data as Record<string, unknown>;
+  if (
+    typeof payload.messageId !== "string" ||
+    !payload.messageId ||
+    typeof payload.clientMessageId !== "string" ||
+    !payload.clientMessageId ||
+    typeof payload.translatedText !== "string" ||
+    !payload.translatedText ||
+    typeof payload.deduplicated !== "boolean"
+  ) {
+    throw new Error("durable_fenced_translation_invalid_response");
+  }
+  return {
+    messageId: payload.messageId,
+    clientMessageId: payload.clientMessageId,
+    translatedText: payload.translatedText,
+    deduplicated: payload.deduplicated,
+  };
 }
 
 export class PantavionSupabaseDurableExecutionStore implements PantavionDurableExecutionStore {
@@ -193,6 +231,39 @@ export class PantavionSupabaseDurableExecutionStore implements PantavionDurableE
     const record = await this.get(checked.executionId);
     if (!record) throw new Error("checkpointed_execution_not_found");
     return record;
+  }
+
+  async persistTranslationFenced(
+    fence: PantavionExecutionFence,
+    input: PantavionFencedTranslationMessageInput,
+  ) {
+    const checked = requireFence(fence);
+    const conversationId = input.conversationId.trim();
+    const senderId = input.senderId.trim();
+    const clientMessageId = input.clientMessageId.trim();
+    const body = input.body.trim();
+    if (!conversationId) throw new Error("translation_conversation_id_required");
+    if (!senderId) throw new Error("translation_sender_id_required");
+    if (!clientMessageId) throw new Error("translation_client_message_id_required");
+    if (!body) throw new Error("translation_body_required");
+
+    const admin = createAdminClient();
+    const result = await admin.rpc("pantavion_persist_translation_message_fenced", {
+      p_execution_id: checked.executionId,
+      p_lease_owner: checked.ownerId,
+      p_fencing_token: checked.fencingToken,
+      p_conversation_id: conversationId,
+      p_sender_id: senderId,
+      p_client_message_id: clientMessageId,
+      p_body: body,
+      p_original_language: input.originalLanguage?.trim() || null,
+      p_metadata: input.metadata ?? {},
+    });
+
+    if (result.error) throw result.error;
+    const message = parseFencedTranslationMessage(result.data);
+    if (!message) throw new PantavionStaleExecutionFenceError();
+    return message;
   }
 
   async finishFencedSuccess(fence: PantavionExecutionFence, output: unknown) {
