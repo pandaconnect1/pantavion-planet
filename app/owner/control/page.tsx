@@ -33,6 +33,14 @@ export default async function OwnerControlPage() {
           <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300">
             Όλα τα ζητήματα που απαιτούν δική σου απόφαση συγκεντρώνονται εδώ. Το Pantavion συνεχίζει αυτόματα όπου επιτρέπεται και σταματά μόνο σε πραγματικό owner decision point.
           </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <a
+              href="/owner/control/implementation"
+              className="rounded-xl border border-cyan-400/50 bg-cyan-400/10 px-4 py-3 text-sm font-black text-cyan-100"
+            >
+              Implementation Truth · Founder only
+            </a>
+          </div>
         </div>
         <OwnerControlClient initialItems={items} />
       </section>

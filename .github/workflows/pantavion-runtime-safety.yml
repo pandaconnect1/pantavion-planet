@@ -33,6 +33,15 @@ jobs:
       - name: Verify founder-only Kernel API surface
         run: node scripts/pantavion-kernel-founder-access-gate.cjs
 
+      - name: Verify conversation intake truth contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-conversation-intake-contract-test.mjs
+
+      - name: Verify universal artifact intake contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-universal-artifact-intake-contract-test.mjs
+
+      - name: Verify universal artifact upload contract
+        run: node scripts/pantavion-universal-artifact-upload-contract-test.mjs
+
       - name: Verify translation worker contract
         run: node scripts/pantavion-translation-worker-gate.cjs
 

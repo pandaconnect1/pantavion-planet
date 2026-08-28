@@ -247,7 +247,89 @@ function testedKernelItem(): ImplementationSyncItem {
   };
 }
 
+type MergedMainItemInput = {
+  id: string;
+  title: string;
+  domain: string;
+  source: string;
+  pr: number;
+  headRevision: string;
+  mergeRevision: string;
+  testRun: string;
+  testedAt: string;
+  mergedAt: string;
+};
+
+function mergedMainItem(input: MergedMainItemInput): ImplementationSyncItem {
+  return {
+    id: input.id,
+    title: input.title,
+    domain: input.domain,
+    state: "merged",
+    source: input.source,
+    branch: "main",
+    pr: input.pr,
+    evidenceRecords: [
+      {
+        kind: "code",
+        reference: input.source,
+        recordedAt: input.testedAt,
+        revision: input.headRevision,
+      },
+      {
+        kind: "test",
+        reference: input.testRun,
+        recordedAt: input.testedAt,
+        revision: input.headRevision,
+      },
+      {
+        kind: "merge",
+        reference: `https://github.com/pandaconnect1/pantavion-planet/pull/${input.pr}`,
+        recordedAt: input.mergedAt,
+        revision: input.mergeRevision,
+      },
+    ],
+    updatedAt: input.mergedAt,
+  };
+}
+
 export const sovereignFactoryImplementationItems: ImplementationSyncItem[] = [
+  mergedMainItem({
+    id: "canonical-conversation-intake",
+    title: "Canonical Conversation Intake",
+    domain: "kernel",
+    source: "core/intake/pantavion-conversation-intake.ts",
+    pr: 329,
+    headRevision: "cdc29cce4f10bad625c58d87ad1be7655b363492",
+    mergeRevision: "da3c3eaf483455e55960cad27f6f01f396e2a4a0",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33198943520",
+    testedAt: "2026-08-28T18:24:01.000Z",
+    mergedAt: "2026-08-28T18:24:45.000Z",
+  }),
+  mergedMainItem({
+    id: "universal-artifact-intake",
+    title: "Universal Artifact Intake",
+    domain: "recovery",
+    source: "core/intake/pantavion-universal-artifact-intake.ts",
+    pr: 330,
+    headRevision: "6b979eed47e4ca3627a3bd79a68ba5db5c974907",
+    mergeRevision: "4d74dbbdb00653b35a11016e52be736fbfe6f81a",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33200845615",
+    testedAt: "2026-08-28T18:48:49.000Z",
+    mergedAt: "2026-08-28T18:49:38.000Z",
+  }),
+  mergedMainItem({
+    id: "universal-raw-artifact-upload",
+    title: "Universal Raw Artifact Upload",
+    domain: "recovery",
+    source: "app/api/kernel/artifact-upload/complete/route.ts",
+    pr: 331,
+    headRevision: "a33da52cca3fcab2858a5ee976d71359013230bb",
+    mergeRevision: "cc59aadbb7c5a2cd37d234c6b3cd07b296357b6d",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33201669487",
+    testedAt: "2026-08-28T18:59:34.000Z",
+    mergedAt: "2026-08-28T19:00:32.000Z",
+  }),
   testedItem("sovereign-technology-factory", "Sovereign Technology Factory", "sovereign", "core/sovereign/technology-factory.ts"),
   testedItem("intent-to-outcome-fabric", "Intent-to-Outcome Fabric", "sovereign", "core/sovereign/intent-to-outcome-fabric.ts"),
   testedItem("ephemeral-agent-swarm", "Ephemeral Agent Swarm", "sovereign", "core/sovereign/ephemeral-agent-swarm.ts"),
@@ -264,7 +346,7 @@ export const sovereignFactoryImplementationItems: ImplementationSyncItem[] = [
     domain: "release",
     state: "blocked",
     source: "owner_green_light",
-    blocker: "Founder approval, merge, exact deployment revision and live evidence do not exist.",
+    blocker: "Factory PR #315 is TESTED but unmerged; founder approval, exact deployment revision and live evidence do not exist.",
     updatedAt: codedAt,
   },
 ];

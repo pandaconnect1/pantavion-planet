@@ -18,6 +18,7 @@ import { assessTechnologyLibraryEntry } from "../core/sovereign/technology-libra
 import {
   advanceImplementationItem,
   canAdvanceImplementationState,
+  sovereignFactoryImplementationItems,
   synchronizeImplementationItems,
   validateImplementationTruth,
 } from "../core/pantavion/implementation-sync-registry.ts";
@@ -238,10 +239,29 @@ assert(
   "Registry must quarantine a false completion claim.",
 );
 
+for (const id of [
+  "canonical-conversation-intake",
+  "universal-artifact-intake",
+  "universal-raw-artifact-upload",
+]) {
+  const item = sovereignFactoryImplementationItems.find((candidate) => candidate.id === id);
+  assert(item?.state === "merged", `${id} must be recorded as MERGED only.`);
+  assert(validateImplementationTruth(item).length === 0, `${id} must carry code, test and merge evidence.`);
+  assert(
+    !["deployed", "verified_live"].includes(item.state),
+    `${id} must not infer deployment or VERIFIED_LIVE from merge evidence.`,
+  );
+}
+
 const ownerPage = await readFile(join(process.cwd(), "app/owner/control/implementation/page.tsx"), "utf8");
 assert(ownerPage.includes("requireFounderIdentity"), "Owner implementation page must require founder identity.");
 assert(ownerPage.includes('currentLevel !== "aal2"'), "Owner implementation page must require AAL2 MFA.");
 assert(ownerPage.includes('dynamic = "force-dynamic"'), "Owner implementation page must never be statically exposed.");
+const ownerControlPage = await readFile(join(process.cwd(), "app/owner/control/page.tsx"), "utf8");
+assert(
+  ownerControlPage.includes('href="/owner/control/implementation"'),
+  "Owner Control must link to the founder-only implementation truth surface.",
+);
 
 console.log("PANTAVION SOVEREIGN FACTORY CONTRACT TEST: PASSED");
 console.log("- intent firewall fails closed and production/public actions stop at owner approval");

@@ -41,5 +41,19 @@ export default async function KernelPage({ searchParams }: KernelPageProps) {
     notFound();
   }
 
-  return <KernelLivePanelClient />;
+  return (
+    <>
+      <div className="bg-[#05070d] px-5 pt-6 text-white">
+        <div className="mx-auto flex max-w-7xl flex-wrap gap-3">
+          <a
+            href="/kernel/artifact-upload"
+            className="rounded-2xl border border-cyan-300/40 bg-cyan-300/10 px-5 py-3 text-sm font-black text-cyan-100"
+          >
+            Universal Artifact Intake
+          </a>
+        </div>
+      </div>
+      <KernelLivePanelClient />
+    </>
+  );
 }
