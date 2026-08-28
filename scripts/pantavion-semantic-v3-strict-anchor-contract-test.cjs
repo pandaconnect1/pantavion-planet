@@ -50,6 +50,26 @@ assert(
   'Strict export guard must not conflict between export/synchronize and guard/protect.',
 );
 
+const multilingualVoiceRuntimePath = 'core/runtime/voice-multilingual-policy.ts';
+const multilingualVoiceRuntimeAnchor = sourcePathAnchor(multilingualVoiceRuntimePath);
+assert(
+  multilingualVoiceRuntimeAnchor && !multilingualVoiceRuntimeAnchor.strict,
+  'Multilingual voice runtime must retain its non-strict Kernel source ownership.',
+);
+assert(
+  capabilityFromPath(multilingualVoiceRuntimePath, multilingualVoiceRuntimeAnchor) === 'execute',
+  'Multilingual voice runtime must resolve to execution rather than generic policy protection.',
+);
+const multilingualVoiceRuntimeRanks = anchoredCapabilityRank(
+  'multilingual voice policy runtime',
+  multilingualVoiceRuntimeAnchor,
+  multilingualVoiceRuntimePath,
+);
+assert(
+  multilingualVoiceRuntimeRanks[0]?.name === 'execute' && multilingualVoiceRuntimeRanks[0]?.score >= 8,
+  'Exact multilingual voice runtime evidence must dominate the generic policy keyword.',
+);
+
 const broadWaterPath = 'docs/requirements/pantavion-professional-infrastructure-water.md';
 const broadWaterAnchor = sourcePathAnchor(broadWaterPath);
 assert(broadWaterAnchor && !broadWaterAnchor.strict, 'Generic Water master requirement must remain non-strict.');
@@ -164,7 +184,6 @@ const ambiguousSources = [
   'docs/requirements/pantavion-water-full-master-strategy.md',
   'docs/requirements/pantavion-water-serving-architecture-decision.md',
   'scripts/global-emergency-languages-patch.cjs',
-  'core/runtime/voice-multilingual-policy.ts',
   'core/public/pantavion-public-surfaces.ts',
   'app/dashboard/page.tsx',
   'app/distribution/page.tsx',
@@ -190,5 +209,5 @@ for (const sourcePath of exactSources) {
 
 console.log('PANTAVION STRICT ANCHOR CONTRACT TEST: PASSED');
 console.log('- strict exact paths own their declared capability');
-console.log('- multi-capability sources remain unresolved');
+console.log('- exact multilingual voice runtime owns execution while cross-module wrappers remain unresolved');
 console.log('- exact anchors have no strict ownership collisions');
