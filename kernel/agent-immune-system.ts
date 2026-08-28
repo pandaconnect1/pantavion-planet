@@ -87,6 +87,8 @@ function containmentForRisk(risk: number, rollbackPlanRequired: boolean): AgentC
  * The caller must first produce a Kernel zero-trust decision. This policy is a
  * second, monotonic gate: delegated authority may only narrow an already valid
  * zero-trust decision and can never turn a zero-trust deny into an allow.
+ * The zero-trust decision must also be bound to the exact principal, action,
+ * resource and environment of the execution intent, preventing decision replay.
  */
 export function evaluateAgentExecutionAuthority(
   intent: AgentExecutionIntent,
@@ -98,7 +100,16 @@ export function evaluateAgentExecutionAuthority(
   const risk = Math.max(0, Math.min(100, Math.round(intent.behaviourRiskScore)));
 
   if (zeroTrust.requestId !== intent.requestId) reasons.push("zero_trust_request_mismatch");
+  if (
+    zeroTrust.context.principalId !== intent.principal.id
+    || zeroTrust.context.resourceId !== intent.resource.id
+    || zeroTrust.context.environment !== intent.resource.environment
+    || zeroTrust.context.action !== intent.action
+  ) {
+    reasons.push("zero_trust_context_mismatch");
+  }
   if (!zeroTrust.allowed) reasons.push("zero_trust_denied");
+  if (zeroTrust.allowed && !zeroTrust.matchedGrantId) reasons.push("zero_trust_grant_missing");
   if (!isAgentWorkload(intent.principal)) reasons.push("agent_workload_principal_required");
   if (!authority.envelopeId.trim()) reasons.push("authority_envelope_id_required");
   if (!authority.issuerPrincipalId.trim()) reasons.push("authority_issuer_required");
