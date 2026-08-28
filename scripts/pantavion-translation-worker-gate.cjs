@@ -16,6 +16,12 @@ const fencingMigrationPath = path.join(
   "migrations",
   "20260828062237_durable_execution_lease_fencing.sql",
 );
+const fencedPersistenceMigrationPath = path.join(
+  root,
+  "supabase",
+  "migrations",
+  "20260828082934_durable_translation_fenced_persistence.sql",
+);
 const messageCoreMigrationPath = path.join(
   root,
   "supabase",
@@ -46,6 +52,7 @@ const worker = read(workerPath);
 const store = read(storePath);
 const durableMigration = read(durableMigrationPath);
 const fencingMigration = read(fencingMigrationPath);
+const fencedPersistenceMigration = read(fencedPersistenceMigrationPath);
 const messageCoreMigration = read(messageCoreMigrationPath);
 const messageIdempotencyMigration = read(messageIdempotencyMigrationPath);
 
@@ -97,11 +104,7 @@ for (const rpc of [
     `fenced_rpc_service_role_grant_missing:${rpc}`,
   );
 }
-requirePattern(
-  fencingMigration,
-  /lease_token = d\.lease_token \+ 1/,
-  "monotonic_fencing_token_missing",
-);
+requirePattern(fencingMigration, /lease_token = d\.lease_token \+ 1/, "monotonic_fencing_token_missing");
 requirePattern(
   fencingMigration,
   /d\.status = 'running'[\s\S]*d\.lease_expires_at is null or d\.lease_expires_at <= v_now/,
@@ -113,24 +116,72 @@ requirePattern(
   "fenced_write_guard_missing",
 );
 
+// The user-visible translation side effect must be fenced in the same database transaction.
+requirePattern(
+  fencedPersistenceMigration,
+  /create or replace function public\.pantavion_persist_translation_message_fenced\s*\(/,
+  "fenced_translation_persistence_rpc_missing",
+);
+requirePattern(
+  fencedPersistenceMigration,
+  /from public\.durable_executions as d[\s\S]*d\.task_name = 'translation:process_message'[\s\S]*d\.lease_owner = v_owner[\s\S]*d\.lease_token = p_fencing_token[\s\S]*d\.lease_expires_at > v_now[\s\S]*for update/,
+  "translation_side_effect_fence_lock_missing",
+);
+requirePattern(
+  fencedPersistenceMigration,
+  /v_execution\.input->>'conversationId'[\s\S]*p_conversation_id::text/,
+  "translation_conversation_binding_missing",
+);
+requirePattern(
+  fencedPersistenceMigration,
+  /v_execution\.input->>'systemSenderId'[\s\S]*p_sender_id::text/,
+  "translation_sender_binding_missing",
+);
+requirePattern(
+  fencedPersistenceMigration,
+  /v_client_message_id <> 'translation:' \|\| p_execution_id/,
+  "translation_execution_idempotency_binding_missing",
+);
+requirePattern(
+  fencedPersistenceMigration,
+  /insert into public\.messages\([\s\S]*message_type[\s\S]*'system'/,
+  "atomic_translation_message_insert_missing",
+);
+requirePattern(
+  fencedPersistenceMigration,
+  /revoke all on function public\.pantavion_persist_translation_message_fenced\([\s\S]*from public, anon, authenticated/,
+  "fenced_translation_persistence_browser_revoke_missing",
+);
+requirePattern(
+  fencedPersistenceMigration,
+  /grant execute on function public\.pantavion_persist_translation_message_fenced\([\s\S]*to service_role/,
+  "fenced_translation_persistence_service_role_grant_missing",
+);
+
 // Supabase store must expose only owner+token guarded worker mutations.
 requirePattern(store, /async claimFenced\s*\(/, "store_fenced_claim_missing");
 requirePattern(store, /pantavion_claim_durable_execution_fenced/, "store_fenced_claim_rpc_missing");
 requirePattern(store, /pantavion_heartbeat_durable_execution_fenced/, "store_fenced_heartbeat_rpc_missing");
 requirePattern(store, /pantavion_append_durable_checkpoint_fenced/, "store_fenced_checkpoint_rpc_missing");
 requirePattern(store, /pantavion_finish_durable_execution_fenced/, "store_fenced_finish_rpc_missing");
+requirePattern(store, /async persistTranslationFenced\s*\(/, "store_fenced_translation_persistence_missing");
+requirePattern(store, /pantavion_persist_translation_message_fenced/, "store_fenced_translation_persistence_rpc_missing");
 requirePattern(store, /PantavionStaleExecutionFenceError/, "store_stale_fence_fail_closed_missing");
 
-// The production translation worker must never fall back to the unfenced claim/write path.
+// The production translation worker must never fall back to an unfenced claim/write/side-effect path.
 requirePattern(worker, /durable\.claimFenced\s*\(/, "worker_does_not_use_fenced_claim");
 requirePattern(worker, /durable\.checkpointFenced\s*\(/, "worker_fenced_checkpoint_missing");
 requirePattern(worker, /durable\.heartbeatFenced\s*\(/, "worker_lease_heartbeat_missing");
+requirePattern(worker, /durable\.persistTranslationFenced\s*\(/, "worker_atomic_fenced_translation_persistence_missing");
 requirePattern(worker, /durable\.finishFencedSuccess\s*\(/, "worker_fenced_success_missing");
 requirePattern(worker, /durable\.finishFencedFailure\s*\(/, "worker_fenced_failure_missing");
 requirePattern(worker, /PantavionStaleExecutionFenceError/, "worker_stale_fence_guard_missing");
 requirePattern(worker, /translation-agent:\$\{process\.pid\}:\$\{randomUUID\(\)\}/, "worker_identity_not_unique");
+rejectPattern(worker, /createAdminClient/, "worker_direct_admin_client_reintroduced");
+rejectPattern(worker, /\.from\(["']messages["']\)/, "worker_direct_message_access_reintroduced");
 rejectPattern(worker, /\.rpc\("pantavion_claim_durable_execution"/, "worker_legacy_claim_reintroduced");
 rejectPattern(worker, /durable\.put\s*\(/, "worker_unfenced_put_reintroduced");
+requirePattern(worker, /clientMessageId:\s*`translation:\$\{executionId\}`/, "translation_idempotency_key_missing");
 requirePattern(
   worker,
   /\["queued", "planned"\]\.includes\(exec\.status\)/,
@@ -139,20 +190,11 @@ requirePattern(
 rejectPattern(worker, /status:\s*"pending"|status:\s*"done"/, "legacy_execution_status_reintroduced");
 requirePattern(worker, /if \(!res\.ok\)/, "http_failure_guard_missing");
 requirePattern(worker, /if \(!body \|\| body\.ok === false\)/, "provider_failure_guard_missing");
-requirePattern(worker, /client_message_id:\s*`translation:\$\{executionId\}`/, "translation_idempotency_key_missing");
-requirePattern(worker, /result\.error && result\.error\.code !== "23505"/, "idempotency_race_error_guard_missing");
-requirePattern(worker, /result\.error\?\.code === "23505"/, "idempotency_race_recovery_missing");
-requirePattern(worker, /message_type:\s*"system"/, "schema_valid_translation_message_type_missing");
-rejectPattern(worker, /message_type:\s*"translation"/, "invalid_translation_message_type_reintroduced");
 requirePattern(worker, /translation_system_sender_id_required/, "required_sender_guard_missing");
 requirePattern(worker, /refusing unsupported control task/, "unsupported_control_task_guard_missing");
 rejectPattern(worker, /no-op control handler placeholder/, "false_control_completion_reintroduced");
 
-requirePattern(
-  messageCoreMigration,
-  /client_message_id text/,
-  "message_client_id_schema_missing",
-);
+requirePattern(messageCoreMigration, /client_message_id text/, "message_client_id_schema_missing");
 requirePattern(
   messageIdempotencyMigration,
   /create unique index if not exists messages_sender_client_id_unique_idx[\s\S]*on public\.messages\(sender_id, client_message_id\)[\s\S]*where client_message_id is not null/,
