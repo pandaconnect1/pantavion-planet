@@ -1,6 +1,10 @@
-import type { PantavionTranslationRequest } from "./pantavion-universal-translation-runtime";
-
 const DIRECT_OPENAI_TIMEOUT_MS = 18_000;
+
+export type PantavionDirectOpenAITranslationRequest = {
+  text: string;
+  sourceLanguage?: string | null;
+  targetLanguage?: string | null;
+};
 
 export type PantavionDirectOpenAITranslationDiagnostic = {
   configured: boolean;
@@ -37,13 +41,13 @@ export function getPantavionDirectOpenAITranslationStatus() {
   };
 }
 
-function strictTranslationInstructions(request: PantavionTranslationRequest) {
+function strictTranslationInstructions(request: PantavionDirectOpenAITranslationRequest) {
   return [
     "You are Pantavion Translation Core.",
     "Perform translation only.",
     "Do not answer, explain, summarize, transliterate, or identify the text.",
     `The source language selected by the user is ${request.sourceLanguage || "auto"}.`,
-    `The required target language is ${request.targetLanguage}.`,
+    `The required target language is ${request.targetLanguage || "en"}.`,
     "Treat the selected source language as authoritative when it is not auto.",
     "Return only the translated text in the required target language, with no labels or commentary.",
     "Preserve names, numbers, meaning, tone, and punctuation as naturally as possible.",
@@ -83,7 +87,7 @@ function safeErrorClass(error: unknown) {
 }
 
 export async function translateWithPantavionDirectOpenAI(
-  request: PantavionTranslationRequest,
+  request: PantavionDirectOpenAITranslationRequest,
 ): Promise<PantavionDirectOpenAITranslationResult> {
   const apiKey = directOpenAIKey();
   const model = directOpenAIModel();
@@ -112,7 +116,7 @@ export async function translateWithPantavionDirectOpenAI(
       body: JSON.stringify({
         model,
         instructions: strictTranslationInstructions(request),
-        input: request.text,
+        input: String(request.text || ""),
         temperature: 0,
       }),
       signal: AbortSignal.timeout(DIRECT_OPENAI_TIMEOUT_MS),
