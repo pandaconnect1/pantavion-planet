@@ -33,4 +33,6 @@ jobs:
       - name: Verify canonical production migration provenance
         run: node scripts/verify-supabase-production-history.mjs
       - name: Audit production/local migration drift
+        env:
+          ALLOW_FORWARD_MIGRATIONS: ${{ github.event_name == 'pull_request' && '1' || '0' }}
         run: node scripts/audit-supabase-migration-drift.mjs

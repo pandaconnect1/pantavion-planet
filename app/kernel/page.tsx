@@ -1,8 +1,9 @@
-﻿import { cookies } from "next/headers";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 import {
   isPantavionKernelAccessAllowed,
+  isPantavionKernelFounderIdentityAllowed,
   PANTAVION_KERNEL_ACCESS_QUERY,
   PANTAVION_KERNEL_FOUNDER_QUERY,
   PANTAVION_KERNEL_SESSION_COOKIE,
@@ -32,11 +33,11 @@ export default async function KernelPage({ searchParams }: KernelPageProps) {
 
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get(PANTAVION_KERNEL_SESSION_COOKIE)?.value ?? null;
+  const secretAllowed =
+    isPantavionKernelAccessAllowed(queryToken) ||
+    isPantavionKernelAccessAllowed(sessionToken);
 
-  if (
-    !isPantavionKernelAccessAllowed(queryToken) &&
-    !isPantavionKernelAccessAllowed(sessionToken)
-  ) {
+  if (!secretAllowed || !(await isPantavionKernelFounderIdentityAllowed())) {
     notFound();
   }
 

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   createPantavionKernelAccessDeniedReport,
-  isPantavionKernelRequestAllowed,
+  isPantavionKernelFounderRequestAllowed,
 } from "@/core/kernel/kernel-access-guard";
 import {
   cancelPantavionFounderWorkOrder,
@@ -244,7 +244,7 @@ function safeErrorMarker(error: unknown): string {
 }
 
 export async function GET(request: Request) {
-  if (!isPantavionKernelRequestAllowed(request)) return denied();
+  if (!(await isPantavionKernelFounderRequestAllowed(request))) return denied();
 
   const url = new URL(request.url);
   const rawLimit = Number.parseInt(url.searchParams.get("limit") ?? "30", 10);
@@ -268,7 +268,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!isPantavionKernelRequestAllowed(request)) return denied();
+  if (!(await isPantavionKernelFounderRequestAllowed(request))) return denied();
 
   let body: unknown;
   try {
@@ -334,7 +334,7 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  if (!isPantavionKernelRequestAllowed(request)) return denied();
+  if (!(await isPantavionKernelFounderRequestAllowed(request))) return denied();
 
   let body: Record<string, unknown> | null = null;
   try {
