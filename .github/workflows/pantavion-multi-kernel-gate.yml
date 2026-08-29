@@ -14,6 +14,7 @@ on:
       - "scripts/pantavion-foundry-gate.cjs"
       - "scripts/pantavion-kernel-*.mjs"
       - "scripts/pantavion-multi-kernel-*.mjs"
+      - "scripts/pantavion-global-safety-fabric-test.mjs"
       - "scripts/pantavion-durable-execution-*.mjs"
       - "scripts/pantavion-durable-fencing-postgres-test.sql"
       - "scripts/pantavion-translation-worker-gate.cjs"
@@ -31,6 +32,7 @@ on:
       - "scripts/pantavion-foundry-gate.cjs"
       - "scripts/pantavion-kernel-*.mjs"
       - "scripts/pantavion-multi-kernel-*.mjs"
+      - "scripts/pantavion-global-safety-fabric-test.mjs"
       - "scripts/pantavion-durable-execution-*.mjs"
       - "scripts/pantavion-durable-fencing-postgres-test.sql"
       - "scripts/pantavion-translation-worker-gate.cjs"
@@ -57,6 +59,9 @@ jobs:
 
       - name: Verify resilience contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-multi-kernel-resilience-test.mjs
+
+      - name: Verify global safety and jurisdiction failover fabric
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-global-safety-fabric-test.mjs
 
       - name: Verify nervous-system contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-nervous-system-test.mjs
