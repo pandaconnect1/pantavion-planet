@@ -1,0 +1,54 @@
+name: Pantavion Artifact Capability
+
+on:
+  pull_request:
+    paths:
+      - "core/intake/pantavion-artifact-storage-policy.ts"
+      - "core/intake/pantavion-artifact-editing-capabilities.ts"
+      - "app/api/kernel/artifact-upload/**"
+      - "app/kernel/artifact-upload/**"
+      - "scripts/pantavion-universal-artifact-upload-contract-test.mjs"
+      - "scripts/pantavion-artifact-editing-capability-contract-test.mjs"
+      - "supabase/migrations/20260829073502_expand_personal_media_artifact_limit_1_5g.sql"
+      - ".github/workflows/pantavion-artifact-capability.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "core/intake/pantavion-artifact-storage-policy.ts"
+      - "core/intake/pantavion-artifact-editing-capabilities.ts"
+      - "app/api/kernel/artifact-upload/**"
+      - "app/kernel/artifact-upload/**"
+      - "scripts/pantavion-universal-artifact-upload-contract-test.mjs"
+      - "scripts/pantavion-artifact-editing-capability-contract-test.mjs"
+      - "supabase/migrations/20260829073502_expand_personal_media_artifact_limit_1_5g.sql"
+      - ".github/workflows/pantavion-artifact-capability.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  artifact-capability-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify universal artifact upload truth
+        run: node scripts/pantavion-universal-artifact-upload-contract-test.mjs
+
+      - name: Verify editing capability truth
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-artifact-editing-capability-contract-test.mjs
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Repository typecheck
+        run: npm run typecheck
