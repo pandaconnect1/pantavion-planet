@@ -1,6 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { runPantavionCloudCronTick } from "@/core/intelligence/pantavion-intelligence-ledger";
+import { materializePantavionFounderExecutionIntents } from "@/core/kernel/pantavion-founder-canonical-state-runtime";
 import { runPantavionNervousSystemFoundryTick } from "@/core/kernel/pantavion-foundry-nervous-system-runtime";
 import { runSecureScheduledWorker } from "@/core/runtime/secure-scheduled-worker";
 
@@ -63,17 +64,19 @@ async function executeScheduledTick(
     const worker = await runSecureScheduledWorker(
       "pantavion-intelligence-hourly",
       async () => {
+        const canonicalExecutionIntake = await materializePantavionFounderExecutionIntents(20);
         const tick = await runPantavionCloudCronTick(source);
         const foundry = await runPantavionNervousSystemFoundryTick();
 
         return {
-          ok: tick.ok,
+          ok: tick.ok && canonicalExecutionIntake.status !== "blocked",
           route: tick.route,
           executedAt: tick.cron.executedAt,
           opportunityCount: tick.ledgerEvent.opportunityCount,
           buildQueueCount: tick.ledgerEvent.buildQueueCount,
           ledgerStatus: tick.ledgerEvent.status,
           ledgerStorageMode: tick.ledgerEvent.storageMode,
+          canonicalExecutionIntake,
           foundry,
         };
       },
@@ -85,11 +88,13 @@ async function executeScheduledTick(
       runtimeSafety: {
         authorization: "exact CRON_SECRET bearer token",
         concurrency: "Supabase atomic lease prevents overlapping executions",
-        idempotency: "one run key per worker per UTC hour",
-        audit: "durable run status and bounded summary stored in Supabase",
+        idempotency: "one run key per worker per UTC hour plus durable founder-intent/work-order idempotency keys",
+        audit: "durable run status, canonical execution-intent status, work-order checkpoints and bounded summary are stored in Supabase",
+        canonicalIntake:
+          "founder-only canonical execution intents are materialized through the Pantavion work-order constructor before Nervous System and Foundry execution",
         foundry:
-          "dependency-gated Nervous System reconciles durable Pantavion-owned agents before the existing Foundry performs its atomic SQL claim and internal runtime execution",
-        destructiveActions: "disabled",
+          "dependency-gated Nervous System reconciles durable Pantavion-owned agents before the existing Foundry performs its fenced/atomic internal runtime execution",
+        destructiveActions: "disabled unless separately authorized through the recorded capability and owner-release boundaries",
       },
     });
   } catch (error) {
