@@ -54,6 +54,9 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Install pinned repository compiler
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
       - name: Verify hierarchy contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-hierarchy-test.mjs
 
@@ -63,7 +66,7 @@ jobs:
       - name: Compile global safety fabric contract
         run: |
           rm -rf .tmp-global-safety
-          npx tsc \
+          ./node_modules/.bin/tsc \
             --target ES2022 \
             --module commonjs \
             --moduleResolution node \
