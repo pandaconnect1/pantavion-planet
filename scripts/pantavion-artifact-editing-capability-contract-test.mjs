@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 
 import { createPantavionArtifactIntakeRecord } from "../core/intake/pantavion-universal-artifact-intake.ts";
 import {
-  getPantavionArtifactEditingCapabilities,
+  createPantavionArtifactEditingCapabilities,
   PANTAVION_ARTIFACT_EDITING_CAPABILITY_MARKER,
 } from "../core/intake/pantavion-artifact-editing-capabilities.ts";
 import {
@@ -25,7 +25,7 @@ function capabilitiesFor(fileName, mimeType = "application/octet-stream") {
     sizeBytes: 1024,
     mimeType,
   });
-  const capabilities = getPantavionArtifactEditingCapabilities(artifact.detection);
+  const capabilities = createPantavionArtifactEditingCapabilities(artifact.detection);
   assert.equal(capabilities.marker, PANTAVION_ARTIFACT_EDITING_CAPABILITY_MARKER);
   assert.equal(capabilities.originalImmutable, true);
   assert.equal(capabilities.derivativeRequiredForByteChanges, true);
