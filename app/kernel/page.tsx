@@ -46,6 +46,12 @@ export default async function KernelPage({ searchParams }: KernelPageProps) {
       <div className="bg-[#05070d] px-5 pt-6 text-white">
         <div className="mx-auto flex max-w-7xl flex-wrap gap-3">
           <a
+            href="/admin/pantavion/intelligence"
+            className="rounded-2xl border border-violet-300/40 bg-violet-300/10 px-5 py-3 text-sm font-black text-violet-100"
+          >
+            Strategic Intelligence
+          </a>
+          <a
             href="/kernel/artifact-upload"
             className="rounded-2xl border border-cyan-300/40 bg-cyan-300/10 px-5 py-3 text-sm font-black text-cyan-100"
           >
