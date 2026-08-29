@@ -14,6 +14,7 @@ on:
       - "scripts/pantavion-foundry-gate.cjs"
       - "scripts/pantavion-kernel-*.mjs"
       - "scripts/pantavion-multi-kernel-*.mjs"
+      - "scripts/pantavion-global-safety-fabric-test.mjs"
       - "scripts/pantavion-durable-execution-*.mjs"
       - "scripts/pantavion-durable-fencing-postgres-test.sql"
       - "scripts/pantavion-translation-worker-gate.cjs"
@@ -31,6 +32,7 @@ on:
       - "scripts/pantavion-foundry-gate.cjs"
       - "scripts/pantavion-kernel-*.mjs"
       - "scripts/pantavion-multi-kernel-*.mjs"
+      - "scripts/pantavion-global-safety-fabric-test.mjs"
       - "scripts/pantavion-durable-execution-*.mjs"
       - "scripts/pantavion-durable-fencing-postgres-test.sql"
       - "scripts/pantavion-translation-worker-gate.cjs"
@@ -42,7 +44,7 @@ permissions:
 jobs:
   kernel-contracts:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -52,11 +54,35 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Install pinned repository compiler
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
       - name: Verify hierarchy contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-hierarchy-test.mjs
 
       - name: Verify resilience contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-multi-kernel-resilience-test.mjs
+
+      - name: Compile global safety fabric contract
+        run: |
+          rm -rf .tmp-global-safety
+          ./node_modules/.bin/tsc \
+            --target ES2022 \
+            --module commonjs \
+            --moduleResolution node \
+            --esModuleInterop true \
+            --strict \
+            --skipLibCheck \
+            --outDir .tmp-global-safety \
+            core/identity/age-role-engine.ts \
+            core/governance/adaptive-ecosystem-policy.ts \
+            kernel/hierarchy.ts \
+            kernel/resilience.ts \
+            kernel/zero-trust.ts \
+            kernel/global-safety-fabric.ts
+
+      - name: Verify global safety and jurisdiction failover fabric
+        run: node scripts/pantavion-global-safety-fabric-test.mjs
 
       - name: Verify nervous-system contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-nervous-system-test.mjs
