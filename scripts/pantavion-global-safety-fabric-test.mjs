@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {
   PANTAVION_CONTINENTS,
   resolvePantavionGlobalSafetyFabric,
-} from "../kernel/global-safety-fabric.ts";
+} from "../.tmp-global-safety/kernel/global-safety-fabric.js";
 
 const now = Date.parse("2026-08-29T09:45:00.000Z");
 

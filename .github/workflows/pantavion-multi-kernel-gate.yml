@@ -44,7 +44,7 @@ permissions:
 jobs:
   kernel-contracts:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -60,8 +60,26 @@ jobs:
       - name: Verify resilience contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-multi-kernel-resilience-test.mjs
 
+      - name: Compile global safety fabric contract
+        run: |
+          rm -rf .tmp-global-safety
+          npx tsc \
+            --target ES2022 \
+            --module commonjs \
+            --moduleResolution node \
+            --esModuleInterop true \
+            --strict \
+            --skipLibCheck \
+            --outDir .tmp-global-safety \
+            core/identity/age-role-engine.ts \
+            core/governance/adaptive-ecosystem-policy.ts \
+            kernel/hierarchy.ts \
+            kernel/resilience.ts \
+            kernel/zero-trust.ts \
+            kernel/global-safety-fabric.ts
+
       - name: Verify global safety and jurisdiction failover fabric
-        run: node --no-warnings --experimental-strip-types scripts/pantavion-global-safety-fabric-test.mjs
+        run: node scripts/pantavion-global-safety-fabric-test.mjs
 
       - name: Verify nervous-system contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-kernel-nervous-system-test.mjs

@@ -3,12 +3,12 @@ import {
   type PantavionAdaptiveFeature,
   type PantavionCountryAdaptiveRule,
   type PantavionAdaptivePolicyDecision,
-} from "../core/governance/adaptive-ecosystem-policy.ts";
+} from "../core/governance/adaptive-ecosystem-policy";
 import {
   selectUserServingPath,
   type KernelHierarchyNode,
   type KernelTier,
-} from "./hierarchy.ts";
+} from "./hierarchy";
 import {
   electKernelLeader,
   type KernelElectionPolicy,
@@ -16,13 +16,13 @@ import {
   type KernelNodeHealth,
   type KernelNodeRole,
   type KernelNodeStatus,
-} from "./resilience.ts";
+} from "./resilience";
 import {
   evaluateKernelZeroTrustAccess,
   type KernelPrincipal,
   type KernelProtectedResource,
   type KernelZeroTrustDecision,
-} from "./zero-trust.ts";
+} from "./zero-trust";
 
 export const PANTAVION_CONTINENTS = [
   "Africa",
