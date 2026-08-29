@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import { evaluateReplacement } from "../core/sovereign/technology-factory.ts";
 import { compileOutcomePlan } from "../core/sovereign/intent-to-outcome-fabric.ts";
-import { createEphemeralAgent, canAgentUseCapability } from "../core/sovereign/ephemeral-agent-swarm.ts";
+import { activateEphemeralAgent, createEphemeralAgent, canAgentUseCapability } from "../core/sovereign/ephemeral-agent-swarm.ts";
 import { evaluateIntentFirewall } from "../core/sovereign/intent-firewall.ts";
 import {
   authorizeAgentCapability,
@@ -86,6 +86,7 @@ const grant = createAgentBudgetGrant({
   expiresAt: "2026-08-28T20:00:00.000Z",
 });
 const readRequest = {
+  agentId: "agent_1",
   intentId: "intent_safe",
   capability: "classify",
   scope: "recovery/corpus",
@@ -117,16 +118,22 @@ const edgeTask = {
   issuedAt: "2026-08-27T20:00:00.000Z",
   expiresAt: "2026-08-28T20:00:00.000Z",
 };
-const packet = createDisconnectedExecutionPacket(edgeTask, {
+const edgePolicy = {
   allowedCapabilities: ["classify"],
   maximumPayloadBytes: 1024,
-});
+};
+const packet = createDisconnectedExecutionPacket(edgeTask, edgePolicy);
 assert(
-  verifyDisconnectedExecutionPacket(packet, "2026-08-27T21:00:00.000Z").valid,
+  verifyDisconnectedExecutionPacket(packet, "2026-08-27T21:00:00.000Z", edgePolicy).valid,
   "Untampered offline packet must verify.",
 );
 assert(
-  !verifyDisconnectedExecutionPacket(packet, "2026-08-27T21:00:00.000Z", new Set([packet.payloadDigest])).valid,
+  !verifyDisconnectedExecutionPacket(
+    packet,
+    "2026-08-27T21:00:00.000Z",
+    edgePolicy,
+    new Set([packet.payloadDigest]),
+  ).valid,
   "Consumed offline packet must be rejected as replay.",
 );
 expectThrows(
@@ -195,7 +202,7 @@ const plan = compileOutcomePlan(
 );
 assert(plan.requiresOwnerApproval, "High-risk outcome plan must wait for owner approval.");
 
-const ephemeralAgent = createEphemeralAgent({
+const createdEphemeralAgent = createEphemeralAgent({
   id: "ephemeral_1",
   parentIntentId: "intent_safe",
   role: "verifier",
@@ -205,8 +212,26 @@ const ephemeralAgent = createEphemeralAgent({
   expiresAt: "2026-08-28T20:00:00.000Z",
 });
 assert(
-  canAgentUseCapability(ephemeralAgent, "classify", "recovery/corpus", new Date("2026-08-27T21:00:00.000Z")),
-  "Ephemeral agent must use only its bounded live scope.",
+  !canAgentUseCapability(
+    createdEphemeralAgent,
+    "classify",
+    "recovery/corpus",
+    new Date("2026-08-27T21:00:00.000Z"),
+  ),
+  "Created agents must not execute before explicit activation.",
+);
+const ephemeralAgent = activateEphemeralAgent(
+  createdEphemeralAgent,
+  new Date("2026-08-27T21:00:00.000Z"),
+);
+assert(
+  canAgentUseCapability(
+    ephemeralAgent,
+    "classify",
+    "recovery/corpus",
+    new Date("2026-08-27T21:00:00.000Z"),
+  ),
+  "Activated ephemeral agent must use only its bounded live scope.",
 );
 
 const codedItem = {
@@ -252,6 +277,141 @@ for (const id of [
     `${id} must not infer deployment or VERIFIED_LIVE from merge evidence.`,
   );
 }
+
+
+assert(
+  !authorizeAgentCapability(grant, { ...readRequest, agentId: "different_agent" }).allowed,
+  "A capability grant must be bound to the exact agent identity.",
+);
+assert(
+  !authorizeAgentCapability({ ...grant, spent: Number.NaN }, readRequest).allowed,
+  "Non-finite grant accounting must fail closed.",
+);
+expectThrows(
+  () =>
+    createAgentBudgetGrant({
+      id: "grant_invalid_time",
+      agentId: "agent_1",
+      intentId: "intent_safe",
+      capabilities: [{ capability: "classify", scope: "recovery/corpus", access: "read" }],
+      budgetLimit: 1,
+      issuedAt: "not-a-time",
+      expiresAt: "also-not-a-time",
+    }),
+  "Invalid grant timestamps must be rejected.",
+);
+
+assert(
+  evaluateIntentFirewall({ ...safeIntentRequest, dataClasses: [] }, firewallPolicy).disposition === "deny",
+  "Missing data classification must fail closed.",
+);
+assert(
+  evaluateIntentFirewall(
+    safeIntentRequest,
+    { ...firewallPolicy, maximumAutomaticCost: Number.NaN },
+  ).disposition === "deny",
+  "Invalid firewall policy numbers must fail closed.",
+);
+
+expectThrows(
+  () =>
+    compileOutcomePlan(
+      { id: "invalid_cost", userId: "founder_test", text: "verify", desiredOutcome: "verify" },
+      [],
+      Number.NaN,
+      { ownerApprovalRisks: ["high"], requireApprovalForIrreversible: true, maximumAutomaticCost: 5 },
+    ),
+  "Non-finite outcome cost must be rejected.",
+);
+const cyclicPlan = compileOutcomePlan(
+  { id: "cycle", userId: "founder_test", text: "verify", desiredOutcome: "verify" },
+  [
+    {
+      id: "a",
+      title: "A",
+      kind: "workflow",
+      capability: "classify",
+      risk: "low",
+      reversible: true,
+      requiresOwnerApproval: false,
+      dependsOn: ["b"],
+    },
+    {
+      id: "b",
+      title: "B",
+      kind: "workflow",
+      capability: "classify",
+      risk: "low",
+      reversible: true,
+      requiresOwnerApproval: false,
+      dependsOn: ["a"],
+    },
+  ],
+  0,
+  { ownerApprovalRisks: ["high"], requireApprovalForIrreversible: true, maximumAutomaticCost: 5 },
+);
+assert(
+  cyclicPlan.state === "blocked" && cyclicPlan.blockers.includes("dependency_cycle_detected"),
+  "Cyclic outcome dependencies must be blocked before execution.",
+);
+
+expectThrows(
+  () => createDisconnectedExecutionPacket({ ...edgeTask, issuedAt: "invalid" }, edgePolicy),
+  "Invalid edge timestamps must be rejected.",
+);
+assert(
+  !verifyDisconnectedExecutionPacket(packet, "invalid", edgePolicy).valid,
+  "Invalid edge verification time must fail closed.",
+);
+assert(
+  !verifyDisconnectedExecutionPacket(
+    packet,
+    "2026-08-27T21:00:00.000Z",
+    { ...edgePolicy, allowedCapabilities: [] },
+  ).valid,
+  "Edge verification must re-apply the capability policy.",
+);
+
+assert(
+  evaluateReplacement(
+    incumbent,
+    { ...replacement, unitCost: Number.NaN },
+    {
+      minimumQuality: 85,
+      minimumPrivacy: 65,
+      minimumResilience: 65,
+      maximumUnitCost: 6,
+      ownerApprovalForExternalReplacement: true,
+    },
+  ).decision === "deny",
+  "Non-finite replacement metrics must fail closed.",
+);
+assert(
+  assessTechnologyLibraryEntry({
+    ...completeTechnology,
+    evidence: completeTechnology.evidence.map((evidence, index) =>
+      index === 0 ? { ...evidence, reference: "" } : evidence
+    ),
+  }).readiness === "hold",
+  "Blank technology evidence must not satisfy readiness.",
+);
+
+const invalidEvidenceItem = {
+  ...codedItem,
+  evidenceRecords: [{ kind: "code", reference: "", recordedAt: codedItem.updatedAt }],
+};
+assert(
+  validateImplementationTruth(invalidEvidenceItem).includes("evidence_reference_missing:code"),
+  "Implementation evidence must carry a non-empty reference.",
+);
+assert(
+  !canAdvanceImplementationState("unknown_state", "unknown_state"),
+  "Unknown runtime states must never be treated as a valid transition.",
+);
+expectThrows(
+  () => advanceImplementationItem(codedItem, "coded", [], "2026-08-27T19:00:00.000Z"),
+  "Implementation truth timestamps must be monotonic.",
+);
 
 const ownerPage = await readFile(join(process.cwd(), "app/owner/control/implementation/page.tsx"), "utf8");
 assert(ownerPage.includes("requireFounderIdentity"), "Owner implementation page must require founder identity.");

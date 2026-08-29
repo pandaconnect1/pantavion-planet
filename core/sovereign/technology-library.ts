@@ -37,17 +37,37 @@ export function assessTechnologyLibraryEntry(
   const blockers: string[] = [];
   const evidenceKinds = new Set(entry.evidence.map((item) => item.kind));
 
-  if (!entry.id.trim() || !entry.capability.trim()) blockers.push("identity_or_capability_missing");
-  if (!entry.licenseId || !evidenceKinds.has("license")) blockers.push("license_evidence_missing");
+  if (!entry.id.trim() || !entry.name.trim() || !entry.capability.trim()) {
+    blockers.push("identity_or_capability_missing");
+  }
+  for (const evidence of entry.evidence) {
+    if (!evidence.reference.trim()) blockers.push("evidence_reference_missing:" + evidence.kind);
+    if (!Number.isFinite(Date.parse(evidence.observedAt))) {
+      blockers.push("evidence_timestamp_invalid:" + evidence.kind);
+    }
+  }
+
+  const matchingLicenseEvidence = entry.evidence.some(
+    (item) => item.kind === "license" && item.reference.trim() === entry.licenseId?.trim(),
+  );
+  if (!entry.licenseId?.trim() || !evidenceKinds.has("license")) blockers.push("license_evidence_missing");
+  else if (!matchingLicenseEvidence) blockers.push("license_evidence_mismatch");
   if (!entry.commercialUseAllowed) blockers.push("commercial_use_not_allowed");
   if (!entry.sourceAvailable && entry.source !== "external_provider") blockers.push("source_unavailable");
   if (!entry.reversibleIntegration) blockers.push("rollback_unavailable");
   if (!entry.securityReviewed || !evidenceKinds.has("security")) blockers.push("security_review_missing");
   if (!entry.privacyReviewed || !evidenceKinds.has("privacy")) blockers.push("privacy_review_missing");
-  if (!evidenceKinds.has("source") || !evidenceKinds.has("benchmark")) blockers.push("technical_evidence_incomplete");
+  if (!evidenceKinds.has("source") || !evidenceKinds.has("benchmark")) {
+    blockers.push("technical_evidence_incomplete");
+  }
 
   if (blockers.length) {
-    return { entryId: entry.id, readiness: "hold", blockers, deploymentAuthorized: false };
+    return {
+      entryId: entry.id,
+      readiness: "hold",
+      blockers: [...new Set(blockers)],
+      deploymentAuthorized: false,
+    };
   }
 
   return {

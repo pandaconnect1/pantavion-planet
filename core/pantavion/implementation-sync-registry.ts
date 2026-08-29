@@ -67,34 +67,99 @@ const requiredEvidence: Record<Exclude<ImplementationState, "blocked">, Implemen
   ],
 };
 
+const validImplementationStates = new Set<ImplementationState>([...stateOrder, "blocked"]);
+const validEvidenceKinds = new Set<ImplementationEvidenceKind>([
+  "code",
+  "test",
+  "merge",
+  "deployment",
+  "exact_revision",
+  "authenticated_e2e",
+  "rls_isolation",
+  "rollback",
+  "audit",
+]);
+const revisionBoundEvidenceKinds = new Set<ImplementationEvidenceKind>([
+  "merge",
+  "deployment",
+  "exact_revision",
+  "authenticated_e2e",
+  "rls_isolation",
+  "rollback",
+  "audit",
+]);
+
 export function requiredEvidenceForState(state: ImplementationState): ImplementationEvidenceKind[] {
+  if (!validImplementationStates.has(state)) throw new Error("invalid implementation state");
   return state === "blocked" ? [] : [...requiredEvidence[state]];
 }
 
 export function validateImplementationTruth(item: ImplementationSyncItem): string[] {
   const blockers: string[] = [];
+  const updatedAt = Date.parse(item.updatedAt);
   if (!item.id.trim() || !item.title.trim() || !item.source.trim()) blockers.push("identity_or_source_missing");
-  if (!Number.isFinite(Date.parse(item.updatedAt))) blockers.push("updated_at_invalid");
+  if (!Number.isFinite(updatedAt)) blockers.push("updated_at_invalid");
+  if (!validImplementationStates.has(item.state)) {
+    blockers.push("implementation_state_invalid");
+    return blockers;
+  }
   if (item.state === "blocked") {
     if (!item.blocker?.trim()) blockers.push("blocked_state_without_blocker");
     return blockers;
   }
 
-  const evidenceKinds = new Set((item.evidenceRecords ?? []).map((record) => record.kind));
+  const evidenceRecords = item.evidenceRecords ?? [];
+  for (const record of evidenceRecords) {
+    if (!validEvidenceKinds.has(record.kind)) blockers.push("evidence_kind_invalid");
+    if (!record.reference.trim()) blockers.push("evidence_reference_missing:" + record.kind);
+    const recordedAt = Date.parse(record.recordedAt);
+    if (!Number.isFinite(recordedAt)) blockers.push("evidence_timestamp_invalid:" + record.kind);
+    else if (Number.isFinite(updatedAt) && recordedAt > updatedAt) {
+      blockers.push("evidence_after_item_update:" + record.kind);
+    }
+    if (revisionBoundEvidenceKinds.has(record.kind) && !record.revision?.trim()) {
+      blockers.push("evidence_revision_missing:" + record.kind);
+    }
+  }
+
+  const evidenceKinds = new Set(evidenceRecords.map((record) => record.kind));
   for (const required of requiredEvidence[item.state]) {
-    if (!evidenceKinds.has(required)) blockers.push(`evidence_missing:${required}`);
+    if (!evidenceKinds.has(required)) blockers.push("evidence_missing:" + required);
   }
+
   if (item.state === "deployed" || item.state === "verified_live") {
-    const exactRevision = (item.evidenceRecords ?? []).find((record) => record.kind === "exact_revision");
-    if (!exactRevision?.revision?.trim()) blockers.push("exact_deployed_revision_missing");
+    const exactRevisions = [
+      ...new Set(
+        evidenceRecords
+          .filter((record) => record.kind === "exact_revision")
+          .map((record) => record.revision?.trim())
+          .filter((revision): revision is string => Boolean(revision)),
+      ),
+    ];
+    if (!exactRevisions.length) blockers.push("exact_deployed_revision_missing");
+    if (exactRevisions.length > 1) blockers.push("contradictory_exact_deployed_revisions");
+    const exactRevision = exactRevisions[0];
+    if (exactRevision) {
+      for (const record of evidenceRecords) {
+        if (
+          revisionBoundEvidenceKinds.has(record.kind) &&
+          record.kind !== "merge" &&
+          record.revision?.trim() &&
+          record.revision.trim() !== exactRevision
+        ) {
+          blockers.push("evidence_revision_mismatch:" + record.kind);
+        }
+      }
+    }
   }
-  return blockers;
+  return [...new Set(blockers)];
 }
 
 export function canAdvanceImplementationState(
   current: ImplementationState,
   next: ImplementationState,
 ) {
+  if (!validImplementationStates.has(current) || !validImplementationStates.has(next)) return false;
   if (next === "blocked") return true;
   if (current === "blocked") return false;
   const currentRank = stateOrder.indexOf(current);
@@ -109,7 +174,16 @@ export function advanceImplementationItem(
   updatedAt: string,
 ): ImplementationSyncItem {
   if (!canAdvanceImplementationState(current.state, next)) {
-    throw new Error(`invalid implementation transition:${current.state}->${next}`);
+    throw new Error("invalid implementation transition:" + current.state + "->" + next);
+  }
+  const nextUpdatedAt = Date.parse(updatedAt);
+  const currentUpdatedAt = Date.parse(current.updatedAt);
+  if (
+    !Number.isFinite(nextUpdatedAt) ||
+    !Number.isFinite(currentUpdatedAt) ||
+    nextUpdatedAt < currentUpdatedAt
+  ) {
+    throw new Error("implementation updatedAt must be valid and monotonic");
   }
   const candidate: ImplementationSyncItem = {
     ...current,
@@ -118,7 +192,7 @@ export function advanceImplementationItem(
     updatedAt,
   };
   const blockers = validateImplementationTruth(candidate);
-  if (blockers.length) throw new Error(`implementation truth rejected:${blockers.join(",")}`);
+  if (blockers.length) throw new Error("implementation truth rejected:" + blockers.join(","));
   return candidate;
 }
 
@@ -134,7 +208,7 @@ export function synchronizeImplementationItems(
   for (const item of sources.flat()) {
     const truthBlockers = validateImplementationTruth(item);
     const safeItem = truthBlockers.length
-      ? { ...item, state: "blocked" as const, blocker: `truth_gate:${truthBlockers.join("|")}` }
+      ? { ...item, state: "blocked" as const, blocker: "truth_gate:" + truthBlockers.join("|") }
       : item;
     const existing = merged.get(safeItem.id);
     if (!existing) {
@@ -142,35 +216,55 @@ export function synchronizeImplementationItems(
       continue;
     }
 
+    if (safeItem.state === "blocked" && existing.state !== "blocked") continue;
+
     const incomingRank = stateRank(safeItem.state);
     const existingRank = stateRank(existing.state);
-    const newer = Date.parse(safeItem.updatedAt) >= Date.parse(existing.updatedAt);
-    const mergedEvidenceRecords = [...(existing.evidenceRecords ?? []), ...(safeItem.evidenceRecords ?? [])]
+    const incomingTime = Date.parse(safeItem.updatedAt);
+    const existingTime = Date.parse(existing.updatedAt);
+    const newer = Number.isFinite(incomingTime) && (
+      !Number.isFinite(existingTime) || incomingTime >= existingTime
+    );
+    const preferred =
+      incomingRank > existingRank || (incomingRank === existingRank && newer)
+        ? safeItem
+        : existing;
+
+    const validEvidenceSources = [existing, safeItem].filter((candidate) => candidate.state !== "blocked");
+    const mergedEvidenceRecords = validEvidenceSources
+      .flatMap((candidate) => candidate.evidenceRecords ?? [])
       .filter((record, index, all) =>
         all.findIndex((candidate) =>
           candidate.kind === record.kind &&
           candidate.reference === record.reference &&
-          candidate.revision === record.revision,
+          candidate.revision === record.revision &&
+          candidate.recordedAt === record.recordedAt,
         ) === index,
       );
 
-    if (incomingRank > existingRank || (incomingRank === existingRank && newer)) {
-      merged.set(safeItem.id, {
-        ...existing,
-        ...safeItem,
-        evidence: [...new Set([...(existing.evidence ?? []), ...(safeItem.evidence ?? [])])],
-        evidenceRecords: mergedEvidenceRecords,
-      });
-    } else {
-      merged.set(safeItem.id, {
-        ...existing,
-        evidence: [...new Set([...(existing.evidence ?? []), ...(safeItem.evidence ?? [])])],
-        evidenceRecords: mergedEvidenceRecords,
-      });
-    }
+    const candidate: ImplementationSyncItem = {
+      ...preferred,
+      evidence: [
+        ...new Set(validEvidenceSources.flatMap((source) => source.evidence ?? [])),
+      ],
+      evidenceRecords: mergedEvidenceRecords,
+    };
+    const candidateBlockers = validateImplementationTruth(candidate);
+    merged.set(
+      safeItem.id,
+      candidateBlockers.length
+        ? {
+            ...candidate,
+            state: "blocked",
+            blocker: "truth_gate:" + candidateBlockers.join("|"),
+          }
+        : candidate,
+    );
   }
 
-  return [...merged.values()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  return [...merged.values()].sort(
+    (a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt),
+  );
 }
 
 const codedAt = "2026-08-27T20:45:00.000Z";
