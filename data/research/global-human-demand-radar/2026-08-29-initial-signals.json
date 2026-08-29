@@ -1,0 +1,369 @@
+{
+  "snapshot": "2026-08-29",
+  "truthBoundary": "Observed facts are source-backed snapshots. Product implications are hypotheses requiring country- and segment-level validation. No research signal has production authority.",
+  "signals": [
+    {
+      "id": "global-fragmented-digital-life-2026",
+      "title": "Digital life is widespread, mobile-led, multi-platform and increasingly AI-assisted",
+      "domain": "ai_personal_assistant",
+      "signalType": "fragmentation",
+      "segment": {
+        "continent": "Europe",
+        "countries": ["GLOBAL_PROXY"],
+        "connectivity": ["mixed"],
+        "deviceProfiles": ["mobile_first", "mobile_plus_desktop"],
+        "notes": ["Global signal is stored with GLOBAL_PROXY; it must never be interpreted as a Europe-only finding."]
+      },
+      "evidence": [
+        {
+          "id": "datareportal-global-midyear-2026",
+          "title": "Digital 2026 Mid-Year Global Update",
+          "publisher": "DataReportal",
+          "url": "https://datareportal.com/reports/digital-2026-mid-year-global-update-report",
+          "observedAt": "2026-04-01",
+          "tier": "reputable_research",
+          "claim": "6.12B internet users, 5.79B social-media identities and about 2.42B active GenAI users were reported in April 2026; mobile phones are used to access the internet by the overwhelming majority of internet users.",
+          "confidence": 92
+        },
+        {
+          "id": "datareportal-global-2026",
+          "title": "Digital 2026 Global Overview",
+          "publisher": "DataReportal",
+          "url": "https://datareportal.com/reports/digital-2026-global-overview-report",
+          "observedAt": "2025-10-01",
+          "tier": "reputable_research",
+          "claim": "Adult social users commonly use multiple platforms and cite several distinct reasons for social-platform use; keeping in touch remains the top global motivation.",
+          "confidence": 90
+        }
+      ],
+      "prevalence": 97,
+      "userFriction": 80,
+      "pantavionFit": 98,
+      "urgency": 88,
+      "trustOrRegulatoryRisk": 72,
+      "hypothesis": "A continuous Personal AI plus unified communication, social, files, learning, work, marketplace and media experience can reduce app fragmentation if permissions and boundaries stay explicit.",
+      "proposedCapabilities": [
+        "intent-first universal search",
+        "cross-module Personal AI continuity",
+        "unified inbox and communication",
+        "universal artifact workspace",
+        "user-controlled cross-module memory",
+        "transparent permissions and action approvals"
+      ]
+    },
+    {
+      "id": "africa-mobile-inclusion-trust-2026",
+      "title": "Africa combines fast digital growth with affordability and usage barriers",
+      "domain": "communication",
+      "signalType": "connectivity_constraint",
+      "segment": {
+        "continent": "Africa",
+        "connectivity": ["mixed", "low_bandwidth", "intermittent"],
+        "deviceProfiles": ["mobile_first"],
+        "notes": ["Country-level variation is large; do not generalize the continental profile to an individual user."]
+      },
+      "evidence": [
+        {
+          "id": "gsma-africa-2026",
+          "title": "The Mobile Economy Africa 2026",
+          "publisher": "GSMA",
+          "url": "https://www.gsma.com/newsroom/press-release/mobile-technologies-contributed-240-billion-to-africas-economy-in-2025-as-the-continent-enters-a-new-phase-of-digital-transformation/",
+          "observedAt": "2026-06-16",
+          "tier": "industry_primary",
+          "claim": "GSMA reports strong mobile-led economic growth while identifying affordability as a key barrier to digital inclusion.",
+          "confidence": 94
+        },
+        {
+          "id": "datareportal-nigeria-2026",
+          "title": "Digital 2026 Nigeria",
+          "publisher": "DataReportal",
+          "url": "https://datareportal.com/reports/digital-2026-nigeria",
+          "observedAt": "2025-12-31",
+          "tier": "country_report",
+          "claim": "Nigeria provides an example of substantial mobile connectivity alongside a much lower share of the total population using the internet and social media.",
+          "confidence": 88
+        }
+      ],
+      "prevalence": 80,
+      "userFriction": 90,
+      "pantavionFit": 94,
+      "urgency": 87,
+      "trustOrRegulatoryRisk": 74,
+      "hypothesis": "Pantavion should treat low-data, offline-capable, local-language and trust-preserving operation as first-class product modes rather than degraded afterthoughts.",
+      "proposedCapabilities": [
+        "data-saver mode",
+        "offline-first queues and delayed sync",
+        "local-language and dialect assistance",
+        "low-bandwidth voice and messaging",
+        "fraud and impersonation protections",
+        "device-light progressive experience"
+      ]
+    },
+    {
+      "id": "asia-scale-ai-trust-2026",
+      "title": "Asia-Pacific is scaling 5G and AI while digital trust becomes a core requirement",
+      "domain": "trust_privacy_identity",
+      "signalType": "behavior_shift",
+      "segment": {
+        "continent": "Asia",
+        "connectivity": ["high_reliability", "mixed", "low_bandwidth"],
+        "deviceProfiles": ["mobile_first", "mobile_plus_desktop"],
+        "notes": ["Asia is too diverse for a single platform model; country/language ecosystems must remain distinct."]
+      },
+      "evidence": [
+        {
+          "id": "gsma-apac-2026",
+          "title": "The Mobile Economy Asia Pacific 2026",
+          "publisher": "GSMA",
+          "url": "https://www.gsma.com/solutions-and-impact/connectivity-for-good/mobile-economy/asiapacific/",
+          "observedAt": "2026-01-01",
+          "tier": "industry_primary",
+          "claim": "GSMA projects 1.5B 5G connections in Asia Pacific by 2030 and identifies AI integration and proactive digital trust/scam reduction as strategic priorities.",
+          "confidence": 94
+        },
+        {
+          "id": "datareportal-japan-2026",
+          "title": "Digital 2026 Japan",
+          "publisher": "DataReportal",
+          "url": "https://datareportal.com/reports/digital-2026-japan",
+          "observedAt": "2025-12-31",
+          "tier": "country_report",
+          "claim": "Japan illustrates high internet and social-platform adoption in a mature Asian digital market.",
+          "confidence": 88
+        }
+      ],
+      "prevalence": 92,
+      "userFriction": 72,
+      "pantavionFit": 96,
+      "urgency": 90,
+      "trustOrRegulatoryRisk": 84,
+      "hypothesis": "The strongest Pantavion fit is a multilingual, high-scale Personal AI and communication layer that can connect social, commerce, files and services while aggressively reducing scams and impersonation.",
+      "proposedCapabilities": [
+        "high-scale multilingual orchestration",
+        "anti-scam trust graph",
+        "verified business and identity signals",
+        "cross-service intent routing",
+        "commerce and communication continuity",
+        "country-specific ecosystem adapters"
+      ]
+    },
+    {
+      "id": "europe-connected-trust-crossborder-2026",
+      "title": "Europe is highly connected and demands resilient cross-border digital services",
+      "domain": "trust_privacy_identity",
+      "signalType": "unmet_need",
+      "segment": {
+        "continent": "Europe",
+        "connectivity": ["high_reliability", "mixed"],
+        "deviceProfiles": ["mobile_plus_desktop", "mobile_first"]
+      },
+      "evidence": [
+        {
+          "id": "gsma-europe-2026",
+          "title": "The Mobile Economy Europe 2026",
+          "publisher": "GSMA",
+          "url": "https://www.gsma.com/about-us/regions/europe/gsma_resources/the-mobile-economy-europe-2026/",
+          "observedAt": "2026-06-11",
+          "tier": "industry_primary",
+          "claim": "The EU has roughly 370M unique mobile internet users, more than 80% of the regional population, and mobile networks support a growing range of services.",
+          "confidence": 95
+        }
+      ],
+      "prevalence": 92,
+      "userFriction": 65,
+      "pantavionFit": 94,
+      "urgency": 80,
+      "trustOrRegulatoryRisk": 92,
+      "hypothesis": "Pantavion can differentiate through transparent privacy, multilingual cross-border continuity, interoperability and clear user control rather than attention-maximizing design.",
+      "proposedCapabilities": [
+        "privacy dashboard and consent ledger",
+        "cross-border multilingual communication",
+        "interoperable personal data export/import",
+        "explainable recommendation controls",
+        "accessibility-by-default",
+        "country-specific policy enforcement"
+      ]
+    },
+    {
+      "id": "north-america-high-adoption-ai-workflows-2026",
+      "title": "North America combines very high connectivity with broad social and AI-ready workflows",
+      "domain": "work_business",
+      "signalType": "fragmentation",
+      "segment": {
+        "continent": "North America",
+        "countries": ["US", "CA"],
+        "connectivity": ["high_reliability", "mixed"],
+        "deviceProfiles": ["mobile_plus_desktop", "mobile_first"]
+      },
+      "evidence": [
+        {
+          "id": "datareportal-usa-2026",
+          "title": "Digital 2026 United States",
+          "publisher": "DataReportal",
+          "url": "https://datareportal.com/reports/digital-2026-united-states-of-america",
+          "observedAt": "2025-12-31",
+          "tier": "country_report",
+          "claim": "US internet penetration was reported at 93.1%, with 254M social-media user identities.",
+          "confidence": 90
+        },
+        {
+          "id": "datareportal-canada-2026",
+          "title": "Digital 2026 Canada",
+          "publisher": "DataReportal",
+          "url": "https://datareportal.com/reports/digital-2026-canada",
+          "observedAt": "2025-12-31",
+          "tier": "country_report",
+          "claim": "Canada internet penetration was reported at 95.1%, with social-media identities equivalent to 82.1% of the population.",
+          "confidence": 90
+        }
+      ],
+      "prevalence": 94,
+      "userFriction": 78,
+      "pantavionFit": 95,
+      "urgency": 86,
+      "trustOrRegulatoryRisk": 80,
+      "hypothesis": "A strong North American proposition is one Personal AI that moves between personal, creator, professional, communication, media and marketplace workflows without forcing users into separate products.",
+      "proposedCapabilities": [
+        "AI work and life assistant",
+        "creator and media workspace",
+        "professional and business identity",
+        "unified communications",
+        "marketplace and service workflows",
+        "fine-grained privacy and notification controls"
+      ]
+    },
+    {
+      "id": "south-america-mobile-social-commerce-2026",
+      "title": "Latin America is mobile-led, socially connected and still constrained by a substantial usage gap",
+      "domain": "commerce_marketplace",
+      "signalType": "connectivity_constraint",
+      "segment": {
+        "continent": "South America",
+        "connectivity": ["mixed", "low_bandwidth"],
+        "deviceProfiles": ["mobile_first"]
+      },
+      "evidence": [
+        {
+          "id": "gsma-latam-2026",
+          "title": "The Mobile Economy Latin America 2026",
+          "publisher": "GSMA",
+          "url": "https://www.gsma.com/about-us/regions/latin-america-and-the-caribbean/gsma_resources/the-mobile-economy-latin-america-2026/",
+          "observedAt": "2026-05-13",
+          "tier": "industry_primary",
+          "claim": "GSMA reports a 32% mobile-internet usage gap, expanding 5G adoption, growing AI use and digital trust as a core regional priority.",
+          "confidence": 95
+        }
+      ],
+      "prevalence": 86,
+      "userFriction": 85,
+      "pantavionFit": 95,
+      "urgency": 86,
+      "trustOrRegulatoryRisk": 80,
+      "hypothesis": "Pantavion should connect messaging, social discovery, local business, marketplace and AI assistance in a mobile-first experience that remains useful on constrained connections.",
+      "proposedCapabilities": [
+        "mobile-first social commerce",
+        "local business discovery",
+        "low-bandwidth media modes",
+        "AI customer and seller assistance",
+        "trust and fraud controls",
+        "Spanish and Portuguese language depth"
+      ]
+    },
+    {
+      "id": "oceania-high-connectivity-remote-resilience-2026",
+      "title": "Oceania combines high adoption in Australia and New Zealand with remote-connectivity realities",
+      "domain": "resilience_emergency",
+      "signalType": "unmet_need",
+      "segment": {
+        "continent": "Oceania",
+        "countries": ["AU", "NZ"],
+        "connectivity": ["high_reliability", "mixed", "intermittent"],
+        "deviceProfiles": ["mobile_plus_desktop", "mobile_first", "field_device"]
+      },
+      "evidence": [
+        {
+          "id": "datareportal-australia-2026",
+          "title": "Digital 2026 Australia",
+          "publisher": "DataReportal",
+          "url": "https://datareportal.com/reports/digital-2026-australia",
+          "observedAt": "2025-12-31",
+          "tier": "country_report",
+          "claim": "Australia had social-media user identities equivalent to 77.7% of its population.",
+          "confidence": 88
+        },
+        {
+          "id": "datareportal-new-zealand-2026",
+          "title": "Digital 2026 New Zealand",
+          "publisher": "DataReportal",
+          "url": "https://datareportal.com/reports/digital-2026-new-zealand",
+          "observedAt": "2025-12-31",
+          "tier": "country_report",
+          "claim": "New Zealand internet penetration was reported at 96.2%, with social-media identities equivalent to 80.6% of the population.",
+          "confidence": 90
+        }
+      ],
+      "prevalence": 90,
+      "userFriction": 66,
+      "pantavionFit": 91,
+      "urgency": 74,
+      "trustOrRegulatoryRisk": 80,
+      "hypothesis": "Pantavion should combine mainstream high-connectivity experiences with robust remote, travel, emergency and delayed-sync modes for dispersed communities and field contexts.",
+      "proposedCapabilities": [
+        "remote connectivity mode",
+        "offline maps and delayed sync",
+        "community and local discovery",
+        "emergency communication fallbacks",
+        "media and creator tools",
+        "privacy-first personal AI"
+      ]
+    },
+    {
+      "id": "antarctica-edge-operations-2026",
+      "title": "Antarctica is an extreme operational edge case rather than a conventional consumer market",
+      "domain": "resilience_emergency",
+      "signalType": "connectivity_constraint",
+      "segment": {
+        "continent": "Antarctica",
+        "connectivity": ["satellite_or_radio_edge", "intermittent"],
+        "deviceProfiles": ["field_device", "desktop_specialist"],
+        "notes": ["Treat Antarctica as a resilience/science/field-operations proving ground, not a consumer-demand proxy."]
+      },
+      "evidence": [
+        {
+          "id": "nsf-antarctica-connectivity-study",
+          "title": "Connecting the last continent",
+          "publisher": "U.S. National Science Foundation",
+          "url": "https://www.nsf.gov/geo/updates/connecting-last-continent-new-desktop-study-antarcticas",
+          "observedAt": "2023-12-27",
+          "tier": "official",
+          "claim": "US Antarctic stations and field camps rely on satellite internet; capacity limitations can require bandwidth rationing, motivating study of more resilient connectivity.",
+          "confidence": 98
+        },
+        {
+          "id": "aad-stations-2026",
+          "title": "Australian Antarctic research stations and field locations",
+          "publisher": "Australian Antarctic Program",
+          "url": "https://www.antarctica.gov.au/antarctic-operations/stations-and-field-locations/",
+          "observedAt": "2026-04-02",
+          "tier": "official",
+          "claim": "Australia operates permanent and seasonal research locations where scientific and operational workflows must function in remote conditions.",
+          "confidence": 98
+        }
+      ],
+      "prevalence": 15,
+      "userFriction": 100,
+      "pantavionFit": 82,
+      "urgency": 64,
+      "trustOrRegulatoryRisk": 86,
+      "hypothesis": "If Pantavion works safely under Antarctic-style intermittent connectivity, it gains resilience patterns useful for disaster zones, ships, remote communities and infrastructure teams worldwide.",
+      "proposedCapabilities": [
+        "offline-first field workspace",
+        "store-and-forward messaging",
+        "satellite and radio aware fallback orchestration",
+        "offline maps and geospatial artifacts",
+        "scientific file provenance",
+        "emergency and operational priority queues"
+      ]
+    }
+  ]
+}
