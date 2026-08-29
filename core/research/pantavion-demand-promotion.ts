@@ -3,9 +3,48 @@ import type {
   PantavionHumanDemandSignal,
   PantavionHumanNeedDomain,
 } from "./pantavion-global-human-demand-radar";
-import type { PantavionFounderWorkOrderSubmission } from "../kernel/pantavion-work-order-runtime";
 
 export const PANTAVION_DEMAND_PROMOTION_MARKER = "pantavion_demand_promotion_candidate_v1" as const;
+export const PANTAVION_FOUNDER_WORK_ORDER_ROUTE = "/api/kernel/work-orders" as const;
+
+export type PantavionDemandProposalTarget =
+  | "pantavion_internal"
+  | "external_app"
+  | "api_integration"
+  | "admin_tool"
+  | "safety_system"
+  | "water_infrastructure"
+  | "sos_elder"
+  | "translation"
+  | "marketplace"
+  | "social_universe"
+  | "pantaai_center";
+
+export type PantavionDemandProposalCapability =
+  | "repo_truth"
+  | "code_audit"
+  | "error_repair"
+  | "scoped_patch"
+  | "internal_feature_build"
+  | "external_app_build"
+  | "provider_integration"
+  | "deployment_plan"
+  | "founder_approval_gate"
+  | "verification";
+
+export interface PantavionDemandWorkOrderProposal {
+  idempotencyKey: string;
+  founderIntent: string;
+  target: PantavionDemandProposalTarget;
+  capabilities: PantavionDemandProposalCapability[];
+  targetFiles: string[];
+  approvalScope: "proposal_only";
+  workload: {
+    kind: "single_work_order";
+    unitCount: 1;
+    intakeReference: string;
+  };
+}
 
 export interface PantavionDemandPromotionInput {
   signal: PantavionHumanDemandSignal;
@@ -18,9 +57,10 @@ export interface PantavionDemandPromotionCandidate {
   marker: typeof PANTAVION_DEMAND_PROMOTION_MARKER;
   signalId: string;
   eligibleForFounderProposal: boolean;
+  persistenceRoute: typeof PANTAVION_FOUNDER_WORK_ORDER_ROUTE;
   reasons: string[];
   safeguards: string[];
-  submission: PantavionFounderWorkOrderSubmission | null;
+  submission: PantavionDemandWorkOrderProposal | null;
 }
 
 function safeToken(value: string): string {
@@ -32,7 +72,7 @@ function safeToken(value: string): string {
     .slice(0, 120) || "signal";
 }
 
-function targetForDomain(domain: PantavionHumanNeedDomain): PantavionFounderWorkOrderSubmission["target"] {
+function targetForDomain(domain: PantavionHumanNeedDomain): PantavionDemandProposalTarget {
   switch (domain) {
     case "communication":
     case "social_community":
@@ -99,6 +139,7 @@ export function createPantavionDemandPromotionCandidate(
       marker: PANTAVION_DEMAND_PROMOTION_MARKER,
       signalId: input.signal.id,
       eligibleForFounderProposal: false,
+      persistenceRoute: PANTAVION_FOUNDER_WORK_ORDER_ROUTE,
       reasons,
       safeguards,
       submission: null,
@@ -120,6 +161,7 @@ export function createPantavionDemandPromotionCandidate(
     marker: PANTAVION_DEMAND_PROMOTION_MARKER,
     signalId: input.signal.id,
     eligibleForFounderProposal: true,
+    persistenceRoute: PANTAVION_FOUNDER_WORK_ORDER_ROUTE,
     reasons: ["spec_candidate_with_country_validation_and_bounded_risk"],
     safeguards,
     submission: {
