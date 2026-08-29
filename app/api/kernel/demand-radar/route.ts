@@ -96,7 +96,8 @@ export async function POST(request: Request) {
 
     if (action === "ingest") {
       const sourceRef = typeof body?.sourceRef === "string" ? body.sourceRef.trim() : "";
-      const items = Array.isArray(body?.items) ? (body.items as PantavionDemandRadarIngestItem[]) : [];
+      const rawItems = body?.items;
+      const items = Array.isArray(rawItems) ? (rawItems as PantavionDemandRadarIngestItem[]) : [];
       if (!sourceRef || items.length < 1 || items.length > 200) {
         return noStore(
           NextResponse.json(
