@@ -1,4 +1,4 @@
-import { resolvePantavionAgeRole, type PantavionAgeBand, type PantavionAgeRole } from "../identity/age-role-engine";
+import { resolvePantavionAgeRole, type PantavionAgeBand, type PantavionAgeRole } from "../identity/age-role-engine.ts";
 
 export type PantavionAdaptiveFeature =
   | "people"
