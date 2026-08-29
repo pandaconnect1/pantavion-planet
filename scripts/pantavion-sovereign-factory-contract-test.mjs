@@ -16,6 +16,12 @@ import {
 } from "../core/sovereign/edge-execution.ts";
 import { assessTechnologyLibraryEntry } from "../core/sovereign/technology-library.ts";
 import {
+  createBoundedExecutionSession,
+  recordBoundedStepCompletion,
+  verifyBoundedExecutionSession,
+} from "../core/sovereign/bounded-execution-runtime.ts";
+import { compileSovereignKernelDecision } from "../core/sovereign/sovereign-capability-kernel.ts";
+import {
   advanceImplementationItem,
   canAdvanceImplementationState,
   sovereignFactoryImplementationItems,
@@ -203,7 +209,7 @@ const plan = compileOutcomePlan(
 assert(plan.requiresOwnerApproval, "High-risk outcome plan must wait for owner approval.");
 
 const createdEphemeralAgent = createEphemeralAgent({
-  id: "ephemeral_1",
+  id: "agent_1",
   parentIntentId: "intent_safe",
   role: "verifier",
   capabilities: [{ capability: "classify", scope: "recovery/corpus", expiresAt: "2026-08-28T20:00:00.000Z" }],
@@ -232,6 +238,191 @@ assert(
     new Date("2026-08-27T21:00:00.000Z"),
   ),
   "Activated ephemeral agent must use only its bounded live scope.",
+);
+
+
+const boundedStep = {
+  id: "bounded_classify",
+  title: "Classify preserved recovery evidence",
+  kind: "workflow",
+  capability: "classify",
+  risk: "low",
+  reversible: true,
+  requiresOwnerApproval: false,
+  dependsOn: [],
+};
+const boundedDecision = compileSovereignKernelDecision({
+  intent: {
+    id: "intent_safe",
+    userId: "founder_test",
+    text: "Classify the preserved corpus",
+    desiredOutcome: "Evidence-backed canonical classification",
+    jurisdiction: "CY",
+    maxCost: 3,
+  },
+  steps: [boundedStep],
+  estimatedCost: 1,
+  outcomePolicy: {
+    ownerApprovalRisks: ["high", "critical"],
+    requireApprovalForIrreversible: true,
+    maximumAutomaticCost: 3,
+  },
+  firewallRequest: safeIntentRequest,
+  firewallPolicy,
+});
+const boundedSession = createBoundedExecutionSession({
+  id: "bounded_session_1",
+  decision: boundedDecision,
+  agent: ephemeralAgent,
+  grant,
+  maximumEvidenceBytes: 1024,
+  now: "2026-08-27T21:00:00.000Z",
+});
+const completedBoundedSession = recordBoundedStepCompletion(boundedSession, {
+  sessionId: boundedSession.id,
+  intentId: boundedSession.intentId,
+  agentId: ephemeralAgent.id,
+  stepId: boundedStep.id,
+  scope: "recovery/corpus",
+  access: "read",
+  cost: 1,
+  observedAt: "2026-08-27T21:05:00.000Z",
+  outputBytes: Buffer.from("evidence-backed-classification"),
+  auditReference: "audit://bounded-session-1",
+  rollbackReference: "rollback://read-only-no-write",
+});
+assert(
+  completedBoundedSession.state === "completed",
+  "A dependency-ready bounded step must produce a completed session.",
+);
+assert(
+  completedBoundedSession.grant.spent === 1 &&
+    completedBoundedSession.receipts[0]?.outputDigestVerifiedFromBytes === true,
+  "Bounded completion must consume the exact budget and hash the real output bytes.",
+);
+assert(
+  !completedBoundedSession.mayMerge &&
+    !completedBoundedSession.mayDeployProduction &&
+    !completedBoundedSession.mayPublishToUsers &&
+    completedBoundedSession.receipts[0]?.releaseAuthority === false,
+  "Bounded execution must never imply protected release authority.",
+);
+assert(
+  verifyBoundedExecutionSession(completedBoundedSession).valid,
+  "The complete bounded execution receipt chain must verify.",
+);
+expectThrows(
+  () =>
+    recordBoundedStepCompletion(boundedSession, {
+      sessionId: boundedSession.id,
+      intentId: boundedSession.intentId,
+      agentId: "different_agent",
+      stepId: boundedStep.id,
+      scope: "recovery/corpus",
+      access: "read",
+      cost: 1,
+      observedAt: "2026-08-27T21:05:00.000Z",
+      outputBytes: Buffer.from("invalid-agent"),
+      auditReference: "audit://denied",
+      rollbackReference: "rollback://denied",
+    }),
+  "A completion from a different agent identity must fail closed.",
+);
+const dependencyDecision = compileSovereignKernelDecision({
+  intent: {
+    id: "intent_safe",
+    userId: "founder_test",
+    text: "Classify then verify",
+    desiredOutcome: "Ordered bounded execution",
+    jurisdiction: "CY",
+    maxCost: 3,
+  },
+  steps: [
+    boundedStep,
+    {
+      ...boundedStep,
+      id: "bounded_verify",
+      title: "Verify classification",
+      dependsOn: [boundedStep.id],
+    },
+  ],
+  estimatedCost: 2,
+  outcomePolicy: {
+    ownerApprovalRisks: ["high", "critical"],
+    requireApprovalForIrreversible: true,
+    maximumAutomaticCost: 3,
+  },
+  firewallRequest: safeIntentRequest,
+  firewallPolicy,
+});
+const dependencySession = createBoundedExecutionSession({
+  id: "bounded_session_dependency",
+  decision: dependencyDecision,
+  agent: ephemeralAgent,
+  grant,
+  maximumEvidenceBytes: 1024,
+  now: "2026-08-27T21:00:00.000Z",
+});
+expectThrows(
+  () =>
+    recordBoundedStepCompletion(dependencySession, {
+      sessionId: dependencySession.id,
+      intentId: dependencySession.intentId,
+      agentId: ephemeralAgent.id,
+      stepId: "bounded_verify",
+      scope: "recovery/corpus",
+      access: "read",
+      cost: 1,
+      observedAt: "2026-08-27T21:05:00.000Z",
+      outputBytes: Buffer.from("out-of-order"),
+      auditReference: "audit://out-of-order",
+      rollbackReference: "rollback://read-only-no-write",
+    }),
+  "A dependent step must never execute before its prerequisite receipt.",
+);
+const tamperedBoundedSession = {
+  ...completedBoundedSession,
+  receipts: [
+    {
+      ...completedBoundedSession.receipts[0],
+      auditReference: "audit://tampered",
+    },
+  ],
+};
+assert(
+  !verifyBoundedExecutionSession(tamperedBoundedSession).valid,
+  "Tampering with a bounded execution receipt must break verification.",
+);
+const protectedDecision = compileSovereignKernelDecision({
+  intent: {
+    id: "intent_safe",
+    userId: "founder_test",
+    text: "Write production",
+    desiredOutcome: "Protected action",
+    jurisdiction: "CY",
+    maxCost: 3,
+  },
+  steps: [boundedStep],
+  estimatedCost: 1,
+  outcomePolicy: {
+    ownerApprovalRisks: ["high", "critical"],
+    requireApprovalForIrreversible: true,
+    maximumAutomaticCost: 3,
+  },
+  firewallRequest: { ...safeIntentRequest, writesProduction: true },
+  firewallPolicy,
+});
+expectThrows(
+  () =>
+    createBoundedExecutionSession({
+      id: "bounded_session_protected",
+      decision: protectedDecision,
+      agent: ephemeralAgent,
+      grant,
+      maximumEvidenceBytes: 1024,
+      now: "2026-08-27T21:00:00.000Z",
+    }),
+  "Owner-controlled production work must never enter bounded automatic execution.",
 );
 
 const codedItem = {
