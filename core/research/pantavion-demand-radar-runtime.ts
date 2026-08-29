@@ -2,8 +2,8 @@ import "server-only";
 
 import { createHash } from "node:crypto";
 
-import { createAdminClient } from "@/lib/supabase/admin";
 import seed from "@/data/research/global-human-demand-radar/2026-08-29-initial-signals.json";
+import { createAdminClient } from "@/lib/supabase/admin";
 import {
   PANTAVION_RESEARCH_CONTINENTS,
   assessPantavionHumanDemand,
@@ -112,7 +112,7 @@ function freshnessFor(latest: string | null, nowMs = Date.now()): PantavionDeman
   return "STALE";
 }
 
-function defaultCountryValidationRefs(signal: PantavionHumanDemandSignal): string[] {
+function allowedCountryEvidenceIds(signal: PantavionHumanDemandSignal): string[] {
   if ((signal.segment.countries?.length ?? 0) === 0) return [];
   return uniqueStrings(
     signal.evidence
@@ -120,6 +120,12 @@ function defaultCountryValidationRefs(signal: PantavionHumanDemandSignal): strin
       .map((item) => item.id),
     20,
   );
+}
+
+function validatedCountryRefs(signal: PantavionHumanDemandSignal, requested?: string[]): string[] {
+  const allowed = new Set(allowedCountryEvidenceIds(signal));
+  const source = requested?.length ? requested : Array.from(allowed);
+  return uniqueStrings(source.filter((value) => allowed.has(value)), 20);
 }
 
 function trendFor(previous: PantavionDemandRadarStoredSignal | undefined, next: PantavionDemandAssessment) {
@@ -185,11 +191,11 @@ function buildSnapshot(records: PantavionDemandRadarStoredSignal[], sourceRefs: 
   };
 }
 
-function seedSnapshot(): PantavionDemandRadarSnapshot {
+export function createPantavionDemandRadarSeedSnapshot(): PantavionDemandRadarSnapshot {
   const records = (seed.signals as PantavionHumanDemandSignal[]).map((signal) => ({
     signal,
     assessment: assessPantavionHumanDemand(signal),
-    countryValidationRefs: defaultCountryValidationRefs(signal),
+    countryValidationRefs: validatedCountryRefs(signal),
     trend: "NEW" as const,
     opportunityDelta: 0,
     latestEvidenceAt: latestEvidenceAt(signal),
@@ -220,10 +226,108 @@ async function activeRadarState(): Promise<CanonicalStateRow | null> {
   return (data as CanonicalStateRow | null) ?? null;
 }
 
+async function activateSnapshot(input: {
+  snapshot: PantavionDemandRadarSnapshot;
+  sourceRef: string;
+  current: CanonicalStateRow | null;
+}) {
+  const content = stableJson(input.snapshot);
+  const contentSha256 = sha256(content);
+  if (input.current?.content_sha256 === contentSha256) {
+    return {
+      stateId: input.current.state_id,
+      contentSha256,
+      deduplicated: true,
+      snapshot: input.snapshot,
+    };
+  }
+
+  const admin = createAdminClient();
+  const stateId = `demand_radar_${contentSha256.slice(0, 24)}`;
+  const metadata = {
+    marker: PANTAVION_DEMAND_RADAR_SNAPSHOT_MARKER,
+    signalCount: input.snapshot.aggregates.totalSignals,
+    sourceRefs: input.snapshot.sourceRefs,
+    founderOnly: true,
+    productionMutationAllowed: false,
+  };
+
+  const { data: existingById, error: existingError } = await admin
+    .from("pantavion_founder_canonical_states")
+    .select("state_id,status")
+    .eq("state_id", stateId)
+    .maybeSingle();
+  if (existingError) throw existingError;
+
+  if (!existingById) {
+    const { error: insertError } = await admin
+      .from("pantavion_founder_canonical_states")
+      .insert({
+        state_id: stateId,
+        state_kind: PANTAVION_DEMAND_RADAR_STATE_KIND,
+        title: "Pantavion Global Human Demand Radar",
+        content,
+        content_sha256: contentSha256,
+        source_ref: input.sourceRef,
+        truth_state: input.current ? "archived_internal" : "canonical_internal",
+        status: input.current ? "archived" : "active",
+        supersedes_state_id: input.current?.state_id ?? null,
+        metadata,
+      });
+    if (insertError) throw insertError;
+  }
+
+  if (input.current) {
+    const now = new Date().toISOString();
+    const { error: supersedeError } = await admin
+      .from("pantavion_founder_canonical_states")
+      .update({
+        status: "superseded",
+        truth_state: "superseded_internal",
+        updated_at: now,
+      })
+      .eq("state_id", input.current.state_id)
+      .eq("status", "active");
+    if (supersedeError) throw supersedeError;
+
+    const { error: activateError } = await admin
+      .from("pantavion_founder_canonical_states")
+      .update({
+        content,
+        content_sha256: contentSha256,
+        source_ref: input.sourceRef,
+        status: "active",
+        truth_state: "canonical_internal",
+        supersedes_state_id: input.current.state_id,
+        metadata,
+        updated_at: now,
+      })
+      .eq("state_id", stateId);
+    if (activateError) throw activateError;
+  } else if (existingById) {
+    const { error: reactivateError } = await admin
+      .from("pantavion_founder_canonical_states")
+      .update({
+        content,
+        content_sha256: contentSha256,
+        source_ref: input.sourceRef,
+        status: "active",
+        truth_state: "canonical_internal",
+        supersedes_state_id: null,
+        metadata,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("state_id", stateId);
+    if (reactivateError) throw reactivateError;
+  }
+
+  return { stateId, contentSha256, deduplicated: false, snapshot: input.snapshot };
+}
+
 export async function getPantavionDemandRadarOverview(): Promise<PantavionDemandRadarOverview> {
   const active = await activeRadarState();
   const snapshot = active ? parseSnapshot(active.content) : null;
-  const resolved = snapshot ?? seedSnapshot();
+  const resolved = snapshot ?? createPantavionDemandRadarSeedSnapshot();
   const content = stableJson(resolved);
   const checkedAt = new Date().toISOString();
 
@@ -242,6 +346,15 @@ export async function getPantavionDemandRadarOverview(): Promise<PantavionDemand
   };
 }
 
+export async function initializePantavionDemandRadar() {
+  const current = await activeRadarState();
+  return activateSnapshot({
+    snapshot: current ? parseSnapshot(current.content) ?? createPantavionDemandRadarSeedSnapshot() : createPantavionDemandRadarSeedSnapshot(),
+    sourceRef: "repo:data/research/global-human-demand-radar/2026-08-29-initial-signals.json",
+    current,
+  });
+}
+
 export async function persistPantavionDemandRadarSnapshot(input: {
   items: PantavionDemandRadarIngestItem[];
   sourceRef: string;
@@ -253,7 +366,7 @@ export async function persistPantavionDemandRadarSnapshot(input: {
 
   const current = await activeRadarState();
   const currentSnapshot = current ? parseSnapshot(current.content) : null;
-  const base = currentSnapshot ?? seedSnapshot();
+  const base = currentSnapshot ?? createPantavionDemandRadarSeedSnapshot();
   const records = new Map(base.signals.map((record) => [record.signal.id, record]));
 
   for (const item of input.items) {
@@ -263,12 +376,7 @@ export async function persistPantavionDemandRadarSnapshot(input: {
     records.set(item.signal.id, {
       signal: item.signal,
       assessment,
-      countryValidationRefs: uniqueStrings(
-        item.countryValidationRefs?.length
-          ? item.countryValidationRefs
-          : defaultCountryValidationRefs(item.signal),
-        20,
-      ),
+      countryValidationRefs: validatedCountryRefs(item.signal, item.countryValidationRefs),
       trend,
       opportunityDelta: delta,
       latestEvidenceAt: latestEvidenceAt(item.signal),
@@ -280,81 +388,7 @@ export async function persistPantavionDemandRadarSnapshot(input: {
   }
 
   const snapshot = buildSnapshot(Array.from(records.values()), [...base.sourceRefs, input.sourceRef]);
-  const content = stableJson(snapshot);
-  const contentSha256 = sha256(content);
-
-  if (current?.content_sha256 === contentSha256) {
-    return { stateId: current.state_id, contentSha256, deduplicated: true, snapshot };
-  }
-
-  const admin = createAdminClient();
-  const stateId = `demand_radar_${contentSha256.slice(0, 24)}`;
-  const { data: existingById, error: existingError } = await admin
-    .from("pantavion_founder_canonical_states")
-    .select("state_id,status")
-    .eq("state_id", stateId)
-    .maybeSingle();
-  if (existingError) throw existingError;
-
-  if (!existingById) {
-    const { error: insertError } = await admin
-      .from("pantavion_founder_canonical_states")
-      .insert({
-        state_id: stateId,
-        state_kind: PANTAVION_DEMAND_RADAR_STATE_KIND,
-        title: "Pantavion Global Human Demand Radar",
-        content,
-        content_sha256: contentSha256,
-        source_ref: input.sourceRef,
-        truth_state: current ? "archived_internal" : "canonical_internal",
-        status: current ? "archived" : "active",
-        supersedes_state_id: current?.state_id ?? null,
-        metadata: {
-          marker: PANTAVION_DEMAND_RADAR_SNAPSHOT_MARKER,
-          signalCount: snapshot.aggregates.totalSignals,
-          sourceRefs: snapshot.sourceRefs,
-          founderOnly: true,
-          productionMutationAllowed: false,
-        },
-      });
-    if (insertError) throw insertError;
-  }
-
-  if (current) {
-    const { error: supersedeError } = await admin
-      .from("pantavion_founder_canonical_states")
-      .update({
-        status: "superseded",
-        truth_state: "superseded_internal",
-        updated_at: new Date().toISOString(),
-      })
-      .eq("state_id", current.state_id)
-      .eq("status", "active");
-    if (supersedeError) throw supersedeError;
-
-    const { error: activateError } = await admin
-      .from("pantavion_founder_canonical_states")
-      .update({
-        content,
-        content_sha256: contentSha256,
-        source_ref: input.sourceRef,
-        status: "active",
-        truth_state: "canonical_internal",
-        supersedes_state_id: current.state_id,
-        metadata: {
-          marker: PANTAVION_DEMAND_RADAR_SNAPSHOT_MARKER,
-          signalCount: snapshot.aggregates.totalSignals,
-          sourceRefs: snapshot.sourceRefs,
-          founderOnly: true,
-          productionMutationAllowed: false,
-        },
-        updated_at: new Date().toISOString(),
-      })
-      .eq("state_id", stateId);
-    if (activateError) throw activateError;
-  }
-
-  return { stateId, contentSha256, deduplicated: false, snapshot };
+  return activateSnapshot({ snapshot, sourceRef: input.sourceRef, current });
 }
 
 export async function createPantavionDemandExecutionIntent(signalId: string): Promise<{
@@ -374,11 +408,12 @@ export async function createPantavionDemandExecutionIntent(signalId: string): Pr
     return { candidate, intentId: null, deduplicated: false };
   }
 
+  const versionedIdempotencyKey = `${candidate.submission.idempotencyKey}:${active.content_sha256.slice(0, 12)}`;
   const admin = createAdminClient();
   const { data: existing, error: existingError } = await admin
     .from("pantavion_founder_execution_intents")
     .select("intent_id")
-    .eq("idempotency_key", candidate.submission.idempotencyKey)
+    .eq("idempotency_key", versionedIdempotencyKey)
     .maybeSingle();
   if (existingError) throw existingError;
   if (existing?.intent_id) {
@@ -391,7 +426,7 @@ export async function createPantavionDemandExecutionIntent(signalId: string): Pr
     .insert({
       intent_id: intentId,
       canonical_state_id: active.state_id,
-      idempotency_key: candidate.submission.idempotencyKey,
+      idempotency_key: versionedIdempotencyKey,
       title: `Demand proposal: ${record.signal.title}`.slice(0, 300),
       founder_intent: candidate.submission.founderIntent,
       target: candidate.submission.target,
