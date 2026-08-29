@@ -69,8 +69,17 @@ if (materializeIndex < 0 || foundryIndex < 0 || materializeIndex > foundryIndex)
   throw new Error("canonical execution intents must be materialized before the Nervous System/Foundry tick");
 }
 
-if (runtime.includes("NEXT_PUBLIC_") || runtime.includes("anon") || runtime.includes("authenticated")) {
-  throw new Error("canonical founder state runtime must not use browser/public database credentials");
+const forbiddenPublicClientPatterns = [
+  "NEXT_PUBLIC_SUPABASE",
+  "NEXT_PUBLIC_",
+  "createBrowserClient",
+  "createClientComponentClient",
+  "SUPABASE_ANON_KEY",
+  "SUPABASE_PUBLISHABLE_KEY",
+];
+const forbiddenPublicClientPattern = forbiddenPublicClientPatterns.find((pattern) => runtime.includes(pattern));
+if (forbiddenPublicClientPattern) {
+  throw new Error(`canonical founder state runtime uses forbidden browser/public database path: ${forbiddenPublicClientPattern}`);
 }
 
 console.log("Pantavion canonical founder state + execution intent contract verified.");
