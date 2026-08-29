@@ -11,6 +11,8 @@ export const PANTAVION_RESEARCH_CONTINENTS = [
 export type PantavionResearchContinent =
   (typeof PANTAVION_RESEARCH_CONTINENTS)[number];
 
+export type PantavionResearchScope = "global" | "continent" | "country";
+
 export type PantavionHumanNeedDomain =
   | "communication"
   | "social_community"
@@ -79,7 +81,8 @@ export interface PantavionDemandEvidence {
 }
 
 export interface PantavionDemandSegment {
-  continent: PantavionResearchContinent;
+  scope: PantavionResearchScope;
+  continent?: PantavionResearchContinent;
   countries?: string[];
   ageBands?: string[];
   languages?: string[];
@@ -144,6 +147,23 @@ function scoreEvidence(evidence: PantavionDemandEvidence[]): number {
   return clamp(weighted + diversity);
 }
 
+function validateSegment(segment: PantavionDemandSegment): void {
+  if (segment.scope === "global") {
+    if (segment.continent || (segment.countries?.length ?? 0) > 0) {
+      throw new Error("pantavion_demand_global_scope_must_not_fake_geography");
+    }
+    return;
+  }
+
+  if (!segment.continent || !PANTAVION_RESEARCH_CONTINENTS.includes(segment.continent)) {
+    throw new Error("pantavion_demand_continent_required");
+  }
+
+  if (segment.scope === "country" && (segment.countries?.length ?? 0) === 0) {
+    throw new Error("pantavion_demand_country_scope_requires_country");
+  }
+}
+
 function decisionFor(input: PantavionHumanDemandSignal, evidenceScore: number): PantavionDemandDecision {
   const opportunity = clamp(
     clamp(input.prevalence) * 0.25 +
@@ -164,9 +184,7 @@ function decisionFor(input: PantavionHumanDemandSignal, evidenceScore: number): 
 export function assessPantavionHumanDemand(
   input: PantavionHumanDemandSignal,
 ): PantavionDemandAssessment {
-  if (!PANTAVION_RESEARCH_CONTINENTS.includes(input.segment.continent)) {
-    throw new Error("pantavion_demand_continent_invalid");
-  }
+  validateSegment(input.segment);
   if (!input.id.trim() || !input.title.trim()) {
     throw new Error("pantavion_demand_identity_required");
   }
@@ -196,10 +214,10 @@ export function assessPantavionHumanDemand(
     opportunityScore,
     riskScore,
     productionMutationAllowed: false,
-    requiresCountryValidation: true,
+    requiresCountryValidation: input.segment.scope !== "country",
     requiresFounderApprovalForSpec: decision === "SPEC_CANDIDATE",
     researchActions: [
-      "Validate the signal at country level before treating a continental pattern as a product rule.",
+      "Validate continental and global signals at country level before treating them as product rules.",
       "Segment by age, language, accessibility needs, device profile, connectivity and urban/rural context where evidence permits.",
       "Map the human need behind each external app or behavior instead of copying the external product.",
       "Measure trust, safety, privacy, legal and affordability constraints before proposing execution changes.",
