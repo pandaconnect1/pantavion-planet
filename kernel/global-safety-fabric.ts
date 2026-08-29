@@ -7,12 +7,15 @@ import {
 import {
   selectUserServingPath,
   type KernelHierarchyNode,
+  type KernelTier,
 } from "./hierarchy";
 import {
   electKernelLeader,
   type KernelElectionPolicy,
   type KernelElectionResult,
   type KernelNodeHealth,
+  type KernelNodeRole,
+  type KernelNodeStatus,
 } from "./resilience";
 import {
   evaluateKernelZeroTrustAccess,
@@ -46,9 +49,21 @@ export type PantavionControllerRole =
   | "domain_controller"
   | "worker";
 
-export interface PantavionGlobalKernelNode
-  extends KernelHierarchyNode,
-    KernelNodeHealth {
+export interface PantavionGlobalKernelNode {
+  id: string;
+  tier: KernelTier;
+  parentId: string | null;
+  domain?: string;
+  topic?: string;
+  jurisdiction?: string;
+  ageBand?: string;
+  capabilities: string[];
+  healthy: boolean;
+  priority: number;
+  role: KernelNodeRole;
+  status: KernelNodeStatus;
+  epoch: number;
+  lastHeartbeatAt: string;
   continent: PantavionContinent;
   controllerRole: PantavionControllerRole;
   countryScopes: string[];
@@ -202,7 +217,7 @@ function toHierarchyNodes(nodes: PantavionGlobalKernelNode[]): KernelHierarchyNo
   return nodes.map((node) => ({
     id: node.id,
     tier: node.tier,
-    parentId: node.parentId ?? null,
+    parentId: node.parentId,
     domain: node.domain,
     topic: node.topic,
     jurisdiction: node.jurisdiction,
