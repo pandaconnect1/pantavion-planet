@@ -10,6 +10,8 @@ export const PANTAVION_PERSONAL_ADAPTIVE_RUNTIME_V1 = {
     noHiddenDiagnosis: true,
     noSensitiveTraitScoring: true,
     userAgencyPreserved: true,
+    silentAdaptationIsPresentationOnly: true,
+    substantiveActionsRequireNormalCapabilityGates: true,
     highImpactActionsRequireExplicitApproval: true,
     irreversibleActionsRequireExplicitApproval: true,
     jurisdictionAndSafetyCannotBeRelaxed: true,
@@ -86,7 +88,8 @@ export type PersonalAIAdaptivePlan = {
   };
   autonomy: {
     mode: PersonalAIAutonomyMode;
-    mayActWithoutConfirmation: boolean;
+    mayAdaptPresentationWithoutConfirmation: true;
+    mayExecuteUserIntentWithoutConfirmation: false;
     highImpactRequiresExplicitApproval: true;
     irreversibleRequiresExplicitApproval: true;
   };
@@ -215,7 +218,6 @@ export function resolvePersonalAIAdaptivePlan(
   );
 
   const autonomyMode = autonomyFor(profile.assistance_level);
-  const mayActWithoutConfirmation = autonomyMode === "bounded_assist";
 
   return {
     runtime: PANTAVION_PERSONAL_ADAPTIVE_RUNTIME_V1.id,
@@ -246,7 +248,8 @@ export function resolvePersonalAIAdaptivePlan(
     },
     autonomy: {
       mode: autonomyMode,
-      mayActWithoutConfirmation,
+      mayAdaptPresentationWithoutConfirmation: true,
+      mayExecuteUserIntentWithoutConfirmation: false,
       highImpactRequiresExplicitApproval: true,
       irreversibleRequiresExplicitApproval: true,
     },
@@ -263,6 +266,7 @@ export function resolvePersonalAIAdaptivePlan(
     rationale: [
       "Personalization is resolved inside Pantavion without an external personalization provider.",
       "Only explicit profile preferences and current-interaction signals change presentation behavior.",
+      "Silent adaptation is presentation-only and never authorizes substantive actions.",
       "No disability, diagnosis, intelligence level, mental-health condition or other sensitive trait is inferred.",
       "High-impact and irreversible actions always remain behind explicit authorization and the global safety/jurisdiction fabric.",
     ],
@@ -292,7 +296,8 @@ export function personalAIAdaptivePromptLines(plan: PersonalAIAdaptivePlan): str
     `PANTAVION ADAPTIVE RUNTIME: ${plan.runtime}; personalization=${plan.personalizationProvider}; external_personalization=false.`,
     `Response preference: length=${plan.response.length}; explanation=${plan.response.explanationStyle}; structure=${plan.response.structure}; examples=${plan.response.includeExamplesWhenHelpful}.`,
     `Modality: voiceFirst=${plan.modality.voiceFirst}; captions=${plan.modality.captionsPreferred}; reducedStimulation=${plan.modality.reducedStimulation}; lowBandwidth=${plan.modality.lowBandwidth}.`,
-    `Autonomy: ${plan.autonomy.mode}; high-impact and irreversible actions require explicit approval.`,
+    `Autonomy preference: ${plan.autonomy.mode}; presentation may adapt silently, but substantive user intent is never auto-authorized.`,
+    "High-impact and irreversible actions require explicit approval and all normal capability, safety and jurisdiction gates.",
     "Do not infer hidden sensitive traits from these adaptation signals. Treat them only as presentation and interaction preferences for the current user.",
   ];
 }
