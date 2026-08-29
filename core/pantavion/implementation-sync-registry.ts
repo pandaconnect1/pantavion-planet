@@ -268,13 +268,13 @@ export function synchronizeImplementationItems(
 }
 
 const codedAt = "2026-08-27T20:45:00.000Z";
-const testedAt = "2026-08-27T23:06:30.000Z";
+const testedAt = "2026-08-29T23:09:32.000Z";
 const branch = "feature/sovereign-technology-factory-foundation";
 const sovereignContractRun =
-  "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33124896375";
+  "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33280225764";
 const sovereignKernelIntegrationRun =
-  "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33125460286";
-const sovereignKernelTestedAt = "2026-08-27T23:13:36.164Z";
+  "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33280225764";
+const sovereignKernelTestedAt = "2026-08-29T23:09:32.000Z";
 
 function codedItem(
   id: string,
@@ -311,7 +311,7 @@ function testedItem(
         kind: "test",
         reference: sovereignContractRun,
         recordedAt: testedAt,
-        revision: "ab1800acfa6261a874949ed8a20b134379a7df5d",
+        revision: "53e04cc0e222fd6651c5559fca85f50791780d95",
       },
     ],
     updatedAt: testedAt,
@@ -334,7 +334,7 @@ function testedKernelItem(): ImplementationSyncItem {
         kind: "test",
         reference: sovereignKernelIntegrationRun,
         recordedAt: sovereignKernelTestedAt,
-        revision: "73cbfb22d5fff8e66965f59f92f2df18c44dbc72",
+        revision: "53e04cc0e222fd6651c5559fca85f50791780d95",
       },
     ],
     updatedAt: sovereignKernelTestedAt,
