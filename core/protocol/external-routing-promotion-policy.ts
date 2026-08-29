@@ -1,7 +1,5 @@
 ﻿// core/protocol/external-routing-promotion-policy.ts
 
-type UnknownRecord = Record<string, unknown>;
-
 export interface PantavionExternalRoutingPromotionProbeResult {
   capabilityKey: string;
   operationKey: string;

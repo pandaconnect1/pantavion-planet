@@ -2,6 +2,13 @@ import { randomUUID } from "node:crypto";
 
 import { NextResponse } from "next/server";
 
+import { createPantavionArtifactEditingCapabilities } from "@/core/intake/pantavion-artifact-editing-capabilities";
+import {
+  isPantavionArtifactUploadSizeAllowed,
+  PANTAVION_ARTIFACT_HEADER_SAMPLE_BYTES,
+  PANTAVION_ARTIFACT_TUS_CHUNK_BYTES,
+  PANTAVION_ARTIFACT_UPLOAD_MAX_BYTES,
+} from "@/core/intake/pantavion-artifact-storage-policy";
 import {
   createPantavionArtifactIntakeRecord,
   type PantavionArtifactSourceKind,
@@ -17,9 +24,6 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const BUCKET = "personal-media";
-const CURRENT_BUCKET_LIMIT_BYTES = 1_073_741_824;
-const SAMPLE_LIMIT_BYTES = 2_048;
-const TUS_CHUNK_SIZE_BYTES = 6 * 1024 * 1024;
 const CANONICAL_SUPABASE_URL = "https://cxhulvwkagzufbjsdwwu.supabase.co";
 
 const DOMAINS = [
@@ -138,7 +142,7 @@ export async function POST(request: Request) {
     if (!fileName || !Number.isSafeInteger(sizeBytes) || sizeBytes <= 0) {
       throw new Error("artifact_payload_invalid");
     }
-    if (sizeBytes > CURRENT_BUCKET_LIMIT_BYTES) {
+    if (!isPantavionArtifactUploadSizeAllowed(sizeBytes)) {
       throw new Error("artifact_size_exceeds_current_private_bucket_limit");
     }
     if (input.domains !== undefined && !domains) throw new Error("artifact_domains_invalid");
@@ -147,7 +151,9 @@ export async function POST(request: Request) {
     }
     if (firstBytesBase64) {
       const decoded = Buffer.from(firstBytesBase64, "base64");
-      if (decoded.byteLength > SAMPLE_LIMIT_BYTES) throw new Error("artifact_sample_too_large");
+      if (decoded.byteLength > PANTAVION_ARTIFACT_HEADER_SAMPLE_BYTES) {
+        throw new Error("artifact_sample_too_large");
+      }
     }
 
     const ownerId = founderId();
@@ -163,6 +169,7 @@ export async function POST(request: Request) {
       firstBytesBase64,
       domains: (domains ?? ["general"]) as PantavionConversationDomain[],
     });
+    const capabilities = createPantavionArtifactEditingCapabilities(classification.detection);
 
     const area = classification.security.quarantineRequired
       ? "artifact-quarantine"
@@ -190,7 +197,7 @@ export async function POST(request: Request) {
           path: data.path || storagePath,
           token: data.token,
           tusEndpoint: tusEndpointFor(supabaseUrl),
-          chunkSizeBytes: TUS_CHUNK_SIZE_BYTES,
+          chunkSizeBytes: PANTAVION_ARTIFACT_TUS_CHUNK_BYTES,
           expectedSizeBytes: sizeBytes,
           expectedFileName: fileName,
           mimeType: mimeType || "application/octet-stream",
@@ -198,12 +205,15 @@ export async function POST(request: Request) {
           ownerId,
         },
         classification,
+        capabilities,
         truth: {
           authorizationOnly: true,
           bytesUploaded: false,
           storedObjectVerified: false,
-          currentBucketLimitBytes: CURRENT_BUCKET_LIMIT_BYTES,
+          currentBucketLimitBytes: PANTAVION_ARTIFACT_UPLOAD_MAX_BYTES,
           directExecutionAllowed: false,
+          originalImmutable: true,
+          byteChangingEditsCreateDerivatives: true,
         },
       }),
     );
