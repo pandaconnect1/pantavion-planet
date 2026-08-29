@@ -51,6 +51,12 @@ export default async function KernelPage({ searchParams }: KernelPageProps) {
           >
             Universal Artifact Intake
           </a>
+          <a
+            href="/kernel/demand-radar"
+            className="rounded-2xl border border-emerald-300/40 bg-emerald-300/10 px-5 py-3 text-sm font-black text-emerald-100"
+          >
+            Global Human Demand Radar
+          </a>
         </div>
       </div>
       <KernelLivePanelClient />
