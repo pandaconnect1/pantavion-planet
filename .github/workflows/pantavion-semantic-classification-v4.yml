@@ -1,0 +1,140 @@
+name: Pantavion Semantic Classification v4 Current Main
+
+on:
+  pull_request:
+    paths:
+      - "scripts/pantavion-canonical-semantic-classification-v3.cjs"
+      - "scripts/pantavion-semantic-v3-strict-anchor-contract-test.cjs"
+      - ".github/workflows/pantavion-semantic-classification-v4.yml"
+      - "data/recovery/imported-pr248/**"
+      - "supabase/migrations/**"
+      - "supabase/production-history-baseline.json"
+      - "supabase/production-migration-index.json"
+      - "scripts/verify-supabase-production-history.mjs"
+      - "scripts/audit-supabase-migration-drift.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-semantic-classification-v4-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  semantic-classification-v4:
+    name: Rebase and verify all 82,413 records on current main
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Verify current production migration provenance
+        run: |
+          node scripts/verify-supabase-production-history.mjs
+          ALLOW_FORWARD_MIGRATIONS=1 node scripts/audit-supabase-migration-drift.mjs
+
+      - name: Refuse stale 2026-08-26 production snapshot
+        run: |
+          test ! -e data/recovery/production-truth/supabase-repository-evidence-20260826.json || {
+            echo "Stale production snapshot must not be used by Recovery v4" >&2
+            exit 1
+          }
+
+      - name: Verify strict ownership contracts
+        run: node scripts/pantavion-semantic-v3-strict-anchor-contract-test.cjs
+
+      - name: Run fail-closed semantic classification
+        run: node scripts/pantavion-canonical-semantic-classification-v3.cjs
+
+      - name: Verify preservation, fingerprints, quarantine, and non-final truth
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const crypto = require('crypto');
+          const readline = require('readline');
+
+          const corpusRoot = 'data/recovery/imported-pr248/canonical-ledger/corpus';
+          const receipt = JSON.parse(fs.readFileSync(path.join(corpusRoot,'MATERIALIZATION_RECEIPT.json'),'utf8'));
+          const manifest = JSON.parse(fs.readFileSync('data/recovery/canonical-semantic-v3/manifest.json','utf8'));
+          const prodIndex = JSON.parse(fs.readFileSync('supabase/production-migration-index.json','utf8'));
+          const source = fs.readdirSync(path.join(corpusRoot,'batches'))
+            .filter(x => x.endsWith('.json')).sort()
+            .flatMap(name => JSON.parse(fs.readFileSync(path.join(corpusRoot,'batches',name),'utf8')).records);
+
+          const expectedSourceFingerprint = '99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d';
+          const expectedOrderedIdFingerprint = 'd796a55c548655fda8b1014f4db810a7cf7b5f1aef8c7441b985faa8baa00b51';
+          const idFingerprint = crypto.createHash('sha256').update(source.map(r => r.id).join('\n')).digest('hex');
+
+          if (receipt.totalRecords !== 82413 || source.length !== 82413) throw new Error('82,413-record source preservation mismatch');
+          if (receipt.corpusFingerprint !== expectedSourceFingerprint) throw new Error('Source fingerprint drift');
+          if (idFingerprint !== expectedOrderedIdFingerprint) throw new Error('Ordered-ID fingerprint drift');
+          if (manifest.sourceFingerprint !== expectedSourceFingerprint || manifest.recordCount !== 82413 || manifest.preservedRecordCount !== 82413) throw new Error('Manifest/source mismatch');
+          if (manifest.externalProductionTruth !== null) throw new Error('Recovery v4 must not attach stale production snapshot evidence');
+
+          (async () => {
+            const lines = readline.createInterface({input: fs.createReadStream('data/recovery/canonical-semantic-v3/semantic-ledger.ndjson',{encoding:'utf8'}), crlfDelay:Infinity});
+            let index = 0;
+            let recursiveArtifacts = 0;
+            let falselyFinal = 0;
+            let classified = 0;
+            let hold = 0;
+            for await (const line of lines) {
+              if (!line.trim()) continue;
+              if (index >= source.length) throw new Error('Semantic ledger contains extra records');
+              const record = JSON.parse(line);
+              const original = source[index];
+              if (original.id !== record.id) throw new Error('Record ID/order changed at '+index);
+              if (JSON.stringify(original.provenance) !== JSON.stringify(record.provenance)) throw new Error('Provenance changed at '+index);
+              const recursiveSource = String(record.provenance?.sourceFile || '').startsWith('data/recovery/canonical-ledger/corpus/batches/');
+              if (record.reviewStatus === 'PRESERVED_RECURSIVE_ARTIFACT') {
+                if (!recursiveSource || record.semanticDecision !== 'PRESERVE_QUARANTINE') throw new Error('Invalid recursive artifact disposition at '+index);
+                recursiveArtifacts++;
+              } else if (recursiveSource) {
+                throw new Error('Recursive artifact escaped quarantine at '+index);
+              }
+              if (record.reviewStatus === 'SEMANTICALLY_CLASSIFIED') {
+                classified++;
+                if (!record.classification?.module || !record.classification?.subsystem || !record.classification?.capability || !record.classification?.feature || !record.classification?.canonicalTarget) falselyFinal++;
+              }
+              if (record.reviewStatus === 'REVIEW_REQUIRED') hold++;
+              index++;
+            }
+            if (index !== 82413) throw new Error('Semantic ledger record count mismatch: '+index);
+            if (recursiveArtifacts !== 50279 || manifest.completion.preservedRecursiveArtifacts !== 50279) throw new Error('Recursive artifact quarantine mismatch');
+            if (falselyFinal) throw new Error('Falsely-final records: '+falselyFinal);
+            if (manifest.completion.semanticallyClassified !== classified || manifest.completion.reviewRequired !== hold) throw new Error('Manifest completion accounting mismatch');
+            if (manifest.completion.complete !== (hold === 0)) throw new Error('Completion truth mismatch');
+
+            const summary = {
+              schemaVersion: 4,
+              currentMainBase: process.env.GITHUB_BASE_REF || 'main',
+              revision: process.env.GITHUB_SHA || null,
+              productionIndexCapturedAt: prodIndex.capturedAtUtc,
+              appliedProductionMigrations: prodIndex.migrations.length,
+              records: index,
+              recursiveArtifacts,
+              semanticallyClassified: classified,
+              reviewRequired: hold,
+              reviewReasonSummary: manifest.reviewReasonSummary,
+              moduleSummary: manifest.moduleSummary,
+              sourceFingerprint: manifest.sourceFingerprint,
+              orderedIdFingerprint: idFingerprint,
+              complete: hold === 0,
+              truth: 'Recovery/classification is not implementation, deployment, or VERIFIED_LIVE evidence.'
+            };
+            fs.writeFileSync('data/recovery/canonical-semantic-v3/recovery-v4-current-main-summary.json', JSON.stringify(summary,null,2)+'\n');
+            console.log(JSON.stringify({records:index,recursiveArtifacts,classified,hold,complete:hold===0}));
+          })().catch(error => { console.error(error); process.exit(1); });
+          NODE
+
+      - name: Upload current-main recovery evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-semantic-classification-v4-current-main
+          path: data/recovery/canonical-semantic-v3/
+          retention-days: 30
