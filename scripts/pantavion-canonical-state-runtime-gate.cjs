@@ -61,8 +61,10 @@ requireAll("cron", cron, [
   "exact CRON_SECRET bearer token",
 ]);
 
-const materializeIndex = cron.indexOf("materializePantavionFounderExecutionIntents");
-const foundryIndex = cron.indexOf("runPantavionNervousSystemFoundryTick");
+const materializeCall = "const canonicalExecutionIntake = await materializePantavionFounderExecutionIntents";
+const foundryCall = "const foundry = await runPantavionNervousSystemFoundryTick";
+const materializeIndex = cron.indexOf(materializeCall);
+const foundryIndex = cron.indexOf(foundryCall);
 if (materializeIndex < 0 || foundryIndex < 0 || materializeIndex > foundryIndex) {
   throw new Error("canonical execution intents must be materialized before the Nervous System/Foundry tick");
 }
