@@ -3,6 +3,11 @@
 import { ChangeEvent, useMemo, useState } from "react";
 import * as tus from "tus-js-client";
 
+import {
+  PANTAVION_ARTIFACT_HEADER_SAMPLE_BYTES,
+  PANTAVION_ARTIFACT_UPLOAD_MAX_BYTES,
+} from "@/core/intake/pantavion-artifact-storage-policy";
+
 type Domain =
   | "general"
   | "personal_ai"
@@ -39,6 +44,24 @@ type ArtifactClassification = {
   };
 };
 
+type ArtifactOperationCapability = {
+  operation?: string;
+  state?: string;
+  adapter?: string;
+  reason?: string;
+  nonDestructive?: boolean;
+};
+
+type ArtifactCapabilities = {
+  marker?: string;
+  formatId?: string;
+  family?: string;
+  supportState?: string;
+  originalImmutable?: boolean;
+  derivativeRequiredForByteChanges?: boolean;
+  operations?: ArtifactOperationCapability[];
+};
+
 type AuthorizeResponse = {
   ok?: boolean;
   status?: string;
@@ -56,6 +79,7 @@ type AuthorizeResponse = {
     declaredSha256?: string | null;
   };
   classification?: ArtifactClassification;
+  capabilities?: ArtifactCapabilities;
 };
 
 type CompleteResponse = {
@@ -63,6 +87,7 @@ type CompleteResponse = {
   status?: string;
   reason?: string;
   artifact?: ArtifactClassification;
+  capabilities?: ArtifactCapabilities;
   verification?: {
     sizeVerified?: boolean;
     headerObservedFromStoredBytes?: boolean;
@@ -77,6 +102,7 @@ type CompleteResponse = {
     private?: boolean;
     preserved?: boolean;
     deleted?: boolean;
+    maxArtifactBytes?: number;
   };
   execution?: {
     executionId?: string;
@@ -105,8 +131,8 @@ const DOMAINS: Array<{ id: Domain; label: string }> = [
   { id: "governance", label: "Governance" },
 ];
 
-const MAX_CURRENT_BYTES = 1_073_741_824;
-const SAMPLE_BYTES = 2_048;
+const MAX_CURRENT_BYTES = PANTAVION_ARTIFACT_UPLOAD_MAX_BYTES;
+const SAMPLE_BYTES = PANTAVION_ARTIFACT_HEADER_SAMPLE_BYTES;
 
 function bytesLabel(bytes: number): string {
   if (bytes >= 1024 ** 3) return `${(bytes / 1024 ** 3).toFixed(2)} GB`;
@@ -150,6 +176,7 @@ export default function KernelArtifactUploadClient() {
     "Επίλεξε οποιοδήποτε αρχείο. Το Pantavion θα το ταξινομήσει πριν και μετά την πραγματική αποθήκευση.",
   );
   const [classification, setClassification] = useState<ArtifactClassification | null>(null);
+  const [capabilities, setCapabilities] = useState<ArtifactCapabilities | null>(null);
   const [result, setResult] = useState<CompleteResponse | null>(null);
 
   const fileInfo = useMemo(
@@ -161,6 +188,7 @@ export default function KernelArtifactUploadClient() {
     const next = event.target.files?.[0] ?? null;
     setFile(next);
     setClassification(null);
+    setCapabilities(null);
     setResult(null);
     setProgress(0);
 
@@ -178,7 +206,7 @@ export default function KernelArtifactUploadClient() {
     if (next.size > MAX_CURRENT_BYTES) {
       setPhase("blocked");
       setMessage(
-        `Το σημερινό private Pantavion bucket είναι κλειδωμένο στα ${bytesLabel(MAX_CURRENT_BYTES)}. Το αρχείο διατηρείται στη συσκευή — δεν θα προσποιηθούμε ότι ανέβηκε.`,
+        `Το verified private Pantavion artifact ceiling είναι σήμερα ${bytesLabel(MAX_CURRENT_BYTES)} ανά αρχείο. Το αρχείο μένει στη συσκευή — δεν θα προσποιηθούμε ότι ανέβηκε.`,
       );
       return;
     }
@@ -192,7 +220,7 @@ export default function KernelArtifactUploadClient() {
 
     setPhase("authorizing");
     setProgress(0);
-    setMessage("Αρχική ταξινόμηση και δημιουργία one-time private upload authorization…");
+    setMessage("Αρχική ταξινόμηση, capability mapping και δημιουργία one-time private upload authorization…");
 
     try {
       const firstBytesBase64 = await fileSampleBase64(file);
@@ -214,6 +242,7 @@ export default function KernelArtifactUploadClient() {
       }
 
       setClassification(authorizationBody.classification ?? null);
+      setCapabilities(authorizationBody.capabilities ?? null);
       const upload = authorizationBody.upload;
       if (
         !upload.uploadId ||
@@ -269,7 +298,7 @@ export default function KernelArtifactUploadClient() {
       });
 
       setPhase("verifying");
-      setMessage("Το upload τελείωσε. Το Pantavion ξαναδιαβάζει τώρα τα πραγματικά αποθηκευμένα bytes και ελέγχει μέγεθος/signature/hash…");
+      setMessage("Το upload τελείωσε. Το Pantavion ξαναδιαβάζει τα πραγματικά αποθηκευμένα bytes και ελέγχει μέγεθος/signature/hash truth…");
 
       const completion = await fetch("/api/kernel/artifact-upload/complete", {
         method: "POST",
@@ -288,6 +317,7 @@ export default function KernelArtifactUploadClient() {
       const completionBody = (await completion.json()) as CompleteResponse;
       setResult(completionBody);
       if (completionBody.artifact) setClassification(completionBody.artifact);
+      if (completionBody.capabilities) setCapabilities(completionBody.capabilities);
 
       if (!completion.ok || !completionBody.ok) {
         setPhase("blocked");
@@ -312,10 +342,11 @@ export default function KernelArtifactUploadClient() {
     <main className="min-h-screen bg-[#05070d] px-5 py-8 text-white">
       <section className="mx-auto max-w-5xl rounded-[2rem] border border-cyan-300/25 bg-slate-950/90 p-6 shadow-2xl">
         <p className="text-xs font-black uppercase tracking-[0.45em] text-cyan-300">Pantavion Universal Artifact Intake</p>
-        <h1 className="mt-4 text-4xl font-black md:text-6xl">Any format. Preserve first. Verify truth.</h1>
+        <h1 className="mt-4 text-4xl font-black md:text-6xl">Any format. Preserve. Verify. Edit by capability.</h1>
         <p className="mt-4 max-w-4xl text-sm leading-7 text-slate-200">
-          Πραγματικό founder-only upload προς private Pantavion storage. CAD, maps, documents, media, archives,
-          source code, legacy ή άγνωστα formats γίνονται δεκτά χωρίς να αποκτούν αυτόματα δικαίωμα εκτέλεσης.
+          Founder-only private upload για CAD/BIM, maps/GIS, φωτογραφίες, εικόνες, μουσική/audio, video,
+          κείμενα, έγγραφα, spreadsheets, presentations, code, databases, archives, legacy και άγνωστα formats.
+          Το original παραμένει immutable· κάθε byte-changing edit πρέπει να παράγει derivative/version με provenance.
         </p>
 
         <div className="mt-8 grid gap-4 md:grid-cols-2">
@@ -349,9 +380,39 @@ export default function KernelArtifactUploadClient() {
           <p className="text-sm font-bold text-slate-200">Current classification</p>
           <p className="mt-2 break-words text-sm text-cyan-200">{classificationText(classification ?? undefined)}</p>
           <p className="mt-3 text-xs text-slate-400">
-            Current private bucket bound: {bytesLabel(MAX_CURRENT_BYTES)}. Bigger artifacts need a later verified storage tier; they are not falsely marked uploaded.
+            Private artifact ceiling: {bytesLabel(MAX_CURRENT_BYTES)} ανά αρχείο. Τα μεγαλύτερα artifacts απαιτούν ξεχωριστό verified storage tier και δεν σημειώνονται ψευδώς ως uploaded.
           </p>
         </div>
+
+        {capabilities?.operations?.length ? (
+          <section className="mt-6 rounded-2xl border border-cyan-300/15 bg-cyan-950/10 p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="font-black text-cyan-100">Artifact Studio capabilities</h2>
+                <p className="mt-1 text-xs text-slate-400">
+                  Original immutable: {String(capabilities.originalImmutable ?? true)} · byte-changing edits create derivatives.
+                </p>
+              </div>
+              <span className="rounded-full border border-cyan-300/20 px-3 py-1 text-xs text-cyan-200">
+                {capabilities.formatId || "unknown"}
+              </span>
+            </div>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              {capabilities.operations.map((capability, index) => (
+                <article key={`${capability.operation || "op"}-${index}`} className="rounded-xl border border-white/10 bg-black/25 p-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <strong className="text-sm text-white">{capability.operation || "UNKNOWN"}</strong>
+                    <span className="rounded-full border border-white/10 px-2 py-0.5 text-[11px] text-cyan-200">
+                      {capability.state || "UNKNOWN"}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-xs leading-5 text-slate-300">{capability.reason || "No capability reason."}</p>
+                  <p className="mt-2 break-all text-[11px] text-slate-500">adapter: {capability.adapter || "none"}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         {phase === "uploading" || progress > 0 ? (
           <div className="mt-6">
