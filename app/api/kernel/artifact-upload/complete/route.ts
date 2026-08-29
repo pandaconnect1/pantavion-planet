@@ -2,6 +2,13 @@ import { createHash } from "node:crypto";
 
 import { NextResponse } from "next/server";
 
+import { createPantavionArtifactEditingCapabilities } from "@/core/intake/pantavion-artifact-editing-capabilities";
+import {
+  isPantavionArtifactUploadSizeAllowed,
+  PANTAVION_ARTIFACT_HEADER_SAMPLE_BYTES,
+  PANTAVION_ARTIFACT_SYNC_SHA256_MAX_BYTES,
+  PANTAVION_ARTIFACT_UPLOAD_MAX_BYTES,
+} from "@/core/intake/pantavion-artifact-storage-policy";
 import {
   createPantavionArtifactIntakeRecord,
   createPantavionArtifactWorkOrderCandidate,
@@ -19,9 +26,6 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const BUCKET = "personal-media";
-const HEADER_SAMPLE_BYTES = 2_048;
-const FULL_HASH_LIMIT_BYTES = 16 * 1024 * 1024;
-const CURRENT_BUCKET_LIMIT_BYTES = 1_073_741_824;
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const SHA256_PATTERN = /^[0-9a-f]{64}$/i;
 
@@ -95,7 +99,7 @@ async function signedReadUrl(path: string): Promise<string> {
 async function inspectStoredHeader(path: string, expectedSize: number) {
   const url = await signedReadUrl(path);
   const response = await fetch(url, {
-    headers: { Range: `bytes=0-${HEADER_SAMPLE_BYTES - 1}` },
+    headers: { Range: `bytes=0-${PANTAVION_ARTIFACT_HEADER_SAMPLE_BYTES - 1}` },
     cache: "no-store",
   });
 
@@ -105,13 +109,16 @@ async function inspectStoredHeader(path: string, expectedSize: number) {
   const contentRange = response.headers.get("content-range");
   const totalBytes = parseTotalBytes(contentRange, contentLength);
 
-  if (response.status !== 206 && expectedSize > HEADER_SAMPLE_BYTES) {
+  if (response.status !== 206 && expectedSize > PANTAVION_ARTIFACT_HEADER_SAMPLE_BYTES) {
     await response.body?.cancel().catch(() => undefined);
     throw new Error("artifact_storage_range_not_supported");
   }
 
   const buffer = Buffer.from(await response.arrayBuffer());
-  if (buffer.byteLength > HEADER_SAMPLE_BYTES && expectedSize > HEADER_SAMPLE_BYTES) {
+  if (
+    buffer.byteLength > PANTAVION_ARTIFACT_HEADER_SAMPLE_BYTES &&
+    expectedSize > PANTAVION_ARTIFACT_HEADER_SAMPLE_BYTES
+  ) {
     throw new Error("artifact_storage_range_overflow");
   }
 
@@ -124,7 +131,9 @@ async function inspectStoredHeader(path: string, expectedSize: number) {
 }
 
 async function computeStoredSha256(path: string, expectedSize: number): Promise<string> {
-  if (expectedSize > FULL_HASH_LIMIT_BYTES) throw new Error("artifact_full_hash_worker_required");
+  if (expectedSize > PANTAVION_ARTIFACT_SYNC_SHA256_MAX_BYTES) {
+    throw new Error("artifact_full_hash_worker_required");
+  }
 
   const url = await signedReadUrl(path);
   const response = await fetch(url, { cache: "no-store" });
@@ -233,11 +242,7 @@ export async function POST(request: Request) {
 
     if (!UUID_PATTERN.test(uploadId)) throw new Error("artifact_upload_id_invalid");
     if (!fileName) throw new Error("artifact_payload_invalid");
-    if (
-      !Number.isSafeInteger(expectedSizeBytes) ||
-      expectedSizeBytes <= 0 ||
-      expectedSizeBytes > CURRENT_BUCKET_LIMIT_BYTES
-    ) {
+    if (!isPantavionArtifactUploadSizeAllowed(expectedSizeBytes)) {
       throw new Error("artifact_expected_size_invalid");
     }
     if (declaredSha256 && !SHA256_PATTERN.test(declaredSha256)) {
@@ -283,7 +288,7 @@ export async function POST(request: Request) {
 
     let computedSha256: string | null = null;
     let fullHashVerification: "verified" | "worker_required" = "worker_required";
-    if (expectedSizeBytes <= FULL_HASH_LIMIT_BYTES) {
+    if (expectedSizeBytes <= PANTAVION_ARTIFACT_SYNC_SHA256_MAX_BYTES) {
       computedSha256 = await computeStoredSha256(path, expectedSizeBytes);
       fullHashVerification = "verified";
     }
@@ -295,15 +300,18 @@ export async function POST(request: Request) {
       sizeBytes: expectedSizeBytes,
       mimeType: inspected.contentType || mimeType,
       sha256: computedSha256,
+      sha256VerifiedFromBytes: fullHashVerification === "verified",
       firstBytesBase64: inspected.sample.toString("base64"),
       storageReference: `${BUCKET}:${path}`,
       domains: (domains ?? ["general"]) as PantavionConversationDomain[],
       notes: [
         `server_storage_range_status:${inspected.rangeStatus}`,
         `full_hash_verification:${fullHashVerification}`,
+        `artifact_upload_max_bytes:${PANTAVION_ARTIFACT_UPLOAD_MAX_BYTES}`,
         declaredSha256 ? "declared_sha256_received:true" : "declared_sha256_received:false",
       ],
     });
+    const capabilities = createPantavionArtifactEditingCapabilities(artifact.detection);
 
     const declaredHashMismatch = Boolean(
       declaredSha256 && computedSha256 && declaredSha256 !== computedSha256,
@@ -343,6 +351,7 @@ export async function POST(request: Request) {
               ? "artifact_declared_hash_mismatch"
               : "artifact_server_quarantine_escalation",
             artifact,
+            capabilities,
             verification: {
               fullHashVerification,
               computedSha256,
@@ -367,6 +376,7 @@ export async function POST(request: Request) {
         ok: true,
         status: "artifact_stored_verified_and_queued",
         artifact,
+        capabilities,
         verification: {
           sizeVerified: true,
           headerObservedFromStoredBytes: true,
@@ -383,6 +393,7 @@ export async function POST(request: Request) {
           private: true,
           preserved: true,
           deleted: false,
+          maxArtifactBytes: PANTAVION_ARTIFACT_UPLOAD_MAX_BYTES,
         },
         execution: {
           executionId: persisted.execution.executionId,
@@ -392,8 +403,8 @@ export async function POST(request: Request) {
         },
         truth:
           fullHashVerification === "verified"
-            ? "The stored object size, real stored header bytes and complete SHA-256 were server-verified before work-order promotion. This still does not mean parsed, deployed or VERIFIED_LIVE."
-            : "The stored object size and real stored header bytes were server-verified. Full SHA-256 remains a bounded worker task for this large artifact; the work order must not claim full hash verification until that completes.",
+            ? "The stored object size, real stored header bytes and complete SHA-256 were server-verified before work-order promotion. The original remains immutable; byte-changing edits must create derivatives. This still does not mean every editor operation is VERIFIED_LIVE."
+            : "The stored object size and real stored header bytes were server-verified. Full SHA-256 remains a fenced durable worker task for this large artifact; the original remains immutable and byte-changing edits must create derivatives.",
       }),
     );
   } catch (error) {

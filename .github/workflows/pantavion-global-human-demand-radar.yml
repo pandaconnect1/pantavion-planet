@@ -1,0 +1,78 @@
+name: Pantavion Global Human Demand Radar
+
+on:
+  pull_request:
+    paths:
+      - "core/research/pantavion-global-human-demand-radar.ts"
+      - "core/research/pantavion-demand-promotion.ts"
+      - "core/research/pantavion-demand-radar-runtime.ts"
+      - "app/api/kernel/demand-radar/**"
+      - "app/kernel/demand-radar/**"
+      - "app/kernel/page.tsx"
+      - "data/research/global-human-demand-radar/**"
+      - "scripts/pantavion-global-human-demand-radar-test.mjs"
+      - "scripts/pantavion-demand-promotion-gate.ts"
+      - "scripts/pantavion-continuous-demand-radar-runtime-gate.cjs"
+      - ".github/workflows/pantavion-global-human-demand-radar.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "core/research/pantavion-global-human-demand-radar.ts"
+      - "core/research/pantavion-demand-promotion.ts"
+      - "core/research/pantavion-demand-radar-runtime.ts"
+      - "app/api/kernel/demand-radar/**"
+      - "app/kernel/demand-radar/**"
+      - "app/kernel/page.tsx"
+      - "data/research/global-human-demand-radar/**"
+      - "scripts/pantavion-global-human-demand-radar-test.mjs"
+      - "scripts/pantavion-demand-promotion-gate.ts"
+      - "scripts/pantavion-continuous-demand-radar-runtime-gate.cjs"
+      - ".github/workflows/pantavion-global-human-demand-radar.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  demand-radar-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify seven-continent demand radar contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-global-human-demand-radar-test.mjs
+
+      - name: Verify continuous demand radar runtime contract
+        run: node scripts/pantavion-continuous-demand-radar-runtime-gate.cjs
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Compile demand promotion gate
+        run: |
+          rm -rf .tmp-demand-promotion
+          npx tsc \
+            --target ES2022 \
+            --module commonjs \
+            --moduleResolution node \
+            --esModuleInterop true \
+            --strict \
+            --skipLibCheck \
+            --outDir .tmp-demand-promotion \
+            core/research/pantavion-global-human-demand-radar.ts \
+            core/research/pantavion-demand-promotion.ts \
+            scripts/pantavion-demand-promotion-gate.ts
+
+      - name: Verify founder-gated demand promotion
+        run: node .tmp-demand-promotion/scripts/pantavion-demand-promotion-gate.js
+
+      - name: Repository typecheck
+        run: npm run typecheck

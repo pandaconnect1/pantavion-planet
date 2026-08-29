@@ -1,0 +1,46 @@
+name: Pantavion Personal AI Adaptive Runtime
+
+on:
+  pull_request:
+    paths:
+      - "core/intelligence/personal-ai-adaptive-runtime.ts"
+      - "app/api/personal-ai/adaptation/route.ts"
+      - "scripts/pantavion-personal-ai-adaptive-runtime-test.mjs"
+      - ".github/workflows/pantavion-personal-ai-adaptive-runtime.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "core/intelligence/personal-ai-adaptive-runtime.ts"
+      - "app/api/personal-ai/adaptation/route.ts"
+      - "scripts/pantavion-personal-ai-adaptive-runtime-test.mjs"
+      - ".github/workflows/pantavion-personal-ai-adaptive-runtime.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  adaptive-runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify deterministic adaptive runtime contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-personal-ai-adaptive-runtime-test.mjs
+
+      - name: Typecheck repository
+        run: npm run typecheck
+
+      - name: Production build
+        run: npm run build
