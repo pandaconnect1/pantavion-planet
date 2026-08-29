@@ -295,6 +295,7 @@ export async function POST(request: Request) {
       sizeBytes: expectedSizeBytes,
       mimeType: inspected.contentType || mimeType,
       sha256: computedSha256,
+      sha256VerifiedFromBytes: fullHashVerification === "verified",
       firstBytesBase64: inspected.sample.toString("base64"),
       storageReference: `${BUCKET}:${path}`,
       domains: (domains ?? ["general"]) as PantavionConversationDomain[],
