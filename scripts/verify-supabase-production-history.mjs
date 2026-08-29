@@ -9,7 +9,6 @@ let scopedSemanticMatches = 0;
 
 const md5Of = (text) => createHash('md5').update(text, 'utf8').digest('hex');
 const whitespaceNormalized = (text) => text.trim().replace(/\s+/g, ' ');
-const codePoints = (value) => [...String(value)].map((char) => char.codePointAt(0));
 
 for (const entry of baseline.entries) {
   const path = `supabase/migrations/${entry.version}_${entry.name}.sql`;
@@ -28,6 +27,9 @@ for (const entry of baseline.entries) {
     continue;
   }
 
+  // Git text files conventionally end with one LF, while Supabase's migration
+  // ledger may persist the submitted statement without that terminal LF.
+  // Permit only this single representational difference; all other bytes must match.
   if (text.endsWith('\n') && !text.endsWith('\n\n')) {
     const withoutTerminalLf = text.slice(0, -1);
     if (withoutTerminalLf.length === entry.chars && md5Of(withoutTerminalLf) === entry.md5) {
@@ -36,6 +38,9 @@ for (const entry of baseline.entries) {
     }
   }
 
+  // One historical Personal AI migration was committed to Git with different SQL
+  // whitespace formatting than the exact statement retained by Supabase. This mode
+  // is opt-in per baseline entry and is never a global fallback.
   if (entry.verificationMode === 'whitespace_normalized') {
     const normalized = whitespaceNormalized(text);
     if (
@@ -47,12 +52,7 @@ for (const entry of baseline.entries) {
     }
   }
 
-  failures.push(
-    `${path}: expected md5=${entry.md5} chars=${entry.chars}; got md5=${md5} chars=${chars}; ` +
-      `expectedMd5Length=${String(entry.md5).length} gotMd5Length=${md5.length}; ` +
-      `expectedCharsType=${typeof entry.chars} gotCharsType=${typeof chars}; ` +
-      `expectedMd5Codes=${JSON.stringify(codePoints(entry.md5))}; gotMd5Codes=${JSON.stringify(codePoints(md5))}`,
-  );
+  failures.push(`${path}: expected md5=${entry.md5} chars=${entry.chars}; got md5=${md5} chars=${chars}`);
 }
 
 if (failures.length) {
