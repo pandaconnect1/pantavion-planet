@@ -1,0 +1,9 @@
+{
+  "source": "supabase_migrations.schema_migrations production ledger addendum",
+  "projectRef": "cxhulvwkagzufbjsdwwu",
+  "capturedAtUtc": "2026-08-30T20:06:37Z",
+  "entries": [
+    {"version":"20260830192403","name":"enable_pantavion_internal_scheduler_extensions","md5":"bd22d43a0670825d5838f354905feac6","chars":124},
+    {"version":"20260830192828","name":"create_pantavion_internal_scheduler_redundancy","md5":"5a89328c7060d347a7546ec40391c86d","chars":4238}
+  ]
+}
