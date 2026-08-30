@@ -40,6 +40,28 @@ for (const partitionOrdinal of [1, index.partitionPlan.partitionCount]) {
   assert.equal(inventory.uniqueRecordCount, partition.recordCount);
   assert.equal(inventory.recordEvidence.length, partition.recordCount);
   assert.match(inventory.partitionEvidenceSha256, /^[a-f0-9]{64}$/);
+  assert.equal(
+    analyzePantavionRecoveryPartitionInventory(partition).partitionEvidenceSha256,
+    inventory.partitionEvidenceSha256,
+    "partition evidence must be deterministic",
+  );
+  assert.equal(Object.getPrototypeOf(inventory.sourceFamilies), null);
+  assert.equal(Object.getPrototypeOf(inventory.seedModules), null);
+  for (const evidence of inventory.recordEvidence) {
+    assert.deepEqual(
+      Object.keys(evidence).sort(),
+      [
+        "hasContext",
+        "hasText",
+        "recordId",
+        "seedModule",
+        "sourceFamily",
+        "sourceFile",
+        "sourceRecordSha256",
+      ],
+      "inventory evidence must expose only bounded metadata and digests",
+    );
+  }
   assert.equal(inventory.nextStage, "semantic_classification_v3");
   assert.equal(inventory.authority.analysis, true);
   assert.equal(inventory.authority.planning, true);
@@ -77,8 +99,71 @@ assert.throws(
   /recovery_inventory_duplicate_record_id/,
 );
 
+assert.throws(
+  () => analyzePantavionRecoveryPartitionInventory({
+    ...firstPartition,
+    authority: { ...firstPartition.authority, analysis: false },
+  }),
+  /recovery_inventory_partition_authority_invalid/,
+  "inventory must not self-grant analysis authority",
+);
+assert.throws(
+  () => analyzePantavionRecoveryPartitionInventory({
+    ...firstPartition,
+    endOrdinal: firstPartition.endOrdinal + 1,
+  }),
+  /recovery_inventory_partition_range_invalid/,
+  "ordinal range drift must fail closed",
+);
+
+const firstEvidence = firstPartition.sourceEvidence[0];
+assert.ok(firstEvidence);
+assert.throws(
+  () => analyzePantavionRecoveryPartitionInventory({
+    ...firstPartition,
+    sourceEvidence: [
+      {
+        ...firstEvidence,
+        segmentStartOrdinal: firstEvidence.segmentStartOrdinal + 1,
+        recordCount: firstEvidence.recordCount - 1,
+      },
+      ...firstPartition.sourceEvidence.slice(1),
+    ],
+  }),
+  /recovery_inventory_source_evidence_(invalid|coverage_mismatch)/,
+  "source-evidence gaps must fail closed",
+);
+
+const prototypeKeyPartition = {
+  ...firstPartition,
+  startOrdinal: 1,
+  endOrdinal: 1,
+  recordCount: 1,
+  records: [
+    {
+      id: "prototype-key-record",
+      provenance: { sourceFile: "fixture.json", sourceFamily: "__proto__" },
+      classification: { module: "constructor" },
+    },
+  ],
+  sourceEvidence: [
+    {
+      file: "fixture.json",
+      fileSha256: "a".repeat(64),
+      segmentStartOrdinal: 1,
+      segmentEndOrdinal: 1,
+      recordCount: 1,
+    },
+  ],
+};
+const prototypeKeyInventory = analyzePantavionRecoveryPartitionInventory(prototypeKeyPartition);
+assert.equal(Object.getPrototypeOf(prototypeKeyInventory.sourceFamilies), null);
+assert.equal(Object.getPrototypeOf(prototypeKeyInventory.seedModules), null);
+assert.equal(prototypeKeyInventory.sourceFamilies.__proto__, 1);
+assert.equal(prototypeKeyInventory.seedModules.constructor, 1);
+
 console.log("Pantavion Recovery Partition Inventory contract: PASS");
 console.log("First partition inventory: 500 records");
 console.log("Last partition inventory: 413 records");
 console.log("Raw recovered text/context copied into inventory: false");
-console.log("Duplicate record rejection: PASS");
+console.log("Duplicate, authority, ordinal, evidence-gap and prototype-key rejection: PASS");
