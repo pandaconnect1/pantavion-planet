@@ -5,7 +5,9 @@ on:
     paths:
       - 'supabase/migrations/**'
       - 'supabase/production-history-baseline.json'
+      - 'supabase/production-history-addendum-*.json'
       - 'supabase/production-migration-index.json'
+      - 'supabase/production-migration-index-addendum-*.json'
       - 'scripts/verify-supabase-production-history.mjs'
       - 'scripts/audit-supabase-migration-drift.mjs'
       - '.github/workflows/supabase-production-history-integrity.yml'
@@ -14,7 +16,9 @@ on:
     paths:
       - 'supabase/migrations/**'
       - 'supabase/production-history-baseline.json'
+      - 'supabase/production-history-addendum-*.json'
       - 'supabase/production-migration-index.json'
+      - 'supabase/production-migration-index-addendum-*.json'
       - 'scripts/verify-supabase-production-history.mjs'
       - 'scripts/audit-supabase-migration-drift.mjs'
       - '.github/workflows/supabase-production-history-integrity.yml'
