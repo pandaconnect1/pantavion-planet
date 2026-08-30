@@ -9,6 +9,7 @@ import {
   PANTAVION_KERNEL_SESSION_COOKIE,
 } from "@/core/kernel/kernel-access-guard";
 
+import CanonicalMaterializationClient from "./canonical-materialization-client";
 import KernelLivePanelClient from "./kernel-live-panel-client";
 
 export const dynamic = "force-dynamic";
@@ -65,6 +66,7 @@ export default async function KernelPage({ searchParams }: KernelPageProps) {
           </a>
         </div>
       </div>
+      <CanonicalMaterializationClient />
       <KernelLivePanelClient />
     </>
   );
