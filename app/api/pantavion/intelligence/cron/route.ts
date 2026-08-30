@@ -3,7 +3,9 @@ import { NextResponse } from "next/server";
 import { runPantavionCloudCronTick } from "@/core/intelligence/pantavion-intelligence-ledger";
 import { materializePantavionFounderExecutionIntents } from "@/core/kernel/pantavion-founder-canonical-state-runtime";
 import { runPantavionNervousSystemFoundryTick } from "@/core/kernel/pantavion-foundry-nervous-system-runtime";
+import { materializePantavionRecoveryExecutionPartitions } from "@/core/recovery/pantavion-recovery-partition-scheduler";
 import { runSecureScheduledWorker } from "@/core/runtime/secure-scheduled-worker";
+import { PantavionSupabaseDurableExecutionStore } from "@/core/runtime/supabase-durable-execution-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -65,11 +67,18 @@ async function executeScheduledTick(
       "pantavion-intelligence-hourly",
       async () => {
         const canonicalExecutionIntake = await materializePantavionFounderExecutionIntents(20);
+        const recoveryPartitions = await materializePantavionRecoveryExecutionPartitions({
+          store: new PantavionSupabaseDurableExecutionStore(),
+          limit: 25,
+        });
         const tick = await runPantavionCloudCronTick(source);
         const foundry = await runPantavionNervousSystemFoundryTick();
 
         return {
-          ok: tick.ok && canonicalExecutionIntake.status !== "blocked",
+          ok:
+            tick.ok &&
+            canonicalExecutionIntake.status !== "blocked" &&
+            recoveryPartitions.status !== "blocked",
           route: tick.route,
           executedAt: tick.cron.executedAt,
           opportunityCount: tick.ledgerEvent.opportunityCount,
@@ -77,6 +86,7 @@ async function executeScheduledTick(
           ledgerStatus: tick.ledgerEvent.status,
           ledgerStorageMode: tick.ledgerEvent.storageMode,
           canonicalExecutionIntake,
+          recoveryPartitions,
           foundry,
         };
       },
@@ -88,10 +98,12 @@ async function executeScheduledTick(
       runtimeSafety: {
         authorization: "exact CRON_SECRET bearer token",
         concurrency: "Supabase atomic lease prevents overlapping executions",
-        idempotency: "one run key per worker per UTC hour plus durable founder-intent/work-order idempotency keys",
-        audit: "durable run status, canonical execution-intent status, work-order checkpoints and bounded summary are stored in Supabase",
+        idempotency: "one run key per worker per UTC hour plus durable founder-intent/work-order/recovery-partition idempotency keys",
+        audit: "durable run status, canonical execution-intent status, recovery partition state, work-order checkpoints and bounded summary are stored in Supabase",
         canonicalIntake:
           "founder-only canonical execution intents are materialized through the Pantavion work-order constructor before Nervous System and Foundry execution",
+        recoveryPartitions:
+          "the exact 82,413-record recovery corpus is materialized idempotently into 165 bounded durable partitions; this scheduler grants internal analysis/planning only and no code mutation, production write, merge, deployment, public exposure or release authority",
         foundry:
           "dependency-gated Nervous System reconciles durable Pantavion-owned agents before the existing Foundry performs its fenced/atomic internal runtime execution",
         destructiveActions: "disabled unless separately authorized through the recorded capability and owner-release boundaries",
