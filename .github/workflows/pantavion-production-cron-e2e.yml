@@ -6,10 +6,13 @@ on:
       - main
     paths:
       - "app/api/pantavion/intelligence/cron/**"
+      - "app/api/pantavion/intelligence/scheduler-health/**"
+      - "core/intelligence/pantavion-intelligence-ledger.ts"
       - "core/recovery/pantavion-recovery-fenced-executor.ts"
       - "core/recovery/pantavion-recovery-partition-scheduler.ts"
       - "core/runtime/secure-scheduled-worker.ts"
       - "core/runtime/supabase-durable-execution-store.ts"
+      - "supabase/migrations/*internal_scheduler*"
       - "next.config.ts"
       - "vercel.json"
       - ".github/workflows/pantavion-production-cron-e2e.yml"
@@ -18,10 +21,13 @@ on:
       - main
     paths:
       - "app/api/pantavion/intelligence/cron/**"
+      - "app/api/pantavion/intelligence/scheduler-health/**"
+      - "core/intelligence/pantavion-intelligence-ledger.ts"
       - "core/recovery/pantavion-recovery-fenced-executor.ts"
       - "core/recovery/pantavion-recovery-partition-scheduler.ts"
       - "core/runtime/secure-scheduled-worker.ts"
       - "core/runtime/supabase-durable-execution-store.ts"
+      - "supabase/migrations/*internal_scheduler*"
       - "next.config.ts"
       - "vercel.json"
       - ".github/workflows/pantavion-production-cron-e2e.yml"
@@ -32,9 +38,9 @@ permissions:
 
 jobs:
   production-cron-e2e:
-    name: Verify production cron boundary
+    name: Verify production cron boundary and live execution
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       PANTAVION_PRODUCTION_BASE: https://pantavion.com
       PANTAVION_CRON_SECRET: ${{ secrets.CRON_SECRET }}
@@ -54,6 +60,7 @@ jobs:
             echo "Production revision attempt $attempt/40 HTTP=$code revision=${revision:-<none>} expected=$GITHUB_SHA"
             if [ "$code" = "200" ] && [ "$ok" = "true" ] && [ "$revision" = "$GITHUB_SHA" ]; then
               echo "Exact production revision verified."
+              echo "PANTAVION_REVISION_VERIFIED_EPOCH=$(date -u +%s)" >> "$GITHUB_ENV"
               break
             fi
             if [ "$attempt" = "40" ]; then
@@ -93,7 +100,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "${PANTAVION_CRON_SECRET:-}" ]; then
-            echo "GitHub CRON_SECRET is not configured; authenticated manual tick is skipped. Native Vercel Cron remains the execution source."
+            echo "GitHub CRON_SECRET is not configured; manual authenticated tick is NOT execution evidence. Waiting for a deployed scheduler instead."
             exit 0
           fi
           code=$(curl --location --silent --show-error --max-time 240 \
@@ -117,5 +124,42 @@ jobs:
             if (!recovery || recovery.status === 'blocked') throw new Error('production_recovery_scheduler_blocked');
             if (!executor || executor.status === 'blocked') throw new Error('production_recovery_executor_blocked');
           }
-          console.log('Authenticated production cron boundary: PASS');
+          console.log('Authenticated production cron request: PASS');
           NODE
+
+      - name: Verify fresh durable scheduled execution evidence
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${PANTAVION_REVISION_VERIFIED_EPOCH:-}" ]; then
+            echo "::error::Exact production revision timestamp is missing."
+            exit 1
+          fi
+          minimum_epoch=$((PANTAVION_REVISION_VERIFIED_EPOCH - 60))
+          for attempt in $(seq 1 48); do
+            code=$(curl --location --silent --show-error --max-time 30 \
+              -o /tmp/scheduler-health.json -w "%{http_code}" \
+              "$PANTAVION_PRODUCTION_BASE/api/pantavion/intelligence/scheduler-health" || true)
+            revision=$(jq -r '.revision // empty' /tmp/scheduler-health.json 2>/dev/null || true)
+            verified=$(jq -r '.executionVerified // false' /tmp/scheduler-health.json 2>/dev/null || echo false)
+            started=$(jq -r '.worker.lastStartedAt // empty' /tmp/scheduler-health.json 2>/dev/null || true)
+            recovery=$(jq -r '.recovery.totalPartitions // 0' /tmp/scheduler-health.json 2>/dev/null || echo 0)
+            started_epoch=0
+            if [ -n "$started" ]; then
+              started_epoch=$(date -u -d "$started" +%s 2>/dev/null || echo 0)
+            fi
+            echo "Execution evidence attempt $attempt/48 HTTP=$code revision=${revision:-<none>} verified=$verified lastStartedAt=${started:-<none>} recovery=$recovery"
+            if [ "$code" = "200" ] \
+              && [ "$revision" = "$GITHUB_SHA" ] \
+              && [ "$verified" = "true" ] \
+              && [ "$started_epoch" -ge "$minimum_epoch" ] \
+              && [ "$recovery" -gt 0 ]; then
+              echo "Fresh durable scheduled execution evidence verified."
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::Production revision is deployed but no fresh durable scheduled execution was observed."
+          cat /tmp/scheduler-health.json || true
+          exit 1
