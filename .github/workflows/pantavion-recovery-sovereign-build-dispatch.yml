@@ -63,7 +63,22 @@ jobs:
         run: npm run materialize:recovery-runtime-fabric
 
       - name: Materialize sovereign dispatch and canonical build orders
-        run: node --no-warnings --experimental-strip-types scripts/pantavion-recovery-sovereign-build-dispatch.mjs
+        run: |
+          KERNEL_OUT="$(mktemp -d)"
+          trap 'rm -rf "$KERNEL_OUT"' EXIT
+          node node_modules/typescript/bin/tsc \
+            --module commonjs \
+            --moduleResolution node \
+            --target ES2022 \
+            --rootDir core/sovereign \
+            --outDir "$KERNEL_OUT" \
+            --esModuleInterop true \
+            --skipLibCheck true \
+            --declaration false \
+            --noEmit false \
+            core/sovereign/sovereign-capability-kernel.ts
+          PANTAVION_SOVEREIGN_KERNEL_RUNTIME="$KERNEL_OUT/sovereign-capability-kernel.js" \
+            node --no-warnings --experimental-strip-types scripts/pantavion-recovery-sovereign-build-dispatch.mjs
 
       - name: Verify exact sovereign build-dispatch truth
         run: |

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
 import { createHash } from "node:crypto";
+import { createRequire } from "node:module";
 
 import {
   createPantavionRecoverySovereignBuildOrder,
@@ -16,6 +17,17 @@ import {
 } from "../core/recovery/pantavion-recovery-runtime-fabric.ts";
 
 const root = process.cwd();
+const require = createRequire(import.meta.url);
+const sovereignKernelRuntimePath = process.env.PANTAVION_SOVEREIGN_KERNEL_RUNTIME;
+if (typeof sovereignKernelRuntimePath !== "string" || !sovereignKernelRuntimePath.trim()) {
+  throw new Error("recovery_dispatch_sovereign_kernel_runtime_required");
+}
+const sovereignKernelRuntime = require(path.resolve(root, sovereignKernelRuntimePath));
+const sovereignKernelCompiler = sovereignKernelRuntime?.compileSovereignKernelDecision;
+if (typeof sovereignKernelCompiler !== "function") {
+  throw new Error("recovery_dispatch_sovereign_kernel_compiler_missing");
+}
+
 const runtimeRoot = path.join(root, "data/recovery/runtime-fabric-v1");
 const runtimeManifestPath = path.join(runtimeRoot, "manifest.json");
 const workUnitsPath = path.join(runtimeRoot, "recovery-work-units.ndjson");
@@ -235,6 +247,7 @@ async function materializeSovereignBuildDispatch() {
         route: group.route,
         membership,
         previousBuildOrderDigest,
+        sovereignKernelCompiler,
       });
       requireEqual("build_order_sorted_identity", buildOrder.buildOrderId, group.buildOrderId);
       decisionCounts[buildOrder.sovereignDecision.disposition] += 1;
@@ -286,13 +299,19 @@ async function materializeSovereignBuildDispatch() {
   const emptyMembership = structuredClone(firstBuildFixture);
   emptyMembership.membership.memberCount = 0;
   expectFailure("recovery_build_empty_membership", () => {
-    createPantavionRecoverySovereignBuildOrder(emptyMembership);
+    createPantavionRecoverySovereignBuildOrder({
+      ...emptyMembership,
+      sovereignKernelCompiler,
+    });
   });
 
   const missingCapability = structuredClone(firstBuildFixture);
   missingCapability.route.capability = "";
   expectFailure("recovery_build_missing_capability", () => {
-    createPantavionRecoverySovereignBuildOrder(missingCapability);
+    createPantavionRecoverySovereignBuildOrder({
+      ...missingCapability,
+      sovereignKernelCompiler,
+    });
   });
 
   const manifest = {

@@ -5,10 +5,13 @@ import { PANTAVION_RECOVERY_CORPUS_CONTRACT } from "./pantavion-recovery-runtime
 import type { AgentCapabilityScope } from "../sovereign/agent-capability-budget-control.ts";
 import type { SwarmRole } from "../sovereign/ephemeral-agent-swarm.ts";
 import type { TechnologyReadiness } from "../sovereign/technology-library.ts";
-import {
-  compileSovereignKernelDecision,
-  type SovereignKernelDecision,
+import type {
+  compileSovereignKernelDecision as compileSovereignKernelDecisionType,
+  SovereignKernelDecision,
 } from "../sovereign/sovereign-capability-kernel.ts";
+
+export type PantavionRecoverySovereignKernelCompiler =
+  typeof compileSovereignKernelDecisionType;
 
 export interface PantavionRecoveryCanonicalBuildRoute {
   module: string;
@@ -318,7 +321,11 @@ export function createPantavionRecoverySovereignBuildOrder(input: {
   route: PantavionRecoveryCanonicalBuildRoute;
   membership: PantavionRecoveryBuildMembership;
   previousBuildOrderDigest: string | null;
+  sovereignKernelCompiler: PantavionRecoverySovereignKernelCompiler;
 }): PantavionRecoverySovereignBuildOrder {
+  if (typeof input.sovereignKernelCompiler !== "function") {
+    throw new Error("recovery_build_order_sovereign_kernel_compiler_required");
+  }
   if (!Number.isInteger(input.buildOrderOrdinal) || input.buildOrderOrdinal < 1) {
     throw new Error("recovery_build_order_ordinal_invalid");
   }
@@ -360,7 +367,7 @@ export function createPantavionRecoverySovereignBuildOrder(input: {
   const scopeStepId = `${intentId}:scope`;
   const buildStepId = `${intentId}:build`;
   const verifyStepId = `${intentId}:verify`;
-  const sovereignDecision = compileSovereignKernelDecision({
+  const sovereignDecision = input.sovereignKernelCompiler({
     intent: {
       id: intentId,
       userId: "pantavion_recovery_factory",
