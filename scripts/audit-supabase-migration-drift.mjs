@@ -1,10 +1,20 @@
 import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
 
-const index = JSON.parse(await readFile('supabase/production-migration-index.json', 'utf8'));
+const baselineIndex = JSON.parse(await readFile('supabase/production-migration-index.json', 'utf8'));
+const addendumIndex = JSON.parse(await readFile('supabase/production-migration-index-addendum-20260830.json', 'utf8'));
+if (baselineIndex.projectRef !== addendumIndex.projectRef) {
+  throw new Error(`Production migration index project mismatch: baseline=${baselineIndex.projectRef} addendum=${addendumIndex.projectRef}`);
+}
+const migrations = [...baselineIndex.migrations, ...addendumIndex.migrations];
+const versions = migrations.map((migration) => migration.version);
+if (new Set(versions).size !== versions.length) {
+  throw new Error('Duplicate production migration version across baseline/addendum index.');
+}
+
 const allowForwardMigrations = process.env.ALLOW_FORWARD_MIGRATIONS === '1';
-const productionByVersion = new Map(index.migrations.map((m) => [m.version, m]));
-const productionHead = index.migrations.map((m) => m.version).sort().at(-1) ?? '00000000000000';
+const productionByVersion = new Map(migrations.map((m) => [m.version, m]));
+const productionHead = migrations.map((m) => m.version).sort().at(-1) ?? '00000000000000';
 const files = (await readdir('supabase/migrations')).filter((f) => /^\d{14}_.+\.sql$/.test(f)).sort();
 
 const filesByVersion = new Map();
@@ -23,7 +33,7 @@ if (duplicateVersions.length) {
 }
 
 const byVersion = new Map([...filesByVersion.entries()].map(([version, group]) => [version, group[0]]));
-const missingProduction = index.migrations.filter((m) => !byVersion.has(m.version));
+const missingProduction = migrations.filter((m) => !byVersion.has(m.version));
 
 if (missingProduction.length) {
   console.error('Production migration versions missing from repository:');
@@ -52,7 +62,7 @@ function jaccard(a, b) {
 }
 
 const productionDocs = [];
-for (const migration of index.migrations) {
+for (const migration of migrations) {
   const file = byVersion.get(migration.version);
   const text = await readFile(`supabase/migrations/${file}`, 'utf8');
   productionDocs.push({ migration, file, text, normalized: normalize(text), tokens: tokens(text) });
@@ -90,7 +100,7 @@ const duplicateForwardSql = forwardPending.filter((item) => item.normalizedEquiv
 
 console.log(JSON.stringify({
   productionHead,
-  productionCount: index.migrations.length,
+  productionCount: migrations.length,
   repositoryMigrationCount: files.length,
   historicalDriftCount: historicalDrift.length,
   forwardPendingCount: forwardPending.length,
@@ -115,7 +125,7 @@ if (forwardPending.length && !allowForwardMigrations) {
   process.exit(1);
 }
 
-if (files.length !== index.migrations.length + forwardPending.length) {
-  console.error(`Unexpected migration count: repository=${files.length}, production=${index.migrations.length}, forwardPending=${forwardPending.length}`);
+if (files.length !== migrations.length + forwardPending.length) {
+  console.error(`Unexpected migration count: repository=${files.length}, production=${migrations.length}, forwardPending=${forwardPending.length}`);
   process.exit(1);
 }
