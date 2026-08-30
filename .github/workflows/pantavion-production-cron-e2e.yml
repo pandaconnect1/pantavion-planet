@@ -1,0 +1,121 @@
+name: Pantavion Production Cron E2E
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "app/api/pantavion/intelligence/cron/**"
+      - "core/recovery/pantavion-recovery-fenced-executor.ts"
+      - "core/recovery/pantavion-recovery-partition-scheduler.ts"
+      - "core/runtime/secure-scheduled-worker.ts"
+      - "core/runtime/supabase-durable-execution-store.ts"
+      - "next.config.ts"
+      - "vercel.json"
+      - ".github/workflows/pantavion-production-cron-e2e.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "app/api/pantavion/intelligence/cron/**"
+      - "core/recovery/pantavion-recovery-fenced-executor.ts"
+      - "core/recovery/pantavion-recovery-partition-scheduler.ts"
+      - "core/runtime/secure-scheduled-worker.ts"
+      - "core/runtime/supabase-durable-execution-store.ts"
+      - "next.config.ts"
+      - "vercel.json"
+      - ".github/workflows/pantavion-production-cron-e2e.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-cron-e2e:
+    name: Verify production cron boundary
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PANTAVION_PRODUCTION_BASE: https://pantavion.com
+      PANTAVION_CRON_SECRET: ${{ secrets.CRON_SECRET }}
+
+    steps:
+      - name: Wait for exact main revision in production
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 40); do
+            code=$(curl -sS -L --connect-timeout 10 --max-time 20 \
+              -o /tmp/social-health.json -w "%{http_code}" \
+              "$PANTAVION_PRODUCTION_BASE/api/social/health" || true)
+            revision=$(jq -r '.revision // empty' /tmp/social-health.json 2>/dev/null || true)
+            ok=$(jq -r '.ok // false' /tmp/social-health.json 2>/dev/null || echo false)
+            echo "Production revision attempt $attempt/40 HTTP=$code revision=${revision:-<none>} expected=$GITHUB_SHA"
+            if [ "$code" = "200" ] && [ "$ok" = "true" ] && [ "$revision" = "$GITHUB_SHA" ]; then
+              echo "Exact production revision verified."
+              break
+            fi
+            if [ "$attempt" = "40" ]; then
+              echo "::error::Production did not reach exact main revision $GITHUB_SHA."
+              exit 1
+            fi
+            sleep 15
+          done
+
+      - name: Verify cron authorization is configured and fail-closed
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl --location --silent --show-error --max-time 30 \
+            -o /tmp/cron-auth.json -w "%{http_code}" \
+            "$PANTAVION_PRODUCTION_BASE/api/pantavion/intelligence/cron" || true)
+          cat /tmp/cron-auth.json || true
+          echo
+          mode=$(jq -r '.mode // empty' /tmp/cron-auth.json 2>/dev/null || true)
+          if [ "$code" != "401" ]; then
+            echo "::error::Unauthenticated production cron request must return HTTP 401; got $code."
+            exit 1
+          fi
+          if [ "$mode" = "blocked_missing_cron_secret" ]; then
+            echo "::error::Production CRON_SECRET is missing. Native Vercel Cron cannot authenticate this route."
+            exit 1
+          fi
+          if [ "$mode" != "blocked_invalid_cron_secret" ]; then
+            echo "::error::Unexpected cron authorization mode: ${mode:-missing}."
+            exit 1
+          fi
+          echo "Production CRON_SECRET is configured and unauthenticated access is fail-closed."
+
+      - name: Trigger authenticated production tick when GitHub secret is available
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${PANTAVION_CRON_SECRET:-}" ]; then
+            echo "GitHub CRON_SECRET is not configured; authenticated manual tick is skipped. Native Vercel Cron remains the execution source."
+            exit 0
+          fi
+          code=$(curl --location --silent --show-error --max-time 240 \
+            -o /tmp/cron-run.json -w "%{http_code}" \
+            -H "Authorization: Bearer $PANTAVION_CRON_SECRET" \
+            "$PANTAVION_PRODUCTION_BASE/api/pantavion/intelligence/cron" || true)
+          cat /tmp/cron-run.json || true
+          echo
+          if [ "$code" != "200" ]; then
+            echo "::error::Authenticated production cron tick returned HTTP $code."
+            exit 1
+          fi
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const result = JSON.parse(fs.readFileSync('/tmp/cron-run.json', 'utf8'));
+          if (result.ok !== true) throw new Error('production_cron_result_not_ok');
+          if (result.authMode !== 'cron_secret_verified') throw new Error('production_cron_auth_not_verified');
+          if (result.executed === true) {
+            const recovery = result.output?.recoveryPartitions;
+            const executor = result.output?.recoveryExecutor;
+            if (!recovery || recovery.status === 'blocked') throw new Error('production_recovery_scheduler_blocked');
+            if (!executor || executor.status === 'blocked') throw new Error('production_recovery_executor_blocked');
+          }
+          console.log('Authenticated production cron boundary: PASS');
+          NODE
