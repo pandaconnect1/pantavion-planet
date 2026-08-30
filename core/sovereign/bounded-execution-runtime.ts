@@ -1,22 +1,9 @@
 import { createHash } from "node:crypto";
 
-import {
-  authorizeAgentCapability,
-  consumeAuthorizedBudget,
-  type AgentBudgetGrant,
-  type CapabilityAccess,
-} from "./agent-capability-budget-control.ts";
-import {
-  canAgentUseCapability,
-  type EphemeralAgent,
-} from "./ephemeral-agent-swarm.ts";
-import {
-  getExecutableSteps,
-  isOutcomeComplete,
-  type OutcomePlan,
-  type OutcomeStep,
-} from "./intent-to-outcome-fabric.ts";
-import type { SovereignKernelDecision } from "./sovereign-capability-kernel.ts";
+import type { AgentBudgetGrant, CapabilityAccess } from "./agent-capability-budget-control";
+import type { EphemeralAgent } from "./ephemeral-agent-swarm";
+import type { OutcomePlan, OutcomeStep } from "./intent-to-outcome-fabric";
+import type { SovereignKernelDecision } from "./sovereign-capability-kernel";
 
 export type BoundedExecutionSessionState = "ready" | "executing" | "completed" | "failed";
 
@@ -94,6 +81,120 @@ function parseTimestamp(value: string, label: string): number {
   const parsed = Date.parse(value);
   if (!Number.isFinite(parsed)) throw new Error(label + " is invalid");
   return parsed;
+}
+
+interface BoundedCapabilityRequest {
+  agentId: string;
+  intentId: string;
+  capability: string;
+  scope: string;
+  access: CapabilityAccess;
+  cost: number;
+  now: string;
+}
+
+function getExecutableBoundedSteps(plan: OutcomePlan, completedStepIds: string[]): OutcomeStep[] {
+  if (!["ready", "executing", "verifying"].includes(plan.state)) return [];
+  const completed = new Set(completedStepIds);
+  return plan.steps.filter(
+    (step) => !completed.has(step.id) && step.dependsOn.every((dependency) => completed.has(dependency)),
+  );
+}
+
+function isBoundedOutcomeComplete(plan: OutcomePlan, completedStepIds: string[]): boolean {
+  const completed = new Set(completedStepIds);
+  return plan.steps.length > 0 && plan.steps.every((step) => completed.has(step.id));
+}
+
+function agentHasBoundedCapability(
+  agent: EphemeralAgent,
+  capability: string,
+  scope: string,
+  access: CapabilityAccess,
+  observedAt: number,
+): boolean {
+  const agentExpiresAt = Date.parse(agent.expiresAt);
+  if (
+    agent.state !== "active" ||
+    !capability.trim() ||
+    !scope.trim() ||
+    (access !== "read" && access !== "write") ||
+    !Number.isFinite(observedAt) ||
+    !Number.isFinite(agentExpiresAt) ||
+    agentExpiresAt <= observedAt
+  ) {
+    return false;
+  }
+  return agent.capabilities.some((candidate) => {
+    const capabilityExpiresAt = Date.parse(candidate.expiresAt);
+    return (
+      candidate.capability === capability &&
+      candidate.scope === scope &&
+      !(access === "write" && candidate.readOnly === true) &&
+      Number.isFinite(capabilityExpiresAt) &&
+      capabilityExpiresAt > observedAt &&
+      capabilityExpiresAt <= agentExpiresAt
+    );
+  });
+}
+
+function authorizeBoundedCapability(
+  grant: AgentBudgetGrant,
+  request: BoundedCapabilityRequest,
+): { allowed: boolean; reasons: string[]; remainingBudget: number } {
+  const reasons: string[] = [];
+  const now = Date.parse(request.now);
+  const issuedAt = Date.parse(grant.issuedAt);
+  const expiresAt = Date.parse(grant.expiresAt);
+  const validBudget = Number.isFinite(grant.budgetLimit) && grant.budgetLimit >= 0;
+  const validSpend =
+    Number.isFinite(grant.spent) &&
+    grant.spent >= 0 &&
+    validBudget &&
+    grant.spent <= grant.budgetLimit;
+  const remainingBudget = validBudget && validSpend
+    ? Math.max(0, grant.budgetLimit - grant.spent)
+    : 0;
+
+  if (!grant.id.trim() || !grant.agentId.trim() || !grant.intentId.trim()) reasons.push("grant_identity_invalid");
+  if (grant.state !== "active") reasons.push("grant_" + grant.state);
+  if (!Number.isFinite(issuedAt) || !Number.isFinite(expiresAt) || expiresAt <= issuedAt) {
+    reasons.push("grant_time_invalid");
+  }
+  if (!Number.isFinite(now)) reasons.push("invalid_request_time");
+  else {
+    if (Number.isFinite(issuedAt) && now < issuedAt) reasons.push("grant_not_yet_active");
+    if (Number.isFinite(expiresAt) && expiresAt <= now) reasons.push("grant_expired");
+  }
+  if (!validBudget) reasons.push("grant_budget_invalid");
+  if (!validSpend) reasons.push("grant_spend_invalid");
+  if (!request.agentId.trim() || request.agentId !== grant.agentId) reasons.push("agent_scope_mismatch");
+  if (!request.intentId.trim() || request.intentId !== grant.intentId) reasons.push("intent_scope_mismatch");
+  if (!request.capability.trim() || !request.scope.trim()) reasons.push("capability_request_invalid");
+  if (request.access !== "read" && request.access !== "write") reasons.push("access_invalid");
+  if (!Number.isFinite(request.cost) || request.cost < 0) reasons.push("invalid_cost");
+
+  const scoped = grant.capabilities.find(
+    (candidate) =>
+      candidate.capability === request.capability &&
+      candidate.scope === request.scope,
+  );
+  if (!scoped) reasons.push("capability_or_scope_not_granted");
+  else if (request.access === "write" && scoped.access !== "write") reasons.push("write_not_granted");
+
+  if (Number.isFinite(request.cost) && request.cost >= 0 && request.cost > remainingBudget) {
+    reasons.push("budget_exceeded");
+  }
+  return { allowed: reasons.length === 0, reasons: [...new Set(reasons)], remainingBudget };
+}
+
+function consumeBoundedBudget(
+  grant: AgentBudgetGrant,
+  request: BoundedCapabilityRequest,
+): AgentBudgetGrant {
+  const decision = authorizeBoundedCapability(grant, request);
+  if (!decision.allowed) throw new Error("agent authorization denied:" + decision.reasons.join(","));
+  return { ...grant, spent: grant.spent + request.cost };
 }
 
 function assertDecisionIsBounded(decision: SovereignKernelDecision) {
@@ -184,7 +285,7 @@ export function createBoundedExecutionSession(input: {
 }
 
 function findExecutableStep(session: BoundedExecutionSession, stepId: string): OutcomeStep {
-  const executable = getExecutableSteps(session.plan, session.completedStepIds);
+  const executable = getExecutableBoundedSteps(session.plan, session.completedStepIds);
   const step = executable.find((candidate) => candidate.id === stepId);
   if (!step) throw new Error("step is not dependency-ready:" + stepId);
   return step;
@@ -224,11 +325,12 @@ export function recordBoundedStepCompletion(
     throw new Error("step is outside bounded execution authority");
   }
   if (
-    !canAgentUseCapability(
+    !agentHasBoundedCapability(
       session.agent,
       step.capability,
       input.scope,
-      new Date(observedAt),
+      input.access,
+      observedAt,
     )
   ) {
     throw new Error("ephemeral agent capability denied");
@@ -243,11 +345,11 @@ export function recordBoundedStepCompletion(
     cost: input.cost,
     now: input.observedAt,
   };
-  const authorization = authorizeAgentCapability(session.grant, authorizationRequest);
+  const authorization = authorizeBoundedCapability(session.grant, authorizationRequest);
   if (!authorization.allowed) {
     throw new Error("budget authorization denied:" + authorization.reasons.join(","));
   }
-  const updatedGrant = consumeAuthorizedBudget(session.grant, authorizationRequest);
+  const updatedGrant = consumeBoundedBudget(session.grant, authorizationRequest);
   const outputDigest = sha256(input.outputBytes);
   const previousReceiptDigest = session.receipts.at(-1)?.receiptDigest ?? null;
   const receiptId = sha256(
@@ -289,7 +391,7 @@ export function recordBoundedStepCompletion(
   const completedStepIds = [...session.completedStepIds, step.id];
   const nextSession: BoundedExecutionSession = {
     ...session,
-    state: isOutcomeComplete(session.plan, completedStepIds) ? "completed" : "executing",
+    state: isBoundedOutcomeComplete(session.plan, completedStepIds) ? "completed" : "executing",
     grant: updatedGrant,
     completedStepIds,
     receipts: [...session.receipts, receipt],
@@ -402,7 +504,7 @@ export function verifyBoundedExecutionSession(
     reasons.push("completed_steps_mismatch");
   }
   if (session.grant.spent !== expectedSpend) reasons.push("session_budget_mismatch");
-  const outcomeComplete = isOutcomeComplete(session.plan, session.completedStepIds);
+  const outcomeComplete = isBoundedOutcomeComplete(session.plan, session.completedStepIds);
   if (session.state === "completed" && !outcomeComplete) reasons.push("false_completed_state");
   if (outcomeComplete && session.state !== "completed") reasons.push("completed_outcome_state_mismatch");
   if (session.state === "failed" && !session.failureReason?.trim()) reasons.push("failed_state_without_reason");

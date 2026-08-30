@@ -20,7 +20,6 @@ import {
   recordBoundedStepCompletion,
   verifyBoundedExecutionSession,
 } from "../core/sovereign/bounded-execution-runtime.ts";
-import { compileSovereignKernelDecision } from "../core/sovereign/sovereign-capability-kernel.ts";
 import {
   advanceImplementationItem,
   canAdvanceImplementationState,
@@ -41,6 +40,31 @@ function expectThrows(operation, message) {
     threw = true;
   }
   assert(threw, message);
+}
+
+function createTestKernelDecision(steps, estimatedCost = steps.length) {
+  return {
+    intentId: "intent_safe",
+    disposition: "ready_for_bounded_execution",
+    firewall: {
+      intentId: "intent_safe",
+      disposition: "allow",
+      reasons: ["policy_satisfied"],
+      auditRequired: true,
+    },
+    plan: {
+      intentId: "intent_safe",
+      state: "ready",
+      steps,
+      blockers: [],
+      estimatedCost,
+      requiresOwnerApproval: false,
+    },
+    blockers: [],
+    mayMerge: false,
+    mayDeployProduction: false,
+    mayPublishToUsers: false,
+  };
 }
 
 const firewallPolicy = {
@@ -251,25 +275,7 @@ const boundedStep = {
   requiresOwnerApproval: false,
   dependsOn: [],
 };
-const boundedDecision = compileSovereignKernelDecision({
-  intent: {
-    id: "intent_safe",
-    userId: "founder_test",
-    text: "Classify the preserved corpus",
-    desiredOutcome: "Evidence-backed canonical classification",
-    jurisdiction: "CY",
-    maxCost: 3,
-  },
-  steps: [boundedStep],
-  estimatedCost: 1,
-  outcomePolicy: {
-    ownerApprovalRisks: ["high", "critical"],
-    requireApprovalForIrreversible: true,
-    maximumAutomaticCost: 3,
-  },
-  firewallRequest: safeIntentRequest,
-  firewallPolicy,
-});
+const boundedDecision = createTestKernelDecision([boundedStep], 1);
 const boundedSession = createBoundedExecutionSession({
   id: "bounded_session_1",
   decision: boundedDecision,
@@ -328,16 +334,8 @@ expectThrows(
     }),
   "A completion from a different agent identity must fail closed.",
 );
-const dependencyDecision = compileSovereignKernelDecision({
-  intent: {
-    id: "intent_safe",
-    userId: "founder_test",
-    text: "Classify then verify",
-    desiredOutcome: "Ordered bounded execution",
-    jurisdiction: "CY",
-    maxCost: 3,
-  },
-  steps: [
+const dependencyDecision = createTestKernelDecision(
+  [
     boundedStep,
     {
       ...boundedStep,
@@ -346,15 +344,8 @@ const dependencyDecision = compileSovereignKernelDecision({
       dependsOn: [boundedStep.id],
     },
   ],
-  estimatedCost: 2,
-  outcomePolicy: {
-    ownerApprovalRisks: ["high", "critical"],
-    requireApprovalForIrreversible: true,
-    maximumAutomaticCost: 3,
-  },
-  firewallRequest: safeIntentRequest,
-  firewallPolicy,
-});
+  2,
+);
 const dependencySession = createBoundedExecutionSession({
   id: "bounded_session_dependency",
   decision: dependencyDecision,
@@ -393,25 +384,17 @@ assert(
   !verifyBoundedExecutionSession(tamperedBoundedSession).valid,
   "Tampering with a bounded execution receipt must break verification.",
 );
-const protectedDecision = compileSovereignKernelDecision({
-  intent: {
-    id: "intent_safe",
-    userId: "founder_test",
-    text: "Write production",
-    desiredOutcome: "Protected action",
-    jurisdiction: "CY",
-    maxCost: 3,
+const protectedDecision = {
+  ...createTestKernelDecision([boundedStep], 1),
+  disposition: "awaiting_owner",
+  firewall: {
+    intentId: "intent_safe",
+    disposition: "owner_approval",
+    reasons: ["production_mutation_requires_owner"],
+    auditRequired: true,
   },
-  steps: [boundedStep],
-  estimatedCost: 1,
-  outcomePolicy: {
-    ownerApprovalRisks: ["high", "critical"],
-    requireApprovalForIrreversible: true,
-    maximumAutomaticCost: 3,
-  },
-  firewallRequest: { ...safeIntentRequest, writesProduction: true },
-  firewallPolicy,
-});
+  blockers: ["production_mutation_requires_owner"],
+};
 expectThrows(
   () =>
     createBoundedExecutionSession({
