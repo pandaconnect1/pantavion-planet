@@ -15,11 +15,15 @@ const migrationPath = "supabase/migrations/20260829135042_create_founder_canonic
 const runtimePath = "core/kernel/pantavion-founder-canonical-state-runtime.ts";
 const routePath = "app/api/kernel/canonical-state/route.ts";
 const cronPath = "app/api/pantavion/intelligence/cron/route.ts";
+const kernelPagePath = "app/kernel/page.tsx";
+const materializationControlPath = "app/kernel/canonical-materialization-client.tsx";
 
 const migration = read(migrationPath);
 const runtime = read(runtimePath);
 const route = read(routePath);
 const cron = read(cronPath);
+const kernelPage = read(kernelPagePath);
+const materializationControl = read(materializationControlPath);
 
 requireAll("migration", migration, [
   "pantavion_founder_canonical_states",
@@ -72,6 +76,28 @@ if (
   founderAuthIndex > materializeRouteIndex
 ) {
   throw new Error("founder materialization POST must enforce mutation boundary then founder+AAL2 authorization before materialization");
+}
+
+requireAll("founder kernel page", kernelPage, [
+  "isPantavionKernelFounderIdentityAllowed",
+  "CanonicalMaterializationClient",
+  "<CanonicalMaterializationClient />",
+]);
+
+requireAll("founder materialization control", materializationControl, [
+  '"use client"',
+  'fetch("/api/kernel/canonical-state"',
+  'method: "POST"',
+  '"Content-Type": "application/json"',
+  'JSON.stringify({ action: "materialize", limit: 50 })',
+  'credentials: "same-origin"',
+  "Materialize pending intents",
+  "direct file write: false",
+  "direct production deploy: false",
+]);
+
+if (materializationControl.includes("NEXT_PUBLIC_") || materializationControl.includes("SUPABASE_SERVICE_ROLE")) {
+  throw new Error("founder materialization control must not contain public or service-role credentials");
 }
 
 requireAll("cron", cron, [
