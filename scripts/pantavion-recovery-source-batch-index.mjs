@@ -7,8 +7,7 @@ const corpusRoot = path.join(root, "data/recovery/imported-pr248/canonical-ledge
 const batchesRoot = path.join(corpusRoot, "batches");
 const receiptPath = path.join(corpusRoot, "MATERIALIZATION_RECEIPT.json");
 const contractPath = path.join(root, "data/recovery/recovery-runtime-fabric-v1.json");
-const outRoot = path.join(root, "data/recovery/runtime-fabric-v1");
-const outPath = path.join(outRoot, "source-batch-index.json");
+const outPath = path.join(root, "data/recovery/source-batch-index-v1.json");
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -67,6 +66,9 @@ const expectedPartitionCount = contract.workload?.partitionCount;
 requireEqual("receipt_record_count", receipt.totalRecords, expectedRecordCount);
 requireEqual("receipt_batch_count", receipt.totalBatches, expectedBatchCount);
 requireEqual("receipt_source_fingerprint", receipt.corpusFingerprint, expectedSourceFingerprint);
+if (typeof receipt.generatedAt !== "string" || !receipt.generatedAt.trim()) {
+  throw new Error("receipt_generated_at_required");
+}
 
 const files = fs.readdirSync(batchesRoot).filter((name) => name.endsWith(".json")).sort();
 requireEqual("committed_batch_count", files.length, expectedBatchCount);
@@ -140,7 +142,7 @@ for (let ordinal = 1; ordinal <= partitionCount; ordinal += 1) {
 
 const index = {
   id: "pantavion_recovery_source_batch_index_v1",
-  generatedAt: new Date().toISOString(),
+  generatedAt: receipt.generatedAt,
   corpus: {
     recordCount: globalOrdinal,
     batchCount: batches.length,
@@ -164,10 +166,11 @@ const index = {
   partitions,
 };
 
-fs.mkdirSync(outRoot, { recursive: true });
+fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, `${JSON.stringify(index, null, 2)}\n`);
 console.log(JSON.stringify({
   id: index.id,
+  generatedAt: index.generatedAt,
   recordCount: index.corpus.recordCount,
   batchCount: index.corpus.batchCount,
   partitionCount: index.partitionPlan.partitionCount,
