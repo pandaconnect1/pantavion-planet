@@ -7,6 +7,7 @@ import { runPantavionRecoveryFencedExecutor } from "@/core/recovery/pantavion-re
 import { materializePantavionRecoveryExecutionPartitions } from "@/core/recovery/pantavion-recovery-partition-scheduler";
 import { PantavionRecoverySupabaseExecutionStore } from "@/core/recovery/pantavion-recovery-supabase-execution-store";
 import { runSecureScheduledWorker } from "@/core/runtime/secure-scheduled-worker";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -14,9 +15,16 @@ export const maxDuration = 240;
 
 type PantavionCronAuthMode =
   | "cron_secret_verified"
+  | "internal_scheduler_verified"
   | "local_development_explicitly_allowed"
   | "blocked_missing_cron_secret"
-  | "blocked_invalid_cron_secret";
+  | "blocked_invalid_cron_secret"
+  | "blocked_invalid_internal_scheduler_token";
+
+type PantavionScheduledTickSource =
+  | "vercel_cron"
+  | "internal_scheduler"
+  | "external_scheduler";
 
 function secretsMatch(actual: string, expected: string) {
   const actualBytes = Buffer.from(actual);
@@ -25,10 +33,35 @@ function secretsMatch(actual: string, expected: string) {
     && timingSafeEqual(actualBytes, expectedBytes);
 }
 
-function authorizeCronRequest(request: Request) {
+async function verifyInternalSchedulerToken(token: string): Promise<boolean> {
+  if (token.length < 32) return false;
+  try {
+    const admin = createAdminClient();
+    const result = await admin.rpc("pantavion_verify_internal_scheduler_token", {
+      p_token: token,
+    });
+    return result.error == null && result.data === true;
+  } catch {
+    return false;
+  }
+}
+
+async function authorizeCronRequest(request: Request) {
   const secret = process.env.CRON_SECRET?.trim() ?? "";
   const authorization = request.headers.get("authorization") ?? "";
+  const internalSchedulerToken = request.headers.get("x-pantavion-scheduler-token")?.trim() ?? "";
   const isProduction = process.env.NODE_ENV === "production";
+
+  if (secret && secretsMatch(authorization, "Bearer " + secret)) {
+    return { ok: true, mode: "cron_secret_verified" as const };
+  }
+
+  if (internalSchedulerToken) {
+    if (await verifyInternalSchedulerToken(internalSchedulerToken)) {
+      return { ok: true, mode: "internal_scheduler_verified" as const };
+    }
+    return { ok: false, mode: "blocked_invalid_internal_scheduler_token" as const };
+  }
 
   if (!secret) {
     if (!isProduction && process.env.PANTAVION_ALLOW_LOCAL_CRON === "true") {
@@ -37,12 +70,7 @@ function authorizeCronRequest(request: Request) {
     return { ok: false, mode: "blocked_missing_cron_secret" as const };
   }
 
-  const expected = "Bearer " + secret;
-  if (!secretsMatch(authorization, expected)) {
-    return { ok: false, mode: "blocked_invalid_cron_secret" as const };
-  }
-
-  return { ok: true, mode: "cron_secret_verified" as const };
+  return { ok: false, mode: "blocked_invalid_cron_secret" as const };
 }
 
 function unauthorizedCronResponse(mode: PantavionCronAuthMode) {
@@ -53,14 +81,14 @@ function unauthorizedCronResponse(mode: PantavionCronAuthMode) {
       error: "Unauthorized scheduled-worker request.",
       mode,
       runtimeSafety:
-        "Execution is fail-closed. Production requires an exact CRON_SECRET bearer token.",
+        "Execution is fail-closed. Production requires either the exact Vercel CRON_SECRET bearer token or the Vault-backed Pantavion internal scheduler token.",
     },
     { status: 401 },
   );
 }
 
 async function executeScheduledTick(
-  source: "vercel_cron" | "external_scheduler",
+  source: PantavionScheduledTickSource,
   authMode: PantavionCronAuthMode,
 ) {
   try {
@@ -105,7 +133,10 @@ async function executeScheduledTick(
       ...worker,
       authMode,
       runtimeSafety: {
-        authorization: "exact CRON_SECRET bearer token",
+        authorization:
+          "exact Vercel CRON_SECRET bearer token or Vault-backed Pantavion internal scheduler token",
+        schedulerRedundancy:
+          "Vercel Cron and a separately activated Supabase pg_cron/pg_net scheduler may invoke the same route; five-minute run-key idempotency and Supabase leases prevent duplicate execution",
         concurrency: "Supabase scheduled-worker lease plus per-partition monotonic fencing prevents overlapping or stale execution writes",
         idempotency: "one run key per five-minute UTC bucket plus durable founder-intent/work-order/recovery-partition idempotency keys",
         audit: "durable run status, recovery partition claims, fenced checkpoints, terminal states and bounded summaries are stored in Supabase",
@@ -141,13 +172,17 @@ async function executeScheduledTick(
 }
 
 export async function GET(request: Request) {
-  const auth = authorizeCronRequest(request);
+  const auth = await authorizeCronRequest(request);
   if (!auth.ok) return unauthorizedCronResponse(auth.mode);
-  return executeScheduledTick("vercel_cron", auth.mode);
+  const source: PantavionScheduledTickSource =
+    auth.mode === "internal_scheduler_verified" ? "internal_scheduler" : "vercel_cron";
+  return executeScheduledTick(source, auth.mode);
 }
 
 export async function POST(request: Request) {
-  const auth = authorizeCronRequest(request);
+  const auth = await authorizeCronRequest(request);
   if (!auth.ok) return unauthorizedCronResponse(auth.mode);
-  return executeScheduledTick("external_scheduler", auth.mode);
+  const source: PantavionScheduledTickSource =
+    auth.mode === "internal_scheduler_verified" ? "internal_scheduler" : "external_scheduler";
+  return executeScheduledTick(source, auth.mode);
 }
