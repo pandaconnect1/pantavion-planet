@@ -64,51 +64,85 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          code=$(curl --location --silent --show-error --max-time 45 \
-            -o /tmp/el-en.json -w "%{http_code}" \
-            -X POST "$PANTAVION_PRODUCTION_BASE/api/pantavion/translate" \
-            -H 'Content-Type: application/json' \
-            --data '{"text":"Καλημέρα, η αμφίδρομη μετάφραση του Pantavion λειτουργεί ζωντανά.","sourceLanguage":"el","targetLanguage":"en","bidirectional":true,"surface":"production-e2e"}' || true)
-          echo "EL->EN HTTP=$code"
-          cat /tmp/el-en.json || true
-          echo
-          if [ "$code" != "200" ]; then
-            echo "::error::EL->EN production translation returned HTTP $code. Sanitized route diagnostic printed above."
+          for attempt in $(seq 1 4); do
+            code=$(curl --location --silent --show-error --max-time 45 \
+              -o /tmp/el-en.json -w "%{http_code}" \
+              -X POST "$PANTAVION_PRODUCTION_BASE/api/pantavion/translate" \
+              -H 'Content-Type: application/json' \
+              --data '{"text":"Καλημέρα, η αμφίδρομη μετάφραση του Pantavion λειτουργεί ζωντανά.","sourceLanguage":"el","targetLanguage":"en","bidirectional":true,"surface":"production-e2e"}' || true)
+            echo "EL->EN attempt=$attempt/4 HTTP=$code"
+            cat /tmp/el-en.json || true
+            echo
+
+            if [ "$code" = "200" ]; then
+              node -e '
+                const fs = require("node:fs");
+                const result = JSON.parse(fs.readFileSync("/tmp/el-en.json", "utf8"));
+                if (result.ok !== true) throw new Error(`el-en not ok: ${result.status || result.error || "unknown"}`);
+                if (typeof result.translatedText !== "string" || !result.translatedText.trim()) throw new Error("el-en empty translatedText");
+                if (result.translatedText.includes("Καλημέρα") && result.translatedText.includes("λειτουργεί")) throw new Error("el-en output appears untranslated");
+                console.log("EL->EN PASS:", result.translatedText);
+              '
+              break
+            fi
+
+            status=$(jq -r '.status // empty' /tmp/el-en.json 2>/dev/null || true)
+            retry_after_ms=$(jq -r '.retryAfterMs // 0' /tmp/el-en.json 2>/dev/null || echo 0)
+            if [ "$status" = "gateway_rate_limited" ] && [ "$attempt" -lt 4 ]; then
+              if ! [[ "$retry_after_ms" =~ ^[0-9]+$ ]]; then retry_after_ms=15000; fi
+              if [ "$retry_after_ms" -lt 1000 ]; then retry_after_ms=1000; fi
+              if [ "$retry_after_ms" -gt 60000 ]; then retry_after_ms=60000; fi
+              sleep_seconds=$(( (retry_after_ms + 1999) / 1000 ))
+              echo "Gateway rate limited; honoring retryAfterMs=$retry_after_ms and waiting ${sleep_seconds}s before retry."
+              sleep "$sleep_seconds"
+              continue
+            fi
+
+            echo "::error::EL->EN production translation returned HTTP $code status=${status:-unknown}. Sanitized route diagnostic printed above."
             exit 1
-          fi
-          node -e '
-            const fs = require("node:fs");
-            const result = JSON.parse(fs.readFileSync("/tmp/el-en.json", "utf8"));
-            if (result.ok !== true) throw new Error(`el-en not ok: ${result.status || result.error || "unknown"}`);
-            if (typeof result.translatedText !== "string" || !result.translatedText.trim()) throw new Error("el-en empty translatedText");
-            if (result.translatedText.includes("Καλημέρα") && result.translatedText.includes("λειτουργεί")) throw new Error("el-en output appears untranslated");
-            console.log("EL->EN PASS:", result.translatedText);
-          '
+          done
 
       - name: English to Greek live translation
         shell: bash
         run: |
           set -euo pipefail
-          code=$(curl --location --silent --show-error --max-time 45 \
-            -o /tmp/en-el.json -w "%{http_code}" \
-            -X POST "$PANTAVION_PRODUCTION_BASE/api/pantavion/translate" \
-            -H 'Content-Type: application/json' \
-            --data '{"text":"Good evening, Pantavion bidirectional translation is working live.","sourceLanguage":"en","targetLanguage":"el","bidirectional":true,"surface":"production-e2e"}' || true)
-          echo "EN->EL HTTP=$code"
-          cat /tmp/en-el.json || true
-          echo
-          if [ "$code" != "200" ]; then
-            echo "::error::EN->EL production translation returned HTTP $code. Sanitized route diagnostic printed above."
+          for attempt in $(seq 1 4); do
+            code=$(curl --location --silent --show-error --max-time 45 \
+              -o /tmp/en-el.json -w "%{http_code}" \
+              -X POST "$PANTAVION_PRODUCTION_BASE/api/pantavion/translate" \
+              -H 'Content-Type: application/json' \
+              --data '{"text":"Good evening, Pantavion bidirectional translation is working live.","sourceLanguage":"en","targetLanguage":"el","bidirectional":true,"surface":"production-e2e"}' || true)
+            echo "EN->EL attempt=$attempt/4 HTTP=$code"
+            cat /tmp/en-el.json || true
+            echo
+
+            if [ "$code" = "200" ]; then
+              node -e '
+                const fs = require("node:fs");
+                const result = JSON.parse(fs.readFileSync("/tmp/en-el.json", "utf8"));
+                if (result.ok !== true) throw new Error(`en-el not ok: ${result.status || result.error || "unknown"}`);
+                if (typeof result.translatedText !== "string" || !result.translatedText.trim()) throw new Error("en-el empty translatedText");
+                if (/\bGood evening\b|\bworking live\b/i.test(result.translatedText)) throw new Error("en-el output appears untranslated");
+                console.log("EN->EL PASS:", result.translatedText);
+              '
+              break
+            fi
+
+            status=$(jq -r '.status // empty' /tmp/en-el.json 2>/dev/null || true)
+            retry_after_ms=$(jq -r '.retryAfterMs // 0' /tmp/en-el.json 2>/dev/null || echo 0)
+            if [ "$status" = "gateway_rate_limited" ] && [ "$attempt" -lt 4 ]; then
+              if ! [[ "$retry_after_ms" =~ ^[0-9]+$ ]]; then retry_after_ms=15000; fi
+              if [ "$retry_after_ms" -lt 1000 ]; then retry_after_ms=1000; fi
+              if [ "$retry_after_ms" -gt 60000 ]; then retry_after_ms=60000; fi
+              sleep_seconds=$(( (retry_after_ms + 1999) / 1000 ))
+              echo "Gateway rate limited; honoring retryAfterMs=$retry_after_ms and waiting ${sleep_seconds}s before retry."
+              sleep "$sleep_seconds"
+              continue
+            fi
+
+            echo "::error::EN->EL production translation returned HTTP $code status=${status:-unknown}. Sanitized route diagnostic printed above."
             exit 1
-          fi
-          node -e '
-            const fs = require("node:fs");
-            const result = JSON.parse(fs.readFileSync("/tmp/en-el.json", "utf8"));
-            if (result.ok !== true) throw new Error(`en-el not ok: ${result.status || result.error || "unknown"}`);
-            if (typeof result.translatedText !== "string" || !result.translatedText.trim()) throw new Error("en-el empty translatedText");
-            if (/\bGood evening\b|\bworking live\b/i.test(result.translatedText)) throw new Error("en-el output appears untranslated");
-            console.log("EN->EL PASS:", result.translatedText);
-          '
+          done
 
       - name: Production translation verdict
         run: echo "PANTAVION PRODUCTION BIDIRECTIONAL TRANSLATION E2E PASSED"
