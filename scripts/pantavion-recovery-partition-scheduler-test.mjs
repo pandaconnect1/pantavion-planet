@@ -1,6 +1,5 @@
 import assert from "node:assert/strict";
 
-import { PantavionMemoryExecutionStore } from "../core/runtime/durable-execution.ts";
 import {
   PANTAVION_RECOVERY_PARTITION_TASK_NAME,
   createPantavionRecoveryPartitionInput,
@@ -8,7 +7,30 @@ import {
 } from "../core/recovery/pantavion-recovery-partition-scheduler.ts";
 import { PANTAVION_RECOVERY_CORPUS_CONTRACT } from "../core/recovery/pantavion-recovery-runtime-fabric.ts";
 
-const store = new PantavionMemoryExecutionStore();
+class MemoryPartitionStore {
+  constructor() {
+    this.records = new Map();
+  }
+
+  async findByIdempotencyKey(idempotencyKey) {
+    for (const record of this.records.values()) {
+      if (record.idempotencyKey === idempotencyKey) return record;
+    }
+    return null;
+  }
+
+  async put(record) {
+    this.records.set(record.executionId, record);
+  }
+
+  async list(limit = 100) {
+    return [...this.records.values()]
+      .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
+      .slice(0, limit);
+  }
+}
+
+const store = new MemoryPartitionStore();
 
 const first = createPantavionRecoveryPartitionInput(1);
 assert.equal(first.startUnit, 1);
