@@ -16,8 +16,11 @@ import {
 } from "../core/sovereign/edge-execution.ts";
 import { assessTechnologyLibraryEntry } from "../core/sovereign/technology-library.ts";
 import {
+  createBoundedExecutionCheckpoint,
   createBoundedExecutionSession,
   recordBoundedStepCompletion,
+  restoreBoundedExecutionSession,
+  verifyBoundedExecutionCheckpoint,
   verifyBoundedExecutionSession,
 } from "../core/sovereign/bounded-execution-runtime.ts";
 import {
@@ -383,6 +386,156 @@ const tamperedBoundedSession = {
 assert(
   !verifyBoundedExecutionSession(tamperedBoundedSession).valid,
   "Tampering with a bounded execution receipt must break verification.",
+);
+
+const rootBoundedCheckpoint = createBoundedExecutionCheckpoint({
+  session: boundedSession,
+  sequence: 1,
+  fencingToken: 7,
+  workerId: "worker_alpha",
+  observedAt: "2026-08-27T21:01:00.000Z",
+});
+assert(
+  verifyBoundedExecutionCheckpoint(rootBoundedCheckpoint).valid &&
+    rootBoundedCheckpoint.releaseAuthority === false,
+  "A root bounded checkpoint must be self-verifying and carry no release authority.",
+);
+const restoredBoundedSession = restoreBoundedExecutionSession(
+  rootBoundedCheckpoint,
+  {
+    sessionId: boundedSession.id,
+    intentId: boundedSession.intentId,
+    agentId: boundedSession.agent.id,
+    planFingerprint: boundedSession.planFingerprint,
+    trustedCheckpointDigest: rootBoundedCheckpoint.checkpointDigest,
+    minimumSequence: 1,
+    minimumFencingToken: 7,
+  },
+);
+const resumedCompletedSession = recordBoundedStepCompletion(
+  restoredBoundedSession,
+  {
+    sessionId: restoredBoundedSession.id,
+    intentId: restoredBoundedSession.intentId,
+    agentId: restoredBoundedSession.agent.id,
+    stepId: boundedStep.id,
+    scope: "recovery/corpus",
+    access: "read",
+    cost: 1,
+    observedAt: "2026-08-27T21:05:00.000Z",
+    outputBytes: Buffer.from("checkpoint-resumed-classification"),
+    auditReference: "audit://checkpoint-resume",
+    rollbackReference: "rollback://read-only-no-write",
+  },
+);
+const completedBoundedCheckpoint = createBoundedExecutionCheckpoint({
+  session: resumedCompletedSession,
+  sequence: 2,
+  fencingToken: 7,
+  workerId: "worker_alpha",
+  observedAt: "2026-08-27T21:06:00.000Z",
+  previous: rootBoundedCheckpoint,
+});
+assert(
+  verifyBoundedExecutionCheckpoint(
+    completedBoundedCheckpoint,
+    rootBoundedCheckpoint,
+  ).valid,
+  "A resumed completion must advance the checkpoint digest chain exactly once.",
+);
+const restoredCompletedSession = restoreBoundedExecutionSession(
+  completedBoundedCheckpoint,
+  {
+    sessionId: boundedSession.id,
+    intentId: boundedSession.intentId,
+    agentId: boundedSession.agent.id,
+    planFingerprint: boundedSession.planFingerprint,
+    trustedCheckpointDigest: completedBoundedCheckpoint.checkpointDigest,
+    minimumSequence: 2,
+    minimumFencingToken: 7,
+  },
+);
+assert(
+  restoredCompletedSession.state === "completed",
+  "The trusted checkpoint head must restore the exact completed session state.",
+);
+const tamperedBoundedCheckpoint = {
+  ...completedBoundedCheckpoint,
+  session: {
+    ...completedBoundedCheckpoint.session,
+    receipts: [
+      {
+        ...completedBoundedCheckpoint.session.receipts[0],
+        auditReference: "audit://tampered-checkpoint",
+      },
+    ],
+  },
+};
+assert(
+  !verifyBoundedExecutionCheckpoint(
+    tamperedBoundedCheckpoint,
+    rootBoundedCheckpoint,
+  ).valid,
+  "Nested checkpoint session tampering must invalidate the checkpoint.",
+);
+expectThrows(
+  () =>
+    restoreBoundedExecutionSession(rootBoundedCheckpoint, {
+      sessionId: boundedSession.id,
+      intentId: boundedSession.intentId,
+      agentId: boundedSession.agent.id,
+      planFingerprint: boundedSession.planFingerprint,
+      trustedCheckpointDigest: completedBoundedCheckpoint.checkpointDigest,
+      minimumSequence: 2,
+      minimumFencingToken: 7,
+    }),
+  "A stale checkpoint must not restore after a newer trusted head exists.",
+);
+expectThrows(
+  () =>
+    createBoundedExecutionCheckpoint({
+      session: resumedCompletedSession,
+      sequence: 3,
+      fencingToken: 7,
+      workerId: "worker_beta",
+      observedAt: "2026-08-27T21:07:00.000Z",
+      previous: completedBoundedCheckpoint,
+    }),
+  "A worker failover must advance the fencing token.",
+);
+const failoverBoundedCheckpoint = createBoundedExecutionCheckpoint({
+  session: resumedCompletedSession,
+  sequence: 3,
+  fencingToken: 8,
+  workerId: "worker_beta",
+  observedAt: "2026-08-27T21:07:00.000Z",
+  previous: completedBoundedCheckpoint,
+});
+assert(
+  verifyBoundedExecutionCheckpoint(
+    failoverBoundedCheckpoint,
+    completedBoundedCheckpoint,
+  ).valid,
+  "A worker failover with a higher fencing token must preserve the checkpoint chain.",
+);
+const failoverRestoredSession = restoreBoundedExecutionSession(
+  failoverBoundedCheckpoint,
+  {
+    sessionId: boundedSession.id,
+    intentId: boundedSession.intentId,
+    agentId: boundedSession.agent.id,
+    planFingerprint: boundedSession.planFingerprint,
+    trustedCheckpointDigest: failoverBoundedCheckpoint.checkpointDigest,
+    minimumSequence: 3,
+    minimumFencingToken: 8,
+  },
+);
+assert(
+  failoverRestoredSession.state === "completed" &&
+    failoverRestoredSession.mayMerge === false &&
+    failoverRestoredSession.mayDeployProduction === false &&
+    failoverRestoredSession.mayPublishToUsers === false,
+  "Failover restore must preserve state while retaining all founder release locks.",
 );
 const protectedDecision = {
   ...createTestKernelDecision([boundedStep], 1),

@@ -511,3 +511,366 @@ export function verifyBoundedExecutionSession(
 
   return { valid: reasons.length === 0, reasons: [...new Set(reasons)] };
 }
+
+export interface BoundedExecutionCheckpoint {
+  version: "pantavion_bounded_execution_checkpoint_v1";
+  checkpointId: string;
+  sessionId: string;
+  intentId: string;
+  agentId: string;
+  planFingerprint: string;
+  sequence: number;
+  fencingToken: number;
+  workerId: string;
+  observedAt: string;
+  previousCheckpointDigest: string | null;
+  lastReceiptDigest: string | null;
+  sessionDigest: string;
+  session: BoundedExecutionSession;
+  releaseAuthority: false;
+  checkpointDigest: string;
+}
+
+export interface BoundedExecutionRestoreExpectation {
+  sessionId: string;
+  intentId: string;
+  agentId: string;
+  planFingerprint: string;
+  trustedCheckpointDigest: string;
+  minimumSequence: number;
+  minimumFencingToken: number;
+}
+
+function cloneBoundedExecutionSession(
+  session: BoundedExecutionSession,
+): BoundedExecutionSession {
+  return {
+    ...session,
+    plan: {
+      ...session.plan,
+      steps: session.plan.steps.map((step) => ({
+        ...step,
+        dependsOn: [...step.dependsOn],
+      })),
+      blockers: [...session.plan.blockers],
+    },
+    agent: {
+      ...session.agent,
+      capabilities: session.agent.capabilities.map((capability) => ({
+        ...capability,
+      })),
+    },
+    grant: {
+      ...session.grant,
+      capabilities: session.grant.capabilities.map((capability) => ({
+        ...capability,
+      })),
+    },
+    completedStepIds: [...session.completedStepIds],
+    receipts: session.receipts.map((receipt) => ({ ...receipt })),
+  };
+}
+
+function digestBoundedSession(session: BoundedExecutionSession): string {
+  return sha256(JSON.stringify(session));
+}
+
+function digestCheckpoint(
+  checkpoint: Omit<BoundedExecutionCheckpoint, "checkpointDigest">,
+): string {
+  return sha256(JSON.stringify(checkpoint));
+}
+
+function expectedCheckpointId(
+  input: Pick<
+    BoundedExecutionCheckpoint,
+    | "sessionId"
+    | "sequence"
+    | "fencingToken"
+    | "workerId"
+    | "observedAt"
+    | "previousCheckpointDigest"
+    | "sessionDigest"
+  >,
+): string {
+  return sha256(
+    [
+      input.sessionId,
+      String(input.sequence),
+      String(input.fencingToken),
+      input.workerId,
+      input.observedAt,
+      input.previousCheckpointDigest ?? "root",
+      input.sessionDigest,
+    ].join("|"),
+  ).slice(0, 32);
+}
+
+
+function validateCheckpointIntegrity(
+  checkpoint: BoundedExecutionCheckpoint,
+): string[] {
+  const reasons: string[] = [];
+  const observedAt = Date.parse(checkpoint.observedAt);
+  const sessionUpdatedAt = Date.parse(checkpoint.session.updatedAt);
+  const sessionVerification = verifyBoundedExecutionSession(checkpoint.session);
+  const { checkpointDigest, ...withoutDigest } = checkpoint;
+  const expectedLastReceiptDigest =
+    checkpoint.session.receipts.at(-1)?.receiptDigest ?? null;
+
+  if (checkpoint.version !== "pantavion_bounded_execution_checkpoint_v1") {
+    reasons.push("checkpoint_version_invalid");
+  }
+  if (
+    !checkpoint.checkpointId.trim() ||
+    !checkpoint.sessionId.trim() ||
+    !checkpoint.intentId.trim() ||
+    !checkpoint.agentId.trim() ||
+    !checkpoint.workerId.trim()
+  ) {
+    reasons.push("checkpoint_identity_invalid");
+  }
+  if (!Number.isInteger(checkpoint.sequence) || checkpoint.sequence < 1) {
+    reasons.push("checkpoint_sequence_invalid");
+  }
+  if (!Number.isInteger(checkpoint.fencingToken) || checkpoint.fencingToken < 1) {
+    reasons.push("checkpoint_fence_invalid");
+  }
+  if (
+    checkpoint.sessionId !== checkpoint.session.id ||
+    checkpoint.intentId !== checkpoint.session.intentId ||
+    checkpoint.agentId !== checkpoint.session.agent.id
+  ) {
+    reasons.push("checkpoint_session_identity_mismatch");
+  }
+  if (
+    checkpoint.planFingerprint !== checkpoint.session.planFingerprint ||
+    checkpoint.planFingerprint !== fingerprintPlan(checkpoint.session.plan)
+  ) {
+    reasons.push("checkpoint_plan_mismatch");
+  }
+  if (
+    !Number.isFinite(observedAt) ||
+    !Number.isFinite(sessionUpdatedAt) ||
+    observedAt < sessionUpdatedAt
+  ) {
+    reasons.push("checkpoint_time_invalid");
+  }
+  if (checkpoint.sequence === 1 && checkpoint.previousCheckpointDigest !== null) {
+    reasons.push("checkpoint_root_predecessor_present");
+  }
+  if (checkpoint.sequence > 1 && !checkpoint.previousCheckpointDigest?.trim()) {
+    reasons.push("checkpoint_predecessor_missing");
+  }
+  if (checkpoint.lastReceiptDigest !== expectedLastReceiptDigest) {
+    reasons.push("checkpoint_receipt_head_mismatch");
+  }
+  if (checkpoint.sessionDigest !== digestBoundedSession(checkpoint.session)) {
+    reasons.push("checkpoint_session_digest_mismatch");
+  }
+  if (
+    checkpoint.checkpointId !==
+    expectedCheckpointId({
+      sessionId: checkpoint.sessionId,
+      sequence: checkpoint.sequence,
+      fencingToken: checkpoint.fencingToken,
+      workerId: checkpoint.workerId,
+      observedAt: checkpoint.observedAt,
+      previousCheckpointDigest: checkpoint.previousCheckpointDigest,
+      sessionDigest: checkpoint.sessionDigest,
+    })
+  ) {
+    reasons.push("checkpoint_id_mismatch");
+  }
+  if (checkpoint.releaseAuthority !== false) {
+    reasons.push("checkpoint_release_authority_present");
+  }
+  if (checkpointDigest !== digestCheckpoint(withoutDigest)) {
+    reasons.push("checkpoint_digest_mismatch");
+  }
+  reasons.push(
+    ...sessionVerification.reasons.map(
+      (reason) => "checkpoint_session_invalid:" + reason,
+    ),
+  );
+  return [...new Set(reasons)];
+}
+
+export function verifyBoundedExecutionCheckpoint(
+  checkpoint: BoundedExecutionCheckpoint,
+  previous?: BoundedExecutionCheckpoint,
+): { valid: boolean; reasons: string[] } {
+  const reasons = validateCheckpointIntegrity(checkpoint);
+  if (previous) {
+    reasons.push(
+      ...validateCheckpointIntegrity(previous).map(
+        (reason) => "checkpoint_predecessor_invalid:" + reason,
+      ),
+    );
+    if (
+      checkpoint.sessionId !== previous.sessionId ||
+      checkpoint.intentId !== previous.intentId ||
+      checkpoint.agentId !== previous.agentId ||
+      checkpoint.planFingerprint !== previous.planFingerprint
+    ) {
+      reasons.push("checkpoint_chain_identity_mismatch");
+    }
+    if (checkpoint.sequence !== previous.sequence + 1) {
+      reasons.push("checkpoint_chain_sequence_invalid");
+    }
+    if (checkpoint.previousCheckpointDigest !== previous.checkpointDigest) {
+      reasons.push("checkpoint_chain_digest_mismatch");
+    }
+    if (checkpoint.fencingToken < previous.fencingToken) {
+      reasons.push("checkpoint_chain_fence_regressed");
+    }
+    if (
+      checkpoint.workerId !== previous.workerId &&
+      checkpoint.fencingToken <= previous.fencingToken
+    ) {
+      reasons.push("checkpoint_failover_fence_not_advanced");
+    }
+    if (Date.parse(checkpoint.observedAt) < Date.parse(previous.observedAt)) {
+      reasons.push("checkpoint_chain_time_regressed");
+    }
+  }
+  return { valid: reasons.length === 0, reasons: [...new Set(reasons)] };
+}
+
+
+export function createBoundedExecutionCheckpoint(input: {
+  session: BoundedExecutionSession;
+  sequence: number;
+  fencingToken: number;
+  workerId: string;
+  observedAt: string;
+  previous?: BoundedExecutionCheckpoint;
+}): BoundedExecutionCheckpoint {
+  if (!input.workerId.trim()) throw new Error("checkpoint worker identity is required");
+  if (!Number.isInteger(input.sequence) || input.sequence < 1) {
+    throw new Error("checkpoint sequence must be a positive integer");
+  }
+  if (!Number.isInteger(input.fencingToken) || input.fencingToken < 1) {
+    throw new Error("checkpoint fencing token must be a positive integer");
+  }
+
+  const session = cloneBoundedExecutionSession(input.session);
+  const sessionVerification = verifyBoundedExecutionSession(session);
+  if (!sessionVerification.valid) {
+    throw new Error(
+      "checkpoint session verification failed:" + sessionVerification.reasons.join(","),
+    );
+  }
+  const observedAt = parseTimestamp(input.observedAt, "checkpoint observedAt");
+  if (observedAt < parseTimestamp(session.updatedAt, "session updatedAt")) {
+    throw new Error("checkpoint time must not precede session state");
+  }
+  if (!input.previous && input.sequence !== 1) {
+    throw new Error("root checkpoint sequence must be one");
+  }
+  if (input.previous && input.sequence !== input.previous.sequence + 1) {
+    throw new Error("checkpoint sequence must advance exactly once");
+  }
+
+  const sessionDigest = digestBoundedSession(session);
+  const previousCheckpointDigest = input.previous?.checkpointDigest ?? null;
+  const checkpointId = expectedCheckpointId({
+    sessionId: session.id,
+    sequence: input.sequence,
+    fencingToken: input.fencingToken,
+    workerId: input.workerId,
+    observedAt: input.observedAt,
+    previousCheckpointDigest,
+    sessionDigest,
+  });
+  const checkpointWithoutDigest: Omit<
+    BoundedExecutionCheckpoint,
+    "checkpointDigest"
+  > = {
+    version: "pantavion_bounded_execution_checkpoint_v1",
+    checkpointId,
+    sessionId: session.id,
+    intentId: session.intentId,
+    agentId: session.agent.id,
+    planFingerprint: session.planFingerprint,
+    sequence: input.sequence,
+    fencingToken: input.fencingToken,
+    workerId: input.workerId,
+    observedAt: input.observedAt,
+    previousCheckpointDigest,
+    lastReceiptDigest: session.receipts.at(-1)?.receiptDigest ?? null,
+    sessionDigest,
+    session,
+    releaseAuthority: false,
+  };
+  const checkpoint: BoundedExecutionCheckpoint = {
+    ...checkpointWithoutDigest,
+    checkpointDigest: digestCheckpoint(checkpointWithoutDigest),
+  };
+  const verification = verifyBoundedExecutionCheckpoint(
+    checkpoint,
+    input.previous,
+  );
+  if (!verification.valid) {
+    throw new Error(
+      "bounded execution checkpoint verification failed:" +
+        verification.reasons.join(","),
+    );
+  }
+  return checkpoint;
+}
+
+export function restoreBoundedExecutionSession(
+  checkpoint: BoundedExecutionCheckpoint,
+  expectation: BoundedExecutionRestoreExpectation,
+): BoundedExecutionSession {
+  const verification = verifyBoundedExecutionCheckpoint(checkpoint);
+  if (!verification.valid) {
+    throw new Error(
+      "checkpoint restore verification failed:" + verification.reasons.join(","),
+    );
+  }
+  if (
+    !expectation.sessionId.trim() ||
+    !expectation.intentId.trim() ||
+    !expectation.agentId.trim() ||
+    !expectation.planFingerprint.trim() ||
+    !expectation.trustedCheckpointDigest.trim()
+  ) {
+    throw new Error("checkpoint restore expectation is incomplete");
+  }
+  if (
+    !Number.isInteger(expectation.minimumSequence) ||
+    expectation.minimumSequence < 1 ||
+    !Number.isInteger(expectation.minimumFencingToken) ||
+    expectation.minimumFencingToken < 1
+  ) {
+    throw new Error("checkpoint restore floor is invalid");
+  }
+  if (
+    checkpoint.sessionId !== expectation.sessionId ||
+    checkpoint.intentId !== expectation.intentId ||
+    checkpoint.agentId !== expectation.agentId ||
+    checkpoint.planFingerprint !== expectation.planFingerprint
+  ) {
+    throw new Error("checkpoint restore identity mismatch");
+  }
+  if (checkpoint.checkpointDigest !== expectation.trustedCheckpointDigest) {
+    throw new Error("checkpoint is not the trusted recovery head");
+  }
+  if (
+    checkpoint.sequence < expectation.minimumSequence ||
+    checkpoint.fencingToken < expectation.minimumFencingToken
+  ) {
+    throw new Error("checkpoint is stale or fenced");
+  }
+
+  const session = cloneBoundedExecutionSession(checkpoint.session);
+  const sessionVerification = verifyBoundedExecutionSession(session);
+  if (!sessionVerification.valid) {
+    throw new Error(
+      "restored session verification failed:" + sessionVerification.reasons.join(","),
+    );
+  }
+  return session;
+}
