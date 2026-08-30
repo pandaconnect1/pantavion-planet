@@ -1,5 +1,5 @@
-import { compileOutcomePlan, type OutcomePlan, type OutcomePolicy, type OutcomeStep, type UserIntent } from "./intent-to-outcome-fabric";
-import { evaluateIntentFirewall, type IntentFirewallDecision, type IntentFirewallPolicy, type IntentFirewallRequest } from "./intent-firewall";
+import { compileOutcomePlan, type OutcomePlan, type OutcomePolicy, type OutcomeStep, type UserIntent } from "./intent-to-outcome-fabric.ts";
+import { evaluateIntentFirewall, type IntentFirewallDecision, type IntentFirewallPolicy, type IntentFirewallRequest } from "./intent-firewall.ts";
 
 export type SovereignKernelDisposition = "denied" | "awaiting_owner" | "ready_for_bounded_execution";
 
