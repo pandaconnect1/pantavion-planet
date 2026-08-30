@@ -2,6 +2,9 @@ import "server-only";
 
 import { randomUUID } from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createScheduledRunKey } from "./scheduled-run-key";
+
+export { createScheduledRunKey } from "./scheduled-run-key";
 
 type ClaimResult = {
   acquired: boolean;
@@ -16,19 +19,19 @@ function messageFor(error: unknown) {
   return error instanceof Error ? error.message : String(error);
 }
 
-export function createScheduledRunKey(workerName: string, now = new Date()) {
-  const hour = now.toISOString().slice(0, 13);
-  return workerName + ":" + hour;
-}
-
 export async function runSecureScheduledWorker(
   workerName: string,
   task: () => Promise<ScheduledWorkerTaskResult>,
+  options: { runKeyBucketMinutes?: number } = {},
 ) {
   const admin = createAdminClient();
   const runId = randomUUID();
   const leaseToken = randomUUID();
-  const runKey = createScheduledRunKey(workerName);
+  const runKey = createScheduledRunKey(
+    workerName,
+    new Date(),
+    options.runKeyBucketMinutes ?? 60,
+  );
 
   const claim = await admin.rpc("pantavion_claim_scheduled_worker", {
     p_worker_name: workerName,

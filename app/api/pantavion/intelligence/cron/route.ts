@@ -3,9 +3,10 @@ import { NextResponse } from "next/server";
 import { runPantavionCloudCronTick } from "@/core/intelligence/pantavion-intelligence-ledger";
 import { materializePantavionFounderExecutionIntents } from "@/core/kernel/pantavion-founder-canonical-state-runtime";
 import { runPantavionNervousSystemFoundryTick } from "@/core/kernel/pantavion-foundry-nervous-system-runtime";
+import { runPantavionRecoveryFencedExecutor } from "@/core/recovery/pantavion-recovery-fenced-executor";
 import { materializePantavionRecoveryExecutionPartitions } from "@/core/recovery/pantavion-recovery-partition-scheduler";
+import { PantavionRecoverySupabaseExecutionStore } from "@/core/recovery/pantavion-recovery-supabase-execution-store";
 import { runSecureScheduledWorker } from "@/core/runtime/secure-scheduled-worker";
-import { PantavionSupabaseDurableExecutionStore } from "@/core/runtime/supabase-durable-execution-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -64,12 +65,17 @@ async function executeScheduledTick(
 ) {
   try {
     const worker = await runSecureScheduledWorker(
-      "pantavion-intelligence-hourly",
+      "pantavion-intelligence-5m",
       async () => {
+        const durableStore = new PantavionRecoverySupabaseExecutionStore();
         const canonicalExecutionIntake = await materializePantavionFounderExecutionIntents(20);
         const recoveryPartitions = await materializePantavionRecoveryExecutionPartitions({
-          store: new PantavionSupabaseDurableExecutionStore(),
+          store: durableStore,
           limit: 25,
+        });
+        const recoveryExecutor = await runPantavionRecoveryFencedExecutor({
+          store: durableStore,
+          limit: 5,
         });
         const tick = await runPantavionCloudCronTick(source);
         const foundry = await runPantavionNervousSystemFoundryTick();
@@ -78,7 +84,8 @@ async function executeScheduledTick(
           ok:
             tick.ok &&
             canonicalExecutionIntake.status !== "blocked" &&
-            recoveryPartitions.status !== "blocked",
+            recoveryPartitions.status !== "blocked" &&
+            recoveryExecutor.status !== "blocked",
           route: tick.route,
           executedAt: tick.cron.executedAt,
           opportunityCount: tick.ledgerEvent.opportunityCount,
@@ -87,9 +94,11 @@ async function executeScheduledTick(
           ledgerStorageMode: tick.ledgerEvent.storageMode,
           canonicalExecutionIntake,
           recoveryPartitions,
+          recoveryExecutor,
           foundry,
         };
       },
+      { runKeyBucketMinutes: 5 },
     );
 
     return NextResponse.json({
@@ -97,16 +106,20 @@ async function executeScheduledTick(
       authMode,
       runtimeSafety: {
         authorization: "exact CRON_SECRET bearer token",
-        concurrency: "Supabase atomic lease prevents overlapping executions",
-        idempotency: "one run key per worker per UTC hour plus durable founder-intent/work-order/recovery-partition idempotency keys",
-        audit: "durable run status, canonical execution-intent status, recovery partition state, work-order checkpoints and bounded summary are stored in Supabase",
+        concurrency: "Supabase scheduled-worker lease plus per-partition monotonic fencing prevents overlapping or stale execution writes",
+        idempotency: "one run key per five-minute UTC bucket plus durable founder-intent/work-order/recovery-partition idempotency keys",
+        audit: "durable run status, recovery partition claims, fenced checkpoints, terminal states and bounded summaries are stored in Supabase",
         canonicalIntake:
           "founder-only canonical execution intents are materialized through the Pantavion work-order constructor before Nervous System and Foundry execution",
         recoveryPartitions:
-          "the exact 82,413-record recovery corpus is materialized idempotently into 165 bounded durable partitions; this scheduler grants internal analysis/planning only and no code mutation, production write, merge, deployment, public exposure or release authority",
+          "the exact 82,413-record recovery corpus is materialized idempotently into 165 bounded durable partitions using task-scoped state discovery",
+        recoveryExecutor:
+          "each task-scoped claimed recovery partition is SHA-256 verified from pinned source batches, analyzed in-process, checkpointed and finished through the Supabase fencing boundary; no raw recovered payload is copied into durable output",
+        authority:
+          "recovery execution remains analysis/planning-only; code mutation, production business-data writes, merge, deployment, public exposure and release remain false",
         foundry:
-          "dependency-gated Nervous System reconciles durable Pantavion-owned agents before the existing Foundry performs its fenced/atomic internal runtime execution",
-        destructiveActions: "disabled unless separately authorized through the recorded capability and owner-release boundaries",
+          "dependency-gated Nervous System reconciles durable Pantavion-owned agents before the existing Foundry performs its separately authorized runtime execution",
+        destructiveActions: "disabled unless separately authorized through recorded capability and owner-release boundaries",
       },
     });
   } catch (error) {

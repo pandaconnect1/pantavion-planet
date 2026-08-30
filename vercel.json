@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/pantavion/intelligence/cron",
-      "schedule": "0 * * * *"
+      "schedule": "*/5 * * * *"
     }
   ]
 }
