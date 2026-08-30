@@ -220,12 +220,12 @@ export function materializePantavionRecoveryWorkUnit(input: {
   const lane = classifyLane(input.record);
   const sourceFile = text(input.record.provenance?.sourceFile);
   const classification = input.record.classification ?? {};
-  const module = text(classification.module);
+  const moduleName = text(classification.module);
   const subsystem = text(classification.subsystem);
   const capability = text(classification.capability);
   const canonicalTarget = text(classification.canonicalTarget);
 
-  if (lane.lane === "CLASSIFIED_CANDIDATE" && (!module || !subsystem || !capability || !canonicalTarget)) {
+  if (lane.lane === "CLASSIFIED_CANDIDATE" && (!moduleName || !subsystem || !capability || !canonicalTarget)) {
     throw new Error("classified_candidate_missing_canonical_route");
   }
 
@@ -268,7 +268,7 @@ export function materializePantavionRecoveryWorkUnit(input: {
       semanticRecordSha256: digestPantavionRecoverySourceRecord(input.record),
     },
     route: {
-      module,
+      module: moduleName,
       subsystem,
       capability,
       feature: text(classification.feature),
