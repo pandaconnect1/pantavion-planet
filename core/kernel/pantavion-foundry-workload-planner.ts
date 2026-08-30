@@ -1,4 +1,4 @@
-import { PANTAVION_RECOVERY_CORPUS_CONTRACT } from "../recovery/pantavion-recovery-runtime-fabric";
+import { PANTAVION_RECOVERY_CORPUS_CONTRACT } from "../recovery/pantavion-recovery-runtime-fabric.ts";
 import type { PantavionOwnedAgentRole } from "./pantavion-agent-factory";
 
 export type PantavionFoundryWorkloadKind = "single_work_order" | "recovery_excavation";
@@ -292,4 +292,3 @@ export function describePantavionFoundryPartition(
     requiredStages: plan.stages.map((stage) => stage.id),
   } as const;
 }
-
