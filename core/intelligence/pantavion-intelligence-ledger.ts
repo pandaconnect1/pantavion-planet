@@ -14,7 +14,7 @@ export type PantavionLedgerStorageMode =
 export interface PantavionIntelligenceLedgerEvent {
   id: string;
   createdAt: string;
-  source: "manual" | "vercel_cron" | "external_scheduler" | "local_test";
+  source: "manual" | "vercel_cron" | "internal_scheduler" | "external_scheduler" | "local_test";
   route: string;
   storageMode: PantavionLedgerStorageMode;
   status: "recorded" | "recorded_non_durable" | "external_failed";
@@ -27,6 +27,7 @@ export interface PantavionIntelligenceLedgerEvent {
 
 const memoryKey = "__pantavionIntelligenceLedger";
 const maxMemoryEvents = 50;
+const PANTAVION_CRON_SCHEDULE = "*/5 * * * *";
 
 function getMemoryLedger(): PantavionIntelligenceLedgerEvent[] {
   const globalLedger = globalThis as typeof globalThis & {
@@ -66,16 +67,19 @@ export function getPantavionCloudCronStatus() {
     ok: true,
     route: "/api/pantavion/intelligence/health",
     cronRoute: "/api/pantavion/intelligence/cron",
-    cronSchedule: "0 * * * *",
+    cronSchedule: PANTAVION_CRON_SCHEDULE,
     hasCronSecret,
     hasExternalLedgerEndpoint,
     hasExternalLedgerToken,
+    schedulerRedundancy:
+      "Vercel Cron is primary-compatible; a separately activated Supabase pg_cron/pg_net scheduler can invoke the same fenced five-minute worker without duplicate execution.",
     storageTruth: hasExternalLedgerEndpoint
       ? "durable external endpoint configured"
       : "no durable external endpoint configured; local dev uses file, production falls back to runtime memory",
     requirementsToBecomeFull24x365: [
-      "Vercel deployment must include vercel.json cron",
-      "CRON_SECRET should be configured for protected cron calls",
+      "At least one verified production scheduler must create durable pantavion-intelligence-5m worker runs",
+      "Vercel deployment should include vercel.json cron and CRON_SECRET for the native scheduler path",
+      "Supabase internal scheduler may be activated as a redundant execution source using Vault, pg_cron and pg_net",
       "PANTAVION_INTELLIGENCE_LEDGER_ENDPOINT should be configured for durable production ledger",
       "PANTAVION_INTELLIGENCE_LEDGER_TOKEN should be configured if external ledger requires auth",
       "production routes must return OK 200 and markers",
@@ -245,12 +249,12 @@ export async function runPantavionCloudCronTick(source: PantavionIntelligenceLed
     source,
     route: "/api/pantavion/intelligence/cron",
     summary:
-      "Cloud cron executed Pantavion intelligence tick and refreshed opportunity/build queue status.",
+      "Cloud scheduler executed Pantavion intelligence tick and refreshed opportunity/build queue status.",
     opportunityCount: opportunities.length,
     buildQueueCount: buildQueue.length,
     cloudRequirements: status.requirementsToBecomeFull24x365,
     warnings: [
-      "Cron execution does not mean autonomous code deployment. Founder approval and audit/build gates remain required.",
+      "Scheduled execution does not mean autonomous code deployment. Founder approval and audit/build gates remain required.",
       "External scanning must use lawful public, licensed, user-provided, or authorized sources only.",
     ],
   });
@@ -259,7 +263,7 @@ export async function runPantavionCloudCronTick(source: PantavionIntelligenceLed
     ok: true,
     route: "/api/pantavion/intelligence/cron",
     cron: {
-      schedule: "0 * * * *",
+      schedule: PANTAVION_CRON_SCHEDULE,
       source,
       executedAt: event.createdAt,
     },
@@ -268,4 +272,3 @@ export async function runPantavionCloudCronTick(source: PantavionIntelligenceLed
     health: status,
   };
 }
-
