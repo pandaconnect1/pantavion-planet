@@ -164,7 +164,7 @@ function ordinalFor(record: PantavionDurableExecutionRecord): number {
   try {
     return parsePartitionInput(record).partitionOrdinal;
   } catch {
-    return Number.MAX_SAFE_INTEGER;
+    return -1;
   }
 }
 
