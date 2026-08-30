@@ -601,6 +601,32 @@ export const sovereignFactoryImplementationItems: ImplementationSyncItem[] = [
     ],
     updatedAt: "2026-08-30T00:08:47.000Z",
   },
+  {
+    id: "bounded-execution-checkpointing",
+    title: "Fenced Bounded Execution Checkpointing",
+    domain: "runtime",
+    state: "tested",
+    source: "core/sovereign/bounded-execution-runtime.ts",
+    branch,
+    pr: 315,
+    evidenceRecords: [
+      {
+        kind: "code",
+        reference:
+          "https://github.com/pandaconnect1/pantavion-planet/commit/8bf3aa0441850b42a5b580ca6068b2619fe0ff3c",
+        recordedAt: "2026-08-30T03:54:09.000Z",
+        revision: "8bf3aa0441850b42a5b580ca6068b2619fe0ff3c",
+      },
+      {
+        kind: "test",
+        reference:
+          "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33291312449",
+        recordedAt: "2026-08-30T03:56:05.000Z",
+        revision: "8bf3aa0441850b42a5b580ca6068b2619fe0ff3c",
+      },
+    ],
+    updatedAt: "2026-08-30T03:56:05.000Z",
+  },
   testedKernelItem(),
   testedItem("implementation-sync", "Automatic Implementation Sync", "kernel", "core/pantavion/implementation-sync-registry.ts"),
   testedItem("owner-implementation-surface", "Founder-only Implementation Truth", "owner_control", "app/owner/control/implementation/page.tsx"),
