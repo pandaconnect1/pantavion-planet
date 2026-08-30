@@ -5,8 +5,8 @@ import { materializePantavionFounderExecutionIntents } from "@/core/kernel/panta
 import { runPantavionNervousSystemFoundryTick } from "@/core/kernel/pantavion-foundry-nervous-system-runtime";
 import { runPantavionRecoveryFencedExecutor } from "@/core/recovery/pantavion-recovery-fenced-executor";
 import { materializePantavionRecoveryExecutionPartitions } from "@/core/recovery/pantavion-recovery-partition-scheduler";
+import { PantavionRecoverySupabaseExecutionStore } from "@/core/recovery/pantavion-recovery-supabase-execution-store";
 import { runSecureScheduledWorker } from "@/core/runtime/secure-scheduled-worker";
-import { PantavionSupabaseDurableExecutionStore } from "@/core/runtime/supabase-durable-execution-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -67,7 +67,7 @@ async function executeScheduledTick(
     const worker = await runSecureScheduledWorker(
       "pantavion-intelligence-5m",
       async () => {
-        const durableStore = new PantavionSupabaseDurableExecutionStore();
+        const durableStore = new PantavionRecoverySupabaseExecutionStore();
         const canonicalExecutionIntake = await materializePantavionFounderExecutionIntents(20);
         const recoveryPartitions = await materializePantavionRecoveryExecutionPartitions({
           store: durableStore,
@@ -112,9 +112,9 @@ async function executeScheduledTick(
         canonicalIntake:
           "founder-only canonical execution intents are materialized through the Pantavion work-order constructor before Nervous System and Foundry execution",
         recoveryPartitions:
-          "the exact 82,413-record recovery corpus is materialized idempotently into 165 bounded durable partitions",
+          "the exact 82,413-record recovery corpus is materialized idempotently into 165 bounded durable partitions using task-scoped state discovery",
         recoveryExecutor:
-          "each claimed recovery partition is SHA-256 verified from pinned source batches, analyzed in-process, checkpointed and finished through the Supabase fencing boundary; no raw recovered payload is copied into durable output",
+          "each task-scoped claimed recovery partition is SHA-256 verified from pinned source batches, analyzed in-process, checkpointed and finished through the Supabase fencing boundary; no raw recovered payload is copied into durable output",
         authority:
           "recovery execution remains analysis/planning-only; code mutation, production business-data writes, merge, deployment, public exposure and release remain false",
         foundry:
