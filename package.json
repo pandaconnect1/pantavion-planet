@@ -7,11 +7,12 @@
   },
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/pantavion-recovery-source-batch-index.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint app components core lib services src types middleware.ts --max-warnings=114",
     "typecheck": "tsc --noEmit",
-    "verify:runtime-safety": "npm run lint && npm run test:foundry-contract && npm run test:recovery-runtime-fabric && npm run test:sovereign-factory-contract && npm run test:sovereign-kernel-integration && npm run test:owner-release-gate && npm run test:translation-gateway-resilience && npm run audit:water:network-lock && npm run audit:implementation && npm run audit:scheduled-worker && node scripts/pantavion-vscode-real-implementation-gate.cjs && npm run typecheck && npm run build",
+    "verify:runtime-safety": "npm run lint && npm run test:foundry-contract && npm run test:recovery-runtime-fabric && npm run test:recovery-fenced-executor && npm run test:sovereign-factory-contract && npm run test:sovereign-kernel-integration && npm run test:owner-release-gate && npm run test:translation-gateway-resilience && npm run audit:water:network-lock && npm run audit:implementation && npm run audit:scheduled-worker && node scripts/pantavion-vscode-real-implementation-gate.cjs && npm run typecheck && npm run build",
     "verify:runtime-safety:ci": "npm run verify:runtime-safety",
     "audit:pantavion": "node scripts/pantavion-master-audit.cjs",
     "audit:water": "node scripts/pantavion-water-kernel-gate.cjs && node scripts/water-guardian-surface-audit.cjs && node scripts/pantavion-multimodal-language-audit.cjs",
@@ -46,6 +47,7 @@
     "audit:foundry": "node scripts/pantavion-foundry-gate.cjs",
     "test:foundry-contract": "node --no-warnings --experimental-strip-types scripts/pantavion-foundry-contract-test.mjs",
     "test:recovery-runtime-fabric": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-runtime-fabric-contract-test.mjs",
+    "test:recovery-fenced-executor": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-fenced-executor-test.mjs",
     "materialize:recovery-runtime-fabric": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-runtime-fabric-materialize.mjs",
     "safety:pantavion": "node scripts/pantavion-runtime-safety-gate.cjs",
     "audit:foundation": "node scripts/pantavion-foundation-audit.cjs",
@@ -87,4 +89,3 @@
     "typescript": "5.2.2"
   }
 }
-
