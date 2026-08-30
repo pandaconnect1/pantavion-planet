@@ -1,14 +1,14 @@
 import { createHash } from "node:crypto";
 
-import type { PantavionRecoveryWorkUnit } from "./pantavion-recovery-runtime-fabric";
-import { PANTAVION_RECOVERY_CORPUS_CONTRACT } from "./pantavion-recovery-runtime-fabric";
-import type { AgentCapabilityScope } from "../sovereign/agent-capability-budget-control";
-import type { SwarmRole } from "../sovereign/ephemeral-agent-swarm";
-import type { TechnologyReadiness } from "../sovereign/technology-library";
+import type { PantavionRecoveryWorkUnit } from "./pantavion-recovery-runtime-fabric.ts";
+import { PANTAVION_RECOVERY_CORPUS_CONTRACT } from "./pantavion-recovery-runtime-fabric.ts";
+import type { AgentCapabilityScope } from "../sovereign/agent-capability-budget-control.ts";
+import type { SwarmRole } from "../sovereign/ephemeral-agent-swarm.ts";
+import type { TechnologyReadiness } from "../sovereign/technology-library.ts";
 import {
   compileSovereignKernelDecision,
   type SovereignKernelDecision,
-} from "../sovereign/sovereign-capability-kernel";
+} from "../sovereign/sovereign-capability-kernel.ts";
 
 export interface PantavionRecoveryCanonicalBuildRoute {
   module: string;
