@@ -1,7 +1,3 @@
--- Pantavion internal scheduler redundancy.
--- This migration prepares a Supabase-owned scheduler path but DOES NOT activate a cron job.
--- Activation is a separate post-deploy operation so the live route can verify the Vault token first.
-
 create extension if not exists pg_net with schema extensions;
 create extension if not exists pg_cron with schema pg_catalog;
 
