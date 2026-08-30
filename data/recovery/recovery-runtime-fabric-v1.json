@@ -20,6 +20,13 @@
     "governedHold": 355,
     "completion": false
   },
+  "materializationTruth": {
+    "workUnitCount": 82413,
+    "workUnitIdFingerprint": "97d32f84b24880420bdea950c5d2552899e8e8e792fc8eefc551f52f333e958b",
+    "terminalWorkUnitDigest": "346478e715336e5ae290c45ba57d67353176209f1c1125f0e30129f7ac12c853",
+    "rawPayloadDuplicatedIntoControlPlane": false,
+    "implementationState": "TESTED"
+  },
   "workload": {
     "kind": "recovery_excavation",
     "batchSize": 500,
@@ -37,7 +44,11 @@
   "evidence": {
     "semanticClassificationRun": "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33216058927",
     "governedHoldPullRequest": "https://github.com/pandaconnect1/pantavion-planet/pull/341",
-    "materializationReceipt": "data/recovery/imported-pr248/canonical-ledger/corpus/MATERIALIZATION_RECEIPT.json"
+    "materializationReceipt": "data/recovery/imported-pr248/canonical-ledger/corpus/MATERIALIZATION_RECEIPT.json",
+    "runtimeMaterializationRun": "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33303724300",
+    "runtimeMaterializationRevision": "fd24dbf0136cdbf31f03485f4c2fecff90e8354f",
+    "artifactId": 9729822776,
+    "artifactSha256": "33f1f00fb1c18441147ae1217f56f840dc567c6646be8c19e1bf35e1f19abadf"
   },
   "truthRule": "All 82,413 source records must materialize exactly once into the Pantavion recovery work-unit ledger. HOLD and recursive artifacts remain preserved without execution authority. Classified candidates may advance only through scoped internal planning and the existing Founder/Kernel gates."
 }

@@ -216,6 +216,18 @@ async function materialize() {
   }
   requireEqual("governed_hold_total", [...governedCounts.values()].reduce((sum, value) => sum + value, 0), governed.expectedReviewRequired);
 
+  const workUnitIdFingerprint = workUnitIdHash.digest("hex");
+  requireEqual(
+    "pinned_work_unit_id_fingerprint",
+    workUnitIdFingerprint,
+    pinnedContract.materializationTruth?.workUnitIdFingerprint,
+  );
+  requireEqual(
+    "pinned_terminal_work_unit_digest",
+    previousWorkUnitDigest,
+    pinnedContract.materializationTruth?.terminalWorkUnitDigest,
+  );
+
   const manifest = {
     id: "pantavion_recovery_runtime_fabric_materialization_v1",
     generatedAt: new Date().toISOString(),
@@ -231,7 +243,7 @@ async function materialize() {
       workUnitCount: ordinal,
       counts,
       moduleSummary,
-      workUnitIdFingerprint: workUnitIdHash.digest("hex"),
+      workUnitIdFingerprint,
       terminalWorkUnitDigest: previousWorkUnitDigest,
       rawPayloadDuplicatedIntoControlPlane: false,
       sourcePayloadMode: "immutable_corpus_reference_plus_sha256",

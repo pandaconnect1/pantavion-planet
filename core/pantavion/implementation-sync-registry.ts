@@ -657,6 +657,39 @@ export const sovereignFactoryImplementationItems: ImplementationSyncItem[] = [
   testedItem("implementation-sync", "Automatic Implementation Sync", "kernel", "core/pantavion/implementation-sync-registry.ts"),
   testedItem("owner-implementation-surface", "Founder-only Implementation Truth", "owner_control", "app/owner/control/implementation/page.tsx"),
   {
+    id: "recovery-corpus-runtime-fabric",
+    title: "82,413-record Recovery Runtime Fabric",
+    domain: "recovery",
+    state: "tested",
+    source: "core/recovery/pantavion-recovery-runtime-fabric.ts",
+    branch: "feature/recovery-corpus-runtime-fabric",
+    pr: 352,
+    evidenceRecords: [
+      {
+        kind: "code",
+        reference:
+          "https://github.com/pandaconnect1/pantavion-planet/commit/fd24dbf0136cdbf31f03485f4c2fecff90e8354f",
+        recordedAt: "2026-08-30T09:18:22.000Z",
+        revision: "fd24dbf0136cdbf31f03485f4c2fecff90e8354f",
+      },
+      {
+        kind: "test",
+        reference:
+          "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33303724300",
+        recordedAt: "2026-08-30T09:22:52.000Z",
+        revision: "fd24dbf0136cdbf31f03485f4c2fecff90e8354f",
+      },
+      {
+        kind: "audit",
+        reference:
+          "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33303724300/artifacts/9729822776",
+        recordedAt: "2026-08-30T09:22:52.000Z",
+        revision: "fd24dbf0136cdbf31f03485f4c2fecff90e8354f",
+      },
+    ],
+    updatedAt: "2026-08-30T09:22:52.000Z",
+  },
+  {
     id: "production-verification",
     title: "Production verification",
     domain: "release",

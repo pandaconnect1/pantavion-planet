@@ -16,6 +16,11 @@ assert.equal(pinned.corpus.sourceFingerprint, PANTAVION_RECOVERY_CORPUS_CONTRACT
 assert.equal(pinned.corpus.orderedIdFingerprint, PANTAVION_RECOVERY_CORPUS_CONTRACT.orderedIdFingerprint);
 assert.equal(pinned.workload.partitionCount, Math.ceil(pinned.corpus.records / pinned.workload.batchSize));
 assert.equal(pantavionRecoveryRuntimeDoctrine.publicReleaseRequiresFounderGreenLight, true);
+assert.match(pinned.materializationTruth.workUnitIdFingerprint, /^[0-9a-f]{64}$/);
+assert.match(pinned.materializationTruth.terminalWorkUnitDigest, /^[0-9a-f]{64}$/);
+assert.equal(pinned.materializationTruth.workUnitCount, 82_413);
+assert.equal(pinned.materializationTruth.rawPayloadDuplicatedIntoControlPlane, false);
+assert.equal(pinned.materializationTruth.implementationState, "TESTED");
 
 const plannerSource = fs.readFileSync("core/kernel/pantavion-foundry-workload-planner.ts", "utf8");
 for (const required of [
