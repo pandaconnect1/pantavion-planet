@@ -36,9 +36,10 @@ function recordFromRow(row: RecoveryExecutionRow): PantavionDurableExecutionReco
 }
 
 export class PantavionRecoverySupabaseExecutionStore extends PantavionSupabaseDurableExecutionStore {
-  async listByTaskName(taskName: string, _limit = 500) {
+  async listByTaskName(taskName: string, limit = 500) {
     const cleanTaskName = taskName.trim();
     if (!cleanTaskName) throw new Error("recovery_store_task_name_required");
+    const boundedLimit = Math.max(1, Math.min(500, Math.trunc(limit)));
 
     const admin = createAdminClient();
     const result = await admin
@@ -46,7 +47,7 @@ export class PantavionRecoverySupabaseExecutionStore extends PantavionSupabaseDu
       .select("execution_id,idempotency_key,task_name,status,attempt,max_attempts,input,output,last_error,created_at,updated_at")
       .eq("task_name", cleanTaskName)
       .order("execution_id", { ascending: true })
-      .limit(500);
+      .limit(boundedLimit);
 
     if (result.error) throw result.error;
     return ((result.data ?? []) as RecoveryExecutionRow[]).map(recordFromRow);
