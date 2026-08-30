@@ -65,7 +65,7 @@ async function executeScheduledTick(
 ) {
   try {
     const worker = await runSecureScheduledWorker(
-      "pantavion-intelligence-hourly",
+      "pantavion-intelligence-5m",
       async () => {
         const durableStore = new PantavionSupabaseDurableExecutionStore();
         const canonicalExecutionIntake = await materializePantavionFounderExecutionIntents(20);
@@ -98,6 +98,7 @@ async function executeScheduledTick(
           foundry,
         };
       },
+      { runKeyBucketMinutes: 5 },
     );
 
     return NextResponse.json({
@@ -106,7 +107,7 @@ async function executeScheduledTick(
       runtimeSafety: {
         authorization: "exact CRON_SECRET bearer token",
         concurrency: "Supabase scheduled-worker lease plus per-partition monotonic fencing prevents overlapping or stale execution writes",
-        idempotency: "one run key per worker per UTC hour plus durable founder-intent/work-order/recovery-partition idempotency keys",
+        idempotency: "one run key per five-minute UTC bucket plus durable founder-intent/work-order/recovery-partition idempotency keys",
         audit: "durable run status, recovery partition claims, fenced checkpoints, terminal states and bounded summaries are stored in Supabase",
         canonicalIntake:
           "founder-only canonical execution intents are materialized through the Pantavion work-order constructor before Nervous System and Foundry execution",
