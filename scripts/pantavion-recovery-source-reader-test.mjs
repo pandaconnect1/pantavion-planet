@@ -9,7 +9,7 @@ import {
 } from "../core/recovery/pantavion-recovery-source-reader.ts";
 
 const root = process.cwd();
-const indexPath = path.join(root, "data/recovery/runtime-fabric-v1/source-batch-index.json");
+const indexPath = path.join(root, "data/recovery/source-batch-index-v1.json");
 const index = JSON.parse(fs.readFileSync(indexPath, "utf8"));
 const verifiedBatches = new Map();
 
