@@ -151,8 +151,7 @@ function assertLaneSemantics(unit: PantavionRecoveryWorkUnit): void {
 }
 
 export function digestPantavionRecoveryWorkUnit(unit: PantavionRecoveryWorkUnit): string {
-  const { workUnitDigest: _workUnitDigest, ...unsigned } = unit;
-  return sha256(canonicalJson(unsigned));
+  return sha256(canonicalJson({ ...unit, workUnitDigest: undefined }));
 }
 
 function assertWorkUnit(input: {
