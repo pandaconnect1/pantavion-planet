@@ -35,6 +35,10 @@ interface PantavionRecoveryPartitionRecord {
 export interface PantavionRecoveryPartitionStore {
   findByIdempotencyKey(idempotencyKey: string): Promise<PantavionRecoveryPartitionRecord | null>;
   put(record: PantavionRecoveryPartitionRecord): Promise<void>;
+  listByTaskName?(
+    taskName: string,
+    limit?: number,
+  ): Promise<PantavionRecoveryPartitionRecord[]>;
 }
 
 export interface PantavionRecoveryPartitionInput {
@@ -212,10 +216,39 @@ export async function materializePantavionRecoveryExecutionPartitions(input: {
   let createdPartitions = 0;
   let conflictingPartitions = 0;
   const issues: string[] = [];
+  let preloadedByIdempotencyKey: Map<string, PantavionRecoveryPartitionRecord> | null = null;
+
+  if (input.store.listByTaskName) {
+    try {
+      const preloaded = await input.store.listByTaskName(
+        PANTAVION_RECOVERY_PARTITION_TASK_NAME,
+        PANTAVION_RECOVERY_CORPUS_CONTRACT.partitionCount,
+      );
+      preloadedByIdempotencyKey = new Map(
+        preloaded.map((record) => [record.idempotencyKey, record]),
+      );
+    } catch {
+      return {
+        marker: "pantavion_recovery_partition_scheduler_v1",
+        status: "blocked",
+        sourceRecordCount: PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceRecordCount,
+        partitionCount: PANTAVION_RECOVERY_CORPUS_CONTRACT.partitionCount,
+        existingPartitions: 0,
+        createdPartitions: 0,
+        remainingPartitions: PANTAVION_RECOVERY_CORPUS_CONTRACT.partitionCount,
+        conflictingPartitions: 0,
+        issues: ["partition_store_prefetch_failure"],
+        checkedAt,
+      };
+    }
+  }
 
   for (let ordinal = 1; ordinal <= PANTAVION_RECOVERY_CORPUS_CONTRACT.partitionCount; ordinal += 1) {
     try {
-      const existing = await input.store.findByIdempotencyKey(partitionIdempotencyKey(ordinal));
+      const key = partitionIdempotencyKey(ordinal);
+      const existing = preloadedByIdempotencyKey
+        ? preloadedByIdempotencyKey.get(key) ?? null
+        : await input.store.findByIdempotencyKey(key);
       if (existing) {
         if (isExpectedExistingPartition(existing, ordinal)) {
           existingPartitions += 1;
@@ -227,7 +260,9 @@ export async function materializePantavionRecoveryExecutionPartitions(input: {
       }
 
       if (createdPartitions >= limit) continue;
-      await input.store.put(createPlannedPartitionRecord(ordinal));
+      const created = createPlannedPartitionRecord(ordinal);
+      await input.store.put(created);
+      preloadedByIdempotencyKey?.set(created.idempotencyKey, created);
       createdPartitions += 1;
     } catch {
       issues.push(`partition_store_failure:${ordinal}`);
