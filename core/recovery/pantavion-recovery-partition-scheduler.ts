@@ -1,13 +1,41 @@
-import {
-  appendCheckpoint,
-  createExecutionRecord,
-  type PantavionDurableExecutionRecord,
-  type PantavionDurableExecutionStore,
-} from "../runtime/durable-execution.ts";
 import { PANTAVION_RECOVERY_CORPUS_CONTRACT } from "./pantavion-recovery-runtime-fabric.ts";
 
 export const PANTAVION_RECOVERY_PARTITION_TASK_NAME = "pantavion:recovery_partition:v1";
 export const PANTAVION_RECOVERY_PARTITIONS_PER_TICK = 25;
+
+type PantavionRecoveryPartitionStatus =
+  | "queued"
+  | "planned"
+  | "running"
+  | "paused"
+  | "succeeded"
+  | "failed"
+  | "cancelled";
+
+interface PantavionRecoveryPartitionRecord {
+  executionId: string;
+  idempotencyKey: string;
+  taskName?: string;
+  status: PantavionRecoveryPartitionStatus;
+  createdAt: string;
+  updatedAt: string;
+  attempt: number;
+  maxAttempts?: number;
+  input?: unknown;
+  output?: unknown;
+  checkpoints: Array<{
+    id: string;
+    at: string;
+    label: string;
+    state: Record<string, unknown>;
+  }>;
+  lastError?: string;
+}
+
+export interface PantavionRecoveryPartitionStore {
+  findByIdempotencyKey(idempotencyKey: string): Promise<PantavionRecoveryPartitionRecord | null>;
+  put(record: PantavionRecoveryPartitionRecord): Promise<void>;
+}
 
 export interface PantavionRecoveryPartitionInput {
   marker: "pantavion_recovery_execution_partition_v1";
@@ -97,7 +125,7 @@ export function createPantavionRecoveryPartitionInput(
 }
 
 function isExpectedExistingPartition(
-  record: PantavionDurableExecutionRecord,
+  record: PantavionRecoveryPartitionRecord,
   ordinal: number,
 ): boolean {
   if (
@@ -126,43 +154,49 @@ function isExpectedExistingPartition(
   );
 }
 
-function createPlannedPartitionRecord(ordinal: number): PantavionDurableExecutionRecord {
+function createPlannedPartitionRecord(ordinal: number): PantavionRecoveryPartitionRecord {
   const input = createPantavionRecoveryPartitionInput(ordinal);
-  const queued = createExecutionRecord(
-    partitionExecutionId(ordinal),
-    partitionIdempotencyKey(ordinal),
-    PANTAVION_RECOVERY_PARTITION_TASK_NAME,
-    input,
-    5,
-  );
+  const executionId = partitionExecutionId(ordinal);
+  const now = new Date().toISOString();
 
-  return appendCheckpoint(
-    {
-      ...queued,
-      status: "planned",
-    },
-    "pantavion_recovery_partition_materialized",
-    {
-      marker: "pantavion_recovery_partition_materialized_v1",
-      intentId: input.intentId,
-      partitionOrdinal: input.partitionOrdinal,
-      startUnit: input.startUnit,
-      endUnit: input.endUnit,
-      unitCount: input.unitCount,
-      immutableCorpusBinding: true,
-      readyFor: "pantavion_in_process_recovery_executor",
-      externalWorkerAllowed: false,
-      productionWriteAllowed: false,
-      mergeAllowed: false,
-      deploymentAllowed: false,
-      publicExposureAllowed: false,
-      releaseAllowed: false,
-    },
-  );
+  return {
+    executionId,
+    idempotencyKey: partitionIdempotencyKey(ordinal),
+    taskName: PANTAVION_RECOVERY_PARTITION_TASK_NAME,
+    status: "planned",
+    createdAt: now,
+    updatedAt: now,
+    attempt: 0,
+    maxAttempts: 5,
+    input,
+    checkpoints: [
+      {
+        id: `${executionId}:1`,
+        at: now,
+        label: "pantavion_recovery_partition_materialized",
+        state: {
+          marker: "pantavion_recovery_partition_materialized_v1",
+          intentId: input.intentId,
+          partitionOrdinal: input.partitionOrdinal,
+          startUnit: input.startUnit,
+          endUnit: input.endUnit,
+          unitCount: input.unitCount,
+          immutableCorpusBinding: true,
+          readyFor: "pantavion_in_process_recovery_executor",
+          externalWorkerAllowed: false,
+          productionWriteAllowed: false,
+          mergeAllowed: false,
+          deploymentAllowed: false,
+          publicExposureAllowed: false,
+          releaseAllowed: false,
+        },
+      },
+    ],
+  };
 }
 
 export async function materializePantavionRecoveryExecutionPartitions(input: {
-  store: PantavionDurableExecutionStore;
+  store: PantavionRecoveryPartitionStore;
   limit?: number;
 }): Promise<PantavionRecoveryPartitionSchedulerReport> {
   const checkedAt = new Date().toISOString();
