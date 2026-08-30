@@ -69,6 +69,11 @@ jobs:
       - name: Materialize all 82,413 Pantavion work units
         run: npm run materialize:recovery-runtime-fabric
 
+      - name: Verify source batch index survives full materialization
+        run: |
+          test -f data/recovery/source-batch-index-v1.json
+          node scripts/pantavion-recovery-source-batch-index-test.mjs
+
       - name: Verify exact full-corpus runtime manifest
         run: |
           node - <<'NODE'
@@ -97,7 +102,7 @@ jobs:
           path: |
             data/recovery/canonical-semantic-v3/manifest.json
             data/recovery/canonical-semantic-v3/module-gap-map.json
-            data/recovery/runtime-fabric-v1/source-batch-index.json
+            data/recovery/source-batch-index-v1.json
             data/recovery/runtime-fabric-v1/manifest.json
             data/recovery/runtime-fabric-v1/recovery-work-units.ndjson
           if-no-files-found: error
