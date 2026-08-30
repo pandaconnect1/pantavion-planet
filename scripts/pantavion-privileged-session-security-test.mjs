@@ -65,8 +65,9 @@ try {
     /invalid_water_admin_session_ttl/,
   );
 
+  const liveToken = createWaterAdminSessionValue(secret);
   const request = new Request("https://pantavion.com/professional/infrastructure/water/admin", {
-    headers: { cookie: `${WATER_ADMIN_SESSION_COOKIE}=${encodeURIComponent(tokenA)}` },
+    headers: { cookie: `${WATER_ADMIN_SESSION_COOKIE}=${encodeURIComponent(liveToken)}` },
   });
   assert.equal(hasWaterAdminSession(request), true);
 
