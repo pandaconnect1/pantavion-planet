@@ -24,6 +24,11 @@ import {
   verifyBoundedExecutionSession,
 } from "../core/sovereign/bounded-execution-runtime.ts";
 import {
+  durableBoundedCheckpointLabel,
+  persistFencedBoundedExecutionCheckpoint,
+  takeoverFencedBoundedExecutionSession,
+} from "../core/sovereign/durable-bounded-execution-coordinator.ts";
+import {
   advanceImplementationItem,
   canAdvanceImplementationState,
   sovereignFactoryImplementationItems,
@@ -43,6 +48,16 @@ function expectThrows(operation, message) {
     threw = true;
   }
   assert(threw, message);
+}
+
+async function expectRejects(operation, message) {
+  let rejected = false;
+  try {
+    await operation();
+  } catch {
+    rejected = true;
+  }
+  assert(rejected, message);
 }
 
 function createTestKernelDecision(steps, estimatedCost = steps.length) {
@@ -536,6 +551,247 @@ assert(
     failoverRestoredSession.mayDeployProduction === false &&
     failoverRestoredSession.mayPublishToUsers === false,
   "Failover restore must preserve state while retaining all founder release locks.",
+);
+
+class DurableBoundedCheckpointTestStore {
+  constructor(binding, fence) {
+    this.activeFence = { ...fence };
+    this.record = {
+      executionId: binding.executionId,
+      idempotencyKey: binding.idempotencyKey,
+      taskName: "sovereign-bounded-execution",
+      status: "running",
+      createdAt: "2026-08-27T21:00:00.000Z",
+      updatedAt: "2026-08-27T21:00:00.000Z",
+      attempt: 1,
+      maxAttempts: 3,
+      checkpoints: [],
+    };
+  }
+
+  async get(executionId) {
+    return executionId === this.record.executionId
+      ? structuredClone(this.record)
+      : null;
+  }
+
+  async heartbeatFenced(fence, leaseMs = 120_000) {
+    if (
+      fence.executionId !== this.record.executionId ||
+      fence.ownerId !== this.activeFence.ownerId ||
+      fence.fencingToken !== this.activeFence.fencingToken ||
+      this.record.status !== "running"
+    ) {
+      throw new Error("stale_execution_fence");
+    }
+    if (!Number.isFinite(leaseMs) || leaseMs <= 0) {
+      throw new Error("lease_duration_invalid");
+    }
+    return true;
+  }
+
+  async checkpointFenced(fence, label, state = {}) {
+    await this.heartbeatFenced(fence);
+    const checkpoint = state.checkpoint;
+    if (
+      !checkpoint ||
+      typeof checkpoint !== "object" ||
+      typeof checkpoint.observedAt !== "string"
+    ) {
+      throw new Error("checkpoint_state_invalid");
+    }
+    const durableCheckpoint = {
+      id: this.record.executionId + ":" + (this.record.checkpoints.length + 1),
+      at: checkpoint.observedAt,
+      label,
+      state: structuredClone(state),
+    };
+    this.record = {
+      ...this.record,
+      updatedAt: checkpoint.observedAt,
+      checkpoints: [...this.record.checkpoints, durableCheckpoint],
+    };
+    return structuredClone(this.record);
+  }
+
+  takeover(fence) {
+    this.activeFence = { ...fence };
+    this.record = {
+      ...this.record,
+      status: "running",
+      attempt: this.record.attempt + 1,
+    };
+  }
+
+  tamperLatestReceipt() {
+    const latest = this.record.checkpoints.at(-1);
+    latest.state.checkpoint.session.receipts[0].auditReference =
+      "audit://tampered-durable-state";
+  }
+
+  checkpointCount() {
+    return this.record.checkpoints.filter(
+      (checkpoint) => checkpoint.label === durableBoundedCheckpointLabel,
+    ).length;
+  }
+
+  latestEnvelope() {
+    return this.record.checkpoints.at(-1)?.state;
+  }
+}
+
+const durableFenceAlpha = {
+  executionId: "durable_factory_execution_1",
+  ownerId: "worker_alpha",
+  fencingToken: 7,
+};
+const durableFenceBeta = {
+  executionId: durableFenceAlpha.executionId,
+  ownerId: "worker_beta",
+  fencingToken: 8,
+};
+const durableBinding = {
+  executionId: durableFenceAlpha.executionId,
+  idempotencyKey: "factory:bounded-session-1",
+  sessionId: boundedSession.id,
+  intentId: boundedSession.intentId,
+  agentId: boundedSession.agent.id,
+  planFingerprint: boundedSession.planFingerprint,
+};
+const durableCheckpointStore = new DurableBoundedCheckpointTestStore(
+  durableBinding,
+  durableFenceAlpha,
+);
+const persistedDurableRoot =
+  await persistFencedBoundedExecutionCheckpoint(durableCheckpointStore, {
+    binding: durableBinding,
+    fence: durableFenceAlpha,
+    operationId: "bounded-session-root",
+    session: boundedSession,
+    observedAt: "2026-08-27T21:01:00.000Z",
+  });
+assert(
+  persistedDurableRoot.checkpoint.sequence === 1 &&
+    persistedDurableRoot.checkpoint.fencingToken === 7 &&
+    persistedDurableRoot.deduplicated === false &&
+    durableCheckpointStore.checkpointCount() === 1 &&
+    durableCheckpointStore.latestEnvelope().executionAuthority === false &&
+    durableCheckpointStore.latestEnvelope().releaseAuthority === false,
+  "The active durable fence must persist one founder-locked root checkpoint.",
+);
+const deduplicatedDurableRoot =
+  await persistFencedBoundedExecutionCheckpoint(durableCheckpointStore, {
+    binding: durableBinding,
+    fence: durableFenceAlpha,
+    operationId: "bounded-session-root",
+    session: boundedSession,
+    observedAt: "2026-08-27T21:01:00.000Z",
+  });
+assert(
+  deduplicatedDurableRoot.deduplicated === true &&
+    deduplicatedDurableRoot.checkpoint.checkpointDigest ===
+      persistedDurableRoot.checkpoint.checkpointDigest &&
+    durableCheckpointStore.checkpointCount() === 1,
+  "A repeated durable checkpoint operation must return the exact persisted receipt without duplication.",
+);
+await expectRejects(
+  () =>
+    persistFencedBoundedExecutionCheckpoint(durableCheckpointStore, {
+      binding: {
+        ...durableBinding,
+        idempotencyKey: "factory:different-execution",
+      },
+      fence: durableFenceAlpha,
+      operationId: "wrong-binding",
+      session: boundedSession,
+      observedAt: "2026-08-27T21:02:00.000Z",
+    }),
+  "A durable record with a different idempotency identity must fail closed.",
+);
+const persistedDurableCompletion =
+  await persistFencedBoundedExecutionCheckpoint(durableCheckpointStore, {
+    binding: durableBinding,
+    fence: durableFenceAlpha,
+    operationId: "bounded-session-completed",
+    session: resumedCompletedSession,
+    observedAt: "2026-08-27T21:06:00.000Z",
+  });
+assert(
+  persistedDurableCompletion.checkpoint.sequence === 2 &&
+    persistedDurableCompletion.checkpoint.session.state === "completed" &&
+    durableCheckpointStore.checkpointCount() === 2,
+  "Durable persistence must advance the cryptographic chain with the exact completed session.",
+);
+
+durableCheckpointStore.takeover(durableFenceBeta);
+await expectRejects(
+  () =>
+    persistFencedBoundedExecutionCheckpoint(durableCheckpointStore, {
+      binding: durableBinding,
+      fence: durableFenceAlpha,
+      operationId: "stale-worker-write",
+      session: resumedCompletedSession,
+      observedAt: "2026-08-27T21:07:00.000Z",
+    }),
+  "The previous worker must lose all checkpoint authority after fenced takeover.",
+);
+const durableTakeover = await takeoverFencedBoundedExecutionSession(
+  durableCheckpointStore,
+  {
+    binding: durableBinding,
+    fence: durableFenceBeta,
+    operationId: "worker-beta-takeover",
+    observedAt: "2026-08-27T21:07:00.000Z",
+  },
+);
+assert(
+  durableTakeover.checkpoint.sequence === 3 &&
+    durableTakeover.checkpoint.fencingToken === 8 &&
+    durableTakeover.checkpoint.workerId === "worker_beta" &&
+    durableTakeover.session.state === "completed" &&
+    durableTakeover.session.mayMerge === false &&
+    durableTakeover.session.mayDeployProduction === false &&
+    durableTakeover.session.mayPublishToUsers === false &&
+    durableCheckpointStore.checkpointCount() === 3,
+  "A higher fenced worker must roll the trusted durable head forward before restoring it.",
+);
+const repeatedDurableTakeover =
+  await takeoverFencedBoundedExecutionSession(durableCheckpointStore, {
+    binding: durableBinding,
+    fence: durableFenceBeta,
+    operationId: "worker-beta-takeover",
+    observedAt: "2026-08-27T21:07:00.000Z",
+  });
+assert(
+  repeatedDurableTakeover.deduplicated === true &&
+    repeatedDurableTakeover.checkpoint.checkpointDigest ===
+      durableTakeover.checkpoint.checkpointDigest &&
+    durableCheckpointStore.checkpointCount() === 3,
+  "A retried takeover must be idempotent and must not fork the durable checkpoint chain.",
+);
+
+const tamperedDurableStore = new DurableBoundedCheckpointTestStore(
+  durableBinding,
+  durableFenceAlpha,
+);
+await persistFencedBoundedExecutionCheckpoint(tamperedDurableStore, {
+  binding: durableBinding,
+  fence: durableFenceAlpha,
+  operationId: "tamper-root",
+  session: resumedCompletedSession,
+  observedAt: "2026-08-27T21:06:00.000Z",
+});
+tamperedDurableStore.tamperLatestReceipt();
+tamperedDurableStore.takeover(durableFenceBeta);
+await expectRejects(
+  () =>
+    takeoverFencedBoundedExecutionSession(tamperedDurableStore, {
+      binding: durableBinding,
+      fence: durableFenceBeta,
+      operationId: "tampered-takeover",
+      observedAt: "2026-08-27T21:07:00.000Z",
+    }),
+  "A tampered durable receipt must never fall back to an older checkpoint or restore.",
 );
 const protectedDecision = {
   ...createTestKernelDecision([boundedStep], 1),
