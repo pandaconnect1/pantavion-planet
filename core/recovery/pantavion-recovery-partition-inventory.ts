@@ -54,16 +54,85 @@ function recordObject(value: unknown): Record<string, unknown> | null {
     : null;
 }
 
+function emptyCounter(): Record<string, number> {
+  return Object.create(null) as Record<string, number>;
+}
+
 function increment(target: Record<string, number>, key: string | null): void {
   if (!key) return;
-  target[key] = (target[key] ?? 0) + 1;
+  const current = Object.prototype.hasOwnProperty.call(target, key) ? target[key] : 0;
+  target[key] = current + 1;
+}
+
+function assertPartitionHeader(partition: PantavionVerifiedRecoveryPartition): void {
+  if (partition.marker !== "pantavion_verified_recovery_partition_v1") {
+    throw new Error("recovery_inventory_partition_marker_invalid");
+  }
+  if (
+    partition.authority.analysis !== true ||
+    partition.authority.planning !== true ||
+    partition.authority.codeMutation !== false ||
+    partition.authority.productionWrite !== false ||
+    partition.authority.merge !== false ||
+    partition.authority.deployment !== false ||
+    partition.authority.publicExposure !== false ||
+    partition.authority.release !== false
+  ) {
+    throw new Error("recovery_inventory_partition_authority_invalid");
+  }
+  if (
+    !Number.isInteger(partition.ordinal) ||
+    partition.ordinal < 1 ||
+    !Number.isInteger(partition.startOrdinal) ||
+    partition.startOrdinal < 1 ||
+    !Number.isInteger(partition.endOrdinal) ||
+    partition.endOrdinal < partition.startOrdinal ||
+    !Number.isInteger(partition.recordCount) ||
+    partition.recordCount < 1 ||
+    partition.recordCount !== partition.endOrdinal - partition.startOrdinal + 1 ||
+    partition.records.length !== partition.recordCount
+  ) {
+    throw new Error("recovery_inventory_partition_range_invalid");
+  }
+}
+
+function assertSourceEvidenceCoverage(partition: PantavionVerifiedRecoveryPartition): void {
+  if (!Array.isArray(partition.sourceEvidence) || partition.sourceEvidence.length === 0) {
+    throw new Error("recovery_inventory_source_evidence_required");
+  }
+
+  let expectedStart = partition.startOrdinal;
+  let coveredRecords = 0;
+  for (const evidence of partition.sourceEvidence) {
+    if (
+      typeof evidence.file !== "string" ||
+      !evidence.file.trim() ||
+      !/^[a-f0-9]{64}$/.test(evidence.fileSha256) ||
+      !Number.isInteger(evidence.segmentStartOrdinal) ||
+      !Number.isInteger(evidence.segmentEndOrdinal) ||
+      !Number.isInteger(evidence.recordCount) ||
+      evidence.segmentStartOrdinal !== expectedStart ||
+      evidence.segmentEndOrdinal < evidence.segmentStartOrdinal ||
+      evidence.recordCount !== evidence.segmentEndOrdinal - evidence.segmentStartOrdinal + 1
+    ) {
+      throw new Error("recovery_inventory_source_evidence_invalid");
+    }
+    expectedStart = evidence.segmentEndOrdinal + 1;
+    coveredRecords += evidence.recordCount;
+  }
+
+  if (expectedStart !== partition.endOrdinal + 1 || coveredRecords !== partition.recordCount) {
+    throw new Error("recovery_inventory_source_evidence_coverage_mismatch");
+  }
 }
 
 function evidenceForRecord(record: PantavionRecoverySourceRecord): PantavionRecoveryInventoryRecordEvidence {
+  const id = nonEmptyText(record.id);
+  if (!id) throw new Error("recovery_inventory_record_id_required");
   const provenance = recordObject(record.provenance);
   const classification = recordObject(record.classification);
   return {
-    recordId: record.id,
+    recordId: id,
     sourceRecordSha256: digestPantavionRecoverySourceRecord(record),
     sourceFile: nonEmptyText(provenance?.sourceFile),
     sourceFamily: nonEmptyText(provenance?.sourceFamily),
@@ -77,7 +146,7 @@ function partitionEvidenceDigest(records: readonly PantavionRecoveryInventoryRec
   const hash = createHash("sha256");
   records.forEach((record, index) => {
     if (index > 0) hash.update("\n");
-    hash.update(`${record.recordId}:${record.sourceRecordSha256}`);
+    hash.update(JSON.stringify([record.recordId, record.sourceRecordSha256]));
   });
   return hash.digest("hex");
 }
@@ -85,32 +154,18 @@ function partitionEvidenceDigest(records: readonly PantavionRecoveryInventoryRec
 export function analyzePantavionRecoveryPartitionInventory(
   partition: PantavionVerifiedRecoveryPartition,
 ): PantavionRecoveryPartitionInventory {
-  if (partition.marker !== "pantavion_verified_recovery_partition_v1") {
-    throw new Error("recovery_inventory_partition_marker_invalid");
-  }
-  if (
-    partition.authority.codeMutation !== false ||
-    partition.authority.productionWrite !== false ||
-    partition.authority.merge !== false ||
-    partition.authority.deployment !== false ||
-    partition.authority.publicExposure !== false ||
-    partition.authority.release !== false
-  ) {
-    throw new Error("recovery_inventory_partition_authority_invalid");
-  }
-  if (partition.records.length !== partition.recordCount) {
-    throw new Error("recovery_inventory_partition_count_mismatch");
-  }
+  assertPartitionHeader(partition);
 
   const ids = partition.records.map((record) => record.id);
   const uniqueRecordCount = new Set(ids).size;
   if (uniqueRecordCount !== partition.recordCount) {
     throw new Error("recovery_inventory_duplicate_record_id");
   }
+  assertSourceEvidenceCoverage(partition);
 
   const recordEvidence = partition.records.map(evidenceForRecord);
-  const sourceFamilies: Record<string, number> = {};
-  const seedModules: Record<string, number> = {};
+  const sourceFamilies = emptyCounter();
+  const seedModules = emptyCounter();
   let recordsMissingSourceFile = 0;
   let recordsMissingSeedModule = 0;
   let recordsWithText = 0;
