@@ -23,7 +23,7 @@ jobs:
   production-translation-e2e:
     name: Verify live bidirectional translation
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 30
     env:
       PANTAVION_PRODUCTION_BASE: https://pantavion.com
 
