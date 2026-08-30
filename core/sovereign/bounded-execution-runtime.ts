@@ -5,18 +5,18 @@ import {
   consumeAuthorizedBudget,
   type AgentBudgetGrant,
   type CapabilityAccess,
-} from "./agent-capability-budget-control";
+} from "./agent-capability-budget-control.ts";
 import {
   canAgentUseCapability,
   type EphemeralAgent,
-} from "./ephemeral-agent-swarm";
+} from "./ephemeral-agent-swarm.ts";
 import {
   getExecutableSteps,
   isOutcomeComplete,
   type OutcomePlan,
   type OutcomeStep,
-} from "./intent-to-outcome-fabric";
-import type { SovereignKernelDecision } from "./sovereign-capability-kernel";
+} from "./intent-to-outcome-fabric.ts";
+import type { SovereignKernelDecision } from "./sovereign-capability-kernel.ts";
 
 export type BoundedExecutionSessionState = "ready" | "executing" | "completed" | "failed";
 
