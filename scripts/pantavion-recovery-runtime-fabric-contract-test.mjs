@@ -42,6 +42,17 @@ for (const required of [
 assert.equal(founderSurface.includes("NEXT_PUBLIC_"), false);
 assert.equal(founderSurface.includes("SUPABASE_SERVICE_ROLE"), false);
 
+const foundryRuntime = fs.readFileSync("core/kernel/pantavion-foundry-runtime.ts", "utf8");
+for (const required of [
+  "parseRecoveryCorpusBinding",
+  "canonical_corpus_ordered_record_id",
+  "sourceOrdinalBinding",
+  "corpusBinding",
+  "PANTAVION_RECOVERY_CORPUS_CONTRACT",
+]) {
+  assert.equal(foundryRuntime.includes(required), true, `Foundry runtime missing ${required}`);
+}
+
 function locator(record, ordinal) {
   return {
     batchFile: "batch-contract.json",

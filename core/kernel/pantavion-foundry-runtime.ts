@@ -16,8 +16,12 @@ import {
   type PantavionAgentModuleDeliveryAssignment,
 } from "./pantavion-module-delivery-factory";
 import { isPantavionEcosystemServiceId } from "./pantavion-ecosystem-cell-factory";
+import { PANTAVION_RECOVERY_CORPUS_CONTRACT } from "../recovery/pantavion-recovery-runtime-fabric";
 import type { PantavionOwnedAgentRole } from "./pantavion-agent-factory";
-import type { PantavionAgentWorkloadAssignment } from "./pantavion-foundry-workload-planner";
+import type {
+  PantavionAgentWorkloadAssignment,
+  PantavionFoundryCorpusBinding,
+} from "./pantavion-foundry-workload-planner";
 
 const MAX_AGENTS_PER_TICK = 3;
 const INTERNAL_AGENT_TIMEOUT_MS = 45_000;
@@ -157,6 +161,51 @@ const WORKLOAD_STAGE_IDS = new Set<PantavionAgentWorkloadAssignment["ownedStages
   "repair_queue",
 ]);
 
+function parseRecoveryCorpusBinding(value: unknown): PantavionFoundryCorpusBinding | null {
+  const binding = asRecord(value);
+  if (!binding) return null;
+  const contract = PANTAVION_RECOVERY_CORPUS_CONTRACT;
+  if (
+    binding.version !== "pantavion_recovery_corpus_binding_v1" ||
+    binding.intentId !== contract.intentId ||
+    binding.intakeReference !== contract.intakeReference ||
+    binding.corpusRoot !== contract.corpusRoot ||
+    binding.semanticLedgerPath !== contract.semanticLedgerPath ||
+    binding.governedHoldPath !== contract.governedHoldPath ||
+    binding.sourceRecordCount !== contract.sourceRecordCount ||
+    binding.sourceBatchCount !== contract.sourceBatchCount ||
+    binding.sourceFingerprint !== contract.sourceFingerprint ||
+    binding.orderedIdFingerprint !== contract.orderedIdFingerprint ||
+    binding.classifiedCount !== contract.classifiedCount ||
+    binding.recursiveQuarantineCount !== contract.recursiveQuarantineCount ||
+    binding.governedHoldCount !== contract.governedHoldCount ||
+    binding.executionAuthority !== false ||
+    binding.releaseAuthority !== false ||
+    binding.productionWriteAuthority !== false
+  ) {
+    return null;
+  }
+
+  return {
+    version: "pantavion_recovery_corpus_binding_v1",
+    intentId: contract.intentId,
+    intakeReference: contract.intakeReference,
+    corpusRoot: contract.corpusRoot,
+    semanticLedgerPath: contract.semanticLedgerPath,
+    governedHoldPath: contract.governedHoldPath,
+    sourceRecordCount: contract.sourceRecordCount,
+    sourceBatchCount: contract.sourceBatchCount,
+    sourceFingerprint: contract.sourceFingerprint,
+    orderedIdFingerprint: contract.orderedIdFingerprint,
+    classifiedCount: contract.classifiedCount,
+    recursiveQuarantineCount: contract.recursiveQuarantineCount,
+    governedHoldCount: contract.governedHoldCount,
+    executionAuthority: false,
+    releaseAuthority: false,
+    productionWriteAuthority: false,
+  };
+}
+
 function parseWorkloadAssignment(value: unknown): PantavionAgentWorkloadAssignment | null {
   const root = asRecord(value);
   const partitionContract = asRecord(root?.partitionContract);
@@ -165,6 +214,12 @@ function parseWorkloadAssignment(value: unknown): PantavionAgentWorkloadAssignme
   const unitCount = typeof root?.unitCount === "number" ? root.unitCount : 0;
   const batchSize = typeof partitionContract?.batchSize === "number" ? partitionContract.batchSize : 0;
   const batchCount = typeof partitionContract?.batchCount === "number" ? partitionContract.batchCount : 0;
+  const sourceOrdinalBinding = partitionContract?.sourceOrdinalBinding === undefined
+    ? "workload_unit_ordinal_only"
+    : partitionContract.sourceOrdinalBinding;
+  const rawCorpusBinding = root?.corpusBinding;
+  const corpusBinding = parseRecoveryCorpusBinding(rawCorpusBinding);
+  const hasCorpusBinding = rawCorpusBinding !== undefined && rawCorpusBinding !== null;
 
   if (
     root?.marker !== "pantavion_agent_workload_assignment_v1" ||
@@ -186,6 +241,13 @@ function parseWorkloadAssignment(value: unknown): PantavionAgentWorkloadAssignme
     batchCount < 1 ||
     partitionContract?.batchRangeFormula !== "start=(ordinal-1)*batchSize+1; end=min(ordinal*batchSize,unitCount)" ||
     partitionContract?.rawPayloadStorage !== "forbidden_in_control_plane" ||
+    (sourceOrdinalBinding !== "canonical_corpus_ordered_record_id" &&
+      sourceOrdinalBinding !== "workload_unit_ordinal_only") ||
+    (hasCorpusBinding && !corpusBinding) ||
+    (sourceOrdinalBinding === "canonical_corpus_ordered_record_id" && !corpusBinding) ||
+    (corpusBinding && sourceOrdinalBinding !== "canonical_corpus_ordered_record_id") ||
+    (corpusBinding && root.intakeReference !== corpusBinding.intakeReference) ||
+    (corpusBinding && unitCount !== corpusBinding.sourceRecordCount) ||
     partitionContract?.progressAuthority !== "durable_checkpoint_with_evidence"
   ) {
     return null;
@@ -197,6 +259,7 @@ function parseWorkloadAssignment(value: unknown): PantavionAgentWorkloadAssignme
     workloadKind: root.workloadKind,
     unitCount,
     ...(typeof root.intakeReference === "string" ? { intakeReference: root.intakeReference } : {}),
+    ...(corpusBinding ? { corpusBinding } : {}),
     assignedRole: assignedRole as PantavionAgentWorkloadAssignment["assignedRole"],
     ownedStages: ownedStages as PantavionAgentWorkloadAssignment["ownedStages"],
     partitionContract: {
@@ -206,6 +269,7 @@ function parseWorkloadAssignment(value: unknown): PantavionAgentWorkloadAssignme
       batchCount,
       batchRangeFormula: "start=(ordinal-1)*batchSize+1; end=min(ordinal*batchSize,unitCount)",
       rawPayloadStorage: "forbidden_in_control_plane",
+      sourceOrdinalBinding,
       progressAuthority: "durable_checkpoint_with_evidence",
     },
     externalWorkerAllowed: false,
@@ -958,3 +1022,4 @@ export async function runPantavionFoundryTick(): Promise<PantavionFoundryTickRep
     checkedAt,
   };
 }
+
