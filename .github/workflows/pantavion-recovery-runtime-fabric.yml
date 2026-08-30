@@ -7,6 +7,7 @@ on:
       - "core/recovery/pantavion-recovery-partition-scheduler.ts"
       - "core/recovery/pantavion-recovery-source-reader.ts"
       - "core/recovery/pantavion-recovery-partition-inventory.ts"
+      - "core/recovery/pantavion-recovery-partition-semantic-receipt.ts"
       - "core/recovery/pantavion-recovery-fenced-executor.ts"
       - "core/kernel/pantavion-foundry-workload-planner.ts"
       - "core/kernel/pantavion-founder-canonical-state-runtime.ts"
@@ -85,6 +86,9 @@ jobs:
           test -f data/recovery/source-batch-index-v1.json
           node scripts/pantavion-recovery-source-batch-index-test.mjs
 
+      - name: Materialize 165 partition-bound semantic receipts
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-recovery-partition-semantic-receipts.mjs
+
       - name: Verify exact full-corpus runtime manifest
         run: |
           node - <<'NODE'
@@ -121,5 +125,7 @@ jobs:
             data/recovery/source-batch-index-v1.json
             data/recovery/runtime-fabric-v1/manifest.json
             data/recovery/runtime-fabric-v1/recovery-work-units.ndjson
+            data/recovery/runtime-fabric-v1/partition-semantic-receipts.ndjson
+            data/recovery/runtime-fabric-v1/partition-semantic-receipts-manifest.json
           if-no-files-found: error
           retention-days: 30
