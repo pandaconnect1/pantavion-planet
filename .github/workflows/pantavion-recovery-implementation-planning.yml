@@ -1,0 +1,109 @@
+name: Pantavion Recovery Implementation Planning
+
+on:
+  pull_request:
+    paths:
+      - "core/recovery/pantavion-recovery-implementation-plan-envelope.ts"
+      - "core/recovery/pantavion-recovery-runtime-fabric.ts"
+      - "scripts/pantavion-recovery-implementation-planning.mjs"
+      - "scripts/pantavion-recovery-runtime-fabric-materialize.mjs"
+      - "scripts/pantavion-canonical-semantic-classification-v3.cjs"
+      - "data/recovery/recovery-runtime-fabric-v1.json"
+      - "data/recovery/governed-hold-resolution-v4.json"
+      - "data/recovery/imported-pr248/**"
+      - ".github/workflows/pantavion-recovery-implementation-planning.yml"
+      - "next.config.ts"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-recovery-implementation-planning-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  recovery-implementation-planning:
+    name: Plan all 82,413 recovery work units
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install exact dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify strict semantic ownership contracts
+        run: node scripts/pantavion-semantic-v3-strict-anchor-contract-test.cjs
+
+      - name: Generate deterministic source batch index
+        run: node scripts/pantavion-recovery-source-batch-index.mjs
+
+      - name: Verify exact source batch index contract
+        run: node scripts/pantavion-recovery-source-batch-index-test.mjs
+
+      - name: Rebuild semantic truth for all 82,413 records
+        run: node scripts/pantavion-canonical-semantic-classification-v3.cjs
+
+      - name: Verify fail-closed Recovery Runtime contract
+        run: npm run test:recovery-runtime-fabric
+
+      - name: Materialize all 82,413 Pantavion work units
+        run: npm run materialize:recovery-runtime-fabric
+
+      - name: Materialize all 82,413 implementation plan envelopes
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-recovery-implementation-planning.mjs
+
+      - name: Verify exact implementation planning truth
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const manifest = JSON.parse(fs.readFileSync('data/recovery/implementation-planning-v1/manifest.json','utf8'));
+          if (manifest.marker !== 'pantavion_recovery_implementation_planning_manifest_v1') throw new Error('planning_marker_mismatch');
+          if (manifest.corpus.sourceRecordCount !== 82413) throw new Error('planning_record_count_mismatch');
+          if (manifest.planning.planEnvelopeCount !== 82413) throw new Error('planning_envelope_count_mismatch');
+          if (manifest.planning.dispositionCounts.SCOPED_INTERNAL_DRAFT_PLAN !== 31779) throw new Error('planning_ready_count_mismatch');
+          if (manifest.planning.dispositionCounts.GOVERNED_HOLD_PRESERVATION !== 355) throw new Error('planning_hold_count_mismatch');
+          if (manifest.planning.dispositionCounts.RECURSIVE_PROVENANCE_PRESERVATION !== 50279) throw new Error('planning_recursive_count_mismatch');
+          if (manifest.planning.implementationStateCounts.idea !== 31779) throw new Error('planning_idea_count_mismatch');
+          if (manifest.planning.implementationStateCounts.blocked !== 50634) throw new Error('planning_blocked_count_mismatch');
+          if (manifest.planning.partitionCount !== 165 || manifest.planning.partitionsFullyCovered !== true) throw new Error('planning_partition_coverage_mismatch');
+          if (manifest.planning.rawPayloadDuplicatedIntoControlPlane !== false) throw new Error('planning_raw_payload_forbidden');
+          if (manifest.authority.analysisAuthority !== true || manifest.authority.planningAuthority !== true) throw new Error('planning_authority_missing');
+          const forbidden = Object.entries(manifest.authority).filter(([key]) => !['analysisAuthority','planningAuthority'].includes(key));
+          if (forbidden.some(([, value]) => value !== false)) throw new Error('planning_execution_authority_forbidden');
+          if (manifest.negativeCasesVerified !== true) throw new Error('planning_negative_cases_missing');
+          if (manifest.implementationPlanningLifecycleState !== 'CODED') throw new Error('planning_lifecycle_mismatch');
+          if (manifest.completion !== false) throw new Error('planning_completion_must_remain_false');
+          NODE
+
+      - name: TypeScript verification
+        run: npm run typecheck
+
+      - name: Production build verification
+        run: npm run build
+
+      - name: Verify production build preserved deterministic source index
+        run: |
+          test -f data/recovery/source-batch-index-v1.json
+          printf '%s  %s\n' '97a5bf8409e60f9711ba52f62c2c0f71efce2777172b1005bad43a71357ab929' 'data/recovery/source-batch-index-v1.json' | sha256sum --check --strict
+
+      - name: Upload immutable implementation planning evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-recovery-implementation-planning-${{ github.sha }}
+          path: |
+            data/recovery/canonical-semantic-v3/manifest.json
+            data/recovery/canonical-semantic-v3/module-gap-map.json
+            data/recovery/source-batch-index-v1.json
+            data/recovery/runtime-fabric-v1/manifest.json
+            data/recovery/runtime-fabric-v1/recovery-work-units.ndjson
+            data/recovery/implementation-planning-v1/manifest.json
+            data/recovery/implementation-planning-v1/implementation-plan-envelopes.ndjson
+          if-no-files-found: error
+          retention-days: 30
