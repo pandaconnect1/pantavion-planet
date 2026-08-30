@@ -21,7 +21,10 @@ export const PANTAVION_RECOVERY_EXECUTIONS_PER_TICK = 5;
 const PANTAVION_RECOVERY_EXECUTION_LEASE_MS = 120_000;
 
 export interface PantavionRecoveryFencedExecutionStore {
-  list(limit?: number): Promise<PantavionDurableExecutionRecord[]>;
+  listByTaskName(
+    taskName: string,
+    limit?: number,
+  ): Promise<PantavionDurableExecutionRecord[]>;
   claimFenced(
     executionId: string,
     ownerId: string,
@@ -178,7 +181,10 @@ export async function runPantavionRecoveryFencedExecutor(input: {
   let records: PantavionDurableExecutionRecord[];
 
   try {
-    records = await input.store.list(500);
+    records = await input.store.listByTaskName(
+      PANTAVION_RECOVERY_PARTITION_TASK_NAME,
+      PANTAVION_RECOVERY_CORPUS_CONTRACT.partitionCount,
+    );
   } catch (error) {
     return {
       marker: "pantavion_recovery_fenced_executor_v1",
@@ -195,10 +201,7 @@ export async function runPantavionRecoveryFencedExecutor(input: {
   }
 
   const eligible = records
-    .filter((record) =>
-      record.taskName === PANTAVION_RECOVERY_PARTITION_TASK_NAME &&
-      ["queued", "planned", "running"].includes(record.status),
-    )
+    .filter((record) => ["queued", "planned", "running"].includes(record.status))
     .sort((a, b) => ordinalFor(a) - ordinalFor(b));
 
   if (eligible.length === 0) {
