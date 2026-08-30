@@ -1,3 +1,4 @@
+import { PANTAVION_RECOVERY_CORPUS_CONTRACT } from "../recovery/pantavion-recovery-runtime-fabric.ts";
 import type { PantavionOwnedAgentRole } from "./pantavion-agent-factory";
 
 export type PantavionFoundryWorkloadKind = "single_work_order" | "recovery_excavation";
@@ -17,6 +18,25 @@ export interface PantavionFoundryWorkloadRequest {
   unitCount?: number;
   batchSize?: number;
   intakeReference?: string;
+}
+
+export interface PantavionFoundryCorpusBinding {
+  version: "pantavion_recovery_corpus_binding_v1";
+  intentId: string;
+  intakeReference: string;
+  corpusRoot: string;
+  semanticLedgerPath: string;
+  governedHoldPath: string;
+  sourceRecordCount: number;
+  sourceBatchCount: number;
+  sourceFingerprint: string;
+  orderedIdFingerprint: string;
+  classifiedCount: number;
+  recursiveQuarantineCount: number;
+  governedHoldCount: number;
+  executionAuthority: false;
+  releaseAuthority: false;
+  productionWriteAuthority: false;
 }
 
 export interface PantavionFoundryWorkloadStage {
@@ -40,6 +60,7 @@ export interface PantavionFoundryPartitionContract {
   batchCount: number;
   batchRangeFormula: "start=(ordinal-1)*batchSize+1; end=min(ordinal*batchSize,unitCount)";
   rawPayloadStorage: "forbidden_in_control_plane";
+  sourceOrdinalBinding: "canonical_corpus_ordered_record_id" | "workload_unit_ordinal_only";
   progressAuthority: "durable_checkpoint_with_evidence";
 }
 
@@ -49,6 +70,7 @@ export interface PantavionFoundryWorkloadPlan {
   kind: PantavionFoundryWorkloadKind;
   unitCount: number;
   intakeReference?: string;
+  corpusBinding?: PantavionFoundryCorpusBinding;
   stages: PantavionFoundryWorkloadStage[];
   internalLanes: PantavionFoundryInternalLane[];
   partitionContract: PantavionFoundryPartitionContract;
@@ -63,6 +85,7 @@ export interface PantavionAgentWorkloadAssignment {
   workloadKind: PantavionFoundryWorkloadKind;
   unitCount: number;
   intakeReference?: string;
+  corpusBinding?: PantavionFoundryCorpusBinding;
   assignedRole: PantavionOwnedAgentRole;
   ownedStages: PantavionFoundryWorkloadStageId[];
   partitionContract: PantavionFoundryPartitionContract;
@@ -145,6 +168,44 @@ function chooseBatchSize(kind: PantavionFoundryWorkloadKind, requested: number |
   return Math.min(MAX_BATCH_SIZE, asPositiveInteger(requested, DEFAULT_RECOVERY_BATCH_SIZE));
 }
 
+export function resolvePantavionRecoveryCorpusBinding(
+  workload: PantavionFoundryWorkloadRequest | undefined,
+): PantavionFoundryCorpusBinding | undefined {
+  if (
+    workload?.kind !== "recovery_excavation" ||
+    workload.intakeReference?.trim() !== PANTAVION_RECOVERY_CORPUS_CONTRACT.intakeReference
+  ) {
+    return undefined;
+  }
+
+  if (workload.unitCount !== PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceRecordCount) {
+    throw new Error("recovery_corpus_workload_record_count_mismatch");
+  }
+  if (workload.batchSize !== PANTAVION_RECOVERY_CORPUS_CONTRACT.batchSize) {
+    throw new Error("recovery_corpus_workload_batch_size_mismatch");
+  }
+
+  const contract = PANTAVION_RECOVERY_CORPUS_CONTRACT;
+  return {
+    version: "pantavion_recovery_corpus_binding_v1",
+    intentId: contract.intentId,
+    intakeReference: contract.intakeReference,
+    corpusRoot: contract.corpusRoot,
+    semanticLedgerPath: contract.semanticLedgerPath,
+    governedHoldPath: contract.governedHoldPath,
+    sourceRecordCount: contract.sourceRecordCount,
+    sourceBatchCount: contract.sourceBatchCount,
+    sourceFingerprint: contract.sourceFingerprint,
+    orderedIdFingerprint: contract.orderedIdFingerprint,
+    classifiedCount: contract.classifiedCount,
+    recursiveQuarantineCount: contract.recursiveQuarantineCount,
+    governedHoldCount: contract.governedHoldCount,
+    executionAuthority: false,
+    releaseAuthority: false,
+    productionWriteAuthority: false,
+  };
+}
+
 /**
  * Produces a deterministic internal work-partition contract. It intentionally
  * stores no source payload: individual recovery records belong in the
@@ -162,6 +223,7 @@ export function createPantavionFoundryWorkloadPlan(input: {
   const batchSize = chooseBatchSize(kind, input.workload?.batchSize);
   const batchCount = Math.ceil(unitCount / batchSize);
   const intakeReference = input.workload?.intakeReference?.trim() || undefined;
+  const corpusBinding = resolvePantavionRecoveryCorpusBinding(input.workload);
 
   return {
     marker: "pantavion_foundry_workload_plan_v1",
@@ -169,6 +231,7 @@ export function createPantavionFoundryWorkloadPlan(input: {
     kind,
     unitCount,
     ...(intakeReference ? { intakeReference } : {}),
+    ...(corpusBinding ? { corpusBinding } : {}),
     stages: STAGES,
     internalLanes: LANES,
     partitionContract: {
@@ -178,6 +241,9 @@ export function createPantavionFoundryWorkloadPlan(input: {
       batchCount,
       batchRangeFormula: "start=(ordinal-1)*batchSize+1; end=min(ordinal*batchSize,unitCount)",
       rawPayloadStorage: "forbidden_in_control_plane",
+      sourceOrdinalBinding: corpusBinding
+        ? "canonical_corpus_ordered_record_id"
+        : "workload_unit_ordinal_only",
       progressAuthority: "durable_checkpoint_with_evidence",
     },
     externalWorkerDependency: false,
@@ -196,6 +262,7 @@ export function createPantavionAgentWorkloadAssignment(input: {
     workloadKind: input.plan.kind,
     unitCount: input.plan.unitCount,
     ...(input.plan.intakeReference ? { intakeReference: input.plan.intakeReference } : {}),
+    ...(input.plan.corpusBinding ? { corpusBinding: input.plan.corpusBinding } : {}),
     assignedRole: input.role,
     ownedStages: input.plan.stages
       .filter((stage) => stage.ownerRoles.includes(input.role))

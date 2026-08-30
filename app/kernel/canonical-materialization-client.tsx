@@ -11,6 +11,12 @@ type CanonicalIntent = {
   workOrderExecutionId?: string | null;
   last_error?: string | null;
   lastError?: string | null;
+  workload?: {
+    kind?: string;
+    unitCount?: number;
+    batchSize?: number;
+    intakeReference?: string;
+  } | null;
 };
 
 type CanonicalStateResponse = {
@@ -79,6 +85,27 @@ export default function CanonicalMaterializationClient() {
     }
 
     return result;
+  }, [intents]);
+
+  const recoveryRuntime = useMemo(() => {
+    const intent = intents.find((candidate) =>
+      candidate.intent_id === "total_ingest_004" ||
+      candidate.intentId === "total_ingest_004" ||
+      candidate.workload?.intakeReference === "total-ingestion:recovery-corpus"
+    );
+    const unitCount = intent?.workload?.unitCount ?? 0;
+    const batchSize = intent?.workload?.batchSize ?? 0;
+    return {
+      present: Boolean(intent),
+      status: intent ? intentStatus(intent) : "missing",
+      unitCount,
+      batchSize,
+      partitionCount: unitCount > 0 && batchSize > 0 ? Math.ceil(unitCount / batchSize) : 0,
+      exactCorpusBound:
+        unitCount === 82_413 &&
+        batchSize === 500 &&
+        intent?.workload?.intakeReference === "total-ingestion:recovery-corpus",
+    };
   }, [intents]);
 
   async function materialize(): Promise<void> {
@@ -154,6 +181,45 @@ export default function CanonicalMaterializationClient() {
         </div>
       </div>
 
+      <div className="mt-5 rounded-2xl border border-cyan-300/25 bg-cyan-950/20 p-5">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">
+              Recovery Runtime Fabric
+            </p>
+            <h3 className="mt-2 text-xl font-black">82,413 canonical work units</h3>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-200">
+              The complete recovered corpus is bound by exact source and ordered-ID fingerprints.
+              Classified candidates may enter scoped internal planning; governed HOLD and recursive
+              provenance remain preserved and non-executable.
+            </p>
+          </div>
+          <span className="rounded-full border border-white/15 bg-black/30 px-4 py-2 text-xs font-black uppercase text-cyan-100">
+            {loading ? "checking" : recoveryRuntime.status}
+          </span>
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-4">
+          <div className="rounded-xl bg-black/30 p-3">
+            <p className="text-xs text-slate-300">Units declared</p>
+            <p className="mt-1 text-xl font-black">{loading ? "—" : recoveryRuntime.unitCount.toLocaleString()}</p>
+          </div>
+          <div className="rounded-xl bg-black/30 p-3">
+            <p className="text-xs text-slate-300">Bounded partitions</p>
+            <p className="mt-1 text-xl font-black">{loading ? "—" : recoveryRuntime.partitionCount}</p>
+          </div>
+          <div className="rounded-xl bg-black/30 p-3">
+            <p className="text-xs text-slate-300">Exact corpus binding</p>
+            <p className={`mt-1 text-sm font-black ${recoveryRuntime.exactCorpusBound ? "text-emerald-300" : "text-rose-200"}`}>
+              {loading ? "—" : recoveryRuntime.exactCorpusBound ? "VERIFIED INPUT" : "BLOCKED"}
+            </p>
+          </div>
+          <div className="rounded-xl bg-black/30 p-3">
+            <p className="text-xs text-slate-300">Public / production authority</p>
+            <p className="mt-1 text-sm font-black text-amber-200">LOCKED</p>
+          </div>
+        </div>
+      </div>
+
       <div className="mt-5 flex flex-wrap gap-3">
         <button
           type="button"
@@ -176,3 +242,4 @@ export default function CanonicalMaterializationClient() {
     </section>
   );
 }
+

@@ -36,6 +36,9 @@ jobs:
       - name: Verify Pantavion-native canonical state and execution intake
         run: node scripts/pantavion-canonical-state-runtime-gate.cjs
 
+      - name: Verify Recovery Runtime Fabric contract
+        run: npm run test:recovery-runtime-fabric
+
       - name: Verify conversation intake truth contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-conversation-intake-contract-test.mjs
 
@@ -96,3 +99,4 @@ jobs:
 
       - name: Production build
         run: npm run build
+
