@@ -81,7 +81,7 @@ function unauthorizedCronResponse(mode: PantavionCronAuthMode) {
       error: "Unauthorized scheduled-worker request.",
       mode,
       runtimeSafety:
-        "Execution is fail-closed. Production requires either the exact Vercel CRON_SECRET bearer token or the Vault-backed Pantavion internal scheduler token.",
+        "Execution is fail-closed. Production keeps the exact CRON_SECRET bearer token contract and additionally accepts the Vault-backed Pantavion internal scheduler token.",
     },
     { status: 401 },
   );
@@ -134,7 +134,7 @@ async function executeScheduledTick(
       authMode,
       runtimeSafety: {
         authorization:
-          "exact Vercel CRON_SECRET bearer token or Vault-backed Pantavion internal scheduler token",
+          "exact CRON_SECRET bearer token plus separately verified Vault-backed Pantavion internal scheduler token",
         schedulerRedundancy:
           "Vercel Cron and a separately activated Supabase pg_cron/pg_net scheduler may invoke the same route; five-minute run-key idempotency and Supabase leases prevent duplicate execution",
         concurrency: "Supabase scheduled-worker lease plus per-partition monotonic fencing prevents overlapping or stale execution writes",
