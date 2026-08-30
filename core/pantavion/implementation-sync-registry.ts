@@ -575,6 +575,32 @@ export const sovereignFactoryImplementationItems: ImplementationSyncItem[] = [
   testedItem("agent-capability-budget", "Agent Capability & Budget Control", "sovereign", "core/sovereign/agent-capability-budget-control.ts"),
   testedItem("disconnected-edge-execution", "Disconnected / Edge Execution", "sovereign", "core/sovereign/edge-execution.ts"),
   testedItem("technology-library", "Technology Library", "sovereign", "core/sovereign/technology-library.ts"),
+  {
+    id: "bounded-execution-runtime",
+    title: "Receipt-chained Bounded Execution Runtime",
+    domain: "runtime",
+    state: "tested",
+    source: "core/sovereign/bounded-execution-runtime.ts",
+    branch,
+    pr: 315,
+    evidenceRecords: [
+      {
+        kind: "code",
+        reference:
+          "https://github.com/pandaconnect1/pantavion-planet/commit/51175ae4d03c8c063ab5377e46db82976d913f7b",
+        recordedAt: "2026-08-30T00:06:28.000Z",
+        revision: "51175ae4d03c8c063ab5377e46db82976d913f7b",
+      },
+      {
+        kind: "test",
+        reference:
+          "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33282528541",
+        recordedAt: "2026-08-30T00:08:47.000Z",
+        revision: "51175ae4d03c8c063ab5377e46db82976d913f7b",
+      },
+    ],
+    updatedAt: "2026-08-30T00:08:47.000Z",
+  },
   testedKernelItem(),
   testedItem("implementation-sync", "Automatic Implementation Sync", "kernel", "core/pantavion/implementation-sync-registry.ts"),
   testedItem("owner-implementation-surface", "Founder-only Implementation Truth", "owner_control", "app/owner/control/implementation/page.tsx"),
