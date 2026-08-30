@@ -2,6 +2,8 @@ import { randomUUID } from "node:crypto";
 
 import { NextResponse } from "next/server";
 
+import { enforcePantavionKernelPrivilegedMutationBoundary } from "@/core/kernel/kernel-privileged-mutation-boundary";
+
 import { createPantavionArtifactEditingCapabilities } from "@/core/intake/pantavion-artifact-editing-capabilities";
 import {
   isPantavionArtifactUploadSizeAllowed,
@@ -123,6 +125,9 @@ function safeError(error: unknown): string {
 }
 
 export async function POST(request: Request) {
+  const mutationBoundaryResponse = enforcePantavionKernelPrivilegedMutationBoundary(request);
+  if (mutationBoundaryResponse) return mutationBoundaryResponse;
+
   if (!(await isPantavionKernelFounderRequestAllowed(request))) return denied();
 
   try {
