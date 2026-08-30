@@ -627,6 +627,32 @@ export const sovereignFactoryImplementationItems: ImplementationSyncItem[] = [
     ],
     updatedAt: "2026-08-30T03:56:05.000Z",
   },
+  {
+    id: "durable-bounded-execution-coordinator",
+    title: "Durable Fenced Bounded Execution Recovery",
+    domain: "runtime",
+    state: "tested",
+    source: "core/sovereign/durable-bounded-execution-coordinator.ts",
+    branch,
+    pr: 315,
+    evidenceRecords: [
+      {
+        kind: "code",
+        reference:
+          "https://github.com/pandaconnect1/pantavion-planet/commit/6298cd0c1784a807646978dbf32fdda05466b97b",
+        recordedAt: "2026-08-30T05:05:40.000Z",
+        revision: "6298cd0c1784a807646978dbf32fdda05466b97b",
+      },
+      {
+        kind: "test",
+        reference:
+          "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33293928901",
+        recordedAt: "2026-08-30T05:07:57.000Z",
+        revision: "6298cd0c1784a807646978dbf32fdda05466b97b",
+      },
+    ],
+    updatedAt: "2026-08-30T05:07:57.000Z",
+  },
   testedKernelItem(),
   testedItem("implementation-sync", "Automatic Implementation Sync", "kernel", "core/pantavion/implementation-sync-registry.ts"),
   testedItem("owner-implementation-surface", "Founder-only Implementation Truth", "owner_control", "app/owner/control/implementation/page.tsx"),
