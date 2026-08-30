@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "pantavion_recovery_runtime_fabric_v1",
+  "intent": {
+    "intentId": "total_ingest_004",
+    "intakeReference": "total-ingestion:recovery-corpus",
+    "approvalScope": "proposal_only",
+    "statusObservedReadOnly": "pending_materialization"
+  },
+  "corpus": {
+    "root": "data/recovery/imported-pr248/canonical-ledger/corpus",
+    "records": 82413,
+    "batches": 55,
+    "sourceFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d",
+    "orderedIdFingerprint": "d796a55c548655fda8b1014f4db810a7cf7b5f1aef8c7441b985faa8baa00b51"
+  },
+  "semanticTruth": {
+    "classifiedCandidates": 31779,
+    "recursiveQuarantine": 50279,
+    "governedHold": 355,
+    "completion": false
+  },
+  "workload": {
+    "kind": "recovery_excavation",
+    "batchSize": 500,
+    "partitionCount": 165,
+    "sourceOrdinalBinding": "globalOrdinal maps 1:1 to the ordered canonical corpus record ID fingerprint"
+  },
+  "authority": {
+    "executionAuthority": false,
+    "mergeAuthority": false,
+    "deploymentAuthority": false,
+    "productionWriteAuthority": false,
+    "publicExposureAuthority": false,
+    "releaseAuthority": false
+  },
+  "evidence": {
+    "semanticClassificationRun": "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33216058927",
+    "governedHoldPullRequest": "https://github.com/pandaconnect1/pantavion-planet/pull/341",
+    "materializationReceipt": "data/recovery/imported-pr248/canonical-ledger/corpus/MATERIALIZATION_RECEIPT.json"
+  },
+  "truthRule": "All 82,413 source records must materialize exactly once into the Pantavion recovery work-unit ledger. HOLD and recursive artifacts remain preserved without execution authority. Classified candidates may advance only through scoped internal planning and the existing Founder/Kernel gates."
+}

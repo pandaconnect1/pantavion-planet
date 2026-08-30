@@ -1,0 +1,85 @@
+name: Pantavion Recovery Runtime Fabric
+
+on:
+  pull_request:
+    paths:
+      - "core/recovery/pantavion-recovery-runtime-fabric.ts"
+      - "core/kernel/pantavion-foundry-workload-planner.ts"
+      - "core/kernel/pantavion-founder-canonical-state-runtime.ts"
+      - "app/kernel/canonical-materialization-client.tsx"
+      - "core/pantavion/implementation-sync-registry.ts"
+      - "scripts/pantavion-recovery-runtime-fabric-*.mjs"
+      - "scripts/pantavion-canonical-semantic-classification-v3.cjs"
+      - "data/recovery/recovery-runtime-fabric-v1.json"
+      - "data/recovery/governed-hold-resolution-v4.json"
+      - "data/recovery/imported-pr248/**"
+      - ".github/workflows/pantavion-recovery-runtime-fabric.yml"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-recovery-runtime-fabric-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  recovery-runtime-fabric:
+    name: Materialize and verify all 82,413 work units
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install exact dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify strict semantic ownership contracts
+        run: node scripts/pantavion-semantic-v3-strict-anchor-contract-test.cjs
+
+      - name: Rebuild semantic truth for all 82,413 records
+        run: node scripts/pantavion-canonical-semantic-classification-v3.cjs
+
+      - name: Verify fail-closed Recovery Runtime contract
+        run: npm run test:recovery-runtime-fabric
+
+      - name: Materialize all 82,413 Pantavion work units
+        run: npm run materialize:recovery-runtime-fabric
+
+      - name: Verify exact full-corpus runtime manifest
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const manifest = JSON.parse(fs.readFileSync('data/recovery/runtime-fabric-v1/manifest.json','utf8'));
+          if (manifest.corpus.sourceRecordCount !== 82413) throw new Error('runtime_record_count_mismatch');
+          if (manifest.corpus.sourceBatchCount !== 55) throw new Error('runtime_batch_count_mismatch');
+          if (manifest.materialization.workUnitCount !== 82413) throw new Error('runtime_work_unit_count_mismatch');
+          if (manifest.materialization.counts.CLASSIFIED_CANDIDATE !== 31779) throw new Error('runtime_classified_count_mismatch');
+          if (manifest.materialization.counts.QUARANTINED_RECURSIVE !== 50279) throw new Error('runtime_recursive_count_mismatch');
+          if (manifest.materialization.counts.GOVERNED_HOLD !== 355) throw new Error('runtime_hold_count_mismatch');
+          if (Object.values(manifest.authority).some(Boolean)) throw new Error('runtime_authority_must_remain_false');
+          if (manifest.completion !== false) throw new Error('raw_recovery_completion_must_remain_false');
+          NODE
+
+      - name: TypeScript verification
+        run: npm run typecheck
+
+      - name: Production build verification
+        run: npm run build
+
+      - name: Upload immutable runtime evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-recovery-runtime-fabric-${{ github.sha }}
+          path: |
+            data/recovery/canonical-semantic-v3/manifest.json
+            data/recovery/canonical-semantic-v3/module-gap-map.json
+            data/recovery/runtime-fabric-v1/manifest.json
+            data/recovery/runtime-fabric-v1/recovery-work-units.ndjson
+          if-no-files-found: error
+          retention-days: 30
