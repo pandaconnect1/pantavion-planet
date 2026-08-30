@@ -25,9 +25,10 @@ class TestFencedStore {
     this.records.set(record.executionId, structuredClone(record));
   }
 
-  async list(limit = 100) {
+  async listByTaskName(taskName, limit = 500) {
     return [...this.records.values()]
-      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+      .filter((record) => record.taskName === taskName)
+      .sort((a, b) => a.executionId.localeCompare(b.executionId))
       .slice(0, limit)
       .map((record) => structuredClone(record));
   }
@@ -184,6 +185,7 @@ assert.match(store.records.get(sixth.executionId).lastError, /recovery_executor_
 
 console.log("Pantavion Recovery Fenced Executor contract: PASS");
 console.log("Durable partitions seeded: 165");
+console.log("Task-scoped executor discovery: PASS");
 console.log("Fenced successful executions: 5");
 console.log("Replay duplicate execution: 0");
 console.log("Authority escalation rejection: PASS");
