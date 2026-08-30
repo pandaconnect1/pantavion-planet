@@ -3,10 +3,13 @@ import path from "node:path";
 import assert from "node:assert/strict";
 
 const root = process.cwd();
-const indexPath = path.join(root, "data/recovery/runtime-fabric-v1/source-batch-index.json");
+const indexPath = path.join(root, "data/recovery/source-batch-index-v1.json");
+const receiptPath = path.join(root, "data/recovery/imported-pr248/canonical-ledger/corpus/MATERIALIZATION_RECEIPT.json");
 const index = JSON.parse(fs.readFileSync(indexPath, "utf8"));
+const receipt = JSON.parse(fs.readFileSync(receiptPath, "utf8"));
 
 assert.equal(index.id, "pantavion_recovery_source_batch_index_v1");
+assert.equal(index.generatedAt, receipt.generatedAt);
 assert.equal(index.corpus.recordCount, 82_413);
 assert.equal(index.corpus.batchCount, 55);
 assert.equal(index.partitionPlan.batchSize, 500);
@@ -60,3 +63,4 @@ console.log("Pantavion Recovery Source Batch Index contract: PASS");
 console.log("Batches: 55");
 console.log("Partitions: 165");
 console.log("Records: 82413");
+console.log("Deterministic generatedAt: PASS");
