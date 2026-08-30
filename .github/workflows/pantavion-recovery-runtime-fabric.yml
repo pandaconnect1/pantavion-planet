@@ -5,6 +5,7 @@ on:
     paths:
       - "core/recovery/pantavion-recovery-runtime-fabric.ts"
       - "core/recovery/pantavion-recovery-partition-scheduler.ts"
+      - "core/recovery/pantavion-recovery-source-reader.ts"
       - "core/kernel/pantavion-foundry-workload-planner.ts"
       - "core/kernel/pantavion-founder-canonical-state-runtime.ts"
       - "app/kernel/canonical-materialization-client.tsx"
@@ -13,6 +14,7 @@ on:
       - "scripts/pantavion-recovery-runtime-fabric-*.mjs"
       - "scripts/pantavion-recovery-partition-scheduler-test.mjs"
       - "scripts/pantavion-recovery-source-batch-index*.mjs"
+      - "scripts/pantavion-recovery-source-reader-test.mjs"
       - "scripts/pantavion-canonical-semantic-classification-v3.cjs"
       - "data/recovery/recovery-runtime-fabric-v1.json"
       - "data/recovery/governed-hold-resolution-v4.json"
@@ -51,6 +53,9 @@ jobs:
 
       - name: Verify exact source batch index contract
         run: node scripts/pantavion-recovery-source-batch-index-test.mjs
+
+      - name: Verify cryptographic recovery source reader
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-recovery-source-reader-test.mjs
 
       - name: Rebuild semantic truth for all 82,413 records
         run: node scripts/pantavion-canonical-semantic-classification-v3.cjs
