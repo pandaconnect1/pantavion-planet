@@ -12,7 +12,7 @@ import {
   verifyBoundedExecutionSession,
   type BoundedExecutionCheckpoint,
   type BoundedExecutionSession,
-} from "./bounded-execution-runtime";
+} from "./bounded-execution-runtime.ts";
 
 export const durableBoundedCheckpointLabel =
   "pantavion_bounded_execution_checkpoint_v1";
