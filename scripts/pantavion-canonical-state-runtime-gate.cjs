@@ -49,10 +49,30 @@ requireAll("founder route", route, [
   "createPantavionKernelAccessDeniedReport",
   "listPantavionFounderCanonicalStates",
   "listPantavionFounderExecutionIntents",
+  "materializePantavionFounderExecutionIntents",
+  "evaluatePrivilegedRequestBoundary",
+  "export async function POST",
+  'action !== "materialize"',
   'visibility: "founder_internal_only"',
+  'workOrderMaterialization: true',
+  'directFileWriteAllowed: false',
+  'directProductionDeployAllowed: false',
   'status: 404',
   'Cache-Control", "no-store',
 ]);
+
+const boundaryIndex = route.indexOf("evaluatePrivilegedRequestBoundary(request)");
+const founderAuthIndex = route.indexOf("isPantavionKernelFounderRequestAllowed(request)", boundaryIndex);
+const materializeRouteIndex = route.indexOf("materializePantavionFounderExecutionIntents(limit)");
+if (
+  boundaryIndex < 0 ||
+  founderAuthIndex < 0 ||
+  materializeRouteIndex < 0 ||
+  boundaryIndex > founderAuthIndex ||
+  founderAuthIndex > materializeRouteIndex
+) {
+  throw new Error("founder materialization POST must enforce mutation boundary then founder+AAL2 authorization before materialization");
+}
 
 requireAll("cron", cron, [
   "materializePantavionFounderExecutionIntents",
