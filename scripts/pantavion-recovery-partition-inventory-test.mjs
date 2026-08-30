@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 
 import {
   materializeVerifiedPantavionRecoveryPartition,
@@ -13,29 +14,34 @@ const index = JSON.parse(
   fs.readFileSync(path.join(root, "data/recovery/runtime-fabric-v1/source-batch-index.json"), "utf8"),
 );
 
-function verifiedBatchesForPartition(partitionOrdinal) {
-  const partition = index.partitions[partitionOrdinal - 1];
-  const map = new Map();
-  for (const segment of partition.segments) {
-    if (map.has(segment.file)) continue;
-    const entry = index.batches.find((batch) => batch.file === segment.file);
-    assert.ok(entry, `missing batch entry for ${segment.file}`);
-    const payload = fs.readFileSync(path.join(root, entry.relativePath));
-    map.set(entry.file, verifyPantavionRecoveryBatchPayload({ entry, payload }));
-  }
-  return map;
+const verifiedBatches = new Map();
+for (const entry of index.batches) {
+  const payload = fs.readFileSync(path.join(root, entry.relativePath));
+  verifiedBatches.set(entry.file, verifyPantavionRecoveryBatchPayload({ entry, payload }));
 }
 
-for (const partitionOrdinal of [1, index.partitionPlan.partitionCount]) {
+const fullCorpusIds = new Set();
+const orderedIdHash = createHash("sha256");
+const inventoryChainHash = createHash("sha256");
+let totalInventoryRecords = 0;
+let expectedStartOrdinal = 1;
+let firstPartition = null;
+let firstInventory = null;
+let lastInventory = null;
+
+for (let partitionOrdinal = 1; partitionOrdinal <= index.partitionPlan.partitionCount; partitionOrdinal += 1) {
   const partition = materializeVerifiedPantavionRecoveryPartition({
     index,
     partitionOrdinal,
-    verifiedBatches: verifiedBatchesForPartition(partitionOrdinal),
+    verifiedBatches,
   });
   const inventory = analyzePantavionRecoveryPartitionInventory(partition);
 
+  assert.equal(partition.startOrdinal, expectedStartOrdinal, "partitions must cover the corpus contiguously");
   assert.equal(inventory.marker, "pantavion_recovery_partition_inventory_v1");
   assert.equal(inventory.partitionOrdinal, partitionOrdinal);
+  assert.equal(inventory.startOrdinal, expectedStartOrdinal);
+  assert.equal(inventory.endOrdinal, partition.endOrdinal);
   assert.equal(inventory.recordCount, partition.recordCount);
   assert.equal(inventory.uniqueRecordCount, partition.recordCount);
   assert.equal(inventory.recordEvidence.length, partition.recordCount);
@@ -47,7 +53,8 @@ for (const partitionOrdinal of [1, index.partitionPlan.partitionCount]) {
   );
   assert.equal(Object.getPrototypeOf(inventory.sourceFamilies), null);
   assert.equal(Object.getPrototypeOf(inventory.seedModules), null);
-  for (const evidence of inventory.recordEvidence) {
+
+  for (const [recordIndex, evidence] of inventory.recordEvidence.entries()) {
     assert.deepEqual(
       Object.keys(evidence).sort(),
       [
@@ -61,7 +68,14 @@ for (const partitionOrdinal of [1, index.partitionPlan.partitionCount]) {
       ],
       "inventory evidence must expose only bounded metadata and digests",
     );
+    assert.equal(evidence.recordId, partition.records[recordIndex].id);
+    assert.match(evidence.sourceRecordSha256, /^[a-f0-9]{64}$/);
+    assert.equal(fullCorpusIds.has(evidence.recordId), false, `duplicate corpus record id: ${evidence.recordId}`);
+    fullCorpusIds.add(evidence.recordId);
+    if (totalInventoryRecords > 0 || recordIndex > 0) orderedIdHash.update("\n");
+    orderedIdHash.update(evidence.recordId);
   }
+
   assert.equal(inventory.nextStage, "semantic_classification_v3");
   assert.equal(inventory.authority.analysis, true);
   assert.equal(inventory.authority.planning, true);
@@ -72,22 +86,48 @@ for (const partitionOrdinal of [1, index.partitionPlan.partitionCount]) {
   assert.equal(inventory.authority.publicExposure, false);
   assert.equal(inventory.authority.release, false);
 
-  const serialized = JSON.stringify(inventory);
-  for (const record of partition.records.slice(0, 10)) {
-    if (typeof record.text === "string" && record.text.length > 32) {
-      assert.equal(serialized.includes(record.text), false, "inventory must not copy raw recovered text");
-    }
-    if (typeof record.context === "string" && record.context.length > 32) {
-      assert.equal(serialized.includes(record.context), false, "inventory must not copy raw recovered context");
+  if (partitionOrdinal === 1 || partitionOrdinal === index.partitionPlan.partitionCount) {
+    const serialized = JSON.stringify(inventory);
+    for (const record of partition.records.slice(0, 10)) {
+      if (typeof record.text === "string" && record.text.length > 32) {
+        assert.equal(serialized.includes(record.text), false, "inventory must not copy raw recovered text");
+      }
+      if (typeof record.context === "string" && record.context.length > 32) {
+        assert.equal(serialized.includes(record.context), false, "inventory must not copy raw recovered context");
+      }
     }
   }
+
+  if (partitionOrdinal > 1) inventoryChainHash.update("\n");
+  inventoryChainHash.update(JSON.stringify([
+    inventory.partitionOrdinal,
+    inventory.startOrdinal,
+    inventory.endOrdinal,
+    inventory.recordCount,
+    inventory.partitionEvidenceSha256,
+  ]));
+  totalInventoryRecords += inventory.recordCount;
+  expectedStartOrdinal = inventory.endOrdinal + 1;
+  if (partitionOrdinal === 1) {
+    firstPartition = partition;
+    firstInventory = inventory;
+  }
+  if (partitionOrdinal === index.partitionPlan.partitionCount) lastInventory = inventory;
 }
 
-const firstPartition = materializeVerifiedPantavionRecoveryPartition({
-  index,
-  partitionOrdinal: 1,
-  verifiedBatches: verifiedBatchesForPartition(1),
-});
+assert.ok(firstPartition);
+assert.ok(firstInventory);
+assert.ok(lastInventory);
+assert.equal(totalInventoryRecords, index.corpus.recordCount);
+assert.equal(totalInventoryRecords, 82_413);
+assert.equal(fullCorpusIds.size, index.corpus.recordCount);
+assert.equal(expectedStartOrdinal, index.corpus.recordCount + 1);
+assert.equal(orderedIdHash.digest("hex"), index.corpus.orderedIdFingerprint);
+assert.equal(firstInventory.recordCount, 500);
+assert.equal(lastInventory.recordCount, 413);
+const fullCorpusInventoryDigest = inventoryChainHash.digest("hex");
+assert.match(fullCorpusInventoryDigest, /^[a-f0-9]{64}$/);
+
 const duplicatePartition = {
   ...firstPartition,
   records: [firstPartition.records[0], firstPartition.records[0]],
@@ -163,6 +203,10 @@ assert.equal(prototypeKeyInventory.sourceFamilies.__proto__, 1);
 assert.equal(prototypeKeyInventory.seedModules.constructor, 1);
 
 console.log("Pantavion Recovery Partition Inventory contract: PASS");
+console.log(`Full-corpus inventories: ${index.partitionPlan.partitionCount} partitions / ${totalInventoryRecords} records`);
+console.log(`Full-corpus unique IDs: ${fullCorpusIds.size}`);
+console.log(`Ordered ID fingerprint: ${index.corpus.orderedIdFingerprint}`);
+console.log(`Inventory chain digest: ${fullCorpusInventoryDigest}`);
 console.log("First partition inventory: 500 records");
 console.log("Last partition inventory: 413 records");
 console.log("Raw recovered text/context copied into inventory: false");
