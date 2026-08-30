@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { enforcePantavionKernelPrivilegedMutationBoundary } from "@/core/kernel/kernel-privileged-mutation-boundary";
+
 import {
   createPantavionKernelAccessDeniedReport,
   isPantavionKernelFounderRequestAllowed,
@@ -183,6 +185,9 @@ function safeError(error: unknown) {
 }
 
 export async function POST(request: Request) {
+  const mutationBoundaryResponse = enforcePantavionKernelPrivilegedMutationBoundary(request);
+  if (mutationBoundaryResponse) return mutationBoundaryResponse;
+
   if (!(await isPantavionKernelFounderRequestAllowed(request))) return denied();
 
   try {

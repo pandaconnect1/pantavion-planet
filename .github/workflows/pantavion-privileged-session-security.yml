@@ -5,6 +5,9 @@ on:
     paths:
       - "core/security/water-admin-session.ts"
       - "core/security/privileged-request-boundary.ts"
+      - "core/kernel/kernel-privileged-mutation-boundary.ts"
+      - "app/api/kernel/**/route.ts"
+      - "scripts/pantavion-kernel-mutation-boundary-wiring-test.mjs"
       - "middleware.ts"
       - "app/api/professional/infrastructure/water/admin/session/route.ts"
       - "core/infrastructure/water/water-network-runtime-lock.json"
@@ -16,6 +19,9 @@ on:
     paths:
       - "core/security/water-admin-session.ts"
       - "core/security/privileged-request-boundary.ts"
+      - "core/kernel/kernel-privileged-mutation-boundary.ts"
+      - "app/api/kernel/**/route.ts"
+      - "scripts/pantavion-kernel-mutation-boundary-wiring-test.mjs"
       - "middleware.ts"
       - "app/api/professional/infrastructure/water/admin/session/route.ts"
       - "core/infrastructure/water/water-network-runtime-lock.json"
@@ -45,6 +51,9 @@ jobs:
 
       - name: Verify privileged mutation boundary contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-privileged-request-boundary-test.mjs
+
+      - name: Verify Founder Kernel mutation boundary wiring
+        run: node scripts/pantavion-kernel-mutation-boundary-wiring-test.mjs
 
       - name: Verify water runtime integrity lock
         run: node scripts/pantavion-water-network-runtime-lock.cjs
