@@ -5,14 +5,10 @@ import type {
   PantavionExecutionCheckpoint,
 } from "../runtime/durable-execution";
 import type { PantavionExecutionFence } from "../runtime/durable-execution-fencing";
-import {
-  createBoundedExecutionCheckpoint,
-  restoreBoundedExecutionSession,
-  verifyBoundedExecutionCheckpoint,
-  verifyBoundedExecutionSession,
-  type BoundedExecutionCheckpoint,
-  type BoundedExecutionSession,
-} from "./bounded-execution-runtime.ts";
+import type {
+  BoundedExecutionCheckpoint,
+  BoundedExecutionSession,
+} from "./bounded-execution-runtime";
 
 export const durableBoundedCheckpointLabel =
   "pantavion_bounded_execution_checkpoint_v1";
@@ -48,6 +44,36 @@ export interface DurableBoundedExecutionCheckpointStore {
     label: string,
     state?: Record<string, unknown>,
   ): Promise<PantavionDurableExecutionRecord>;
+}
+
+export interface DurableBoundedExecutionRuntime {
+  createCheckpoint(input: {
+    session: BoundedExecutionSession;
+    sequence: number;
+    fencingToken: number;
+    workerId: string;
+    observedAt: string;
+    previous?: BoundedExecutionCheckpoint;
+  }): BoundedExecutionCheckpoint;
+  restoreSession(
+    checkpoint: BoundedExecutionCheckpoint,
+    expectation: {
+      sessionId: string;
+      intentId: string;
+      agentId: string;
+      planFingerprint: string;
+      trustedCheckpointDigest: string;
+      minimumSequence: number;
+      minimumFencingToken: number;
+    },
+  ): BoundedExecutionSession;
+  verifyCheckpoint(
+    checkpoint: BoundedExecutionCheckpoint,
+    previous?: BoundedExecutionCheckpoint,
+  ): { valid: boolean; reasons: string[] };
+  verifySession(
+    session: BoundedExecutionSession,
+  ): { valid: boolean; reasons: string[] };
 }
 
 export interface PersistFencedBoundedExecutionCheckpointInput {
@@ -108,11 +134,12 @@ function requireFiniteTime(value: string, reason: string): number {
 }
 
 function verifyCheckpointSafely(
+  runtime: DurableBoundedExecutionRuntime,
   checkpoint: BoundedExecutionCheckpoint,
   previous?: BoundedExecutionCheckpoint,
 ): { valid: boolean; reasons: string[] } {
   try {
-    return verifyBoundedExecutionCheckpoint(checkpoint, previous);
+    return runtime.verifyCheckpoint(checkpoint, previous);
   } catch (error) {
     return {
       valid: false,
@@ -125,6 +152,7 @@ function verifyCheckpointSafely(
 }
 
 function parseEnvelope(
+  runtime: DurableBoundedExecutionRuntime,
   durableCheckpoint: PantavionExecutionCheckpoint,
 ): DurableBoundedExecutionCheckpointEnvelope {
   if (!durableCheckpoint.id.trim()) {
@@ -153,7 +181,7 @@ function parseEnvelope(
   }
 
   const checkpoint = state.checkpoint as unknown as BoundedExecutionCheckpoint;
-  const verification = verifyCheckpointSafely(checkpoint);
+  const verification = verifyCheckpointSafely(runtime, checkpoint);
   if (!verification.valid) {
     throw new Error(
       "durable_checkpoint_payload_invalid:" + verification.reasons.join(","),
@@ -185,6 +213,7 @@ function parseEnvelope(
 }
 
 function readPersistedCheckpointChain(
+  runtime: DurableBoundedExecutionRuntime,
   record: PantavionDurableExecutionRecord,
 ): ParsedDurableCheckpoint[] {
   const parsed: ParsedDurableCheckpoint[] = [];
@@ -194,7 +223,7 @@ function readPersistedCheckpointChain(
 
   for (const durableCheckpoint of record.checkpoints) {
     if (durableCheckpoint.label !== durableBoundedCheckpointLabel) continue;
-    const envelope = parseEnvelope(durableCheckpoint);
+    const envelope = parseEnvelope(runtime, durableCheckpoint);
     if (
       envelope.executionId !== record.executionId ||
       envelope.idempotencyKey !== record.idempotencyKey
@@ -204,7 +233,11 @@ function readPersistedCheckpointChain(
     if (operationIds.has(envelope.operationId)) {
       throw new Error("durable_checkpoint_operation_replayed");
     }
-    const verification = verifyCheckpointSafely(envelope.checkpoint, previous);
+    const verification = verifyCheckpointSafely(
+      runtime,
+      envelope.checkpoint,
+      previous,
+    );
     if (!verification.valid) {
       throw new Error(
         "durable_checkpoint_chain_invalid:" + verification.reasons.join(","),
@@ -235,6 +268,7 @@ function assertFence(fence: PantavionExecutionFence): void {
 }
 
 function assertBinding(
+  runtime: DurableBoundedExecutionRuntime,
   binding: DurableBoundedExecutionBinding,
   record: PantavionDurableExecutionRecord,
   fence: PantavionExecutionFence,
@@ -273,7 +307,7 @@ function assertBinding(
   ) {
     throw new Error("bounded_session_binding_mismatch");
   }
-  const verification = verifyBoundedExecutionSession(session);
+  const verification = runtime.verifySession(session);
   if (!verification.valid) {
     throw new Error(
       "bounded_session_invalid:" + verification.reasons.join(","),
@@ -299,11 +333,12 @@ function createEnvelope(
 }
 
 function confirmPersistedOperation(
+  runtime: DurableBoundedExecutionRuntime,
   record: PantavionDurableExecutionRecord,
   operationId: string,
   expectedDigest: string,
 ): BoundedExecutionCheckpoint {
-  const chain = readPersistedCheckpointChain(record);
+  const chain = readPersistedCheckpointChain(runtime, record);
   const persisted = chain.find(
     (candidate) => candidate.envelope.operationId === operationId,
   );
@@ -315,6 +350,7 @@ function confirmPersistedOperation(
 }
 
 export async function persistFencedBoundedExecutionCheckpoint(
+  runtime: DurableBoundedExecutionRuntime,
   store: DurableBoundedExecutionCheckpointStore,
   input: PersistFencedBoundedExecutionCheckpointInput,
 ): Promise<PersistedFencedBoundedExecutionCheckpoint> {
@@ -328,8 +364,8 @@ export async function persistFencedBoundedExecutionCheckpoint(
 
   const record = await store.get(input.binding.executionId);
   if (!record) throw new Error("durable_execution_not_found");
-  assertBinding(input.binding, record, input.fence, input.session);
-  const chain = readPersistedCheckpointChain(record);
+  assertBinding(runtime, input.binding, record, input.fence, input.session);
+  const chain = readPersistedCheckpointChain(runtime, record);
   const existing = chain.find(
     (candidate) => candidate.envelope.operationId === operationId,
   );
@@ -346,7 +382,7 @@ export async function persistFencedBoundedExecutionCheckpoint(
   }
 
   const previous = chain.at(-1)?.envelope.checkpoint;
-  const checkpoint = createBoundedExecutionCheckpoint({
+  const checkpoint = runtime.createCheckpoint({
     session: input.session,
     sequence: previous ? previous.sequence + 1 : 1,
     fencingToken: input.fence.fencingToken,
@@ -361,6 +397,7 @@ export async function persistFencedBoundedExecutionCheckpoint(
     envelope as unknown as Record<string, unknown>,
   );
   const confirmed = confirmPersistedOperation(
+    runtime,
     updated,
     operationId,
     checkpoint.checkpointDigest,
@@ -369,6 +406,7 @@ export async function persistFencedBoundedExecutionCheckpoint(
 }
 
 export async function takeoverFencedBoundedExecutionSession(
+  runtime: DurableBoundedExecutionRuntime,
   store: DurableBoundedExecutionCheckpointStore,
   input: TakeoverFencedBoundedExecutionInput,
 ): Promise<TakenOverFencedBoundedExecution> {
@@ -376,20 +414,24 @@ export async function takeoverFencedBoundedExecutionSession(
   await store.heartbeatFenced(input.fence, input.leaseMs);
   const record = await store.get(input.binding.executionId);
   if (!record) throw new Error("durable_execution_not_found");
-  const chain = readPersistedCheckpointChain(record);
+  const chain = readPersistedCheckpointChain(runtime, record);
   const previous = chain.at(-1)?.envelope.checkpoint;
   if (!previous) throw new Error("durable_bounded_checkpoint_missing");
-  assertBinding(input.binding, record, input.fence, previous.session);
+  assertBinding(runtime, input.binding, record, input.fence, previous.session);
 
-  const persisted = await persistFencedBoundedExecutionCheckpoint(store, {
-    binding: input.binding,
-    fence: input.fence,
-    operationId: input.operationId,
-    session: previous.session,
-    observedAt: input.observedAt,
-    leaseMs: input.leaseMs,
-  });
-  const session = restoreBoundedExecutionSession(persisted.checkpoint, {
+  const persisted = await persistFencedBoundedExecutionCheckpoint(
+    runtime,
+    store,
+    {
+      binding: input.binding,
+      fence: input.fence,
+      operationId: input.operationId,
+      session: previous.session,
+      observedAt: input.observedAt,
+      leaseMs: input.leaseMs,
+    },
+  );
+  const session = runtime.restoreSession(persisted.checkpoint, {
     sessionId: input.binding.sessionId,
     intentId: input.binding.intentId,
     agentId: input.binding.agentId,

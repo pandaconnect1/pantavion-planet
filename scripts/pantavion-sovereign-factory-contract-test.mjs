@@ -650,6 +650,12 @@ const durableFenceBeta = {
   ownerId: "worker_beta",
   fencingToken: 8,
 };
+const durableBoundedRuntime = {
+  createCheckpoint: createBoundedExecutionCheckpoint,
+  restoreSession: restoreBoundedExecutionSession,
+  verifyCheckpoint: verifyBoundedExecutionCheckpoint,
+  verifySession: verifyBoundedExecutionSession,
+};
 const durableBinding = {
   executionId: durableFenceAlpha.executionId,
   idempotencyKey: "factory:bounded-session-1",
@@ -663,7 +669,7 @@ const durableCheckpointStore = new DurableBoundedCheckpointTestStore(
   durableFenceAlpha,
 );
 const persistedDurableRoot =
-  await persistFencedBoundedExecutionCheckpoint(durableCheckpointStore, {
+  await persistFencedBoundedExecutionCheckpoint(durableBoundedRuntime, durableCheckpointStore, {
     binding: durableBinding,
     fence: durableFenceAlpha,
     operationId: "bounded-session-root",
@@ -680,7 +686,7 @@ assert(
   "The active durable fence must persist one founder-locked root checkpoint.",
 );
 const deduplicatedDurableRoot =
-  await persistFencedBoundedExecutionCheckpoint(durableCheckpointStore, {
+  await persistFencedBoundedExecutionCheckpoint(durableBoundedRuntime, durableCheckpointStore, {
     binding: durableBinding,
     fence: durableFenceAlpha,
     operationId: "bounded-session-root",
@@ -696,7 +702,7 @@ assert(
 );
 await expectRejects(
   () =>
-    persistFencedBoundedExecutionCheckpoint(durableCheckpointStore, {
+    persistFencedBoundedExecutionCheckpoint(durableBoundedRuntime, durableCheckpointStore, {
       binding: {
         ...durableBinding,
         idempotencyKey: "factory:different-execution",
@@ -709,7 +715,7 @@ await expectRejects(
   "A durable record with a different idempotency identity must fail closed.",
 );
 const persistedDurableCompletion =
-  await persistFencedBoundedExecutionCheckpoint(durableCheckpointStore, {
+  await persistFencedBoundedExecutionCheckpoint(durableBoundedRuntime, durableCheckpointStore, {
     binding: durableBinding,
     fence: durableFenceAlpha,
     operationId: "bounded-session-completed",
@@ -726,7 +732,7 @@ assert(
 durableCheckpointStore.takeover(durableFenceBeta);
 await expectRejects(
   () =>
-    persistFencedBoundedExecutionCheckpoint(durableCheckpointStore, {
+    persistFencedBoundedExecutionCheckpoint(durableBoundedRuntime, durableCheckpointStore, {
       binding: durableBinding,
       fence: durableFenceAlpha,
       operationId: "stale-worker-write",
@@ -736,6 +742,7 @@ await expectRejects(
   "The previous worker must lose all checkpoint authority after fenced takeover.",
 );
 const durableTakeover = await takeoverFencedBoundedExecutionSession(
+  durableBoundedRuntime,
   durableCheckpointStore,
   {
     binding: durableBinding,
@@ -756,7 +763,7 @@ assert(
   "A higher fenced worker must roll the trusted durable head forward before restoring it.",
 );
 const repeatedDurableTakeover =
-  await takeoverFencedBoundedExecutionSession(durableCheckpointStore, {
+  await takeoverFencedBoundedExecutionSession(durableBoundedRuntime, durableCheckpointStore, {
     binding: durableBinding,
     fence: durableFenceBeta,
     operationId: "worker-beta-takeover",
@@ -774,7 +781,7 @@ const tamperedDurableStore = new DurableBoundedCheckpointTestStore(
   durableBinding,
   durableFenceAlpha,
 );
-await persistFencedBoundedExecutionCheckpoint(tamperedDurableStore, {
+await persistFencedBoundedExecutionCheckpoint(durableBoundedRuntime, tamperedDurableStore, {
   binding: durableBinding,
   fence: durableFenceAlpha,
   operationId: "tamper-root",
@@ -785,7 +792,7 @@ tamperedDurableStore.tamperLatestReceipt();
 tamperedDurableStore.takeover(durableFenceBeta);
 await expectRejects(
   () =>
-    takeoverFencedBoundedExecutionSession(tamperedDurableStore, {
+    takeoverFencedBoundedExecutionSession(durableBoundedRuntime, tamperedDurableStore, {
       binding: durableBinding,
       fence: durableFenceBeta,
       operationId: "tampered-takeover",
