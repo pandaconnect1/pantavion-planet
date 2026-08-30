@@ -2,20 +2,20 @@ import fs from "node:fs";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 
-import type { PantavionDurableExecutionRecord } from "../runtime/durable-execution";
-import type { PantavionExecutionFence } from "../runtime/durable-execution-fencing";
+import type { PantavionDurableExecutionRecord } from "../runtime/durable-execution.ts";
+import type { PantavionExecutionFence } from "../runtime/durable-execution-fencing.ts";
 import {
   PANTAVION_RECOVERY_PARTITION_TASK_NAME,
   type PantavionRecoveryPartitionInput,
-} from "./pantavion-recovery-partition-scheduler";
-import { analyzePantavionRecoveryPartitionInventory } from "./pantavion-recovery-partition-inventory";
+} from "./pantavion-recovery-partition-scheduler.ts";
+import { analyzePantavionRecoveryPartitionInventory } from "./pantavion-recovery-partition-inventory.ts";
 import {
   materializeVerifiedPantavionRecoveryPartition,
   verifyPantavionRecoveryBatchPayload,
   type PantavionRecoverySourceBatchIndex,
   type PantavionVerifiedRecoveryBatch,
-} from "./pantavion-recovery-source-reader";
-import { PANTAVION_RECOVERY_CORPUS_CONTRACT } from "./pantavion-recovery-runtime-fabric";
+} from "./pantavion-recovery-source-reader.ts";
+import { PANTAVION_RECOVERY_CORPUS_CONTRACT } from "./pantavion-recovery-runtime-fabric.ts";
 
 export const PANTAVION_RECOVERY_EXECUTIONS_PER_TICK = 5;
 const PANTAVION_RECOVERY_EXECUTION_LEASE_MS = 120_000;
