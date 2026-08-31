@@ -902,6 +902,7 @@ const testedRegistryIds = [
   "recovery-founder-build-decision-receipts",
   "recovery-founder-scoped-build-capsules",
   "recovery-bounded-build-admission",
+  "recovery-bounded-step-execution",
 ];
 for (const id of testedRegistryIds) {
   const item = sovereignFactoryImplementationItems.find((candidate) => candidate.id === id);
@@ -937,6 +938,9 @@ const founderScopedBuildCapsules = sovereignFactoryImplementationItems.find(
 const boundedBuildAdmission = sovereignFactoryImplementationItems.find(
   (item) => item.id === "recovery-bounded-build-admission",
 );
+const boundedStepExecution = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-bounded-step-execution",
+);
 assert(
   semanticReceipts?.evidence?.includes("records:82413") &&
     implementationPlanning?.evidence?.includes("records:82413") &&
@@ -945,8 +949,9 @@ assert(
     sovereignReadiness?.evidence?.includes("records:82413") &&
     founderBuildDecisions?.evidence?.includes("records:82413") &&
     founderScopedBuildCapsules?.evidence?.includes("records:82413") &&
-    boundedBuildAdmission?.evidence?.includes("records:82413"),
-  "All eight current recovery surfaces must preserve the exact 82,413-record boundary.",
+    boundedBuildAdmission?.evidence?.includes("records:82413") &&
+    boundedStepExecution?.evidence?.includes("records:82413"),
+  "All nine current recovery surfaces must preserve the exact 82,413-record boundary.",
 );
 assert(
   sovereignDispatch?.evidence?.includes("canonical_build_orders:279") &&
@@ -1017,6 +1022,29 @@ assert(
   "Bounded-admission truth must cover the complete classified corpus while retaining zero real execution, repository, production and release authority.",
 );
 
+assert(
+  boundedStepExecution?.evidence?.includes("bounded_sessions:279") &&
+    boundedStepExecution?.evidence?.includes("classified_members:31779") &&
+    boundedStepExecution?.evidence?.includes("bounded_step_receipts:1674") &&
+    boundedStepExecution?.evidence?.includes("bounded_checkpoints:1953") &&
+    boundedStepExecution?.evidence?.includes("blocked_governed_hold:355") &&
+    boundedStepExecution?.evidence?.includes("blocked_recursive_provenance:50279") &&
+    boundedStepExecution?.evidence?.includes("synthetic_inputs_only:true") &&
+    boundedStepExecution?.evidence?.includes("real_founder_approvals:0") &&
+    boundedStepExecution?.evidence?.includes("real_technology_clearances:0") &&
+    boundedStepExecution?.evidence?.includes("real_agent_grants:0") &&
+    boundedStepExecution?.evidence?.includes("real_budget_grants:0") &&
+    boundedStepExecution?.evidence?.includes("real_edge_packets:0") &&
+    boundedStepExecution?.evidence?.includes("real_code_mutations:0") &&
+    boundedStepExecution?.evidence?.includes("canonical_repository_writes:0") &&
+    boundedStepExecution?.evidence?.includes("production_writes:0") &&
+    boundedStepExecution?.evidence?.includes("merge_authority:0") &&
+    boundedStepExecution?.evidence?.includes("deployment_authority:0") &&
+    boundedStepExecution?.evidence?.includes("release_authority:0") &&
+    boundedStepExecution?.evidence?.includes("lifecycle_promotions:0"),
+  "Bounded-step truth must record all synthetic receipts and checkpoints while retaining zero real mutation, production, release or lifecycle authority.",
+);
+
 const supersededReceipts = sovereignFactoryImplementationItems.find(
   (item) => item.id === "recovery-semantic-receipts-superseded",
 );
@@ -1034,7 +1062,7 @@ assert(
   productionVerification?.state === "blocked" &&
     productionVerification.blocker?.includes("PR #315") &&
     productionVerification.blocker?.includes("MERGED only") &&
-    productionVerification.blocker?.includes("PRs #363-#372") &&
+    productionVerification.blocker?.includes("PRs #363-#373") &&
     productionVerification.blocker?.includes("VERCEL_TOKEN"),
   "Production truth must distinguish merged Factory code from deployment and retain the external credential blocker.",
 );
