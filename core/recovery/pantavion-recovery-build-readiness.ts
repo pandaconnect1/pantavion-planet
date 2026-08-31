@@ -158,6 +158,10 @@ function assertSha256(label: string, value: string): void {
   if (!/^[0-9a-f]{64}$/.test(value)) throw new Error(label + "_must_be_sha256");
 }
 
+function assertGitCommitSha(label: string, value: string): void {
+  if (!/^[0-9a-f]{40}$/.test(value)) throw new Error(label + "_must_be_git_commit_sha");
+}
+
 function classifyRisk(route: PantavionRecoveryCanonicalBuildRoute): {
   level: IntentRisk;
   reasonCodes: string[];
@@ -371,9 +375,9 @@ export function createPantavionRecoveryBuildReadinessIndex(input: {
   };
   orders: readonly PantavionRecoveryBuildOrderReadinessInput[];
 }) {
-  assertSha256("recovery_readiness_parent_revision", input.source.parentRevision);
+  assertGitCommitSha("recovery_readiness_parent_revision", input.source.parentRevision);
   assertSha256("recovery_readiness_build_order_index", input.source.buildOrderIndexDigest);
-  assertSha256("recovery_readiness_dispatch_revision", input.source.dispatchRevision);
+  assertGitCommitSha("recovery_readiness_dispatch_revision", input.source.dispatchRevision);
   assertSha256(
     "recovery_readiness_dispatch_artifact",
     input.source.dispatchArtifactArchiveSha256,
