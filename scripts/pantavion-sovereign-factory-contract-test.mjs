@@ -900,6 +900,7 @@ const testedRegistryIds = [
   "recovery-founder-build-order-surface",
   "recovery-sovereign-build-readiness",
   "recovery-founder-build-decision-receipts",
+  "recovery-founder-scoped-build-capsules",
 ];
 for (const id of testedRegistryIds) {
   const item = sovereignFactoryImplementationItems.find((candidate) => candidate.id === id);
@@ -929,14 +930,18 @@ const sovereignReadiness = sovereignFactoryImplementationItems.find(
 const founderBuildDecisions = sovereignFactoryImplementationItems.find(
   (item) => item.id === "recovery-founder-build-decision-receipts",
 );
+const founderScopedBuildCapsules = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-founder-scoped-build-capsules",
+);
 assert(
   semanticReceipts?.evidence?.includes("records:82413") &&
     implementationPlanning?.evidence?.includes("records:82413") &&
     sovereignDispatch?.evidence?.includes("records:82413") &&
     founderBuildOrderSurface?.evidence?.includes("records:82413") &&
     sovereignReadiness?.evidence?.includes("records:82413") &&
-    founderBuildDecisions?.evidence?.includes("records:82413"),
-  "All six current recovery surfaces must preserve the exact 82,413-record boundary.",
+    founderBuildDecisions?.evidence?.includes("records:82413") &&
+    founderScopedBuildCapsules?.evidence?.includes("records:82413"),
+  "All seven current recovery surfaces must preserve the exact 82,413-record boundary.",
 );
 assert(
   sovereignDispatch?.evidence?.includes("canonical_build_orders:279") &&
@@ -965,6 +970,25 @@ assert(
     founderBuildDecisions?.evidence?.includes("migration:authored_not_applied"),
   "Founder decision truth must bind all 279 readiness packets without implying runtime or production authority.",
 );
+assert(
+  founderScopedBuildCapsules?.evidence?.includes("scoped_build_capsules:279") &&
+    founderScopedBuildCapsules?.evidence?.includes("classified_members:31779") &&
+    founderScopedBuildCapsules?.evidence?.includes("blocked_governed_hold:355") &&
+    founderScopedBuildCapsules?.evidence?.includes("blocked_recursive_provenance:50279") &&
+    founderScopedBuildCapsules?.evidence?.includes("synthetic_receipts_only:true") &&
+    founderScopedBuildCapsules?.evidence?.includes("founder_approvals:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("technology_hold:279") &&
+    founderScopedBuildCapsules?.evidence?.includes("agent_grants:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("budget_grants:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("executions:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("network_access:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("secrets_access:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("production_writes:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("merge_authority:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("deployment_authority:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("release_authority:0"),
+  "Scoped-build capsule truth must preserve the complete corpus and every Founder, Technology, agent, network, secret, production and release gate.",
+);
 
 const supersededReceipts = sovereignFactoryImplementationItems.find(
   (item) => item.id === "recovery-semantic-receipts-superseded",
@@ -983,7 +1007,7 @@ assert(
   productionVerification?.state === "blocked" &&
     productionVerification.blocker?.includes("PR #315") &&
     productionVerification.blocker?.includes("MERGED only") &&
-    productionVerification.blocker?.includes("PRs #363-#370") &&
+    productionVerification.blocker?.includes("PRs #363-#371") &&
     productionVerification.blocker?.includes("VERCEL_TOKEN"),
   "Production truth must distinguish merged Factory code from deployment and retain the external credential blocker.",
 );
