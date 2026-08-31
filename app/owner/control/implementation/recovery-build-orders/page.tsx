@@ -5,6 +5,9 @@ import buildOrderIndex from "@/data/recovery/sovereign-build-order-index-v1.json
 import buildReadinessIndex from "@/data/recovery/sovereign-build-readiness-index-v1.json";
 import { requireFounderIdentity } from "@/lib/owner-control/decision-queue";
 import { createClient } from "@/lib/supabase/server";
+import RecoveryBuildOrderDecisionPanel, {
+  type RecoveryBuildDecisionOption,
+} from "./recovery-build-order-decision-panel";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -45,6 +48,14 @@ export default async function OwnerRecoveryBuildOrdersPage() {
         if (!readiness) throw new Error("missing_recovery_build_readiness_packet");
         return { ...order, readiness };
       }),
+  }));
+  const decisionOptions: RecoveryBuildDecisionOption[] = buildReadinessIndex.packets.map((packet) => ({
+    buildOrderOrdinal: packet.buildOrderOrdinal,
+    buildOrderId: packet.buildOrderId,
+    readinessDigest: packet.readinessDigest,
+    label: `${packet.route.module} · ${packet.route.subsystem} · ${packet.route.capability}`,
+    riskLevel: packet.risk.level as RecoveryBuildDecisionOption["riskLevel"],
+    dataClasses: packet.data.classes,
   }));
 
   return (
@@ -122,6 +133,8 @@ export default async function OwnerRecoveryBuildOrdersPage() {
         <div className="mt-5 rounded-2xl border border-rose-900/70 bg-rose-950/20 p-4 text-sm leading-6 text-rose-200">
           Authority remains fail-closed: code mutation, execution, production writes, merge, deployment, public exposure and release are all false. This page is evidence and review only.
         </div>
+
+        <RecoveryBuildOrderDecisionPanel options={decisionOptions} />
 
         <section className="mt-6 space-y-3">
           {moduleGroups.map((group) => (
