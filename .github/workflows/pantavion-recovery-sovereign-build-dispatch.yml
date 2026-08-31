@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "core/recovery/pantavion-recovery-sovereign-build-dispatch.ts"
+      - "core/recovery/pantavion-recovery-build-readiness.ts"
       - "core/recovery/pantavion-recovery-runtime-fabric.ts"
       - "core/sovereign/intent-to-outcome-fabric.ts"
       - "core/sovereign/intent-firewall.ts"
@@ -13,7 +14,9 @@ on:
       - "core/sovereign/technology-library.ts"
       - "scripts/pantavion-recovery-sovereign-build-dispatch.mjs"
       - "scripts/pantavion-owner-build-order-surface-test.mjs"
+      - "scripts/pantavion-recovery-build-readiness-test.mjs"
       - "data/recovery/sovereign-build-order-index-v1.json"
+      - "data/recovery/sovereign-build-readiness-index-v1.json"
       - "app/owner/control/implementation/page.tsx"
       - "app/owner/control/implementation/recovery-build-orders/page.tsx"
       - "scripts/pantavion-recovery-runtime-fabric-materialize.mjs"
@@ -113,6 +116,9 @@ jobs:
           if (manifest.completion !== false) throw new Error('dispatch_completion_must_remain_false');
           NODE
 
+      - name: Verify deterministic build readiness for all canonical orders
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-recovery-build-readiness-test.mjs
+
       - name: Verify founder-only build-order surface
         run: node scripts/pantavion-owner-build-order-surface-test.mjs
 
@@ -140,5 +146,6 @@ jobs:
             data/recovery/sovereign-build-dispatch-v1/manifest.json
             data/recovery/sovereign-build-dispatch-v1/dispatch-ledger.ndjson
             data/recovery/sovereign-build-dispatch-v1/sovereign-build-orders.ndjson
+            data/recovery/sovereign-build-readiness-index-v1.json
           if-no-files-found: error
           retention-days: 30
