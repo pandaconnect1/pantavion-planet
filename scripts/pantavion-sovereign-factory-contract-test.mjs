@@ -897,6 +897,8 @@ const testedRegistryIds = [
   "recovery-partition-semantic-receipts",
   "recovery-implementation-planning",
   "recovery-sovereign-build-dispatch",
+  "recovery-founder-build-order-surface",
+  "recovery-sovereign-build-readiness",
 ];
 for (const id of testedRegistryIds) {
   const item = sovereignFactoryImplementationItems.find((candidate) => candidate.id === id);
@@ -917,17 +919,38 @@ const implementationPlanning = sovereignFactoryImplementationItems.find(
 const sovereignDispatch = sovereignFactoryImplementationItems.find(
   (item) => item.id === "recovery-sovereign-build-dispatch",
 );
+const founderBuildOrderSurface = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-founder-build-order-surface",
+);
+const sovereignReadiness = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-sovereign-build-readiness",
+);
 assert(
   semanticReceipts?.evidence?.includes("records:82413") &&
     implementationPlanning?.evidence?.includes("records:82413") &&
-    sovereignDispatch?.evidence?.includes("records:82413"),
-  "All three current recovery surfaces must preserve the exact 82,413-record boundary.",
+    sovereignDispatch?.evidence?.includes("records:82413") &&
+    founderBuildOrderSurface?.evidence?.includes("records:82413") &&
+    sovereignReadiness?.evidence?.includes("records:82413"),
+  "All five current recovery surfaces must preserve the exact 82,413-record boundary.",
 );
 assert(
   sovereignDispatch?.evidence?.includes("canonical_build_orders:279") &&
     sovereignDispatch?.evidence?.includes("awaiting_owner:279") &&
     sovereignDispatch?.evidence?.includes("execution_ready:0"),
   "Sovereign dispatch truth must expose all 279 owner-gated orders and zero execution authority.",
+);
+assert(
+  founderBuildOrderSurface?.evidence?.includes("canonical_build_orders:279") &&
+    founderBuildOrderSurface?.evidence?.includes("visibility:founder_only_aal2") &&
+    founderBuildOrderSurface?.evidence?.includes("execution_ready:0"),
+  "Founder build-order truth must expose all orders under AAL2 without execution authority.",
+);
+assert(
+  sovereignReadiness?.evidence?.includes("readiness_packets:279") &&
+    sovereignReadiness?.evidence?.includes("technology_hold:279") &&
+    sovereignReadiness?.evidence?.includes("agent_grants:0") &&
+    sovereignReadiness?.evidence?.includes("edge_eligible:0"),
+  "Readiness truth must expose every packet and preserve all Technology, agent and edge gates.",
 );
 
 const supersededReceipts = sovereignFactoryImplementationItems.find(
@@ -947,6 +970,7 @@ assert(
   productionVerification?.state === "blocked" &&
     productionVerification.blocker?.includes("PR #315") &&
     productionVerification.blocker?.includes("MERGED only") &&
+    productionVerification.blocker?.includes("PRs #363-#369") &&
     productionVerification.blocker?.includes("VERCEL_TOKEN"),
   "Production truth must distinguish merged Factory code from deployment and retain the external credential blocker.",
 );
