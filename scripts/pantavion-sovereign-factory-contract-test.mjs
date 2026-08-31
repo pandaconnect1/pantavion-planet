@@ -899,6 +899,7 @@ const testedRegistryIds = [
   "recovery-sovereign-build-dispatch",
   "recovery-founder-build-order-surface",
   "recovery-sovereign-build-readiness",
+  "recovery-founder-build-decision-receipts",
 ];
 for (const id of testedRegistryIds) {
   const item = sovereignFactoryImplementationItems.find((candidate) => candidate.id === id);
@@ -925,13 +926,17 @@ const founderBuildOrderSurface = sovereignFactoryImplementationItems.find(
 const sovereignReadiness = sovereignFactoryImplementationItems.find(
   (item) => item.id === "recovery-sovereign-build-readiness",
 );
+const founderBuildDecisions = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-founder-build-decision-receipts",
+);
 assert(
   semanticReceipts?.evidence?.includes("records:82413") &&
     implementationPlanning?.evidence?.includes("records:82413") &&
     sovereignDispatch?.evidence?.includes("records:82413") &&
     founderBuildOrderSurface?.evidence?.includes("records:82413") &&
-    sovereignReadiness?.evidence?.includes("records:82413"),
-  "All five current recovery surfaces must preserve the exact 82,413-record boundary.",
+    sovereignReadiness?.evidence?.includes("records:82413") &&
+    founderBuildDecisions?.evidence?.includes("records:82413"),
+  "All six current recovery surfaces must preserve the exact 82,413-record boundary.",
 );
 assert(
   sovereignDispatch?.evidence?.includes("canonical_build_orders:279") &&
@@ -952,6 +957,14 @@ assert(
     sovereignReadiness?.evidence?.includes("edge_eligible:0"),
   "Readiness truth must expose every packet and preserve all Technology, agent and edge gates.",
 );
+assert(
+  founderBuildDecisions?.evidence?.includes("decision_sources:279") &&
+    founderBuildDecisions?.evidence?.includes("visibility:founder_only_aal2") &&
+    founderBuildDecisions?.evidence?.includes("same_origin_post:true") &&
+    founderBuildDecisions?.evidence?.includes("execution_authority:0") &&
+    founderBuildDecisions?.evidence?.includes("migration:authored_not_applied"),
+  "Founder decision truth must bind all 279 readiness packets without implying runtime or production authority.",
+);
 
 const supersededReceipts = sovereignFactoryImplementationItems.find(
   (item) => item.id === "recovery-semantic-receipts-superseded",
@@ -970,7 +983,7 @@ assert(
   productionVerification?.state === "blocked" &&
     productionVerification.blocker?.includes("PR #315") &&
     productionVerification.blocker?.includes("MERGED only") &&
-    productionVerification.blocker?.includes("PRs #363-#369") &&
+    productionVerification.blocker?.includes("PRs #363-#370") &&
     productionVerification.blocker?.includes("VERCEL_TOKEN"),
   "Production truth must distinguish merged Factory code from deployment and retain the external credential blocker.",
 );
