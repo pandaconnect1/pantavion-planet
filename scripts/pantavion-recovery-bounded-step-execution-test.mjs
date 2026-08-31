@@ -18,6 +18,10 @@ import {
   createPantavionRecoveryStepEvidenceBytes,
   verifyPantavionRecoveryBoundedExecution,
 } from "../core/recovery/pantavion-recovery-bounded-step-execution.ts";
+import {
+  createPantavionRecoveryImplementationReviewPacket,
+  verifyPantavionRecoveryImplementationReviewPacket,
+} from "../core/recovery/pantavion-recovery-implementation-review.ts";
 import { createRecoveryBuildOwnerDecisionReceipt } from "../core/recovery/pantavion-recovery-owner-decision.ts";
 import { createPantavionRecoveryScopedBuildCapsule } from "../core/recovery/pantavion-recovery-scoped-build-capsule.ts";
 
@@ -231,15 +235,38 @@ function executeFixture(fixture) {
 
 const fixtures = [];
 const executions = [];
+const reviewPackets = [];
 let previousCapsuleDigest = null;
 let previousAdmissionDigest = null;
+let previousReviewPacketDigest = null;
 for (const [offset, packet] of readinessIndex.packets.entries()) {
   const fixture = createFixture(packet, offset, previousCapsuleDigest, previousAdmissionDigest);
   const execution = executeFixture(fixture);
+  const finalObservedAt = at(fixture.epoch, 14 * 60 * 1000);
+  const finalMaterial = stepMaterial(fixture, "exact_revision_evidence");
+  const finalEvidenceBytes = createPantavionRecoveryStepEvidenceBytes({
+    admission: fixture.admission,
+    stepId: "exact_revision_evidence",
+    origin: "synthetic_test_only",
+    observedAt: finalObservedAt,
+    ...finalMaterial,
+  });
+  const reviewPacket = createPantavionRecoveryImplementationReviewPacket({
+    execution,
+    admission: fixture.admission,
+    readinessPacket: packet,
+    finalEvidenceBytes,
+    finalArtifactBytes: finalMaterial.artifactBytes,
+    finalRollbackBytes: finalMaterial.rollbackBytes,
+    previousReviewPacketDigest,
+    observedAt: at(fixture.epoch, 15 * 60 * 1000),
+  });
   fixtures.push(fixture);
   executions.push(execution);
+  reviewPackets.push(reviewPacket);
   previousCapsuleDigest = fixture.capsule.capsuleDigest;
   previousAdmissionDigest = fixture.admission.admissionDigest;
+  previousReviewPacketDigest = reviewPacket.packetDigest;
 }
 
 assert.equal(executions.length, 279);
@@ -248,6 +275,9 @@ assert.equal(readinessIndex.corpus.governedHoldCount + readinessIndex.corpus.rec
 assert.equal(new Set(executions.map((execution) => execution.executionDigest)).size, 279);
 assert.equal(executions.reduce((sum, execution) => sum + execution.session.receipts.length, 0), 1674);
 assert.equal(executions.reduce((sum, execution) => sum + execution.checkpoints.length, 0), 1953);
+assert.equal(reviewPackets.length, 279);
+assert.equal(new Set(reviewPackets.map((packet) => packet.packetDigest)).size, 279);
+assert.equal(reviewPackets.reduce((sum, packet) => sum + packet.corpus.memberCount, 0), 31779);
 for (const execution of executions) {
   assert.equal(execution.status, "bounded_protocol_complete");
   assert.equal(execution.session.state, "completed");
@@ -267,9 +297,62 @@ for (const execution of executions) {
   assert.equal(execution.authority.lifecyclePromotion, false);
   assert.equal(execution.completion, false);
 }
+for (const [index, packet] of reviewPackets.entries()) {
+  const finalMaterial = stepMaterial(fixtures[index], "exact_revision_evidence");
+  const finalEvidenceBytes = createPantavionRecoveryStepEvidenceBytes({
+    admission: fixtures[index].admission,
+    stepId: "exact_revision_evidence",
+    origin: "synthetic_test_only",
+    observedAt: at(fixtures[index].epoch, 14 * 60 * 1000),
+    ...finalMaterial,
+  });
+  assert.equal(packet.status, "synthetic_rehearsal");
+  assert.equal(packet.protocol.receiptCount, 6);
+  assert.equal(packet.protocol.checkpointCount, 7);
+  assert.equal(packet.evidence.origin, "synthetic_test_only");
+  assert.equal(packet.evidence.syntheticOnly, true);
+  assert.equal(packet.evidence.realWorkspaceEvidence, false);
+  assert.equal(packet.review.currentLifecycleState, "IDEA");
+  assert.equal(packet.review.requestedLifecycleState, "CODED");
+  assert.equal(packet.review.founderAal2Required, true);
+  assert.equal(packet.review.founderDecisionRecorded, false);
+  assert.equal(packet.review.readyForLifecyclePromotion, false);
+  assert.equal(packet.review.blockers.includes("synthetic_inputs_not_external_evidence"), true);
+  assert.equal(packet.authority.canonicalRepositoryWrite, false);
+  assert.equal(packet.authority.productionWrite, false);
+  assert.equal(packet.authority.merge, false);
+  assert.equal(packet.authority.deployment, false);
+  assert.equal(packet.authority.release, false);
+  assert.equal(packet.authority.lifecyclePromotion, false);
+  assert.equal(packet.completion, false);
+  assert.equal(
+    packet.previousReviewPacketDigest,
+    index === 0 ? null : reviewPackets[index - 1].packetDigest,
+  );
+  assert.equal(verifyPantavionRecoveryImplementationReviewPacket({
+    packet,
+    execution: executions[index],
+    admission: fixtures[index].admission,
+    readinessPacket: fixtures[index].packet,
+    finalEvidenceBytes,
+    finalArtifactBytes: finalMaterial.artifactBytes,
+    finalRollbackBytes: finalMaterial.rollbackBytes,
+    observedAt: at(fixtures[index].epoch, 15 * 60 * 1000),
+  }), true);
+}
 
 const first = fixtures[0];
 const firstStart = at(first.epoch, 8 * 60 * 1000);
+const firstFinalObservedAt = at(first.epoch, 14 * 60 * 1000);
+const firstReviewObservedAt = at(first.epoch, 15 * 60 * 1000);
+const firstFinalMaterial = stepMaterial(first, "exact_revision_evidence");
+const firstFinalEvidence = createPantavionRecoveryStepEvidenceBytes({
+  admission: first.admission,
+  stepId: "exact_revision_evidence",
+  origin: "synthetic_test_only",
+  observedAt: firstFinalObservedAt,
+  ...firstFinalMaterial,
+});
 assert.throws(
   () => beginPantavionRecoveryBoundedExecution({
     admission: first.admission,
@@ -321,6 +404,123 @@ assert.throws(
   }),
   /admission_invalid_or_expired/,
 );
+
+const incompleteReviewExecution = beginPantavionRecoveryBoundedExecution({
+  admission: first.admission,
+  edgePacket: first.edgePacket,
+  edgePolicy: first.edgePolicy,
+  consumedEdgeDigests: new Set(),
+  workerId: "incomplete_review_worker",
+  fencingToken: 2,
+  observedAt: firstStart,
+});
+assert.throws(
+  () => createPantavionRecoveryImplementationReviewPacket({
+    execution: incompleteReviewExecution,
+    admission: first.admission,
+    readinessPacket: first.packet,
+    finalEvidenceBytes: firstFinalEvidence,
+    finalArtifactBytes: firstFinalMaterial.artifactBytes,
+    finalRollbackBytes: firstFinalMaterial.rollbackBytes,
+    previousReviewPacketDigest: null,
+    observedAt: firstReviewObservedAt,
+  }),
+  /protocol_incomplete/,
+);
+assert.throws(
+  () => createPantavionRecoveryImplementationReviewPacket({
+    execution: executions[0],
+    admission: first.admission,
+    readinessPacket: first.packet,
+    finalEvidenceBytes: Buffer.concat([firstFinalEvidence, Buffer.from(" ")]),
+    finalArtifactBytes: firstFinalMaterial.artifactBytes,
+    finalRollbackBytes: firstFinalMaterial.rollbackBytes,
+    previousReviewPacketDigest: null,
+    observedAt: firstReviewObservedAt,
+  }),
+  /not_canonical/,
+);
+assert.throws(
+  () => createPantavionRecoveryImplementationReviewPacket({
+    execution: executions[0],
+    admission: first.admission,
+    readinessPacket: first.packet,
+    finalEvidenceBytes: firstFinalEvidence,
+    finalArtifactBytes: Buffer.from("tampered-review-artifact"),
+    finalRollbackBytes: firstFinalMaterial.rollbackBytes,
+    previousReviewPacketDigest: null,
+    observedAt: firstReviewObservedAt,
+  }),
+  /binding_invalid/,
+);
+const second = fixtures[1];
+const secondFinalMaterial = stepMaterial(second, "exact_revision_evidence");
+const secondFinalEvidence = createPantavionRecoveryStepEvidenceBytes({
+  admission: second.admission,
+  stepId: "exact_revision_evidence",
+  origin: "synthetic_test_only",
+  observedAt: at(second.epoch, 14 * 60 * 1000),
+  ...secondFinalMaterial,
+});
+assert.throws(
+  () => createPantavionRecoveryImplementationReviewPacket({
+    execution: executions[1],
+    admission: second.admission,
+    readinessPacket: second.packet,
+    finalEvidenceBytes: secondFinalEvidence,
+    finalArtifactBytes: secondFinalMaterial.artifactBytes,
+    finalRollbackBytes: secondFinalMaterial.rollbackBytes,
+    previousReviewPacketDigest: null,
+    observedAt: at(second.epoch, 15 * 60 * 1000),
+  }),
+  /previous_digest_required/,
+);
+assert.equal(verifyPantavionRecoveryImplementationReviewPacket({
+  packet: {
+    ...reviewPackets[0],
+    authority: { ...reviewPackets[0].authority, lifecyclePromotion: true },
+  },
+  execution: executions[0],
+  admission: first.admission,
+  readinessPacket: first.packet,
+  finalEvidenceBytes: firstFinalEvidence,
+  finalArtifactBytes: firstFinalMaterial.artifactBytes,
+  finalRollbackBytes: firstFinalMaterial.rollbackBytes,
+  observedAt: firstReviewObservedAt,
+}), false);
+assert.equal(verifyPantavionRecoveryImplementationReviewPacket({
+  packet: { ...reviewPackets[0], status: "external_attestation_required" },
+  execution: executions[0],
+  admission: first.admission,
+  readinessPacket: first.packet,
+  finalEvidenceBytes: firstFinalEvidence,
+  finalArtifactBytes: firstFinalMaterial.artifactBytes,
+  finalRollbackBytes: firstFinalMaterial.rollbackBytes,
+  observedAt: firstReviewObservedAt,
+}), false);
+assert.equal(verifyPantavionRecoveryImplementationReviewPacket({
+  packet: reviewPackets[0],
+  execution: executions[0],
+  admission: first.admission,
+  readinessPacket: first.packet,
+  finalEvidenceBytes: firstFinalEvidence,
+  finalArtifactBytes: Buffer.from("tampered-verifier-artifact"),
+  finalRollbackBytes: firstFinalMaterial.rollbackBytes,
+  observedAt: firstReviewObservedAt,
+}), false);
+assert.equal(verifyPantavionRecoveryImplementationReviewPacket({
+  packet: reviewPackets[0],
+  execution: executions[0],
+  admission: first.admission,
+  readinessPacket: {
+    ...first.packet,
+    membership: { ...first.packet.membership, memberCount: first.packet.membership.memberCount + 1 },
+  },
+  finalEvidenceBytes: firstFinalEvidence,
+  finalArtifactBytes: firstFinalMaterial.artifactBytes,
+  finalRollbackBytes: firstFinalMaterial.rollbackBytes,
+  observedAt: firstReviewObservedAt,
+}), false);
 
 let partial = beginPantavionRecoveryBoundedExecution({
   admission: first.admission,
@@ -438,5 +638,7 @@ console.log("PANTAVION RECOVERY BOUNDED STEP EXECUTION: PASSED");
 console.log("- 279/279 bounded admission sessions exercised through the complete six-step DAG");
 console.log("- all 31,779 classified members covered; 355 governed HOLD and 50,279 provenance records preserved outside execution");
 console.log("- 1,674 byte-derived step receipts and 1,953 chained checkpoints verified in synthetic in-memory protocol tests");
+console.log("- 279 chained implementation-review packets bind every session to its exact isolated revision and corpus membership");
+console.log("- synthetic evidence remains rehearsal-only and cannot request or record a CODED lifecycle promotion");
 console.log("- edge replay, dependency order, evidence bytes, rollback, budget, fencing and lifecycle boundaries fail closed");
 console.log("- 0 real approvals, agents, grants, code mutations, repository writes, production writes, merges, deployments or lifecycle promotions occurred");
