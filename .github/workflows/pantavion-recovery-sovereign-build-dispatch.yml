@@ -7,6 +7,7 @@ on:
       - "core/recovery/pantavion-recovery-build-readiness.ts"
       - "core/recovery/pantavion-recovery-owner-decision.ts"
       - "core/recovery/pantavion-recovery-scoped-build-capsule.ts"
+      - "core/recovery/pantavion-recovery-build-admission.ts"
       - "core/recovery/pantavion-recovery-runtime-fabric.ts"
       - "core/sovereign/intent-to-outcome-fabric.ts"
       - "core/sovereign/intent-firewall.ts"
@@ -19,6 +20,7 @@ on:
       - "scripts/pantavion-recovery-build-readiness-test.mjs"
       - "scripts/pantavion-recovery-owner-decision-test.mjs"
       - "scripts/pantavion-recovery-scoped-build-capsule-test.mjs"
+      - "scripts/pantavion-recovery-build-admission-test.mjs"
       - "lib/owner-control/decision-queue.ts"
       - "lib/owner-control/assurance.ts"
       - "lib/owner-control/request-security.ts"
@@ -136,6 +138,9 @@ jobs:
 
       - name: Verify scoped build capsules across all canonical orders
         run: npm run test:recovery-scoped-build-capsule
+
+      - name: Verify bounded Pantavion admission across all scoped capsules
+        run: npm run test:recovery-build-admission
 
       - name: Verify founder-only build-order surface
         run: node scripts/pantavion-owner-build-order-surface-test.mjs
