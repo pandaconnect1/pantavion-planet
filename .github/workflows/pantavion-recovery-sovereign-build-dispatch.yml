@@ -12,6 +12,10 @@ on:
       - "core/sovereign/ephemeral-agent-swarm.ts"
       - "core/sovereign/technology-library.ts"
       - "scripts/pantavion-recovery-sovereign-build-dispatch.mjs"
+      - "scripts/pantavion-owner-build-order-surface-test.mjs"
+      - "data/recovery/sovereign-build-order-index-v1.json"
+      - "app/owner/control/implementation/page.tsx"
+      - "app/owner/control/implementation/recovery-build-orders/page.tsx"
       - "scripts/pantavion-recovery-runtime-fabric-materialize.mjs"
       - "scripts/pantavion-canonical-semantic-classification-v3.cjs"
       - "data/recovery/recovery-runtime-fabric-v1.json"
@@ -108,6 +112,9 @@ jobs:
           if (manifest.sovereignBuildDispatchLifecycleState !== 'CODED') throw new Error('dispatch_lifecycle_mismatch');
           if (manifest.completion !== false) throw new Error('dispatch_completion_must_remain_false');
           NODE
+
+      - name: Verify founder-only build-order surface
+        run: node scripts/pantavion-owner-build-order-surface-test.mjs
 
       - name: TypeScript verification
         run: npm run typecheck
