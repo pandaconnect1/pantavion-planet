@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import buildOrderIndex from "@/data/recovery/sovereign-build-order-index-v1.json";
+import buildReadinessIndex from "@/data/recovery/sovereign-build-readiness-index-v1.json";
 import { requireFounderIdentity } from "@/lib/owner-control/decision-queue";
 import { createClient } from "@/lib/supabase/server";
 
@@ -30,9 +31,20 @@ export default async function OwnerRecoveryBuildOrdersPage() {
     redirect("/owner/safety/verify?next=/owner/control/implementation/recovery-build-orders");
   }
 
+  const readinessByOrderId = new Map<
+    string,
+    (typeof buildReadinessIndex.packets)[number]
+  >(buildReadinessIndex.packets.map((packet) => [packet.buildOrderId, packet]));
+
   const moduleGroups = buildOrderIndex.moduleSummary.map((summary) => ({
     ...summary,
-    orders: buildOrderIndex.orders.filter((order) => order.route.module === summary.module),
+    orders: buildOrderIndex.orders
+      .filter((order) => order.route.module === summary.module)
+      .map((order) => {
+        const readiness = readinessByOrderId.get(order.buildOrderId);
+        if (!readiness) throw new Error("missing_recovery_build_readiness_packet");
+        return { ...order, readiness };
+      }),
   }));
 
   return (
@@ -63,6 +75,23 @@ export default async function OwnerRecoveryBuildOrdersPage() {
             <article key={label} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
               <div className="text-xs uppercase tracking-wider text-slate-500">{label}</div>
               <div className="mt-2 text-2xl font-semibold text-slate-100">
+                {Number(value).toLocaleString()}
+              </div>
+            </article>
+          ))}
+        </section>
+
+        <section className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {[
+            ["Critical risk orders", buildReadinessIndex.totals.riskCounts.critical ?? 0],
+            ["High risk orders", buildReadinessIndex.totals.riskCounts.high ?? 0],
+            ["Technology HOLD", buildReadinessIndex.totals.technologyHoldCount],
+            ["Edge eligible", buildReadinessIndex.totals.edgeEligibleCount],
+            ["Agent grants", buildReadinessIndex.totals.agentGrantIssuedCount],
+          ].map(([label, value]) => (
+            <article key={label} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+              <div className="text-xs uppercase tracking-wider text-slate-500">{label}</div>
+              <div className="mt-2 text-xl font-semibold text-slate-100">
                 {Number(value).toLocaleString()}
               </div>
             </article>
@@ -150,9 +179,30 @@ export default async function OwnerRecoveryBuildOrdersPage() {
                         </div>
                         <div>
                           <dt className="text-slate-600">Technology readiness</dt>
-                          <dd className="mt-1 uppercase">{order.technologyReadiness}</dd>
+                          <dd className="mt-1 uppercase">{order.readiness.technology.assessment.readiness}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-slate-600">Risk / data class</dt>
+                          <dd className="mt-1 uppercase">
+                            {order.readiness.risk.level} · {order.readiness.data.classes.join(", ")}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt className="text-slate-600">Ephemeral agent request</dt>
+                          <dd className="mt-1 uppercase">
+                            {order.readiness.agent.primaryRole} · budget {order.readiness.agent.requestedBudgetLimit}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt className="text-slate-600">Disconnected / edge</dt>
+                          <dd className="mt-1 uppercase">
+                            {order.readiness.disconnectedEdge.disposition} · {order.readiness.disconnectedEdge.networkPolicy.replaceAll("_", " ")}
+                          </dd>
                         </div>
                       </dl>
+                      <div className="mt-3 rounded-lg border border-amber-950 bg-amber-950/20 p-3 text-xs leading-5 text-amber-200">
+                        Technology blockers: {order.readiness.technology.assessment.blockers.join(" · ")}
+                      </div>
                     </article>
                   ))}
                 </div>
@@ -164,7 +214,9 @@ export default async function OwnerRecoveryBuildOrdersPage() {
         <section className="mt-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-xs leading-6 text-slate-400">
           <div>Exact dispatch revision: {buildOrderIndex.source.headRevision}</div>
           <div>Artifact: {buildOrderIndex.source.artifactId} · SHA-256 {buildOrderIndex.source.artifactArchiveSha256}</div>
-          <div>Index digest: {buildOrderIndex.indexDigest}</div>
+          <div>Build-order index digest: {buildOrderIndex.indexDigest}</div>
+          <div>Readiness index digest: {buildReadinessIndex.indexDigest}</div>
+          <div>Readiness terminal receipt: {buildReadinessIndex.terminalReadinessDigest}</div>
           <div className="mt-2">
             Founder identity and AAL2 MFA are checked server-side on every request. Review does not create an approval, grant or execution receipt.
           </div>
