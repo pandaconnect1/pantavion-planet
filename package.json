@@ -48,6 +48,7 @@
     "test:foundry-contract": "node --no-warnings --experimental-strip-types scripts/pantavion-foundry-contract-test.mjs",
     "test:recovery-runtime-fabric": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-runtime-fabric-contract-test.mjs",
     "test:recovery-fenced-executor": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-fenced-executor-test.mjs",
+    "test:recovery-owner-decision": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-owner-decision-test.mjs",
     "test:scheduled-run-key": "node --no-warnings --experimental-strip-types scripts/pantavion-scheduled-run-key-test.mjs",
     "test:internal-scheduler-redundancy": "node --no-warnings scripts/pantavion-internal-scheduler-redundancy-test.mjs",
     "materialize:recovery-runtime-fabric": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-runtime-fabric-materialize.mjs",
