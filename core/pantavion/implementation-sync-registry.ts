@@ -267,80 +267,6 @@ export function synchronizeImplementationItems(
   );
 }
 
-const codedAt = "2026-08-27T20:45:00.000Z";
-const testedAt = "2026-08-29T23:09:32.000Z";
-const branch = "feature/sovereign-technology-factory-foundation";
-const sovereignContractRun =
-  "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33280225764";
-const sovereignKernelIntegrationRun =
-  "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33280225764";
-const sovereignKernelTestedAt = "2026-08-29T23:09:32.000Z";
-
-function codedItem(
-  id: string,
-  title: string,
-  domain: string,
-  source: string,
-): ImplementationSyncItem {
-  return {
-    id,
-    title,
-    domain,
-    state: "coded",
-    source,
-    branch,
-    pr: 315,
-    evidenceRecords: [{ kind: "code", reference: source, recordedAt: codedAt }],
-    updatedAt: codedAt,
-  };
-}
-
-function testedItem(
-  id: string,
-  title: string,
-  domain: string,
-  source: string,
-): ImplementationSyncItem {
-  const coded = codedItem(id, title, domain, source);
-  return {
-    ...coded,
-    state: "tested",
-    evidenceRecords: [
-      ...(coded.evidenceRecords ?? []),
-      {
-        kind: "test",
-        reference: sovereignContractRun,
-        recordedAt: testedAt,
-        revision: "53e04cc0e222fd6651c5559fca85f50791780d95",
-      },
-    ],
-    updatedAt: testedAt,
-  };
-}
-
-function testedKernelItem(): ImplementationSyncItem {
-  const coded = codedItem(
-    "sovereign-capability-kernel",
-    "Sovereign Capability Kernel",
-    "kernel",
-    "core/sovereign/sovereign-capability-kernel.ts",
-  );
-  return {
-    ...coded,
-    state: "tested",
-    evidenceRecords: [
-      ...(coded.evidenceRecords ?? []),
-      {
-        kind: "test",
-        reference: sovereignKernelIntegrationRun,
-        recordedAt: sovereignKernelTestedAt,
-        revision: "53e04cc0e222fd6651c5559fca85f50791780d95",
-      },
-    ],
-    updatedAt: sovereignKernelTestedAt,
-  };
-}
-
 type MergedMainItemInput = {
   id: string;
   title: string;
@@ -385,6 +311,77 @@ function mergedMainItem(input: MergedMainItemInput): ImplementationSyncItem {
     ],
     updatedAt: input.mergedAt,
   };
+}
+
+type TestedPullRequestItemInput = {
+  id: string;
+  title: string;
+  domain: string;
+  source: string;
+  branch: string;
+  pr: number;
+  headRevision: string;
+  testRun: string;
+  testedAt: string;
+  auditReference?: string;
+  evidence?: string[];
+};
+
+function testedPullRequestItem(input: TestedPullRequestItemInput): ImplementationSyncItem {
+  const evidenceRecords: ImplementationEvidence[] = [
+    {
+      kind: "code",
+      reference: input.source,
+      recordedAt: input.testedAt,
+      revision: input.headRevision,
+    },
+    {
+      kind: "test",
+      reference: input.testRun,
+      recordedAt: input.testedAt,
+      revision: input.headRevision,
+    },
+  ];
+  if (input.auditReference) {
+    evidenceRecords.push({
+      kind: "audit",
+      reference: input.auditReference,
+      recordedAt: input.testedAt,
+      revision: input.headRevision,
+    });
+  }
+  return {
+    id: input.id,
+    title: input.title,
+    domain: input.domain,
+    state: "tested",
+    source: input.source,
+    branch: input.branch,
+    pr: input.pr,
+    evidence: input.evidence,
+    evidenceRecords,
+    updatedAt: input.testedAt,
+  };
+}
+
+function mergedFactoryItem(
+  id: string,
+  title: string,
+  domain: string,
+  source: string,
+): ImplementationSyncItem {
+  return mergedMainItem({
+    id,
+    title,
+    domain,
+    source,
+    pr: 315,
+    headRevision: "75208e3baeef68b819977727f1c6425769294058",
+    mergeRevision: "39391543b46d1226686d4d5b915f38efd69e83e7",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33304779695",
+    testedAt: "2026-08-30T09:46:35.000Z",
+    mergedAt: "2026-08-30T14:32:11.000Z",
+  });
 }
 
 export const sovereignFactoryImplementationItems: ImplementationSyncItem[] = [
@@ -568,135 +565,295 @@ export const sovereignFactoryImplementationItems: ImplementationSyncItem[] = [
     testedAt: "2026-08-29T17:45:02.000Z",
     mergedAt: "2026-08-29T17:46:03.000Z",
   }),
-  testedItem("sovereign-technology-factory", "Sovereign Technology Factory", "sovereign", "core/sovereign/technology-factory.ts"),
-  testedItem("intent-to-outcome-fabric", "Intent-to-Outcome Fabric", "sovereign", "core/sovereign/intent-to-outcome-fabric.ts"),
-  testedItem("ephemeral-agent-swarm", "Ephemeral Agent Swarm", "sovereign", "core/sovereign/ephemeral-agent-swarm.ts"),
-  testedItem("intent-firewall", "Intent Firewall", "sovereign", "core/sovereign/intent-firewall.ts"),
-  testedItem("agent-capability-budget", "Agent Capability & Budget Control", "sovereign", "core/sovereign/agent-capability-budget-control.ts"),
-  testedItem("disconnected-edge-execution", "Disconnected / Edge Execution", "sovereign", "core/sovereign/edge-execution.ts"),
-  testedItem("technology-library", "Technology Library", "sovereign", "core/sovereign/technology-library.ts"),
-  {
-    id: "bounded-execution-runtime",
-    title: "Receipt-chained Bounded Execution Runtime",
-    domain: "runtime",
-    state: "tested",
-    source: "core/sovereign/bounded-execution-runtime.ts",
-    branch,
-    pr: 315,
-    evidenceRecords: [
-      {
-        kind: "code",
-        reference:
-          "https://github.com/pandaconnect1/pantavion-planet/commit/51175ae4d03c8c063ab5377e46db82976d913f7b",
-        recordedAt: "2026-08-30T00:06:28.000Z",
-        revision: "51175ae4d03c8c063ab5377e46db82976d913f7b",
-      },
-      {
-        kind: "test",
-        reference:
-          "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33282528541",
-        recordedAt: "2026-08-30T00:08:47.000Z",
-        revision: "51175ae4d03c8c063ab5377e46db82976d913f7b",
-      },
-    ],
-    updatedAt: "2026-08-30T00:08:47.000Z",
-  },
-  {
-    id: "bounded-execution-checkpointing",
-    title: "Fenced Bounded Execution Checkpointing",
-    domain: "runtime",
-    state: "tested",
-    source: "core/sovereign/bounded-execution-runtime.ts",
-    branch,
-    pr: 315,
-    evidenceRecords: [
-      {
-        kind: "code",
-        reference:
-          "https://github.com/pandaconnect1/pantavion-planet/commit/8bf3aa0441850b42a5b580ca6068b2619fe0ff3c",
-        recordedAt: "2026-08-30T03:54:09.000Z",
-        revision: "8bf3aa0441850b42a5b580ca6068b2619fe0ff3c",
-      },
-      {
-        kind: "test",
-        reference:
-          "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33291312449",
-        recordedAt: "2026-08-30T03:56:05.000Z",
-        revision: "8bf3aa0441850b42a5b580ca6068b2619fe0ff3c",
-      },
-    ],
-    updatedAt: "2026-08-30T03:56:05.000Z",
-  },
-  {
-    id: "durable-bounded-execution-coordinator",
-    title: "Durable Fenced Bounded Execution Recovery",
-    domain: "runtime",
-    state: "tested",
-    source: "core/sovereign/durable-bounded-execution-coordinator.ts",
-    branch,
-    pr: 315,
-    evidenceRecords: [
-      {
-        kind: "code",
-        reference:
-          "https://github.com/pandaconnect1/pantavion-planet/commit/6298cd0c1784a807646978dbf32fdda05466b97b",
-        recordedAt: "2026-08-30T05:05:40.000Z",
-        revision: "6298cd0c1784a807646978dbf32fdda05466b97b",
-      },
-      {
-        kind: "test",
-        reference:
-          "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33293928901",
-        recordedAt: "2026-08-30T05:07:57.000Z",
-        revision: "6298cd0c1784a807646978dbf32fdda05466b97b",
-      },
-    ],
-    updatedAt: "2026-08-30T05:07:57.000Z",
-  },
-  testedKernelItem(),
-  testedItem("implementation-sync", "Automatic Implementation Sync", "kernel", "core/pantavion/implementation-sync-registry.ts"),
-  testedItem("owner-implementation-surface", "Founder-only Implementation Truth", "owner_control", "app/owner/control/implementation/page.tsx"),
-  {
+  mergedFactoryItem(
+    "sovereign-technology-factory",
+    "Sovereign Technology Factory",
+    "sovereign",
+    "core/sovereign/technology-factory.ts",
+  ),
+  mergedFactoryItem(
+    "intent-to-outcome-fabric",
+    "Intent-to-Outcome Fabric",
+    "sovereign",
+    "core/sovereign/intent-to-outcome-fabric.ts",
+  ),
+  mergedFactoryItem(
+    "ephemeral-agent-swarm",
+    "Ephemeral Agent Swarm",
+    "sovereign",
+    "core/sovereign/ephemeral-agent-swarm.ts",
+  ),
+  mergedFactoryItem(
+    "intent-firewall",
+    "Intent Firewall",
+    "sovereign",
+    "core/sovereign/intent-firewall.ts",
+  ),
+  mergedFactoryItem(
+    "agent-capability-budget",
+    "Agent Capability & Budget Control",
+    "sovereign",
+    "core/sovereign/agent-capability-budget-control.ts",
+  ),
+  mergedFactoryItem(
+    "disconnected-edge-execution",
+    "Disconnected / Edge Execution",
+    "sovereign",
+    "core/sovereign/edge-execution.ts",
+  ),
+  mergedFactoryItem(
+    "technology-library",
+    "Technology Library",
+    "sovereign",
+    "core/sovereign/technology-library.ts",
+  ),
+  mergedFactoryItem(
+    "bounded-execution-runtime",
+    "Receipt-chained Bounded Execution Runtime",
+    "runtime",
+    "core/sovereign/bounded-execution-runtime.ts",
+  ),
+  mergedFactoryItem(
+    "bounded-execution-checkpointing",
+    "Fenced Bounded Execution Checkpointing",
+    "runtime",
+    "core/sovereign/bounded-execution-runtime.ts",
+  ),
+  mergedFactoryItem(
+    "durable-bounded-execution-coordinator",
+    "Durable Fenced Bounded Execution Recovery",
+    "runtime",
+    "core/sovereign/durable-bounded-execution-coordinator.ts",
+  ),
+  mergedFactoryItem(
+    "sovereign-capability-kernel",
+    "Sovereign Capability Kernel",
+    "kernel",
+    "core/sovereign/sovereign-capability-kernel.ts",
+  ),
+  mergedFactoryItem(
+    "implementation-sync",
+    "Automatic Implementation Sync",
+    "kernel",
+    "core/pantavion/implementation-sync-registry.ts",
+  ),
+  mergedFactoryItem(
+    "owner-implementation-surface",
+    "Founder-only Implementation Truth",
+    "owner_control",
+    "app/owner/control/implementation/page.tsx",
+  ),
+  mergedMainItem({
     id: "recovery-corpus-runtime-fabric",
     title: "82,413-record Recovery Runtime Fabric",
     domain: "recovery",
-    state: "tested",
     source: "core/recovery/pantavion-recovery-runtime-fabric.ts",
-    branch: "feature/recovery-corpus-runtime-fabric",
     pr: 352,
-    evidenceRecords: [
-      {
-        kind: "code",
-        reference:
-          "https://github.com/pandaconnect1/pantavion-planet/commit/fd24dbf0136cdbf31f03485f4c2fecff90e8354f",
-        recordedAt: "2026-08-30T09:18:22.000Z",
-        revision: "fd24dbf0136cdbf31f03485f4c2fecff90e8354f",
-      },
-      {
-        kind: "test",
-        reference:
-          "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33303724300",
-        recordedAt: "2026-08-30T09:22:52.000Z",
-        revision: "fd24dbf0136cdbf31f03485f4c2fecff90e8354f",
-      },
-      {
-        kind: "audit",
-        reference:
-          "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33303724300/artifacts/9729822776",
-        recordedAt: "2026-08-30T09:22:52.000Z",
-        revision: "fd24dbf0136cdbf31f03485f4c2fecff90e8354f",
-      },
-    ],
-    updatedAt: "2026-08-30T09:22:52.000Z",
+    headRevision: "b4525534fb2f43e1c686cdca1ba906e03f397cae",
+    mergeRevision: "9f7399f4bc025fba816fd2e6296a2c7acf32b3b3",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33317521905",
+    testedAt: "2026-08-30T14:45:25.000Z",
+    mergedAt: "2026-08-30T14:45:25.000Z",
+  }),
+  mergedMainItem({
+    id: "privileged-mutation-boundary",
+    title: "Privileged Mutation Boundary",
+    domain: "security",
+    source: "core/kernel/kernel-privileged-mutation-boundary.ts",
+    pr: 353,
+    headRevision: "f9aaae9d1094385b6c3e378cdf51a281135ae1a0",
+    mergeRevision: "fb0a2c85293e458f146b15eba64112d84d329de2",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33304597556",
+    testedAt: "2026-08-30T14:31:48.000Z",
+    mergedAt: "2026-08-30T14:31:48.000Z",
+  }),
+  mergedMainItem({
+    id: "recovery-partition-scheduler",
+    title: "Durable Recovery Partition Scheduler",
+    domain: "recovery",
+    source: "core/recovery/pantavion-recovery-partition-scheduler.ts",
+    pr: 354,
+    headRevision: "32d2ad000987815c6403c11f4312dfb4041f8537",
+    mergeRevision: "3bd9d8f894154b7424cea72d773813ec3e932afd",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33318156427",
+    testedAt: "2026-08-30T14:59:17.000Z",
+    mergedAt: "2026-08-30T14:59:17.000Z",
+  }),
+  mergedMainItem({
+    id: "recovery-source-batch-index",
+    title: "Deterministic Recovery Source Batch Index",
+    domain: "recovery",
+    source: "scripts/pantavion-recovery-source-batch-index.mjs",
+    pr: 355,
+    headRevision: "f490f6c2f33d3835c407d9c285c0f1c5534e2e6e",
+    mergeRevision: "fd6270d47615ae009f83a59be10bf5828b804fe9",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33319156304",
+    testedAt: "2026-08-30T15:20:30.000Z",
+    mergedAt: "2026-08-30T15:20:30.000Z",
+  }),
+  mergedMainItem({
+    id: "recovery-partition-inventory",
+    title: "Full-corpus Recovery Partition Inventory",
+    domain: "recovery",
+    source: "core/recovery/pantavion-recovery-partition-inventory.ts",
+    pr: 356,
+    headRevision: "cc6cfe25d30f59e0cf20aa012f75c8e16d908d96",
+    mergeRevision: "71d6092062a87f2a9de3d1b367997ee54acfca72",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33327419968",
+    testedAt: "2026-08-30T18:17:09.000Z",
+    mergedAt: "2026-08-30T18:17:09.000Z",
+  }),
+  mergedMainItem({
+    id: "recovery-source-index-preservation",
+    title: "Recovery Source Index Preservation",
+    domain: "recovery",
+    source: "scripts/pantavion-recovery-source-batch-index.mjs",
+    pr: 357,
+    headRevision: "ae087033f1c2cea13ae7b78446e3d938673ea0cf",
+    mergeRevision: "7a644b8e30e2f782059959f1570d073744968bc0",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33327149384",
+    testedAt: "2026-08-30T18:11:17.000Z",
+    mergedAt: "2026-08-30T18:11:17.000Z",
+  }),
+  mergedMainItem({
+    id: "translation-e2e-cooldown",
+    title: "Production Translation E2E Cooldown Control",
+    domain: "translation",
+    source: ".github/workflows/pantavion-production-translation-e2e.yml",
+    pr: 358,
+    headRevision: "fb9e658d69ea7c76800310ad7eff497206934841",
+    mergeRevision: "71075eaf8fd6c758489936c768f1985181af1dca",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33319955615",
+    testedAt: "2026-08-30T18:04:48.000Z",
+    mergedAt: "2026-08-30T18:04:48.000Z",
+  }),
+  {
+    id: "recovery-semantic-receipts-superseded",
+    title: "Superseded Recovery Semantic Receipts",
+    domain: "recovery",
+    state: "blocked",
+    source: "https://github.com/pandaconnect1/pantavion-planet/pull/359",
+    branch: "feature/recovery-partition-semantic-receipts-20260830",
+    pr: 359,
+    blocker: "PR #359 closed unmerged and was superseded without data loss by TESTED PR #364.",
+    updatedAt: "2026-08-30T20:51:36.000Z",
   },
+  mergedMainItem({
+    id: "recovery-fenced-production-executor",
+    title: "Fenced Production Recovery Executor",
+    domain: "recovery",
+    source: "core/recovery/pantavion-recovery-fenced-executor.ts",
+    pr: 360,
+    headRevision: "d0023f59a63413ac9c4f66a27834617bd88f438a",
+    mergeRevision: "c710abbf1d24fefddc3f8d2154841a0982c64022",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33329985335",
+    testedAt: "2026-08-30T19:13:08.000Z",
+    mergedAt: "2026-08-30T19:13:08.000Z",
+  }),
+  mergedMainItem({
+    id: "internal-scheduler-redundancy",
+    title: "Internal Scheduler Redundancy",
+    domain: "runtime",
+    source: "app/api/pantavion/intelligence/scheduler-health/route.ts",
+    pr: 361,
+    headRevision: "b135348dcb764cfd1f5c2288f0f5a52bb119336e",
+    mergeRevision: "bb085e9cba119938d1c691b795d5b32da3864286",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33331095426",
+    testedAt: "2026-08-30T19:56:37.000Z",
+    mergedAt: "2026-08-30T19:56:37.000Z",
+  }),
+  mergedMainItem({
+    id: "scheduler-history-admin-binding-repair",
+    title: "Scheduler History and Admin Binding Repair",
+    domain: "runtime",
+    source: ".github/workflows/pantavion-repair-vercel-supabase-admin.yml",
+    pr: 362,
+    headRevision: "e39ca1efecf7f3c52fe15e3b31b35e0d737905db",
+    mergeRevision: "f23533d21c8be62ca1ddd0c3ecb5fe50c22d6912",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33333034293",
+    testedAt: "2026-08-30T20:16:06.000Z",
+    mergedAt: "2026-08-30T20:16:06.000Z",
+  }),
+  testedPullRequestItem({
+    id: "scheduler-single-credential-admin-repair",
+    title: "Single-credential Scheduler Admin Repair",
+    domain: "runtime",
+    source: ".github/workflows/pantavion-repair-vercel-supabase-admin.yml",
+    branch: "fix/vercel-token-only-admin-repair",
+    pr: 363,
+    headRevision: "15e56e8de04693e88698965438a7edae2695b6bd",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33333406006",
+    testedAt: "2026-08-31T01:53:54.000Z",
+    evidence: ["remaining_external_credential:VERCEL_TOKEN"],
+  }),
+  testedPullRequestItem({
+    id: "recovery-partition-semantic-receipts",
+    title: "82,413-record Chained Semantic Receipts",
+    domain: "recovery",
+    source: "core/recovery/pantavion-recovery-partition-semantic-receipt.ts",
+    branch: "feature/recovery-partition-semantic-receipts-main-20260830",
+    pr: 364,
+    headRevision: "b5cd186847a957588adf98745e0edcdd496e9b1e",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33335022195",
+    testedAt: "2026-08-30T21:00:49.000Z",
+    auditReference: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33335022195/artifacts/9738809673",
+    evidence: [
+      "records:82413",
+      "partitions:165",
+      "artifact_bytes:19070669",
+      "artifact_sha256:6d63c5e5a54444b8e8ae9dddac483f7ea4aeed96677bce317c09a15bd25c695d",
+    ],
+  }),
+  testedPullRequestItem({
+    id: "recovery-implementation-planning",
+    title: "82,413-record Implementation Planning",
+    domain: "recovery",
+    source: "core/recovery/pantavion-recovery-implementation-plan-envelope.ts",
+    branch: "feature/recovery-implementation-planning-envelopes-20260830",
+    pr: 365,
+    headRevision: "ae1d8e49c5fc4eacfc508e614001f96826a046a7",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33335538920",
+    testedAt: "2026-08-30T21:11:46.000Z",
+    auditReference: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33335538920/artifacts/9738960314",
+    evidence: [
+      "records:82413",
+      "partitions:165",
+      "planning_ready_idea:31779",
+      "blocked_governed_hold:355",
+      "blocked_recursive_provenance:50279",
+      "artifact_bytes:40581214",
+      "artifact_sha256:90b3038693eee649efbea82df5a377ed55abeeef3a9ef720e070a03deda94726",
+    ],
+  }),
+  testedPullRequestItem({
+    id: "recovery-sovereign-build-dispatch",
+    title: "82,413-record Sovereign Build Dispatch",
+    domain: "recovery",
+    source: "core/recovery/pantavion-recovery-sovereign-build-dispatch.ts",
+    branch: "feature/recovery-sovereign-build-dispatch-20260831",
+    pr: 366,
+    headRevision: "cc47f2ca9dd5bd783020ea2e2a6a09d5deb25f18",
+    testRun: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33338614570",
+    testedAt: "2026-08-30T22:18:58.000Z",
+    auditReference: "https://github.com/pandaconnect1/pantavion-planet/actions/runs/33338614570/artifacts/9739867022",
+    evidence: [
+      "records:82413",
+      "canonical_build_orders:279",
+      "awaiting_owner:279",
+      "execution_ready:0",
+      "agent_grants:0",
+      "artifact_bytes:30669834",
+      "artifact_sha256:77d4bc569f8459011c6989d5e5d304125b16422588d5196d7903f1ef269520d9",
+    ],
+  }),
   {
     id: "production-verification",
     title: "Production verification",
     domain: "release",
     state: "blocked",
     source: "owner_green_light",
-    blocker: "Factory PR #315 is TESTED but unmerged. Current-main production health does not prove these Factory files are deployed; founder approval, exact Factory deployment revision, authenticated E2E, isolation, rollback and audit evidence remain required.",
-    updatedAt: codedAt,
+    blocker: "Factory PR #315 and recovery/runtime PRs #352-#362 are MERGED only; merge evidence is not deployment or live evidence. PRs #363-#366 are TESTED and unmerged. Production progression requires explicit founder authorization, VERCEL_TOKEN for the scheduler repair path, exact deployed revision, authenticated E2E, RLS isolation, rollback and audit evidence.",
+    updatedAt: "2026-08-31T01:53:54.000Z",
   },
 ];
 

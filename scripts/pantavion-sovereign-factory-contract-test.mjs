@@ -854,11 +854,35 @@ assert(
   "Registry must quarantine a false completion claim.",
 );
 
-for (const id of [
+const mergedRegistryIds = [
   "canonical-conversation-intake",
   "universal-artifact-intake",
   "universal-raw-artifact-upload",
-]) {
+  "sovereign-technology-factory",
+  "intent-to-outcome-fabric",
+  "ephemeral-agent-swarm",
+  "intent-firewall",
+  "agent-capability-budget",
+  "disconnected-edge-execution",
+  "technology-library",
+  "bounded-execution-runtime",
+  "bounded-execution-checkpointing",
+  "durable-bounded-execution-coordinator",
+  "sovereign-capability-kernel",
+  "implementation-sync",
+  "owner-implementation-surface",
+  "recovery-corpus-runtime-fabric",
+  "privileged-mutation-boundary",
+  "recovery-partition-scheduler",
+  "recovery-source-batch-index",
+  "recovery-partition-inventory",
+  "recovery-source-index-preservation",
+  "translation-e2e-cooldown",
+  "recovery-fenced-production-executor",
+  "internal-scheduler-redundancy",
+  "scheduler-history-admin-binding-repair",
+];
+for (const id of mergedRegistryIds) {
   const item = sovereignFactoryImplementationItems.find((candidate) => candidate.id === id);
   assert(item?.state === "merged", `${id} must be recorded as MERGED only.`);
   assert(validateImplementationTruth(item).length === 0, `${id} must carry code, test and merge evidence.`);
@@ -867,6 +891,71 @@ for (const id of [
     `${id} must not infer deployment or VERIFIED_LIVE from merge evidence.`,
   );
 }
+
+const testedRegistryIds = [
+  "scheduler-single-credential-admin-repair",
+  "recovery-partition-semantic-receipts",
+  "recovery-implementation-planning",
+  "recovery-sovereign-build-dispatch",
+];
+for (const id of testedRegistryIds) {
+  const item = sovereignFactoryImplementationItems.find((candidate) => candidate.id === id);
+  assert(item?.state === "tested", `${id} must remain TESTED and unmerged.`);
+  assert(validateImplementationTruth(item).length === 0, `${id} must carry exact code and test evidence.`);
+  assert(
+    !["merged", "deployed", "verified_live"].includes(item.state),
+    `${id} must not skip MERGED, DEPLOYED or VERIFIED_LIVE.`,
+  );
+}
+
+const semanticReceipts = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-partition-semantic-receipts",
+);
+const implementationPlanning = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-implementation-planning",
+);
+const sovereignDispatch = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-sovereign-build-dispatch",
+);
+assert(
+  semanticReceipts?.evidence?.includes("records:82413") &&
+    implementationPlanning?.evidence?.includes("records:82413") &&
+    sovereignDispatch?.evidence?.includes("records:82413"),
+  "All three current recovery surfaces must preserve the exact 82,413-record boundary.",
+);
+assert(
+  sovereignDispatch?.evidence?.includes("canonical_build_orders:279") &&
+    sovereignDispatch?.evidence?.includes("awaiting_owner:279") &&
+    sovereignDispatch?.evidence?.includes("execution_ready:0"),
+  "Sovereign dispatch truth must expose all 279 owner-gated orders and zero execution authority.",
+);
+
+const supersededReceipts = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-semantic-receipts-superseded",
+);
+assert(
+  supersededReceipts?.state === "blocked" &&
+    supersededReceipts.blocker?.includes("superseded") &&
+    supersededReceipts.blocker?.includes("#364"),
+  "Closed unmerged PR #359 must remain visibly blocked and point to its tested successor.",
+);
+
+const productionVerification = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "production-verification",
+);
+assert(
+  productionVerification?.state === "blocked" &&
+    productionVerification.blocker?.includes("PR #315") &&
+    productionVerification.blocker?.includes("MERGED only") &&
+    productionVerification.blocker?.includes("VERCEL_TOKEN"),
+  "Production truth must distinguish merged Factory code from deployment and retain the external credential blocker.",
+);
+
+const registryIds = sovereignFactoryImplementationItems.map((item) => item.id);
+assert(
+  new Set(registryIds).size === registryIds.length,
+  "Implementation truth registry IDs must remain unique.",
+);
 
 
 assert(
