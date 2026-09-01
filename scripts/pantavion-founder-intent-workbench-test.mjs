@@ -8,6 +8,7 @@ import {
   createFounderIntentEdgeHandoff,
   createFounderIntentVerificationBundle,
   createFounderEphemeralAgentLease,
+  createFounderEphemeralAgentRevocation,
   createFounderIntentRecord,
   decryptFounderIntentVault,
   encryptFounderIntentVault,
@@ -19,6 +20,7 @@ import {
   verifyFounderTechnologyAssessment,
   verifyFounderIntentVerificationBundle,
   verifyFounderEphemeralAgentLease,
+  verifyFounderEphemeralAgentRevocation,
 } from "../core/intent/pantavion-founder-intent-workbench.ts";
 
 const input = {
@@ -104,6 +106,13 @@ assert.equal(lease.actionLimit, 8);
 assert.equal(await verifyFounderEphemeralAgentLease(first, budget, technology, lease), true);
 assert.equal(await verifyFounderEphemeralAgentLease(first, budget, technology, { ...lease, actionLimit: 9 }), false);
 
+const revocation = await createFounderEphemeralAgentRevocation({ record: first, lease, revokedAt: "2026-09-01T07:02:00.000Z", reason: "owner_revoked" });
+assert.equal(revocation.terminal, true);
+assert.equal(revocation.executionAllowed, false);
+assert.equal(revocation.leaseSha256, lease.sha256);
+assert.equal(await verifyFounderEphemeralAgentRevocation(first, lease, revocation), true);
+assert.equal(await verifyFounderEphemeralAgentRevocation(first, lease, { ...revocation, reason: "expired" }), false);
+
 const bundle = await createFounderIntentVerificationBundle({ record: first, firewall: assessment, budget, handoff, technology });
 assert.equal(bundle.receiptChain.length, 5);
 assert.equal(bundle.lifecycleState, "TESTED_LOCALLY_NOT_MERGED");
@@ -143,8 +152,8 @@ assert.throws(
 console.log(JSON.stringify({
   marker: "pantavion_founder_intent_workbench_test_v1",
   status: "passed",
-  assertions: 58,
-  actualCapability: "encrypted offline intent capture with Firewall, budget, edge, Technology Library, bounded ephemeral-agent lease, and verification bundle",
+  assertions: 63,
+  actualCapability: "encrypted offline intent capture with Firewall, budget, edge, Technology Library, bounded ephemeral-agent lease/revocation, and verification bundle",
   sha256: first.sha256,
   syntheticRecordsCountedAsImplementation: 0,
 }, null, 2));

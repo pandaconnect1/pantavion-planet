@@ -109,6 +109,19 @@ export type FounderEphemeralAgentLease = {
   sha256: string;
 };
 
+export type FounderEphemeralAgentRevocation = {
+  marker: "pantavion_founder_ephemeral_agent_revocation_v1";
+  intentId: string;
+  agentId: string;
+  leaseSha256: string;
+  revokedAt: string;
+  reason: "owner_revoked" | "budget_exhausted" | "integrity_failure" | "expired";
+  terminal: true;
+  executionAllowed: false;
+  canonicalPayload: string;
+  sha256: string;
+};
+
 export type FounderIntentVerificationBundle = {
   marker: "pantavion_founder_intent_verification_bundle_v1";
   intentId: string;
@@ -380,6 +393,24 @@ export async function verifyFounderEphemeralAgentLease(record: FounderIntentReco
   if (!/^[0-9a-f]{64}$/.test(lease.sha256) || await sha256Hex(lease.canonicalPayload) !== lease.sha256) return false;
   const signed = JSON.parse(lease.canonicalPayload) as Record<string, unknown>;
   return signed.marker === lease.marker && signed.intentId === record.id && signed.intentSha256 === record.sha256 && signed.budgetSha256 === budget.sha256 && signed.technologySha256 === technology.sha256 && signed.agentId === lease.agentId && signed.capabilityScope === lease.capabilityScope && signed.actionLimit === lease.actionLimit && signed.expiresAt === lease.expiresAt && signed.status === lease.status && signed.executionAllowed === false;
+}
+
+export async function createFounderEphemeralAgentRevocation(params: { record: FounderIntentRecord; lease: FounderEphemeralAgentLease; revokedAt: string; reason: FounderEphemeralAgentRevocation["reason"] }): Promise<FounderEphemeralAgentRevocation> {
+  if (!await verifyFounderIntentRecord(params.record)) throw new Error("intent_record_integrity_failed");
+  if (params.lease.intentId !== params.record.id || params.lease.executionAllowed !== false || await sha256Hex(params.lease.canonicalPayload) !== params.lease.sha256) throw new Error("agent_lease_integrity_failed");
+  if (!Number.isFinite(Date.parse(params.revokedAt))) throw new Error("revoked_at_invalid");
+  if (!["owner_revoked", "budget_exhausted", "integrity_failure", "expired"].includes(params.reason)) throw new Error("revocation_reason_invalid");
+  const canonicalPayload = JSON.stringify({ marker: "pantavion_founder_ephemeral_agent_revocation_v1", intentId: params.record.id, intentSha256: params.record.sha256, agentId: params.lease.agentId, leaseSha256: params.lease.sha256, revokedAt: new Date(params.revokedAt).toISOString(), reason: params.reason, terminal: true, executionAllowed: false });
+  const canonical = JSON.parse(canonicalPayload) as Omit<FounderEphemeralAgentRevocation, "canonicalPayload" | "sha256">;
+  return { ...canonical, canonicalPayload, sha256: await sha256Hex(canonicalPayload) };
+}
+
+export async function verifyFounderEphemeralAgentRevocation(record: FounderIntentRecord, lease: FounderEphemeralAgentLease, revocation: FounderEphemeralAgentRevocation) {
+  if (!await verifyFounderIntentRecord(record)) return false;
+  if (revocation.intentId !== record.id || revocation.agentId !== lease.agentId || revocation.leaseSha256 !== lease.sha256 || revocation.terminal !== true || revocation.executionAllowed !== false) return false;
+  if (!/^[0-9a-f]{64}$/.test(revocation.sha256) || await sha256Hex(revocation.canonicalPayload) !== revocation.sha256) return false;
+  const signed = JSON.parse(revocation.canonicalPayload) as Record<string, unknown>;
+  return signed.marker === revocation.marker && signed.intentId === record.id && signed.intentSha256 === record.sha256 && signed.agentId === lease.agentId && signed.leaseSha256 === lease.sha256 && signed.revokedAt === revocation.revokedAt && signed.reason === revocation.reason && signed.terminal === true && signed.executionAllowed === false;
 }
 
 export async function createFounderIntentVerificationBundle(params: { record: FounderIntentRecord; firewall: FounderIntentFirewallAssessment; budget: FounderIntentBudgetEnvelope; handoff: FounderIntentEdgeHandoff; technology: FounderTechnologyAssessment }): Promise<FounderIntentVerificationBundle> {
