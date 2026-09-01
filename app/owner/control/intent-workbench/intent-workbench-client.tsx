@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   assessFounderIntentFirewall,
+  assessFounderTechnologyLibrary,
   createFounderIntentBudgetEnvelope,
   createFounderIntentEdgeHandoff,
   createFounderIntentRecord,
@@ -15,6 +16,7 @@ import {
   type FounderIntentFirewallAssessment,
   type FounderIntentBudgetEnvelope,
   type FounderIntentEdgeHandoff,
+  type FounderTechnologyAssessment,
   type FounderIntentModule,
   type FounderIntentPriority,
   type FounderIntentRecord,
@@ -54,6 +56,7 @@ export default function IntentWorkbenchClient() {
   const [assessments, setAssessments] = useState<Record<string, FounderIntentFirewallAssessment>>({});
   const [budgets, setBudgets] = useState<Record<string, FounderIntentBudgetEnvelope>>({});
   const [handoffs, setHandoffs] = useState<Record<string, FounderIntentEdgeHandoff>>({});
+  const [technologies, setTechnologies] = useState<Record<string, FounderTechnologyAssessment>>({});
   const importRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -104,12 +107,14 @@ export default function IntentWorkbenchClient() {
       const assessment = await assessFounderIntentFirewall(record);
       const budget = await createFounderIntentBudgetEnvelope(record);
       const handoff = await createFounderIntentEdgeHandoff({ record, assessment, budget, nonce: Array.from(globalThis.crypto.getRandomValues(new Uint8Array(16)), (byte) => byte.toString(16).padStart(2, "0")).join(""), createdAt: new Date().toISOString() });
+      const technology = await assessFounderTechnologyLibrary(record, handoff);
       const next = [record, ...records];
       await persist(next);
       setRecords(next);
       setAssessments((current) => ({ ...current, [record.id]: assessment }));
       setBudgets((current) => ({ ...current, [record.id]: budget }));
       setHandoffs((current) => ({ ...current, [record.id]: handoff }));
+      setTechnologies((current) => ({ ...current, [record.id]: technology }));
       setInput(emptyInput);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "intent_capture_failed");
@@ -125,9 +130,11 @@ export default function IntentWorkbenchClient() {
       const assessment = await assessFounderIntentFirewall(record);
       const budget = await createFounderIntentBudgetEnvelope(record);
       const handoff = await createFounderIntentEdgeHandoff({ record, assessment, budget, nonce: Array.from(globalThis.crypto.getRandomValues(new Uint8Array(16)), (byte) => byte.toString(16).padStart(2, "0")).join(""), createdAt: new Date().toISOString() });
+      const technology = await assessFounderTechnologyLibrary(record, handoff);
       setAssessments((current) => ({ ...current, [record.id]: assessment }));
       setBudgets((current) => ({ ...current, [record.id]: budget }));
       setHandoffs((current) => ({ ...current, [record.id]: handoff }));
+      setTechnologies((current) => ({ ...current, [record.id]: technology }));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "intent_firewall_assessment_failed");
     } finally {
@@ -346,6 +353,7 @@ export default function IntentWorkbenchClient() {
                 <div className="mt-2 break-all font-mono text-[10px] text-amber-300">Receipt {assessments[record.id].sha256}</div>
                 {budgets[record.id] ? <div className="mt-3 border-t border-amber-800 pt-3"><div className="font-black">CAPABILITY/BUDGET GRANT WITHHELD</div><div className="mt-1">Scope {budgets[record.id].capabilityScope} · {budgets[record.id].actionLimit} actions · {budgets[record.id].timeLimitMinutes} minutes</div><div className="mt-1 break-all font-mono text-[10px] text-amber-300">Budget receipt {budgets[record.id].sha256}</div></div> : null}
                 {handoffs[record.id] ? <div className="mt-3 border-t border-amber-800 pt-3"><div className="font-black">OFFLINE EDGE HANDOFF · SINGLE USE · NOT EXECUTABLE</div><div className="mt-1">Nonce {handoffs[record.id].nonce} · owner admission required</div><div className="mt-1 break-all font-mono text-[10px] text-amber-300">Edge receipt {handoffs[record.id].sha256}</div></div> : null}
+                {technologies[record.id] ? <div className="mt-3 border-t border-amber-800 pt-3"><div className="font-black">TECHNOLOGY LIBRARY · {technologies[record.id].disposition.replaceAll("_", " ")}</div><div className="mt-1">Approved: {technologies[record.id].approvedTechnologies.join(" · ") || "none"}</div><div className="mt-1">Missing: {technologies[record.id].missingCapabilities.join(" · ") || "none"}</div><div className="mt-1 break-all font-mono text-[10px] text-amber-300">Technology receipt {technologies[record.id].sha256}</div></div> : null}
               </div>
             ) : (
               <button type="button" disabled={busy} onClick={() => void assess(record)} className="mt-3 min-h-11 rounded-xl border border-amber-700 px-4 text-sm font-black text-amber-200 disabled:opacity-50">RUN INTENT FIREWALL</button>

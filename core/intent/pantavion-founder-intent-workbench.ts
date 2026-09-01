@@ -83,6 +83,30 @@ export type FounderIntentEdgeHandoff = {
   sha256: string;
 };
 
+export type FounderTechnologyAssessment = {
+  marker: "pantavion_founder_technology_assessment_v1";
+  intentId: string;
+  edgeHandoffSha256: string;
+  requiredCapabilities: string[];
+  approvedTechnologies: string[];
+  missingCapabilities: string[];
+  disposition: "compatible_pending_owner_admission" | "technology_hold";
+  executionAllowed: false;
+  canonicalPayload: string;
+  sha256: string;
+};
+
+const founderTechnologyLibrary: Record<FounderIntentModule, ReadonlyArray<{ capability: string; technology: string }>> = {
+  intent_to_outcome: [{ capability: "deterministic_receipts", technology: "WebCrypto SHA-256" }],
+  ephemeral_agent_swarm: [],
+  disconnected_edge: [{ capability: "local_encryption", technology: "WebCrypto AES-GCM" }, { capability: "offline_persistence", technology: "IndexedDB" }, { capability: "integrity_receipts", technology: "WebCrypto SHA-256" }],
+  intent_firewall: [{ capability: "deterministic_policy", technology: "Pantavion Intent Firewall" }],
+  capability_budget: [{ capability: "bounded_budget", technology: "Pantavion Budget Envelope" }],
+  owner_control: [{ capability: "owner_authentication", technology: "Pantavion Owner AAL2" }],
+  technology_library: [{ capability: "technology_admission", technology: "Pantavion Technology Library" }],
+  implementation_truth: [{ capability: "lifecycle_evidence", technology: "Pantavion Implementation Truth" }],
+};
+
 export type EncryptedFounderIntentVault = {
   marker: typeof FOUNDER_INTENT_VAULT_MARKER;
   cipher: "AES-GCM-256";
@@ -293,6 +317,27 @@ export async function verifyFounderIntentEdgeHandoff(params: {
   if (!/^[0-9a-f]{64}$/.test(handoff.sha256) || await sha256Hex(handoff.canonicalPayload) !== handoff.sha256) return false;
   const signed = JSON.parse(handoff.canonicalPayload) as Record<string, unknown>;
   return signed.marker === handoff.marker && signed.intentId === handoff.intentId && signed.intentSha256 === handoff.intentSha256 && signed.firewallSha256 === handoff.firewallSha256 && signed.budgetSha256 === handoff.budgetSha256 && signed.nonce === handoff.nonce && signed.createdAt === handoff.createdAt && signed.networkPolicy === "offline_only" && signed.replayPolicy === "single_use_pending_owner_admission" && signed.executionAllowed === false;
+}
+
+export async function assessFounderTechnologyLibrary(record: FounderIntentRecord, handoff: FounderIntentEdgeHandoff): Promise<FounderTechnologyAssessment> {
+  if (!await verifyFounderIntentRecord(record)) throw new Error("intent_record_integrity_failed");
+  if (handoff.intentId !== record.id || handoff.intentSha256 !== record.sha256 || handoff.executionAllowed !== false || await sha256Hex(handoff.canonicalPayload) !== handoff.sha256) throw new Error("edge_handoff_integrity_failed");
+  const entries = founderTechnologyLibrary[record.module];
+  const requiredCapabilities = record.module === "ephemeral_agent_swarm" ? ["sandbox_runtime", "ephemeral_identity", "capability_revocation"] : entries.map((entry) => entry.capability);
+  const approvedTechnologies = entries.map((entry) => entry.technology);
+  const covered = new Set(entries.map((entry) => entry.capability));
+  const missingCapabilities = requiredCapabilities.filter((capability) => !covered.has(capability));
+  const disposition = missingCapabilities.length === 0 ? "compatible_pending_owner_admission" : "technology_hold";
+  const canonicalPayload = JSON.stringify({ marker: "pantavion_founder_technology_assessment_v1", intentId: record.id, intentSha256: record.sha256, edgeHandoffSha256: handoff.sha256, requiredCapabilities, approvedTechnologies, missingCapabilities, disposition, executionAllowed: false });
+  return { marker: "pantavion_founder_technology_assessment_v1", intentId: record.id, edgeHandoffSha256: handoff.sha256, requiredCapabilities, approvedTechnologies, missingCapabilities, disposition, executionAllowed: false, canonicalPayload, sha256: await sha256Hex(canonicalPayload) };
+}
+
+export async function verifyFounderTechnologyAssessment(record: FounderIntentRecord, handoff: FounderIntentEdgeHandoff, assessment: FounderTechnologyAssessment) {
+  if (!await verifyFounderIntentRecord(record) || handoff.intentId !== record.id || handoff.intentSha256 !== record.sha256 || await sha256Hex(handoff.canonicalPayload) !== handoff.sha256) return false;
+  if (assessment.intentId !== record.id || assessment.edgeHandoffSha256 !== handoff.sha256 || assessment.executionAllowed !== false) return false;
+  if (!/^[0-9a-f]{64}$/.test(assessment.sha256) || await sha256Hex(assessment.canonicalPayload) !== assessment.sha256) return false;
+  const signed = JSON.parse(assessment.canonicalPayload) as Record<string, unknown>;
+  return signed.marker === assessment.marker && signed.intentId === record.id && signed.intentSha256 === record.sha256 && signed.edgeHandoffSha256 === handoff.sha256 && JSON.stringify(signed.requiredCapabilities) === JSON.stringify(assessment.requiredCapabilities) && JSON.stringify(signed.approvedTechnologies) === JSON.stringify(assessment.approvedTechnologies) && JSON.stringify(signed.missingCapabilities) === JSON.stringify(assessment.missingCapabilities) && signed.disposition === assessment.disposition && signed.executionAllowed === false;
 }
 
 function bytesToBase64(bytes: Uint8Array) {

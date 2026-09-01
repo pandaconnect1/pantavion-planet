@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 
 import {
   assessFounderIntentFirewall,
+  assessFounderTechnologyLibrary,
   canonicalizeFounderIntent,
   createFounderIntentBudgetEnvelope,
   createFounderIntentEdgeHandoff,
@@ -13,6 +14,7 @@ import {
   verifyFounderIntentFirewallAssessment,
   verifyFounderIntentBudgetEnvelope,
   verifyFounderIntentEdgeHandoff,
+  verifyFounderTechnologyAssessment,
 } from "../core/intent/pantavion-founder-intent-workbench.ts";
 
 const input = {
@@ -82,6 +84,15 @@ assert.equal(handoff.budgetSha256, budget.sha256);
 assert.equal(await verifyFounderIntentEdgeHandoff({ record: first, assessment, budget, handoff }), true);
 assert.equal(await verifyFounderIntentEdgeHandoff({ record: first, assessment, budget, handoff: { ...handoff, nonce: "ffffffffffffffffffffffffffffffff" } }), false);
 
+const technology = await assessFounderTechnologyLibrary(first, handoff);
+assert.equal(technology.disposition, "compatible_pending_owner_admission");
+assert.deepEqual(technology.missingCapabilities, []);
+assert.ok(technology.approvedTechnologies.includes("WebCrypto AES-GCM"));
+assert.ok(technology.approvedTechnologies.includes("IndexedDB"));
+assert.equal(technology.executionAllowed, false);
+assert.equal(await verifyFounderTechnologyAssessment(first, handoff, technology), true);
+assert.equal(await verifyFounderTechnologyAssessment(first, handoff, { ...technology, approvedTechnologies: [...technology.approvedTechnologies, "Unreviewed Runtime"] }), false);
+
 const tampered = { ...first, desiredOutcome: "tampered" };
 assert.equal(await verifyFounderIntentRecord(tampered), false, "tampering must fail closed");
 
@@ -114,8 +125,8 @@ assert.throws(
 console.log(JSON.stringify({
   marker: "pantavion_founder_intent_workbench_test_v1",
   status: "passed",
-  assertions: 41,
-  actualCapability: "encrypted offline intent capture plus fail-closed Firewall, capability/budget envelope, and replay-bound edge handoff",
+  assertions: 48,
+  actualCapability: "encrypted offline intent capture plus fail-closed Firewall, capability/budget, replay-bound edge handoff, and Technology Library admission",
   sha256: first.sha256,
   syntheticRecordsCountedAsImplementation: 0,
 }, null, 2));
