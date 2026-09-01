@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   assessFounderIntentFirewall,
+  createFounderIntentBudgetEnvelope,
   createFounderIntentRecord,
   decryptFounderIntentVault,
   encryptFounderIntentVault,
@@ -11,6 +12,7 @@ import {
   type EncryptedFounderIntentVault,
   type FounderIntentInput,
   type FounderIntentFirewallAssessment,
+  type FounderIntentBudgetEnvelope,
   type FounderIntentModule,
   type FounderIntentPriority,
   type FounderIntentRecord,
@@ -48,6 +50,7 @@ export default function IntentWorkbenchClient() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [assessments, setAssessments] = useState<Record<string, FounderIntentFirewallAssessment>>({});
+  const [budgets, setBudgets] = useState<Record<string, FounderIntentBudgetEnvelope>>({});
   const importRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -96,10 +99,12 @@ export default function IntentWorkbenchClient() {
         createdAt: new Date().toISOString(),
       });
       const assessment = await assessFounderIntentFirewall(record);
+      const budget = await createFounderIntentBudgetEnvelope(record);
       const next = [record, ...records];
       await persist(next);
       setRecords(next);
       setAssessments((current) => ({ ...current, [record.id]: assessment }));
+      setBudgets((current) => ({ ...current, [record.id]: budget }));
       setInput(emptyInput);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "intent_capture_failed");
@@ -113,7 +118,9 @@ export default function IntentWorkbenchClient() {
     setError(null);
     try {
       const assessment = await assessFounderIntentFirewall(record);
+      const budget = await createFounderIntentBudgetEnvelope(record);
       setAssessments((current) => ({ ...current, [record.id]: assessment }));
+      setBudgets((current) => ({ ...current, [record.id]: budget }));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "intent_firewall_assessment_failed");
     } finally {
@@ -330,6 +337,7 @@ export default function IntentWorkbenchClient() {
                 <div className="font-black uppercase">Intent Firewall · OWNER REVIEW REQUIRED · execution blocked</div>
                 <div className="mt-2">{assessments[record.id].reasons.join(" · ")}</div>
                 <div className="mt-2 break-all font-mono text-[10px] text-amber-300">Receipt {assessments[record.id].sha256}</div>
+                {budgets[record.id] ? <div className="mt-3 border-t border-amber-800 pt-3"><div className="font-black">CAPABILITY/BUDGET GRANT WITHHELD</div><div className="mt-1">Scope {budgets[record.id].capabilityScope} · {budgets[record.id].actionLimit} actions · {budgets[record.id].timeLimitMinutes} minutes</div><div className="mt-1 break-all font-mono text-[10px] text-amber-300">Budget receipt {budgets[record.id].sha256}</div></div> : null}
               </div>
             ) : (
               <button type="button" disabled={busy} onClick={() => void assess(record)} className="mt-3 min-h-11 rounded-xl border border-amber-700 px-4 text-sm font-black text-amber-200 disabled:opacity-50">RUN INTENT FIREWALL</button>

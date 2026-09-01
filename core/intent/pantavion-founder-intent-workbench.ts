@@ -55,6 +55,19 @@ export type FounderIntentFirewallAssessment = {
   sha256: string;
 };
 
+export type FounderIntentBudgetEnvelope = {
+  marker: "pantavion_founder_intent_budget_envelope_v1";
+  intentId: string;
+  capabilityScope: FounderIntentModule;
+  actionLimit: number;
+  timeLimitMinutes: number;
+  expiresAt: string;
+  grantStatus: "withheld_pending_owner_review";
+  executionAllowed: false;
+  canonicalPayload: string;
+  sha256: string;
+};
+
 export type EncryptedFounderIntentVault = {
   marker: typeof FOUNDER_INTENT_VAULT_MARKER;
   cipher: "AES-GCM-256";
@@ -216,6 +229,21 @@ export async function verifyFounderIntentFirewallAssessment(record: FounderInten
     && signed.disposition === assessment.disposition
     && signed.executionAllowed === false
     && JSON.stringify(signed.reasons) === JSON.stringify(assessment.reasons);
+}
+
+export async function createFounderIntentBudgetEnvelope(record: FounderIntentRecord): Promise<FounderIntentBudgetEnvelope> {
+  if (!await verifyFounderIntentRecord(record)) throw new Error("intent_record_integrity_failed");
+  const expiresAt = new Date(Date.parse(record.createdAt) + record.maxMinutes * 60_000).toISOString();
+  const canonicalPayload = JSON.stringify({ marker: "pantavion_founder_intent_budget_envelope_v1", intentId: record.id, intentSha256: record.sha256, capabilityScope: record.module, actionLimit: record.maxActions, timeLimitMinutes: record.maxMinutes, expiresAt, grantStatus: "withheld_pending_owner_review", executionAllowed: false });
+  return { marker: "pantavion_founder_intent_budget_envelope_v1", intentId: record.id, capabilityScope: record.module, actionLimit: record.maxActions, timeLimitMinutes: record.maxMinutes, expiresAt, grantStatus: "withheld_pending_owner_review", executionAllowed: false, canonicalPayload, sha256: await sha256Hex(canonicalPayload) };
+}
+
+export async function verifyFounderIntentBudgetEnvelope(record: FounderIntentRecord, envelope: FounderIntentBudgetEnvelope) {
+  if (!await verifyFounderIntentRecord(record)) return false;
+  if (envelope.intentId !== record.id || envelope.executionAllowed !== false || envelope.capabilityScope !== record.module || envelope.actionLimit !== record.maxActions || envelope.timeLimitMinutes !== record.maxMinutes || envelope.grantStatus !== "withheld_pending_owner_review") return false;
+  if (!/^[0-9a-f]{64}$/.test(envelope.sha256) || await sha256Hex(envelope.canonicalPayload) !== envelope.sha256) return false;
+  const signed = JSON.parse(envelope.canonicalPayload) as Record<string, unknown>;
+  return signed.marker === envelope.marker && signed.intentId === record.id && signed.intentSha256 === record.sha256 && signed.capabilityScope === envelope.capabilityScope && signed.actionLimit === envelope.actionLimit && signed.timeLimitMinutes === envelope.timeLimitMinutes && signed.expiresAt === envelope.expiresAt && signed.grantStatus === envelope.grantStatus && signed.executionAllowed === false;
 }
 
 function bytesToBase64(bytes: Uint8Array) {
