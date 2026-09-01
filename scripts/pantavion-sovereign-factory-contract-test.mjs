@@ -854,11 +854,35 @@ assert(
   "Registry must quarantine a false completion claim.",
 );
 
-for (const id of [
+const mergedRegistryIds = [
   "canonical-conversation-intake",
   "universal-artifact-intake",
   "universal-raw-artifact-upload",
-]) {
+  "sovereign-technology-factory",
+  "intent-to-outcome-fabric",
+  "ephemeral-agent-swarm",
+  "intent-firewall",
+  "agent-capability-budget",
+  "disconnected-edge-execution",
+  "technology-library",
+  "bounded-execution-runtime",
+  "bounded-execution-checkpointing",
+  "durable-bounded-execution-coordinator",
+  "sovereign-capability-kernel",
+  "implementation-sync",
+  "owner-implementation-surface",
+  "recovery-corpus-runtime-fabric",
+  "privileged-mutation-boundary",
+  "recovery-partition-scheduler",
+  "recovery-source-batch-index",
+  "recovery-partition-inventory",
+  "recovery-source-index-preservation",
+  "translation-e2e-cooldown",
+  "recovery-fenced-production-executor",
+  "internal-scheduler-redundancy",
+  "scheduler-history-admin-binding-repair",
+];
+for (const id of mergedRegistryIds) {
   const item = sovereignFactoryImplementationItems.find((candidate) => candidate.id === id);
   assert(item?.state === "merged", `${id} must be recorded as MERGED only.`);
   assert(validateImplementationTruth(item).length === 0, `${id} must carry code, test and merge evidence.`);
@@ -867,6 +891,273 @@ for (const id of [
     `${id} must not infer deployment or VERIFIED_LIVE from merge evidence.`,
   );
 }
+
+const testedRegistryIds = [
+  "scheduler-single-credential-admin-repair",
+  "recovery-partition-semantic-receipts",
+  "recovery-implementation-planning",
+  "recovery-sovereign-build-dispatch",
+  "recovery-founder-build-order-surface",
+  "recovery-sovereign-build-readiness",
+  "recovery-founder-build-decision-receipts",
+  "recovery-founder-scoped-build-capsules",
+  "recovery-bounded-build-admission",
+  "recovery-bounded-step-execution",
+  "recovery-implementation-review-packets",
+  "recovery-repository-attestation-gate",
+  "founder-offline-intent-workbench",
+];
+for (const id of testedRegistryIds) {
+  const item = sovereignFactoryImplementationItems.find((candidate) => candidate.id === id);
+  assert(item?.state === "tested", `${id} must remain TESTED and unmerged.`);
+  assert(validateImplementationTruth(item).length === 0, `${id} must carry exact code and test evidence.`);
+  assert(
+    !["merged", "deployed", "verified_live"].includes(item.state),
+    `${id} must not skip MERGED, DEPLOYED or VERIFIED_LIVE.`,
+  );
+}
+
+const semanticReceipts = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-partition-semantic-receipts",
+);
+const implementationPlanning = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-implementation-planning",
+);
+const sovereignDispatch = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-sovereign-build-dispatch",
+);
+const founderBuildOrderSurface = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-founder-build-order-surface",
+);
+const sovereignReadiness = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-sovereign-build-readiness",
+);
+const founderBuildDecisions = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-founder-build-decision-receipts",
+);
+const founderScopedBuildCapsules = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-founder-scoped-build-capsules",
+);
+const boundedBuildAdmission = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-bounded-build-admission",
+);
+const boundedStepExecution = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-bounded-step-execution",
+);
+const implementationReviewPackets = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-implementation-review-packets",
+);
+const repositoryAttestationGate = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-repository-attestation-gate",
+);
+const founderIntentWorkbench = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "founder-offline-intent-workbench",
+);
+assert(
+  semanticReceipts?.evidence?.includes("records:82413") &&
+    implementationPlanning?.evidence?.includes("records:82413") &&
+    sovereignDispatch?.evidence?.includes("records:82413") &&
+    founderBuildOrderSurface?.evidence?.includes("records:82413") &&
+    sovereignReadiness?.evidence?.includes("records:82413") &&
+    founderBuildDecisions?.evidence?.includes("records:82413") &&
+    founderScopedBuildCapsules?.evidence?.includes("records:82413") &&
+    boundedBuildAdmission?.evidence?.includes("records:82413") &&
+    boundedStepExecution?.evidence?.includes("records:82413") &&
+    implementationReviewPackets?.evidence?.includes("records:82413") &&
+    repositoryAttestationGate?.evidence?.includes("records:82413"),
+  "All eleven current recovery surfaces must preserve the exact 82,413-record boundary.",
+);
+assert(
+  sovereignDispatch?.evidence?.includes("canonical_build_orders:279") &&
+    sovereignDispatch?.evidence?.includes("awaiting_owner:279") &&
+    sovereignDispatch?.evidence?.includes("execution_ready:0"),
+  "Sovereign dispatch truth must expose all 279 owner-gated orders and zero execution authority.",
+);
+assert(
+  founderBuildOrderSurface?.evidence?.includes("canonical_build_orders:279") &&
+    founderBuildOrderSurface?.evidence?.includes("visibility:founder_only_aal2") &&
+    founderBuildOrderSurface?.evidence?.includes("execution_ready:0"),
+  "Founder build-order truth must expose all orders under AAL2 without execution authority.",
+);
+assert(
+  sovereignReadiness?.evidence?.includes("readiness_packets:279") &&
+    sovereignReadiness?.evidence?.includes("technology_hold:279") &&
+    sovereignReadiness?.evidence?.includes("agent_grants:0") &&
+    sovereignReadiness?.evidence?.includes("edge_eligible:0"),
+  "Readiness truth must expose every packet and preserve all Technology, agent and edge gates.",
+);
+assert(
+  founderBuildDecisions?.evidence?.includes("decision_sources:279") &&
+    founderBuildDecisions?.evidence?.includes("visibility:founder_only_aal2") &&
+    founderBuildDecisions?.evidence?.includes("same_origin_post:true") &&
+    founderBuildDecisions?.evidence?.includes("execution_authority:0") &&
+    founderBuildDecisions?.evidence?.includes("migration:authored_not_applied"),
+  "Founder decision truth must bind all 279 readiness packets without implying runtime or production authority.",
+);
+assert(
+  founderScopedBuildCapsules?.evidence?.includes("scoped_build_capsules:279") &&
+    founderScopedBuildCapsules?.evidence?.includes("classified_members:31779") &&
+    founderScopedBuildCapsules?.evidence?.includes("blocked_governed_hold:355") &&
+    founderScopedBuildCapsules?.evidence?.includes("blocked_recursive_provenance:50279") &&
+    founderScopedBuildCapsules?.evidence?.includes("synthetic_receipts_only:true") &&
+    founderScopedBuildCapsules?.evidence?.includes("founder_approvals:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("technology_hold:279") &&
+    founderScopedBuildCapsules?.evidence?.includes("agent_grants:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("budget_grants:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("executions:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("network_access:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("secrets_access:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("production_writes:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("merge_authority:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("deployment_authority:0") &&
+    founderScopedBuildCapsules?.evidence?.includes("release_authority:0"),
+  "Scoped-build capsule truth must preserve the complete corpus and every Founder, Technology, agent, network, secret, production and release gate.",
+);
+
+assert(
+  boundedBuildAdmission?.evidence?.includes("bounded_admissions:279") &&
+    boundedBuildAdmission?.evidence?.includes("classified_members:31779") &&
+    boundedBuildAdmission?.evidence?.includes("blocked_governed_hold:355") &&
+    boundedBuildAdmission?.evidence?.includes("blocked_recursive_provenance:50279") &&
+    boundedBuildAdmission?.evidence?.includes("synthetic_inputs_only:true") &&
+    boundedBuildAdmission?.evidence?.includes("bounded_sessions:279") &&
+    boundedBuildAdmission?.evidence?.includes("completed_steps:0") &&
+    boundedBuildAdmission?.evidence?.includes("execution_receipts:0") &&
+    boundedBuildAdmission?.evidence?.includes("real_founder_approvals:0") &&
+    boundedBuildAdmission?.evidence?.includes("real_technology_clearances:0") &&
+    boundedBuildAdmission?.evidence?.includes("real_agent_grants:0") &&
+    boundedBuildAdmission?.evidence?.includes("real_budget_grants:0") &&
+    boundedBuildAdmission?.evidence?.includes("real_edge_packets:0") &&
+    boundedBuildAdmission?.evidence?.includes("canonical_repository_writes:0") &&
+    boundedBuildAdmission?.evidence?.includes("production_writes:0") &&
+    boundedBuildAdmission?.evidence?.includes("merge_authority:0") &&
+    boundedBuildAdmission?.evidence?.includes("deployment_authority:0") &&
+    boundedBuildAdmission?.evidence?.includes("release_authority:0"),
+  "Bounded-admission truth must cover the complete classified corpus while retaining zero real execution, repository, production and release authority.",
+);
+
+assert(
+  boundedStepExecution?.evidence?.includes("bounded_sessions:279") &&
+    boundedStepExecution?.evidence?.includes("classified_members:31779") &&
+    boundedStepExecution?.evidence?.includes("bounded_step_receipts:1674") &&
+    boundedStepExecution?.evidence?.includes("bounded_checkpoints:1953") &&
+    boundedStepExecution?.evidence?.includes("blocked_governed_hold:355") &&
+    boundedStepExecution?.evidence?.includes("blocked_recursive_provenance:50279") &&
+    boundedStepExecution?.evidence?.includes("synthetic_inputs_only:true") &&
+    boundedStepExecution?.evidence?.includes("real_founder_approvals:0") &&
+    boundedStepExecution?.evidence?.includes("real_technology_clearances:0") &&
+    boundedStepExecution?.evidence?.includes("real_agent_grants:0") &&
+    boundedStepExecution?.evidence?.includes("real_budget_grants:0") &&
+    boundedStepExecution?.evidence?.includes("real_edge_packets:0") &&
+    boundedStepExecution?.evidence?.includes("real_code_mutations:0") &&
+    boundedStepExecution?.evidence?.includes("canonical_repository_writes:0") &&
+    boundedStepExecution?.evidence?.includes("production_writes:0") &&
+    boundedStepExecution?.evidence?.includes("merge_authority:0") &&
+    boundedStepExecution?.evidence?.includes("deployment_authority:0") &&
+    boundedStepExecution?.evidence?.includes("release_authority:0") &&
+    boundedStepExecution?.evidence?.includes("lifecycle_promotions:0"),
+  "Bounded-step truth must record all synthetic receipts and checkpoints while retaining zero real mutation, production, release or lifecycle authority.",
+);
+
+assert(
+  implementationReviewPackets?.evidence?.includes("implementation_review_packets:279") &&
+    implementationReviewPackets?.evidence?.includes("classified_members:31779") &&
+    implementationReviewPackets?.evidence?.includes("bounded_step_receipts:1674") &&
+    implementationReviewPackets?.evidence?.includes("bounded_checkpoints:1953") &&
+    implementationReviewPackets?.evidence?.includes("blocked_governed_hold:355") &&
+    implementationReviewPackets?.evidence?.includes("blocked_recursive_provenance:50279") &&
+    implementationReviewPackets?.evidence?.includes("synthetic_rehearsal_only:true") &&
+    implementationReviewPackets?.evidence?.includes("trusted_repository_attestations:0") &&
+    implementationReviewPackets?.evidence?.includes("real_founder_approvals:0") &&
+    implementationReviewPackets?.evidence?.includes("real_technology_clearances:0") &&
+    implementationReviewPackets?.evidence?.includes("real_agent_grants:0") &&
+    implementationReviewPackets?.evidence?.includes("real_budget_grants:0") &&
+    implementationReviewPackets?.evidence?.includes("real_edge_packets:0") &&
+    implementationReviewPackets?.evidence?.includes("real_code_mutations:0") &&
+    implementationReviewPackets?.evidence?.includes("canonical_repository_writes:0") &&
+    implementationReviewPackets?.evidence?.includes("production_writes:0") &&
+    implementationReviewPackets?.evidence?.includes("merge_authority:0") &&
+    implementationReviewPackets?.evidence?.includes("deployment_authority:0") &&
+    implementationReviewPackets?.evidence?.includes("release_authority:0") &&
+    implementationReviewPackets?.evidence?.includes("lifecycle_promotions:0"),
+  "Implementation-review truth must bind every synthetic review packet while retaining zero attestation, real mutation, production, release or lifecycle authority.",
+);
+
+assert(
+  repositoryAttestationGate?.evidence?.includes("repository_attestation_evaluations:279") &&
+    repositoryAttestationGate?.evidence?.includes("classified_members:31779") &&
+    repositoryAttestationGate?.evidence?.includes("synthetic_rehearsal_blocked:279") &&
+    repositoryAttestationGate?.evidence?.includes("blocked_governed_hold:355") &&
+    repositoryAttestationGate?.evidence?.includes("blocked_recursive_provenance:50279") &&
+    repositoryAttestationGate?.evidence?.includes("ed25519_signature_gate:true") &&
+    repositoryAttestationGate?.evidence?.includes("exact_pr_commit_tree_binding:true") &&
+    repositoryAttestationGate?.evidence?.includes("required_workflow_gates:3") &&
+    repositoryAttestationGate?.evidence?.includes("immutable_artifact_binding:true") &&
+    repositoryAttestationGate?.evidence?.includes("replay_protection:true") &&
+    repositoryAttestationGate?.evidence?.includes("trusted_real_workspace_attestations:0") &&
+    repositoryAttestationGate?.evidence?.includes("real_founder_code_reviews:0") &&
+    repositoryAttestationGate?.evidence?.includes("real_lifecycle_eligible_orders:0") &&
+    repositoryAttestationGate?.evidence?.includes("real_user_visible_capabilities:0") &&
+    repositoryAttestationGate?.evidence?.includes("real_code_mutations:0") &&
+    repositoryAttestationGate?.evidence?.includes("canonical_repository_writes:0") &&
+    repositoryAttestationGate?.evidence?.includes("production_writes:0") &&
+    repositoryAttestationGate?.evidence?.includes("merge_authority:0") &&
+    repositoryAttestationGate?.evidence?.includes("deployment_authority:0") &&
+    repositoryAttestationGate?.evidence?.includes("release_authority:0") &&
+    repositoryAttestationGate?.evidence?.includes("lifecycle_promotions:0"),
+  "Repository-attestation truth must preserve every synthetic blocker and explicitly record zero real user-visible capability or lifecycle eligibility.",
+);
+
+assert(
+  founderIntentWorkbench?.state === "tested" &&
+    founderIntentWorkbench?.evidence?.includes("real_coded_capabilities:1") &&
+    founderIntentWorkbench?.evidence?.includes("real_tested_capabilities:1") &&
+    founderIntentWorkbench?.evidence?.includes("real_route:/owner/control/intent-workbench") &&
+    founderIntentWorkbench?.evidence?.includes("founder_only:true") &&
+    founderIntentWorkbench?.evidence?.includes("aal2_required:true") &&
+    founderIntentWorkbench?.evidence?.includes("offline_execution:true") &&
+    founderIntentWorkbench?.evidence?.includes("local_encrypted_vault:true") &&
+    founderIntentWorkbench?.evidence?.includes("aes_gcm_256:true") &&
+    founderIntentWorkbench?.evidence?.includes("pbkdf2_sha256_iterations:210000") &&
+    founderIntentWorkbench?.evidence?.includes("canonical_sha256_receipts:true") &&
+    founderIntentWorkbench?.evidence?.includes("tamper_detection:true") &&
+    founderIntentWorkbench?.evidence?.includes("test_assertions:19") &&
+    founderIntentWorkbench?.evidence?.includes("exact_head_workflows_passed:8") &&
+    founderIntentWorkbench?.evidence?.includes("synthetic_records_counted_as_implementation:0") &&
+    founderIntentWorkbench?.evidence?.includes("real_deployed_capabilities:0") &&
+    founderIntentWorkbench?.evidence?.includes("real_verified_live_capabilities:0") &&
+    founderIntentWorkbench?.evidence?.includes("production_writes:0") &&
+    founderIntentWorkbench?.evidence?.includes("supabase_writes:0"),
+  "Founder intent truth must expose one real tested capability, count zero synthetic implementation and retain zero deployment or production authority.",
+);
+
+const supersededReceipts = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-semantic-receipts-superseded",
+);
+assert(
+  supersededReceipts?.state === "blocked" &&
+    supersededReceipts.blocker?.includes("superseded") &&
+    supersededReceipts.blocker?.includes("#364"),
+  "Closed unmerged PR #359 must remain visibly blocked and point to its tested successor.",
+);
+
+const productionVerification = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "production-verification",
+);
+assert(
+  productionVerification?.state === "blocked" &&
+    productionVerification.blocker?.includes("PR #315") &&
+    productionVerification.blocker?.includes("MERGED only") &&
+    productionVerification.blocker?.includes("PRs #363-#376") &&
+    productionVerification.blocker?.includes("VERCEL_TOKEN"),
+  "Production truth must distinguish merged Factory code from deployment and retain the external credential blocker.",
+);
+
+const registryIds = sovereignFactoryImplementationItems.map((item) => item.id);
+assert(
+  new Set(registryIds).size === registryIds.length,
+  "Implementation truth registry IDs must remain unique.",
+);
 
 
 assert(
