@@ -6,6 +6,7 @@ import {
   canonicalizeFounderIntent,
   createFounderIntentBudgetEnvelope,
   createFounderIntentEdgeHandoff,
+  createFounderIntentVerificationBundle,
   createFounderIntentRecord,
   decryptFounderIntentVault,
   encryptFounderIntentVault,
@@ -15,6 +16,7 @@ import {
   verifyFounderIntentBudgetEnvelope,
   verifyFounderIntentEdgeHandoff,
   verifyFounderTechnologyAssessment,
+  verifyFounderIntentVerificationBundle,
 } from "../core/intent/pantavion-founder-intent-workbench.ts";
 
 const input = {
@@ -93,6 +95,13 @@ assert.equal(technology.executionAllowed, false);
 assert.equal(await verifyFounderTechnologyAssessment(first, handoff, technology), true);
 assert.equal(await verifyFounderTechnologyAssessment(first, handoff, { ...technology, approvedTechnologies: [...technology.approvedTechnologies, "Unreviewed Runtime"] }), false);
 
+const bundle = await createFounderIntentVerificationBundle({ record: first, firewall: assessment, budget, handoff, technology });
+assert.equal(bundle.receiptChain.length, 5);
+assert.equal(bundle.lifecycleState, "TESTED_LOCALLY_NOT_MERGED");
+assert.equal(bundle.syntheticRecordsCountedAsImplementation, 0);
+assert.equal(await verifyFounderIntentVerificationBundle(bundle), true);
+assert.equal(await verifyFounderIntentVerificationBundle({ ...bundle, lifecycleState: "MERGED" }), false);
+
 const tampered = { ...first, desiredOutcome: "tampered" };
 assert.equal(await verifyFounderIntentRecord(tampered), false, "tampering must fail closed");
 
@@ -125,8 +134,8 @@ assert.throws(
 console.log(JSON.stringify({
   marker: "pantavion_founder_intent_workbench_test_v1",
   status: "passed",
-  assertions: 48,
-  actualCapability: "encrypted offline intent capture plus fail-closed Firewall, capability/budget, replay-bound edge handoff, and Technology Library admission",
+  assertions: 53,
+  actualCapability: "encrypted offline intent capture with Firewall, capability/budget, edge, Technology Library, and exportable verification bundle",
   sha256: first.sha256,
   syntheticRecordsCountedAsImplementation: 0,
 }, null, 2));

@@ -96,6 +96,16 @@ export type FounderTechnologyAssessment = {
   sha256: string;
 };
 
+export type FounderIntentVerificationBundle = {
+  marker: "pantavion_founder_intent_verification_bundle_v1";
+  intentId: string;
+  receiptChain: [string, string, string, string, string];
+  lifecycleState: "TESTED_LOCALLY_NOT_MERGED";
+  syntheticRecordsCountedAsImplementation: 0;
+  canonicalPayload: string;
+  sha256: string;
+};
+
 const founderTechnologyLibrary: Record<FounderIntentModule, ReadonlyArray<{ capability: string; technology: string }>> = {
   intent_to_outcome: [{ capability: "deterministic_receipts", technology: "WebCrypto SHA-256" }],
   ephemeral_agent_swarm: [],
@@ -338,6 +348,25 @@ export async function verifyFounderTechnologyAssessment(record: FounderIntentRec
   if (!/^[0-9a-f]{64}$/.test(assessment.sha256) || await sha256Hex(assessment.canonicalPayload) !== assessment.sha256) return false;
   const signed = JSON.parse(assessment.canonicalPayload) as Record<string, unknown>;
   return signed.marker === assessment.marker && signed.intentId === record.id && signed.intentSha256 === record.sha256 && signed.edgeHandoffSha256 === handoff.sha256 && JSON.stringify(signed.requiredCapabilities) === JSON.stringify(assessment.requiredCapabilities) && JSON.stringify(signed.approvedTechnologies) === JSON.stringify(assessment.approvedTechnologies) && JSON.stringify(signed.missingCapabilities) === JSON.stringify(assessment.missingCapabilities) && signed.disposition === assessment.disposition && signed.executionAllowed === false;
+}
+
+export async function createFounderIntentVerificationBundle(params: { record: FounderIntentRecord; firewall: FounderIntentFirewallAssessment; budget: FounderIntentBudgetEnvelope; handoff: FounderIntentEdgeHandoff; technology: FounderTechnologyAssessment }): Promise<FounderIntentVerificationBundle> {
+  if (!await verifyFounderIntentRecord(params.record)) throw new Error("intent_record_integrity_failed");
+  if (!await verifyFounderIntentFirewallAssessment(params.record, params.firewall)) throw new Error("intent_firewall_integrity_failed");
+  if (!await verifyFounderIntentBudgetEnvelope(params.record, params.budget)) throw new Error("intent_budget_integrity_failed");
+  if (!await verifyFounderIntentEdgeHandoff({ record: params.record, assessment: params.firewall, budget: params.budget, handoff: params.handoff })) throw new Error("edge_handoff_integrity_failed");
+  if (!await verifyFounderTechnologyAssessment(params.record, params.handoff, params.technology)) throw new Error("technology_assessment_integrity_failed");
+  const receiptChain: FounderIntentVerificationBundle["receiptChain"] = [params.record.sha256, params.firewall.sha256, params.budget.sha256, params.handoff.sha256, params.technology.sha256];
+  const canonicalPayload = JSON.stringify({ marker: "pantavion_founder_intent_verification_bundle_v1", intentId: params.record.id, receiptChain, lifecycleState: "TESTED_LOCALLY_NOT_MERGED", syntheticRecordsCountedAsImplementation: 0 });
+  return { marker: "pantavion_founder_intent_verification_bundle_v1", intentId: params.record.id, receiptChain, lifecycleState: "TESTED_LOCALLY_NOT_MERGED", syntheticRecordsCountedAsImplementation: 0, canonicalPayload, sha256: await sha256Hex(canonicalPayload) };
+}
+
+export async function verifyFounderIntentVerificationBundle(bundle: FounderIntentVerificationBundle) {
+  if (bundle.lifecycleState !== "TESTED_LOCALLY_NOT_MERGED" || bundle.syntheticRecordsCountedAsImplementation !== 0 || bundle.receiptChain.length !== 5) return false;
+  if (bundle.receiptChain.some((receipt) => !/^[0-9a-f]{64}$/.test(receipt))) return false;
+  if (!/^[0-9a-f]{64}$/.test(bundle.sha256) || await sha256Hex(bundle.canonicalPayload) !== bundle.sha256) return false;
+  const signed = JSON.parse(bundle.canonicalPayload) as Record<string, unknown>;
+  return signed.marker === bundle.marker && signed.intentId === bundle.intentId && JSON.stringify(signed.receiptChain) === JSON.stringify(bundle.receiptChain) && signed.lifecycleState === bundle.lifecycleState && signed.syntheticRecordsCountedAsImplementation === 0;
 }
 
 function bytesToBase64(bytes: Uint8Array) {
