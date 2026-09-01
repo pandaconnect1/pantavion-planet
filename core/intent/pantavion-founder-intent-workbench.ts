@@ -45,6 +45,16 @@ export type FounderIntentValidation = {
   errors: string[];
 };
 
+export type FounderIntentFirewallAssessment = {
+  marker: "pantavion_founder_intent_firewall_assessment_v1";
+  intentId: string;
+  disposition: "owner_review_required";
+  executionAllowed: false;
+  reasons: string[];
+  assessedPayload: string;
+  sha256: string;
+};
+
 export type EncryptedFounderIntentVault = {
   marker: typeof FOUNDER_INTENT_VAULT_MARKER;
   cipher: "AES-GCM-256";
@@ -163,6 +173,49 @@ export async function verifyFounderIntentRecord(record: FounderIntentRecord) {
     && canonical.productionWriteAuthority === false
     && canonical.mergeAuthority === false
     && canonical.deploymentAuthority === false;
+}
+
+export async function assessFounderIntentFirewall(record: FounderIntentRecord): Promise<FounderIntentFirewallAssessment> {
+  if (!await verifyFounderIntentRecord(record)) throw new Error("intent_record_integrity_failed");
+  const reasons = ["explicit_execution_authority_missing", "merge_authority_missing", "deployment_authority_missing"];
+  if (record.priority === "critical") reasons.push("critical_priority_requires_owner_review");
+  if (record.module === "ephemeral_agent_swarm") reasons.push("agent_capability_grant_missing");
+  if (record.module === "technology_library") reasons.push("technology_clearance_missing");
+  if (record.maxActions > 20) reasons.push("elevated_action_budget_requires_owner_review");
+  if (record.maxMinutes > 480) reasons.push("elevated_time_budget_requires_owner_review");
+  const assessedPayload = JSON.stringify({
+    marker: "pantavion_founder_intent_firewall_assessment_v1",
+    intentId: record.id,
+    intentSha256: record.sha256,
+    disposition: "owner_review_required",
+    executionAllowed: false,
+    reasons,
+  });
+  return {
+    marker: "pantavion_founder_intent_firewall_assessment_v1",
+    intentId: record.id,
+    disposition: "owner_review_required",
+    executionAllowed: false,
+    reasons,
+    assessedPayload,
+    sha256: await sha256Hex(assessedPayload),
+  };
+}
+
+export async function verifyFounderIntentFirewallAssessment(record: FounderIntentRecord, assessment: FounderIntentFirewallAssessment) {
+  if (!await verifyFounderIntentRecord(record)) return false;
+  if (assessment.marker !== "pantavion_founder_intent_firewall_assessment_v1") return false;
+  if (assessment.intentId !== record.id || assessment.executionAllowed !== false) return false;
+  if (assessment.disposition !== "owner_review_required") return false;
+  if (!assessment.reasons.includes("explicit_execution_authority_missing")) return false;
+  if (!/^[0-9a-f]{64}$/.test(assessment.sha256) || await sha256Hex(assessment.assessedPayload) !== assessment.sha256) return false;
+  const signed = JSON.parse(assessment.assessedPayload) as Record<string, unknown>;
+  return signed.marker === assessment.marker
+    && signed.intentId === record.id
+    && signed.intentSha256 === record.sha256
+    && signed.disposition === assessment.disposition
+    && signed.executionAllowed === false
+    && JSON.stringify(signed.reasons) === JSON.stringify(assessment.reasons);
 }
 
 function bytesToBase64(bytes: Uint8Array) {

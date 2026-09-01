@@ -3,12 +3,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
+  assessFounderIntentFirewall,
   createFounderIntentRecord,
   decryptFounderIntentVault,
   encryptFounderIntentVault,
   founderIntentModules,
   type EncryptedFounderIntentVault,
   type FounderIntentInput,
+  type FounderIntentFirewallAssessment,
   type FounderIntentModule,
   type FounderIntentPriority,
   type FounderIntentRecord,
@@ -45,6 +47,7 @@ export default function IntentWorkbenchClient() {
   const [unlocked, setUnlocked] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [assessments, setAssessments] = useState<Record<string, FounderIntentFirewallAssessment>>({});
   const importRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -92,12 +95,27 @@ export default function IntentWorkbenchClient() {
         id: crypto.randomUUID(),
         createdAt: new Date().toISOString(),
       });
+      const assessment = await assessFounderIntentFirewall(record);
       const next = [record, ...records];
       await persist(next);
       setRecords(next);
+      setAssessments((current) => ({ ...current, [record.id]: assessment }));
       setInput(emptyInput);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "intent_capture_failed");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function assess(record: FounderIntentRecord) {
+    setBusy(true);
+    setError(null);
+    try {
+      const assessment = await assessFounderIntentFirewall(record);
+      setAssessments((current) => ({ ...current, [record.id]: assessment }));
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "intent_firewall_assessment_failed");
     } finally {
       setBusy(false);
     }
@@ -307,6 +325,15 @@ export default function IntentWorkbenchClient() {
               <strong className="text-white">Verify:</strong> {record.acceptanceEvidence}
             </div>
             <div className="mt-3 break-all font-mono text-[11px] text-emerald-300">SHA-256 {record.sha256}</div>
+            {assessments[record.id] ? (
+              <div className="mt-3 rounded-xl border border-amber-700 bg-amber-950/30 p-3 text-xs text-amber-100">
+                <div className="font-black uppercase">Intent Firewall · OWNER REVIEW REQUIRED · execution blocked</div>
+                <div className="mt-2">{assessments[record.id].reasons.join(" · ")}</div>
+                <div className="mt-2 break-all font-mono text-[10px] text-amber-300">Receipt {assessments[record.id].sha256}</div>
+              </div>
+            ) : (
+              <button type="button" disabled={busy} onClick={() => void assess(record)} className="mt-3 min-h-11 rounded-xl border border-amber-700 px-4 text-sm font-black text-amber-200 disabled:opacity-50">RUN INTENT FIREWALL</button>
+            )}
             <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
               <span>{new Date(record.createdAt).toLocaleString()}</span>
               <span>{record.maxActions} actions · {record.maxMinutes} min · offline only</span>
