@@ -1,12 +1,14 @@
 import assert from "node:assert/strict";
 
 import {
+  assessFounderIntentFirewall,
   canonicalizeFounderIntent,
   createFounderIntentRecord,
   decryptFounderIntentVault,
   encryptFounderIntentVault,
   validateFounderIntentInput,
   verifyFounderIntentRecord,
+  verifyFounderIntentFirewallAssessment,
 } from "../core/intent/pantavion-founder-intent-workbench.ts";
 
 const input = {
@@ -40,6 +42,23 @@ assert.equal(first.mergeAuthority, false);
 assert.equal(first.deploymentAuthority, false);
 assert.equal(await verifyFounderIntentRecord(first), true);
 
+const assessment = await assessFounderIntentFirewall(first);
+assert.equal(assessment.disposition, "owner_review_required");
+assert.equal(assessment.executionAllowed, false);
+assert.ok(assessment.reasons.includes("explicit_execution_authority_missing"));
+assert.equal(await verifyFounderIntentFirewallAssessment(first, assessment), true);
+assert.match(assessment.sha256, /^[0-9a-f]{64}$/);
+assert.equal(
+  await verifyFounderIntentFirewallAssessment(first, { ...assessment, reasons: [...assessment.reasons, "tampered"] }),
+  false,
+  "tampered displayed reasons must fail receipt verification",
+);
+assert.equal(
+  await verifyFounderIntentFirewallAssessment(first, { ...assessment, assessedPayload: assessment.assessedPayload.replace("owner_review_required", "allow") }),
+  false,
+  "tampered signed payload must fail receipt verification",
+);
+
 const tampered = { ...first, desiredOutcome: "tampered" };
 assert.equal(await verifyFounderIntentRecord(tampered), false, "tampering must fail closed");
 
@@ -72,8 +91,8 @@ assert.throws(
 console.log(JSON.stringify({
   marker: "pantavion_founder_intent_workbench_test_v1",
   status: "passed",
-  assertions: 19,
-  actualCapability: "encrypted offline founder intent capture/export/import/integrity verification",
+  assertions: 26,
+  actualCapability: "encrypted offline founder intent capture plus deterministic fail-closed Intent Firewall assessment",
   sha256: first.sha256,
   syntheticRecordsCountedAsImplementation: 0,
 }, null, 2));
