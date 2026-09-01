@@ -905,6 +905,7 @@ const testedRegistryIds = [
   "recovery-bounded-step-execution",
   "recovery-implementation-review-packets",
   "recovery-repository-attestation-gate",
+  "founder-offline-intent-workbench",
 ];
 for (const id of testedRegistryIds) {
   const item = sovereignFactoryImplementationItems.find((candidate) => candidate.id === id);
@@ -948,6 +949,9 @@ const implementationReviewPackets = sovereignFactoryImplementationItems.find(
 );
 const repositoryAttestationGate = sovereignFactoryImplementationItems.find(
   (item) => item.id === "recovery-repository-attestation-gate",
+);
+const founderIntentWorkbench = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "founder-offline-intent-workbench",
 );
 assert(
   semanticReceipts?.evidence?.includes("records:82413") &&
@@ -1104,6 +1108,29 @@ assert(
   "Repository-attestation truth must preserve every synthetic blocker and explicitly record zero real user-visible capability or lifecycle eligibility.",
 );
 
+assert(
+  founderIntentWorkbench?.state === "tested" &&
+    founderIntentWorkbench?.evidence?.includes("real_coded_capabilities:1") &&
+    founderIntentWorkbench?.evidence?.includes("real_tested_capabilities:1") &&
+    founderIntentWorkbench?.evidence?.includes("real_route:/owner/control/intent-workbench") &&
+    founderIntentWorkbench?.evidence?.includes("founder_only:true") &&
+    founderIntentWorkbench?.evidence?.includes("aal2_required:true") &&
+    founderIntentWorkbench?.evidence?.includes("offline_execution:true") &&
+    founderIntentWorkbench?.evidence?.includes("local_encrypted_vault:true") &&
+    founderIntentWorkbench?.evidence?.includes("aes_gcm_256:true") &&
+    founderIntentWorkbench?.evidence?.includes("pbkdf2_sha256_iterations:210000") &&
+    founderIntentWorkbench?.evidence?.includes("canonical_sha256_receipts:true") &&
+    founderIntentWorkbench?.evidence?.includes("tamper_detection:true") &&
+    founderIntentWorkbench?.evidence?.includes("test_assertions:19") &&
+    founderIntentWorkbench?.evidence?.includes("exact_head_workflows_passed:8") &&
+    founderIntentWorkbench?.evidence?.includes("synthetic_records_counted_as_implementation:0") &&
+    founderIntentWorkbench?.evidence?.includes("real_deployed_capabilities:0") &&
+    founderIntentWorkbench?.evidence?.includes("real_verified_live_capabilities:0") &&
+    founderIntentWorkbench?.evidence?.includes("production_writes:0") &&
+    founderIntentWorkbench?.evidence?.includes("supabase_writes:0"),
+  "Founder intent truth must expose one real tested capability, count zero synthetic implementation and retain zero deployment or production authority.",
+);
+
 const supersededReceipts = sovereignFactoryImplementationItems.find(
   (item) => item.id === "recovery-semantic-receipts-superseded",
 );
@@ -1121,7 +1148,7 @@ assert(
   productionVerification?.state === "blocked" &&
     productionVerification.blocker?.includes("PR #315") &&
     productionVerification.blocker?.includes("MERGED only") &&
-    productionVerification.blocker?.includes("PRs #363-#375") &&
+    productionVerification.blocker?.includes("PRs #363-#376") &&
     productionVerification.blocker?.includes("VERCEL_TOKEN"),
   "Production truth must distinguish merged Factory code from deployment and retain the external credential blocker.",
 );
