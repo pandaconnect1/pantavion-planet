@@ -96,6 +96,19 @@ export type FounderTechnologyAssessment = {
   sha256: string;
 };
 
+export type FounderEphemeralAgentLease = {
+  marker: "pantavion_founder_ephemeral_agent_lease_v1";
+  intentId: string;
+  agentId: string;
+  capabilityScope: FounderIntentModule;
+  actionLimit: number;
+  expiresAt: string;
+  status: "withheld_pending_owner_admission";
+  executionAllowed: false;
+  canonicalPayload: string;
+  sha256: string;
+};
+
 export type FounderIntentVerificationBundle = {
   marker: "pantavion_founder_intent_verification_bundle_v1";
   intentId: string;
@@ -348,6 +361,25 @@ export async function verifyFounderTechnologyAssessment(record: FounderIntentRec
   if (!/^[0-9a-f]{64}$/.test(assessment.sha256) || await sha256Hex(assessment.canonicalPayload) !== assessment.sha256) return false;
   const signed = JSON.parse(assessment.canonicalPayload) as Record<string, unknown>;
   return signed.marker === assessment.marker && signed.intentId === record.id && signed.intentSha256 === record.sha256 && signed.edgeHandoffSha256 === handoff.sha256 && JSON.stringify(signed.requiredCapabilities) === JSON.stringify(assessment.requiredCapabilities) && JSON.stringify(signed.approvedTechnologies) === JSON.stringify(assessment.approvedTechnologies) && JSON.stringify(signed.missingCapabilities) === JSON.stringify(assessment.missingCapabilities) && signed.disposition === assessment.disposition && signed.executionAllowed === false;
+}
+
+export async function createFounderEphemeralAgentLease(params: { record: FounderIntentRecord; budget: FounderIntentBudgetEnvelope; technology: FounderTechnologyAssessment; agentId: string }): Promise<FounderEphemeralAgentLease> {
+  if (!await verifyFounderIntentRecord(params.record)) throw new Error("intent_record_integrity_failed");
+  if (!await verifyFounderIntentBudgetEnvelope(params.record, params.budget)) throw new Error("intent_budget_integrity_failed");
+  if (params.technology.disposition !== "compatible_pending_owner_admission" || params.technology.executionAllowed !== false) throw new Error("technology_admission_required");
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(params.agentId)) throw new Error("agent_id_invalid");
+  const canonicalPayload = JSON.stringify({ marker: "pantavion_founder_ephemeral_agent_lease_v1", intentId: params.record.id, intentSha256: params.record.sha256, budgetSha256: params.budget.sha256, technologySha256: params.technology.sha256, agentId: params.agentId.toLowerCase(), capabilityScope: params.record.module, actionLimit: params.budget.actionLimit, expiresAt: params.budget.expiresAt, status: "withheld_pending_owner_admission", executionAllowed: false });
+  const canonical = JSON.parse(canonicalPayload) as Omit<FounderEphemeralAgentLease, "canonicalPayload" | "sha256">;
+  return { ...canonical, canonicalPayload, sha256: await sha256Hex(canonicalPayload) };
+}
+
+export async function verifyFounderEphemeralAgentLease(record: FounderIntentRecord, budget: FounderIntentBudgetEnvelope, technology: FounderTechnologyAssessment, lease: FounderEphemeralAgentLease) {
+  if (!await verifyFounderIntentRecord(record) || !await verifyFounderIntentBudgetEnvelope(record, budget)) return false;
+  if (technology.disposition !== "compatible_pending_owner_admission" || technology.executionAllowed !== false) return false;
+  if (lease.intentId !== record.id || lease.capabilityScope !== record.module || lease.actionLimit !== budget.actionLimit || lease.expiresAt !== budget.expiresAt || lease.status !== "withheld_pending_owner_admission" || lease.executionAllowed !== false) return false;
+  if (!/^[0-9a-f]{64}$/.test(lease.sha256) || await sha256Hex(lease.canonicalPayload) !== lease.sha256) return false;
+  const signed = JSON.parse(lease.canonicalPayload) as Record<string, unknown>;
+  return signed.marker === lease.marker && signed.intentId === record.id && signed.intentSha256 === record.sha256 && signed.budgetSha256 === budget.sha256 && signed.technologySha256 === technology.sha256 && signed.agentId === lease.agentId && signed.capabilityScope === lease.capabilityScope && signed.actionLimit === lease.actionLimit && signed.expiresAt === lease.expiresAt && signed.status === lease.status && signed.executionAllowed === false;
 }
 
 export async function createFounderIntentVerificationBundle(params: { record: FounderIntentRecord; firewall: FounderIntentFirewallAssessment; budget: FounderIntentBudgetEnvelope; handoff: FounderIntentEdgeHandoff; technology: FounderTechnologyAssessment }): Promise<FounderIntentVerificationBundle> {
