@@ -904,6 +904,7 @@ const testedRegistryIds = [
   "recovery-bounded-build-admission",
   "recovery-bounded-step-execution",
   "recovery-implementation-review-packets",
+  "recovery-repository-attestation-gate",
 ];
 for (const id of testedRegistryIds) {
   const item = sovereignFactoryImplementationItems.find((candidate) => candidate.id === id);
@@ -945,6 +946,9 @@ const boundedStepExecution = sovereignFactoryImplementationItems.find(
 const implementationReviewPackets = sovereignFactoryImplementationItems.find(
   (item) => item.id === "recovery-implementation-review-packets",
 );
+const repositoryAttestationGate = sovereignFactoryImplementationItems.find(
+  (item) => item.id === "recovery-repository-attestation-gate",
+);
 assert(
   semanticReceipts?.evidence?.includes("records:82413") &&
     implementationPlanning?.evidence?.includes("records:82413") &&
@@ -955,8 +959,9 @@ assert(
     founderScopedBuildCapsules?.evidence?.includes("records:82413") &&
     boundedBuildAdmission?.evidence?.includes("records:82413") &&
     boundedStepExecution?.evidence?.includes("records:82413") &&
-    implementationReviewPackets?.evidence?.includes("records:82413"),
-  "All ten current recovery surfaces must preserve the exact 82,413-record boundary.",
+    implementationReviewPackets?.evidence?.includes("records:82413") &&
+    repositoryAttestationGate?.evidence?.includes("records:82413"),
+  "All eleven current recovery surfaces must preserve the exact 82,413-record boundary.",
 );
 assert(
   sovereignDispatch?.evidence?.includes("canonical_build_orders:279") &&
@@ -1074,6 +1079,31 @@ assert(
   "Implementation-review truth must bind every synthetic review packet while retaining zero attestation, real mutation, production, release or lifecycle authority.",
 );
 
+assert(
+  repositoryAttestationGate?.evidence?.includes("repository_attestation_evaluations:279") &&
+    repositoryAttestationGate?.evidence?.includes("classified_members:31779") &&
+    repositoryAttestationGate?.evidence?.includes("synthetic_rehearsal_blocked:279") &&
+    repositoryAttestationGate?.evidence?.includes("blocked_governed_hold:355") &&
+    repositoryAttestationGate?.evidence?.includes("blocked_recursive_provenance:50279") &&
+    repositoryAttestationGate?.evidence?.includes("ed25519_signature_gate:true") &&
+    repositoryAttestationGate?.evidence?.includes("exact_pr_commit_tree_binding:true") &&
+    repositoryAttestationGate?.evidence?.includes("required_workflow_gates:3") &&
+    repositoryAttestationGate?.evidence?.includes("immutable_artifact_binding:true") &&
+    repositoryAttestationGate?.evidence?.includes("replay_protection:true") &&
+    repositoryAttestationGate?.evidence?.includes("trusted_real_workspace_attestations:0") &&
+    repositoryAttestationGate?.evidence?.includes("real_founder_code_reviews:0") &&
+    repositoryAttestationGate?.evidence?.includes("real_lifecycle_eligible_orders:0") &&
+    repositoryAttestationGate?.evidence?.includes("real_user_visible_capabilities:0") &&
+    repositoryAttestationGate?.evidence?.includes("real_code_mutations:0") &&
+    repositoryAttestationGate?.evidence?.includes("canonical_repository_writes:0") &&
+    repositoryAttestationGate?.evidence?.includes("production_writes:0") &&
+    repositoryAttestationGate?.evidence?.includes("merge_authority:0") &&
+    repositoryAttestationGate?.evidence?.includes("deployment_authority:0") &&
+    repositoryAttestationGate?.evidence?.includes("release_authority:0") &&
+    repositoryAttestationGate?.evidence?.includes("lifecycle_promotions:0"),
+  "Repository-attestation truth must preserve every synthetic blocker and explicitly record zero real user-visible capability or lifecycle eligibility.",
+);
+
 const supersededReceipts = sovereignFactoryImplementationItems.find(
   (item) => item.id === "recovery-semantic-receipts-superseded",
 );
@@ -1091,7 +1121,7 @@ assert(
   productionVerification?.state === "blocked" &&
     productionVerification.blocker?.includes("PR #315") &&
     productionVerification.blocker?.includes("MERGED only") &&
-    productionVerification.blocker?.includes("PRs #363-#374") &&
+    productionVerification.blocker?.includes("PRs #363-#375") &&
     productionVerification.blocker?.includes("VERCEL_TOKEN"),
   "Production truth must distinguish merged Factory code from deployment and retain the external credential blocker.",
 );
