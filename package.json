@@ -52,6 +52,7 @@
     "test:recovery-scoped-build-capsule": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-scoped-build-capsule-test.mjs",
     "test:recovery-build-admission": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-build-admission-test.mjs",
     "test:recovery-bounded-step-execution": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-bounded-step-execution-test.mjs",
+    "test:founder-intent-workbench": "node --no-warnings --experimental-strip-types scripts/pantavion-founder-intent-workbench-test.mjs",
     "test:scheduled-run-key": "node --no-warnings --experimental-strip-types scripts/pantavion-scheduled-run-key-test.mjs",
     "test:internal-scheduler-redundancy": "node --no-warnings scripts/pantavion-internal-scheduler-redundancy-test.mjs",
     "materialize:recovery-runtime-fabric": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-runtime-fabric-materialize.mjs",
