@@ -3,12 +3,14 @@ import assert from "node:assert/strict";
 import {
   assessFounderIntentFirewall,
   canonicalizeFounderIntent,
+  createFounderIntentBudgetEnvelope,
   createFounderIntentRecord,
   decryptFounderIntentVault,
   encryptFounderIntentVault,
   validateFounderIntentInput,
   verifyFounderIntentRecord,
   verifyFounderIntentFirewallAssessment,
+  verifyFounderIntentBudgetEnvelope,
 } from "../core/intent/pantavion-founder-intent-workbench.ts";
 
 const input = {
@@ -59,6 +61,15 @@ assert.equal(
   "tampered signed payload must fail receipt verification",
 );
 
+const budget = await createFounderIntentBudgetEnvelope(first);
+assert.equal(budget.capabilityScope, "disconnected_edge");
+assert.equal(budget.actionLimit, 8);
+assert.equal(budget.timeLimitMinutes, 120);
+assert.equal(budget.grantStatus, "withheld_pending_owner_review");
+assert.equal(budget.executionAllowed, false);
+assert.equal(await verifyFounderIntentBudgetEnvelope(first, budget), true);
+assert.equal(await verifyFounderIntentBudgetEnvelope(first, { ...budget, actionLimit: 9 }), false);
+
 const tampered = { ...first, desiredOutcome: "tampered" };
 assert.equal(await verifyFounderIntentRecord(tampered), false, "tampering must fail closed");
 
@@ -91,8 +102,8 @@ assert.throws(
 console.log(JSON.stringify({
   marker: "pantavion_founder_intent_workbench_test_v1",
   status: "passed",
-  assertions: 26,
-  actualCapability: "encrypted offline founder intent capture plus deterministic fail-closed Intent Firewall assessment",
+  assertions: 33,
+  actualCapability: "encrypted offline intent capture plus fail-closed Firewall and cryptographically bound capability/budget envelope",
   sha256: first.sha256,
   syntheticRecordsCountedAsImplementation: 0,
 }, null, 2));
