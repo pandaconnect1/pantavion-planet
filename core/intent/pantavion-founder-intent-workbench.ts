@@ -68,6 +68,21 @@ export type FounderIntentBudgetEnvelope = {
   sha256: string;
 };
 
+export type FounderIntentEdgeHandoff = {
+  marker: "pantavion_founder_intent_edge_handoff_v1";
+  intentId: string;
+  intentSha256: string;
+  firewallSha256: string;
+  budgetSha256: string;
+  nonce: string;
+  createdAt: string;
+  networkPolicy: "offline_only";
+  replayPolicy: "single_use_pending_owner_admission";
+  executionAllowed: false;
+  canonicalPayload: string;
+  sha256: string;
+};
+
 export type EncryptedFounderIntentVault = {
   marker: typeof FOUNDER_INTENT_VAULT_MARKER;
   cipher: "AES-GCM-256";
@@ -244,6 +259,40 @@ export async function verifyFounderIntentBudgetEnvelope(record: FounderIntentRec
   if (!/^[0-9a-f]{64}$/.test(envelope.sha256) || await sha256Hex(envelope.canonicalPayload) !== envelope.sha256) return false;
   const signed = JSON.parse(envelope.canonicalPayload) as Record<string, unknown>;
   return signed.marker === envelope.marker && signed.intentId === record.id && signed.intentSha256 === record.sha256 && signed.capabilityScope === envelope.capabilityScope && signed.actionLimit === envelope.actionLimit && signed.timeLimitMinutes === envelope.timeLimitMinutes && signed.expiresAt === envelope.expiresAt && signed.grantStatus === envelope.grantStatus && signed.executionAllowed === false;
+}
+
+export async function createFounderIntentEdgeHandoff(params: {
+  record: FounderIntentRecord;
+  assessment: FounderIntentFirewallAssessment;
+  budget: FounderIntentBudgetEnvelope;
+  nonce: string;
+  createdAt: string;
+}): Promise<FounderIntentEdgeHandoff> {
+  if (!await verifyFounderIntentRecord(params.record)) throw new Error("intent_record_integrity_failed");
+  if (!await verifyFounderIntentFirewallAssessment(params.record, params.assessment)) throw new Error("intent_firewall_integrity_failed");
+  if (!await verifyFounderIntentBudgetEnvelope(params.record, params.budget)) throw new Error("intent_budget_integrity_failed");
+  if (!/^[0-9a-f]{32}$/i.test(params.nonce)) throw new Error("edge_nonce_invalid");
+  if (!Number.isFinite(Date.parse(params.createdAt))) throw new Error("edge_created_at_invalid");
+  const canonicalPayload = JSON.stringify({ marker: "pantavion_founder_intent_edge_handoff_v1", intentId: params.record.id, intentSha256: params.record.sha256, firewallSha256: params.assessment.sha256, budgetSha256: params.budget.sha256, nonce: params.nonce.toLowerCase(), createdAt: new Date(params.createdAt).toISOString(), networkPolicy: "offline_only", replayPolicy: "single_use_pending_owner_admission", executionAllowed: false });
+  const canonical = JSON.parse(canonicalPayload) as Omit<FounderIntentEdgeHandoff, "canonicalPayload" | "sha256">;
+  return { ...canonical, canonicalPayload, sha256: await sha256Hex(canonicalPayload) };
+}
+
+export async function verifyFounderIntentEdgeHandoff(params: {
+  record: FounderIntentRecord;
+  assessment: FounderIntentFirewallAssessment;
+  budget: FounderIntentBudgetEnvelope;
+  handoff: FounderIntentEdgeHandoff;
+}) {
+  if (!await verifyFounderIntentRecord(params.record)) return false;
+  if (!await verifyFounderIntentFirewallAssessment(params.record, params.assessment)) return false;
+  if (!await verifyFounderIntentBudgetEnvelope(params.record, params.budget)) return false;
+  const { handoff } = params;
+  if (handoff.intentId !== params.record.id || handoff.intentSha256 !== params.record.sha256 || handoff.firewallSha256 !== params.assessment.sha256 || handoff.budgetSha256 !== params.budget.sha256) return false;
+  if (handoff.networkPolicy !== "offline_only" || handoff.replayPolicy !== "single_use_pending_owner_admission" || handoff.executionAllowed !== false || !/^[0-9a-f]{32}$/.test(handoff.nonce)) return false;
+  if (!/^[0-9a-f]{64}$/.test(handoff.sha256) || await sha256Hex(handoff.canonicalPayload) !== handoff.sha256) return false;
+  const signed = JSON.parse(handoff.canonicalPayload) as Record<string, unknown>;
+  return signed.marker === handoff.marker && signed.intentId === handoff.intentId && signed.intentSha256 === handoff.intentSha256 && signed.firewallSha256 === handoff.firewallSha256 && signed.budgetSha256 === handoff.budgetSha256 && signed.nonce === handoff.nonce && signed.createdAt === handoff.createdAt && signed.networkPolicy === "offline_only" && signed.replayPolicy === "single_use_pending_owner_admission" && signed.executionAllowed === false;
 }
 
 function bytesToBase64(bytes: Uint8Array) {

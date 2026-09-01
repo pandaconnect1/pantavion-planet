@@ -4,6 +4,7 @@ import {
   assessFounderIntentFirewall,
   canonicalizeFounderIntent,
   createFounderIntentBudgetEnvelope,
+  createFounderIntentEdgeHandoff,
   createFounderIntentRecord,
   decryptFounderIntentVault,
   encryptFounderIntentVault,
@@ -11,6 +12,7 @@ import {
   verifyFounderIntentRecord,
   verifyFounderIntentFirewallAssessment,
   verifyFounderIntentBudgetEnvelope,
+  verifyFounderIntentEdgeHandoff,
 } from "../core/intent/pantavion-founder-intent-workbench.ts";
 
 const input = {
@@ -70,6 +72,16 @@ assert.equal(budget.executionAllowed, false);
 assert.equal(await verifyFounderIntentBudgetEnvelope(first, budget), true);
 assert.equal(await verifyFounderIntentBudgetEnvelope(first, { ...budget, actionLimit: 9 }), false);
 
+const handoff = await createFounderIntentEdgeHandoff({ record: first, assessment, budget, nonce: "00112233445566778899aabbccddeeff", createdAt: "2026-09-01T07:01:00.000Z" });
+assert.equal(handoff.networkPolicy, "offline_only");
+assert.equal(handoff.replayPolicy, "single_use_pending_owner_admission");
+assert.equal(handoff.executionAllowed, false);
+assert.equal(handoff.intentSha256, first.sha256);
+assert.equal(handoff.firewallSha256, assessment.sha256);
+assert.equal(handoff.budgetSha256, budget.sha256);
+assert.equal(await verifyFounderIntentEdgeHandoff({ record: first, assessment, budget, handoff }), true);
+assert.equal(await verifyFounderIntentEdgeHandoff({ record: first, assessment, budget, handoff: { ...handoff, nonce: "ffffffffffffffffffffffffffffffff" } }), false);
+
 const tampered = { ...first, desiredOutcome: "tampered" };
 assert.equal(await verifyFounderIntentRecord(tampered), false, "tampering must fail closed");
 
@@ -102,8 +114,8 @@ assert.throws(
 console.log(JSON.stringify({
   marker: "pantavion_founder_intent_workbench_test_v1",
   status: "passed",
-  assertions: 33,
-  actualCapability: "encrypted offline intent capture plus fail-closed Firewall and cryptographically bound capability/budget envelope",
+  assertions: 41,
+  actualCapability: "encrypted offline intent capture plus fail-closed Firewall, capability/budget envelope, and replay-bound edge handoff",
   sha256: first.sha256,
   syntheticRecordsCountedAsImplementation: 0,
 }, null, 2));
