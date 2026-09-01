@@ -7,6 +7,7 @@ import {
   createFounderIntentBudgetEnvelope,
   createFounderIntentEdgeHandoff,
   createFounderIntentVerificationBundle,
+  createFounderEphemeralAgentLease,
   createFounderIntentRecord,
   decryptFounderIntentVault,
   encryptFounderIntentVault,
@@ -17,6 +18,7 @@ import {
   verifyFounderIntentEdgeHandoff,
   verifyFounderTechnologyAssessment,
   verifyFounderIntentVerificationBundle,
+  verifyFounderEphemeralAgentLease,
 } from "../core/intent/pantavion-founder-intent-workbench.ts";
 
 const input = {
@@ -95,6 +97,13 @@ assert.equal(technology.executionAllowed, false);
 assert.equal(await verifyFounderTechnologyAssessment(first, handoff, technology), true);
 assert.equal(await verifyFounderTechnologyAssessment(first, handoff, { ...technology, approvedTechnologies: [...technology.approvedTechnologies, "Unreviewed Runtime"] }), false);
 
+const lease = await createFounderEphemeralAgentLease({ record: first, budget, technology, agentId: "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee" });
+assert.equal(lease.status, "withheld_pending_owner_admission");
+assert.equal(lease.executionAllowed, false);
+assert.equal(lease.actionLimit, 8);
+assert.equal(await verifyFounderEphemeralAgentLease(first, budget, technology, lease), true);
+assert.equal(await verifyFounderEphemeralAgentLease(first, budget, technology, { ...lease, actionLimit: 9 }), false);
+
 const bundle = await createFounderIntentVerificationBundle({ record: first, firewall: assessment, budget, handoff, technology });
 assert.equal(bundle.receiptChain.length, 5);
 assert.equal(bundle.lifecycleState, "TESTED_LOCALLY_NOT_MERGED");
@@ -134,8 +143,8 @@ assert.throws(
 console.log(JSON.stringify({
   marker: "pantavion_founder_intent_workbench_test_v1",
   status: "passed",
-  assertions: 53,
-  actualCapability: "encrypted offline intent capture with Firewall, capability/budget, edge, Technology Library, and exportable verification bundle",
+  assertions: 58,
+  actualCapability: "encrypted offline intent capture with Firewall, budget, edge, Technology Library, bounded ephemeral-agent lease, and verification bundle",
   sha256: first.sha256,
   syntheticRecordsCountedAsImplementation: 0,
 }, null, 2));
