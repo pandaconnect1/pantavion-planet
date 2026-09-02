@@ -18,7 +18,7 @@ Preview readiness, branch existence, or workflow completion on an unmerged branc
 |---|---:|---|---|---|
 | Intent-to-Outcome / Founder Intent Workbench | #376 | `98df445d6ab0c157dca39d90186388e6ea5b99a2` | TESTED | offline-only; no production authority |
 | Intent Firewall assessment | #377 | `d57c937a284982bce7b3c45bae98b8ecde0e585d` | TESTED | execution blocked; owner review required |
-| Capability and budget envelope | #378 | `4988506d903a09c7c8570dfa0df917a30?` | TESTED | grant withheld; execution blocked |
+| Capability and budget envelope | #378 | `4988506d903a09c7c8570dfa0df9173c4defdc60` | TESTED | grant withheld; execution blocked |
 | Disconnected / edge handoff | #379 | `732fd663bfcab0085e8999763fc76b353b08e575` | TESTED | single-use pending owner admission |
 | Verification bundle | #381 | `21f17a30cd445b6c34499b0178fa65820a3717b5` | TESTED | exportable receipts; not live |
 | Ephemeral-agent lease primitive | #382 | `14053be41b39eb17c66267cdb0f0a52995cbe719` | TESTED* | lease withheld; remediation superseded by #386 |
