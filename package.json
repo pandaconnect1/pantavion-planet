@@ -58,7 +58,8 @@
     "test:sovereign-factory-contract": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-factory-contract-test.mjs",
     "test:sovereign-kernel-integration": "node scripts/pantavion-sovereign-kernel-integration-test.cjs",
     "test:owner-release-gate": "node --no-warnings --experimental-strip-types scripts/pantavion-owner-release-gate-test.mjs",
-    "test:translation-gateway-resilience": "node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs"
+    "test:translation-gateway-resilience": "node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs",
+    "test:sovereign-registry-truth-gate": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-registry-truth-gate-test.mjs"
   },
   "dependencies": {
     "@ai-sdk/gateway": "4.0.28",
