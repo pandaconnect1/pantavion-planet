@@ -2,9 +2,7 @@
   "name": "pantavion-planet",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": ">=22.0.0"
-  },
+  "engines": {"node": ">=22.0.0"},
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/pantavion-recovery-source-batch-index.mjs",
@@ -15,11 +13,7 @@
     "verify:runtime-safety": "npm run lint && npm run test:foundry-contract && npm run test:recovery-runtime-fabric && npm run test:recovery-fenced-executor && npm run test:scheduled-run-key && npm run test:internal-scheduler-redundancy && npm run test:sovereign-factory-contract && npm run test:sovereign-kernel-integration && npm run test:owner-release-gate && npm run test:translation-gateway-resilience && npm run audit:water:network-lock && npm run audit:implementation && npm run audit:scheduled-worker && node scripts/pantavion-vscode-real-implementation-gate.cjs && npm run typecheck && npm run build",
     "verify:runtime-safety:ci": "npm run verify:runtime-safety",
     "audit:pantavion": "node scripts/pantavion-master-audit.cjs",
-    "audit:water": "node scripts/pantavion-water-kernel-gate.cjs && node scripts/water-guardian-surface-audit.cjs && node scripts/pantavion-multimodal-language-audit.cjs",
-    "audit:water:production": "node scripts/pantavion-water-guardian-production-smoke.cjs",
-    "audit:water:map-b-source": "node scripts/pantavion-water-map-b-dwg-inventory.mjs",
     "audit:implementation": "node scripts/pantavion-implementation-gate.cjs",
-    "audit:autonomous-builder": "node scripts/pantavion-autonomous-builder-gate.cjs",
     "audit:implementation-runtime": "node scripts/pantavion-implementation-runtime-gate.cjs",
     "smoke:translation": "node scripts/pantavion-real-translation-smoke.cjs",
     "audit:intelligence": "node scripts/pantavion-intelligence-fabric-gate.cjs",
@@ -56,6 +50,7 @@
     "audit:scheduled-worker": "node scripts/pantavion-secure-scheduled-worker-gate.cjs",
     "audit:social-chat": "node scripts/pantavion-social-chat-contract-gate.cjs",
     "test:sovereign-factory-contract": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-factory-contract-test.mjs",
+    "test:sovereign-unified-gate-matrix": "node --no-warnings scripts/pantavion-sovereign-unified-gate-matrix-test.mjs",
     "test:sovereign-kernel-integration": "node scripts/pantavion-sovereign-kernel-integration-test.cjs",
     "test:owner-release-gate": "node --no-warnings --experimental-strip-types scripts/pantavion-owner-release-gate-test.mjs",
     "test:translation-gateway-resilience": "node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs"
