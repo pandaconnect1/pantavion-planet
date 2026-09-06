@@ -79,8 +79,8 @@ try {
     changesIdentityOrAccess: false,
   };
 
-  const planA = compileOutcomePlan({ intent, steps, policy: outcomePolicy });
-  const planB = compileOutcomePlan({ intent, steps, policy: outcomePolicy });
+  const planA = compileOutcomePlan(intent, steps, 1, outcomePolicy);
+  const planB = compileOutcomePlan(intent, steps, 1, outcomePolicy);
   assert(JSON.stringify(planA) === JSON.stringify(planB), 'Equivalent intent inputs must produce deterministic outcome plans.');
   assert(planA.steps.length === 1 && planA.steps[0].capability === 'classify', 'Outcome plan must preserve the bounded capability.');
 
