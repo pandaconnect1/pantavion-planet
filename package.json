@@ -72,7 +72,7 @@
     "@vercel/blob": "^2.4.0",
     "@vercel/oidc": "^3.8.1",
     "ai": "7.0.40",
-    "leaflet": "^1.9.0",
+    "leaflet": "^1.9.4",
     "next": "15.5.14",
     "react": "18.2.0",
     "react-dom": "18.2.0",
