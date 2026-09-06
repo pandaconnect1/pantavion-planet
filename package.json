@@ -58,7 +58,8 @@
     "test:sovereign-factory-contract": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-factory-contract-test.mjs",
     "test:sovereign-kernel-integration": "node scripts/pantavion-sovereign-kernel-integration-test.cjs",
     "test:owner-release-gate": "node --no-warnings --experimental-strip-types scripts/pantavion-owner-release-gate-test.mjs",
-    "test:translation-gateway-resilience": "node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs"
+    "test:translation-gateway-resilience": "node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs",
+    "test:sovereign-technology-library-provenance": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-technology-library-provenance-test.mjs"
   },
   "dependencies": {
     "@ai-sdk/gateway": "4.0.28",
@@ -71,8 +72,7 @@
     "@vercel/blob": "^2.4.0",
     "@vercel/oidc": "^3.8.1",
     "ai": "7.0.40",
-    "leaflet": "^1.9.4",
-    "next": "15.5.14",
+    "leaflet": "^1.9.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tus-js-client": "4.3.1",
