@@ -54,7 +54,7 @@ jobs:
           if (!register.candidates.length) throw new Error("innovation_register_empty");
           if (manifest.totals.exactDeduplicatedCandidates !== register.candidates.length) throw new Error("candidate_count_mismatch");
           if (familyMap.total !== register.candidates.length) throw new Error("family_map_count_mismatch");
-          if (csv.length !== register.candidates.length + 1) throw new Error("csv_count_mismatch");
+          if (countCsvRecords(csv) !== register.candidates.length + 1) throw new Error("csv_record_count_mismatch");
           if (register.candidates.some((candidate) => candidate.noveltyClaimAllowed !== false || candidate.noveltyStatus !== "UNVERIFIED_PRIOR_ART_REQUIRED")) throw new Error("unsupported_novelty_claim");
           if (register.candidates.some((candidate) => !Array.isArray(candidate.evidence) || candidate.evidence.length === 0)) throw new Error("evidence_less_candidate");
           if (register.candidates.some((candidate) => candidate.originStatus === "EXTERNAL_SIGNAL_ONLY" && candidate.evidence.some((evidence) => evidence.sourceKind !== "external-signal-synthesis"))) throw new Error("external_origin_boundary_broken");
