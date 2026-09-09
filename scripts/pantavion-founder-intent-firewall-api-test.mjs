@@ -126,5 +126,5 @@ assert.ok(routeSource.includes('authorizationEffect: "none"'));
 assert.ok(routeSource.includes('"Cache-Control": "no-store, max-age=0"'));
 
 console.log("PANTAVION FOUNDER INTENT FIREWALL API TEST: PASSED");
-console.log("- 31 assertions cover deterministic receipts, fail-closed policy, input bounds, Founder auth and AAL2");
+console.log("- 29 assertions cover deterministic receipts, fail-closed policy, input bounds, Founder auth and AAL2");
 console.log("- assessmentOnly=true; executionAllowed=false; authorizationEffect=none");
