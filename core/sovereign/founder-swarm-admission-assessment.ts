@@ -115,6 +115,11 @@ export function createFounderSwarmAdmissionAssessment(input: unknown) {
     schema: SWARM_ADMISSION_SCHEMA,
     policyVersion: SWARM_ADMISSION_POLICY,
     intentId: parsed.intentId,
+    policyLimits: {
+      maxAgents: parsed.maxAgents,
+      maxTotalBudget: parsed.maxTotalBudget,
+      maxLifetimeMinutes: parsed.maxLifetimeMinutes,
+    },
     proposalCount: parsed.proposals.length,
     totalBudget,
     proposedAgents: parsed.proposals,
