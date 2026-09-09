@@ -31,7 +31,7 @@ function rejectUnknownKeys(value: RecordValue, allowed: Set<string>, location: s
   }
 }
 
-function boundedString(value: unknown, field: string, max: number, optional = false) {
+function boundedString(value: unknown, field: string, max: number, optional?: false): string;\nfunction boundedString(value: unknown, field: string, max: number, optional: true): string | undefined;\nfunction boundedString(value: unknown, field: string, max: number, optional = false): string | undefined {
   if (optional && value === undefined) return undefined;
   if (typeof value !== "string") throw new Error(`invalid_technology_assessment_request:${field}_must_be_string`);
   const normalized = value.trim();
