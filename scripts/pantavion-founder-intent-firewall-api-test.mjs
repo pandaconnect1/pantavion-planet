@@ -125,6 +125,28 @@ assert.ok(routeSource.includes("MAX_REQUEST_BYTES"));
 assert.ok(routeSource.includes('authorizationEffect: "none"'));
 assert.ok(routeSource.includes('"Cache-Control": "no-store, max-age=0"'));
 
+const pageSource = await readFile(
+  join(process.cwd(), "app/owner/control/intent-firewall/page.tsx"),
+  "utf8",
+);
+assert.ok(pageSource.includes("requireFounderIdentity(auth.user.id)"));
+assert.ok(pageSource.includes('currentLevel !== "aal2"'));
+assert.ok(pageSource.includes("founderUserId={auth.user.id}"));
+
+const clientSource = await readFile(
+  join(process.cwd(), "app/owner/control/intent-firewall/intent-firewall-client.tsx"),
+  "utf8",
+);
+assert.ok(clientSource.includes('fetch("/api/owner/intent-firewall"'));
+assert.ok(clientSource.includes('aria-live="polite"'));
+assert.ok(clientSource.includes("Execution allowed"));
+
+const ownerControlSource = await readFile(
+  join(process.cwd(), "app/owner/control/page.tsx"),
+  "utf8",
+);
+assert.ok(ownerControlSource.includes('href="/owner/control/intent-firewall"'));
+
 console.log("PANTAVION FOUNDER INTENT FIREWALL API TEST: PASSED");
-console.log("- 29 assertions cover deterministic receipts, fail-closed policy, input bounds, Founder auth and AAL2");
+console.log("- 36 assertions cover deterministic receipts, fail-closed policy, Founder/AAL2 gates and the visible workbench");
 console.log("- assessmentOnly=true; executionAllowed=false; authorizationEffect=none");
