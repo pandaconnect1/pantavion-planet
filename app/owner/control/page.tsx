@@ -40,6 +40,12 @@ export default async function OwnerControlPage() {
             >
               Implementation Truth · Founder only
             </a>
+            <a
+              href="/owner/control/agent-budget"
+              className="rounded-xl border border-cyan-400/50 bg-cyan-400/10 px-4 py-3 text-sm font-black text-cyan-100"
+            >
+              Agent Capability & Budget · Founder only
+            </a>
           </div>
         </div>
         <OwnerControlClient initialItems={items} />
