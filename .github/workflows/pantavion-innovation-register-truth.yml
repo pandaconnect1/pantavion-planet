@@ -50,7 +50,22 @@ jobs:
           const manifest = JSON.parse(fs.readFileSync(`${path}/manifest.json`, "utf8"));
           const register = JSON.parse(fs.readFileSync(`${path}/innovation-master-register.json`, "utf8"));
           const familyMap = JSON.parse(fs.readFileSync(`${path}/innovation-family-map.json`, "utf8"));
-          const csv = fs.readFileSync(`${path}/innovation-master-register.csv`, "utf8").trim().split(/\r?\n/);
+          const csv = fs.readFileSync(`${path}/innovation-master-register.csv`, "utf8");
+          function countCsvRecords(value) {
+            let records = 0;
+            let quoted = false;
+            for (let index = 0; index < value.length; index += 1) {
+              const character = value[index];
+              if (character === '"') {
+                if (quoted && value[index + 1] === '"') index += 1;
+                else quoted = !quoted;
+              } else if (character === "\\n" && !quoted) {
+                records += 1;
+              }
+            }
+            if (quoted) throw new Error("csv_unterminated_quote");
+            return records + (value.length > 0 && !value.endsWith("\\n") ? 1 : 0);
+          }
           if (!register.candidates.length) throw new Error("innovation_register_empty");
           if (manifest.totals.exactDeduplicatedCandidates !== register.candidates.length) throw new Error("candidate_count_mismatch");
           if (familyMap.total !== register.candidates.length) throw new Error("family_map_count_mismatch");
