@@ -40,6 +40,12 @@ export default async function OwnerControlPage() {
             >
               Implementation Truth · Founder only
             </a>
+            <a
+              href="/owner/control/intent-firewall"
+              className="rounded-xl border border-emerald-400/50 bg-emerald-400/10 px-4 py-3 text-sm font-black text-emerald-100"
+            >
+              Intent Firewall · Assess intent
+            </a>
           </div>
         </div>
         <OwnerControlClient initialItems={items} />
