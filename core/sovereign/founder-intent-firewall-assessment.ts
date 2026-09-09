@@ -6,7 +6,7 @@ import {
   type IntentFirewallPolicy,
   type IntentFirewallRequest,
   type IntentRisk,
-} from "@/core/sovereign/intent-firewall";
+} from "./intent-firewall.ts";
 
 export const FOUNDER_INTENT_FIREWALL_SCHEMA = "pantavion.founder-intent-firewall-assessment.v1";
 export const FOUNDER_INTENT_FIREWALL_POLICY_VERSION = "founder-read-only-v1";
