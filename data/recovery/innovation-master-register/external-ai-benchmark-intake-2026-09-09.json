@@ -1,0 +1,35 @@
+{
+  "status": "BENCHMARK_INTAKE_ONLY",
+  "capturedAt": "2026-09-09",
+  "truthRule": "User-supplied screenshots are discovery signals only. Names/categories are not proof of capability, quality, novelty, licensing, integration readiness, or production suitability. No external product is automatically integrated or copied.",
+  "purpose": ["prior-art screening", "capability-gap discovery", "product-absorption research", "technology-factory benchmark inputs"],
+  "benchmarkCategories": ["video", "chatbot", "productivity", "design", "writing", "marketing", "coding", "search", "audio", "meetings", "research", "agent-orchestration", "RAG", "LLM-routing", "tools-MCP", "data-layer", "observability-evals", "deployment"],
+  "architecturePatternObserved": {
+    "flow": ["USER_REQUEST", "FRONTEND", "AGENT_ORCHESTRATION", "KNOWLEDGE_RAG", "MODELS_LLM", "TOOLS_MCP", "DATA_LAYER", "OBSERVABILITY_EVALS", "DEPLOYMENT"],
+    "examplesVisible": {
+      "frontend": ["React", "Next.js", "Streamlit"],
+      "orchestration": ["LangGraph", "CrewAI", "Mastra"],
+      "knowledge": ["documents", "vector database", "memory", "retrieval", "context builder"],
+      "models": ["Claude", "GPT", "Gemini", "Llama"],
+      "tools": ["GitHub", "Slack", "browser", "APIs"],
+      "data": ["PostgreSQL", "Redis", "S3/storage", "Qdrant"],
+      "evals": ["Langfuse", "Phoenix", "RAGAS", "TruLens"],
+      "deployment": ["Docker", "Kubernetes", "Vercel", "Cloudflare"]
+    }
+  },
+  "namedDiscoverySignals": ["Blackbox AI", "Likewise AI", "Komo AI", "Phind", "Voicemod AI", "Lalal.ai", "Chatsonic", "InteractAI", "Remove.ai", "Wispr Flow", "FormulaBot", "TwoShorts AI", "tl;dv", "LambdaTest AI", "ContextMind", "Canva", "Adobe Firefly", "Suno", "VEED", "Pika", "ElevenLabs", "Copilot", "Perplexity", "Claude", "ChatGPT", "Poe", "Gemini", "Grok", "Zapier", "Notion AI", "Make", "Airtable", "ClickUp", "Otter.ai", "Slack AI", "Figma AI", "Midjourney", "Leonardo AI", "Sora", "Whisk", "Grammarly", "Jasper", "Quillbot", "Writesonic"],
+  "absorptionPolicy": {
+    "doNotCopy": true,
+    "doNotClaimIntegration": true,
+    "stages": ["DISCOVER", "VERIFY_CAPABILITY", "VERIFY_LICENSE_AND_TERMS", "COMPARE_WITH_PANTAVION", "IDENTIFY_GAP", "DESIGN_NATIVE_OR_ADAPTER_PATH", "SECURITY_PRIVACY_REVIEW", "BENCHMARK", "SANDBOX", "OWNER_GATE_IF_STRATEGIC_OR_PAID", "DEPLOY_ONLY_AFTER_TESTS"],
+    "targetFamilies": ["AGENTS", "APP-SERVICE-CREATION", "INVENTION", "TECHNOLOGY-FACTORY", "PRODUCT-ABSORPTION", "MARKET-WORK", "FOUNDATION"]
+  },
+  "noveltyNegativeControls": [
+    "Having RAG alone is not a novelty claim.",
+    "Having multiple LLMs alone is not a novelty claim.",
+    "Having agent orchestration alone is not a novelty claim.",
+    "Having MCP/tools alone is not a novelty claim.",
+    "Having common observability/evaluation tooling alone is not a novelty claim.",
+    "Having a standard cloud deployment stack alone is not a novelty claim."
+  ]
+}
