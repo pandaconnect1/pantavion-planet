@@ -47,7 +47,7 @@ const dispositionStyles = {
 
 export default function FounderIntentFirewallClient({ founderUserId }: { founderUserId: string }) {
   const [form, setForm] = useState<FormState>(() => ({
-    intentId: `founder-intent-${Date.now()}`,
+    intentId: "founder-intent-001",
     actorId: founderUserId,
     actorKind: "founder",
     capabilities: "read_status, verify_evidence",
