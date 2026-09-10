@@ -206,7 +206,7 @@ function stableJson(value: unknown): string {
       .map((key) => `${JSON.stringify(key)}:${stableJson(value[key])}`)
       .join(",")}}`;
   }
-  return JSON.stringify(value);
+  return JSON.stringify(value) ?? "null";
 }
 
 export function createInnovationReviewPreflight(value: unknown) {
