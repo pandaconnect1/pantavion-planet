@@ -93,6 +93,8 @@ const expectedQueueFingerprint = hash(
 if (manifest.sourceAtomFingerprint !== expectedSourceFingerprint) fail('source atom fingerprint mismatch');
 if (manifest.reviewQueueFingerprint !== expectedQueueFingerprint) fail('review queue fingerprint mismatch');
 if (manifest.totals?.sourceAtoms !== atoms.size || manifest.totals?.sourceAtomsPreserved !== atoms.size) fail('source atom preservation totals mismatch');
+if (manifest.totals?.oversizedBucketsSkipped !== 0) fail('an oversized candidate bucket was skipped');
+if ((manifest.totals?.oversizedBucketsPartitioned || 0) > 0 && (manifest.totals?.boundedPartitionsCreated || 0) === 0) fail('oversized buckets were not materialized into bounded partitions');
 if (manifest.totals?.reviewPairs !== pairIds.size || manifest.totals?.atomsWithSuggestions !== atomsWithSuggestions.size) fail('review queue totals mismatch');
 if (manifest.totals?.atomsWithoutSuggestionsPreserved !== atoms.size - atomsWithSuggestions.size) fail('unpaired atom preservation mismatch');
 if (humanAdjudicatedPairs || manifest.totals?.humanAdjudicatedPairs !== 0) fail('human adjudication claimed without review');
@@ -108,6 +110,9 @@ console.log(JSON.stringify({
   reviewPairs: pairIds.size,
   atomsWithSuggestions: atomsWithSuggestions.size,
   atomsWithoutSuggestionsPreserved: atoms.size - atomsWithSuggestions.size,
+  oversizedBucketsPartitioned: manifest.totals.oversizedBucketsPartitioned,
+  boundedPartitionsCreated: manifest.totals.boundedPartitionsCreated,
+  oversizedBucketsSkipped: manifest.totals.oversizedBucketsSkipped,
   humanAdjudicatedPairs,
   semanticMergesAuthorized,
   unsupportedNoveltyClaims,
