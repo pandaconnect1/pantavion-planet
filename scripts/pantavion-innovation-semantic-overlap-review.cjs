@@ -72,7 +72,10 @@ let oversizedBucketsPartitioned = 0;
 let boundedPartitionsCreated = 0;
 function addPairs(ids) {
   for (let i = 0; i < ids.length; i += 1) {
-    for (let j = i + 1; j < ids.length; j += 1) candidatePairs.add(`${ids[i]}|${ids[j]}`);
+    for (let j = i + 1; j < ids.length; j += 1) {
+      const [left, right] = [ids[i], ids[j]].sort();
+      candidatePairs.add(`${left}|${right}`);
+    }
   }
 }
 for (const ids of buckets.values()) {
