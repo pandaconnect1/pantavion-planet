@@ -19,13 +19,9 @@ function check(condition, message) {
   assertions += 1;
 }
 function rejects(input, fragment) {
-  assert.throws(() => parseInnovationReviewPreflightRequest(inputInput(input), new RegExp(fragment));
+  assert.throws(() => parseInnovationReviewPreflightRequest(input), new RegExp(fragment));
   assertions += 1;
 }
-function parseInnovationReviewPreflightRequestInput(input) {
-  return input;
-}
-
 const holdItem = {
   queueItemId: "queue-001",
   atomId: "atom-001",
