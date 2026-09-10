@@ -50,6 +50,7 @@ const COMPONENT_KEYS = new Set([
 ]);
 const ID = /^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,159}$/;
 const SHA256 = /^[a-f0-9]{64}$/;
+const GIT_SHA = /^[a-f0-9]{40}$/;
 
 export type SovereignAdmissionComponent = {
   componentId: ComponentId;
@@ -90,8 +91,8 @@ function identifier(value: unknown, field: string) {
   return normalized;
 }
 
-function sha(value: unknown, field: string) {
-  if (typeof value !== "string" || !SHA256.test(value.toLowerCase())) {
+function normalizedHash(value: unknown, field: string, pattern: RegExp) {
+  if (typeof value !== "string" || !pattern.test(value.toLowerCase())) {
     throw new Error(`invalid_sovereign_admission_bundle:${field}_format`);
   }
   return value.toLowerCase();
@@ -111,7 +112,7 @@ function parseComponent(value: unknown, index: number): SovereignAdmissionCompon
   if (value.sourcePr !== expected.sourcePr) {
     throw new Error(`invalid_sovereign_admission_bundle:component_${index}_source_pr`);
   }
-  if (sha(value.sourceHead, `components[${index}].sourceHead`) !== expected.sourceHead) {
+  if (normalizedHash(value.sourceHead, `components[${index}].sourceHead`, GIT_SHA) !== expected.sourceHead) {
     throw new Error(`invalid_sovereign_admission_bundle:component_${index}_source_head`);
   }
   if (typeof value.disposition !== "string" || !DISPOSITIONS.has(value.disposition)) {
@@ -128,7 +129,7 @@ function parseComponent(value: unknown, index: number): SovereignAdmissionCompon
     componentId: expected.id,
     sourcePr: expected.sourcePr,
     sourceHead: expected.sourceHead,
-    receiptSha256: sha(value.receiptSha256, `components[${index}].receiptSha256`),
+    receiptSha256: normalizedHash(value.receiptSha256, `components[${index}].receiptSha256`, SHA256),
     disposition: value.disposition as Disposition,
     authorizationEffect: "none",
     executionAllowed: false,
