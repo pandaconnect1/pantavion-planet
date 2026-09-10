@@ -72,7 +72,8 @@ const csv = fs.readFileSync(csvPath, 'utf8');
 if (!Array.isArray(atomProjection.atoms) || !Array.isArray(mappingProjection.mappings) || !Array.isArray(maturityProjection.reviews) || !Array.isArray(projection.shortlist)) fail('required arrays missing');
 if (manifest.id !== 'pantavion_preseed_research_shortlist_v1') fail('unexpected manifest id');
 if (JSON.stringify(projection.manifest) !== JSON.stringify(manifest)) fail('embedded manifest mismatch');
-if (atomProjection.atoms.length !== expectedAtomCount || atomProjection.manifest?.atomizationFingerprint !== expectedAtomFingerprint) fail('exact atom parent drifted');
+const actualAtomFingerprint = hash(atomProjection.atoms.map(atom => atom.atomId + ':' + atom.normalizedFingerprint).sort().join('\\n'));
+if (atomProjection.atoms.length !== expectedAtomCount || actualAtomFingerprint !== expectedAtomFingerprint) fail('exact atom parent drifted');
 if (maturityProjection.reviews.length !== expectedAtomCount || maturityProjection.manifest?.maturityQueueFingerprint !== expectedMaturityFingerprint) fail('exact maturity parent drifted');
 if (manifest.sourceAtomFingerprint !== expectedAtomFingerprint || manifest.sourceMaturityQueueFingerprint !== expectedMaturityFingerprint) fail('manifest parent binding mismatch');
 
