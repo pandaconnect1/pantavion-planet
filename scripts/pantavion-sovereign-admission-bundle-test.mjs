@@ -25,7 +25,9 @@ function rejects(input, fragment) {
 
 const sources = sovereignAdmissionComponents();
 const component = (entry, index, disposition = "pass") => ({
-  ...entry,
+  componentId: entry.id,
+  sourcePr: entry.sourcePr,
+  sourceHead: entry.sourceHead,
   receiptSha256: String(index + 1).repeat(64),
   disposition,
   authorizationEffect: "none",
