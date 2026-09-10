@@ -45,8 +45,8 @@ jobs:
       - name: Verify Founder review preflight contract
         run: npm run test:founder-innovation-review-preflight
 
-      - name: Verify exact maturity queue parent
-        run: node scripts/pantavion-innovation-maturity-evidence-review-gate.cjs
+      - name: Regenerate and verify exact maturity queue parent
+        run: npm run innovations:verify-maturity
 
       - name: Verify Recovery Runtime contract
         run: npm run test:recovery-runtime-fabric
