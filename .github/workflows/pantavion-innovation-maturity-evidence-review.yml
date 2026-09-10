@@ -1,0 +1,49 @@
+name: Pantavion Innovation Maturity Evidence Review
+
+on:
+  pull_request:
+    branches:
+      - feature/innovation-semantic-overlap-review-20260910
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-maturity-evidence-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout exact PR head revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Generate and verify full innovation maturity chain
+        run: npm run innovations:verify-maturity
+
+      - name: Preserve first deterministic maturity queue
+        run: cp -R data/recovery/innovation-maturity-evidence-review /tmp/innovation-maturity-evidence-review-first
+
+      - name: Regenerate and reverify maturity queue
+        run: npm run innovations:review-maturity && npm run audit:innovation-maturity
+
+      - name: Require byte-identical deterministic regeneration
+        run: diff -ru /tmp/innovation-maturity-evidence-review-first data/recovery/innovation-maturity-evidence-review
+
+      - name: Upload exact-head maturity evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-innovation-maturity-evidence-review-${{ github.event.pull_request.head.sha || github.sha }}
+          path: data/recovery/innovation-maturity-evidence-review
+          if-no-files-found: error
+          retention-days: 30
