@@ -1,0 +1,67 @@
+name: Pantavion Coherent Invention Disclosures
+
+on:
+  pull_request:
+    branches:
+      - feature/preseed-shortlist-quality-audit-20260910
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-coherent-invention-disclosures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout exact PR head revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Assert exact pull-request head
+        if: github.event_name == 'pull_request'
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Regenerate exact tested maturity inputs in isolated worktree
+        shell: bash
+        run: |
+          parent_dir="$(mktemp -d)"
+          git worktree add --detach "$parent_dir" 8d4efe98738779d1dad1dcd8dcf77bcf93fc0b8b
+          (
+            cd "$parent_dir"
+            npm ci --no-audit --no-fund
+            npm run innovations:verify-maturity
+          )
+          for dataset in innovation-semantic-atomization innovation-capability-mapping innovation-maturity-evidence-review; do
+            rm -rf "data/recovery/$dataset"
+            cp -R "$parent_dir/data/recovery/$dataset" "data/recovery/$dataset"
+          done
+          git worktree remove --force "$parent_dir"
+      - name: Reproduce rejected parent shortlist and quality verdict
+        run: npm run innovations:verify-preseed-shortlist && npm run innovations:verify-preseed-quality
+      - name: Generate and verify coherent disclosures
+        run: npm run innovations:verify-coherent-disclosures
+      - name: Preserve first deterministic disclosure set
+        run: cp -R data/recovery/coherent-invention-disclosures /tmp/coherent-invention-disclosures-first
+      - name: Regenerate and reverify disclosures
+        run: npm run innovations:verify-coherent-disclosures
+      - name: Require byte-identical deterministic regeneration
+        run: diff -ru /tmp/coherent-invention-disclosures-first data/recovery/coherent-invention-disclosures
+      - name: TypeScript verification
+        run: npm run typecheck
+      - name: Production build verification
+        run: npm run build
+      - name: Upload exact-head disclosure evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-coherent-invention-disclosures-${{ github.event.pull_request.head.sha || github.sha }}
+          path: data/recovery/coherent-invention-disclosures
+          if-no-files-found: error
+          retention-days: 30
