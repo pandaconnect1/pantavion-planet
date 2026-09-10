@@ -18,6 +18,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Assert exact pull-request head
+        if: github.event_name == 'pull_request'
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
 
       - name: Use Node.js 22
         uses: actions/setup-node@v4
@@ -28,7 +33,21 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Generate and verify full maturity batch chain
+      - name: Regenerate exact tested maturity parent in isolated worktree
+        shell: bash
+        run: |
+          parent_dir="$(mktemp -d)"
+          git worktree add --detach "$parent_dir" 8d4efe98738779d1dad1dcd8dcf77bcf93fc0b8b
+          (
+            cd "$parent_dir"
+            npm ci --no-audit --no-fund
+            npm run innovations:verify-maturity
+          )
+          rm -rf data/recovery/innovation-maturity-evidence-review
+          cp -R "$parent_dir/data/recovery/innovation-maturity-evidence-review" data/recovery/innovation-maturity-evidence-review
+          git worktree remove --force "$parent_dir"
+
+      - name: Generate and verify maturity review batches
         run: npm run innovations:verify-review-batches
 
       - name: Preserve first deterministic batch set
