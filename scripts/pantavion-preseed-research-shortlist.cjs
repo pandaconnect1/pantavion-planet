@@ -33,7 +33,8 @@ if (!Array.isArray(atomProjection.atoms) || !Array.isArray(mappingProjection.map
   fail('required input arrays missing');
 }
 if (atomProjection.atoms.length !== expectedAtomCount) fail('exact atom count drifted');
-if (atomProjection.manifest?.atomizationFingerprint !== expectedAtomFingerprint) fail('exact atom fingerprint drifted');
+const actualAtomFingerprint = hash(atomProjection.atoms.map(atom => atom.atomId + ':' + atom.normalizedFingerprint).sort().join('\\n'));
+if (actualAtomFingerprint !== expectedAtomFingerprint) fail('exact atom fingerprint drifted');
 if (maturityProjection.manifest?.maturityQueueFingerprint !== expectedMaturityFingerprint) fail('exact maturity queue fingerprint drifted');
 
 const atoms = new Map(atomProjection.atoms.map(atom => [atom.atomId, atom]));
