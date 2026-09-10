@@ -1,0 +1,79 @@
+name: Pantavion PRE-SEED Shortlist Quality Audit
+
+on:
+  pull_request:
+    branches:
+      - feature/preseed-research-shortlist-20260910
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-preseed-shortlist-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Checkout exact PR head revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Assert exact pull-request head
+        if: github.event_name == 'pull_request'
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Regenerate exact tested maturity inputs in isolated worktree
+        shell: bash
+        run: |
+          parent_dir="$(mktemp -d)"
+          git worktree add --detach "$parent_dir" 8d4efe98738779d1dad1dcd8dcf77bcf93fc0b8b
+          (
+            cd "$parent_dir"
+            npm ci --no-audit --no-fund
+            npm run innovations:verify-maturity
+          )
+          for dataset in innovation-semantic-atomization innovation-capability-mapping innovation-maturity-evidence-review; do
+            rm -rf "data/recovery/$dataset"
+            cp -R "$parent_dir/data/recovery/$dataset" "data/recovery/$dataset"
+          done
+          git worktree remove --force "$parent_dir"
+
+      - name: Regenerate and verify exact parent shortlist
+        run: npm run innovations:verify-preseed-shortlist
+
+      - name: Generate and verify fail-closed quality audit
+        run: npm run innovations:verify-preseed-quality
+
+      - name: Preserve first deterministic audit
+        run: cp -R data/recovery/preseed-shortlist-quality-audit /tmp/preseed-shortlist-quality-audit-first
+
+      - name: Regenerate and reverify quality audit
+        run: npm run innovations:verify-preseed-quality
+
+      - name: Require byte-identical deterministic regeneration
+        run: diff -ru /tmp/preseed-shortlist-quality-audit-first data/recovery/preseed-shortlist-quality-audit
+
+      - name: TypeScript verification
+        run: npm run typecheck
+
+      - name: Production build verification
+        run: npm run build
+
+      - name: Upload exact-head quality evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-preseed-shortlist-quality-audit-${{ github.event.pull_request.head.sha || github.sha }}
+          path: data/recovery/preseed-shortlist-quality-audit
+          if-no-files-found: error
+          retention-days: 30
