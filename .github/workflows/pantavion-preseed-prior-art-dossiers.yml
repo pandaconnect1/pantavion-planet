@@ -33,20 +33,22 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Regenerate exact tested shortlist in isolated worktree
+      - name: Regenerate exact tested shortlist from locked evidence parent
         shell: bash
         run: |
-          parent_dir="$(mktemp -d)"
-          git worktree add --detach "$parent_dir" 85579e30db5b5bf84b3d40bd6d5f2ba9d87dcf1b
+          source_dir="$(mktemp -d)"
+          git worktree add --detach "$source_dir" 8d4efe98738779d1dad1dcd8dcf77bcf93fc0b8b
           (
-            cd "$parent_dir"
+            cd "$source_dir"
             npm ci --no-audit --no-fund
             npm run innovations:verify-maturity
-            npm run innovations:verify-preseed-shortlist
           )
-          rm -rf data/recovery/preseed-research-shortlist
-          cp -R "$parent_dir/data/recovery/preseed-research-shortlist" data/recovery/preseed-research-shortlist
-          git worktree remove --force "$parent_dir"
+          for dataset in innovation-semantic-atomization innovation-capability-mapping innovation-maturity-evidence-review; do
+            rm -rf "data/recovery/$dataset"
+            cp -R "$source_dir/data/recovery/$dataset" "data/recovery/$dataset"
+          done
+          npm run innovations:verify-preseed-shortlist
+          git worktree remove --force "$source_dir"
 
       - name: Generate and verify prior-art dossiers
         run: npm run innovations:verify-preseed-dossiers
