@@ -1,0 +1,58 @@
+name: Pantavion Founder Innovation Review Preflight
+
+on:
+  pull_request:
+    branches:
+      - feature/innovation-maturity-evidence-review-20260910
+    paths:
+      - "app/api/owner/innovation-review/**"
+      - "app/owner/control/innovation-review/**"
+      - "core/sovereign/founder-innovation-review-preflight.ts"
+      - "scripts/pantavion-founder-innovation-review-preflight-test.mjs"
+      - "package.json"
+      - ".github/workflows/pantavion-founder-innovation-review-preflight.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  founder-innovation-review-preflight:
+    name: Verify bounded Founder review preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout exact pull-request head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Assert checkout is exact pull-request head
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install exact dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify Founder review preflight contract
+        run: npm run test:founder-innovation-review-preflight
+
+      - name: Verify exact maturity queue parent
+        run: node scripts/pantavion-innovation-maturity-evidence-review-gate.cjs
+
+      - name: Verify Recovery Runtime contract
+        run: npm run test:recovery-runtime-fabric
+
+      - name: TypeScript verification
+        run: npm run typecheck
+
+      - name: Production build verification
+        run: npm run build
