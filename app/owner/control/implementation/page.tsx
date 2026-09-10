@@ -148,6 +148,7 @@ export default async function OwnerImplementationPage() {
                     <div className="flex gap-2">
                       <span className="rounded-full border border-emerald-500/50 px-2 py-1 text-xs font-black text-emerald-300">{record.stage}</span>
                       <span className="rounded-full border border-amber-500/50 px-2 py-1 text-xs font-black text-amber-300">{record.truthLocation}</span>
+                      {record.researchQuality ? <span className={`rounded-full border px-2 py-1 text-xs font-black ${record.researchQuality === "BLOCKED" ? "border-rose-500/50 text-rose-300" : "border-cyan-500/50 text-cyan-300"}`}>RESEARCH {record.researchQuality}</span> : null}
                     </div>
                   </div>
                   <p className="mt-2 text-xs text-slate-400">{record.domain} · {record.workflowCount}/{record.workflowCount} workflows successful</p>
@@ -160,6 +161,7 @@ export default async function OwnerImplementationPage() {
                     <a className="font-bold text-cyan-300 underline-offset-4 hover:underline" href={`https://github.com/pandaconnect1/pantavion-planet/pull/${record.pr}`} rel="noreferrer" target="_blank">Open exact PR evidence</a>
                     <span className="text-slate-400">Next: {record.nextTransition}</span>
                   </div>
+                  {record.qualityBlocker ? <p role="alert" className="mt-3 rounded-lg border border-rose-500/40 bg-rose-500/10 p-2 text-xs leading-5 text-rose-200">{record.qualityBlocker}</p> : null}
                   <p className="mt-2 text-xs font-semibold text-rose-300">Merged: false · Deployed: false · Verified live: false · Execution: false</p>
                 </article>
               ))}
