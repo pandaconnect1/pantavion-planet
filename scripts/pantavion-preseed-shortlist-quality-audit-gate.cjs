@@ -19,6 +19,9 @@ function hash(value) {
 }
 function classify(value) {
   const text = String(value || '').trim();
+  if (/^\"[^\"]+:\\s*[^\"]+\"[,]?$/.test(text)) {
+    return { classification:'CODE_OR_CONFIG_FRAGMENT', reasons:['quoted_config_shape'], researchEligible:false };
+  }
   if (/^("[^:"]+"|'[^:']+'|\x60[^\x60]+\x60|[A-Z][A-Z0-9_]+),?$/.test(text)) {
     return { classification:'LITERAL_OR_IDENTIFIER_FRAGMENT', reasons:['standalone_literal_or_identifier'], researchEligible:false };
   }
