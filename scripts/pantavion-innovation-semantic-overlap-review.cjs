@@ -68,15 +68,30 @@ for (const atom of [...atomsProjection.atoms].sort((a, b) => a.atomId.localeComp
 }
 
 const candidatePairs = new Set();
-let oversizedBucketsSkipped = 0;
+let oversizedBucketsPartitioned = 0;
+let boundedPartitionsCreated = 0;
+function addPairs(ids) {
+  for (let i = 0; i < ids.length; i += 1) {
+    for (let j = i + 1; j < ids.length; j += 1) candidatePairs.add(`${ids[i]}|${ids[j]}`);
+  }
+}
 for (const ids of buckets.values()) {
-  const unique = [...new Set(ids)].sort();
-  if (unique.length > maxBucketSize) {
-    oversizedBucketsSkipped += 1;
+  const unique = [...new Set(ids)].sort((left, right) => {
+    const byText = normalize(atomById.get(left).atomicMechanism).localeCompare(normalize(atomById.get(right).atomicMechanism));
+    return byText || left.localeCompare(right);
+  });
+  if (unique.length <= maxBucketSize) {
+    addPairs(unique);
     continue;
   }
-  for (let i = 0; i < unique.length; i += 1) {
-    for (let j = i + 1; j < unique.length; j += 1) candidatePairs.add(`${unique[i]}|${unique[j]}`);
+  oversizedBucketsPartitioned += 1;
+  const stride = Math.floor(maxBucketSize / 2);
+  for (let start = 0; start < unique.length; start += stride) {
+    const partition = unique.slice(start, start + maxBucketSize);
+    if (partition.length < 2) break;
+    addPairs(partition);
+    boundedPartitionsCreated += 1;
+    if (start + maxBucketSize >= unique.length) break;
   }
 }
 
@@ -121,7 +136,7 @@ const manifest = {
   sourceAtomFingerprint,
   reviewQueueFingerprint,
   method: {
-    description: 'Deterministic capability-bounded minhash-style candidate generation followed by exact token-set Jaccard scoring.',
+    description: 'Deterministic capability-bounded minhash-style candidate generation with overlapping lexical partitions for oversized buckets, followed by exact token-set Jaccard scoring.',
     signatureWidth,
     maxBucketSize,
     thresholdPpm,
@@ -135,7 +150,9 @@ const manifest = {
     reviewPairs: pairs.length,
     atomsWithSuggestions: atomsWithSuggestions.size,
     atomsWithoutSuggestionsPreserved: atomsProjection.atoms.length - atomsWithSuggestions.size,
-    oversizedBucketsSkipped,
+    oversizedBucketsPartitioned,
+    boundedPartitionsCreated,
+    oversizedBucketsSkipped: 0,
     humanAdjudicatedPairs: 0,
     semanticMergesAuthorized: 0,
     unsupportedNoveltyClaims: 0,
