@@ -16,7 +16,7 @@ export type SovereignVerificationRecord = {
   evidenceArtifact?: string;
   parentPr?: number;
   parentExactHead?: string;
-  researchQuality?: "BLOCKED" | "VALIDATED";
+  researchQuality?: "BLOCKED" | "VALIDATED" | "RESEARCH_READY";
   researchEligible?: boolean;
   qualityBlocker?: string;
   merged: boolean;
@@ -26,7 +26,7 @@ export type SovereignVerificationRecord = {
   nextTransition: SovereignVerificationStage;
 };
 
-export const sovereignVerificationSnapshotAt = "2026-09-10T16:31:00.000Z";
+export const sovereignVerificationSnapshotAt = "2026-09-10T17:11:00.000Z";
 
 export const sovereignVerificationRecords: SovereignVerificationRecord[] = [
   { id:"intent-firewall-workbench", title:"Founder Intent Firewall Workbench", domain:"Intent Firewall", stage:"TESTED", truthLocation:"OPEN_PR", pr:476, exactHead:"4fa03685a7277d4696873996ddd0b5b94b6514e0", base:"main", verifiedAt:"2026-09-09T13:45:06.000Z", workflowCount:11, verificationReceipt:"5602900011", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
@@ -47,6 +47,7 @@ export const sovereignVerificationRecords: SovereignVerificationRecord[] = [
   { id:"preseed-research-shortlist", title:"Evidence-first PRE-SEED Research Shortlist", domain:"Prior-art research triage", stage:"TESTED", truthLocation:"OPEN_PR", pr:492, exactHead:"85579e30db5b5bf84b3d40bd6d5f2ba9d87dcf1b", base:"feature/innovation-review-campaign-plan-20260910", verifiedAt:"2026-09-10T13:28:42.000Z", workflowCount:7, verificationReceipt:"5619491177", evidenceArtifact:"10154289683", parentPr:491, parentExactHead:"212f79a084eefb1521dc59d1c45245d687630f39", researchQuality:"BLOCKED", researchEligible:false, qualityBlocker:"140 code/config fragments, 6 literals/identifiers and 4 incomplete fragments; 0 coherent technical mechanisms. Rejected for innovation research by PR #494.", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
   { id:"preseed-prior-art-dossiers", title:"PRE-SEED Prior-Art Research Dossiers", domain:"Prior-art research planning", stage:"TESTED", truthLocation:"OPEN_PR", pr:493, exactHead:"1b6717ce095e38d4a9c489742a4da63fa07ddc2e", base:"feature/preseed-research-shortlist-20260910", verifiedAt:"2026-09-10T14:32:09.000Z", workflowCount:7, verificationReceipt:"5620380543", evidenceArtifact:"10157089662", parentPr:492, parentExactHead:"85579e30db5b5bf84b3d40bd6d5f2ba9d87dcf1b", researchQuality:"BLOCKED", researchEligible:false, qualityBlocker:"Research dossiers are deterministic but blocked by the invalid #492 parent population; 750 tasks remain unexecuted.", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
   { id:"preseed-shortlist-quality-audit", title:"PRE-SEED Shortlist Research Quality Audit", domain:"Research quality control", stage:"TESTED", truthLocation:"OPEN_PR", pr:494, exactHead:"8d00bae9ea614e42309065b5ee74110cc93c62cd", base:"feature/preseed-research-shortlist-20260910", verifiedAt:"2026-09-10T16:31:00.000Z", workflowCount:7, verificationReceipt:"5622042586", evidenceArtifact:"10162289979", parentPr:492, parentExactHead:"85579e30db5b5bf84b3d40bd6d5f2ba9d87dcf1b", researchQuality:"VALIDATED", researchEligible:false, qualityBlocker:"Validated fail-closed rejection: 0/150 coherent technical mechanisms and 0 research-eligible items.", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
+  { id:"coherent-invention-disclosures", title:"Coherent Invention Disclosures", domain:"Prior-art research preparation", stage:"TESTED", truthLocation:"OPEN_PR", pr:495, exactHead:"b2434d35fcd0d7b8f024c152ed61eaaf8f6fad6b", base:"feature/preseed-shortlist-quality-audit-20260910", verifiedAt:"2026-09-10T17:11:00.000Z", workflowCount:7, verificationReceipt:"5622537250", evidenceArtifact:"10163147674", parentPr:494, parentExactHead:"8d00bae9ea614e42309065b5ee74110cc93c62cd", researchQuality:"RESEARCH_READY", researchEligible:true, qualityBlocker:"Two coherent technical disclosures are ready for professional prior-art research; novelty and patentability remain unverified.", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
 ];
 
 const stageOrder: SovereignVerificationStage[] = ["CODED","TESTED","MERGED","DEPLOYED","VERIFIED_LIVE"];
@@ -71,6 +72,7 @@ export function validateSovereignVerificationCatalog(records = sovereignVerifica
     if (record.executionAuthorized) blockers.push("execution_authority_forbidden:" + record.id);
     if (record.researchQuality === "BLOCKED" && (record.researchEligible !== false || !record.qualityBlocker?.trim())) blockers.push("research_quality_block_incomplete:" + record.id);
     if (record.researchQuality === "VALIDATED" && record.researchEligible !== false) blockers.push("research_quality_verdict_inconsistent:" + record.id);
+    if (record.researchQuality === "RESEARCH_READY" && (record.researchEligible !== true || !record.qualityBlocker?.trim())) blockers.push("research_ready_evidence_incomplete:" + record.id);
     const currentRank = stageOrder.indexOf(record.stage);
     const nextRank = stageOrder.indexOf(record.nextTransition);
     if (nextRank !== currentRank + 1) blockers.push("non_adjacent_next_transition:" + record.id);
