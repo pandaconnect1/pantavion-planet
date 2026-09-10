@@ -46,7 +46,16 @@ jobs:
         run: npm run test:founder-innovation-review-preflight
 
       - name: Regenerate and verify exact maturity queue parent
-        run: npm run innovations:verify-maturity
+        shell: bash
+        run: |
+          parent_dir="$(mktemp -d)"
+          git worktree add --detach "$parent_dir" 8d4efe98738779d1dad1dcd8dcf77bcf93fc0b8b
+          (
+            cd "$parent_dir"
+            npm ci --no-audit --no-fund
+            npm run innovations:verify-maturity
+          )
+          git worktree remove --force "$parent_dir"
 
       - name: Verify Recovery Runtime contract
         run: npm run test:recovery-runtime-fabric
