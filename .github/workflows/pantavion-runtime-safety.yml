@@ -84,7 +84,7 @@ jobs:
       - name: Verify founder-only release gate
         run: npm run test:owner-release-gate
 
-      - name: Typecheck
+      - name: Verify Founder innovation review preflight\n        run: npm run test:founder-innovation-review-preflight\n\n      - name: Typecheck
         shell: bash
         run: |
           set +e
