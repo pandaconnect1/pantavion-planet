@@ -100,7 +100,7 @@ rejects({ ...request, components: [...request.components, request.components[0]]
 rejects({ ...request, components: [{ ...request.components[0], extra: true }, ...request.components.slice(1)] }, "unknown_component_field");
 rejects({ ...request, components: [request.components[1], request.components[0], ...request.components.slice(2)] }, "component_0_order");
 rejects({ ...request, components: [{ ...request.components[0], sourcePr: 999 }, ...request.components.slice(1)] }, "source_pr");
-rejects({ ...request, components: [{ ...request.components[0], sourceHead: "a".repeat(64) }, ...request.components.slice(1)] }, "source_head");
+rejects({ ...request, components: [{ ...request.components[0], sourceHead: "a".repeat(40) }, ...request.components.slice(1)] }, "source_head");
 rejects({ ...request, components: [{ ...request.components[0], receiptSha256: "bad" }, ...request.components.slice(1)] }, "receiptSha256_format");
 rejects({ ...request, components: [{ ...request.components[0], disposition: "approve" }, ...request.components.slice(1)] }, "disposition");
 rejects({ ...request, components: [{ ...request.components[0], authorizationEffect: "grant" }, ...request.components.slice(1)] }, "authorization_effect");
