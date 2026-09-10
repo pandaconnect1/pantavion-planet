@@ -11,9 +11,9 @@ const eq = (actual, expected, message) => { assert.equal(actual, expected, messa
 const ok = (value, message) => { assert.ok(value, message); assertions += 1; };
 
 eq(validateSovereignVerificationCatalog().length, 0, "catalog passes fail-closed validation");
-eq(sovereignVerificationRecords.length, 16, "all current Sovereign and innovation PRs represented");
-eq(new Set(sovereignVerificationRecords.map(record => record.id)).size, 16, "unique catalog IDs");
-eq(new Set(sovereignVerificationRecords.map(record => record.pr)).size, 16, "unique PRs");
+eq(sovereignVerificationRecords.length, 17, "all current Sovereign and innovation PRs represented");
+eq(new Set(sovereignVerificationRecords.map(record => record.id)).size, 17, "unique catalog IDs");
+eq(new Set(sovereignVerificationRecords.map(record => record.pr)).size, 17, "unique PRs");
 eq(sovereignVerificationRecords.every(record => record.stage === "TESTED"), true, "no unverified lifecycle promotion");
 eq(sovereignVerificationRecords.every(record => record.truthLocation === "OPEN_PR"), true, "truth location remains open PR");
 eq(sovereignVerificationRecords.every(record => !record.merged), true, "nothing claimed merged");
@@ -26,7 +26,7 @@ eq(sovereignVerificationRecords.every(record => record.workflowCount >= 7), true
 ok(Number.isFinite(Date.parse(sovereignVerificationSnapshotAt)), "snapshot timestamp");
 
 const byPr = new Map(sovereignVerificationRecords.map(record => [record.pr, record]));
-for (const [childPr, parentPr] of [[483,480],[484,483],[485,484],[486,485],[488,486],[490,486],[491,490],[492,491]]) {
+for (const [childPr, parentPr] of [[483,480],[484,483],[485,484],[486,485],[488,486],[490,486],[491,490],[492,491],[493,492]]) {
   const child = byPr.get(childPr);
   const parent = byPr.get(parentPr);
   ok(child && parent, "stack records exist");
