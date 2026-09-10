@@ -1,0 +1,84 @@
+name: Pantavion Innovation Review Campaign Plan
+
+on:
+  pull_request:
+    branches:
+      - feature/innovation-maturity-review-batches-20260910
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-review-campaign-plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout exact PR head revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Assert exact pull-request head
+        if: github.event_name == 'pull_request'
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Regenerate exact tested batch parent chain in isolated worktrees
+        shell: bash
+        run: |
+          maturity_dir="$(mktemp -d)"
+          batches_dir="$(mktemp -d)"
+          git worktree add --detach "$maturity_dir" 8d4efe98738779d1dad1dcd8dcf77bcf93fc0b8b
+          git worktree add --detach "$batches_dir" 8365040942e148c0bb6661058d75f482f2c5aed0
+          (
+            cd "$maturity_dir"
+            npm ci --no-audit --no-fund
+            npm run innovations:verify-maturity
+          )
+          rm -rf "$batches_dir/data/recovery/innovation-maturity-evidence-review"
+          cp -R "$maturity_dir/data/recovery/innovation-maturity-evidence-review" "$batches_dir/data/recovery/innovation-maturity-evidence-review"
+          (
+            cd "$batches_dir"
+            npm ci --no-audit --no-fund
+            npm run innovations:verify-review-batches
+          )
+          rm -rf data/recovery/innovation-maturity-review-batches
+          cp -R "$batches_dir/data/recovery/innovation-maturity-review-batches" data/recovery/innovation-maturity-review-batches
+          git worktree remove --force "$batches_dir"
+          git worktree remove --force "$maturity_dir"
+
+      - name: Generate and verify deterministic campaign plan
+        run: npm run innovations:verify-review-campaign
+
+      - name: Preserve first deterministic campaign plan
+        run: cp -R data/recovery/innovation-review-campaign-plan /tmp/innovation-review-campaign-plan-first
+
+      - name: Regenerate and reverify campaign plan
+        run: npm run innovations:plan-review-campaign && npm run audit:innovation-review-campaign
+
+      - name: Require byte-identical deterministic regeneration
+        run: diff -ru /tmp/innovation-review-campaign-plan-first data/recovery/innovation-review-campaign-plan
+
+      - name: TypeScript verification
+        run: npm run typecheck
+
+      - name: Production build verification
+        run: npm run build
+
+      - name: Upload exact-head campaign-plan evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-innovation-review-campaign-plan-${{ github.event.pull_request.head.sha || github.sha }}
+          path: data/recovery/innovation-review-campaign-plan
+          if-no-files-found: error
+          retention-days: 30
