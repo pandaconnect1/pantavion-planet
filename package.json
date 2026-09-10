@@ -83,7 +83,10 @@
     "innovations:verify-review-campaign": "npm run innovations:plan-review-campaign && npm run audit:innovation-review-campaign",
     "innovations:shortlist-preseed-research": "node scripts/pantavion-preseed-research-shortlist.cjs",
     "audit:preseed-research-shortlist": "node scripts/pantavion-preseed-research-shortlist-gate.cjs",
-    "innovations:verify-preseed-shortlist": "npm run innovations:shortlist-preseed-research && npm run audit:preseed-research-shortlist"
+    "innovations:verify-preseed-shortlist": "npm run innovations:shortlist-preseed-research && npm run audit:preseed-research-shortlist",
+    "innovations:audit-preseed-quality": "node scripts/pantavion-preseed-shortlist-quality-audit.cjs",
+    "audit:preseed-shortlist-quality": "node scripts/pantavion-preseed-shortlist-quality-audit-gate.cjs",
+    "innovations:verify-preseed-quality": "npm run innovations:audit-preseed-quality && npm run audit:preseed-shortlist-quality"
   },
   "dependencies": {
     "@ai-sdk/gateway": "4.0.28",
