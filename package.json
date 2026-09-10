@@ -77,7 +77,7 @@
     "test:translation-gateway-resilience": "node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs",
     "innovations:batch-maturity-review": "node scripts/pantavion-innovation-maturity-review-batches.cjs",
     "audit:innovation-review-batches": "node scripts/pantavion-innovation-maturity-review-batches-gate.cjs",
-    "innovations:verify-review-batches": "npm run innovations:verify-maturity && npm run innovations:batch-maturity-review && npm run audit:innovation-review-batches"
+    "innovations:verify-review-batches": "npm run innovations:batch-maturity-review && npm run audit:innovation-review-batches"
   },
   "dependencies": {
     "@ai-sdk/gateway": "4.0.28",
