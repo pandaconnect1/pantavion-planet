@@ -1,0 +1,49 @@
+name: Pantavion Innovation Capability Mapping
+
+on:
+  pull_request:
+    branches:
+      - feature/innovation-semantic-atomization-20260910
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-capability-mapping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact PR head revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Generate and verify register, atoms and capability candidates
+        run: npm run innovations:verify-capabilities
+
+      - name: Preserve first deterministic projection
+        run: cp -R data/recovery/innovation-capability-mapping /tmp/innovation-capability-mapping-first
+
+      - name: Regenerate and reverify capability candidates
+        run: npm run innovations:map-capabilities && npm run audit:innovation-capabilities
+
+      - name: Require byte-identical deterministic regeneration
+        run: diff -ru /tmp/innovation-capability-mapping-first data/recovery/innovation-capability-mapping
+
+      - name: Upload exact-head capability evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-innovation-capability-mapping-${{ github.event.pull_request.head.sha || github.sha }}
+          path: data/recovery/innovation-capability-mapping
+          if-no-files-found: error
+          retention-days: 30
