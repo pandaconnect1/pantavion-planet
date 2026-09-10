@@ -1,0 +1,74 @@
+name: Pantavion Innovation Maturity Review Batches
+
+on:
+  pull_request:
+    branches:
+      - feature/innovation-maturity-evidence-review-20260910
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-maturity-review-batches:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exact PR head revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Assert exact pull-request head
+        if: github.event_name == 'pull_request'
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Regenerate exact tested maturity parent in isolated worktree
+        shell: bash
+        run: |
+          parent_dir="$(mktemp -d)"
+          git worktree add --detach "$parent_dir" 8d4efe98738779d1dad1dcd8dcf77bcf93fc0b8b
+          (
+            cd "$parent_dir"
+            npm ci --no-audit --no-fund
+            npm run innovations:verify-maturity
+          )
+          rm -rf data/recovery/innovation-maturity-evidence-review
+          cp -R "$parent_dir/data/recovery/innovation-maturity-evidence-review" data/recovery/innovation-maturity-evidence-review
+          git worktree remove --force "$parent_dir"
+
+      - name: Generate and verify maturity review batches
+        run: npm run innovations:verify-review-batches
+
+      - name: Preserve first deterministic batch set
+        run: cp -R data/recovery/innovation-maturity-review-batches /tmp/innovation-maturity-review-batches-first
+
+      - name: Regenerate and reverify review batches
+        run: npm run innovations:batch-maturity-review && npm run audit:innovation-review-batches
+
+      - name: Require byte-identical deterministic regeneration
+        run: diff -ru /tmp/innovation-maturity-review-batches-first data/recovery/innovation-maturity-review-batches
+
+      - name: TypeScript verification
+        run: npm run typecheck
+
+      - name: Production build verification
+        run: npm run build
+
+      - name: Upload exact-head review batch evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-innovation-maturity-review-batches-${{ github.event.pull_request.head.sha || github.sha }}
+          path: data/recovery/innovation-maturity-review-batches
+          if-no-files-found: error
+          retention-days: 30
