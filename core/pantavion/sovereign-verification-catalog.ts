@@ -23,7 +23,7 @@ export type SovereignVerificationRecord = {
   nextTransition: SovereignVerificationStage;
 };
 
-export const sovereignVerificationSnapshotAt = "2026-09-10T13:28:42.000Z";
+export const sovereignVerificationSnapshotAt = "2026-09-10T14:32:09.000Z";
 
 export const sovereignVerificationRecords: SovereignVerificationRecord[] = [
   { id:"intent-firewall-workbench", title:"Founder Intent Firewall Workbench", domain:"Intent Firewall", stage:"TESTED", truthLocation:"OPEN_PR", pr:476, exactHead:"4fa03685a7277d4696873996ddd0b5b94b6514e0", base:"main", verifiedAt:"2026-09-09T13:45:06.000Z", workflowCount:11, verificationReceipt:"5602900011", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
@@ -42,6 +42,7 @@ export const sovereignVerificationRecords: SovereignVerificationRecord[] = [
   { id:"innovation-maturity-review-batches", title:"Bounded Maturity Review Batches", domain:"Recovery classification", stage:"TESTED", truthLocation:"OPEN_PR", pr:490, exactHead:"8365040942e148c0bb6661058d75f482f2c5aed0", base:"feature/innovation-maturity-evidence-review-20260910", verifiedAt:"2026-09-10T08:17:05.000Z", workflowCount:7, verificationReceipt:"5615412404", evidenceArtifact:"10142655927", parentPr:486, parentExactHead:"8d4efe98738779d1dad1dcd8dcf77bcf93fc0b8b", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
   { id:"innovation-review-campaign-plan", title:"Deterministic Innovation Review Campaign Plan", domain:"Recovery classification", stage:"TESTED", truthLocation:"OPEN_PR", pr:491, exactHead:"212f79a084eefb1521dc59d1c45245d687630f39", base:"feature/innovation-maturity-review-batches-20260910", verifiedAt:"2026-09-10T12:31:05.000Z", workflowCount:7, verificationReceipt:"5618710980", evidenceArtifact:"10151859238", parentPr:490, parentExactHead:"8365040942e148c0bb6661058d75f482f2c5aed0", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
   { id:"preseed-research-shortlist", title:"Evidence-first PRE-SEED Research Shortlist", domain:"Prior-art research triage", stage:"TESTED", truthLocation:"OPEN_PR", pr:492, exactHead:"85579e30db5b5bf84b3d40bd6d5f2ba9d87dcf1b", base:"feature/innovation-review-campaign-plan-20260910", verifiedAt:"2026-09-10T13:28:42.000Z", workflowCount:7, verificationReceipt:"5619491177", evidenceArtifact:"10154289683", parentPr:491, parentExactHead:"212f79a084eefb1521dc59d1c45245d687630f39", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
+  { id:"preseed-prior-art-dossiers", title:"PRE-SEED Prior-Art Research Dossiers", domain:"Prior-art research planning", stage:"TESTED", truthLocation:"OPEN_PR", pr:493, exactHead:"1b6717ce095e38d4a9c489742a4da63fa07ddc2e", base:"feature/preseed-research-shortlist-20260910", verifiedAt:"2026-09-10T14:32:09.000Z", workflowCount:7, verificationReceipt:"5620380543", evidenceArtifact:"10157089662", parentPr:492, parentExactHead:"85579e30db5b5bf84b3d40bd6d5f2ba9d87dcf1b", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
 ];
 
 const stageOrder: SovereignVerificationStage[] = ["CODED","TESTED","MERGED","DEPLOYED","VERIFIED_LIVE"];
