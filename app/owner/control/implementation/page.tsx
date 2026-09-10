@@ -6,6 +6,12 @@ import {
   synchronizeImplementationItems,
 } from "@/core/pantavion/implementation-sync-registry";
 import {
+  sovereignVerificationDoctrine,
+  sovereignVerificationRecords,
+  sovereignVerificationSnapshotAt,
+  validateSovereignVerificationCatalog,
+} from "@/core/pantavion/sovereign-verification-catalog";
+import {
   defaultOwnerReleasePolicy,
   evaluateOwnerReleaseGate,
   ownerReleaseDoctrine,
@@ -40,6 +46,9 @@ export default async function OwnerImplementationPage() {
   if (assurance?.currentLevel !== "aal2") {
     redirect("/owner/safety/verify?next=/owner/control/implementation");
   }
+
+  const catalogBlockers = validateSovereignVerificationCatalog();
+  const verifiedPrRecords = catalogBlockers.length ? [] : sovereignVerificationRecords;
 
   const currentItems = synchronizeImplementationItems(sovereignFactoryImplementationItems).map((item) => ({
     ...item,
@@ -111,6 +120,52 @@ export default async function OwnerImplementationPage() {
               </div>
             </article>
           ))}
+        </section>
+
+        <section className="mt-8 rounded-2xl border border-cyan-900/70 bg-slate-900/60 p-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">Exact-head Sovereign verification catalog</p>
+              <h2 className="mt-2 text-xl font-semibold">Open PR evidence — όχι production</h2>
+            </div>
+            <span className="rounded-full border border-amber-500/50 bg-amber-500/10 px-3 py-1 text-xs font-black text-amber-200">
+              OPEN_PR ≠ MERGED ≠ DEPLOYED
+            </span>
+          </div>
+          <p className="mt-3 text-sm leading-6 text-slate-300">{sovereignVerificationDoctrine.rule}</p>
+          <p className="mt-2 text-xs text-slate-500">Snapshot: {sovereignVerificationSnapshotAt}</p>
+
+          {catalogBlockers.length ? (
+            <div role="alert" className="mt-4 rounded-xl border border-rose-500/60 bg-rose-500/10 p-4 text-sm text-rose-100">
+              Catalog hidden fail-closed: {catalogBlockers.join(", ")}
+            </div>
+          ) : (
+            <div className="mt-5 grid gap-3 lg:grid-cols-2">
+              {verifiedPrRecords.map((record) => (
+                <article key={record.id} className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h3 className="font-semibold text-slate-100">{record.title}</h3>
+                    <div className="flex gap-2">
+                      <span className="rounded-full border border-emerald-500/50 px-2 py-1 text-xs font-black text-emerald-300">{record.stage}</span>
+                      <span className="rounded-full border border-amber-500/50 px-2 py-1 text-xs font-black text-amber-300">{record.truthLocation}</span>
+                    </div>
+                  </div>
+                  <p className="mt-2 text-xs text-slate-400">{record.domain} · {record.workflowCount}/{record.workflowCount} workflows successful</p>
+                  <div className="mt-3 space-y-1 break-all font-mono text-[11px] text-slate-500">
+                    <p>PR #{record.pr} · {record.exactHead}</p>
+                    <p>receipt #{record.verificationReceipt}{record.evidenceArtifact ? ` · artifact ${record.evidenceArtifact}` : ""}</p>
+                    {record.parentPr ? <p>parent PR #{record.parentPr} · {record.parentExactHead}</p> : null}
+                  </div>
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <a className="font-bold text-cyan-300 underline-offset-4 hover:underline" href={`https://github.com/pandaconnect1/pantavion-planet/pull/${record.pr}`} rel="noreferrer" target="_blank">Open exact PR evidence</a>
+                    <span className="text-slate-400">Next: {record.nextTransition}</span>
+                  </div>
+                  <p className="mt-2 text-xs font-semibold text-rose-300">Merged: false · Deployed: false · Verified live: false · Execution: false</p>
+                </article>
+              ))}
+            </div>
+          )}
+          <p className="mt-4 text-xs leading-5 text-slate-500">{sovereignVerificationDoctrine.releaseRule}</p>
         </section>
 
         <div className="mt-6 text-xs text-slate-500">
