@@ -10,6 +10,9 @@ const dir = path.join(root, 'data', 'recovery', 'innovation-maturity-evidence-re
 const manifestPath = path.join(dir, 'manifest.json');
 const queuePath = path.join(dir, 'maturity-review-queue.json');
 const csvPath = path.join(dir, 'maturity-review-queue.csv');
+const expectedParentAtomCount = 38014;
+const expectedParentAtomFingerprint = '95f5fa3cc66fbe5f60780652c76e6bd949bb6f6ee514b18b1c329b1d10decf02';
+const expectedParentOverlapFingerprint = '63ac318e83901cfff998e50f9d02cd10fdfe1efecf049c5ab1f94a3eae399783';
 
 function fail(message) {
   console.error('PANTAVION INNOVATION MATURITY EVIDENCE GATE: FAIL - ' + message);
@@ -108,6 +111,9 @@ const expectedQueueFingerprint = hash(queue.reviews.map(review => [
   review.candidateCapabilityIds.join('|'),
   review.overlapSuggestionCount,
 ].join(':')).join('\n'));
+if (atoms.size !== expectedParentAtomCount) fail('exact parent atom count drifted: expected ' + expectedParentAtomCount + ', received ' + atoms.size);
+if (expectedSourceAtomFingerprint !== expectedParentAtomFingerprint) fail('exact parent atom fingerprint drifted');
+if (overlapsProjection.manifest?.reviewQueueFingerprint !== expectedParentOverlapFingerprint) fail('exact parent overlap fingerprint drifted');
 if (manifest.sourceAtomFingerprint !== expectedSourceAtomFingerprint) fail('source atom fingerprint mismatch');
 if (manifest.sourceOverlapFingerprint !== overlapsProjection.manifest?.reviewQueueFingerprint) fail('source overlap fingerprint mismatch');
 if (manifest.maturityQueueFingerprint !== expectedQueueFingerprint) fail('maturity queue fingerprint mismatch');
