@@ -1,0 +1,75 @@
+name: Pantavion PRE-SEED Prior Art Dossiers
+
+on:
+  pull_request:
+    branches:
+      - feature/preseed-research-shortlist-20260910
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-preseed-prior-art-dossiers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout exact PR head revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Assert exact pull-request head
+        if: github.event_name == 'pull_request'
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Regenerate exact tested shortlist in isolated worktree
+        shell: bash
+        run: |
+          parent_dir="$(mktemp -d)"
+          git worktree add --detach "$parent_dir" 85579e30db5b5bf84b3d40bd6d5f2ba9d87dcf1b
+          (
+            cd "$parent_dir"
+            npm ci --no-audit --no-fund
+            npm run innovations:verify-maturity
+            npm run innovations:verify-preseed-shortlist
+          )
+          rm -rf data/recovery/preseed-research-shortlist
+          cp -R "$parent_dir/data/recovery/preseed-research-shortlist" data/recovery/preseed-research-shortlist
+          git worktree remove --force "$parent_dir"
+
+      - name: Generate and verify prior-art dossiers
+        run: npm run innovations:verify-preseed-dossiers
+
+      - name: Preserve first deterministic dossiers
+        run: cp -R data/recovery/preseed-prior-art-dossiers /tmp/preseed-prior-art-dossiers-first
+
+      - name: Regenerate and reverify dossiers
+        run: npm run innovations:prepare-preseed-dossiers && npm run audit:preseed-prior-art-dossiers
+
+      - name: Require byte-identical deterministic regeneration
+        run: diff -ru /tmp/preseed-prior-art-dossiers-first data/recovery/preseed-prior-art-dossiers
+
+      - name: TypeScript verification
+        run: npm run typecheck
+
+      - name: Production build verification
+        run: npm run build
+
+      - name: Upload exact-head dossier evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-preseed-prior-art-dossiers-${{ github.event.pull_request.head.sha || github.sha }}
+          path: data/recovery/preseed-prior-art-dossiers
+          if-no-files-found: error
+          retention-days: 30
