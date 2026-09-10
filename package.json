@@ -86,7 +86,10 @@
     "innovations:verify-preseed-shortlist": "npm run innovations:shortlist-preseed-research && npm run audit:preseed-research-shortlist",
     "innovations:audit-preseed-quality": "node scripts/pantavion-preseed-shortlist-quality-audit.cjs",
     "audit:preseed-shortlist-quality": "node scripts/pantavion-preseed-shortlist-quality-audit-gate.cjs",
-    "innovations:verify-preseed-quality": "npm run innovations:audit-preseed-quality && npm run audit:preseed-shortlist-quality"
+    "innovations:verify-preseed-quality": "npm run innovations:audit-preseed-quality && npm run audit:preseed-shortlist-quality",
+    "innovations:build-coherent-disclosures": "node scripts/pantavion-coherent-invention-disclosures.cjs",
+    "audit:coherent-invention-disclosures": "node scripts/pantavion-coherent-invention-disclosures-gate.cjs",
+    "innovations:verify-coherent-disclosures": "npm run innovations:build-coherent-disclosures && npm run audit:coherent-invention-disclosures"
   },
   "dependencies": {
     "@ai-sdk/gateway": "4.0.28",
