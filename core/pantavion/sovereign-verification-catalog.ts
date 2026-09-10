@@ -16,6 +16,9 @@ export type SovereignVerificationRecord = {
   evidenceArtifact?: string;
   parentPr?: number;
   parentExactHead?: string;
+  researchQuality?: "BLOCKED" | "VALIDATED";
+  researchEligible?: boolean;
+  qualityBlocker?: string;
   merged: boolean;
   deployed: boolean;
   verifiedLive: boolean;
@@ -23,7 +26,7 @@ export type SovereignVerificationRecord = {
   nextTransition: SovereignVerificationStage;
 };
 
-export const sovereignVerificationSnapshotAt = "2026-09-10T14:32:09.000Z";
+export const sovereignVerificationSnapshotAt = "2026-09-10T16:31:00.000Z";
 
 export const sovereignVerificationRecords: SovereignVerificationRecord[] = [
   { id:"intent-firewall-workbench", title:"Founder Intent Firewall Workbench", domain:"Intent Firewall", stage:"TESTED", truthLocation:"OPEN_PR", pr:476, exactHead:"4fa03685a7277d4696873996ddd0b5b94b6514e0", base:"main", verifiedAt:"2026-09-09T13:45:06.000Z", workflowCount:11, verificationReceipt:"5602900011", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
@@ -41,8 +44,9 @@ export const sovereignVerificationRecords: SovereignVerificationRecord[] = [
   { id:"sovereign-admission-bundle", title:"Sovereign Receipt-chain Admission Bundle", domain:"Owner Control integration", stage:"TESTED", truthLocation:"OPEN_PR", pr:489, exactHead:"34ef8f01c0ae53412a4b07ae93f8a13c711c2a16", base:"main", verifiedAt:"2026-09-10T06:57:58.000Z", workflowCount:12, verificationReceipt:"5614469215", evidenceArtifact:"10140201992", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
   { id:"innovation-maturity-review-batches", title:"Bounded Maturity Review Batches", domain:"Recovery classification", stage:"TESTED", truthLocation:"OPEN_PR", pr:490, exactHead:"8365040942e148c0bb6661058d75f482f2c5aed0", base:"feature/innovation-maturity-evidence-review-20260910", verifiedAt:"2026-09-10T08:17:05.000Z", workflowCount:7, verificationReceipt:"5615412404", evidenceArtifact:"10142655927", parentPr:486, parentExactHead:"8d4efe98738779d1dad1dcd8dcf77bcf93fc0b8b", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
   { id:"innovation-review-campaign-plan", title:"Deterministic Innovation Review Campaign Plan", domain:"Recovery classification", stage:"TESTED", truthLocation:"OPEN_PR", pr:491, exactHead:"212f79a084eefb1521dc59d1c45245d687630f39", base:"feature/innovation-maturity-review-batches-20260910", verifiedAt:"2026-09-10T12:31:05.000Z", workflowCount:7, verificationReceipt:"5618710980", evidenceArtifact:"10151859238", parentPr:490, parentExactHead:"8365040942e148c0bb6661058d75f482f2c5aed0", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
-  { id:"preseed-research-shortlist", title:"Evidence-first PRE-SEED Research Shortlist", domain:"Prior-art research triage", stage:"TESTED", truthLocation:"OPEN_PR", pr:492, exactHead:"85579e30db5b5bf84b3d40bd6d5f2ba9d87dcf1b", base:"feature/innovation-review-campaign-plan-20260910", verifiedAt:"2026-09-10T13:28:42.000Z", workflowCount:7, verificationReceipt:"5619491177", evidenceArtifact:"10154289683", parentPr:491, parentExactHead:"212f79a084eefb1521dc59d1c45245d687630f39", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
-  { id:"preseed-prior-art-dossiers", title:"PRE-SEED Prior-Art Research Dossiers", domain:"Prior-art research planning", stage:"TESTED", truthLocation:"OPEN_PR", pr:493, exactHead:"1b6717ce095e38d4a9c489742a4da63fa07ddc2e", base:"feature/preseed-research-shortlist-20260910", verifiedAt:"2026-09-10T14:32:09.000Z", workflowCount:7, verificationReceipt:"5620380543", evidenceArtifact:"10157089662", parentPr:492, parentExactHead:"85579e30db5b5bf84b3d40bd6d5f2ba9d87dcf1b", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
+  { id:"preseed-research-shortlist", title:"Evidence-first PRE-SEED Research Shortlist", domain:"Prior-art research triage", stage:"TESTED", truthLocation:"OPEN_PR", pr:492, exactHead:"85579e30db5b5bf84b3d40bd6d5f2ba9d87dcf1b", base:"feature/innovation-review-campaign-plan-20260910", verifiedAt:"2026-09-10T13:28:42.000Z", workflowCount:7, verificationReceipt:"5619491177", evidenceArtifact:"10154289683", parentPr:491, parentExactHead:"212f79a084eefb1521dc59d1c45245d687630f39", researchQuality:"BLOCKED", researchEligible:false, qualityBlocker:"140 code/config fragments, 6 literals/identifiers and 4 incomplete fragments; 0 coherent technical mechanisms. Rejected for innovation research by PR #494.", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
+  { id:"preseed-prior-art-dossiers", title:"PRE-SEED Prior-Art Research Dossiers", domain:"Prior-art research planning", stage:"TESTED", truthLocation:"OPEN_PR", pr:493, exactHead:"1b6717ce095e38d4a9c489742a4da63fa07ddc2e", base:"feature/preseed-research-shortlist-20260910", verifiedAt:"2026-09-10T14:32:09.000Z", workflowCount:7, verificationReceipt:"5620380543", evidenceArtifact:"10157089662", parentPr:492, parentExactHead:"85579e30db5b5bf84b3d40bd6d5f2ba9d87dcf1b", researchQuality:"BLOCKED", researchEligible:false, qualityBlocker:"Research dossiers are deterministic but blocked by the invalid #492 parent population; 750 tasks remain unexecuted.", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
+  { id:"preseed-shortlist-quality-audit", title:"PRE-SEED Shortlist Research Quality Audit", domain:"Research quality control", stage:"TESTED", truthLocation:"OPEN_PR", pr:494, exactHead:"8d00bae9ea614e42309065b5ee74110cc93c62cd", base:"feature/preseed-research-shortlist-20260910", verifiedAt:"2026-09-10T16:31:00.000Z", workflowCount:7, verificationReceipt:"5622042586", evidenceArtifact:"10162289979", parentPr:492, parentExactHead:"85579e30db5b5bf84b3d40bd6d5f2ba9d87dcf1b", researchQuality:"VALIDATED", researchEligible:false, qualityBlocker:"Validated fail-closed rejection: 0/150 coherent technical mechanisms and 0 research-eligible items.", merged:false, deployed:false, verifiedLive:false, executionAuthorized:false, nextTransition:"MERGED" },
 ];
 
 const stageOrder: SovereignVerificationStage[] = ["CODED","TESTED","MERGED","DEPLOYED","VERIFIED_LIVE"];
@@ -65,6 +69,8 @@ export function validateSovereignVerificationCatalog(records = sovereignVerifica
     if (record.deployed && !record.merged) blockers.push("deployed_without_merge:" + record.id);
     if (record.verifiedLive && !record.deployed) blockers.push("verified_live_without_deploy:" + record.id);
     if (record.executionAuthorized) blockers.push("execution_authority_forbidden:" + record.id);
+    if (record.researchQuality === "BLOCKED" && (record.researchEligible !== false || !record.qualityBlocker?.trim())) blockers.push("research_quality_block_incomplete:" + record.id);
+    if (record.researchQuality === "VALIDATED" && record.researchEligible !== false) blockers.push("research_quality_verdict_inconsistent:" + record.id);
     const currentRank = stageOrder.indexOf(record.stage);
     const nextRank = stageOrder.indexOf(record.nextTransition);
     if (nextRank !== currentRank + 1) blockers.push("non_adjacent_next_transition:" + record.id);
