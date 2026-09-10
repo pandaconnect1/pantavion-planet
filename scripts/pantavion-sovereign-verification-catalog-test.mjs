@@ -11,9 +11,9 @@ const eq = (actual, expected, message) => { assert.equal(actual, expected, messa
 const ok = (value, message) => { assert.ok(value, message); assertions += 1; };
 
 eq(validateSovereignVerificationCatalog().length, 0, "catalog passes fail-closed validation");
-eq(sovereignVerificationRecords.length, 18, "all current Sovereign and innovation PRs represented");
-eq(new Set(sovereignVerificationRecords.map(record => record.id)).size, 18, "unique catalog IDs");
-eq(new Set(sovereignVerificationRecords.map(record => record.pr)).size, 18, "unique PRs");
+eq(sovereignVerificationRecords.length, 19, "all current Sovereign and innovation PRs represented");
+eq(new Set(sovereignVerificationRecords.map(record => record.id)).size, 19, "unique catalog IDs");
+eq(new Set(sovereignVerificationRecords.map(record => record.pr)).size, 19, "unique PRs");
 eq(sovereignVerificationRecords.every(record => record.stage === "TESTED"), true, "no unverified lifecycle promotion");
 eq(sovereignVerificationRecords.every(record => record.truthLocation === "OPEN_PR"), true, "truth location remains open PR");
 eq(sovereignVerificationRecords.every(record => !record.merged), true, "nothing claimed merged");
@@ -26,7 +26,7 @@ eq(sovereignVerificationRecords.every(record => record.workflowCount >= 7), true
 ok(Number.isFinite(Date.parse(sovereignVerificationSnapshotAt)), "snapshot timestamp");
 
 const byPr = new Map(sovereignVerificationRecords.map(record => [record.pr, record]));
-for (const [childPr, parentPr] of [[483,480],[484,483],[485,484],[486,485],[488,486],[490,486],[491,490],[492,491],[493,492],[494,492]]) {
+for (const [childPr, parentPr] of [[483,480],[484,483],[485,484],[486,485],[488,486],[490,486],[491,490],[492,491],[493,492],[494,492],[495,494]]) {
   const child = byPr.get(childPr);
   const parent = byPr.get(parentPr);
   ok(child && parent, "stack records exist");
@@ -37,6 +37,8 @@ for (const [childPr, parentPr] of [[483,480],[484,483],[485,484],[486,485],[488,
 eq(byPr.get(492).researchQuality, "BLOCKED", "shortlist research quality blocked");
 eq(byPr.get(493).researchQuality, "BLOCKED", "dossiers inherit parent quality blocker");
 eq(byPr.get(494).researchQuality, "VALIDATED", "quality audit evidence validated");
+eq(byPr.get(495).researchQuality, "RESEARCH_READY", "coherent disclosures are research ready");
+eq(byPr.get(495).researchEligible, true, "coherent disclosures eligible for prior-art research");
 eq([492,493,494].every(pr => byPr.get(pr).researchEligible === false), true, "blocked research never becomes eligible");
 
 const tampered = structuredClone(sovereignVerificationRecords);
@@ -55,6 +57,10 @@ ok(validateSovereignVerificationCatalog(brokenParent).some(blocker => blocker.st
 const brokenResearchQuality = structuredClone(sovereignVerificationRecords);
 brokenResearchQuality.find(record => record.pr === 492).qualityBlocker = "";
 ok(validateSovereignVerificationCatalog(brokenResearchQuality).some(blocker => blocker.startsWith("research_quality_block_incomplete:")), "reject incomplete research quality block");
+
+const brokenResearchReady = structuredClone(sovereignVerificationRecords);
+brokenResearchReady.find(record => record.pr === 495).researchEligible = false;
+ok(validateSovereignVerificationCatalog(brokenResearchReady).some(blocker => blocker.startsWith("research_ready_evidence_incomplete:")), "reject incomplete research-ready evidence");
 
 const page = readFileSync("app/owner/control/implementation/page.tsx", "utf8");
 ok(page.includes("requireFounderIdentity(auth.user.id)"), "Founder identity protected");
