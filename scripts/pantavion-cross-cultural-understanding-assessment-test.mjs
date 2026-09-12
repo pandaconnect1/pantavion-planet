@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import {
   assessCrossCulturalUnderstanding,
+  normalizeCrossCulturalUnderstandingInput,
 } from "../core/pantavion/cross-cultural-understanding-assessment.ts";
 
 let assertions = 0;
@@ -98,3 +101,33 @@ throws(() => assessCrossCulturalUnderstanding(base, {...policy, maximumTextLengt
 throws(() => assessCrossCulturalUnderstanding({...base, culturalContext:"x".repeat(2049)}, policy), /cultural_context_too_long/, "reject oversized context");
 
 console.log(`Cross-cultural understanding assessment contract: PASS (${assertions} assertions)`);
+
+throws(() => normalizeCrossCulturalUnderstandingInput({...base, unexpected:true}), /input_unknown_field/, "reject unknown input field");
+throws(() => normalizeCrossCulturalUnderstandingInput({...base, recipientAgeBand:"UNKNOWN"}), /invalid_recipient_age_band/, "reject unknown age band");
+throws(() => normalizeCrossCulturalUnderstandingInput({...base, jurisdictionDecision:"UNKNOWN"}), /invalid_jurisdiction_decision/, "reject unknown jurisdiction decision");
+throws(() => normalizeCrossCulturalUnderstandingInput({...base, understandingSignal:"UNKNOWN"}), /invalid_understanding_signal/, "reject unknown understanding signal");
+throws(() => normalizeCrossCulturalUnderstandingInput({...base, safetySignal:"UNKNOWN"}), /invalid_safety_signal/, "reject unknown safety signal");
+throws(() => normalizeCrossCulturalUnderstandingInput({...base, consentToUnderstandingCheck:"yes"}), /consent_boolean_required/, "reject non-boolean consent");
+
+const routeSource = await readFile(join(process.cwd(), "app/api/owner/cross-cultural-understanding/route.ts"), "utf8");
+ok(routeSource.includes("requireFounderIdentity(auth.user.id)"), "API is founder-only");
+ok(routeSource.includes('currentLevel !== "aal2"'), "API requires AAL2");
+ok(routeSource.includes("MAX_REQUEST_BYTES"), "API request is bounded");
+ok(routeSource.includes('"Cache-Control": "no-store, max-age=0"'), "API response is not cached");
+ok(routeSource.includes("DEFAULT_CROSS_CULTURAL_UNDERSTANDING_POLICY"), "API binds exact policy");
+
+const pageSource = await readFile(join(process.cwd(), "app/owner/control/cross-cultural-understanding/page.tsx"), "utf8");
+ok(pageSource.includes("requireFounderIdentity(auth.user.id)"), "page is founder-only");
+ok(pageSource.includes('currentLevel !== "aal2"'), "page requires AAL2");
+
+const clientSource = await readFile(join(process.cwd(), "app/owner/control/cross-cultural-understanding/understanding-client.tsx"), "utf8");
+ok(clientSource.includes('fetch("/api/owner/cross-cultural-understanding"'), "client calls protected API");
+ok(clientSource.includes('aria-live="polite"'), "result surface is accessible");
+ok(clientSource.includes("Message delivered"), "client exposes non-delivery truth");
+ok(clientSource.includes("Repair executed"), "client exposes non-execution truth");
+ok(clientSource.includes("Production write allowed"), "client exposes production boundary");
+
+const ownerSource = await readFile(join(process.cwd(), "app/owner/control/page.tsx"), "utf8");
+ok(ownerSource.includes('href="/owner/control/cross-cultural-understanding"'), "Owner Control links workbench");
+
+console.log(`Cross-cultural understanding Owner Control contract: PASS (${assertions} assertions)`);
