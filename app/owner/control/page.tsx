@@ -40,6 +40,12 @@ export default async function OwnerControlPage() {
             >
               Implementation Truth · Founder only
             </a>
+            <a
+              href="/owner/control/cross-cultural-understanding"
+              className="rounded-xl border border-violet-400/50 bg-violet-400/10 px-4 py-3 text-sm font-black text-violet-100"
+            >
+              Cross-Cultural Understanding · Assess meaning
+            </a>
           </div>
         </div>
         <OwnerControlClient initialItems={items} />
