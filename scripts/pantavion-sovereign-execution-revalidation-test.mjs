@@ -139,4 +139,7 @@ ok(client.includes("Execution allowed"), "execution truth visible");
 ok(client.includes("Production write allowed"), "production boundary visible");
 ok(client.includes("Edge handoff issued"), "edge boundary visible");
 
+const owner = await readFile(join(process.cwd(), "app/owner/control/page.tsx"), "utf8");
+ok(owner.includes('href="/owner/control/sovereign-execution-revalidation"'), "Owner Control links workbench");
+
 console.log(`Sovereign execution revalidation contract: PASS (${assertions} assertions)`);
