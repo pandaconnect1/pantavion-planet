@@ -1,0 +1,61 @@
+name: Pantavion Sovereign Admission Bundle
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "app/api/owner/sovereign-admission/**"
+      - "app/owner/control/sovereign-admission/**"
+      - "core/sovereign/sovereign-admission-bundle.ts"
+      - "scripts/pantavion-sovereign-admission-bundle-test.mjs"
+      - "package.json"
+      - ".github/workflows/pantavion-sovereign-admission-bundle.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sovereign-admission-bundle:
+    name: Verify Sovereign receipt chain
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout exact pull-request head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Assert checkout is exact pull-request head
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install exact dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify Sovereign admission bundle contract
+        run: npm run test:sovereign-admission-bundle
+
+      - name: Verify existing Sovereign factory contracts
+        run: npm run test:foundry-contract && npm run test:sovereign-factory-contract && npm run test:sovereign-kernel-integration
+
+      - name: Verify owner release gate
+        run: npm run test:owner-release-gate
+
+      - name: Verify Recovery Runtime contract
+        run: npm run test:recovery-runtime-fabric
+
+      - name: TypeScript verification
+        run: npm run typecheck
+
+      - name: Production build verification
+        run: npm run build
