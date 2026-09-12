@@ -12,8 +12,8 @@ const ok = (value, message) => { assert.ok(value, message); assertions += 1; };
 
 eq(validateSovereignVerificationCatalog().length, 0, "catalog passes fail-closed validation");
 eq(sovereignVerificationRecords.length, 21, "all current Sovereign and innovation PRs represented");
-eq(new Set(sovereignVerificationRecords.map(record => record.id)).size, 21, "unique catalog IDs");
-eq(new Set(sovereignVerificationRecords.map(record => record.pr)).size, 21, "unique PRs");
+eq(new Set(sovereignVerificationRecords.map(record => record.id)).size, 22, "unique catalog IDs");
+eq(new Set(sovereignVerificationRecords.map(record => record.pr)).size, 22, "unique PRs");
 eq(sovereignVerificationRecords.every(record => record.stage === "TESTED"), true, "no unverified lifecycle promotion");
 eq(sovereignVerificationRecords.every(record => record.truthLocation === "OPEN_PR"), true, "truth location remains open PR");
 eq(sovereignVerificationRecords.every(record => !record.merged), true, "nothing claimed merged");
@@ -26,7 +26,7 @@ eq(sovereignVerificationRecords.every(record => record.workflowCount >= 7), true
 ok(Number.isFinite(Date.parse(sovereignVerificationSnapshotAt)), "snapshot timestamp");
 
 const byPr = new Map(sovereignVerificationRecords.map(record => [record.pr, record]));
-for (const [childPr, parentPr] of [[483,480],[484,483],[485,484],[486,485],[488,486],[490,486],[491,490],[492,491],[493,492],[494,492],[495,494],[498,489]]) {
+for (const [childPr, parentPr] of [[483,480],[484,483],[485,484],[486,485],[488,486],[490,486],[491,490],[492,491],[493,492],[494,492],[495,494],[498,489],[499,498]]) {
   const child = byPr.get(childPr);
   const parent = byPr.get(parentPr);
   ok(child && parent, "stack records exist");
@@ -47,6 +47,9 @@ eq(byPr.get(497).verificationReceipt, "5645456108", "understanding workbench exa
 eq(byPr.get(498).exactHead, "f0d36a346fd18f6717d787e9920793d86e552e35", "execution revalidation exact head");
 eq(byPr.get(498).verificationReceipt, "5645677398", "execution revalidation receipt");
 eq(byPr.get(498).executionAuthorized, false, "revalidation grants no execution authority");
+eq(byPr.get(499).exactHead, "49924524c41cb2dd70d7c7fd159ae5dc61918ba4", "execution manifest exact head");
+eq(byPr.get(499).verificationReceipt, "5646460194", "execution manifest receipt");
+eq(byPr.get(499).executionAuthorized, false, "execution manifest grants no execution authority");
 eq([492,493,494].every(pr => byPr.get(pr).researchEligible === false), true, "blocked research never becomes eligible");
 
 const tampered = structuredClone(sovereignVerificationRecords);
