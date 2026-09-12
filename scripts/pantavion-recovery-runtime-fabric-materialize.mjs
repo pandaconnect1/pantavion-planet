@@ -14,6 +14,9 @@ const root = process.cwd();
 const corpusRoot = path.join(root, PANTAVION_RECOVERY_CORPUS_CONTRACT.corpusRoot);
 const batchesRoot = path.join(corpusRoot, "batches");
 const receiptPath = path.join(corpusRoot, "MATERIALIZATION_RECEIPT.json");
+const provenanceManifestPath = path.join(corpusRoot, "PROVENANCE_MANIFEST.json");
+const PRESERVATION_REPOSITORY = "pandaconnect1/pantavion-planet";
+const PRESERVATION_REF = "a93a0814ce4c45719d0eedfd3782fdf5c459d767";
 const semanticLedgerPath = path.join(root, PANTAVION_RECOVERY_CORPUS_CONTRACT.semanticLedgerPath);
 const semanticManifestPath = path.join(path.dirname(semanticLedgerPath), "manifest.json");
 const governedHoldPath = path.join(root, PANTAVION_RECOVERY_CORPUS_CONTRACT.governedHoldPath);
@@ -65,6 +68,13 @@ function verifyPinnedContract(contract) {
 function loadSourceLocators() {
   const receipt = readJson(receiptPath);
   const batchFiles = fs.readdirSync(batchesRoot).filter((name) => name.endsWith(".json")).sort();
+  const provenanceManifest = readJson(provenanceManifestPath);
+  const blobByBatchFile = new Map((provenanceManifest.sourcePaths ?? [])
+    .filter((entry) => typeof entry.path === "string" && entry.path.includes("/batches/"))
+    .map((entry) => [path.basename(entry.path), entry.blobSha]));
+  requireEqual("provenance_source_commit", provenanceManifest.sourceCommit, "da6fb9f70937f2f63b0d30204a22023ac72e1544");
+  requireEqual("provenance_preserved_file_count", provenanceManifest.preservedFileCount, 57);
+  requireEqual("provenance_batch_blob_count", blobByBatchFile.size, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceBatchCount);
   requireEqual("receipt_record_count", receipt.totalRecords, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceRecordCount);
   requireEqual("receipt_batch_count", receipt.totalBatches, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceBatchCount);
   requireEqual("receipt_source_fingerprint", receipt.corpusFingerprint, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceFingerprint);
@@ -77,6 +87,10 @@ function loadSourceLocators() {
 
   for (const batchFile of batchFiles) {
     const batch = readJson(path.join(batchesRoot, batchFile));
+    const preservationBlobSha = blobByBatchFile.get(batchFile);
+    if (typeof preservationBlobSha !== "string" || !/^[0-9a-f]{40}$/.test(preservationBlobSha)) {
+      throw new Error(`recovery_preservation_blob_missing:${batchFile}`);
+    }
     if (!Array.isArray(batch.records)) throw new Error(`recovery_batch_records_missing:${batchFile}`);
     for (let batchRecordIndex = 0; batchRecordIndex < batch.records.length; batchRecordIndex += 1) {
       const sourceRecord = batch.records[batchRecordIndex];
@@ -91,6 +105,10 @@ function loadSourceLocators() {
         batchRecordIndex,
         globalOrdinal,
         sourceRecordSha256: digestPantavionRecoverySourceRecord(sourceRecord),
+        preservationRepository: PRESERVATION_REPOSITORY,
+        preservationRef: PRESERVATION_REF,
+        preservationPath: path.posix.join(PANTAVION_RECOVERY_CORPUS_CONTRACT.corpusRoot, "batches", batchFile),
+        preservationBlobSha,
       });
     }
   }
