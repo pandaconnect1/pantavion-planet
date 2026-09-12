@@ -11,7 +11,7 @@ const eq = (actual, expected, message) => { assert.equal(actual, expected, messa
 const ok = (value, message) => { assert.ok(value, message); assertions += 1; };
 
 eq(validateSovereignVerificationCatalog().length, 0, "catalog passes fail-closed validation");
-eq(sovereignVerificationRecords.length, 22, "all current Sovereign and innovation PRs represented");
+eq(sovereignVerificationRecords.length, 23, "all current Sovereign and innovation PRs represented");
 eq(new Set(sovereignVerificationRecords.map(record => record.id)).size, 23, "unique catalog IDs");
 eq(new Set(sovereignVerificationRecords.map(record => record.pr)).size, 23, "unique PRs");
 eq(sovereignVerificationRecords.every(record => record.stage === "TESTED"), true, "no unverified lifecycle promotion");
