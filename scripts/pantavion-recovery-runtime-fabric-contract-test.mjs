@@ -64,6 +64,10 @@ function locator(record, ordinal) {
     batchRecordIndex: ordinal - 1,
     globalOrdinal: ordinal,
     sourceRecordSha256: digestPantavionRecoverySourceRecord(record),
+    preservationRepository: "pandaconnect1/pantavion-planet",
+    preservationRef: "a93a0814ce4c45719d0eedfd3782fdf5c459d767",
+    preservationPath: "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-contract.json",
+    preservationBlobSha: "35c698d1d527d06895625170032f7fd16c230b48",
   };
 }
 
