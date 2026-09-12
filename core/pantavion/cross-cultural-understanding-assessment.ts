@@ -48,6 +48,26 @@ export type CrossCulturalUnderstandingAssessment = {
   authorizationEffect: "none";
 };
 
+export const DEFAULT_CROSS_CULTURAL_UNDERSTANDING_POLICY: CrossCulturalUnderstandingPolicy = {
+  policyVersion: "pantavion-understanding-v1",
+  maximumDeviationForUnderstanding: 0.2,
+  requireOwnerReviewForMinors: true,
+  maximumTextLength: 2048,
+};
+
+const INPUT_FIELDS = [
+  "messageId", "originalMessageDigest", "translationReceipt", "senderIntent",
+  "sourceLanguage", "targetLanguage", "culturalContext", "recipientAgeBand",
+  "jurisdiction", "jurisdictionDecision", "consentToUnderstandingCheck",
+  "understandingSignal", "recipientMeaningSummary", "meaningDeviationScore", "safetySignal",
+] as const;
+const POLICY_FIELDS = [
+  "policyVersion", "maximumDeviationForUnderstanding", "requireOwnerReviewForMinors", "maximumTextLength",
+] as const;
+const AGE_BANDS = ["CHILD", "TEEN", "ADULT", "VERIFIED_ADULT"] as const;
+const JURISDICTION_DECISIONS = ["ADMIT", "OWNER_REVIEW", "DENY"] as const;
+const UNDERSTANDING_SIGNALS = ["UNDERSTOOD", "PARTIAL", "NOT_UNDERSTOOD", "DECLINED"] as const;
+const SAFETY_SIGNALS = ["NONE", "POTENTIAL_HARM", "IMMINENT_HARM"] as const;
 const sha256 = (value: string) => createHash("sha256").update(value).digest("hex");
 const digestPattern = /^[a-f0-9]{64}$/;
 
@@ -60,15 +80,80 @@ function canonical(value: unknown): string {
   return JSON.stringify(value);
 }
 
+function record(value: unknown, name: string): Record<string, unknown> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error(name + "_object_required");
+  return value as Record<string, unknown>;
+}
+
+function rejectUnknownFields(value: Record<string, unknown>, allowed: readonly string[], name: string) {
+  const unknown = Object.keys(value).filter(key => !allowed.includes(key));
+  if (unknown.length) throw new Error(name + "_unknown_field:" + unknown.sort().join(","));
+}
+
+function text(value: unknown, name: string): string {
+  if (typeof value !== "string") throw new Error(name + "_string_required");
+  return value;
+}
+
+function bool(value: unknown, name: string): boolean {
+  if (typeof value !== "boolean") throw new Error(name + "_boolean_required");
+  return value;
+}
+
+function number(value: unknown, name: string): number {
+  if (typeof value !== "number") throw new Error(name + "_number_required");
+  return value;
+}
+
+function oneOf<T extends string>(value: unknown, choices: readonly T[], name: string): T {
+  if (typeof value !== "string" || !choices.includes(value as T)) throw new Error("invalid_" + name);
+  return value as T;
+}
+
+export function normalizeCrossCulturalUnderstandingInput(value: unknown): CrossCulturalUnderstandingInput {
+  const input = record(value, "input");
+  rejectUnknownFields(input, INPUT_FIELDS, "input");
+  return {
+    messageId: text(input.messageId, "message_id"),
+    originalMessageDigest: text(input.originalMessageDigest, "original_message_digest"),
+    translationReceipt: text(input.translationReceipt, "translation_receipt"),
+    senderIntent: text(input.senderIntent, "sender_intent"),
+    sourceLanguage: text(input.sourceLanguage, "source_language"),
+    targetLanguage: text(input.targetLanguage, "target_language"),
+    culturalContext: text(input.culturalContext, "cultural_context"),
+    recipientAgeBand: oneOf(input.recipientAgeBand, AGE_BANDS, "recipient_age_band"),
+    jurisdiction: text(input.jurisdiction, "jurisdiction"),
+    jurisdictionDecision: oneOf(input.jurisdictionDecision, JURISDICTION_DECISIONS, "jurisdiction_decision"),
+    consentToUnderstandingCheck: bool(input.consentToUnderstandingCheck, "consent"),
+    understandingSignal: oneOf(input.understandingSignal, UNDERSTANDING_SIGNALS, "understanding_signal"),
+    recipientMeaningSummary: text(input.recipientMeaningSummary, "recipient_meaning_summary"),
+    meaningDeviationScore: number(input.meaningDeviationScore, "meaning_deviation"),
+    safetySignal: oneOf(input.safetySignal, SAFETY_SIGNALS, "safety_signal"),
+  };
+}
+
+export function normalizeCrossCulturalUnderstandingPolicy(value: unknown): CrossCulturalUnderstandingPolicy {
+  const policy = record(value, "policy");
+  rejectUnknownFields(policy, POLICY_FIELDS, "policy");
+  return {
+    policyVersion: text(policy.policyVersion, "policy_version"),
+    maximumDeviationForUnderstanding: number(policy.maximumDeviationForUnderstanding, "deviation_threshold"),
+    requireOwnerReviewForMinors: bool(policy.requireOwnerReviewForMinors, "minor_review"),
+    maximumTextLength: number(policy.maximumTextLength, "text_bound"),
+  };
+}
+
 function requireBoundedText(name: string, value: string, maximum: number) {
   if (!value.trim()) throw new Error(name + "_required");
   if (value.length > maximum) throw new Error(name + "_too_long");
 }
 
 export function assessCrossCulturalUnderstanding(
-  input: CrossCulturalUnderstandingInput,
-  policy: CrossCulturalUnderstandingPolicy,
+  rawInput: unknown,
+  rawPolicy: unknown = DEFAULT_CROSS_CULTURAL_UNDERSTANDING_POLICY,
 ): CrossCulturalUnderstandingAssessment {
+  const input = normalizeCrossCulturalUnderstandingInput(rawInput);
+  const policy = normalizeCrossCulturalUnderstandingPolicy(rawPolicy);
   if (!Number.isFinite(policy.maximumDeviationForUnderstanding) || policy.maximumDeviationForUnderstanding < 0 || policy.maximumDeviationForUnderstanding > 1) {
     throw new Error("invalid_deviation_threshold");
   }
