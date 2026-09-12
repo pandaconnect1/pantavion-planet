@@ -46,6 +46,12 @@ export default async function OwnerControlPage() {
             >
               Execution Revalidation · Evidence only
             </a>
+            <a
+              href="/owner/control/sovereign-execution-manifest"
+              className="rounded-xl border border-violet-400/50 bg-violet-400/10 px-4 py-3 text-sm font-black text-violet-100"
+            >
+              Execution Manifest · Review only
+            </a>
           </div>
         </div>
         <OwnerControlClient initialItems={items} />
