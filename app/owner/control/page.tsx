@@ -40,6 +40,12 @@ export default async function OwnerControlPage() {
             >
               Implementation Truth · Founder only
             </a>
+            <a
+              href="/owner/control/sovereign-execution-revalidation"
+              className="rounded-xl border border-amber-400/50 bg-amber-400/10 px-4 py-3 text-sm font-black text-amber-100"
+            >
+              Execution Revalidation · Evidence only
+            </a>
           </div>
         </div>
         <OwnerControlClient initialItems={items} />
