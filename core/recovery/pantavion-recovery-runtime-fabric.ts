@@ -78,6 +78,10 @@ export interface PantavionRecoverySourceLocator {
   batchRecordIndex: number;
   globalOrdinal: number;
   sourceRecordSha256: string;
+  preservationRepository: string;
+  preservationRef: string;
+  preservationPath: string;
+  preservationBlobSha: string;
 }
 
 export interface PantavionRecoveryWorkUnit {
@@ -239,6 +243,10 @@ export function materializePantavionRecoveryWorkUnit(input: {
   }
   if (!text(input.locator.batchFile)) throw new Error("recovery_runtime_batch_file_required");
   assertSha256("recovery_runtime_source_record_digest", input.locator.sourceRecordSha256);
+  assertSha256("recovery_runtime_preservation_blob_sha", input.locator.preservationBlobSha);
+  if (!text(input.locator.preservationRepository) || !text(input.locator.preservationRef) || !text(input.locator.preservationPath)) {
+    throw new Error("recovery_runtime_preservation_binding_required");
+  }
   if (input.previousWorkUnitDigest) {
     assertSha256("recovery_runtime_previous_work_unit_digest", input.previousWorkUnitDigest);
   }
