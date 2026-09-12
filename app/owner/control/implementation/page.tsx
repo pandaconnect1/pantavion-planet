@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import {
@@ -84,6 +85,21 @@ export default async function OwnerImplementationPage() {
           <p className="mt-2 text-sm leading-6 text-slate-300">{ownerReleaseDoctrine.rule}</p>
           <p className="mt-2 text-xs leading-5 text-slate-500">{ownerReleaseDoctrine.evolutionRule}</p>
         </div>
+
+        <Link
+          href="/owner/control/implementation/recovery-build-orders"
+          className="mt-4 block rounded-2xl border border-cyan-900/70 bg-cyan-950/20 p-4 transition hover:border-cyan-700"
+        >
+          <div className="text-xs font-semibold uppercase tracking-wider text-cyan-300">
+            Recovery Factory · Founder-only
+          </div>
+          <div className="mt-2 text-lg font-medium text-slate-100">
+            Open the 82,413-record Sovereign Build Order surface
+          </div>
+          <p className="mt-1 text-sm leading-6 text-slate-400">
+            Inspect every canonical order, membership boundary, SHA-256 evidence and owner gate. This view grants no execution, merge, deployment or release authority.
+          </p>
+        </Link>
 
         <section className="mt-6 grid gap-3">
           {currentItems.map((item) => (

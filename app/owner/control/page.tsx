@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { listOwnerDecisionItems, requireFounderIdentity } from "@/lib/owner-control/decision-queue";
@@ -34,12 +35,18 @@ export default async function OwnerControlPage() {
             Όλα τα ζητήματα που απαιτούν δική σου απόφαση συγκεντρώνονται εδώ. Το Pantavion συνεχίζει αυτόματα όπου επιτρέπεται και σταματά μόνο σε πραγματικό owner decision point.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <a
+            <Link
+              href="/owner/control/intent-workbench"
+              className="rounded-xl border border-emerald-400/50 bg-emerald-400/10 px-4 py-3 text-sm font-black text-emerald-100"
+            >
+              Intent Workbench · Offline
+            </Link>
+            <Link
               href="/owner/control/implementation"
               className="rounded-xl border border-cyan-400/50 bg-cyan-400/10 px-4 py-3 text-sm font-black text-cyan-100"
             >
               Implementation Truth · Founder only
-            </a>
+            </Link>
           </div>
         </div>
         <OwnerControlClient initialItems={items} />

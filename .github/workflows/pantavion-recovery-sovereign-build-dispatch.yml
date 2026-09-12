@@ -1,0 +1,179 @@
+name: Pantavion Recovery Sovereign Build Dispatch
+
+on:
+  pull_request:
+    paths:
+      - "core/recovery/pantavion-recovery-sovereign-build-dispatch.ts"
+      - "core/recovery/pantavion-recovery-build-readiness.ts"
+      - "core/recovery/pantavion-recovery-owner-decision.ts"
+      - "core/recovery/pantavion-recovery-scoped-build-capsule.ts"
+      - "core/recovery/pantavion-recovery-build-admission.ts"
+      - "core/recovery/pantavion-recovery-bounded-step-execution.ts"
+      - "core/recovery/pantavion-recovery-runtime-fabric.ts"
+      - "core/sovereign/intent-to-outcome-fabric.ts"
+      - "core/sovereign/intent-firewall.ts"
+      - "core/sovereign/sovereign-capability-kernel.ts"
+      - "core/sovereign/agent-capability-budget-control.ts"
+      - "core/sovereign/ephemeral-agent-swarm.ts"
+      - "core/sovereign/technology-library.ts"
+      - "scripts/pantavion-recovery-sovereign-build-dispatch.mjs"
+      - "scripts/pantavion-owner-build-order-surface-test.mjs"
+      - "scripts/pantavion-recovery-build-readiness-test.mjs"
+      - "scripts/pantavion-recovery-owner-decision-test.mjs"
+      - "scripts/pantavion-recovery-scoped-build-capsule-test.mjs"
+      - "scripts/pantavion-recovery-build-admission-test.mjs"
+      - "scripts/pantavion-recovery-bounded-step-execution-test.mjs"
+      - "lib/owner-control/decision-queue.ts"
+      - "lib/owner-control/assurance.ts"
+      - "lib/owner-control/request-security.ts"
+      - "lib/owner-control/recovery-build-order-decisions.ts"
+      - "app/api/owner/control/decisions/route.ts"
+      - "app/api/owner/control/recovery-build-orders/decisions/route.ts"
+      - "supabase/migrations/20260831040500_owner_recovery_build_decision_receipts.sql"
+      - "data/recovery/sovereign-build-order-index-v1.json"
+      - "data/recovery/sovereign-build-readiness-index-v1.json"
+      - "app/owner/control/implementation/page.tsx"
+      - "app/owner/control/implementation/recovery-build-orders/page.tsx"
+      - "app/owner/control/implementation/recovery-build-orders/recovery-build-order-decision-panel.tsx"
+      - "scripts/pantavion-recovery-runtime-fabric-materialize.mjs"
+      - "scripts/pantavion-canonical-semantic-classification-v3.cjs"
+      - "data/recovery/recovery-runtime-fabric-v1.json"
+      - "data/recovery/governed-hold-resolution-v4.json"
+      - "data/recovery/imported-pr248/**"
+      - ".github/workflows/pantavion-recovery-sovereign-build-dispatch.yml"
+      - "next.config.ts"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-recovery-sovereign-build-dispatch-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  recovery-sovereign-build-dispatch:
+    name: Gate all recovery units into canonical build orders
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install exact dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify strict semantic ownership contracts
+        run: node scripts/pantavion-semantic-v3-strict-anchor-contract-test.cjs
+
+      - name: Generate deterministic source batch index
+        run: node scripts/pantavion-recovery-source-batch-index.mjs
+
+      - name: Verify exact source batch index contract
+        run: node scripts/pantavion-recovery-source-batch-index-test.mjs
+
+      - name: Rebuild semantic truth for all 82,413 records
+        run: node scripts/pantavion-canonical-semantic-classification-v3.cjs
+
+      - name: Verify fail-closed Recovery Runtime contract
+        run: npm run test:recovery-runtime-fabric
+
+      - name: Materialize all 82,413 Pantavion work units
+        run: npm run materialize:recovery-runtime-fabric
+
+      - name: Materialize sovereign dispatch and canonical build orders
+        run: |
+          KERNEL_OUT="$(mktemp -d)"
+          trap 'rm -rf "$KERNEL_OUT"' EXIT
+          node node_modules/typescript/bin/tsc \
+            --module commonjs \
+            --moduleResolution node \
+            --target ES2022 \
+            --rootDir core/sovereign \
+            --outDir "$KERNEL_OUT" \
+            --esModuleInterop true \
+            --skipLibCheck true \
+            --declaration false \
+            --noEmit false \
+            core/sovereign/sovereign-capability-kernel.ts
+          PANTAVION_SOVEREIGN_KERNEL_RUNTIME="$KERNEL_OUT/sovereign-capability-kernel.js" \
+            node --no-warnings --experimental-strip-types scripts/pantavion-recovery-sovereign-build-dispatch.mjs
+
+      - name: Verify exact sovereign build-dispatch truth
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const manifest = JSON.parse(fs.readFileSync('data/recovery/sovereign-build-dispatch-v1/manifest.json','utf8'));
+          if (manifest.marker !== 'pantavion_recovery_sovereign_build_dispatch_manifest_v1') throw new Error('dispatch_marker_mismatch');
+          if (manifest.corpus.sourceRecordCount !== 82413) throw new Error('dispatch_record_count_mismatch');
+          if (manifest.dispatch.dispatchRecordCount !== 82413) throw new Error('dispatch_ledger_count_mismatch');
+          if (manifest.dispatch.dispatchCounts.AWAITING_OWNER_SCOPED_BUILD !== 31779) throw new Error('dispatch_candidate_count_mismatch');
+          if (manifest.dispatch.dispatchCounts.BLOCKED_GOVERNED_HOLD !== 355) throw new Error('dispatch_hold_count_mismatch');
+          if (manifest.dispatch.dispatchCounts.BLOCKED_RECURSIVE_PROVENANCE !== 50279) throw new Error('dispatch_recursive_count_mismatch');
+          if (manifest.dispatch.rawPayloadDuplicatedIntoControlPlane !== false) throw new Error('dispatch_raw_payload_forbidden');
+          const orders = manifest.sovereignBuildOrders;
+          if (!Number.isInteger(orders.canonicalBuildOrderCount) || orders.canonicalBuildOrderCount < 1 || orders.canonicalBuildOrderCount > 31779) throw new Error('build_order_count_invalid');
+          if (orders.groupedCandidateCount !== 31779) throw new Error('build_order_membership_count_mismatch');
+          if (orders.decisionCounts.awaiting_owner !== orders.canonicalBuildOrderCount) throw new Error('build_order_owner_gate_count_mismatch');
+          if (orders.decisionCounts.denied !== 0 || orders.decisionCounts.ready_for_bounded_execution !== 0) throw new Error('build_order_execution_leak');
+          if (orders.ephemeralAgentGrantIssuedCount !== 0) throw new Error('build_order_agent_grant_leak');
+          if (orders.technologyAssessmentRequiredCount !== orders.canonicalBuildOrderCount) throw new Error('build_order_technology_gate_mismatch');
+          if (orders.disconnectedExecutionEligibleCount !== 0) throw new Error('build_order_edge_execution_leak');
+          if (orders.ownerApprovalRequiredCount !== orders.canonicalBuildOrderCount) throw new Error('build_order_owner_approval_mismatch');
+          if (manifest.authority.analysisAuthority !== true || manifest.authority.planningAuthority !== true) throw new Error('dispatch_planning_authority_missing');
+          const forbidden = Object.entries(manifest.authority).filter(([key]) => !['analysisAuthority','planningAuthority'].includes(key));
+          if (forbidden.some(([, value]) => value !== false)) throw new Error('dispatch_execution_authority_forbidden');
+          if (manifest.negativeCasesVerified !== true) throw new Error('dispatch_negative_cases_missing');
+          if (manifest.sovereignBuildDispatchLifecycleState !== 'CODED') throw new Error('dispatch_lifecycle_mismatch');
+          if (manifest.completion !== false) throw new Error('dispatch_completion_must_remain_false');
+          NODE
+
+      - name: Verify deterministic build readiness for all canonical orders
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-recovery-build-readiness-test.mjs
+
+      - name: Verify Founder AAL2 build-decision receipts and fail-closed authority
+        run: npm run test:recovery-owner-decision
+
+      - name: Verify scoped build capsules across all canonical orders
+        run: npm run test:recovery-scoped-build-capsule
+
+      - name: Verify bounded Pantavion admission across all scoped capsules
+        run: npm run test:recovery-build-admission
+
+      - name: Verify bounded Pantavion step execution, receipts and checkpoints
+        run: npm run test:recovery-bounded-step-execution
+
+      - name: Verify founder-only build-order surface
+        run: node scripts/pantavion-owner-build-order-surface-test.mjs
+
+      - name: TypeScript verification
+        run: npm run typecheck
+
+      - name: Production build verification
+        run: npm run build
+
+      - name: Verify production build preserved deterministic source index
+        run: |
+          test -f data/recovery/source-batch-index-v1.json
+          printf '%s  %s\n' '97a5bf8409e60f9711ba52f62c2c0f71efce2777172b1005bad43a71357ab929' 'data/recovery/source-batch-index-v1.json' | sha256sum --check --strict
+
+      - name: Upload immutable sovereign build-dispatch evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-recovery-sovereign-build-dispatch-${{ github.sha }}
+          path: |
+            data/recovery/canonical-semantic-v3/manifest.json
+            data/recovery/canonical-semantic-v3/module-gap-map.json
+            data/recovery/source-batch-index-v1.json
+            data/recovery/runtime-fabric-v1/manifest.json
+            data/recovery/runtime-fabric-v1/recovery-work-units.ndjson
+            data/recovery/sovereign-build-dispatch-v1/manifest.json
+            data/recovery/sovereign-build-dispatch-v1/dispatch-ledger.ndjson
+            data/recovery/sovereign-build-dispatch-v1/sovereign-build-orders.ndjson
+            data/recovery/sovereign-build-readiness-index-v1.json
+          if-no-files-found: error
+          retention-days: 30
