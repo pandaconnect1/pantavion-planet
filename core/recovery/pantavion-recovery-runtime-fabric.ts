@@ -243,7 +243,9 @@ export function materializePantavionRecoveryWorkUnit(input: {
   }
   if (!text(input.locator.batchFile)) throw new Error("recovery_runtime_batch_file_required");
   assertSha256("recovery_runtime_source_record_digest", input.locator.sourceRecordSha256);
-  assertSha256("recovery_runtime_preservation_blob_sha", input.locator.preservationBlobSha);
+  if (!/^[0-9a-f]{40}$/.test(input.locator.preservationBlobSha)) {
+    throw new Error("recovery_runtime_preservation_blob_sha_must_be_git_sha1");
+  }
   if (!text(input.locator.preservationRepository) || !text(input.locator.preservationRef) || !text(input.locator.preservationPath)) {
     throw new Error("recovery_runtime_preservation_binding_required");
   }
