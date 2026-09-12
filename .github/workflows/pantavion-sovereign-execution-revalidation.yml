@@ -41,8 +41,8 @@ jobs:
         run: npm run test:owner-release-gate
       - name: Verify recovery truth boundary
         run: npm run test:recovery-runtime-fabric
-      - name: Verify Guardian security boundary
-        run: node scripts/pantavion-runtime-safety-gate.cjs
+      - name: Verify protected-change security boundary
+        run: npm run audit:protected-change
       - name: TypeScript verification
         run: npm run typecheck
       - name: Production build verification
