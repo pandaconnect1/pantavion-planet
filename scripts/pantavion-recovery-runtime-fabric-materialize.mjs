@@ -21,6 +21,8 @@ const contractPath = path.join(root, "data/recovery/recovery-runtime-fabric-v1.j
 const outRoot = path.join(root, "data/recovery/runtime-fabric-v1");
 const workUnitsPath = path.join(outRoot, "recovery-work-units.ndjson");
 const manifestPath = path.join(outRoot, "manifest.json");
+const blockerQueuePath = path.join(outRoot, "blocker-queue.ndjson");
+const BLOCKER_FIRST_SEEN_AT = "2026-09-12T21:36:02.760Z";
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -160,6 +162,9 @@ async function materialize() {
   fs.rmSync(outRoot, { recursive: true, force: true });
   fs.mkdirSync(outRoot, { recursive: true });
   const output = fs.createWriteStream(workUnitsPath, { encoding: "utf8", flags: "wx" });
+  const blockerOutput = fs.createWriteStream(blockerQueuePath, { encoding: "utf8", flags: "wx" });
+  const blockerIdHash = createHash("sha256");
+  let blockerCount = 0;
   const input = readline.createInterface({
     input: fs.createReadStream(semanticLedgerPath, { encoding: "utf8" }),
     crlfDelay: Infinity,
@@ -196,6 +201,56 @@ async function materialize() {
       accountingSummary[unit.accounting.sourceRef ? "sourceRefObserved" : "sourceRefMissing"] += 1;
       accountingSummary[unit.accounting.destinationBinding.bound ? "destinationBound" : "destinationUnbound"] += 1;
 
+      const missingProvenance = [
+        !unit.accounting.sourceProject ? "SOURCE_PROJECT_MISSING" : null,
+        !unit.accounting.sourceRepository ? "SOURCE_REPOSITORY_MISSING" : null,
+        !unit.accounting.sourceRef ? "SOURCE_REF_MISSING" : null,
+      ].filter(Boolean);
+      if (missingProvenance.length > 0 || !unit.accounting.destinationBinding.bound) {
+        const errorCodes = [
+          ...missingProvenance,
+          ...(!unit.accounting.destinationBinding.bound ? ["DESTINATION_BINDING_MISSING"] : []),
+        ];
+        const blockerId = `recovery_blocker_${createHash("sha256")
+          .update(`${unit.workUnitId}:${errorCodes.join(",")}`)
+          .digest("hex")}`;
+        const blocker = {
+          version: "pantavion_recovery_blocker_v1",
+          blockerId,
+          workUnitId: unit.workUnitId,
+          recordId: unit.recordId,
+          source: {
+            batchFile: unit.source.batchFile,
+            batchRecordIndex: unit.source.batchRecordIndex,
+            globalOrdinal: unit.source.globalOrdinal,
+            sourceRef: unit.accounting.sourceRef,
+            sourceProject: unit.accounting.sourceProject,
+            sourceRepository: unit.accounting.sourceRepository,
+          },
+          errorCodes,
+          errorText: `Required accounting provenance unavailable: ${errorCodes.join(",")}`,
+          firstSeenAt: BLOCKER_FIRST_SEEN_AT,
+          lastAttemptAt: BLOCKER_FIRST_SEEN_AT,
+          retryCount: 1,
+          dependency: "upstream recovery inventory or verified GitHub/Vercel source mapping",
+          impact: "item is preserved and destination-bound but cannot satisfy complete source project/repository provenance",
+          proposedResolutionPath: [
+            "match immutable sourceRef against committed recovery inventory",
+            "rebind from verified GitHub repository/ref evidence when exact",
+            "retry Vercel project inventory without blocking independent records",
+            "retain blocker when no authoritative mapping exists",
+          ],
+          parked: true,
+          returnedToActiveFlow: false,
+          completion: false,
+        };
+        blockerCount += 1;
+        updateOrderedHash(blockerIdHash, blockerId, blockerCount);
+        if (!blockerOutput.write(`${JSON.stringify(blocker)}\n`)) {
+          await new Promise((resolve) => blockerOutput.once("drain", resolve));
+        }
+      }
+
       const module = unit.route.module ?? "RECOVERY / PROVENANCE";
       const summary = moduleSummary[module] ??= {
         total: 0,
@@ -214,10 +269,16 @@ async function materialize() {
     }
   } finally {
     input.close();
-    await new Promise((resolve, reject) => {
-      output.end(resolve);
-      output.on("error", reject);
-    });
+    await Promise.all([
+      new Promise((resolve, reject) => {
+        output.end(resolve);
+        output.on("error", reject);
+      }),
+      new Promise((resolve, reject) => {
+        blockerOutput.end(resolve);
+        blockerOutput.on("error", reject);
+      }),
+    ]);
   }
 
   requireEqual("materialized_work_unit_count", ordinal, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceRecordCount);
@@ -239,6 +300,8 @@ async function materialize() {
   }
   requireEqual("governed_hold_total", [...governedCounts.values()].reduce((sum, value) => sum + value, 0), governed.expectedReviewRequired);
 
+  requireEqual("blocker_queue_count", blockerCount, accountingSummary.sourceProjectMissing);
+  const blockerQueueFingerprint = blockerIdHash.digest("hex");
   const workUnitIdFingerprint = workUnitIdHash.digest("hex");
   requireEqual(
     "pinned_work_unit_id_fingerprint",
@@ -266,6 +329,14 @@ async function materialize() {
       workUnitCount: ordinal,
       counts,
       accountingSummary,
+      blockerQueue: {
+        parkedCount: blockerCount,
+        resolvedCount: 0,
+        returnedToActiveFlowCount: 0,
+        fingerprint: blockerQueueFingerprint,
+        path: "data/recovery/runtime-fabric-v1/blocker-queue.ndjson",
+        completion: false,
+      },
       moduleSummary,
       workUnitIdFingerprint,
       terminalWorkUnitDigest: previousWorkUnitDigest,
