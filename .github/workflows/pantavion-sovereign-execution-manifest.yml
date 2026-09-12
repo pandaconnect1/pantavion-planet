@@ -1,0 +1,40 @@
+name: Pantavion Sovereign Execution Manifest
+on:
+  pull_request:
+    branches:
+      - feature/sovereign-execution-revalidation-20260912
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-execution-manifest:
+    name: Verify sealed non-authorizing manifest
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Assert exact head and parent evidence
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+          git cat-file -e f0d36a346fd18f6717d787e9920793d86e552e35^{commit}
+          test "$(git merge-base HEAD f0d36a346fd18f6717d787e9920793d86e552e35)" = "f0d36a346fd18f6717d787e9920793d86e552e35"
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - name: Verify parent receipt chain
+        run: npm run test:sovereign-admission-bundle && npm run test:sovereign-execution-revalidation
+      - name: Verify execution manifest contract
+        run: npm run test:sovereign-execution-manifest
+      - name: Verify owner and recovery boundaries
+        run: npm run test:owner-release-gate && npm run test:recovery-runtime-fabric
+      - name: Verify protected-change security boundary
+        run: npm run audit:protected-change
+      - name: TypeScript verification
+        run: npm run typecheck
+      - name: Production build verification
+        run: npm run build
