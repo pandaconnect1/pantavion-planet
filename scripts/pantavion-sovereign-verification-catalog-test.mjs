@@ -11,9 +11,9 @@ const eq = (actual, expected, message) => { assert.equal(actual, expected, messa
 const ok = (value, message) => { assert.ok(value, message); assertions += 1; };
 
 eq(validateSovereignVerificationCatalog().length, 0, "catalog passes fail-closed validation");
-eq(sovereignVerificationRecords.length, 19, "all current Sovereign and innovation PRs represented");
-eq(new Set(sovereignVerificationRecords.map(record => record.id)).size, 19, "unique catalog IDs");
-eq(new Set(sovereignVerificationRecords.map(record => record.pr)).size, 19, "unique PRs");
+eq(sovereignVerificationRecords.length, 20, "all current Sovereign and innovation PRs represented");
+eq(new Set(sovereignVerificationRecords.map(record => record.id)).size, 20, "unique catalog IDs");
+eq(new Set(sovereignVerificationRecords.map(record => record.pr)).size, 20, "unique PRs");
 eq(sovereignVerificationRecords.every(record => record.stage === "TESTED"), true, "no unverified lifecycle promotion");
 eq(sovereignVerificationRecords.every(record => record.truthLocation === "OPEN_PR"), true, "truth location remains open PR");
 eq(sovereignVerificationRecords.every(record => !record.merged), true, "nothing claimed merged");
@@ -39,6 +39,9 @@ eq(byPr.get(493).researchQuality, "BLOCKED", "dossiers inherit parent quality bl
 eq(byPr.get(494).researchQuality, "VALIDATED", "quality audit evidence validated");
 eq(byPr.get(495).researchQuality, "RESEARCH_READY", "coherent disclosures are research ready");
 eq(byPr.get(495).researchEligible, true, "coherent disclosures eligible for prior-art research");
+eq(byPr.get(497).domain, "Translation and intercultural repair", "understanding core is visible in its real domain");
+eq(byPr.get(497).workflowCount, 11, "understanding core exact workflow evidence");
+eq(byPr.get(497).executionAuthorized, false, "understanding core grants no execution authority");
 eq([492,493,494].every(pr => byPr.get(pr).researchEligible === false), true, "blocked research never becomes eligible");
 
 const tampered = structuredClone(sovereignVerificationRecords);
