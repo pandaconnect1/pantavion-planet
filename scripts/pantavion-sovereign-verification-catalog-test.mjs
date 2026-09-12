@@ -42,6 +42,8 @@ eq(byPr.get(495).researchEligible, true, "coherent disclosures eligible for prio
 eq(byPr.get(497).domain, "Translation and intercultural repair", "understanding core is visible in its real domain");
 eq(byPr.get(497).workflowCount, 11, "understanding core exact workflow evidence");
 eq(byPr.get(497).executionAuthorized, false, "understanding core grants no execution authority");
+eq(byPr.get(497).exactHead, "d85a81bf01dacd968a65835b3a4c81b87ddb5271", "understanding workbench exact head");
+eq(byPr.get(497).verificationReceipt, "5645456108", "understanding workbench exact verification receipt");
 eq([492,493,494].every(pr => byPr.get(pr).researchEligible === false), true, "blocked research never becomes eligible");
 
 const tampered = structuredClone(sovereignVerificationRecords);
