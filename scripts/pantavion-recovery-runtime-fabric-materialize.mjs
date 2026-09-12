@@ -143,6 +143,16 @@ async function materialize() {
     QUARANTINED_RECURSIVE: 0,
   };
   const moduleSummary = {};
+  const accountingSummary = {
+    sourceProjectObserved: 0,
+    sourceProjectMissing: 0,
+    sourceRepositoryObserved: 0,
+    sourceRepositoryMissing: 0,
+    sourceRefObserved: 0,
+    sourceRefMissing: 0,
+    destinationBound: 0,
+    destinationUnbound: 0,
+  };
   const workUnitIdHash = createHash("sha256");
   let previousWorkUnitDigest = null;
   let ordinal = 0;
@@ -181,6 +191,11 @@ async function materialize() {
       if (unit.runtimeLane === "GOVERNED_HOLD") {
         governedCounts.set(sourceFile, (governedCounts.get(sourceFile) ?? 0) + 1);
       }
+      accountingSummary[unit.accounting.sourceProject ? "sourceProjectObserved" : "sourceProjectMissing"] += 1;
+      accountingSummary[unit.accounting.sourceRepository ? "sourceRepositoryObserved" : "sourceRepositoryMissing"] += 1;
+      accountingSummary[unit.accounting.sourceRef ? "sourceRefObserved" : "sourceRefMissing"] += 1;
+      accountingSummary[unit.accounting.destinationBinding.bound ? "destinationBound" : "destinationUnbound"] += 1;
+
       const module = unit.route.module ?? "RECOVERY / PROVENANCE";
       const summary = moduleSummary[module] ??= {
         total: 0,
@@ -207,6 +222,14 @@ async function materialize() {
 
   requireEqual("materialized_work_unit_count", ordinal, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceRecordCount);
   assertPantavionRecoveryRuntimeCounts(counts);
+  for (const [field, observed, missing] of [
+    ["source_project", accountingSummary.sourceProjectObserved, accountingSummary.sourceProjectMissing],
+    ["source_repository", accountingSummary.sourceRepositoryObserved, accountingSummary.sourceRepositoryMissing],
+    ["source_ref", accountingSummary.sourceRefObserved, accountingSummary.sourceRefMissing],
+    ["destination_binding", accountingSummary.destinationBound, accountingSummary.destinationUnbound],
+  ]) {
+    requireEqual(`accounting_${field}_coverage`, observed + missing, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceRecordCount);
+  }
   for (const disposition of governed.dispositions) {
     requireEqual(
       `governed_hold_source_count:${disposition.sourceFile}`,
@@ -242,6 +265,7 @@ async function materialize() {
     materialization: {
       workUnitCount: ordinal,
       counts,
+      accountingSummary,
       moduleSummary,
       workUnitIdFingerprint,
       terminalWorkUnitDigest: previousWorkUnitDigest,
