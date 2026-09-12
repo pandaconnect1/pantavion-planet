@@ -91,6 +91,32 @@ const candidate = materializePantavionRecoveryWorkUnit({
 assert.equal(candidate.runtimeLane, "CLASSIFIED_CANDIDATE");
 assert.equal(candidate.implementationState, "idea");
 assert.equal(candidate.nextAction, "PLAN_SCOPED_INTERNAL_DRAFT");
+assert.deepEqual(candidate.accounting, {
+  module: "Personal AI / PantaAI",
+  topic: "orchestration",
+  subtopic: "plan",
+  artifactType: "implementation",
+  status: "ARTIFACT_BOUND",
+  dependencies: [
+    `source-record-sha256:${candidate.source.sourceRecordSha256}`,
+    `semantic-record-sha256:${candidate.source.semanticRecordSha256}`,
+  ],
+  targetLocation: "canonical/Personal AI / PantaAI/orchestration/plan",
+  sourceProject: null,
+  sourceRepository: null,
+  sourceRef: null,
+  destinationBinding: {
+    kind: "CANONICAL_TARGET",
+    location: "canonical/Personal AI / PantaAI/orchestration/plan",
+    bound: true,
+  },
+  verificationEvidence: {
+    sourceRecordSha256: candidate.source.sourceRecordSha256,
+    semanticRecordSha256: candidate.source.semanticRecordSha256,
+    globalOrdinal: 1,
+    previousWorkUnitDigest: null,
+  },
+});
 assert.equal(candidate.governance.executionAuthority, false);
 assert.equal(candidate.governance.releaseAuthority, false);
 assert.equal(candidate.governance.productionWriteAuthority, false);
@@ -117,6 +143,9 @@ const quarantine = materializePantavionRecoveryWorkUnit({
 assert.equal(quarantine.runtimeLane, "QUARANTINED_RECURSIVE");
 assert.equal(quarantine.previousWorkUnitDigest, candidate.workUnitDigest);
 assert.equal(quarantine.implementationState, "blocked");
+assert.equal(quarantine.accounting.status, "ARTIFACT_BOUND");
+assert.equal(quarantine.accounting.destinationBinding.kind, "PRESERVATION_TARGET");
+assert.equal(quarantine.accounting.dependencies.at(-1), `previous-work-unit-sha256:${candidate.workUnitDigest}`);
 
 const held = {
   id: "record-held",
@@ -147,6 +176,9 @@ const governed = materializePantavionRecoveryWorkUnit({
 assert.equal(governed.runtimeLane, "GOVERNED_HOLD");
 assert.equal(governed.governance.disposition, "CANONICAL_OWNER");
 assert.equal(governed.nextAction, "PRESERVE_GOVERNED_HOLD");
+assert.equal(governed.accounting.targetLocation, "app/dashboard/page.tsx");
+assert.equal(governed.accounting.destinationBinding.kind, "PRESERVATION_TARGET");
+assert.equal(governed.accounting.destinationBinding.bound, true);
 
 assert.throws(
   () => materializePantavionRecoveryWorkUnit({ record: held, locator: locator(held, 3) }),
