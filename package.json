@@ -2,9 +2,7 @@
   "name": "pantavion-planet",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": ">=22.0.0"
-  },
+  "engines": { "node": ">=22.0.0" },
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/pantavion-recovery-source-batch-index.mjs",
@@ -58,7 +56,8 @@
     "test:sovereign-factory-contract": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-factory-contract-test.mjs",
     "test:sovereign-kernel-integration": "node scripts/pantavion-sovereign-kernel-integration-test.cjs",
     "test:owner-release-gate": "node --no-warnings --experimental-strip-types scripts/pantavion-owner-release-gate-test.mjs",
-    "test:translation-gateway-resilience": "node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs"
+    "test:translation-gateway-resilience": "node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs",
+    "test:sovereign-intent-determinism": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-intent-determinism-test.mjs"
   },
   "dependencies": {
     "@ai-sdk/gateway": "4.0.28",
@@ -71,8 +70,7 @@
     "@vercel/blob": "^2.4.0",
     "@vercel/oidc": "^3.8.1",
     "ai": "7.0.40",
-    "leaflet": "^1.9.4",
-    "next": "15.5.14",
+    "leaflet": "^1.9.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tus-js-client": "4.3.1",
