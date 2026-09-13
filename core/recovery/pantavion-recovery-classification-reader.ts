@@ -86,6 +86,8 @@ export type RecoveryClassificationPage = {
   moduleStartPages: Record<string, number>;
   rows: RecoveryClassificationRow[];
   selectedModule: string | null;
+  selectedStatus: string | null;
+  query: string;
   filteredRecords: number;
 };
 
@@ -126,6 +128,8 @@ function summarize(record: CorpusRecord): RecoveryClassificationRow {
 export async function loadRecoveryClassificationPage(
   requestedPage?: string | null,
   requestedModule?: string | null,
+  requestedStatus?: string | null,
+  requestedQuery?: string | null,
 ): Promise<RecoveryClassificationPage> {
   const manifest = await readJson<CorpusManifest>(path.join(CORPUS_ROOT, "manifest.json"));
   if (manifest.totalRecords !== TOTAL_RECORDS) {
@@ -135,6 +139,11 @@ export async function loadRecoveryClassificationPage(
   const selectedModule = requestedModule && manifest.moduleCounts[requestedModule]
     ? requestedModule
     : null;
+  const selectedStatus = requestedStatus && manifest.reviewCounts[requestedStatus]
+    ? requestedStatus
+    : null;
+  const query = (requestedQuery ?? "").trim().slice(0, 120);
+  const normalizedQuery = query.toLocaleLowerCase("el-GR");
   const records: CorpusRecord[] = [];
 
   for (const batch of manifest.batches) {
@@ -142,9 +151,16 @@ export async function loadRecoveryClassificationPage(
     const batchFile = await readJson<BatchFile>(
       path.join(CORPUS_ROOT, "batches", `${batch.batchId}.json`),
     );
-    records.push(...batchFile.records.filter((record) =>
-      !selectedModule || record.classification?.module === selectedModule,
-    ));
+    records.push(...batchFile.records.filter((record) => {
+      if (selectedModule && record.classification?.module !== selectedModule) return false;
+      if (selectedStatus && record.reviewStatus !== selectedStatus) return false;
+      if (!normalizedQuery) return true;
+      const searchable = [record.id, record.text, record.reviewStatus,
+        record.classification?.module, record.classification?.subsystem,
+        record.classification?.capability, record.classification?.canonicalTarget,
+        record.provenance?.sourceFile].filter(Boolean).join(" ").toLocaleLowerCase("el-GR");
+      return searchable.includes(normalizedQuery);
+    }));
   }
 
   records.sort((left, right) => left.ordinal - right.ordinal);
@@ -182,6 +198,8 @@ export async function loadRecoveryClassificationPage(
     moduleStartPages,
     rows: pageRecords.map(summarize),
     selectedModule,
+    selectedStatus,
+    query,
     filteredRecords,
   };
 }
