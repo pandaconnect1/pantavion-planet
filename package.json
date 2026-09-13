@@ -2,9 +2,7 @@
   "name": "pantavion-planet",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": ">=22.0.0"
-  },
+  "engines": {"node": ">=22.0.0"},
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/pantavion-recovery-source-batch-index.mjs",
@@ -50,6 +48,7 @@
     "test:recovery-fenced-executor": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-fenced-executor-test.mjs",
     "test:scheduled-run-key": "node --no-warnings --experimental-strip-types scripts/pantavion-scheduled-run-key-test.mjs",
     "test:internal-scheduler-redundancy": "node --no-warnings scripts/pantavion-internal-scheduler-redundancy-test.mjs",
+    "test:sovereign-verification-boundary": "node --no-warnings scripts/pantavion-sovereign-verification-boundary-test.mjs",
     "materialize:recovery-runtime-fabric": "node --no-warnings --experimental-strip-types scripts/pantavion-recovery-runtime-fabric-materialize.mjs",
     "safety:pantavion": "node scripts/pantavion-runtime-safety-gate.cjs",
     "audit:foundation": "node scripts/pantavion-foundation-audit.cjs",
