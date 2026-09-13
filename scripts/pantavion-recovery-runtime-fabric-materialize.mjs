@@ -17,9 +17,9 @@ const receiptPath = path.join(corpusRoot, "MATERIALIZATION_RECEIPT.json");
 const provenanceManifestPath = path.join(corpusRoot, "PROVENANCE_MANIFEST.json");
 const PRESERVATION_REPOSITORY = "pandaconnect1/pantavion-planet";
 const PRESERVATION_REF = "a93a0814ce4c45719d0eedfd3782fdf5c459d767";
-const SOURCE_INVENTORY_PATH = "data/pantavion-source-inventory/inventory.json";
-const SOURCE_INVENTORY_REPOSITORY = "pandaconnect1/pantavion-planet";
-const SOURCE_INVENTORY_RECORD_COUNT = 32;
+const VERIFIED_SOURCE_COMMIT = "366c2c3882bf459df18960c1e3de3396df031ee3";
+const VERIFIED_SOURCE_REPOSITORY = "pandaconnect1/pantavion-planet";
+const VERIFIED_SOURCE_RECORD_COUNT = 82_413;
 const semanticLedgerPath = path.join(root, PANTAVION_RECOVERY_CORPUS_CONTRACT.semanticLedgerPath);
 const semanticManifestPath = path.join(path.dirname(semanticLedgerPath), "manifest.json");
 const governedHoldPath = path.join(root, PANTAVION_RECOVERY_CORPUS_CONTRACT.governedHoldPath);
@@ -98,9 +98,9 @@ function loadSourceLocators() {
     for (let batchRecordIndex = 0; batchRecordIndex < batch.records.length; batchRecordIndex += 1) {
       const sourceRecord = batch.records[batchRecordIndex];
       const recordId = safeRecordId(sourceRecord?.id);
-      const sourceRepository = sourceRecord?.provenance?.sourceFamily === "donor"
-        && sourceRecord?.provenance?.sourceFile === SOURCE_INVENTORY_PATH
-        ? SOURCE_INVENTORY_REPOSITORY
+      const sourceRepository = sourceRecord?.provenance?.sourceRef === VERIFIED_SOURCE_COMMIT
+        && sourceRecord?.provenance?.sourceCommit === VERIFIED_SOURCE_COMMIT
+        ? VERIFIED_SOURCE_REPOSITORY
         : undefined;
       if (seen.has(recordId)) throw new Error(`recovery_source_duplicate_record_id:${recordId}`);
       seen.add(recordId);
@@ -317,7 +317,7 @@ async function materialize() {
   ]) {
     requireEqual(`accounting_${field}_coverage`, observed + missing, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceRecordCount);
   }
-  requireEqual("verified_source_inventory_repository_bindings", accountingSummary.sourceRepositoryObserved, SOURCE_INVENTORY_RECORD_COUNT);
+  requireEqual("verified_source_commit_repository_bindings", accountingSummary.sourceRepositoryObserved, VERIFIED_SOURCE_RECORD_COUNT);
   for (const disposition of governed.dispositions) {
     requireEqual(
       `governed_hold_source_count:${disposition.sourceFile}`,
