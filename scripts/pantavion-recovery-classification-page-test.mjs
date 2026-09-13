@@ -16,6 +16,10 @@ if (!page.includes("data.moduleCounts")) throw new Error("classification_page_mo
 if (!page.includes('params.set("module", module)')) throw new Error("classification_page_module_filter_link_missing");
 if (!reader.includes("selectedModule")) throw new Error("classification_page_module_filter_missing");
 if (!reader.includes("filteredRecords")) throw new Error("classification_page_filtered_count_missing");
+if (!page.includes('name="q"')) throw new Error("classification_page_search_input_missing");
+if (!page.includes('name="status"')) throw new Error("classification_page_status_filter_missing");
+if (!reader.includes("normalizedQuery")) throw new Error("classification_page_search_runtime_missing");
+if (!reader.includes("selectedStatus")) throw new Error("classification_page_status_runtime_missing");
 if (!page.includes("row.sourceLocation")) throw new Error("classification_page_provenance_missing");
 
 const moduleTotal = Object.values(manifest.moduleCounts).reduce((sum, value) => sum + value, 0);
