@@ -60,6 +60,9 @@ jobs:
       - name: Verify translation gateway resilience contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs
 
+      - name: Verify cross-cultural understanding assessment
+        run: npm run test:cross-cultural-understanding
+
       - name: Verify translation gateway rate-limit circuit
         run: node --no-warnings --experimental-strip-types scripts/pantavion-translation-rate-limit-circuit-test.mjs
 
