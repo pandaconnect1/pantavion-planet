@@ -13,6 +13,9 @@ if (!page.includes("Live επαληθευμένα")) throw new Error("classifica
 if (!reader.includes("recovery_classification_page_gap")) throw new Error("classification_page_gap_gate_missing");
 if (!reader.includes("PAGE_SIZE = 50")) throw new Error("classification_page_bounded_pagination_missing");
 if (!page.includes("data.moduleCounts")) throw new Error("classification_page_module_counts_missing");
+if (!page.includes('params.set("module", module)')) throw new Error("classification_page_module_filter_link_missing");
+if (!reader.includes("selectedModule")) throw new Error("classification_page_module_filter_missing");
+if (!reader.includes("filteredRecords")) throw new Error("classification_page_filtered_count_missing");
 if (!page.includes("row.sourceLocation")) throw new Error("classification_page_provenance_missing");
 
 const moduleTotal = Object.values(manifest.moduleCounts).reduce((sum, value) => sum + value, 0);
