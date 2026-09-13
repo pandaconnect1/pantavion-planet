@@ -22,8 +22,8 @@ jobs:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_SCOPE: pandaconnect
+      VERCEL_PROJECT: pantavion-planet
       PANTAVION_PRODUCTION_BASE: https://pantavion.com
       VERCEL_CLI_VERSION: '59.5.0'
 
@@ -33,7 +33,7 @@ jobs:
         run: |
           set -euo pipefail
           missing=0
-          for name in SUPABASE_ACCESS_TOKEN SUPABASE_PROJECT_REF VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
+          for name in SUPABASE_ACCESS_TOKEN SUPABASE_PROJECT_REF VERCEL_TOKEN; do
             if [ -z "${!name:-}" ]; then
               echo "::error::$name is not configured; production admin binding repair is blocked."
               missing=1
@@ -42,6 +42,10 @@ jobs:
           if [ "$missing" -ne 0 ]; then exit 1; fi
           if [ "$SUPABASE_PROJECT_REF" != "cxhulvwkagzufbjsdwwu" ]; then
             echo "::error::SUPABASE_PROJECT_REF does not match the canonical Pantavion production project."
+            exit 1
+          fi
+          if [ "$VERCEL_SCOPE/$VERCEL_PROJECT" != "pandaconnect/pantavion-planet" ]; then
+            echo "::error::Vercel target identity does not match the canonical Pantavion production project."
             exit 1
           fi
 
@@ -78,12 +82,13 @@ jobs:
           echo "::add-mask::$key"
           echo "key_file=$key_file" >> "$GITHUB_OUTPUT"
 
-      - name: Install and link Vercel CLI
+      - name: Install and link Vercel CLI to canonical project
         shell: bash
         run: |
           set -euo pipefail
           npm install --global "vercel@$VERCEL_CLI_VERSION" --no-audit --no-fund
-          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          vercel link --yes --project "$VERCEL_PROJECT" --scope "$VERCEL_SCOPE" --token="$VERCEL_TOKEN"
+          vercel pull --yes --environment=production --scope "$VERCEL_SCOPE" --token="$VERCEL_TOKEN"
 
       - name: Restore sensitive production admin key
         shell: bash
@@ -95,10 +100,10 @@ jobs:
             echo "::error::Supabase admin key handoff file is missing."
             exit 1
           fi
-          if vercel env update SUPABASE_SECRET_KEY production --token="$VERCEL_TOKEN" < "$KEY_FILE"; then
+          if vercel env update SUPABASE_SECRET_KEY production --scope "$VERCEL_SCOPE" --token="$VERCEL_TOKEN" < "$KEY_FILE"; then
             echo "Updated existing sensitive SUPABASE_SECRET_KEY binding."
           else
-            vercel env add SUPABASE_SECRET_KEY production --sensitive --token="$VERCEL_TOKEN" < "$KEY_FILE"
+            vercel env add SUPABASE_SECRET_KEY production --sensitive --scope "$VERCEL_SCOPE" --token="$VERCEL_TOKEN" < "$KEY_FILE"
             echo "Added sensitive SUPABASE_SECRET_KEY binding."
           fi
           rm -f "$KEY_FILE"
@@ -107,9 +112,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
-          vercel build --prod --token="$VERCEL_TOKEN"
-          vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+          vercel pull --yes --environment=production --scope "$VERCEL_SCOPE" --token="$VERCEL_TOKEN"
+          vercel build --prod --scope "$VERCEL_SCOPE" --token="$VERCEL_TOKEN"
+          vercel deploy --prebuilt --prod --scope "$VERCEL_SCOPE" --token="$VERCEL_TOKEN"
 
       - name: Verify exact production revision and admin health
         shell: bash
