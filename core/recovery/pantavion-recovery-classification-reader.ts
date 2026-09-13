@@ -85,6 +85,8 @@ export type RecoveryClassificationPage = {
   reviewCounts: Record<string, number>;
   moduleStartPages: Record<string, number>;
   rows: RecoveryClassificationRow[];
+  selectedModule: string | null;
+  filteredRecords: number;
 };
 
 function safePage(value: string | null | undefined): number {
@@ -123,34 +125,39 @@ function summarize(record: CorpusRecord): RecoveryClassificationRow {
 
 export async function loadRecoveryClassificationPage(
   requestedPage?: string | null,
+  requestedModule?: string | null,
 ): Promise<RecoveryClassificationPage> {
   const manifest = await readJson<CorpusManifest>(path.join(CORPUS_ROOT, "manifest.json"));
   if (manifest.totalRecords !== TOTAL_RECORDS) {
     throw new Error(`recovery_classification_count_mismatch:${manifest.totalRecords}`);
   }
 
-  const page = safePage(requestedPage);
-  const startOrdinal = (page - 1) * PAGE_SIZE + 1;
-  const endOrdinal = Math.min(startOrdinal + PAGE_SIZE - 1, manifest.totalRecords);
-  const relevantBatches = manifest.batches.filter(
-    (batch) => batch.endOrdinal >= startOrdinal && batch.startOrdinal <= endOrdinal,
-  );
+  const selectedModule = requestedModule && manifest.moduleCounts[requestedModule]
+    ? requestedModule
+    : null;
   const records: CorpusRecord[] = [];
 
-  for (const batch of relevantBatches) {
+  for (const batch of manifest.batches) {
+    if (selectedModule && !(batch.moduleCounts?.[selectedModule] ?? 0)) continue;
     const batchFile = await readJson<BatchFile>(
       path.join(CORPUS_ROOT, "batches", `${batch.batchId}.json`),
     );
-    records.push(
-      ...batchFile.records.filter(
-        (record) => record.ordinal >= startOrdinal && record.ordinal <= endOrdinal,
-      ),
-    );
+    records.push(...batchFile.records.filter((record) =>
+      !selectedModule || record.classification?.module === selectedModule,
+    ));
   }
 
   records.sort((left, right) => left.ordinal - right.ordinal);
-  if (records.length !== endOrdinal - startOrdinal + 1) {
-    throw new Error(`recovery_classification_page_gap:${records.length}`);
+  const filteredRecords = records.length;
+  const totalPages = Math.max(1, Math.ceil(filteredRecords / PAGE_SIZE));
+  const parsedPage = safePage(requestedPage);
+  const page = Math.min(parsedPage, totalPages);
+  const offset = (page - 1) * PAGE_SIZE;
+  const pageRecords = records.slice(offset, offset + PAGE_SIZE);
+  const startOrdinal = filteredRecords ? offset + 1 : 0;
+  const endOrdinal = offset + pageRecords.length;
+  if (pageRecords.length !== Math.min(PAGE_SIZE, Math.max(0, filteredRecords - offset))) {
+    throw new Error(`recovery_classification_page_gap:${pageRecords.length}`);
   }
 
   const moduleStartPages = Object.fromEntries(
@@ -166,13 +173,15 @@ export async function loadRecoveryClassificationPage(
     totalBatches: manifest.totalBatches,
     page,
     pageSize: PAGE_SIZE,
-    totalPages: Math.ceil(manifest.totalRecords / PAGE_SIZE),
+    totalPages,
     startOrdinal,
     endOrdinal,
     moduleCounts: manifest.moduleCounts,
     sourceCounts: manifest.sourceCounts,
     reviewCounts: manifest.reviewCounts,
     moduleStartPages,
-    rows: records.map(summarize),
+    rows: pageRecords.map(summarize),
+    selectedModule,
+    filteredRecords,
   };
 }
