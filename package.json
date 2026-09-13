@@ -57,6 +57,7 @@
     "audit:social-chat": "node scripts/pantavion-social-chat-contract-gate.cjs",
     "test:sovereign-factory-contract": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-factory-contract-test.mjs",
     "test:sovereign-kernel-integration": "node scripts/pantavion-sovereign-kernel-integration-test.cjs",
+    "test:sovereign-intent-outcome-edge-convergence": "node scripts/pantavion-sovereign-intent-outcome-edge-convergence-test.cjs",
     "test:owner-release-gate": "node --no-warnings --experimental-strip-types scripts/pantavion-owner-release-gate-test.mjs",
     "test:translation-gateway-resilience": "node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs"
   },
