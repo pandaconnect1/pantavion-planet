@@ -14,6 +14,12 @@ const root = process.cwd();
 const corpusRoot = path.join(root, PANTAVION_RECOVERY_CORPUS_CONTRACT.corpusRoot);
 const batchesRoot = path.join(corpusRoot, "batches");
 const receiptPath = path.join(corpusRoot, "MATERIALIZATION_RECEIPT.json");
+const provenanceManifestPath = path.join(corpusRoot, "PROVENANCE_MANIFEST.json");
+const PRESERVATION_REPOSITORY = "pandaconnect1/pantavion-planet";
+const PRESERVATION_REF = "a93a0814ce4c45719d0eedfd3782fdf5c459d767";
+const SOURCE_INVENTORY_PATH = "data/pantavion-source-inventory/inventory.json";
+const SOURCE_INVENTORY_REPOSITORY = "pandaconnect1/pantavion-planet";
+const SOURCE_INVENTORY_RECORD_COUNT = 32;
 const semanticLedgerPath = path.join(root, PANTAVION_RECOVERY_CORPUS_CONTRACT.semanticLedgerPath);
 const semanticManifestPath = path.join(path.dirname(semanticLedgerPath), "manifest.json");
 const governedHoldPath = path.join(root, PANTAVION_RECOVERY_CORPUS_CONTRACT.governedHoldPath);
@@ -21,6 +27,8 @@ const contractPath = path.join(root, "data/recovery/recovery-runtime-fabric-v1.j
 const outRoot = path.join(root, "data/recovery/runtime-fabric-v1");
 const workUnitsPath = path.join(outRoot, "recovery-work-units.ndjson");
 const manifestPath = path.join(outRoot, "manifest.json");
+const blockerQueuePath = path.join(outRoot, "blocker-queue.ndjson");
+const BLOCKER_FIRST_SEEN_AT = "2026-09-12T21:36:02.760Z";
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -63,6 +71,13 @@ function verifyPinnedContract(contract) {
 function loadSourceLocators() {
   const receipt = readJson(receiptPath);
   const batchFiles = fs.readdirSync(batchesRoot).filter((name) => name.endsWith(".json")).sort();
+  const provenanceManifest = readJson(provenanceManifestPath);
+  const blobByBatchFile = new Map((provenanceManifest.sourcePaths ?? [])
+    .filter((entry) => typeof entry.path === "string" && entry.path.includes("/batches/"))
+    .map((entry) => [path.basename(entry.path), entry.blobSha]));
+  requireEqual("provenance_source_commit", provenanceManifest.sourceCommit, "da6fb9f70937f2f63b0d30204a22023ac72e1544");
+  requireEqual("provenance_preserved_file_count", provenanceManifest.preservedFileCount, 57);
+  requireEqual("provenance_batch_blob_count", blobByBatchFile.size, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceBatchCount);
   requireEqual("receipt_record_count", receipt.totalRecords, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceRecordCount);
   requireEqual("receipt_batch_count", receipt.totalBatches, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceBatchCount);
   requireEqual("receipt_source_fingerprint", receipt.corpusFingerprint, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceFingerprint);
@@ -75,10 +90,18 @@ function loadSourceLocators() {
 
   for (const batchFile of batchFiles) {
     const batch = readJson(path.join(batchesRoot, batchFile));
+    const preservationBlobSha = blobByBatchFile.get(batchFile);
+    if (typeof preservationBlobSha !== "string" || !/^[0-9a-f]{40}$/.test(preservationBlobSha)) {
+      throw new Error(`recovery_preservation_blob_missing:${batchFile}`);
+    }
     if (!Array.isArray(batch.records)) throw new Error(`recovery_batch_records_missing:${batchFile}`);
     for (let batchRecordIndex = 0; batchRecordIndex < batch.records.length; batchRecordIndex += 1) {
       const sourceRecord = batch.records[batchRecordIndex];
       const recordId = safeRecordId(sourceRecord?.id);
+      const sourceRepository = sourceRecord?.provenance?.sourceFamily === "donor"
+        && sourceRecord?.provenance?.sourceFile === SOURCE_INVENTORY_PATH
+        ? SOURCE_INVENTORY_REPOSITORY
+        : undefined;
       if (seen.has(recordId)) throw new Error(`recovery_source_duplicate_record_id:${recordId}`);
       seen.add(recordId);
       globalOrdinal += 1;
@@ -89,6 +112,11 @@ function loadSourceLocators() {
         batchRecordIndex,
         globalOrdinal,
         sourceRecordSha256: digestPantavionRecoverySourceRecord(sourceRecord),
+        preservationRepository: PRESERVATION_REPOSITORY,
+        preservationRef: PRESERVATION_REF,
+        preservationPath: path.posix.join(PANTAVION_RECOVERY_CORPUS_CONTRACT.corpusRoot, "batches", batchFile),
+        preservationBlobSha,
+        sourceRepository,
       });
     }
   }
@@ -143,6 +171,16 @@ async function materialize() {
     QUARANTINED_RECURSIVE: 0,
   };
   const moduleSummary = {};
+  const accountingSummary = {
+    sourceProjectObserved: 0,
+    sourceProjectMissing: 0,
+    sourceRepositoryObserved: 0,
+    sourceRepositoryMissing: 0,
+    sourceRefObserved: 0,
+    sourceRefMissing: 0,
+    destinationBound: 0,
+    destinationUnbound: 0,
+  };
   const workUnitIdHash = createHash("sha256");
   let previousWorkUnitDigest = null;
   let ordinal = 0;
@@ -150,6 +188,9 @@ async function materialize() {
   fs.rmSync(outRoot, { recursive: true, force: true });
   fs.mkdirSync(outRoot, { recursive: true });
   const output = fs.createWriteStream(workUnitsPath, { encoding: "utf8", flags: "wx" });
+  const blockerOutput = fs.createWriteStream(blockerQueuePath, { encoding: "utf8", flags: "wx" });
+  const blockerIdHash = createHash("sha256");
+  let blockerCount = 0;
   const input = readline.createInterface({
     input: fs.createReadStream(semanticLedgerPath, { encoding: "utf8" }),
     crlfDelay: Infinity,
@@ -181,6 +222,61 @@ async function materialize() {
       if (unit.runtimeLane === "GOVERNED_HOLD") {
         governedCounts.set(sourceFile, (governedCounts.get(sourceFile) ?? 0) + 1);
       }
+      accountingSummary[unit.accounting.sourceProject ? "sourceProjectObserved" : "sourceProjectMissing"] += 1;
+      accountingSummary[unit.accounting.sourceRepository ? "sourceRepositoryObserved" : "sourceRepositoryMissing"] += 1;
+      accountingSummary[unit.accounting.sourceRef ? "sourceRefObserved" : "sourceRefMissing"] += 1;
+      accountingSummary[unit.accounting.destinationBinding.bound ? "destinationBound" : "destinationUnbound"] += 1;
+
+      const missingProvenance = [
+        !unit.accounting.sourceProject ? "SOURCE_PROJECT_MISSING" : null,
+        !unit.accounting.sourceRepository ? "SOURCE_REPOSITORY_MISSING" : null,
+        !unit.accounting.sourceRef ? "SOURCE_REF_MISSING" : null,
+      ].filter(Boolean);
+      if (missingProvenance.length > 0 || !unit.accounting.destinationBinding.bound) {
+        const errorCodes = [
+          ...missingProvenance,
+          ...(!unit.accounting.destinationBinding.bound ? ["DESTINATION_BINDING_MISSING"] : []),
+        ];
+        const blockerId = `recovery_blocker_${createHash("sha256")
+          .update(`${unit.workUnitId}:${errorCodes.join(",")}`)
+          .digest("hex")}`;
+        const blocker = {
+          version: "pantavion_recovery_blocker_v1",
+          blockerId,
+          workUnitId: unit.workUnitId,
+          recordId: unit.recordId,
+          source: {
+            batchFile: unit.source.batchFile,
+            batchRecordIndex: unit.source.batchRecordIndex,
+            globalOrdinal: unit.source.globalOrdinal,
+            sourceRef: unit.accounting.sourceRef,
+            sourceProject: unit.accounting.sourceProject,
+            sourceRepository: unit.accounting.sourceRepository,
+          },
+          errorCodes,
+          errorText: `Required accounting provenance unavailable: ${errorCodes.join(",")}`,
+          firstSeenAt: BLOCKER_FIRST_SEEN_AT,
+          lastAttemptAt: BLOCKER_FIRST_SEEN_AT,
+          retryCount: 1,
+          dependency: "upstream recovery inventory or verified GitHub/Vercel source mapping",
+          impact: "item is preserved and destination-bound but cannot satisfy complete source project/repository provenance",
+          proposedResolutionPath: [
+            "match immutable sourceRef against committed recovery inventory",
+            "rebind from verified GitHub repository/ref evidence when exact",
+            "retry Vercel project inventory without blocking independent records",
+            "retain blocker when no authoritative mapping exists",
+          ],
+          parked: true,
+          returnedToActiveFlow: false,
+          completion: false,
+        };
+        blockerCount += 1;
+        updateOrderedHash(blockerIdHash, blockerId, blockerCount);
+        if (!blockerOutput.write(`${JSON.stringify(blocker)}\n`)) {
+          await new Promise((resolve) => blockerOutput.once("drain", resolve));
+        }
+      }
+
       const module = unit.route.module ?? "RECOVERY / PROVENANCE";
       const summary = moduleSummary[module] ??= {
         total: 0,
@@ -199,14 +295,29 @@ async function materialize() {
     }
   } finally {
     input.close();
-    await new Promise((resolve, reject) => {
-      output.end(resolve);
-      output.on("error", reject);
-    });
+    await Promise.all([
+      new Promise((resolve, reject) => {
+        output.end(resolve);
+        output.on("error", reject);
+      }),
+      new Promise((resolve, reject) => {
+        blockerOutput.end(resolve);
+        blockerOutput.on("error", reject);
+      }),
+    ]);
   }
 
   requireEqual("materialized_work_unit_count", ordinal, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceRecordCount);
   assertPantavionRecoveryRuntimeCounts(counts);
+  for (const [field, observed, missing] of [
+    ["source_project", accountingSummary.sourceProjectObserved, accountingSummary.sourceProjectMissing],
+    ["source_repository", accountingSummary.sourceRepositoryObserved, accountingSummary.sourceRepositoryMissing],
+    ["source_ref", accountingSummary.sourceRefObserved, accountingSummary.sourceRefMissing],
+    ["destination_binding", accountingSummary.destinationBound, accountingSummary.destinationUnbound],
+  ]) {
+    requireEqual(`accounting_${field}_coverage`, observed + missing, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceRecordCount);
+  }
+  requireEqual("verified_source_inventory_repository_bindings", accountingSummary.sourceRepositoryObserved, SOURCE_INVENTORY_RECORD_COUNT);
   for (const disposition of governed.dispositions) {
     requireEqual(
       `governed_hold_source_count:${disposition.sourceFile}`,
@@ -216,6 +327,8 @@ async function materialize() {
   }
   requireEqual("governed_hold_total", [...governedCounts.values()].reduce((sum, value) => sum + value, 0), governed.expectedReviewRequired);
 
+  requireEqual("blocker_queue_count", blockerCount, accountingSummary.sourceProjectMissing);
+  const blockerQueueFingerprint = blockerIdHash.digest("hex");
   const workUnitIdFingerprint = workUnitIdHash.digest("hex");
   requireEqual(
     "pinned_work_unit_id_fingerprint",
@@ -242,6 +355,15 @@ async function materialize() {
     materialization: {
       workUnitCount: ordinal,
       counts,
+      accountingSummary,
+      blockerQueue: {
+        parkedCount: blockerCount,
+        resolvedCount: 0,
+        returnedToActiveFlowCount: 0,
+        fingerprint: blockerQueueFingerprint,
+        path: "data/recovery/runtime-fabric-v1/blocker-queue.ndjson",
+        completion: false,
+      },
       moduleSummary,
       workUnitIdFingerprint,
       terminalWorkUnitDigest: previousWorkUnitDigest,
