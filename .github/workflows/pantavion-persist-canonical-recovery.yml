@@ -1,0 +1,62 @@
+name: Pantavion Persist Canonical Recovery
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/pantavion-persist-canonical-recovery.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  persist-recovery:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout writable head branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Rebuild complete recovery corpus
+        run: npm run knowledge:excavate-and-marry
+      - name: Enforce no-loss recovery floor and cross-stage equality
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const m=JSON.parse(fs.readFileSync('data/recovery/canonical-knowledge-v2/manifest.json','utf8'));
+          const x=JSON.parse(fs.readFileSync('data/recovery/canonical-knowledge-v2/photo-marriage/crosswalk.json','utf8'));
+          const a=JSON.parse(fs.readFileSync('data/recovery/canonical-knowledge-v2/semantic-archive/archive-manifest.json','utf8'));
+          const floor=28862;
+          if(m.totalRecords < floor) throw new Error(`recovery regression: ${m.totalRecords} < verified floor ${floor}`);
+          if(x.totalRecords !== m.totalRecords) throw new Error(`photo-marriage mismatch ${x.totalRecords} != ${m.totalRecords}`);
+          if(a.totalRecords !== m.totalRecords) throw new Error(`semantic-archive mismatch ${a.totalRecords} != ${m.totalRecords}`);
+          if(m.totalBatches !== 20 && m.totalRecords <= 20*1499) throw new Error(`unexpected batch count ${m.totalBatches}`);
+          console.log(JSON.stringify({persistingRecords:m.totalRecords,batches:m.totalBatches,sourceCounts:m.sourceCounts,moduleCounts:m.moduleCounts,reviewCounts:m.reviewCounts},null,2));
+          NODE
+      - name: Persist generated recovery into pantavion-planet branch
+        shell: bash
+        run: |
+          git config user.name 'pantavion-recovery-bot'
+          git config user.email 'pantavion-recovery-bot@users.noreply.github.com'
+          git add -f data/recovery/canonical-knowledge-v2
+          if git diff --cached --quiet; then
+            echo 'Canonical recovery corpus already persisted with no changes.'
+            exit 0
+          fi
+          git commit -m 'recovery: persist complete canonical knowledge corpus'
+          git push origin HEAD:${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+      - name: Final persisted-file verification
+        shell: bash
+        run: |
+          test -f data/recovery/canonical-knowledge-v2/full-corpus.json
+          test -f data/recovery/canonical-knowledge-v2/manifest.json
+          test -f data/recovery/canonical-knowledge-v2/photo-marriage/full-corpus-married.json
+          test -f data/recovery/canonical-knowledge-v2/semantic-archive/archive-manifest.json

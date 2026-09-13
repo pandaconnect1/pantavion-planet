@@ -14,13 +14,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   excavate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout writable source branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+          fetch-depth: 1
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -43,7 +47,8 @@ jobs:
           const m=JSON.parse(fs.readFileSync('data/recovery/canonical-knowledge-v2/manifest.json','utf8'));
           const x=JSON.parse(fs.readFileSync('data/recovery/canonical-knowledge-v2/photo-marriage/crosswalk.json','utf8'));
           const a=JSON.parse(fs.readFileSync('data/recovery/canonical-knowledge-v2/semantic-archive/archive-manifest.json','utf8'));
-          if(!(m.totalRecords>0)) throw new Error('empty corpus');
+          const verifiedFloor=28862;
+          if(m.totalRecords < verifiedFloor) throw new Error(`recovery regression ${m.totalRecords} < ${verifiedFloor}`);
           if(!(m.totalBatches>0)) throw new Error('no batches');
           const required=['founder-vision','unfinished-gap','recovery','donor','current-code','live-state'];
           for(const family of required){ if(!(family in m.sourceCounts)) throw new Error(`missing source family ${family}`); }
@@ -63,6 +68,19 @@ jobs:
           NODE
       - name: Runtime safety
         run: npm run typecheck
+      - name: Persist canonical recovery corpus into Pantavion Planet
+        if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+        shell: bash
+        run: |
+          git config user.name 'pantavion-recovery-bot'
+          git config user.email 'pantavion-recovery-bot@users.noreply.github.com'
+          git add -f data/recovery/canonical-knowledge-v2
+          if git diff --cached --quiet; then
+            echo 'Recovery corpus already persisted with no delta.'
+          else
+            git commit -m 'recovery: persist complete canonical knowledge corpus'
+            git push origin HEAD:${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: pantavion-canonical-knowledge-v2
