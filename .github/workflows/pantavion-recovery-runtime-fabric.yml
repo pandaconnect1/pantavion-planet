@@ -8,9 +8,11 @@ on:
       - "core/recovery/pantavion-recovery-source-reader.ts"
       - "core/recovery/pantavion-recovery-partition-inventory.ts"
       - "core/recovery/pantavion-recovery-fenced-executor.ts"
+      - "core/recovery/pantavion-recovery-classification-reader.ts"
       - "core/kernel/pantavion-foundry-workload-planner.ts"
       - "core/kernel/pantavion-founder-canonical-state-runtime.ts"
       - "app/kernel/canonical-materialization-client.tsx"
+      - "app/kernel/recovery-classification/**"
       - "app/api/pantavion/intelligence/cron/route.ts"
       - "core/pantavion/implementation-sync-registry.ts"
       - "scripts/pantavion-recovery-runtime-fabric-*.mjs"
@@ -19,6 +21,7 @@ on:
       - "scripts/pantavion-recovery-source-reader-test.mjs"
       - "scripts/pantavion-recovery-partition-inventory-test.mjs"
       - "scripts/pantavion-recovery-fenced-executor-test.mjs"
+      - "scripts/pantavion-recovery-classification-page-test.mjs"
       - "scripts/pantavion-canonical-semantic-classification-v3.cjs"
       - "data/recovery/recovery-runtime-fabric-v1.json"
       - "data/recovery/governed-hold-resolution-v4.json"
@@ -73,6 +76,9 @@ jobs:
 
       - name: Verify fail-closed Recovery Runtime contract
         run: npm run test:recovery-runtime-fabric
+
+      - name: Verify Founder recovery classification page contract
+        run: npm run test:recovery-classification-page
 
       - name: Verify durable recovery partition scheduler
         run: node --no-warnings --experimental-strip-types scripts/pantavion-recovery-partition-scheduler-test.mjs
