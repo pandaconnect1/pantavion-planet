@@ -2,9 +2,7 @@
   "name": "pantavion-planet",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": ">=22.0.0"
-  },
+  "engines": {"node": ">=22.0.0"},
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/pantavion-recovery-source-batch-index.mjs",
@@ -36,6 +34,10 @@
     "knowledge:marry:screenshots": "node scripts/pantavion-knowledge-photo-marriage.cjs",
     "knowledge:archive:semantic": "node scripts/pantavion-canonical-semantic-archive.cjs",
     "knowledge:excavate-and-marry": "npm run knowledge:excavate:v2 && npm run knowledge:marry:screenshots && npm run knowledge:archive:semantic",
+    "innovations:extract": "npm run vision:ingest && npm run plans:ingest && npm run knowledge:excavate:v2 && node scripts/pantavion-innovation-master-register.cjs",
+    "innovations:families": "node scripts/pantavion-innovation-family-map.cjs",
+    "audit:innovation-register": "node scripts/pantavion-innovation-master-register-gate.cjs",
+    "innovations:verify": "npm run innovations:extract && npm run innovations:families && npm run audit:innovation-register",
     "sources:harvest": "node scripts/pantavion-external-source-harvest.cjs",
     "audit:translation-runtime": "node scripts/pantavion-translation-runtime-gate.cjs",
     "audit:vision": "node scripts/pantavion-vision-registry-gate.cjs",
@@ -60,34 +62,6 @@
     "test:owner-release-gate": "node --no-warnings --experimental-strip-types scripts/pantavion-owner-release-gate-test.mjs",
     "test:translation-gateway-resilience": "node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs"
   },
-  "dependencies": {
-    "@ai-sdk/gateway": "4.0.28",
-    "@mlightcad/cad-simple-viewer": "^1.5.5",
-    "@mlightcad/cad-viewer": "^1.5.5",
-    "@mlightcad/libredwg-web": "^0.7.4",
-    "@supabase/ssr": "^0.7.0",
-    "@supabase/supabase-js": "^2.57.4",
-    "@vercel/analytics": "^2.0.1",
-    "@vercel/blob": "^2.4.0",
-    "@vercel/oidc": "^3.8.1",
-    "ai": "7.0.40",
-    "leaflet": "^1.9.4",
-    "next": "15.5.14",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "tus-js-client": "4.3.1",
-    "zustand": "^5.0.12"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3.3.3",
-    "@types/leaflet": "^1.9.21",
-    "@types/node": "24.10.2",
-    "@types/react": "19.2.7",
-    "autoprefixer": "10.4.16",
-    "eslint": "^9.0.0",
-    "eslint-config-next": "15.5.14",
-    "postcss": "8.4.31",
-    "tailwindcss": "3.3.3",
-    "typescript": "5.2.2"
-  }
+  "dependencies": {"@ai-sdk/gateway":"4.0.28","@mlightcad/cad-simple-viewer":"^1.5.5","@mlightcad/cad-viewer":"^1.5.5","@mlightcad/libredwg-web":"^0.7.4","@supabase/ssr":"^0.7.0","@supabase/supabase-js":"^2.57.4","@vercel/analytics":"^2.0.1","@vercel/blob":"^2.4.0","@vercel/oidc":"^3.8.1","ai":"7.0.40","leaflet":"^1.9.4","next":"15.5.14","react":"18.2.0","react-dom":"18.2.0","tus-js-client":"4.3.1","zustand":"^5.0.12"},
+  "devDependencies": {"@eslint/eslintrc":"^3.3.3","@types/leaflet":"^1.9.21","@types/node":"24.10.2","@types/react":"19.2.7","autoprefixer":"10.4.16","eslint":"^9.0.0","eslint-config-next":"15.5.14","postcss":"8.4.31","tailwindcss":"3.3.3","typescript":"5.2.2"}
 }

@@ -1,0 +1,130 @@
+name: Pantavion Innovation Register Truth
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/pantavion-innovation-*.cjs"
+      - "data/recovery/innovation-master-register/**"
+      - "data/recovery/canonical-knowledge-v2/**"
+      - "data/runtime-reports/**"
+      - "docs/recovery/PANTAVION_EXTERNAL_SIGNAL_ABSORPTION_2026-09-09.md"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/pantavion-innovation-register-truth.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: innovation-register-truth-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-innovation-register:
+    name: Verify evidence, truth boundaries, and deterministic outputs
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Generate and gate innovation register
+        run: npm run innovations:verify
+
+      - name: Validate first-pass truth contract
+        run: |
+          node <<'NODE'
+          const fs = require("fs");
+          const path = "data/recovery/innovation-master-register";
+          const manifest = JSON.parse(fs.readFileSync(`${path}/manifest.json`, "utf8"));
+          const register = JSON.parse(fs.readFileSync(`${path}/innovation-master-register.json`, "utf8"));
+          const familyMap = JSON.parse(fs.readFileSync(`${path}/innovation-family-map.json`, "utf8"));
+          const csv = fs.readFileSync(`${path}/innovation-master-register.csv`, "utf8");
+          function countCsvRecords(value) {
+            let records = 0;
+            let quoted = false;
+            for (let index = 0; index < value.length; index += 1) {
+              const character = value[index];
+              if (character === '"') {
+                if (quoted && value[index + 1] === '"') index += 1;
+                else quoted = !quoted;
+              } else if (character === "\n" && !quoted) {
+                records += 1;
+              }
+            }
+            if (quoted) throw new Error("csv_unterminated_quote");
+            return records + (value.length > 0 && !value.endsWith("\n") ? 1 : 0);
+          }
+          if (!register.candidates.length) throw new Error("innovation_register_empty");
+          if (manifest.totals.exactDeduplicatedCandidates !== register.candidates.length) throw new Error("candidate_count_mismatch");
+          if (familyMap.total !== register.candidates.length) throw new Error("family_map_count_mismatch");
+          if (countCsvRecords(csv) !== register.candidates.length + 1) throw new Error("csv_record_count_mismatch");
+          if (register.candidates.some((candidate) => candidate.noveltyClaimAllowed !== false || candidate.noveltyStatus !== "UNVERIFIED_PRIOR_ART_REQUIRED")) throw new Error("unsupported_novelty_claim");
+          if (register.candidates.some((candidate) => !Array.isArray(candidate.evidence) || candidate.evidence.length === 0)) throw new Error("evidence_less_candidate");
+          if (register.candidates.some((candidate) => candidate.originStatus === "EXTERNAL_SIGNAL_ONLY" && candidate.evidence.some((evidence) => evidence.sourceKind !== "external-signal-synthesis"))) throw new Error("external_origin_boundary_broken");
+          console.log(JSON.stringify({
+            candidates: register.candidates.length,
+            familyCounts: manifest.totals.familyCounts,
+            unresolvedFamilies: familyMap.unresolved,
+            unsupportedNoveltyClaims: 0,
+            evidenceLessCandidates: 0,
+          }, null, 2));
+          NODE
+
+      - name: Preserve first deterministic projection
+        run: |
+          mkdir -p /tmp/pantavion-innovation-first
+          cp data/recovery/innovation-master-register/manifest.json /tmp/pantavion-innovation-first/
+          cp data/recovery/innovation-master-register/innovation-master-register.json /tmp/pantavion-innovation-first/
+          cp data/recovery/innovation-master-register/innovation-master-register.csv /tmp/pantavion-innovation-first/
+          cp data/recovery/innovation-master-register/innovation-family-map.json /tmp/pantavion-innovation-first/
+
+      - name: Regenerate independently
+        run: npm run innovations:verify
+
+      - name: Verify deterministic semantic projection
+        run: |
+          node <<'NODE'
+          const assert = require("assert/strict");
+          const fs = require("fs");
+          const current = "data/recovery/innovation-master-register";
+          const first = "/tmp/pantavion-innovation-first";
+          function normalized(file) {
+            const value = JSON.parse(fs.readFileSync(`${file}`, "utf8"));
+            if (value.generatedAt) delete value.generatedAt;
+            if (value.manifest?.generatedAt) delete value.manifest.generatedAt;
+            return value;
+          }
+          for (const name of ["manifest.json", "innovation-master-register.json", "innovation-family-map.json"]) {
+            assert.deepEqual(normalized(`${first}/${name}`), normalized(`${current}/${name}`), `${name} is not deterministic after timestamp normalization`);
+          }
+          assert.equal(
+            fs.readFileSync(`${first}/innovation-master-register.csv`, "utf8"),
+            fs.readFileSync(`${current}/innovation-master-register.csv`, "utf8"),
+            "CSV projection is not deterministic",
+          );
+          console.log("PANTAVION INNOVATION REGISTER DETERMINISM: PASS");
+          NODE
+
+      - name: Upload exact-head verification evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-innovation-register-truth-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            data/recovery/innovation-master-register/manifest.json
+            data/recovery/innovation-master-register/innovation-master-register.json
+            data/recovery/innovation-master-register/innovation-master-register.csv
+            data/recovery/innovation-master-register/innovation-family-map.json
