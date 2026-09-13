@@ -22,8 +22,10 @@ function count(value: number): string {
   return new Intl.NumberFormat("el-GR").format(value);
 }
 
-function pageHref(page: number): string {
-  return `/kernel/recovery-classification?page=${page}`;
+function pageHref(page: number, module?: string | null): string {
+  const params = new URLSearchParams({ page: String(page) });
+  if (module) params.set("module", module);
+  return `/kernel/recovery-classification?${params.toString()}`;
 }
 
 export default async function RecoveryClassificationPage({
@@ -43,7 +45,7 @@ export default async function RecoveryClassificationPage({
 
   if (!allowed || !(await isPantavionKernelFounderIdentityAllowed())) notFound();
 
-  const data = await loadRecoveryClassificationPage(first(resolved.page));
+  const data = await loadRecoveryClassificationPage(first(resolved.page), first(resolved.module));
 
   return (
     <main className="min-h-screen bg-[#05070d] px-4 py-8 text-white sm:px-6">
@@ -68,7 +70,7 @@ export default async function RecoveryClassificationPage({
           <h2 className="text-xl font-black">Ενότητες</h2>
           <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {Object.entries(data.moduleCounts).map(([module, moduleCount]) => (
-              <a key={module} href={pageHref(data.moduleStartPages[module] ?? 1)} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 hover:border-cyan-300/40">
+              <a key={module} href={pageHref(1, module)} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 hover:border-cyan-300/40">
                 <p className="text-sm font-bold text-slate-100">{module}</p>
                 <p className="mt-2 text-2xl font-black text-cyan-200">{count(moduleCount)}</p>
               </a>
@@ -79,12 +81,13 @@ export default async function RecoveryClassificationPage({
         <section className="mt-7 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03]">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 p-5">
             <div>
-              <h2 className="text-xl font-black">Εγγραφές {count(data.startOrdinal)}–{count(data.endOrdinal)}</h2>
+              <h2 className="text-xl font-black">{data.selectedModule ?? "Όλες οι ενότητες"}: {count(data.startOrdinal)}–{count(data.endOrdinal)} από {count(data.filteredRecords)}</h2>
               <p className="mt-1 text-xs text-slate-400">Σελίδα {count(data.page)} από {count(data.totalPages)} · 50 ανά σελίδα</p>
             </div>
             <div className="flex gap-2">
-              {data.page > 1 ? <PageLink href={pageHref(data.page - 1)} label="Προηγούμενα" /> : null}
-              {data.page < data.totalPages ? <PageLink href={pageHref(data.page + 1)} label="Επόμενα" /> : null}
+              {data.selectedModule ? <PageLink href={pageHref(1)} label="Όλα" /> : null}
+              {data.page > 1 ? <PageLink href={pageHref(data.page - 1, data.selectedModule)} label="Προηγούμενα" /> : null}
+              {data.page < data.totalPages ? <PageLink href={pageHref(data.page + 1, data.selectedModule)} label="Επόμενα" /> : null}
             </div>
           </div>
           <div className="divide-y divide-white/10">
