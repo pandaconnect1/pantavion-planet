@@ -137,7 +137,6 @@ function loadGovernance() {
   }
 
   const bySourceFile = new Map();
-  requireEqual("verified_source_inventory_repository_bindings", accountingSummary.sourceRepositoryObserved, SOURCE_INVENTORY_RECORD_COUNT);
   for (const disposition of governed.dispositions) {
     if (typeof disposition.sourceFile !== "string" || !disposition.sourceFile.trim()) {
       throw new Error("governed_hold_source_file_missing");
@@ -318,6 +317,7 @@ async function materialize() {
   ]) {
     requireEqual(`accounting_${field}_coverage`, observed + missing, PANTAVION_RECOVERY_CORPUS_CONTRACT.sourceRecordCount);
   }
+  requireEqual("verified_source_inventory_repository_bindings", accountingSummary.sourceRepositoryObserved, SOURCE_INVENTORY_RECORD_COUNT);
   for (const disposition of governed.dispositions) {
     requireEqual(
       `governed_hold_source_count:${disposition.sourceFile}`,
