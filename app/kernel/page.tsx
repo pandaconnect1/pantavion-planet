@@ -64,6 +64,12 @@ export default async function KernelPage({ searchParams }: KernelPageProps) {
           >
             Global Human Demand Radar
           </a>
+          <a
+            href="/kernel/recovery-classification"
+            className="rounded-2xl border border-cyan-300/40 bg-cyan-300/10 px-5 py-3 text-sm font-black text-cyan-100"
+          >
+            82,413 Recovery Classification
+          </a>
         </div>
       </div>
       <CanonicalMaterializationClient />
