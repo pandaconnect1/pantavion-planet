@@ -82,6 +82,7 @@ export interface PantavionRecoverySourceLocator {
   preservationRef: string;
   preservationPath: string;
   preservationBlobSha: string;
+  sourceRepository?: string;
 }
 
 export interface PantavionRecoveryWorkUnit {
@@ -318,7 +319,7 @@ export function materializePantavionRecoveryWorkUnit(input: {
       ],
       targetLocation: destinationLocation,
       sourceProject: text(input.record.provenance?.sourceProject),
-      sourceRepository: text(input.record.provenance?.sourceRepository),
+      sourceRepository: text(input.record.provenance?.sourceRepository) ?? text(input.locator.sourceRepository),
       sourceRef: text(input.record.provenance?.sourceRef),
       destinationBinding: {
         kind: lane.lane === "CLASSIFIED_CANDIDATE" ? "CANONICAL_TARGET" as const : "PRESERVATION_TARGET" as const,
