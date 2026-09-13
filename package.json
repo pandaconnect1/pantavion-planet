@@ -59,7 +59,8 @@
     "test:sovereign-kernel-integration": "node scripts/pantavion-sovereign-kernel-integration-test.cjs",
     "test:owner-release-gate": "node --no-warnings --experimental-strip-types scripts/pantavion-owner-release-gate-test.mjs",
     "test:translation-gateway-resilience": "node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs",
-    "test:sovereign-admission-bundle": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-admission-bundle-test.mjs"
+    "test:sovereign-admission-bundle": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-admission-bundle-test.mjs",
+    "test:sovereign-execution-revalidation": "node --no-warnings --experimental-strip-types scripts/pantavion-sovereign-execution-revalidation-test.mjs"
   },
   "dependencies": {
     "@ai-sdk/gateway": "4.0.28",
