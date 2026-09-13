@@ -17,6 +17,9 @@ const receiptPath = path.join(corpusRoot, "MATERIALIZATION_RECEIPT.json");
 const provenanceManifestPath = path.join(corpusRoot, "PROVENANCE_MANIFEST.json");
 const PRESERVATION_REPOSITORY = "pandaconnect1/pantavion-planet";
 const PRESERVATION_REF = "a93a0814ce4c45719d0eedfd3782fdf5c459d767";
+const SOURCE_INVENTORY_PATH = "data/pantavion-source-inventory/inventory.json";
+const SOURCE_INVENTORY_REPOSITORY = "pandaconnect1/pantavion-planet";
+const SOURCE_INVENTORY_RECORD_COUNT = 32;
 const semanticLedgerPath = path.join(root, PANTAVION_RECOVERY_CORPUS_CONTRACT.semanticLedgerPath);
 const semanticManifestPath = path.join(path.dirname(semanticLedgerPath), "manifest.json");
 const governedHoldPath = path.join(root, PANTAVION_RECOVERY_CORPUS_CONTRACT.governedHoldPath);
@@ -95,6 +98,10 @@ function loadSourceLocators() {
     for (let batchRecordIndex = 0; batchRecordIndex < batch.records.length; batchRecordIndex += 1) {
       const sourceRecord = batch.records[batchRecordIndex];
       const recordId = safeRecordId(sourceRecord?.id);
+      const sourceRepository = sourceRecord?.provenance?.sourceFamily === "donor"
+        && sourceRecord?.provenance?.sourceFile === SOURCE_INVENTORY_PATH
+        ? SOURCE_INVENTORY_REPOSITORY
+        : undefined;
       if (seen.has(recordId)) throw new Error(`recovery_source_duplicate_record_id:${recordId}`);
       seen.add(recordId);
       globalOrdinal += 1;
@@ -109,6 +116,7 @@ function loadSourceLocators() {
         preservationRef: PRESERVATION_REF,
         preservationPath: path.posix.join(PANTAVION_RECOVERY_CORPUS_CONTRACT.corpusRoot, "batches", batchFile),
         preservationBlobSha,
+        sourceRepository,
       });
     }
   }
@@ -129,6 +137,7 @@ function loadGovernance() {
   }
 
   const bySourceFile = new Map();
+  requireEqual("verified_source_inventory_repository_bindings", accountingSummary.sourceRepositoryObserved, SOURCE_INVENTORY_RECORD_COUNT);
   for (const disposition of governed.dispositions) {
     if (typeof disposition.sourceFile !== "string" || !disposition.sourceFile.trim()) {
       throw new Error("governed_hold_source_file_missing");
