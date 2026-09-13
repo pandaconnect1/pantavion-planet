@@ -23,7 +23,7 @@
   "materializationTruth": {
     "workUnitCount": 82413,
     "workUnitIdFingerprint": "97d32f84b24880420bdea950c5d2552899e8e8e792fc8eefc551f52f333e958b",
-    "terminalWorkUnitDigest": "7b80da33ae2e82e054436002a40c02b0872ed281976067aba4cf79b4889ba94b",
+    "terminalWorkUnitDigest": "0da789b3e548e7abed05afce1f9829c4589a0b4a2eb7384ccfa1b647f1272767",
     "rawPayloadDuplicatedIntoControlPlane": false,
     "implementationState": "TESTED"
   },
