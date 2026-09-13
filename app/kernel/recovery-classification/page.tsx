@@ -22,9 +22,11 @@ function count(value: number): string {
   return new Intl.NumberFormat("el-GR").format(value);
 }
 
-function pageHref(page: number, module?: string | null): string {
+function pageHref(page: number, module?: string | null, status?: string | null, query?: string): string {
   const params = new URLSearchParams({ page: String(page) });
   if (module) params.set("module", module);
+  if (status) params.set("status", status);
+  if (query) params.set("q", query);
   return `/kernel/recovery-classification?${params.toString()}`;
 }
 
@@ -45,7 +47,9 @@ export default async function RecoveryClassificationPage({
 
   if (!allowed || !(await isPantavionKernelFounderIdentityAllowed())) notFound();
 
-  const data = await loadRecoveryClassificationPage(first(resolved.page), first(resolved.module));
+  const data = await loadRecoveryClassificationPage(
+    first(resolved.page), first(resolved.module), first(resolved.status), first(resolved.q),
+  );
 
   return (
     <main className="min-h-screen bg-[#05070d] px-4 py-8 text-white sm:px-6">
@@ -66,11 +70,21 @@ export default async function RecoveryClassificationPage({
           <p className="mt-4 break-all text-xs text-slate-400">Corpus fingerprint: {data.corpusFingerprint}</p>
         </div>
 
+        <form method="get" className="mt-6 grid gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:grid-cols-3">
+          <input name="q" defaultValue={data.query} maxLength={120} placeholder="Αναζήτηση ID, θέματος, πηγής…" className="rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm" />
+          <select name="status" defaultValue={data.selectedStatus ?? ""} className="rounded-xl border border-white/15 bg-[#0a0d14] px-4 py-3 text-sm">
+            <option value="">Όλες οι καταστάσεις</option>
+            {Object.entries(data.reviewCounts).map(([status, statusCount]) => <option key={status} value={status}>{status} ({count(statusCount)})</option>)}
+          </select>
+          {data.selectedModule ? <input type="hidden" name="module" value={data.selectedModule} /> : null}
+          <button className="rounded-xl bg-cyan-300 px-4 py-3 text-sm font-black text-slate-950" type="submit">Εφαρμογή φίλτρων</button>
+        </form>
+
         <section className="mt-6">
           <h2 className="text-xl font-black">Ενότητες</h2>
           <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {Object.entries(data.moduleCounts).map(([module, moduleCount]) => (
-              <a key={module} href={pageHref(1, module)} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 hover:border-cyan-300/40">
+              <a key={module} href={pageHref(1, module, data.selectedStatus, data.query)} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 hover:border-cyan-300/40">
                 <p className="text-sm font-bold text-slate-100">{module}</p>
                 <p className="mt-2 text-2xl font-black text-cyan-200">{count(moduleCount)}</p>
               </a>
@@ -85,9 +99,9 @@ export default async function RecoveryClassificationPage({
               <p className="mt-1 text-xs text-slate-400">Σελίδα {count(data.page)} από {count(data.totalPages)} · 50 ανά σελίδα</p>
             </div>
             <div className="flex gap-2">
-              {data.selectedModule ? <PageLink href={pageHref(1)} label="Όλα" /> : null}
-              {data.page > 1 ? <PageLink href={pageHref(data.page - 1, data.selectedModule)} label="Προηγούμενα" /> : null}
-              {data.page < data.totalPages ? <PageLink href={pageHref(data.page + 1, data.selectedModule)} label="Επόμενα" /> : null}
+              {data.selectedModule || data.selectedStatus || data.query ? <PageLink href={pageHref(1)} label="Καθαρισμός" /> : null}
+              {data.page > 1 ? <PageLink href={pageHref(data.page - 1, data.selectedModule, data.selectedStatus, data.query)} label="Προηγούμενα" /> : null}
+              {data.page < data.totalPages ? <PageLink href={pageHref(data.page + 1, data.selectedModule, data.selectedStatus, data.query)} label="Επόμενα" /> : null}
             </div>
           </div>
           <div className="divide-y divide-white/10">
