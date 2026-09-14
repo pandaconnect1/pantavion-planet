@@ -1,0 +1,46 @@
+{
+  "actions": {
+    "login": "Log in",
+    "signup": "Sign up",
+    "createAccount": "Create account"
+  },
+  "hero": {
+    "title": "Everything for Everyone — one platform.",
+    "subtitle": "Global social & life hub with AI, languages, messaging, calls, media and more."
+  },
+  "cta": {
+    "getStarted": "Get started",
+    "explore": "Explore features"
+  },
+  "features": {
+    "multilang": {
+      "title": "Multi-language by design",
+      "desc": "Automatic & manual language selection. Respecting all languages and cultures."
+    },
+    "security": {
+      "title": "Security & Compliance",
+      "desc": "Role-based experience, age gates, and country-level rules built-in."
+    },
+    "scalable": {
+      "title": "Scalable foundation",
+      "desc": "Built for growth with cloud-native architecture."
+    }
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "auth": {
+    "loginTitle": "Welcome back",
+    "signupTitle": "Create your Pantavion account",
+    "email": "Email",
+    "password": "Password",
+    "name": "Full name",
+    "noAccount": "Don’t have an account?",
+    "haveAccount": "Already have an account?",
+    "role": {
+      "child": "Child (under 18)",
+      "adult": "Adult",
+      "business": "Business"
+    }
+  }
+}
