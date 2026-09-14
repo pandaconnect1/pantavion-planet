@@ -35,6 +35,12 @@ export default async function OwnerControlPage() {
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <a
+              href="/owner/control/truth-live"
+              className="rounded-xl border border-emerald-400/50 bg-emerald-400/10 px-4 py-3 text-sm font-black text-emerald-100"
+            >
+              Live Truth · πραγματικό production verify
+            </a>
+            <a
               href="/owner/control/implementation"
               className="rounded-xl border border-cyan-400/50 bg-cyan-400/10 px-4 py-3 text-sm font-black text-cyan-100"
             >
