@@ -41,6 +41,15 @@ Most recent production deployment observed: `dpl_FoXoMgG2E7iZsRraJ1JUDx7VWmuu`, 
 
 The first deployment-history page for `pantavion-planet-vmxx` was recovered: 20 entries, with older entries available before cursor `1789288815034`.
 
+## Vercel-only/no-Git project check
+The four projects returned without Git links were queried directly for deployment history:
+- `v0-new-project-dr8uqvuxfhx` — 0 deployments returned
+- `v0-new-project-cd71xe9esnl` — 0 deployments returned
+- `v0-new-project-0hexy2s8dnt` — 0 deployments returned
+- `v0-new-project-81xhfwdrlxy` — 0 deployments returned
+
+This is useful cleanup evidence, but it is not by itself authority to delete them; settings/env/domain evidence must still be checked before cleanup.
+
 ## Truth boundary
 This evidence proves project visibility, project ids, repository bindings, domains and recovered deployment metadata. It does NOT claim that environment-variable secret values have been exported. The currently exposed Vercel connector does not provide an environment-variable export/read action. Secret values must not be committed to this public repository.
 
