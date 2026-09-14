@@ -35,12 +35,14 @@ The complete active Edge Function source `pantavion-map-b-one-time-upload` has b
 
 Supabase's own `supabase_migrations.schema_migrations` table was verified to retain 64 migrations and their SQL statement arrays (259,299 SQL characters total), so the production migration SQL remains recoverable from the canonical database. No database password, service-role key, token, Vault secret or private row payload is copied into this public repository.
 
-## NOT YET SOURCE-COPIED — REQUIRES PRIVATE GITHUB ACCESS
-Vercel proves two additional private source repositories exist, but the current GitHub connector returns 404 for both by name and numeric repository id:
+## NOT YET SOURCE-COPIED — EXACT PRIVATE GITHUB ACCESS BLOCKER
+Vercel proves two additional private source repositories exist:
 - `pandaconnect1/nextjs-ai-chatbot` — repository id `994952595`
 - `pandaconnect1/pantaai-v1` — repository id `998179796`
 
-Their Vercel provenance, commits and build evidence are preserved under `docs/recovery/vercel-private-source-evidence/`, but their actual private source contents are not yet copied. They must remain private unless the owner explicitly authorizes changing their confidentiality boundary.
+The GitHub App installation currently connected to ChatGPT is installation `147879137` on account `pandaconnect1`. GitHub reports `repository_selection: selected`, and the installation's accessible-repository list contains only `pandaconnect1/pantavion-planet`. Direct reads of both private repository ids therefore return 404.
+
+Their Vercel provenance, commits and build evidence are preserved under `docs/recovery/vercel-private-source-evidence/`, but their actual private source contents are not yet copied. To retrieve them, the GitHub App installation must be granted access to those private repositories (or all repositories). Their source must remain private unless the owner explicitly authorizes changing that confidentiality boundary.
 
 ## ENVIRONMENT / SECRET BOUNDARY
 The connected Vercel tools do not expose an environment-variable export/read operation. Secret values therefore have NOT been copied. This is deliberately not represented as complete backup. Environment-variable names/requirements may be reconstructed from source and workflows, but actual secret values must be recovered through an authorized private secret channel, never committed to this public repository.
