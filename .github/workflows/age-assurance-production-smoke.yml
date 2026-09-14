@@ -1,0 +1,53 @@
+name: Age Assurance Production Smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/age-assurance-production-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call production age-assurance API
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://www.pantavion.com/api/age-assurance/verify"
+          BODY='{"method":"CAMERA_LIVENESS","estimatedAge":19,"livenessPassed":false,"jurisdiction":"CY"}'
+
+          echo "POST $URL"
+          for attempt in {1..10}; do
+            http_code=$(curl -sS -L --connect-timeout 10 --max-time 20 \
+              -o response.json -w '%{http_code}' \
+              -H 'content-type: application/json' \
+              -X POST "$URL" \
+              --data "$BODY" || true)
+            echo "attempt=$attempt http=$http_code"
+            cat response.json 2>/dev/null || true
+            echo
+            if [ "$http_code" = "422" ]; then
+              break
+            fi
+            sleep 10
+          done
+
+          test "$http_code" = "422"
+          node - <<'NODE'
+          const fs = require('fs');
+          const body = JSON.parse(fs.readFileSync('response.json','utf8'));
+          if (body?.ok !== false) throw new Error('Expected ok=false');
+          if (body?.verification?.status !== 'REJECTED') throw new Error('Expected REJECTED');
+          if (body?.verification?.ageBand !== 'UNKNOWN') throw new Error('Expected UNKNOWN age band');
+          if (body?.verification?.assuranceLevel !== 0) throw new Error('Expected assuranceLevel=0');
+          if (body?.evidence?.method !== 'CAMERA_LIVENESS') throw new Error('Wrong method evidence');
+          if (body?.evidence?.jurisdiction !== 'CY') throw new Error('Wrong jurisdiction evidence');
+          if (body?.evidence?.rawImageStored !== false) throw new Error('rawImageStored must be false');
+          console.log('PRODUCTION_API_RUNTIME_VERIFIED: unsigned/failed liveness is rejected as expected');
+          NODE
