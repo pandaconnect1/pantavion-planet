@@ -1,7 +1,7 @@
-# Vercel Connected Recovery — 2026-09-14
+# Vercel Connected Recovery — 2026-09-14/15
 
 ## Connection restored
-The ChatGPT↔Vercel authorization was re-established for team `pantavion` (`pandaconnect`, team id `team_tGNSGGjcV3VNecscMvaAniGY`). After reauthorization, Vercel project discovery returned 15 projects.
+The ChatGPT↔Vercel authorization is active for team `pantavion` (`pandaconnect`, team id `team_tGNSGGjcV3VNecscMvaAniGY`). Vercel project discovery returns 15 projects.
 
 ## Project inventory
 1. `pantavion-planet-vmxx` — `prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU` — GitHub `pandaconnect1/pantavion-planet`
@@ -20,38 +20,33 @@ The ChatGPT↔Vercel authorization was re-established for team `pantavion` (`pan
 14. `v0-new-project-81xhfwdrlxy` — `prj_6vYEVxzch7eYJQthBUP53aQ87zvO` — no Git link returned
 15. `nextjs-ai-chatbot` — `prj_qaSInQRFvCwA6V5duEvOLaGkcbbN` — GitHub `pandaconnect1/nextjs-ai-chatbot`
 
-## Canonical Pantavion project metadata
-`pantavion-planet` is a Next.js project on Node 24.x. Domains returned by Vercel:
-- `www.pantavion.com`
-- `pantavion.com`
-- `pantavion-planet.vercel.app`
-- `pantavion-planet-pandaconnect.vercel.app`
-- `pantavion-planet-git-main-pandaconnect.vercel.app`
+## Fresh project metadata snapshot
+A direct `get_project` sweep was performed across all 15 projects.
 
-Latest project deployment observed: `dpl_BzpSHynaQhJLP1UxYU4KqEe6xgae` (`READY`).
+Canonical projects:
+- `pantavion-planet`: Next.js, Node 24.x, domains include `www.pantavion.com`, `pantavion.com`, `pantavion-planet.vercel.app`. The latest newly-created deployment observed at the time of this sweep is `dpl_uFnHeehksKAoAn6mk9ZEhu1YMvPN`, URL `pantavion-planet-ex2shfy6x-pandaconnect.vercel.app`, state `ERROR`, target null. This does NOT erase the earlier recovered production deployment `dpl_Dc5bXsU48aZAdZ8sASugaN7rnxSC`, which was `READY`, target `production`, source commit `16297cdcad36c49aeea4acf087412b6bdc053761`.
+- `pantavion-planet-vmxx`: Next.js, Node 24.x. Latest newly-created deployment observed is `dpl_H98PyyW77CrLYa7rBHvcK5AbjCHF`, URL `pantavion-planet-vmxx-lagd6sef9-pandaconnect.vercel.app`, state `ERROR`, target null. Earlier recovered production deployment `dpl_FoXoMgG2E7iZsRraJ1JUDx7VWmuu` was `READY`, target `production`, same source commit `16297cdcad36c49aeea4acf087412b6bdc053761`.
 
-Most recent production deployment observed: `dpl_Dc5bXsU48aZAdZ8sASugaN7rnxSC`, URL `pantavion-planet-k2ilkmuba-pandaconnect.vercel.app`, target `production`, state `READY`, source commit `16297cdcad36c49aeea4acf087412b6bdc053761` on `main`.
+Other project heads observed:
+- `pantavion-one` — latest `READY` production
+- `pantavion-one-clean-98it` — latest `READY` production; domains include `pantavion.com`
+- `pantavion-one-clean` — latest `READY` production
+- `pantaai` — latest deployment `ERROR`
+- `pantavion-one-clean-ui` — latest deployment `READY`
+- `pantaai-v1-nf17` — latest deployment `ERROR`
+- `pantaai-v1` — latest deployment `ERROR`
+- four `v0-new-project-*` projects — no latest deployment and no domains returned
+- `pantaai-template` — no latest deployment and no domains returned
+- `nextjs-ai-chatbot` — no latest deployment and no domains returned
 
-The first deployment-history page for `pantavion-planet` was recovered: 20 entries, with older entries available before cursor `1789288815063`.
+## Deployment history evidence already recovered
+The first deployment-history pages for both `pantavion-planet` and `pantavion-planet-vmxx` were captured previously, with older entries available by cursor. The recovered history includes successful production deployments tied to immutable Git commit SHAs.
 
-## Secondary Pantavion project
-`pantavion-planet-vmxx` project id: `prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU`.
+## Git source preservation linkage
+All currently accessible non-empty GitHub repositories under `pandaconnect1`, including the two private repositories `nextjs-ai-chatbot` and `pantaai-v1`, now have a `backup/full-preservation-20260914` branch. Details are recorded in `GITHUB_FULL_BRANCH_PRESERVATION_20260915.md`.
 
-Most recent production deployment observed: `dpl_FoXoMgG2E7iZsRraJ1JUDx7VWmuu`, URL `pantavion-planet-vmxx-jdz3b1zkg-pandaconnect.vercel.app`, target `production`, state `READY`, source commit `16297cdcad36c49aeea4acf087412b6bdc053761` on `main`.
-
-The first deployment-history page for `pantavion-planet-vmxx` was recovered: 20 entries, with older entries available before cursor `1789288815034`.
-
-## Vercel-only/no-Git project check
-The four projects returned without Git links were queried directly for deployment history:
-- `v0-new-project-dr8uqvuxfhx` — 0 deployments returned
-- `v0-new-project-cd71xe9esnl` — 0 deployments returned
-- `v0-new-project-0hexy2s8dnt` — 0 deployments returned
-- `v0-new-project-81xhfwdrlxy` — 0 deployments returned
-
-This is useful cleanup evidence, but it is not by itself authority to delete them; settings/env/domain evidence must still be checked before cleanup.
-
-## Truth boundary
-This evidence proves project visibility, project ids, repository bindings, domains and recovered deployment metadata. It does NOT claim that environment-variable secret values have been exported. The currently exposed Vercel connector does not provide an environment-variable export/read action. Secret values must not be committed to this public repository.
+## Environment / secret boundary
+The Vercel connector available in this chat does not expose an environment-variable read/export action. Vercel documentation confirms authorized CLI/API routes exist (`vercel env pull`, `vercel pull --environment=production`, GET project env endpoints), but this connector cannot invoke them directly. Therefore secret values are NOT represented as backed up here. Environment names/requirements are being reconstructed from source and workflow references; values must be recovered through an authorized private channel and must never be committed to this public repository.
 
 ## Preservation rule
-Do not delete any Vercel project, deployment, branch, GitHub repository, domain binding, or historical evidence until project-by-project recovery evidence has been captured and independently verified.
+Do not delete any Vercel project, deployment, branch, GitHub repository, domain binding, Supabase resource, environment binding, or historical evidence until project-by-project recovery evidence has been captured and independently verified.
