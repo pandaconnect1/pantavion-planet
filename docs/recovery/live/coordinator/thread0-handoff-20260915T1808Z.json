@@ -1,0 +1,36 @@
+{
+  "observedAtUtc": "2026-09-15T18:08:00Z",
+  "thread": 0,
+  "role": "COORDINATOR_RUNTIME_TRUTH",
+  "status": "BLOCKING_HANDOFF_RECORDED",
+  "facts": {
+    "sourceFloor": 3679,
+    "canonicalizedFloor": 219,
+    "rehydratedPendingCanonicalization": 400,
+    "recoveryPartitionsTotal": 165,
+    "recoveryPartitionsPlanned": 165,
+    "recoveryPartitionsSucceeded": 0,
+    "recoveryPartitionsFailed": 0,
+    "partitionAttemptsMin": 0,
+    "partitionAttemptsMax": 0,
+    "schedulerHealthy": true,
+    "executorStarted": false,
+    "recoveryBranchAndDeployedMainDiverged": true
+  },
+  "blockingCode": "RECOVERY_EXECUTOR_NOT_STARTED",
+  "handoff": {
+    "thread9": "Reconcile the existing fenced durable executor path with the recovery branch and activate execution through the current durable_executions/durable_execution_checkpoints fabric. Preserve atomic claims, leases, fencing, idempotency and failure states. Do not create a competing execution system and do not treat materialization as execution.",
+    "threads2and3": "Consume only eligible preserved evidence using deterministic hash bucket ownership. The 400 rehydrated records remain pending until durable idempotent canonical writes exist. Do not raise canonical counts from preservation alone.",
+    "thread4": "Classify eligible records with confidence/evidence and REVIEW_REQUIRED for uncertainty. Do not invent missing semantic truth.",
+    "threads5and6": "Route and bind work only from correctly classified canonical identities while retaining immutable provenance.",
+    "thread7": "Audit stale ownership, duplicate stable IDs, missing downstream bindings and terminal-state inconsistencies without silently rewriting owned shards.",
+    "thread8": "Preserve manifests, receipts, checksums and evidence pointers for new durable progress."
+  },
+  "coordinatorConstraints": {
+    "noIngestionShardClaim": true,
+    "noBlindMergeOrCherryPick": true,
+    "noCountInflation": true,
+    "noDestructiveVercelAction": true,
+    "noDeletion": true
+  }
+}
