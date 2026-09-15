@@ -1,0 +1,72 @@
+{
+  "schema": "pantavion_lane_e_checkpoint_v2",
+  "lane": "E",
+  "captured_at_utc": "2026-09-15T14:08:30Z",
+  "status": "BLOCKED_AUTH_EXPORT",
+  "zero_deletions": true,
+  "vercel_mutations": false,
+  "secret_values_written": false,
+  "private_source_written": false,
+  "coordination": {
+    "A": {"status":"TERMINAL_CHECKPOINTED","history_terminal":true,"records_captured_this_run":619},
+    "B": {"status":"TERMINAL_VERIFIED","history_terminal":true,"dedupe_mode":"IDEMPOTENT_UPSERT_OR_SKIP","vmxx_root_http":200,"vmxx_founder_recovery_route_http":404},
+    "C": {"status":"TERMINAL_VERIFIED","projects_terminal":"6/6","deployment_total":73,"new_env_name_evidence":["POSTGRES_URL"]},
+    "D": {"status":"BLOCKED_VERCEL_HISTORICAL_RUNTIME_BILLING_LIMIT","deployment_histories_terminal":"7/7","deployment_records_preserved":12,"no_git_projects_terminal_zero":"4/4"}
+  },
+  "secondary_surfaces": {
+    "agent_runs": {"production_90d_projects":0,"preview_90d_projects":0,"data_confidence":"real"},
+    "toolbar_threads": {"unresolved":0,"resolved":0,"scope":"team-wide accessible surface"}
+  },
+  "authoritative_production_live_truth": {
+    "project": "pantavion-planet",
+    "project_id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+    "deployment_id": "dpl_3eJ2dStrpNpPzyLw9cMAjSDXYWoE",
+    "git_sha": "1d84eac023bba54657020c6ff449a4821a351426",
+    "state": "READY",
+    "target": "production",
+    "aliases": ["www.pantavion.com","pantavion.com","pantavion-planet.vercel.app","pantavion-planet-pandaconnect.vercel.app","pantavion-planet-git-main-pandaconnect.vercel.app"],
+    "founder_recovery_route": {
+      "route": "/admin/pantavion/recovery",
+      "url": "https://www.pantavion.com/admin/pantavion/recovery",
+      "http_status": 200,
+      "matched_path": "/admin/pantavion/recovery",
+      "rendered_boundary": "Founder Access Required",
+      "live_truth": "VERIFIED_LIVE",
+      "verification_scope": "route boundary only; operational data remains founder-protected",
+      "result": "The previous 404 is resolved on authoritative production."
+    }
+  },
+  "vmxx_live_truth": {
+    "root_http_status": 200,
+    "root_live_truth": "VERIFIED_LIVE",
+    "founder_recovery_route_http_status": 404,
+    "founder_recovery_route_live_truth": "NOT_LIVE_ON_VMXX_PRODUCTION",
+    "source": "Lane B"
+  },
+  "environment_continuity_delta": {
+    "previous_names_count": 111,
+    "new_names_count": 112,
+    "added_name": "POSTGRES_URL",
+    "source": "Lane C pantaai build evidence",
+    "values_captured": false,
+    "vercel_presence_truth": "UNKNOWN_FROM_CONNECTED_SURFACES",
+    "scope_truth": "UNKNOWN_FROM_CONNECTED_SURFACES",
+    "exact_value_exportability": "BLOCKED_AUTH_EXPORT"
+  },
+  "no_git_update": {
+    "projects": ["v0-new-project-dr8uqvuxfhx","v0-new-project-cd71xe9esnl","v0-new-project-0hexy2s8dnt","v0-new-project-81xhfwdrlxy"],
+    "lane_d_deployment_histories_terminal": true,
+    "historical_deployment_ids_exposed": false,
+    "truth": "Explicit terminal count=0 does not prove the historical projects were empty; it proves only that the accessible Vercel deployment-history surface returned no records."
+  },
+  "remaining_blockers": [
+    {"type":"AUTHENTICATED_EXPORT_TOOL_SURFACE_MISSING","owner_lane":"E","detail":"Current connected Vercel tools do not expose project env listing/decryption or deployment file-tree/content reads. Exact values remain private and unpreserved unless an authorized read surface is supplied."},
+    {"type":"VERCEL_HISTORICAL_RUNTIME_BILLING_RETENTION","owner_lane":"D","detail":"Historical runtime logs for old deployments are blocked by Vercel billing/retention access; this is not evidence of absence."}
+  ],
+  "rules": [
+    "READY/production is not VERIFIED_LIVE without direct runtime proof",
+    "no deep pagination restart after owner-lane terminal proof",
+    "no secret values in public recovery metadata",
+    "no deletion or Vercel mutation during rescue"
+  ]
+}
