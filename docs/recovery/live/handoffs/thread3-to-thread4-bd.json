@@ -1,0 +1,24 @@
+{
+  "fromThread": 3,
+  "toThread": 4,
+  "handoffType": "CANONICAL_RECORDS_READY_FOR_CLASSIFICATION",
+  "sourceLanes": [
+    "B",
+    "D"
+  ],
+  "canonicalManifest": "docs/recovery/live/canonical/thread3-bd-manifest.json",
+  "canonicalFiles": [
+    "docs/recovery/live/canonical/thread3-bd-bucket-5.json",
+    "docs/recovery/live/canonical/thread3-bd-bucket-6.json",
+    "docs/recovery/live/canonical/thread3-bd-bucket-7.json",
+    "docs/recovery/live/canonical/thread3-bd-bucket-8.json",
+    "docs/recovery/live/canonical/thread3-bd-bucket-9.json"
+  ],
+  "canonicalRecordCount": 30,
+  "sourceInputFingerprint": "6846e5baf9dd3da0b8c87fa426a1ab97d65f9fd125623b6e609b630343994c6c",
+  "constraints": [
+    "Do not rewrite source evidence.",
+    "Use REVIEW_REQUIRED when semantic classification is uncertain.",
+    "Do not convert historical READY state into VERIFIED_LIVE."
+  ]
+}

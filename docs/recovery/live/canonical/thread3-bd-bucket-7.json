@@ -1,0 +1,384 @@
+{
+  "contract": "PANTAVION_CANONICAL_SHARDING_V1",
+  "ownerThread": 3,
+  "ownedBucket": 7,
+  "sourceLanes": [
+    "B",
+    "D"
+  ],
+  "inputFingerprint": "6846e5baf9dd3da0b8c87fa426a1ab97d65f9fd125623b6e609b630343994c6c",
+  "recordCount": 9,
+  "records": [
+    {
+      "canonicalRecordId": "vercel-deployment:prj_EAWqpERO72KiDdYv2pXPhKZdPUGe:dpl_AMTM9LwAoGcWEMVcuMbJAQRitHH4",
+      "stableRecordKey": "prj_EAWqpERO72KiDdYv2pXPhKZdPUGe:dpl_AMTM9LwAoGcWEMVcuMbJAQRitHH4",
+      "stableRecordHash": "b619e1917442cd8f49e6211cd92728369ea9905c1ed961cda24e6172186a0c21",
+      "shardBucket": 7,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "reconciliationState": "CONSISTENT",
+      "immutableProvenance": {
+        "sourceLane": "D",
+        "project": "pantaai-v1-nf17",
+        "projectId": "prj_EAWqpERO72KiDdYv2pXPhKZdPUGe",
+        "sourceEvidence": [
+          "docs/recovery/live/shards/lane-d-legacy-b.json"
+        ],
+        "observationCount": 1,
+        "distinctPayloadCount": 1,
+        "observationFingerprints": [
+          "a8cb1da8211042885b6022596b6477446914cb712c7738a5b327d42678f1f790"
+        ],
+        "privacy": "PUBLIC_SAFE",
+        "originalRescueState": "CAPTURED"
+      },
+      "sourceAccounting": {
+        "sourceClassification": "unknown",
+        "countsTowardRecoveredSourceFloor": null,
+        "assertedBySource": false
+      },
+      "deployment": {
+        "deploymentId": "dpl_AMTM9LwAoGcWEMVcuMbJAQRitHH4",
+        "created": "2025-07-07T06:58:59.965Z",
+        "state": "ERROR",
+        "target": "production",
+        "url": null,
+        "gitRef": "main",
+        "gitSha": "cab42ccc04bafb9f7f0261156243b37cb46e97a3",
+        "gitMessage": "Create next.config.js",
+        "gitRepo": "pandaconnect1/pantaai-v1"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_EAWqpERO72KiDdYv2pXPhKZdPUGe:dpl_GZeVMTT7Xvvo5Kwk7PCu8LB4Tg6F",
+      "stableRecordKey": "prj_EAWqpERO72KiDdYv2pXPhKZdPUGe:dpl_GZeVMTT7Xvvo5Kwk7PCu8LB4Tg6F",
+      "stableRecordHash": "96ccdd681a83df71f9a0f02f14428e55b08c81400f256fa6c4bc6b4621c904ca",
+      "shardBucket": 7,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "reconciliationState": "CONSISTENT",
+      "immutableProvenance": {
+        "sourceLane": "D",
+        "project": "pantaai-v1-nf17",
+        "projectId": "prj_EAWqpERO72KiDdYv2pXPhKZdPUGe",
+        "sourceEvidence": [
+          "docs/recovery/live/shards/lane-d-legacy-b.json"
+        ],
+        "observationCount": 1,
+        "distinctPayloadCount": 1,
+        "observationFingerprints": [
+          "64c2f966d6822dfb2abd05b68f87df9eb357ebfcb148bec6a27d857fa7cbb675"
+        ],
+        "privacy": "PUBLIC_SAFE",
+        "originalRescueState": "CAPTURED"
+      },
+      "sourceAccounting": {
+        "sourceClassification": "unknown",
+        "countsTowardRecoveredSourceFloor": null,
+        "assertedBySource": false
+      },
+      "deployment": {
+        "deploymentId": "dpl_GZeVMTT7Xvvo5Kwk7PCu8LB4Tg6F",
+        "created": "2025-07-07T06:33:27.496Z",
+        "state": "ERROR",
+        "target": "production",
+        "url": null,
+        "gitRef": "main",
+        "gitSha": "7854a6cce4e0bb58348c9efa5b910615a0c34552",
+        "gitMessage": "Create next.config.js",
+        "gitRepo": "pandaconnect1/pantaai-v1"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_3hvm2PcwVgpd4Y21XDWMS4UBBZ6A",
+      "stableRecordKey": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_3hvm2PcwVgpd4Y21XDWMS4UBBZ6A",
+      "stableRecordHash": "2482f7afcdb7181b0bca5fe53d2f85de9c309dd7a4ab17358b8fb470a5732719",
+      "shardBucket": 7,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "reconciliationState": "CONSISTENT",
+      "immutableProvenance": {
+        "sourceLane": "B",
+        "project": "pantavion-planet-vmxx",
+        "projectId": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-b-20260915T1356Z-incremental-dedupe.json"
+        ],
+        "observationCount": 1,
+        "distinctPayloadCount": 1,
+        "observationFingerprints": [
+          "374326bb9b43c5dec9f295a1901a6cabf85a9a309332ef21df2e3ece49c61cfb"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "originalRescueState": null
+      },
+      "sourceAccounting": {
+        "sourceClassification": "RECOVERY_OPERATIONAL",
+        "countsTowardRecoveredSourceFloor": false,
+        "assertedBySource": true
+      },
+      "deployment": {
+        "deploymentId": "dpl_3hvm2PcwVgpd4Y21XDWMS4UBBZ6A",
+        "created": 1789478202824,
+        "state": "ERROR",
+        "target": null,
+        "url": null,
+        "gitRef": "backup/pre-vercel-risk-20260914",
+        "gitSha": "48c3590f58bc7bcb5c4d0074c5740c5ae3db5366",
+        "gitMessage": "recovery: reconcile coordinator status with latest lane checkpoint"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_5eNKaL64GUZpuMjNHkhzcdaHwVXr",
+      "stableRecordKey": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_5eNKaL64GUZpuMjNHkhzcdaHwVXr",
+      "stableRecordHash": "f2c1ba7798c63e41f558d6963c4991a00f4795d4fb6adb690643b7beaf0a2b90",
+      "shardBucket": 7,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "reconciliationState": "CONSISTENT",
+      "immutableProvenance": {
+        "sourceLane": "B",
+        "project": "pantavion-planet-vmxx",
+        "projectId": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-b-20260915T1356Z-incremental-dedupe.json"
+        ],
+        "observationCount": 1,
+        "distinctPayloadCount": 1,
+        "observationFingerprints": [
+          "4741ae8205fed5f660f7c762ec06ba0a54809add92e6747a54cd6be7a56f7c3b"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "originalRescueState": null
+      },
+      "sourceAccounting": {
+        "sourceClassification": "RECOVERY_OPERATIONAL",
+        "countsTowardRecoveredSourceFloor": false,
+        "assertedBySource": true
+      },
+      "deployment": {
+        "deploymentId": "dpl_5eNKaL64GUZpuMjNHkhzcdaHwVXr",
+        "created": 1789478857155,
+        "state": "READY",
+        "target": null,
+        "url": null,
+        "gitRef": "backup/pre-vercel-risk-20260914",
+        "gitSha": "7977df2319744e6ae61e1201202531e8c97eb1fa",
+        "gitMessage": "recovery: refresh founder feed with lane and live-runtime truth"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_7yuc9VtHu3AncS4BZCMjJXeK5MrQ",
+      "stableRecordKey": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_7yuc9VtHu3AncS4BZCMjJXeK5MrQ",
+      "stableRecordHash": "502c3d07feeca9e76f631d2d9d7a3bee56a40852bda0d78f1128a8e0194183c3",
+      "shardBucket": 7,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "reconciliationState": "CONSISTENT",
+      "immutableProvenance": {
+        "sourceLane": "B",
+        "project": "pantavion-planet-vmxx",
+        "projectId": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-b-20260915T1356Z-incremental-dedupe.json"
+        ],
+        "observationCount": 1,
+        "distinctPayloadCount": 1,
+        "observationFingerprints": [
+          "c51633defdecd5899b23aa494428e3be69bc56f0b217205ed261e5a402eb6376"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "originalRescueState": null
+      },
+      "sourceAccounting": {
+        "sourceClassification": "RECOVERY_OPERATIONAL",
+        "countsTowardRecoveredSourceFloor": false,
+        "assertedBySource": true
+      },
+      "deployment": {
+        "deploymentId": "dpl_7yuc9VtHu3AncS4BZCMjJXeK5MrQ",
+        "created": 1789480307160,
+        "state": "READY",
+        "target": null,
+        "url": null,
+        "gitRef": "backup/pre-vercel-risk-20260914",
+        "gitSha": "309b77cab69e6aedb81f90f4e84279086b449d3c",
+        "gitMessage": "recovery: audit lane A payload-backed canonicalization"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_ELNjgnwQsyUubyzYq4JpHyF9nkyg",
+      "stableRecordKey": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_ELNjgnwQsyUubyzYq4JpHyF9nkyg",
+      "stableRecordHash": "3c412bbc72b4cd4d2a987d26902fa394e2826d7979e2e6f6030e11e5f5a0efb6",
+      "shardBucket": 7,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "reconciliationState": "CONSISTENT",
+      "immutableProvenance": {
+        "sourceLane": "B",
+        "project": "pantavion-planet-vmxx",
+        "projectId": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-b-20260915T1356Z-incremental-dedupe.json"
+        ],
+        "observationCount": 1,
+        "distinctPayloadCount": 1,
+        "observationFingerprints": [
+          "4163c7d37fadf23d2a1900a01c2e775ed431b73ad709478f74c81c16a41263e7"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "originalRescueState": null
+      },
+      "sourceAccounting": {
+        "sourceClassification": "RECOVERY_OPERATIONAL",
+        "countsTowardRecoveredSourceFloor": false,
+        "assertedBySource": true
+      },
+      "deployment": {
+        "deploymentId": "dpl_ELNjgnwQsyUubyzYq4JpHyF9nkyg",
+        "created": 1789478569217,
+        "state": "READY",
+        "target": null,
+        "url": null,
+        "gitRef": "backup/pre-vercel-risk-20260914",
+        "gitSha": "70207dceefcb29e0d719c8e3b7f2397aec8e891d",
+        "gitMessage": "recovery: checkpoint lane C pantavion-one-clean terminal deployments"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_H7LJaBefjxv6TfdnrvBkdJc8dYEH",
+      "stableRecordKey": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_H7LJaBefjxv6TfdnrvBkdJc8dYEH",
+      "stableRecordHash": "8cdda5482e6bce55bac5c1812c4d16be9551e3b33aa50f756d6395a59acb38ad",
+      "shardBucket": 7,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "reconciliationState": "CONSISTENT",
+      "immutableProvenance": {
+        "sourceLane": "B",
+        "project": "pantavion-planet-vmxx",
+        "projectId": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-b-20260915T1356Z-incremental-dedupe.json"
+        ],
+        "observationCount": 1,
+        "distinctPayloadCount": 1,
+        "observationFingerprints": [
+          "efddedf2e37ad60cc4865a67ab426ab4ead206036271656dfabe4e67979f874a"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "originalRescueState": null
+      },
+      "sourceAccounting": {
+        "sourceClassification": "RECOVERY_OPERATIONAL",
+        "countsTowardRecoveredSourceFloor": false,
+        "assertedBySource": true
+      },
+      "deployment": {
+        "deploymentId": "dpl_H7LJaBefjxv6TfdnrvBkdJc8dYEH",
+        "created": 1789478935111,
+        "state": "READY",
+        "target": null,
+        "url": null,
+        "gitRef": "backup/pre-vercel-risk-20260914",
+        "gitSha": "555b3a66f1eb636a636eb8de272a33caca78e369",
+        "gitMessage": "rescue: mark canonical Lane A terminal after zero-page proof"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_HNpiyniN12RfZQ7pNF8BpTkKwYfp",
+      "stableRecordKey": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_HNpiyniN12RfZQ7pNF8BpTkKwYfp",
+      "stableRecordHash": "1007905a87b0dc09331c380c5507a85cbacad44dc86998ede22a10c57ff2ea4c",
+      "shardBucket": 7,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "reconciliationState": "CONSISTENT",
+      "immutableProvenance": {
+        "sourceLane": "B",
+        "project": "pantavion-planet-vmxx",
+        "projectId": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-b-20260915T1356Z-incremental-dedupe.json"
+        ],
+        "observationCount": 1,
+        "distinctPayloadCount": 1,
+        "observationFingerprints": [
+          "ce2a4fe16dd2d7e691fdd51929ae0c74a331a5109334dcaed49e0d42a2e4dbbd"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "originalRescueState": null
+      },
+      "sourceAccounting": {
+        "sourceClassification": "RECOVERY_OPERATIONAL",
+        "countsTowardRecoveredSourceFloor": false,
+        "assertedBySource": true
+      },
+      "deployment": {
+        "deploymentId": "dpl_HNpiyniN12RfZQ7pNF8BpTkKwYfp",
+        "created": 1789478411016,
+        "state": "READY",
+        "target": null,
+        "url": null,
+        "gitRef": "backup/pre-vercel-risk-20260914",
+        "gitSha": "376828fb0e011dc9d413e9bf0cc55f55ee155801",
+        "gitMessage": "recovery: exclude recovery docs from TypeScript build scope"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_HRJ72VJSRCMhrXw6S5VYzwdbFJKA",
+      "stableRecordKey": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU:dpl_HRJ72VJSRCMhrXw6S5VYzwdbFJKA",
+      "stableRecordHash": "00b5b5106d7d20494182aeee707d59cbca11abd3ad0956236d48b6cda87a2048",
+      "shardBucket": 7,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "reconciliationState": "CONSISTENT",
+      "immutableProvenance": {
+        "sourceLane": "B",
+        "project": "pantavion-planet-vmxx",
+        "projectId": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-b-20260915T1356Z-incremental-dedupe.json"
+        ],
+        "observationCount": 1,
+        "distinctPayloadCount": 1,
+        "observationFingerprints": [
+          "b3aadb8b6ce1daa6bc14c743989d8c3753a5aba3f2d2e605e4d63f8f8df7a629"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "originalRescueState": null
+      },
+      "sourceAccounting": {
+        "sourceClassification": "RECOVERY_OPERATIONAL",
+        "countsTowardRecoveredSourceFloor": false,
+        "assertedBySource": true
+      },
+      "deployment": {
+        "deploymentId": "dpl_HRJ72VJSRCMhrXw6S5VYzwdbFJKA",
+        "created": 1789478554959,
+        "state": "READY",
+        "target": null,
+        "url": null,
+        "gitRef": "backup/pre-vercel-risk-20260914",
+        "gitSha": "8ed803b1374cf07ba1faf94889dd92bac48a9f14",
+        "gitMessage": "recovery: checkpoint lane C pantavion-one-clean first 40 deployments"
+      }
+    }
+  ]
+}

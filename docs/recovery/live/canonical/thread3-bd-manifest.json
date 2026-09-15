@@ -1,0 +1,57 @@
+{
+  "contract": "PANTAVION_CANONICAL_SHARDING_V1",
+  "ownerThread": 3,
+  "scope": "LANES_B_D_BUCKETS_5_9",
+  "sourceInputFingerprint": "6846e5baf9dd3da0b8c87fa426a1ab97d65f9fd125623b6e609b630343994c6c",
+  "inputs": [
+    {
+      "path": "docs/recovery/live/batches/lane-b-20260915T1356Z-incremental-dedupe.json",
+      "sha256": "df177f2b26c3768a301aec2732dc8675422cda1cf16acabbbcd5c949337b9722",
+      "observedRows": 48,
+      "uniqueDeclared": 48
+    },
+    {
+      "path": "docs/recovery/live/shards/lane-d-legacy-b.json",
+      "sha256": "9f010aa8d5d06835efbe8770768562a731f5b99ba9823e8b82f517f30abdba48",
+      "observedRows": 12,
+      "uniqueDeclared": 12
+    }
+  ],
+  "sourceObservedRows": 60,
+  "sourceUniqueStableKeyCount": 60,
+  "duplicateObservationCount": 0,
+  "conflictingObservationCount": 0,
+  "thread3CanonicalRecordCount": 30,
+  "thread3LaneCounts": {
+    "B": 23,
+    "D": 7
+  },
+  "bucketCounts": {
+    "5": 6,
+    "6": 5,
+    "7": 9,
+    "8": 7,
+    "9": 3
+  },
+  "thread3RecoveredSourceFloorContribution": 1,
+  "canonicalFiles": [
+    "docs/recovery/live/canonical/thread3-bd-bucket-5.json",
+    "docs/recovery/live/canonical/thread3-bd-bucket-6.json",
+    "docs/recovery/live/canonical/thread3-bd-bucket-7.json",
+    "docs/recovery/live/canonical/thread3-bd-bucket-8.json",
+    "docs/recovery/live/canonical/thread3-bd-bucket-9.json"
+  ],
+  "rules": [
+    "Lane B RECOVERY_OPERATIONAL deployments are preserved as provenance but do not increase recovered-source floor.",
+    "Lane D recovered-source-floor contribution is not asserted where source evidence does not explicitly define it.",
+    "Only buckets 5-9 are owned by Thread 3.",
+    "Source evidence is never modified.",
+    "Distinct observations of one stable key are merged; conflicting payloads become REVIEW_REQUIRED rather than duplicate canonical identities.",
+    "No semantic module classification or live-runtime verification is asserted here."
+  ],
+  "downstream": {
+    "classificationOwner": "THREAD_4",
+    "auditOwner": "THREAD_7",
+    "durabilityOwner": "THREAD_8"
+  }
+}
