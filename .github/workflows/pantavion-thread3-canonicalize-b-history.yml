@@ -59,5 +59,18 @@ jobs:
             exit 0
           fi
           git commit -m "recovery: canonicalize Thread 3 Lane B history buckets 5-9"
-          git pull --rebase origin "$BRANCH"
-          git push origin "HEAD:$BRANCH"
+          pushed=0
+          for attempt in 1 2 3 4 5 6 7 8; do
+            echo "Race-safe push attempt $attempt"
+            git fetch origin "$BRANCH"
+            git rebase "origin/$BRANCH"
+            if git push origin "HEAD:$BRANCH"; then
+              pushed=1
+              break
+            fi
+            sleep 1
+          done
+          if [ "$pushed" -ne 1 ]; then
+            echo "Failed to publish durable canonical artifacts after bounded retries" >&2
+            exit 1
+          fi
