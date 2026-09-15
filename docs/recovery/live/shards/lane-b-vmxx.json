@@ -1,0 +1,17 @@
+{
+  "capturedAt": "2026-09-15T13:16:00Z",
+  "lane": "B",
+  "status": "TERMINAL_VERIFIED",
+  "project": "pantavion-planet-vmxx",
+  "projectId": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+  "privacy": "PUBLIC_SAFE",
+  "secretValuesIncluded": false,
+  "historyTerminal": {"until":1786177840266,"count":0,"verifiedBy":"direct Vercel list_deployments query","priorDurableEvidence":"docs/recovery/live/batches/vercel-continuation-2980-to-3000-mirror-terminal.json"},
+  "projectMetadata": {"framework":"nextjs","createdAt":1786177837877,"updatedAtObserved":1789477538637,"nodeVersion":"24.x","live":false,"domains":["pantavion-planet-vmxx.vercel.app","pantavion-planet-vmxx-pandaconnect.vercel.app","pantavion-planet-vmxx-git-main-pandaconnect.vercel.app"]},
+  "postTerminalHead": {"observedPageCount":20,"nextCursor":1789477698891,"checkpoint":"docs/recovery/live/batches/lane-b-20260915T1316Z-vmxx-head.json","classification":"mirror_candidate","note":"Recovery-branch GitHub commits are generating additional VMXX deployments after the historical terminal scan. The new head is captured separately; no deep-history restart was performed."},
+  "buildEvidence": {"deploymentId":"dpl_8JAWjFMPWqGjRUTcze35JVdiaKGZ","state":"ERROR","gitSha":"80685822e91293ebf34e73849dbb22d7e24585ad","gitRef":"backup/pre-vercel-risk-20260914","gitMessage":"recovery: claim lane B for vmxx deep rescue","errorClass":"TypeScript compile error","errorPath":"docs/recovery/legacy-source-snapshots/pantavion-one/app/layout.tsx","errorSummary":"Binding element 'children' implicitly has an 'any' type.","command":"npm run build","liveTruth":"HISTORICAL_ONLY","rescueState":"CHECKPOINTED"},
+  "otherEvidence": {"runtimeErrorsLast7d":0,"unresolvedToolbarThreads":0,"productionAgentRunsLast30d":0},
+  "hardBlockers": ["VMXX recovery-branch deployments currently fail production build type-checking because legacy source snapshots are inside the Next.js/TypeScript build scope.","Lane B write discipline permits only this shard and lane-B checkpoints, so source-code remediation belongs outside Lane B."],
+  "rulesObserved": ["zero deletions","zero Vercel mutations","no secret values","no deep pagination restart after terminal proof","READY/production not treated as VERIFIED_LIVE"],
+  "destination": "GitHub public recovery metadata"
+}
