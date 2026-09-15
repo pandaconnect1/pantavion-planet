@@ -1,0 +1,63 @@
+name: Pantavion Thread 3 Canonicalize Lane B History Buckets 5-9
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "scripts/recovery/thread3-canonicalize-b-history.mjs"
+      - ".github/workflows/pantavion-thread3-canonicalize-b-history.yml"
+      - "docs/recovery/live/canonical/CANONICAL_SHARDING_CONTRACT_V1.json"
+      - "docs/recovery/live/batches/lane-b-20260915T1316Z-vmxx-head.json"
+      - "docs/recovery/live/batches/vercel-continuation-*.json"
+      - "docs/recovery/live/canonical/thread3-bd-bucket-*.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pantavion-thread3-canonicalize-b-history-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  canonicalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Canonicalize only Thread 3 Lane B history buckets 5-9
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/recovery/thread3-canonicalize-b-history.mjs | tee /tmp/thread3-canonicalize-b-history-result.json
+      - name: Commit durable Lane B history canonical ledger writes
+        shell: bash
+        env:
+          BRANCH: backup/pre-vercel-risk-20260914
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            docs/recovery/live/canonical/thread3-b-history-bucket-5.json \
+            docs/recovery/live/canonical/thread3-b-history-bucket-6.json \
+            docs/recovery/live/canonical/thread3-b-history-bucket-7.json \
+            docs/recovery/live/canonical/thread3-b-history-bucket-8.json \
+            docs/recovery/live/canonical/thread3-b-history-bucket-9.json \
+            docs/recovery/live/canonical/thread3-b-history-manifest.json \
+            docs/recovery/live/shards/thread3-canonical-b-history.json \
+            docs/recovery/live/handoffs/thread3-to-thread4-b-history.json
+          if git diff --cached --quiet; then
+            echo "Idempotent no-op: Lane B history canonical artifacts already match source evidence."
+            exit 0
+          fi
+          git commit -m "recovery: canonicalize Thread 3 Lane B history buckets 5-9"
+          git pull --rebase origin "$BRANCH"
+          git push origin "HEAD:$BRANCH"
