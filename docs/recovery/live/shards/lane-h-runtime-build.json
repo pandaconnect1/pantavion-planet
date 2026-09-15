@@ -1,9 +1,9 @@
 {
-  "schema": "pantavion_vercel_lane_h_runtime_build_v1",
+  "schema": "pantavion_vercel_lane_h_runtime_build_v2",
   "lane": "H",
-  "updated_at_utc": "2026-09-15T14:03:30Z",
+  "updated_at_utc": "2026-09-15T15:13:00Z",
   "status": "TERMINAL_VERIFIED",
-  "scope": "build/runtime/error evidence classification from already preserved rescue evidence plus unique non-pagination Vercel surfaces",
+  "scope": "build/runtime/error evidence classification from preserved rescue evidence plus direct non-pagination Vercel verification",
   "hard_rules": {
     "zero_deletions": true,
     "zero_vercel_mutations": true,
@@ -13,29 +13,65 @@
   "canonical_current": {
     "project": "pantavion-planet",
     "project_id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
-    "production_deployment_id": "dpl_FGfYCSEAhtQwVhGiW57nCyrFi6et",
-    "production_git_sha": "7d7d429f9dc669a9479c63987aafda0464b703d5",
+    "production_deployment_id": "dpl_78oz9uKZpyJxy97QGWdZbkTVXA5B",
+    "production_git_sha": "585a0a79372ff7fea5ee75d96cfec2445a6191ec",
     "production_git_ref": "main",
+    "production_git_message": "docs: preserve live atomic recovery partition RPC SQL",
     "deployment_state": "READY",
     "target": "production",
-    "build_classification": "BUILD_SUCCEEDED",
-    "build_evidence": "Vercel build completed in /vercel/output, outputs deployed and deployment completed",
-    "runtime_classification": "RUNTIME_FAILURE_CONFIRMED",
-    "runtime_error_group": "pantavion_secure_scheduled_worker_failed",
-    "runtime_error_count_7d": 2012,
-    "runtime_error_users_7d": 1984,
-    "runtime_route": "/api/pantavion/intelligence/cron",
-    "runtime_first_seen": "2026-08-24T14:00:27Z",
-    "runtime_last_seen": "2026-09-15T13:40:38Z",
-    "runtime_failure_summary": "Scheduled worker cannot initialize Pantavion Supabase admin runtime because the required private admin credential is not configured or not readable in production.",
-    "privacy": "PUBLIC_SAFE_NAMES_ONLY",
-    "live_truth": "RUNTIME_FAILURE_CONFIRMED"
+    "founder_recovery_boundary": {
+      "route": "/admin/pantavion/recovery",
+      "http_status": 200,
+      "rendered_boundary": "Founder Access Required",
+      "classification": "VERIFIED_LIVE_ACCESS_BOUNDARY_ONLY",
+      "authenticated_founder_feed_verified": false
+    },
+    "runtime_classification": "SECRETLESS_SCHEDULER_HEALTHY_EXECUTION_VERIFIED",
+    "runtime_revision": "585a0a79372ff7fea5ee75d96cfec2445a6191ec",
+    "runtime_transport": "vercel_oidc_to_supabase_edge",
+    "runtime_secretless": true,
+    "oidc_trust": {
+      "route": "/api/pantavion/intelligence/oidc-supabase-trust",
+      "http_status": 200,
+      "status": "verified",
+      "trust": "vercel_oidc_verified_by_supabase",
+      "privileged_data_access": false
+    },
+    "scheduler_health": {
+      "route": "/api/pantavion/intelligence/scheduler-health",
+      "http_status": 200,
+      "status": "healthy",
+      "schedule": "*/5 * * * *",
+      "execution_verified": true,
+      "worker_total_runs": 11,
+      "worker_last_status": "succeeded",
+      "worker_last_run_key": "pantavion-intelligence-5m:2026-09-15T15:10",
+      "worker_last_finished_at": "2026-09-15T15:10:42.090354+00:00"
+    },
+    "recovery_partitions": {
+      "task_name": "pantavion:recovery_partition:v1",
+      "total": 165,
+      "active": 165,
+      "succeeded": 0,
+      "failed": 0,
+      "other": 0,
+      "completion_verified": false
+    },
+    "current_cron_error_query": {
+      "window": "30m",
+      "result": "NO_RUNTIME_ERRORS_FOUND"
+    },
+    "live_truth": "SCHEDULER_EXECUTION_VERIFIED_RECOVERY_PARTITIONS_ACTIVE_NOT_COMPLETE"
   },
-  "build_remediation": {
-    "canonical_preview_deployment_id": "dpl_8s1W8tDmQ13m4mY6RumqsunxW8eK",
-    "classification": "BUILD_SUCCEEDED",
-    "evidence": "Errors-only build-log query returned Build Completed in /vercel/output [53s]",
-    "live_truth": "BUILD_VERIFIED_NOT_RUNTIME_VERIFIED"
+  "historical_runtime_failure": {
+    "preserved": true,
+    "error_group": "pantavion_secure_scheduled_worker_failed",
+    "route": "/api/pantavion/intelligence/cron",
+    "first_seen": "2026-08-24T14:00:27Z",
+    "last_seen": "2026-09-15T13:40:38Z",
+    "rolling_7d_observed_count_at_1510Z": 1998,
+    "historical_summary": "Earlier production revisions failed because the scheduled worker could not initialize the Supabase admin runtime without a private admin credential. Current production now uses verified secretless Vercel OIDC transport for the bounded scheduler path.",
+    "truth": "HISTORICAL_FAILURE_SUPERSEDED_FOR_CURRENT_SCHEDULER_PATH"
   },
   "legacy_build_evidence": [
     {
@@ -44,7 +80,6 @@
       "deployment_id": "dpl_EwYtxUjRFHh8rqmsTCeCFRs8gvgm",
       "classification": "BUILD_FAILURE_CONFIRMED",
       "failure": "Migration failed because POSTGRES_URL is not defined; pnpm run build exited with code 1",
-      "source": "direct Vercel build logs",
       "live_truth": "HISTORICAL_ONLY"
     },
     {
@@ -52,7 +87,6 @@
       "project_id": "prj_PZD1t2hOc6SaiY5pKithCHILboHF",
       "classification": "HISTORICAL_BUILD_FAILURE_PATTERN_CAPTURED",
       "failure": "app/compass/page.js cannot resolve ../../components/ui/card",
-      "source": "lane-c preserved build evidence",
       "live_truth": "HISTORICAL_ONLY"
     },
     {
@@ -60,7 +94,6 @@
       "project_id": "prj_EAWqpERO72KiDdYv2pXPhKZdPUGe",
       "classification": "HISTORICAL_BUILD_FAILURE_CAPTURED",
       "failure": "No Output Directory named public found after build completed",
-      "source": "lane-d preserved build evidence",
       "live_truth": "HISTORICAL_ONLY"
     },
     {
@@ -68,29 +101,28 @@
       "project_id": "prj_7grzRBApMytGyui5TzP2JTzxaR6k",
       "classification": "HISTORICAL_BUILD_FAILURE_CAPTURED",
       "failure": "No Output Directory named public found after build completed",
-      "source": "lane-d preserved build evidence",
       "live_truth": "HISTORICAL_ONLY",
       "uniqueness": "mirror_candidate"
     }
   ],
-  "runtime_surface_classification": {
-    "canonical_current_error_cluster": "CONFIRMED",
-    "lane_c_projects_last_7d": "NO_ERRORS_FOUND_ON_ACCESSIBLE_CURRENT_SURFACE",
-    "lane_d_projects_last_7d": "NO_ERRORS_FOUND_ON_ACCESSIBLE_CURRENT_SURFACE",
-    "interpretation": "No current error cluster is not proof that historical runtime logs never existed."
-  },
   "explicit_gaps": [
+    {
+      "gap": "RECOVERY_PARTITION_COMPLETION",
+      "state": "ACTIVE_NOT_COMPLETE",
+      "evidence": "165 recovery partitions are materialized and active; 0 succeeded and 0 failed at direct live verification.",
+      "required_follow_up": "Track partitions to terminal outcomes and reconcile their outputs into canonical ingestion/founder feed/audit."
+    },
     {
       "gap": "HISTORICAL_RUNTIME_LOG_EXPORT",
       "state": "BLOCKED_VERCEL_HISTORICAL_RUNTIME_BILLING_LIMIT",
-      "evidence": "Lane D historical log query returned Vercel Logs API 400 ExceedsBillingLimitError.",
+      "evidence": "Lane D historical log retrieval remains limited by Vercel billing/retention.",
       "required_follow_up": "Retry authenticated historical runtime-log export after billing/access/retention allows it, or use a retained private log archive if available."
     },
     {
-      "gap": "PRIVATE_ADMIN_RUNTIME_CREDENTIAL",
-      "state": "BLOCKED_SECRET_CONFIGURATION",
-      "evidence": "Current production scheduled worker repeatedly reports that its Supabase admin credential is unavailable.",
-      "required_follow_up": "Restore or reissue the required credential only through the private production secret store, then runtime-test the cron route; never write the value to GitHub or chat."
+      "gap": "SECRET_INVENTORY_EXPORT",
+      "state": "BLOCKED_AUTH_EXPORT",
+      "evidence": "Current connected surface does not expose complete authenticated environment secret inventory/decryption.",
+      "required_follow_up": "Keep exact values private and use an authorized secret-management/export surface if continuity requires it."
     },
     {
       "gap": "DEPLOYMENT_FILE_TREE_EXPORT",
@@ -100,15 +132,14 @@
     }
   ],
   "source_evidence": [
-    "docs/recovery/live/VERCEL_RESCUE_STATUS.json",
+    "docs/recovery/live/shards/lane-e-secrets-artifacts.json v5",
+    "direct Vercel get_deployment www.pantavion.com",
+    "direct Vercel fetch /admin/pantavion/recovery",
+    "direct Vercel fetch /api/pantavion/intelligence/oidc-supabase-trust",
+    "direct Vercel fetch /api/pantavion/intelligence/scheduler-health",
+    "direct Vercel runtime-error query /api/pantavion/intelligence/cron last 30m",
     "docs/recovery/live/shards/lane-c-legacy-a.json",
-    "docs/recovery/live/shards/lane-d-legacy-b.json",
-    "docs/recovery/live/shards/lane-e-secrets-artifacts.json",
-    "Vercel get_runtime_errors canonical 7d",
-    "Vercel get_deployment dpl_FGfYCSEAhtQwVhGiW57nCyrFi6et",
-    "Vercel build logs dpl_FGfYCSEAhtQwVhGiW57nCyrFi6et",
-    "Vercel build logs dpl_8s1W8tDmQ13m4mY6RumqsunxW8eK",
-    "Vercel build logs dpl_EwYtxUjRFHh8rqmsTCeCFRs8gvgm"
+    "docs/recovery/live/shards/lane-d-legacy-b.json"
   ],
-  "completion_truth": "Lane H exhausted the accessible non-pagination build/runtime/error evidence needed for classification. Current canonical build success and runtime failure are explicitly separated. Historical runtime export, private secret restoration, and complete deployment-file export remain explicit blockers/gaps rather than being claimed preserved or verified live."
+  "completion_truth": "Lane H runtime/build classification is refreshed to current production truth. The protected founder route boundary is live, OIDC trust is verified, and the secretless scheduler path is healthy with executionVerified=true. Recovery execution itself is not complete because all 165 recovery partitions remain active with zero terminal successes/failures at this observation. Historical runtime/build failures and export gaps remain preserved without being misreported as current scheduler failure."
 }
