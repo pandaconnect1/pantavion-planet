@@ -1,0 +1,71 @@
+{
+  "schema": "pantavion_lane_e_dedupe_map_v1",
+  "lane": "E",
+  "captured_at_utc": "2026-09-15T14:10:00Z",
+  "status": "CLASSIFIED",
+  "zero_deletions": true,
+  "rule": "Preserve project-specific Vercel provenance, but count canonical source evidence only once when Git SHA/source identity proves duplication.",
+  "primary_keys": {
+    "vercel_provenance": "project_id:deployment_id",
+    "canonical_source_fingerprint": "git_repo:git_sha:git_ref",
+    "fallback_fingerprint": "project_id:evidence_type:source_surface:git_sha:created_at"
+  },
+  "classifications": [
+    {
+      "group": "canonical_vs_vmxx",
+      "projects": ["pantavion-planet","pantavion-planet-vmxx"],
+      "shared_git_repo": "pandaconnect1/pantavion-planet",
+      "uniqueness": "mirror_candidate",
+      "decision": "Do not sum VMXX and canonical deployment rows as unique source records merely because deployment IDs differ. Preserve both deployment IDs as Vercel provenance, deduplicate canonical source evidence by Git SHA/ref or stronger fingerprint.",
+      "source": "Lane B dedupe policy and shared Git binding"
+    },
+    {
+      "group": "pantaai_v1_pair",
+      "projects": ["pantaai-v1-nf17","pantaai-v1"],
+      "shared_git_repo": "pandaconnect1/pantaai-v1",
+      "matched_git_shas": [
+        "cab42ccc04bafb9f7f0261156243b37cb46e97a3",
+        "af2c83f95d75cb58f8cb388aa7e20f52685e75ca",
+        "7854a6cce4e0bb58348c9efa5b910615a0c34552",
+        "b1b83470c153488264cce7aaf5cb0c252d3fa5c4",
+        "1b514a9c353a6828eecf8ef85f6f5a7cc5d09c6b",
+        "9f6db83b15c9401647e14b98f72401f17c7b2905"
+      ],
+      "matched_source_record_count": 6,
+      "uniqueness": "duplicate_confirmed_at_source_fingerprint_level",
+      "decision": "Retain both Vercel project/deployment IDs for provenance. Count each matched Git SHA/ref source record once in canonical recovery counts.",
+      "source": "Lane D deployment evidence"
+    },
+    {
+      "group": "pantavion_one_clean_pair",
+      "projects": ["pantavion-one-clean-98it","pantavion-one-clean"],
+      "shared_git_repo": "pandaconnect1/pantavion-one-clean",
+      "uniqueness": "mirror_candidate",
+      "decision": "Lane C reports shared Git SHAs, but the available shard does not enumerate a complete one-to-one overlap set. Preserve both histories; deduplicate only records whose source fingerprint is proven equal.",
+      "source": "Lane C"
+    },
+    {
+      "group": "nextjs_ai_chatbot_binding",
+      "projects": ["pantaai","nextjs-ai-chatbot"],
+      "shared_git_repo": "pandaconnect1/nextjs-ai-chatbot",
+      "uniqueness": "not_duplicate_confirmed",
+      "decision": "pantaai has one historical ERROR deployment; nextjs-ai-chatbot reached explicit deployment-history count=0. Shared repo binding alone is insufficient to declare project-level duplication.",
+      "source": "Lanes C and D"
+    },
+    {
+      "group": "no_git_v0_projects",
+      "projects": ["v0-new-project-dr8uqvuxfhx","v0-new-project-cd71xe9esnl","v0-new-project-0hexy2s8dnt","v0-new-project-81xhfwdrlxy"],
+      "uniqueness": "unknown",
+      "decision": "Keep four distinct project-metadata records. Their explicit terminal deployment-history count=0 does not supply source fingerprints and does not prove they were historically empty or duplicates.",
+      "source": "Lane D"
+    }
+  ],
+  "canonical_counting_rule": {
+    "deployment_id": "provenance identity only; not sufficient for unique-source counting across mirrors",
+    "same_git_sha_ref_repo": "count once as canonical source evidence, preserve every project/deployment provenance edge",
+    "recovery_generated_deployments": "classify RECOVERY_OPERATIONAL and exclude from recovered-source-floor inflation",
+    "conflicting_metadata_same_source_fingerprint": "merge observations/provenance; do not create a second canonical source row"
+  },
+  "privacy": "PUBLIC_SAFE",
+  "secret_values_included": false
+}
