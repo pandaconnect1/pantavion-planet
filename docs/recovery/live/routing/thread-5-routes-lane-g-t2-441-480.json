@@ -1,43 +1,57 @@
 {
-  "schema": "pantavion_module_graph_routes_v2",
+  "schema": "pantavion_module_graph_routes_v3",
   "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
   "thread": 5,
   "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
   "routingContract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
   "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json",
   "sourceClassificationSchema": "pantavion_semantic_classification_v1_compact",
+  "sourceRecordTuple": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]",
   "sourceClassificationSha256": "101f1f1704af841342160c1ef6bc64bc6d2f6664a2c7284c589925e787b3c617",
-  "explicitSourceCanonicalLedger": null,
-  "explicitSourceCanonicalLedgerSha256": null,
+  "explicitSourceCanonicalLedger": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+  "explicitSourceCanonicalLedgerSha256": "43735ffb84f34a6241870028cbd32f89df906c2c7a66b1f4634c50ae2f9a5225",
+  "explicitSourceCanonicalLedgerGitBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
   "sourceRecordCount": 19,
   "summary": {
     "routedRecords": 0,
     "reviewRequired": 0,
-    "waitingCanonical": 19,
-    "waitingClassification": 0,
+    "waitingCanonical": 0,
+    "waitingClassification": 19,
     "canonicalConflicts": 0,
     "graphEdgeCount": 0,
     "semanticMirrorsSuppressed": 0,
     "implementationCandidates": 0,
-    "duplicateStableRecordKeys": 0,
-    "duplicateRouteIds": 0
+    "duplicateStableRecordKeysWithinOutput": 0,
+    "duplicateRouteIdsWithinOutput": 0
   },
-  "truthBoundary": "Only routeState=ROUTED has durable module/graph edges. WAITING_* and REVIEW_REQUIRED are not completion; DEPLOYED is not VERIFIED_LIVE.",
+  "truthBoundary": "Only routeState=ROUTED has semantic module/graph edges. REVIEW_REQUIRED has governed_hold only. WAITING_* has zero edges. DEPLOYED is not VERIFIED_LIVE.",
   "bindings": [
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BBJMLmAgRR33LUeBfiV2Kne9Fnem",
+      "stableRecordKeySha256": "438283e3a947b90a944079c3e3c99746f42ec05077c38b63593101c9739bccc1",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BBJMLmAgRR33LUeBfiV2Kne9Fnem",
+        "stableRecordKeySha256": "438283e3a947b90a944079c3e3c99746f42ec05077c38b63593101c9739bccc1",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[0]",
-      "classificationConfidence": "6d97be7d8404ea8d66ad37162a9032a49450aed1",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "438283e3a947b90a944079c3e3c99746f42ec05077c38b63593101c9739bccc1",
-        "gitSha": "dpl_BBJMLmAgRR33LUeBfiV2Kne9Fnem",
+        "deploymentId": "dpl_BBJMLmAgRR33LUeBfiV2Kne9Fnem",
+        "gitSha": "6d97be7d8404ea8d66ad37162a9032a49450aed1",
+        "laneARecordOrdinal": 446,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -51,25 +65,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AuczoShWmhJvEmuxrdSHgspv8B52",
+      "stableRecordKeySha256": "5ec8b1023df4f69dc2c432f37e03cec3f47d6558bcfec183078e135c137803bb",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AuczoShWmhJvEmuxrdSHgspv8B52",
+        "stableRecordKeySha256": "5ec8b1023df4f69dc2c432f37e03cec3f47d6558bcfec183078e135c137803bb",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[1]",
-      "classificationConfidence": "95e99922d1ad02893da974407db6d17b52f150a9",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "5ec8b1023df4f69dc2c432f37e03cec3f47d6558bcfec183078e135c137803bb",
-        "gitSha": "dpl_AuczoShWmhJvEmuxrdSHgspv8B52",
+        "deploymentId": "dpl_AuczoShWmhJvEmuxrdSHgspv8B52",
+        "gitSha": "95e99922d1ad02893da974407db6d17b52f150a9",
+        "laneARecordOrdinal": 447,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -83,25 +109,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6iApfdkrxR9pvGMZSWBPDHRz5cgc",
+      "stableRecordKeySha256": "8e5179db835abe3bd6b79c5dee5ceb9fed02491ab0b44858619bf7c29ecd375e",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6iApfdkrxR9pvGMZSWBPDHRz5cgc",
+        "stableRecordKeySha256": "8e5179db835abe3bd6b79c5dee5ceb9fed02491ab0b44858619bf7c29ecd375e",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[2]",
-      "classificationConfidence": "03d80063b4e532e7fc2d6efa7c19a441814678df",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "8e5179db835abe3bd6b79c5dee5ceb9fed02491ab0b44858619bf7c29ecd375e",
-        "gitSha": "dpl_6iApfdkrxR9pvGMZSWBPDHRz5cgc",
+        "deploymentId": "dpl_6iApfdkrxR9pvGMZSWBPDHRz5cgc",
+        "gitSha": "03d80063b4e532e7fc2d6efa7c19a441814678df",
+        "laneARecordOrdinal": 448,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -115,25 +153,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HbYqTiqonVXiAsUEvn9q3aGYcbGx",
+      "stableRecordKeySha256": "28e5c78efeea9ae703e7791a47a08d0e78535352038712a57382d546cde2dfbe",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HbYqTiqonVXiAsUEvn9q3aGYcbGx",
+        "stableRecordKeySha256": "28e5c78efeea9ae703e7791a47a08d0e78535352038712a57382d546cde2dfbe",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[3]",
-      "classificationConfidence": "f985ca0b2fdbefc2fa5e8020a822b7b201f717a0",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "28e5c78efeea9ae703e7791a47a08d0e78535352038712a57382d546cde2dfbe",
-        "gitSha": "dpl_HbYqTiqonVXiAsUEvn9q3aGYcbGx",
+        "deploymentId": "dpl_HbYqTiqonVXiAsUEvn9q3aGYcbGx",
+        "gitSha": "f985ca0b2fdbefc2fa5e8020a822b7b201f717a0",
+        "laneARecordOrdinal": 452,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -147,25 +197,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_s3N1xn93SqT2h7GEYJoL5aKmXCuq",
+      "stableRecordKeySha256": "d0fc991b99abdd4aa11f659356013ea1551529a9f31504639058e0977abf13a3",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_s3N1xn93SqT2h7GEYJoL5aKmXCuq",
+        "stableRecordKeySha256": "d0fc991b99abdd4aa11f659356013ea1551529a9f31504639058e0977abf13a3",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[4]",
-      "classificationConfidence": "c124a66abe763a93cad42d011d7964b3794c0068",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "d0fc991b99abdd4aa11f659356013ea1551529a9f31504639058e0977abf13a3",
-        "gitSha": "dpl_s3N1xn93SqT2h7GEYJoL5aKmXCuq",
+        "deploymentId": "dpl_s3N1xn93SqT2h7GEYJoL5aKmXCuq",
+        "gitSha": "c124a66abe763a93cad42d011d7964b3794c0068",
+        "laneARecordOrdinal": 453,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -179,25 +241,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CxZ7UuYxmvpthL8mBjF5junD8Hax",
+      "stableRecordKeySha256": "492d9b391d6365e2db0eb0d3b4d0b581f683dc6f97d3eae14c1c701df3461f6e",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CxZ7UuYxmvpthL8mBjF5junD8Hax",
+        "stableRecordKeySha256": "492d9b391d6365e2db0eb0d3b4d0b581f683dc6f97d3eae14c1c701df3461f6e",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[5]",
-      "classificationConfidence": "c127a8cddafb135f25e92df9c53b2f1c7f4a25ce",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "492d9b391d6365e2db0eb0d3b4d0b581f683dc6f97d3eae14c1c701df3461f6e",
-        "gitSha": "dpl_CxZ7UuYxmvpthL8mBjF5junD8Hax",
+        "deploymentId": "dpl_CxZ7UuYxmvpthL8mBjF5junD8Hax",
+        "gitSha": "c127a8cddafb135f25e92df9c53b2f1c7f4a25ce",
+        "laneARecordOrdinal": 454,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -211,25 +285,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_215uiQdWtRojhRau4x36Fpqx6C8d",
+      "stableRecordKeySha256": "1bcc4cea3ec8f84a95f4a41184704133b2918af7462faa5f16a9d39cb17ad5a5",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_215uiQdWtRojhRau4x36Fpqx6C8d",
+        "stableRecordKeySha256": "1bcc4cea3ec8f84a95f4a41184704133b2918af7462faa5f16a9d39cb17ad5a5",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[6]",
-      "classificationConfidence": "c4bf0f3510fec9c27098c89c7496bb071559e2b3",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "1bcc4cea3ec8f84a95f4a41184704133b2918af7462faa5f16a9d39cb17ad5a5",
-        "gitSha": "dpl_215uiQdWtRojhRau4x36Fpqx6C8d",
+        "deploymentId": "dpl_215uiQdWtRojhRau4x36Fpqx6C8d",
+        "gitSha": "c4bf0f3510fec9c27098c89c7496bb071559e2b3",
+        "laneARecordOrdinal": 455,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -243,25 +329,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GtQHKqd5p5JkLqtsonC3KZnD1yXz",
+      "stableRecordKeySha256": "7acfa18d7c3eba86420544c09fc49373aa86997c0948b2d18954c0fa16dd3561",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GtQHKqd5p5JkLqtsonC3KZnD1yXz",
+        "stableRecordKeySha256": "7acfa18d7c3eba86420544c09fc49373aa86997c0948b2d18954c0fa16dd3561",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[7]",
-      "classificationConfidence": "e8be53b3388fb0ca44e3d5a427c2b20b759debc6",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "7acfa18d7c3eba86420544c09fc49373aa86997c0948b2d18954c0fa16dd3561",
-        "gitSha": "dpl_GtQHKqd5p5JkLqtsonC3KZnD1yXz",
+        "deploymentId": "dpl_GtQHKqd5p5JkLqtsonC3KZnD1yXz",
+        "gitSha": "e8be53b3388fb0ca44e3d5a427c2b20b759debc6",
+        "laneARecordOrdinal": 456,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -275,25 +373,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_G8N8DihtaUb66FUpEFAT5J9q1bTz",
+      "stableRecordKeySha256": "bb9780d880c7f3508d5a78f6b485081664ff9effd632607c27ab90afb66d163d",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_G8N8DihtaUb66FUpEFAT5J9q1bTz",
+        "stableRecordKeySha256": "bb9780d880c7f3508d5a78f6b485081664ff9effd632607c27ab90afb66d163d",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[8]",
-      "classificationConfidence": "de82c68cb17640f99818a472e26cb5edc101dd65",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "bb9780d880c7f3508d5a78f6b485081664ff9effd632607c27ab90afb66d163d",
-        "gitSha": "dpl_G8N8DihtaUb66FUpEFAT5J9q1bTz",
+        "deploymentId": "dpl_G8N8DihtaUb66FUpEFAT5J9q1bTz",
+        "gitSha": "de82c68cb17640f99818a472e26cb5edc101dd65",
+        "laneARecordOrdinal": 457,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -307,25 +417,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BKfthwtomB43pNA9yrGceykwcYYT",
+      "stableRecordKeySha256": "53e7fd389805890ac63cb99fbd5a3425a2191d186a30b83d50f686423fa18548",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BKfthwtomB43pNA9yrGceykwcYYT",
+        "stableRecordKeySha256": "53e7fd389805890ac63cb99fbd5a3425a2191d186a30b83d50f686423fa18548",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[9]",
-      "classificationConfidence": "01c59017206f6b3e083a8ea8c50e68894d083873",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "53e7fd389805890ac63cb99fbd5a3425a2191d186a30b83d50f686423fa18548",
-        "gitSha": "dpl_BKfthwtomB43pNA9yrGceykwcYYT",
+        "deploymentId": "dpl_BKfthwtomB43pNA9yrGceykwcYYT",
+        "gitSha": "01c59017206f6b3e083a8ea8c50e68894d083873",
+        "laneARecordOrdinal": 460,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -339,25 +461,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BcUhwYzH6MVFivcS2GpuzNFWfWVS",
+      "stableRecordKeySha256": "f80f6fd35df160168e531c8216b4aa07d7d1b6ea6b50d7747eed4e2cbc9f1128",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BcUhwYzH6MVFivcS2GpuzNFWfWVS",
+        "stableRecordKeySha256": "f80f6fd35df160168e531c8216b4aa07d7d1b6ea6b50d7747eed4e2cbc9f1128",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[10]",
-      "classificationConfidence": "666f10a39e7dadfc8f9b6fdfd94d8f783795d682",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "f80f6fd35df160168e531c8216b4aa07d7d1b6ea6b50d7747eed4e2cbc9f1128",
-        "gitSha": "dpl_BcUhwYzH6MVFivcS2GpuzNFWfWVS",
+        "deploymentId": "dpl_BcUhwYzH6MVFivcS2GpuzNFWfWVS",
+        "gitSha": "666f10a39e7dadfc8f9b6fdfd94d8f783795d682",
+        "laneARecordOrdinal": 461,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -371,25 +505,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6C6gMNVFZcCaiUxJ1QdGadBMcMRx",
+      "stableRecordKeySha256": "3ba614824dcea66bfd3a0ac2fa9015437e6351353bb2d85b5246c7f6eb0f6ce2",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6C6gMNVFZcCaiUxJ1QdGadBMcMRx",
+        "stableRecordKeySha256": "3ba614824dcea66bfd3a0ac2fa9015437e6351353bb2d85b5246c7f6eb0f6ce2",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[11]",
-      "classificationConfidence": "6c99b5ff87fdf755f70a9bff4e279c9c35e87c94",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "3ba614824dcea66bfd3a0ac2fa9015437e6351353bb2d85b5246c7f6eb0f6ce2",
-        "gitSha": "dpl_6C6gMNVFZcCaiUxJ1QdGadBMcMRx",
+        "deploymentId": "dpl_6C6gMNVFZcCaiUxJ1QdGadBMcMRx",
+        "gitSha": "6c99b5ff87fdf755f70a9bff4e279c9c35e87c94",
+        "laneARecordOrdinal": 462,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -403,25 +549,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5LVPm4FDLdkHK3FS6473FSCfGV4W",
+      "stableRecordKeySha256": "b39204e05f20857384359ce33d038a3fb33474c7efe697c73478e8ed758bea19",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5LVPm4FDLdkHK3FS6473FSCfGV4W",
+        "stableRecordKeySha256": "b39204e05f20857384359ce33d038a3fb33474c7efe697c73478e8ed758bea19",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[12]",
-      "classificationConfidence": "ecc387877f8e5ba977b951ec061b9b3dd2d679a5",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "b39204e05f20857384359ce33d038a3fb33474c7efe697c73478e8ed758bea19",
-        "gitSha": "dpl_5LVPm4FDLdkHK3FS6473FSCfGV4W",
+        "deploymentId": "dpl_5LVPm4FDLdkHK3FS6473FSCfGV4W",
+        "gitSha": "ecc387877f8e5ba977b951ec061b9b3dd2d679a5",
+        "laneARecordOrdinal": 466,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -435,25 +593,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4BUREBwXSW9WkgiCjvsJSfa7uGX6",
+      "stableRecordKeySha256": "749b8346c80bbb0dee3aade6dcb05c2562bdeb75978e60b97bee1b917d06a98a",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4BUREBwXSW9WkgiCjvsJSfa7uGX6",
+        "stableRecordKeySha256": "749b8346c80bbb0dee3aade6dcb05c2562bdeb75978e60b97bee1b917d06a98a",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[13]",
-      "classificationConfidence": "75ed0f42f067e16ecdca258fa8feedb2c239d494",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "749b8346c80bbb0dee3aade6dcb05c2562bdeb75978e60b97bee1b917d06a98a",
-        "gitSha": "dpl_4BUREBwXSW9WkgiCjvsJSfa7uGX6",
+        "deploymentId": "dpl_4BUREBwXSW9WkgiCjvsJSfa7uGX6",
+        "gitSha": "75ed0f42f067e16ecdca258fa8feedb2c239d494",
+        "laneARecordOrdinal": 468,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -467,25 +637,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Di2n6KCSwtpmjEMWqH9j5X7yZPjZ",
+      "stableRecordKeySha256": "50f1c431f7f66f1736fd3befab18dd6bb1c106f919e999f701cde3bce034464a",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Di2n6KCSwtpmjEMWqH9j5X7yZPjZ",
+        "stableRecordKeySha256": "50f1c431f7f66f1736fd3befab18dd6bb1c106f919e999f701cde3bce034464a",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[14]",
-      "classificationConfidence": "9e526fd3c91062f5594b28cca626178fa31d276f",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "50f1c431f7f66f1736fd3befab18dd6bb1c106f919e999f701cde3bce034464a",
-        "gitSha": "dpl_Di2n6KCSwtpmjEMWqH9j5X7yZPjZ",
+        "deploymentId": "dpl_Di2n6KCSwtpmjEMWqH9j5X7yZPjZ",
+        "gitSha": "9e526fd3c91062f5594b28cca626178fa31d276f",
+        "laneARecordOrdinal": 469,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -499,25 +681,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8tJJ4X7A16ZLCcucWcLsaFMFfCMr",
+      "stableRecordKeySha256": "001e0b24edb57264ee784ae452e924279cb687e3a40415dff907b549f7629b88",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8tJJ4X7A16ZLCcucWcLsaFMFfCMr",
+        "stableRecordKeySha256": "001e0b24edb57264ee784ae452e924279cb687e3a40415dff907b549f7629b88",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[15]",
-      "classificationConfidence": "808f1b2613e2bda4ae563b90f6ad1bb1b450c024",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "001e0b24edb57264ee784ae452e924279cb687e3a40415dff907b549f7629b88",
-        "gitSha": "dpl_8tJJ4X7A16ZLCcucWcLsaFMFfCMr",
+        "deploymentId": "dpl_8tJJ4X7A16ZLCcucWcLsaFMFfCMr",
+        "gitSha": "808f1b2613e2bda4ae563b90f6ad1bb1b450c024",
+        "laneARecordOrdinal": 473,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -531,25 +725,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5HuHATLNpMrGPwoJhkikwsaNdV11",
+      "stableRecordKeySha256": "9ca7e20f456c7162f1c3d091cb30393aa5c16f0ce00af715ca45f20fae33d99d",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5HuHATLNpMrGPwoJhkikwsaNdV11",
+        "stableRecordKeySha256": "9ca7e20f456c7162f1c3d091cb30393aa5c16f0ce00af715ca45f20fae33d99d",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[16]",
-      "classificationConfidence": "8123dfdce8351fe0914cc48e96603c0a45b783be",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "9ca7e20f456c7162f1c3d091cb30393aa5c16f0ce00af715ca45f20fae33d99d",
-        "gitSha": "dpl_5HuHATLNpMrGPwoJhkikwsaNdV11",
+        "deploymentId": "dpl_5HuHATLNpMrGPwoJhkikwsaNdV11",
+        "gitSha": "8123dfdce8351fe0914cc48e96603c0a45b783be",
+        "laneARecordOrdinal": 477,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -563,25 +769,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AdyVXp99jxjEToDh4DLGVsC2U4dM",
+      "stableRecordKeySha256": "3f84533e0e966ebaaae965b0c77930861aa6b64e718fa8ffe39b55ad4c6bea98",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AdyVXp99jxjEToDh4DLGVsC2U4dM",
+        "stableRecordKeySha256": "3f84533e0e966ebaaae965b0c77930861aa6b64e718fa8ffe39b55ad4c6bea98",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[17]",
-      "classificationConfidence": "f80674ce1d2522aa02b92236aef684ed039785a4",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "3f84533e0e966ebaaae965b0c77930861aa6b64e718fa8ffe39b55ad4c6bea98",
-        "gitSha": "dpl_AdyVXp99jxjEToDh4DLGVsC2U4dM",
+        "deploymentId": "dpl_AdyVXp99jxjEToDh4DLGVsC2U4dM",
+        "gitSha": "f80674ce1d2522aa02b92236aef684ed039785a4",
+        "laneARecordOrdinal": 478,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -595,25 +813,37 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FCCkCB1q6os2J9gxNw3maM2mq1GY",
+      "stableRecordKeySha256": "b362386a5007f13cc80af4e019fefbafd8e09ebb489a466c091799d18c7d1370",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FCCkCB1q6os2J9gxNw3maM2mq1GY",
+        "stableRecordKeySha256": "b362386a5007f13cc80af4e019fefbafd8e09ebb489a466c091799d18c7d1370",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json#records[18]",
-      "classificationConfidence": "fc609e534026eb7a5d37284bc2658f6f08e001df",
+      "classificationConfidence": null,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "b362386a5007f13cc80af4e019fefbafd8e09ebb489a466c091799d18c7d1370",
-        "gitSha": "dpl_FCCkCB1q6os2J9gxNw3maM2mq1GY",
+        "deploymentId": "dpl_FCCkCB1q6os2J9gxNw3maM2mq1GY",
+        "gitSha": "fc609e534026eb7a5d37284bc2658f6f08e001df",
+        "laneARecordOrdinal": 480,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json",
+        "canonicalInputBlobSha": "39a18808eb3ca17796fe5194fe88cbb0dfaefdb6",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]"
       },
       "classificationSummary": {
         "theme": null,
@@ -627,8 +857,8 @@
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
+      "routeState": "WAITING_CLASSIFICATION",
+      "waitingReason": "INCOMPLETE_THREAD4_SEMANTIC_HIERARCHY",
       "canonicalCandidates": [],
       "graphEdges": []
     }

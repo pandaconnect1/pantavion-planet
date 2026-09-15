@@ -1,14 +1,16 @@
 {
-  "schema": "pantavion_module_graph_routes_v2",
+  "schema": "pantavion_module_graph_routes_v3",
   "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
   "thread": 5,
   "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
   "routingContract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
   "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-601-619.json",
   "sourceClassificationSchema": "pantavion_semantic_classification_v1",
+  "sourceRecordTuple": null,
   "sourceClassificationSha256": "a58d154604beff73feb9a9ae6136a07aadcd5920cf4399a0f5093fa604e4f546",
   "explicitSourceCanonicalLedger": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
   "explicitSourceCanonicalLedgerSha256": "74c000c4e51ad89b3193820522525f39798570ee0144b8a2c942351e7dd7165c",
+  "explicitSourceCanonicalLedgerGitBlobSha": "d5a3e78f994ffa37fed36e8723010cbbed49e121",
   "sourceRecordCount": 19,
   "summary": {
     "routedRecords": 19,
@@ -19,17 +21,19 @@
     "graphEdgeCount": 128,
     "semanticMirrorsSuppressed": 1,
     "implementationCandidates": 20,
-    "duplicateStableRecordKeys": 0,
-    "duplicateRouteIds": 0
+    "duplicateStableRecordKeysWithinOutput": 0,
+    "duplicateRouteIdsWithinOutput": 0
   },
-  "truthBoundary": "Only routeState=ROUTED has durable module/graph edges. WAITING_* and REVIEW_REQUIRED are not completion; DEPLOYED is not VERIFIED_LIVE.",
+  "truthBoundary": "Only routeState=ROUTED has semantic module/graph edges. REVIEW_REQUIRED has governed_hold only. WAITING_* has zero edges. DEPLOYED is not VERIFIED_LIVE.",
   "bindings": [
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HEeTimYBMiiyRyRa9oWPyjEmey3t",
+      "stableRecordKeySha256": "7c2ed4ee19cab9ce00e118e59d169582c5c3dea16512383090622b9908dd89d7",
       "sourceFingerprint": "sha256:f0aeef5bc2731ad8fe39c89617409617e2c23025e6805feb8ca5c59919e6c8de",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HEeTimYBMiiyRyRa9oWPyjEmey3t",
+        "stableRecordKeySha256": "7c2ed4ee19cab9ce00e118e59d169582c5c3dea16512383090622b9908dd89d7",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -97,10 +101,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CuUS4wpk3gAZmSsA1hpK8wyjBu1s",
+      "stableRecordKeySha256": "cbc630fb555809e6fbced54dab1cd36f942b2f417e1be437fb4236d20d25ccf7",
       "sourceFingerprint": "sha256:28ed43e80f665449c63d495711484b2ba75b07c3c399697079734934516e43f8",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CuUS4wpk3gAZmSsA1hpK8wyjBu1s",
+        "stableRecordKeySha256": "cbc630fb555809e6fbced54dab1cd36f942b2f417e1be437fb4236d20d25ccf7",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -170,10 +176,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DXYJrSQftYk5vneRcRwqi1mcw7Sx",
+      "stableRecordKeySha256": "eaabfdca1cb77cbdc71f297f46dbc30677919614b3587a83c2f2dd23184fed1c",
       "sourceFingerprint": "sha256:d865e830fa8bb98416e65190f60c52eeff72ad8407f54b67ca9941f727edbdf9",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DXYJrSQftYk5vneRcRwqi1mcw7Sx",
+        "stableRecordKeySha256": "eaabfdca1cb77cbdc71f297f46dbc30677919614b3587a83c2f2dd23184fed1c",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -248,10 +256,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Fk6HdFGfBz8WVoaGy9ymvEhbTNYh",
+      "stableRecordKeySha256": "d6968c62873aebb7bdcd3249664bd7bcd195d70d1180aeace97a790778b6ddca",
       "sourceFingerprint": "sha256:4ace5d6302a232aed97c28704a672b43a9d33b285d35d429fe54b4aa5567eafe",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Fk6HdFGfBz8WVoaGy9ymvEhbTNYh",
+        "stableRecordKeySha256": "d6968c62873aebb7bdcd3249664bd7bcd195d70d1180aeace97a790778b6ddca",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -326,10 +336,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AMyo3UKZLd9Hb4P6rNuYKM58uKiV",
+      "stableRecordKeySha256": "7e266afa63ffc9e739c22e0414a772eaa3dcb0e9601be704c4e39cf2866def4e",
       "sourceFingerprint": "sha256:d8f041b3fffd42772ef41d09e18db1f0cf628858b1386c36a1964294a4fb49c0",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AMyo3UKZLd9Hb4P6rNuYKM58uKiV",
+        "stableRecordKeySha256": "7e266afa63ffc9e739c22e0414a772eaa3dcb0e9601be704c4e39cf2866def4e",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -404,10 +416,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5Z5GYq4ecYh8tbYoD29S9qTcnWoi",
+      "stableRecordKeySha256": "c310fac247f3128295071d644b341bae6bd5e6bf23931f029c6fdabb524ea6b0",
       "sourceFingerprint": "sha256:6744547faf008c3c3b3477509aee54d721e25670346be194939fa11230a97f49",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5Z5GYq4ecYh8tbYoD29S9qTcnWoi",
+        "stableRecordKeySha256": "c310fac247f3128295071d644b341bae6bd5e6bf23931f029c6fdabb524ea6b0",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -482,10 +496,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_476WTfNoFZ5GhT3umYvBfZFDZnMX",
+      "stableRecordKeySha256": "3a90de78f5880df09dd04e880452c2728e5916a280fbb861f49f66227dfae4d0",
       "sourceFingerprint": "sha256:20cd8f5bbf9ee09ae8745e8871843193858558022f915717085fe9127c51a865",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_476WTfNoFZ5GhT3umYvBfZFDZnMX",
+        "stableRecordKeySha256": "3a90de78f5880df09dd04e880452c2728e5916a280fbb861f49f66227dfae4d0",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -566,10 +582,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GBWgmMVgGMoUjN3eFgo722ufht4N",
+      "stableRecordKeySha256": "82ceb89c4b5a9cf32a4d3f1400920ac5fc762b368a4b70f809b1fd6e82554797",
       "sourceFingerprint": "sha256:2fc2e660591da58b72d117b86515b1995984b30fe24934536c3a7824e3f0ba58",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GBWgmMVgGMoUjN3eFgo722ufht4N",
+        "stableRecordKeySha256": "82ceb89c4b5a9cf32a4d3f1400920ac5fc762b368a4b70f809b1fd6e82554797",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -656,10 +674,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8EiUHoLLaKDL8gttUEMAA8psed8i",
+      "stableRecordKeySha256": "be38941813a0dbf98b0afc521588330c1b4b95cc623e02a7fa40cea06c298b5e",
       "sourceFingerprint": "sha256:4314346132ee21f402ab77316ee7d69d8706b5c0f0ea9a85e81097785d8f16be",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8EiUHoLLaKDL8gttUEMAA8psed8i",
+        "stableRecordKeySha256": "be38941813a0dbf98b0afc521588330c1b4b95cc623e02a7fa40cea06c298b5e",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -740,10 +760,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3Smc1qdVujaXGNdfwUaBgYQ2WeGc",
+      "stableRecordKeySha256": "0f98e32d6427d4548627d0ea837ed258823253250bee8a613d3fd76eea4b8766",
       "sourceFingerprint": "sha256:91addfc47a3eff889aeaacc26e72a80287a0a5fa47d369ad24be8ff7db28dd65",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3Smc1qdVujaXGNdfwUaBgYQ2WeGc",
+        "stableRecordKeySha256": "0f98e32d6427d4548627d0ea837ed258823253250bee8a613d3fd76eea4b8766",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -818,10 +840,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_48MLp77LtGD8A1WuTgYGE24KyqkM",
+      "stableRecordKeySha256": "61c01d9278bc7c3fd291712083ff7aa851d94d35aa456d510593e5ad2ae9523e",
       "sourceFingerprint": "sha256:b224efb96bea537ce7024e78a5cc770289184165f1317694743e5461b5343189",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_48MLp77LtGD8A1WuTgYGE24KyqkM",
+        "stableRecordKeySha256": "61c01d9278bc7c3fd291712083ff7aa851d94d35aa456d510593e5ad2ae9523e",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -896,10 +920,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GnzJUQiEkEnFGeCSFyr8cm9jzHp3",
+      "stableRecordKeySha256": "dd6087c04f967e85aac564ca57a295810ecb262d300c83bb23c815bff6e442d0",
       "sourceFingerprint": "sha256:00def0d482947ef51c96fa60c196fd4c165c8fc62fd56a7e99555d0ed103c74a",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GnzJUQiEkEnFGeCSFyr8cm9jzHp3",
+        "stableRecordKeySha256": "dd6087c04f967e85aac564ca57a295810ecb262d300c83bb23c815bff6e442d0",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -980,10 +1006,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9xcACYCAw6n3EYdquhKG28JZyYSQ",
+      "stableRecordKeySha256": "476fe6a2550a1d35b17320aec5071cf0af71a8130afb272539e4843d0f2e04ba",
       "sourceFingerprint": "sha256:0bf49663aaee394a67f0ad3ea1022871b57589f933410d5190be0634d57ee8ab",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9xcACYCAw6n3EYdquhKG28JZyYSQ",
+        "stableRecordKeySha256": "476fe6a2550a1d35b17320aec5071cf0af71a8130afb272539e4843d0f2e04ba",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -1064,10 +1092,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_75Po8F5JoG97jtweeUxQUxYXbsdS",
+      "stableRecordKeySha256": "516def9ff23becfec3498ec3eec0f900fd4fb0e7a9ace0ff9694bba74714deb4",
       "sourceFingerprint": "sha256:9b4dccd593e920436d4256767b5f3ff9261e1b2c0d28238967258a1173d5e1ea",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_75Po8F5JoG97jtweeUxQUxYXbsdS",
+        "stableRecordKeySha256": "516def9ff23becfec3498ec3eec0f900fd4fb0e7a9ace0ff9694bba74714deb4",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -1148,10 +1178,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_B6ur6U6JzR9Sswg9SUucP8qSFTLm",
+      "stableRecordKeySha256": "feced36e2e1683cbb0e6001dce3bdbb23e8e58e5c3b0b8ad485d5f0e17b6dc38",
       "sourceFingerprint": "sha256:ce370985eb0da1d85c06f81cb1e9ee90193601543c0414d144c651d7e2591999",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_B6ur6U6JzR9Sswg9SUucP8qSFTLm",
+        "stableRecordKeySha256": "feced36e2e1683cbb0e6001dce3bdbb23e8e58e5c3b0b8ad485d5f0e17b6dc38",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -1226,10 +1258,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8tnSgJMjE9riBC6inGiaX23PvgCP",
+      "stableRecordKeySha256": "784df51837696f3675ae4d574aa50667150ea5f18805cda32f5298653362ebfa",
       "sourceFingerprint": "sha256:e7680bb96774a06e5c4181b10869142876381c009f797645d6ccfc07a24b3ad3",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8tnSgJMjE9riBC6inGiaX23PvgCP",
+        "stableRecordKeySha256": "784df51837696f3675ae4d574aa50667150ea5f18805cda32f5298653362ebfa",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -1304,10 +1338,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4X5tLzXUijoush97o4D5T7kqEkbb",
+      "stableRecordKeySha256": "f8080f3f21cd890ab2656483fae517ad5b4e9697469ce9bc8ea2cf320dc8b674",
       "sourceFingerprint": "sha256:729170d4589365587002c83552f0ec99229575411b5a7ba1df9ba220ee645a22",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4X5tLzXUijoush97o4D5T7kqEkbb",
+        "stableRecordKeySha256": "f8080f3f21cd890ab2656483fae517ad5b4e9697469ce9bc8ea2cf320dc8b674",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -1382,10 +1418,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8NKBFrGghec1cENP6itaqRstizMN",
+      "stableRecordKeySha256": "3e39f451991738eccd347d9823f193e36076a3d979584f39d23739f8575e825b",
       "sourceFingerprint": "sha256:b32d5ecf978492bce8f513b8ea316f5420cf4517127ba3fb74c7a526e63054fb",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8NKBFrGghec1cENP6itaqRstizMN",
+        "stableRecordKeySha256": "3e39f451991738eccd347d9823f193e36076a3d979584f39d23739f8575e825b",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },
@@ -1502,10 +1540,12 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_E2bVPTBgBkqHWLCMSgaYBsN97MGq",
+      "stableRecordKeySha256": "dadabd29dfce3f9ade5120089e87a40ed2ce5409d0a1c7a1b8480cc95a460026",
       "sourceFingerprint": "sha256:55118d291f2d8890454e6e86c9cc0c8666ac3473d3999d0affff6c755c82e0b9",
       "canonicalLedgerPointer": {
         "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_E2bVPTBgBkqHWLCMSgaYBsN97MGq",
+        "stableRecordKeySha256": "dadabd29dfce3f9ade5120089e87a40ed2ce5409d0a1c7a1b8480cc95a460026",
         "canonicalRecordId": null,
         "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
       },

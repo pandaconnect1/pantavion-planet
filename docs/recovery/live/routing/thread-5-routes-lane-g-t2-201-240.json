@@ -1,636 +1,1416 @@
 {
-  "schema": "pantavion_module_graph_routes_v2",
+  "schema": "pantavion_module_graph_routes_v3",
   "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
   "thread": 5,
   "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
   "routingContract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
   "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json",
   "sourceClassificationSchema": "pantavion_semantic_classification_v1_compact",
+  "sourceRecordTuple": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]",
   "sourceClassificationSha256": "c054357f75bd4e0a9c4c161aab0cbe952e6f18d592259759480e99a1632b15f5",
-  "explicitSourceCanonicalLedger": null,
-  "explicitSourceCanonicalLedgerSha256": null,
+  "explicitSourceCanonicalLedger": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+  "explicitSourceCanonicalLedgerSha256": "c34477784fd271eef12932855ade40f6b30cc87a072079e0f198ceae558d5822",
+  "explicitSourceCanonicalLedgerGitBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
   "sourceRecordCount": 19,
   "summary": {
-    "routedRecords": 0,
-    "reviewRequired": 0,
-    "waitingCanonical": 19,
+    "routedRecords": 18,
+    "reviewRequired": 1,
+    "waitingCanonical": 0,
     "waitingClassification": 0,
     "canonicalConflicts": 0,
-    "graphEdgeCount": 0,
+    "graphEdgeCount": 94,
     "semanticMirrorsSuppressed": 0,
     "implementationCandidates": 0,
-    "duplicateStableRecordKeys": 0,
-    "duplicateRouteIds": 0
+    "duplicateStableRecordKeysWithinOutput": 0,
+    "duplicateRouteIdsWithinOutput": 0
   },
-  "truthBoundary": "Only routeState=ROUTED has durable module/graph edges. WAITING_* and REVIEW_REQUIRED are not completion; DEPLOYED is not VERIFIED_LIVE.",
+  "truthBoundary": "Only routeState=ROUTED has semantic module/graph edges. REVIEW_REQUIRED has governed_hold only. WAITING_* has zero edges. DEPLOYED is not VERIFIED_LIVE.",
   "bindings": [
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FYs6gs9tY32a63e1MYekZxmianPM",
+      "stableRecordKeySha256": "f79837e219bb740ed1a9b6b7ab4d32822a03d0b8cbdf4fc8272a3cfa6b0e7a75",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FYs6gs9tY32a63e1MYekZxmianPM",
+        "stableRecordKeySha256": "f79837e219bb740ed1a9b6b7ab4d32822a03d0b8cbdf4fc8272a3cfa6b0e7a75",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[0]",
-      "classificationConfidence": "a9c67323fd296c59777addbe92fd4d0ede9e55c0",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:a9c67323fd296c59777addbe92fd4d0ede9e55c0",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "f79837e219bb740ed1a9b6b7ab4d32822a03d0b8cbdf4fc8272a3cfa6b0e7a75",
-        "gitSha": "dpl_FYs6gs9tY32a63e1MYekZxmianPM",
+        "deploymentId": "dpl_FYs6gs9tY32a63e1MYekZxmianPM",
+        "gitSha": "a9c67323fd296c59777addbe92fd4d0ede9e55c0",
+        "laneARecordOrdinal": 204,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Data & Artifacts",
+        "section": "Project Intake",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Project Intake Guardrails",
+        "capability": "Inventory-export exclusion",
+        "feature": "Ignore local project inventory exports",
+        "canonicalTarget": [
+          "shared-core/project-intake/guardrails"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "7398458f73fd46eaee82aa5ec8f9280dca2a445cbc897a40e1434765d1f9e13e",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "f7f4ab27f2a851708b91717da29a1d265240a406e7030fdafc52bd74023a41fb",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Project Intake Guardrails"
+        },
+        {
+          "routeId": "b8dbcd60eddfffc321301ba9d3934d5e6c9a2a122612532902722c480630097c",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Project Intake Guardrails::capability::Inventory-export exclusion"
+        },
+        {
+          "routeId": "7c29707c7ebdc19da4c15f8536851f7d66c46354e9b3a01b4c84b2db3a2a16b5",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Project Intake Guardrails::capability::Inventory-export exclusion::feature::Ignore local project inventory exports"
+        },
+        {
+          "routeId": "47b593dd9e94e19502a0b676bed91afd76a8e76faaefe5ec8f7eff86f64c85c8",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::shared-core/project-intake/guardrails"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2pdUP4kssd6ZJUPcjZmQwmxrxfSR",
+      "stableRecordKeySha256": "bb9ed06ddc4249d9b0c2f37586e1da985e6c250a1751a3ea3fec8c36132301e6",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2pdUP4kssd6ZJUPcjZmQwmxrxfSR",
+        "stableRecordKeySha256": "bb9ed06ddc4249d9b0c2f37586e1da985e6c250a1751a3ea3fec8c36132301e6",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[1]",
-      "classificationConfidence": "631c0d752e91b24cd16a1b95453bd405a52fee09",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:631c0d752e91b24cd16a1b95453bd405a52fee09",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "bb9ed06ddc4249d9b0c2f37586e1da985e6c250a1751a3ea3fec8c36132301e6",
-        "gitSha": "dpl_2pdUP4kssd6ZJUPcjZmQwmxrxfSR",
+        "deploymentId": "dpl_2pdUP4kssd6ZJUPcjZmQwmxrxfSR",
+        "gitSha": "631c0d752e91b24cd16a1b95453bd405a52fee09",
+        "laneARecordOrdinal": 208,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Infrastructure & City Intelligence",
+        "section": "Water CAD",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "Master DWG Runtime",
+        "capability": "Type-safe DWG streaming",
+        "feature": "Final master DWG stream response",
+        "canonicalTarget": [
+          "infrastructure/water-control/dwg-stream"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "1ce1f72e26437633c29aec856b9b629c62db1a6128295522c25093d207867b51",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::Maps/Infrastructure/City Intelligence"
+        },
+        {
+          "routeId": "d76cb82881be7ea408736f2e39596c7ecb614253addc92c9fedbe3de27abe87d",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Maps/Infrastructure/City Intelligence::subsystem::Master DWG Runtime"
+        },
+        {
+          "routeId": "9cee27569440a5ac11f87b01f4542d7786826b549fa0883acde44cb8aa3a0204",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Maps/Infrastructure/City Intelligence::subsystem::Master DWG Runtime::capability::Type-safe DWG streaming"
+        },
+        {
+          "routeId": "f9c4976cd6d1996a49391bcb9921f53263d0ca93009a193c58113d512acbd440",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Maps/Infrastructure/City Intelligence::subsystem::Master DWG Runtime::capability::Type-safe DWG streaming::feature::Final master DWG stream response"
+        },
+        {
+          "routeId": "6d0872c33e499aac84c3e334f00e65e2f75faa64af901ab5778893fecffd9254",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::infrastructure/water-control/dwg-stream"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_A9pgs2huuns4FygNAwoqUyduvfie",
+      "stableRecordKeySha256": "dcf42f3d3fd1987f0a7c5e27c572718218e76e3cd00567a6240956a1268c8685",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_A9pgs2huuns4FygNAwoqUyduvfie",
+        "stableRecordKeySha256": "dcf42f3d3fd1987f0a7c5e27c572718218e76e3cd00567a6240956a1268c8685",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[2]",
-      "classificationConfidence": "08370ab9b7a2f5834782f4a2e3a20844e481b978",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:08370ab9b7a2f5834782f4a2e3a20844e481b978",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "dcf42f3d3fd1987f0a7c5e27c572718218e76e3cd00567a6240956a1268c8685",
-        "gitSha": "dpl_A9pgs2huuns4FygNAwoqUyduvfie",
+        "deploymentId": "dpl_A9pgs2huuns4FygNAwoqUyduvfie",
+        "gitSha": "08370ab9b7a2f5834782f4a2e3a20844e481b978",
+        "laneARecordOrdinal": 209,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
-        "relatedModules": [],
+        "theme": "Platform Core",
+        "section": "Capability Registry",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Product Capability Registry",
+        "capability": "Capability separation/integrity",
+        "feature": "Universal Life/SOS/Calendar capability registry",
+        "canonicalTarget": [
+          "shared-core/capability-registry"
+        ],
+        "relatedModules": [
+          "SOS"
+        ],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "c83192563e0d6595b8e8d41d0f693b09405cbf57b4d03976363adcff8e6ad118",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "447533bdadbb7756271535eb5448d8a529a48dd005f0c1a200394c6a074bfe99",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Product Capability Registry"
+        },
+        {
+          "routeId": "57f59b2a1dd0f1436f427edf03cceaafd903d0e00b6f7f267f46153bdeab6d0f",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Product Capability Registry::capability::Capability separation/integrity"
+        },
+        {
+          "routeId": "339eb996a7e61b7fc90d46d0920341aa0c68efdc9a57484dda1bbb0327d14210",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Product Capability Registry::capability::Capability separation/integrity::feature::Universal Life/SOS/Calendar capability registry"
+        },
+        {
+          "routeId": "a7b55a0a2779dabfdfa1a273e67f7727284634561fd1092898606307acb84d11",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::SOS"
+        },
+        {
+          "routeId": "1e662da8c00112a002ae1465952f56e6a9e47c0673039a56e2840431cf173d4f",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::shared-core/capability-registry"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GAvGsKNkLAjbDypz9asDBMMmESFu",
+      "stableRecordKeySha256": "04f1ed336f036ea994b02b916e96b51c651c3fd8e7211803e428fac79f9cd64e",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GAvGsKNkLAjbDypz9asDBMMmESFu",
+        "stableRecordKeySha256": "04f1ed336f036ea994b02b916e96b51c651c3fd8e7211803e428fac79f9cd64e",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[3]",
-      "classificationConfidence": "036e03c19e4765317b1aa53c08d81cb233cf35a2",
+      "classificationConfidence": 0.98,
+      "implementationSemanticKey": "git:036e03c19e4765317b1aa53c08d81cb233cf35a2",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "04f1ed336f036ea994b02b916e96b51c651c3fd8e7211803e428fac79f9cd64e",
-        "gitSha": "dpl_GAvGsKNkLAjbDypz9asDBMMmESFu",
+        "deploymentId": "dpl_GAvGsKNkLAjbDypz9asDBMMmESFu",
+        "gitSha": "036e03c19e4765317b1aa53c08d81cb233cf35a2",
+        "laneARecordOrdinal": 211,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
-        "relatedModules": [],
+        "theme": "Platform Core",
+        "section": "Capability Registry",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Product Capability Registry",
+        "capability": "Capability separation/integrity",
+        "feature": "Universal Life/SOS/Calendar capability registry",
+        "canonicalTarget": [
+          "shared-core/capability-registry"
+        ],
+        "relatedModules": [
+          "SOS"
+        ],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "5e15c65ae670daa4cc6657fe9fae577554fa81c77aba5e878f2e18524cdd6289",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "221b0688732b40a29abab0dfefb213e3d2ebb9b5e81b9b3f555c7e9177969ca8",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Product Capability Registry"
+        },
+        {
+          "routeId": "9265b7897d5446145fbced3e7c1660f18ff0a799c17025ab6744b2070d5be9b3",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Product Capability Registry::capability::Capability separation/integrity"
+        },
+        {
+          "routeId": "e3400cd33db4d241dfa71ae19a740828332f28ea489226076f1e274007b5f58b",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Product Capability Registry::capability::Capability separation/integrity::feature::Universal Life/SOS/Calendar capability registry"
+        },
+        {
+          "routeId": "09f9c162eff32417f5cd343ff340b1d4c26de88a13fa34587cd1f678beb9b221",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::SOS"
+        },
+        {
+          "routeId": "bfa8b2eaa4b8fe1835f1e48ff415241da65271547960c2d01ef49e26de65feda",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::shared-core/capability-registry"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DF189i8xo79qhJfbpjNhRPZPU2vu",
+      "stableRecordKeySha256": "d26d2b23c80047d6c1e892146e4346f4aef86bdfd30d9a3ede3aaeec8def83c7",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DF189i8xo79qhJfbpjNhRPZPU2vu",
+        "stableRecordKeySha256": "d26d2b23c80047d6c1e892146e4346f4aef86bdfd30d9a3ede3aaeec8def83c7",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[4]",
-      "classificationConfidence": "2734064250bb22df937a841ab0457a5232f619b9",
+      "classificationConfidence": 0.98,
+      "implementationSemanticKey": "git:2734064250bb22df937a841ab0457a5232f619b9",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "d26d2b23c80047d6c1e892146e4346f4aef86bdfd30d9a3ede3aaeec8def83c7",
-        "gitSha": "dpl_DF189i8xo79qhJfbpjNhRPZPU2vu",
+        "deploymentId": "dpl_DF189i8xo79qhJfbpjNhRPZPU2vu",
+        "gitSha": "2734064250bb22df937a841ab0457a5232f619b9",
+        "laneARecordOrdinal": 212,
+        "deploymentState": "ERROR",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Platform Core",
+        "section": "Capability Registry",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Pantavion One DNA",
+        "capability": "Unified product capability model",
+        "feature": "Unify Pantavion One DNA into Planet capabilities",
+        "canonicalTarget": [
+          "shared-core/capability-registry"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "0c8f600538bcdcd770cdd85398d8c0dfcd76c5920be4f60f387142e2e6d3bb3d",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "6fb710675442c924c58e97849ca7a71d323fbd25bcf118b7ed639f28b331abc2",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Pantavion One DNA"
+        },
+        {
+          "routeId": "f974e045d093eb781a88484c484d89e83549cb0973467161b24c55733839da52",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Pantavion One DNA::capability::Unified product capability model"
+        },
+        {
+          "routeId": "2afef0a63120091a2d3fc77d32e5a6d3160df5965fdc78c6b735f756f5d86c02",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Pantavion One DNA::capability::Unified product capability model::feature::Unify Pantavion One DNA into Planet capabilities"
+        },
+        {
+          "routeId": "27dbbfbb5c7102c85be6261a939838a190ff04415d3a228e0b7001e30c1698e6",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::shared-core/capability-registry"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CkSkDWrnY77AhPXVycM2Hjwezie4",
+      "stableRecordKeySha256": "f0ed35a883ea76ea7507153a45467f53a68f359b21943958141ca202d32316dd",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CkSkDWrnY77AhPXVycM2Hjwezie4",
+        "stableRecordKeySha256": "f0ed35a883ea76ea7507153a45467f53a68f359b21943958141ca202d32316dd",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[5]",
-      "classificationConfidence": "e05f894f2d9ece3613141a37fcefa2e319c82fba",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:e05f894f2d9ece3613141a37fcefa2e319c82fba",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "f0ed35a883ea76ea7507153a45467f53a68f359b21943958141ca202d32316dd",
-        "gitSha": "dpl_CkSkDWrnY77AhPXVycM2Hjwezie4",
+        "deploymentId": "dpl_CkSkDWrnY77AhPXVycM2Hjwezie4",
+        "gitSha": "e05f894f2d9ece3613141a37fcefa2e319c82fba",
+        "laneARecordOrdinal": 213,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Experience & Discovery",
+        "section": "SEO",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Canonical Domain",
+        "capability": "Canonical-domain consistency",
+        "feature": "Unify Pantavion canonical domain",
+        "canonicalTarget": [
+          "shared-core/seo/canonical-domain"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "44c23188f95416c073367d87fe1d3a270965a9c8ed3f80e3832c14fcf7203013",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "1661e8f8361575ea149bb8a95b14f88bb5fbb20a57fce7712f78209f85611695",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Domain"
+        },
+        {
+          "routeId": "1966485b5f3621fff2f739757c9008a156e4688f58eae6f4e6b7c41b038918fd",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Domain::capability::Canonical-domain consistency"
+        },
+        {
+          "routeId": "9174cc00cd7f2e8787d8bd0bfb48eb2194b1f142f06ed77d74e8e58633ebf935",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Domain::capability::Canonical-domain consistency::feature::Unify Pantavion canonical domain"
+        },
+        {
+          "routeId": "fa317d55bade896d922c80f93c5e892981daaf808c0a1592e40bf9d6cbb08bdd",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::shared-core/seo/canonical-domain"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7SqejXZ49g5RxtJ4czBNLSio3xfn",
+      "stableRecordKeySha256": "d9984c087bf92a819f07f3b1325a3e69b61190613f18a49107042b8114442154",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7SqejXZ49g5RxtJ4czBNLSio3xfn",
+        "stableRecordKeySha256": "d9984c087bf92a819f07f3b1325a3e69b61190613f18a49107042b8114442154",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[6]",
-      "classificationConfidence": "fabb3343ac8b60e2bda9338f113277018e2d8b8f",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:fabb3343ac8b60e2bda9338f113277018e2d8b8f",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "d9984c087bf92a819f07f3b1325a3e69b61190613f18a49107042b8114442154",
-        "gitSha": "dpl_7SqejXZ49g5RxtJ4czBNLSio3xfn",
+        "deploymentId": "dpl_7SqejXZ49g5RxtJ4czBNLSio3xfn",
+        "gitSha": "fabb3343ac8b60e2bda9338f113277018e2d8b8f",
+        "laneARecordOrdinal": 214,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Trust & Observability",
+        "section": "Foundation Audit",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Audit Gate",
+        "capability": "Foundation evidence gate",
+        "feature": "Foundation audit gate",
+        "canonicalTarget": [
+          "shared-core/audit/foundation-gate"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "01ec48e1b1713276333b7975f730ba8f4a158478c1c3da8432206b3740e4e20c",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "bf04b3b559ed65c231e2a528a2ad77ce5df1402c4227635693e69d71e4380f90",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Audit Gate"
+        },
+        {
+          "routeId": "517604f5bd4d0064e2d1e9802be8e23959efb406ab8f0eb0cd5803002d334d9a",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Audit Gate::capability::Foundation evidence gate"
+        },
+        {
+          "routeId": "ae890d54ea66e65debc4b83097f7cd3a7aa0e7f76263f9122739099b93638f81",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Audit Gate::capability::Foundation evidence gate::feature::Foundation audit gate"
+        },
+        {
+          "routeId": "6077e54160be7e365b8e46e3fffe0a7bb790052680f8432baaf2448b1374ef45",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::shared-core/audit/foundation-gate"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FXdybw9RB4UtgqjMumr4nTTXTsek",
+      "stableRecordKeySha256": "3091dbf1bad96ea8ad23dc4bb6952574e605edeabf51affb449e38fe6eac619a",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FXdybw9RB4UtgqjMumr4nTTXTsek",
+        "stableRecordKeySha256": "3091dbf1bad96ea8ad23dc4bb6952574e605edeabf51affb449e38fe6eac619a",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[7]",
-      "classificationConfidence": "4d498438a550f04ab3a3923fe3b3402d54f9be3f",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:4d498438a550f04ab3a3923fe3b3402d54f9be3f",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "3091dbf1bad96ea8ad23dc4bb6952574e605edeabf51affb449e38fe6eac619a",
-        "gitSha": "dpl_FXdybw9RB4UtgqjMumr4nTTXTsek",
+        "deploymentId": "dpl_FXdybw9RB4UtgqjMumr4nTTXTsek",
+        "gitSha": "4d498438a550f04ab3a3923fe3b3402d54f9be3f",
+        "laneARecordOrdinal": 215,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
-        "relatedModules": [],
+        "theme": "AI Safety & Governance",
+        "section": "Kernel Runtime",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Capability Broker",
+        "capability": "Runtime safety and capability brokering",
+        "feature": "Runtime safety + capability broker foundation",
+        "canonicalTarget": [
+          "ai-orchestration/capability-broker"
+        ],
+        "relatedModules": [
+          "Security"
+        ],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "d9cdc515401c47e59c5d05448c0e656ff282bdb7ee3a5f62fe8c383155f4d955",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "cf9317205849d868c95629902e76edb56aa0b308997976d23750a106bfc0a9d9",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Capability Broker"
+        },
+        {
+          "routeId": "53417cc020c190412c83cbe1ce3879113d13615465adea26f527c1e2c64c560a",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Capability Broker::capability::Runtime safety and capability brokering"
+        },
+        {
+          "routeId": "04a01f941e497a18c8297f92c3dbeafba624e5867adbc6e59474611d258ef370",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Capability Broker::capability::Runtime safety and capability brokering::feature::Runtime safety + capability broker foundation"
+        },
+        {
+          "routeId": "e599775da2e2617a3e06222df1f3396919240de48146c99baf002e4097d6ed13",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::Security"
+        },
+        {
+          "routeId": "c5869db15962289cbfda6cadb9f829e0fcc54c3501b927c17e8dba4ade6ef049",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::ai-orchestration/capability-broker"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_EtVymrBQimGgwJFBbo3KMshmNXu3",
+      "stableRecordKeySha256": "c1d5ddd61e013a965492ef4d7949f166c09cba8e6430bfd5334373d7ca5dfb2e",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_EtVymrBQimGgwJFBbo3KMshmNXu3",
+        "stableRecordKeySha256": "c1d5ddd61e013a965492ef4d7949f166c09cba8e6430bfd5334373d7ca5dfb2e",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[8]",
-      "classificationConfidence": "06c4d9269f9d911538b46ab5ccae3c378d3199de",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:06c4d9269f9d911538b46ab5ccae3c378d3199de",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "c1d5ddd61e013a965492ef4d7949f166c09cba8e6430bfd5334373d7ca5dfb2e",
-        "gitSha": "dpl_EtVymrBQimGgwJFBbo3KMshmNXu3",
+        "deploymentId": "dpl_EtVymrBQimGgwJFBbo3KMshmNXu3",
+        "gitSha": "06c4d9269f9d911538b46ab5ccae3c378d3199de",
+        "laneARecordOrdinal": 216,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Infrastructure & City Intelligence",
+        "section": "Water CAD",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "Master DWG Source",
+        "capability": "Blob source binding",
+        "feature": "Connect final master DWG blob source",
+        "canonicalTarget": [
+          "infrastructure/water-control/dwg-source"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "dcd2e6ed890b011bb8e7077333ee384aa8d29e479961ddd5d148fe05a7417965",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::Maps/Infrastructure/City Intelligence"
+        },
+        {
+          "routeId": "6d7006361f006b4e2837e038a0e92f08c8f8468a33389eb3878e862563757227",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Maps/Infrastructure/City Intelligence::subsystem::Master DWG Source"
+        },
+        {
+          "routeId": "07699fb6eded1c0420ffd444f4cfc3f0b3b0cf4b9306819d6831274e5b0244f8",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Maps/Infrastructure/City Intelligence::subsystem::Master DWG Source::capability::Blob source binding"
+        },
+        {
+          "routeId": "f9325b3da2f774c055b073e18f6d06bcc6158e1470039a3f80ed1152602ab7fd",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Maps/Infrastructure/City Intelligence::subsystem::Master DWG Source::capability::Blob source binding::feature::Connect final master DWG blob source"
+        },
+        {
+          "routeId": "bf4aed9ffaee4c365e6911d35d6c957d4ea8f760cb3c5cc67b2a6748446a6022",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::infrastructure/water-control/dwg-source"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Dqf8k8XaRAUXrJCCK8FigQ7hLWzi",
+      "stableRecordKeySha256": "7021c57acd23d7639d5e38a639137e682412a568e4db3a5d5ab44d1aa8b45e05",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Dqf8k8XaRAUXrJCCK8FigQ7hLWzi",
+        "stableRecordKeySha256": "7021c57acd23d7639d5e38a639137e682412a568e4db3a5d5ab44d1aa8b45e05",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[9]",
-      "classificationConfidence": "51b095200901c9c59ab9b716353cd1f9454c5cd4",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:51b095200901c9c59ab9b716353cd1f9454c5cd4",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "7021c57acd23d7639d5e38a639137e682412a568e4db3a5d5ab44d1aa8b45e05",
-        "gitSha": "dpl_Dqf8k8XaRAUXrJCCK8FigQ7hLWzi",
+        "deploymentId": "dpl_Dqf8k8XaRAUXrJCCK8FigQ7hLWzi",
+        "gitSha": "51b095200901c9c59ab9b716353cd1f9454c5cd4",
+        "laneARecordOrdinal": 218,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Infrastructure & City Intelligence",
+        "section": "Water CAD",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "Master DWG Delivery",
+        "capability": "Original DWG delivery",
+        "feature": "Serve original final master DWG",
+        "canonicalTarget": [
+          "infrastructure/water-control/dwg-delivery"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "3cd4ed0ddbeb04dea79d05e530ca1e08b787f9b117c5046d02f849f097a1eda4",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::Maps/Infrastructure/City Intelligence"
+        },
+        {
+          "routeId": "490e4e9eed53c64d50703b2091b72b8ca727655fc420c8e11404abceb214e021",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Maps/Infrastructure/City Intelligence::subsystem::Master DWG Delivery"
+        },
+        {
+          "routeId": "c71052ad2014e2312a7cb4fe25820f0c99cc8810548115bc2aa08cba36085d26",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Maps/Infrastructure/City Intelligence::subsystem::Master DWG Delivery::capability::Original DWG delivery"
+        },
+        {
+          "routeId": "4726f293282299def57c4fe63060f9e302a7fd4c8d6f1700247c11558207976c",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Maps/Infrastructure/City Intelligence::subsystem::Master DWG Delivery::capability::Original DWG delivery::feature::Serve original final master DWG"
+        },
+        {
+          "routeId": "8ba5196fd32aa7921c00e20df84baec33cf81fba4e76f0cd8683aa7032cce213",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::infrastructure/water-control/dwg-delivery"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7WRrrCJ4mFbqLbyNtiKzoDusnSb8",
+      "stableRecordKeySha256": "bffe6a5a4be3954ebea81fb5298355e9e74230ce2b9a4317d27e51313b0a037e",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7WRrrCJ4mFbqLbyNtiKzoDusnSb8",
+        "stableRecordKeySha256": "bffe6a5a4be3954ebea81fb5298355e9e74230ce2b9a4317d27e51313b0a037e",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[10]",
-      "classificationConfidence": "9c74f84c89f5ffc40a5722e7536368c5b5c49a09",
+      "classificationConfidence": 0.82,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "bffe6a5a4be3954ebea81fb5298355e9e74230ce2b9a4317d27e51313b0a037e",
-        "gitSha": "dpl_7WRrrCJ4mFbqLbyNtiKzoDusnSb8",
+        "deploymentId": "dpl_7WRrrCJ4mFbqLbyNtiKzoDusnSb8",
+        "gitSha": "9c74f84c89f5ffc40a5722e7536368c5b5c49a09",
+        "laneARecordOrdinal": 220,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Artificial Intelligence",
+        "section": "Software Evolution",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Evolution Engine",
+        "capability": "Autonomous evolution workflow",
+        "feature": "Merged evolution-engine branch",
+        "canonicalTarget": [
+          "ai-orchestration/evolution-engine"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "REVIEW_REQUIRED",
+      "graphEdges": [
+        {
+          "routeId": "20fd2a3c66cf1c20abf1f5a82a64db0d4d10f82e7b0829a7f21f10f436b8c51d",
+          "relationshipType": "governed_hold",
+          "targetCanonicalPath": "review::docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[10]",
+          "reason": "THREAD4_REVIEW_REQUIRED"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9s2y2c6eQa82LZ2y3DS9trQwy8vQ",
+      "stableRecordKeySha256": "b89fe2b0a45501526729dfed4200bdeb1bce2571d0edd685ba54c1ab9eea75c5",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9s2y2c6eQa82LZ2y3DS9trQwy8vQ",
+        "stableRecordKeySha256": "b89fe2b0a45501526729dfed4200bdeb1bce2571d0edd685ba54c1ab9eea75c5",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[11]",
-      "classificationConfidence": "4fe0eb7faff75be5b91b8032d1ad94ae58554906",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:4fe0eb7faff75be5b91b8032d1ad94ae58554906",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "b89fe2b0a45501526729dfed4200bdeb1bce2571d0edd685ba54c1ab9eea75c5",
-        "gitSha": "dpl_9s2y2c6eQa82LZ2y3DS9trQwy8vQ",
+        "deploymentId": "dpl_9s2y2c6eQa82LZ2y3DS9trQwy8vQ",
+        "gitSha": "4fe0eb7faff75be5b91b8032d1ad94ae58554906",
+        "laneARecordOrdinal": 223,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Artificial Intelligence",
+        "section": "Execution Scheduling",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Scheduler",
+        "capability": "Scheduled PR execution",
+        "feature": "Connect scheduler to work-package PR executor",
+        "canonicalTarget": [
+          "ai-orchestration/scheduler/pr-executor"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "ecc3ae18bca9c044ae52a7888fce21382018f35b37d4cadcfbff45eda2acb42e",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "dfb69ddbcba9ce7fa0def24436d6ba6e6848fd658e1f11d29929cd7d3dceb2a0",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Scheduler"
+        },
+        {
+          "routeId": "8f4c7ff51bd86771d30ca277320ac46da1dec5e35cb4a24d2ed7a7fe76430d09",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Scheduler::capability::Scheduled PR execution"
+        },
+        {
+          "routeId": "067774a124a909d8c3d278e5c1ddfe00650cd53448e6b6d96bcf78ea0da8c186",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Scheduler::capability::Scheduled PR execution::feature::Connect scheduler to work-package PR executor"
+        },
+        {
+          "routeId": "7b6e902787dd1165107d24d8d4654526b0105fadddd9db9c794eb09d52aadef9",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::ai-orchestration/scheduler/pr-executor"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4ECB8eiyUh9wAi6ziWQQZgi26kNR",
+      "stableRecordKeySha256": "2431c5d0b050b72538e8ced9c183152e7c69c2482ff31090c96fcda26c257a00",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4ECB8eiyUh9wAi6ziWQQZgi26kNR",
+        "stableRecordKeySha256": "2431c5d0b050b72538e8ced9c183152e7c69c2482ff31090c96fcda26c257a00",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[12]",
-      "classificationConfidence": "575d7653865371f7249c0d8a2e53d3baa143902d",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:575d7653865371f7249c0d8a2e53d3baa143902d",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "2431c5d0b050b72538e8ced9c183152e7c69c2482ff31090c96fcda26c257a00",
-        "gitSha": "dpl_4ECB8eiyUh9wAi6ziWQQZgi26kNR",
+        "deploymentId": "dpl_4ECB8eiyUh9wAi6ziWQQZgi26kNR",
+        "gitSha": "575d7653865371f7249c0d8a2e53d3baa143902d",
+        "laneARecordOrdinal": 225,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Artificial Intelligence",
+        "section": "Execution Scheduling",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Scheduler",
+        "capability": "Work-package queue scheduling",
+        "feature": "Connect scheduler to work-package queue",
+        "canonicalTarget": [
+          "ai-orchestration/scheduler/work-queue"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "8810f127165988e4e34eb054010367c5ced3781de63b9e08e06a2797c4108f44",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "022b8ce69c79e7126f8f2c2aa86f2f7767ac3634ad696fbbff9bbd3c26fad805",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Scheduler"
+        },
+        {
+          "routeId": "74ddde2cfff5950669e904d1397d584251e634f3c5ee0fdef3f93c8d96b116c8",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Scheduler::capability::Work-package queue scheduling"
+        },
+        {
+          "routeId": "f05934f8a83f33738817cb2e3067d7425c88748febb8307e3d226cbf3effac4f",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Scheduler::capability::Work-package queue scheduling::feature::Connect scheduler to work-package queue"
+        },
+        {
+          "routeId": "01c90dc79eb1086c1aedd1bd9cff0990e4dd1e62eb40ab6086654e66c584fb9d",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::ai-orchestration/scheduler/work-queue"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Cib9dZP3QUU6wYCwCetH6WAYxCXk",
+      "stableRecordKeySha256": "184be2f255afa69b9279cd5a695971666976c301a2fcf96d6d550afe7dd95c3e",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Cib9dZP3QUU6wYCwCetH6WAYxCXk",
+        "stableRecordKeySha256": "184be2f255afa69b9279cd5a695971666976c301a2fcf96d6d550afe7dd95c3e",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[13]",
-      "classificationConfidence": "226e12fa99da9926946ad2137bca0e48b4f51aef",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:226e12fa99da9926946ad2137bca0e48b4f51aef",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "184be2f255afa69b9279cd5a695971666976c301a2fcf96d6d550afe7dd95c3e",
-        "gitSha": "dpl_Cib9dZP3QUU6wYCwCetH6WAYxCXk",
+        "deploymentId": "dpl_Cib9dZP3QUU6wYCwCetH6WAYxCXk",
+        "gitSha": "226e12fa99da9926946ad2137bca0e48b4f51aef",
+        "laneARecordOrdinal": 228,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Artificial Intelligence",
+        "section": "Autonomous Repair",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Repair Automation",
+        "capability": "Autonomous repair PR creation",
+        "feature": "Autonomous repair PR creator",
+        "canonicalTarget": [
+          "ai-orchestration/repair/pr-creator"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "4a551f315d591fb83acaf622fd459843ce0acd491b6fe4376ed9b89c94924bff",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "ea06d3ca14de583064790ccb0c2192790720d1ffa765029171b552c16f04f666",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Repair Automation"
+        },
+        {
+          "routeId": "d4bd0b03ecaed8e5fd3a39be67906472439fadf44aa9f75990bc33c8d93f3a07",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Repair Automation::capability::Autonomous repair PR creation"
+        },
+        {
+          "routeId": "4319126c9ecaf817ed852bb9313c9b5eed8a565b88741c6f3974de8163b0f5f2",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Repair Automation::capability::Autonomous repair PR creation::feature::Autonomous repair PR creator"
+        },
+        {
+          "routeId": "071a143455ec2cd22bae23166f9638d86b9fb98bf3b5bf3a4b01a6aa9ae3f8a8",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::ai-orchestration/repair/pr-creator"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Az7MrfeH7UwJWHBFBHW4avcYbJ4m",
+      "stableRecordKeySha256": "a8595a85b3160e6fa2661f559cd58580c1ecb9bdacb213b128c647acd9cea08d",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Az7MrfeH7UwJWHBFBHW4avcYbJ4m",
+        "stableRecordKeySha256": "a8595a85b3160e6fa2661f559cd58580c1ecb9bdacb213b128c647acd9cea08d",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[14]",
-      "classificationConfidence": "edc0824c5407437401672d9afb3390a0e3115d24",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:edc0824c5407437401672d9afb3390a0e3115d24",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "a8595a85b3160e6fa2661f559cd58580c1ecb9bdacb213b128c647acd9cea08d",
-        "gitSha": "dpl_Az7MrfeH7UwJWHBFBHW4avcYbJ4m",
+        "deploymentId": "dpl_Az7MrfeH7UwJWHBFBHW4avcYbJ4m",
+        "gitSha": "edc0824c5407437401672d9afb3390a0e3115d24",
+        "laneARecordOrdinal": 233,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "AI Safety & Governance",
+        "section": "Execution Scheduling",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Scheduler Guard",
+        "capability": "Autonomous scheduler safety",
+        "feature": "Harden autonomous scheduler guard",
+        "canonicalTarget": [
+          "ai-orchestration/scheduler/guard"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "b6b8e42dafcc6b358bb5f8ac89a41ccb35866f76087ff943b5ffe924cb91fae4",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "ebb7695fe8ed92a71deb9ec08a3aa9c35ea7986a780ccc474ffa168b5bf38820",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Scheduler Guard"
+        },
+        {
+          "routeId": "dab7a3b6f5048733c7319697cb36403e66e6249d9d2ed064e5ccd5509c054a59",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Scheduler Guard::capability::Autonomous scheduler safety"
+        },
+        {
+          "routeId": "bd16be7b5aee5a8cfea2383032a7858f7b5fa4fa5da48c53c5ab5e412b5844b8",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Scheduler Guard::capability::Autonomous scheduler safety::feature::Harden autonomous scheduler guard"
+        },
+        {
+          "routeId": "bac3348a77f7bc5583a8917a0672da8e1e4edddf67a60911d5420df472379bff",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::ai-orchestration/scheduler/guard"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3Fv1iEDjhVDvgGZsaMFFBXT3fZ2W",
+      "stableRecordKeySha256": "64ca41eb07fb92fff3678a7d98c96059b2e23a74ec90c87c360cb403510aea16",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3Fv1iEDjhVDvgGZsaMFFBXT3fZ2W",
+        "stableRecordKeySha256": "64ca41eb07fb92fff3678a7d98c96059b2e23a74ec90c87c360cb403510aea16",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[15]",
-      "classificationConfidence": "863c7912af7c1f22b441b5079c9efae09ebe0303",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:863c7912af7c1f22b441b5079c9efae09ebe0303",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "64ca41eb07fb92fff3678a7d98c96059b2e23a74ec90c87c360cb403510aea16",
-        "gitSha": "dpl_3Fv1iEDjhVDvgGZsaMFFBXT3fZ2W",
+        "deploymentId": "dpl_3Fv1iEDjhVDvgGZsaMFFBXT3fZ2W",
+        "gitSha": "863c7912af7c1f22b441b5079c9efae09ebe0303",
+        "laneARecordOrdinal": 234,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Artificial Intelligence",
+        "section": "Planning & Routing",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Runtime Ledger",
+        "capability": "Planning-route execution accounting",
+        "feature": "Connect router planning routes to runtime ledger",
+        "canonicalTarget": [
+          "ai-orchestration/runtime-ledger"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "947e69a25f4177148c487cdfd1db1a2745796dfa45a88c5ad947758589606606",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "2587ff7b2ea2250ee7103533dbc740a1800fa8fc862bb7ccb5df7c56a952ec97",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Runtime Ledger"
+        },
+        {
+          "routeId": "b9ba3bfbeb5591be37c76b6df8e09320c5ffbc3c18629b9889c890e0dc12c016",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Runtime Ledger::capability::Planning-route execution accounting"
+        },
+        {
+          "routeId": "e23a7517089297d627401ec0e648db4ebb8063cf1f9de3b897b570ea43fddd7e",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Runtime Ledger::capability::Planning-route execution accounting::feature::Connect router planning routes to runtime ledger"
+        },
+        {
+          "routeId": "1b38d9a3b10ba58663343b6063900bb10324cb7cf57c98094821245ed951beb6",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::ai-orchestration/runtime-ledger"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6mH9mZFJtjwVMVciVpZJLJSbDqut",
+      "stableRecordKeySha256": "de1f57fa57657a2cf8f63f8f549b7a99f473079ff08b901b72e44d82202581ea",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6mH9mZFJtjwVMVciVpZJLJSbDqut",
+        "stableRecordKeySha256": "de1f57fa57657a2cf8f63f8f549b7a99f473079ff08b901b72e44d82202581ea",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[16]",
-      "classificationConfidence": "b3c588e80a1e2821536ea19efd901820d05e4c1e",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:b3c588e80a1e2821536ea19efd901820d05e4c1e",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "de1f57fa57657a2cf8f63f8f549b7a99f473079ff08b901b72e44d82202581ea",
-        "gitSha": "dpl_6mH9mZFJtjwVMVciVpZJLJSbDqut",
+        "deploymentId": "dpl_6mH9mZFJtjwVMVciVpZJLJSbDqut",
+        "gitSha": "b3c588e80a1e2821536ea19efd901820d05e4c1e",
+        "laneARecordOrdinal": 235,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Artificial Intelligence",
+        "section": "Code Generation",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Runtime Ledger",
+        "capability": "Code-generation execution accounting",
+        "feature": "Connect code-generation worker to runtime ledger",
+        "canonicalTarget": [
+          "ai-orchestration/runtime-ledger"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "b3c2dfea38e44293431aff36c50b151569aa19a42c2067a09104563c88945e38",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "c000388246ca3063c2fbe972f363fe11212ff8d1b41aef38e34ebaf12a906bc8",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Runtime Ledger"
+        },
+        {
+          "routeId": "d953477700d93b27ac797575a7613a882b6751b53cb12d9c4249398a3ecbcccc",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Runtime Ledger::capability::Code-generation execution accounting"
+        },
+        {
+          "routeId": "d108dc30000f8659cce1d5742d2077ee2269a3dafe815bad41dc6351ce7d5749",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Runtime Ledger::capability::Code-generation execution accounting::feature::Connect code-generation worker to runtime ledger"
+        },
+        {
+          "routeId": "352d513eb037576699d8ae423d12a750ead7776b2718bfe6e8edf5ed1983b478",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::ai-orchestration/runtime-ledger"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_C2NJnqDTLX1Bk6HLCQPQysxMdfey",
+      "stableRecordKeySha256": "6661d9aad1f69f79e167eea905bcb4ffecd90c6cd2cdfa86e74a2184f426bdf3",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_C2NJnqDTLX1Bk6HLCQPQysxMdfey",
+        "stableRecordKeySha256": "6661d9aad1f69f79e167eea905bcb4ffecd90c6cd2cdfa86e74a2184f426bdf3",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[17]",
-      "classificationConfidence": "c1b4cb6985f4b5102a65c6d7a82e87df3497b20c",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:c1b4cb6985f4b5102a65c6d7a82e87df3497b20c",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "6661d9aad1f69f79e167eea905bcb4ffecd90c6cd2cdfa86e74a2184f426bdf3",
-        "gitSha": "dpl_C2NJnqDTLX1Bk6HLCQPQysxMdfey",
+        "deploymentId": "dpl_C2NJnqDTLX1Bk6HLCQPQysxMdfey",
+        "gitSha": "c1b4cb6985f4b5102a65c6d7a82e87df3497b20c",
+        "laneARecordOrdinal": 236,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Platform Reliability",
+        "section": "Kernel Contracts",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Ecosystem Domain",
+        "capability": "Domain-contract correctness",
+        "feature": "Remove literal newline escape from ecosystem domain",
+        "canonicalTarget": [
+          "ai-orchestration/ecosystem-domain"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "0d6c54f5acfe24689dfac03fa7a66887ed36560d1c603925ea3b5b5537caa182",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "b0869003e527546db476a25b238408ee9b1b37660ed2d0a4b1382cc9b51f4dfb",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Ecosystem Domain"
+        },
+        {
+          "routeId": "77761a79f69364f8df8993cd014afe559389fe719bcc6fcc7ae4fda0a024fac1",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Ecosystem Domain::capability::Domain-contract correctness"
+        },
+        {
+          "routeId": "9ac4400b42d25a92ec59adfbe946897cd46402e3c145a4786a1c52c0e327f57e",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Ecosystem Domain::capability::Domain-contract correctness::feature::Remove literal newline escape from ecosystem domain"
+        },
+        {
+          "routeId": "593e98e174961f22d00f47be63f7b31ebcfffe9b94072428f3025c4ffecfbc45",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::ai-orchestration/ecosystem-domain"
+        }
+      ]
     },
     {
-      "stableRecordKey": null,
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6D4KieKRhNprZcmcdHdvZNSQ7NdA",
+      "stableRecordKeySha256": "9c9636b1da8f805649e8a9dd7a7ab3e7d851d7476462c3ccd01169395330a553",
       "sourceFingerprint": null,
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6D4KieKRhNprZcmcdHdvZNSQ7NdA",
+        "stableRecordKeySha256": "9c9636b1da8f805649e8a9dd7a7ab3e7d851d7476462c3ccd01169395330a553",
+        "canonicalRecordId": null,
+        "identityDerivation": "EXPLICIT_STABLE_RECORD_KEY"
+      },
       "classificationId": null,
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json#records[18]",
-      "classificationConfidence": "3ac2e53133a3075578d87e29db43b412dc4c8b06",
+      "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:3ac2e53133a3075578d87e29db43b412dc4c8b06",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "projectId": null,
-        "deploymentId": "9c9636b1da8f805649e8a9dd7a7ab3e7d851d7476462c3ccd01169395330a553",
-        "gitSha": "dpl_6D4KieKRhNprZcmcdHdvZNSQ7NdA",
+        "deploymentId": "dpl_6D4KieKRhNprZcmcdHdvZNSQ7NdA",
+        "gitSha": "3ac2e53133a3075578d87e29db43b412dc4c8b06",
+        "laneARecordOrdinal": 240,
+        "deploymentState": "READY",
         "sourcePath": null,
         "sourceBlobSha": null,
-        "liveTruth": null
+        "canonicalInputPath": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json",
+        "canonicalInputBlobSha": "9de4f1d638f2da464a028cc7c64b887665bb06c9",
+        "liveTruth": null,
+        "tupleSchema": "[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,profile,confidence,reviewRequired,state]"
       },
       "classificationSummary": {
-        "theme": null,
-        "section": null,
-        "contentType": null,
-        "module": null,
-        "subsystem": null,
-        "capability": null,
-        "feature": null,
-        "canonicalTarget": [],
+        "theme": "Artificial Intelligence",
+        "section": "Execution Runtime",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Executor Adapter",
+        "capability": "Execution planning",
+        "feature": "Executor adapter planner",
+        "canonicalTarget": [
+          "ai-orchestration/executor-adapter"
+        ],
         "relatedModules": [],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "MISSING_STABLE_RECORD_KEY",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "b9195d8608f53139e160b6557cd4fb2730be78a2f4f88aae0b9aa676d6a5f426",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "b6df0228be391a8691aabf4f218245ee24e8ec01ac2db5b4acc8aed9b7350af4",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Executor Adapter"
+        },
+        {
+          "routeId": "91239b423d04a62b6c96387fce639194f7068af8f65ecc8696793fdcb19fb145",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Executor Adapter::capability::Execution planning"
+        },
+        {
+          "routeId": "5a08341f5808580694a21cf29328aa820c4869b515d639f8c7f41e8fcff348ce",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Executor Adapter::capability::Execution planning::feature::Executor adapter planner"
+        },
+        {
+          "routeId": "fa2f31015ae5922e43f27a7e6fc0a195c3d145985ee76a1388b7b1acced7a73e",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::ai-orchestration/executor-adapter"
+        }
+      ]
     }
   ]
 }

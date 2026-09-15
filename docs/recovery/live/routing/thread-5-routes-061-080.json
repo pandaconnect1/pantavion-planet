@@ -1,14 +1,16 @@
 {
-  "schema": "pantavion_module_graph_routes_v2",
+  "schema": "pantavion_module_graph_routes_v3",
   "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
   "thread": 5,
   "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
   "routingContract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
   "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-061-080.json",
   "sourceClassificationSchema": "pantavion_semantic_classification_v1_compact",
+  "sourceRecordTuple": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]",
   "sourceClassificationSha256": "87b94dc3d4fd5f1f8e04553c5ea148501a464d897290f410f8427ca871844236",
   "explicitSourceCanonicalLedger": null,
   "explicitSourceCanonicalLedgerSha256": null,
+  "explicitSourceCanonicalLedgerGitBlobSha": null,
   "sourceRecordCount": 20,
   "summary": {
     "routedRecords": 0,
@@ -19,13 +21,14 @@
     "graphEdgeCount": 0,
     "semanticMirrorsSuppressed": 0,
     "implementationCandidates": 0,
-    "duplicateStableRecordKeys": 0,
-    "duplicateRouteIds": 0
+    "duplicateStableRecordKeysWithinOutput": 0,
+    "duplicateRouteIdsWithinOutput": 0
   },
-  "truthBoundary": "Only routeState=ROUTED has durable module/graph edges. WAITING_* and REVIEW_REQUIRED are not completion; DEPLOYED is not VERIFIED_LIVE.",
+  "truthBoundary": "Only routeState=ROUTED has semantic module/graph edges. REVIEW_REQUIRED has governed_hold only. WAITING_* has zero edges. DEPLOYED is not VERIFIED_LIVE.",
   "bindings": [
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8ina1yFNLSDBJhCGU4kpRkAoVB4D",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -35,9 +38,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_8ina1yFNLSDBJhCGU4kpRkAoVB4D",
         "gitSha": "19369bd49cdffe58b3dc90843fe023beed1a7b99",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Social Network",
@@ -60,6 +68,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_F4mC2YU35xPG6oXCpeEZ857XwkP4",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -69,9 +78,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_F4mC2YU35xPG6oXCpeEZ857XwkP4",
         "gitSha": "2dd17698d25ae22e6c1f9750f68ade07c1935997",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Platform Reliability",
@@ -94,6 +108,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FwtHobeoJNEhtUmCBrKhqp6YmNbs",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -103,9 +118,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_FwtHobeoJNEhtUmCBrKhqp6YmNbs",
         "gitSha": "216fdd36e4c8aee75feedc32c7bd7a236c2dc5d0",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Platform Reliability",
@@ -128,6 +148,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_A7bZBNGy2fYDVQTzxrXZ41JyCGZU",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -137,9 +158,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_A7bZBNGy2fYDVQTzxrXZ41JyCGZU",
         "gitSha": "e1e8adada49dbcea316e41403ea59db82bbc5997",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Platform Reliability",
@@ -162,6 +188,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4FCVQPWjHjwG7kCdXGeZhUbuERiQ",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -171,9 +198,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_4FCVQPWjHjwG7kCdXGeZhUbuERiQ",
         "gitSha": "8dccdf599325ca76da6ee8491abd3b644d836bc2",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Artificial Intelligence",
@@ -196,6 +228,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DHeoA7rEYybYd6a68aoWzHBXwKwm",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -205,9 +238,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_DHeoA7rEYybYd6a68aoWzHBXwKwm",
         "gitSha": "7322dfdd35f5ea92c7016ebbdadb2ada504fc736",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Artificial Intelligence",
@@ -230,6 +268,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Cr2Zn15DCLR8WTQpRzHjjCpxijNq",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -239,9 +278,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_Cr2Zn15DCLR8WTQpRzHjjCpxijNq",
         "gitSha": "db6e1ab2a961fb4c4fe2aabd3cc30c96c2f79562",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Trust & Observability",
@@ -264,6 +308,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BoGKsUP9x2jW4aAA8G4rifEtY3iA",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -273,9 +318,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_BoGKsUP9x2jW4aAA8G4rifEtY3iA",
         "gitSha": "1b8b9e567d82586cd37db9f6cf2c4df3df62cae5",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Trust & Observability",
@@ -298,6 +348,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FHGeM9ncJ2hixAkpFThZUGshqRko",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -307,9 +358,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_FHGeM9ncJ2hixAkpFThZUGshqRko",
         "gitSha": "db57779e046cb70f397e4f5679bb2a6e55f6bd2c",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Trust & Observability",
@@ -332,6 +388,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GSbRgBtAAvAaLNaCnkqJG42rpuvs",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -341,9 +398,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_GSbRgBtAAvAaLNaCnkqJG42rpuvs",
         "gitSha": "71548bd0e52023677a6d0bba240d03447b390399",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Engineering Evidence",
@@ -366,6 +428,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FTbGmHzwBg6mido4HeY82j23tGQV",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -375,9 +438,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_FTbGmHzwBg6mido4HeY82j23tGQV",
         "gitSha": "453c0c640c1d8f1ec2c0d494aabb72d44cf707af",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Life Navigation",
@@ -400,6 +468,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HjzcEsc1J9AKuAbxMt8hUPG7D8sV",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -409,9 +478,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_HjzcEsc1J9AKuAbxMt8hUPG7D8sV",
         "gitSha": "9d1dd2c789b389c9515d77a63b56305a2cc51988",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Governance & Resilience",
@@ -438,6 +512,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FSA7XQGaBnHEBSYXKustChkQTzu8",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -447,9 +522,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_FSA7XQGaBnHEBSYXKustChkQTzu8",
         "gitSha": "79792a4dbc560307d763542f1dbaa37b0d18113d",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Engineering Evidence",
@@ -472,6 +552,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HFRvbiqdVg4vnMJcx5G5E5PpSekE",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -481,9 +562,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_HFRvbiqdVg4vnMJcx5G5E5PpSekE",
         "gitSha": "2dad175a41c75b03b6f2b045145ec639a7611f63",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Identity & Access",
@@ -506,6 +592,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DdTPk1ka2uJG2roKfZUQZ55WH5bb",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -515,9 +602,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_DdTPk1ka2uJG2roKfZUQZ55WH5bb",
         "gitSha": "baec3952c403545a5bd8c8a5ce576de5561ffc80",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Identity & Access",
@@ -540,6 +632,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_43fUz989VbqCvQapE9Kkkc9xTBoS",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -549,9 +642,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_43fUz989VbqCvQapE9Kkkc9xTBoS",
         "gitSha": "cbb3fa886b0c3a5064396b73a8aedb4f0acf916c",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Identity & Access",
@@ -574,6 +672,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5PBdWPgZdtAd2nkneX2LLWXi9B38",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -583,9 +682,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_5PBdWPgZdtAd2nkneX2LLWXi9B38",
         "gitSha": "b32f93d00eeb0b9fa14d05fce151ef01cca56133",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "People & Identity",
@@ -608,6 +712,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CMtTVhEKwBfPUVNvJ2ibZXwWnWXJ",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -617,9 +722,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_CMtTVhEKwBfPUVNvJ2ibZXwWnWXJ",
         "gitSha": "e07d863ccf661ac9367a8d3bee2504b1dcf9ed2e",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "People & Identity",
@@ -642,6 +752,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3Efep6nVRhtFC8TkJBLVZBZr6Eqc",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -651,9 +762,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_3Efep6nVRhtFC8TkJBLVZBZr6Eqc",
         "gitSha": "35a02b240dcd4e0a20e089838d65688cf02941ac",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "People & Identity",
@@ -676,6 +792,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3dU51hRvybwoMJhtj6vESvgEdYjg",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -685,9 +802,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_3dU51hRvybwoMJhtj6vESvgEdYjg",
         "gitSha": "71a7cf78382e9d5f7fed88789fb281ccb679c41d",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Identity & Access",

@@ -1,14 +1,16 @@
 {
-  "schema": "pantavion_module_graph_routes_v2",
+  "schema": "pantavion_module_graph_routes_v3",
   "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
   "thread": 5,
   "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
   "routingContract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
   "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-181-200.json",
   "sourceClassificationSchema": "pantavion_semantic_classification_v1_compact",
+  "sourceRecordTuple": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]",
   "sourceClassificationSha256": "12cd03e3bce74e7bd2a94fc24bd4f407fc72fb7aabbe2778b75d2a75e23364ab",
   "explicitSourceCanonicalLedger": null,
   "explicitSourceCanonicalLedgerSha256": null,
+  "explicitSourceCanonicalLedgerGitBlobSha": null,
   "sourceRecordCount": 20,
   "summary": {
     "routedRecords": 0,
@@ -19,13 +21,14 @@
     "graphEdgeCount": 0,
     "semanticMirrorsSuppressed": 0,
     "implementationCandidates": 0,
-    "duplicateStableRecordKeys": 0,
-    "duplicateRouteIds": 0
+    "duplicateStableRecordKeysWithinOutput": 0,
+    "duplicateRouteIdsWithinOutput": 0
   },
-  "truthBoundary": "Only routeState=ROUTED has durable module/graph edges. WAITING_* and REVIEW_REQUIRED are not completion; DEPLOYED is not VERIFIED_LIVE.",
+  "truthBoundary": "Only routeState=ROUTED has semantic module/graph edges. REVIEW_REQUIRED has governed_hold only. WAITING_* has zero edges. DEPLOYED is not VERIFIED_LIVE.",
   "bindings": [
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_EitaF72DZrjL7mXwa3dB7XSnKwo6",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -35,9 +38,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_EitaF72DZrjL7mXwa3dB7XSnKwo6",
         "gitSha": "afc5ca220d52200410b7c2f42c88feb817156b47",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Creation & Execution",
@@ -60,6 +68,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DWRLNsHNSD3qJRVL3FZGxbgJBeTi",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -69,9 +78,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_DWRLNsHNSD3qJRVL3FZGxbgJBeTi",
         "gitSha": "cc2bba6a644bc8e9391a00c71edb27574ca11846",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Data & Artifacts",
@@ -96,6 +110,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_67azS8Ww1V6Y2hNjZketd2pHzDfm",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -105,9 +120,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_67azS8Ww1V6Y2hNjZketd2pHzDfm",
         "gitSha": "bb1fbb172415df1f2c96ee1db56183b0ea5098a0",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Artificial Intelligence",
@@ -130,6 +150,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Bh3eTo3oaXNyBxt8PWN9ggxZAw2d",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -139,9 +160,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_Bh3eTo3oaXNyBxt8PWN9ggxZAw2d",
         "gitSha": "bd8140691b291516c516f6a57f59382d4a7c48cd",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Artificial Intelligence",
@@ -164,6 +190,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_26SRUapAAdVvDmEZTYkbHKip4LHo",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -173,9 +200,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_26SRUapAAdVvDmEZTYkbHKip4LHo",
         "gitSha": "3af6473b1b48888d53a7a2708f56676309295cb1",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Artificial Intelligence",
@@ -198,6 +230,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_zd4qzh6GEMv3jRMhxSEfAQgfRtpJ",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -207,9 +240,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_zd4qzh6GEMv3jRMhxSEfAQgfRtpJ",
         "gitSha": "6917984bfb37684089cfcc9cbb3567ae4cc98d37",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Governance & Control",
@@ -232,6 +270,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_27GT4bWEHDLNn71Dn147i6aVjXad",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -241,9 +280,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_27GT4bWEHDLNn71Dn147i6aVjXad",
         "gitSha": "76e08e04b187a0ff3dcc343d54106eb09599d663",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Artificial Intelligence",
@@ -266,6 +310,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HGL677cQTJtv5v1hNd829vgP2Gb5",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -275,9 +320,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_HGL677cQTJtv5v1hNd829vgP2Gb5",
         "gitSha": "0cc01a4bd788c35098bf42f44e0b670fb7eb3f2e",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Artificial Intelligence",
@@ -300,6 +350,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8gCHJHdPepEJw9TZrTLixArF2ptY",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -309,9 +360,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_8gCHJHdPepEJw9TZrTLixArF2ptY",
         "gitSha": "03ae20725edaaedfaeb16242511b7dfa0d892127",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Infrastructure & City Intelligence",
@@ -334,6 +390,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AVV4DoVYthi795yJCgizbEsz7F4M",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -343,9 +400,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_AVV4DoVYthi795yJCgizbEsz7F4M",
         "gitSha": "b64709e090d0cd0ec033e93099cf58e7239c60f2",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Infrastructure & City Intelligence",
@@ -368,6 +430,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DQZEhKPDpBjVCW7UKzUVgf6cFb6d",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -377,9 +440,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_DQZEhKPDpBjVCW7UKzUVgf6cFb6d",
         "gitSha": "e9fbc2f4f997b3b38bbf3997a8382f442b6af4de",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Infrastructure & City Intelligence",
@@ -402,6 +470,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7QDSRSfGp8vCPuaKpnuBgriuW4HF",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -411,9 +480,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_7QDSRSfGp8vCPuaKpnuBgriuW4HF",
         "gitSha": "1df930183fbb67c740ef1cb501056bded68b881c",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Language & Culture",
@@ -436,6 +510,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9WgHDopqfzJVPqEQryhE6EJQimFw",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -445,9 +520,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_9WgHDopqfzJVPqEQryhE6EJQimFw",
         "gitSha": "1df930183fbb67c740ef1cb501056bded68b881c",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Language & Culture",
@@ -470,6 +550,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8SJcEnM6LS16zrbCGpawDP4xwDzh",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -479,9 +560,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_8SJcEnM6LS16zrbCGpawDP4xwDzh",
         "gitSha": "1df930183fbb67c740ef1cb501056bded68b881c",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Language & Culture",
@@ -504,6 +590,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9PrJUQ6RXZ8oAh5CfojUD7UgniRE",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -513,9 +600,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_9PrJUQ6RXZ8oAh5CfojUD7UgniRE",
         "gitSha": "cc4ebf473a05b943554927e7cc2c2843002bd83f",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Language & Culture",
@@ -540,6 +632,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DyM1cQDMtz57wEbX5cVb2Y5zCjdU",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -549,9 +642,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_DyM1cQDMtz57wEbX5cVb2Y5zCjdU",
         "gitSha": "4862a50854b1f284239b67d4917ae3d01d4f86b3",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Language & Culture",
@@ -574,6 +672,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Cg1DEz7j427BcJCgbXYXzmaH9jUt",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -583,9 +682,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_Cg1DEz7j427BcJCgbXYXzmaH9jUt",
         "gitSha": "ae60d8a78145e49cc3b2118955625b45a35aa202",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Trust & Experience",
@@ -610,6 +714,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BfAiosbKE3aVLv4StETMufMCwj43",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -619,9 +724,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_BfAiosbKE3aVLv4StETMufMCwj43",
         "gitSha": "f4a944a14eaceb4dbbadbd1581955ba303d6910e",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Experience Layer",
@@ -644,6 +754,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DJ1Wby6nHrPpyF6Y1fWyGWFgqGd8",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -653,9 +764,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_DJ1Wby6nHrPpyF6Y1fWyGWFgqGd8",
         "gitSha": "5df41759be0db5570f21129c086e3fc12577956c",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Artificial Intelligence",
@@ -678,6 +794,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CCe8TJxFb6vM9VwQYtLQBBAk38aL",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -687,9 +804,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_CCe8TJxFb6vM9VwQYtLQBBAk38aL",
         "gitSha": "b69d7c66797a17c99c3f3f52b49c47216656c591",
+        "laneARecordOrdinal": null,
+        "deploymentState": "READY",
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
         "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence,deploymentState]"
       },
       "classificationSummary": {
         "theme": "Artificial Intelligence",

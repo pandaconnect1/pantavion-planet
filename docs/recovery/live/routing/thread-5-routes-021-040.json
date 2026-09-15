@@ -1,14 +1,16 @@
 {
-  "schema": "pantavion_module_graph_routes_v2",
+  "schema": "pantavion_module_graph_routes_v3",
   "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
   "thread": 5,
   "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
   "routingContract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
   "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-021-040.json",
   "sourceClassificationSchema": "pantavion_semantic_classification_v1_compact",
+  "sourceRecordTuple": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]",
   "sourceClassificationSha256": "73e7bf69d989ecf20fe4f64a4afbae92a0ae7691727b7963b84d4d1b86aae75d",
   "explicitSourceCanonicalLedger": null,
   "explicitSourceCanonicalLedgerSha256": null,
+  "explicitSourceCanonicalLedgerGitBlobSha": null,
   "sourceRecordCount": 20,
   "summary": {
     "routedRecords": 0,
@@ -19,13 +21,14 @@
     "graphEdgeCount": 0,
     "semanticMirrorsSuppressed": 0,
     "implementationCandidates": 0,
-    "duplicateStableRecordKeys": 0,
-    "duplicateRouteIds": 0
+    "duplicateStableRecordKeysWithinOutput": 0,
+    "duplicateRouteIdsWithinOutput": 0
   },
-  "truthBoundary": "Only routeState=ROUTED has durable module/graph edges. WAITING_* and REVIEW_REQUIRED are not completion; DEPLOYED is not VERIFIED_LIVE.",
+  "truthBoundary": "Only routeState=ROUTED has semantic module/graph edges. REVIEW_REQUIRED has governed_hold only. WAITING_* has zero edges. DEPLOYED is not VERIFIED_LIVE.",
   "bindings": [
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9ztMC3RxoAhpfXPK9LLvWZMgiY8p",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -35,9 +38,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_9ztMC3RxoAhpfXPK9LLvWZMgiY8p",
         "gitSha": "158af3f78100656fb1134a794893127b0e22ee0b",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Advertising",
@@ -60,6 +68,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5woWjkDbihTQ8JMtbz7FxmyMDPhG",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -69,9 +78,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_5woWjkDbihTQ8JMtbz7FxmyMDPhG",
         "gitSha": "310aca5a37e3b255cc2b82fdf1c61b2b40509f25",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Advertising",
@@ -94,6 +108,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Fmpix9CEdiFxzvs3AQH3JusWv4ez",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -103,9 +118,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_Fmpix9CEdiFxzvs3AQH3JusWv4ez",
         "gitSha": "1d2b45871a56be4dd62891db79bc67f9454e77ef",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Advertising",
@@ -128,6 +148,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8sMCpaSGSRRhuyEJuBE3XTjohHBM",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -137,9 +158,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_8sMCpaSGSRRhuyEJuBE3XTjohHBM",
         "gitSha": "f83839bae74caf89f02e0916fca109b4ed730987",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Advertising",
@@ -162,6 +188,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8CigaLpLrSUzmSe7KkZ3uiNWpgLR",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -171,9 +198,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_8CigaLpLrSUzmSe7KkZ3uiNWpgLR",
         "gitSha": "c4029b3367cc2b076916e06d01a1475796af4333",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Advertising",
@@ -196,6 +228,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7H7ABfZhYEaxwFDAHhsHLacFhGib",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -205,9 +238,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_7H7ABfZhYEaxwFDAHhsHLacFhGib",
         "gitSha": "0a75f0cedfe8cdb1ac60a78093d07459905cf1a0",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Advertising",
@@ -232,6 +270,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AyGjFC8SAJ9UyEYAGSBLqaL249B3",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -241,9 +280,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_AyGjFC8SAJ9UyEYAGSBLqaL249B3",
         "gitSha": "f5d425fc21350e62267428ac52a77259da8ae204",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Advertising",
@@ -266,6 +310,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CAcbRkoiTaoEqNHCYM3fxYAeLMn7",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -275,9 +320,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_CAcbRkoiTaoEqNHCYM3fxYAeLMn7",
         "gitSha": "064fab7a7c1572a9e5669fd03bc00760bcf3db19",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Advertising",
@@ -300,6 +350,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Eo6wfeLXB2x1NLy7mo2PfiTtETVi",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -309,9 +360,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_Eo6wfeLXB2x1NLy7mo2PfiTtETVi",
         "gitSha": "66b9a5ac73841f935c27828f0ff502ab12cfb870",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Advertising",
@@ -334,6 +390,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3LK7XN9xCiqWyuXSWcqTu7NMwjwa",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -343,9 +400,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_3LK7XN9xCiqWyuXSWcqTu7NMwjwa",
         "gitSha": "1c99bb454f011273c61f2645955903e78f138dcd",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Governance & Monetization",
@@ -368,6 +430,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AnZaW7k3BrkKJGGZ5bxPFJL2oUjy",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -377,9 +440,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_AnZaW7k3BrkKJGGZ5bxPFJL2oUjy",
         "gitSha": "733676d182c0ddc39169dbbe2329f458177893a3",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Platform Core",
@@ -402,6 +470,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7sJv3JKXtsdhcoGanQNmtAyGPwa7",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -411,9 +480,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_7sJv3JKXtsdhcoGanQNmtAyGPwa7",
         "gitSha": "c34e6d5b05feb35293d719997d0d1af51ab3d94a",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Advertising",
@@ -438,6 +512,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AFJywrAXC5QfFwDATptxeESxue6W",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -447,9 +522,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_AFJywrAXC5QfFwDATptxeESxue6W",
         "gitSha": "3be8ecc83159098f6ea393532aba8ae211246c35",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Data & Monetization",
@@ -472,6 +552,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9Tzz6vAMDJ9EyRGAXYcqPiQvRgHu",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -481,9 +562,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_9Tzz6vAMDJ9EyRGAXYcqPiQvRgHu",
         "gitSha": "05668ae6326899b517a02419c3186ddc62b97913",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Governance & Monetization",
@@ -506,6 +592,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2fqa9s9pBw1Uvtm9NLmf2XU6woee",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -515,9 +602,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_2fqa9s9pBw1Uvtm9NLmf2XU6woee",
         "gitSha": "5526bdf0cea4993f7e5d8ddd08e267df5af60657",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Social Network",
@@ -544,6 +636,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Fh2ypGSTAM1iCx86Zb6jN9cDScd5",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -553,9 +646,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_Fh2ypGSTAM1iCx86Zb6jN9cDScd5",
         "gitSha": "96e7e8764ca45f1eecef045f23c79e5d1961fb07",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Social Network",
@@ -578,6 +676,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6tT7FemGeMdbuB4owgQUwrYJAD97",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -587,9 +686,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_6tT7FemGeMdbuB4owgQUwrYJAD97",
         "gitSha": "4b58516cf430eca2359d92fdb625e124708a7cd1",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Social Network",
@@ -612,6 +716,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AcgqPuMWZJmBQ92FbXHJYrPRnhoV",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -621,9 +726,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_AcgqPuMWZJmBQ92FbXHJYrPRnhoV",
         "gitSha": "59ade71af5a9ea041b7d03d86d3ae396c7377880",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Communication & People",
@@ -649,6 +759,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DAyQDMiStJjU7pXzcTuWQnEwLD7R",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -658,9 +769,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_DAyQDMiStJjU7pXzcTuWQnEwLD7R",
         "gitSha": "d2aacdeb427599ffa1f3ded8cc6b3ad5fe85d3aa",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "Secure Communication",
@@ -683,6 +799,7 @@
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Fb4WLh35FKehttKkjoypvMHhvhGi",
+      "stableRecordKeySha256": null,
       "sourceFingerprint": null,
       "canonicalLedgerPointer": null,
       "classificationId": null,
@@ -692,9 +809,14 @@
         "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
         "deploymentId": "dpl_Fb4WLh35FKehttKkjoypvMHhvhGi",
         "gitSha": "fa43a048e779c0ef187737ee826c57dcf9e1f143",
+        "laneARecordOrdinal": null,
+        "deploymentState": null,
         "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
         "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
-        "liveTruth": "HISTORICAL_ONLY"
+        "canonicalInputPath": null,
+        "canonicalInputBlobSha": null,
+        "liveTruth": "HISTORICAL_ONLY",
+        "tupleSchema": "[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]"
       },
       "classificationSummary": {
         "theme": "People & Identity",
