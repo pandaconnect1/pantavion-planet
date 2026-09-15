@@ -1,0 +1,91 @@
+{
+  "schema": "pantavion_thread7_global_reconciliation_v1",
+  "observedAtUtc": "2026-09-15T18:13:01.190947Z",
+  "thread": 7,
+  "scope": "GLOBAL_DEDUP_RECONCILIATION_COMPLETENESS_AUDIT",
+  "status": "OPEN_NOT_COMPLETE",
+  "safety": {
+    "zeroDeletions": true,
+    "ingestionPerformed": false,
+    "ownedShardRewritten": false,
+    "secretValuesRecorded": false
+  },
+  "findings": [
+    {
+      "id": "T7-001",
+      "state": "RESOLVED_WITH_HISTORY_PRESERVED",
+      "type": "CLAIM_COLLISION",
+      "finding": "Thread 1 had multiple claim artifacts during the parallel startup race, but ABSORPTION_THREAD_1.lock and THREAD_1_10THREAD_PROTOCOL.lock explicitly yielded as SUPERSEDED_DUPLICATE_SCOPE_NO_WORK. THREAD_1.lock is the active owner. No duplicate intake/canonical writes are evidenced by the superseded claim artifacts. Preserve all claim history."
+    },
+    {
+      "id": "T7-002",
+      "state": "VALIDATED",
+      "type": "CANONICAL_SHARD_CONTRACT",
+      "finding": "PANTAVION_CANONICAL_SHARDING_V1 is disjoint and exhaustive: Thread 2 owns buckets 0-4 and Thread 3 owns buckets 5-9 using SHA-256(stableRecordKey), first 8 digest bytes as unsigned big-endian 64-bit integer, mod 10."
+    },
+    {
+      "id": "T7-003",
+      "state": "VALIDATED_SAMPLE_AND_BATCH",
+      "type": "THREAD2_DETERMINISTIC_CANONICALIZATION",
+      "finding": "For Thread 2 Lane-G records 201-240, all 19 durable output records were independently recomputed against the V1 hash/bucket rule with 19/19 hash matches and 19/19 bucket matches; all buckets are within 0-4 and duplicateStableKeysWithinOutput=0. Source provenance blob SHAs for the 201-220 and 221-240 source files match the referenced GitHub blobs."
+    },
+    {
+      "id": "T7-004",
+      "state": "IN_PROGRESS",
+      "type": "THREAD2_PROGRESS_WITHOUT_GLOBAL_COUNT_INFLATION",
+      "finding": "Thread 2 has durable batch evidence for Lane-G 201-240: 19 owned / 21 outside ownership, and 241-280: 22 owned / 18 outside ownership, with zero within-output duplicates reported. Thread-2 subtotal through source ordinal 280 is 41 owned records. This is not yet a validated global canonical count and must not be added blindly to the historical canonical floor."
+    },
+    {
+      "id": "T7-005",
+      "state": "DURABLE_OUTPUT_PRESENT_CROSS_RANGE_RECONCILIATION_PENDING",
+      "type": "THREAD3_BUCKET_COVERAGE",
+      "finding": "Thread 3 produced bucket ledgers 5-9 for Lane-G source range 201-600 under the same inputFingerprint. Bucket counts are 43, 41, 41, 39, and 35 respectively, totaling 199 records. Cross-checking every stable key against the complete 400-record source set and against Thread 2's final 201-record complement remains required before declaring the whole 201-600 range canonical-complete."
+    },
+    {
+      "id": "T7-006",
+      "state": "EXPECTED_FINAL_CARDINALITY_NOT_YET_PROVEN",
+      "type": "CROSS_SHARD_COMPLETENESS_GUARD",
+      "finding": "Given a 400-record deduplicated Lane-G source set and Thread 3's current 199 owned records, Thread 2 must ultimately account for exactly 201 unique owned stable keys for that same source set if V1 partitioning is complete. Do not declare 400/400 canonical coverage until union cardinality=400, intersection cardinality=0, source-key difference=0, provenance present for every record, and all hashes/buckets validate."
+    },
+    {
+      "id": "T7-007",
+      "state": "REVIEW_REQUIRED",
+      "type": "CANONICAL_LEDGER_AUTHORITY",
+      "finding": "The established recovery corpus identifies an authoritative canonical-ledger corpus under data/recovery/imported-pr248/canonical-ledger/corpus, while the new Thread 2/3 shard outputs are currently durable GitHub artifacts under docs/recovery/live/canonical. The 10-thread protocol requires a durable canonical ledger write before a record is counted canonical. Until the ownership contract or downstream binding explicitly establishes these new files as authoritative canonical ledger writes, or binds them idempotently into the canonical ledger, global canonical totals must remain conservative."
+    },
+    {
+      "id": "T7-008",
+      "state": "BLOCKING_RUNTIME_PROGRESS_OWNER_THREAD9",
+      "type": "SUPABASE_DURABLE_EXECUTION_STALL",
+      "finding": "At 2026-09-15T18:13:01.190947Z the task pantavion:recovery_partition:v1 has total=165, planned=165, running=0, succeeded=0, failed=0, leased=0, max_attempt=0, latest_heartbeat=null, latest_update=2026-09-15T14:30:27.011720Z. Thread 9 is the active exclusive owner of SUPABASE_DURABLE_WORKER_PLANE. GitHub worker progress must not be represented as Supabase durable partition execution progress."
+    },
+    {
+      "id": "T7-009",
+      "state": "VALIDATED_LOCAL_ONLY",
+      "type": "DEDUP_SCOPE_GUARD",
+      "finding": "Lane G reports 400 rehydrated records with 400 unique deployment IDs and zero duplicates for its local 201-600 recovery set. This validates local source-set uniqueness only; it does not prove absence of duplicates against earlier F/B/C/D canonical/source evidence or the wider 3,679 recovered deployment floor. Global semantic and physical dedup remains open."
+    }
+  ],
+  "countGuards": {
+    "vercelRecoveredDeploymentFloor": 3679,
+    "laneGRehydratedSourceRecords": 400,
+    "laneGLocalUniqueDeploymentIds": 400,
+    "thread3LaneGOwnedRecords": 199,
+    "thread2LaneGDurableOwnedSubtotalThroughOrdinal280": 41,
+    "thread2ExpectedFinalOwnedRecordsForLaneGIfSourceAndContractRemainUnchanged": 201,
+    "historicalCanonicalFloor": 219,
+    "globalCanonicalCount": "NOT_RECOMPUTED_DO_NOT_INFLATE",
+    "supabaseRecoveryPartitionsMaterialized": 165,
+    "supabaseRecoveryPartitionsExecuting": 0,
+    "supabaseRecoveryPartitionsTerminal": 0
+  },
+  "requiredNextAuditProofs": [
+    "Reconcile Thread 2 final buckets 0-4 against Thread 3 buckets 5-9 for the full Lane-G 201-600 source set: union=400, intersection=0, source difference=0.",
+    "Verify every Thread 3 stableRecordHash and shardBucket against PANTAVION_CANONICAL_SHARDING_V1 and detect duplicates within/across its five bucket ledgers.",
+    "Resolve canonical-ledger authority/binding before increasing the global canonical count.",
+    "Reconcile new Lane-G canonical identities against prior canonical/source evidence to detect cross-source physical duplicates and semantic mirrors.",
+    "Confirm Thread 9 produces real fenced Supabase execution evidence: nonzero attempt/lease followed by durable terminal results.",
+    "Audit downstream classification/routing/work-unit fanout for canonical records without treating pending downstream stages as completion."
+  ],
+  "completionTruth": "UNRESOLVED_IS_NOT_COMPLETION"
+}
