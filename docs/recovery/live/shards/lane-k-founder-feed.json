@@ -1,0 +1,72 @@
+{
+  "updatedAt": "2026-09-15T14:16:00Z",
+  "lane": "K",
+  "status": "ACTIVE_PARTIAL_INPUT",
+  "purpose": "Public-safe metadata feed contract for founder-only /admin/pantavion/recovery",
+  "privacy": "PUBLIC_SAFE_METADATA_ONLY",
+  "secretValuesIncluded": false,
+  "consumer": "/admin/pantavion/recovery",
+  "runtimeVerification": "NOT_CLAIMED",
+  "inputState": {
+    "laneF": "PARTIAL_CANONICALIZED_WITH_EXPLICIT_PAYLOAD_GAP",
+    "laneJ": "NOT_AVAILABLE_AT_THIS_CHECKPOINT",
+    "policy": "Consume A-J outputs only; do not infer missing module classifications."
+  },
+  "counts": {
+    "sourceRecordsAvailableFloor": 3679,
+    "canonicalizedRecordsFloor": 219,
+    "laneACapturedRecords": 619,
+    "laneAPayloadBackedCanonicalized": 219,
+    "laneASummaryOnlyPayloadGap": 400,
+    "vmxxPostTerminalUniqueNewDeploymentIds": 48,
+    "vmxxRecoveryGeneratedOperationalDeployments": 46,
+    "vmxxProductionMainDeployments": 2
+  },
+  "projects": [
+    {
+      "project": "pantavion-planet",
+      "project_id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+      "rescue_state": "TERMINAL_CHECKPOINTED",
+      "terminal": true,
+      "source_cursor": 1786126296277,
+      "next_cursor": null,
+      "last_non_empty_cursor": 1775918227754,
+      "terminal_probe_count": 0,
+      "live_truth": "HISTORICAL_ONLY",
+      "evidence_pointer": "docs/recovery/live/shards/lane-a-canonical.json"
+    },
+    {
+      "project": "pantavion-planet-vmxx",
+      "project_id": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+      "rescue_state": "TERMINAL_VERIFIED",
+      "terminal": true,
+      "terminal_until": 1786177840266,
+      "terminal_probe_count": 0,
+      "live_truth": "VERIFIED_LIVE_ROOT_ONLY",
+      "founder_recovery_route": {"http_status": 404, "live_truth": "NOT_LIVE_ON_VMXX_PRODUCTION"},
+      "evidence_pointer": "docs/recovery/live/shards/lane-b-vmxx.json"
+    }
+  ],
+  "canonical": {
+    "classification_state": "PARTIAL_CANONICALIZED_WITH_EXPLICIT_PAYLOAD_GAP",
+    "terminal_evidence_bound": true,
+    "github_evidence_bound": true,
+    "pantavion_founder_feed_bound": true,
+    "evidence_pointer": "docs/recovery/live/shards/lane-f-canonical-ingestion.json"
+  },
+  "gaps": [
+    "Lane J module-classification shard is not available at this checkpoint; no module/theme labels are guessed.",
+    "Lane A ranges 201-600 have durable traversal/count/cursor summaries but lack individual deployment payloads for per-record canonicalization (400-record summary-only payload gap).",
+    "Founder recovery route /admin/pantavion/recovery is directly verified 404 on VMXX production; no UI/runtime success is claimed.",
+    "Deployment filesystem/build-output export remains outside current connector evidence.",
+    "Exact decrypted secret values are not present in this feed and must remain private."
+  ],
+  "evidencePointers": [
+    "docs/recovery/live/shards/lane-a-canonical.json",
+    "docs/recovery/live/shards/lane-b-vmxx.json",
+    "docs/recovery/live/shards/lane-f-canonical-ingestion.json",
+    "docs/recovery/live/canonical/lane-f-a-run-payload-audit.json",
+    "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json"
+  ],
+  "rules": ["zero deletions", "zero Vercel mutations", "no secret values", "no deep deployment pagination", "READY/production is not VERIFIED_LIVE", "missing classifications remain explicit gaps"]
+}
