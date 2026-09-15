@@ -1,0 +1,27 @@
+{
+  "lane":"G","sourceLane":"A","project":"pantavion-planet","projectId":"prj_BxhpnjvAs1seyfBU1UYFU8nDykwh","range":"381-400","fromCursorExclusive":1779391117677,"nextCursor":1779134272977,"recordCount":20,"sourceSurface":"Vercel list_deployments","privacy":"PUBLIC_SAFE","sanitized":true,"secretValuesIncluded":false,"gitMessageResolution":"resolve from git_sha in GitHub when needed",
+  "schema":["deployment_id","created_at","state","target","git_sha","git_ref"],
+  "records":[
+    ["dpl_2GEjn1SGsXYUfu4cuWRQWzAWHqjd",1779389588347,"READY","production","1f6adbae86c05bd43082aa3bf75cedcdaf49fb0e","main"],
+    ["dpl_8An8boXoWtaC2mgwguoHCzLA74EJ",1779389034434,"READY","production","109a0beb1720287e5f7d94932b29e9f3ce8496d1","main"],
+    ["dpl_4szuXumVAWpRmCevCmkcAektqqkw",1779387787424,"READY","production","fc63f35418f7142159b03a73630b4462933d070f","main"],
+    ["dpl_5zxGyc4yv69G1UBq9PrnnvxXnou1",1779318660931,"READY","production","07f73658bab80481fece74e66483d3ab3fd5ff57","main"],
+    ["dpl_5i1RxQcDqkRh5uhkwWaCGoSM4dMW",1779317954211,"READY","production","3ec0a32c9d303bafb99a6ccd164c607dfed82fdd","main"],
+    ["dpl_9ok8uAzh9psxit6kd95o2Y7UJdmv",1779315649932,"READY","production","4a74bb6b0d2fc3c5680ef318856aaa13c2bc7e55","main"],
+    ["dpl_48bqPAhZoa7NSemeF69SjPkAu64G",1779312513899,"READY","production","9caea059659e151721e0c8815e7593e5ed581628","main"],
+    ["dpl_7rDuPLiYek5yWwzhjCmf6vuCFjLf",1779311982437,"READY","production","0ffb5c11b477ca894086cb2ff12b5d73ff2b87db","main"],
+    ["dpl_FHrCKCNFbQWMtdFCP4PPmRhWhVNW",1779304958019,"READY","production","84436e7a304fff91340586df09c070e1959878be","main"],
+    ["dpl_FU8VLHgBdjrZp2d9oiayL9Vnts8F",1779304479253,"READY","production","1579fc203644a7102ad9d024a9b8705c4ea1ed73","main"],
+    ["dpl_CHCNLnmf7RRtu8VSmczuEPzWp5ys",1779215013248,"READY","production","f5ae14d8c33ce8fdbae3534b776924004c9ada42","main"],
+    ["dpl_8f4JPX2a7HBKjhzHbUgZ79Qc3mMU",1779206493013,"READY","production","5774c84cc69d9d971cca9818a710c2ccd9bdbdd3","main"],
+    ["dpl_3CGtAFfTBVg722Vkjb2v5cX74vVo",1779206109269,"READY","production","46e77b8e49241e649ca7ffceeac57fb494579c5d","main"],
+    ["dpl_3mph5KLtH1sAp6WscCuqX9WdR7X1",1779206015176,"READY","production","47d2df098ee529c9431a00e877f39da5d87be36c","main"],
+    ["dpl_ERGX2SLtZwDhWaz1rvYkieVnK8p7",1779205461198,"READY","production","3e7246b2392d5efd4c7847ad4c75d57ab714d3ed","main"],
+    ["dpl_F3k1XFtxafURtXVNgL7gtERkVX5R",1779204162428,"READY","production","8c2312a3dd07bc01301f2406fa4e664e6d3782ff","main"],
+    ["dpl_FN5y7XrLDCTK4eJHfrykuDQpCzm3",1779202499369,"READY","production","114907d4049885c45540fe35a60dbcfd6c65599e","main"],
+    ["dpl_Eh8D3gGfMmBhogx7A5EMMrKvCUoQ",1779198697029,"READY","production","2630ef01ecca06f0e2211625615129acbd153dff","main"],
+    ["dpl_J3B9MRQ1vhq7hJmMScV3xxtptVga",1779135357070,"READY","production","2630ef01ecca06f0e2211625615129acbd153dff","main"],
+    ["dpl_FZp2tn3ZiKdkt3P2AxtCmGtCknBJ",1779134272977,"READY","production","4358b8ce5cfb2ec82ea01da6d9dbeab23625e901","main"]
+  ],
+  "rules":["gap recovery only","deduplicate by deployment_id","no creator identity copied","no secret values","no Vercel mutations","READY/production remains HISTORICAL_ONLY"]
+}
