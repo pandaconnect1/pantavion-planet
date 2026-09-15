@@ -53,7 +53,7 @@ for (const file of batchFiles) {
   }
   totalRecords += parsed.records.length;
   const rawSha256 = sha256(raw);
-  const orderedIdFingerprint = sha256(Buffer.from(ids.join('\n'), 'utf8'));
+  const orderedRecordIdFingerprint = sha256(Buffer.from(ids.join('\n'), 'utf8'));
   batchReceipts.push({
     file,
     relativePath: `data/recovery/imported-pr248/canonical-ledger/corpus/batches/${file}`,
@@ -80,18 +80,6 @@ for (const file of batchFiles) {
 if (totalRecords !== 82413) throw new Error(`record_count_mismatch:${totalRecords}`);
 if (seenIds.size !== 82413) throw new Error(`unique_id_count_mismatch:${seenIds.size}`);
 if (duplicateIds !== 0) throw new Error(`duplicate_ids:${duplicateIds}`);
-
-const globalOrderedIdFingerprint = (() => {
-  const hash = createHash('sha256');
-  let first = true;
-  for (const file of batchFiles) {
-    // Re-read only IDs deterministically in batch filename order.
-    // The fingerprint is probe evidence, not a claim that filename order equals historical ordinal order.
-    // Batch ordinal order will be taken from corpus manifest in the canonical binding step.
-    // eslint-disable-next-line no-await-in-loop
-  }
-  return null;
-})();
 
 const out = {
   marker: 'pantavion_thread3_corpus_probe_v1',
