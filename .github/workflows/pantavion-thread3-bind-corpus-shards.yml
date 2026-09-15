@@ -1,0 +1,66 @@
+name: Pantavion Thread 3 Bind Existing Corpus Buckets 5-9
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "scripts/recovery/thread3-bind-corpus-shards.mjs"
+      - ".github/workflows/pantavion-thread3-bind-corpus-shards.yml"
+      - "docs/recovery/live/canonical/CANONICAL_SHARDING_CONTRACT_V1.json"
+      - "data/recovery/imported-pr248/canonical-ledger/corpus/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pantavion-thread3-bind-corpus-shards-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  bind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify and bind existing canonical corpus to Thread 3 buckets 5-9
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/recovery/thread3-bind-corpus-shards.mjs | tee /tmp/thread3-bind-corpus-result.json
+      - name: Commit compact shard map and receipts
+        shell: bash
+        env:
+          BRANCH: backup/pre-vercel-risk-20260914
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            docs/recovery/live/canonical/thread3-corpus-shard-map.json \
+            docs/recovery/live/canonical/thread3-corpus-shard-receipt.json \
+            docs/recovery/live/shards/thread3-canonical-corpus.json \
+            docs/recovery/live/handoffs/thread3-to-thread4-corpus.json
+          if git diff --cached --quiet; then
+            echo "Idempotent no-op: corpus shard bindings already match immutable source."
+            exit 0
+          fi
+          git commit -m "recovery: bind existing corpus to Thread 3 buckets 5-9"
+          pushed=0
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch origin "$BRANCH"
+            git rebase "origin/$BRANCH"
+            if git push origin "HEAD:$BRANCH"; then
+              pushed=1
+              break
+            fi
+            sleep 1
+          done
+          test "$pushed" -eq 1
