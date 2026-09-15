@@ -1,0 +1,64 @@
+{
+  "capturedAt": "2026-09-15T13:28:00Z",
+  "sanitized": true,
+  "secretValuesIncluded": false,
+  "records": 40,
+  "canonical": {
+    "fromCursorExclusive": 1786447657347,
+    "nextCursor": 1786442191240,
+    "records": [
+      ["dpl_5yP7QDwAzzMYRcAj89PpxNFeiaFu",1786447601943,"READY","16949b4f42b10b0538c3ab3ca5962d4f3bc1f46e"],
+      ["dpl_GkRV6dYVjbd1CNNWdF93Dk4ZAyom",1786447560183,"ERROR","9b617d28eacf3e2d67cc192074705f3278155cfa"],
+      ["dpl_GKNtH5MPi8g6XwnnvLqAL1Vxak7s",1786447510883,"READY","853476a6e40f5d0cc97208cf98f15dc39304acf8"],
+      ["dpl_FU6MMuVqqTyDT3NV68qksTuDNvp8",1786447494930,"READY","d1c51bfa233bf9ad46bc3fc1ea07198f0aa13c02"],
+      ["dpl_6WZLBiD5Wt9NPVFU8psfFxtRkFP9",1786447478791,"READY","869a1cf3c34dbcc715ff9c9753c916eabb866e2c"],
+      ["dpl_2HsKbLbKbU64m1S2wdUHiGWinwhN",1786447459275,"READY","964fdefa663eed19f4247c003bfeea5626d8679c"],
+      ["dpl_36UgDehbZ15sGmVSmwrVZkjuasLX",1786447427693,"READY","01e25af3510b2118f2397fbab08b786b7aa7567a"],
+      ["dpl_GFDr3c9c3fQGP4aRMSN8QLBsteSX",1786447382514,"READY","7d82a181c7e853e9c803c90735540d0ee59e09a5"],
+      ["dpl_Bq1EuGwSDsn5QmzPpfqM2hZdYL2V",1786447364756,"READY","c846b15602b9d4dafda0cae61a2222eab488f901"],
+      ["dpl_BssZeeQzyfy9YhKzJf5etgTnyJB8",1786447219108,"READY","b7d33a911d1002cc0ecc2a2d31464e9c4853315f"],
+      ["dpl_2JjTVQjQ6BbM175F1gdtEYfdAA7X",1786447048468,"READY","81b3e37dbac4dadea651a01010104cd375ca8a3b"],
+      ["dpl_9iXEU2UtLbQoLHqi2KkuRFkUyn8X",1786445492908,"READY","c80dab396422a713414eb3d96d702b1f26a20e56"],
+      ["dpl_A3L2vyPRuPos4NJXsTtiQ5CSKJM5",1786445453817,"ERROR","cdb79a657ff30440742ebf713f55c73597c392e6"],
+      ["dpl_5aXPPvSzBRTovSRsqPPsh3T9urXX",1786444658438,"READY","a07f9d176e895b2d064482b73ad243452b53e0e1"],
+      ["dpl_DLAnwB88K5zneFjm8enXxiyqbQRj",1786443169748,"READY","f89e82cdd0457a4283449dc7cf52a4c8d398a524"],
+      ["dpl_4yjjYedYGBi8TD2NeWYPo1gibd2U",1786443113702,"READY","7438df9d7b7cded8f789919bd63924b540ab79e0"],
+      ["dpl_BDmhKGY6QbnNBZm6tPHw7SQNrFhK",1786443060532,"ERROR","a52f7c0b754df2118a0eb4dbfaa179edbc1f6621"],
+      ["dpl_3Cz4jQ7aCqm8YdYJcXygQYHkCKak",1786443018477,"READY","7e8a6c7c2d3cd6354cebf4bc182e3d236e971316"],
+      ["dpl_EqnJvuRCSnXf688ELKaucSoeE3A7",1786442245829,"READY","334e830dfc893f7d4fb74aff52b1973ee505a917"],
+      ["dpl_FuKymxrmoev4mMYCDbVX29mKLBDn",1786442191240,"READY","7f382c7b2b2fdc0ef8645706272d0f41aa669756"]
+    ]
+  },
+  "mirror": {
+    "fromCursorExclusive": 1786447657336,
+    "nextCursor": 1786442191224,
+    "records": [
+      ["dpl_EP8YSXesRRS42n7JjWLFt68pjMHR",1786447601502,"READY","16949b4f42b10b0538c3ab3ca5962d4f3bc1f46e"],
+      ["dpl_5pWgFeFrKJVQjvbhbcgPpLniUjfL",1786447560175,"ERROR","9b617d28eacf3e2d67cc192074705f3278155cfa"],
+      ["dpl_Fw9gHhfmfK7n1Jpf8HN8z7EUYDSi",1786447510867,"READY","853476a6e40f5d0cc97208cf98f15dc39304acf8"],
+      ["dpl_qCiNVPRYTnouc8ChHrn2FWBKKtpw",1786447494968,"READY","d1c51bfa233bf9ad46bc3fc1ea07198f0aa13c02"],
+      ["dpl_7v3nGUyjH3xinEkB7qCkc4Mp6DgQ",1786447478655,"READY","869a1cf3c34dbcc715ff9c9753c916eabb866e2c"],
+      ["dpl_HTEmRM99egoTxZ3EehJwmLW9zNa6",1786447459037,"READY","964fdefa663eed19f4247c003bfeea5626d8679c"],
+      ["dpl_3yeQoXS5vp5D6GMXWGkwwNQiobUF",1786447427600,"READY","01e25af3510b2118f2397fbab08b786b7aa7567a"],
+      ["dpl_2rF8U3jWJJAUUuzeiymfgrpdda1z",1786447382486,"READY","7d82a181c7e853e9c803c90735540d0ee59e09a5"],
+      ["dpl_2WgthQHM46tvGqTTYNV5cnZSbi7s",1786447364647,"READY","c846b15602b9d4dafda0cae61a2222eab488f901"],
+      ["dpl_2scUujeJSBU3TFKmdZtL3v5jpKgq",1786447219102,"READY","b7d33a911d1002cc0ecc2a2d31464e9c4853315f"],
+      ["dpl_5F3nRMzsJBW8MTBSQonb7kUnwVUB",1786447048503,"READY","81b3e37dbac4dadea651a01010104cd375ca8a3b"],
+      ["dpl_3A2UwahSBcd7mmnNagKh814vtoc2",1786445492920,"READY","c80dab396422a713414eb3d96d702b1f26a20e56"],
+      ["dpl_Am8wfrka6yRceTKAHZcs4ryp7Noo",1786445453815,"ERROR","cdb79a657ff30440742ebf713f55c73597c392e6"],
+      ["dpl_4M4QTAZo7XUa21dXh6KxH1opERTq",1786444658219,"READY","a07f9d176e895b2d064482b73ad243452b53e0e1"],
+      ["dpl_DQEXQzmdAPgZgp4RYj9DZeh7QhYo",1786443169755,"READY","f89e82cdd0457a4283449dc7cf52a4c8d398a524"],
+      ["dpl_C5KHRx7p65CXZhUXZGdVb4d64N8f",1786443113701,"READY","7438df9d7b7cded8f789919bd63924b540ab79e0"],
+      ["dpl_fA3joq1sqBKFBvhjwp2nrzHzVEG6",1786443060407,"ERROR","a52f7c0b754df2118a0eb4dbfaa179edbc1f6621"],
+      ["dpl_QXpUmDkGE3uXQfWywpckreee21X8",1786443018515,"READY","7e8a6c7c2d3cd6354cebf4bc182e3d236e971316"],
+      ["dpl_1297i1c3Z1MXtYZAs8hXuV68o61B",1786442245776,"READY","334e830dfc893f7d4fb74aff52b1973ee505a917"],
+      ["dpl_9nAdxSa9wZyUjcXW48c5UvNgEQa5",1786442191224,"READY","7f382c7b2b2fdc0ef8645706272d0f41aa669756"]
+    ]
+  },
+  "tupleSchema": ["deploymentId","created","state","githubCommitSha"],
+  "notes": [
+    "Creator identity/email and secret-bearing fields are excluded.",
+    "Several records are mirrored deployments of the same Git commits; record count is not a unique-feature count.",
+    "Pagination remains non-terminal."
+  ]
+}
