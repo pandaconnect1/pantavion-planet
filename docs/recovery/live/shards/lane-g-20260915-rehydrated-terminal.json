@@ -1,0 +1,39 @@
+{
+  "lane": "G",
+  "status": "TERMINAL_VERIFIED_REHYDRATED",
+  "scope": "Lane-A records 201-600 only",
+  "source": "Vercel list_deployments",
+  "project": "pantavion-planet",
+  "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+  "recordRange": [201, 600],
+  "rehydratedRecords": 400,
+  "batchCount": 20,
+  "uniqueDeploymentIds": 400,
+  "duplicateDeploymentIds": 0,
+  "privateFieldsFound": 0,
+  "secretValuesIncluded": false,
+  "dedupKey": "projectId:deploymentId",
+  "contiguousRangeVerified": true,
+  "rangeEvidence": {
+    "firstRange": [201, 220],
+    "lastRange": [581, 600],
+    "batchPattern": "docs/recovery/live/batches/lane-g-20260915-*-rehydrated.json"
+  },
+  "audit": {
+    "marker": "pantavion_lane_g_rehydration_audit_v2",
+    "status": "PASS",
+    "workflowRunId": 35002161120,
+    "jobId": 104493009553,
+    "auditCommit": "1c5bae3623db5fa732d351426a9059485581e2b8",
+    "artifactId": 10409732746,
+    "pipefailEnforced": true
+  },
+  "canonicalization": {
+    "lane": "F",
+    "status": "PENDING_IDEMPOTENT_DEDUP_AND_CANONICALIZATION",
+    "canonicalizedRecordsFloorUnchanged": 219,
+    "reason": "Rehydration closes the Vercel-only payload preservation gap but does not itself canonicalize or merge records."
+  },
+  "deleteAllowed": false,
+  "truth": "All 400 previously summary-only Lane-A deployment records 201-600 are now durably GitHub-bound with per-deployment sanitized provenance and have passed the corrected fail-closed audit."
+}
