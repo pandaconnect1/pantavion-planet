@@ -4,8 +4,8 @@
   "bucketOwnership": [5,6,7,8,9],
   "contract": "PANTAVION_CANONICAL_SHARDING_V1",
   "status": "ACTIVE_WITH_EXPLICIT_SOURCE_GAPS",
-  "updatedAtUtc": "2026-09-15T18:20:00Z",
-  "durableCanonicalWrites": {
+  "updatedAtUtc": "2026-09-15T18:27:00Z",
+  "newPhysicalCanonicalWrites": {
     "laneGRehydrated201To600": {
       "sourceRecords": 400,
       "thread3CanonicalRecords": 199,
@@ -25,14 +25,49 @@
       "checkpoint": "docs/recovery/live/shards/thread3-canonical-b-history.json"
     }
   },
-  "thread3DurableCanonicalRecordCount": 288,
-  "countSemantics": "This is only the count of records newly written by Thread 3 under buckets 5-9. It is not the total Pantavion recovery count, not the user's approximately 18,000 Vercel estimate, and not the 82,413 Pantavion corpus.",
+  "thread3NewPhysicalCanonicalRecordCount": 288,
+  "existingPantavionCorpusBinding": {
+    "dataset": "Pantavion canonical knowledge corpus",
+    "sourceCorpus": "data/recovery/imported-pr248/canonical-ledger/corpus",
+    "sourcePhysicalCanonicalRecordCount": 82413,
+    "thread3ExistingCanonicalRecordsBound": 41209,
+    "sourcePhysicalRecordsDuplicatedByThread3": 0,
+    "ownedBucketCounts": {"5":8181,"6":8250,"7":8255,"8":8276,"9":8247},
+    "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d",
+    "receipt": "docs/recovery/live/canonical/thread3-corpus-shard-receipt.json",
+    "checkpoint": "docs/recovery/live/shards/thread3-canonical-corpus.json",
+    "shardMap": "docs/recovery/live/canonical/thread3-corpus-shard-map.json",
+    "thread4Handoff": "docs/recovery/live/handoffs/thread3-to-thread4-corpus.json",
+    "structuralSourceIdentityVerification": {
+      "all55ProvenanceGitBlobShasMatched": true,
+      "all82413RecordIdsReproducedFromOriginalSourceFingerprintFormula": true,
+      "uniqueRecordIds": 82413,
+      "uniqueStableRecordKeys": 82413,
+      "duplicateRecordIds": 0,
+      "duplicateStableRecordKeys": 0,
+      "sourceIdMismatchCount": 0
+    },
+    "historicalMaterializationReceiptStatePreserved": {
+      "tested": false,
+      "verified": false,
+      "deleteAllowed": false
+    },
+    "semantics": "These 41,209 records were already physical canonical corpus records before Thread 3. Thread 3 created deterministic ownership/index bindings only; they are not added to new physical canonical counts and are not Vercel records. Structural/source-identity verification does not assert semantic correctness or VERIFIED_LIVE."
+  },
+  "countSemantics": {
+    "thread3NewPhysicalCanonicalRecordCount": 288,
+    "thread3ExistingCanonicalCorpusRecordsBound": 41209,
+    "pantavionCorpusPhysicalRecordCount": 82413,
+    "corpusPhysicalRecordsDuplicatedByThread3": 0,
+    "rule": "Never add existing corpus bindings to the 288 new physical writes. Never compare the 82,413 Pantavion corpus with the user's approximately 18,000 Vercel estimate as if they were the same dataset."
+  },
   "recoveredSourceFloorContributionKnownFromThread3NewWrites": 1,
   "blockedSources": [
     {
       "source": "Lane C",
       "aggregateDeploymentTotal": 73,
       "canonicalRecordsWritten": 0,
+      "canonicalRecordsAssumed": 0,
       "reason": "Aggregate project totals exist but per-deployment deploymentId payloads required for stable projectId:deploymentId identities are absent from current durable evidence.",
       "receipt": "docs/recovery/live/shards/thread3-canonical-c-blocker.json"
     }
@@ -42,20 +77,36 @@
       "source": "Lane F / Lane A payload-backed canonical evidence",
       "existingCanonicalizedFloor": 219,
       "reason": "Underlying canonical identities already exist; Thread 3 does not duplicate already-canonical physical records merely to restamp shard ownership."
+    },
+    {
+      "source": "Pantavion canonical knowledge corpus",
+      "existingCanonicalRecordCount": 82413,
+      "thread3OwnedBindings": 41209,
+      "physicalDuplicatesWritten": 0,
+      "reason": "Thread 3 writes compact immutable pointers/indexes into existing canonical payloads instead of copying record text or IDs."
     }
+  ],
+  "downstreamHandoffs": [
+    "docs/recovery/live/handoffs/thread3-to-thread4-g.json",
+    "docs/recovery/live/handoffs/thread3-to-thread4-bd.json",
+    "docs/recovery/live/handoffs/thread3-to-thread4-b-history.json",
+    "docs/recovery/live/handoffs/thread3-to-thread4-corpus.json"
   ],
   "invariants": [
     "ZERO deletions and ZERO destructive Vercel mutations.",
     "Stable Vercel identity is projectId:deploymentId.",
-    "Only SHA-256 buckets 5-9 are written by Thread 3.",
+    "Stable Pantavion corpus identity is recordId:sourceFingerprint under PANTAVION_CANONICAL_SHARDING_V1.",
+    "Only SHA-256 buckets 5-9 are owned by Thread 3.",
     "No summary-only count is materialized as a canonical record.",
+    "Existing canonical payloads are bound by compact pointers rather than physically duplicated.",
     "Source evidence is preserved unchanged.",
-    "Classification remains Thread 4 scope; routing remains Thread 5 scope.",
-    "READY/production historical metadata is never promoted to VERIFIED_LIVE by canonicalization."
+    "Classification remains Thread 4 scope; routing remains Thread 5 scope; global reconciliation remains Thread 7 scope.",
+    "READY/production historical metadata and historical corpus liveState/classification are never promoted to VERIFIED_LIVE by canonicalization."
   ],
   "next": [
-    "Consume additional payload-backed Pantavion/Vercel intake evidence with stable IDs when it is not already canonical and hashes to buckets 5-9.",
+    "Consume newly preserved payload-backed intake evidence only when stable IDs/provenance exist and no other worker owns it.",
     "Resume Lane C only when per-deployment IDs become durably available.",
-    "Continue emitting Thread 4 handoffs for each new canonical batch."
+    "Do not duplicate the 82,413 corpus payloads; downstream workers consume the immutable source through the compact shard map.",
+    "Continue emitting Thread 4 handoffs for each newly eligible canonical batch."
   ]
 }
