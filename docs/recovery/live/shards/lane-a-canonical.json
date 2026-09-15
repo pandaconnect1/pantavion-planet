@@ -6,15 +6,18 @@
   "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
   "teamId": "team_tGNSGGjcV3VNecscMvaAniGY",
   "sourceCursor": 1786126296277,
-  "nextCursor": 1784868834812,
-  "pagesCapturedThisLaneRun": 5,
-  "recordsCapturedThisLaneRun": 100,
+  "nextCursor": 1781903655488,
+  "pagesCapturedThisLaneRun": 10,
+  "recordsCapturedThisLaneRun": 200,
   "lastPageCount": 20,
   "terminal": false,
   "rescue_state": "CHECKPOINTED",
   "live_truth": "HISTORICAL_ONLY",
-  "recoveredDeploymentRecordsFloorAfterCheckpoint": 3160,
-  "checkpoint": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+  "recoveredDeploymentRecordsFloorAfterCheckpoint": 3260,
+  "checkpoints": [
+    "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+    "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json"
+  ],
   "rules": [
     "zero deletions",
     "no Vercel mutations",
