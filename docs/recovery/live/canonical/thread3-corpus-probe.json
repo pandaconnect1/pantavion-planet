@@ -1,0 +1,1011 @@
+{
+  "marker": "pantavion_thread3_corpus_probe_v1",
+  "ownerThread": 3,
+  "sourceCorpus": "data/recovery/imported-pr248/canonical-ledger/corpus",
+  "sourcePullRequest": 248,
+  "sourceCommit": "da6fb9f70937f2f63b0d30204a22023ac72e1544",
+  "preservationMode": "immutable-path-copy",
+  "truthRule": "This corpus is preserved byte-for-byte by Git blob SHA. Classification or deployment status inside historical records is evidence to review, not a current VERIFIED_LIVE claim.",
+  "receipt": {
+    "totalRecords": 82413,
+    "totalBatches": 55,
+    "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d",
+    "tested": false,
+    "verified": false,
+    "deleteAllowed": false
+  },
+  "probeVerification": {
+    "batchFileCount": 55,
+    "totalRecords": 82413,
+    "uniqueRecordIds": 82413,
+    "duplicateRecordIds": 0,
+    "all55GitBlobShasMatchProvenanceManifest": true,
+    "receiptAndManifestCountsMatch": true,
+    "receiptAndManifestCorpusFingerprintMatch": true
+  },
+  "recordSchema": {
+    "unionKeys": [
+      "classification",
+      "context",
+      "id",
+      "marker",
+      "notes",
+      "ordinal",
+      "provenance",
+      "relations",
+      "reviewStatus",
+      "text"
+    ],
+    "sourceLikeFieldFrequency": {
+      "provenance": 82413
+    },
+    "samples": [
+      {
+        "file": "batch-a.json",
+        "id": "pk_56122fe6e6b7adb3f41941b1",
+        "keys": [
+          "classification",
+          "context",
+          "id",
+          "marker",
+          "notes",
+          "ordinal",
+          "provenance",
+          "relations",
+          "reviewStatus",
+          "text"
+        ],
+        "sourceLikeFields": {
+          "provenance": {
+            "sourceFamily": "founder-vision",
+            "sourceFile": "app/admin/moderation/ModerationClient.tsx",
+            "sourceLine": 47,
+            "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+            "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+            "sourceReport": null
+          }
+        }
+      },
+      {
+        "file": "batch-a2.json",
+        "id": "pk_2ab4039a656bd86aafba6f54",
+        "keys": [
+          "classification",
+          "context",
+          "id",
+          "marker",
+          "notes",
+          "ordinal",
+          "provenance",
+          "relations",
+          "reviewStatus",
+          "text"
+        ],
+        "sourceLikeFields": {
+          "provenance": {
+            "sourceFamily": "recovery",
+            "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-c2.json",
+            "sourceLine": 46868,
+            "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+            "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+            "sourceReport": null
+          }
+        }
+      },
+      {
+        "file": "batch-a3.json",
+        "id": "pk_f36e3656ca20c8a84d434d83",
+        "keys": [
+          "classification",
+          "context",
+          "id",
+          "marker",
+          "notes",
+          "ordinal",
+          "provenance",
+          "relations",
+          "reviewStatus",
+          "text"
+        ],
+        "sourceLikeFields": {
+          "provenance": {
+            "sourceFamily": "current-code",
+            "sourceFile": "core/kernel/kernel-entrypoint.ts",
+            "sourceLine": 21,
+            "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+            "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+            "sourceReport": null
+          }
+        }
+      },
+      {
+        "file": "batch-b.json",
+        "id": "pk_d35dec8aab1c3281a3caae30",
+        "keys": [
+          "classification",
+          "context",
+          "id",
+          "marker",
+          "notes",
+          "ordinal",
+          "provenance",
+          "relations",
+          "reviewStatus",
+          "text"
+        ],
+        "sourceLikeFields": {
+          "provenance": {
+            "sourceFamily": "recovery",
+            "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-a.json",
+            "sourceLine": 34315,
+            "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+            "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+            "sourceReport": null
+          }
+        }
+      },
+      {
+        "file": "batch-b2.json",
+        "id": "pk_b3235421257ad37dceab785b",
+        "keys": [
+          "classification",
+          "context",
+          "id",
+          "marker",
+          "notes",
+          "ordinal",
+          "provenance",
+          "relations",
+          "reviewStatus",
+          "text"
+        ],
+        "sourceLikeFields": {
+          "provenance": {
+            "sourceFamily": "recovery",
+            "sourceFile": "data/recovery/canonical-ledger/corpus/batches/batch-e2.json",
+            "sourceLine": 3035,
+            "sourceRef": "366c2c3882bf459df18960c1e3de3396df031ee3",
+            "sourceCommit": "366c2c3882bf459df18960c1e3de3396df031ee3",
+            "sourceReport": null
+          }
+        }
+      }
+    ]
+  },
+  "batchReceipts": [
+    {
+      "file": "batch-a.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-a.json",
+      "bytes": 4709402,
+      "gitBlobSha": "35c698d1d527d06895625170032f7fd16c230b48",
+      "fileSha256": "61dcf5f8b3213f6a3baa754ee5c0082830b7680de232b2820fe627455f183360",
+      "recordCount": 1499,
+      "firstRecordId": "pk_56122fe6e6b7adb3f41941b1",
+      "lastRecordId": "pk_231b389091fa8a407258942b",
+      "orderedRecordIdFingerprint": "0a64ddf0f05b9c03e057287d301e837e607dd68690fcdc23e212440944bf4f39",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-a2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-a2.json",
+      "bytes": 10934011,
+      "gitBlobSha": "e56ce51b71bb0ffa822dc318b78a1b832904424a",
+      "fileSha256": "936634c6c869d36bc95047b85f52424fa324e5c8a5bb4c636cb395ba6ab24834",
+      "recordCount": 1499,
+      "firstRecordId": "pk_2ab4039a656bd86aafba6f54",
+      "lastRecordId": "pk_f150c303226e97d1c83be760",
+      "orderedRecordIdFingerprint": "f3a180d86a9cf7374752b302f8fe2ad9e9c7ecc5cad133849fd38ec979c7f64b",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-a3.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-a3.json",
+      "bytes": 7400235,
+      "gitBlobSha": "147ca7f0c7425efe3ee3f56e654ade8e313421dd",
+      "fileSha256": "a71271a9885b72320898f1f51b914a74f012f43a26cc95a88d13797ff28542f0",
+      "recordCount": 1499,
+      "firstRecordId": "pk_f36e3656ca20c8a84d434d83",
+      "lastRecordId": "pk_a3c159c364939b5cceda4639",
+      "orderedRecordIdFingerprint": "5274e983f52a70f8934460d31f392ed77f9b08ad31c4b2ce6eb36e0d238795f9",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-b.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-b.json",
+      "bytes": 4985126,
+      "gitBlobSha": "dbe489d8a35cf98e06bdc75b681cf31b5efb5d95",
+      "fileSha256": "341ea408b38b8a7c9ffbf006bb9546898f5d6bf9a0999e0867a7362bf31301a6",
+      "recordCount": 1499,
+      "firstRecordId": "pk_d35dec8aab1c3281a3caae30",
+      "lastRecordId": "pk_9c2f618718bc21d732853500",
+      "orderedRecordIdFingerprint": "ab401090d87f4352ac30b55476d961d116235f90802960a2b412be775ac3b76f",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-b2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-b2.json",
+      "bytes": 11005158,
+      "gitBlobSha": "67e3ce97805a7ecaf785e4e9258b56e1f19cf834",
+      "fileSha256": "c87c89529abe3795b3afac09058411660b858e2cc89bb4fba05983440fff16e3",
+      "recordCount": 1499,
+      "firstRecordId": "pk_b3235421257ad37dceab785b",
+      "lastRecordId": "pk_94510d1bbaaeb74eca47cfef",
+      "orderedRecordIdFingerprint": "be69cf53efef6eea66c9982014b1d47a6ed1332364bdc66ee67d92910324ee06",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-b3.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-b3.json",
+      "bytes": 5551109,
+      "gitBlobSha": "41460cf4a5064ade634a1fb7293904d2d33cdb48",
+      "fileSha256": "a75fbe6c4a846fb15273c98e85f06ab3e2aaefabe7d68afb3e0d5c9d303f42f8",
+      "recordCount": 1499,
+      "firstRecordId": "pk_dbe20e3a7489e019717202f4",
+      "lastRecordId": "pk_dff3a7b6380da39bded336a8",
+      "orderedRecordIdFingerprint": "f9d4e5a9aae6ed3531a773b059c0a1dbf798a9fa7b0f22978788ea92570fab8e",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-c.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-c.json",
+      "bytes": 8292150,
+      "gitBlobSha": "9d50a109ef1a7c3195053eb6d7ea2d41dc2d1150",
+      "fileSha256": "2b14156221b6bdcd5370c0c2c08a02d8d50568446f9d563fc29d023fc44b2223",
+      "recordCount": 1499,
+      "firstRecordId": "pk_e3e401e8ed6c3b5386920d1d",
+      "lastRecordId": "pk_85e99bb0c3a54f07de1b0a56",
+      "orderedRecordIdFingerprint": "e0c5043e748cf39d6b469bda77ee8d87a7a84d00f83d049e9c68ec03b63ed268",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-c2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-c2.json",
+      "bytes": 10919155,
+      "gitBlobSha": "45e618f5a73e23b5608e5de8ba476deefb04d6c5",
+      "fileSha256": "2530fdab38e30135b7bcc4eb6a01ce0418503df29e7a1837aa5ca6a8710ba32f",
+      "recordCount": 1499,
+      "firstRecordId": "pk_0acdf6978a4de123edb8bbbd",
+      "lastRecordId": "pk_e5dc95cdaeb53aeb85f0728c",
+      "orderedRecordIdFingerprint": "0dd36fde89600e4b6ab1529d39de2d5e45b50adc303175856aefbcb1104e1fda",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-c3.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-c3.json",
+      "bytes": 2612530,
+      "gitBlobSha": "9d8280a385774bd2b8953f717b93be661f5800a9",
+      "fileSha256": "60c3413128a6ffe96dc22ace20f43ba26c9fdfdf45a0e2c8946d3f32273834b3",
+      "recordCount": 1467,
+      "firstRecordId": "pk_f3c1a1aff00b9122b4a62f92",
+      "lastRecordId": "pk_830694163f45c01b3b6ddf1a",
+      "orderedRecordIdFingerprint": "697fa4abca10b5ce952f4abac1dfc558cad9cae560e87df265258bef460dee6d",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-d.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-d.json",
+      "bytes": 3853171,
+      "gitBlobSha": "a55695f56fbf483508651b8bdc8b4667ec63e1cf",
+      "fileSha256": "e3546113947093c3d3d956d460b3d8561516d13dabec5853c664fc4acf40e343",
+      "recordCount": 1499,
+      "firstRecordId": "pk_324352651df0ecf7b10dc684",
+      "lastRecordId": "pk_ef89f5587a2ffa1f388580f0",
+      "orderedRecordIdFingerprint": "dc5185080a96bf89e4db6626b5275b38cd6db03ad52e79a69a13b1714086c4de",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-d2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-d2.json",
+      "bytes": 10927762,
+      "gitBlobSha": "8db678caba1cd08829741df09e05fabec038d0b3",
+      "fileSha256": "ecb5f0b392e94ff019ca86e2993e8ec71196254914559a46f890be34bc2922c0",
+      "recordCount": 1499,
+      "firstRecordId": "pk_91bcdce8d7969d6dd660cd11",
+      "lastRecordId": "pk_c449ad39f8858bb69aa0634d",
+      "orderedRecordIdFingerprint": "bb9e0739d248cd89aebc3651d999725ec3272166fd2a99ebc8d88088fb867324",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-e.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-e.json",
+      "bytes": 6379042,
+      "gitBlobSha": "33c1116aea592593140406fe1b8adbf7acee3e02",
+      "fileSha256": "2e7cc0890e669c6b5e439e682642384f307c3fadbf26168322bc665d643363d3",
+      "recordCount": 1499,
+      "firstRecordId": "pk_65ae0cdc978c1e0e921dede1",
+      "lastRecordId": "pk_9d7f16a9b8f667be54c4f585",
+      "orderedRecordIdFingerprint": "8014a43693c72adcaa429143f24615a9399e64474a95f6339eaf215499afa558",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-e2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-e2.json",
+      "bytes": 10938024,
+      "gitBlobSha": "fefe0de086b84af3fd9c8bc57cc4e85cb0d53a28",
+      "fileSha256": "04f469e4fbe041f480535a6ebebf2569e51ecf7f617f94a94f679d1ca4644676",
+      "recordCount": 1499,
+      "firstRecordId": "pk_8d293649a179099690b2a9b2",
+      "lastRecordId": "pk_3234ae480f2ad434a0a21958",
+      "orderedRecordIdFingerprint": "77f97c0814f54b195f0226f670e2119b38d9e95b6fa3e355bc7471e45c2b7d79",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-f.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-f.json",
+      "bytes": 9621974,
+      "gitBlobSha": "7a9efa7bb561f1a83d4d375d637dad08cf5c5e6e",
+      "fileSha256": "d92181d27d58357a46e701facf44c962dd0f458b808e6bb7a48080e079d10243",
+      "recordCount": 1499,
+      "firstRecordId": "pk_6799892ea25d487b8c0e756a",
+      "lastRecordId": "pk_20a81912a3cd84bf38f429f1",
+      "orderedRecordIdFingerprint": "4deaf36a6a05d17d5313913c8560266730f23c08aef920691027052d842a22fb",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-f2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-f2.json",
+      "bytes": 10937911,
+      "gitBlobSha": "05a5c8c93f479024f588ea2976e1fbedfe6955e8",
+      "fileSha256": "96d8cbc809b6ff47a3f8b2185cffc1e55810fb0491314bc82957d618d0830736",
+      "recordCount": 1499,
+      "firstRecordId": "pk_e6e8f91ec675a11b8be8071c",
+      "lastRecordId": "pk_62f5bf3117358402552ad47e",
+      "orderedRecordIdFingerprint": "a4113b24f7617e5cd77e44c5b2a73de2c40b03a884a9e76144ae68da8123527d",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-g.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-g.json",
+      "bytes": 4178990,
+      "gitBlobSha": "94dec4ef4ec1db784359530e3d40f210d69dbbd9",
+      "fileSha256": "a32d35c1638f92ea4d11a0c501d84c74eb844fc55b30bff258635ab9385fcee4",
+      "recordCount": 1499,
+      "firstRecordId": "pk_6286be3d29f864a62c7e9876",
+      "lastRecordId": "pk_ca8973c4f1cffafc2f8049bd",
+      "orderedRecordIdFingerprint": "19a57d2154f5316f4cf6556738a904102e256c7d51f1d6bb5100f1045efd7b0a",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-g2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-g2.json",
+      "bytes": 10920964,
+      "gitBlobSha": "47343817cb0ed642494deee8590f391a3e3ee862",
+      "fileSha256": "23d9448cbec365d8801ab2ce02a7db322b42fc4004ff0bda0477de0d767097c5",
+      "recordCount": 1499,
+      "firstRecordId": "pk_14d8fb55da3e3e820a8ba306",
+      "lastRecordId": "pk_c2943821e7799d768eb971ef",
+      "orderedRecordIdFingerprint": "59dcf36b10b8e9d65400a64b6115338306464740f0626eb40b26dab796b868fd",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-h.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-h.json",
+      "bytes": 3547181,
+      "gitBlobSha": "c77e65998f6855a214fcbe2e4c877057051ec763",
+      "fileSha256": "8267112a1eda2ebeab1027d3154275cd72ae83dbe1e5f06a0388c80681f31cf5",
+      "recordCount": 1499,
+      "firstRecordId": "pk_a5b729c29a48f5ce9e842b26",
+      "lastRecordId": "pk_001d4ee75c37d0d7b297d77c",
+      "orderedRecordIdFingerprint": "91e36e357902822df9f40ad32412a02d18ad975f0ddf56bb8ec0f4e48358cbaf",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-h2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-h2.json",
+      "bytes": 11054495,
+      "gitBlobSha": "ec4e56306e5f9cb70f81595fbc2e3ce8a3cf0531",
+      "fileSha256": "21236c4ab62f8cf079d9b9a38428a228bc1dfdcb397bceee5bdde38a3471463b",
+      "recordCount": 1499,
+      "firstRecordId": "pk_c048c16a6793cb896372dd61",
+      "lastRecordId": "pk_930e14ba64dd8db4076ffeb5",
+      "orderedRecordIdFingerprint": "28208b39ebc4cc739ebfea898a7270010be83407fc0d7dbe694f3a8d25c73933",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-i.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-i.json",
+      "bytes": 8026556,
+      "gitBlobSha": "82995c483e36d8e89d9956985309fb4cde9de2c5",
+      "fileSha256": "e55d581d435605152389b461373e0b9a39bb79e6f6bb55badaeb7585fe8c4bb5",
+      "recordCount": 1499,
+      "firstRecordId": "pk_c49961c239acfac673104ab7",
+      "lastRecordId": "pk_98408315ef7478946175cd85",
+      "orderedRecordIdFingerprint": "a960b02c9f2d995f289914c9cc16e0cc20aba903485cc839a9e2e5351fcc4921",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-i2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-i2.json",
+      "bytes": 11000568,
+      "gitBlobSha": "134db78e05d0816942bab7f2823ace48adc7df50",
+      "fileSha256": "201c3fa28c5dbc3abd573b28859f6a3f6147dade3139072785a79eb57b35e5a4",
+      "recordCount": 1499,
+      "firstRecordId": "pk_2c0580bfce61423e3b63c6ee",
+      "lastRecordId": "pk_7d17b2b15947f8e658319fd5",
+      "orderedRecordIdFingerprint": "5aa18a6f91d0f9f9547bc4e85b35543f8662959d93f0c30b70169201f8666d0d",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-j.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-j.json",
+      "bytes": 9479342,
+      "gitBlobSha": "1b1324b398d41afe2949501e2b612765552d5f46",
+      "fileSha256": "bdb189012405dbe11e6e902d544ca58a1c26f1d0c72b92e718aa328be06a4b25",
+      "recordCount": 1499,
+      "firstRecordId": "pk_ee6e227516ad6d1c67f9768e",
+      "lastRecordId": "pk_0946325873805baecd81cd66",
+      "orderedRecordIdFingerprint": "6693fc63f67fa88e8b0923d73385d47afa85693998cd81e184c68234d3b6f527",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-j2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-j2.json",
+      "bytes": 10927758,
+      "gitBlobSha": "7cbbd847a9cc49a7639b2cd0a892d544da32e019",
+      "fileSha256": "d0528d4fd2f8bd6cfc399236a05fb25efc997da14882d67f4201c9d9b2b94ed1",
+      "recordCount": 1499,
+      "firstRecordId": "pk_340c6fc371603f63a9dc5e67",
+      "lastRecordId": "pk_e981cda684fd3912c933c58c",
+      "orderedRecordIdFingerprint": "aa24c0f5b75124624035b3a2653cf6d56239bc4359ed5c63a873d3c83d3d2f7d",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-k.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-k.json",
+      "bytes": 7192419,
+      "gitBlobSha": "bc0cd4b8b6426391b96bb8ae8c1a6db53662f400",
+      "fileSha256": "82b866033080692db85ea2f327d2d9a540682b5c3091c926687b876fd59b2057",
+      "recordCount": 1499,
+      "firstRecordId": "pk_8d1ae06528d8c44d88ce6ff0",
+      "lastRecordId": "pk_657ea27a70ee3c14db13c779",
+      "orderedRecordIdFingerprint": "ad256eefa0871ef421ce8166928c47df6ef5c2a4187f6d67ef5ff8d8284c6b25",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-k2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-k2.json",
+      "bytes": 10595459,
+      "gitBlobSha": "e33b2f47019a2c43e35de8b66407caf5928da9e0",
+      "fileSha256": "f2d1d894bba3bc7d65d9ca11f3354cb89b7e3945c39e5146b6a3d569fac98882",
+      "recordCount": 1499,
+      "firstRecordId": "pk_df34bae9772b0e4774284124",
+      "lastRecordId": "pk_f33b29eefe81596d0e173d75",
+      "orderedRecordIdFingerprint": "5123199633a2559a5f52de8523bfee006eb22b2359a28a3b5b4ce2e00a9c8642",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-l.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-l.json",
+      "bytes": 4235901,
+      "gitBlobSha": "1ce01d9b4c16e79aa9b970ef94186efc695f452b",
+      "fileSha256": "b266a48990698d73876a9aca67704b61b85465a6b3f6510d26d649e276f7d64a",
+      "recordCount": 1499,
+      "firstRecordId": "pk_f715959144527da0f5aa2d44",
+      "lastRecordId": "pk_2185c2d094dc17efe113f7cf",
+      "orderedRecordIdFingerprint": "226918ffa51f2ecdacd0027bc3eec57daef552e573b71bf5bda5c09003630783",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-l2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-l2.json",
+      "bytes": 10087989,
+      "gitBlobSha": "ffe90f98ce22d9da08cc97fc13a30234e9202708",
+      "fileSha256": "42c3206cce97652d282f572384156b9eedb5ff4e8c5eebf04304b3696115e2a6",
+      "recordCount": 1499,
+      "firstRecordId": "pk_eb9ad7ace4818d8bd5c2f494",
+      "lastRecordId": "pk_f8189f48078a23c9c98fd4fc",
+      "orderedRecordIdFingerprint": "1f81291aaf1c2a0b26d1d25c1b026155612c0ac066d97b58d5ae6f9d34781821",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-m.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-m.json",
+      "bytes": 3599770,
+      "gitBlobSha": "a2ece4aa44f0fe73584d3deec8520ce686d72fd2",
+      "fileSha256": "a8ac45aace10d0218ff4a33c751b097a88d5637ad66ea750b5d8ea13cc060fa0",
+      "recordCount": 1499,
+      "firstRecordId": "pk_d7434cec15418c7a9971e7fe",
+      "lastRecordId": "pk_8e3c28f75ad4e375e3c342a0",
+      "orderedRecordIdFingerprint": "671cc1c20874d008548dcface6dde18e532f864db133226075530c0e0a9a1558",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-m2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-m2.json",
+      "bytes": 10947736,
+      "gitBlobSha": "33249acff036d302c0989ac2d589dfd95522af2f",
+      "fileSha256": "141654e2d633238f96e4ffc7d39402ee31ea87a0739223a4a70e7ec6ce28e5f3",
+      "recordCount": 1499,
+      "firstRecordId": "pk_f44e09576c780326a98da052",
+      "lastRecordId": "pk_b753c89c617c323061e003c7",
+      "orderedRecordIdFingerprint": "6033988e96cacdd62cd83eee452b6bd4a96b3f77830d935d02a7d9150695257f",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-n.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-n.json",
+      "bytes": 3512843,
+      "gitBlobSha": "310d87eeb681ebc07d88e18af4e8d0aab45f75fa",
+      "fileSha256": "637d72ea452e9129791e8b97eb16f4a5e5e6265387a6aa7b8fcfd53c5619c5df",
+      "recordCount": 1499,
+      "firstRecordId": "pk_72a45733f4422b182710eee0",
+      "lastRecordId": "pk_0f1be2c0bc96c3f7eb53c5ab",
+      "orderedRecordIdFingerprint": "b06dc4bd21b4ef111616ba0feb1e432543d7579270ec91ad472c6a78fc89e3ec",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-n2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-n2.json",
+      "bytes": 8730361,
+      "gitBlobSha": "e68fcc3bd43cd423b54b7a291fd48e670d289147",
+      "fileSha256": "6177bf7ba07e0d88a3b72975c59c0e3536d5a7d99510adb75964242b84bf1229",
+      "recordCount": 1499,
+      "firstRecordId": "pk_c5c0fd93a5011045f779799f",
+      "lastRecordId": "pk_04e5a6d88496cb8c1795a07c",
+      "orderedRecordIdFingerprint": "63d8ae8cd37ae91b8f3c0deda4bf2db4a44fd182813efa972be79efa02dc5045",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-o.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-o.json",
+      "bytes": 3463348,
+      "gitBlobSha": "3d769854ee57821f2ec3cee5f101645bcda4f5c5",
+      "fileSha256": "9b02020cd33a84f79a65647d6c72e94e2cb2d582e85ed9bb1f47e3547883ad86",
+      "recordCount": 1499,
+      "firstRecordId": "pk_303f87f10880b06199188a5d",
+      "lastRecordId": "pk_babe685459ccb97529d65369",
+      "orderedRecordIdFingerprint": "90d289e48789429d3deec8c1800e21301a69f404904b295aa325f8e282dd9068",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-o2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-o2.json",
+      "bytes": 5911525,
+      "gitBlobSha": "11290ac359572c866837d710416cecf19739cd71",
+      "fileSha256": "b1bf17108b2a63ddf74dbf955599ea352b0cd2e5221537b5dae8ad555639eb6e",
+      "recordCount": 1499,
+      "firstRecordId": "pk_b4c51eba922dad0f08318e89",
+      "lastRecordId": "pk_220c953ea0ff61806cb257bb",
+      "orderedRecordIdFingerprint": "b51312b31e8cf9f28b946d7739758c221236353f99454138738d8ac3ab4a3b50",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-p.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-p.json",
+      "bytes": 9060425,
+      "gitBlobSha": "0da4d1ca3ea98db57a5e4a820e507635c2ed28f4",
+      "fileSha256": "7028e448b10708a9c92e2b0bd9cc1c5d7385e13bf7d4f4b44ad1da249116ca88",
+      "recordCount": 1499,
+      "firstRecordId": "pk_2d00b0eb72df97f31698aa02",
+      "lastRecordId": "pk_f6e12c62249824ff16151b18",
+      "orderedRecordIdFingerprint": "70ad57b85c7477db9a09b74e58dec0c8bb767165b3c058418645ca8b35cd7745",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-p2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-p2.json",
+      "bytes": 4332158,
+      "gitBlobSha": "f28f4d10c6663980d2e00ea8dfce56ffbec4c0da",
+      "fileSha256": "175d20a29557c7e6a8661413011a8ac6d0080dbe3880e941c959f75f89cf517f",
+      "recordCount": 1499,
+      "firstRecordId": "pk_dcbd8810ecf48eed2d56701c",
+      "lastRecordId": "pk_5acb1d40ee829e30d72be90c",
+      "orderedRecordIdFingerprint": "f5a68b2c497295fa54265ef700ed58d67de1c1bd8469b97679dea9deeb0f49de",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-q.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-q.json",
+      "bytes": 9287728,
+      "gitBlobSha": "26734ba32a6544ef1974dbb8926ca6e80678480d",
+      "fileSha256": "35a4bae29ba8ff997f09926652aa5b16bb2f59ccf15c62d9f08ab95c6bcfae0f",
+      "recordCount": 1499,
+      "firstRecordId": "pk_b48ef891cca838bc9cce3080",
+      "lastRecordId": "pk_856d374b3fe8ae58c6b9e399",
+      "orderedRecordIdFingerprint": "7ca14f89e4d96c0bfe030535336b303f816602722d29adcfe6edf0c297664c1d",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-q2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-q2.json",
+      "bytes": 6957665,
+      "gitBlobSha": "e6e0c7857ee7616a53ae490860ea3ef628f42741",
+      "fileSha256": "c3ad7b5c18c249d1bf305a0abf64c0226f0d200a4ba08ada91072b8cec916266",
+      "recordCount": 1499,
+      "firstRecordId": "pk_268d5a365a8a19f128b13a24",
+      "lastRecordId": "pk_f096e32e1a4643e9bc436c20",
+      "orderedRecordIdFingerprint": "a9ae7ecfb027513dfdb9820b3cbf7344af64e6c1247212bd783668b0fbc9b4d2",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-r.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-r.json",
+      "bytes": 9331779,
+      "gitBlobSha": "9a80d71fb6eb77691da4d546369f1636af7e7971",
+      "fileSha256": "e8604fc09e0d0d82417215c9cf381eae12dd53bfbf90e30bc9878dc5a3164db5",
+      "recordCount": 1499,
+      "firstRecordId": "pk_f0039b3a68b89993fdf88f2e",
+      "lastRecordId": "pk_681026a7c3b81698902491c6",
+      "orderedRecordIdFingerprint": "45e30941118098f83ebabfde0e6c615170209b9a1ee48d4377373fe881f12d0b",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-r2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-r2.json",
+      "bytes": 9631745,
+      "gitBlobSha": "94c06759c8bd32975f227965877c71866db625ec",
+      "fileSha256": "9b63d8e68e18c5825dbcd42051e58c30a967a0184705dc263cfa0b88b99647f5",
+      "recordCount": 1499,
+      "firstRecordId": "pk_c2c8df519f89bee343984da9",
+      "lastRecordId": "pk_82508ac947ad16f74bb40fcb",
+      "orderedRecordIdFingerprint": "1f7f133dbee5757516c24fd7d7e005008fde23f1388cffebaf035968814778fc",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-s.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-s.json",
+      "bytes": 9536916,
+      "gitBlobSha": "9d5afd33e7a83300964cd6c78218c63fadc64f26",
+      "fileSha256": "83594fa6ee89fc183b4b9062fc1b122a5599ec97fba51a6fea074b20c52173d5",
+      "recordCount": 1499,
+      "firstRecordId": "pk_63e63a88d8d44f4e2f4eb297",
+      "lastRecordId": "pk_6e4bc16fbaf3687c93a5f9bc",
+      "orderedRecordIdFingerprint": "e6efdfe4bcef6bcd120485d4691fa2b5889f848d07fffaeab764c14736372aff",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-s2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-s2.json",
+      "bytes": 10280535,
+      "gitBlobSha": "72b5d32241f71d704cfd96e24cfce8ae5a7b4dde",
+      "fileSha256": "bd7c25a1dee99aa27e2c6baf520d40b03e5dfd03eb9fecec5897b54277c1f8c0",
+      "recordCount": 1499,
+      "firstRecordId": "pk_8d69d9262927b1ebf8637a44",
+      "lastRecordId": "pk_e9f6e6f8a969cb71cc7bbaf5",
+      "orderedRecordIdFingerprint": "3b40b888c4ef9260784b4df7f3cc2c2d6212c5eda11475f8fd35aa94e0f9daff",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-t.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-t.json",
+      "bytes": 4119679,
+      "gitBlobSha": "cf65f3834caf4e67f65579b75dac3783bf62d28b",
+      "fileSha256": "b1eb9a03f6e27d73eec513125fc0dc233c4f5ad6be384fbfc9b79f51ef662a0a",
+      "recordCount": 1499,
+      "firstRecordId": "pk_a5bb203b8bb62e5adb65e2f2",
+      "lastRecordId": "pk_a289b7437a1374d7afdfdc06",
+      "orderedRecordIdFingerprint": "1f780ce78440168444ad9abad78824151a3fb173c768b71afd3d93cceffe280f",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-t2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-t2.json",
+      "bytes": 10859229,
+      "gitBlobSha": "42be4a810a6d4a733c6002a8cb0c03a8061d336a",
+      "fileSha256": "cbd8fe43f131c643bf3c65d8a7c96d0e63871d189bd5fca4d26d45a827d140c3",
+      "recordCount": 1499,
+      "firstRecordId": "pk_4ade00376f4ced91b1552180",
+      "lastRecordId": "pk_15379cfdfe00d4234f55c366",
+      "orderedRecordIdFingerprint": "79f192fd723707956305f8a11229d3eb3ae97e75767623acef0f08facf3b07d4",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-u.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-u.json",
+      "bytes": 8054942,
+      "gitBlobSha": "39f499be37605a3918b974efbddfb5d9acbba938",
+      "fileSha256": "c3fd0c3766bc3689ecf3df4f9e83735206a4ceba9fb66f5d7bb7f4eee88954dc",
+      "recordCount": 1499,
+      "firstRecordId": "pk_da351a82ceb18817cd6b700c",
+      "lastRecordId": "pk_2d5835afe49a5bb636205cbe",
+      "orderedRecordIdFingerprint": "1a8e2f3b3e7464f1cd00db5dee3e4121e16c2c06f8ab3c2801011067ba94fc25",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-u2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-u2.json",
+      "bytes": 10896628,
+      "gitBlobSha": "894d11f97c3bacf001169a2c3927cb99fac8bbcc",
+      "fileSha256": "7925d40a28bb14e99f048c00f67f90e2f0ae4922f225581a64fa3e9649f3e7ad",
+      "recordCount": 1499,
+      "firstRecordId": "pk_19cda0c744cbdcf2344efe4f",
+      "lastRecordId": "pk_a1b2017a5b9e3885c960f7a0",
+      "orderedRecordIdFingerprint": "e5aae646e792f74756de81897fcfc0826bc69b56375bc471d2026a6d51edb8fe",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-v.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-v.json",
+      "bytes": 5430289,
+      "gitBlobSha": "d403846c8de929226ec31168e27ba88e552a2d31",
+      "fileSha256": "2b6db43aaf6ae55d82ac2977d3412e3ccd2134a273af61d47d658fc156f4d40d",
+      "recordCount": 1499,
+      "firstRecordId": "pk_553f9d2d200bc15826547007",
+      "lastRecordId": "pk_2f45b9b5bc133ae857073e8c",
+      "orderedRecordIdFingerprint": "b5b30e40ed40ee862c58c004fb616ef860c7ff4eebcfcc119cb9dba34248114b",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-v2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-v2.json",
+      "bytes": 10209590,
+      "gitBlobSha": "909254f6662bb4f86195256f860fb5dbd4b13a91",
+      "fileSha256": "bc61b2d4394a2357e1193ac19013ecbe7248b038e31d50c1611dba65f5251a71",
+      "recordCount": 1499,
+      "firstRecordId": "pk_6c3985e89eb3a7b76bcc29b9",
+      "lastRecordId": "pk_f9ee4f3c2ea0f0562ec76479",
+      "orderedRecordIdFingerprint": "35b92006da6d231c66bdc6c5a415db7d5a98f701da361ef45befea94a491ede4",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-w.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-w.json",
+      "bytes": 6095108,
+      "gitBlobSha": "f867a402323f2ba41d46f0c0f53c3030c412b5e7",
+      "fileSha256": "9e59858689c49fe40b913a5c516894e89ccfe6142f914aa2245a194876b0bccf",
+      "recordCount": 1499,
+      "firstRecordId": "pk_f393d7229a2bb17925de175e",
+      "lastRecordId": "pk_fa024536cb77658c00076ed4",
+      "orderedRecordIdFingerprint": "7c66cea067e078ef399616739cc9ecc3201288a9f60d439fe45e462ffc98a4fe",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-w2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-w2.json",
+      "bytes": 10412103,
+      "gitBlobSha": "2762deb9f9b07a211c900dc1a3885fc8c4170893",
+      "fileSha256": "32cec8b0f72004c52a25246413f87d9b63049da8cc1659f0e22b273ac92b6964",
+      "recordCount": 1499,
+      "firstRecordId": "pk_97dea2cc71216ddabeab9c77",
+      "lastRecordId": "pk_17893459b5c3a0de8e43a5b1",
+      "orderedRecordIdFingerprint": "ef246bb864181a5e8ba1b9f2e0183a189114e87e54e57e2264ba9d2d2508ec13",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-x.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-x.json",
+      "bytes": 5337245,
+      "gitBlobSha": "ad75c076c1e0f6fd6bb9d9fa85d757b17f642425",
+      "fileSha256": "e81b1b744244a6d16b0df6aa9e5bd07ebc86fd446d168c095e326df80922ef0f",
+      "recordCount": 1499,
+      "firstRecordId": "pk_f76918803edf68fa1e6317b1",
+      "lastRecordId": "pk_fe66a640c744d6e298b27ce1",
+      "orderedRecordIdFingerprint": "9c04f18aa178ef79c3e3d84252aab816c9700ed6bc0fee1b21f19b74f83b242e",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-x2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-x2.json",
+      "bytes": 7006062,
+      "gitBlobSha": "6ba6bd1da441ed408f5dd46418cfc34309b8a3b9",
+      "fileSha256": "833326237aff2d0cc85ce6f00fe9a38e6b8bae6b86e0b8e4b176dc50b550fbaa",
+      "recordCount": 1499,
+      "firstRecordId": "pk_ac44bb1ae4092255231d72e6",
+      "lastRecordId": "pk_060a9708aad6c3e421b776e0",
+      "orderedRecordIdFingerprint": "bcc0af6588c082e14c7bd4024213fbcaabcf62d9367b3d362b000b22948af4d3",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-y.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-y.json",
+      "bytes": 6826809,
+      "gitBlobSha": "f056c5b2b8bc88ba30b488b86a2e17b141019593",
+      "fileSha256": "ada33cfb0eb00db2fbe9f5d081fdccf7e04584c2c3a062e77313723b8472c837",
+      "recordCount": 1499,
+      "firstRecordId": "pk_eea0b2e2487432d4b2050f1f",
+      "lastRecordId": "pk_2ac53a4d1904c1b474b007ae",
+      "orderedRecordIdFingerprint": "57a17aceb16d88fa4da7ac5691a23e5432614c15644135724ebddab05c6cb9c6",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-y2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-y2.json",
+      "bytes": 7195591,
+      "gitBlobSha": "2cd9c8d8fca30f69dd2183e6344080dcfcc7581f",
+      "fileSha256": "8e8c1d0784bb73ab72455b3c28d118f179028c715a71b9b02d38ca9725506365",
+      "recordCount": 1499,
+      "firstRecordId": "pk_634a0debe41bbc075e290109",
+      "lastRecordId": "pk_5e125a8ddcf1b971d601b396",
+      "orderedRecordIdFingerprint": "e57315cf0e8ad5880f007114e8af6e810a4446ae040e30bcfd003d1b02779781",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-z.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-z.json",
+      "bytes": 10945177,
+      "gitBlobSha": "af8dfcd2643421cef8cb98a620084aaccc627038",
+      "fileSha256": "57861fe695605dc8e6656e61f8425dc8b1254bcc2092b55be6924912b8f61167",
+      "recordCount": 1499,
+      "firstRecordId": "pk_fd247e7ada25f49a7a3a05c4",
+      "lastRecordId": "pk_8241c736da8d086920c4b87d",
+      "orderedRecordIdFingerprint": "2da3e8695208a65370f6bf5ad5569fbd54cf4334cc5010f05cdb8aaf64dc9dcc",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    },
+    {
+      "file": "batch-z2.json",
+      "relativePath": "data/recovery/imported-pr248/canonical-ledger/corpus/batches/batch-z2.json",
+      "bytes": 5080078,
+      "gitBlobSha": "d8e19d44d99e5e78eb13fabb249fad34786abcaf",
+      "fileSha256": "0f4a1bc495b5ce243ac058b1a3bf0864d23abc6a8b1ebd8c639c7c7b14db2a7c",
+      "recordCount": 1499,
+      "firstRecordId": "pk_9459c0ca5788f2ce2ef8ac6e",
+      "lastRecordId": "pk_8435805aae7ab081bf5ef931",
+      "orderedRecordIdFingerprint": "f75386d7016e119a4009fd787039ac21e5354cae540376e8ec9aec4bc5e70e4f",
+      "batchTopLevelKeys": [
+        "checkpoint",
+        "records"
+      ]
+    }
+  ],
+  "canonicalizationDecision": {
+    "physicalRecordDuplicationAllowed": false,
+    "reason": "The preserved corpus already contains canonical physical records. Thread 3 should create compact immutable shard bindings/index pointers for owned buckets 5-9 rather than duplicate record payloads.",
+    "stableIdentityRequirement": "recordId + immutable source hash/fingerprint; exact formula must be bound to verified batch SHA and original record ID in the next deterministic step."
+  },
+  "warnings": [
+    "MATERIALIZATION_RECEIPT currently says tested=false and verified=false; this probe verifies structural/blob invariants only and does not rewrite that historical receipt.",
+    "Historical classification/live-state fields remain evidence, not current VERIFIED_LIVE truth."
+  ]
+}
