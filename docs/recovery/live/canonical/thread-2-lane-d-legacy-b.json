@@ -1,0 +1,78 @@
+{
+  "contract": "PANTAVION_CANONICAL_SHARDING_V1",
+  "thread": 2,
+  "ownershipBuckets": [0,1,2,3,4],
+  "canonicalizedAt": "2026-09-15T18:44:00Z",
+  "source": {
+    "path": "docs/recovery/live/shards/lane-d-legacy-b.json",
+    "blobSha": "4cc1d5b1304b5407347a96055358bd0be4f61a49",
+    "deploymentRecordsPreserved": 12,
+    "deploymentHistoriesTerminalVerified": true
+  },
+  "canonicalRecords": [
+    {
+      "stableRecordKey": "prj_EAWqpERO72KiDdYv2pXPhKZdPUGe:dpl_JEHu4FS13hEasuCHHXm9jgB8DnSm",
+      "stableRecordKeySha256": "193788141fa62cb6bd9e2302be6255662f93de79c5f979994c159aa12cbb44aa",
+      "bucket": 4,
+      "projectId": "prj_EAWqpERO72KiDdYv2pXPhKZdPUGe",
+      "deploymentId": "dpl_JEHu4FS13hEasuCHHXm9jgB8DnSm",
+      "sourceProjectIndex": 1,
+      "sourceDeploymentIndex": 2,
+      "sourceUniqueness": "unknown"
+    },
+    {
+      "stableRecordKey": "prj_EAWqpERO72KiDdYv2pXPhKZdPUGe:dpl_3Y4PmUcY3WUt1KsFsySTkyZ8uSFh",
+      "stableRecordKeySha256": "0d9b6467c221f240518accc171cbca8a6562d0a00a214fdde1cd1841430e2582",
+      "bucket": 4,
+      "projectId": "prj_EAWqpERO72KiDdYv2pXPhKZdPUGe",
+      "deploymentId": "dpl_3Y4PmUcY3WUt1KsFsySTkyZ8uSFh",
+      "sourceProjectIndex": 1,
+      "sourceDeploymentIndex": 5,
+      "sourceUniqueness": "unknown"
+    },
+    {
+      "stableRecordKey": "prj_7grzRBApMytGyui5TzP2JTzxaR6k:dpl_328tZJ6sJ2WXCHmRwtvyLSf4tbQV",
+      "stableRecordKeySha256": "fb9d30fb891b74dda87b97e6cae2f63bbc96d17cc9381443a7bb4e3112f53edd",
+      "bucket": 3,
+      "projectId": "prj_7grzRBApMytGyui5TzP2JTzxaR6k",
+      "deploymentId": "dpl_328tZJ6sJ2WXCHmRwtvyLSf4tbQV",
+      "sourceProjectIndex": 2,
+      "sourceDeploymentIndex": 1,
+      "sourceUniqueness": "mirror_candidate"
+    },
+    {
+      "stableRecordKey": "prj_7grzRBApMytGyui5TzP2JTzxaR6k:dpl_5f1oFWZCj45Z6AG8vZfbeMNZkonq",
+      "stableRecordKeySha256": "de27e372d547577320aeab0fef6278eb438fda624a1ba94a896c8c2ffad8bc44",
+      "bucket": 3,
+      "projectId": "prj_7grzRBApMytGyui5TzP2JTzxaR6k",
+      "deploymentId": "dpl_5f1oFWZCj45Z6AG8vZfbeMNZkonq",
+      "sourceProjectIndex": 2,
+      "sourceDeploymentIndex": 5,
+      "sourceUniqueness": "mirror_candidate"
+    },
+    {
+      "stableRecordKey": "prj_7grzRBApMytGyui5TzP2JTzxaR6k:dpl_CFKpP49mv38XPnHz7EGVm6nBxxRa",
+      "stableRecordKeySha256": "44a045cd6a2a47eef09661d979df3b81f4fb657924ddbef103f228bed6b71983",
+      "bucket": 4,
+      "projectId": "prj_7grzRBApMytGyui5TzP2JTzxaR6k",
+      "deploymentId": "dpl_CFKpP49mv38XPnHz7EGVm6nBxxRa",
+      "sourceProjectIndex": 2,
+      "sourceDeploymentIndex": 6,
+      "sourceUniqueness": "mirror_candidate"
+    }
+  ],
+  "outsideThread2Ownership": {
+    "count": 7,
+    "buckets": [5,6,7,8],
+    "owner": "THREAD_3",
+    "action": "SKIPPED_NO_DUPLICATE_WRITE"
+  },
+  "totals": {
+    "sourceDeploymentRecords": 12,
+    "thread2DurableCanonicalWrites": 5,
+    "thread3OwnershipSkipped": 7,
+    "sourceRecordsDeleted": 0,
+    "buckets5to9WrittenByThread2": 0
+  },
+  "truthBoundary": "Canonical identity is projectId:deploymentId. Mirror-candidate evidence is preserved as source metadata and is not collapsed into another project's deployment identity by Thread 2. Semantic mirror reconciliation belongs to the audit/reconciliation layer."
+}
