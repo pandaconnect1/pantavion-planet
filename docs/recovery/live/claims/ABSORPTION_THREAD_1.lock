@@ -2,5 +2,8 @@ createdAtUtc: 2026-09-15T18:04:00Z
 thread: 1
 scope: VERCEL_UNIVERSAL_INTAKE
 protocol: PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15
-status: ACTIVE
-rules: ZERO_DELETIONS; ZERO_DESTRUCTIVE_VERCEL_MUTATIONS; DEDUP_PROJECTID_DEPLOYMENTID; PRESERVE_PROVENANCE
+status: SUPERSEDED_DUPLICATE_SCOPE_NO_WORK
+supersededBy: docs/recovery/live/claims/THREAD_1.lock
+collisionDetectedUtc: 2026-09-15T18:05:00Z
+note: Read-only Vercel inventory/delta probes occurred before collision detection; no intake/canonical writes were made from those probes.
+rules: ZERO_DELETIONS; ZERO_DESTRUCTIVE_VERCEL_MUTATIONS; DEDUP_PROJECTID_DEPLOYMENTID; PRESERVE_PROVENANCE; SKIP_OWNED_SCOPE
