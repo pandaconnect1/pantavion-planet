@@ -1,0 +1,35 @@
+{
+  "schema":"pantavion_semantic_classification_v1_compact","protocol":"PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15","thread":4,"scope":"AI_SEMANTIC_CLASSIFICATION_SWARM","generatedAtUtc":"2026-09-15T19:11:00Z",
+  "canonicalInput":{"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-561-600.json","blobSha":"56bea6d23741965d41248fe10be64f4e54644d67","canonicalRecordCount":22,"ownerThread":2,"ownershipBuckets":[0,1,2,3,4]},
+  "sourceEvidence":[{"path":"docs/recovery/live/batches/lane-g-20260915-561-580-rehydrated.json","blobSha":"ed4a17ac26281ae0f92832b7ce0a8454374730f7"},{"path":"docs/recovery/live/batches/lane-g-20260915-581-600-rehydrated.json","blobSha":"f93ca7cc9fbe312d1d3cde4b11405367d4b542f2"}],
+  "rules":{"classificationOnly":true,"canonicalCountDelta":0,"sourceEvidenceMutated":false,"routingPerformed":false,"unsupportedSemanticsGuessed":false},
+  "profiles":{
+    "MAIN_UNRESOLVED":{"theme":"REVIEW_REQUIRED","section":"REVIEW_REQUIRED","type":"deployment_provenance","module":"REVIEW_REQUIRED","subsystem":"REVIEW_REQUIRED","capability":"REVIEW_REQUIRED","feature":"REVIEW_REQUIRED","canonicalTarget":"REVIEW_REQUIRED"},
+    "KERNEL_CANONICALIZATION":{"theme":"Platform Core","section":"Kernel Canonicalization","type":"deployment_provenance","module":"Shared Core","subsystem":"Kernel Canonicalization","capability":"REVIEW_REQUIRED","feature":"REVIEW_REQUIRED","canonicalTarget":"shared-core/kernel-canonicalization"}
+  },
+  "records":[
+    ["865eca4497a0ee146ce3fb226141d9d69d2c4808c826b4815b76b8f5e97afc8a","dpl_FGF33UfbpeoXqHzdbp439W2B3WsW",561,"MAIN_UNRESOLVED",0.0,true],
+    ["265a797a518fb1f9058d6c895cf0b3d2709f8b82f122165f75bb1daf2d46e42a","dpl_YguUtGEdmAioRQZsPAnU5QyyBZ5w",563,"MAIN_UNRESOLVED",0.0,true],
+    ["a3fa9d19f8b636c8a64a5e3bf7db5378e1750045efc4344b8cadc216ed2d6d38","dpl_A4NxzNYwrJ4Tr1oM5nteQPoB3ruF",566,"MAIN_UNRESOLVED",0.0,true],
+    ["e1cecdafe70f2c30d1557eb5ba43c818b2cd0d11bfea19b453d662c68665a674","dpl_Dez26YngnrAuVGSTKCwxxnMQ8oVu",567,"MAIN_UNRESOLVED",0.0,true],
+    ["d12c35962f7ba970ca3a881af6eb307213c01b1b728acebbecfc091b7b56fa2f","dpl_9ps494QhknL6fFc6ehxGoKYcLJCk",568,"MAIN_UNRESOLVED",0.0,true],
+    ["a2f225b833b7af39dadafffe4a2f78283580c1c7391f53c8206093af0c0aa4f4","dpl_23Cry7qxYMo6Zx5KbEDzYXYZAJuq",569,"MAIN_UNRESOLVED",0.0,true],
+    ["f44946473a0ff42be90ff7d03016046b805c1eea4c4779dbb09bf03451adbb2e","dpl_2CpomvLbqDj54abXtuu8mtjU6f9e",570,"MAIN_UNRESOLVED",0.0,true],
+    ["1eaa27cf4e24975467ebd5095349410fe74c10cc2c8ac11cbb8c69adc0bedec7","dpl_5ti1tDEtMXtue14eAHT9BqLG1rpH",571,"MAIN_UNRESOLVED",0.0,true],
+    ["24e2e53a93d24e74892a6b858960dcf68c7d1fe6d5f2cbdf3edf4653c3f4e18c","dpl_6truCHdTQoMnbAuVp7tuKz2rJSTt",573,"MAIN_UNRESOLVED",0.0,true],
+    ["8c7e6fea3fdf7f468dc83654ca28f46e0548ed69567f8a32a8006f5c42d32312","dpl_6YaAuq1MGBLe3rQHyzdg4g8uirPU",574,"MAIN_UNRESOLVED",0.0,true],
+    ["3d1196c881eb6f52abbc5eb8fe7c9805cef34870a684f79a066a286d5eb5ff79","dpl_Fi4eYVV3Ki8mvVrKKfQZ7LZnRADT",577,"MAIN_UNRESOLVED",0.0,true],
+    ["909272ad2a9b8ab60ad8ee071bf85919512aef76ec6b7db9755cf601b2a4705b","dpl_CANZkoQGMPGYXKwvGeNDMoXoJK1q",578,"MAIN_UNRESOLVED",0.0,true],
+    ["60f33c1fbbb3e18756debd22f64c1e1873027512014de820c4b366ccf7410954","dpl_H57XU4rgGfytTfLc6fuNrtiRhKsZ",581,"MAIN_UNRESOLVED",0.0,true],
+    ["956b2461f3330c8fdd3ce92e007b4094b0f2d3620205179dbf2c35ed3e347062","dpl_7R8e373KifMfsZ1c6XzRuqXHvHDJ",583,"MAIN_UNRESOLVED",0.0,true],
+    ["811f932b8a6f52754b8e2556c47fa66010d0976b5ff9c8e21b14170901784e9b","dpl_6oRsjthmBvepBz2NCpwci39pYkhS",585,"MAIN_UNRESOLVED",0.0,true],
+    ["e562265e4efc43542937e252c54d6e1c3a103341f74bdcc9f351a9d208df34b8","dpl_B3yvHarmWAbsUzPadNUUNatMUhHP",587,"MAIN_UNRESOLVED",0.0,true],
+    ["7f7a265cafda72057a3685a9091f13cda055c0a7543cb6848a2638356f8d4345","dpl_5WW6rMf6Z3qD9gpDiYXUGq4gXkgd",588,"MAIN_UNRESOLVED",0.0,true],
+    ["93b96e12ee177a244ab9890e05a2c6d98458d1cad68e66b6a7cb950987cb9e2f","dpl_E2qwoMhkDzntz6od6sYrbs9u3tUa",590,"MAIN_UNRESOLVED",0.0,true],
+    ["11d77df55c9af9dd63a5c253de01a8654b6efc6a5bb137d1f27b9be339b890ac","dpl_HLPmc2iQzaoxqjC7vD44iVn7zcbz",592,"MAIN_UNRESOLVED",0.0,true],
+    ["4afc57b9c70203f2c00282e126e97b7272bb662ec6fb96b285db97d6367c274e","dpl_D3YxyRjhvDRMVVwdaipTMEfpjiZP",594,"MAIN_UNRESOLVED",0.0,true],
+    ["38d962d147386d754e58e95b9c9a3ada5dc5f1f8498d2e79a854de2042e89e3a","dpl_6heGfuj42R5MEC8CRwEXBSzXUKrW",596,"MAIN_UNRESOLVED",0.0,true],
+    ["747ad8534a5f58edb93ec2866db15b3e269183f30b52d6766ff5d53aa5500711","dpl_5EyqUubYKDExV3dYuQnnBzTYE3na",597,"KERNEL_CANONICALIZATION",0.65,true]
+  ],
+  "recordTuple":"[stableRecordKeySha256,deploymentId,laneARecordOrdinal,profile,confidence,reviewRequired]","summary":{"classified":22,"reviewRequired":22,"canonicalCountDelta":0},"status":"DURABLE_CLASSIFIED_WITH_REVIEW_HOLDS"
+}
