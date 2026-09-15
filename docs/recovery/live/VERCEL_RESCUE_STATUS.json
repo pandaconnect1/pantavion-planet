@@ -1,21 +1,23 @@
 {
-  "updatedAt": "2026-09-15T13:48:00Z",
-  "coordinatorObservedAt": "2026-09-15T13:48:00Z",
-  "phase": "EMERGENCY_VERCEL_RESCUE",
+  "updatedAt": "2026-09-15T14:06:30Z",
+  "coordinatorObservedAt": "2026-09-15T14:06:30Z",
+  "phase": "EMERGENCY_VERCEL_RESCUE_CANONICAL_INGESTION",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total and not directly comparable with mirrored deployment counts",
-  "recoveredDeploymentRecordsFloor": 3560,
-  "recoveredDeploymentRecordsFloorBasis": "Durably checkpointed verified lower bound. Lane A has captured 500 non-terminal canonical deployment records in 25 pages in its current run; mirror overlap across projects may exist.",
+  "recoveredDeploymentRecordsFloor": 3679,
+  "recoveredDeploymentRecordsFloorBasis": "Durably checkpointed verified lower bound after Lane A captured 619 additional canonical deployment records and reached explicit terminal count=0. Mirror overlap across projects may exist and must be deduplicated before totals are summed.",
   "canonical": {
     "project": "pantavion-planet",
     "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
     "sourceCursor": 1786126296277,
-    "nextCursor": 1778033520555,
-    "pagesCapturedThisLaneRun": 25,
-    "recordsCapturedThisLaneRun": 500,
-    "lastPageCount": 20,
-    "terminal": false,
-    "rescue_state": "CHECKPOINTED",
+    "nextCursor": null,
+    "lastNonEmptyCursor": 1775918227754,
+    "pagesCapturedThisLaneRun": 31,
+    "recordsCapturedThisLaneRun": 619,
+    "lastPageCount": 19,
+    "terminalProbeCount": 0,
+    "terminal": true,
+    "rescue_state": "TERMINAL_CHECKPOINTED",
     "live_truth": "HISTORICAL_ONLY",
     "shard": "docs/recovery/live/shards/lane-a-canonical.json"
   },
@@ -27,30 +29,45 @@
     "terminal": true,
     "rescue_state": "TERMINAL_VERIFIED"
   },
+  "latestBatch": {
+    "records": 19,
+    "pages": 1,
+    "canonicalRecords": 19,
+    "mirrorRecords": 0,
+    "note": "Lane A terminal batch 601-619 was durably preserved; the immediately following pagination probe returned count=0. Lane F has canonicalized these 19 records and bound them to GitHub recovery evidence plus Pantavion founder-feed input."
+  },
   "lanes": {
-    "A": {"status": "ACTIVE", "historyTerminal": false, "nextCursor": 1778033520555},
+    "A": {"status": "TERMINAL_CHECKPOINTED", "historyTerminal": true, "recordsCapturedThisRun": 619, "terminalProbeCount": 0},
     "B": {"status": "TERMINAL_VERIFIED", "historyTerminal": true},
     "C": {"status": "TERMINAL_VERIFIED", "projectsTerminal": "6/6", "deploymentRecords": 73},
     "D": {"status": "BLOCKED_VERCEL_HISTORICAL_RUNTIME_BILLING_LIMIT", "deploymentHistoriesTerminal": "7/7", "historicalRuntimeExportBlocked": true},
-    "E": {"status": "BLOCKED_AUTH_EXPORT", "projectMetadataCaptured": "15/15", "envConfigNamesCaptured": 111, "secretValuesCaptured": false}
+    "E": {"status": "BLOCKED_AUTH_EXPORT", "projectMetadataCaptured": "15/15", "envConfigNamesCaptured": 111, "secretValuesCaptured": false},
+    "F": {"status": "ACTIVE", "canonicalizedRecordsFloor": 19, "sourceRecordsAvailableFloor": 3679, "githubEvidenceBound": true, "pantavionFounderFeedBound": true}
+  },
+  "canonicalIngestion": {
+    "lane": "F",
+    "status": "ACTIVE",
+    "canonicalizedRecordsFloor": 19,
+    "sourceRecordsAvailableFloor": 3679,
+    "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+    "shard": "docs/recovery/live/shards/lane-f-canonical-ingestion.json",
+    "completionRule": "CAPTURED -> CLASSIFIED -> CANONICALIZED -> GITHUB_EVIDENCE_BOUND -> PANTAVION_FOUNDER_FEED_BOUND -> VERIFIED_OR_EXPLICIT_GAP"
   },
   "liveProduction": {
     "domain": "www.pantavion.com",
     "apexRedirect": "pantavion.com -> www.pantavion.com",
     "authoritativeProject": "pantavion-planet",
     "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
-    "deploymentId": "dpl_FGfYCSEAhtQwVhGiW57nCyrFi6et",
+    "deploymentId": "dpl_EYCpp9xXxt5N9516jaYSwP1GEm76",
     "gitRef": "main",
-    "gitSha": "7d7d429f9dc669a9479c63987aafda0464b703d5",
+    "gitSha": "f4897f17b8c0b334ba2dd1a86340d46aac8563e7",
     "state": "READY",
     "target": "production",
-    "rootHttpVerified": true,
-    "rootLiveTruth": "VERIFIED_LIVE",
     "founderRecoveryRoute": {
       "route": "/admin/pantavion/recovery",
       "productionBuildPresent": true,
-      "unauthorizedProbeStatus": 404,
-      "liveTruth": "PRODUCTION_BUILD_PRESENT_AUTH_GUARDED"
+      "liveTruth": "PRODUCTION_BUILD_PRESENT_AUTH_GUARDED",
+      "feedMode": "dynamic GitHub rescue-branch JSON with no-store"
     }
   },
   "productionRuntime": {
@@ -59,7 +76,7 @@
     "errorGroup": "pantavion_secure_scheduled_worker_failed",
     "observedErrorCount": 287,
     "lastSeen": "2026-09-15T13:20:38Z",
-    "blocker": "Supabase admin runtime requires SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY; no secret value was exposed or captured.",
+    "blocker": "Supabase admin runtime requires an authorized admin credential that is not configured or not readable in production; no secret value was exposed or captured.",
     "rescueState": "BLOCKED_SECRET_CONFIGURATION"
   },
   "buildRemediation": {
@@ -72,9 +89,10 @@
     "liveTruth": "BUILD_VERIFIED_NOT_RUNTIME_VERIFIED"
   },
   "parallelCoordinator": {
-    "mode": "VERIFY_COORDINATE_ONLY",
-    "unclaimedLane": false,
-    "activeLocks": ["A", "B", "C", "D", "E"],
+    "mode": "PARALLEL_A_TO_L",
+    "claimedLocks": ["A", "B", "C", "D", "E", "F"],
+    "activeLocks": ["A", "B", "C", "D", "E", "F"],
+    "availableAdditionalLanes": ["G", "H", "I", "J", "K", "L"],
     "vercelProjectInventoryVerified": true,
     "vercelProjectCount": 15,
     "noGitProjectsVerified": [
@@ -89,19 +107,28 @@
     "zeroDirectVercelMutations": true,
     "secretValuesRecorded": false
   },
+  "recentEvidence": [
+    "Lane A pantavion-planet deployment history reached explicit terminal count=0 after 619 additional records in the current lane run.",
+    "Lane F canonicalized the terminal 19-record batch into normalized deployment/Git/provenance records and bound the artifact to GitHub recovery evidence and Pantavion founder-feed input.",
+    "Lane C reports 6/6 legacy group-A project histories terminal with 73 deployment records preserved.",
+    "Lane D reports 7/7 deployment histories terminal; historical runtime export remains separately blocked by Vercel billing/retention limits.",
+    "Lane E captured non-secret project/environment continuity metadata for all 15 projects without exposing secret values.",
+    "The production founder recovery route is present in the deployed main build and reads this rescue feed dynamically with no-store."
+  ],
   "hardGaps": [
-    "Lane A canonical history is still non-terminal and must continue from cursor 1778033520555 until explicit count=0/no older records.",
-    "Canonical production scheduled worker is failing because a required Supabase admin credential is not configured or not readable in production.",
-    "Authenticated Vercel environment-variable inventory/decryption/write actions are not exposed by the connected tool surface in this coordinator thread; values must remain private.",
+    "Lane F still must canonicalize and deduplicate the earlier durable deployment batches; raw captured evidence is not completion.",
+    "Canonical production scheduled worker has confirmed runtime failure because a required Supabase admin credential is not configured or not readable in production.",
+    "Authenticated Vercel secret-value export/decryption is not exposed by the current connected tool surface; values must remain private and may require authorized reissue/rotation.",
     "Complete deployment filesystem/build-output export is not available through the current connected Vercel tool surface.",
     "Lane D historical runtime log retrieval is blocked by Vercel billing/retention limits; this is not evidence that historical logs are absent."
   ],
   "rules": [
     "zero deletions",
+    "zero direct Vercel mutations during emergency rescue",
     "READY or production is deployment evidence, not automatically VERIFIED_LIVE",
     "no secret values in public GitHub or chat",
-    "public root is VERIFIED_LIVE only because it received direct HTTP runtime proof",
-    "mirror terminal is verified; canonical must continue until its own explicit terminal zero",
-    "all A-E lanes remain claimed; coordinator must not duplicate lane pagination"
+    "terminal deployment history requires explicit count=0/no older records",
+    "raw capture is incomplete until classified, canonicalized, GitHub-bound and Pantavion-founder-feed-bound or recorded as an explicit gap",
+    "additional workers must claim distinct G-L lanes and must not duplicate A-F work"
   ]
 }
