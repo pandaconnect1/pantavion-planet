@@ -203,14 +203,29 @@
       "graphEdgeCount": 0,
       "semanticMirrorsSuppressed": 0,
       "implementationCandidates": 0
+    },
+    {
+      "output": "docs/recovery/live/routing/thread-5-routes-lane-g-t2-281-320.json",
+      "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-281-320.json",
+      "explicitSourceCanonicalLedger": null,
+      "sha256": "fb6a397e5e6204aefb5140d9d32f54790bb844211cb95ba0059ca0b33fa1c84d",
+      "recordCount": 20,
+      "routedRecords": 0,
+      "reviewRequired": 0,
+      "waitingCanonical": 20,
+      "waitingClassification": 0,
+      "canonicalConflicts": 0,
+      "graphEdgeCount": 0,
+      "semanticMirrorsSuppressed": 0,
+      "implementationCandidates": 0
     }
   ],
   "totals": {
-    "classificationArtifacts": 13,
-    "sourceRecords": 260,
+    "classificationArtifacts": 14,
+    "sourceRecords": 280,
     "routedRecords": 19,
     "reviewRequired": 0,
-    "waitingCanonical": 241,
+    "waitingCanonical": 261,
     "waitingClassification": 0,
     "canonicalConflicts": 0,
     "graphEdges": 128,
