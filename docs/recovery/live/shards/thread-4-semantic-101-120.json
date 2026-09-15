@@ -1,0 +1,36 @@
+{
+  "schema":"pantavion_semantic_classification_v1_compact","protocol":"PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15","thread":4,"scope":"AI_SEMANTIC_CLASSIFICATION_SWARM","generatedAtUtc":"2026-09-15T18:27:00Z",
+  "source":{"path":"docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json","blobSha":"bb895e553a0d13adbb9c71925a7d4e50528018b0","projectId":"prj_BxhpnjvAs1seyfBU1UYFU8nDykwh","range":"101-120","liveTruth":"HISTORICAL_ONLY"},
+  "rules":{"classificationOnly":true,"canonicalCountDelta":0,"sourceEvidenceMutated":false,"routingPerformed":false,"readyIsVerifiedLive":false},
+  "profiles":{
+    "WATER_RUNTIME":{"theme":"Infrastructure & City Intelligence","section":"Water Operations","type":"deployment_provenance","module":"Maps/Infrastructure/City Intelligence","subsystem":"Protected Water Network Runtime","capability":"Network/map runtime reliability","feature":"Lock/restore/refresh water network runtime","canonicalTarget":"infrastructure/water-control/runtime"},
+    "WATER_PIPE_LOAD":{"theme":"Infrastructure & City Intelligence","section":"Water Network","type":"deployment_provenance","module":"Maps/Infrastructure/City Intelligence","subsystem":"Pipe Data Runtime","capability":"Private pipe range/stream loading","feature":"Resilient pipe loading fallback","canonicalTarget":"infrastructure/water-control/pipes"},
+    "WATER_ALERTS":{"theme":"Infrastructure & City Intelligence","section":"Water Access","type":"deployment_provenance","module":"Maps/Infrastructure/City Intelligence","subsystem":"Access Requests","capability":"Mobile administrator alerts","feature":"Push alerts for access requests","canonicalTarget":"infrastructure/water-control/access-alerts"},
+    "WATER_ACCESS_QUEUE":{"theme":"Infrastructure & City Intelligence","section":"Water Access","type":"deployment_provenance","module":"Maps/Infrastructure/City Intelligence","subsystem":"Access Request Queue","capability":"Request deduplication","feature":"Deduplicate access request queue","canonicalTarget":"infrastructure/water-control/access-queue"},
+    "WATER_ADMIN_MOBILE":{"theme":"Infrastructure & City Intelligence","section":"Water Administration","type":"deployment_provenance","module":"Maps/Infrastructure/City Intelligence","subsystem":"Mobile Admin Controls","capability":"Mobile administrative operation","feature":"Functional admin tools and approval panels","canonicalTarget":"infrastructure/water-control/admin-mobile"},
+    "WATER_USERS":{"theme":"Identity & Access","section":"Water Administration","type":"deployment_provenance","module":"Maps/Infrastructure/City Intelligence","subsystem":"Protected User Management","capability":"Secure Water user administration","feature":"Protected users and deletion controls","canonicalTarget":"infrastructure/water-control/users","relatedModules":["Shared Core"]}
+  },
+  "records":[
+    ["dpl_339BfTQquyte3rm8JJsWPWb3d31S","641601e9b4e621f6e1c9300431a7421901230339","WATER_RUNTIME",0.98,false,true],
+    ["dpl_FRCxkcVv8qutXtCxBZRFxYkW9iFP","940a2d1b1d5e3cb3805a2b928f3b070ff349ec73","WATER_PIPE_LOAD",0.99,false,true],
+    ["dpl_CUYgejjteQUmxH1Z9Zzw7sMs9ZcG","b2c286bad08291456c4355cfca590c7f65ab21f9","WATER_PIPE_LOAD",0.99,false,true],
+    ["dpl_DXVDAtTLPxXysFyJLH3oxp8EKACn","84a877e6e80e1d98f67927b172e0a1d8656dbf40","WATER_PIPE_LOAD",0.99,false,true],
+    ["dpl_75re2ofXmNySzirxX4bGcP7sKzaK","87e1d775bd6c024ab51d615e934ec0f91655b4b7","WATER_RUNTIME",0.99,false,true],
+    ["dpl_A5DTG8HMVnNgY7DLwGbsq3VjZmHg","51285dbd4f1176645b8da19a2906f2d4fc572808","WATER_RUNTIME",0.99,false,true],
+    ["dpl_AJEokJqfEQkNSSkwQz5dke8JnPKG","68aaf3efe9611e18758a6773b5f452763fbb5d15","WATER_RUNTIME",0.99,false,true],
+    ["dpl_8WCMLzfx9RtQaukojobXySEusaj6","80d7ba6586ba768636639c4639993d4537804f90","WATER_RUNTIME",0.99,false,true],
+    ["dpl_AEDeNcSP68fW7nmScoZixEBWTfkW","c4ae9c5a2de941f635e95a47494b60cc5ca90c56","WATER_RUNTIME",0.99,false,true],
+    ["dpl_3Z28WWWPH6UU3bDEBYeV29rXZBnH","2ac87bb6c48d1441aeb16fc9cfc8f1dc1502c486","WATER_RUNTIME",0.99,false,true],
+    ["dpl_7pVPZkMb35ceg1gvGgh2NiGEboWa","152c1b54630d78238abb9fce73e918fbd82bb235","WATER_ALERTS",0.99,false,true],
+    ["dpl_AmPhpfES3uShZPVcBpXiASesm5wh","52344e78be1cf1d0e19496a5c37e10d81a6f4944","WATER_ALERTS",0.99,false,true],
+    ["dpl_9bQsUqg3QJ5Gbv8s2gaYcdDXUEpq","9e40305baee27cdfe85291fea30a6327abbac94d","WATER_ACCESS_QUEUE",0.99,false,true],
+    ["dpl_Ce8N1xronL6M2LWjBjwM8XuXBoRW","087d4e1380a56d5c3a65622e4eff38fb8589a2c3","WATER_ACCESS_QUEUE",0.99,false,true],
+    ["dpl_2caL5TPbJw13KYv6b6Mbh9S4KHCG","306fc0e29b0cac33d7fa0517d871c1a4a23a05fe","WATER_ADMIN_MOBILE",0.99,false,true],
+    ["dpl_5WgmsRQcZjgBXLd9RcjZEHg167jc","d2cafcbef615b4a02ba434579661782a03a4ccc7","WATER_ADMIN_MOBILE",0.99,false,true],
+    ["dpl_AawiiE3kvsEd7U8aemskMuFv3dMY","c256e66c937819838ed9f5df1874ced9bb15aa4b","WATER_ADMIN_MOBILE",0.99,false,true],
+    ["dpl_BHPLzSNMQwD73H6M31Tw7YdwM1rf","c1ef45b8d893d1270ebdf403bc0a95118f0e43ae","WATER_USERS",0.99,false,true],
+    ["dpl_89i1UxXYjdhujCHiqBGUtkwVd3uC","c24016f80f7cc614e6c6ffa95d9fc0ed84aeea90","WATER_USERS",0.99,false,true],
+    ["dpl_67hXPCZgpaYKgWsKEyar7AYZEaox","146a5de6c5b0ab4d951e0e7440a181b4a101fe7b","WATER_USERS",0.99,false,true]
+  ],
+  "recordTuple":"[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]","sourceFingerprintRule":"github-blob:bb895e553a0d13adbb9c71925a7d4e50528018b0 + deploymentId + gitSha","status":"DURABLE_CLASSIFIED"
+}
