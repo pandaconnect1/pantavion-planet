@@ -1,0 +1,29 @@
+{
+  "capturedAt": "2026-09-15",
+  "source": "authenticated Vercel project detail queries",
+  "secretValuesIncluded": false,
+  "cleanupAuthorized": false,
+  "projects": [
+    {"name":"pantavion-planet","framework":"nextjs","nodeVersion":"24.x","live":false,"latestDeploymentState":"BUILDING","domains":["www.pantavion.com","pantavion-planet.vercel.app","pantavion.com","pantavion-planet-pandaconnect.vercel.app","pantavion-planet-git-main-pandaconnect.vercel.app"]},
+    {"name":"pantavion-planet-vmxx","framework":"nextjs","nodeVersion":"24.x","live":false,"latestDeploymentState":"ERROR","domains":["pantavion-planet-vmxx.vercel.app","pantavion-planet-vmxx-pandaconnect.vercel.app","pantavion-planet-vmxx-git-main-pandaconnect.vercel.app"]},
+    {"name":"pantavion-one","framework":"nextjs","nodeVersion":"22.x","live":false,"latestDeploymentState":"READY","latestDeploymentTarget":"production","domains":["pantavion-one.vercel.app","pantavion-one-pandaconnect.vercel.app","pantavion-one-git-main-pandaconnect.vercel.app"]},
+    {"name":"pantavion-one-clean-98it","framework":"nextjs","nodeVersion":"24.x","live":false,"latestDeploymentState":"READY","latestDeploymentTarget":"production","domains":["pantavion.com","pantavion-one-clean-98it.vercel.app","pantavion-one-clean-98it-pandaconnect.vercel.app","pantavion-one-clean-98it-git-main-pandaconnect.vercel.app"]},
+    {"name":"pantavion-one-clean","framework":"nextjs","nodeVersion":"22.x","live":false,"latestDeploymentState":"READY","latestDeploymentTarget":"production","domains":["pantavion-one-clean.vercel.app","pantavion-one-clean-pandaconnect.vercel.app","pantavion-one-clean-git-main-pandaconnect.vercel.app"]},
+    {"name":"pantaai","framework":"nextjs","nodeVersion":"22.x","live":false,"latestDeploymentState":"ERROR","latestDeploymentTarget":"production","domains":["pantaai-pandaconnect.vercel.app","pantaai-git-main-pandaconnect.vercel.app"]},
+    {"name":"pantavion-one-clean-ui","framework":"nextjs","nodeVersion":"24.x","live":false,"latestDeploymentState":"READY","domains":["pantavion-one-clean-ui.vercel.app","pantavion-one-clean-ui-pandaconnect.vercel.app","pantavion-one-clean-ui-git-main-pandaconnect.vercel.app"]},
+    {"name":"v0-new-project-dr8uqvuxfhx","framework":null,"nodeVersion":"22.x","live":false,"latestDeploymentState":null,"domains":[]},
+    {"name":"v0-new-project-cd71xe9esnl","framework":null,"nodeVersion":"22.x","live":false,"latestDeploymentState":null,"domains":[]},
+    {"name":"v0-new-project-0hexy2s8dnt","framework":null,"nodeVersion":"22.x","live":false,"latestDeploymentState":null,"domains":[]},
+    {"name":"pantaai-template","framework":null,"nodeVersion":"22.x","live":false,"latestDeploymentState":null,"domains":[]},
+    {"name":"pantaai-v1-nf17","framework":null,"nodeVersion":"22.x","live":false,"latestDeploymentState":"ERROR","latestDeploymentTarget":"production","domains":["pantaai-v1-nf17-pandaconnect.vercel.app","pantaai-v1-nf17-git-main-pandaconnect.vercel.app"]},
+    {"name":"pantaai-v1","framework":null,"nodeVersion":"22.x","live":false,"latestDeploymentState":"ERROR","latestDeploymentTarget":"production","domains":["pantaai-v1-pandaconnect.vercel.app","pantaai-v1-git-main-pandaconnect.vercel.app"]},
+    {"name":"v0-new-project-81xhfwdrlxy","framework":null,"nodeVersion":"22.x","live":false,"latestDeploymentState":null,"domains":[]},
+    {"name":"nextjs-ai-chatbot","framework":"nextjs","nodeVersion":"22.x","live":false,"latestDeploymentState":null,"domains":[]}
+  ],
+  "criticalFindings": [
+    "Canonical pantavion-planet currently reports both www.pantavion.com and pantavion.com in its domain list.",
+    "Legacy pantavion-one-clean-98it also reports pantavion.com in its domain list; routing/ownership must be verified before any project cleanup.",
+    "Zero-deployment projects with empty domain lists remain configuration-review items, not deletion-authorized items.",
+    "Environment-variable secret values are intentionally not stored in this public repository."
+  ]
+}
