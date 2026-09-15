@@ -1,0 +1,179 @@
+{
+  "schema": "pantavion_thread8_parallel_output_receipt_v1",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_20260915",
+  "thread": 8,
+  "scope": "GITHUB_EVIDENCE_DURABILITY",
+  "observedAtUtc": "2026-09-15T18:21:09.319659Z",
+  "recoveryBranch": "backup/pre-vercel-risk-20260914",
+  "branchHeadObserved": {
+    "commitSha": "ae0f1f92a006588b788ce10ba1faa30d4c0024cc",
+    "treeSha": "abb6bf124525f611f5daf9c3ee30a8f811b67870",
+    "message": "recovery: classify Thread 2 Lane-G canonical 201-240"
+  },
+  "truthRules": {
+    "activityEvidenceIsNotCompletion": true,
+    "commitMessageAloneDoesNotRaiseCounts": true,
+    "readyOrDeployedIsNotVerifiedLive": true,
+    "preflightIsNotRouted": true,
+    "routerCodePresentIsNotRouterExecution": true,
+    "blockedIsNotComplete": true,
+    "noDatasetConflation": true
+  },
+  "boundOutputs": [
+    {
+      "ownerThread": 7,
+      "scope": "GLOBAL_DEDUP_RECONCILIATION_COMPLETENESS_AUDIT",
+      "commitSha": "ab7a3b34755bef9eb8fc3fce6e16a864c8f4bedd",
+      "treeSha": "88e47f3317585a6ce9d2d9f9528e5bfcaf8b2f3d",
+      "artifact": {
+        "path": "docs/recovery/live/audit/thread-7-global-reconciliation-20260915T181301Z.json",
+        "gitBlobSha": "9d4fc47fb805fe6cbe39f0e2c6404b2ff58a8346"
+      },
+      "inspectedTruth": {
+        "canonicalShardOverlap": 0,
+        "duplicateStableIdsAcrossThreads2And3": 0,
+        "sourceKeyOverlap": 0,
+        "semanticMirrorGroups": 1,
+        "missingProvenanceRefs": 0,
+        "bucketMismatch": 0,
+        "finalRouteRows": 0,
+        "openFindingsRemain": true,
+        "foreignShardRewritePerformed": false
+      },
+      "completionAssertion": "AUDIT_FINDINGS_OPEN_NOT_COMPLETE"
+    },
+    {
+      "ownerThread": 7,
+      "scope": "GLOBAL_DEDUP_RECONCILIATION_COMPLETENESS_AUDIT",
+      "commitSha": "d72894fde6e3df36b7fc7cb00b9e41e69e093a42",
+      "treeSha": "88d0084333634782c3561170b53453450583280a",
+      "artifact": {
+        "path": "docs/recovery/live/audit/thread-7-global-reconciliation-delta-20260915T181438Z.json",
+        "gitBlobSha": "94dd9b3c3e0d632efa2626d2c7c13d5dc7c195e7"
+      },
+      "inspectedTruth": {
+        "semanticClassificationFinalCountBefore": 35,
+        "semanticClassificationFinalCountAfter": 51,
+        "routeEligibleFinalCount": 51,
+        "finalRoutingRowsMaterialized": 0,
+        "openFindingsRemain": true,
+        "unresolvedIsTerminal": false,
+        "foreignShardRewritePerformed": false
+      },
+      "completionAssertion": "AUDIT_DELTA_OPEN_NOT_COMPLETE"
+    },
+    {
+      "ownerThread": 4,
+      "scope": "AI_SEMANTIC_CLASSIFICATION",
+      "commitSha": "8d080c65c31cae685f315b768aa61d46b25d5bae",
+      "treeSha": "30274328b60aab49aa27d103c9e21dfb0848f391",
+      "artifact": {
+        "path": "docs/recovery/live/checkpoints/thread-4-semantic-20260915T1836Z.json",
+        "gitBlobSha": "93ccbe174b60a18b1011951428573052feb25ac8"
+      },
+      "inspectedTruth": {
+        "status": "ACTIVE_CAUGHT_UP_FOR_CURRENT_PAYLOAD_BACKED_CANONICAL_INPUT",
+        "payloadBackedCanonicalCandidates": 219,
+        "classifiedPayloadBackedRecords": 219,
+        "reviewRequired": 2,
+        "regularRoutingEligible": 217,
+        "canonicalCountDelta": 0,
+        "moduleGraphRoutingWrites": 0,
+        "summaryOnlyPayloadGap": 400
+      },
+      "completionAssertion": "CURRENT_PAYLOAD_BACKED_INPUT_CAUGHT_UP_NOT_GLOBAL_COMPLETE"
+    },
+    {
+      "ownerThread": 5,
+      "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
+      "commitSha": "b5cd8549dac66c86eeed4fd63aa51f3540f144a0",
+      "treeSha": "907c93381571f8c014421a621f09fa8b4686f9d3",
+      "artifact": {
+        "path": "docs/recovery/live/routing/thread-5-routing-manifest.json",
+        "gitBlobSha": "901acc337619b1b88007b57b8e61a2c4442d6ccd"
+      },
+      "inspectedTruth": {
+        "classificationArtifacts": 11,
+        "sourceRecords": 219,
+        "routedRecords": 0,
+        "waitingCanonical": 219,
+        "waitingClassification": 0,
+        "canonicalConflicts": 0,
+        "graphEdges": 0,
+        "implementationCandidates": 0
+      },
+      "completionAssertion": "ROUTE_MANIFEST_MATERIALIZED_WAITING_CANONICAL"
+    },
+    {
+      "ownerThread": 9,
+      "scope": "SUPABASE_DURABLE_WORKER_PLANE_EXECUTION_ENABLER",
+      "commitSha": "5ee1389f4786da32da408b2e1000692187ea09bb",
+      "treeSha": "040628736a7cdbec8278e9b2bf44a57d49c475cb",
+      "artifact": {
+        "path": ".github/workflows/pantavion-recovery-partition-executor.yml",
+        "gitBlobSha": "31b5daa087c545276ff663719a06562874bdabeb"
+      },
+      "inspectedTruth": {
+        "workflowName": "Pantavion Recovery Partition Executor",
+        "githubOidcRequired": true,
+        "fencedExecutorInvoked": true,
+        "runId": 35006462360,
+        "runStatusAtObservation": "in_progress",
+        "activeJobId": 104507324073,
+        "activeStep": "Execute recovery partitions through GitHub OIDC fencing bridge"
+      },
+      "completionAssertion": "FENCED_EXECUTION_OBSERVED_NOT_TERMINAL"
+    }
+  ],
+  "thread9RuntimeTruth": {
+    "taskName": "pantavion:recovery_partition:v1",
+    "observedAtUtc": "2026-09-15T18:21:09.319659Z",
+    "total": 165,
+    "planned": 84,
+    "queued": 0,
+    "running": 0,
+    "succeeded": 81,
+    "failed": 0,
+    "leased": 0,
+    "maxAttempt": 1,
+    "latestLeaseHeartbeat": "2026-09-15T18:21:08.502412Z",
+    "latestExecutionUpdateUtc": "2026-09-15T18:21:08.502412Z",
+    "executionProofState": "FENCED_EXECUTION_OBSERVED",
+    "thread9LockExists": true,
+    "lockIsNotExecutionProof": true,
+    "terminal": false
+  },
+  "actionsEvidence": {
+    "workflowName": "Pantavion Recovery Partition Executor",
+    "workflowId": 358985505,
+    "runId": 35006462360,
+    "headSha": "5ee1389f4786da32da408b2e1000692187ea09bb",
+    "event": "push",
+    "statusAtObservation": "in_progress",
+    "jobId": 104507324073,
+    "jobName": "Execute fenced recovery partitions to terminal",
+    "completedPrerequisiteSteps": [
+      "Checkout exact main revision",
+      "Use Node 22",
+      "Generate deterministic recovery source index",
+      "Verify source index contract"
+    ],
+    "activeStep": "Execute recovery partitions through GitHub OIDC fencing bridge",
+    "secretValuesRecorded": false
+  },
+  "notAsserted": {
+    "thread1Completion": "NOT_ASSERTED_BY_THIS_RECEIPT",
+    "thread5RoutingCompletion": "EXPLICITLY_FALSE_AT_OBSERVATION",
+    "thread6DownstreamCompletion": "NOT_ASSERTED_BY_THIS_RECEIPT",
+    "thread9TerminalCompletion": "EXPLICITLY_FALSE_AT_OBSERVATION",
+    "finalConvergence": false
+  },
+  "safety": {
+    "zeroDeletions": true,
+    "zeroDestructiveVercelMutations": true,
+    "secretsRecorded": false,
+    "rawPayloadsDuplicated": false,
+    "foreignThreadArtifactsMutated": false
+  },
+  "state": "DURABLE_RUNTIME_AND_AUDIT_EVIDENCE_BOUND_OPEN_NOT_COMPLETE"
+}
