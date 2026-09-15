@@ -1,0 +1,76 @@
+{
+  "schema": "pantavion_recovery_coordinator_runtime_truth_v1",
+  "observed_at_utc": "2026-09-15T18:05:40Z",
+  "thread": 0,
+  "role": "COORDINATOR_RUNTIME_TRUTH",
+  "scope": "verification/reconciliation only; no ingestion shard claimed",
+  "rules": {
+    "zero_deletions": true,
+    "zero_destructive_vercel_mutations": true,
+    "secret_values_recorded": false,
+    "duplicate_shard_work": false,
+    "ready_is_verified_live": false
+  },
+  "production": {
+    "project": "pantavion-planet",
+    "project_id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+    "deployment_id": "dpl_6NLyCMTnyzvi481Xz4UAQHrE2PHj",
+    "git_sha": "170ffb3b9e5c48313d08fb6e27ecafb715bfec90",
+    "state": "READY",
+    "target": "production",
+    "verified_live_scope": "scheduler health endpoint only"
+  },
+  "scheduler": {
+    "route": "/api/pantavion/intelligence/scheduler-health",
+    "http_status": 200,
+    "status": "healthy",
+    "schedule": "*/5 * * * *",
+    "last_observed_run_key": "pantavion-intelligence-5m:2026-09-15T18:05",
+    "last_observed_run_status": "succeeded",
+    "last_observed_finished_at": "2026-09-15T18:05:40.188278+00:00",
+    "transport": "vercel_oidc_to_supabase_edge",
+    "secretless": true
+  },
+  "recovery_partitions": {
+    "task_name": "pantavion:recovery_partition:v1",
+    "total": 165,
+    "planned": 165,
+    "queued": 0,
+    "running": 0,
+    "succeeded": 0,
+    "failed": 0,
+    "leased": 0,
+    "distinct_partition_ordinals": 165,
+    "partition_ordinal_min": 1,
+    "partition_ordinal_max": 165,
+    "distinct_idempotency_keys": 165,
+    "last_partition_update_at": "2026-09-15T14:30:27.01172+00:00",
+    "terminal_completion_verified": false
+  },
+  "stall_diagnosis": {
+    "state": "CONFIRMED_EXECUTION_STALL_AFTER_MATERIALIZATION",
+    "evidence": [
+      "Supabase durable_executions contains exactly 165 recovery partitions, all status=planned, with zero queued/running/succeeded/failed and zero active leases.",
+      "The scheduled worker continues to complete successfully every five minutes, so scheduler heartbeat alone is not evidence that recovery partitions are executing.",
+      "Production cron currently runs through secretless OIDC mode.",
+      "The secretless cron branch materializes recovery partitions but does not invoke runPantavionRecoveryFencedExecutor; recovery_fenced_executor is explicitly listed as a pending capability in the deployed source.",
+      "The scheduler-health endpoint aggregates planned/queued/running into the display bucket named active, so active=165 currently means pending materialized work, not 165 executing workers."
+    ],
+    "root_cause_boundary": "THREAD_9_SUPABASE_DURABLE_WORKER_PLANE",
+    "required_next_state": "Provide an authorized secretless OIDC execution path for fenced recovery claims/checkpoints/terminal outcomes, or an equivalent existing durable-fabric path, without creating a competing executor.",
+    "do_not_claim_complete_until": [
+      "at least one partition transitions through an actual fenced claim and execution checkpoint",
+      "partition statuses progress toward succeeded/failed terminal outcomes",
+      "leases/fencing and idempotent ownership are verified",
+      "all 165 reach explicit terminal outcomes or explicit durable failure states"
+    ]
+  },
+  "lane_reconciliation": {
+    "all_A_to_L_claimed": true,
+    "coordinator_did_not_claim_lane": true,
+    "F": "stale at canonicalized floor 219; 400 G-rehydrated records still await F canonicalization",
+    "J": "partial and stale relative to later G/runtime truth",
+    "K": "stale founder-feed snapshot",
+    "L": "stale audit snapshot relative to later G/runtime truth"
+  }
+}
