@@ -1,0 +1,64 @@
+{
+  "capturedAt": "2026-09-15T13:27:00Z",
+  "mode": "VERIFY_COORDINATE_ONLY",
+  "aggregate": {
+    "recoveredDeploymentRecordsFloor": 3300,
+    "canonicalNextCursor": 1781340813841,
+    "canonicalTerminal": false,
+    "mirrorTerminal": true
+  },
+  "lanes": {
+    "A": {
+      "status": "ACTIVE",
+      "scope": "pantavion-planet canonical deep history",
+      "latestVerifiedCursor": 1781340813841,
+      "lastPageCount": 20,
+      "terminal": false,
+      "action": "CONTINUE_BY_LANE_OWNER_ONLY"
+    },
+    "B": {
+      "status": "TERMINAL_VERIFIED",
+      "scope": "pantavion-planet-vmxx historical deep history",
+      "terminalCursor": 1786177840266,
+      "terminalCount": 0,
+      "buildBlockerRemediation": "docs/recovery/** excluded from TypeScript build scope in commit 376828fb0e011dc9d413e9bf0cc55f55ee155801",
+      "action": "NO_DEEP_HISTORY_RESTART"
+    },
+    "C": {
+      "status": "TERMINAL_VERIFIED",
+      "projects": 6,
+      "deploymentRecords": 73,
+      "allDeploymentHistoriesTerminalZero": true,
+      "exportGaps": ["environment variable listing/decryption", "deployment file-tree/content export"],
+      "action": "PRESERVE_EXPORT_GAPS; NO_DUPLICATE_PAGINATION"
+    },
+    "D": {
+      "status": "DEPLOYMENT_HISTORIES_TERMINAL_VERIFIED",
+      "projects": 7,
+      "deploymentRecords": 12,
+      "noGitProjects": 4,
+      "allDeploymentHistoriesTerminalZero": true,
+      "historicalRuntimeBlocker": "Vercel Logs API 400 ExceedsBillingLimitError",
+      "action": "RETRY_HISTORICAL_LOG_EXPORT_ONLY_AFTER_BILLING_OR_ACCESS_RESTORED"
+    },
+    "E": {
+      "status": "BLOCKED_AUTH_EXPORT",
+      "projectsMetadataCaptured": 15,
+      "environmentNamesCaptured": 111,
+      "secretValuesCaptured": false,
+      "connectorEnvInventoryAvailable": false,
+      "connectorDeploymentFileApiAvailable": false,
+      "action": "AUTHORIZED_PRIVATE_EXPORT_OR_REISSUE_ROTATE_REQUIRED"
+    }
+  },
+  "cleanupAuthorization": "NONE",
+  "hardRules": [
+    "zero deletions",
+    "zero Vercel mutations",
+    "no secret values in public GitHub or chat",
+    "private source stays private",
+    "READY/production is historical evidence, not VERIFIED_LIVE",
+    "do not duplicate Lane A pagination while its lock is active"
+  ],
+  "completionTruth": "Historical deployment pagination is terminal for lanes B, C and D. Lane E has completed accessible non-secret continuity mapping but remains blocked on authenticated private export surfaces. Lane A canonical history remains the only active deep deployment-history lane and must continue to explicit count=0."
+}
