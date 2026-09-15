@@ -1,0 +1,34 @@
+{
+  "schema":"pantavion_semantic_classification_v1_compact","protocol":"PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15","thread":4,"scope":"AI_SEMANTIC_CLASSIFICATION_SWARM","generatedAtUtc":"2026-09-15T19:08:00Z",
+  "canonicalInput":{"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-521-560.json","blobSha":"cf42750e4bcf540ab515aa298954db5782a8802b","canonicalRecordCount":18,"ownerThread":2,"ownershipBuckets":[0,1,2,3,4]},
+  "sourceEvidence":[{"path":"docs/recovery/live/batches/lane-g-20260915-521-540-rehydrated.json","blobSha":"08174c676e36530072e6827e0ea55d443e0a2cbb"},{"path":"docs/recovery/live/batches/lane-g-20260915-541-560-rehydrated.json","blobSha":"e32d24d62dd5553046b69dad4f7685dca94256df"}],
+  "rules":{"classificationOnly":true,"canonicalCountDelta":0,"sourceEvidenceMutated":false,"routingPerformed":false,"unsupportedSemanticsGuessed":false},
+  "profiles":{
+    "MAIN_UNRESOLVED":{"theme":"REVIEW_REQUIRED","section":"REVIEW_REQUIRED","type":"deployment_provenance","module":"REVIEW_REQUIRED","subsystem":"REVIEW_REQUIRED","capability":"REVIEW_REQUIRED","feature":"REVIEW_REQUIRED","canonicalTarget":"REVIEW_REQUIRED"},
+    "GUARDIAN_SOS":{"theme":"Safety & Emergency","section":"SOS","type":"deployment_provenance","module":"SOS","subsystem":"Guardian / Extreme Emergency","capability":"REVIEW_REQUIRED","feature":"REVIEW_REQUIRED","canonicalTarget":"sos/guardian-extreme"},
+    "GLOBAL_EMERGENCY_LANG":{"theme":"Safety & Language","section":"Emergency Languages","type":"deployment_provenance","module":"SOS","subsystem":"Global Emergency Language Coverage","capability":"Emergency multilingual coverage","feature":"REVIEW_REQUIRED","canonicalTarget":"sos/global-emergency-languages","relatedModules":["Interpreter/Translation"]},
+    "SOS_LIVE_I18N":{"theme":"Safety & Language","section":"SOS Live Actions","type":"deployment_provenance","module":"SOS","subsystem":"Live Internationalization Actions","capability":"Localized live SOS actions","feature":"REVIEW_REQUIRED","canonicalTarget":"sos/live-i18n-actions","relatedModules":["Interpreter/Translation"]},
+    "VERCEL_ANALYTICS":{"theme":"Trust & Observability","section":"Web Analytics","type":"deployment_provenance","module":"Infrastructure","subsystem":"Vercel Web Analytics","capability":"Web analytics instrumentation","feature":"Vercel Web Analytics installation","canonicalTarget":"infrastructure/observability/web-analytics"}
+  },
+  "records":[
+    ["5857023ddc7260d7908128a79bbfb303bac97557f71897eeefa2bb244a50a0ab","dpl_2LAMcTYKjQv9uXpygYmHHZz9Fdb3",521,"MAIN_UNRESOLVED",0.0,true],
+    ["8bc4c5db9e400bb38d9e4627548cfa0fe5ec22c61a2b186563ecc36d02fd2a8b","dpl_Hb9sNZnLpJubU5gh9a4zmfEzqG9h",524,"MAIN_UNRESOLVED",0.0,true],
+    ["9d3c06a42f45942212537eb5b6e998eddf030dcf2f3a2a2f27f81725f6de4ae7","dpl_GQfsqrQSkZYzcBQdDBVT1h3Kvfwe",527,"MAIN_UNRESOLVED",0.0,true],
+    ["eb8f3c25c44bbe68f04c9f532be1c9d524bf044c0141ffa51cd29dc623acab8c","dpl_7EE8g1kygPcouF9FBKnkGUaDWt4r",532,"MAIN_UNRESOLVED",0.0,true],
+    ["63ce19aff0300818452524488714559eb88db35f9c7930a846e9a6e0bfcbe0f7","dpl_Ba4oEjCnfRCR7zJEyqzy7aSXxLsq",534,"MAIN_UNRESOLVED",0.0,true],
+    ["5d08f7f49226fbc6a54dda0984294a493ec8e9ecca66349370b897dcb54a8ece","dpl_EeTMLLmos5s2HjTKxq5XPCQ1NQbG",535,"GUARDIAN_SOS",0.67,true],
+    ["9d8f199d9b7e0d68c39a70eab49cea1fb85b4f4e4c922b0d398605902bfa585a","dpl_CvVtGdvLGiUZs5TN7RNy6iexFjyB",537,"GUARDIAN_SOS",0.67,true],
+    ["66085c19976e421ca20f4dac39d9ce5ea84e9904f775a288e086ab4a912e3c21","dpl_Ha68JU9thKzm7rx27NJroVadT6b6",538,"GUARDIAN_SOS",0.67,true],
+    ["68710b07f50ba0b24bae5423f05f26f286f394e843b76072e4e051b4b86bf09b","dpl_DbZq462484qsY487YDgUpZLkqoBd",540,"MAIN_UNRESOLVED",0.0,true],
+    ["5027d9e212cc1b76b5313f17c6453ca49ac4fc97e489410531f717b676ee4bdc","dpl_9vqWKqRQmR1jNa6pnh7iz53ezoL4",542,"GLOBAL_EMERGENCY_LANG",0.76,true],
+    ["d902d1b6b20ae6ac27a0d1c87bc2206b790a309069c920b0ce4113ac459268f5","dpl_FnByCQFGdiKSLtA9WcZZVSptKW6Y",544,"GLOBAL_EMERGENCY_LANG",0.76,true],
+    ["d5c5efabaeb73c975bf2845981ab12fd6f19b143f357d7c00fa0bfe19177a3fd","dpl_3Zm5NVKeLeRCktEjRUjACs9Cfuen",546,"SOS_LIVE_I18N",0.78,true],
+    ["ecfa3962dcf5fe86bd983090cb9d133c88cd6ae5aaa0fa6bf6b023ab3b8a04a4","dpl_2JLSDj7whX1YXZ1ssznMvb7be2Nz",547,"SOS_LIVE_I18N",0.78,true],
+    ["e3b8609d0be9e1b7f03ed0be9a674737ae28ec0278fe23ecf49f587eb8aba5af","dpl_9sWQdLdn8AdntHdmKWqLnjm9XfU4",548,"SOS_LIVE_I18N",0.78,true],
+    ["f3a22e0407df7bfcd4ab7473d7ec78e6dd37cc51153b3c712859283855e41eb6","dpl_MYdQUM8C1ZvEWY938faDEEoZ7RVq",553,"MAIN_UNRESOLVED",0.0,true],
+    ["6ceb2401a76f4dfe6c5661924bdaed9b0c6414ba0a8974f2ad06d55f589543a7","dpl_9MscgzSJCJJ6jzSfkd12GzNN9xwz",554,"MAIN_UNRESOLVED",0.0,true],
+    ["cd1bf65923c533474006ce2f70882425bc600f9812ce48f65c72f412194cd4cd","dpl_5Tam99HtM3shtvwhEvJcJYs9VUxn",557,"MAIN_UNRESOLVED",0.0,true],
+    ["53074f6ef90270dc5caf0189ee719bc03bf9a3534d4572c7528a91c65452c568","dpl_41cuTapsG6q4SdfiX8u5qXDkFNgD",560,"VERCEL_ANALYTICS",0.96,false]
+  ],
+  "recordTuple":"[stableRecordKeySha256,deploymentId,laneARecordOrdinal,profile,confidence,reviewRequired]","summary":{"classified":18,"reviewRequired":17,"canonicalCountDelta":0},"status":"DURABLE_CLASSIFIED"
+}
