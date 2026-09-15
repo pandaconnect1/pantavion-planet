@@ -1,0 +1,83 @@
+{
+  "auditedAt": "2026-09-15T14:12:00Z",
+  "lane": "F",
+  "sourceLane": "A",
+  "project": "pantavion-planet",
+  "project_id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+  "sourceRunCapturedRecords": 619,
+  "payloadBackedCanonicalizableRecords": 219,
+  "summaryOnlyRecords": 400,
+  "canonicalization": {
+    "mode": "source-record projection plus inherited canonical fields",
+    "inheritedFields": {
+      "project": "pantavion-planet",
+      "project_id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+      "evidence_type": "deployment",
+      "source_surface": "Vercel list_deployments",
+      "uniqueness": "unknown",
+      "live_truth": "HISTORICAL_ONLY",
+      "privacy": "PUBLIC_SAFE",
+      "destination": "Pantavion founder recovery feed"
+    }
+  },
+  "payloadSources": [
+    {
+      "path": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+      "range": "1-100",
+      "recordCount": 100,
+      "recordPayload": true,
+      "sourceRecordShape": "object",
+      "canonicalState": "CANONICALIZED_BY_REFERENCE"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+      "range": "101-200",
+      "recordCount": 100,
+      "recordPayload": true,
+      "sourceRecordShape": "schema-bound array",
+      "canonicalState": "CANONICALIZED_BY_REFERENCE"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-a-20260915-601-619-terminal.json",
+      "range": "601-619",
+      "recordCount": 19,
+      "recordPayload": true,
+      "sourceRecordShape": "schema-bound array",
+      "canonicalState": "CANONICALIZED_MATERIALIZED",
+      "canonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json"
+    }
+  ],
+  "payloadGaps": [
+    {
+      "path": "docs/recovery/live/batches/lane-a-20260915-201-400-progress.json",
+      "range": "201-400",
+      "recordCount": 200,
+      "recordPayload": false,
+      "state": "EXPLICIT_RECORD_PAYLOAD_GAP",
+      "preserved": ["cursor boundaries", "page counts", "record count", "source surface", "privacy/rescue metadata"]
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-a-20260915-401-500-progress.json",
+      "range": "401-500",
+      "recordCount": 100,
+      "recordPayload": false,
+      "state": "EXPLICIT_RECORD_PAYLOAD_GAP",
+      "preserved": ["cursor boundaries", "page counts", "record count", "source surface", "privacy/rescue metadata"]
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-a-20260915-501-600-progress.json",
+      "range": "501-600",
+      "recordCount": 100,
+      "recordPayload": false,
+      "state": "EXPLICIT_RECORD_PAYLOAD_GAP",
+      "preserved": ["cursor boundaries", "page counts", "record count", "source surface", "privacy/rescue metadata"]
+    }
+  ],
+  "truthBoundary": "Summary-only checkpoints prove traversal/count/cursor continuity but do not preserve the individual deployment IDs or Git provenance required for per-record canonicalization.",
+  "rules": [
+    "do not claim summary-only records as canonicalized",
+    "do not repeat deep pagination while another lane owns it",
+    "after source lane terminal, missing payload must be recovered only through explicitly reassigned unique-gap work or another durable evidence source",
+    "zero deletions and zero secret values"
+  ]
+}
