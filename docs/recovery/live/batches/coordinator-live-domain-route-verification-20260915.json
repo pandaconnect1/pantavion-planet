@@ -1,0 +1,49 @@
+{
+  "role": "VERIFY_COORDINATE",
+  "evidence_type": "live_domain_and_founder_route_verification",
+  "observed_at_utc": "2026-09-15T13:25:02Z",
+  "live_domain": {
+    "apex": "pantavion.com",
+    "canonical_host": "www.pantavion.com",
+    "apex_behavior": "307 redirect to canonical host",
+    "canonical_response": 200,
+    "authoritative_project": "pantavion-planet",
+    "project_id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+    "production_deployment_id": "dpl_FGfYCSEAhtQwVhGiW57nCyrFi6et",
+    "production_branch": "main",
+    "production_git_sha": "7d7d429f9dc669a9479c63987aafda0464b703d5",
+    "deployment_state": "READY",
+    "target": "production",
+    "root_live_truth": "VERIFIED_LIVE"
+  },
+  "legacy_domain_reconciliation": {
+    "legacy_project": "pantavion-one-clean-98it",
+    "legacy_project_id": "prj_jQ4NAbtiHfxC68CazUHwIARlDa1E",
+    "note": "Legacy project metadata still lists pantavion.com, but direct live response assets identify deployment dpl_FGfYCSEAhtQwVhGiW57nCyrFi6et, which belongs to pantavion-planet. Treat legacy domains[] metadata as non-authoritative for current routing."
+  },
+  "founder_recovery_route": {
+    "route": "/admin/pantavion/recovery",
+    "production_build_present": true,
+    "production_build_log_routes": [
+      "/admin/pantavion/recovery",
+      "/admin/pantavion/recovery/vercel"
+    ],
+    "unauthorized_probe_status": 404,
+    "unauthorized_probe_matched_path": "/admin/pantavion/recovery",
+    "interpretation": "The route is deployed in the production bundle and intentionally hides behind the founder authorization boundary when requested without founder credentials.",
+    "live_truth": "PRODUCTION_BUILD_PRESENT_AUTH_GUARDED"
+  },
+  "production_build": {
+    "result": "COMPLETED",
+    "deployment_completed": true,
+    "static_pages_generated": "153/153"
+  },
+  "privacy_and_safety": {
+    "deletions": 0,
+    "direct_vercel_mutations": 0,
+    "secret_values_recorded": false,
+    "temporary_access_tokens_or_share_urls_persisted": false,
+    "duplicate_deep_pagination": false
+  },
+  "truth_boundary": "READY is deployment evidence. The public root has direct HTTP runtime proof and is VERIFIED_LIVE; the founder route is proven present and access-guarded but was not authenticated as founder in this coordinator check."
+}
