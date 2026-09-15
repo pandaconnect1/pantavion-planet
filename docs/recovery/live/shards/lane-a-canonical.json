@@ -1,31 +1,40 @@
 {
-  "updatedAt": "2026-09-15T13:55:00Z",
+  "updatedAt": "2026-09-15T14:00:00Z",
   "lane": "A",
-  "status": "ACTIVE",
+  "status": "TERMINAL",
   "project": "pantavion-planet",
   "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
   "teamId": "team_tGNSGGjcV3VNecscMvaAniGY",
   "sourceCursor": 1786126296277,
-  "nextCursor": 1776883214626,
-  "pagesCapturedThisLaneRun": 30,
-  "recordsCapturedThisLaneRun": 600,
-  "lastPageCount": 20,
-  "terminal": false,
-  "rescue_state": "CHECKPOINTED",
+  "nextCursor": null,
+  "lastNonEmptyCursor": 1775918227754,
+  "nonEmptyPagesCapturedThisLaneRun": 31,
+  "paginationCallsThisLaneRun": 32,
+  "recordsCapturedThisLaneRun": 619,
+  "lastNonEmptyPageCount": 19,
+  "terminalProbeCount": 0,
+  "terminal": true,
+  "rescue_state": "TERMINAL_CHECKPOINTED",
   "live_truth": "HISTORICAL_ONLY",
-  "recoveredDeploymentRecordsFloorAfterCheckpoint": 3660,
+  "recoveredDeploymentRecordsFloorAfterCheckpoint": 3679,
   "checkpoints": [
     "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
     "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
     "docs/recovery/live/batches/lane-a-20260915-201-400-progress.json",
     "docs/recovery/live/batches/lane-a-20260915-401-500-progress.json",
-    "docs/recovery/live/batches/lane-a-20260915-501-600-progress.json"
+    "docs/recovery/live/batches/lane-a-20260915-501-600-progress.json",
+    "docs/recovery/live/batches/lane-a-20260915-601-619-terminal.json"
   ],
+  "terminalEvidence": {
+    "probeUntil": 1775918227754,
+    "count": 0,
+    "deploymentsEmpty": true
+  },
   "rules": [
     "zero deletions",
     "no Vercel mutations",
     "READY or production is not VERIFIED_LIVE",
     "no secret values recorded",
-    "continue from nextCursor until explicit count=0/no older records"
+    "lane lock is retained; no duplicate lane work"
   ]
 }
