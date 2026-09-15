@@ -5,7 +5,7 @@
   "contract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
   "canonicalIndex": {
     "artifactDirectory": "docs/recovery/live/canonical",
-    "uniqueStableRecordKeys": 491,
+    "uniqueStableRecordKeys": 515,
     "ambiguousStableRecordKeys": 4
   },
   "entries": [
@@ -163,16 +163,16 @@
       "output": "docs/recovery/live/routing/thread-5-routes-601-619.json",
       "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-601-619.json",
       "explicitSourceCanonicalLedger": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
-      "sha256": "13f4637657f02622c491ec3a6eb1d1874feba3371f6854a18ac7c048f16c3109",
+      "sha256": "a95c4efbdc4b10f1b85ca2e46f7333cfd39da5045ec5b5691f3b8a24c47466fe",
       "recordCount": 19,
-      "routedRecords": 0,
+      "routedRecords": 19,
       "reviewRequired": 0,
-      "waitingCanonical": 19,
+      "waitingCanonical": 0,
       "waitingClassification": 0,
       "canonicalConflicts": 0,
-      "graphEdgeCount": 0,
-      "semanticMirrorsSuppressed": 0,
-      "implementationCandidates": 0
+      "graphEdgeCount": 128,
+      "semanticMirrorsSuppressed": 1,
+      "implementationCandidates": 20
     },
     {
       "output": "docs/recovery/live/routing/thread-5-routes-lane-g-t2-201-240.json",
@@ -193,14 +193,14 @@
   "totals": {
     "classificationArtifacts": 12,
     "sourceRecords": 238,
-    "routedRecords": 0,
+    "routedRecords": 19,
     "reviewRequired": 0,
-    "waitingCanonical": 238,
+    "waitingCanonical": 219,
     "waitingClassification": 0,
     "canonicalConflicts": 0,
-    "graphEdges": 0,
-    "semanticMirrorsSuppressed": 0,
-    "implementationCandidates": 0
+    "graphEdges": 128,
+    "semanticMirrorsSuppressed": 1,
+    "implementationCandidates": 20
   },
   "rules": {
     "noSourceMutation": true,
@@ -209,6 +209,7 @@
     "waitingCanonicalHasNoEdges": true,
     "reviewRequiredNeverGuessed": true,
     "idempotentRouteIds": true,
-    "canonicalBindingMatchedByStableRecordKey": true
+    "canonicalBindingMatchedByStableRecordKey": true,
+    "legacyVercelStableKeyDerivedFromCanonicalFields": true
   }
 }

@@ -11,14 +11,14 @@
   "explicitSourceCanonicalLedgerSha256": "74c000c4e51ad89b3193820522525f39798570ee0144b8a2c942351e7dd7165c",
   "sourceRecordCount": 19,
   "summary": {
-    "routedRecords": 0,
+    "routedRecords": 19,
     "reviewRequired": 0,
-    "waitingCanonical": 19,
+    "waitingCanonical": 0,
     "waitingClassification": 0,
     "canonicalConflicts": 0,
-    "graphEdgeCount": 0,
-    "semanticMirrorsSuppressed": 0,
-    "implementationCandidates": 0,
+    "graphEdgeCount": 128,
+    "semanticMirrorsSuppressed": 1,
+    "implementationCandidates": 20,
     "duplicateStableRecordKeys": 0,
     "duplicateRouteIds": 0
   },
@@ -27,10 +27,18 @@
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HEeTimYBMiiyRyRa9oWPyjEmey3t",
       "sourceFingerprint": "sha256:f0aeef5bc2731ad8fe39c89617409617e2c23025e6805feb8ca5c59919e6c8de",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HEeTimYBMiiyRyRa9oWPyjEmey3t",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-f0aeef5bc2731ad8fe39",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-f0aeef5bc2731ad8fe39",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:c67f9aa71ea2769e0eb150a8d9e1e2675accfd2f",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -58,18 +66,50 @@
         "relatedModules": [],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "7044da503927d775ead3bf8e4ece8f92bca0ac5803508f4ffc8f51a028adbe75",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "328a3daff413be27ad0bd7d5150cce64247ca7631ed44cf0b1b6830ca84d6d48",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Kernel Multimodal Intake"
+        },
+        {
+          "routeId": "8e56ad16b64b6d41b76bd621ddbcb720b6247ea388012db8587d2bc0d28634b8",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Kernel Multimodal Intake::capability::Multimodal channel inference"
+        },
+        {
+          "routeId": "26b688e1e750affbb214190ae69563310967260e1e135ffd2acee2c75ab4d8a5",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Kernel Multimodal Intake::capability::Multimodal channel inference::feature::Channel set typing and deduplication"
+        },
+        {
+          "routeId": "2c7ead3fbfa373d1cd8757896d899d7172307bf081354d010b7333233dfaed7d",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/kernel.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CuUS4wpk3gAZmSsA1hpK8wyjBu1s",
       "sourceFingerprint": "sha256:28ed43e80f665449c63d495711484b2ba75b07c3c399697079734934516e43f8",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CuUS4wpk3gAZmSsA1hpK8wyjBu1s",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-28ed43e80f665449c63d",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-28ed43e80f665449c63d",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:c67f9aa71ea2769e0eb150a8d9e1e2675accfd2f",
+      "semanticMirrorOf": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HEeTimYBMiiyRyRa9oWPyjEmey3t",
+      "implementationCandidateSuppressed": true,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -97,18 +137,52 @@
         "relatedModules": [],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "4ea28375987656f82ccf3dba2d2138c263b57525f210320a058386e87ac3d9b5",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "aec02894d8a8fad1e6691541c4f456364eb34d328fe6221946cc7f8d160beba9",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Kernel Multimodal Intake"
+        },
+        {
+          "routeId": "2b069b601c4453207a21c1bab7a4f49db6fb92d5389844a2472efe8763b58388",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Kernel Multimodal Intake::capability::Multimodal channel inference"
+        },
+        {
+          "routeId": "7e8d9cb1149bfd8b34287c2dfc215fc8ca47ff1537691a6365cbfbe53889678a",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Kernel Multimodal Intake::capability::Multimodal channel inference::feature::Channel set typing and deduplication"
+        },
+        {
+          "routeId": "ff6df3afd257da0d553d8a6690837b5cddee793c25344001164b7c8f89ad327a",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "record::prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HEeTimYBMiiyRyRa9oWPyjEmey3t",
+          "semanticMirror": true,
+          "reason": "SAME_IMPLEMENTATION_GIT_SHA"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DXYJrSQftYk5vneRcRwqi1mcw7Sx",
       "sourceFingerprint": "sha256:d865e830fa8bb98416e65190f60c52eeff72ad8407f54b67ca9941f727edbdf9",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DXYJrSQftYk5vneRcRwqi1mcw7Sx",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-d865e830fa8bb98416e6",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-d865e830fa8bb98416e6",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:7514e24a9375f75c0fa59c917fc81c879560c189",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -138,18 +212,55 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "a24b319f29170292d9c71a346f282f069fffe6590d4958f53c98a76c86390349",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "8eb61aa6c400f86acfe9136bf603052817513e7c560c32b8382a9e2547a910d2",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Retrieval and Routing"
+        },
+        {
+          "routeId": "11cb73a0e073799b0aa415146b6395df8d0c7eb590c96249712c424e93015ff6",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Retrieval and Routing::capability::Context-aware route selection and memory recall"
+        },
+        {
+          "routeId": "bc062925eb3108bfa61ee38c363da907e4f928b02e7dd35d24f6ab974b416bd2",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Retrieval and Routing::capability::Context-aware route selection and memory recall::feature::Intent expansion, scoped recall ranking, route-mode decision"
+        },
+        {
+          "routeId": "51692736a39b11a6a24499edbaa68a709bc09fdc2187474bd5e27fc01b21c987",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::Memory/Continuity"
+        },
+        {
+          "routeId": "36c21f302257dc9c7f0e634cb7cc44b33dcb376fbd682a8d221faf0aec689173",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/kernel.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Fk6HdFGfBz8WVoaGy9ymvEhbTNYh",
       "sourceFingerprint": "sha256:4ace5d6302a232aed97c28704a672b43a9d33b285d35d429fe54b4aa5567eafe",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Fk6HdFGfBz8WVoaGy9ymvEhbTNYh",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-4ace5d6302a232aed97c",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-4ace5d6302a232aed97c",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:135428b5dca1fb004319fbd314e25ab29fb16165",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -179,18 +290,55 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "93a2f5e29cce9ab765414bf035e3a9a3a425e6a875519004c39f946730b4fddb",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "6801a3c44fdb51a48969df719d2cbe0013c2ccb2c99948e056230304acbbace5",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Memory-Aware Orchestration"
+        },
+        {
+          "routeId": "6945f445d15494636957b0d0d1e05cac0972d37d37a8a5147c4c91e8e6e9d293",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Memory-Aware Orchestration::capability::Memory-aware capability orchestration"
+        },
+        {
+          "routeId": "a96567e10c0451014e1a480c385f100a67db8866f16c510da7dfcbc5a2798bb1",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::AI/Orchestration::subsystem::Memory-Aware Orchestration::capability::Memory-aware capability orchestration::feature::Orchestration brief combining capability directives and recalled memories"
+        },
+        {
+          "routeId": "057a51422d197ee24f881c4ad0eeeb2b9b4e556d6315fdbe8f0e1cc3f7b56ec7",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::Memory/Continuity"
+        },
+        {
+          "routeId": "fbd6267879b6dcd8d3ecf03746e4c59cbdf70a39850410afb2c3598e919f9be2",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/kernel.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AMyo3UKZLd9Hb4P6rNuYKM58uKiV",
       "sourceFingerprint": "sha256:d8f041b3fffd42772ef41d09e18db1f0cf628858b1386c36a1964294a4fb49c0",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AMyo3UKZLd9Hb4P6rNuYKM58uKiV",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-d8f041b3fffd42772ef4",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-d8f041b3fffd42772ef4",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:7cb3ee72cfa5d21c1b3eccaca164dafaacb167e9",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -220,18 +368,55 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "67b0868930e7bf3afe1d520265a354cdce39f8a8e50ce646ce5d7c8a76cb8161",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "a10ad0736a2d6608abc3d8837b6e0689ece43c6ca001ed42daedf2910a325820",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Kernel State Persistence"
+        },
+        {
+          "routeId": "9956d7e14bf2a8b00a826e81fc49b83ccc66d84cc941d049292e930c77c075f2",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Kernel State Persistence::capability::Legacy persistence compatibility"
+        },
+        {
+          "routeId": "4666c0f9a5ce7219abcb6917c708c8e28a697d9129c810cf50bab70183f99d24",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Kernel State Persistence::capability::Legacy persistence compatibility::feature::Guarded browser localStorage read/write fallback"
+        },
+        {
+          "routeId": "1261bd9c3643807e576e006fc31fd725f78f579d252dd11c8823989a95e62ecb",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "9fd4520db024ab9b451f81980f43377ebfe908c5cf2c95c6f711fe90ec8f3ec2",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/store.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5Z5GYq4ecYh8tbYoD29S9qTcnWoi",
       "sourceFingerprint": "sha256:6744547faf008c3c3b3477509aee54d721e25670346be194939fa11230a97f49",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5Z5GYq4ecYh8tbYoD29S9qTcnWoi",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-6744547faf008c3c3b34",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-6744547faf008c3c3b34",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:e16333aca6c6a17b4cf90137c13d654cd536d96c",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -261,18 +446,55 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "bf96ac1abd392e09022fe227808ea6ed4fc9cb71bf3151ab641c3dc44fd61b84",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::Memory/Continuity"
+        },
+        {
+          "routeId": "8031f84680f68743f1aeb757b9b2ca821a40fe4414a074d9fcaf0c0c5a5125ae",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Memory/Continuity::subsystem::Kernel Memory Store"
+        },
+        {
+          "routeId": "e75ade299bae61274115655aeb355f83178d0144b4e918b015a3a794f1254b47",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Memory/Continuity::subsystem::Kernel Memory Store::capability::Memory storage dependency boundary"
+        },
+        {
+          "routeId": "cbb20ebec3ceee457d4c39d2e9c58b59d574dbd0eee219ee3fb71a76eeadd10f",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Memory/Continuity::subsystem::Kernel Memory Store::capability::Memory storage dependency boundary::feature::Single addEntry path reused by bulkAdd with type-only store dependency"
+        },
+        {
+          "routeId": "8e9614081f754a6c1b786d4333ed219d6462611d96c9e654efb1745ace27977c",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "df958af1c9107d3c03be23cc8ea4d6add9a18b410410f5df4270349d4adc3dd8",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/memory.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_476WTfNoFZ5GhT3umYvBfZFDZnMX",
       "sourceFingerprint": "sha256:20cd8f5bbf9ee09ae8745e8871843193858558022f915717085fe9127c51a865",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_476WTfNoFZ5GhT3umYvBfZFDZnMX",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-20cd8f5bbf9ee09ae874",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-20cd8f5bbf9ee09ae874",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:fd0deb42613608d85342fed96f65bfd6ad9a765f",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -303,18 +525,60 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "fe4343bb9301247aafaf0bb5bef7e8179500b79b5b4b89520d98248270bf28be",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "0920deff670a18d59ba2122b7217c8992717f06af0edbcbe7ab47cf650b59497",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Runtime Access"
+        },
+        {
+          "routeId": "7adc28eb4d4e9c9c84e12eb34dd3633c8e7495b4e8025921a1110d2b4cc043f3",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Runtime Access::capability::Kernel runtime health exposure"
+        },
+        {
+          "routeId": "a957dbcfc05caf9aae0f9799913236919b715becc77808eca0cf676c632d044b",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Runtime Access::capability::Kernel runtime health exposure::feature::Canonical runtime health on kernel and state API routes"
+        },
+        {
+          "routeId": "fefd4afcd235fa537f82cd0c92d11ef2ecc4aab2cf5069fdc2d567df41560f4c",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "58826933dea0d5b433abe6513ef5559d23949f3d3be8e0c32c8beb62287cba27",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::app/api/kernel/route.ts"
+        },
+        {
+          "routeId": "4c3f5c3d35774f726817f6dd3d43f42696169e0a62944e9a3a5acb84a52636e8",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::app/api/kernel/state/route.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GBWgmMVgGMoUjN3eFgo722ufht4N",
       "sourceFingerprint": "sha256:2fc2e660591da58b72d117b86515b1995984b30fe24934536c3a7824e3f0ba58",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GBWgmMVgGMoUjN3eFgo722ufht4N",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-2fc2e660591da58b72d1",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-2fc2e660591da58b72d1",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:f6be9c9c89b9bb2e48f9235ee82390f17a28c0db",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -346,18 +610,65 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "d037b081885445bcb16d1ddec568a38296fc24336e1a69c83ab15fdee37e023f",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "48a50c347035369915613aa917f4c33e0a392db3807625576fa22c4d47d3d555",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Runtime Bridge"
+        },
+        {
+          "routeId": "3a94d31dbd86bbf9f6ce8b8209733bffd675c08c59ff44e99ea06d8fb7a3d8b4",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Runtime Bridge::capability::Canonical runtime export surface"
+        },
+        {
+          "routeId": "ccc922dc81d19459487edf421171f493c5a257aba9be840d6ada9c690754c6c8",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Runtime Bridge::capability::Canonical runtime export surface::feature::Kernel exports canonical audit/store/memory/runtime modules"
+        },
+        {
+          "routeId": "c096e73c0219a4cbb777b0768762aeafae462ee99d0ea5639918997b8e840279",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "975fe3e98520cd2d78f5f15e2a427a2804bede6b3a5e9672867a03f700f95f88",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::Memory/Continuity"
+        },
+        {
+          "routeId": "27e092d036e7046db14eb88818c493d90e33e108746c36452706938bed3f807d",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/kernel.ts"
+        },
+        {
+          "routeId": "f5a2e6e2c150bca1fdaacf27c2cffad289ba3923ce466ea644d9d0ea410b37a3",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/canonical-runtime.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8EiUHoLLaKDL8gttUEMAA8psed8i",
       "sourceFingerprint": "sha256:4314346132ee21f402ab77316ee7d69d8706b5c0f0ea9a85e81097785d8f16be",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8EiUHoLLaKDL8gttUEMAA8psed8i",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-4314346132ee21f402ab",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-4314346132ee21f402ab",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:b836dc510baf44f40548d2056a49f08082c51fc4",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -388,18 +699,60 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "32d7df746cdf100aa2ba922ffbcba2b041ef52257e081dd85af8aaecf2819005",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "e8cdfb1bf786a8249b6640b19ae11566a2988b34a1355517686650f1387e7bea",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Runtime Composition"
+        },
+        {
+          "routeId": "95d146c54e7836cf8aa0e2bec7a9ce27a8b59ecc1c64cee5e2d0278f0561129a",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Runtime Composition::capability::Canonical kernel runtime"
+        },
+        {
+          "routeId": "c8feaaf092872784eb90e15d2381771de5cd88b08ad5a2c38b354f75e43da49a",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Runtime Composition::capability::Canonical kernel runtime::feature::Singleton composition of audit, store and memory with health contract"
+        },
+        {
+          "routeId": "2f851929aa8643f9a8c273a95543496dd93368f9dc9c2745193f2f2a930a3589",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "6492a9f86c9d9cfeeaad9de36902d20a9d2a48e1f7517bf6caf78b0f3e2ed6d4",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::Memory/Continuity"
+        },
+        {
+          "routeId": "b8471001651c3275367db7f93411f610b046029e0426e5a573162dd99a8454b4",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/canonical-runtime.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3Smc1qdVujaXGNdfwUaBgYQ2WeGc",
       "sourceFingerprint": "sha256:91addfc47a3eff889aeaacc26e72a80287a0a5fa47d369ad24be8ff7db28dd65",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3Smc1qdVujaXGNdfwUaBgYQ2WeGc",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-91addfc47a3eff889aea",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-91addfc47a3eff889aea",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:0b4dd01cffb1e7a48b292b66ab9a4d69870561c6",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -429,18 +782,55 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "f2b7f4ff554eacc6f115a8620a9e18a2835ef75c6e5e24bbc0e9a48f2e0617b1",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::Memory/Continuity"
+        },
+        {
+          "routeId": "8e4b7a9adf7789bbb35d5ffd8e8dc0e7ddd39fad92b276e54f38b22faef153b9",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Memory/Continuity::subsystem::Canonical Memory"
+        },
+        {
+          "routeId": "a11e491be0f7d166b5bd76e8593f928faed5630933d24e886bf953e8546daa7a",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Memory/Continuity::subsystem::Canonical Memory::capability::Memory audit compatibility"
+        },
+        {
+          "routeId": "8374c09e6b5986c42af5a797d4d28bd0e282a9d2ded98dcec9c0803680df8c7d",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Memory/Continuity::subsystem::Canonical Memory::capability::Memory audit compatibility::feature::Canonical memory audit entry contract alignment"
+        },
+        {
+          "routeId": "fb480a6ea25ab6da68f1bce04d562704b79ac510e071b3437eb2aaa009b1a179",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "ff0755775ce00e59e4deeb136dffa3bc5e7d781d2915dedbb0ef4dfdffeb0d66",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/canonical-memory.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_48MLp77LtGD8A1WuTgYGE24KyqkM",
       "sourceFingerprint": "sha256:b224efb96bea537ce7024e78a5cc770289184165f1317694743e5461b5343189",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_48MLp77LtGD8A1WuTgYGE24KyqkM",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-b224efb96bea537ce702",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-b224efb96bea537ce702",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:3ff9681683e1add38080dadcb90bd11f6edc0d2d",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -470,18 +860,55 @@
         ],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "f9013df803e2a9300c8519ff433a6de6769d068fb64b28ad1609e11acead24fc",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "46b6a425eb5be5af5f66dfd799d7cd136f576d6c30777b9b50451350b9c43607",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Store Compatibility"
+        },
+        {
+          "routeId": "88404d17853518a5566cb1e0103612877ab47aeffaaa9a090b634b0eef8578fc",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Store Compatibility::capability::Store compatibility bridge documentation"
+        },
+        {
+          "routeId": "8f49622dd8097fbaa2d4aad3303eec103107d681d227c7468b2a0eef72670118",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Store Compatibility::capability::Store compatibility bridge documentation::feature::Patch 6 additive bridge evidence note"
+        },
+        {
+          "routeId": "482c20a437967af021eedb9ae8ebfcd99ef4e17fa36cc08c44a3f564cc4ac4e0",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "f4f950370d5dbdef7f696980eb4ac3a9983006ac4e0b0d5d0204566c4e2561c1",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::docs/kernel-canonicalization/PATCH_6_STORE_COMPATIBILITY_BRIDGE.md"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GnzJUQiEkEnFGeCSFyr8cm9jzHp3",
       "sourceFingerprint": "sha256:00def0d482947ef51c96fa60c196fd4c165c8fc62fd56a7e99555d0ed103c74a",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GnzJUQiEkEnFGeCSFyr8cm9jzHp3",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-00def0d482947ef51c96",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-00def0d482947ef51c96",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:f594eca46cb64dcd6258b47babee1a7390ac2c73",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -512,18 +939,60 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "72ad66f2fa03c706a97568b765c77ecdf0c7dfed288d9385977ecbc76ff6ad49",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "8e4a7592ced28748a5c5953132b82af4dd21da61549f109098c19120c5291a29",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical State Store"
+        },
+        {
+          "routeId": "97a0ae3c2d41a2a2d7c4574b98e9733e38f75ce45bd949418cbc367b76e5b4d9",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical State Store::capability::Canonical kernel state contract"
+        },
+        {
+          "routeId": "7a5be61564e8a5e18cf744a89ef910602babf223dbe12a8ab5f59425dc07b3a9",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical State Store::capability::Canonical kernel state contract::feature::State, signal, audit, memory and planner canonical structures"
+        },
+        {
+          "routeId": "c590836a151ff71eeae24cd91275e150a410239b35ffa70189098890b17bef6b",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "c106a2b253e8886d7e6adce1899a65fbc491f0ecbc3bd6e3da9d43af35091bdb",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::Memory/Continuity"
+        },
+        {
+          "routeId": "da737c13c028aa704d0ac4d63026e0e0959c112f5c8a670747e57871d9d2a883",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/canonical-store.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9xcACYCAw6n3EYdquhKG28JZyYSQ",
       "sourceFingerprint": "sha256:0bf49663aaee394a67f0ad3ea1022871b57589f933410d5190be0634d57ee8ab",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9xcACYCAw6n3EYdquhKG28JZyYSQ",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-0bf49663aaee394a67f0",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-0bf49663aaee394a67f0",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:26dc5c80a05ade85d7a9da1340353b3e3b682e7e",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -554,18 +1023,60 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "5216fe319e47e7b168dac5111d4b679840a489150100ec4ac63ac01ba5247978",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "5e74773ec96c1d68c710ff32d02ef83ec292e6aa9c4e34824e4a940da85da021",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Kernel Audit"
+        },
+        {
+          "routeId": "c65b4d0e5bb2d47b179a7e876b7eb4ff8f76f1561f9cf44463bdda7c9ff3cc73",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Kernel Audit::capability::Canonical audit compatibility bridge"
+        },
+        {
+          "routeId": "c2a6bae42c2bd9e86d3fe0c62ea0a46c5c6db2af1958606002747d0b45aab5fe",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Kernel Audit::capability::Canonical audit compatibility bridge::feature::Legacy audit surface re-exports canonical audit contracts"
+        },
+        {
+          "routeId": "f82166ec793238ce87275f4ce4590d7eeff6ea27c41975a6fa1b49ea73d07b0b",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "c9b1bc99894c49cd4bccf6bdc77fcdded5c1cfa44918c4ff121c07f15e156651",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/audit.ts"
+        },
+        {
+          "routeId": "715c6c04fee2198e9c9298e39dfcaa87e9b3270b8797a63070961652e976fda1",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/canonical-audit.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_75Po8F5JoG97jtweeUxQUxYXbsdS",
       "sourceFingerprint": "sha256:9b4dccd593e920436d4256767b5f3ff9261e1b2c0d28238967258a1173d5e1ea",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_75Po8F5JoG97jtweeUxQUxYXbsdS",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-9b4dccd593e920436d42",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-9b4dccd593e920436d42",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:85f00e786a0fda603f33c5224b11533bc9441400",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -596,18 +1107,60 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "6a6746bd13df47298813a51a3ea2b215ba351aaccd08449d83822a7331e8e31f",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "2de32044deadd54b353029794e8c63c4dce4abdce1758e74af26faf610f5f50f",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Kernel Shared Types"
+        },
+        {
+          "routeId": "8790756decafc44fac198d6d9245a3ac4479cc58f867dba2ae49dcfbca545e2b",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Kernel Shared Types::capability::Canonical types compatibility bridge"
+        },
+        {
+          "routeId": "5de03cd5f7318f3def3fea13623117fc687b8f1d25fdcee9650d9a8cf629757a",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Kernel Shared Types::capability::Canonical types compatibility bridge::feature::Legacy types surface re-exports canonical priorities/scopes/audit primitives"
+        },
+        {
+          "routeId": "6832a39f523d3e71efde6d27eecbcf94e42d906cb96b6b1e33d6a5c3063bb99b",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "07eeda65f68919a7ed6600403826b77df2cc28994179a69ad49bbfde7e87c647",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/types.ts"
+        },
+        {
+          "routeId": "6aa316cb7d3b74824c7d2d7b773f654b1b27bbbb316e4b4ae5d0e31f1c6b78e7",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/canonical-types.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_B6ur6U6JzR9Sswg9SUucP8qSFTLm",
       "sourceFingerprint": "sha256:ce370985eb0da1d85c06f81cb1e9ee90193601543c0414d144c651d7e2591999",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_B6ur6U6JzR9Sswg9SUucP8qSFTLm",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-ce370985eb0da1d85c06",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-ce370985eb0da1d85c06",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:3ee79d6240f557744cd5dbf1efa4417733ee4069",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -637,18 +1190,55 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "2b471888d5255cf05c9d32b1c937fdafb6fecd19c1aa946e446758154a2b899d",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "d06cc5ca106e86126cdaa0cc68e51f6fd1b5c90c8d218ce14a939c23055e7c10",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Audit"
+        },
+        {
+          "routeId": "78f08d4dc30053d2ad97e82654121abb6c7bb6ad479189637fee93b19d06155d",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Audit::capability::Canonical audit contract"
+        },
+        {
+          "routeId": "73139ebeff111b05f86b3c59263ad992bdf329ed3b911fa975515d4174a7f331",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Audit::capability::Canonical audit contract::feature::Normalized audit entry creation, formatting and append"
+        },
+        {
+          "routeId": "c6b05466c27a60d5a7fd03d07f0fce17b5ba98636f38320d242921bf4efe0979",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "486ec789638be53e959d553bfaa7d295eee91178c41cf8a540cbd2431f92016b",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/canonical-audit.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8tnSgJMjE9riBC6inGiaX23PvgCP",
       "sourceFingerprint": "sha256:e7680bb96774a06e5c4181b10869142876381c009f797645d6ccfc07a24b3ad3",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8tnSgJMjE9riBC6inGiaX23PvgCP",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-e7680bb96774a06e5c41",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-e7680bb96774a06e5c41",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:f330f22551b026f9cd0a639be81e5e6f607583c2",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -678,18 +1268,55 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "a2e7c1ed16876fd9505d7c17fb502ed05ca747d1d7fb171879b27f70863ad778",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "b33c2aec0e1da25cdc5db59f20c8c524cf058da4f6ad306455b071058d836a54",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Shared Types"
+        },
+        {
+          "routeId": "66530c3147993051fe888d2052aa5a8132ad69e4037f9d4e59420a53ec466ca0",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Shared Types::capability::Canonical kernel primitives"
+        },
+        {
+          "routeId": "5fa07e537065ea3bccb4afb0e841423ba5e2c251700678887526a9532c6b63e8",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Canonical Shared Types::capability::Canonical kernel primitives::feature::Priorities, scopes, audit levels, requests, signals and normalizers"
+        },
+        {
+          "routeId": "3c7f719dac96ff77d7dca236f9ccd22b9761d76eaa4e5d4e6100f0865367f9d1",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "218f7776c6a07f71141ef58ecb6622e55ff423499617c6498200e4131519e956",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/canonical-types.ts"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4X5tLzXUijoush97o4D5T7kqEkbb",
       "sourceFingerprint": "sha256:729170d4589365587002c83552f0ec99229575411b5a7ba1df9ba220ee645a22",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4X5tLzXUijoush97o4D5T7kqEkbb",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-729170d4589365587002",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-729170d4589365587002",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:a910e011c49051dd51daf62596c9ae41080aacab",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -719,18 +1346,55 @@
         ],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "052793e64cd93d87819e2fdbbc747b53587debade9c0a7ef7b3de4c3609bc038",
+          "relationshipType": "shared_core",
+          "targetCanonicalPath": "module::Shared Core"
+        },
+        {
+          "routeId": "2727c5dd40ffbea1a248083f90f0af569ec735270708ecb01a41e02b65260434",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Kernel Canonicalization Baseline"
+        },
+        {
+          "routeId": "1fb8e345a922153b53260987bb0ec3604962d10580a40058e5c3061d0243ec77",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Kernel Canonicalization Baseline::capability::Baseline inventory and build checkpoint"
+        },
+        {
+          "routeId": "ac3d2bf0bd6cb35fb759658f6159ef3a8d098d4d7951e19719b57460da84af7f",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Shared Core::subsystem::Kernel Canonicalization Baseline::capability::Baseline inventory and build checkpoint::feature::Pre-migration export inventory and BUILD OK baseline"
+        },
+        {
+          "routeId": "120a4382b2f17274241bf8ed0d513d8fd16155f953a09dcb4b5340462097feff",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "50fd82f20b9c914aedf8dc0699fa6470bfbc3867872f6e361129eaeb0b2ae1c7",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::docs/kernel-canonicalization/20260411-200129/"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8NKBFrGghec1cENP6itaqRstizMN",
       "sourceFingerprint": "sha256:b32d5ecf978492bce8f513b8ea316f5420cf4517127ba3fb74c7a526e63054fb",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8NKBFrGghec1cENP6itaqRstizMN",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-b32d5ecf978492bce8f5",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-b32d5ecf978492bce8f5",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:ac092b514451269df4d614a840a374bdfc5f45b5",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -767,18 +1431,90 @@
         ],
         "implementationEvidence": false
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "1022a87ddf37ed025e3882e56c0f8bad75ad48fac53a6a5e3727f68660c8c973",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::Chat"
+        },
+        {
+          "routeId": "3ada38363b318e56076743f3b288c13adbfb3ebafaf9895a5b7c237836c76695",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::Compass"
+        },
+        {
+          "routeId": "37d8ce3c13cc87ad9cb3e22aeef629e22deee7eb969f7e51e4828d0eacd8c5fd",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::Mind"
+        },
+        {
+          "routeId": "485b8451b959523d9fd37b6113cec5204150a82f757f20e2edb502c2f3ecf0bd",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::App/Service Engine"
+        },
+        {
+          "routeId": "f4e642f52809050f928f8fd14ffd9d358d71e08b9a60c74dd68a7f2fc39a1925",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::Chat"
+        },
+        {
+          "routeId": "cc7551dd41ee925563920dba05887fb7fccb9ba9b4bf088b0358ef60d77f000c",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::Compass"
+        },
+        {
+          "routeId": "8142b92023c505f6e849bdbafea8709f43ef0aa142b7eb99fbc372a4ad30f86e",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::Mind"
+        },
+        {
+          "routeId": "55a83ed514b45cb145bf705d1ae14da3137664ba72e97d0fd0830307cfa45ba0",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::App/Service Engine"
+        },
+        {
+          "routeId": "595296467fc75037c51d7380e6f4eb5d18c1a2820e0abc058a029acb5ce6c770",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::app/chat/page.tsx"
+        },
+        {
+          "routeId": "fd74c99ed440deae2e1a5d2b7a807f79dca0b6388f0d7b740f30b74a0458be96",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::app/compass/page.tsx"
+        },
+        {
+          "routeId": "c1a7cbc9f77fe46ffc6cd0eecbe98459fbcdb8e4fa0f0bc424bb577e98b487e6",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::app/mind/page.tsx"
+        },
+        {
+          "routeId": "8788fbbc81a41d58b0841120729de650cf6138f742c5a8532f22aa62b1191cfe",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::app/create/page.tsx"
+        },
+        {
+          "routeId": "ffc38e1394f91b1ae391638f2ba5a23f5be37bfca323c736ed3b5af4787deb35",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "artifact::app/pantavion-clean-ui.tsx"
+        }
+      ]
     },
     {
       "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_E2bVPTBgBkqHWLCMSgaYBsN97MGq",
       "sourceFingerprint": "sha256:55118d291f2d8890454e6e86c9cc0c8666ac3473d3999d0affff6c755c82e0b9",
-      "canonicalLedgerPointer": null,
+      "canonicalLedgerPointer": {
+        "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_E2bVPTBgBkqHWLCMSgaYBsN97MGq",
+        "canonicalRecordId": null,
+        "identityDerivation": "VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID"
+      },
       "classificationId": "class-v1-55118d291f2d8890454e",
       "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-55118d291f2d8890454e",
       "classificationConfidence": 0.99,
+      "implementationSemanticKey": "git:6ef6398bf219de227cb3ba1bce536a485b95a54f",
+      "semanticMirrorOf": null,
+      "implementationCandidateSuppressed": false,
       "sourceProvenance": {
         "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
         "project": "pantavion-planet",
@@ -810,10 +1546,49 @@
         ],
         "implementationEvidence": true
       },
-      "routeState": "WAITING_CANONICAL",
-      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
-      "canonicalCandidates": [],
-      "graphEdges": []
+      "routeState": "ROUTED",
+      "graphEdges": [
+        {
+          "routeId": "0f0f76871ad0a6232232c6f3986cc844486e35bf485e5478d1e2be4199faf30a",
+          "relationshipType": "module",
+          "targetCanonicalPath": "module::Memory/Continuity"
+        },
+        {
+          "routeId": "68a723ba77e7e0f67e20fd38e7ed017d81feab7162c7626a45ee8326b39fc752",
+          "relationshipType": "subsystem",
+          "targetCanonicalPath": "module::Memory/Continuity::subsystem::Kernel Memory Build Compatibility"
+        },
+        {
+          "routeId": "5a8fb0b48f8779422b18407376d4270de36095d60ca2d5ce0bd087c8cfbd41b9",
+          "relationshipType": "capability",
+          "targetCanonicalPath": "module::Memory/Continuity::subsystem::Kernel Memory Build Compatibility::capability::TypeScript build compatibility"
+        },
+        {
+          "routeId": "dea89e0840299b075491bbfa363cf167f6cbd266fffd248663be91a54e9bf9e0",
+          "relationshipType": "feature",
+          "targetCanonicalPath": "module::Memory/Continuity::subsystem::Kernel Memory Build Compatibility::capability::TypeScript build compatibility::feature::Memory eligibleScopes type compatibility and tsconfig cleanup"
+        },
+        {
+          "routeId": "2f02742e7b34dca8d800821018701e6a9cd16c9ef199c13937605adc26602803",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::Infrastructure"
+        },
+        {
+          "routeId": "336bca68af4232f05ae5e0f7f4545d384efbb5a53065522a251ce8a0d640421b",
+          "relationshipType": "related_evidence",
+          "targetCanonicalPath": "module::AI/Orchestration"
+        },
+        {
+          "routeId": "6cb718d2198d5459f355787dbc21041aa437a87cef4c1c58cf77c87fde506287",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::kernel/memory.ts"
+        },
+        {
+          "routeId": "c878c612c0848ad4b6a8b794205b92c3fa037e8ee4b34364a21a58399bdff003",
+          "relationshipType": "implementation_candidate",
+          "targetCanonicalPath": "artifact::tsconfig.json"
+        }
+      ]
     }
   ]
 }
