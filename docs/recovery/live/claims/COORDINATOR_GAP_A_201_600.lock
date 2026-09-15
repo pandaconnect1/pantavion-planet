@@ -1,8 +1,21 @@
 timestamp_utc: 2026-09-15T14:22:00Z
+completed_utc: 2026-09-15T14:36:00Z
 purpose: explicit coordinator reassignment of Lane A summary-only payload gap records 201-600
 source_project: pantavion-planet
 source_project_id: prj_BxhpnjvAs1seyfBU1UYFU8nDykwh
 scope: targeted read-only Vercel re-pagination only for cursor windows 1781903655488 -> 1776883214626
 owner_mode: VERIFY_COORDINATE_GAP_RECOVERY
-status: ACTIVE
-rules: zero deletions; zero Vercel mutations; no secret values; no overlap with Lane F canonical writes; dedupe by projectId:deploymentId
+status: PAYLOAD_RECOVERED_COMPLETE_READY_FOR_F_DEDUPE
+recovered_payload_records: 400
+expected_records: 400
+remaining_payload_gap: 0
+artifacts:
+  - docs/recovery/live/coordinator/lane-a-gap-payload-201-300.json
+  - docs/recovery/live/coordinator/lane-a-gap-payload-301-400.json
+  - docs/recovery/live/coordinator/lane-a-gap-payload-401-500.json
+  - docs/recovery/live/coordinator/lane-a-gap-payload-501-600.json
+boundary_proof: start_cursor=1781903655488; final_cursor=1776883214626; 20 pages x 20 records = 400
+next_owner: Lane F
+next_action: canonical dedupe/upsert by projectId:deploymentId; do not re-run Vercel pagination for this range
+canonicalized_here: false
+rules: zero deletions; zero Vercel mutations; no secret values; no overlap with Lane F canonical writes; dedupe by projectId:deploymentId; READY/production remains historical evidence unless separately runtime verified
