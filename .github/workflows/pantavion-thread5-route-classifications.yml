@@ -1,0 +1,53 @@
+name: Pantavion Thread 5 Route Classifications
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "docs/recovery/live/shards/thread-4-semantic-*.json"
+      - "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json"
+      - "scripts/recovery/thread5-route-classifications.mjs"
+      - ".github/workflows/pantavion-thread5-route-classifications.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pantavion-thread5-route-classifications-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  route:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Materialize deterministic module and graph routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/recovery/thread5-route-classifications.mjs | tee /tmp/thread5-routing-result.json
+      - name: Commit durable Thread 5 routing ledgers
+        shell: bash
+        env:
+          BRANCH: backup/pre-vercel-risk-20260914
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/recovery/live/routing/thread-5-routes-*.json docs/recovery/live/routing/thread-5-routing-manifest.json
+          if git diff --cached --quiet; then
+            echo "Idempotent no-op: Thread 5 routing artifacts already match classified canonical inputs."
+            exit 0
+          fi
+          git commit -m "recovery: materialize Thread 5 module graph routes"
+          git pull --rebase origin "$BRANCH"
+          git push origin "HEAD:$BRANCH"
