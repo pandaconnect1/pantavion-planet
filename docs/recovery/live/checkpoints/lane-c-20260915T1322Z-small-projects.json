@@ -1,0 +1,32 @@
+{
+  "lane":"C",
+  "captured_at_utc":"2026-09-15T13:22:00Z",
+  "schema":["project","deployment_id","created_at","state","target","git_sha","git_ref","git_message","uniqueness"],
+  "records":[
+    ["pantavion-one","dpl_7n748GPUgAahXvmgBDbLJUBLUDYi",1781893399892,"READY","production","402522eaaa8c30bb8cc0ef05829524ad6f1241d9","main","fix(seo): redirect legacy Pantavion app to canonical site","unique"],
+    ["pantavion-one","dpl_6CqrEUM6L4LMrGzxz6XJ9XwRt5E5",1763765297300,"READY","production","361e9fc7b60619bba64ba07be6c3cc47fe274ff4","main","Create EMPTY","unique"],
+    ["pantavion-one","dpl_HL6LFvoUKwhjUDTkG5hCGSe796d5",1763764798785,"READY","production","8f4c4b34901e7428cd3bc28c90d021a2ed4686ea","main","Create .github.txt","unique"],
+    ["pantavion-one","dpl_DedLGmjWsZyCu9aw6zVKhug2MrMg",1763763127453,"READY","production","b8c06807022743ae757269f29b597c40555f725f","main","Create CreatePage component with header and content","unique"],
+    ["pantavion-one","dpl_HEdNND2g47cyz2H6eEhh6uNYj6jb",1763763103111,"READY","production","25ec608653a88b9cccdb8727053754d84b460195","main","Create mind.tsx","unique"],
+    ["pantavion-one","dpl_CEkDLDJ2wm1XT4WdgZWWHee3h4f5",1763762652176,"READY","production","57cb4481e526798e950ddf8a91f75fa1fd05abad","main","Add CreatePage component for Pantavion One","unique"],
+    ["pantavion-one","dpl_Haow1w8fxriPaePds74r6akkCG6Q",1763762634273,"READY","production","4b3eec6c10bdc87beff20cc0d0ffdfd45c0b8a92","main","Create mind.tsx","unique"],
+    ["pantavion-one","dpl_G59gEfLStfXm6WyCwAQh3hhSgbZe",1763762607569,"READY","production","a0f4bd9029a64b1af135c6a43810c5ab005b6b50","main","Create compass.tsx for Pantavion One page","unique"],
+    ["pantavion-one","dpl_Bjsh3wLe1QTkMFqCzTacmEEG4tk5",1763762500560,"READY","production","400e5596a4f2d7657efed3565d62c01652cbd4b5","main","Add CreatePage component to voice.tsx","unique"],
+    ["pantavion-one","dpl_HFgPjV1uqc26WDAmp8foKfk6MLe7",1763762419606,"READY","production","31e19e460224d9c38dfe8f382a571247c7196b6c","main","Create chat.tsx for CreatePage component","unique"],
+    ["pantavion-one","dpl_5YjZuNd6jWfFyruKHwTMqUjSU4Px",1763762378837,"READY","production","dfb3eb2ba8bcb50b16ebe6b25abb27fa525660e4","main","Add CreatePage component for Pantavion One","unique"],
+    ["pantavion-one","dpl_CNQaSvMgGbd9VA42f8GREL3bSRd2",1763762302574,"READY","production","b0a62899cf265babf80b551cbdde84470d88385a","main","Create PulsePage component with header","unique"],
+    ["pantavion-one","dpl_7cJPJw4r59LNauJNZzxsMmsh25Mq",1763760761649,"READY","production","721ebecf281b94d6e81b3678643082ded67bb917","main","Fix package.json formatting and add newline at end","unique"],
+    ["pantavion-one","dpl_E3gUNvy6GSea9KEpT6gGypPzGzYD",1763754856838,"READY","production","8fe1a24b30fc4424089a250d3572e93833678df3","main","Add files via upload","unique"],
+    ["pantavion-one-clean-98it","dpl_2jsPyCC3zm3HnjehCS8QLDUTUtw4",1774465602547,"READY","production","473429b1f11233181e35a3593b798888c414d4ad","main","Implement global state engine for Pantavion","mirror_candidate"],
+    ["pantavion-one-clean-98it","dpl_FMxECQuTsEUCPicgXeeZntLdVEQM",1774465154940,"READY","production","35d28b1075389c884e71fa0a12c48bc7e120d9ea","main","Create pantavion-core.jsx","mirror_candidate"],
+    ["pantavion-one-clean-98it","dpl_Wkno3nJ89YoWJ38LNPJdNrNxSucN",1774463301471,"READY","production","e91453c75724084c02aa5450d6b0058443e840ce","main","Add PantavionPage component with initial contentS","mirror_candidate"],
+    ["pantavion-one-clean-98it","dpl_9XXWnq5UkFNWF67pvk3rEgMD6t4u",1764158608846,"READY","production","55903e06c0409636c3dcdc408ad6a730026012a5","main","Update page.js","mirror_candidate"],
+    ["pantaai","dpl_EwYtxUjRFHh8rqmsTCeCFRs8gvgm",1749185544520,"ERROR","production","1410fd14343a421974d504d271d7582216975dff","main","Initial commit; created from Vercel new-project flow","unique"],
+    ["pantavion-one-clean-ui","dpl_DRLLhUiVL8trrcKDEgyNXDo714rz",1776864574346,"READY",null,"833bbbfd1308174be414db9230c7643f83579f62","vercel/react-server-components-cve-vu-68t1ie","Fix React Server Components CVE vulnerabilities","unique"],
+    ["pantavion-one-clean-ui","dpl_5Wk1ZiSj9KQo1Lf814d8yAgkkfyz",1764523336354,"READY","production","1684ab077a293185b86315beb8e15248d30db827","main","Clean Voice page with client-side demo","unique"]
+  ],
+  "pantaai-template":{"project_id":"prj_QXmlk9C7ICX24Pi9cITJPJS4fFQ7","deployment_count":0,"terminal_zero":true},
+  "live_truth":"HISTORICAL_ONLY",
+  "secret_values":false,
+  "private_source":false
+}
