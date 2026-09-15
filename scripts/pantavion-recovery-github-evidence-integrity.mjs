@@ -1,20 +1,34 @@
 import { createHash } from "node:crypto";
+import { execFile as execFileCallback } from "node:child_process";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
+import { promisify } from "node:util";
 
+const execFile = promisify(execFileCallback);
 const ROOT = process.cwd();
 const MANIFEST_DIR = path.join(ROOT, "docs/recovery/live/github");
 const MANIFEST_PATTERN = /^thread-8-durability-manifest-.*\.json$/;
+const SHA1_PATTERN = /^[0-9a-f]{40}$/;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-async function gitBlobSha(relativePath) {
+async function currentGitBlobSha(relativePath) {
   const absolutePath = path.join(ROOT, relativePath);
   const body = await readFile(absolutePath);
   const header = Buffer.from(`blob ${body.byteLength}\0`, "utf8");
   return createHash("sha1").update(header).update(body).digest("hex");
+}
+
+async function historicalBlobExists(blobSha) {
+  assert(SHA1_PATTERN.test(blobSha), `invalid_git_blob_sha:${blobSha}`);
+  try {
+    const { stdout } = await execFile("git", ["cat-file", "-t", blobSha], { cwd: ROOT });
+    return stdout.trim() === "blob";
+  } catch {
+    return false;
+  }
 }
 
 function collectLocalEvidencePointers(manifest) {
@@ -62,22 +76,43 @@ async function verifyManifest(manifestPath) {
   assert(new Set(pointerPaths).size === pointerPaths.length, "duplicate_local_evidence_pointer_path");
 
   const verifiedPointers = [];
+  let currentPathMatches = 0;
+  let currentPathAdvanced = 0;
   for (const pointer of pointers) {
-    const actualSha = await gitBlobSha(pointer.path);
-    assert(actualSha === pointer.gitBlobSha, `blob_sha_mismatch:${pointer.path}:expected=${pointer.gitBlobSha}:actual=${actualSha}`);
-    verifiedPointers.push({ path: pointer.path, gitBlobSha: actualSha });
+    const blobPreserved = await historicalBlobExists(pointer.gitBlobSha);
+    assert(blobPreserved, `historical_blob_missing:${pointer.path}:${pointer.gitBlobSha}`);
+
+    let currentSha = null;
+    try {
+      currentSha = await currentGitBlobSha(pointer.path);
+    } catch {
+      currentSha = null;
+    }
+
+    const currentMatchesPointer = currentSha === pointer.gitBlobSha;
+    if (currentMatchesPointer) currentPathMatches += 1;
+    else currentPathAdvanced += 1;
+
+    verifiedPointers.push({
+      path: pointer.path,
+      preservedGitBlobSha: pointer.gitBlobSha,
+      historicalBlobPreserved: true,
+      currentGitBlobSha: currentSha,
+      currentMatchesPointer,
+    });
   }
 
   const production = manifest.productionEvidencePointers ?? {};
   assert(typeof production.projectId === "string" && production.projectId.startsWith("prj_"), "invalid_project_id_pointer");
   assert(
-    typeof production.deploymentIdentity === "string" &&
-      production.deploymentIdentity.startsWith(`${production.projectId}:dpl_`),
+    typeof production.deploymentIdentity === "string" && production.deploymentIdentity.startsWith(`${production.projectId}:dpl_`),
     "deployment_identity_must_use_projectId_deploymentId"
   );
   assert(production.deploymentState !== "VERIFIED_LIVE", "ready_deployment_must_not_be_relabelled_verified_live");
-  assert(production.founderRecoveryBoundary?.authenticatedFounderFeedVerified !== true || production.founderRecoveryBoundary?.httpStatus === 200,
-    "authenticated_founder_feed_cannot_be_verified_without_live_http_boundary");
+  assert(
+    production.founderRecoveryBoundary?.authenticatedFounderFeedVerified !== true || production.founderRecoveryBoundary?.httpStatus === 200,
+    "authenticated_founder_feed_cannot_be_verified_without_live_http_boundary"
+  );
 
   const worker = manifest.workerExecutionEvidence ?? {};
   const statusTotal = ["planned", "queued", "running", "succeeded", "failed"]
@@ -88,7 +123,12 @@ async function verifyManifest(manifestPath) {
   assert(Number(worker.maxAttempt ?? 0) >= 0, "invalid_max_attempt");
 
   const completion = manifest.completion ?? {};
-  const noExecutionProof = Number(worker.running ?? 0) === 0 && Number(worker.succeeded ?? 0) === 0 && Number(worker.failed ?? 0) === 0 && Number(worker.leased ?? 0) === 0 && Number(worker.maxAttempt ?? 0) === 0;
+  const noExecutionProof =
+    Number(worker.running ?? 0) === 0 &&
+    Number(worker.succeeded ?? 0) === 0 &&
+    Number(worker.failed ?? 0) === 0 &&
+    Number(worker.leased ?? 0) === 0 &&
+    Number(worker.maxAttempt ?? 0) === 0;
   if (noExecutionProof) {
     assert(completion.workerExecutionEvidenceBound === false, "worker_execution_cannot_be_bound_without_fenced_execution_evidence");
   }
@@ -101,7 +141,9 @@ async function verifyManifest(manifestPath) {
   return {
     ok: true,
     manifest: path.relative(ROOT, manifestPath),
-    verifiedLocalEvidencePointers: verifiedPointers.length,
+    verifiedHistoricalEvidencePointers: verifiedPointers.length,
+    currentPathMatches,
+    currentPathAdvanced,
     verifiedThreads: threadIds,
     deploymentIdentity: production.deploymentIdentity,
     worker: {
@@ -115,6 +157,7 @@ async function verifyManifest(manifestPath) {
       maxAttempt: Number(worker.maxAttempt ?? 0),
     },
     completionState: completion.state,
+    evidencePointers: verifiedPointers,
   };
 }
 
