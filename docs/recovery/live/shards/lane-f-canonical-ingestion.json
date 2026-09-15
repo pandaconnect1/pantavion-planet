@@ -1,35 +1,48 @@
 {
-  "updatedAt": "2026-09-15T14:06:30Z",
+  "updatedAt": "2026-09-15T14:12:30Z",
   "lane": "F",
   "status": "ACTIVE",
   "purpose": "Canonical ingestion of durably recovered deployment evidence for GitHub and Pantavion founder recovery feed",
   "sourceLaneStatus": {
     "A": "TERMINAL_CHECKPOINTED",
-    "B": "terminal previously verified; ingestion pending reconciliation",
-    "C": "ACTIVE",
-    "D": "ACTIVE"
+    "B": "TERMINAL_VERIFIED; ingestion pending mirror dedup",
+    "C": "TERMINAL_VERIFIED; ingestion pending",
+    "D": "DEPLOYMENT_HISTORIES_TERMINAL; historical runtime export separately blocked"
   },
-  "canonicalizedRecordsThisCheckpoint": 19,
-  "canonicalizedRecordsFloor": 19,
+  "canonicalizedRecordsThisCheckpoint": 219,
+  "canonicalizedRecordsFloor": 219,
   "sourceRecordsAvailableFloor": 3679,
-  "sourceRecordsAvailableFloorBasis": "latest lane-A terminal shard lower bound; mirror overlap and other lanes require dedup before totals can be summed",
-  "input": "docs/recovery/live/batches/lane-a-20260915-601-619-terminal.json",
-  "canonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+  "sourceRecordsAvailableFloorBasis": "latest durable recovery lower bound; project/mirror overlap must be deduplicated before aggregate canonical totals are summed",
+  "laneARunAudit": {
+    "capturedRecords": 619,
+    "payloadBackedCanonicalized": 219,
+    "summaryOnlyPayloadGap": 400,
+    "auditArtifact": "docs/recovery/live/canonical/lane-f-a-run-payload-audit.json"
+  },
+  "canonicalArtifacts": [
+    "docs/recovery/live/canonical/lane-f-a-run-payload-audit.json",
+    "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json"
+  ],
   "terminalEvidenceBound": true,
   "githubEvidenceBound": true,
   "pantavionFounderFeedBound": true,
-  "classificationState": "CANONICALIZED",
+  "classificationState": "PARTIAL_CANONICALIZED_WITH_EXPLICIT_PAYLOAD_GAP",
+  "explicitGaps": [
+    "Lane A ranges 201-400, 401-500 and 501-600 have durable traversal/count/cursor summaries but their checkpoint files do not contain the individual deployment record payloads needed for per-record canonicalization."
+  ],
   "remaining": [
-    "canonicalize prior lane-A durable batches 1-600",
-    "ingest lane-B terminal evidence with mirror dedup",
-    "ingest lane-C and lane-D checkpoints as they become durable",
-    "hand thematic/module classification to lane J without guessing",
-    "feed lane K founder-page integration with canonical pointers"
+    "inspect earlier durable recovery batches outside the 619-record Lane-A run and canonicalize payload-backed records",
+    "resolve Lane-A summary-only 201-600 record payload gap only from unique durable evidence or explicitly reassigned recovery work",
+    "ingest Lane-B terminal evidence with mirror dedup",
+    "ingest Lane-C and Lane-D durable project histories",
+    "hand thematic/module classification to Lane J without guessing",
+    "feed Lane K founder-page integration with canonical pointers"
   ],
   "rules": [
     "zero deletions",
     "zero Vercel mutations",
     "no secret values",
+    "do not count summary-only records as canonicalized",
     "do not duplicate A-D deployment pagination",
     "READY/production is HISTORICAL_ONLY unless separately runtime verified"
   ]
