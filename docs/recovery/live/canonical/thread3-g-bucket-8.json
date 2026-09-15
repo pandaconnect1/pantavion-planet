@@ -1,0 +1,1226 @@
+{
+  "contract": "PANTAVION_CANONICAL_SHARDING_V1",
+  "ownerThread": 3,
+  "ownedBucket": 8,
+  "sourceLane": "G",
+  "sourceRange": [
+    201,
+    600
+  ],
+  "inputFingerprint": "5002e2eec1a45ff467fc9e0b52ff1b9c2e4336a86b20fe4fa6397356fb705ea3",
+  "recordCount": 39,
+  "records": [
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2nDgRm7X9ozhuUscDMxwrzD3mDjG",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2nDgRm7X9ozhuUscDMxwrzD3mDjG",
+      "stableRecordHash": "5b9e266ab7eb54583062a7d392151e81c0c2d88fb87e402e76082700ccbaff54",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "ddb150e89b52496142f75e90e2cf4e9f2740bdbddc35ddf4a2a1449133535173",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-261-280-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_2nDgRm7X9ozhuUscDMxwrzD3mDjG",
+        "created": 1780142283493,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-7sfjl9pnj-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "8c8210795b4f6887e4ae6bb875f88156c148d8fb",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2rHXKXzY7D18n5c56Qa4RCQ9Bta7",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2rHXKXzY7D18n5c56Qa4RCQ9Bta7",
+      "stableRecordHash": "0ce91ade145c157ad9cee2819c505771ab2113cfc5008bb911846320ba9354df",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "fc42c1edf23ebbe101a28dea1d3261bee445d22c86b0b821cf2b09c921523b14",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-521-540-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_2rHXKXzY7D18n5c56Qa4RCQ9Bta7",
+        "created": 1777817097541,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-ffg62id2s-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "0b595f8ee0f49c327ef111c9757055fdc3e02d2d",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2v5qrZ7zwtNTQL9MFnSvRADFYTsE",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2v5qrZ7zwtNTQL9MFnSvRADFYTsE",
+      "stableRecordHash": "464f93a15414681cb808c67ef61009ede225d159bffb3b95c8c68460a177a8ab",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "22b503b347043c54728c0313bdf28e75119b0978a7903034d1ed30be6a150965",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-581-600-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_2v5qrZ7zwtNTQL9MFnSvRADFYTsE",
+        "created": 1777109200197,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-hqlm6j130-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "346aec8501467ddb409e188ec8cc215204428190",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2VTXm44hxpG1E6FxwGdZXRrSB7aJ",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2VTXm44hxpG1E6FxwGdZXRrSB7aJ",
+      "stableRecordHash": "1cb9bf29baff002ae74d1bafc40abe4038b4905a3a0b909e0f7d612b0c978a3c",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "9733551b890b0fb09e76f6856f9f637950866ecc2ab217abd9f1ee7519d9af69",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-301-320-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_2VTXm44hxpG1E6FxwGdZXRrSB7aJ",
+        "created": 1779823688289,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-94w8zzenv-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "68a895160cfdc9e185edd96ca4de320f87e8a3ea",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3mph5KLtH1sAp6WscCuqX9WdR7X1",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3mph5KLtH1sAp6WscCuqX9WdR7X1",
+      "stableRecordHash": "84157ccf93da50ccc9aaa30470c9d5f004ee209a799770640539d73f86b9e89a",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "ccee3b3bf4c4c2d7506e55a35c187eac3d7cb639d0a9ab50fa1fa8a818bcc73c",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-381-400-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_3mph5KLtH1sAp6WscCuqX9WdR7X1",
+        "created": 1779206015176,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-qvipn0r72-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "47d2df098ee529c9431a00e877f39da5d87be36c",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3YaJZWkcdFPTK2wkNjRjj8sGu7Q8",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3YaJZWkcdFPTK2wkNjRjj8sGu7Q8",
+      "stableRecordHash": "a69c53d8c6b9491a9b90783629dfccbd86de2f3aca990b64ea34057eee37288c",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "1157af7c8f2395b90d45d9772af67b93841e0746af7470c9bd2a0a32376e86ec",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-541-560-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_3YaJZWkcdFPTK2wkNjRjj8sGu7Q8",
+        "created": 1777756929869,
+        "state": "READY",
+        "target": null,
+        "url": "pantavion-planet-je4hwkbyc-pandaconnect.vercel.app",
+        "gitRef": "feat/global-emergency-languages-20260503-000515",
+        "gitSha": "aba8d2a0b41cc21da46472ec056daf5afdfe668b",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_46yZYP6VFWhCG3LjRSg2BUjMZBQy",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_46yZYP6VFWhCG3LjRSg2BUjMZBQy",
+      "stableRecordHash": "ed89961b9f5dae6aedd766ae0418fd5f10f94c62cdc31efc4d7a1d1bbff8e517",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "9bff0a6511f37bc14d7bce04931bf5cd8fad0c28b3960742c2f379a919662f4d",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-361-380-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_46yZYP6VFWhCG3LjRSg2BUjMZBQy",
+        "created": 1779391509065,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-mlc6sgjb7-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "834a48843c399e7584af8b80dabc2002d05d5ddd",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5HpdbEJYrwPPEuw2NXwpxcpG3Ncv",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5HpdbEJYrwPPEuw2NXwpxcpG3Ncv",
+      "stableRecordHash": "655fb3e138d3d99aa46965c0b1783c04e5403746717acd579a72f21da9b0ad72",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "dc4ecabe83f2b58357c6c834a3b7309970aaa6113661bdb83872b8d6bab2ac7f",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-261-280-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_5HpdbEJYrwPPEuw2NXwpxcpG3Ncv",
+        "created": 1780125562638,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-hua5jwnt8-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "7b1366a6bfb9f945087cf4bf1984bb598294f4d9",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_68bDVbjs6Cb7oAZ4VdmahLiaMbWH",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_68bDVbjs6Cb7oAZ4VdmahLiaMbWH",
+      "stableRecordHash": "99eb1fbdf28f54245af07350a4de383d2238e747b5f34e449762f7d9d296b93e",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "3f5de3017fba27b30782878b8a446d50f5b09854b363c647eeb3bc5093ef87a4",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-541-560-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_68bDVbjs6Cb7oAZ4VdmahLiaMbWH",
+        "created": 1777732667188,
+        "state": "READY",
+        "target": null,
+        "url": "pantavion-planet-52znnydw2-pandaconnect.vercel.app",
+        "gitRef": "real/live-sos-20260502-173628",
+        "gitSha": "9323c58e889509265016db97df4043b74ed33ab0",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6DwpLYJGyi8Up6cD5z3iijmzbPFU",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6DwpLYJGyi8Up6cD5z3iijmzbPFU",
+      "stableRecordHash": "089287bee098144e9d13cb646b64c0a64ffd2f1a48818b82c31b1028806e2c3d",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "b8b39b644bb6b4dd2881cad94d0fb2976da48c80743857909ab34aed8aa4f9b6",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-341-360-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_6DwpLYJGyi8Up6cD5z3iijmzbPFU",
+        "created": 1779489797407,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-n1osmgowo-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "8b01c33f629070a778f229e3acb07b9605cb9058",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6wGKodm4r6BXrgnT4QggBoWfNQ77",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6wGKodm4r6BXrgnT4QggBoWfNQ77",
+      "stableRecordHash": "b0f110e47d8ddcbabe5bedbd5801c13e70144ba84b34392b46e2e3a8e7efd31c",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "bd84bd6b404e849ffdb9860ba490c95a63688986ff3d170f59b554173fe9c4f0",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-241-260-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_6wGKodm4r6BXrgnT4QggBoWfNQ77",
+        "created": 1781047738062,
+        "state": "READY",
+        "target": null,
+        "url": "pantavion-planet-qd294jewk-pandaconnect.vercel.app",
+        "gitRef": "pantavion/execution-engine-v1",
+        "gitSha": "f28cae11352a7a579cc681749115a7241548232a",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7buP7hJe9gxMdzjPVriizNkcpwLE",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7buP7hJe9gxMdzjPVriizNkcpwLE",
+      "stableRecordHash": "6fe32bae9982a8ac71b1cbd768ba77602fd447eb1b3c88518892dc0f32be2bba",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "3923bb43407eb1ecc805fe362cd034461dfbe75bfcfc932594823366f7b275f0",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-581-600-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_7buP7hJe9gxMdzjPVriizNkcpwLE",
+        "created": 1776883214626,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-68bf49o6w-pandaconnect.vercel.app",
+        "gitRef": "kernel-canonicalization-20260411-200129",
+        "gitSha": "c67f9aa71ea2769e0eb150a8d9e1e2675accfd2f",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7MnaBErNA1BKb8aZ1CbqqUvPTvV8",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7MnaBErNA1BKb8aZ1CbqqUvPTvV8",
+      "stableRecordHash": "90213928645053ba246de41eb9a1e0dfd8693f9fa3803d18a3260d317e58b133",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "b948eb52f61cfd8ae9ab88d3a133fc9a5548b2052c4a7813022f0e66352fc63d",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-341-360-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_7MnaBErNA1BKb8aZ1CbqqUvPTvV8",
+        "created": 1779489341214,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-kfw7x9f9p-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "7e3488218b58a9c9845253c96da4d3f5de2475dc",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7V1Tu2ZijwrD1685cqWphjGZ8vw3",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7V1Tu2ZijwrD1685cqWphjGZ8vw3",
+      "stableRecordHash": "94f2fac5dd29aa9a3d15737f3c4804d86dce328708ca8ee29416b8f4f861559a",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "cf455c60f3e55de29dfab1651c7c7238826167b8717eccbb98b1fa148114f7a2",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-341-360-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_7V1Tu2ZijwrD1685cqWphjGZ8vw3",
+        "created": 1779477280693,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-nk2h24lim-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "81c29dbc8c8abc68f4902ce6e2f23a8c53572ae3",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8qC3trFi91MvkNqdNf4pGiPgZmPf",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8qC3trFi91MvkNqdNf4pGiPgZmPf",
+      "stableRecordHash": "697f033316feef2a4777249419758193b217fa6276af751d1218fe3fcf704364",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "db71585419ceb63e654a56bf8d6068e718e71bfc5c3d30b6fe7a4bfe5e44a2a4",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-561-580-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_8qC3trFi91MvkNqdNf4pGiPgZmPf",
+        "created": 1777320044019,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-gy56m1str-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "d821f50f25e26e9217779373ef56cb0a5eff9ffc",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8X377Lkw6FgFpKD4a4bD6pY1ajGR",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8X377Lkw6FgFpKD4a4bD6pY1ajGR",
+      "stableRecordHash": "9099b2cc7f03e4a6f3b33e02b173c8893865b413704944fa22f50b59e9df6fdf",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "01d70f1b1fcc11d001001aac41ab66c86b1849f762a1028dd12d91ea9545ba1b",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-321-340-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_8X377Lkw6FgFpKD4a4bD6pY1ajGR",
+        "created": 1779735015373,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-m7py8e96t-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "9bd84cfe2464f67a7cd9c2fa8070ac354b34b952",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9nAxkGfQbkgcgD1TJPzticCoGmGR",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9nAxkGfQbkgcgD1TJPzticCoGmGR",
+      "stableRecordHash": "1b7e2b96c24e1b1c7d5335bb0c5b63f48b931799941547408e55387b9695e3d6",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "4788f7c10c7a1a5d9af7e5fe56bbf4a437a02723322cba07debe970b2fce9f79",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-501-520-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_9nAxkGfQbkgcgD1TJPzticCoGmGR",
+        "created": 1778032864710,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-rcg1y4q3w-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "6daf5c7531fa7fbdf783876686a15169c6abe7a7",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_A292x2ukSXT2VytEQ6H2Gnw11uDf",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_A292x2ukSXT2VytEQ6H2Gnw11uDf",
+      "stableRecordHash": "32a6d8bfc974d4f60ddd99f35eaf5b28062b0c9135653d6956a5de7d39e224cd",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "7eb80c9c8034b68755b700405ad609d4c508f882a1135b70105c23fe6c0dba80",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-561-580-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_A292x2ukSXT2VytEQ6H2Gnw11uDf",
+        "created": 1777234846460,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-uljwpyuvu-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "fac7646f8fe81f857f862a4f2e3c7aa9b6580caf",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_A8p6AHinEydg6s2ebhyRcb5QBJpE",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_A8p6AHinEydg6s2ebhyRcb5QBJpE",
+      "stableRecordHash": "497238a6396fa79036851f33a5838f707323ab9cfeddf9648bbab51725afd357",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "9ca4f337cabab4aca5f80fcbe890a557c36a86a5b0a2f210ffe9450c82c055cf",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-221-240-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_A8p6AHinEydg6s2ebhyRcb5QBJpE",
+        "created": 1781354069735,
+        "state": "READY",
+        "target": null,
+        "url": "pantavion-planet-c8eatjwe4-pandaconnect.vercel.app",
+        "gitRef": "pantavion/execution-engine-v1",
+        "gitSha": "ee370a6685008228d8b6db57deb0eb5c8bc6b3f6",
+        "gitMessage": "feat(kernel): add work package pr executor"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AAeWhNrDiZXHjdF6qLxnguD5rnD7",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AAeWhNrDiZXHjdF6qLxnguD5rnD7",
+      "stableRecordHash": "c49dfbf3eae68982be5a4effb3dbf70f43e69bb38b469f29edd090713dc2c823",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "edd8695f29df48a6fba604a71bd1d1bcd388033b0586edbd3d41f11a5274f534",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-201-220-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_AAeWhNrDiZXHjdF6qLxnguD5rnD7",
+        "created": 1781579612319,
+        "state": "READY",
+        "target": null,
+        "url": "pantavion-planet-n0t2pnxrn-pandaconnect.vercel.app",
+        "gitRef": "pantavion/ecosystem-readiness-gate-v1",
+        "gitSha": "084bee75d3a9d4c5c85f4dca7840dbfdeeb2ab19",
+        "gitMessage": "chore(water): connect final master DWG blob source"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_aM9kWAiRDsqFKvRPELjnvUtiUeFM",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_aM9kWAiRDsqFKvRPELjnvUtiUeFM",
+      "stableRecordHash": "78134d4dc8d5c2bc3c01254b3a64ee396bef2e02bdeb08fa40ac6c7114685cba",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "c4a5c2109f1a51cf4acfaf4eea140529f082d954f2ff5c04fd7987a1973e93cc",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-221-240-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_aM9kWAiRDsqFKvRPELjnvUtiUeFM",
+        "created": 1781351574100,
+        "state": "READY",
+        "target": null,
+        "url": "pantavion-planet-4zuxeu30p-pandaconnect.vercel.app",
+        "gitRef": "pantavion/execution-engine-v1",
+        "gitSha": "2fc1e0bee4b0b4580254377e6abc7eb55c18da0e",
+        "gitMessage": "feat(kernel): connect scheduler to work package queue"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BNoL1BHyniXMtCVZbttTw8DGpEWE",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BNoL1BHyniXMtCVZbttTw8DGpEWE",
+      "stableRecordHash": "f6975e40ac5cd984b8fe43dce918a3b5476e422a0a9285f9fd88c6e52a1b7dea",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "c46b49a918c7abf8735865e13ea753474da6670fe17882575e7f78064cab3599",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-501-520-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_BNoL1BHyniXMtCVZbttTw8DGpEWE",
+        "created": 1777918154476,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-2ap1gj0vt-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "7277dbdc7a5d79caeef2842c45c2378be9e317a1",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CbY9izGmDBvGXnRuuCUnZjysNg9U",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CbY9izGmDBvGXnRuuCUnZjysNg9U",
+      "stableRecordHash": "22ed4fe9b62d44dcf1c238cfa60c4b31e73497b354bdc2061bc810fe9d256fc2",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "fdae644e0ee4f2eb6b8ae6233f271b6c7239097dde2e179a67a069241865e835",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-201-220-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_CbY9izGmDBvGXnRuuCUnZjysNg9U",
+        "created": 1781898958624,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-fhxrfmoc4-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "8f39379eac7c292905c986a2e5a003dcde28bb04",
+        "gitMessage": "feat(kernel): add project intake registry foundation"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CTiioAzQgxVzJbmFPyPYhheMkBUc",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CTiioAzQgxVzJbmFPyPYhheMkBUc",
+      "stableRecordHash": "3a869cd349d198dcf976633e1eb7a95d66cd84131db83f18bc07f101cb0b8ce2",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "42ae2293fea41f70e637fd4d94d6b9e43c5b763d4f739aa06649410c8810883c",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-501-520-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_CTiioAzQgxVzJbmFPyPYhheMkBUc",
+        "created": 1778007852800,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-n5f9k4vbo-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "f64e1842e0419e86c6f00e5428ba6b801930cb7a",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_D4MDNsnAmTYoAxmexE8nkcLSNmdt",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_D4MDNsnAmTYoAxmexE8nkcLSNmdt",
+      "stableRecordHash": "98acce1593154f8294f28e2913186011de1f144f40cb1d8b437da62e28f65695",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "d462520f8977350796030367768aa24b161eecb986955f39dd4576f6a02319a8",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-221-240-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_D4MDNsnAmTYoAxmexE8nkcLSNmdt",
+        "created": 1781341203864,
+        "state": "READY",
+        "target": null,
+        "url": "pantavion-planet-j8evdpky9-pandaconnect.vercel.app",
+        "gitRef": "pantavion/execution-engine-v1",
+        "gitSha": "be35e81c52ce98fa648b1a7900ee3db8a10ac039",
+        "gitMessage": "feat(kernel): add executor adapter route"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Ei8bGgjySEoYgRYmeuH2UA6RdsnQ",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Ei8bGgjySEoYgRYmeuH2UA6RdsnQ",
+      "stableRecordHash": "da90915e0ded3c70db937560b93732e55d9173f2752e34ac5033f80c31fca2f0",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "29609d2a3bfe0578870b38a91d0a9b79d589d0b650ba3981e25e8bf28e0525d6",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-321-340-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_Ei8bGgjySEoYgRYmeuH2UA6RdsnQ",
+        "created": 1779546641255,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-e8v4i7pig-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "8bb662264ed143ab5f83fb62077b4db59bad8afe",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_ER3ezD6WAbbsCbqapFNhY5hPuZ4C",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_ER3ezD6WAbbsCbqapFNhY5hPuZ4C",
+      "stableRecordHash": "850edcc80ded4ba66ee523a15416b7d33affcea45a930ba08aafeb4e3ce1301f",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "69bef559e79197e3cb7891b2377da8cf2aa97f35c9e77e9defd0791273bee3c0",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-461-480-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_ER3ezD6WAbbsCbqapFNhY5hPuZ4C",
+        "created": 1778322950308,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-nlk2joesr-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "4cdfbdc65cad31bd140ba53395b70e21f1c912ad",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_F64SvFKcG9HMDkgmdosTAUjL1Lgg",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_F64SvFKcG9HMDkgmdosTAUjL1Lgg",
+      "stableRecordHash": "9aa764617f942daa4bc658f62db324482a0f78d7b2e3f53fee73a61a2fa7f1f8",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "67e2bcf7e404849a037af548b23740d006fa7f445cee4bdc7d8bcb4ae8be0095",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-521-540-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_F64SvFKcG9HMDkgmdosTAUjL1Lgg",
+        "created": 1777840821198,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-iy15tvdnn-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "37d007d776520986e8bb23ec4f20092a4cbabca5",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GLG9fDwyeg2DrpdQEmURPXUtjdZJ",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GLG9fDwyeg2DrpdQEmURPXUtjdZJ",
+      "stableRecordHash": "52b8b1d1bc6a08a4f96209724b7e3f02b25b05317876bf6723d75a511d5f58b8",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "ee6a3f2632e67d87b2b199555684c35a8d3bafcf19a9d149604ddd6c617e8485",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-441-460-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_GLG9fDwyeg2DrpdQEmURPXUtjdZJ",
+        "created": 1778390514669,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-i8u2egp44-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "d1e01cd92ccb75a99d69edff57db3cccdd6412c4",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Gpvfuabd6L2j3FgGBK4DXrmZjyYM",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Gpvfuabd6L2j3FgGBK4DXrmZjyYM",
+      "stableRecordHash": "e30f0cb21c58eb78007b9b1f75800c3e7dcbd6a7c592e2e1b5c09b898d702156",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "a7154e80ccee9f5a39218ad70f89727a51c790ee14d501eca55342c5ce5d4910",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-361-380-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_Gpvfuabd6L2j3FgGBK4DXrmZjyYM",
+        "created": 1779474111589,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-mzi4jqubm-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "026ecdea023a72d31a091ad23ba8d9bad314147e",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GqMa647PzfbeZUomwXJqDBmoivhK",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GqMa647PzfbeZUomwXJqDBmoivhK",
+      "stableRecordHash": "7731b537ca7944a89851194c5faded3b532979864a382c78c6e9ebff7492e593",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "b4841ccf0cc28cc5e14c564ffa17dfb6feff920a8ef2df7c1aea6cfd545cce0d",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-501-520-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_GqMa647PzfbeZUomwXJqDBmoivhK",
+        "created": 1778012384377,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-qriv036ov-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "9f1d684a246421443ec3f0c2cb2ade6aace47e2f",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GUPu6zmuLxfxJtVggkjrWaeAQPjY",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GUPu6zmuLxfxJtVggkjrWaeAQPjY",
+      "stableRecordHash": "f2132ef05454d316511b706c3f1e1503f21d714d165b49f89358977fc28ee010",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "811c9bdbc12e8ba809a8ccf95863cce577b6d8a23c883a310b6076d264a801b1",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-321-340-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_GUPu6zmuLxfxJtVggkjrWaeAQPjY",
+        "created": 1779568876859,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-7wy8u2g5x-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "91d13d380a6c4d27716c570a682f19d7ce69d6a9",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Hdx5TFkNK63M3E51qVSYWABkQH41",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Hdx5TFkNK63M3E51qVSYWABkQH41",
+      "stableRecordHash": "2ea93ab30909f5d0530bf79696105fa206cdb93771618e9745e3a70cc1318397",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "aae52eac5dbbf354223bdd254a392cb89264c0f3f7409667bbb017122c5e65db",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-241-260-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_Hdx5TFkNK63M3E51qVSYWABkQH41",
+        "created": 1781340671058,
+        "state": "READY",
+        "target": null,
+        "url": "pantavion-planet-li2oxetko-pandaconnect.vercel.app",
+        "gitRef": "pantavion/execution-engine-v1",
+        "gitSha": "5ea04d9e31337439fc85960a7447aa296c86c0ba",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HtuZ2cCbzFxNP9zAhzH4RH6V3cMx",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HtuZ2cCbzFxNP9zAhzH4RH6V3cMx",
+      "stableRecordHash": "244edfded50b678e317ce83bf7378f9dbe1e0fdfffa9cd72300cd56ed9fb2ef9",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "e53b2cb6a0ad105d3e87bf4771fb5269bfc6d2dd5701067df080074cdad1368a",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-421-440-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_HtuZ2cCbzFxNP9zAhzH4RH6V3cMx",
+        "created": 1778423077892,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-m3qxxw7px-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "4d299de10833aa984868419904f0fa27a1746cb6",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_J4zisQESQ29nx9yxVwTWNN2HbSyy",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_J4zisQESQ29nx9yxVwTWNN2HbSyy",
+      "stableRecordHash": "4ab0d4f0a8657d5c8ebe896235e79c1b1b8b1ec03e620959a6baff65b86afb27",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "33f0a3e8e2f5f4fe47c6c4372893c3637e8681374fa33565a3a893b169dd3e41",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-561-580-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_J4zisQESQ29nx9yxVwTWNN2HbSyy",
+        "created": 1777192938567,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-2wlqlvy5g-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "6ea92d77b4fb8e1be2ae419827df86fab266c95f",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_J5CqbKvCteW8qZQeVRcZWZXL1Sg3",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_J5CqbKvCteW8qZQeVRcZWZXL1Sg3",
+      "stableRecordHash": "b072dbe4c7e624888c101e35a539765bb2564717eb06c1db56e89913f0146f5c",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "f015e8c51af164714fc2b77d65318c50fbef24836b865d49fc1814f9fe2d9516",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-281-300-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_J5CqbKvCteW8qZQeVRcZWZXL1Sg3",
+        "created": 1780077721781,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-9qu66wm2t-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "6c0996a7609c05d18621385002e13a1c746c7869",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_JAY4SZKzm5RLxGJcFHevzVrQabiG",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_JAY4SZKzm5RLxGJcFHevzVrQabiG",
+      "stableRecordHash": "28a559eb7b362b368f85d2a7ef8e46f60ffc254d66c40f02e1b9d3aeebb234f6",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "a95a76162de1fa2dee3e336214312736f622ab2b3b101a77587ef00c1d080828",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-201-220-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_JAY4SZKzm5RLxGJcFHevzVrQabiG",
+        "created": 1781901626082,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-7hqhfa96h-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "dc22785eccd0e44cddfd61e4187558da1f2110a5",
+        "gitMessage": "feat(kernel): add project work order prioritizer"
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_mi1E2psumVzcpxaW9W65jh7u4TJa",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_mi1E2psumVzcpxaW9W65jh7u4TJa",
+      "stableRecordHash": "9013c5339b1e7d20da28b955d5b3c41cecf6c703e28e77916f55ec78275ae159",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "f9ded0835d89acb7168e93fccfdbbaa8f1554169e78975227bdbfcea3ba0004a",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-441-460-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_mi1E2psumVzcpxaW9W65jh7u4TJa",
+        "created": 1778396176127,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-2ie2k0n14-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "b4259f87a1543e255456ef26a45a10451e6aee3c",
+        "gitMessage": null
+      }
+    },
+    {
+      "canonicalRecordId": "vercel-deployment:prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_YV2tTrfS9mxjybDZd6Qi22GQnTta",
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_YV2tTrfS9mxjybDZd6Qi22GQnTta",
+      "stableRecordHash": "c7b03937039961e4757c343b7448c81777c373daba18457fcbb239f0e742785a",
+      "shardBucket": 8,
+      "canonicalType": "VERCEL_DEPLOYMENT_EVIDENCE",
+      "canonicalState": "CANONICALIZED",
+      "liveTruth": "HISTORICAL_ONLY",
+      "classificationState": "PENDING_THREAD_4",
+      "payloadFingerprint": "cdbe141920d6051cc5c1c22fa7c21f476e42d5530dc5db4616e0cc7e1135c031",
+      "immutableProvenance": {
+        "sourceLane": "G",
+        "sourceSurface": "Vercel list_deployments",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "sourceEvidence": [
+          "docs/recovery/live/batches/lane-g-20260915-261-280-rehydrated.json"
+        ],
+        "privacy": "PUBLIC_SAFE_SANITIZED",
+        "recoveryTruth": "PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND"
+      },
+      "deployment": {
+        "deploymentId": "dpl_YV2tTrfS9mxjybDZd6Qi22GQnTta",
+        "created": 1780143957509,
+        "state": "READY",
+        "target": "production",
+        "url": "pantavion-planet-3fw378nsi-pandaconnect.vercel.app",
+        "gitRef": "main",
+        "gitSha": "430830fbca45448bb13d673ec7ba0eee4b49236e",
+        "gitMessage": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "fromThread": 3,
+  "toThread": 4,
+  "handoffType": "CANONICAL_RECORDS_READY_FOR_CLASSIFICATION",
+  "sourceLane": "G",
+  "canonicalManifest": "docs/recovery/live/canonical/thread3-g-manifest.json",
+  "canonicalFiles": [
+    "docs/recovery/live/canonical/thread3-g-bucket-5.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-6.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-7.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-8.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-9.json"
+  ],
+  "canonicalRecordCount": 199,
+  "sourceInputFingerprint": "5002e2eec1a45ff467fc9e0b52ff1b9c2e4336a86b20fe4fa6397356fb705ea3",
+  "constraints": [
+    "Do not rewrite immutable source evidence.",
+    "Use REVIEW_REQUIRED for uncertain semantic classification.",
+    "Do not infer VERIFIED_LIVE from READY/production historical deployment state."
+  ]
+}

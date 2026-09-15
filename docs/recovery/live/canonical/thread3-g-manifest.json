@@ -1,0 +1,245 @@
+{
+  "contract": "PANTAVION_CANONICAL_SHARDING_V1",
+  "ownerThread": 3,
+  "scope": "G_REHYDRATED_RECORDS_BUCKETS_5_9",
+  "sourceLane": "G",
+  "sourceRange": [
+    201,
+    600
+  ],
+  "sourceBatchCount": 20,
+  "sourceRecordCount": 400,
+  "sourceUniqueStableKeyCount": 400,
+  "sourceInputFingerprint": "5002e2eec1a45ff467fc9e0b52ff1b9c2e4336a86b20fe4fa6397356fb705ea3",
+  "duplicateStableKeyCount": 0,
+  "payloadConflictCount": 0,
+  "thread3CanonicalRecordCount": 199,
+  "bucketCounts": {
+    "5": 43,
+    "6": 41,
+    "7": 41,
+    "8": 39,
+    "9": 35
+  },
+  "canonicalFiles": [
+    "docs/recovery/live/canonical/thread3-g-bucket-5.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-6.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-7.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-8.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-9.json"
+  ],
+  "provenanceInputs": [
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-201-220-rehydrated.json",
+      "sha256": "3dabe52f9125b6e79f094536773aa836d1401c44576cb8a7726b53ce67e31259",
+      "recordRange": [
+        201,
+        220
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:18:30Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-221-240-rehydrated.json",
+      "sha256": "1b5ed15ef2b302269d97314f992233eb6b977204f034f5273267b1d465041fc5",
+      "recordRange": [
+        221,
+        240
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:20:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-241-260-rehydrated.json",
+      "sha256": "76686a91d8211fe1ee6880a200b6899a2bdd1c33e446ad9cff640c6767135dd5",
+      "recordRange": [
+        241,
+        260
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:22:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-261-280-rehydrated.json",
+      "sha256": "7656ed2318100aca175adaf64c1fdde165df6183ad97d3f4d62767fa94e6f796",
+      "recordRange": [
+        261,
+        280
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:24:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-281-300-rehydrated.json",
+      "sha256": "f343df97b406f9fce583108817dd5c819883218d6f51fafacd75618606457d5c",
+      "recordRange": [
+        281,
+        300
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:26:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-301-320-rehydrated.json",
+      "sha256": "4540bc58a761a77231cfffaf43dfc07cba1630d2b8896a9b3e64470c9a697086",
+      "recordRange": [
+        301,
+        320
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:28:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-321-340-rehydrated.json",
+      "sha256": "2b157e818d972f6c3cf240d189ecbc6b341276d2e0a67a3aa08b810baa444d1c",
+      "recordRange": [
+        321,
+        340
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:30:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-341-360-rehydrated.json",
+      "sha256": "09d9dbcc5f162a67600adb5624b9a5608f701e2a180bde99ac9fce9f69764b38",
+      "recordRange": [
+        341,
+        360
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:32:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-361-380-rehydrated.json",
+      "sha256": "b24301a38e14835fae208d9b099b2bb519cfcd39a1218c9b3f412bf54e02d533",
+      "recordRange": [
+        361,
+        380
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:34:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-381-400-rehydrated.json",
+      "sha256": "c432597fd516f3768c6d714bd39ecf5bddf1792570dbd5ff26e62dd1f1dc2902",
+      "recordRange": [
+        381,
+        400
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:36:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-401-420-rehydrated.json",
+      "sha256": "ef270e8a12b89d17537e708e1f172830693fc7d573f30503dc21e601f09085c3",
+      "recordRange": [
+        401,
+        420
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:38:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-421-440-rehydrated.json",
+      "sha256": "b47f9c658dd021a724423e7f83fb11b623e726316be7690626dedda7e4233a36",
+      "recordRange": [
+        421,
+        440
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:40:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-441-460-rehydrated.json",
+      "sha256": "fe906cf20321c8152e6f2f188a894f23c13f2489cb6016660a43a3e74ab2c834",
+      "recordRange": [
+        441,
+        460
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:42:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-461-480-rehydrated.json",
+      "sha256": "d5b77c2ae2be9ea8278cfe347d6fbb54dab07e9e172cf15d1c71a045146aa9ab",
+      "recordRange": [
+        461,
+        480
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:44:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-481-500-rehydrated.json",
+      "sha256": "aca21dd160ad3889b04174fc169ea7665560b851b7a57d7b1db6a520c64d3c76",
+      "recordRange": [
+        481,
+        500
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:46:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-501-520-rehydrated.json",
+      "sha256": "171e36b9cd1b51387da9bfb7478fdd01432cc255ee59f4f4f7d2dbecf7642d6c",
+      "recordRange": [
+        501,
+        520
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:48:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-521-540-rehydrated.json",
+      "sha256": "c20120ff30dd30fa10aa468ee4b4598454ab0f6ada9415aefac7a9b2b7cc5669",
+      "recordRange": [
+        521,
+        540
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:50:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-541-560-rehydrated.json",
+      "sha256": "04e0e2ba31b1da86b47cf1ea886ba7d9318a9c3d97752f13a58e0526dbabff64",
+      "recordRange": [
+        541,
+        560
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:52:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-561-580-rehydrated.json",
+      "sha256": "9e81fa7d15699965205d746b37f1399adf963b322ce35c92182894ccdb1743d4",
+      "recordRange": [
+        561,
+        580
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:54:00Z"
+    },
+    {
+      "path": "docs/recovery/live/batches/lane-g-20260915-581-600-rehydrated.json",
+      "sha256": "cb480d0461af88f9d869a6c78a86dd00072e73a50259f5b8543c10af0bf06440",
+      "recordRange": [
+        581,
+        600
+      ],
+      "recordCount": 20,
+      "capturedAt": "2026-09-15T17:56:00Z"
+    }
+  ],
+  "rules": [
+    "Source evidence remains unchanged.",
+    "Only buckets 5-9 are owned by Thread 3.",
+    "No classification or module routing is asserted here.",
+    "READY/production remains historical evidence only until separately VERIFIED_LIVE.",
+    "Canonical count is valid only after these files are durably committed to GitHub."
+  ],
+  "downstream": {
+    "classificationOwner": "THREAD_4",
+    "auditOwner": "THREAD_7",
+    "durabilityOwner": "THREAD_8"
+  }
+}
