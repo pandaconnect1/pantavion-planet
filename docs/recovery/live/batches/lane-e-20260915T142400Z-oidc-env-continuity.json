@@ -1,0 +1,107 @@
+{
+  "schema": "pantavion_lane_e_oidc_env_continuity_v1",
+  "lane": "E",
+  "captured_at_utc": "2026-09-15T14:24:00Z",
+  "status": "VERIFIED_LIVE_PARTIAL_CONTINUITY_WITH_AUTH_EXPORT_BLOCKER",
+  "zero_deletions": true,
+  "zero_vercel_mutations": true,
+  "secret_values_written": false,
+  "private_source_written": false,
+  "authoritative_production": {
+    "project": "pantavion-planet",
+    "project_id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+    "deployment_id": "dpl_G5n17bSGw7ejKQPr3hQgnymcJV84",
+    "git_sha": "4872f6d21e291d9c2072392eac360551dcd667eb",
+    "git_ref": "main",
+    "state": "READY",
+    "target": "production"
+  },
+  "founder_recovery_route": {
+    "url": "https://www.pantavion.com/admin/pantavion/recovery",
+    "http_status": 200,
+    "matched_path": "/admin/pantavion/recovery",
+    "rendered_boundary": "Founder Access Required",
+    "live_truth": "VERIFIED_LIVE",
+    "note": "The former 404 remains resolved on the newer OIDC-enabled production deployment; protected operational data was not accessed."
+  },
+  "secretless_oidc_trust": {
+    "url": "https://www.pantavion.com/api/pantavion/intelligence/oidc-supabase-trust",
+    "http_status": 200,
+    "revision": "4872f6d21e291d9c2072392eac360551dcd667eb",
+    "status": "verified",
+    "secretless": true,
+    "privileged_data_access": false,
+    "upstream_status": 200,
+    "trust": "vercel_oidc_verified_by_supabase",
+    "live_truth": "VERIFIED_LIVE"
+  },
+  "scheduler_health": {
+    "url": "https://www.pantavion.com/api/pantavion/intelligence/scheduler-health",
+    "http_status": 200,
+    "revision": "4872f6d21e291d9c2072392eac360551dcd667eb",
+    "status": "degraded",
+    "execution_verified": false,
+    "transport": "vercel_oidc_to_supabase_edge",
+    "secretless": true,
+    "worker": {
+      "name": "pantavion-intelligence-5m",
+      "total_runs": 1,
+      "last_run_key": "pantavion-intelligence-5m:2026-09-15T14:20",
+      "last_status": "succeeded",
+      "last_started_at": "2026-09-15T14:20:39.076902+00:00",
+      "last_finished_at": "2026-09-15T14:20:39.75932+00:00"
+    },
+    "internal_scheduler": {
+      "dispatch_count": 1,
+      "last_request_queued": true,
+      "last_dispatch_failed": false
+    },
+    "recovery": {
+      "task_name": "pantavion:recovery_partition:v1",
+      "total_partitions": 0,
+      "succeeded": 0,
+      "failed": 0,
+      "active": 0,
+      "other": 0
+    },
+    "truth": "The previous Supabase-admin-key blocker is bypassed for the scheduled-worker claim/finish path through verified secretless Vercel OIDC. Full recovery execution is NOT verified because recovery partition count remains zero."
+  },
+  "cron_runtime_errors_after_oidc_window": {
+    "query_window": "last_15m_at_capture",
+    "route": "/api/pantavion/intelligence/cron",
+    "result": "NO_RUNTIME_ERRORS_FOUND",
+    "truth": "This supports the new secretless path but does not erase older confirmed credential failures or prove all future cron runs succeed."
+  },
+  "environment_continuity": {
+    "previous_code_or_recovery_manifest_names_floor": 112,
+    "current_verified_code_used_names_floor": 127,
+    "floor_not_inventory_total": true,
+    "added_code_used_names_since_previous_floor": [
+      "VERCEL_OIDC_TOKEN",
+      "PANTAVION_HLU_ENABLED",
+      "PANTAVION_HLU_MODEL",
+      "NEXT_PUBLIC_STRIPE_FOUNDING_LINK",
+      "NEXT_PUBLIC_PANTAVION_DEFAULT_EMERGENCY_NUMBER",
+      "PANTAVION_SOS_WEBHOOK_URL",
+      "PANTAVION_PARTNER_INTEREST_WEBHOOK_URL",
+      "STRIPE_SECRET_KEY",
+      "PANTAVION_STRIPE_LISTING_BOOST_PRICE_ID",
+      "PANTAVION_TRANSLATION_DIRECT_OPENAI_MODEL",
+      "VERCEL_URL",
+      "PANTAVION_WATER_HELP_USER_DIRECTORY_JSON",
+      "PANTAVION_WATER_NETWORK_GEOJSON_URL",
+      "PANTAVION_WATER_NETWORK_GEOJSON_BEARER_TOKEN",
+      "PANTAVION_WATER_B_MAP_PDF_URL"
+    ],
+    "evidence_scope": "Names observed in accessible GitHub main code plus preserved recovery evidence. Values are neither read nor recorded.",
+    "vercel_presence_truth": "UNKNOWN_FROM_CONNECTED_SURFACES",
+    "vercel_scope_truth": "UNKNOWN_FROM_CONNECTED_SURFACES",
+    "exact_value_exportability": "BLOCKED_AUTH_EXPORT",
+    "completion_truth": "127 is a verified lower bound for code/recovery dependency names, not a claim of complete Vercel environment inventory."
+  },
+  "remaining_lane_e_blockers": [
+    "Current Vercel connector still does not expose authenticated project environment-variable listing/scopes/decryption.",
+    "Complete deployment file-tree/content export remains unavailable through the connected Vercel surface.",
+    "Full recovery execution remains unverified because scheduler health reports recovery.totalPartitions=0 and executionVerified=false."
+  ]
+}
