@@ -1,0 +1,33 @@
+{
+  "thread": 3,
+  "status": "BLOCKED_MISSING_PER_DEPLOYMENT_EVIDENCE",
+  "scope": "LANE_C_CANONICAL_BUCKETS_5_9",
+  "updatedAtUtc": "2026-09-15T18:19:00Z",
+  "sourceEvidence": [
+    "docs/recovery/live/shards/lane-c-legacy-a.json"
+  ],
+  "sourceAggregateDeploymentTotal": 73,
+  "sourceAggregateProjects": [
+    {"project":"pantavion-one","projectId":"prj_Rld6OiU8Iu0TeBDYZ6Y2igDd200e","aggregateDeploymentCount":14},
+    {"project":"pantavion-one-clean-98it","projectId":"prj_jQ4NAbtiHfxC68CazUHwIARlDa1E","aggregateDeploymentCount":4},
+    {"project":"pantavion-one-clean","projectId":"prj_PZD1t2hOc6SaiY5pKithCHILboHF","aggregateDeploymentCount":52},
+    {"project":"pantaai","projectId":"prj_ViFBWhpM0mPurIwxsdvKKmjGrNEs","aggregateDeploymentCount":1},
+    {"project":"pantavion-one-clean-ui","projectId":"prj_e5oghsEalj1r5sIKmXFyRlXGYUdC","aggregateDeploymentCount":2},
+    {"project":"pantaai-template","projectId":"prj_QXmlk9C7ICX24Pi9cITJPJS4fFQ7","aggregateDeploymentCount":0}
+  ],
+  "canonicalRecordsWritten": 0,
+  "canonicalRecordsAssumed": 0,
+  "reason": "The durable Lane C shard currently provides aggregate project deployment counts and project IDs, but not the per-deployment deploymentId values required to form stable projectId:deploymentId identities and apply PANTAVION_CANONICAL_SHARDING_V1 deterministically.",
+  "requiredEvidenceToResume": [
+    "A durable payload-backed Lane C evidence file containing each deploymentId and its immutable source provenance.",
+    "The evidence must be sufficient to compute stableRecordKey=projectId:deploymentId and SHA-256 bucket ownership without inference."
+  ],
+  "safetyRulesApplied": [
+    "Do not materialize aggregate counts as physical records.",
+    "Do not guess deployment IDs or bucket ownership.",
+    "Do not treat READY/production historical metadata as VERIFIED_LIVE.",
+    "Preserve lane-c-legacy-a.json unchanged.",
+    "When payload-backed evidence appears, canonicalize only buckets 5-9 and merge by stable identity idempotently."
+  ],
+  "unresolved": true
+}
