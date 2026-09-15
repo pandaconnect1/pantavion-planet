@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
 
 import {
   isPantavionKernelAccessAllowed,
@@ -84,9 +83,40 @@ export default async function FounderRecoveryPage({ searchParams }: PageProps) {
   const secretAllowed =
     isPantavionKernelAccessAllowed(queryToken) ||
     isPantavionKernelAccessAllowed(sessionToken);
+  const founderAllowed =
+    secretAllowed && (await isPantavionKernelFounderIdentityAllowed());
 
-  if (!secretAllowed || !(await isPantavionKernelFounderIdentityAllowed())) {
-    notFound();
+  if (!founderAllowed) {
+    return (
+      <main className="min-h-screen bg-[#05070d] px-4 py-10 text-white sm:px-6">
+        <div className="mx-auto max-w-3xl rounded-3xl border border-amber-300/20 bg-white/[0.03] p-6 sm:p-8">
+          <p className="text-xs font-black uppercase tracking-[0.25em] text-amber-200">
+            Founder protected surface
+          </p>
+          <h1 className="mt-3 text-3xl font-black">Founder Access Required</h1>
+          <p className="mt-4 text-sm leading-6 text-slate-300">
+            The recovery route is live, but its operational data remains restricted. Sign in with the authorized founder account and complete the required founder verification to view the recovery feed.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="/auth/login"
+              className="rounded-2xl border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-sm font-black text-cyan-100"
+            >
+              Founder sign in
+            </a>
+            <a
+              href="/"
+              className="rounded-2xl border border-white/15 px-4 py-2 text-sm font-bold text-slate-200"
+            >
+              Pantavion home
+            </a>
+          </div>
+          <p className="mt-6 text-xs leading-5 text-slate-500">
+            No recovery evidence, tokens, secret values or internal operational details are exposed on this access boundary.
+          </p>
+        </div>
+      </main>
+    );
   }
 
   const status = await loadStatus();
