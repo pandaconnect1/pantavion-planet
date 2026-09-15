@@ -1,72 +1,113 @@
 {
-  "updatedAt": "2026-09-15T14:16:00Z",
+  "schema": "pantavion_lane_k_founder_feed_v2",
+  "updatedAt": "2026-09-15T18:09:26Z",
   "lane": "K",
-  "status": "ACTIVE_PARTIAL_INPUT",
-  "purpose": "Public-safe metadata feed contract for founder-only /admin/pantavion/recovery",
+  "status": "ACTIVE_PARTIAL_CURRENT_INPUT",
+  "purpose": "Public-safe founder recovery metadata feed for /admin/pantavion/recovery",
   "privacy": "PUBLIC_SAFE_METADATA_ONLY",
   "secretValuesIncluded": false,
   "consumer": "/admin/pantavion/recovery",
-  "runtimeVerification": "NOT_CLAIMED",
-  "inputState": {
-    "laneF": "PARTIAL_CANONICALIZED_WITH_EXPLICIT_PAYLOAD_GAP",
-    "laneJ": "NOT_AVAILABLE_AT_THIS_CHECKPOINT",
-    "policy": "Consume A-J outputs only; do not infer missing module classifications."
+  "aggregateEvidence": {
+    "commit": "6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5",
+    "checkpoint": "docs/recovery/live/checkpoints/coordinator-chat-20260915T1741Z.json"
   },
   "counts": {
     "sourceRecordsAvailableFloor": 3679,
     "canonicalizedRecordsFloor": 219,
-    "laneACapturedRecords": 619,
-    "laneAPayloadBackedCanonicalized": 219,
-    "laneASummaryOnlyPayloadGap": 400,
-    "vmxxPostTerminalUniqueNewDeploymentIds": 48,
-    "vmxxRecoveryGeneratedOperationalDeployments": 46,
-    "vmxxProductionMainDeployments": 2
+    "laneARehydratedPendingF": 400,
+    "laneARehydratedUniqueDeploymentIds": 400,
+    "laneARehydratedDuplicateDeploymentIds": 0,
+    "recoveryPartitionsTotal": 165,
+    "recoveryPartitionsActive": 165,
+    "recoveryPartitionsSucceeded": 0,
+    "recoveryPartitionsFailed": 0,
+    "workerSuccessfulRunsObserved": 40
   },
-  "projects": [
-    {
-      "project": "pantavion-planet",
-      "project_id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
-      "rescue_state": "TERMINAL_CHECKPOINTED",
-      "terminal": true,
-      "source_cursor": 1786126296277,
-      "next_cursor": null,
-      "last_non_empty_cursor": 1775918227754,
-      "terminal_probe_count": 0,
-      "live_truth": "HISTORICAL_ONLY",
-      "evidence_pointer": "docs/recovery/live/shards/lane-a-canonical.json"
+  "inputState": {
+    "laneF": "ACTIVE_STALLED_PENDING_G_INGEST_AND_GLOBAL_DEDUP",
+    "laneG": "TERMINAL_VERIFIED_REHYDRATED",
+    "laneH": "TERMINAL_VERIFIED_WITH_CURRENT_RUNTIME_TRUTH_SUPERSEDED_BY_COORDINATOR_1741Z_COUNTS",
+    "laneJ": "ACTIVE_PARTIAL",
+    "policy": "Only payload-backed canonical evidence and source-bound J classifications are surfaced. Rehydrated G records do not increase canonicalized floor until F binds them idempotently using projectId:deploymentId."
+  },
+  "rehydration": {
+    "project": "pantavion-planet",
+    "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+    "range": [201, 600],
+    "records": 400,
+    "unique": 400,
+    "duplicates": 0,
+    "audit": "PASS",
+    "canonicalization": "PENDING_F_IDEMPOTENT_DEDUP_AND_CANONICALIZATION",
+    "evidencePointer": "docs/recovery/live/shards/lane-g-20260915-rehydrated-terminal.json"
+  },
+  "production": {
+    "project": "pantavion-planet",
+    "deploymentId": "dpl_6NLyCMTnyzvi481Xz4UAQHrE2PHj",
+    "gitSha": "170ffb3b9e5c48313d08fb6e27ecafb715bfec90",
+    "state": "READY",
+    "readyIsModuleVerifiedLive": false,
+    "founderRecoveryBoundary": {
+      "route": "/admin/pantavion/recovery",
+      "httpStatus": 200,
+      "classification": "VERIFIED_LIVE_ACCESS_BOUNDARY_ONLY",
+      "authenticatedFounderFeedVerified": false
     },
-    {
-      "project": "pantavion-planet-vmxx",
-      "project_id": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
-      "rescue_state": "TERMINAL_VERIFIED",
-      "terminal": true,
-      "terminal_until": 1786177840266,
-      "terminal_probe_count": 0,
-      "live_truth": "VERIFIED_LIVE_ROOT_ONLY",
-      "founder_recovery_route": {"http_status": 404, "live_truth": "NOT_LIVE_ON_VMXX_PRODUCTION"},
-      "evidence_pointer": "docs/recovery/live/shards/lane-b-vmxx.json"
+    "oidcTrust": "VERIFIED_LIVE",
+    "scheduler": {
+      "status": "healthy",
+      "executionVerified": true,
+      "successfulRunsObserved": 40,
+      "cronErrorsLast30m": 0
+    },
+    "recoveryExecution": {
+      "totalPartitions": 165,
+      "active": 165,
+      "succeeded": 0,
+      "failed": 0,
+      "completionVerified": false
     }
-  ],
-  "canonical": {
-    "classification_state": "PARTIAL_CANONICALIZED_WITH_EXPLICIT_PAYLOAD_GAP",
-    "terminal_evidence_bound": true,
-    "github_evidence_bound": true,
-    "pantavion_founder_feed_bound": true,
-    "evidence_pointer": "docs/recovery/live/shards/lane-f-canonical-ingestion.json"
+  },
+  "moduleClassifications": {
+    "Social": "EVIDENCE_BOUND_HISTORICAL_ONLY",
+    "People": "EVIDENCE_BOUND_HISTORICAL_ONLY",
+    "Chat": "EVIDENCE_BOUND_HISTORICAL_ONLY",
+    "Interpreter/Translation": "EVIDENCE_BOUND_HISTORICAL_ONLY",
+    "Contacts": "EVIDENCE_BOUND_HISTORICAL_ONLY",
+    "Trust/Verification": "EVIDENCE_BOUND_WITH_LIVE_ACCESS_BOUNDARY_ONLY",
+    "Minors/Safety": "EVIDENCE_BOUND_HISTORICAL_ONLY",
+    "AI/Orchestration": "EVIDENCE_BOUND_HISTORICAL_ONLY",
+    "Memory/Continuity": "EVIDENCE_BOUND_HISTORICAL_ONLY",
+    "Security": "EVIDENCE_BOUND_CURRENT_SCHEDULER_PATH_HEALTHY_BUT_MODULE_NOT_VERIFIED_LIVE",
+    "Infrastructure": "EVIDENCE_BOUND_WITH_EXPORT_GAPS",
+    "Ads Center": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_J_INPUT",
+    "Business": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_J_INPUT",
+    "Dating": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_J_INPUT",
+    "Events": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_J_INPUT",
+    "Marketplace": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_J_INPUT"
   },
   "gaps": [
-    "Lane J module-classification shard is not available at this checkpoint; no module/theme labels are guessed.",
-    "Lane A ranges 201-600 have durable traversal/count/cursor summaries but lack individual deployment payloads for per-record canonicalization (400-record summary-only payload gap).",
-    "Founder recovery route /admin/pantavion/recovery is directly verified 404 on VMXX production; no UI/runtime success is claimed.",
-    "Deployment filesystem/build-output export remains outside current connector evidence.",
-    "Exact decrypted secret values are not present in this feed and must remain private."
+    "F has not yet idempotently canonicalized the 400 G-rehydrated records; canonicalized floor remains 219.",
+    "B/C/D and earlier durable evidence remain pending complete canonical ingestion/global mirror dedup in F.",
+    "Authenticated founder-feed content access has not been directly verified; only the protected route boundary is HTTP 200 live.",
+    "All 165 recovery partitions are active with zero terminal successes/failures at the latest coordinator observation; recovery completion is false.",
+    "Ads Center, Business, Dating, Events and Marketplace lack direct bound evidence in the current J input and remain review-required.",
+    "Complete deployment file-tree/content export and exact decrypted secret inventory remain private/auth-dependent gaps."
   ],
   "evidencePointers": [
-    "docs/recovery/live/shards/lane-a-canonical.json",
-    "docs/recovery/live/shards/lane-b-vmxx.json",
+    "docs/recovery/live/checkpoints/coordinator-chat-20260915T1741Z.json",
     "docs/recovery/live/shards/lane-f-canonical-ingestion.json",
-    "docs/recovery/live/canonical/lane-f-a-run-payload-audit.json",
-    "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json"
+    "docs/recovery/live/shards/lane-g-20260915-rehydrated-terminal.json",
+    "docs/recovery/live/shards/lane-h-runtime-build.json",
+    "docs/recovery/live/shards/lane-j-module-classification.json"
   ],
-  "rules": ["zero deletions", "zero Vercel mutations", "no secret values", "no deep deployment pagination", "READY/production is not VERIFIED_LIVE", "missing classifications remain explicit gaps"]
+  "rules": [
+    "zero deletions",
+    "zero Vercel mutations",
+    "no secret values",
+    "no deep deployment pagination",
+    "projectId:deploymentId is the deployment dedup key",
+    "READY/production is not module VERIFIED_LIVE",
+    "unsupported classifications remain explicit gaps"
+  ]
 }
