@@ -1,0 +1,7 @@
+timestamp_utc: 2026-09-15T18:05:30Z
+thread: 0
+purpose: coordinator_runtime_truth_for_10_thread_parallel_absorption
+status: ACTIVE
+ingestion_shard_claimed: false
+protocol: docs/recovery/PANTAVION_10_THREAD_PARALLEL_ABSORPTION_PROTOCOL_20260915.md
+rules: zero_deletions; zero_destructive_vercel_mutations; no_secret_values; no_duplicate_lane_work
