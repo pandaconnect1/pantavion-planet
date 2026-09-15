@@ -30,20 +30,34 @@ function pushEdge(edges, stableRecordKey, relationshipType, targetCanonicalPath,
   if (!edges.some((candidate) => candidate.routeId === edge.routeId)) edges.push(edge);
 }
 
+function canonicalStableRecordKey(value) {
+  if (typeof value?.stableRecordKey === 'string' && value.stableRecordKey.length > 0) {
+    return value.stableRecordKey;
+  }
+  const projectId = value?.projectId ?? value?.project_id ?? null;
+  const deploymentId = value?.deploymentId ?? value?.deployment_id ?? null;
+  if (projectId && deploymentId) return `${projectId}:${deploymentId}`;
+  return null;
+}
+
 function collectStableRecords(value, artifact, out, seen) {
   if (!value || typeof value !== 'object') return;
-  if (typeof value.stableRecordKey === 'string') {
-    const dedupKey = `${artifact}\0${value.stableRecordKey}`;
+  const stableRecordKey = canonicalStableRecordKey(value);
+  if (stableRecordKey) {
+    const dedupKey = `${artifact}\0${stableRecordKey}`;
     if (!seen.has(dedupKey)) {
       seen.add(dedupKey);
-      const list = out.get(value.stableRecordKey) || [];
+      const list = out.get(stableRecordKey) || [];
       list.push({
         artifact,
-        stableRecordKey: value.stableRecordKey,
-        sourceFingerprint: value.sourceFingerprint ?? null,
-        canonicalRecordId: value.canonicalRecordId ?? value.recordId ?? value.id ?? null,
+        stableRecordKey,
+        sourceFingerprint: value.sourceFingerprint ?? value.source_fingerprint ?? null,
+        canonicalRecordId: value.canonicalRecordId ?? value.canonical_record_id ?? value.recordId ?? value.record_id ?? value.id ?? null,
+        identityDerivation: typeof value.stableRecordKey === 'string'
+          ? 'EXPLICIT_STABLE_RECORD_KEY'
+          : 'VERCEL_PROJECT_ID_PLUS_DEPLOYMENT_ID',
       });
-      out.set(value.stableRecordKey, list);
+      out.set(stableRecordKey, list);
     }
   }
   if (Array.isArray(value)) {
@@ -183,6 +197,7 @@ function buildBinding(record, canonicalCandidate, mirrorsByGitSha) {
     artifact: canonicalCandidate.artifact,
     stableRecordKey,
     canonicalRecordId: canonicalCandidate.canonicalRecordId,
+    identityDerivation: canonicalCandidate.identityDerivation ?? null,
   };
   const sourceFingerprint = record.sourceFingerprint ?? canonicalCandidate.sourceFingerprint ?? null;
   const edges = [];
@@ -442,6 +457,7 @@ const manifestDoc = {
     reviewRequiredNeverGuessed: true,
     idempotentRouteIds: true,
     canonicalBindingMatchedByStableRecordKey: true,
+    legacyVercelStableKeyDerivedFromCanonicalFields: true,
   },
 };
 fs.writeFileSync(manifestPath, `${JSON.stringify(manifestDoc, null, 2)}\n`, 'utf8');
