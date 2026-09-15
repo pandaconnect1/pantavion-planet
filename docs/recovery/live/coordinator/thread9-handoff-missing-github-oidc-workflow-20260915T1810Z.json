@@ -1,0 +1,63 @@
+{
+  "schema": "pantavion_thread9_runtime_handoff_v1",
+  "observed_at_utc": "2026-09-15T18:10:00Z",
+  "from_thread": 0,
+  "to_thread": 9,
+  "status": "REAL_BLOCKER_CONFIRMED",
+  "scope": "Supabase durable recovery execution control plane",
+  "finding": "The durable recovery executor implementation and bounded Supabase OIDC bridge exist, but the only GitHub Actions workflow identity accepted by the bridge is absent from main, so no authorized GitHub OIDC execution entrypoint currently connects them.",
+  "evidence": {
+    "production_main_sha": "170ffb3b9e5c48313d08fb6e27ecafb715bfec90",
+    "executor_script": "scripts/pantavion-github-recovery-partition-executor.mjs",
+    "executor_script_present": true,
+    "bridge_function": "pantavion-github-recovery-executor-bridge",
+    "bridge_active": true,
+    "bridge_expected_workflow_ref": "pandaconnect1/pantavion-planet/.github/workflows/pantavion-recovery-partition-executor.yml@refs/heads/main",
+    "expected_workflow_path": ".github/workflows/pantavion-recovery-partition-executor.yml",
+    "expected_workflow_present_on_main": false,
+    "existing_runtime_fabric_workflow": ".github/workflows/pantavion-recovery-runtime-fabric.yml",
+    "existing_runtime_fabric_invokes_executor_script": false,
+    "durable_partition_state": {
+      "task_name": "pantavion:recovery_partition:v1",
+      "total": 165,
+      "planned": 165,
+      "queued": 0,
+      "running": 0,
+      "succeeded": 0,
+      "failed": 0,
+      "leased": 0
+    }
+  },
+  "security_boundary": {
+    "bridge_issuer": "https://token.actions.githubusercontent.com",
+    "bridge_audience": "pantavion-supabase-recovery",
+    "repository_bound": true,
+    "repository_id_bound": true,
+    "owner_bound": true,
+    "owner_id_bound": true,
+    "main_ref_bound": true,
+    "workflow_ref_bound": true,
+    "allowed_events": ["push", "workflow_dispatch", "schedule"],
+    "service_role_exposed_to_github": false,
+    "capabilities": ["list", "claim", "checkpoint", "finish"],
+    "task_scope": "pantavion:recovery_partition:v1",
+    "execution_id_scope": "partitions 001-165 only",
+    "fencing_required": true,
+    "code_mutation_allowed_by_execution_output": false,
+    "production_write_allowed_by_execution_output": false,
+    "merge_allowed_by_execution_output": false,
+    "deployment_allowed_by_execution_output": false,
+    "public_exposure_allowed_by_execution_output": false,
+    "release_allowed_by_execution_output": false
+  },
+  "required_thread9_action": [
+    "Use the existing executor and bridge; do not build a second execution system.",
+    "Add or restore the exact main-branch workflow path already pinned by the bridge, with GitHub id-token: write and contents: read only as needed for checkout/execution.",
+    "Invoke scripts/pantavion-github-recovery-partition-executor.mjs from that exact workflow identity.",
+    "Preserve existing leases, fencing, idempotency and fail-closed authority checks.",
+    "Verify first real transition planned -> running/leased -> checkpointed -> succeeded before claiming execution is live.",
+    "Then verify terminal convergence to 165 succeeded, 0 failed, 0 remaining, or preserve explicit durable failures."
+  ],
+  "coordinator_non_action": "Thread 0 did not mutate main, did not trigger the missing workflow, did not claim Thread 9 work, and did not perform destructive Vercel/Supabase operations.",
+  "completion": false
+}
