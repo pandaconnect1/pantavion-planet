@@ -1,0 +1,37 @@
+name: Pantavion Lane G Rehydration Audit
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "docs/recovery/live/batches/lane-g-20260915-*-rehydrated.json"
+      - "scripts/pantavion-lane-g-rehydration-audit.mjs"
+      - ".github/workflows/pantavion-lane-g-rehydration-audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-lane-g-rehydration-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Audit 400 rehydrated Vercel deployment records
+        run: node scripts/pantavion-lane-g-rehydration-audit.mjs | tee lane-g-rehydration-audit.json
+      - name: Upload audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-lane-g-rehydration-audit-${{ github.sha }}
+          path: lane-g-rehydration-audit.json
+          if-no-files-found: error
+          retention-days: 30
