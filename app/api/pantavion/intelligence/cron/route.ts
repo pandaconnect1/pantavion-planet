@@ -13,6 +13,7 @@ import {
   hasSupabaseAdminCredential,
   PantavionSupabaseAdminConfigurationError,
 } from "@/lib/supabase/admin";
+import { materializePantavionRecoveryPartitionsViaOidc } from "@/lib/supabase/oidc-scheduler-bridge";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -33,7 +34,6 @@ type PantavionScheduledTickSource =
 
 const SECRETLESS_PENDING_CAPABILITIES = [
   "founder_intent_materialization",
-  "recovery_partition_materialization",
   "recovery_fenced_executor",
   "nervous_system_foundry",
 ] as const;
@@ -138,9 +138,10 @@ async function executeSecretlessScheduledTick(
   try {
     const worker = await runOidcScheduledWorker(
       async () => {
+        const recoveryPartitions = await materializePantavionRecoveryPartitionsViaOidc(25);
         const tick = await runPantavionCloudCronTick(source);
         return {
-          ok: tick.ok,
+          ok: tick.ok && recoveryPartitions.remainingPartitions === 0,
           mode: "secretless_oidc_degraded",
           intelligenceTickExecuted: true,
           route: tick.route,
@@ -149,6 +150,7 @@ async function executeSecretlessScheduledTick(
           buildQueueCount: tick.ledgerEvent.buildQueueCount,
           ledgerStatus: tick.ledgerEvent.status,
           ledgerStorageMode: tick.ledgerEvent.storageMode,
+          recoveryPartitions,
           pendingCapabilities: [...SECRETLESS_PENDING_CAPABILITIES],
         };
       },
@@ -167,12 +169,15 @@ async function executeSecretlessScheduledTick(
         secretExposure: "no Supabase service-role or secret key is present in the Vercel runtime",
         executedNow: [
           "durable_scheduled_worker_claim",
+          "atomic_recovery_partition_materialization",
           "pantavion_intelligence_tick",
           "durable_scheduled_worker_finish",
         ],
+        recoveryMaterialization:
+          "the immutable 82,413-record corpus is reconciled to exactly 165 partitions through a service-role-only SECURITY INVOKER RPC with transaction advisory locking and idempotent identity checks",
         pendingCapabilities: [...SECRETLESS_PENDING_CAPABILITIES],
         authority:
-          "secretless degraded mode does not gain generic Supabase access and cannot mutate arbitrary database objects",
+          "secretless degraded mode does not gain generic Supabase access and recovery materialization cannot grant code mutation, production write, merge, deployment, public exposure or release authority",
       },
     });
   } catch (error) {
@@ -181,7 +186,8 @@ async function executeSecretlessScheduledTick(
       message.includes("scheduler_bridge") ||
       message.includes("vercel_oidc") ||
       message.includes("scheduled_claim") ||
-      message.includes("scheduled_finish")
+      message.includes("scheduled_finish") ||
+      message.includes("recovery_partition_materialization")
     ) {
       return blockedSupabaseConfigurationResponse(source, authMode);
     }
