@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import {
+  createAdminClient,
+  hasSupabaseAdminCredential,
+  PantavionSupabaseAdminConfigurationError,
+} from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,8 +23,32 @@ function json(body: unknown, status: number) {
   });
 }
 
+function blockedSupabaseConfiguration(revision: string | null) {
+  return json(
+    {
+      ok: false,
+      status: "blocked_configuration",
+      route: "/api/pantavion/intelligence/scheduler-health",
+      revision,
+      schedule: SCHEDULE,
+      executionVerified: false,
+      dependency: "supabase_admin",
+      code: "SUPABASE_ADMIN_CREDENTIAL_MISSING",
+      diagnostics: ["supabase_admin_credential_missing"],
+      retryable: true,
+      privacy:
+        "Sanitized dependency state only. No secret value, user data, recovered payload, lease token or request token is exposed.",
+    },
+    200,
+  );
+}
+
 export async function GET() {
   const revision = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? null;
+
+  if (!hasSupabaseAdminCredential()) {
+    return blockedSupabaseConfiguration(revision);
+  }
 
   try {
     const admin = createAdminClient();
@@ -98,6 +126,7 @@ export async function GET() {
     return json(
       {
         ok: true,
+        status: "healthy",
         route: "/api/pantavion/intelligence/scheduler-health",
         revision,
         schedule: SCHEDULE,
@@ -128,10 +157,15 @@ export async function GET() {
       },
       200,
     );
-  } catch {
+  } catch (error) {
+    if (error instanceof PantavionSupabaseAdminConfigurationError) {
+      return blockedSupabaseConfiguration(revision);
+    }
+
     return json(
       {
         ok: false,
+        status: "unavailable",
         route: "/api/pantavion/intelligence/scheduler-health",
         revision,
         schedule: SCHEDULE,
