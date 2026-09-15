@@ -1,0 +1,102 @@
+{
+  "schema": "pantavion_lane_j_module_taxonomy_delta_v1",
+  "lane": "J",
+  "created_at_utc": "2026-09-15T14:29:00Z",
+  "status": "EVIDENCE_BOUND_DELTA",
+  "rules": {
+    "zero_deletions": true,
+    "zero_vercel_mutations": true,
+    "secret_values_written": false,
+    "private_source_written": false,
+    "ready_or_production_equals_verified_live": false
+  },
+  "source_evidence": [
+    "docs/recovery/PARALLEL_RESCUE_MASTER_COMMAND_20260915.md",
+    "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
+    "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+    "core/kernel-types.ts@main",
+    "commit:aa03d1ee8161b85842e2367d26b28c91fc93c1be"
+  ],
+  "classification_delta": {
+    "other/Voice": {
+      "classification": "EVIDENCE_BOUND_HISTORICAL_AND_REPOSITORY_PRESENT",
+      "evidence": [
+        {
+          "summary": "Historical donor snapshot for pandaconnect1/pantavion-voice was preserved exactly into the canonical recovery tree.",
+          "git_sha": "aa03d1ee8161b85842e2367d26b28c91fc93c1be",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Canonical repository currently contains Pantavion Voice implementation surfaces including device-voice selection, voice runtime supervision and preserved donor voice UI.",
+          "paths": [
+            "core/translation/pantavion-device-voice.ts",
+            "core/runtime/voice-runtime-supervisor.ts",
+            "recovery/donor-repositories/pantavion-voice/app/voice/page.tsx"
+          ],
+          "live_truth": "CODE_PRESENT_NOT_VERIFIED_LIVE"
+        }
+      ]
+    },
+    "other/PantaLearn": {
+      "classification": "EVIDENCE_BOUND_HISTORICAL_AND_REPOSITORY_PRESENT",
+      "evidence": [
+        {
+          "summary": "Recovered deployment provenance includes curriculum/youth policy runtime, verified curriculum source registry and policy-aware minors surfaces.",
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Canonical repository currently contains PantaLearn and Scan-to-Learn surfaces and the kernel module registry explicitly includes PantaLearn.",
+          "paths": [
+            "app/pantalearn/page.tsx",
+            "app/pantalearn/scan-to-learn-client.tsx",
+            "core/kernel-types.ts"
+          ],
+          "live_truth": "CODE_PRESENT_NOT_VERIFIED_LIVE"
+        }
+      ]
+    }
+  },
+  "taxonomy_crosscheck": {
+    "master_lane_j_explicit_modules": [
+      "Social",
+      "People",
+      "Chat",
+      "Interpreter/Translation",
+      "Contacts",
+      "Trust/Verification",
+      "Minors/Safety",
+      "Ads Center",
+      "Business",
+      "Dating",
+      "Events",
+      "Marketplace",
+      "AI/Orchestration",
+      "Memory/Continuity",
+      "Security",
+      "Infrastructure",
+      "other"
+    ],
+    "kernel_module_keys_observed_on_main": [
+      "Kernel",
+      "People",
+      "Chat",
+      "Voice",
+      "Pulse",
+      "Compass",
+      "Mind",
+      "Create",
+      "PantaLearn",
+      "Tools Hub",
+      "Business Layer",
+      "Research Layer",
+      "Ads Center"
+    ],
+    "classification_gap": "Lane J's explicit master list does not separately name Voice, Pulse, Compass, Mind, Create, PantaLearn, Tools Hub or Research Layer even though the canonical kernel registry currently names them. Preserve these under other until the master taxonomy is deliberately expanded; do not drop or silently remap them."
+  },
+  "unresolved": [
+    "Pulse, Compass, Mind, Create, Tools Hub and Research Layer require source-bound recovery evidence before module-level classification.",
+    "Voice and PantaLearn are evidence-bound, but no current end-to-end VERIFIED_LIVE claim is made.",
+    "Business Layer must not be silently equated to Business without provenance-level reconciliation."
+  ]
+}
