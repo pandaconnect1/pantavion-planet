@@ -1,0 +1,44 @@
+{
+  "schema": "pantavion_thread7_global_reconciliation_delta_v1",
+  "observedAtUtc": "2026-09-15T18:14:38.463563Z",
+  "thread": 7,
+  "scope": "GLOBAL_DEDUP_RECONCILIATION_COMPLETENESS_AUDIT",
+  "status": "OPEN_NOT_COMPLETE",
+  "baseAudit": "docs/recovery/live/audit/thread-7-global-reconciliation-20260915T181301Z.json",
+  "newFindings": [
+    {
+      "id": "T7-010",
+      "state": "IN_PROGRESS",
+      "type": "THREAD2_LANEG_CARDINALITY_PROGRESS",
+      "finding": "Durable Thread 2 Lane-G batches now exist for source windows 201-240, 241-280, 281-320, 321-360, and 361-400 with owned counts 19, 22, 20, 19, and 21 respectively. Subtotal=101 owned unique-within-batch records across the first 200 source records. Each file reports duplicateStableKeysWithinOutput=0. This does not yet prove absence of duplicates across batches or against prior canonical evidence."
+    },
+    {
+      "id": "T7-011",
+      "state": "MISSING_RANGE_CURRENTLY_EXPLICIT",
+      "type": "THREAD2_LANEG_RANGE_GAP",
+      "finding": "At this observation point there is no Thread 2 canonical artifact for Lane-G source range 401-440 at the expected sequential batch path, and therefore ranges 401-600 are not yet evidenced as processed by Thread 2. Do not declare the Lane-G 201-600 cross-shard union complete."
+    },
+    {
+      "id": "T7-012",
+      "state": "REVIEW_REQUIRED",
+      "type": "CANONICAL_TIMESTAMP_SEMANTICS",
+      "finding": "Thread 2 canonicalizedAt values are not reliable as observed execution timestamps without clarification. Example: the 321-360 artifact declares canonicalizedAt=2026-09-15T18:18:00Z while its Git commit was created at 2026-09-15T18:13:07Z; the 361-400 artifact declares canonicalizedAt=2026-09-15T18:20:00Z while its Git commit was created at 2026-09-15T18:13:57Z. Treat Git object/commit time as durability evidence and canonicalizedAt as semantically unverified until the owner defines its meaning or corrects clock/timestamp generation."
+    },
+    {
+      "id": "T7-013",
+      "state": "BLOCKING_RUNTIME_PROGRESS_OWNER_THREAD9",
+      "type": "SUPABASE_STALL_RECONFIRMED",
+      "finding": "At 2026-09-15T18:14:38.463563Z recovery partitions remain planned=165, running=0, succeeded=0, failed=0, leased=0, max_attempt=0, latest_heartbeat=null. No durable worker execution progress is yet evidenced."
+    }
+  ],
+  "currentGuards": {
+    "thread2LaneGOwnedSubtotal201To400": 101,
+    "thread3LaneGOwnedTotal201To600": 199,
+    "thread2ExpectedFinalOwnedTotal201To600": 201,
+    "thread2RemainingExpectedOwnedCardinalityIfNoSourceOrContractChange": 100,
+    "laneGWholeRangeCanonicalComplete": false,
+    "globalCanonicalCount": "DO_NOT_RECOMPUTE_YET",
+    "timestampExecutionTruth": "USE_DURABLE_GIT_SUPABASE_EVIDENCE_NOT_UNVERIFIED_CANONICALIZEDAT"
+  },
+  "completionTruth": "OPEN_NOT_COMPLETE"
+}
