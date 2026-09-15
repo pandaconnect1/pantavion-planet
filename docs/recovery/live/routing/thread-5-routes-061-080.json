@@ -1,0 +1,712 @@
+{
+  "schema": "pantavion_module_graph_routes_v2",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
+  "thread": 5,
+  "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
+  "routingContract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
+  "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-061-080.json",
+  "sourceClassificationSchema": "pantavion_semantic_classification_v1_compact",
+  "sourceClassificationSha256": "87b94dc3d4fd5f1f8e04553c5ea148501a464d897290f410f8427ca871844236",
+  "explicitSourceCanonicalLedger": null,
+  "explicitSourceCanonicalLedgerSha256": null,
+  "sourceRecordCount": 20,
+  "summary": {
+    "routedRecords": 0,
+    "reviewRequired": 0,
+    "waitingCanonical": 20,
+    "waitingClassification": 0,
+    "canonicalConflicts": 0,
+    "graphEdgeCount": 0,
+    "semanticMirrorsSuppressed": 0,
+    "implementationCandidates": 0,
+    "duplicateStableRecordKeys": 0,
+    "duplicateRouteIds": 0
+  },
+  "truthBoundary": "Only routeState=ROUTED has durable module/graph edges. WAITING_* and REVIEW_REQUIRED are not completion; DEPLOYED is not VERIFIED_LIVE.",
+  "bindings": [
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8ina1yFNLSDBJhCGU4kpRkAoVB4D",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[0]",
+      "classificationConfidence": 0.98,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_8ina1yFNLSDBJhCGU4kpRkAoVB4D",
+        "gitSha": "19369bd49cdffe58b3dc90843fe023beed1a7b99",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Social Network",
+        "section": "Social Core",
+        "contentType": "deployment_provenance",
+        "module": "Social",
+        "subsystem": "Domain Contracts",
+        "capability": "Social Core contracts",
+        "feature": "Port contracts to current main",
+        "canonicalTarget": [
+          "social/contracts"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_F4mC2YU35xPG6oXCpeEZ857XwkP4",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[1]",
+      "classificationConfidence": 0.96,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_F4mC2YU35xPG6oXCpeEZ857XwkP4",
+        "gitSha": "2dd17698d25ae22e6c1f9750f68ade07c1935997",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Reliability",
+        "section": "Build Tooling",
+        "contentType": "deployment_provenance",
+        "module": "Infrastructure",
+        "subsystem": "Frontend Build Compatibility",
+        "capability": "React/TypeScript dependency compatibility",
+        "feature": "React DOM declarations and lockfile-compatible types",
+        "canonicalTarget": [
+          "infrastructure/frontend-build"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FwtHobeoJNEhtUmCBrKhqp6YmNbs",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[2]",
+      "classificationConfidence": 0.97,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_FwtHobeoJNEhtUmCBrKhqp6YmNbs",
+        "gitSha": "216fdd36e4c8aee75feedc32c7bd7a236c2dc5d0",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Reliability",
+        "section": "Build Tooling",
+        "contentType": "deployment_provenance",
+        "module": "Infrastructure",
+        "subsystem": "Frontend Build Compatibility",
+        "capability": "React/TypeScript dependency compatibility",
+        "feature": "React DOM declarations and lockfile-compatible types",
+        "canonicalTarget": [
+          "infrastructure/frontend-build"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_A7bZBNGy2fYDVQTzxrXZ41JyCGZU",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[3]",
+      "classificationConfidence": 0.98,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_A7bZBNGy2fYDVQTzxrXZ41JyCGZU",
+        "gitSha": "e1e8adada49dbcea316e41403ea59db82bbc5997",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Reliability",
+        "section": "Build Tooling",
+        "contentType": "deployment_provenance",
+        "module": "Infrastructure",
+        "subsystem": "Frontend Build Compatibility",
+        "capability": "React/TypeScript dependency compatibility",
+        "feature": "React DOM declarations and lockfile-compatible types",
+        "canonicalTarget": [
+          "infrastructure/frontend-build"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4FCVQPWjHjwG7kCdXGeZhUbuERiQ",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[4]",
+      "classificationConfidence": 0.98,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_4FCVQPWjHjwG7kCdXGeZhUbuERiQ",
+        "gitSha": "8dccdf599325ca76da6ee8491abd3b644d836bc2",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Agent Runtime",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Agent Registry & Router",
+        "capability": "Executable agent routing",
+        "feature": "Agent registry/router and safe status endpoint",
+        "canonicalTarget": [
+          "ai-orchestration/agent-runtime"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DHeoA7rEYybYd6a68aoWzHBXwKwm",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[5]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_DHeoA7rEYybYd6a68aoWzHBXwKwm",
+        "gitSha": "7322dfdd35f5ea92c7016ebbdadb2ada504fc736",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Agent Runtime",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Agent Registry & Router",
+        "capability": "Executable agent routing",
+        "feature": "Agent registry/router and safe status endpoint",
+        "canonicalTarget": [
+          "ai-orchestration/agent-runtime"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Cr2Zn15DCLR8WTQpRzHjjCpxijNq",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[6]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_Cr2Zn15DCLR8WTQpRzHjjCpxijNq",
+        "gitSha": "db6e1ab2a961fb4c4fe2aabd3cc30c96c2f79562",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Trust & Observability",
+        "section": "Runtime Health",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Health & Incidents",
+        "capability": "Runtime degradation detection",
+        "feature": "Degraded runtime incident reporting",
+        "canonicalTarget": [
+          "shared-core/observability/health"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BoGKsUP9x2jW4aAA8G4rifEtY3iA",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[7]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_BoGKsUP9x2jW4aAA8G4rifEtY3iA",
+        "gitSha": "1b8b9e567d82586cd37db9f6cf2c4df3df62cae5",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Trust & Observability",
+        "section": "Incidents",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Incident Management",
+        "capability": "Redacted incident creation and alerts",
+        "feature": "Provider-independent incident model",
+        "canonicalTarget": [
+          "shared-core/observability/incidents"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FHGeM9ncJ2hixAkpFThZUGshqRko",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[8]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_FHGeM9ncJ2hixAkpFThZUGshqRko",
+        "gitSha": "db57779e046cb70f397e4f5679bb2a6e55f6bd2c",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Trust & Observability",
+        "section": "Incidents",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Incident Management",
+        "capability": "Redacted incident creation and alerts",
+        "feature": "Provider-independent incident model",
+        "canonicalTarget": [
+          "shared-core/observability/incidents"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GSbRgBtAAvAaLNaCnkqJG42rpuvs",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[9]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_GSbRgBtAAvAaLNaCnkqJG42rpuvs",
+        "gitSha": "71548bd0e52023677a6d0bba240d03447b390399",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Engineering Evidence",
+        "section": "Foundation Sprint",
+        "contentType": "engineering_documentation_provenance",
+        "module": "Shared Core",
+        "subsystem": "Engineering Audit",
+        "capability": "Foundation sprint evidence",
+        "feature": "Initial foundation sprint audit",
+        "canonicalTarget": [
+          "engineering-evidence/foundation-sprint"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": false
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FTbGmHzwBg6mido4HeY82j23tGQV",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[10]",
+      "classificationConfidence": 0.94,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_FTbGmHzwBg6mido4HeY82j23tGQV",
+        "gitSha": "453c0c640c1d8f1ec2c0d494aabb72d44cf707af",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Life Navigation",
+        "section": "Personalized Navigation",
+        "contentType": "deployment_provenance",
+        "module": "Compass",
+        "subsystem": "Personalized Navigation",
+        "capability": "Multidimensional navigation",
+        "feature": "Personalized navigation foundation",
+        "canonicalTarget": [
+          "compass/personalized-navigation"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HjzcEsc1J9AKuAbxMt8hUPG7D8sV",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[11]",
+      "classificationConfidence": 0.88,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_HjzcEsc1J9AKuAbxMt8hUPG7D8sV",
+        "gitSha": "9d1dd2c789b389c9515d77a63b56305a2cc51988",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Governance & Resilience",
+        "section": "Global Principles",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Global Policy Foundations",
+        "capability": "Emergency/language/security/subscription principles",
+        "feature": "Expanded global principles",
+        "canonicalTarget": [
+          "shared-core/global-principles"
+        ],
+        "relatedModules": [
+          "SOS",
+          "Interpreter/Travel",
+          "Security"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FSA7XQGaBnHEBSYXKustChkQTzu8",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[12]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_FSA7XQGaBnHEBSYXKustChkQTzu8",
+        "gitSha": "79792a4dbc560307d763542f1dbaa37b0d18113d",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Engineering Evidence",
+        "section": "Continuity",
+        "contentType": "engineering_documentation_provenance",
+        "module": "Shared Core",
+        "subsystem": "Live Continuity",
+        "capability": "Continuity baseline documentation",
+        "feature": "Live continuity foundation",
+        "canonicalTarget": [
+          "engineering-evidence/continuity"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": false
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HFRvbiqdVg4vnMJcx5G5E5PpSekE",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[13]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_HFRvbiqdVg4vnMJcx5G5E5PpSekE",
+        "gitSha": "2dad175a41c75b03b6f2b045145ec639a7611f63",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Identity & Access",
+        "section": "Authenticated Experience",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Identity/Auth",
+        "capability": "Authenticated dashboard session",
+        "feature": "Connect dashboard to Supabase user",
+        "canonicalTarget": [
+          "shared-core/auth/dashboard"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DdTPk1ka2uJG2roKfZUQZ55WH5bb",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[14]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_DdTPk1ka2uJG2roKfZUQZ55WH5bb",
+        "gitSha": "baec3952c403545a5bd8c8a5ce576de5561ffc80",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Identity & Access",
+        "section": "Session Management",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Identity/Auth",
+        "capability": "Session termination",
+        "feature": "Dashboard sign-out action",
+        "canonicalTarget": [
+          "shared-core/auth/session"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_43fUz989VbqCvQapE9Kkkc9xTBoS",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[15]",
+      "classificationConfidence": 0.98,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_43fUz989VbqCvQapE9Kkkc9xTBoS",
+        "gitSha": "cbb3fa886b0c3a5064396b73a8aedb4f0acf916c",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Identity & Access",
+        "section": "Session Protection",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Identity/Auth",
+        "capability": "Supabase session middleware",
+        "feature": "Protected session middleware",
+        "canonicalTarget": [
+          "shared-core/auth/middleware"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5PBdWPgZdtAd2nkneX2LLWXi9B38",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[16]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_5PBdWPgZdtAd2nkneX2LLWXi9B38",
+        "gitSha": "b32f93d00eeb0b9fa14d05fce151ef01cca56133",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "People & Identity",
+        "section": "Profile",
+        "contentType": "deployment_provenance",
+        "module": "People",
+        "subsystem": "User Profile",
+        "capability": "Protected profile experience",
+        "feature": "Profile page/editor",
+        "canonicalTarget": [
+          "people/profile"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CMtTVhEKwBfPUVNvJ2ibZXwWnWXJ",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[17]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_CMtTVhEKwBfPUVNvJ2ibZXwWnWXJ",
+        "gitSha": "e07d863ccf661ac9367a8d3bee2504b1dcf9ed2e",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "People & Identity",
+        "section": "Profile",
+        "contentType": "deployment_provenance",
+        "module": "People",
+        "subsystem": "User Profile",
+        "capability": "Protected profile experience",
+        "feature": "Profile page/editor",
+        "canonicalTarget": [
+          "people/profile"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3Efep6nVRhtFC8TkJBLVZBZr6Eqc",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[18]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_3Efep6nVRhtFC8TkJBLVZBZr6Eqc",
+        "gitSha": "35a02b240dcd4e0a20e089838d65688cf02941ac",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "People & Identity",
+        "section": "Profile Data",
+        "contentType": "deployment_provenance",
+        "module": "People",
+        "subsystem": "Profile Persistence",
+        "capability": "Profile schema and row security",
+        "feature": "Profiles schema, RLS and user trigger",
+        "canonicalTarget": [
+          "people/profile/data"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3dU51hRvybwoMJhtj6vESvgEdYjg",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-061-080.json#records[19]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_3dU51hRvybwoMJhtj6vESvgEdYjg",
+        "gitSha": "71a7cf78382e9d5f7fed88789fb281ccb679c41d",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Identity & Access",
+        "section": "Session Protection",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Identity/Auth",
+        "capability": "Supabase session middleware",
+        "feature": "Protected session middleware",
+        "canonicalTarget": [
+          "shared-core/auth/middleware"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    }
+  ]
+}

@@ -1,0 +1,726 @@
+{
+  "schema": "pantavion_module_graph_routes_v2",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
+  "thread": 5,
+  "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
+  "routingContract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
+  "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-041-060.json",
+  "sourceClassificationSchema": "pantavion_semantic_classification_v1_compact",
+  "sourceClassificationSha256": "1d62163ef82c4df71854dd4c20b423643e0e2614444384c7e5310b5db5b261c7",
+  "explicitSourceCanonicalLedger": null,
+  "explicitSourceCanonicalLedgerSha256": null,
+  "sourceRecordCount": 20,
+  "summary": {
+    "routedRecords": 0,
+    "reviewRequired": 0,
+    "waitingCanonical": 20,
+    "waitingClassification": 0,
+    "canonicalConflicts": 0,
+    "graphEdgeCount": 0,
+    "semanticMirrorsSuppressed": 0,
+    "implementationCandidates": 0,
+    "duplicateStableRecordKeys": 0,
+    "duplicateRouteIds": 0
+  },
+  "truthBoundary": "Only routeState=ROUTED has durable module/graph edges. WAITING_* and REVIEW_REQUIRED are not completion; DEPLOYED is not VERIFIED_LIVE.",
+  "bindings": [
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FCfoWcZvQDqp2os5TY5XjigYzhEn",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[0]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_FCfoWcZvQDqp2os5TY5XjigYzhEn",
+        "gitSha": "fccdcfbe1b89be57422c6e07907a30e40093596d",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Social Network",
+        "section": "Communities",
+        "contentType": "deployment_provenance",
+        "module": "Social",
+        "subsystem": "Communities",
+        "capability": "Community experience",
+        "feature": "Real communities interface",
+        "canonicalTarget": [
+          "social/communities"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3YfLc92LUWuBzvrSbowkFeYR686N",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[1]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_3YfLc92LUWuBzvrSbowkFeYR686N",
+        "gitSha": "b34cf25c019d6a7a8419c2ee263fa35361710293",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Social Network",
+        "section": "Communities",
+        "contentType": "deployment_provenance",
+        "module": "Social",
+        "subsystem": "Communities",
+        "capability": "Community mutations",
+        "feature": "Community server actions",
+        "canonicalTarget": [
+          "social/communities/actions"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5Z4EQym5GEpgwtsZ7C5fi1xDr2pD",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[2]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_5Z4EQym5GEpgwtsZ7C5fi1xDr2pD",
+        "gitSha": "26c25cf26e4a838525562ad1fc4dd8a23ae41fe8",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Communication",
+        "section": "Chat",
+        "contentType": "deployment_provenance",
+        "module": "Chat",
+        "subsystem": "Messaging",
+        "capability": "Supabase-backed chat experience",
+        "feature": "Chat interface",
+        "canonicalTarget": [
+          "chat/messaging"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3HtXAAyNBNR5AP34eRuzgT4Xgd26",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[3]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_3HtXAAyNBNR5AP34eRuzgT4Xgd26",
+        "gitSha": "24d59a5aaaadcc1afa8feca7e420b1a300a0982f",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Communication",
+        "section": "Chat",
+        "contentType": "deployment_provenance",
+        "module": "Chat",
+        "subsystem": "Messaging",
+        "capability": "Server-side messaging actions",
+        "feature": "Real chat server actions",
+        "canonicalTarget": [
+          "chat/messaging/actions"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7SUSvTJe1vWXLrhgGrohyNK2b96q",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[4]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_7SUSvTJe1vWXLrhgGrohyNK2b96q",
+        "gitSha": "674fce01e8d4214a662ca46f68982973329166a4",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Communication & Social",
+        "section": "Data Layer",
+        "contentType": "deployment_provenance",
+        "module": "MULTI_MODULE",
+        "subsystem": "Chat and Communities Data",
+        "capability": "Supabase schema and RLS",
+        "feature": "Chat/community persistence and row security",
+        "canonicalTarget": [
+          "shared-core/social-communication-data"
+        ],
+        "relatedModules": [
+          "Chat",
+          "Social"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BrSCg77XMyaWk8agVh1nQEJgpCoj",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[5]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_BrSCg77XMyaWk8agVh1nQEJgpCoj",
+        "gitSha": "c8e4883fe9fada8f6aa493e116ecaef9dbc11dda",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Social Network",
+        "section": "Feed",
+        "contentType": "deployment_provenance",
+        "module": "Social",
+        "subsystem": "Global Feed",
+        "capability": "Supabase-backed social feed",
+        "feature": "Global feed experience/actions",
+        "canonicalTarget": [
+          "social/feed"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Hk4GWjodFKiqs5VMt16WLqY5hZBA",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[6]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_Hk4GWjodFKiqs5VMt16WLqY5hZBA",
+        "gitSha": "448d7de4ca4ef3b0914d4037c976117221b4c85e",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Social Network",
+        "section": "Feed",
+        "contentType": "deployment_provenance",
+        "module": "Social",
+        "subsystem": "Global Feed",
+        "capability": "Supabase-backed social feed",
+        "feature": "Global feed experience/actions",
+        "canonicalTarget": [
+          "social/feed"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DzxXyUZADvGkq8JwqNk5VVPrfSgY",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[7]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_DzxXyUZADvGkq8JwqNk5VVPrfSgY",
+        "gitSha": "20d054973058073cac65d1310e0aaa367ad73b3c",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Social Network",
+        "section": "Data Layer",
+        "contentType": "deployment_provenance",
+        "module": "Social",
+        "subsystem": "Social Core Data",
+        "capability": "Supabase schema and RLS",
+        "feature": "Social Core persistence and row security",
+        "canonicalTarget": [
+          "social/data"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5WyD91PYcLXHzZA9DkjCUf3rw6tN",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[8]",
+      "classificationConfidence": 0.98,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_5WyD91PYcLXHzZA9DkjCUf3rw6tN",
+        "gitSha": "17eefddec4b1b2d7bf455cbb6debaf655e58018b",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "AI Orchestration",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Context Handoff",
+        "capability": "Specialist-module context transfer",
+        "feature": "Context handoff engine",
+        "canonicalTarget": [
+          "ai-orchestration/context-handoff"
+        ],
+        "relatedModules": [
+          "Memory/Continuity"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_ABrxKZnEuhnhRncrQvyHxaFDXzCZ",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[9]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_ABrxKZnEuhnhRncrQvyHxaFDXzCZ",
+        "gitSha": "dbedb1da52562e4786ea6df9fe5739fb3e9cf476",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "AI Orchestration",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Context Handoff",
+        "capability": "Specialist-module context transfer",
+        "feature": "Context handoff engine",
+        "canonicalTarget": [
+          "ai-orchestration/context-handoff"
+        ],
+        "relatedModules": [
+          "Memory/Continuity"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HmuVEBohPddrDPEB6sT3T6BfXf5c",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[10]",
+      "classificationConfidence": 0.98,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_HmuVEBohPddrDPEB6sT3T6BfXf5c",
+        "gitSha": "87f5f1ea854d22b0d091e12efcba3d7e059a201c",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Language & Culture",
+        "section": "Cultural Bridge",
+        "contentType": "deployment_provenance",
+        "module": "Interpreter/Travel",
+        "subsystem": "Cross-Culture Social Bridge",
+        "capability": "Intercultural assistance",
+        "feature": "Interactive/adaptive culture bridge",
+        "canonicalTarget": [
+          "interpreter-travel/cultural-bridge"
+        ],
+        "relatedModules": [
+          "Social"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_72YFdGnccxS27jxgYdgxvg2drVLM",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[11]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_72YFdGnccxS27jxgYdgxvg2drVLM",
+        "gitSha": "579a52e7e0c6d20095f82c82c5e2aa0bce61cf4d",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Language & Culture",
+        "section": "Cultural Bridge",
+        "contentType": "deployment_provenance",
+        "module": "Interpreter/Travel",
+        "subsystem": "Cross-Culture Social Bridge",
+        "capability": "Intercultural assistance",
+        "feature": "Interactive/adaptive culture bridge",
+        "canonicalTarget": [
+          "interpreter-travel/cultural-bridge"
+        ],
+        "relatedModules": [
+          "Social"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2h7NjVL3qENy1QoQhw8KqFMQ1S3c",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[12]",
+      "classificationConfidence": 0.97,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_2h7NjVL3qENy1QoQhw8KqFMQ1S3c",
+        "gitSha": "d7171fb08e7a76f0f37486d060322a41c47c85f6",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Language & Culture",
+        "section": "Cultural Bridge",
+        "contentType": "deployment_provenance",
+        "module": "Interpreter/Travel",
+        "subsystem": "Cross-Culture Social Bridge",
+        "capability": "Intercultural assistance",
+        "feature": "Interactive/adaptive culture bridge",
+        "canonicalTarget": [
+          "interpreter-travel/cultural-bridge"
+        ],
+        "relatedModules": [
+          "Social"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4vKWuK3K8UEpJaUUQ4LTzpTvPpNW",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[13]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_4vKWuK3K8UEpJaUUQ4LTzpTvPpNW",
+        "gitSha": "7e60d2d36bef80c82e6668563a6c9a00380f91c1",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Language & Culture",
+        "section": "Cultural Bridge",
+        "contentType": "deployment_provenance",
+        "module": "Interpreter/Travel",
+        "subsystem": "Cross-Culture Social Bridge",
+        "capability": "Intercultural assistance",
+        "feature": "Interactive/adaptive culture bridge",
+        "canonicalTarget": [
+          "interpreter-travel/cultural-bridge"
+        ],
+        "relatedModules": [
+          "Social"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8nWJC1wFpkJdbrL3QFeBxgf9js15",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[14]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_8nWJC1wFpkJdbrL3QFeBxgf9js15",
+        "gitSha": "0e7b245d61ebcfd44ed4f893f5699c9c4a4e4895",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Social Network",
+        "section": "Social World",
+        "contentType": "deployment_provenance",
+        "module": "Social",
+        "subsystem": "Authenticated Navigation",
+        "capability": "Dashboard-to-Social discovery",
+        "feature": "Connect Social World from dashboard",
+        "canonicalTarget": [
+          "social/navigation"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7PP1qv2uoFCMU8gcYaGCdvvGmwxP",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[15]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_7PP1qv2uoFCMU8gcYaGCdvvGmwxP",
+        "gitSha": "887033fdc59ddf1c4cfef7aa84c674e89906d133",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Social Network",
+        "section": "Social World",
+        "contentType": "deployment_provenance",
+        "module": "Social",
+        "subsystem": "Social Experience",
+        "capability": "Age-inclusive global UX",
+        "feature": "Bright global Social Core design",
+        "canonicalTarget": [
+          "social/experience"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4RYuMVzohhYHVysDLPPyCBRwECA3",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[16]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_4RYuMVzohhYHVysDLPPyCBRwECA3",
+        "gitSha": "8e8e7086589262bc4d75fd8a9d6ebcd74cb4d97d",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Social Network",
+        "section": "Social Core",
+        "contentType": "deployment_provenance",
+        "module": "Social",
+        "subsystem": "Unified Runtime",
+        "capability": "Unified Social Core runtime",
+        "feature": "Live global surface/runtime exposure",
+        "canonicalTarget": [
+          "social/runtime"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8LKKv23kJUUTKcWbiC8Nkqa8jp4f",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[17]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_8LKKv23kJUUTKcWbiC8Nkqa8jp4f",
+        "gitSha": "9c22eee4b9a3aec29fab382ecbf6327c8e14fbef",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Social Network",
+        "section": "Social Core",
+        "contentType": "deployment_provenance",
+        "module": "Social",
+        "subsystem": "Unified Runtime",
+        "capability": "Unified Social Core runtime",
+        "feature": "Live global surface/runtime exposure",
+        "canonicalTarget": [
+          "social/runtime"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Hc3NEH5aRUrGZub85ePbjp8SCMic",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[18]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_Hc3NEH5aRUrGZub85ePbjp8SCMic",
+        "gitSha": "6a4c1a95c390ce1049dbbd90028197342541acd7",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Safety & Governance",
+        "section": "Social Safety",
+        "contentType": "deployment_provenance",
+        "module": "Social",
+        "subsystem": "Policy and Age Safety",
+        "capability": "Age-aware social policy",
+        "feature": "Policy and age safety engine",
+        "canonicalTarget": [
+          "social/safety"
+        ],
+        "relatedModules": [
+          "Trust/Verification",
+          "Minors/Safety"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7WzL86fh4DTm8g1uGXCc51bNHngr",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-041-060.json#records[19]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_7WzL86fh4DTm8g1uGXCc51bNHngr",
+        "gitSha": "a63c4703c1ddeffc47a35cdd18c6e1bf3ec020b6",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
+        "sourceBlobSha": "ef572d923d3992ac0abae4aa924862bf3949c47a",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Core",
+        "section": "Module Registry",
+        "contentType": "deployment_provenance",
+        "module": "Social",
+        "subsystem": "Module Registration",
+        "capability": "Social Core registry",
+        "feature": "Port Social Core module registry",
+        "canonicalTarget": [
+          "social/module-registry"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    }
+  ]
+}

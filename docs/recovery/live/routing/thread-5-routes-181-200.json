@@ -1,0 +1,714 @@
+{
+  "schema": "pantavion_module_graph_routes_v2",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
+  "thread": 5,
+  "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
+  "routingContract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
+  "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-181-200.json",
+  "sourceClassificationSchema": "pantavion_semantic_classification_v1_compact",
+  "sourceClassificationSha256": "12cd03e3bce74e7bd2a94fc24bd4f407fc72fb7aabbe2778b75d2a75e23364ab",
+  "explicitSourceCanonicalLedger": null,
+  "explicitSourceCanonicalLedgerSha256": null,
+  "sourceRecordCount": 20,
+  "summary": {
+    "routedRecords": 0,
+    "reviewRequired": 0,
+    "waitingCanonical": 20,
+    "waitingClassification": 0,
+    "canonicalConflicts": 0,
+    "graphEdgeCount": 0,
+    "semanticMirrorsSuppressed": 0,
+    "implementationCandidates": 0,
+    "duplicateStableRecordKeys": 0,
+    "duplicateRouteIds": 0
+  },
+  "truthBoundary": "Only routeState=ROUTED has durable module/graph edges. WAITING_* and REVIEW_REQUIRED are not completion; DEPLOYED is not VERIFIED_LIVE.",
+  "bindings": [
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_EitaF72DZrjL7mXwa3dB7XSnKwo6",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[0]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_EitaF72DZrjL7mXwa3dB7XSnKwo6",
+        "gitSha": "afc5ca220d52200410b7c2f42c88feb817156b47",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Creation & Execution",
+        "section": "Conversion Engine",
+        "contentType": "deployment_provenance",
+        "module": "App/Service Engine (Blueprints)",
+        "subsystem": "Professional Conversion",
+        "capability": "Professional format conversion",
+        "feature": "Pantavion conversion engine",
+        "canonicalTarget": [
+          "app-service-engine/conversion"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DWRLNsHNSD3qJRVL3FZGxbgJBeTi",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[1]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_DWRLNsHNSD3qJRVL3FZGxbgJBeTi",
+        "gitSha": "cc2bba6a644bc8e9391a00c71edb27574ca11846",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Data & Artifacts",
+        "section": "Universal Intake",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Omnimodal Intake",
+        "capability": "Universal multimodal/artifact intake",
+        "feature": "Pantavion universal omnimodal intake",
+        "canonicalTarget": [
+          "shared-core/omnimodal-intake"
+        ],
+        "relatedModules": [
+          "AI/Orchestration"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_67azS8Ww1V6Y2hNjZketd2pHzDfm",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[2]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_67azS8Ww1V6Y2hNjZketd2pHzDfm",
+        "gitSha": "bb1fbb172415df1f2c96ee1db56183b0ea5098a0",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Kernel Intake",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Signal Intake",
+        "capability": "User signal ingestion",
+        "feature": "Pantavion user signal intake",
+        "canonicalTarget": [
+          "ai-orchestration/signal-intake"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Bh3eTo3oaXNyBxt8PWN9ggxZAw2d",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[3]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_Bh3eTo3oaXNyBxt8PWN9ggxZAw2d",
+        "gitSha": "bd8140691b291516c516f6a57f59382d4a7c48cd",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Intelligence",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Ecosystem Analysis",
+        "capability": "Gap discovery",
+        "feature": "Pantavion ecosystem gap finder",
+        "canonicalTarget": [
+          "ai-orchestration/gap-finder"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_26SRUapAAdVvDmEZTYkbHKip4LHo",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[4]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_26SRUapAAdVvDmEZTYkbHKip4LHo",
+        "gitSha": "3af6473b1b48888d53a7a2708f56676309295cb1",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Founder Commands",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Code Generation",
+        "capability": "Founder-directed code writing",
+        "feature": "Founder command code-writer agent",
+        "canonicalTarget": [
+          "ai-orchestration/founder-code-writer"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_zd4qzh6GEMv3jRMhxSEfAQgfRtpJ",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[5]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_zd4qzh6GEMv3jRMhxSEfAQgfRtpJ",
+        "gitSha": "6917984bfb37684089cfcc9cbb3567ae4cc98d37",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Governance & Control",
+        "section": "Founder Commands",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Founder Command Inbox",
+        "capability": "Founder directive intake",
+        "feature": "Founder Command Inbox",
+        "canonicalTarget": [
+          "ai-orchestration/founder-inbox"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_27GT4bWEHDLNn71Dn147i6aVjXad",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[6]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_27GT4bWEHDLNn71Dn147i6aVjXad",
+        "gitSha": "76e08e04b187a0ff3dcc343d54106eb09599d663",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Software Evolution",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Evolution/PR Bridge",
+        "capability": "PR drafting and command bridging",
+        "feature": "Evolution PR writer",
+        "canonicalTarget": [
+          "ai-orchestration/evolution-pr"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HGL677cQTJtv5v1hNd829vgP2Gb5",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[7]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_HGL677cQTJtv5v1hNd829vgP2Gb5",
+        "gitSha": "0cc01a4bd788c35098bf42f44e0b670fb7eb3f2e",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Kernel Runtime",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Live Kernel Runtime",
+        "capability": "Kernel execution foundation",
+        "feature": "Live Pantavion kernel runtime foundation",
+        "canonicalTarget": [
+          "ai-orchestration/kernel-runtime"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8gCHJHdPepEJw9TZrTLixArF2ptY",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[8]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_8gCHJHdPepEJw9TZrTLixArF2ptY",
+        "gitSha": "03ae20725edaaedfaeb16242511b7dfa0d892127",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Infrastructure & City Intelligence",
+        "section": "Water Maps",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "B Map Delivery",
+        "capability": "Protected PDF map access",
+        "feature": "B map PDF viewer/link/delivery gate",
+        "canonicalTarget": [
+          "infrastructure/water-control/b-map"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AVV4DoVYthi795yJCgizbEsz7F4M",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[9]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_AVV4DoVYthi795yJCgizbEsz7F4M",
+        "gitSha": "b64709e090d0cd0ec033e93099cf58e7239c60f2",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Infrastructure & City Intelligence",
+        "section": "Water Maps",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "B Map Delivery",
+        "capability": "Protected PDF map access",
+        "feature": "B map PDF viewer/link/delivery gate",
+        "canonicalTarget": [
+          "infrastructure/water-control/b-map"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DQZEhKPDpBjVCW7UKzUVgf6cFb6d",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[10]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_DQZEhKPDpBjVCW7UKzUVgf6cFb6d",
+        "gitSha": "e9fbc2f4f997b3b38bbf3997a8382f442b6af4de",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Infrastructure & City Intelligence",
+        "section": "Water Maps",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "B Map Delivery",
+        "capability": "Protected PDF map access",
+        "feature": "B map PDF viewer/link/delivery gate",
+        "canonicalTarget": [
+          "infrastructure/water-control/b-map"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_7QDSRSfGp8vCPuaKpnuBgriuW4HF",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[11]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_7QDSRSfGp8vCPuaKpnuBgriuW4HF",
+        "gitSha": "1df930183fbb67c740ef1cb501056bded68b881c",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Language & Culture",
+        "section": "Global Language Layer",
+        "contentType": "deployment_provenance",
+        "module": "Interpreter/Translation",
+        "subsystem": "Language Selector",
+        "capability": "Translation UI synchronization",
+        "feature": "Sync global language selector with Translate UI",
+        "canonicalTarget": [
+          "interpreter/language-selector"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9WgHDopqfzJVPqEQryhE6EJQimFw",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[12]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_9WgHDopqfzJVPqEQryhE6EJQimFw",
+        "gitSha": "1df930183fbb67c740ef1cb501056bded68b881c",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Language & Culture",
+        "section": "Global Language Layer",
+        "contentType": "deployment_provenance",
+        "module": "Interpreter/Translation",
+        "subsystem": "Language Selector",
+        "capability": "Translation UI synchronization",
+        "feature": "Sync global language selector with Translate UI",
+        "canonicalTarget": [
+          "interpreter/language-selector"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8SJcEnM6LS16zrbCGpawDP4xwDzh",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[13]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_8SJcEnM6LS16zrbCGpawDP4xwDzh",
+        "gitSha": "1df930183fbb67c740ef1cb501056bded68b881c",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Language & Culture",
+        "section": "Global Language Layer",
+        "contentType": "deployment_provenance",
+        "module": "Interpreter/Translation",
+        "subsystem": "Language Selector",
+        "capability": "Translation UI synchronization",
+        "feature": "Sync global language selector with Translate UI",
+        "canonicalTarget": [
+          "interpreter/language-selector"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9PrJUQ6RXZ8oAh5CfojUD7UgniRE",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[14]",
+      "classificationConfidence": 0.98,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_9PrJUQ6RXZ8oAh5CfojUD7UgniRE",
+        "gitSha": "cc4ebf473a05b943554927e7cc2c2843002bd83f",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Language & Culture",
+        "section": "Global Language Layer",
+        "contentType": "deployment_provenance",
+        "module": "Interpreter/Translation",
+        "subsystem": "Language Catalog",
+        "capability": "Sorted selector plus work-order integration",
+        "feature": "World language selector and kernel work orders",
+        "canonicalTarget": [
+          "interpreter/language-selector"
+        ],
+        "relatedModules": [
+          "AI/Orchestration"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DyM1cQDMtz57wEbX5cVb2Y5zCjdU",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[15]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_DyM1cQDMtz57wEbX5cVb2Y5zCjdU",
+        "gitSha": "4862a50854b1f284239b67d4917ae3d01d4f86b3",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Language & Culture",
+        "section": "Global Language Layer",
+        "contentType": "deployment_provenance",
+        "module": "Interpreter/Translation",
+        "subsystem": "Language Catalog",
+        "capability": "Language coverage catalog",
+        "feature": "Expanded world language selector catalog",
+        "canonicalTarget": [
+          "interpreter/language-catalog"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Cg1DEz7j427BcJCgbXYXzmaH9jUt",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[16]",
+      "classificationConfidence": 0.96,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_Cg1DEz7j427BcJCgbXYXzmaH9jUt",
+        "gitSha": "ae60d8a78145e49cc3b2118955625b45a35aa202",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Trust & Experience",
+        "section": "Product Status",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Product Truth & Language Layer",
+        "capability": "Truthful module/language status",
+        "feature": "Clarify module status and language layer",
+        "canonicalTarget": [
+          "shared-core/product-status"
+        ],
+        "relatedModules": [
+          "Interpreter/Translation"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BfAiosbKE3aVLv4StETMufMCwj43",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[17]",
+      "classificationConfidence": 0.93,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_BfAiosbKE3aVLv4StETMufMCwj43",
+        "gitSha": "f4a944a14eaceb4dbbadbd1581955ba303d6910e",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Experience Layer",
+        "section": "Homepage",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Product Discovery",
+        "capability": "Product status exposure",
+        "feature": "Homepage product status/universal life",
+        "canonicalTarget": [
+          "experience/home/product-status"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DJ1Wby6nHrPpyF6Y1fWyGWFgqGd8",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[18]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_DJ1Wby6nHrPpyF6Y1fWyGWFgqGd8",
+        "gitSha": "5df41759be0db5570f21129c086e3fc12577956c",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Work Planning",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Autonomous Draft Workspace",
+        "capability": "Product status and draft work planning",
+        "feature": "Autonomous draft workspace",
+        "canonicalTarget": [
+          "ai-orchestration/draft-workspace"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CCe8TJxFb6vM9VwQYtLQBBAk38aL",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-181-200.json#records[19]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_CCe8TJxFb6vM9VwQYtLQBBAk38aL",
+        "gitSha": "b69d7c66797a17c99c3f3f52b49c47216656c591",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Work Execution",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Work Order Dispatch",
+        "capability": "Autonomous dispatch governance",
+        "feature": "Work-order dispatch gate",
+        "canonicalTarget": [
+          "ai-orchestration/work-order-dispatch"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    }
+  ]
+}

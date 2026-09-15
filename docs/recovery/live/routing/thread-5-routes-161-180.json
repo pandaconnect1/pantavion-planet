@@ -1,0 +1,708 @@
+{
+  "schema": "pantavion_module_graph_routes_v2",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
+  "thread": 5,
+  "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
+  "routingContract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
+  "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-161-180.json",
+  "sourceClassificationSchema": "pantavion_semantic_classification_v1_compact",
+  "sourceClassificationSha256": "aa8fa50d20e9cf602a42b8fc1c2f275f97a3f0251d97c76a4d2ed640a39ffbe1",
+  "explicitSourceCanonicalLedger": null,
+  "explicitSourceCanonicalLedgerSha256": null,
+  "sourceRecordCount": 20,
+  "summary": {
+    "routedRecords": 0,
+    "reviewRequired": 0,
+    "waitingCanonical": 20,
+    "waitingClassification": 0,
+    "canonicalConflicts": 0,
+    "graphEdgeCount": 0,
+    "semanticMirrorsSuppressed": 0,
+    "implementationCandidates": 0,
+    "duplicateStableRecordKeys": 0,
+    "duplicateRouteIds": 0
+  },
+  "truthBoundary": "Only routeState=ROUTED has durable module/graph edges. WAITING_* and REVIEW_REQUIRED are not completion; DEPLOYED is not VERIFIED_LIVE.",
+  "bindings": [
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8UZwkWtmjx9sVuCEWCoqU2XFiUka",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[0]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_8UZwkWtmjx9sVuCEWCoqU2XFiUka",
+        "gitSha": "a96d1ee7d42c0c6e89d79fcbc240962487f8c574",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Security & Conversion",
+        "section": "Conversion Security",
+        "contentType": "deployment_provenance",
+        "module": "Security",
+        "subsystem": "Conversion Engine Security",
+        "capability": "Filesystem boundary protection",
+        "feature": "Conversion path/write hardening",
+        "canonicalTarget": [
+          "security/conversion-engine"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_D9n6TpHQx797FdvbeHYdQDVNuyXd",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[1]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_D9n6TpHQx797FdvbeHYdQDVNuyXd",
+        "gitSha": "6ca07d9b9e2af369dfbcfe69d0f5d009b1057035",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Security & Data",
+        "section": "Omnimodal Intake Security",
+        "contentType": "deployment_provenance",
+        "module": "Security",
+        "subsystem": "Universal Intake Guardrails",
+        "capability": "Sensitive file filtering",
+        "feature": "Bare-dotfile/sensitive intake hardening",
+        "canonicalTarget": [
+          "security/omnimodal-intake"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_ABLCYuqhrN6bLhdMzkFLrViXin66",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[2]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_ABLCYuqhrN6bLhdMzkFLrViXin66",
+        "gitSha": "a1247703c4b8b07eb62a9d43f5e2f8df9bd1d603",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Security",
+        "section": "Kernel Authentication",
+        "contentType": "deployment_provenance",
+        "module": "Security",
+        "subsystem": "Secret Comparison",
+        "capability": "Timing-resistant credential comparison",
+        "feature": "Kernel secret comparison hardening",
+        "canonicalTarget": [
+          "security/kernel-auth"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CcRJhjkj6doAFCzHSB4yzdCRtywL",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[3]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_CcRJhjkj6doAFCzHSB4yzdCRtywL",
+        "gitSha": "cdf60aa2180c06ef8e3135a7768f8282c39fba56",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Execution Infrastructure",
+        "section": "Conversion Workers",
+        "contentType": "deployment_provenance",
+        "module": "App/Service Engine (Blueprints)",
+        "subsystem": "Python Worker Runtime",
+        "capability": "Worker runtime contract",
+        "feature": "Python conversion worker contract",
+        "canonicalTarget": [
+          "app-service-engine/conversion/python-worker"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5HbE2Csd9w2SmFDh5zruEpyggear",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[4]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_5HbE2Csd9w2SmFDh5zruEpyggear",
+        "gitSha": "2b13fdf16342d6c861010bd9421b3081b4d64e1b",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Infrastructure & City Intelligence",
+        "section": "Water Assets",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "Water Asset Registry",
+        "capability": "Asset telemetry",
+        "feature": "SV/FH/PRV/DMA telemetry registry",
+        "canonicalTarget": [
+          "infrastructure/water-control/assets"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_36H6uFLN7Va3dRMegyCJ8DT7PJHW",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[5]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_36H6uFLN7Va3dRMegyCJ8DT7PJHW",
+        "gitSha": "6c024d94097df0ffd3822f5221c2df668bbfa960",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Infrastructure & City Intelligence",
+        "section": "Water Operations",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "Operational Overlay",
+        "capability": "Operational valve/workflow overlay",
+        "feature": "SV operational workflow",
+        "canonicalTarget": [
+          "infrastructure/water-control/operational-overlay"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_J8Cx52YVFfrkU8nzS4JcCQo5P9LV",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[6]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_J8Cx52YVFfrkU8nzS4JcCQo5P9LV",
+        "gitSha": "8e6b3779793bda19f063748aeba54551cc21087b",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Location & Infrastructure",
+        "section": "Device Geo Status",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "Device Geo Status",
+        "capability": "Current-position status",
+        "feature": "Current position viewport",
+        "canonicalTarget": [
+          "infrastructure/device-geo"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2axiXHVK7x6pEZMEFfFraj51MF8D",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[7]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_2axiXHVK7x6pEZMEFfFraj51MF8D",
+        "gitSha": "00bd2803e1671452da81d1498a97d2a9f4274abb",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Infrastructure & City Intelligence",
+        "section": "Water Sources",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "Water Sources Administration",
+        "capability": "Source administration",
+        "feature": "Water sources admin page",
+        "canonicalTarget": [
+          "infrastructure/water-control/sources"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_BakZfYhmaTBfwqprLqtoLcxJTDc3",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[8]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_BakZfYhmaTBfwqprLqtoLcxJTDc3",
+        "gitSha": "a6eaa7cecacdb64a9fa5b8a65b6464f9ceb20c66",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Data & Artifacts",
+        "section": "Universal Intake",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Artifact Intake Registry",
+        "capability": "Upload source registration",
+        "feature": "Universal artifact upload/source registry",
+        "canonicalTarget": [
+          "shared-core/artifact-intake/source-registry"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_2FrsUh3XHMaQ33Xz1bxpBtjGWoDW",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[9]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_2FrsUh3XHMaQ33Xz1bxpBtjGWoDW",
+        "gitSha": "63102e4b0847256ac82b4f4d05aa8a32f8db4c40",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "CAD & Infrastructure",
+        "section": "DWG Integration",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "Licensed DWG Adapter",
+        "capability": "Licensed DWG runtime adapter",
+        "feature": "DWG adapter runtime contract",
+        "canonicalTarget": [
+          "infrastructure/cad-dwg/adapter"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6zj8ekovB1X1tgGzHko6PeX7T5cW",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[10]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_6zj8ekovB1X1tgGzHko6PeX7T5cW",
+        "gitSha": "dd5e8bd8b7c8ed23866154add739927a54a4574d",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "CAD & Infrastructure",
+        "section": "DWG Integration",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "Original DWG Viewer",
+        "capability": "Original-source viewing bridge",
+        "feature": "B/C original DWG viewer bridge",
+        "canonicalTarget": [
+          "infrastructure/cad-dwg/viewer"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5g84ictKDpZEPbshyrtr5eRNYy4b",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[11]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_5g84ictKDpZEPbshyrtr5eRNYy4b",
+        "gitSha": "59f7d446b12ea6953f0d7b164d4e022584c1d818",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "CAD & Infrastructure",
+        "section": "DWG Integration",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "Original DWG Source",
+        "capability": "Source binding",
+        "feature": "Original DWG source binding",
+        "canonicalTarget": [
+          "infrastructure/cad-dwg/source-binding"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Hh99WitMNJ72utmXtGdL1iwGUg9w",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[12]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_Hh99WitMNJ72utmXtGdL1iwGUg9w",
+        "gitSha": "d49ea06837ff8d64ebfdeb9eb8fea82b1c96dd13",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Agent Execution",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Execution Reliability",
+        "capability": "Reliable agent execution",
+        "feature": "Agent execution reliability layer",
+        "canonicalTarget": [
+          "ai-orchestration/execution-reliability"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_H8UUKMTLTdgb4ut3j8bHw1LBc7q9",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[13]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_H8UUKMTLTdgb4ut3j8bHw1LBc7q9",
+        "gitSha": "b271b56a15dfe34c93d96c280af18f9f9ccb6bc1",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Creation & Execution",
+        "section": "Startup Builder",
+        "contentType": "deployment_provenance",
+        "module": "App/Service Engine (Blueprints)",
+        "subsystem": "Startup Builder Stack",
+        "capability": "Builder stack registry",
+        "feature": "Startup builder stack registry",
+        "canonicalTarget": [
+          "app-service-engine/startup-builder"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6GACVasTAx3anUxAjpw5vRXYbo6m",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[14]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_6GACVasTAx3anUxAjpw5vRXYbo6m",
+        "gitSha": "d5a5d9d7fb803ffb5cf4323b671008da38759219",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "AI Safety & Governance",
+        "section": "Repository Automation",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Repo Agent Safety Gate",
+        "capability": "Repository mutation safety",
+        "feature": "Repo-agent runtime safety gate",
+        "canonicalTarget": [
+          "ai-orchestration/repo-agent-safety"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_EPfYAtfNmf73WLr3fNXYXq2hwtS8",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[15]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_EPfYAtfNmf73WLr3fNXYXq2hwtS8",
+        "gitSha": "ed65c223e9d1a2b47a69025a7402147adb56eabb",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Governance & Control",
+        "section": "Founder Approval",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Founder Approval Board",
+        "capability": "Founder-controlled approvals",
+        "feature": "Founder approval board",
+        "canonicalTarget": [
+          "ai-orchestration/founder-approval"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_37FhEnkv6kDzbyRHSUqtZvWLWRrg",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[16]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_37FhEnkv6kDzbyRHSUqtZvWLWRrg",
+        "gitSha": "49ff33a7222f3e2a1eb79b9c29a65c11feb9eeab",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Security & Data",
+        "section": "Sensitive Artifacts",
+        "contentType": "deployment_provenance",
+        "module": "Security",
+        "subsystem": "Sensitive Artifact Vault",
+        "capability": "Protected artifact custody",
+        "feature": "Sensitive artifact vault",
+        "canonicalTarget": [
+          "security/sensitive-artifact-vault"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8wCrAN2P4sKxBPpza44oP37udhfE",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[17]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_8wCrAN2P4sKxBPpza44oP37udhfE",
+        "gitSha": "5b5a9654c207ae9b37061bccef486d8795393728",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "CAD & Infrastructure",
+        "section": "CAD Adapters",
+        "contentType": "deployment_provenance",
+        "module": "Maps/Infrastructure/City Intelligence",
+        "subsystem": "CAD Viewer Adapters",
+        "capability": "Legal CAD/DWG viewer selection",
+        "feature": "CAD/DWG adapter matrix",
+        "canonicalTarget": [
+          "infrastructure/cad-dwg/adapter-matrix"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_E8zJSBxJCPQBKFyzU6CfwMYBVQ4A",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[18]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_E8zJSBxJCPQBKFyzU6CfwMYBVQ4A",
+        "gitSha": "560bf78ec1ee87f705493aa921521339307c4df6",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Creation & Execution",
+        "section": "Conversion Engine",
+        "contentType": "deployment_provenance",
+        "module": "App/Service Engine (Blueprints)",
+        "subsystem": "Format Conversion",
+        "capability": "Conversion format routing",
+        "feature": "Conversion format matrix",
+        "canonicalTarget": [
+          "app-service-engine/conversion/matrix"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5MxqxU27pXTMseqwUEqJgaj9rgwm",
+      "sourceFingerprint": null,
+      "canonicalLedgerPointer": null,
+      "classificationId": null,
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-161-180.json#records[19]",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_5MxqxU27pXTMseqwUEqJgaj9rgwm",
+        "gitSha": "8e7310e598f17df42a30c2171567cc648b12caaf",
+        "sourcePath": "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+        "sourceBlobSha": "bb895e553a0d13adbb9c71925a7d4e50528018b0",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Creation & Execution",
+        "section": "Conversion Engine",
+        "contentType": "deployment_provenance",
+        "module": "App/Service Engine (Blueprints)",
+        "subsystem": "Format Conversion",
+        "capability": "Conversion format routing",
+        "feature": "Conversion format matrix",
+        "canonicalTarget": [
+          "app-service-engine/conversion/matrix"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    }
+  ]
+}

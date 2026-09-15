@@ -1,0 +1,819 @@
+{
+  "schema": "pantavion_module_graph_routes_v2",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
+  "thread": 5,
+  "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
+  "routingContract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
+  "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-601-619.json",
+  "sourceClassificationSchema": "pantavion_semantic_classification_v1",
+  "sourceClassificationSha256": "a58d154604beff73feb9a9ae6136a07aadcd5920cf4399a0f5093fa604e4f546",
+  "explicitSourceCanonicalLedger": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+  "explicitSourceCanonicalLedgerSha256": "74c000c4e51ad89b3193820522525f39798570ee0144b8a2c942351e7dd7165c",
+  "sourceRecordCount": 19,
+  "summary": {
+    "routedRecords": 0,
+    "reviewRequired": 0,
+    "waitingCanonical": 19,
+    "waitingClassification": 0,
+    "canonicalConflicts": 0,
+    "graphEdgeCount": 0,
+    "semanticMirrorsSuppressed": 0,
+    "implementationCandidates": 0,
+    "duplicateStableRecordKeys": 0,
+    "duplicateRouteIds": 0
+  },
+  "truthBoundary": "Only routeState=ROUTED has durable module/graph edges. WAITING_* and REVIEW_REQUIRED are not completion; DEPLOYED is not VERIFIED_LIVE.",
+  "bindings": [
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HEeTimYBMiiyRyRa9oWPyjEmey3t",
+      "sourceFingerprint": "sha256:f0aeef5bc2731ad8fe39c89617409617e2c23025e6805feb8ca5c59919e6c8de",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-f0aeef5bc2731ad8fe39",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-f0aeef5bc2731ad8fe39",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_HEeTimYBMiiyRyRa9oWPyjEmey3t",
+        "createdAtMs": 1776881920982,
+        "deploymentState": "READY",
+        "deploymentTarget": "production",
+        "gitSha": "c67f9aa71ea2769e0eb150a8d9e1e2675accfd2f",
+        "gitMessage": "Fix multimodal channel typing in kernel",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Kernel Orchestration",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Kernel Multimodal Intake",
+        "capability": "Multimodal channel inference",
+        "feature": "Channel set typing and deduplication",
+        "canonicalTarget": [
+          "kernel/kernel.ts"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_CuUS4wpk3gAZmSsA1hpK8wyjBu1s",
+      "sourceFingerprint": "sha256:28ed43e80f665449c63d495711484b2ba75b07c3c399697079734934516e43f8",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-28ed43e80f665449c63d",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-28ed43e80f665449c63d",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_CuUS4wpk3gAZmSsA1hpK8wyjBu1s",
+        "createdAtMs": 1775979739581,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "c67f9aa71ea2769e0eb150a8d9e1e2675accfd2f",
+        "gitMessage": "Fix multimodal channel typing in kernel",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Kernel Orchestration",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Kernel Multimodal Intake",
+        "capability": "Multimodal channel inference",
+        "feature": "Channel set typing and deduplication",
+        "canonicalTarget": [
+          "kernel/kernel.ts"
+        ],
+        "relatedModules": [],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_DXYJrSQftYk5vneRcRwqi1mcw7Sx",
+      "sourceFingerprint": "sha256:d865e830fa8bb98416e65190f60c52eeff72ad8407f54b67ca9941f727edbdf9",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-d865e830fa8bb98416e6",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-d865e830fa8bb98416e6",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_DXYJrSQftYk5vneRcRwqi1mcw7Sx",
+        "createdAtMs": 1775978618292,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "7514e24a9375f75c0fa59c917fc81c879560c189",
+        "gitMessage": "Deepen kernel retrieval and routing flow",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Kernel Orchestration",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Retrieval and Routing",
+        "capability": "Context-aware route selection and memory recall",
+        "feature": "Intent expansion, scoped recall ranking, route-mode decision",
+        "canonicalTarget": [
+          "kernel/kernel.ts"
+        ],
+        "relatedModules": [
+          "Memory/Continuity"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_Fk6HdFGfBz8WVoaGy9ymvEhbTNYh",
+      "sourceFingerprint": "sha256:4ace5d6302a232aed97c28704a672b43a9d33b285d35d429fe54b4aa5567eafe",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-4ace5d6302a232aed97c",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-4ace5d6302a232aed97c",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_Fk6HdFGfBz8WVoaGy9ymvEhbTNYh",
+        "createdAtMs": 1775977108265,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "135428b5dca1fb004319fbd314e25ab29fb16165",
+        "gitMessage": "Add memory-aware kernel orchestration flow",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Artificial Intelligence",
+        "section": "Kernel Orchestration",
+        "contentType": "deployment_provenance",
+        "module": "AI/Orchestration",
+        "subsystem": "Memory-Aware Orchestration",
+        "capability": "Memory-aware capability orchestration",
+        "feature": "Orchestration brief combining capability directives and recalled memories",
+        "canonicalTarget": [
+          "kernel/kernel.ts"
+        ],
+        "relatedModules": [
+          "Memory/Continuity"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_AMyo3UKZLd9Hb4P6rNuYKM58uKiV",
+      "sourceFingerprint": "sha256:d8f041b3fffd42772ef41d09e18db1f0cf628858b1386c36a1964294a4fb49c0",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-d8f041b3fffd42772ef4",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-d8f041b3fffd42772ef4",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_AMyo3UKZLd9Hb4P6rNuYKM58uKiV",
+        "createdAtMs": 1775976311402,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "7cb3ee72cfa5d21c1b3eccaca164dafaacb167e9",
+        "gitMessage": "Isolate legacy store persistence path",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Core",
+        "section": "Kernel State",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Kernel State Persistence",
+        "capability": "Legacy persistence compatibility",
+        "feature": "Guarded browser localStorage read/write fallback",
+        "canonicalTarget": [
+          "kernel/store.ts"
+        ],
+        "relatedModules": [
+          "AI/Orchestration"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_5Z5GYq4ecYh8tbYoD29S9qTcnWoi",
+      "sourceFingerprint": "sha256:6744547faf008c3c3b3477509aee54d721e25670346be194939fa11230a97f49",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-6744547faf008c3c3b34",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-6744547faf008c3c3b34",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_5Z5GYq4ecYh8tbYoD29S9qTcnWoi",
+        "createdAtMs": 1775976047959,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "e16333aca6c6a17b4cf90137c13d654cd536d96c",
+        "gitMessage": "Tighten memory store dependency boundary",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Knowledge and Continuity",
+        "section": "Memory",
+        "contentType": "deployment_provenance",
+        "module": "Memory/Continuity",
+        "subsystem": "Kernel Memory Store",
+        "capability": "Memory storage dependency boundary",
+        "feature": "Single addEntry path reused by bulkAdd with type-only store dependency",
+        "canonicalTarget": [
+          "kernel/memory.ts"
+        ],
+        "relatedModules": [
+          "AI/Orchestration"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_476WTfNoFZ5GhT3umYvBfZFDZnMX",
+      "sourceFingerprint": "sha256:20cd8f5bbf9ee09ae8745e8871843193858558022f915717085fe9127c51a865",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-20cd8f5bbf9ee09ae874",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-20cd8f5bbf9ee09ae874",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_476WTfNoFZ5GhT3umYvBfZFDZnMX",
+        "createdAtMs": 1775974184858,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "fd0deb42613608d85342fed96f65bfd6ad9a765f",
+        "gitMessage": "Align kernel routes with canonical runtime access",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Core",
+        "section": "Kernel Runtime API",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Canonical Runtime Access",
+        "capability": "Kernel runtime health exposure",
+        "feature": "Canonical runtime health on kernel and state API routes",
+        "canonicalTarget": [
+          "app/api/kernel/route.ts",
+          "app/api/kernel/state/route.ts"
+        ],
+        "relatedModules": [
+          "AI/Orchestration"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GBWgmMVgGMoUjN3eFgo722ufht4N",
+      "sourceFingerprint": "sha256:2fc2e660591da58b72d117b86515b1995984b30fe24934536c3a7824e3f0ba58",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-2fc2e660591da58b72d1",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-2fc2e660591da58b72d1",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_GBWgmMVgGMoUjN3eFgo722ufht4N",
+        "createdAtMs": 1775973745528,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "f6be9c9c89b9bb2e48f9235ee82390f17a28c0db",
+        "gitMessage": "Add canonical runtime export bridge",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Core",
+        "section": "Kernel Runtime Composition",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Canonical Runtime Bridge",
+        "capability": "Canonical runtime export surface",
+        "feature": "Kernel exports canonical audit/store/memory/runtime modules",
+        "canonicalTarget": [
+          "kernel/kernel.ts",
+          "kernel/canonical-runtime.ts"
+        ],
+        "relatedModules": [
+          "AI/Orchestration",
+          "Memory/Continuity"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8EiUHoLLaKDL8gttUEMAA8psed8i",
+      "sourceFingerprint": "sha256:4314346132ee21f402ab77316ee7d69d8706b5c0f0ea9a85e81097785d8f16be",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-4314346132ee21f402ab",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-4314346132ee21f402ab",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_8EiUHoLLaKDL8gttUEMAA8psed8i",
+        "createdAtMs": 1775935194766,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "b836dc510baf44f40548d2056a49f08082c51fc4",
+        "gitMessage": "Add canonical kernel runtime composition layer",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Core",
+        "section": "Kernel Runtime Composition",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Canonical Runtime Composition",
+        "capability": "Canonical kernel runtime",
+        "feature": "Singleton composition of audit, store and memory with health contract",
+        "canonicalTarget": [
+          "kernel/canonical-runtime.ts"
+        ],
+        "relatedModules": [
+          "AI/Orchestration",
+          "Memory/Continuity"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_3Smc1qdVujaXGNdfwUaBgYQ2WeGc",
+      "sourceFingerprint": "sha256:91addfc47a3eff889aeaacc26e72a80287a0a5fa47d369ad24be8ff7db28dd65",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-91addfc47a3eff889aea",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-91addfc47a3eff889aea",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_3Smc1qdVujaXGNdfwUaBgYQ2WeGc",
+        "createdAtMs": 1775931807643,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "0b4dd01cffb1e7a48b292b66ab9a4d69870561c6",
+        "gitMessage": "Fix canonical memory audit entry compatibility",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Knowledge and Continuity",
+        "section": "Memory",
+        "contentType": "deployment_provenance",
+        "module": "Memory/Continuity",
+        "subsystem": "Canonical Memory",
+        "capability": "Memory audit compatibility",
+        "feature": "Canonical memory audit entry contract alignment",
+        "canonicalTarget": [
+          "kernel/canonical-memory.ts"
+        ],
+        "relatedModules": [
+          "Shared Core"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_48MLp77LtGD8A1WuTgYGE24KyqkM",
+      "sourceFingerprint": "sha256:b224efb96bea537ce7024e78a5cc770289184165f1317694743e5461b5343189",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-b224efb96bea537ce702",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-b224efb96bea537ce702",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_48MLp77LtGD8A1WuTgYGE24KyqkM",
+        "createdAtMs": 1775929155027,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "3ff9681683e1add38080dadcb90bd11f6edc0d2d",
+        "gitMessage": "Patch 6 align kernel store with canonical compatibility bridge",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Core",
+        "section": "Kernel Canonicalization",
+        "contentType": "engineering_documentation_provenance",
+        "module": "Shared Core",
+        "subsystem": "Canonical Store Compatibility",
+        "capability": "Store compatibility bridge documentation",
+        "feature": "Patch 6 additive bridge evidence note",
+        "canonicalTarget": [
+          "docs/kernel-canonicalization/PATCH_6_STORE_COMPATIBILITY_BRIDGE.md"
+        ],
+        "relatedModules": [
+          "AI/Orchestration"
+        ],
+        "implementationEvidence": false
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_GnzJUQiEkEnFGeCSFyr8cm9jzHp3",
+      "sourceFingerprint": "sha256:00def0d482947ef51c96fa60c196fd4c165c8fc62fd56a7e99555d0ed103c74a",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-00def0d482947ef51c96",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-00def0d482947ef51c96",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_GnzJUQiEkEnFGeCSFyr8cm9jzHp3",
+        "createdAtMs": 1775928076457,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "f594eca46cb64dcd6258b47babee1a7390ac2c73",
+        "gitMessage": "Patch 5 add canonical store layer",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Core",
+        "section": "Kernel State",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Canonical State Store",
+        "capability": "Canonical kernel state contract",
+        "feature": "State, signal, audit, memory and planner canonical structures",
+        "canonicalTarget": [
+          "kernel/canonical-store.ts"
+        ],
+        "relatedModules": [
+          "AI/Orchestration",
+          "Memory/Continuity"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_9xcACYCAw6n3EYdquhKG28JZyYSQ",
+      "sourceFingerprint": "sha256:0bf49663aaee394a67f0ad3ea1022871b57589f933410d5190be0634d57ee8ab",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-0bf49663aaee394a67f0",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-0bf49663aaee394a67f0",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_9xcACYCAw6n3EYdquhKG28JZyYSQ",
+        "createdAtMs": 1775927887241,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "26dc5c80a05ade85d7a9da1340353b3e3b682e7e",
+        "gitMessage": "Patch 4 align kernel audit with canonical compatibility bridge",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Trust and Observability",
+        "section": "Audit",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Kernel Audit",
+        "capability": "Canonical audit compatibility bridge",
+        "feature": "Legacy audit surface re-exports canonical audit contracts",
+        "canonicalTarget": [
+          "kernel/audit.ts",
+          "kernel/canonical-audit.ts"
+        ],
+        "relatedModules": [
+          "AI/Orchestration"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_75Po8F5JoG97jtweeUxQUxYXbsdS",
+      "sourceFingerprint": "sha256:9b4dccd593e920436d4256767b5f3ff9261e1b2c0d28238967258a1173d5e1ea",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-9b4dccd593e920436d42",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-9b4dccd593e920436d42",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_75Po8F5JoG97jtweeUxQUxYXbsdS",
+        "createdAtMs": 1775927668380,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "85f00e786a0fda603f33c5224b11533bc9441400",
+        "gitMessage": "Patch 3 align kernel types with canonical compatibility bridge",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Core",
+        "section": "Kernel Contracts",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Kernel Shared Types",
+        "capability": "Canonical types compatibility bridge",
+        "feature": "Legacy types surface re-exports canonical priorities/scopes/audit primitives",
+        "canonicalTarget": [
+          "kernel/types.ts",
+          "kernel/canonical-types.ts"
+        ],
+        "relatedModules": [
+          "AI/Orchestration"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_B6ur6U6JzR9Sswg9SUucP8qSFTLm",
+      "sourceFingerprint": "sha256:ce370985eb0da1d85c06f81cb1e9ee90193601543c0414d144c651d7e2591999",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-ce370985eb0da1d85c06",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-ce370985eb0da1d85c06",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_B6ur6U6JzR9Sswg9SUucP8qSFTLm",
+        "createdAtMs": 1775927456948,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "3ee79d6240f557744cd5dbf1efa4417733ee4069",
+        "gitMessage": "Patch 2 add canonical audit layer",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Trust and Observability",
+        "section": "Audit",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Canonical Audit",
+        "capability": "Canonical audit contract",
+        "feature": "Normalized audit entry creation, formatting and append",
+        "canonicalTarget": [
+          "kernel/canonical-audit.ts"
+        ],
+        "relatedModules": [
+          "AI/Orchestration"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8tnSgJMjE9riBC6inGiaX23PvgCP",
+      "sourceFingerprint": "sha256:e7680bb96774a06e5c4181b10869142876381c009f797645d6ccfc07a24b3ad3",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-e7680bb96774a06e5c41",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-e7680bb96774a06e5c41",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_8tnSgJMjE9riBC6inGiaX23PvgCP",
+        "createdAtMs": 1775927283276,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "f330f22551b026f9cd0a639be81e5e6f607583c2",
+        "gitMessage": "Patch 1 add canonical shared types foundation",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Core",
+        "section": "Kernel Contracts",
+        "contentType": "deployment_provenance",
+        "module": "Shared Core",
+        "subsystem": "Canonical Shared Types",
+        "capability": "Canonical kernel primitives",
+        "feature": "Priorities, scopes, audit levels, requests, signals and normalizers",
+        "canonicalTarget": [
+          "kernel/canonical-types.ts"
+        ],
+        "relatedModules": [
+          "AI/Orchestration"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_4X5tLzXUijoush97o4D5T7kqEkbb",
+      "sourceFingerprint": "sha256:729170d4589365587002c83552f0ec99229575411b5a7ba1df9ba220ee645a22",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-729170d4589365587002",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-729170d4589365587002",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_4X5tLzXUijoush97o4D5T7kqEkbb",
+        "createdAtMs": 1775926934994,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "a910e011c49051dd51daf62596c9ae41080aacab",
+        "gitMessage": "Create kernel canonicalization baseline inventory",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Engineering Evidence",
+        "section": "Kernel Canonicalization",
+        "contentType": "engineering_inventory_provenance",
+        "module": "Shared Core",
+        "subsystem": "Kernel Canonicalization Baseline",
+        "capability": "Baseline inventory and build checkpoint",
+        "feature": "Pre-migration export inventory and BUILD OK baseline",
+        "canonicalTarget": [
+          "docs/kernel-canonicalization/20260411-200129/"
+        ],
+        "relatedModules": [
+          "AI/Orchestration"
+        ],
+        "implementationEvidence": false
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_8NKBFrGghec1cENP6itaqRstizMN",
+      "sourceFingerprint": "sha256:b32d5ecf978492bce8f513b8ea316f5420cf4517127ba3fb74c7a526e63054fb",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-b32d5ecf978492bce8f5",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-b32d5ecf978492bce8f5",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_8NKBFrGghec1cENP6itaqRstizMN",
+        "createdAtMs": 1775926621840,
+        "deploymentState": "READY",
+        "deploymentTarget": null,
+        "gitSha": "ac092b514451269df4d614a840a374bdfc5f45b5",
+        "gitMessage": "Phase C port clean UI module shells into pantavion-planet",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Experience Layer",
+        "section": "Multi-module UI Shells",
+        "contentType": "deployment_provenance",
+        "module": "MULTI_MODULE",
+        "subsystem": "Application UI Shells",
+        "capability": "Module surface scaffolding",
+        "feature": "Clean UI shells for Chat, Compass, Mind, Create and shared navigation",
+        "canonicalTarget": [
+          "app/chat/page.tsx",
+          "app/compass/page.tsx",
+          "app/mind/page.tsx",
+          "app/create/page.tsx",
+          "app/pantavion-clean-ui.tsx"
+        ],
+        "relatedModules": [
+          "Chat",
+          "Compass",
+          "Mind",
+          "App/Service Engine"
+        ],
+        "implementationEvidence": false
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    },
+    {
+      "stableRecordKey": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_E2bVPTBgBkqHWLCMSgaYBsN97MGq",
+      "sourceFingerprint": "sha256:55118d291f2d8890454e6e86c9cc0c8666ac3473d3999d0affff6c755c82e0b9",
+      "canonicalLedgerPointer": null,
+      "classificationId": "class-v1-55118d291f2d8890454e",
+      "classificationPointer": "docs/recovery/live/shards/thread-4-semantic-601-619.json#classificationId=class-v1-55118d291f2d8890454e",
+      "classificationConfidence": 0.99,
+      "sourceProvenance": {
+        "sourceCanonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+        "project": "pantavion-planet",
+        "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "deploymentId": "dpl_E2bVPTBgBkqHWLCMSgaYBsN97MGq",
+        "createdAtMs": 1775918227754,
+        "deploymentState": "READY",
+        "deploymentTarget": "production",
+        "gitSha": "6ef6398bf219de227cb3ba1bce536a485b95a54f",
+        "gitMessage": "Fix tsconfig and memory compatibility build blockers",
+        "sourceSurface": "Vercel list_deployments",
+        "liveTruth": "HISTORICAL_ONLY"
+      },
+      "classificationSummary": {
+        "theme": "Platform Reliability",
+        "section": "Build and Compatibility",
+        "contentType": "deployment_provenance",
+        "module": "Memory/Continuity",
+        "subsystem": "Kernel Memory Build Compatibility",
+        "capability": "TypeScript build compatibility",
+        "feature": "Memory eligibleScopes type compatibility and tsconfig cleanup",
+        "canonicalTarget": [
+          "kernel/memory.ts",
+          "tsconfig.json"
+        ],
+        "relatedModules": [
+          "Infrastructure",
+          "AI/Orchestration"
+        ],
+        "implementationEvidence": true
+      },
+      "routeState": "WAITING_CANONICAL",
+      "waitingReason": "NO_DURABLE_CANONICAL_LEDGER_MATCH",
+      "canonicalCandidates": [],
+      "graphEdges": []
+    }
+  ]
+}
