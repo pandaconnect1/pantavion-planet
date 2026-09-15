@@ -37,6 +37,27 @@ export type PantavionSchedulerBridgeSnapshot = {
   privacy: string;
 };
 
+export type PantavionRecoveryMaterializationReport = {
+  ok: true;
+  marker: "pantavion_recovery_partition_atomic_materialization_v1";
+  sourceRecordCount: 82413;
+  partitionCount: 165;
+  existingPartitions: number;
+  createdPartitions: number;
+  repairedCheckpoints: number;
+  remainingPartitions: number;
+  limit: number;
+  productionWriteAuthority: false;
+  releaseAuthority: false;
+};
+
+type PantavionRecoveryMaterializationBridgeResponse = {
+  ok: true;
+  capability: "recovery_partition_materialization";
+  transport: "vercel_oidc_to_supabase_edge";
+  report: PantavionRecoveryMaterializationReport;
+};
+
 export type PantavionSchedulerBridgeClaim = {
   ok: true;
   capability: "scheduled_worker_claim";
@@ -95,6 +116,33 @@ export async function getPantavionSchedulerBridgeSnapshot(): Promise<PantavionSc
     throw new Error("scheduler_bridge_invalid_response");
   }
   return payload;
+}
+
+export async function materializePantavionRecoveryPartitionsViaOidc(
+  limit = 25,
+): Promise<PantavionRecoveryMaterializationReport> {
+  if (!Number.isInteger(limit) || limit < 1 || limit > 25) {
+    throw new Error("recovery_partition_materialization_limit_invalid");
+  }
+
+  const payload = await bridgeRequest<PantavionRecoveryMaterializationBridgeResponse>({
+    action: "materialize_recovery_partitions",
+    limit,
+  });
+  if (
+    payload.capability !== "recovery_partition_materialization" ||
+    payload.transport !== "vercel_oidc_to_supabase_edge" ||
+    payload.report.ok !== true ||
+    payload.report.marker !== "pantavion_recovery_partition_atomic_materialization_v1" ||
+    payload.report.partitionCount !== 165 ||
+    payload.report.sourceRecordCount !== 82413 ||
+    payload.report.productionWriteAuthority !== false ||
+    payload.report.releaseAuthority !== false
+  ) {
+    throw new Error("recovery_partition_materialization_invalid_response");
+  }
+
+  return payload.report;
 }
 
 export async function claimPantavionScheduledWorkerViaOidc(input: {
