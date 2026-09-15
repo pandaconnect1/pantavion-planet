@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-09-15T14:28:30Z",
-  "coordinatorObservedAt": "2026-09-15T14:28:30Z",
-  "phase": "EMERGENCY_VERCEL_RESCUE_CANONICAL_INGESTION_AND_DEDUP",
+  "updatedAt": "2026-09-15T15:12:40Z",
+  "coordinatorObservedAt": "2026-09-15T15:12:40Z",
+  "phase": "EMERGENCY_VERCEL_RESCUE_CANONICAL_INGESTION_AND_EXECUTION",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total and not directly comparable with mirrored deployment counts",
   "recoveredDeploymentRecordsFloor": 3679,
@@ -9,14 +9,9 @@
   "canonical": {
     "project": "pantavion-planet",
     "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
-    "sourceCursor": 1786126296277,
     "nextCursor": null,
-    "lastNonEmptyCursor": 1775918227754,
-    "pagesCapturedThisLaneRun": 31,
-    "recordsCapturedThisLaneRun": 619,
-    "lastPageCount": 19,
-    "terminalProbeCount": 0,
     "terminal": true,
+    "terminalProbeCount": 0,
     "rescue_state": "TERMINAL_CHECKPOINTED",
     "live_truth": "HISTORICAL_ONLY",
     "shard": "docs/recovery/live/shards/lane-a-canonical.json"
@@ -31,28 +26,27 @@
   },
   "latestBatch": {
     "records": 219,
-    "pages": 0,
     "canonicalRecords": 219,
     "mirrorRecords": 0,
-    "note": "Lane F has 219 payload-backed canonical records. Lane-A ranges 201-600 remain a 400-record per-record payload gap and are not counted as canonicalized until the reassigned gap worker produces durable payload evidence and F deduplicates/binds it."
+    "note": "Lane F has 219 payload-backed canonical records. Lane-A ranges 201-600 remain a 400-record per-record payload gap and are not counted as canonicalized until durable individual payload evidence exists and F deduplicates/binds it."
   },
   "lanes": {
-    "A": {"status": "TERMINAL_CHECKPOINTED", "historyTerminal": true, "recordsCapturedThisRun": 619, "terminalProbeCount": 0},
+    "A": {"status": "TERMINAL_CHECKPOINTED", "historyTerminal": true},
     "B": {"status": "TERMINAL_VERIFIED", "historyTerminal": true},
     "C": {"status": "TERMINAL_VERIFIED", "projectsTerminal": "6/6", "deploymentRecords": 73},
     "D": {"status": "BLOCKED_VERCEL_HISTORICAL_RUNTIME_BILLING_LIMIT", "deploymentHistoriesTerminal": "7/7", "historicalRuntimeExportBlocked": true},
-    "E": {"status": "BLOCKED_AUTH_EXPORT", "projectMetadataCaptured": "15/15", "envConfigNamesCaptured": 111, "secretValuesCaptured": false},
-    "F": {"status": "ACTIVE", "canonicalizedRecordsFloor": 219, "sourceRecordsAvailableFloor": 3679, "laneARunPayloadGap": 400, "githubEvidenceBound": true, "pantavionFounderFeedBound": true},
-    "G": {"status": "ACTIVE_REASSIGNED_GAP_RECOVERY", "scope": "Lane-A records 201-600 only", "gapRecords": 400, "shardPresent": false, "dedupKey": "projectId:deploymentId"},
-    "H": {"status": "TERMINAL_VERIFIED", "buildRuntimeClassificationComplete": true, "runtimeFailureConfirmed": true},
+    "E": {"status": "BLOCKED_AUTH_EXPORT_WITH_VERIFIED_SECRETLESS_RUNTIME", "projectMetadataCaptured": "15/15", "verifiedEnvNameFloor": 128, "secretValuesCaptured": false, "founderBoundaryLive": true, "secretlessSchedulerLive": true},
+    "F": {"status": "ACTIVE_STALLED_NO_NEW_DURABLE_CANONICAL_ARTIFACT", "canonicalizedRecordsFloor": 219, "sourceRecordsAvailableFloor": 3679, "laneARunPayloadGap": 400},
+    "G": {"status": "ACTIVE_REASSIGNED_GAP_RECOVERY_NO_SHARD_YET", "scope": "Lane-A records 201-600 only", "gapRecords": 400, "shardPresent": false, "dedupKey": "projectId:deploymentId"},
+    "H": {"status": "TERMINAL_VERIFIED_HISTORICAL_CLASSIFICATION_NEEDS_RUNTIME_REFRESH", "historicalRuntimeFailurePreserved": true},
     "I": {"status": "TERMINAL_VERIFIED_WITH_EXPLICIT_GAPS", "projectsClassified": "4/4", "historicallyEmptyProven": 0},
     "J": {"status": "ACTIVE_PARTIAL", "moduleClassificationPresent": true, "unsupportedModulesRemainReviewRequired": true},
-    "K": {"status": "ACTIVE_PARTIAL_INPUT", "founderFeedRefreshRequiredAfterJAndF": true},
-    "L": {"status": "ACTIVE_GAPS_FOUND", "auditRefreshRequiredAfterJAndGapRecovery": true}
+    "K": {"status": "ACTIVE_PARTIAL_STALE_PRE_J", "founderFeedRefreshRequired": true},
+    "L": {"status": "ACTIVE_GAPS_FOUND_STALE_PRE_J", "auditRefreshRequired": true}
   },
   "canonicalIngestion": {
     "lane": "F",
-    "status": "ACTIVE",
+    "status": "ACTIVE_PARTIAL",
     "canonicalizedRecordsFloor": 219,
     "sourceRecordsAvailableFloor": 3679,
     "laneARunCaptured": 619,
@@ -60,11 +54,6 @@
     "laneARunSummaryOnlyPayloadGap": 400,
     "gapRecoveryOwner": "G/coordinator reassignment",
     "gapRecoveryLock": "docs/recovery/live/claims/COORDINATOR_GAP_A_201_600.lock",
-    "artifacts": [
-      "docs/recovery/live/canonical/lane-f-a-run-payload-audit.json",
-      "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json"
-    ],
-    "shard": "docs/recovery/live/shards/lane-f-canonical-ingestion.json",
     "completionRule": "CAPTURED -> CLASSIFIED -> CANONICALIZED -> GITHUB_EVIDENCE_BOUND -> PANTAVION_FOUNDER_FEED_BOUND -> VERIFIED_OR_EXPLICIT_GAP"
   },
   "liveProduction": {
@@ -72,77 +61,94 @@
     "apexRedirect": "pantavion.com -> www.pantavion.com",
     "authoritativeProject": "pantavion-planet",
     "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
-    "deploymentId": "dpl_FGfYCSEAhtQwVhGiW57nCyrFi6et",
+    "deploymentId": "dpl_78oz9uKZpyJxy97QGWdZbkTVXA5B",
     "gitRef": "main",
-    "gitSha": "7d7d429f9dc669a9479c63987aafda0464b703d5",
+    "gitSha": "585a0a79372ff7fea5ee75d96cfec2445a6191ec",
+    "gitMessage": "docs: preserve live atomic recovery partition RPC SQL",
     "state": "READY",
     "target": "production",
-    "buildTruth": "BUILD_SUCCEEDED",
     "founderRecoveryRoute": {
       "route": "/admin/pantavion/recovery",
-      "productionBuildPresent": true,
-      "liveTruth": "PRODUCTION_BUILD_PRESENT_AUTH_GUARDED",
-      "feedMode": "dynamic GitHub rescue-branch JSON with no-store"
+      "httpStatus": 200,
+      "renderedBoundary": "Founder Access Required",
+      "liveTruth": "VERIFIED_LIVE_ACCESS_BOUNDARY_ONLY",
+      "authenticatedFounderFeedVerified": false
     }
   },
   "productionRuntime": {
-    "status": "RUNTIME_FAILURE_CONFIRMED",
-    "route": "/api/pantavion/intelligence/cron",
-    "errorGroup": "pantavion_secure_scheduled_worker_failed",
-    "observedErrorCount7d": 2012,
-    "observedAffectedUsers7d": 1984,
-    "firstSeen": "2026-08-24T14:00:27Z",
-    "lastSeen": "2026-09-15T13:40:38Z",
-    "blocker": "Pantavion Supabase admin runtime is missing or cannot read the required private admin credential in production; no secret value was exposed or captured.",
-    "rescueState": "BLOCKED_SECRET_CONFIGURATION"
-  },
-  "buildRemediation": {
-    "commit": "376828fb0e011dc9d413e9bf0cc55f55ee155801",
-    "change": "docs/recovery/** excluded from TypeScript application build scope",
-    "vmxxPreviewDeployment": "dpl_HNpiyniN12RfZQ7pNF8BpTkKwYfp",
-    "vmxxPreviewState": "READY",
-    "canonicalPreviewDeployment": "dpl_8s1W8tDmQ13m4mY6RumqsunxW8eK",
-    "canonicalPreviewState": "READY",
-    "liveTruth": "BUILD_VERIFIED_NOT_RUNTIME_VERIFIED"
+    "status": "SECRETLESS_SCHEDULER_HEALTHY_EXECUTION_VERIFIED",
+    "revision": "585a0a79372ff7fea5ee75d96cfec2445a6191ec",
+    "transport": "vercel_oidc_to_supabase_edge",
+    "secretless": true,
+    "oidcTrust": {
+      "route": "/api/pantavion/intelligence/oidc-supabase-trust",
+      "httpStatus": 200,
+      "status": "verified",
+      "trust": "vercel_oidc_verified_by_supabase",
+      "privilegedDataAccess": false
+    },
+    "schedulerHealth": {
+      "route": "/api/pantavion/intelligence/scheduler-health",
+      "httpStatus": 200,
+      "status": "healthy",
+      "schedule": "*/5 * * * *",
+      "executionVerified": true,
+      "workerTotalRuns": 11,
+      "workerLastStatus": "succeeded",
+      "workerLastRunKey": "pantavion-intelligence-5m:2026-09-15T15:10",
+      "workerLastFinishedAt": "2026-09-15T15:10:42.090354+00:00"
+    },
+    "recoveryPartitions": {
+      "taskName": "pantavion:recovery_partition:v1",
+      "total": 165,
+      "active": 165,
+      "succeeded": 0,
+      "failed": 0,
+      "other": 0,
+      "completionVerified": false
+    },
+    "cronErrorsLast30m": 0,
+    "historicalCredentialFailure": {
+      "preserved": true,
+      "errorGroup": "pantavion_secure_scheduled_worker_failed",
+      "rolling7dObservedCountAt1510Z": 1998,
+      "lastSeen": "2026-09-15T13:40:38Z",
+      "truth": "Historical failures remain in the rolling window but no cron runtime errors were found in the directly queried last 30 minutes."
+    },
+    "liveTruth": "SCHEDULER_EXECUTION_VERIFIED_RECOVERY_PARTITIONS_ACTIVE_NOT_COMPLETE"
   },
   "parallelCoordinator": {
     "mode": "PARALLEL_A_TO_L_ALL_CLAIMED_VERIFY_COORDINATE",
     "claimedLocks": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
-    "activeLocks": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
     "availableAdditionalLanes": [],
     "coordinatorGapLock": "COORDINATOR_GAP_A_201_600.lock",
     "vercelProjectInventoryVerified": true,
     "vercelProjectCount": 15,
-    "noGitProjectsVerified": [
-      "v0-new-project-dr8uqvuxfhx",
-      "v0-new-project-cd71xe9esnl",
-      "v0-new-project-0hexy2s8dnt",
-      "v0-new-project-81xhfwdrlxy"
-    ],
-    "noGitProjectCount": 4,
     "deepPaginationDuplicated": false,
     "zeroDeletions": true,
     "zeroDirectVercelMutations": true,
     "secretValuesRecorded": false
   },
   "recentEvidence": [
-    "Canonical pantavion-planet deployment history reached explicit terminal count=0; VMXX is also terminal zero.",
-    "Lane H is TERMINAL_VERIFIED and separates successful current production build evidence from confirmed production runtime failure.",
-    "Lane I classified all four no-Git v0 project entities without falsely declaring historical content empty or duplicate.",
-    "Lane J now exists and is ACTIVE_PARTIAL; earlier audit/feed statements that J was missing are superseded.",
-    "Lane G/coordinator reassignment is limited to the 400 Lane-A records 201-600 payload gap; no G shard or replacement canonical artifact exists yet at this observation.",
-    "Lane F remains canonical ingestion owner; canonicalized floor stays 219 until new per-record payload evidence is durably bound and deduplicated.",
-    "Lane K and Lane L must refresh from post-J and post-gap-recovery evidence rather than older partial checkpoints."
+    "Direct Vercel verification at 2026-09-15T15:12Z resolved www.pantavion.com to production deployment dpl_78oz9uKZpyJxy97QGWdZbkTVXA5B / git SHA 585a0a79372ff7fea5ee75d96cfec2445a6191ec.",
+    "Direct Vercel fetch of /admin/pantavion/recovery returned HTTP 200 and rendered Founder Access Required; the protected route boundary is live, but authenticated founder-feed access is not yet proven by this runtime.",
+    "Direct Vercel fetch of /api/pantavion/intelligence/oidc-supabase-trust returned HTTP 200, status verified and vercel_oidc_verified_by_supabase.",
+    "Direct Vercel fetch of /api/pantavion/intelligence/scheduler-health returned healthy with executionVerified=true, 11 worker runs and lastStatus=succeeded.",
+    "Recovery partition materialization is now visible: 165 total/active, 0 succeeded, 0 failed. This is real execution progress but not recovery completion.",
+    "Direct Vercel runtime-error query found zero cron errors in the last 30 minutes; earlier missing-admin-key failures remain historical evidence.",
+    "Lane J v2 consumes Lane I evidence; Lane K and L remain stale relative to current J/runtime truth.",
+    "Lane G still has no shard and Lane F canonicalized floor remains 219; no recovery count inflation was performed."
   ],
   "hardGaps": [
-    "Lane A ranges 201-600 currently have traversal/count/cursor summaries but no individual deployment record payload in durable canonical artifacts; 400 records remain open.",
-    "Lane F must idempotently canonicalize/deduplicate payload-backed recovery from the 400-record gap, B/C/D histories and earlier durable batches before canonical completion can rise.",
-    "Lane J remains partial; Ads Center, Business, Dating, Events and Marketplace currently remain review-required where direct bound evidence has not yet been proven.",
-    "Lane K founder feed and Lane L global audit remain partial/stale until they consume current J/F/G evidence.",
-    "Canonical production scheduled worker has confirmed runtime failure because a required Supabase admin credential is unavailable in production.",
-    "Authenticated Vercel secret-value export/decryption is not exposed by the current connected tool surface; values must remain private and may require authorized reissue/rotation.",
+    "Lane A ranges 201-600 still lack durable individual deployment record payloads; 400 records remain open.",
+    "Lane F still must idempotently canonicalize/deduplicate payload-backed B/C/D histories, earlier durable batches and any future G gap payloads before canonical completion can rise.",
+    "All 165 recovery partitions are currently active with 0 succeeded and 0 failed; full recovery-partition completion is not verified.",
+    "Lane J remains partial; unsupported modules remain review-required until direct evidence is bound.",
+    "Lane K founder feed and Lane L audit are stale and must consume current J and current secretless runtime evidence.",
+    "Authenticated founder access to the recovery feed has not been directly verified from this runtime; only the public protected access boundary is verified live.",
+    "Authenticated Vercel secret-value inventory/decryption is not exposed by the current connected tool surface; values must remain private.",
     "Complete deployment filesystem/build-output export is not available through the current connected Vercel tool surface.",
-    "Lane D historical runtime log retrieval is blocked by Vercel billing/retention limits; this is not evidence that historical logs are absent."
+    "Lane D historical runtime log retrieval remains blocked by Vercel billing/retention limits; this is not evidence that historical logs are absent."
   ],
   "rules": [
     "zero deletions",
@@ -152,7 +158,7 @@
     "terminal deployment history requires explicit count=0/no older records",
     "summary-only checkpoints are not per-record preservation and are not counted as canonicalized",
     "deduplicate by projectId:deploymentId before canonical counts rise",
-    "raw capture is incomplete until classified, canonicalized, GitHub-bound and Pantavion-founder-feed-bound or recorded as an explicit gap",
-    "all A-L lanes are claimed; additional threads must verify/coordinate and must not duplicate lane work"
+    "historical runtime failures must not be presented as current failures after direct healthy runtime evidence supersedes them",
+    "recovery execution is not complete until partitions reach terminal outcomes and downstream canonical/feed/audit states are reconciled"
   ]
 }
