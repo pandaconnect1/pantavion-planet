@@ -1,0 +1,109 @@
+{
+  "marker": "pantavion_thread3_corpus_shard_receipt_v1",
+  "ownerThread": 3,
+  "status": "EXISTING_CANONICAL_CORPUS_SHARD_BOUND",
+  "sourceCorpus": "data/recovery/imported-pr248/canonical-ledger/corpus",
+  "sourcePhysicalCanonicalRecordCount": 82413,
+  "sourcePhysicalRecordsDuplicatedByThread3": 0,
+  "sourcePullRequest": 248,
+  "sourceCommit": "da6fb9f70937f2f63b0d30204a22023ac72e1544",
+  "corpusFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d",
+  "historicalMaterializationReceiptState": {
+    "tested": false,
+    "verified": false,
+    "deleteAllowed": false
+  },
+  "structuralVerificationPerformedNow": {
+    "allProvenanceGitBlobShasMatched": true,
+    "allRecordOrdinalsMatchedManifest": true,
+    "all82413RecordIdsReproducedFromOriginalSourceFingerprintFormula": true,
+    "uniqueRecordIds": 82413,
+    "uniqueStableRecordKeys": 82413,
+    "duplicateRecordIds": 0,
+    "duplicateStableRecordKeys": 0,
+    "sourceIdMismatchCount": 0
+  },
+  "stableKeyDerivation": {
+    "version": "PANTAVION_CORPUS_SOURCE_FINGERPRINT_V1",
+    "sourceFingerprint": "SHA256([provenance.sourceFamily, provenance.sourceFile, provenance.sourceLine, context].join('\\u001f'))",
+    "sourceIdInvariant": "record.id === `pk_${sourceFingerprint.slice(0,24)}`",
+    "stableRecordKey": "record.id + \":\" + sourceFingerprint",
+    "shardingContract": "PANTAVION_CANONICAL_SHARDING_V1",
+    "rationale": "This reproduces the exact stableId input used by scripts/pantavion-canonical-knowledge-excavation-v2.cjs, preserving the original canonical identity derivation while retaining the full SHA-256 source fingerprint."
+  },
+  "globalBucketCounts": {
+    "0": 8299,
+    "1": 8294,
+    "2": 8310,
+    "3": 8115,
+    "4": 8186,
+    "5": 8181,
+    "6": 8250,
+    "7": 8255,
+    "8": 8276,
+    "9": 8247
+  },
+  "thread3OwnedBuckets": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "thread3OwnedRecordCount": 41209,
+  "thread3OwnedBucketCounts": {
+    "5": 8181,
+    "6": 8250,
+    "7": 8255,
+    "8": 8276,
+    "9": 8247
+  },
+  "thread3OwnedBucketFingerprints": {
+    "5": {
+      "recordCount": 8181,
+      "stableRecordKeyFingerprint": "0e23f39eb21dbf7ee538987b3166db64a1dc005a328f64cca788aa8d69587e00",
+      "recordIdFingerprint": "51b0d09589e87c8e55ac9a5e8a4fdad9fe86adbded778ff76a93f309dd4c9e11",
+      "sourcePointerFingerprint": "cdca9c4e86b4ee5608613897bf4e8d4b160436c17de0eba6cc4dee20fa282efb"
+    },
+    "6": {
+      "recordCount": 8250,
+      "stableRecordKeyFingerprint": "b74e15e39a206531694a924e52c0faeaf2b784d257a5c12d259c6433764b9604",
+      "recordIdFingerprint": "9ecf455133ecaf80cff1987c1efe3a4d281456eb6ecc79cc64d412126aea0abc",
+      "sourcePointerFingerprint": "606d7635365bd37d4b3879198f1a50c39ea0298fa641ecb636f34687db23562c"
+    },
+    "7": {
+      "recordCount": 8255,
+      "stableRecordKeyFingerprint": "708d349ce69c3895fd9044462eddab2f73c35f6a09fcb1820561c705b5f9dcf5",
+      "recordIdFingerprint": "2463d2beb53936b39f8ebec7805b57ac85c7f71c24355e0c8e3a0670c66adce1",
+      "sourcePointerFingerprint": "00b9cf118a84766e31d11e96a4554d6073cecf7e7e94b6a31fa303755a0d6590"
+    },
+    "8": {
+      "recordCount": 8276,
+      "stableRecordKeyFingerprint": "22acca0269dd03b81a399399d8f0a8f957b1932808ea0c4d87a2581534e1b90b",
+      "recordIdFingerprint": "4ce0b01642a142212063e6aea23f392ad34b55ed9aa08d135e9600d2c34e10e9",
+      "sourcePointerFingerprint": "5d16660f85a917f89ae1d52dae872880fed80f1da4c55ec72a95702a9ea56d4c"
+    },
+    "9": {
+      "recordCount": 8247,
+      "stableRecordKeyFingerprint": "4e2d6949099b00173933aaa1b28ab461a637cfea9fd165b6782541b4b117d354",
+      "recordIdFingerprint": "ceb5b249dfec04a9babdbc2f585e5a3b3e50118f2fde2e29395e1fb5c4f8a313",
+      "sourcePointerFingerprint": "5721381d1c36fe61d47a4368a77ee806b6af5b99f77d42d0ab1519b11ea91a3c"
+    }
+  },
+  "thread3OwnedSourceFamilyCounts": {
+    "founder-vision": 4903,
+    "unfinished-gap": 5820,
+    "current-code": 4385,
+    "live-state": 65,
+    "recovery": 25819,
+    "donor": 217
+  },
+  "compactShardMap": "docs/recovery/live/canonical/thread3-corpus-shard-map.json",
+  "semantics": [
+    "The 82,413 source records were already durably materialized canonical records before this Thread 3 run; they are not added again to global physical record counts.",
+    "Thread 3 binds only buckets 5-9 and duplicates zero source payloads.",
+    "Structural/source-identity verification does not promote historical semantic classifications or live states to current VERIFIED_LIVE truth.",
+    "Thread 4 may consume the compact shard map and immutable source corpus for semantic classification; source evidence must remain unchanged.",
+    "Thread 7 remains responsible for global reconciliation/audit conclusions."
+  ]
+}

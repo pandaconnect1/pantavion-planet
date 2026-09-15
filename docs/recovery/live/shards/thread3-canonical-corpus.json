@@ -1,0 +1,24 @@
+{
+  "thread": 3,
+  "scope": "CANONICAL_WORKERS_F06_F10",
+  "status": "CORPUS_EXISTING_CANONICAL_SHARD_BOUND",
+  "contract": "PANTAVION_CANONICAL_SHARDING_V1",
+  "sourceCorpus": "data/recovery/imported-pr248/canonical-ledger/corpus",
+  "sourcePhysicalCanonicalRecordCount": 82413,
+  "newPhysicalCanonicalRecordsWrittenForCorpus": 0,
+  "thread3ExistingCanonicalRecordsBound": 41209,
+  "bucketCounts": {
+    "5": 8181,
+    "6": 8250,
+    "7": 8255,
+    "8": 8276,
+    "9": 8247
+  },
+  "shardMap": "docs/recovery/live/canonical/thread3-corpus-shard-map.json",
+  "receipt": "docs/recovery/live/canonical/thread3-corpus-shard-receipt.json",
+  "downstream": {
+    "classificationOwner": "THREAD_4",
+    "reconciliationOwner": "THREAD_7",
+    "durabilityOwner": "THREAD_8"
+  }
+}

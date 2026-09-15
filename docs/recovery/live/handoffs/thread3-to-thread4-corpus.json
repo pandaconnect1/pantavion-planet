@@ -1,0 +1,29 @@
+{
+  "fromThread": 3,
+  "toThread": 4,
+  "handoffType": "EXISTING_CANONICAL_CORPUS_SHARD_READY_FOR_CLASSIFICATION",
+  "sourceCorpus": "data/recovery/imported-pr248/canonical-ledger/corpus",
+  "ownedBuckets": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "ownedRecordCount": 41209,
+  "shardMap": "docs/recovery/live/canonical/thread3-corpus-shard-map.json",
+  "receipt": "docs/recovery/live/canonical/thread3-corpus-shard-receipt.json",
+  "stableKeyDerivation": {
+    "version": "PANTAVION_CORPUS_SOURCE_FINGERPRINT_V1",
+    "sourceFingerprint": "SHA256([provenance.sourceFamily, provenance.sourceFile, provenance.sourceLine, context].join('\\u001f'))",
+    "sourceIdInvariant": "record.id === `pk_${sourceFingerprint.slice(0,24)}`",
+    "stableRecordKey": "record.id + \":\" + sourceFingerprint",
+    "shardingContract": "PANTAVION_CANONICAL_SHARDING_V1",
+    "rationale": "This reproduces the exact stableId input used by scripts/pantavion-canonical-knowledge-excavation-v2.cjs, preserving the original canonical identity derivation while retaining the full SHA-256 source fingerprint."
+  },
+  "constraints": [
+    "Read payloads from immutable corpus batches using ownedRecordIndexesByBucket; do not copy or rewrite source records.",
+    "Historical keyword classification is evidence only; preserve REVIEW_REQUIRED whenever current semantic evidence is insufficient.",
+    "Do not infer VERIFIED_LIVE from any historical liveState/deployment marker."
+  ]
+}
