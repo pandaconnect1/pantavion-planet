@@ -1,0 +1,34 @@
+{
+  "observedAtUtc": "2026-09-15T18:07:00Z",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_20260915",
+  "findingType": "DUPLICATE_SCOPE_CLAIM",
+  "severity": "HIGH",
+  "thread": 1,
+  "scope": "VERCEL_UNIVERSAL_INTAKE",
+  "claims": [
+    {
+      "path": "docs/recovery/live/claims/THREAD_1_10THREAD_PROTOCOL.lock",
+      "commit": "9ca2c697025175103c9fc9978a8a135e4767c98b",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "docs/recovery/live/claims/ABSORPTION_THREAD_1.lock",
+      "commit": "49f8ee1f07e142d51388e1a9c6c597d5eac90365",
+      "status": "ACTIVE"
+    }
+  ],
+  "truth": "Both locks declare the same Thread 1 VERCEL_UNIVERSAL_INTAKE scope. They must be treated as one logical ownership domain, not two workers/shards.",
+  "dedupRule": "projectId:deploymentId",
+  "requiredAction": "Do not start a second independent Thread 1 intake. Existing Thread 1 workers must coordinate against the same durable intake/checkpoints and skip records already owned or preserved.",
+  "prohibitedActions": [
+    "Do not delete either lock during emergency recovery.",
+    "Do not count duplicate lock ownership as additional recovery capacity.",
+    "Do not ingest the same projectId:deploymentId twice."
+  ],
+  "coordinatorDisposition": "OPEN_RECONCILIATION_FINDING",
+  "safety": {
+    "zeroDeletions": true,
+    "zeroVercelMutations": true,
+    "secretValuesRecorded": false
+  }
+}
