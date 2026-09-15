@@ -1,0 +1,148 @@
+{
+  "schema": "pantavion_thread5_module_graph_routing_preflight_v1",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
+  "thread": 5,
+  "generatedAt": "2026-09-15T18:10:00Z",
+  "status": "ACTIVE_WAITING_RECORD_LEVEL_CANONICAL_AND_CLASSIFICATION_BINDINGS",
+  "claim": {
+    "path": "docs/recovery/live/claims/THREAD_5.lock",
+    "commit": "842397fab52a56fe9fa244c553f715c86824b1fa"
+  },
+  "hardRules": {
+    "zeroDeletions": true,
+    "zeroDestructiveVercelMutations": true,
+    "immutableProvenance": true,
+    "oneCanonicalIdentityMultipleGraphEdgesAllowed": true,
+    "duplicateUnderlyingRecordsAllowed": false,
+    "guessMissingClassification": false,
+    "moduleRoutedRequiresDurableRouteWrite": true,
+    "readyOrDeployedEqualsVerifiedLive": false
+  },
+  "identityContract": {
+    "path": "docs/recovery/live/canonical/CANONICAL_SHARDING_CONTRACT_V1.json",
+    "vercelStableRecordKey": "projectId:deploymentId",
+    "pantavionCorpusStableRecordKey": "recordId:sourceFingerprint",
+    "hash": "SHA-256 first 8 digest bytes unsigned big-endian mod 10",
+    "canonicalRequirement": "A record is canonical only after its durable canonical ledger write exists."
+  },
+  "ontologySource": "scripts/pantavion-canonical-semantic-classification-v3.cjs",
+  "inputs": [
+    "docs/recovery/live/shards/lane-j-module-classification.json",
+    "docs/recovery/live/canonical/CANONICAL_SHARDING_CONTRACT_V1.json",
+    "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+    "docs/recovery/live/TEN_THREAD_COORDINATOR_STATUS.json"
+  ],
+  "routeRelationships": [
+    "shared_core",
+    "module",
+    "subsystem",
+    "capability",
+    "feature",
+    "requirement",
+    "dependency",
+    "related_evidence",
+    "implementation_candidate",
+    "governed_hold",
+    "quarantine"
+  ],
+  "legacyClassificationCrosswalk": [
+    {
+      "legacyClass": "Social",
+      "moduleTarget": "Social / Pulse / Communities",
+      "deepTargetState": "WAITING_THREAD4_RECORD_CLASSIFICATION",
+      "routeState": "ROUTE_READY_AFTER_CANONICAL_BINDING"
+    },
+    {
+      "legacyClass": "People",
+      "moduleTarget": "People",
+      "deepTargetState": "WAITING_THREAD4_RECORD_CLASSIFICATION",
+      "routeState": "ROUTE_READY_AFTER_CANONICAL_BINDING"
+    },
+    {
+      "legacyClass": "Chat",
+      "moduleTarget": "Chat",
+      "deepTargetState": "WAITING_THREAD4_RECORD_CLASSIFICATION",
+      "routeState": "ROUTE_READY_AFTER_CANONICAL_BINDING"
+    },
+    {
+      "legacyClass": "Interpreter/Translation",
+      "moduleTarget": "Interpreter / Translation",
+      "deepTargetState": "WAITING_THREAD4_RECORD_CLASSIFICATION",
+      "routeState": "ROUTE_READY_AFTER_CANONICAL_BINDING"
+    },
+    {
+      "legacyClass": "Contacts",
+      "moduleTarget": "People",
+      "candidateSubsystems": ["profile", "discovery"],
+      "deepTargetState": "REVIEW_REQUIRED_UNTIL_THREAD4_RECORD_CLASSIFICATION",
+      "routeState": "MODULE_EDGE_PREPARED_NOT_ROUTED"
+    },
+    {
+      "legacyClass": "Trust/Verification",
+      "candidateModuleTargets": ["Safety / Trust / Minors", "Identity / Auth / Consent"],
+      "deepTargetState": "REVIEW_REQUIRED_PER_RECORD",
+      "routeState": "MULTI_EDGE_PREPARED_NOT_ROUTED"
+    },
+    {
+      "legacyClass": "Minors/Safety",
+      "moduleTarget": "Safety / Trust / Minors",
+      "deepTargetState": "WAITING_THREAD4_RECORD_CLASSIFICATION",
+      "routeState": "ROUTE_READY_AFTER_CANONICAL_BINDING"
+    },
+    {
+      "legacyClass": "AI/Orchestration",
+      "candidateModuleTargets": ["Personal AI / PantaAI", "Kernel / Guardian / Runtime"],
+      "deepTargetState": "REVIEW_REQUIRED_PER_RECORD",
+      "routeState": "MULTI_EDGE_PREPARED_NOT_ROUTED"
+    },
+    {
+      "legacyClass": "Memory/Continuity",
+      "moduleTarget": "Personal AI / PantaAI",
+      "candidateSubsystem": "memory",
+      "deepTargetState": "WAITING_THREAD4_RECORD_CLASSIFICATION",
+      "routeState": "MODULE_EDGE_PREPARED_NOT_ROUTED"
+    },
+    {
+      "legacyClass": "Security",
+      "candidateModuleTargets": ["Safety / Trust / Minors", "Identity / Auth / Consent", "Kernel / Guardian / Runtime"],
+      "deepTargetState": "REVIEW_REQUIRED_PER_RECORD",
+      "routeState": "MULTI_EDGE_PREPARED_NOT_ROUTED"
+    },
+    {
+      "legacyClass": "Infrastructure",
+      "candidateModuleTargets": ["Resilience / Offline / Infrastructure", "Kernel / Guardian / Runtime"],
+      "deepTargetState": "REVIEW_REQUIRED_PER_RECORD",
+      "routeState": "MULTI_EDGE_PREPARED_NOT_ROUTED"
+    }
+  ],
+  "governedHolds": [
+    {"legacyClass": "Ads Center", "reason": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_CLASSIFICATION_INPUT"},
+    {"legacyClass": "Business", "reason": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_CLASSIFICATION_INPUT"},
+    {"legacyClass": "Dating", "reason": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_CLASSIFICATION_INPUT"},
+    {"legacyClass": "Events", "reason": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_CLASSIFICATION_INPUT"},
+    {"legacyClass": "Marketplace", "reason": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_CLASSIFICATION_INPUT"},
+    {"legacyClass": "other/no-Git-v0", "reason": "HISTORICAL_CONTENT_UNIQUENESS_AND_MODULE_ASSIGNMENT_UNPROVEN"}
+  ],
+  "supersessionBoundary": {
+    "preserveHistoricalEvidence": true,
+    "doNotPropagateAsCurrentTruth": [
+      "lane-j Security evidence claiming current scheduled-worker credential failure"
+    ],
+    "currentRuntimeTruth": "TEN_THREAD_COORDINATOR_STATUS and direct scheduler/Supabase verification supersede older live-state assertions while preserving their historical provenance."
+  },
+  "currentCanonicalInputState": {
+    "canonicalDirectoryHasNewThread2Or3RecordLedgers": false,
+    "legacyLaneFCanonicalDeploymentRecords": 19,
+    "legacyLaneFRecordsHaveRecordLevelThread4Classification": false,
+    "safeFinalModuleRoutesWritten": 0,
+    "reason": "Thread 5 will not infer per-record module/subsystem/capability from deployment messages. It waits for durable canonical identity plus Thread 4 record-level classification."
+  },
+  "fanout": {
+    "thread2Thread3": "Publish durable canonical ledger records carrying stableRecordKey/canonical identity for eligible records.",
+    "thread4": "Publish record-level classification bound to canonical/stable IDs with theme/section/type/module/subsystem/capability/feature/canonicalTarget/confidence/reasons or REVIEW_REQUIRED.",
+    "thread6": "Consume only Thread 5 durable routed records; do not create work units from this preflight as if MODULE_ROUTED.",
+    "thread7": "Audit that prepared edges are not counted as routed and that no canonical identity is duplicated.",
+    "thread8": "Bind receipt/checksum/evidence pointer for Thread 5 routing artifacts.",
+    "thread9": "Do not create a second graph execution plane; expose a durable route-write target through the existing execution fabric when schema/runtime support is ready."
+  }
+}
