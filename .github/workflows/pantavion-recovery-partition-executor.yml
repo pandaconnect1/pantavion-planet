@@ -1,0 +1,40 @@
+name: Pantavion Recovery Partition Executor
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/pantavion-recovery-partition-executor.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: pantavion-recovery-partition-executor
+  cancel-in-progress: false
+
+jobs:
+  execute-recovery-partitions:
+    name: Execute fenced recovery partitions to terminal
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exact main revision
+        uses: actions/checkout@v4
+
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Generate deterministic recovery source index
+        run: node scripts/pantavion-recovery-source-batch-index.mjs
+
+      - name: Verify source index contract
+        run: node scripts/pantavion-recovery-source-batch-index-test.mjs
+
+      - name: Execute recovery partitions through GitHub OIDC fencing bridge
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-github-recovery-partition-executor.mjs
