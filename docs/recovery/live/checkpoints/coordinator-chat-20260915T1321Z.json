@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "observedManifestUpdatedAt": "2026-09-15T13:21:00Z",
+  "mode": "VERIFY_COORDINATE_ONLY",
+  "sourceManifestBlobSha": "0fdbed7add570c3aab4d55bb41ed1ae829a24a2f",
+  "recoveredDeploymentRecordsFloor": 3220,
+  "estimatedSourceRecords": 18000,
+  "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total and not directly comparable with mirrored deployment counts",
+  "canonical": {
+    "project": "pantavion-planet",
+    "nextCursor": 1782858024554,
+    "terminal": false,
+    "workerPromptReconciled": true,
+    "workerRule": "re-read live manifest/checkpoints before every batch; never paginate backward or duplicate checkpointed pages"
+  },
+  "mirror": {
+    "project": "pantavion-planet-vmxx",
+    "terminalCursor": 1786177840266,
+    "lastPageCount": 0,
+    "terminal": true,
+    "workerDisabled": true
+  },
+  "parallelLanes": {
+    "activeLocks": ["A", "B", "C", "D", "E"],
+    "unclaimedLane": false,
+    "foregroundDeepPaginationSkippedToAvoidDuplication": true
+  },
+  "legacyProjectEvidence": {
+    "laneDProjectsChecked": 7,
+    "laneDDeploymentRecordsPreserved": 12,
+    "laneDProjectsWithExplicitTerminalZero": 7,
+    "noGitProjects": 4,
+    "noGitDeploymentListingsExplicitZero": true,
+    "historicalRuntimeLogBlocker": "Vercel Logs API ExceedsBillingLimitError for older retained ranges; absence is not proven"
+  },
+  "hardGaps": [
+    "decrypted environment-secret values require authorized CLI/API export or reissue/rotation",
+    "complete deployment filesystem/build-output export is not available through the current Vercel connector",
+    "some historical runtime-log retrieval is blocked by Vercel billing/retention access"
+  ],
+  "rules": [
+    "zero deletions",
+    "zero Vercel mutations",
+    "no secret values recorded",
+    "READY or production is historical provenance, not VERIFIED_LIVE",
+    "canonical terminal may be claimed only after explicit count=0/no older records"
+  ]
+}
