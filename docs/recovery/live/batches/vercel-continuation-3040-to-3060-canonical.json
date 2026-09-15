@@ -1,0 +1,40 @@
+{
+  "capturedAt": "2026-09-15T14:36:00Z",
+  "sanitized": true,
+  "secretValuesIncluded": false,
+  "records": 20,
+  "canonical": {
+    "fromCursorExclusive": 1786149451883,
+    "nextCursor": 1786126296277,
+    "terminal": false,
+    "records": [
+      ["dpl_5NEYw1mudTg3BTABS2yaTzCoH4Hb",1786149376475,"READY","a141f11a5aac0d8165509d269b993a83d5e8a447"],
+      ["dpl_4MH34NGpKzWrtASvYQFoLMpDF3gS",1786149336745,"READY","85a94380711a300920536e7cd787ec6d1a8aead9"],
+      ["dpl_3oQng1P13Cr1sVDJ2AvFBq7SGECA",1786138914341,"READY","1101d8549a9ed95ae7d3ea291e4d387b6e51fcb7"],
+      ["dpl_6iWkjuqKAmQegQoVUntJgm1pys1Y",1786138896695,"READY","1bc2f49707ebe97d0f30952d0f6c9b1a19905178"],
+      ["dpl_Df3KowtbFG78715ocNtu2PcUHTDB",1786138882259,"READY","40f69025c3fcb5d18a3028151d4819351bcd7f26"],
+      ["dpl_78DxEGYrU89ythgN1KkkBdVx1pBc",1786138821850,"READY","7669566617a25430ee3406e1f98e83fe26013420"],
+      ["dpl_J4bSdrx8TZY4uFd3fFxn6auAiEdx",1786138798375,"READY","887fcef7f821dc581baacdcf476fb6eb3cd2f7b4"],
+      ["dpl_3FoCSL5D3FjFSUjtfJRF9mSgXW27",1786138731723,"READY","29f98474a92726950187b61a0062295aa81fdb5c"],
+      ["dpl_8nxNRYvipgXaRNt7WLa4GpWe1X7k",1786136985149,"READY","562353fd71bc172979b3f9fe2ee315a7ac4349e4"],
+      ["dpl_EyzcYDwh4ckeXiTX1gNLPjL3QHkU",1786136936856,"READY","840a70db7f68fe9cf7624357a5013000955d9d31"],
+      ["dpl_EWCtAzsJYjxSEk1BDLtdH5oe9f2L",1786126907570,"READY","2f8e042fb9b9ab11867031cedeb82edfe6e87b95"],
+      ["dpl_DC7PhxFGR5LWVxCjXsr5EVLf5wkQ",1786126823010,"READY","90ef49e9efa5ba5f89d3f740c6d3b5e54107d5a3"],
+      ["dpl_8weXHpywH4GTKAnd6docH9aYQvQQ",1786126808848,"READY","751cbd4faac06b2ae6f0318072f46d496d740fd9"],
+      ["dpl_AXFHww5PSRHq3uEcy3vnpQmmUEzf",1786126793500,"READY","fff30787870eb09f502970061953a34a23a109fa"],
+      ["dpl_8vRuNarNLKr2j73g3SF2nhwt4TKe",1786126783075,"READY","8af63674c5961a1283f2fedb20a95161799dc185"],
+      ["dpl_8s22JVxHfsZbnNccenaMpwRd9Mj7",1786126771988,"READY","87caf03c846091302ad6fd788e0051cbdb027fa6"],
+      ["dpl_DEMuEJg6dDuwAwQNEtvXc6XsefFm",1786126744222,"READY","dc9fbad0fd5c69eaafb38785a2740be9eec946e8"],
+      ["dpl_HEi7fuFKEVHxN63jz7fJANMiWfFT",1786126699522,"READY","2bbd3438e5c081c8e5129f29216a4bb48558a071"],
+      ["dpl_AgPnwtEKpzH5JpX1PyYd4RxAB6aF",1786126685033,"READY","ef08f4b331fc9fae99d383545c879b752cad0d8d"],
+      ["dpl_7Yh3QtukA9KsnTTgw6MQbWoHgFrd",1786126296277,"READY","b9c3d2ba497806cb6dcad5fd316ba89f293a7411"]
+    ]
+  },
+  "mirror": {"terminal": true,"records":[]},
+  "tupleSchema": ["deploymentId","created","state","githubCommitSha"],
+  "notes": [
+    "Evidence includes direct/bidirectional Interpreter flow, language detection, real multilingual STT, live translation fallback and mobile language-control provenance.",
+    "Creator identity/email and secret-bearing fields are excluded.",
+    "Canonical pagination remains non-terminal."
+  ]
+}
