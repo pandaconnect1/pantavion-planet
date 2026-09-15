@@ -1,0 +1,293 @@
+{
+  "schema": "pantavion_lane_j_module_classification_v1",
+  "lane": "J",
+  "updated_at_utc": "2026-09-15T14:23:00Z",
+  "status": "ACTIVE_PARTIAL",
+  "claim": {
+    "path": "docs/recovery/live/claims/LANE_J.lock",
+    "commit": "5bd69237952ef1fed5ffef545e861bb7d424c599",
+    "status": "ACTIVE"
+  },
+  "purpose": "Map recovered public-safe rescue evidence into Pantavion canonical modules/themes without guessing or duplicating A-D pagination.",
+  "hard_rules": {
+    "zero_deletions": true,
+    "zero_vercel_mutations": true,
+    "secret_values_written": false,
+    "private_source_written": false,
+    "deep_pagination_performed_by_lane_j": false,
+    "ready_or_production_equals_verified_live": false
+  },
+  "source_inputs": [
+    "docs/recovery/PARALLEL_RESCUE_MASTER_COMMAND_20260915.md",
+    "docs/recovery/PARALLEL_THREAD_RESCUE_PROTOCOL_20260915.md",
+    "docs/recovery/live/shards/lane-a-canonical.json",
+    "docs/recovery/live/shards/lane-b-vmxx.json",
+    "docs/recovery/live/shards/lane-c-legacy-a.json",
+    "docs/recovery/live/shards/lane-d-legacy-b.json",
+    "docs/recovery/live/shards/lane-e-secrets-artifacts.json",
+    "docs/recovery/live/shards/lane-f-canonical-ingestion.json",
+    "docs/recovery/live/shards/lane-h-runtime-build.json",
+    "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
+    "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md"
+  ],
+  "source_state": {
+    "lane_a": "TERMINAL_CHECKPOINTED",
+    "lane_b": "TERMINAL_VERIFIED",
+    "lane_c": "TERMINAL_VERIFIED",
+    "lane_d": "DEPLOYMENT_HISTORIES_TERMINAL_WITH_HISTORICAL_RUNTIME_EXPORT_BLOCKER",
+    "lane_e": "BLOCKED_AUTH_EXPORT",
+    "lane_f": "ACTIVE_PARTIAL_CANONICALIZATION",
+    "lane_h": "TERMINAL_VERIFIED",
+    "lane_g": "NO_SHARD_FOUND_AT_LAST_CHECK",
+    "classification_scope": "Only source-bound evidence currently available to Lane J; no unsupported completion percentages."
+  },
+  "modules": {
+    "Social": {
+      "classification": "EVIDENCE_BOUND",
+      "evidence": [
+        {
+          "summary": "Protected Social to Chat production flow; Social mutations routed through protected RPCs, block-aware visibility and media-only posts.",
+          "git_sha": "eb5597d57634cdfd1704b608c30311944bfa39ec",
+          "pr": 305,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Canonical Identity/People/Safety restoration includes social command hardening and protected-profile publication controls.",
+          "git_sha": "44503e527b234c23c94f25762a9b729dfa19c6b7",
+          "pr": 303,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        }
+      ]
+    },
+    "People": {
+      "classification": "EVIDENCE_BOUND",
+      "evidence": [
+        {
+          "summary": "Canonical People restoration includes People registration and nearby-location evolution evidence.",
+          "git_sha": "44503e527b234c23c94f25762a9b729dfa19c6b7",
+          "pr": 303,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        }
+      ]
+    },
+    "Chat": {
+      "classification": "EVIDENCE_BOUND",
+      "evidence": [
+        {
+          "summary": "Protected Social to Chat flow and chat privacy/messaging-boundary restoration evidence.",
+          "git_sha": "eb5597d57634cdfd1704b608c30311944bfa39ec",
+          "pr": 305,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Canonical restoration includes chat privacy gates and relationship messaging boundary hardening.",
+          "git_sha": "44503e527b234c23c94f25762a9b729dfa19c6b7",
+          "pr": 303,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        }
+      ]
+    },
+    "Interpreter/Translation": {
+      "classification": "EVIDENCE_BOUND",
+      "evidence": [
+        {
+          "summary": "Bidirectional translation production E2E gate branch evidence.",
+          "git_sha": "6776bb4a8e3f7faf3e12c2682da716fccb33d224",
+          "pr": 288,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Production verification deployment provenance for bidirectional translation.",
+          "git_sha": "49682c8915c2cded6d0d647af56115e8d9d19e1c",
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+          "live_truth": "HISTORICAL_ONLY",
+          "note": "Production provenance is not a current functional translation test."
+        }
+      ]
+    },
+    "Contacts": {
+      "classification": "EVIDENCE_BOUND",
+      "evidence": [
+        {
+          "summary": "Canonical restoration includes contact import, contact discovery, contact matching and multi-contact-point related migration provenance.",
+          "git_sha": "44503e527b234c23c94f25762a9b729dfa19c6b7",
+          "pr": 303,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        }
+      ]
+    },
+    "Trust/Verification": {
+      "classification": "EVIDENCE_BOUND",
+      "evidence": [
+        {
+          "summary": "Identity/security/trust-safety migration restoration and protected profile controls.",
+          "git_sha": "44503e527b234c23c94f25762a9b729dfa19c6b7",
+          "pr": 303,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Personal AI DB truth hardening, prevention of client-forged verified memory truth and handoff/truth-state protection.",
+          "git_sha": "0c36f17dd444b0978df0388f4d7c069d65076302",
+          "pr": 291,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Founder recovery route boundary on authoritative production returns HTTP 200 and Founder Access Required.",
+          "source": "docs/recovery/live/shards/lane-e-secrets-artifacts.json",
+          "live_truth": "VERIFIED_LIVE_ROUTE_BOUNDARY_ONLY"
+        }
+      ]
+    },
+    "Minors/Safety": {
+      "classification": "EVIDENCE_BOUND",
+      "evidence": [
+        {
+          "summary": "Youth/curriculum policy runtime, policy-aware minors surface, adaptive age/jurisdiction, support-network safeguards and minor messaging enforcement were recovered as historical deployment provenance.",
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        }
+      ]
+    },
+    "AI/Orchestration": {
+      "classification": "EVIDENCE_BOUND",
+      "evidence": [
+        {
+          "summary": "Personal AI Runtime v1: secure per-user runtime, authenticated execute/state APIs, AI Gateway boundary and authenticated My AI surface.",
+          "git_sha": "0c36f17dd444b0978df0388f4d7c069d65076302",
+          "pr": 291,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Personal AI multimodal OIDC v3: OIDC execution runtime, real image/PDF input and multimodal analysis surface.",
+          "pr": 293,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Autonomy-report hardening to read-only/artifact-only behavior.",
+          "git_sha": "294b05a03b294411bdff48fb57f93f14d409d388",
+          "pr": 304,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        }
+      ]
+    },
+    "Memory/Continuity": {
+      "classification": "EVIDENCE_BOUND",
+      "evidence": [
+        {
+          "summary": "Personal AI Runtime v1 includes persistent thread continuity, cross-thread memory retrieval, user-controlled memory, life items and relationship context.",
+          "git_sha": "0c36f17dd444b0978df0388f4d7c069d65076302",
+          "pr": 291,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Advanced Memory v2 includes context capsule, memory-health engine/UI, authenticated context handoff and supersession ownership hardening.",
+          "git_sha": "bf6a1201fa62655146212185373513e6adddd34c",
+          "pr": 292,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        }
+      ]
+    },
+    "Security": {
+      "classification": "EVIDENCE_BOUND_WITH_ACTIVE_BLOCKER",
+      "evidence": [
+        {
+          "summary": "Personal AI v1 provenance includes forced RLS, truth-state hardening and protected handoffs.",
+          "git_sha": "0c36f17dd444b0978df0388f4d7c069d65076302",
+          "pr": 291,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Explicit production promotion approval and locked Node 22 quality-gate provenance.",
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Current canonical scheduled worker runtime failure: Supabase admin credential is unavailable/unreadable in production.",
+          "route": "/api/pantavion/intelligence/cron",
+          "error_group": "pantavion_secure_scheduled_worker_failed",
+          "source": "docs/recovery/live/shards/lane-h-runtime-build.json",
+          "live_truth": "RUNTIME_FAILURE_CONFIRMED",
+          "privacy": "SECRET_NAME_ONLY_NO_VALUE"
+        }
+      ]
+    },
+    "Infrastructure": {
+      "classification": "EVIDENCE_BOUND_WITH_EXPORT_GAPS",
+      "evidence": [
+        {
+          "summary": "Foundry control plane rebase and canonical production integration provenance.",
+          "git_sha": "c63532a6cb7e8564204b1145851ebc658d0e12f8",
+          "pr": 287,
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Current Vercel connector cannot export complete deployment file trees or exact decrypted environment values; authenticated private export remains required.",
+          "source": "docs/recovery/live/shards/lane-e-secrets-artifacts.json",
+          "rescue_state": "BLOCKED_AUTH_EXPORT"
+        },
+        {
+          "summary": "Historical runtime log retrieval for old deployments is blocked by Vercel billing/retention limits.",
+          "source": "docs/recovery/live/shards/lane-d-legacy-b.json",
+          "rescue_state": "BLOCKED_VERCEL_HISTORICAL_RUNTIME_BILLING_LIMIT"
+        }
+      ]
+    },
+    "Ads Center": {
+      "classification": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_J_INPUT"
+    },
+    "Business": {
+      "classification": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_J_INPUT"
+    },
+    "Dating": {
+      "classification": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_J_INPUT"
+    },
+    "Events": {
+      "classification": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_J_INPUT"
+    },
+    "Marketplace": {
+      "classification": "REVIEW_REQUIRED_NO_DIRECT_BOUND_EVIDENCE_IN_CURRENT_J_INPUT"
+    },
+    "other": {
+      "classification": "EVIDENCE_BOUND_AND_REVIEW_QUEUE",
+      "evidence": [
+        {
+          "summary": "Legacy donor preservation provenance exists for Pantaai, four donor repository trees, pantavion-one-clean-ui and pantavion-voice; module assignment is intentionally deferred where the preserved checkpoint does not prove a unique canonical module.",
+          "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+          "live_truth": "HISTORICAL_ONLY"
+        }
+      ]
+    }
+  },
+  "classification_notes": [
+    "The 14:19 pagination checkpoint reported histories OPEN at that moment; this is superseded for completion state by later owner-lane A/B terminal-zero evidence. Its deployment provenance remains usable as historical evidence.",
+    "Lane F currently exposes 219 payload-backed canonicalized records and an explicit 400-record summary-only payload gap in one Lane-A run. Lane J does not convert summary-only counts into item-level classifications.",
+    "A missing direct classification for Ads Center, Business, Dating, Events or Marketplace does not mean the capability is absent from the repository; it means the current source-bound Lane J input does not prove a classification yet.",
+    "No module is marked complete or VERIFIED_LIVE solely from deployment metadata."
+  ],
+  "handoff": {
+    "to_lane_k": "This shard is public-safe founder-feed classification input. Lane K may consume it without reclassifying unsupported modules as present.",
+    "to_lane_l": "Audit module provenance, ambiguity queue and conflicts against later F/G/I outputs."
+  },
+  "next_unique_work": [
+    "Consume newly canonicalized Lane F records as they appear and classify only payload-backed evidence.",
+    "Consume Lane G provenance shard if/when created and reconcile unique-vs-mirror classifications.",
+    "Consume Lane I no-Git classifier evidence without inferring module content where uniqueness is unproven.",
+    "Resolve review-required module themes only from direct evidence, not project names or assumptions."
+  ]
+}
