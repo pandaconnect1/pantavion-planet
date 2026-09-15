@@ -1,0 +1,66 @@
+{
+  "capturedAt": "2026-09-15T13:20:00Z",
+  "sanitized": true,
+  "secretValuesIncluded": false,
+  "records": 40,
+  "canonical": {
+    "project": "pantavion-planet",
+    "fromCursorExclusive": 1786553202397,
+    "nextCursor": 1786447657347,
+    "deployments": [
+      ["dpl_6CuCUvVBYJYkZStoNcnqEubrgNBL",1786552875537,"READY","production","main","94ed816160e95686c76c673f3fa82927ede688b5"],
+      ["dpl_JDoa5WUL7oBguaA1BJbiKwKe3yZU",1786552250636,"READY","production","main","0b4027917425a81a7a8d0e1187a0d3b8176a115e"],
+      ["dpl_Fiz7s5FAVoujoLfpxS6kjAHzDSdc",1786551039182,"READY","production","main","d51c857ab4ebc7cade61524941f2ea8a15222062"],
+      ["dpl_244iUZfnjvzQVEWZ4RVAcofPDxwv",1786550261889,"READY",null,"feature/music-voice-studio","1b694997b3e71abd328af49cce3a7e8c7845689b"],
+      ["dpl_Dd8x4zqN3qzwFeG6bsb5xxycdzg8",1786550089548,"READY","production","main","05971fd86ff8902e0f7115b1726aea69924d678a"],
+      ["dpl_127N94zwuoyJAPtnpdaqWEFDdtQU",1786549826665,"READY","production","main","d77e23cbe75e224e00e9c6553a5491ccfa3c9fde"],
+      ["dpl_BD5PfRGEpYmaoh4qza6SWSsHWXsp",1786549750653,"READY",null,"fix/social-health-diagnostics","30d1990c7aa5a41c67f56bd651ac05442f6122ab"],
+      ["dpl_2jXrQqESXbUxg6xTATG7oRbYqudC",1786548655717,"READY","production","main","0a7dc2ceb98ea8931105456544ce685c17a418f4"],
+      ["dpl_9rf2HxSGu2forqJ8x6bTCKXHphBu",1786548444787,"READY",null,"fix/production-sync-yaml","f57f2ee3a2bcf506004a2dea74ba8c9718e740ff"],
+      ["dpl_5XtHyMqDzhzXBgsJpib9ett3UeQi",1786547308536,"READY","production","main","60efa9291f39a5378ebc7a75825af9a17013a451"],
+      ["dpl_3U1x1V6oGU4UZeMeSpKULF5fNuDc",1786547048164,"READY",null,"fix/production-sync-verification","49c69c990c3428204b3ba5f9b320d29cd8a55206"],
+      ["dpl_AApQo8vquMRsDLVeEGX2Njj6m7Ra",1786547007226,"READY",null,"fix/production-sync-verification","3e2443272336681d9bcc650649b0e7d54f4ae4dd"],
+      ["dpl_8YPbwjni6zhiWNQYuf3JfwKTNdVE",1786546659217,"READY","production","main","80613d3461a968dd20fc9f363eb5de4462553158"],
+      ["dpl_Eau2gx8ai6BARUAwfbCYDYAz5TLq",1786546456527,"READY",null,"fix/social-live-backend-gate","b66b16615e0f2884a0f43292f710803aa1f8abf7"],
+      ["dpl_EbtPeNgGtTfVpi969UxeQxZNnCZ2",1786546368804,"READY",null,"fix/social-live-backend-gate","71f9d9fd88722b177297a62257e618e20fbc887e"],
+      ["dpl_D9RZRcKbJdE4boTNxrWFAayWLdnB",1786546303396,"READY",null,"fix/social-live-backend-gate","55a0ebb02a6a8584616536b5ce3ca6ab8d511385"],
+      ["dpl_DqKwhgqPYGiQ1xx3L62fZmwC2AfC",1786538836542,"READY","production","main","92acddf92fb3cc74912f952a2f4846d2466235d6"],
+      ["dpl_8CiKzrMdgVZDNiRJg3ZCsjPGvbBz",1786447737188,"READY","production","main","03d5252a572dbcec6731dea72f89371e2a3daad5"],
+      ["dpl_CzHQyv8rdhuwm5g6oQx7ja8rnSPC",1786447689030,"READY","production","main","f8127fdec4c8e99ca0acce7f998068bdc5402f14"],
+      ["dpl_4RN4iV8uvpSFVT3Jw4t2PRQBdoNV",1786447657347,"READY","production","main","24fcc7c961f4980952fe5360ec934f74f70da7f7"]
+    ]
+  },
+  "mirror": {
+    "project": "pantavion-planet-vmxx",
+    "fromCursorExclusive": 1786553202092,
+    "nextCursor": 1786447657336,
+    "deployments": [
+      ["dpl_vjySM5iwmtqUcBGEuMKPtE2AHRVy",1786552875510,"READY","production","main","94ed816160e95686c76c673f3fa82927ede688b5"],
+      ["dpl_46yTi2AYi49LZgS7qS1Qh5MsEGDo",1786552250454,"READY","production","main","0b4027917425a81a7a8d0e1187a0d3b8176a115e"],
+      ["dpl_CqMD7Tqw1cpu6rLTxahr7zbzxNaY",1786551039122,"READY","production","main","d51c857ab4ebc7cade61524941f2ea8a15222062"],
+      ["dpl_54EWSSTPHsmPnh3Pn2CkNA7Wi1sg",1786550261827,"READY",null,"feature/music-voice-studio","1b694997b3e71abd328af49cce3a7e8c7845689b"],
+      ["dpl_9X8ouCHcVwRkuznfZyxvrfUhnrNY",1786550089363,"READY","production","main","05971fd86ff8902e0f7115b1726aea69924d678a"],
+      ["dpl_CGh5AXeDWRsgAm4VPj3Xe9Jnj5dT",1786549826600,"READY","production","main","d77e23cbe75e224e00e9c6553a5491ccfa3c9fde"],
+      ["dpl_BNgtbwazGFrRopEwnT5iBgUwPui1",1786549750681,"READY",null,"fix/social-health-diagnostics","30d1990c7aa5a41c67f56bd651ac05442f6122ab"],
+      ["dpl_5DXRxJDZzsDVsQ7wn79arHNKLMzT",1786548655563,"READY","production","main","0a7dc2ceb98ea8931105456544ce685c17a418f4"],
+      ["dpl_HuiTXjKEiXBKjFcxnoV6f9m8Spsg",1786548444759,"READY",null,"fix/production-sync-yaml","f57f2ee3a2bcf506004a2dea74ba8c9718e740ff"],
+      ["dpl_36rkrKetk9RZtDR943p5okpnDd9F",1786547308519,"READY","production","main","60efa9291f39a5378ebc7a75825af9a17013a451"],
+      ["dpl_2s8QuzGseyVZpBfJ71brr7AJSWjo",1786547048208,"READY",null,"fix/production-sync-verification","49c69c990c3428204b3ba5f9b320d29cd8a55206"],
+      ["dpl_9XsZPDeGEMsWzLHGzxSvdf1SZUoR",1786547007227,"READY",null,"fix/production-sync-verification","3e2443272336681d9bcc650649b0e7d54f4ae4dd"],
+      ["dpl_DrXYTTbyzSDX2fMnWnJ8McpzurC5",1786546659230,"READY","production","main","80613d3461a968dd20fc9f363eb5de4462553158"],
+      ["dpl_77JQGYHoWuzWuLGpe7DDc7sYseda",1786546456570,"READY",null,"fix/social-live-backend-gate","b66b16615e0f2884a0f43292f710803aa1f8abf7"],
+      ["dpl_4kdgyuARJVCJfEnuDzscRskGLszg",1786546366648,"READY",null,"fix/social-live-backend-gate","71f9d9fd88722b177297a62257e618e20fbc887e"],
+      ["dpl_C718ZCKBHP1QZPBYsXWRxQxr16RX",1786546303386,"READY",null,"fix/social-live-backend-gate","55a0ebb02a6a8584616536b5ce3ca6ab8d511385"],
+      ["dpl_89FejTJ4KiH6vJjXKzSGxkm1HbWQ",1786538836335,"READY","production","main","92acddf92fb3cc74912f952a2f4846d2466235d6"],
+      ["dpl_BboCdPDQXGsqTRXJtJTQyi7jgZEM",1786447737120,"READY","production","main","03d5252a572dbcec6731dea72f89371e2a3daad5"],
+      ["dpl_5gjU3D2yzkCkuABZb9PRibKhdmNb",1786447688936,"READY","production","main","f8127fdec4c8e99ca0acce7f998068bdc5402f14"],
+      ["dpl_8VrYucqMVkYufRdq6UYoUeinaXfz",1786447657336,"READY","production","main","24fcc7c961f4980952fe5360ec934f74f70da7f7"]
+    ]
+  },
+  "tupleSchema": ["deploymentId","created","state","target","githubRef","githubCommitSha"],
+  "notes": [
+    "Creator identity and email fields were intentionally excluded from the public repository artifact.",
+    "Canonical and mirror records can refer to the same Git commit; record count is not a unique-feature count.",
+    "Pagination remains non-terminal and rescue must continue."
+  ]
+}
