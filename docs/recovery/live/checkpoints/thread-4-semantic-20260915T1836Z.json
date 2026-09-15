@@ -1,0 +1,74 @@
+{
+  "schema":"pantavion_absorption_thread_checkpoint_v1",
+  "protocol":"PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
+  "thread":4,
+  "scope":"AI_SEMANTIC_CLASSIFICATION_SWARM",
+  "checkpointAtUtc":"2026-09-15T18:36:00Z",
+  "status":"ACTIVE_CAUGHT_UP_FOR_CURRENT_PAYLOAD_BACKED_CANONICAL_INPUT",
+  "ownership":{"claim":"docs/recovery/live/claims/THREAD_4.lock","exclusiveThread4ClaimObserved":true,"otherThreadScopesMutated":false},
+  "inputTruth":{
+    "laneACapturedRecords":619,
+    "payloadBackedCanonicalCandidates":219,
+    "summaryOnlyPayloadGap":400,
+    "payloadBackedRanges":["1-100","101-200","601-619"],
+    "unclassifiableWithoutNewPerRecordEvidenceRanges":["201-400","401-500","501-600"],
+    "gapOwnershipObserved":"docs/recovery/live/claims/COORDINATOR_GAP_A_201_600.lock",
+    "rule":"Do not classify summary-only counts as individual records."
+  },
+  "classificationProgress":{
+    "classifiedPayloadBackedRecords":219,
+    "classifiedCoverageOfCurrentPayloadBackedInput":"219/219",
+    "reviewRequired":2,
+    "regularRoutingEligible":217,
+    "reviewHoldRoutingEligible":2,
+    "errorDeploymentProvenanceRecords":43,
+    "errorDeploymentRule":"Preserved implementation/provenance evidence only; never runtime-success evidence.",
+    "nonFunctionalOrEvidenceOnlyRecords":6,
+    "canonicalCountDelta":0,
+    "sourceEvidenceMutations":0,
+    "moduleGraphRoutingWrites":0,
+    "agentWorkQueueWrites":0,
+    "vercelMutations":0,
+    "deletions":0,
+    "secretValuesWritten":0
+  },
+  "reviewRequiredRecords":[
+    {"stableRecordKey":"prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_D5bmrSF5wGppvPbacE6zpn2P5F2s","reason":"Release 1 live navigation message does not identify an exact canonical target/module set."},
+    {"stableRecordKey":"prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_HKkrYyKi7CUqUX1o4WZJJt6NdwG7","reason":"Live user surface message is insufficient to identify the exact canonical module target."}
+  ],
+  "semanticMirrorGroups":[
+    {"gitSha":"c67f9aa71ea2769e0eb150a8d9e1e2675accfd2f","physicalDeploymentRecords":2,"rule":"Preserve both physical deployment identities; do not duplicate implementation semantics downstream."},
+    {"gitSha":"1df930183fbb67c740ef1cb501056bded68b881c","physicalDeploymentRecords":3,"rule":"Preserve all physical deployment identities; do not triplicate implementation semantics downstream."}
+  ],
+  "durableClassificationArtifacts":[
+    "docs/recovery/live/shards/thread-4-semantic-001-020.json",
+    "docs/recovery/live/shards/thread-4-semantic-021-040.json",
+    "docs/recovery/live/shards/thread-4-semantic-041-060.json",
+    "docs/recovery/live/shards/thread-4-semantic-061-080.json",
+    "docs/recovery/live/shards/thread-4-semantic-081-100.json",
+    "docs/recovery/live/shards/thread-4-semantic-101-120.json",
+    "docs/recovery/live/shards/thread-4-semantic-121-140.json",
+    "docs/recovery/live/shards/thread-4-semantic-141-160.json",
+    "docs/recovery/live/shards/thread-4-semantic-161-180.json",
+    "docs/recovery/live/shards/thread-4-semantic-181-200.json",
+    "docs/recovery/live/shards/thread-4-semantic-601-619.json"
+  ],
+  "sourceArtifacts":[
+    {"path":"docs/recovery/live/batches/lane-a-20260915T1320Z-100.json","blobSha":"ef572d923d3992ac0abae4aa924862bf3949c47a","recordCount":100,"canonicalState":"CANONICALIZED_BY_REFERENCE"},
+    {"path":"docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json","blobSha":"bb895e553a0d13adbb9c71925a7d4e50528018b0","recordCount":100,"canonicalState":"CANONICALIZED_BY_REFERENCE"},
+    {"path":"docs/recovery/live/canonical/lane-f-a-terminal-601-619.json","recordCount":19,"canonicalState":"CANONICALIZED_MATERIALIZED"}
+  ],
+  "downstreamHandoff":{
+    "thread5MayConsume":true,
+    "instruction":"Use one canonical identity per stableRecordKey; create graph relationships from these semantic classifications. Route REVIEW_REQUIRED records to explicit governed review/hold, not guessed module truth. Preserve semantic-mirror physical provenance while deduplicating implementation semantics.",
+    "thread6MayConsumeAfterRouting":true,
+    "thread7AuditReady":true
+  },
+  "truthBoundaries":[
+    "READY/DEPLOYED is not VERIFIED_LIVE.",
+    "ERROR deployment is not implementation success or runtime success.",
+    "Summary-only traversal/count evidence is not per-record classification evidence.",
+    "This checkpoint is complete only for the currently available 219 payload-backed canonical candidates; Thread 4 remains ACTIVE for newly canonicalized inputs."
+  ],
+  "nextThread4Action":"Consume newly canonicalized payload-backed records when produced by Threads 2/3; do not enter coordinator gap recovery, routing, work-queue, audit, or Vercel intake scopes."
+}
