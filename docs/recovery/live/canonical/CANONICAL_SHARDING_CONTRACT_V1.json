@@ -1,0 +1,31 @@
+{
+  "contract": "PANTAVION_CANONICAL_SHARDING_V1",
+  "createdAt": "2026-09-15T18:08:00Z",
+  "purpose": "Deterministic non-overlapping ownership for 10-thread absorption canonical workers.",
+  "stableRecordKey": {
+    "vercelDeployment": "projectId:deploymentId",
+    "pantavionCorpus": "recordId:sourceFingerprint",
+    "encoding": "UTF-8",
+    "normalization": "No case folding, trimming, Unicode rewriting, or field reordering after the stable key components have been canonically selected."
+  },
+  "hash": {
+    "algorithm": "SHA-256",
+    "projection": "first 8 digest bytes interpreted as unsigned big-endian 64-bit integer",
+    "bucket": "projection mod 10"
+  },
+  "ownership": {
+    "thread2": [0,1,2,3,4],
+    "thread3": [5,6,7,8,9]
+  },
+  "testVectors": [
+    {"stableRecordKey":"prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_JAY4SZKzm5RLxGJcFHevzVrQabiG","sha256":"28a559eb7b362b368f85d2a7ef8e46f60ffc254d66c40f02e1b9d3aeebb234f6","bucket":8},
+    {"stableRecordKey":"prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_FAiFjzU2wCyw96SocH463V2AC6e4","sha256":"cbe67942c5de89810147a43e226a6457c17050290b6b62ad7ef0b6bd7dbecd4f","bucket":5},
+    {"stableRecordKey":"prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6EufXow1wLmEnN7aqVrFn83uwAYJ","sha256":"9e105c4d31e5e2194e0e15966df04f6fd91a821d32032377bf7ea15be0690584","bucket":7}
+  ],
+  "rules": [
+    "Workers MUST NOT process a record whose bucket is outside their ownership set.",
+    "A record is canonical only after its durable canonical ledger write exists.",
+    "Source provenance is immutable and remains independently preserved.",
+    "Changing this contract requires a new version; V1 records are never silently re-sharded."
+  ]
+}
