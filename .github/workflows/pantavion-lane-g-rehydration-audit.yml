@@ -27,7 +27,10 @@ jobs:
         with:
           node-version: "22"
       - name: Audit 400 rehydrated Vercel deployment records
-        run: node scripts/pantavion-lane-g-rehydration-audit.mjs | tee lane-g-rehydration-audit.json
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/pantavion-lane-g-rehydration-audit.mjs | tee lane-g-rehydration-audit.json
       - name: Upload audit evidence
         uses: actions/upload-artifact@v4
         with:
