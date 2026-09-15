@@ -1,0 +1,130 @@
+{
+  "schema": "pantavion_thread8_parallel_output_receipt_v1",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_20260915",
+  "thread": 8,
+  "scope": "GITHUB_EVIDENCE_DURABILITY",
+  "observedAtUtc": "2026-09-15T18:26:23Z",
+  "recoveryBranch": "backup/pre-vercel-risk-20260914",
+  "branchHeadObserved": {
+    "commitSha": "727447f7b5dcca30a494c4cedd95d927cc0287ce",
+    "treeSha": "ba9c8f70fd1cc978a0038fba3e6bd382793e58eb",
+    "message": "recovery: classify Thread 2 Lane-G canonical 441-480 as evidence-limited review"
+  },
+  "truthRules": {
+    "activityEvidenceIsNotCompletion": true,
+    "commitMessageAloneDoesNotRaiseCounts": true,
+    "readyOrDeployedIsNotVerifiedLive": true,
+    "preflightIsNotRouted": true,
+    "routerCodePresentIsNotRouterExecution": true,
+    "blockedIsNotComplete": true,
+    "noDatasetConflation": true
+  },
+  "boundOutputs": [
+    {
+      "ownerThread": 5,
+      "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
+      "commitSha": "7d0bcd7050fed5bd5e672861cc6edbca224d0a03",
+      "treeSha": "9e7a574161f534d147499e8908e11c1a2f892759",
+      "artifact": {
+        "path": "docs/recovery/live/routing/thread-5-routing-manifest.json",
+        "gitBlobSha": "e7ce37ca475afc691713d727e5bc866b9deb80db"
+      },
+      "inspectedTruth": {
+        "classificationArtifacts": 16,
+        "sourceRecords": 320,
+        "routedRecords": 19,
+        "reviewRequired": 0,
+        "waitingCanonical": 301,
+        "waitingClassification": 0,
+        "canonicalConflicts": 0,
+        "graphEdges": 128,
+        "semanticMirrorsSuppressed": 1,
+        "implementationCandidates": 20,
+        "routedSource": "docs/recovery/live/routing/thread-5-routes-601-619.json",
+        "routedSourceRecords": 19,
+        "routedSourceGraphEdges": 128
+      },
+      "completionAssertion": "REAL_ROUTING_OBSERVED_PARTIAL_NOT_COMPLETE"
+    },
+    {
+      "ownerThread": 9,
+      "scope": "SUPABASE_DURABLE_WORKER_PLANE_TERMINAL_EXECUTION",
+      "commitSha": "5ee1389f4786da32da408b2e1000692187ea09bb",
+      "treeSha": "040628736a7cdbec8278e9b2bf44a57d49c475cb",
+      "artifact": {
+        "path": ".github/workflows/pantavion-recovery-partition-executor.yml",
+        "gitBlobSha": "31b5daa087c545276ff663719a06562874bdabeb"
+      },
+      "inspectedTruth": {
+        "workflowName": "Pantavion Recovery Partition Executor",
+        "workflowId": 358985505,
+        "runId": 35006462360,
+        "runStatus": "completed",
+        "runConclusion": "success",
+        "jobId": 104507324073,
+        "jobName": "Execute fenced recovery partitions to terminal",
+        "jobStatus": "completed",
+        "jobConclusion": "success",
+        "fencedOidcExecutionStepStatus": "completed",
+        "fencedOidcExecutionStepConclusion": "success"
+      },
+      "completionAssertion": "FENCED_PARTITION_RUN_TERMINAL_SUCCESS_NOT_GLOBAL_RECOVERY_COMPLETION"
+    }
+  ],
+  "thread9RuntimeTruth": {
+    "taskName": "pantavion:recovery_partition:v1",
+    "observedAtUtc": "2026-09-15T18:25:33.348329Z",
+    "total": 165,
+    "planned": 0,
+    "queued": 0,
+    "running": 0,
+    "succeeded": 165,
+    "failed": 0,
+    "leased": 0,
+    "maxAttempt": 1,
+    "latestLeaseHeartbeat": "2026-09-15T18:25:10.028440Z",
+    "latestExecutionUpdateUtc": "2026-09-15T18:25:10.028440Z",
+    "executionProofState": "FENCED_EXECUTION_TERMINAL_OBSERVED",
+    "thread9LockExists": true,
+    "lockIsNotExecutionProof": true,
+    "terminal": true
+  },
+  "actionsEvidence": {
+    "workflowName": "Pantavion Recovery Partition Executor",
+    "workflowId": 358985505,
+    "runId": 35006462360,
+    "headSha": "5ee1389f4786da32da408b2e1000692187ea09bb",
+    "event": "push",
+    "statusAtObservation": "completed",
+    "conclusionAtObservation": "success",
+    "jobId": 104507324073,
+    "jobName": "Execute fenced recovery partitions to terminal",
+    "jobConclusion": "success",
+    "secretValuesRecorded": false
+  },
+  "downstreamSnapshot": {
+    "thread5StateChanged": true,
+    "thread5RoutedRecords": 19,
+    "thread5WaitingCanonical": 301,
+    "thread6NewestDurableCheckpointObserved": "docs/recovery/live/checkpoints/thread-6-agent-work-queue-20260915T1812Z.json",
+    "thread6NewestDurableCheckpointBlob": "1a2301301aa00c3afc70bd9b3ff957190931cf84",
+    "thread6PostRoutingConsumptionProofObserved": false,
+    "rule": "Do not infer agent work-unit consumption without a newer durable Thread 6 proof."
+  },
+  "notAsserted": {
+    "thread1GlobalIntakeCompletion": "NOT_ASSERTED_BY_THIS_RECEIPT",
+    "canonicalGlobalCompletion": "NOT_ASSERTED_BY_THIS_RECEIPT",
+    "thread5RoutingCompletion": "EXPLICITLY_FALSE_AT_OBSERVATION",
+    "thread6DownstreamCompletion": "NOT_OBSERVED",
+    "founderFeedAuthenticatedVerification": "NOT_ASSERTED_BY_THIS_RECEIPT",
+    "finalConvergence": false
+  },
+  "safety": {
+    "zeroDeletions": true,
+    "zeroDestructiveVercelMutations": true,
+    "secretsRecorded": false,
+    "rawPayloadsDuplicated": false,
+    "foreignThreadArtifactsMutated": false
+  },
+  "state": "THREAD9_TERMINAL_RUN_AND_PARTIAL_ROUTING_EVIDENCE_BOUND_OPEN_NOT_COMPLETE"
+}
