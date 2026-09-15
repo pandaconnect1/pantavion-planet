@@ -1,21 +1,21 @@
 {
-  "updatedAt": "2026-09-15T14:02:00Z",
+  "updatedAt": "2026-09-15T14:12:00Z",
   "phase": "EMERGENCY_VERCEL_RESCUE",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total and not directly comparable with mirrored deployment counts",
-  "recoveredDeploymentRecordsFloor": 2940,
-  "recoveredDeploymentRecordsFloorBasis": "verified lower bound of deployment records captured in rescue checkpoints; mirror overlap may exist; continuation calls use strictly older-than checkpoint cursors to avoid page-edge duplication",
+  "recoveredDeploymentRecordsFloor": 2980,
+  "recoveredDeploymentRecordsFloorBasis": "verified lower bound of deployment records captured in rescue checkpoints; mirror overlap may exist; canonical and mirror lanes are independently paginated using strictly older-than cursors",
   "canonical": {
     "project": "pantavion-planet",
     "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
-    "nextCursor": 1786288386045,
+    "nextCursor": 1786174987467,
     "lastPageCount": 20,
     "terminal": false
   },
   "mirror": {
     "project": "pantavion-planet-vmxx",
     "projectId": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
-    "nextCursor": 1786288385956,
+    "nextCursor": 1786177840266,
     "lastPageCount": 20,
     "terminal": false
   },
@@ -24,17 +24,17 @@
     "pages": 2,
     "canonicalRecords": 20,
     "mirrorRecords": 20,
-    "note": "One full 20-record page was preserved from each history after the 2,900 checkpoint; both histories remain non-terminal."
+    "note": "One full page from each history was preserved after 2,940. The lane cursors now diverge in time, so they continue independently."
   },
   "recentEvidence": [
-    "Human Core authenticated consent, relationships and messaging schema provenance",
-    "machine-readable recovery manifests and canonical recovery/live integration ledger provenance",
-    "Pantavion live placement/completion maps and master recovery handoff provenance",
-    "historical recovery catalog and commit-audit provenance",
-    "social-business/listings ecosystem shell and scalable discovery-menu provenance",
-    "full ecosystem gateway and People messaging wave provenance",
-    "canonical Human + Communication Core backend provenance",
-    "realtime authenticated conversation, People relationship controls and persistent messaging provenance"
+    "social/business/listings discovery and revenue-path provenance",
+    "mobile-first Pantavion home foundation provenance",
+    "AI Gateway speech-context normalization provenance",
+    "language-aware STT with resilient gateway retry provenance",
+    "strict translation language routing through AI Gateway provenance",
+    "official Vercel AI SDK transcription/STT provenance",
+    "mobile MediaRecorder and interpreter voice-recording provenance",
+    "historical recovery and pending-work ledger provenance"
   ],
   "hardGaps": [
     "decrypted environment-secret values require authorized CLI/API export or reissue/rotation",
@@ -44,6 +44,6 @@
     "zero deletions",
     "READY or production is historical provenance, not VERIFIED_LIVE",
     "no secret values in public GitHub",
-    "continue until explicit terminal zero for both histories"
+    "continue each lane until its own explicit terminal zero"
   ]
 }
