@@ -1,0 +1,61 @@
+{
+  "thread": 3,
+  "scope": "CANONICAL_WORKERS_F06_F10",
+  "bucketOwnership": [5,6,7,8,9],
+  "contract": "PANTAVION_CANONICAL_SHARDING_V1",
+  "status": "ACTIVE_WITH_EXPLICIT_SOURCE_GAPS",
+  "updatedAtUtc": "2026-09-15T18:20:00Z",
+  "durableCanonicalWrites": {
+    "laneGRehydrated201To600": {
+      "sourceRecords": 400,
+      "thread3CanonicalRecords": 199,
+      "bucketCounts": {"5":43,"6":41,"7":41,"8":39,"9":35},
+      "checkpoint": "docs/recovery/live/shards/thread3-canonical-g.json"
+    },
+    "laneBIncrementalPlusLaneD": {
+      "sourceUniqueStableKeys": 60,
+      "thread3CanonicalRecords": 30,
+      "bucketCounts": {"5":6,"6":5,"7":9,"8":7,"9":3},
+      "checkpoint": "docs/recovery/live/shards/thread3-canonical-bd.json"
+    },
+    "laneBMirrorHistory": {
+      "sourceUniqueStableKeys": 120,
+      "thread3CanonicalRecords": 59,
+      "bucketCounts": {"5":13,"6":7,"7":11,"8":15,"9":13},
+      "checkpoint": "docs/recovery/live/shards/thread3-canonical-b-history.json"
+    }
+  },
+  "thread3DurableCanonicalRecordCount": 288,
+  "countSemantics": "This is only the count of records newly written by Thread 3 under buckets 5-9. It is not the total Pantavion recovery count, not the user's approximately 18,000 Vercel estimate, and not the 82,413 Pantavion corpus.",
+  "recoveredSourceFloorContributionKnownFromThread3NewWrites": 1,
+  "blockedSources": [
+    {
+      "source": "Lane C",
+      "aggregateDeploymentTotal": 73,
+      "canonicalRecordsWritten": 0,
+      "reason": "Aggregate project totals exist but per-deployment deploymentId payloads required for stable projectId:deploymentId identities are absent from current durable evidence.",
+      "receipt": "docs/recovery/live/shards/thread3-canonical-c-blocker.json"
+    }
+  ],
+  "existingCanonicalEvidenceNotRewritten": [
+    {
+      "source": "Lane F / Lane A payload-backed canonical evidence",
+      "existingCanonicalizedFloor": 219,
+      "reason": "Underlying canonical identities already exist; Thread 3 does not duplicate already-canonical physical records merely to restamp shard ownership."
+    }
+  ],
+  "invariants": [
+    "ZERO deletions and ZERO destructive Vercel mutations.",
+    "Stable Vercel identity is projectId:deploymentId.",
+    "Only SHA-256 buckets 5-9 are written by Thread 3.",
+    "No summary-only count is materialized as a canonical record.",
+    "Source evidence is preserved unchanged.",
+    "Classification remains Thread 4 scope; routing remains Thread 5 scope.",
+    "READY/production historical metadata is never promoted to VERIFIED_LIVE by canonicalization."
+  ],
+  "next": [
+    "Consume additional payload-backed Pantavion/Vercel intake evidence with stable IDs when it is not already canonical and hashes to buckets 5-9.",
+    "Resume Lane C only when per-deployment IDs become durably available.",
+    "Continue emitting Thread 4 handoffs for each new canonical batch."
+  ]
+}
