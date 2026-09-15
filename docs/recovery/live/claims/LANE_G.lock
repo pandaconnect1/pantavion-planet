@@ -1,0 +1,13 @@
+timestamp_utc: 2026-09-15T13:53:04Z
+lane: G
+thread_purpose: post-terminal unique-evidence gap recovery for Lane A ranges 201-600 only; no duplicate work on payload-backed ranges
+status: ACTIVE
+owner_context: Lane F canonical ledger thread
+source_lane_terminal: A
+canonical_owner_lane: F
+rules:
+  - recover only the 400 summary-only deployment payload records
+  - deduplicate by deployment_id
+  - zero deletions
+  - zero secret values
+  - no Vercel mutations
