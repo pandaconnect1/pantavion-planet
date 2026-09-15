@@ -1,0 +1,93 @@
+{
+  "schema": "pantavion_thread0_runtime_truth_reconciliation_v1",
+  "observedAtUtc": "2026-09-15T18:06:47.434623Z",
+  "mode": "THREAD_0_VERIFY_COORDINATE",
+  "protocol": "PANTAVION 10-THREAD PARALLEL ABSORPTION PROTOCOL — 2026-09-15",
+  "repository": "pandaconnect1/pantavion-planet",
+  "branch": "backup/pre-vercel-risk-20260914",
+  "safety": {
+    "zeroDeletions": true,
+    "zeroDestructiveVercelMutations": true,
+    "secretValuesRecorded": false,
+    "ingestionShardClaimedByThisThread": false,
+    "existingLegacyLanesClaimed": ["A","B","C","D","E","F","G","H","I","J","K","L"]
+  },
+  "aggregateTruthBeforeThisReconciliation": {
+    "sourceRecordsAvailableFloor": 3679,
+    "canonicalizedRecordsFloor": 219,
+    "gRehydratedPayloadRecords": 400,
+    "gUniqueDeploymentIds": 400,
+    "gDuplicateDeploymentIds": 0,
+    "canonicalCountGuard": "Do not add the 400 G-rehydrated records to canonicalized totals until Lane F performs durable idempotent projectId:deploymentId binding/writes."
+  },
+  "staleArtifactsDetected": [
+    {
+      "artifact": "docs/recovery/live/shards/lane-f-canonical-ingestion.json",
+      "finding": "Predates G terminal rehydration and still describes the 400 Lane-A records as a payload gap. The payload-preservation gap is superseded by G evidence, but canonicalization remains pending F."
+    },
+    {
+      "artifact": "docs/recovery/live/shards/lane-j-module-classification.json",
+      "finding": "Predates G terminal rehydration and records lane_g as unavailable; it also contains an older scheduled-worker failure that is superseded for current scheduler health by later secretless scheduler evidence."
+    },
+    {
+      "artifact": "docs/recovery/live/shards/lane-k-founder-feed.json",
+      "finding": "Predates current J/G/runtime truth and still reports Lane J unavailable and the 400-record payload gap as unresolved."
+    },
+    {
+      "artifact": "docs/recovery/live/shards/lane-l-audit.json",
+      "finding": "Predates G terminal rehydration and still assigns recovery of records 201-600 as the first unresolved gap; that preservation step is now closed, while F/J/K/L downstream reconciliation remains open."
+    }
+  ],
+  "supabaseDurableWorkerTruth": {
+    "projectRef": "cxhulvwkagzufbjsdwwu",
+    "taskName": "pantavion:recovery_partition:v1",
+    "observedAtUtc": "2026-09-15T18:06:47.434623Z",
+    "total": 165,
+    "planned": 165,
+    "running": 0,
+    "succeeded": 0,
+    "failed": 0,
+    "leased": 0,
+    "latestLeaseHeartbeat": null,
+    "maxAttempt": 0,
+    "latestPartitionUpdateUtc": "2026-09-15T14:30:27.011720Z",
+    "runtimeConclusion": "STALL_CONFIRMED_PLANNED_NOT_EXECUTING",
+    "explanation": "The general scheduler can be healthy while the recovery execution plane is not progressing. All recovery partitions are materialized but none has been claimed or executed."
+  },
+  "rootCauseEvidence": {
+    "productionRevision": "170ffb3b9e5c48313d08fb6e27ecafb715bfec90",
+    "partitionScheduler": "core/recovery/pantavion-recovery-partition-scheduler.ts",
+    "cronRoute": "app/api/pantavion/intelligence/cron/route.ts",
+    "githubOidcExecutorScript": "scripts/pantavion-github-recovery-partition-executor.mjs",
+    "runtimeFabricWorkflow": ".github/workflows/pantavion-recovery-runtime-fabric.yml",
+    "finding": "The partition scheduler intentionally creates planned records. In current secretless cron mode recovery_fenced_executor is declared a pending capability: secretless execution materializes partitions but does not run the fenced executor. A GitHub OIDC executor script exists, but no workflow reference to that script was found in the checked production/recovery workflow inventory. The existing recovery-runtime-fabric workflow verifies/materializes build artifacts and does not execute the durable 165-partition queue."
+  },
+  "coordinationFindings": [
+    {
+      "priority": 1,
+      "owner": "THREAD_9_SUPABASE_DURABLE_WORKER_PLANE",
+      "state": "BLOCKING",
+      "action": "Wire an existing authorized trigger to the existing fenced executor/bridge or extend the existing secretless durable fabric so planned recovery partitions are atomically claimed with leases/fencing and progress to terminal states. Do not create a competing execution system."
+    },
+    {
+      "priority": 2,
+      "owner": "LANE_F_OR_NEW_CANONICAL_SHARD_OWNERS",
+      "state": "BLOCKING_CANONICAL_PROGRESS",
+      "action": "Idempotently canonicalize the 400 G-rehydrated records by projectId:deploymentId, then continue B/C/D and earlier durable batches. Keep canonicalized floor at 219 until durable writes exist."
+    },
+    {
+      "priority": 3,
+      "owner": "THREAD_4_CLASSIFICATION_THEN_THREAD_5_ROUTING_THEN_THREAD_6_WORK_QUEUE",
+      "state": "DOWNSTREAM_WAITING_ON_CANONICAL_OUTPUT",
+      "action": "Fan out each newly durable canonical record immediately; uncertain assignments remain REVIEW_REQUIRED."
+    },
+    {
+      "priority": 4,
+      "owner": "THREAD_7_AUDIT_AND_THREAD_8_GITHUB_EVIDENCE",
+      "state": "REFRESH_REQUIRED",
+      "action": "Refresh global dedup/completeness and founder-facing evidence after F/worker progress without rewriting owned shards silently."
+    }
+  ],
+  "completionTruth": "OPEN_NOT_COMPLETE",
+  "requiredNextRuntimeProof": "At least one recovery partition must move from planned to a fenced claimed/running state with a nonzero attempt/lease and then to a durable terminal result before recovery execution progress can be claimed."
+}
