@@ -1,0 +1,8 @@
+timestamp_utc: 2026-09-15T14:22:00Z
+purpose: explicit coordinator reassignment of Lane A summary-only payload gap records 201-600
+source_project: pantavion-planet
+source_project_id: prj_BxhpnjvAs1seyfBU1UYFU8nDykwh
+scope: targeted read-only Vercel re-pagination only for cursor windows 1781903655488 -> 1776883214626
+owner_mode: VERIFY_COORDINATE_GAP_RECOVERY
+status: ACTIVE
+rules: zero deletions; zero Vercel mutations; no secret values; no overlap with Lane F canonical writes; dedupe by projectId:deploymentId
