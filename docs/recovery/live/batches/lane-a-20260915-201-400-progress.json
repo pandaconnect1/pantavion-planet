@@ -1,0 +1,26 @@
+{
+  "capturedAt": "2026-09-15T13:35:00Z",
+  "lane": "A",
+  "project": "pantavion-planet",
+  "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+  "teamId": "team_tGNSGGjcV3VNecscMvaAniGY",
+  "fromCursorExclusive": 1781903655488,
+  "nextCursor": 1779134272977,
+  "pagesTraversed": 10,
+  "recordCount": 200,
+  "pageCounts": [20,20,20,20,20,20,20,20,20,20],
+  "terminal": false,
+  "rescue_state": "CURSOR_CHECKPOINTED",
+  "live_truth": "HISTORICAL_ONLY",
+  "privacy": "PUBLIC_SAFE",
+  "source_surface": "Vercel list_deployments",
+  "sanitized": true,
+  "secretValuesIncluded": false,
+  "notes": [
+    "All ten Vercel pages were read from the claimed canonical Lane A project in descending deployment order.",
+    "This is a compact continuation checkpoint; detailed deployment provenance remains addressable from the Vercel deployment history and Git commit history.",
+    "Creator identity/email and secret-bearing fields are intentionally not copied into this public checkpoint.",
+    "READY or production is not treated as VERIFIED_LIVE.",
+    "Pagination remains non-terminal; continue from nextCursor until an explicit zero-record page/no older records."
+  ]
+}
