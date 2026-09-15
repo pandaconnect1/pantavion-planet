@@ -23,21 +23,20 @@
     {
       "ownerThread": 7,
       "scope": "GLOBAL_DEDUP_RECONCILIATION_COMPLETENESS_AUDIT",
-      "commitSha": "ab7a3b34755bef9eb8fc3fce6e16a864c8f4bedd",
-      "treeSha": "88e47f3317585a6ce9d2d9f9528e5bfcaf8b2f3d",
+      "commitSha": "0b6b26905bd993e436583d73e70e9b84c3efcf1a",
+      "treeSha": "695cdc5e3223e52a7efc8435c450377ba37617a4",
       "artifact": {
         "path": "docs/recovery/live/audit/thread-7-global-reconciliation-20260915T181301Z.json",
-        "gitBlobSha": "9d4fc47fb805fe6cbe39f0e2c6404b2ff58a8346"
+        "gitBlobSha": "212f431bbef9e14ef1a38bc63bfc3fe909463fd4"
       },
       "inspectedTruth": {
-        "canonicalShardOverlap": 0,
-        "duplicateStableIdsAcrossThreads2And3": 0,
-        "sourceKeyOverlap": 0,
-        "semanticMirrorGroups": 1,
-        "missingProvenanceRefs": 0,
-        "bucketMismatch": 0,
-        "finalRouteRows": 0,
-        "openFindingsRemain": true,
+        "status": "OPEN_NOT_COMPLETE",
+        "claimCollisionResolvedWithHistoryPreserved": true,
+        "thread2SampleHashMatches": "19/19",
+        "thread2SampleBucketMatches": "19/19",
+        "thread3LaneGOwnedRecords": 199,
+        "canonicalLedgerAuthority": "REVIEW_REQUIRED",
+        "globalCanonicalCount": "NOT_RECOMPUTED_DO_NOT_INFLATE",
         "foreignShardRewritePerformed": false
       },
       "completionAssertion": "AUDIT_FINDINGS_OPEN_NOT_COMPLETE"
@@ -45,19 +44,20 @@
     {
       "ownerThread": 7,
       "scope": "GLOBAL_DEDUP_RECONCILIATION_COMPLETENESS_AUDIT",
-      "commitSha": "d72894fde6e3df36b7fc7cb00b9e41e69e093a42",
-      "treeSha": "88d0084333634782c3561170b53453450583280a",
+      "commitSha": "3cb472ca6e4c3bdb6766b8340f701afe9bb9e7ac",
+      "treeSha": "90cab8e92f7ed423f674d2edea8ab2085784584d",
       "artifact": {
         "path": "docs/recovery/live/audit/thread-7-global-reconciliation-delta-20260915T181438Z.json",
-        "gitBlobSha": "94dd9b3c3e0d632efa2626d2c7c13d5dc7c195e7"
+        "gitBlobSha": "623ae7cc031b733fcec1a11118b2a16f9be3b90c"
       },
       "inspectedTruth": {
-        "semanticClassificationFinalCountBefore": 35,
-        "semanticClassificationFinalCountAfter": 51,
-        "routeEligibleFinalCount": 51,
-        "finalRoutingRowsMaterialized": 0,
-        "openFindingsRemain": true,
-        "unresolvedIsTerminal": false,
+        "status": "OPEN_NOT_COMPLETE",
+        "thread2LaneGOwnedSubtotal201To400": 101,
+        "thread2ExpectedFinalOwnedTotal201To600": 201,
+        "thread2RemainingExpectedOwnedCardinality": 100,
+        "laneGWholeRangeCanonicalComplete": false,
+        "canonicalTimestampSemantics": "REVIEW_REQUIRED",
+        "globalCanonicalCount": "DO_NOT_RECOMPUTE_YET",
         "foreignShardRewritePerformed": false
       },
       "completionAssertion": "AUDIT_DELTA_OPEN_NOT_COMPLETE"
