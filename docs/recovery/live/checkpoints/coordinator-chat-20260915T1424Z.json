@@ -1,0 +1,60 @@
+{
+  "schema": "pantavion_recovery_coordinator_checkpoint_v1",
+  "observed_at_utc": "2026-09-15T14:24:00Z",
+  "mode": "VERIFY_COORDINATE_ONLY",
+  "source_branch": "backup/pre-vercel-risk-20260914",
+  "aggregate_manifest_observed": {
+    "path": "docs/recovery/live/VERCEL_RESCUE_STATUS.json",
+    "updated_at": "2026-09-15T14:12:30Z",
+    "recovered_deployment_records_floor": 3679,
+    "canonical_history_terminal": true,
+    "vmxx_history_terminal": true,
+    "canonicalized_records_floor": 219,
+    "lane_a_summary_only_payload_gap": 400,
+    "note": "Aggregate is stale relative to later G-L claims/shards and must be reconciled by the coordinator before any completion claim."
+  },
+  "lane_state_observed": {
+    "A": "TERMINAL_CHECKPOINTED; explicit terminal zero exists",
+    "B": "TERMINAL_VERIFIED",
+    "C": "TERMINAL_VERIFIED; 6/6 project histories terminal",
+    "D": "7/7 deployment histories terminal; historical runtime export blocked by billing/retention",
+    "E": "BLOCKED_AUTH_EXPORT; 15/15 project metadata captured; no secret values",
+    "F": "ACTIVE; canonicalized floor 219; B/C/D and earlier durable batches pending; 400-record A payload gap explicit",
+    "G": "ACTIVE; reassigned specifically to Lane-A ranges 201-600 payload-gap recovery; dedupe by deployment_id",
+    "H": "TERMINAL_VERIFIED; canonical build success separated from confirmed runtime failure; explicit auth/export gaps preserved",
+    "I": "TERMINAL_VERIFIED_WITH_EXPLICIT_GAPS; four no-Git v0 project identities preserved; historical content emptiness/uniqueness not inferred",
+    "J": "ACTIVE_PARTIAL as of 2026-09-15T14:23:00Z; source-bound module classifications exist; unsupported modules remain review-required",
+    "K": "ACTIVE_PARTIAL_INPUT as of 2026-09-15T14:16:00Z; stale relative to later J output and requires refresh after F/J progress",
+    "L": "ACTIVE_GAPS_FOUND as of 2026-09-15T14:17:00Z; its missing-J finding is superseded by later J shard, but F/G/K gaps remain material"
+  },
+  "coordination_checks": {
+    "all_a_to_l_claimed": true,
+    "no_new_lane_should_be_claimed": true,
+    "zero_deletions": true,
+    "zero_vercel_mutations": true,
+    "secret_values_recorded": false,
+    "deep_pagination_should_not_be_duplicated": true,
+    "gap_recovery_scope": "Only the explicitly reassigned Lane-A 201-600 cursor windows may be repaginated for missing per-record payloads."
+  },
+  "gap_recovery": {
+    "coordinator_lock": "docs/recovery/live/claims/COORDINATOR_GAP_A_201_600.lock",
+    "lane_g_lock": "docs/recovery/live/claims/LANE_G.lock",
+    "target_records": 400,
+    "cursor_window": "1781903655488 -> 1776883214626",
+    "canonical_directory_observed": [
+      "docs/recovery/live/canonical/lane-f-a-run-payload-audit.json",
+      "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json"
+    ],
+    "new_payload_backed_gap_artifact_observed": false,
+    "dedupe_key": "projectId:deploymentId",
+    "rule": "Do not count these 400 as canonicalized until individual deployment payloads are durably bound."
+  },
+  "next_coordinator_actions": [
+    "Re-read G/F/J/K/L immediately before every aggregate write.",
+    "Treat J as present; refresh K and L from the post-14:23Z J shard rather than preserving the older missing-J conclusion.",
+    "Do not run a second worker over A/201-600 while the reassigned gap-recovery lock remains ACTIVE; consume its durable output when written.",
+    "After payload-backed gap recovery, F must idempotently ingest/dedupe the 400 records and B/C/D/earlier durable batches before raising canonicalized counts.",
+    "Only then refresh founder feed and global dedup audit; preserve remaining credential/file-tree/historical-runtime gaps explicitly."
+  ],
+  "completion_truth": "Deployment-history rescue is terminal for canonical, mirror and owner project groups, but the rescue is not globally complete. Canonicalization/dedup, the 400-record per-record payload gap, founder-feed refresh, and external auth/billing/export blockers remain open."
+}
