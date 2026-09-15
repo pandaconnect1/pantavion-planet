@@ -1,0 +1,43 @@
+{
+  "schema":"pantavion_semantic_classification_v1_compact","protocol":"PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15","thread":4,"scope":"AI_SEMANTIC_CLASSIFICATION_SWARM","generatedAtUtc":"2026-09-15T18:19:00Z",
+  "source":{"path":"docs/recovery/live/batches/lane-a-20260915T1320Z-100.json","blobSha":"ef572d923d3992ac0abae4aa924862bf3949c47a","projectId":"prj_BxhpnjvAs1seyfBU1UYFU8nDykwh","range":"21-40","liveTruth":"HISTORICAL_ONLY"},
+  "rules":{"classificationOnly":true,"canonicalCountDelta":0,"sourceEvidenceMutated":false,"routingPerformed":false,"readyIsVerifiedLive":false},
+  "profiles":{
+    "ADS_DIRECTORY":{"theme":"Advertising","section":"Ads Center","type":"deployment_provenance","module":"Ads Center","subsystem":"Ads Directory","capability":"Directory-only ad serving","feature":"Dedicated paid advertising directory","canonicalTarget":"ads-center/directory"},
+    "ADS_ENTERPRISE":{"theme":"Advertising","section":"Ads Center","type":"deployment_provenance","module":"Ads Center","subsystem":"Advertiser Workflows","capability":"Standard and enterprise advertising","feature":"Enterprise sales/request workflow","canonicalTarget":"ads-center/advertiser-workflows"},
+    "ADS_UI":{"theme":"Advertising","section":"Ads Center","type":"deployment_provenance","module":"Ads Center","subsystem":"Advertiser Experience","capability":"Collaborative advertiser UI","feature":"Ads Center UI","canonicalTarget":"ads-center/ui"},
+    "ADS_ACTIONS":{"theme":"Advertising","section":"Ads Center","type":"deployment_provenance","module":"Ads Center","subsystem":"Campaign Operations","capability":"Campaign requests and approvals","feature":"Advertiser/campaign actions","canonicalTarget":"ads-center/campaign-operations"},
+    "ADS_POLICY":{"theme":"Governance & Monetization","section":"Advertising Policy","type":"deployment_provenance","module":"Ads Center","subsystem":"Advertising Governance","capability":"First-party advertising policy","feature":"Policy export/enforcement","canonicalTarget":"ads-center/governance"},
+    "ADS_REGISTRY":{"theme":"Platform Core","section":"Module Registry","type":"deployment_provenance","module":"Ads Center","subsystem":"Module Registration","capability":"Ads Center registration","feature":"Register Ads Center module","canonicalTarget":"ads-center/module-registry"},
+    "ADS_SOCIAL_CAP":{"theme":"Advertising","section":"Social Integration","type":"deployment_provenance","module":"Ads Center","subsystem":"Social Core Integration","capability":"First-party Ads capabilities","feature":"Ads capabilities exposed to Social Core","canonicalTarget":"ads-center/social-integration","relatedModules":["Social"]},
+    "ADS_DATA":{"theme":"Data & Monetization","section":"Ads Data","type":"deployment_provenance","module":"Ads Center","subsystem":"Advertising Data Model","capability":"Paid ads persistence","feature":"First-party paid Ads database foundation","canonicalTarget":"ads-center/data"},
+    "SOCIAL_NAV_MULTI":{"theme":"Social Network","section":"Social World Navigation","type":"deployment_provenance","module":"Social","subsystem":"Unified Navigation","capability":"Cross-module navigation","feature":"Connect Chat, Communities and Notifications","canonicalTarget":"social/navigation","relatedModules":["Chat","Communities","Notifications"]},
+    "SOCIAL_NOTIFICATIONS":{"theme":"Social Network","section":"Notifications","type":"deployment_provenance","module":"Social","subsystem":"Social Notifications","capability":"Notification experience/actions","feature":"Notifications screen and actions","canonicalTarget":"social/notifications"},
+    "CONTACT_SECURE_MULTI":{"theme":"Communication & People","section":"Foundations","type":"deployment_provenance","module":"MULTI_MODULE","subsystem":"Contact Sync and Secure Chat","capability":"Foundation exports","feature":"Contact sync + secure chat foundations","canonicalTarget":"shared-core/contact-secure-foundations","relatedModules":["People","Chat"]},
+    "SECURE_CHAT":{"theme":"Secure Communication","section":"Secure Chat","type":"deployment_provenance","module":"Chat","subsystem":"Secret/Secure Chat","capability":"Readiness model","feature":"Truthful secure chat readiness state","canonicalTarget":"chat/secure-chat"},
+    "CONTACT_CONTRACT":{"theme":"People & Identity","section":"Contacts","type":"deployment_provenance","module":"People","subsystem":"Contact Sync","capability":"Privacy-first contact sync","feature":"Contact sync contract","canonicalTarget":"people/contact-sync"}
+  },
+  "records":[
+    ["dpl_9ztMC3RxoAhpfXPK9LLvWZMgiY8p","158af3f78100656fb1134a794893127b0e22ee0b","ADS_ENTERPRISE",0.99,false,true],
+    ["dpl_5woWjkDbihTQ8JMtbz7FxmyMDPhG","310aca5a37e3b255cc2b82fdf1c61b2b40509f25","ADS_ENTERPRISE",0.99,false,true],
+    ["dpl_Fmpix9CEdiFxzvs3AQH3JusWv4ez","1d2b45871a56be4dd62891db79bc67f9454e77ef","ADS_ENTERPRISE",0.99,false,true],
+    ["dpl_8sMCpaSGSRRhuyEJuBE3XTjohHBM","f83839bae74caf89f02e0916fca109b4ed730987","ADS_DIRECTORY",0.99,false,true],
+    ["dpl_8CigaLpLrSUzmSe7KkZ3uiNWpgLR","c4029b3367cc2b076916e06d01a1475796af4333","ADS_DIRECTORY",0.99,false,true],
+    ["dpl_7H7ABfZhYEaxwFDAHhsHLacFhGib","0a75f0cedfe8cdb1ac60a78093d07459905cf1a0","ADS_SOCIAL_CAP",0.96,false,true],
+    ["dpl_AyGjFC8SAJ9UyEYAGSBLqaL249B3","f5d425fc21350e62267428ac52a77259da8ae204","ADS_UI",0.99,false,true],
+    ["dpl_CAcbRkoiTaoEqNHCYM3fxYAeLMn7","064fab7a7c1572a9e5669fd03bc00760bcf3db19","ADS_ACTIONS",0.99,false,true],
+    ["dpl_Eo6wfeLXB2x1NLy7mo2PfiTtETVi","66b9a5ac73841f935c27828f0ff502ab12cfb870","ADS_ACTIONS",0.99,false,true],
+    ["dpl_3LK7XN9xCiqWyuXSWcqTu7NMwjwa","1c99bb454f011273c61f2645955903e78f138dcd","ADS_POLICY",0.98,false,true],
+    ["dpl_AnZaW7k3BrkKJGGZ5bxPFJL2oUjy","733676d182c0ddc39169dbbe2329f458177893a3","ADS_REGISTRY",0.99,false,true],
+    ["dpl_7sJv3JKXtsdhcoGanQNmtAyGPwa7","c34e6d5b05feb35293d719997d0d1af51ab3d94a","ADS_SOCIAL_CAP",0.99,false,true],
+    ["dpl_AFJywrAXC5QfFwDATptxeESxue6W","3be8ecc83159098f6ea393532aba8ae211246c35","ADS_DATA",0.99,false,true],
+    ["dpl_9Tzz6vAMDJ9EyRGAXYcqPiQvRgHu","05668ae6326899b517a02419c3186ddc62b97913","ADS_POLICY",0.99,false,true],
+    ["dpl_2fqa9s9pBw1Uvtm9NLmf2XU6woee","5526bdf0cea4993f7e5d8ddd08e267df5af60657","SOCIAL_NAV_MULTI",0.99,false,true],
+    ["dpl_Fh2ypGSTAM1iCx86Zb6jN9cDScd5","96e7e8764ca45f1eecef045f23c79e5d1961fb07","SOCIAL_NOTIFICATIONS",0.99,false,true],
+    ["dpl_6tT7FemGeMdbuB4owgQUwrYJAD97","4b58516cf430eca2359d92fdb625e124708a7cd1","SOCIAL_NOTIFICATIONS",0.99,false,true],
+    ["dpl_AcgqPuMWZJmBQ92FbXHJYrPRnhoV","59ade71af5a9ea041b7d03d86d3ae396c7377880","CONTACT_SECURE_MULTI",0.97,false,true],
+    ["dpl_DAyQDMiStJjU7pXzcTuWQnEwLD7R","d2aacdeb427599ffa1f3ded8cc6b3ad5fe85d3aa","SECURE_CHAT",0.98,false,true],
+    ["dpl_Fb4WLh35FKehttKkjoypvMHhvhGi","fa43a048e779c0ef187737ee826c57dcf9e1f143","CONTACT_CONTRACT",0.99,false,true]
+  ],
+  "recordTuple":"[deploymentId,gitSha,profile,confidence,reviewRequired,implementationEvidence]","sourceFingerprintRule":"github-blob:ef572d923d3992ac0abae4aa924862bf3949c47a + deploymentId + gitSha","status":"DURABLE_CLASSIFIED"
+}
