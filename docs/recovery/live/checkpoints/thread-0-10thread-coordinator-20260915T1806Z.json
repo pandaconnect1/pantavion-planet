@@ -1,0 +1,71 @@
+{
+  "observedAtUtc": "2026-09-15T18:06:00Z",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_20260915",
+  "thread": 0,
+  "scope": "COORDINATOR_RUNTIME_TRUTH",
+  "claimState": "READ_VERIFY_ONLY_BECAUSE_ATOMIC_LOCK_WRITE_WAS_BLOCKED_BY_CONNECTOR_SAFETY",
+  "ingestionShardClaimed": false,
+  "overlapControl": {
+    "legacyLanesAtoLAlreadyClaimed": true,
+    "tenThreadClaimsObserved": [1],
+    "thread1Scope": "VERCEL_UNIVERSAL_INTAKE",
+    "thread1Commit": "9ca2c697025175103c9fc9978a8a135e4767c98b"
+  },
+  "aggregateTruthFromExistingStatus": {
+    "statusObservedAtUtc": "2026-09-15T17:41:00Z",
+    "estimatedSourceRecords": 18000,
+    "estimatedSourceRecordsBasis": "user estimate only; not a verified Vercel total",
+    "recoveredDeploymentRecordsFloor": 3679,
+    "canonicalizedRecordsFloor": 219,
+    "rehydratedPendingCanonicalization": 400
+  },
+  "production": {
+    "domain": "www.pantavion.com",
+    "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+    "deploymentId": "dpl_6NLyCMTnyzvi481Xz4UAQHrE2PHj",
+    "gitSha": "170ffb3b9e5c48313d08fb6e27ecafb715bfec90",
+    "gitRef": "main",
+    "state": "READY",
+    "target": "production",
+    "verifiedLive": false,
+    "note": "READY is deployment evidence only; no claim of full Pantavion VERIFIED_LIVE."
+  },
+  "scheduler": {
+    "health": "healthy",
+    "executionVerified": true,
+    "schedule": "*/5 * * * *",
+    "workerTotalRuns": 45,
+    "lastRunKey": "pantavion-intelligence-5m:2026-09-15T18:00",
+    "lastStatus": "succeeded",
+    "lastFinishedAt": "2026-09-15T18:00:42.134591+00:00"
+  },
+  "recoveryPartitions": {
+    "taskName": "pantavion:recovery_partition:v1",
+    "healthApiView": {"total": 165, "active": 165, "succeeded": 0, "failed": 0, "other": 0},
+    "databaseExactStatus": {"planned": 165},
+    "databaseLatestUpdatedAt": "2026-09-15T14:30:27.01172+00",
+    "completionVerified": false,
+    "semanticReconciliation": "Health API active means nonterminal; database truth remains planned for all 165."
+  },
+  "newTenThreadActivity": {
+    "thread1ClaimDeploymentId": "dpl_bVJCY8P6bzqiZWnKAHzKKUjzXF95",
+    "gitSha": "9ca2c697025175103c9fc9978a8a135e4767c98b",
+    "stateAtObservation": "BUILDING",
+    "target": null,
+    "productionImpactClaimed": false
+  },
+  "coordinatorFindings": [
+    "Do not duplicate Thread 1 Vercel intake.",
+    "Do not restart terminal legacy lanes A-L.",
+    "Do not raise canonicalized count above 219 until durable idempotent canonical writes exist.",
+    "The 400 rehydrated Lane-G records remain pending canonicalization.",
+    "All 165 recovery partitions remain nonterminal and none are succeeded or failed.",
+    "Thread 1 claim deployment is preview/build activity and is not production VERIFIED_LIVE."
+  ],
+  "safety": {
+    "zeroDeletions": true,
+    "zeroDestructiveVercelMutations": true,
+    "secretValuesRecorded": false,
+    "ingestionOverlap": false
+  }
+}
