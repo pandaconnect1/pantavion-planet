@@ -1,0 +1,21 @@
+{
+  "lane": "E",
+  "timestamp_utc": "2026-09-15T13:21:30Z",
+  "status": "BLOCKED_AUTH_EXPORT",
+  "shard": "docs/recovery/live/shards/lane-e-secrets-artifacts.json",
+  "shard_commit": "6303b3fe3c17dc80a7a96eb9e274723900dcd12f",
+  "claim_commit": "03bf44598d167b7d95f1d170ec7fbe90724bab21",
+  "projects_metadata_captured": 15,
+  "git_bound_projects": 11,
+  "no_git_projects": 4,
+  "environment_dependency_names_captured": 111,
+  "secret_values_captured": 0,
+  "deletions": 0,
+  "vercel_mutations": 0,
+  "deep_pagination_duplicated": false,
+  "blockers": [
+    "Current connected Vercel tools do not expose GET /v9/projects/{idOrName}/env for names/scopes/decryptability checks.",
+    "Current connected Vercel tools do not expose GET /v6/deployments/{id}/files or GET /v8/deployments/{id}/files/{fileId} for deployment artifact export."
+  ],
+  "resume_rule": "Resume Lane E only with an authenticated read surface for env/deployment files; do not duplicate A-D deployment history work."
+}
