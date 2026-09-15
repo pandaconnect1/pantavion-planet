@@ -1,0 +1,36 @@
+{
+  "role": "VERIFY_COORDINATE",
+  "evidence_type": "build_remediation",
+  "branch": "backup/pre-vercel-risk-20260914",
+  "github": {
+    "commit": "376828fb0e011dc9d413e9bf0cc55f55ee155801",
+    "change": "Added docs/recovery/** to tsconfig.json exclude so preserved recovery source snapshots and metadata are not compiled as application TypeScript.",
+    "deletions": 0,
+    "secret_values_recorded": false
+  },
+  "vercel": {
+    "project": "pantavion-planet-vmxx",
+    "project_id": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+    "deployment_id": "dpl_HNpiyniN12RfZQ7pNF8BpTkKwYfp",
+    "deployment_state": "READY",
+    "build_result": "COMPLETED",
+    "build_evidence": [
+      "Next.js optimized production build compiled successfully",
+      "type validation progressed without the prior docs/recovery/legacy-source-snapshots compile failure",
+      "serverless outputs were created and deployment outputs completed"
+    ],
+    "live_truth": "BUILD_VERIFIED_NOT_RUNTIME_VERIFIED"
+  },
+  "founder_recovery_route": {
+    "main_branch": "present at app/admin/pantavion/recovery/page.tsx",
+    "recovery_branch": "not present when checked",
+    "action": "not duplicated by coordinator because founder-feed scope is owned by active Lane E"
+  },
+  "rules_observed": [
+    "zero deletions",
+    "zero direct Vercel mutations",
+    "no secret values",
+    "no duplicate deep pagination",
+    "READY is not treated as VERIFIED_LIVE"
+  ]
+}
