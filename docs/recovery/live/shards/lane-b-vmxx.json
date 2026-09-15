@@ -1,6 +1,6 @@
 {
   "capturedAt": "2026-09-15T13:16:00Z",
-  "updatedAt": "2026-09-15T13:40:15Z",
+  "updatedAt": "2026-09-15T13:56:25Z",
   "lane": "B",
   "status": "TERMINAL_VERIFIED",
   "project": "pantavion-planet-vmxx",
@@ -12,17 +12,44 @@
     "mode": "IDEMPOTENT_UPSERT_OR_SKIP",
     "primaryKey": "projectId:deploymentId",
     "fallbackFingerprint": "projectId:evidence_type:source_surface:git_sha:created_at",
+    "semanticLayer": "Recovery-generated deployments are operational provenance, not newly recovered source records.",
     "canonicalWriteRule": "Never append a second canonical record when the primary key or fallback fingerprint already exists; update/merge provenance or skip instead.",
     "mirrorRule": "Mirror evidence may retain provenance links/checkpoint references but must not increment canonical unique-record counts more than once.",
-    "checkpointRule": "Checkpoint files may reference previously seen evidence for audit continuity, but canonical absorption counts only unique keys.",
+    "selfGeneratedRule": "Deployments triggered by rescue/checkpoint commits on backup/pre-vercel-risk-20260914 are classified RECOVERY_OPERATIONAL and excluded from recovered-source-floor counts.",
+    "checkpointRule": "Checkpoint files may reference previously seen evidence for audit continuity, but canonical absorption counts only unique non-self-generated source evidence.",
     "conflictRule": "If the same key arrives with different state/metadata, preserve one canonical record and merge the newer observation as provenance rather than creating a duplicate row."
   },
   "historyTerminal": {"until":1786177840266,"count":0,"verifiedBy":"direct Vercel list_deployments query","priorDurableEvidence":"docs/recovery/live/batches/vercel-continuation-2980-to-3000-mirror-terminal.json"},
   "projectMetadata": {"framework":"nextjs","createdAt":1786177837877,"updatedAtObserved":1789477538637,"nodeVersion":"24.x","live":false,"domains":["pantavion-planet-vmxx.vercel.app","pantavion-planet-vmxx-pandaconnect.vercel.app","pantavion-planet-vmxx-git-main-pandaconnect.vercel.app"]},
-  "postTerminalHead": {"observedPageCount":20,"nextCursor":1789477698891,"checkpoint":"docs/recovery/live/batches/lane-b-20260915T1316Z-vmxx-head.json","classification":"mirror_candidate","note":"Recovery-branch GitHub commits are generating additional VMXX deployments after the historical terminal scan. The new head is captured separately; no deep-history restart was performed. Canonical absorption must deduplicate by projectId:deploymentId before counting or writing."},
-  "buildEvidence": {"deploymentId":"dpl_8JAWjFMPWqGjRUTcze35JVdiaKGZ","state":"ERROR","gitSha":"80685822e91293ebf34e73849dbb22d7e24585ad","gitRef":"backup/pre-vercel-risk-20260914","gitMessage":"recovery: claim lane B for vmxx deep rescue","errorClass":"TypeScript compile error","errorPath":"docs/recovery/legacy-source-snapshots/pantavion-one/app/layout.tsx","errorSummary":"Binding element 'children' implicitly has an 'any' type.","command":"npm run build","liveTruth":"HISTORICAL_ONLY","rescueState":"CHECKPOINTED"},
+  "postTerminalHead": {
+    "previousWatermark":1789478138830,
+    "latestObserved":1789480369757,
+    "observedRows":49,
+    "uniqueNewDeploymentIds":48,
+    "duplicateRowsSkipped":1,
+    "recoveryGeneratedOperationalDeployments":46,
+    "productionMainDeployments":2,
+    "countTowardRecoveredSourceFloor":2,
+    "checkpoint":"docs/recovery/live/batches/lane-b-20260915T1356Z-incremental-dedupe.json",
+    "note":"The incremental window closed exactly on the previous watermark. Recovery-generated deployments are preserved but excluded from recovered-source counts, preventing checkpoint-write feedback loops from inflating totals."
+  },
+  "buildEvidence": {
+    "originalBlocker":{"deploymentId":"dpl_8JAWjFMPWqGjRUTcze35JVdiaKGZ","state":"ERROR","gitSha":"80685822e91293ebf34e73849dbb22d7e24585ad","errorPath":"docs/recovery/legacy-source-snapshots/pantavion-one/app/layout.tsx","errorSummary":"Binding element 'children' implicitly has an 'any' type."},
+    "remediation":{"gitSha":"376828fb0e011dc9d413e9bf0cc55f55ee155801","gitMessage":"recovery: exclude recovery docs from TypeScript build scope","verifiedLaterDeployment":"dpl_Fb2yY37o7u8icQCkx2XgJWL73vax","verifiedResult":"BUILD_COMPLETED_AND_DEPLOYED"},
+    "blockerState":"RESOLVED_BY_LATER_BUILD"
+  },
+  "runtimeEvidence": {
+    "productionDeploymentId":"dpl_FQFQTTHGqv9bfA1piihaa5PSZhym",
+    "gitSha":"f4897f17b8c0b334ba2dd1a86340d46aac8563e7",
+    "gitRef":"main",
+    "target":"production",
+    "readyState":"READY",
+    "root":{"url":"https://pantavion-planet-vmxx.vercel.app/","httpStatus":200,"liveTruth":"VERIFIED_LIVE_ROOT_ONLY"},
+    "founderRecoveryRoute":{"path":"/admin/pantavion/recovery","httpStatus":404,"liveTruth":"NOT_LIVE_ON_VMXX_PRODUCTION"},
+    "note":"READY alone was not treated as live proof; root live truth comes from direct authenticated Vercel URL fetch. The founder recovery route is explicitly not live on the VMXX production alias."
+  },
   "otherEvidence": {"runtimeErrorsLast7d":0,"unresolvedToolbarThreads":0,"productionAgentRunsLast30d":0},
-  "hardBlockers": ["VMXX recovery-branch deployments currently fail production build type-checking because legacy source snapshots are inside the Next.js/TypeScript build scope.","Lane B write discipline permits only this shard and lane-B checkpoints, so source-code remediation belongs outside Lane B."],
-  "rulesObserved": ["zero deletions","zero Vercel mutations","no secret values","no deep pagination restart after terminal proof","READY/production not treated as VERIFIED_LIVE","canonical absorption is idempotent and duplicate-safe"],
+  "remainingGaps": ["Founder recovery page /admin/pantavion/recovery returns 404 on the VMXX production alias; this is a verified route gap, not assumed success.","Deployment filesystem/build-output export remains outside the current connector surface.","Exact decrypted secret values remain non-exported and must never be written to public recovery metadata."],
+  "rulesObserved": ["zero deletions","zero Vercel mutations","no secret values","no deep pagination restart after terminal proof","READY/production not treated as VERIFIED_LIVE without direct runtime proof","canonical absorption is idempotent and duplicate-safe","self-generated recovery deployments do not inflate recovered-source counts"],
   "destination": "GitHub public recovery metadata"
 }
