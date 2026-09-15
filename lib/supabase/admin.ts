@@ -10,6 +10,26 @@ function firstConfigured(...values: Array<string | undefined>) {
   return "";
 }
 
+export class PantavionSupabaseAdminConfigurationError extends Error {
+  readonly code = "SUPABASE_ADMIN_CREDENTIAL_MISSING";
+
+  constructor() {
+    super(
+      "Pantavion Supabase admin runtime is missing SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY.",
+    );
+    this.name = "PantavionSupabaseAdminConfigurationError";
+  }
+}
+
+export function hasSupabaseAdminCredential() {
+  return Boolean(
+    firstConfigured(
+      process.env.SUPABASE_SECRET_KEY,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+    ),
+  );
+}
+
 export function createAdminClient() {
   const url = firstConfigured(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -22,9 +42,7 @@ export function createAdminClient() {
   );
 
   if (!serverKey) {
-    throw new Error(
-      "Pantavion Supabase admin runtime is missing SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY.",
-    );
+    throw new PantavionSupabaseAdminConfigurationError();
   }
 
   return createSupabaseClient(url, serverKey, {
