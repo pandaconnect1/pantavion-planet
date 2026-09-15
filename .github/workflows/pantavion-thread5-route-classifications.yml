@@ -6,6 +6,7 @@ on:
       - backup/pre-vercel-risk-20260914
     paths:
       - "docs/recovery/live/shards/thread-4-semantic-*.json"
+      - "docs/recovery/live/canonical/*.json"
       - "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json"
       - "scripts/recovery/thread5-route-classifications.mjs"
       - ".github/workflows/pantavion-thread5-route-classifications.yml"
@@ -45,7 +46,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/recovery/live/routing/thread-5-routes-*.json docs/recovery/live/routing/thread-5-routing-manifest.json
           if git diff --cached --quiet; then
-            echo "Idempotent no-op: Thread 5 routing artifacts already match classified canonical inputs."
+            echo "Idempotent no-op: Thread 5 routing artifacts already match classified/canonical inputs."
             exit 0
           fi
           git commit -m "recovery: materialize Thread 5 module graph routes"
