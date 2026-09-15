@@ -8,6 +8,25 @@ const files = fs.readdirSync(dir).filter((name) => pattern.test(name)).sort();
 
 if (files.length !== 20) throw new Error(`lane_g_batch_count_mismatch:${files.length}`);
 
+function findForbiddenKey(value, trail = []) {
+  if (Array.isArray(value)) {
+    for (let index = 0; index < value.length; index += 1) {
+      const found = findForbiddenKey(value[index], [...trail, String(index)]);
+      if (found) return found;
+    }
+    return null;
+  }
+  if (!value || typeof value !== 'object') return null;
+  for (const [key, child] of Object.entries(value)) {
+    if (['creator', 'email', 'uid'].includes(key.toLowerCase())) {
+      return [...trail, key].join('.');
+    }
+    const found = findForbiddenKey(child, [...trail, key]);
+    if (found) return found;
+  }
+  return null;
+}
+
 const ids = new Set();
 const ranges = [];
 let records = 0;
@@ -27,9 +46,9 @@ for (const [index, file] of files.entries()) {
     throw new Error(`lane_g_record_count_mismatch:${file}`);
   }
   if (payload.secretValuesIncluded !== false) throw new Error(`lane_g_secret_flag_invalid:${file}`);
-  if (JSON.stringify(payload).includes('creator') || JSON.stringify(payload).includes('email')) {
-    throw new Error(`lane_g_private_field_present:${file}`);
-  }
+  const forbiddenKey = findForbiddenKey(payload);
+  if (forbiddenKey) throw new Error(`lane_g_private_field_present:${file}:${forbiddenKey}`);
+
   for (const record of payload.records) {
     if (typeof record.deploymentId !== 'string' || !record.deploymentId.startsWith('dpl_')) {
       throw new Error(`lane_g_deployment_id_invalid:${file}`);
@@ -50,7 +69,7 @@ if (records !== 400) throw new Error(`lane_g_total_records_mismatch:${records}`)
 if (ids.size !== 400) throw new Error(`lane_g_unique_ids_mismatch:${ids.size}`);
 
 const report = {
-  marker: 'pantavion_lane_g_rehydration_audit_v1',
+  marker: 'pantavion_lane_g_rehydration_audit_v2',
   status: 'PASS',
   batchCount: files.length,
   recordCount: records,
