@@ -1,14 +1,14 @@
 {
-  "updatedAt": "2026-09-15T14:30:00Z",
+  "updatedAt": "2026-09-15T14:38:00Z",
   "phase": "EMERGENCY_VERCEL_RESCUE",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total and not directly comparable with mirrored deployment counts",
-  "recoveredDeploymentRecordsFloor": 3040,
-  "recoveredDeploymentRecordsFloorBasis": "durably checkpointed verified lower bound. Mirror overlap may exist; the 60 canonical records previously marked observed beyond 2,980 are now compactly preserved in GitHub evidence batches. Canonical and mirror lanes were independently paginated using strictly older-than cursors.",
+  "recoveredDeploymentRecordsFloor": 3060,
+  "recoveredDeploymentRecordsFloorBasis": "durably checkpointed verified lower bound. Mirror overlap may exist; canonical continuation through cursor 1786126296277 is compactly preserved in GitHub evidence. The mirror lane is terminal.",
   "canonical": {
     "project": "pantavion-planet",
     "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
-    "nextCursor": 1786149451883,
+    "nextCursor": 1786126296277,
     "lastPageCount": 20,
     "terminal": false
   },
@@ -20,21 +20,21 @@
     "terminal": true
   },
   "latestBatch": {
-    "records": 60,
-    "pages": 3,
-    "canonicalRecords": 60,
+    "records": 20,
+    "pages": 1,
+    "canonicalRecords": 20,
     "mirrorRecords": 0,
-    "note": "The three previously observed canonical pages are now durably checkpointed. VMXX terminal zero remains explicitly verified. Canonical remains non-terminal."
+    "note": "Another full canonical page is durably checkpointed after 3,040. Canonical remains non-terminal; VMXX remains terminal."
   },
   "recentEvidence": [
+    "direct live bidirectional translator runtime provenance",
+    "simple universal Interpreter and automatic language detection provenance",
+    "real multilingual speech transcription endpoint provenance",
+    "live translation fallback and real text-provider provenance",
+    "mobile language-control and header provenance",
     "bidirectional Interpreter implementation and global speech-locale provenance",
-    "Vercel OIDC runtime helper and sanitized STT diagnostics provenance",
     "speech accessibility normalization and one-tap microphone permission provenance",
-    "shared translation service, global language catalog and bidirectional voice-turn provenance",
-    "mobile voice translation with server STT fallback provenance",
-    "official Vercel AI SDK transcription/STT provenance",
-    "strict translation language routing through AI Gateway provenance",
-    "social/business/listings discovery and revenue-path provenance"
+    "shared translation service and global language catalog provenance"
   ],
   "hardGaps": [
     "decrypted environment-secret values require authorized CLI/API export or reissue/rotation",
