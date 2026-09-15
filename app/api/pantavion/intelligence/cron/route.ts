@@ -7,7 +7,11 @@ import { runPantavionRecoveryFencedExecutor } from "@/core/recovery/pantavion-re
 import { materializePantavionRecoveryExecutionPartitions } from "@/core/recovery/pantavion-recovery-partition-scheduler";
 import { PantavionRecoverySupabaseExecutionStore } from "@/core/recovery/pantavion-recovery-supabase-execution-store";
 import { runSecureScheduledWorker } from "@/core/runtime/secure-scheduled-worker";
-import { createAdminClient } from "@/lib/supabase/admin";
+import {
+  createAdminClient,
+  hasSupabaseAdminCredential,
+  PantavionSupabaseAdminConfigurationError,
+} from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -87,10 +91,48 @@ function unauthorizedCronResponse(mode: PantavionCronAuthMode) {
   );
 }
 
+function blockedSupabaseConfigurationResponse(
+  source: PantavionScheduledTickSource,
+  authMode: PantavionCronAuthMode,
+) {
+  console.warn("pantavion_secure_scheduled_worker_blocked_configuration", {
+    source,
+    dependency: "supabase_admin",
+    code: "SUPABASE_ADMIN_CREDENTIAL_MISSING",
+  });
+
+  return NextResponse.json(
+    {
+      ok: false,
+      executed: false,
+      status: "blocked_configuration",
+      route: "/api/pantavion/intelligence/cron",
+      source,
+      authMode,
+      dependency: "supabase_admin",
+      code: "SUPABASE_ADMIN_CREDENTIAL_MISSING",
+      retryable: true,
+      runtimeSafety: {
+        behavior:
+          "The scheduled worker is intentionally not executed without a server-only Supabase admin credential. This is a controlled degraded state, not a worker crash.",
+        recovery:
+          "Configure SUPABASE_SECRET_KEY (preferred) or SUPABASE_SERVICE_ROLE_KEY in the server-side production environment, then verify a successful scheduled tick.",
+        security:
+          "No publishable/anon fallback is used because privileged scheduler RPCs are service-role-only and must remain inaccessible to public clients.",
+      },
+    },
+    { status: 200 },
+  );
+}
+
 async function executeScheduledTick(
   source: PantavionScheduledTickSource,
   authMode: PantavionCronAuthMode,
 ) {
+  if (!hasSupabaseAdminCredential()) {
+    return blockedSupabaseConfigurationResponse(source, authMode);
+  }
+
   try {
     const worker = await runSecureScheduledWorker(
       "pantavion-intelligence-5m",
@@ -154,6 +196,10 @@ async function executeScheduledTick(
       },
     });
   } catch (error) {
+    if (error instanceof PantavionSupabaseAdminConfigurationError) {
+      return blockedSupabaseConfigurationResponse(source, authMode);
+    }
+
     console.error("pantavion_secure_scheduled_worker_failed", {
       source,
       error: error instanceof Error ? error.message : String(error),
