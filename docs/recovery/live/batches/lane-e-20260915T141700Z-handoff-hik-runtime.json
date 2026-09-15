@@ -1,0 +1,78 @@
+{
+  "schema": "pantavion_lane_e_handoff_v1",
+  "lane": "E",
+  "captured_at_utc": "2026-09-15T14:17:00Z",
+  "status": "HANDOFF_READY_WITH_BLOCKERS",
+  "zero_deletions": true,
+  "zero_vercel_mutations": true,
+  "secret_values_written": false,
+  "private_source_written": false,
+  "authoritative_production": {
+    "project": "pantavion-planet",
+    "project_id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+    "deployment_id": "dpl_3eJ2dStrpNpPzyLw9cMAjSDXYWoE",
+    "git_sha": "1d84eac023bba54657020c6ff449a4821a351426",
+    "state": "READY",
+    "target": "production",
+    "founder_recovery_route": {
+      "url": "https://www.pantavion.com/admin/pantavion/recovery",
+      "http_status": 200,
+      "matched_path": "/admin/pantavion/recovery",
+      "rendered_boundary": "Founder Access Required",
+      "live_truth": "VERIFIED_LIVE",
+      "note": "Route boundary verified live; protected operational data was not accessed or exposed."
+    }
+  },
+  "vmxx": {
+    "root_http_status": 200,
+    "root_live_truth": "VERIFIED_LIVE_ROOT_ONLY",
+    "founder_recovery_route_http_status": 404,
+    "founder_recovery_route_live_truth": "NOT_LIVE_ON_VMXX_PRODUCTION",
+    "classification": "mirror_candidate_not_authoritative_for_founder_route"
+  },
+  "lane_h_reconciliation": {
+    "status": "TERMINAL_VERIFIED",
+    "canonical_build": "BUILD_SUCCEEDED",
+    "runtime_failure": "pantavion_secure_scheduled_worker_failed",
+    "route": "/api/pantavion/intelligence/cron",
+    "failure_dependency_names": ["SUPABASE_SECRET_KEY", "SUPABASE_SERVICE_ROLE_KEY"],
+    "latest_lane_e_runtime_observation": {
+      "window": "1h",
+      "count": 5,
+      "last_seen_utc": "2026-09-15T13:40:38Z",
+      "last_deployment": "dpl_FGfYCSEAhtQwVhGiW57nCyrFi6et"
+    },
+    "post_new_production_fix_truth": "NOT_VERIFIED",
+    "reason": "No post-deployment cron invocation evidence proves the secret configuration problem is fixed; do not promote to resolved merely because the newer founder-route deployment is READY."
+  },
+  "lane_i_reconciliation": {
+    "status": "TERMINAL_VERIFIED_WITH_EXPLICIT_GAPS",
+    "no_git_projects": 4,
+    "distinct_project_ids": 4,
+    "deployment_histories_terminal_zero": 4,
+    "historically_empty_proven": 0,
+    "content_uniqueness_proven": 0,
+    "lane_e_previous_state_resolution": "Earlier NEEDS_HISTORICAL_DEPLOYMENT_ID_FROM_LANE_D classifications are superseded by BLOCKED_NO_ACCESSIBLE_HISTORICAL_DEPLOYMENT_ID / VERIFIED_OR_EXPLICIT_GAP. Preserve identities; do not infer emptiness or duplication."
+  },
+  "lane_k_handoff": {
+    "consumer": "/admin/pantavion/recovery",
+    "current_k_shard_observation": "K still records VMXX founder route 404 and does not yet include authoritative www.pantavion.com HTTP 200 proof.",
+    "required_merge_without_overwrite": [
+      "Add authoritative production founder route liveTruth=VERIFIED_LIVE, HTTP 200, deployment dpl_3eJ2dStrpNpPzyLw9cMAjSDXYWoE.",
+      "Retain VMXX founder route 404 as separate mirror evidence; do not replace it with canonical truth.",
+      "Keep operational recovery data founder-protected; no secret values in public feed.",
+      "Do not mark cron runtime blocker resolved without a post-deployment successful invocation."
+    ]
+  },
+  "environment_continuity": {
+    "names_count": 112,
+    "values_captured": false,
+    "latest_added_name": "POSTGRES_URL",
+    "exact_value_exportability": "BLOCKED_AUTH_EXPORT"
+  },
+  "remaining_lane_e_blockers": [
+    "Authenticated project environment-variable inventory/scopes are not exposed by the current Vercel connector.",
+    "Exact secret values remain private and unpreserved through this public rescue surface.",
+    "Complete deployment file-tree/content export is not exposed by the current Vercel connector."
+  ]
+}
