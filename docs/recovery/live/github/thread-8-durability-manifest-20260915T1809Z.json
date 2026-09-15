@@ -1,0 +1,120 @@
+{
+  "schema": "pantavion_github_durability_manifest_v1",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_20260915",
+  "thread": 8,
+  "role": "GITHUB_EVIDENCE_DURABILITY",
+  "repository": "pandaconnect1/pantavion-planet",
+  "recoveryBranch": "backup/pre-vercel-risk-20260914",
+  "sourceBranchHeadObservedBeforeManifest": "9c79c72ffb3d9609bd0a5bbc94c52a46751ed18d",
+  "safety": {
+    "zeroDeletions": true,
+    "zeroDestructiveVercelMutations": true,
+    "secretValuesRecorded": false,
+    "rawPayloadsDuplicatedIntoGitHub": false,
+    "githubUsedAsHighThroughputPrimaryDatabase": false
+  },
+  "protocolTransitionReceipt": {
+    "protocolDocument": {
+      "path": "docs/recovery/PANTAVION_10_THREAD_PARALLEL_ABSORPTION_PROTOCOL_20260915.md",
+      "gitBlobSha": "db89648066886691a416c4bd6632aa34b1578da0"
+    },
+    "coordinatorStatus": {
+      "path": "docs/recovery/live/TEN_THREAD_COORDINATOR_STATUS.json",
+      "gitBlobSha": "8278d3d66c380f014c1a9a18b1cae9c402875814"
+    },
+    "legacyAggregateStatus": {
+      "path": "docs/recovery/live/VERCEL_RESCUE_STATUS.json",
+      "gitBlobSha": "46cf4232225d2bd7e590e7fce23324f1f48dcf71"
+    },
+    "coordinatorRuntimeStallEvidence": {
+      "path": "docs/recovery/live/coordinator/coordinator-runtime-stall-20260915T1805Z.json",
+      "gitBlobSha": "5b04a030c9e15f39ea03ff459104fc63d7dadb54"
+    },
+    "thread0ReconciliationEvidence": {
+      "path": "docs/recovery/live/coordinator/thread-0-reconciliation-20260915T180647Z.json",
+      "gitBlobSha": "3f8bee8ed9c1bffe0d81325d2084741ff436bf0e"
+    },
+    "status": "BOUND"
+  },
+  "threadOwnershipReceipt": {
+    "allThreads0Through9HaveDurableLocks": true,
+    "locks": [
+      {"thread":0,"path":"docs/recovery/live/claims/THREAD_0_COORDINATOR.lock","gitBlobSha":"3369eea0e3e871387d3721ac705f06f86f01608b"},
+      {"thread":1,"path":"docs/recovery/live/claims/THREAD_1.lock","gitBlobSha":"ab099a380ea90e3e796d9e5bcce23a58d4734b1a"},
+      {"thread":2,"path":"docs/recovery/live/claims/THREAD_2.lock","gitBlobSha":"795b4d9495a5c515c11f83e9a109dc932efeebf5"},
+      {"thread":3,"path":"docs/recovery/live/claims/THREAD_3.lock","gitBlobSha":"19c6d91bb421a597584d2d5b295274cf677a2de3"},
+      {"thread":4,"path":"docs/recovery/live/claims/THREAD_4.lock","gitBlobSha":"e1813251e6d05343c6a5f4f752aeffe997f3b592"},
+      {"thread":5,"path":"docs/recovery/live/claims/THREAD_5.lock","gitBlobSha":"ea2bf0021fbef6a0c818d0f116aeec06e5d9e8a2"},
+      {"thread":6,"path":"docs/recovery/live/claims/THREAD_6.lock","gitBlobSha":"669cea05c3e74198f4b66150d0647d068d8ff39f"},
+      {"thread":7,"path":"docs/recovery/live/claims/THREAD_7.lock","gitBlobSha":"4cfc4bada57fef32c1c961e7cb3e31493ef61267"},
+      {"thread":8,"path":"docs/recovery/live/claims/THREAD_8.lock","gitBlobSha":"990ae73f97456faf2d84a0ba29fb436d7b64d354"},
+      {"thread":9,"path":"docs/recovery/live/claims/THREAD_9.lock","gitBlobSha":"fd3a5ee71ec21c299a62521242f000b6bcc09966"}
+    ]
+  },
+  "productionEvidencePointers": {
+    "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+    "deploymentIdentity": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh:dpl_6NLyCMTnyzvi481Xz4UAQHrE2PHj",
+    "deploymentState": "READY",
+    "target": "production",
+    "mainGitSha": "170ffb3b9e5c48313d08fb6e27ecafb715bfec90",
+    "founderRecoveryBoundary": {
+      "route": "/admin/pantavion/recovery",
+      "httpStatus": 200,
+      "visibleBoundary": "Founder Access Required",
+      "authenticatedFounderFeedVerified": false
+    },
+    "schedulerHealth": {
+      "route": "/api/pantavion/intelligence/scheduler-health",
+      "httpStatus": 200,
+      "status": "healthy",
+      "schedule": "*/5 * * * *",
+      "semanticWarning": "recovery.active groups planned/queued/running and MUST NOT be interpreted as running"
+    }
+  },
+  "workerExecutionEvidence": {
+    "taskName": "pantavion:recovery_partition:v1",
+    "observedAtUtc": "2026-09-15T18:07:46.066729Z",
+    "total": 165,
+    "planned": 165,
+    "queued": 0,
+    "running": 0,
+    "succeeded": 0,
+    "failed": 0,
+    "leased": 0,
+    "maxAttempt": 0,
+    "latestLeaseHeartbeat": null,
+    "latestExecutionUpdateUtc": "2026-09-15T14:30:27.011720Z",
+    "executionProofState": "NO_FENCED_EXECUTION_PROOF_YET",
+    "ownerForRemediation": "THREAD_9"
+  },
+  "productionCodeEvidence": {
+    "githubOidcRecoveryExecutor": {
+      "path": "scripts/pantavion-github-recovery-partition-executor.mjs",
+      "gitBlobShaAtMain170ffb3": "76d3f468c101b1f93df30c3a4cf14a24a2c3c060",
+      "state": "SCRIPT_PRESENT"
+    },
+    "recoveryRuntimeFabricWorkflow": {
+      "path": ".github/workflows/pantavion-recovery-runtime-fabric.yml",
+      "gitBlobShaAtMain170ffb3": "3ed8ab514cf8be3ddcc314575b51cc765b232d04",
+      "executorInvocationVerified": false
+    }
+  },
+  "countIntegrity": {
+    "vercelEstimatedSourceRecords": 18000,
+    "vercelEstimateVerified": false,
+    "pantavionCorpusRecords": 82413,
+    "datasetsComparable": false,
+    "legacyRecoveredDeploymentRecordsFloor": 3679,
+    "legacyCanonicalizedFloor": 219,
+    "rehydratedPendingCanonicalization": 400,
+    "rule": "Do not inflate canonical totals until durable canonical writes exist."
+  },
+  "completion": {
+    "protocolTransitionEvidenceBound": true,
+    "threadOwnershipEvidenceBound": true,
+    "productionAccessBoundaryEvidenceBound": true,
+    "workerExecutionEvidenceBound": false,
+    "finalConvergenceVerified": false,
+    "state": "OPEN_NOT_COMPLETE"
+  }
+}
