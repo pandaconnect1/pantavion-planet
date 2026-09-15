@@ -1,0 +1,27 @@
+{
+  "lane":"G","sourceLane":"A","project":"pantavion-planet","projectId":"prj_BxhpnjvAs1seyfBU1UYFU8nDykwh","range":"241-260","fromCursorExclusive":1781340813841,"nextCursor":1780249516284,"recordCount":20,"sourceSurface":"Vercel list_deployments","privacy":"PUBLIC_SAFE","sanitized":true,"secretValuesIncluded":false,
+  "schema":["deployment_id","created_at","state","target","git_sha","git_ref","git_message_subject","git_verification"],
+  "records":[
+    ["dpl_Hdx5TFkNK63M3E51qVSYWABkQH41",1781340671058,"READY",null,"5ea04d9e31337439fc85960a7447aa296c86c0ba","pantavion/execution-engine-v1","feat(kernel): add ecosystem work package generator","unverified"],
+    ["dpl_7gisykp1JWQ3wqZZZW9JEnMG6V9R",1781339835938,"READY",null,"e14baee0df4ef14cf012fd52b689fdcc7004ccd7","pantavion/execution-engine-v1","feat(kernel): add autonomous code generation worker","unverified"],
+    ["dpl_BQ8ApRhDyj6BTiR4hCHURCahfbC7",1781339240427,"READY",null,"a89b471910614933a5baf0830ae420319d94054c","pantavion/execution-engine-v1","feat(kernel): add autonomous ecosystem execution foundation","unverified"],
+    ["dpl_6wGKodm4r6BXrgnT4QggBoWfNQ77",1781047738062,"READY",null,"f28cae11352a7a579cc681749115a7241548232a","pantavion/execution-engine-v1","feat(kernel): add domain kernel registry","unverified"],
+    ["dpl_DWo13SGHeVw1nDZbv6P31iJ6yvQR",1781044610764,"READY",null,"66e6c940a906357ee1dcc1a77a143b04ea074b14","pantavion/evolution-engine-v2","feat(evolution): add evolution engine v2 foundation","unverified"],
+    ["dpl_Fa5zHqEqqvz3STsRK36mhkEThwD2",1781039950291,"READY","production","9c74f84c89f5ffc40a5722e7536368c5b5c49a09","main","Merge pull request #72 from pandaconnect1/pantavion-agent/evolution-engine-v1","verified"],
+    ["dpl_38iNgjxXJapaDfwa8pqqKLbfNctC",1781039567217,"READY",null,"b80cf8accb0ebafd05b14ba142c3decd73a3d91d","pantavion-agent/evolution-engine-v1","feat(kernel): add Evolution Engine V1","unverified"],
+    ["dpl_5DZpzkRCcNc6DNRGX3zcnfC1KXgd",1781039532468,"READY",null,"d115fac1d4bc52496c649a9afc6f067c5a8feef8","pantavion-agent/evolution-engine-v1","feat(kernel): add Evolution Engine V1","unverified"],
+    ["dpl_BnKDdj4hbgg9uRQ82Fhh1cmiRhEJ",1781039312609,"READY","production","b80d06d5bc33de87317ea29acd1d7b4f26d94e40","main","fix(agent): enable direct spec file writer","unverified"],
+    ["dpl_Ad3Ss6ckWSmbfbsr6z1wCiYXPrXT",1781035737856,"READY","production","e9678d89442627178d5a6cc3c34e31c679695d81","main","feat(agent): allow direct workflow dispatch specs","unverified"],
+    ["dpl_J1iNfrq7Ju1pwHaAqBCZejvi1Hzr",1781029941082,"READY","production","ef6a0b2068df90622b406ea972ec3e6ad924a23f","main","Merge pull request #71 from pandaconnect1/pantavion/real-runtime-safety-gate","verified"],
+    ["dpl_EbkYK9VMy6L1iKoEC7YezzyQLXNg",1781027354900,"READY",null,"538500e757d5e0a30c87dc55ce1feb7d42e20a8a","pantavion/real-runtime-safety-gate","fix(audit): align translation provider boundary marker","unverified"],
+    ["dpl_6rd3mCRK14PP8D9riEiA6v4YKDt3",1781027049342,"READY",null,"5f8ebafcf2d81a9c6730d8ad21ef12823432c65d","pantavion/real-runtime-safety-gate","fix(ci): align guardian and master audit with real runtime","unverified"],
+    ["dpl_54PpokgSzjr1d1gdaswxsH49UTqe",1781026521875,"READY",null,"1a91cc5b9a652a428490d891acfab36cbf6130e0","pantavion/real-runtime-safety-gate","fix(ci): align GitHub dependency install with Vercel","unverified"],
+    ["dpl_6f7oib9qyeidsNhyJnFT1BnggDFM",1781026107545,"READY",null,"659ebfaea96203ced4ec14fc072740ba7152fa22","pantavion/real-runtime-safety-gate","fix(runtime): repair safety gate syntax and CI checks","unverified"],
+    ["dpl_4qxrQEBKTBAFuXtyZDx19DzVeeSz",1781025647073,"READY",null,"57af595278783bbeba793b35b7568f7d4fcdbf85","pantavion/real-runtime-safety-gate","Fix: repair isAuthorizedCronRequest build syntax corruption","verified"],
+    ["dpl_8sQ4gy6SyxGjo6eEZWWZtVYzsNXA",1780945599871,"READY","production","0608acde1b9f550fb7c09802f6869b450078243a","main","fix(water): improve master b tile error reporting","unverified"],
+    ["dpl_Ga4eQTu7k7nuDrHcXkCZWRiaLcDE",1780252048260,"READY","production","ff5ae0cb58ed7f578ba6a2b0ea871b533c2ab612","main","fix(water): align private index smoke with pipe index count","unverified"],
+    ["dpl_13j9GNaFmU6ThET9fHSnspHAezGZ",1780251408268,"READY","production","b4f4f635ef4c6f6e413d51d8100f26d91b6b129d","main","feat(water): add master map integrity contract","unverified"],
+    ["dpl_3kNcJw8tvJEjg4byWCCAKvuHVePv",1780249516284,"READY","production","2c51ed85f08252db694567b80f26d4bad8552369","main","fix(water): clarify B map is approved derived network only","unverified"]
+  ],
+  "rules":["gap recovery only","deduplicate by deployment_id","no creator identity copied","no secret values","no Vercel mutations","READY/production remains HISTORICAL_ONLY"]
+}
