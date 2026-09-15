@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-09-15T14:12:00Z",
+  "updatedAt": "2026-09-15T14:30:00Z",
   "phase": "EMERGENCY_VERCEL_RESCUE",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total and not directly comparable with mirrored deployment counts",
-  "recoveredDeploymentRecordsFloor": 2980,
-  "recoveredDeploymentRecordsFloorBasis": "durably checkpointed verified lower bound; mirror overlap may exist. Additional foreground canonical records have been observed beyond this floor but are not counted here until compact evidence is durably checkpointed.",
+  "recoveredDeploymentRecordsFloor": 3040,
+  "recoveredDeploymentRecordsFloorBasis": "durably checkpointed verified lower bound. Mirror overlap may exist; the 60 canonical records previously marked observed beyond 2,980 are now compactly preserved in GitHub evidence batches. Canonical and mirror lanes were independently paginated using strictly older-than cursors.",
   "canonical": {
     "project": "pantavion-planet",
     "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
@@ -21,24 +21,20 @@
   },
   "latestBatch": {
     "records": 60,
-    "pages": 4,
+    "pages": 3,
     "canonicalRecords": 60,
     "mirrorRecords": 0,
-    "note": "Foreground continuation beyond the durable 2,980 checkpoint observed three additional full canonical pages (60 records). The mirror lane was probed immediately after its saved cursor and returned count=0 with no deployments, proving VMXX terminal. Canonical remains non-terminal. These 60 records are not added to the durable floor until compact evidence is checkpointed."
+    "note": "The three previously observed canonical pages are now durably checkpointed. VMXX terminal zero remains explicitly verified. Canonical remains non-terminal."
   },
   "recentEvidence": [
-    "social/business/listings discovery and revenue-path provenance",
-    "mobile-first Pantavion home foundation provenance",
-    "AI Gateway speech-context normalization provenance",
-    "language-aware STT with resilient gateway retry provenance",
-    "strict translation language routing through AI Gateway provenance",
-    "official Vercel AI SDK transcription/STT provenance",
-    "mobile MediaRecorder and interpreter voice-recording provenance",
-    "historical recovery and pending-work ledger provenance",
     "bidirectional Interpreter implementation and global speech-locale provenance",
     "Vercel OIDC runtime helper and sanitized STT diagnostics provenance",
     "speech accessibility normalization and one-tap microphone permission provenance",
-    "shared translation service, global language catalog and bidirectional voice-turn provenance"
+    "shared translation service, global language catalog and bidirectional voice-turn provenance",
+    "mobile voice translation with server STT fallback provenance",
+    "official Vercel AI SDK transcription/STT provenance",
+    "strict translation language routing through AI Gateway provenance",
+    "social/business/listings discovery and revenue-path provenance"
   ],
   "hardGaps": [
     "decrypted environment-secret values require authorized CLI/API export or reissue/rotation",
