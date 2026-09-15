@@ -1,0 +1,74 @@
+{
+  "contract": "PANTAVION_AGENT_WORK_UNIT_V1",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_20260915",
+  "ownerThread": 6,
+  "createdAtUtc": "2026-09-15T18:12:00Z",
+  "purpose": "Create idempotent, provenance-bound execution-preparation work units only from durable Thread 5 routing outputs without deploying or releasing agent results.",
+  "eligibility": {
+    "acceptedRouteStates": ["ROUTED", "REVIEW_REQUIRED"],
+    "routedRule": "ROUTED records may fan out into applicable work-unit types.",
+    "reviewRequiredRule": "REVIEW_REQUIRED may produce only an explicit review/governance work unit when a canonical identity, route identity and immutable provenance are present.",
+    "rejectedStates": ["WAITING_CANONICAL", "WAITING_CLASSIFICATION", "PREPARED", "QUARANTINED"],
+    "preflightIsEligible": false,
+    "classificationAloneIsEligible": false
+  },
+  "identity": {
+    "algorithm": "SHA-256",
+    "input": "PANTAVION_AGENT_WORK_V1\\u0000<stableRecordKey>\\u0000<routeId>\\u0000<workType>\\u0000<canonicalTarget>",
+    "encoding": "UTF-8",
+    "property": "Reprocessing the same canonical routed record into the same work type and target produces the same workUnitKey."
+  },
+  "requiredBindings": [
+    "workUnitKey",
+    "workType",
+    "stableRecordKey",
+    "canonicalIdOrLedgerPointer",
+    "routeId",
+    "routePointer",
+    "classificationPointer",
+    "sourceFingerprintOrHash",
+    "immutableSourceProvenance",
+    "module",
+    "subsystem",
+    "capability",
+    "feature",
+    "canonicalTarget",
+    "approvalScope",
+    "status"
+  ],
+  "allowedWorkTypes": [
+    "research_gap",
+    "implementation_candidate",
+    "code_task",
+    "test_task",
+    "security_task",
+    "legal_governance_review",
+    "ux_task",
+    "data_schema_task",
+    "module_improvement",
+    "integration_task",
+    "verification_task"
+  ],
+  "deduplication": {
+    "oneCanonicalIdentity": true,
+    "multipleWorkUnitsAllowedWhenWorkTypeOrTargetDiffers": true,
+    "duplicateSameWorkUnitKeyAllowed": false,
+    "upsertRequired": true,
+    "physicalSourceRecordDuplicationAllowed": false
+  },
+  "executionBoundary": {
+    "preparationOnly": true,
+    "automaticDeployAllowed": false,
+    "automaticReleaseAllowed": false,
+    "automaticProductionMutationAllowed": false,
+    "durableExecutionRuntimeOwner": "Thread 9",
+    "githubEvidenceOwner": "Thread 8",
+    "moduleGraphRoutingOwner": "Thread 5"
+  },
+  "truthBoundary": {
+    "generatedIsDeployed": false,
+    "materializedIsVerifiedLive": false,
+    "unresolvedIsComplete": false,
+    "workUnitRequiresImmutableProvenance": true
+  }
+}
