@@ -45,6 +45,7 @@
     "_local_backups/**",
     ".pantavion-backups/**",
     "_pantavion_quarantine/**",
-    "recovery/**"
+    "recovery/**",
+    "docs/recovery/**"
   ]
 }
