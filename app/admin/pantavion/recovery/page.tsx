@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import Link from "next/link";
 
 import {
   isPantavionKernelAccessAllowed,
@@ -98,18 +99,18 @@ export default async function FounderRecoveryPage({ searchParams }: PageProps) {
             The recovery route is live, but its operational data remains restricted. Sign in with the authorized founder account and complete the required founder verification to view the recovery feed.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <a
+            <Link
               href="/auth/login"
               className="rounded-2xl border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-sm font-black text-cyan-100"
             >
               Founder sign in
-            </a>
-            <a
+            </Link>
+            <Link
               href="/"
               className="rounded-2xl border border-white/15 px-4 py-2 text-sm font-bold text-slate-200"
             >
               Pantavion home
-            </a>
+            </Link>
           </div>
           <p className="mt-6 text-xs leading-5 text-slate-500">
             No recovery evidence, tokens, secret values or internal operational details are exposed on this access boundary.
@@ -134,8 +135,8 @@ export default async function FounderRecoveryPage({ searchParams }: PageProps) {
               </p>
             </div>
             <div className="flex gap-2">
-              <a href="/admin/pantavion/intelligence" className="rounded-2xl border border-cyan-300/25 px-4 py-2 text-sm font-bold text-cyan-100">Intelligence</a>
-              <a href="/kernel" className="rounded-2xl border border-slate-300/30 px-4 py-2 text-sm font-bold text-slate-100">Kernel</a>
+              <Link href="/admin/pantavion/intelligence" className="rounded-2xl border border-cyan-300/25 px-4 py-2 text-sm font-bold text-cyan-100">Intelligence</Link>
+              <Link href="/kernel" className="rounded-2xl border border-slate-300/30 px-4 py-2 text-sm font-bold text-slate-100">Kernel</Link>
             </div>
           </div>
         </header>
