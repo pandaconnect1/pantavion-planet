@@ -1,0 +1,77 @@
+{
+  "contract": "PANTAVION_MODULE_GRAPH_ROUTING_V1",
+  "createdAt": "2026-09-15T18:11:00Z",
+  "ownerThread": 5,
+  "purpose": "Idempotent module/knowledge-graph routing without duplicating the canonical source record.",
+  "prerequisites": {
+    "canonicalBindingRequired": true,
+    "recordLevelClassificationRequired": true,
+    "classificationMayBeReviewRequired": true,
+    "sourceProvenanceRequired": true
+  },
+  "canonicalIdentity": {
+    "vercelDeployment": "projectId:deploymentId",
+    "pantavionCorpus": "recordId:sourceFingerprint",
+    "sourceContract": "docs/recovery/live/canonical/CANONICAL_SHARDING_CONTRACT_V1.json"
+  },
+  "routeId": {
+    "algorithm": "SHA-256",
+    "input": "PANTAVION_ROUTE_V1\\u0000<stableRecordKey>\\u0000<relationshipType>\\u0000<targetCanonicalPath>",
+    "encoding": "UTF-8",
+    "purpose": "Idempotent edge identity. Reprocessing the same canonical record-to-target relationship produces the same routeId."
+  },
+  "routeRecordRequiredFields": [
+    "routeId",
+    "stableRecordKey",
+    "canonicalLedgerPointer",
+    "classificationPointer",
+    "classificationConfidence",
+    "relationshipType",
+    "targetCanonicalPath",
+    "sourceProvenance",
+    "routeState"
+  ],
+  "allowedRelationshipTypes": [
+    "shared_core",
+    "module",
+    "subsystem",
+    "capability",
+    "feature",
+    "requirement",
+    "dependency",
+    "related_evidence",
+    "implementation_candidate",
+    "governed_hold",
+    "quarantine"
+  ],
+  "routeStates": {
+    "WAITING_CANONICAL": "No durable canonical binding exists; no route edge may be emitted.",
+    "WAITING_CLASSIFICATION": "Canonical identity exists but record-level classification is not durably bound; no semantic target may be guessed.",
+    "REVIEW_REQUIRED": "Classification is uncertain; only a governed_hold edge may be emitted until reviewed.",
+    "ROUTED": "Durable canonical identity and durable classification both exist and the idempotent route edge has been durably written.",
+    "QUARANTINED": "Governance/safety policy requires isolation while provenance remains preserved."
+  },
+  "ontology": {
+    "source": "scripts/pantavion-canonical-semantic-classification-v3.cjs",
+    "rule": "Thread 5 consumes module/subsystem/capability/feature/canonicalTarget supplied by classification. It does not infer missing semantic targets from deployment state, gitSha, filenames, counts or worker ownership."
+  },
+  "multiplicity": {
+    "oneCanonicalIdentity": true,
+    "multipleGraphEdgesAllowed": true,
+    "physicalRecordDuplicationAllowed": false,
+    "sameEdgeDuplicateAllowed": false
+  },
+  "completionTruth": {
+    "preparedIsRouted": false,
+    "waitingIsRouted": false,
+    "reviewRequiredIsComplete": false,
+    "routedRequiresDurableWrite": true,
+    "readyOrDeployedIsVerifiedLive": false
+  },
+  "downstream": {
+    "thread6MayConsume": "ROUTED records only, plus explicit REVIEW_REQUIRED review tasks when policy permits.",
+    "thread7Audits": "routeId duplicates, canonical identity duplication, classification conflicts and target conflicts.",
+    "thread8Binds": "receipt/checksum/evidence pointer for durable route artifacts.",
+    "thread9Runtime": "may execute routing jobs through the existing durable execution fabric; no competing executor is introduced by Thread 5."
+  }
+}
