@@ -1,0 +1,61 @@
+name: Pantavion Thread 3 Canonicalize G Buckets 5-9
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "scripts/recovery/thread3-canonicalize-g.mjs"
+      - ".github/workflows/pantavion-thread3-canonicalize-g.yml"
+      - "docs/recovery/live/canonical/CANONICAL_SHARDING_CONTRACT_V1.json"
+      - "docs/recovery/live/batches/lane-g-20260915-*-rehydrated.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pantavion-thread3-canonicalize-g-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  canonicalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Canonicalize only Thread 3 buckets 5-9
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/recovery/thread3-canonicalize-g.mjs | tee /tmp/thread3-canonicalize-g-result.json
+      - name: Commit durable canonical ledger writes
+        shell: bash
+        env:
+          BRANCH: backup/pre-vercel-risk-20260914
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            docs/recovery/live/canonical/thread3-g-bucket-5.json \
+            docs/recovery/live/canonical/thread3-g-bucket-6.json \
+            docs/recovery/live/canonical/thread3-g-bucket-7.json \
+            docs/recovery/live/canonical/thread3-g-bucket-8.json \
+            docs/recovery/live/canonical/thread3-g-bucket-9.json \
+            docs/recovery/live/canonical/thread3-g-manifest.json \
+            docs/recovery/live/shards/thread3-canonical-g.json \
+            docs/recovery/live/handoffs/thread3-to-thread4-g.json
+          if git diff --cached --quiet; then
+            echo "Idempotent no-op: canonical artifacts already match source evidence."
+            exit 0
+          fi
+          git commit -m "recovery: canonicalize Thread 3 G buckets 5-9"
+          git pull --rebase origin "$BRANCH"
+          git push origin "HEAD:$BRANCH"
