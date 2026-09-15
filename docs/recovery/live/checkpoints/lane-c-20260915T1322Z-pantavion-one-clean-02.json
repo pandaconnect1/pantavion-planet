@@ -1,0 +1,19 @@
+{
+  "lane":"C","project":"pantavion-one-clean","project_id":"prj_PZD1t2hOc6SaiY5pKithCHILboHF","batch":"41-52","schema":["deployment_id","created_at","state","target","git_sha","git_ref","git_message","uniqueness"],
+  "records":[
+    ["dpl_H2AGqPQzSS4b53DuVBmxb9GoYD9k",1763969305022,"READY","production","7cc6a56aacce1da64c4dc5bf651be32a35968527","main","Update Hero.js","unique"],
+    ["dpl_4MdiJLEPPoyshRqwHVNwWZx8KwXU",1763969280784,"READY","production","f7a09d40a501445a7e14fdadf6c071021ce9d926","main","Update MainNav.js","unique"],
+    ["dpl_Qi8gMAK88kVcdvQWNVsMtkJWFaqQ",1763969239784,"READY","production","276636c0f1c1eba3cd7f18036becaed5d772f3ea","main","Update globals.css","unique"],
+    ["dpl_81cPe2Zvxbn8TeYZuJyaV5tMZfKS",1763969208170,"READY","production","3571d810e201ad34dc87d98f4048d6b14a2991da","main","Update layout.js","unique"],
+    ["dpl_GCztTiLeyocSh1iyRUB2m6EMn2Mv",1763968446402,"READY","production","8bf7c845ab377b4bbaa407d50be7573fbb4ece4d","main","Update layout.js","unique"],
+    ["dpl_6FDFDQWZNoqBXmPsgVDBma9dsH5q",1763968366009,"READY","production","d6dc59476d7668fcfbe071706ec3cc0e1b3bf1d6","main","Update layout.js","unique"],
+    ["dpl_8iqLDvCW4z1m1trRXs4ydoXbNCcv",1763967776781,"READY","production","8203a2ab10a8da58651590aad1c476fac9788e1d","main","Update SectionOverview.js","unique"],
+    ["dpl_6SQTjiJfCUhUW87jYDeDyv8nMDak",1763967724415,"READY","production","4509206446d0487a41831939d9b7e9062c1ff4bc","main","Update Hero.js","unique"],
+    ["dpl_FcoJaQBy9fM8jJvxS9iFi8k1ZMfv",1763967675575,"READY","production","1b19e3da0413905fef63197740f05425c6aea68e","main","Update MainNav.js","unique"],
+    ["dpl_7PYatX3WU8RgBprr7VAhzrCh636H",1763967615804,"READY","production","209770d1f9d5b673360d5f4308d681202195ed77","main","Update globals.css","unique"],
+    ["dpl_4Y5kZpCZRWiCSj69Shw6ji2AGEUa",1763967070756,"READY","production","ab6157e28ae554b1764bfde41ada1b5e02f9fd42","main","Create SectionOverview.js","unique"],
+    ["dpl_3JLtXFh5cfQhuJQmTsZR4b37oA7R",1763936819675,"READY","production","0bee8b0a295d0d67f58f811ebbab227d5f0e91f8","main","Delete Hero.js","unique"]
+  ],
+  "terminal_query":{"until":1763936819675,"count":0},
+  "source_surface":"Vercel deployments","rescue_state":"TERMINAL_VERIFIED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","secret_values":false
+}
