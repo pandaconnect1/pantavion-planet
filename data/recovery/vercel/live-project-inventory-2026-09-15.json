@@ -1,0 +1,27 @@
+{
+  "capturedAt": "2026-09-15",
+  "source": "Vercel live project listing",
+  "projectCount": 15,
+  "projects": [
+    "pantavion-planet",
+    "pantavion-planet-vmxx",
+    "pantavion-one",
+    "pantavion-one-clean-98it",
+    "pantavion-one-clean",
+    "pantaai",
+    "pantavion-one-clean-ui",
+    "v0-new-project-dr8uqvuxfhx",
+    "v0-new-project-cd71xe9esnl",
+    "v0-new-project-0hexy2s8dnt",
+    "pantaai-template",
+    "pantaai-v1-nf17",
+    "pantaai-v1",
+    "v0-new-project-81xhfwdrlxy",
+    "nextjs-ai-chatbot"
+  ],
+  "rules": [
+    "Preserve before cleanup.",
+    "Do not treat project presence as proof that deployments or configuration have been preserved.",
+    "Vercel-only projects require dedicated recovery review."
+  ]
+}
