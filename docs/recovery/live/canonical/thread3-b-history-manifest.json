@@ -1,0 +1,115 @@
+{
+  "contract": "PANTAVION_CANONICAL_SHARDING_V1",
+  "ownerThread": 3,
+  "scope": "LANE_B_MIRROR_HISTORY_BUCKETS_5_9",
+  "sourceProject": "pantavion-planet-vmxx",
+  "sourceProjectId": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+  "sourceInputFingerprint": "317af8538a7989abd01a34b3617f5b693b3cb19e6ed001b880d8fde822997e67",
+  "sourceFileCount": 11,
+  "sourceFiles": [
+    {
+      "path": "docs/recovery/live/batches/lane-b-20260915T1316Z-vmxx-head.json",
+      "sha256": "081f2fd495ba1e31c8e48d2df4fc9e131d94704f1d5839881eef35f3905eada2",
+      "acceptedObservations": 20
+    },
+    {
+      "path": "docs/recovery/live/batches/vercel-continuation-2660.json",
+      "sha256": "5a39d95ecfeebba474bb4223b434b073cb33182ebc4884b9056910ed26d71412",
+      "acceptedObservations": 20,
+      "terminalEvidenceOnly": false
+    },
+    {
+      "path": "docs/recovery/live/batches/vercel-continuation-2700.json",
+      "sha256": "f35a4d8686f57bc65755dac49f22aa9b621971c539dc11bb80a1736d565123b5",
+      "acceptedObservations": 20,
+      "terminalEvidenceOnly": false
+    },
+    {
+      "path": "docs/recovery/live/batches/vercel-continuation-2860-to-2900-chat-parallel.json",
+      "sha256": "266a6fd30c4fa3f706b89a182f24373ade892917b246fef54f2dde3a0251b958",
+      "acceptedObservations": 20,
+      "terminalEvidenceOnly": false
+    },
+    {
+      "path": "docs/recovery/live/batches/vercel-continuation-2900-to-2940-chat-parallel.json",
+      "sha256": "00c973cff4e376ce1ca318a604dc3caf115ecd613c1784982148d4e7ee31b06a",
+      "acceptedObservations": 20,
+      "terminalEvidenceOnly": false
+    },
+    {
+      "path": "docs/recovery/live/batches/vercel-continuation-2940-to-2980-chat-parallel.json",
+      "sha256": "9f29dd0c1bf503f514afd0034b2e1b1cbe56640fe6744a348ed7cc7fd6c36b06",
+      "acceptedObservations": 20,
+      "terminalEvidenceOnly": false
+    },
+    {
+      "path": "docs/recovery/live/batches/vercel-continuation-2980-to-3000-mirror-terminal.json",
+      "sha256": "ff839953d6498a2113dd0767d5d5cf596ffbfd7471c8ada803d08717779ea14b",
+      "acceptedObservations": 0,
+      "terminalEvidenceOnly": true
+    },
+    {
+      "path": "docs/recovery/live/batches/vercel-continuation-3000-to-3040-observed-to-durable.json",
+      "sha256": "cdd6ebc49757ace97d50eb7892f05be8dcf2b2af194249913eb47526d234baad",
+      "acceptedObservations": 0,
+      "terminalEvidenceOnly": true
+    },
+    {
+      "path": "docs/recovery/live/batches/vercel-continuation-3040-to-3060-canonical.json",
+      "sha256": "529c39ab372fc11d358001e431cc663bdd24968d10739cecd83bf4add38039a3",
+      "acceptedObservations": 0,
+      "terminalEvidenceOnly": true
+    },
+    {
+      "path": "docs/recovery/live/batches/vercel-continuation-3060-to-3080-canonical.json",
+      "sha256": "f78be974ecf3ee930fd7a799dc15e0e118cf80d05de36a83f9fbadbb7b762a34",
+      "acceptedObservations": 0,
+      "terminalEvidenceOnly": true
+    },
+    {
+      "path": "docs/recovery/live/batches/vercel-continuation-3140-to-3160-canonical.json",
+      "sha256": "75934b6dc1e5fcd89e395a96257bd0e04ff72bf0d97f94a87eb67163f6e7e9f7",
+      "acceptedObservations": 0,
+      "terminalEvidenceOnly": true
+    }
+  ],
+  "observedRowCount": 120,
+  "uniqueStableKeyCount": 120,
+  "duplicateObservationCount": 0,
+  "conflictingObservationCount": 0,
+  "alreadyCanonicalKeyCount": 0,
+  "existingCanonicalProvenance": [],
+  "newUniqueStableKeyCount": 120,
+  "thread3CanonicalRecordCount": 59,
+  "bucketCounts": {
+    "5": 13,
+    "6": 7,
+    "7": 11,
+    "8": 15,
+    "9": 13
+  },
+  "recoveredSourceFloorContribution": 0,
+  "ignoredContinuationFilesWithoutMirrorPayload": 0,
+  "rejectedUnexpectedMirrorProject": 0,
+  "canonicalFiles": [
+    "docs/recovery/live/canonical/thread3-b-history-bucket-5.json",
+    "docs/recovery/live/canonical/thread3-b-history-bucket-6.json",
+    "docs/recovery/live/canonical/thread3-b-history-bucket-7.json",
+    "docs/recovery/live/canonical/thread3-b-history-bucket-8.json",
+    "docs/recovery/live/canonical/thread3-b-history-bucket-9.json"
+  ],
+  "rules": [
+    "Only explicit Lane B head rows and explicit continuation mirror payload rows are consumed.",
+    "Summary-only ranges are never materialized as records.",
+    "Stable identity is projectId:deploymentId.",
+    "Keys already present in Thread 3 B/D canonical files are not emitted again; their additional source provenance is recorded in this manifest.",
+    "Mirror/recovery-operational evidence is preserved but does not inflate recovered-source-floor counts.",
+    "Only buckets 5-9 are emitted by Thread 3.",
+    "No classification, module routing, production readiness, or VERIFIED_LIVE status is inferred."
+  ],
+  "downstream": {
+    "classificationOwner": "THREAD_4",
+    "auditOwner": "THREAD_7",
+    "durabilityOwner": "THREAD_8"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "thread": 3,
+  "status": "B_HISTORY_CANONICAL_ARTIFACTS_GENERATED",
+  "contract": "PANTAVION_CANONICAL_SHARDING_V1",
+  "sourceInputFingerprint": "317af8538a7989abd01a34b3617f5b693b3cb19e6ed001b880d8fde822997e67",
+  "observedRowCount": 120,
+  "uniqueStableKeyCount": 120,
+  "alreadyCanonicalKeyCount": 0,
+  "canonicalRecordCount": 59,
+  "bucketCounts": {
+    "5": 13,
+    "6": 7,
+    "7": 11,
+    "8": 15,
+    "9": 13
+  },
+  "recoveredSourceFloorContribution": 0,
+  "conflictingObservationCount": 0,
+  "canonicalManifest": "docs/recovery/live/canonical/thread3-b-history-manifest.json",
+  "canonicalFiles": [
+    "docs/recovery/live/canonical/thread3-b-history-bucket-5.json",
+    "docs/recovery/live/canonical/thread3-b-history-bucket-6.json",
+    "docs/recovery/live/canonical/thread3-b-history-bucket-7.json",
+    "docs/recovery/live/canonical/thread3-b-history-bucket-8.json",
+    "docs/recovery/live/canonical/thread3-b-history-bucket-9.json"
+  ],
+  "overlapWithThread2": 0,
+  "next": [
+    "Thread 4 classification",
+    "Thread 7 semantic-mirror/global reconciliation",
+    "Thread 8 durability binding"
+  ]
+}

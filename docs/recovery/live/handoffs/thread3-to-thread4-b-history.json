@@ -1,0 +1,22 @@
+{
+  "fromThread": 3,
+  "toThread": 4,
+  "handoffType": "CANONICAL_RECORDS_READY_FOR_CLASSIFICATION",
+  "sourceLane": "B",
+  "canonicalManifest": "docs/recovery/live/canonical/thread3-b-history-manifest.json",
+  "canonicalFiles": [
+    "docs/recovery/live/canonical/thread3-b-history-bucket-5.json",
+    "docs/recovery/live/canonical/thread3-b-history-bucket-6.json",
+    "docs/recovery/live/canonical/thread3-b-history-bucket-7.json",
+    "docs/recovery/live/canonical/thread3-b-history-bucket-8.json",
+    "docs/recovery/live/canonical/thread3-b-history-bucket-9.json"
+  ],
+  "canonicalRecordCount": 59,
+  "sourceInputFingerprint": "317af8538a7989abd01a34b3617f5b693b3cb19e6ed001b880d8fde822997e67",
+  "constraints": [
+    "Do not rewrite source evidence.",
+    "Preserve mirror/recovery operational semantics as provenance.",
+    "Use REVIEW_REQUIRED when semantic classification is uncertain.",
+    "Do not infer VERIFIED_LIVE from historical deployment state."
+  ]
+}
