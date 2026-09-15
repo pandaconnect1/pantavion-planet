@@ -1,0 +1,14 @@
+{
+  "lane": "D",
+  "timestamp_utc": "2026-09-15T13:18:55Z",
+  "status": "BLOCKED_VERCEL_HISTORICAL_RUNTIME_BILLING_LIMIT",
+  "shard": "docs/recovery/live/shards/lane-d-legacy-b.json",
+  "deployment_histories_terminal_verified": true,
+  "terminal_projects": 7,
+  "deployment_records_preserved": 12,
+  "no_git_projects_verified": 4,
+  "build_failures_preserved": 2,
+  "historical_runtime_blocker": "Vercel Logs API 400 ExceedsBillingLimitError",
+  "zero_deletions": true,
+  "secret_values_recorded": false
+}
