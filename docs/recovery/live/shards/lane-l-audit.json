@@ -1,32 +1,32 @@
 {
-  "schema":"pantavion_lane_l_completeness_dedup_audit_v1",
+  "schema":"pantavion_lane_l_completeness_dedup_audit_v2",
   "lane":"L",
-  "updated_at_utc":"2026-09-15T14:17:00Z",
+  "updated_at_utc":"2026-09-15T15:11:00Z",
   "status":"ACTIVE_GAPS_FOUND",
-  "rules":{"zero_deletions":true,"zero_vercel_mutations":true,"secret_values_written":false,"deep_pagination_performed":false,"ready_promoted_to_verified_live":false},
-  "coverage":{"expected_lanes":["A","B","C","D","E","F","G","H","I","J","K"],"present_shards":["A","B","C","D","E","F","H","I","K"],"missing_shards":["G","J"],"expected_projects":15,"project_history_ownership":{"A":1,"B":1,"C":6,"D":7},"all_15_projects_assigned":true},
+  "aggregate_base":{"commit":"14f732f3de4590ba25e3a658bbdb6a7aee080a3e","source_records_floor":3679,"canonicalized_records_floor":219},
+  "rules":{"zero_deletions":true,"zero_vercel_mutations":true,"secret_values_written":false,"deep_pagination_performed":false,"ready_promoted_to_verified_live":false,"dedup_key":"projectId:deploymentId"},
+  "coverage":{"expected_projects":15,"project_history_ownership":{"A":1,"B":1,"C":6,"D":7},"all_15_projects_assigned":true,"lane_j":"ACTIVE_PARTIAL_PRESENT","lane_g":"EXPLICITLY_REASSIGNED_TO_A_201_600_PAYLOAD_GAP_RECOVERY_NO_GENERAL_G_SHARD_REQUIRED_FOR_THIS_AUDIT"},
   "audit_matrix":[
     {"check":"project coverage","state":"PASS_AT_HISTORY_OWNER_LEVEL","evidence":"A=1,B=1,C=6,D=7 => 15 projects"},
-    {"check":"terminal history","state":"PASS_WITH_STATUS_NORMALIZATION_GAP","evidence":"A terminal explicit count=0; B TERMINAL_VERIFIED; C six explicit terminal zeros; D seven deployment histories terminal verified","gap":"A uses status TERMINAL/rescue_state TERMINAL_CHECKPOINTED rather than master-required TERMINAL_VERIFIED"},
-    {"check":"checkpoint payload completeness","state":"FAIL","evidence":"Lane F reports Lane A 619 captured but only 219 payload-backed canonicalized","gap":"400 Lane-A records in ranges 201-600 have traversal/count/cursor summaries but no individual deployment payloads"},
-    {"check":"canonical ingestion completeness","state":"FAIL_ACTIVE","evidence":"Lane F canonicalized floor 219 vs source-record floor 3679","gap":"B/C/D ingestion and mirror dedup remain pending; earlier durable batches also remain to ingest"},
-    {"check":"module/theme classification","state":"FAIL_MISSING_OUTPUT","gap":"lane-j-module-classification.json absent and no LANE_J.lock visible at audit start"},
-    {"check":"project provenance classification","state":"FAIL_MISSING_OUTPUT","gap":"LANE_G.lock exists but lane-g-project-provenance.json absent at audit start"},
-    {"check":"founder feed completeness","state":"FAIL_PARTIAL","evidence":"Lane K status ACTIVE_PARTIAL_INPUT; only A/B projects represented directly; Lane J unavailable","gap":"Founder feed cannot be complete until F/J and project-wide canonical pointers are complete"},
-    {"check":"duplicate deployment IDs","state":"PARTIAL_PASS","evidence":"Lane B declares primary dedup key projectId:deploymentId and skipped one duplicate row in post-terminal window","gap":"No cross-lane full deployment-ID set is yet available to Lane L because F is partial and A has 400 summary-only records"},
-    {"check":"mirror/conflicting classification","state":"PARTIAL","evidence":"C marks pantavion-one-clean-98it mirror_candidate; D marks pantaai-v1 mirror_candidate; B uses mirror-safe dedup","gap":"Global mirror reconciliation awaits G and complete F ingestion"},
-    {"check":"live truth consistency","state":"PASS_WITH_SCOPED_EXCEPTION","evidence":"A/C/D remain HISTORICAL_ONLY; H confirms canonical runtime failure; B claims only VERIFIED_LIVE_ROOT_ONLY from direct HTTP 200 and explicitly records founder route 404","gap":"Do not generalize B root-only proof to application/module VERIFIED_LIVE"},
-    {"check":"runtime/export gaps","state":"OPEN_EXPLICIT","evidence":"H records historical runtime billing limit, private admin credential blocker, deployment file-tree export gap; C/D corroborate export limitations"}
+    {"check":"terminal history","state":"PASS_WITH_A_STATUS_NORMALIZATION_GAP","evidence":"Canonical and vmxx terminal; C/D owner histories terminal","gap":"A naming remains TERMINAL_CHECKPOINTED rather than normalized TERMINAL_VERIFIED"},
+    {"check":"checkpoint payload completeness","state":"FAIL_OPEN_400","evidence":"Lane F: Lane A captured 619, payload-backed canonicalized 219, summary-only payload gap 400","gap":"Keep records 201-600 open until durable per-record payloads exist"},
+    {"check":"canonical ingestion completeness","state":"FAIL_ACTIVE","evidence":"canonicalized floor 219 vs source-record floor 3679","gap":"F still must idempotently ingest/deduplicate recovered A-gap payloads plus B/C/D and earlier durable evidence"},
+    {"check":"module/theme classification","state":"PARTIAL_PASS_OUTPUT_NOW_PRESENT","evidence":"Lane J ACTIVE_PARTIAL exists and binds Social, People, Chat, Translation, Contacts, Trust, Minors/Safety, AI, Memory, Security and Infrastructure to provenance","gap":"Ads Center, Business, Dating, Events and Marketplace remain review-required in J current evidence"},
+    {"check":"project provenance classification","state":"REASSIGNED_SCOPE","evidence":"Coordinator explicitly repurposed G to A/201-600 payload-gap recovery","gap":"Do not duplicate G pagination or require the old general G shard as a current completion prerequisite"},
+    {"check":"founder feed freshness","state":"FAIL_STALE_INPUT","evidence":"Lane K ACTIVE_PARTIAL_INPUT still says Lane J NOT_AVAILABLE_AT_THIS_CHECKPOINT","gap":"K must refresh after current J and later F changes; current feed directly represents only A/B projects"},
+    {"check":"duplicate deployment IDs","state":"PARTIAL_PASS_BLOCKED_GLOBAL","evidence":"No confirmed cross-project duplicate deployment ID in currently complete per-record sets; B uses projectId:deploymentId and has skipped a duplicate row","gap":"Definitive global dedup awaits per-record payloads for the 400 gap and complete F ingestion"},
+    {"check":"semantic mirrors/conflicts","state":"PARTIAL","evidence":"Known/candidate semantic mirrors remain across separate deployment IDs; no evidence justifies collapsing them as identical records","gap":"Global semantic mirror reconciliation remains dependent on complete F canonical evidence"},
+    {"check":"live truth consistency","state":"PASS_SCOPED","evidence":"Historical READY/production remains HISTORICAL_ONLY; canonical scheduled worker runtime failure remains confirmed; vmxx proof is root-only and founder recovery route is not live there","gap":"No module/application-wide VERIFIED_LIVE promotion permitted"},
+    {"check":"auth/billing/export blockers","state":"OPEN_EXPLICIT","evidence":"Exact decrypted environment values/private credential continuity require authenticated private export or rotation; deployment filesystem/build-output export unavailable through current connector; historical runtime logs constrained by Vercel billing/retention","gap":"These remain explicit external/auth/billing blockers and secret values must never enter public GitHub"}
   ],
   "unresolved_gap_queue":[
-    {"priority":1,"owner":"F/A-reassignment-required","gap":"Recover or bind individual payloads for Lane A ranges 201-600 (400 records); do not re-page unless explicitly reassigned."},
-    {"priority":2,"owner":"J","gap":"Claim/produce module classification shard from canonical evidence without guessing."},
-    {"priority":3,"owner":"G","gap":"Produce project/Git/domain provenance shard; lock exists but shard missing."},
-    {"priority":4,"owner":"F","gap":"Complete idempotent canonical ingestion of B/C/D and earlier durable batches; publish cross-lane duplicate-ID/mirror reconciliation evidence."},
-    {"priority":5,"owner":"K","gap":"Refresh founder feed after F/J completion and include all project evidence pointers/gaps."},
-    {"priority":6,"owner":"A","gap":"Normalize terminal status to TERMINAL_VERIFIED if master-contract semantics are satisfied; preserve explicit count=0 proof."},
-    {"priority":7,"owner":"E/H","gap":"Private credential continuity, deployment file-tree export and historical runtime-log export remain explicit external/auth/billing gaps; never publish values."}
+    {"priority":1,"owner":"G/coordinator-reassigned","gap":"Recover durable individual payload evidence for Lane-A records 201-600 only; do not overlap completed A pagination."},
+    {"priority":2,"owner":"F","gap":"Idempotently bind each new payload by projectId:deploymentId, then ingest remaining B/C/D and earlier durable evidence; canonical count rises only after payload+dedup."},
+    {"priority":3,"owner":"J","gap":"Consume only new payload-backed canonical evidence and extend classifications without guessing; current Ads Center/Business/Dating/Events/Marketplace remain review-required."},
+    {"priority":4,"owner":"K","gap":"Refresh founder feed because its current snapshot predates Lane J and remains partial/stale."},
+    {"priority":5,"owner":"L","gap":"Rerun global duplicate/mirror/completeness audit after G/F/J/K refresh; do not deep-page unless explicitly reassigned."},
+    {"priority":6,"owner":"E/H","gap":"Resolve private credential continuity, deployment file-tree/build-output export, and historical runtime-log billing/retention blockers outside public metadata."}
   ],
-  "dedup_conclusion":"No evidence of a confirmed cross-project duplicate deployment ID was established from the currently complete per-record sets. Semantic mirrors are confirmed/candidates across separate deployment IDs. A definitive global duplicate-ID audit is blocked by incomplete canonical payload ingestion and the 400-record Lane-A payload gap.",
-  "completion_truth":"Lane L audit is not terminal: project-history ownership covers all 15 projects and terminal history evidence exists, but canonicalization, G/J outputs, founder-feed integration, global dedup reconciliation and export/runtime gaps remain unresolved."
+  "dedup_conclusion":"No confirmed cross-project duplicate deployment ID is proven from currently complete per-record sets. A definitive global projectId:deploymentId audit remains blocked by the 400-record Lane-A payload gap and incomplete F ingestion. Semantic mirrors must remain separate unless provenance proves equivalence.",
+  "completion_truth":"Lane J is now present and removes the prior missing-J failure, but rescue is still non-terminal: 400 per-record payloads remain open, F is 219/3679 floor, K is stale relative to J, global dedup/mirror reconciliation is incomplete, and authenticated/billing/export blockers remain explicit."
 }
