@@ -1,0 +1,38 @@
+name: Pantavion Recovery Evidence Integrity
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "docs/recovery/live/github/**"
+      - "docs/recovery/PANTAVION_10_THREAD_PARALLEL_ABSORPTION_PROTOCOL_20260915.md"
+      - "scripts/pantavion-recovery-github-evidence-integrity.mjs"
+      - ".github/workflows/pantavion-recovery-evidence-integrity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-recovery-evidence-integrity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-github-evidence:
+    name: Verify immutable recovery evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout full recovery history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify Thread 8 durability manifests
+        run: node scripts/pantavion-recovery-github-evidence-integrity.mjs
