@@ -1,0 +1,21 @@
+{
+  "lane": "K",
+  "observedAtUtc": "2026-09-15T18:09:26Z",
+  "status": "ACTIVE_PARTIAL_CURRENT_INPUT",
+  "founderFeedCommit": "be198eb3aa142ead883e7bc96cb2948f069fe93f",
+  "sourceFloor": 3679,
+  "canonicalizedFloor": 219,
+  "gRehydratedPendingF": 400,
+  "gUniqueDeploymentIds": 400,
+  "gDuplicateDeploymentIds": 0,
+  "productionDeploymentId": "dpl_6NLyCMTnyzvi481Xz4UAQHrE2PHj",
+  "productionGitSha": "170ffb3b9e5c48313d08fb6e27ecafb715bfec90",
+  "founderRecoveryBoundaryHttp": 200,
+  "authenticatedFounderFeedVerified": false,
+  "schedulerHealthy": true,
+  "executionVerified": true,
+  "workerSuccessfulRunsObserved": 40,
+  "recoveryPartitions": {"total":165,"active":165,"succeeded":0,"failed":0},
+  "completionVerified": false,
+  "safety": {"zeroDeletions":true,"zeroVercelMutations":true,"secretValuesRecorded":false,"deepPagination":false}
+}
