@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "lane": "D",
+  "updated_at_utc": "2026-09-15T13:18:55Z",
+  "status": "BLOCKED_VERCEL_HISTORICAL_RUNTIME_BILLING_LIMIT",
+  "deployment_histories_terminal_verified": true,
+  "zero_deletions": true,
+  "secret_values_recorded": false,
+  "team_id": "team_tGNSGGjcV3VNecscMvaAniGY",
+  "summary": {
+    "projects_checked": 7,
+    "deployment_records_preserved": 12,
+    "projects_with_explicit_terminal_zero": 7,
+    "github_linked_projects": 3,
+    "no_git_projects": 4,
+    "current_runtime_error_clusters_7d": 0,
+    "toolbar_threads_unresolved": 0,
+    "toolbar_threads_resolved": 0,
+    "agent_run_projects_production_90d": 0,
+    "agent_run_projects_preview_90d": 0
+  },
+  "projects": [
+    {
+      "project": "pantaai-v1-nf17",
+      "project_id": "prj_EAWqpERO72KiDdYv2pXPhKZdPUGe",
+      "framework": null,
+      "live": false,
+      "git_binding": {"type": "github", "org": "pandaconnect1", "repo": "pantaai-v1"},
+      "domains": ["pantaai-v1-nf17-pandaconnect.vercel.app", "pantaai-v1-nf17-git-main-pandaconnect.vercel.app"],
+      "latest_deployment": {"deployment_id": "dpl_AMTM9LwAoGcWEMVcuMbJAQRitHH4", "state": "ERROR", "target": "production", "created_at": "2025-07-07T06:58:59.965Z"},
+      "deployment_history_terminal": true,
+      "terminal_query": {"until": 1750092512521, "count": 0},
+      "deployments": [
+        {"deployment_id":"dpl_AMTM9LwAoGcWEMVcuMbJAQRitHH4","created_at":"2025-07-07T06:58:59.965Z","state":"ERROR","target":"production","git_sha":"cab42ccc04bafb9f7f0261156243b37cb46e97a3","git_ref":"main","git_message":"Create next.config.js","git_repo":"pandaconnect1/pantaai-v1","uniqueness":"unknown","rescue_state":"CAPTURED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","destination":"GitHub public recovery metadata"},
+        {"deployment_id":"dpl_JEHu4FS13hEasuCHHXm9jgB8DnSm","created_at":"2025-07-07T06:49:09.744Z","state":"ERROR","target":"production","git_sha":"af2c83f95d75cb58f8cb388aa7e20f52685e75ca","git_ref":"main","git_message":"Delete pages/next.config.js","git_repo":"pandaconnect1/pantaai-v1","uniqueness":"unknown","rescue_state":"CAPTURED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","destination":"GitHub public recovery metadata"},
+        {"deployment_id":"dpl_GZeVMTT7Xvvo5Kwk7PCu8LB4Tg6F","created_at":"2025-07-07T06:33:27.496Z","state":"ERROR","target":"production","git_sha":"7854a6cce4e0bb58348c9efa5b910615a0c34552","git_ref":"main","git_message":"Create next.config.js","git_repo":"pandaconnect1/pantaai-v1","uniqueness":"unknown","rescue_state":"CAPTURED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","destination":"GitHub public recovery metadata"},
+        {"deployment_id":"dpl_EzVfg6NnZKAneazfRnssW2L3jBW9","created_at":"2025-07-05T06:12:49.730Z","state":"ERROR","target":"production","git_sha":"b1b83470c153488264cce7aaf5cb0c252d3fa5c4","git_ref":"main","git_message":"Create package.json","git_repo":"pandaconnect1/pantaai-v1","uniqueness":"unknown","rescue_state":"CAPTURED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","destination":"GitHub public recovery metadata"},
+        {"deployment_id":"dpl_3Y4PmUcY3WUt1KsFsySTkyZ8uSFh","created_at":"2025-07-05T05:51:46.103Z","state":"READY","target":"production","git_sha":"1b514a9c353a6828eecf8ef85f6f5a7cc5d09c6b","git_ref":"main","git_message":"initial homepage setup","git_repo":"pandaconnect1/pantaai-v1","uniqueness":"unknown","rescue_state":"CAPTURED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","destination":"GitHub public recovery metadata"},
+        {"deployment_id":"dpl_HzYBXvoYFUR8evtApWhELtXUkbJu","created_at":"2025-06-16T16:48:32.521Z","state":"READY","target":"production","git_sha":"9f6db83b15c9401647e14b98f72401f17c7b2905","git_ref":"main","git_message":"Initial commit","git_repo":"pandaconnect1/pantaai-v1","uniqueness":"unknown","rescue_state":"CAPTURED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","destination":"GitHub public recovery metadata"}
+      ],
+      "build_evidence": [{"deployment_id":"dpl_AMTM9LwAoGcWEMVcuMbJAQRitHH4","evidence_type":"build","result":"ERROR","summary":"No Output Directory named public found after build completed","privacy":"PUBLIC_SAFE"}],
+      "runtime_error_surface_7d": "NO_ERRORS_FOUND",
+      "historical_runtime_surface": "BLOCKED_EXCEEDS_BILLING_LIMIT"
+    },
+    {
+      "project": "pantaai-v1",
+      "project_id": "prj_7grzRBApMytGyui5TzP2JTzxaR6k",
+      "framework": null,
+      "live": false,
+      "git_binding": {"type": "github", "org": "pandaconnect1", "repo": "pantaai-v1"},
+      "domains": ["pantaai-v1-pandaconnect.vercel.app", "pantaai-v1-git-main-pandaconnect.vercel.app"],
+      "latest_deployment": {"deployment_id": "dpl_328tZJ6sJ2WXCHmRwtvyLSf4tbQV", "state": "ERROR", "target": "production", "created_at": "2025-07-07T06:59:00.349Z"},
+      "deployment_history_terminal": true,
+      "terminal_query": {"until": 1750092512550, "count": 0},
+      "deployments": [
+        {"deployment_id":"dpl_328tZJ6sJ2WXCHmRwtvyLSf4tbQV","created_at":"2025-07-07T06:59:00.349Z","state":"ERROR","target":"production","git_sha":"cab42ccc04bafb9f7f0261156243b37cb46e97a3","git_ref":"main","git_message":"Create next.config.js","git_repo":"pandaconnect1/pantaai-v1","uniqueness":"mirror_candidate","rescue_state":"CAPTURED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","destination":"GitHub public recovery metadata"},
+        {"deployment_id":"dpl_5DvmFi5N5Jbw8Fgu3PSbUgEcqQRa","created_at":"2025-07-07T06:49:09.748Z","state":"ERROR","target":"production","git_sha":"af2c83f95d75cb58f8cb388aa7e20f52685e75ca","git_ref":"main","git_message":"Delete pages/next.config.js","git_repo":"pandaconnect1/pantaai-v1","uniqueness":"mirror_candidate","rescue_state":"CAPTURED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","destination":"GitHub public recovery metadata"},
+        {"deployment_id":"dpl_FHyp8NaQXzzWspjP6enEkAA2sEDf","created_at":"2025-07-07T06:33:27.473Z","state":"ERROR","target":"production","git_sha":"7854a6cce4e0bb58348c9efa5b910615a0c34552","git_ref":"main","git_message":"Create next.config.js","git_repo":"pandaconnect1/pantaai-v1","uniqueness":"mirror_candidate","rescue_state":"CAPTURED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","destination":"GitHub public recovery metadata"},
+        {"deployment_id":"dpl_9rjD7GH4k8TxxiFQ38uQou5bWmKu","created_at":"2025-07-05T06:12:49.738Z","state":"ERROR","target":"production","git_sha":"b1b83470c153488264cce7aaf5cb0c252d3fa5c4","git_ref":"main","git_message":"Create package.json","git_repo":"pandaconnect1/pantaai-v1","uniqueness":"mirror_candidate","rescue_state":"CAPTURED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","destination":"GitHub public recovery metadata"},
+        {"deployment_id":"dpl_5f1oFWZCj45Z6AG8vZfbeMNZkonq","created_at":"2025-07-05T05:51:46.109Z","state":"READY","target":"production","git_sha":"1b514a9c353a6828eecf8ef85f6f5a7cc5d09c6b","git_ref":"main","git_message":"initial homepage setup","git_repo":"pandaconnect1/pantaai-v1","uniqueness":"mirror_candidate","rescue_state":"CAPTURED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","destination":"GitHub public recovery metadata"},
+        {"deployment_id":"dpl_CFKpP49mv38XPnHz7EGVm6nBxxRa","created_at":"2025-06-16T16:48:32.550Z","state":"READY","target":"production","git_sha":"9f6db83b15c9401647e14b98f72401f17c7b2905","git_ref":"main","git_message":"Initial commit","git_repo":"pandaconnect1/pantaai-v1","uniqueness":"mirror_candidate","rescue_state":"CAPTURED","live_truth":"HISTORICAL_ONLY","privacy":"PUBLIC_SAFE","destination":"GitHub public recovery metadata"}
+      ],
+      "build_evidence": [{"deployment_id":"dpl_328tZJ6sJ2WXCHmRwtvyLSf4tbQV","evidence_type":"build","result":"ERROR","summary":"No Output Directory named public found after build completed","privacy":"PUBLIC_SAFE"}],
+      "runtime_error_surface_7d": "NO_ERRORS_FOUND"
+    },
+    {
+      "project":"nextjs-ai-chatbot",
+      "project_id":"prj_qaSInQRFvCwA6V5duEvOLaGkcbbN",
+      "framework":"nextjs",
+      "live":false,
+      "git_binding":{"type":"github","org":"pandaconnect1","repo":"nextjs-ai-chatbot"},
+      "domains":[],
+      "latest_deployment":null,
+      "deployment_history_terminal":true,
+      "terminal_query":{"count":0},
+      "runtime_error_surface_7d":"NO_ERRORS_FOUND",
+      "rescue_state":"TERMINAL_VERIFIED",
+      "live_truth":"HISTORICAL_ONLY"
+    },
+    {
+      "project":"v0-new-project-dr8uqvuxfhx",
+      "project_id":"prj_gp2GCnfAmKo4vQ8qTCo1rg8tmsI1",
+      "git_binding":null,
+      "domains":[],
+      "latest_deployment":null,
+      "deployment_history_terminal":true,
+      "terminal_query":{"count":0},
+      "runtime_error_surface_7d":"NO_ERRORS_FOUND",
+      "rescue_state":"TERMINAL_VERIFIED",
+      "note":"No-Git is proven by Vercel project inventory link:null; zero deployment history does not prove the historical project was empty."
+    },
+    {
+      "project":"v0-new-project-cd71xe9esnl",
+      "project_id":"prj_UIFExM3Y5z1v42gAoMWgLtLGb2eM",
+      "git_binding":null,
+      "domains":[],
+      "latest_deployment":null,
+      "deployment_history_terminal":true,
+      "terminal_query":{"count":0},
+      "runtime_error_surface_7d":"NO_ERRORS_FOUND",
+      "rescue_state":"TERMINAL_VERIFIED",
+      "note":"No-Git is proven by Vercel project inventory link:null; zero deployment history does not prove the historical project was empty."
+    },
+    {
+      "project":"v0-new-project-0hexy2s8dnt",
+      "project_id":"prj_QZvsq6eEjyNwZXVBuQGTqewHqLpJ",
+      "git_binding":null,
+      "domains":[],
+      "latest_deployment":null,
+      "deployment_history_terminal":true,
+      "terminal_query":{"count":0},
+      "runtime_error_surface_7d":"NO_ERRORS_FOUND",
+      "rescue_state":"TERMINAL_VERIFIED",
+      "note":"No-Git is proven by Vercel project inventory link:null; zero deployment history does not prove the historical project was empty."
+    },
+    {
+      "project":"v0-new-project-81xhfwdrlxy",
+      "project_id":"prj_6vYEVxzch7eYJQthBUP53aQ87zvO",
+      "git_binding":null,
+      "domains":[],
+      "latest_deployment":null,
+      "deployment_history_terminal":true,
+      "terminal_query":{"count":0},
+      "runtime_error_surface_7d":"NO_ERRORS_FOUND",
+      "rescue_state":"TERMINAL_VERIFIED",
+      "note":"No-Git is proven by Vercel project inventory link:null; zero deployment history does not prove the historical project was empty."
+    }
+  ],
+  "secondary_surfaces": {
+    "toolbar_threads": {"unresolved": 0, "resolved": 0, "scope": "team-wide accessible surface"},
+    "agent_runs": {"production_90d_projects": 0, "preview_90d_projects": 0, "data_confidence": "real"},
+    "runtime_errors": {"scope": "last 7 days", "all_lane_d_projects": "NO_ERRORS_FOUND"}
+  },
+  "blockers": [
+    {
+      "evidence_type": "runtime",
+      "project": "pantaai-v1-nf17",
+      "deployment_id": "dpl_3Y4PmUcY3WUt1KsFsySTkyZ8uSFh",
+      "attempted_range": "2025-07-05T05:00:00Z/2025-07-06T05:00:00Z",
+      "result": "Vercel Logs API 400 ExceedsBillingLimitError",
+      "meaning": "Historical runtime log retrieval is blocked by the Vercel billing/retention surface; this is not evidence that historical logs are absent.",
+      "required_follow_up": "Retry historical runtime-log export after Vercel billing/access is restored or use an authenticated Vercel log export/archive surface if retained.",
+      "privacy": "PUBLIC_SAFE"
+    }
+  ]
+}
