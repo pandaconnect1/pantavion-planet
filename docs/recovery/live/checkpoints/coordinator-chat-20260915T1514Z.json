@@ -1,0 +1,47 @@
+{
+  "observed_at_utc": "2026-09-15T15:14:00Z",
+  "mode": "VERIFY_COORDINATE",
+  "aggregate_commit": "2f57fdb881abffc74e92ab92e41687617bd16efd",
+  "lane_h_commit": "1344ca9bbf68a13ec822136da8f6b9bce2e6eaa4",
+  "production": {
+    "deployment_id": "dpl_78oz9uKZpyJxy97QGWdZbkTVXA5B",
+    "git_sha": "585a0a79372ff7fea5ee75d96cfec2445a6191ec",
+    "state": "READY",
+    "founder_recovery_boundary_http": 200,
+    "founder_recovery_boundary_truth": "VERIFIED_LIVE_ACCESS_BOUNDARY_ONLY"
+  },
+  "runtime": {
+    "oidc_trust": "VERIFIED_LIVE",
+    "scheduler_status": "healthy",
+    "execution_verified": true,
+    "worker_total_runs": 11,
+    "worker_last_status": "succeeded",
+    "cron_errors_last_30m": 0,
+    "recovery_partitions_total": 165,
+    "recovery_partitions_active": 165,
+    "recovery_partitions_succeeded": 0,
+    "recovery_partitions_failed": 0,
+    "completion_verified": false
+  },
+  "recovery_counts": {
+    "source_records_floor": 3679,
+    "canonicalized_floor": 219,
+    "lane_a_payload_gap": 400
+  },
+  "coordination": {
+    "lane_g_shard_present": false,
+    "lane_f_new_canonical_artifact_present": false,
+    "lane_j_present": true,
+    "lane_k_stale_pre_j": true,
+    "lane_l_stale_pre_j": true,
+    "all_a_to_l_claimed": true
+  },
+  "rules": [
+    "zero deletions",
+    "zero Vercel mutations",
+    "no secret values",
+    "do not inflate canonical counts before payload-backed dedup",
+    "do not present historical credential failures as current scheduler failure",
+    "do not call recovery complete while partitions remain non-terminal or canonical/feed/audit work remains open"
+  ]
+}
