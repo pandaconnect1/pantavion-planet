@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-09-15T14:06:30Z",
-  "coordinatorObservedAt": "2026-09-15T14:06:30Z",
+  "updatedAt": "2026-09-15T14:12:30Z",
+  "coordinatorObservedAt": "2026-09-15T14:12:30Z",
   "phase": "EMERGENCY_VERCEL_RESCUE_CANONICAL_INGESTION",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total and not directly comparable with mirrored deployment counts",
   "recoveredDeploymentRecordsFloor": 3679,
-  "recoveredDeploymentRecordsFloorBasis": "Durably checkpointed verified lower bound after Lane A captured 619 additional canonical deployment records and reached explicit terminal count=0. Mirror overlap across projects may exist and must be deduplicated before totals are summed.",
+  "recoveredDeploymentRecordsFloorBasis": "Durably checkpointed verified lower bound after Lane A captured 619 additional canonical-project deployment records and reached explicit terminal count=0. Mirror overlap across projects may exist and must be deduplicated before totals are summed.",
   "canonical": {
     "project": "pantavion-planet",
     "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
@@ -30,11 +30,11 @@
     "rescue_state": "TERMINAL_VERIFIED"
   },
   "latestBatch": {
-    "records": 19,
-    "pages": 1,
-    "canonicalRecords": 19,
+    "records": 219,
+    "pages": 0,
+    "canonicalRecords": 219,
     "mirrorRecords": 0,
-    "note": "Lane A terminal batch 601-619 was durably preserved; the immediately following pagination probe returned count=0. Lane F has canonicalized these 19 records and bound them to GitHub recovery evidence plus Pantavion founder-feed input."
+    "note": "Lane F verified payload-backed canonicalization for Lane-A ranges 1-200 and 601-619. Ranges 201-600 are preserved only as traversal/count/cursor summaries in their current checkpoints and remain an explicit per-record payload gap."
   },
   "lanes": {
     "A": {"status": "TERMINAL_CHECKPOINTED", "historyTerminal": true, "recordsCapturedThisRun": 619, "terminalProbeCount": 0},
@@ -42,14 +42,20 @@
     "C": {"status": "TERMINAL_VERIFIED", "projectsTerminal": "6/6", "deploymentRecords": 73},
     "D": {"status": "BLOCKED_VERCEL_HISTORICAL_RUNTIME_BILLING_LIMIT", "deploymentHistoriesTerminal": "7/7", "historicalRuntimeExportBlocked": true},
     "E": {"status": "BLOCKED_AUTH_EXPORT", "projectMetadataCaptured": "15/15", "envConfigNamesCaptured": 111, "secretValuesCaptured": false},
-    "F": {"status": "ACTIVE", "canonicalizedRecordsFloor": 19, "sourceRecordsAvailableFloor": 3679, "githubEvidenceBound": true, "pantavionFounderFeedBound": true}
+    "F": {"status": "ACTIVE", "canonicalizedRecordsFloor": 219, "sourceRecordsAvailableFloor": 3679, "laneARunPayloadGap": 400, "githubEvidenceBound": true, "pantavionFounderFeedBound": true}
   },
   "canonicalIngestion": {
     "lane": "F",
     "status": "ACTIVE",
-    "canonicalizedRecordsFloor": 19,
+    "canonicalizedRecordsFloor": 219,
     "sourceRecordsAvailableFloor": 3679,
-    "artifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+    "laneARunCaptured": 619,
+    "laneARunPayloadBackedCanonicalized": 219,
+    "laneARunSummaryOnlyPayloadGap": 400,
+    "artifacts": [
+      "docs/recovery/live/canonical/lane-f-a-run-payload-audit.json",
+      "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json"
+    ],
     "shard": "docs/recovery/live/shards/lane-f-canonical-ingestion.json",
     "completionRule": "CAPTURED -> CLASSIFIED -> CANONICALIZED -> GITHUB_EVIDENCE_BOUND -> PANTAVION_FOUNDER_FEED_BOUND -> VERIFIED_OR_EXPLICIT_GAP"
   },
@@ -109,14 +115,16 @@
   },
   "recentEvidence": [
     "Lane A pantavion-planet deployment history reached explicit terminal count=0 after 619 additional records in the current lane run.",
-    "Lane F canonicalized the terminal 19-record batch into normalized deployment/Git/provenance records and bound the artifact to GitHub recovery evidence and Pantavion founder-feed input.",
+    "Lane F verified 219 payload-backed canonical records from Lane-A ranges 1-200 and 601-619 and bound them to GitHub recovery metadata plus Pantavion founder-feed input.",
+    "Lane F identified 400 Lane-A records in ranges 201-600 whose compact checkpoints preserve traversal/count/cursor continuity but not individual deployment payloads; these are explicitly not counted as canonicalized.",
     "Lane C reports 6/6 legacy group-A project histories terminal with 73 deployment records preserved.",
     "Lane D reports 7/7 deployment histories terminal; historical runtime export remains separately blocked by Vercel billing/retention limits.",
     "Lane E captured non-secret project/environment continuity metadata for all 15 projects without exposing secret values.",
     "The production founder recovery route is present in the deployed main build and reads this rescue feed dynamically with no-store."
   ],
   "hardGaps": [
-    "Lane F still must canonicalize and deduplicate the earlier durable deployment batches; raw captured evidence is not completion.",
+    "Lane A ranges 201-600 currently have compact checkpoint metadata but no individual deployment record payload in those checkpoint files; recover that payload only from unique durable evidence or explicitly reassigned gap recovery.",
+    "Lane F still must inspect and canonicalize/deduplicate earlier durable recovery batches outside the 619-record Lane-A run.",
     "Canonical production scheduled worker has confirmed runtime failure because a required Supabase admin credential is not configured or not readable in production.",
     "Authenticated Vercel secret-value export/decryption is not exposed by the current connected tool surface; values must remain private and may require authorized reissue/rotation.",
     "Complete deployment filesystem/build-output export is not available through the current connected Vercel tool surface.",
@@ -128,6 +136,7 @@
     "READY or production is deployment evidence, not automatically VERIFIED_LIVE",
     "no secret values in public GitHub or chat",
     "terminal deployment history requires explicit count=0/no older records",
+    "summary-only checkpoints are not per-record preservation and are not counted as canonicalized",
     "raw capture is incomplete until classified, canonicalized, GitHub-bound and Pantavion-founder-feed-bound or recorded as an explicit gap",
     "additional workers must claim distinct G-L lanes and must not duplicate A-F work"
   ]
