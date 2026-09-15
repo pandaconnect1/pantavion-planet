@@ -1,0 +1,30 @@
+{
+  "capturedAt": "2026-09-15",
+  "scope": "all 15 projects visible in connected Vercel team",
+  "completionClaim": false,
+  "cleanupAuthorized": false,
+  "projects": [
+    {"name":"pantavion-planet","firstPageCount":20,"hasOlderHistory":true,"nextCursor":1789438497044,"state":"DEEP_PAGINATION_REQUIRED"},
+    {"name":"pantavion-planet-vmxx","firstPageCount":20,"hasOlderHistory":true,"nextCursor":1789438497284,"state":"DEEP_PAGINATION_REQUIRED"},
+    {"name":"pantavion-one","firstPageCount":14,"hasOlderHistory":false,"state":"DEPLOYMENT_PAGE_CAPTURED"},
+    {"name":"pantavion-one-clean-98it","firstPageCount":4,"hasOlderHistory":false,"state":"DEPLOYMENT_PAGE_CAPTURED"},
+    {"name":"pantavion-one-clean","firstPageCount":20,"hasOlderHistory":true,"nextCursor":1764020152617,"state":"DEEP_PAGINATION_REQUIRED"},
+    {"name":"pantaai","firstPageCount":1,"hasOlderHistory":false,"state":"DEPLOYMENT_PAGE_CAPTURED"},
+    {"name":"pantavion-one-clean-ui","firstPageCount":2,"hasOlderHistory":false,"state":"DEPLOYMENT_PAGE_CAPTURED"},
+    {"name":"v0-new-project-dr8uqvuxfhx","firstPageCount":0,"hasOlderHistory":false,"state":"CONFIG_REVIEW_REQUIRED"},
+    {"name":"v0-new-project-cd71xe9esnl","firstPageCount":0,"hasOlderHistory":false,"state":"CONFIG_REVIEW_REQUIRED"},
+    {"name":"v0-new-project-0hexy2s8dnt","firstPageCount":0,"hasOlderHistory":false,"state":"CONFIG_REVIEW_REQUIRED"},
+    {"name":"pantaai-template","firstPageCount":0,"hasOlderHistory":false,"state":"CONFIG_REVIEW_REQUIRED"},
+    {"name":"pantaai-v1-nf17","firstPageCount":6,"hasOlderHistory":false,"state":"DEPLOYMENT_PAGE_CAPTURED"},
+    {"name":"pantaai-v1","firstPageCount":6,"hasOlderHistory":false,"state":"DEPLOYMENT_PAGE_CAPTURED"},
+    {"name":"v0-new-project-81xhfwdrlxy","firstPageCount":0,"hasOlderHistory":false,"state":"CONFIG_REVIEW_REQUIRED"},
+    {"name":"nextjs-ai-chatbot","firstPageCount":0,"hasOlderHistory":false,"state":"CONFIG_REVIEW_REQUIRED"}
+  ],
+  "criticalFindings": [
+    "pantavion-one contains historical READY production deployments tied to feature commits including chat, voice, pulse, compass and mind pages.",
+    "pantavion-one-clean and pantavion-one-clean-98it contain historical kernel/state-engine deployments and must remain preserved.",
+    "pantaai-v1 and pantaai-v1-nf17 each expose six historical production deployment records.",
+    "Zero-deployment projects are not cleanup-authorized until project settings, domains and non-secret configuration are reviewed.",
+    "No secret values are stored in this repository manifest."
+  ]
+}
