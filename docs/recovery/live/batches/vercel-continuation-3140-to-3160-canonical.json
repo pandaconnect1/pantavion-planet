@@ -1,0 +1,40 @@
+{
+  "capturedAt": "2026-09-15T13:22:00Z",
+  "sanitized": true,
+  "secretValuesIncluded": false,
+  "records": 20,
+  "canonical": {
+    "fromCursorExclusive": 1784994595579,
+    "nextCursor": 1784868834812,
+    "terminal": false,
+    "records": [
+      ["dpl_At2RgWapAx64d53S4wp7GSiZx7Ho",1784994545915,"READY","88d44cffdd5f7d019a4129efaa2126a188357737"],
+      ["dpl_CrKtgYyGKih8YvobYcRPJsWXVRX8",1784994536104,"READY","cb18d082fd26ecbcc911ded933bd97c487f502b1"],
+      ["dpl_BTYSKzFUMrFa84r8RUPLnKUQNEkw",1784994377132,"READY","f76ea04cf26c21e68ad8a3407b161cda36074e5a"],
+      ["dpl_Ciaooi9tSmrn6oeQfPwjUBi4SPu3",1784994355941,"READY","333a9cb708315d0bacf1c3dd36b1b494dc39afd5"],
+      ["dpl_33RRwQeHyxsGxTVX3vCh9oYTEQSJ",1784994315188,"READY","b59c8be2d29fd21b907c6536c1312246e7ec38b1"],
+      ["dpl_CLALd3FqSeEHahYB5CEVjWDnEAXp",1784994299628,"READY","6c15bfb69042f318128caf718bad05c421631fc0"],
+      ["dpl_FHEmXFE43o47YeNn9Uv7HBgqvaUv",1784994289094,"READY","21df3d19eaa96872f079cce12df64e5f2220e5bd"],
+      ["dpl_DgGfzTjp2hRM1mfg27kD5YjVFGfn",1784994276237,"READY","c3c895561ac28afea0a5edb507b428bbbbf49bbb"],
+      ["dpl_5uxcahkxXwdGJgUZMdELMNKpnznN",1784993170963,"READY","cc480e9b95d46c329bf7df6fa88a2fcfac6fa957"],
+      ["dpl_BttmnBrJLaRyLM5QS1tEJ9ax7Jqe",1784993152646,"READY","f95487dac574cfac1e9760e0ccd5eeaa3d480b0b"],
+      ["dpl_4ijN9U7uJPpu51WsHc5jQ9ExMJEs",1784992925004,"READY","94198100b08021c52e6a734cd0193945c1ce6901"],
+      ["dpl_AtzU8GCd2KXRY8KaNYEWqbLAj3ra",1784992917119,"READY","660ea3b01c520a09ee84d4d35c8cf957387be8ad"],
+      ["dpl_9w5RQcyTt9UG5cBQLY4z9tDj2YXy",1784992896737,"READY","c1fa43190a6c70cfade59e02a50746eee2f8d211"],
+      ["dpl_CPoQ1FRRd5wPC9thed7hDBNZnPBU",1784992870801,"READY","ae5227958a1095aa2dafbba1adb3740d95ac793a"],
+      ["dpl_FSNRwxZ3CHTFNyZMHJXQuE5PzeNK",1784990546462,"READY","07e03bca8cf3ce96764255c77c8ef598e00f3187"],
+      ["dpl_Bz1bXDqKYPEt733j2U19TtBq5tuv",1784990465206,"ERROR","b937660cdcae539a1c172d7f08d423397d1ecda8"],
+      ["dpl_HRSEsBVHjrbGDNMN5g79WDFqG2Xt",1784990309775,"READY","a714e4384d5068a97744863fbed57e26e7a94e21"],
+      ["dpl_3kodCSUw6R9wxLHEQSZY2z7qeFfo",1784876861672,"READY","9068d3ff34149ccc1cdbe89c27a82b62113afcb7"],
+      ["dpl_3BQPCDeg9pYdK37Lyf1rWZeecbmz",1784876729572,"READY","512ae8c72a6c5cfc1663b650b8f7988b116427e3"],
+      ["dpl_DMkNuLytHGQfeJX21qaH8zRhvpA8",1784868834812,"READY","adf02cf6d0a8189fbd971799964f865f3f0df254"]
+    ]
+  },
+  "mirror": {"terminal": true,"records":[]},
+  "tupleSchema": ["deploymentId","created","state","githubCommitSha"],
+  "notes": [
+    "Evidence includes Supabase auth/session, Social Core foundation, Secure Circles architecture and protected water-runtime provenance.",
+    "Creator identity/email and secret-bearing fields are excluded.",
+    "Canonical pagination remains non-terminal."
+  ]
+}
