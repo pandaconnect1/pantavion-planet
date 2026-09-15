@@ -1,0 +1,82 @@
+{
+  "schema":"pantavion_absorption_thread_checkpoint_v1",
+  "protocol":"PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
+  "thread":4,
+  "scope":"AI_SEMANTIC_CLASSIFICATION_SWARM",
+  "checkpointAtUtc":"2026-09-15T19:14:00Z",
+  "status":"ACTIVE_CAUGHT_UP_TO_CURRENT_DURABLE_CANONICAL_INPUT",
+  "supersedesByReferenceOnly":"docs/recovery/live/checkpoints/thread-4-semantic-20260915T1836Z.json",
+  "ownership":{"claim":"docs/recovery/live/claims/THREAD_4.lock","claimStatus":"ACTIVE","classificationOnly":true,"otherThreadScopesMutated":false},
+  "inputTruth":{
+    "laneFCanonicalRecordsConsumed":219,
+    "thread2LaneGCanonicalRecordsConsumed":201,
+    "currentDurableCanonicalRecordsConsumedTotal":420,
+    "thread2LaneGSourceRange":"201-600",
+    "thread2OwnershipBuckets":[0,1,2,3,4],
+    "thread3OwnershipBuckets":[5,6,7,8,9],
+    "thread3ClaimStatus":"ACTIVE",
+    "thread3CanonicalArtifactsObservedAtCheckpoint":0,
+    "thread3Rule":"Do not canonicalize, claim, or classify as canonical the Thread 3-owned buckets before its durable canonical output exists."
+  },
+  "classificationProgress":{
+    "classifiedCanonicalRecords":420,
+    "reviewRequired":184,
+    "regularRoutingEligible":236,
+    "knownErrorDeploymentProvenanceRecords":44,
+    "errorDeploymentRule":"ERROR is preserved provenance/implementation evidence only and never runtime-success evidence.",
+    "canonicalCountDelta":0,
+    "sourceEvidenceMutations":0,
+    "moduleGraphRoutingWrites":0,
+    "agentWorkQueueWrites":0,
+    "vercelMutations":0,
+    "deletions":0,
+    "secretValuesWritten":0
+  },
+  "evidenceQuality":{
+    "rule":"Exact semantic hierarchy is written only when supported by commit/source evidence. Branch-only evidence may support broad theme/module/subsystem while exact capability/feature remains REVIEW_REQUIRED. Main-branch records without semantic subject/path evidence remain full REVIEW_REQUIRED.",
+    "unsupportedSemanticsGuessed":0,
+    "readyPromotedToVerifiedLive":0
+  },
+  "thread2LaneGShardCounts":[
+    {"range":"201-240","count":19,"reviewRequired":1},
+    {"range":"241-280","count":22,"reviewRequired":22},
+    {"range":"281-320","count":20,"reviewRequired":20},
+    {"range":"321-360","count":19,"reviewRequired":19},
+    {"range":"361-400","count":21,"reviewRequired":21},
+    {"range":"401-440","count":14,"reviewRequired":14},
+    {"range":"441-480","count":19,"reviewRequired":19},
+    {"range":"481-520","count":27,"reviewRequired":27},
+    {"range":"521-560","count":18,"reviewRequired":17},
+    {"range":"561-600","count":22,"reviewRequired":22}
+  ],
+  "durableClassificationArtifacts":21,
+  "artifactSets":[
+    "docs/recovery/live/shards/thread-4-semantic-001-020.json through thread-4-semantic-181-200.json",
+    "docs/recovery/live/shards/thread-4-semantic-601-619.json",
+    "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-201-240.json",
+    "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-241-280.json",
+    "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-281-320.json",
+    "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-321-360.json",
+    "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-361-400.json",
+    "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-401-440.json",
+    "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-441-480.json",
+    "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-481-520.json",
+    "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-521-560.json",
+    "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-561-600.json"
+  ],
+  "downstreamHandoff":{
+    "thread5MayConsume":true,
+    "regularRecords":"Route 236 non-review records using one canonical identity per stableRecordKey and multiple graph edges only where supported.",
+    "reviewRecords":"Bind 184 REVIEW_REQUIRED records to explicit governed review/hold; do not guess target modules.",
+    "thread6MayConsumeAfterRouting":true,
+    "thread7AuditReady":true
+  },
+  "truthBoundaries":[
+    "READY/DEPLOYED is not VERIFIED_LIVE.",
+    "UNRESOLVED/REVIEW_REQUIRED is not completion.",
+    "This checkpoint is Thread 4 classification truth only, not global recovery completion.",
+    "The user Vercel estimate and Pantavion corpus count remain separate datasets.",
+    "Thread 4 remains ACTIVE and must consume new durable canonical inputs as they appear."
+  ],
+  "nextThread4Action":"Consume new Thread 3 buckets 5-9 or any other newly durable canonical candidates immediately when they appear; otherwise remain caught up without entering another thread's scope."
+}
