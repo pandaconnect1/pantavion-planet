@@ -6,6 +6,7 @@ import { runPantavionNervousSystemFoundryTick } from "@/core/kernel/pantavion-fo
 import { runPantavionRecoveryFencedExecutor } from "@/core/recovery/pantavion-recovery-fenced-executor";
 import { materializePantavionRecoveryExecutionPartitions } from "@/core/recovery/pantavion-recovery-partition-scheduler";
 import { PantavionRecoverySupabaseExecutionStore } from "@/core/recovery/pantavion-recovery-supabase-execution-store";
+import { runOidcScheduledWorker } from "@/core/runtime/oidc-scheduled-worker";
 import { runSecureScheduledWorker } from "@/core/runtime/secure-scheduled-worker";
 import {
   createAdminClient,
@@ -29,6 +30,13 @@ type PantavionScheduledTickSource =
   | "vercel_cron"
   | "internal_scheduler"
   | "external_scheduler";
+
+const SECRETLESS_PENDING_CAPABILITIES = [
+  "founder_intent_materialization",
+  "recovery_partition_materialization",
+  "recovery_fenced_executor",
+  "nervous_system_foundry",
+] as const;
 
 function secretsMatch(actual: string, expected: string) {
   const actualBytes = Buffer.from(actual);
@@ -97,8 +105,8 @@ function blockedSupabaseConfigurationResponse(
 ) {
   console.warn("pantavion_secure_scheduled_worker_blocked_configuration", {
     source,
-    dependency: "supabase_admin",
-    code: "SUPABASE_ADMIN_CREDENTIAL_MISSING",
+    dependency: "supabase_admin_or_oidc_bridge",
+    code: "SUPABASE_DURABLE_EXECUTION_UNAVAILABLE",
   });
 
   return NextResponse.json(
@@ -109,20 +117,89 @@ function blockedSupabaseConfigurationResponse(
       route: "/api/pantavion/intelligence/cron",
       source,
       authMode,
-      dependency: "supabase_admin",
-      code: "SUPABASE_ADMIN_CREDENTIAL_MISSING",
+      dependency: "supabase_admin_or_oidc_bridge",
+      code: "SUPABASE_DURABLE_EXECUTION_UNAVAILABLE",
       retryable: true,
       runtimeSafety: {
         behavior:
-          "The scheduled worker is intentionally not executed without a server-only Supabase admin credential. This is a controlled degraded state, not a worker crash.",
-        recovery:
-          "Configure SUPABASE_SECRET_KEY (preferred) or SUPABASE_SERVICE_ROLE_KEY in the server-side production environment, then verify a successful scheduled tick.",
+          "The worker remains fail-closed if neither direct server-only Supabase admin access nor the Vercel-OIDC-to-Supabase capability bridge can create a durable lease.",
         security:
-          "No publishable/anon fallback is used because privileged scheduler RPCs are service-role-only and must remain inaccessible to public clients.",
+          "No publishable/anon fallback and no service-role secret is exposed to the Vercel runtime or public clients.",
       },
     },
     { status: 200 },
   );
+}
+
+async function executeSecretlessScheduledTick(
+  source: PantavionScheduledTickSource,
+  authMode: PantavionCronAuthMode,
+) {
+  try {
+    const worker = await runOidcScheduledWorker(
+      async () => {
+        const tick = await runPantavionCloudCronTick(source);
+        return {
+          ok: tick.ok,
+          mode: "secretless_oidc_degraded",
+          intelligenceTickExecuted: true,
+          route: tick.route,
+          executedAt: tick.cron.executedAt,
+          opportunityCount: tick.ledgerEvent.opportunityCount,
+          buildQueueCount: tick.ledgerEvent.buildQueueCount,
+          ledgerStatus: tick.ledgerEvent.status,
+          ledgerStorageMode: tick.ledgerEvent.storageMode,
+          pendingCapabilities: [...SECRETLESS_PENDING_CAPABILITIES],
+        };
+      },
+      { runKeyBucketMinutes: 5 },
+    );
+
+    return NextResponse.json({
+      ...worker,
+      status: worker.executed ? "degraded" : "deduplicated",
+      authMode,
+      executionMode: "secretless_oidc",
+      runtimeSafety: {
+        authorization: "exact CRON_SECRET bearer token remains required for Vercel Cron",
+        durability:
+          "scheduled-worker claim and finish are recorded in Supabase through an exact-project, exact-production Vercel OIDC capability bridge",
+        secretExposure: "no Supabase service-role or secret key is present in the Vercel runtime",
+        executedNow: [
+          "durable_scheduled_worker_claim",
+          "pantavion_intelligence_tick",
+          "durable_scheduled_worker_finish",
+        ],
+        pendingCapabilities: [...SECRETLESS_PENDING_CAPABILITIES],
+        authority:
+          "secretless degraded mode does not gain generic Supabase access and cannot mutate arbitrary database objects",
+      },
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (
+      message.includes("scheduler_bridge") ||
+      message.includes("vercel_oidc") ||
+      message.includes("scheduled_claim") ||
+      message.includes("scheduled_finish")
+    ) {
+      return blockedSupabaseConfigurationResponse(source, authMode);
+    }
+
+    console.error("pantavion_secretless_scheduled_worker_failed", {
+      source,
+      error: message,
+    });
+    return NextResponse.json(
+      {
+        ok: false,
+        route: "/api/pantavion/intelligence/cron",
+        error: "Secretless scheduled worker failed after acquiring its bounded execution capability.",
+        authMode,
+      },
+      { status: 500 },
+    );
+  }
 }
 
 async function executeScheduledTick(
@@ -130,7 +207,7 @@ async function executeScheduledTick(
   authMode: PantavionCronAuthMode,
 ) {
   if (!hasSupabaseAdminCredential()) {
-    return blockedSupabaseConfigurationResponse(source, authMode);
+    return executeSecretlessScheduledTick(source, authMode);
   }
 
   try {
@@ -174,6 +251,7 @@ async function executeScheduledTick(
     return NextResponse.json({
       ...worker,
       authMode,
+      executionMode: "direct_supabase_admin",
       runtimeSafety: {
         authorization:
           "exact CRON_SECRET bearer token plus separately verified Vault-backed Pantavion internal scheduler token",
@@ -197,7 +275,7 @@ async function executeScheduledTick(
     });
   } catch (error) {
     if (error instanceof PantavionSupabaseAdminConfigurationError) {
-      return blockedSupabaseConfigurationResponse(source, authMode);
+      return executeSecretlessScheduledTick(source, authMode);
     }
 
     console.error("pantavion_secure_scheduled_worker_failed", {
