@@ -1,0 +1,72 @@
+{
+  "capturedAt": "2026-09-15T13:24:00Z",
+  "mode": "VERIFY_COORDINATE_ONLY",
+  "zeroDeletions": true,
+  "zeroVercelMutations": true,
+  "secretValuesRecorded": false,
+  "laneStates": {
+    "A": {
+      "lock": "ACTIVE",
+      "project": "pantavion-planet",
+      "deepPaginationOwner": "lane A only",
+      "latestObservedProgress": {
+        "commit": "57f4af462e73612e16a171be4d2d174494897dc6",
+        "nextCursor": 1782858024554,
+        "additionalRecordsInCommitCheckpoint": 80,
+        "terminal": false
+      },
+      "coordinatorAction": "DO_NOT_DUPLICATE_PAGINATION"
+    },
+    "B": {
+      "lock": "ACTIVE_BY_PROTOCOL",
+      "project": "pantavion-planet-vmxx",
+      "status": "TERMINAL_VERIFIED",
+      "terminalProof": {
+        "until": 1786177840266,
+        "count": 0,
+        "commit": "304c48c404be7a5658efeff274c42bb60e447815"
+      },
+      "buildBlocker": {
+        "classification": "TypeScript compile error on recovery-branch deployment",
+        "path": "docs/recovery/legacy-source-snapshots/pantavion-one/app/layout.tsx",
+        "summary": "Legacy source snapshots are inside the Next.js/TypeScript build scope; binding element children is implicitly any.",
+        "impact": "Recovery-branch VMXX deployments can fail build; historical rescue terminal proof remains valid."
+      },
+      "coordinatorAction": "DO_NOT_RESTART_DEEP_HISTORY"
+    },
+    "C": {
+      "lock": "ACTIVE",
+      "scope": "legacy/PantaAI group A",
+      "checkpointOrShardObservedInCurrentReconciliation": false,
+      "stale": false,
+      "coordinatorAction": "DO_NOT_DUPLICATE; RECHECK_PROGRESS"
+    },
+    "D": {
+      "lock": "ACTIVE",
+      "scope": "legacy/PantaAI group B plus four no-Git v0 projects",
+      "checkpointOrShardObservedInCurrentReconciliation": false,
+      "stale": false,
+      "coordinatorAction": "DO_NOT_DUPLICATE; RECHECK_PROGRESS"
+    },
+    "E": {
+      "lock": "ACTIVE",
+      "scope": "secret-name continuity, artifact gaps, classification, founder feed",
+      "checkpointOrShardObservedInCurrentReconciliation": false,
+      "stale": false,
+      "coordinatorAction": "DO_NOT_DUPLICATE; RECHECK_PROGRESS"
+    }
+  },
+  "criticalRules": [
+    "No lock deletion during emergency rescue.",
+    "No extra worker may duplicate lane pagination while A-E are claimed.",
+    "READY/production is historical provenance, not VERIFIED_LIVE.",
+    "No secret values in public GitHub.",
+    "Cleanup authorization remains NONE."
+  ],
+  "nextCoordinatorChecks": [
+    "Refresh branch commits for C/D/E checkpoint activity.",
+    "Reconcile lane A newest cursor into aggregate feed without overwriting lane-owned files.",
+    "Keep lane B terminal and record build blocker separately from rescue completion.",
+    "Escalate only if a claimed lane becomes demonstrably stale or reports a real blocker."
+  ]
+}
