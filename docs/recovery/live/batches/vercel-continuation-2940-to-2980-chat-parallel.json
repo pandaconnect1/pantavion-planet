@@ -1,0 +1,64 @@
+{
+  "capturedAt": "2026-09-15T14:10:00Z",
+  "sanitized": true,
+  "secretValuesIncluded": false,
+  "records": 40,
+  "canonical": {
+    "fromCursorExclusive": 1786288386045,
+    "nextCursor": 1786174987467,
+    "records": [
+      ["dpl_CYNEQvoKhpqEZgJ15VgXDz3kU8Zf",1786286895424,"READY","30dfa1b173d2394f7dfeea3e1428283f30680dd6"],
+      ["dpl_2vbB4WoRyGuYWhszeavPtgWrK4rQ",1786261111292,"READY","c8dd39a5fa1dcaadec0769bc44989d46baf83235"],
+      ["dpl_FeMZN2gjNz7mJF37XA3jh5QNSpVV",1786260635450,"READY","04b778b1b4b8c4a8d4bd77f0fddce3cab4da96c3"],
+      ["dpl_EBmQxJYrPBqecFvNUVgBrumqRzRg",1786260009543,"READY","191bcdc7f6845e3919d1fcae5967c36e0729341e"],
+      ["dpl_5RhaHDJtQTNqwLDNF5yDkU9hFiqm",1786258576514,"READY","863c7c27ea147f0ac5afd59a042a7b602362600a"],
+      ["dpl_JD56uixvkEBbMoVC96KqK8cSA7M9",1786250861059,"READY","944327d97417bc5bbb9c96f9cc12d2020cba99e0"],
+      ["dpl_7CZQFif2LrgdGU3cqwXd48oN6zNQ",1786216355370,"READY","8c04afaf426e4870dcf00f2f7a81ecfc1ab33821"],
+      ["dpl_6mDGfB3h5MLrQ32U5q38e5C9Upvt",1786214570543,"READY","edee38b1243f71ea69df137cbd68fbec2393324b"],
+      ["dpl_35TmteCYpv835tSZTneZgVmDSb4L",1786210689608,"READY","ab42fb309a9f28d5f4437b39b92f6b42d143a55e"],
+      ["dpl_2G2ukFQDs95GQwH9AogVR65RSsRa",1786210144524,"READY","621676a0a83ae19c03db3d3922105e23ad4e22b7"],
+      ["dpl_H1F4Gb1DbMApCZX4aZb5VULzpvEd",1786207684290,"READY","e94a65d82e4d02618612e3f22db52afb7c54486c"],
+      ["dpl_Bs75vRHy8F5P2j6Bo8RJ6LirJTyS",1786207106635,"READY","56349d0a442d8dd7a8801fb8a6873b338bcd78aa"],
+      ["dpl_FSqzsPSsC7FLrNkoHAV9eRMVgiWL",1786188282590,"READY","48cca33885270227f3ab2da6ad55f070bfdd2fa8"],
+      ["dpl_5B5WXwrdhunEjiiQdFNQxXCWgZzF",1786185740857,"READY","6d4538b3a167d8ad253ddd21aed3a534c0b23f48"],
+      ["dpl_Jeyd52da3Hi5pH8otSXMNELVh5FY",1786185575878,"READY","d9d6e4f236fa831849168378573caacfc256d809"],
+      ["dpl_CExxXqMqbE2x4hD3sqvHQp4hu9ib",1786185542664,"READY","b8dd42961dbf950fe331a41bd686ab6ab9b58d32"],
+      ["dpl_2BmGV3D9gsL89j8SFxmrpjtvLatU",1786184537934,"READY","5e5ef89d1993c5fd4fc350d99f23d728ca1b9553"],
+      ["dpl_GUndphSusNZY4kzo2NJcYYsEMmJ9",1786184373028,"READY","7c9a9dcd37efe23656043d32579487da2568e4f1"],
+      ["dpl_D8a5zMSnrXskRt2QMdKFsQEH4Xeh",1786184329213,"READY","8e09233f417a5b86e5e68ca2d73ca1cdd08195d0"],
+      ["dpl_CYTHDj7WWAE9k8dSJPCXg26Dmbzc",1786174987467,"READY","0f8f3e34065a71f6b5a57cead4dc7748cf0684c9"]
+    ]
+  },
+  "mirror": {
+    "fromCursorExclusive": 1786288385956,
+    "nextCursor": 1786177840266,
+    "records": [
+      ["dpl_AQadaY5Gkxnq3LwSCMmS5VdQDNMt",1786286895358,"READY","30dfa1b173d2394f7dfeea3e1428283f30680dd6"],
+      ["dpl_58pT3eMtGf8ZcbtvLKjYnjh6ja2x",1786261111279,"READY","c8dd39a5fa1dcaadec0769bc44989d46baf83235"],
+      ["dpl_H1pghuPJanixURiLhVpxjuh7CXN2",1786260635335,"READY","04b778b1b4b8c4a8d4bd77f0fddce3cab4da96c3"],
+      ["dpl_FAt8fsBemX4GmF17e2LUzJyBUW3m",1786260009484,"READY","191bcdc7f6845e3919d1fcae5967c36e0729341e"],
+      ["dpl_ERvXS2ysKzJ5wN8KqfbcniVBLeHx",1786258576220,"READY","863c7c27ea147f0ac5afd59a042a7b602362600a"],
+      ["dpl_EVW1VCx85jZyQX7JBMjmZzmZT4b7",1786250860958,"READY","944327d97417bc5bbb9c96f9cc12d2020cba99e0"],
+      ["dpl_94YtX5c4kwYb4VAMmWESuTAsBSnn",1786216355199,"READY","8c04afaf426e4870dcf00f2f7a81ecfc1ab33821"],
+      ["dpl_EcDeAxBSbgTe6xrZ7pi3fU9A77Rq",1786214570311,"READY","edee38b1243f71ea69df137cbd68fbec2393324b"],
+      ["dpl_D4Qdrm6m8QDZMKDqVtsFsBeYtzgA",1786210689358,"READY","ab42fb309a9f28d5f4437b39b92f6b42d143a55e"],
+      ["dpl_CKsfnqAp4v7htUXXV4rLKmbArxo3",1786210144390,"READY","621676a0a83ae19c03db3d3922105e23ad4e22b7"],
+      ["dpl_4PJ4RVHrwWCxLsHwRhQMpg4trJQb",1786207684130,"READY","e94a65d82e4d02618612e3f22db52afb7c54486c"],
+      ["dpl_2efkMMhvg8umEQ54MxDnqNeyUGuF",1786207106418,"READY","56349d0a442d8dd7a8801fb8a6873b338bcd78aa"],
+      ["dpl_DGz7CyGCrJKdCdX1yTChMuvT1kBc",1786188282495,"READY","48cca33885270227f3ab2da6ad55f070bfdd2fa8"],
+      ["dpl_ADYumMwnLyWQCkQUjzk2SYj3w6Jz",1786185740832,"READY","6d4538b3a167d8ad253ddd21aed3a534c0b23f48"],
+      ["dpl_3bADBnRtB5i4ova9QetgCqaCZeqY",1786185575886,"READY","d9d6e4f236fa831849168378573caacfc256d809"],
+      ["dpl_7r5yrcqDmRu1BrSkUnAQBJvXq36p",1786185542624,"READY","b8dd42961dbf950fe331a41bd686ab6ab9b58d32"],
+      ["dpl_8wfMLinJofSJqHDKjtu7nmWbyyXG",1786184537707,"READY","5e5ef89d1993c5fd4fc350d99f23d728ca1b9553"],
+      ["dpl_Dh1QcEePYHSSPyttyF6pPxuCvFfV",1786184372998,"READY","7c9a9dcd37efe23656043d32579487da2568e4f1"],
+      ["dpl_8TmxmPLHK4MRg3VDqhvdyWwRoN86",1786184329154,"READY","8e09233f417a5b86e5e68ca2d73ca1cdd08195d0"],
+      ["dpl_AHxvA78nUNUqeJofGQmkFATe4ifW",1786177840266,"READY","0f8f3e34065a71f6b5a57cead4dc7748cf0684c9"]
+    ]
+  },
+  "tupleSchema": ["deploymentId","created","state","githubCommitSha"],
+  "notes": [
+    "Creator identity/email and secret-bearing fields are excluded.",
+    "The lanes are independently paginated; timestamp boundaries can diverge even when commits mirror each other.",
+    "Pagination remains non-terminal."
+  ]
+}
