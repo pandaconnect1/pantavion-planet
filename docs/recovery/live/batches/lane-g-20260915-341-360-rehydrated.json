@@ -1,0 +1,30 @@
+{
+  "capturedAt":"2026-09-15T17:32:00Z",
+  "lane":"G","scope":"Lane-A summary-only records 201-600","source":"Vercel list_deployments",
+  "projectId":"prj_BxhpnjvAs1seyfBU1UYFU8nDykwh","recordRange":[341,360],"recordCount":20,
+  "dedupKey":"projectId:deploymentId","privacy":"PUBLIC_SAFE_SANITIZED","secretValuesIncluded":false,
+  "records":[
+    {"deploymentId":"dpl_6bxAggbP8rPN7uzE6uBgvK7qQ89n","created":1779538052168,"state":"READY","target":"production","url":"pantavion-planet-h0j5ku6mj-pandaconnect.vercel.app","gitRef":"main","gitSha":"88aa39345c640afdbac1011eda1e882925becc02"},
+    {"deploymentId":"dpl_C9K1DDHeEghz2XazfqnX1NbqK8Ge","created":1779535910348,"state":"READY","target":"production","url":"pantavion-planet-fc2wwjzqn-pandaconnect.vercel.app","gitRef":"main","gitSha":"63201c20cf9d772fd96313b969613044fcae0953"},
+    {"deploymentId":"dpl_8rdmf1bA1V5NAtozEmNdUSXAYh87","created":1779532893608,"state":"READY","target":"production","url":"pantavion-planet-7pmypdrww-pandaconnect.vercel.app","gitRef":"main","gitSha":"c7be3cf4db2a3a7435523f060dee015e7ced5c82"},
+    {"deploymentId":"dpl_D783eerUu4Uq4b2HTraMF42mNKfu","created":1779532604459,"state":"READY","target":"production","url":"pantavion-planet-agy6ve2ob-pandaconnect.vercel.app","gitRef":"main","gitSha":"b2648b9e2fe963d16356e1500a76821b7513c471"},
+    {"deploymentId":"dpl_722ukSr4rQJNrpwrFfD9y65w2sjw","created":1779526790794,"state":"READY","target":"production","url":"pantavion-planet-7c96l2f0t-pandaconnect.vercel.app","gitRef":"main","gitSha":"c34f086775f2303bf9bb5b62fb19172a73404d1d"},
+    {"deploymentId":"dpl_7a4R2jrJzmNmkgMe6Tmr6t8hruQw","created":1779525602278,"state":"READY","target":"production","url":"pantavion-planet-dusfvjdv6-pandaconnect.vercel.app","gitRef":"main","gitSha":"cd41bae7be8f904d2873559fb9d504f9c786ab5e"},
+    {"deploymentId":"dpl_HSGTky3746XjxzXphx4uZFabpQcj","created":1779523286023,"state":"READY","target":"production","url":"pantavion-planet-45y48h4jk-pandaconnect.vercel.app","gitRef":"main","gitSha":"8f0dfd655cf1a5272a3bfa652e4aac55bde5aa6f"},
+    {"deploymentId":"dpl_GExckcVfQ7oR7Ut412GjXDHKBNnu","created":1779493752768,"state":"READY","target":"production","url":"pantavion-planet-f8by5vd7q-pandaconnect.vercel.app","gitRef":"main","gitSha":"45eb9d89aaf91edd2a74a3e727936afca9fce0ef"},
+    {"deploymentId":"dpl_EPy6rXB1zGUfrW49fUUJHSv4GVVJ","created":1779492455639,"state":"READY","target":"production","url":"pantavion-planet-pdmbsd74e-pandaconnect.vercel.app","gitRef":"main","gitSha":"f4a1e5bff12e5848e8815ae11e683da5410e736a"},
+    {"deploymentId":"dpl_8pEyS8j3xHuaFdtrvVie9ohJ2V3k","created":1779491673402,"state":"READY","target":"production","url":"pantavion-planet-jmhyqcbli-pandaconnect.vercel.app","gitRef":"main","gitSha":"0c4b063d6e8ccd31a99ece952eebf59d28a3926e"},
+    {"deploymentId":"dpl_74GKoofRTMjP47T4fnQoeid39AAL","created":1779491272377,"state":"READY","target":"production","url":"pantavion-planet-ihy5xnerd-pandaconnect.vercel.app","gitRef":"main","gitSha":"3112dfcc6c0a13b9bffdd774285a58d0375c9840"},
+    {"deploymentId":"dpl_9P3huQXK4FrmP4zBHqSQwyn4d9mX","created":1779490527710,"state":"READY","target":"production","url":"pantavion-planet-c6mef1753-pandaconnect.vercel.app","gitRef":"main","gitSha":"8977ce18306b250d642143e3bb316dbc727eb5da"},
+    {"deploymentId":"dpl_6DwpLYJGyi8Up6cD5z3iijmzbPFU","created":1779489797407,"state":"READY","target":"production","url":"pantavion-planet-n1osmgowo-pandaconnect.vercel.app","gitRef":"main","gitSha":"8b01c33f629070a778f229e3acb07b9605cb9058"},
+    {"deploymentId":"dpl_7MnaBErNA1BKb8aZ1CbqqUvPTvV8","created":1779489341214,"state":"READY","target":"production","url":"pantavion-planet-kfw7x9f9p-pandaconnect.vercel.app","gitRef":"main","gitSha":"7e3488218b58a9c9845253c96da4d3f5de2475dc"},
+    {"deploymentId":"dpl_AGPyAw5MmqFr1phGzFdqwsyidW44","created":1779487906505,"state":"READY","target":"production","url":"pantavion-planet-amtc24ol3-pandaconnect.vercel.app","gitRef":"main","gitSha":"b6848a2f0f1c12865069f5da277f6ee5a9e23511"},
+    {"deploymentId":"dpl_3u12R6dzw46JEk9JVfAGogquAJTE","created":1779486286011,"state":"READY","target":"production","url":"pantavion-planet-377l7buk7-pandaconnect.vercel.app","gitRef":"main","gitSha":"81b41e5855dbd4a3979966b2f06fa4fa0a29907f"},
+    {"deploymentId":"dpl_DRMGXHkDLmPRHxCx65uHJncvXvJ2","created":1779483248599,"state":"READY","target":"production","url":"pantavion-planet-9pp71uu3z-pandaconnect.vercel.app","gitRef":"main","gitSha":"c3ba0932a2c0b528e540c5b243fcafd4f403be2b"},
+    {"deploymentId":"dpl_HgQDvb8wNGetdMjFstgUXrtkuxk5","created":1779478247756,"state":"READY","target":"production","url":"pantavion-planet-fzcw14vgg-pandaconnect.vercel.app","gitRef":"main","gitSha":"2441bb5f766884c061da2f43b5c00fdd22b0af3d"},
+    {"deploymentId":"dpl_5YDXkYcfbDUdHqRipd7RXq43WVgC","created":1779477541965,"state":"READY","target":"production","url":"pantavion-planet-op7rvtmbw-pandaconnect.vercel.app","gitRef":"main","gitSha":"746eb96c53cf90796648c2b568c0f7df69004600"},
+    {"deploymentId":"dpl_7V1Tu2ZijwrD1685cqWphjGZ8vw3","created":1779477280693,"state":"READY","target":"production","url":"pantavion-planet-nk2h24lim-pandaconnect.vercel.app","gitRef":"main","gitSha":"81c29dbc8c8abc68f4902ce6e2f23a8c53572ae3"}
+  ],
+  "sourcePagination":{"requestedSince":1779134272977,"requestedUntil":1779538585902,"returnedCount":20,"next":1779477280693},
+  "recoveryTruth":"PER_DEPLOYMENT_PAYLOAD_REHYDRATED_AND_GITHUB_BOUND","deleteAllowed":false
+}
