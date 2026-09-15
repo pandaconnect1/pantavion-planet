@@ -1,7 +1,7 @@
 {
-  "schema": "pantavion_lane_j_module_classification_v1",
+  "schema": "pantavion_lane_j_module_classification_v2",
   "lane": "J",
-  "updated_at_utc": "2026-09-15T14:23:00Z",
+  "updated_at_utc": "2026-09-15T14:25:00Z",
   "status": "ACTIVE_PARTIAL",
   "claim": {
     "path": "docs/recovery/live/claims/LANE_J.lock",
@@ -27,6 +27,7 @@
     "docs/recovery/live/shards/lane-e-secrets-artifacts.json",
     "docs/recovery/live/shards/lane-f-canonical-ingestion.json",
     "docs/recovery/live/shards/lane-h-runtime-build.json",
+    "docs/recovery/live/shards/lane-i-nogit-v0.json",
     "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
     "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md"
   ],
@@ -37,8 +38,9 @@
     "lane_d": "DEPLOYMENT_HISTORIES_TERMINAL_WITH_HISTORICAL_RUNTIME_EXPORT_BLOCKER",
     "lane_e": "BLOCKED_AUTH_EXPORT",
     "lane_f": "ACTIVE_PARTIAL_CANONICALIZATION",
-    "lane_h": "TERMINAL_VERIFIED",
     "lane_g": "NO_SHARD_FOUND_AT_LAST_CHECK",
+    "lane_h": "TERMINAL_VERIFIED",
+    "lane_i": "TERMINAL_VERIFIED_WITH_EXPLICIT_GAPS",
     "classification_scope": "Only source-bound evidence currently available to Lane J; no unsupported completion percentages."
   },
   "modules": {
@@ -270,6 +272,18 @@
           "summary": "Legacy donor preservation provenance exists for Pantaai, four donor repository trees, pantavion-one-clean-ui and pantavion-voice; module assignment is intentionally deferred where the preserved checkpoint does not prove a unique canonical module.",
           "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
           "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Four no-Git v0 projects are four distinct Vercel project entities, but historical code/content uniqueness and historical emptiness are unproven; no module assignment is inferred.",
+          "projects": [
+            "v0-new-project-dr8uqvuxfhx",
+            "v0-new-project-cd71xe9esnl",
+            "v0-new-project-0hexy2s8dnt",
+            "v0-new-project-81xhfwdrlxy"
+          ],
+          "source": "docs/recovery/live/shards/lane-i-nogit-v0.json",
+          "rescue_state": "VERIFIED_OR_EXPLICIT_GAP",
+          "live_truth": "HISTORICAL_ONLY"
         }
       ]
     }
@@ -277,17 +291,17 @@
   "classification_notes": [
     "The 14:19 pagination checkpoint reported histories OPEN at that moment; this is superseded for completion state by later owner-lane A/B terminal-zero evidence. Its deployment provenance remains usable as historical evidence.",
     "Lane F currently exposes 219 payload-backed canonicalized records and an explicit 400-record summary-only payload gap in one Lane-A run. Lane J does not convert summary-only counts into item-level classifications.",
+    "Lane I proves four distinct no-Git Vercel project entities but proves neither historical emptiness nor content uniqueness; Lane J therefore leaves their module assignment unresolved.",
     "A missing direct classification for Ads Center, Business, Dating, Events or Marketplace does not mean the capability is absent from the repository; it means the current source-bound Lane J input does not prove a classification yet.",
     "No module is marked complete or VERIFIED_LIVE solely from deployment metadata."
   ],
   "handoff": {
     "to_lane_k": "This shard is public-safe founder-feed classification input. Lane K may consume it without reclassifying unsupported modules as present.",
-    "to_lane_l": "Audit module provenance, ambiguity queue and conflicts against later F/G/I outputs."
+    "to_lane_l": "Audit module provenance, ambiguity queue and conflicts against later F/G outputs."
   },
   "next_unique_work": [
     "Consume newly canonicalized Lane F records as they appear and classify only payload-backed evidence.",
     "Consume Lane G provenance shard if/when created and reconcile unique-vs-mirror classifications.",
-    "Consume Lane I no-Git classifier evidence without inferring module content where uniqueness is unproven.",
     "Resolve review-required module themes only from direct evidence, not project names or assumptions."
   ]
 }
