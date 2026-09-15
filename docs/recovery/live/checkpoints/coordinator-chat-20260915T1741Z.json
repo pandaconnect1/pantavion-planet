@@ -1,0 +1,57 @@
+{
+  "observedAtUtc": "2026-09-15T17:41:30Z",
+  "mode": "VERIFY_COORDINATE_ONLY",
+  "aggregateCommit": "6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5",
+  "branch": "backup/pre-vercel-risk-20260914",
+  "sourceFloor": 3679,
+  "canonicalizedFloor": 219,
+  "laneG": {
+    "status": "TERMINAL_VERIFIED_REHYDRATED",
+    "scope": "Lane-A 201-600",
+    "rehydratedRecords": 400,
+    "uniqueDeploymentIds": 400,
+    "duplicateDeploymentIds": 0,
+    "audit": "PASS",
+    "shard": "docs/recovery/live/shards/lane-g-20260915-rehydrated-terminal.json"
+  },
+  "laneF": {
+    "status": "ACTIVE_STALLED_PENDING_G_INGEST_AND_GLOBAL_DEDUP",
+    "canonicalizedFloor": 219,
+    "pendingGRehydratedRecords": 400,
+    "rule": "Do not raise canonicalized counts until idempotent projectId:deploymentId dedup and canonical binding is durable."
+  },
+  "production": {
+    "deploymentId": "dpl_6NLyCMTnyzvi481Xz4UAQHrE2PHj",
+    "gitSha": "170ffb3b9e5c48313d08fb6e27ecafb715bfec90",
+    "gitMessage": "feat: add GitHub OIDC recovery partition executor",
+    "state": "READY"
+  },
+  "runtime": {
+    "scheduler": "healthy",
+    "executionVerified": true,
+    "workerTotalRuns": 40,
+    "lastSuccessfulRunKey": "pantavion-intelligence-5m:2026-09-15T17:35",
+    "recoveryPartitions": {"total":165,"active":165,"succeeded":0,"failed":0,"other":0},
+    "cronErrorsLast30m": 0,
+    "completion": false
+  },
+  "downstream": {
+    "J": "ACTIVE_PARTIAL",
+    "K": "STALE_PRE_J_G_RUNTIME",
+    "L": "STALE_RELATIVE_TO_G_RUNTIME"
+  },
+  "nextCoordinatorActions": [
+    "Do not re-page G; its assigned 400-record preservation scope is terminal.",
+    "Require F owner to ingest/deduplicate the 400 G records, then B/C/D and earlier durable batches.",
+    "Refresh J only from new canonical F evidence.",
+    "Refresh K founder feed from current J/G/runtime truth.",
+    "Refresh L completeness/dedup audit after F/J/K state changes.",
+    "Continue checking scheduler partition terminal outcomes without inflating completion."
+  ],
+  "safety": {
+    "zeroDeletions": true,
+    "zeroVercelMutations": true,
+    "secretValuesRecorded": false,
+    "duplicateLaneWork": false
+  }
+}
