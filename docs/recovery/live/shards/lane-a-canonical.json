@@ -1,22 +1,23 @@
 {
-  "updatedAt": "2026-09-15T13:20:00Z",
+  "updatedAt": "2026-09-15T13:35:00Z",
   "lane": "A",
   "status": "ACTIVE",
   "project": "pantavion-planet",
   "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
   "teamId": "team_tGNSGGjcV3VNecscMvaAniGY",
   "sourceCursor": 1786126296277,
-  "nextCursor": 1781903655488,
-  "pagesCapturedThisLaneRun": 10,
-  "recordsCapturedThisLaneRun": 200,
+  "nextCursor": 1779134272977,
+  "pagesCapturedThisLaneRun": 20,
+  "recordsCapturedThisLaneRun": 400,
   "lastPageCount": 20,
   "terminal": false,
   "rescue_state": "CHECKPOINTED",
   "live_truth": "HISTORICAL_ONLY",
-  "recoveredDeploymentRecordsFloorAfterCheckpoint": 3260,
+  "recoveredDeploymentRecordsFloorAfterCheckpoint": 3460,
   "checkpoints": [
     "docs/recovery/live/batches/lane-a-20260915T1320Z-100.json",
-    "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json"
+    "docs/recovery/live/batches/lane-a-20260915T1320Z-101-200.json",
+    "docs/recovery/live/batches/lane-a-20260915-201-400-progress.json"
   ],
   "rules": [
     "zero deletions",
