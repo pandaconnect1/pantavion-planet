@@ -5,8 +5,8 @@
   "contract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
   "canonicalIndex": {
     "artifactDirectory": "docs/recovery/live/canonical",
-    "uniqueStableRecordKeys": 515,
-    "ambiguousStableRecordKeys": 4
+    "uniqueStableRecordKeys": 516,
+    "ambiguousStableRecordKeys": 5
   },
   "entries": [
     {
@@ -278,14 +278,29 @@
       "graphEdgeCount": 0,
       "semanticMirrorsSuppressed": 0,
       "implementationCandidates": 0
+    },
+    {
+      "output": "docs/recovery/live/routing/thread-5-routes-lane-g-t2-481-520.json",
+      "sourceClassification": "docs/recovery/live/shards/thread-4-semantic-lane-g-t2-481-520.json",
+      "explicitSourceCanonicalLedger": null,
+      "sha256": "014d08f20f92a9eec66b7efa093a3663d220d94334524b878b1384810fc9db43",
+      "recordCount": 27,
+      "routedRecords": 0,
+      "reviewRequired": 0,
+      "waitingCanonical": 27,
+      "waitingClassification": 0,
+      "canonicalConflicts": 0,
+      "graphEdgeCount": 0,
+      "semanticMirrorsSuppressed": 0,
+      "implementationCandidates": 0
     }
   ],
   "totals": {
-    "classificationArtifacts": 18,
-    "sourceRecords": 353,
+    "classificationArtifacts": 19,
+    "sourceRecords": 380,
     "routedRecords": 19,
     "reviewRequired": 0,
-    "waitingCanonical": 334,
+    "waitingCanonical": 361,
     "waitingClassification": 0,
     "canonicalConflicts": 0,
     "graphEdges": 128,
