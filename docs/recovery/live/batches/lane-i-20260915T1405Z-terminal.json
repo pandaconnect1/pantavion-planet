@@ -1,0 +1,27 @@
+{
+  "lane": "I",
+  "timestamp_utc": "2026-09-15T14:05:30Z",
+  "status": "TERMINAL_VERIFIED_WITH_EXPLICIT_GAPS",
+  "projects": [
+    "prj_gp2GCnfAmKo4vQ8qTCo1rg8tmsI1",
+    "prj_UIFExM3Y5z1v42gAoMWgLtLGb2eM",
+    "prj_QZvsq6eEjyNwZXVBuQGTqewHqLpJ",
+    "prj_6vYEVxzch7eYJQthBUP53aQ87zvO"
+  ],
+  "facts": {
+    "distinct_project_entities": 4,
+    "git_bindings": 0,
+    "current_domains": 0,
+    "current_latest_deployments": 0,
+    "deployment_histories_terminal_zero": 4,
+    "historically_empty_proven": 0,
+    "content_duplicates_proven": 0
+  },
+  "explicit_gap": "No accessible historical deployment ID/payload is exposed for any of the four projects; content-level emptiness or uniqueness cannot be proven from current project metadata alone.",
+  "evidence": [
+    "docs/recovery/live/shards/lane-d-legacy-b.json",
+    "docs/recovery/live/shards/lane-e-secrets-artifacts.json",
+    "docs/recovery/live/shards/lane-i-nogit-v0.json"
+  ],
+  "rules": ["zero deletions", "zero Vercel mutations", "no secret values"]
+}
