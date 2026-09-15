@@ -1,0 +1,45 @@
+{
+  "capturedAt": "2026-09-15T14:20:00Z",
+  "sanitized": true,
+  "secretValuesIncluded": false,
+  "records": 20,
+  "canonical": {
+    "fromCursorExclusive": 1786174987467,
+    "nextCursor": 1786170996687,
+    "terminal": false,
+    "records": [
+      ["dpl_CBrgtAg8bSFxceC41uJiQAVbbv5H",1786174848388,"READY","e8011de1d42a9bce85cf05f234fa830e0aa36062"],
+      ["dpl_AMc2Mz8ceVssmLvVyNFggDQABoe3",1786174826117,"READY","55f01a999feb260fca65dfb328a77837fb2601d3"],
+      ["dpl_ES7Bak9SHMoNJBRSSX3xceKuZy13",1786174816614,"READY","fb5e935fc9e391a941de9bf8a11f26346619eca4"],
+      ["dpl_7xNP6jPr1p6esPc3hBxP3zJEM87a",1786174798187,"READY","f66b05d54e03e926e6d37f93297225556129a45f"],
+      ["dpl_ChsqutVXEuhGSGmjxSDvnueqrRdR",1786174785704,"READY","565b66ba52915478c8d5fefd8db483700c1083f0"],
+      ["dpl_HyLkWoPpWNJEtF9qS4W9NLwSsu56",1786174730592,"READY","89856124b29dd91703efe2d5b6bf4218ddaece00"],
+      ["dpl_CZJuTj96Xqc1Q5tC3afffa2ccntp",1786174701777,"READY","33af3ff3eac80ba8a2c39a3b8e7dc5199031d4f4"],
+      ["dpl_DpBFW5a9uVQ2fYyYKNhVficcEPSj",1786173152868,"READY","d5d6d123b7a22671fa6f91f9606fce5c2d53d0ab"],
+      ["dpl_FojXXkcY5Qa6QDQopc5WAnMktPTJ",1786173009304,"READY","6f41f460d3cef83a0622b6bdb3a0b36cbf50f9f4"],
+      ["dpl_7yZaW4DFcrvotkUX7XRuVdhB5icz",1786172974854,"READY","f825b70d2e6f395878ad5e420b54f835a2c52464"],
+      ["dpl_qk4929yssuam4rQmWqHQjvqSD6TM",1786172300820,"READY","b542ca822ab859d7e795952519536b3473f87c9b"],
+      ["dpl_GFYWwD3ZSnvag3FbMePHinChyX83",1786172164925,"READY","827bb1553c41e48af9dbc0d56f22685da3da5634"],
+      ["dpl_6XQsdNWuvLnfbSB2RWWn4fMUDnBa",1786171848533,"READY","4d0a4cb3b4d5be5282b9a9660bbaa8b67670f2cc"],
+      ["dpl_9zGcYJhMbNV8r95mZpQZnbSknubC",1786171570106,"READY","e7a3455e3bbb83f7c11fb32dc625ffa1a3c33d0f"],
+      ["dpl_FLuijNCV3URm7xtPNE19tbTSxa47",1786171516750,"READY","3449407957f73c210d12fd3e9fa65a4767ce05d0"],
+      ["dpl_FMXt7F1a8nFWiEhurpcX4npdfARK",1786171500718,"READY","bedba1fd30b5fab3b2c146c0b936d9fa26e1d324"],
+      ["dpl_HKg5sCJKxjBEDZqw4h96uzH9ntPX",1786171474486,"READY","f4bb1451aa3c94db87105077b1ec5c800c2620fa"],
+      ["dpl_9KuvQqsEuZ4eunc9Mc9Gws7ugcDi",1786171457142,"READY","b5028c0bedf5ada86d305b2606f84c8c7067a730"],
+      ["dpl_AKaPh5tKq49A9fBioVTVg7qPbWAc",1786171121497,"READY","fc4801cce3ee16fadbbe5debe7f2f2993616617e"],
+      ["dpl_3Hx4RwGV8paVkSB6zTFH9RByb4ji",1786170996687,"READY","21777842f17e8c5e0463be3e0be6d80420b7be40"]
+    ]
+  },
+  "mirror": {
+    "fromCursorExclusive": 1786177840266,
+    "terminal": true,
+    "terminalPageCount": 0,
+    "records": []
+  },
+  "tupleSchema": ["deploymentId","created","state","githubCommitSha"],
+  "notes": [
+    "Mirror terminal zero is explicit Vercel API evidence: querying strictly older than the mirror cursor returned zero deployments.",
+    "Canonical history remains non-terminal.",
+    "Creator identity/email and secret-bearing fields are excluded."
+  ]
+}
