@@ -1,0 +1,61 @@
+name: Pantavion Thread 3 Immutable Corpus Probe
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "scripts/recovery/thread3-probe-corpus.mjs"
+      - ".github/workflows/pantavion-thread3-probe-corpus.yml"
+      - "data/recovery/imported-pr248/canonical-ledger/corpus/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pantavion-thread3-probe-corpus-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify immutable corpus structure and provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/recovery/thread3-probe-corpus.mjs | tee /tmp/thread3-corpus-probe-result.json
+      - name: Commit compact probe receipt
+        shell: bash
+        env:
+          BRANCH: backup/pre-vercel-risk-20260914
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/recovery/live/canonical/thread3-corpus-probe.json
+          if git diff --cached --quiet; then
+            echo "Idempotent no-op: corpus probe already matches source."
+            exit 0
+          fi
+          git commit -m "recovery: verify Thread 3 immutable corpus source"
+          pushed=0
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch origin "$BRANCH"
+            git rebase "origin/$BRANCH"
+            if git push origin "HEAD:$BRANCH"; then
+              pushed=1
+              break
+            fi
+            sleep 1
+          done
+          test "$pushed" -eq 1
