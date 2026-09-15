@@ -1,21 +1,21 @@
 {
-  "updatedAt": "2026-09-15T13:21:00Z",
-  "coordinatorObservedAt": "2026-09-15T13:20:00Z",
+  "updatedAt": "2026-09-15T13:26:00Z",
+  "coordinatorObservedAt": "2026-09-15T13:25:00Z",
   "phase": "EMERGENCY_VERCEL_RESCUE",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total and not directly comparable with mirrored deployment counts",
-  "recoveredDeploymentRecordsFloor": 3220,
-  "recoveredDeploymentRecordsFloorBasis": "durably checkpointed verified lower bound after reconciling overlapping canonical lane checkpoints. Prior coordinator state reached 1784868834812 at floor 3160. Checkpoint docs/recovery/VERCEL_CANONICAL_PROGRESS_20260915_1320Z.md extends the union three additional full pages beyond that cursor, to 1782858024554, adding 60 non-overlapping records. Mirror overlap may exist across projects.",
+  "recoveredDeploymentRecordsFloor": 3300,
+  "recoveredDeploymentRecordsFloorBasis": "durably checkpointed verified lower bound after four additional non-overlapping canonical pages from 1782858024554 to 1781340813841. Mirror overlap may exist across projects.",
   "canonical": {
     "project": "pantavion-planet",
     "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
-    "sourceCursor": 1784868834812,
-    "nextCursor": 1782858024554,
+    "sourceCursor": 1782858024554,
+    "nextCursor": 1781340813841,
     "lastPageCount": 20,
     "terminal": false,
     "rescue_state": "CHECKPOINTED",
     "live_truth": "HISTORICAL_ONLY",
-    "checkpoint": "docs/recovery/VERCEL_CANONICAL_PROGRESS_20260915_1320Z.md"
+    "checkpoint": "docs/recovery/VERCEL_CANONICAL_PROGRESS_20260915_1325Z.md"
   },
   "mirror": {
     "project": "pantavion-planet-vmxx",
@@ -25,11 +25,11 @@
     "terminal": true
   },
   "latestBatch": {
-    "records": 60,
-    "pages": 3,
-    "canonicalRecords": 60,
+    "records": 80,
+    "pages": 4,
+    "canonicalRecords": 80,
     "mirrorRecords": 0,
-    "note": "The latest 80-record checkpoint overlapped the coordinator's prior cursor by one 20-record page. Reconciliation therefore adds 60 new non-overlapping canonical records and advances to 1782858024554. Canonical remains non-terminal; VMXX remains terminal."
+    "note": "Four full non-overlapping canonical pages were durably checkpointed. Canonical remains non-terminal; VMXX remains terminal."
   },
   "parallelCoordinator": {
     "mode": "VERIFY_COORDINATE_ONLY",
@@ -50,11 +50,12 @@
     "secretValuesRecorded": false
   },
   "recentEvidence": [
-    "Supabase authentication/session/profile foundations and Social Core foundations",
-    "protected Water map/pipe runtime, private range loading, access-request deduplication, secure Administrator controls and push-alert provenance",
-    "early Kernel autonomy/recovery provenance including agent runtime, safe patching, product-builder, founder approval and archive/orchestration surfaces",
-    "Vercel-bot security-fix provenance for multiple kernel routes with unauthenticated state/audit mutation risks before fixes",
-    "artifact-intake build provenance where an ignore rule prevented required core/artifacts modules from being committed"
+    "security-fix provenance for conversion path traversal, sensitive bare-dotfile blocking and timing-safe kernel-secret comparison",
+    "Python worker, conversion engine, universal omnimodal intake, user-signal intake and ecosystem gap-finder foundations",
+    "Water asset and operational overlay, device geolocation, original/licensed DWG intake and viewer foundations",
+    "Founder Command, code-writer, Evolution Engine, project inventory/intake and autonomous work-order dispatch foundations",
+    "execution-engine scheduler, runtime ledger, repair loop, PR creation, thread locks and executor-adapter provenance",
+    "language selector and translation UI synchronization plus protected B-map/DWG delivery provenance"
   ],
   "hardGaps": [
     "decrypted environment-secret values require authorized CLI/API export or reissue/rotation",
