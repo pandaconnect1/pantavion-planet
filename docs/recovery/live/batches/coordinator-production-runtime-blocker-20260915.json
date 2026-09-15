@@ -1,0 +1,29 @@
+{
+  "role": "VERIFY_COORDINATE",
+  "evidence_type": "production_runtime_blocker",
+  "observed_at_utc": "2026-09-15T13:25:58Z",
+  "project": "pantavion-planet",
+  "project_id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+  "production_deployment_id": "dpl_FGfYCSEAhtQwVhGiW57nCyrFi6et",
+  "route": "/api/pantavion/intelligence/cron",
+  "error_group": "pantavion_secure_scheduled_worker_failed",
+  "error_count_observed": 287,
+  "first_seen": "2026-08-24T14:00:27Z",
+  "last_seen": "2026-09-15T13:20:38Z",
+  "runtime_message": "Pantavion Supabase admin runtime is missing SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY.",
+  "code_confirmation": {
+    "path": "lib/supabase/admin.ts",
+    "accepted_admin_key_names": ["SUPABASE_SECRET_KEY", "SUPABASE_SERVICE_ROLE_KEY"],
+    "secret_values_captured": false
+  },
+  "rescue_state": "BLOCKED_SECRET_CONFIGURATION",
+  "live_truth": "RUNTIME_FAILURE_CONFIRMED",
+  "required_follow_up": "Restore one valid Supabase admin credential in the canonical pantavion-planet production environment using an authorized private Vercel environment-variable action, then rerun the scheduled worker and verify successful runtime execution. Never place the value in GitHub or chat.",
+  "connector_limit": "The connected Vercel tool surface available to this coordinator does not expose environment-variable listing, decryption, or write actions, so no secret configuration mutation was attempted.",
+  "privacy_and_safety": {
+    "deletions": 0,
+    "direct_vercel_mutations": 0,
+    "secret_values_recorded": false,
+    "duplicate_deep_pagination": false
+  }
+}
