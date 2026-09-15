@@ -1,0 +1,36 @@
+{
+  "updatedAt": "2026-09-15T14:06:30Z",
+  "lane": "F",
+  "status": "ACTIVE",
+  "purpose": "Canonical ingestion of durably recovered deployment evidence for GitHub and Pantavion founder recovery feed",
+  "sourceLaneStatus": {
+    "A": "TERMINAL_CHECKPOINTED",
+    "B": "terminal previously verified; ingestion pending reconciliation",
+    "C": "ACTIVE",
+    "D": "ACTIVE"
+  },
+  "canonicalizedRecordsThisCheckpoint": 19,
+  "canonicalizedRecordsFloor": 19,
+  "sourceRecordsAvailableFloor": 3679,
+  "sourceRecordsAvailableFloorBasis": "latest lane-A terminal shard lower bound; mirror overlap and other lanes require dedup before totals can be summed",
+  "input": "docs/recovery/live/batches/lane-a-20260915-601-619-terminal.json",
+  "canonicalArtifact": "docs/recovery/live/canonical/lane-f-a-terminal-601-619.json",
+  "terminalEvidenceBound": true,
+  "githubEvidenceBound": true,
+  "pantavionFounderFeedBound": true,
+  "classificationState": "CANONICALIZED",
+  "remaining": [
+    "canonicalize prior lane-A durable batches 1-600",
+    "ingest lane-B terminal evidence with mirror dedup",
+    "ingest lane-C and lane-D checkpoints as they become durable",
+    "hand thematic/module classification to lane J without guessing",
+    "feed lane K founder-page integration with canonical pointers"
+  ],
+  "rules": [
+    "zero deletions",
+    "zero Vercel mutations",
+    "no secret values",
+    "do not duplicate A-D deployment pagination",
+    "READY/production is HISTORICAL_ONLY unless separately runtime verified"
+  ]
+}
