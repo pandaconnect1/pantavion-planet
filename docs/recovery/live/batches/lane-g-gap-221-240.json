@@ -1,0 +1,27 @@
+{
+  "lane":"G","sourceLane":"A","project":"pantavion-planet","projectId":"prj_BxhpnjvAs1seyfBU1UYFU8nDykwh","range":"221-240","fromCursorExclusive":1781389203820,"nextCursor":1781340813841,"recordCount":20,"sourceSurface":"Vercel list_deployments","privacy":"PUBLIC_SAFE","sanitized":true,"secretValuesIncluded":false,
+  "schema":["deployment_id","created_at","state","target","git_sha","git_ref","git_message_subject","git_verification"],
+  "records":[
+    ["dpl_Ec69MSGaBDApZs5KsiBrxpBSdMAD",1781355771397,"READY","production","9c74f84c89f5ffc40a5722e7536368c5b5c49a09","main","Merge pull request #72 from pandaconnect1/pantavion-agent/evolution-engine-v1","verified"],
+    ["dpl_5owcU6mvWgHhqKRK95sc4EkfGi7y",1781354676445,"READY",null,"3653c097a997b8c847157f8bc5bf5d0ce5ef9641","pantavion/execution-engine-v1","feat(kernel): add autonomous master backlog improvements","unverified"],
+    ["dpl_9s2y2c6eQa82LZ2y3DS9trQwy8vQ",1781354337484,"READY",null,"4fe0eb7faff75be5b91b8032d1ad94ae58554906","pantavion/execution-engine-v1","feat(kernel): connect scheduler to work package pr executor","unverified"],
+    ["dpl_A8p6AHinEydg6s2ebhyRcb5QBJpE",1781354069735,"READY",null,"ee370a6685008228d8b6db57deb0eb5c8bc6b3f6","pantavion/execution-engine-v1","feat(kernel): add work package pr executor","unverified"],
+    ["dpl_4ECB8eiyUh9wAi6ziWQQZgi26kNR",1781353676026,"READY",null,"575d7653865371f7249c0d8a2e53d3baa143902d","pantavion/execution-engine-v1","feat(kernel): connect scheduler to work package queue","unverified"],
+    ["dpl_aM9kWAiRDsqFKvRPELjnvUtiUeFM",1781351574100,"READY",null,"2fc1e0bee4b0b4580254377e6abc7eb55c18da0e","pantavion/execution-engine-v1","feat(kernel): connect scheduler to work package queue","unverified"],
+    ["dpl_FRCFMgRf7jFgU23qyPdp2Ppo5gR4",1781348169965,"READY",null,"ae4347f6349fcba814b73a8c104b9007540715cb","pantavion/execution-engine-v1","feat(kernel): add autonomous work package coordinator","unverified"],
+    ["dpl_Cib9dZP3QUU6wYCwCetH6WAYxCXk",1781347689066,"READY",null,"226e12fa99da9926946ad2137bca0e48b4f51aef","pantavion/execution-engine-v1","feat(kernel): add autonomous repair pr creator","unverified"],
+    ["dpl_64JxE2QfAkcFNm6V7fwvXn88sBSZ",1781347536347,"READY",null,"c52b2f6af351715e3f2efb70200551157ce3d060","pantavion/execution-engine-v1","feat(kernel): add file thread lock registry","unverified"],
+    ["dpl_EQZ4F94o2Wgnvr6HhACNKTbEsuXD",1781347216486,"READY",null,"f162bcf8341d43448a6e938a8766811de505b96a","pantavion/execution-engine-v1","feat(kernel): add autonomous repair loop","unverified"],
+    ["dpl_8E29R2p7JaiUN6zgFcmDhKjJUBij",1781346310258,"READY",null,"3a93857b219a454bda2b1b97dd309ffaddc7c648","pantavion/execution-engine-v1","feat(kernel): harden autonomous github pr writer","unverified"],
+    ["dpl_43YgnKTMHJHULqFPtCg1ocTABkyg",1781345594788,"READY",null,"2fbcf66f6c1967f5f99bb9e774490266f715340e","pantavion/execution-engine-v1","feat(kernel): add scheduler smoke and env checks","unverified"],
+    ["dpl_Az7MrfeH7UwJWHBFBHW4avcYbJ4m",1781345152071,"READY",null,"edc0824c5407437401672d9afb3390a0e3115d24","pantavion/execution-engine-v1","feat(kernel): harden autonomous scheduler guard","unverified"],
+    ["dpl_3Fv1iEDjhVDvgGZsaMFFBXT3fZ2W",1781344544030,"READY",null,"863c7912af7c1f22b441b5079c9efae09ebe0303","pantavion/execution-engine-v1","feat(kernel): connect router planning routes to runtime ledger","unverified"],
+    ["dpl_6mH9mZFJtjwVMVciVpZJLJSbDqut",1781344209591,"READY",null,"b3c588e80a1e2821536ea19efd901820d05e4c1e","pantavion/execution-engine-v1","feat(kernel): connect code generation worker to runtime ledger","unverified"],
+    ["dpl_C2NJnqDTLX1Bk6HLCQPQysxMdfey",1781343772981,"READY",null,"c1b4cb6985f4b5102a65c6d7a82e87df3497b20c","pantavion/execution-engine-v1","fix(kernel): remove literal newline escape from ecosystem domain","unverified"],
+    ["dpl_4GQzL3eLxsVnaHbi8T7yMZcceGnh",1781343114848,"READY",null,"115caffad5e13c5d880e1be37fccf09f5568d392","pantavion/execution-engine-v1","fix(kernel): align guardian typecheck with vercel","unverified"],
+    ["dpl_Er8EBey5wqAFK5mcKkckakU1dok1",1781341362230,"READY",null,"63867104e44827a210610988d5be0d68500325ba","pantavion/execution-engine-v1","feat(kernel): add runtime ledger","unverified"],
+    ["dpl_D4MDNsnAmTYoAxmexE8nkcLSNmdt",1781341203864,"READY",null,"be35e81c52ce98fa648b1a7900ee3db8a10ac039","pantavion/execution-engine-v1","feat(kernel): add executor adapter route","unverified"],
+    ["dpl_6D4KieKRhNprZcmcdHdvZNSQ7NdA",1781340813841,"READY",null,"3ac2e53133a3075578d87e29db43b412dc4c8b06","pantavion/execution-engine-v1","feat(kernel): add executor adapter planner","unverified"]
+  ],
+  "rules":["gap recovery only","deduplicate by deployment_id","no creator identity copied","no secret values","no Vercel mutations","READY/production remains HISTORICAL_ONLY"]
+}
