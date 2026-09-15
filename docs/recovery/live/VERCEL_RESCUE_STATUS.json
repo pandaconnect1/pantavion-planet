@@ -1,14 +1,14 @@
 {
-  "updatedAt": "2026-09-15T14:38:00Z",
+  "updatedAt": "2026-09-15T13:15:30Z",
   "phase": "EMERGENCY_VERCEL_RESCUE",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total and not directly comparable with mirrored deployment counts",
-  "recoveredDeploymentRecordsFloor": 3060,
-  "recoveredDeploymentRecordsFloorBasis": "durably checkpointed verified lower bound. Mirror overlap may exist; canonical continuation through cursor 1786126296277 is compactly preserved in GitHub evidence. The mirror lane is terminal.",
+  "recoveredDeploymentRecordsFloor": 3140,
+  "recoveredDeploymentRecordsFloorBasis": "durably checkpointed verified lower bound. Mirror overlap may exist. This refresh adds 80 canonical deployment records beyond the prior durable live-feed cursor and advances canonical continuation to 1784994595579. The mirror lane is terminal.",
   "canonical": {
     "project": "pantavion-planet",
     "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
-    "nextCursor": 1786126296277,
+    "nextCursor": 1784994595579,
     "lastPageCount": 20,
     "terminal": false
   },
@@ -20,21 +20,19 @@
     "terminal": true
   },
   "latestBatch": {
-    "records": 20,
-    "pages": 1,
-    "canonicalRecords": 20,
+    "records": 80,
+    "pages": 4,
+    "canonicalRecords": 80,
     "mirrorRecords": 0,
-    "note": "Another full canonical page is durably checkpointed after 3,040. Canonical remains non-terminal; VMXX remains terminal."
+    "note": "Four additional full canonical pages were durably checkpointed after the prior live-feed cursor. Canonical remains non-terminal; VMXX remains terminal."
   },
   "recentEvidence": [
-    "direct live bidirectional translator runtime provenance",
-    "simple universal Interpreter and automatic language detection provenance",
-    "real multilingual speech transcription endpoint provenance",
-    "live translation fallback and real text-provider provenance",
-    "mobile language-control and header provenance",
-    "bidirectional Interpreter implementation and global speech-locale provenance",
-    "speech accessibility normalization and one-tap microphone permission provenance",
-    "shared translation service and global language catalog provenance"
+    "bidirectional translation and Interpreter runtime provenance",
+    "Social Core feed, chat, communities, notifications, contact-sync and age-safety/RLS provenance",
+    "first-party Ads Center policy, directory, sales and campaign workflow provenance",
+    "authenticated profile/session middleware and Supabase profile-schema provenance",
+    "incident, health and orchestrator foundation provenance",
+    "personalized navigation and continuity foundation provenance"
   ],
   "hardGaps": [
     "decrypted environment-secret values require authorized CLI/API export or reissue/rotation",
