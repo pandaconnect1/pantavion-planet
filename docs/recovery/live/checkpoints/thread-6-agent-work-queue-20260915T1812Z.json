@@ -1,0 +1,71 @@
+{
+  "schema": "pantavion_thread6_agent_work_queue_checkpoint_v1",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_20260915",
+  "thread": 6,
+  "scope": "AI_AGENT_WORK_QUEUE_EXECUTION_PREPARATION",
+  "observedAtUtc": "2026-09-15T18:12:00Z",
+  "claim": {
+    "path": "docs/recovery/live/claims/THREAD_6.lock",
+    "commit": "c0c9739261829add07213dfd4e099fa99641ce09",
+    "exclusive": true
+  },
+  "workUnitContract": {
+    "path": "docs/recovery/live/agent-work/AGENT_WORK_UNIT_CONTRACT_V1.json",
+    "commit": "c4113d62e639bad6ac4ced5ea68740aa55ccfdfe"
+  },
+  "existingDurablePreparationPlane": {
+    "table": "public.pantavion_founder_execution_intents",
+    "competingQueueCreated": false,
+    "pendingMaterializationObserved": 16,
+    "cancelledObserved": 1,
+    "newRowsInsertedByThread6": 0,
+    "statusChangesByThread6": 0
+  },
+  "provenanceEnrichment": {
+    "pendingRowsEnriched": 16,
+    "cancelledRowsEnriched": 0,
+    "fieldsBoundIntoExistingWorkload": [
+      "protocol",
+      "threadOwner",
+      "preparationState",
+      "noAutoDeploy",
+      "provenanceBinding.canonicalStateId",
+      "provenanceBinding.canonicalContentSha256",
+      "provenanceBinding.canonicalSourceRef",
+      "provenanceBinding.truthState"
+    ],
+    "preparationState": "PROVENANCE_BOUND",
+    "idempotencyRecheckChangedRows": 0,
+    "countInflation": false
+  },
+  "upstreamState": {
+    "thread4ClassificationCommit": "22cd84e9d31b5d5e81377082a21f6c13b363635f",
+    "thread4ClassifiedRecordsInLatestBatch": 19,
+    "thread4ReviewRequiredInLatestBatch": 0,
+    "thread5PreflightCommit": "b9e740399080ac360ee6856e69fee825276f96a4",
+    "thread5RoutingContractCommit": "935b64bdd70e841ccc4c8be69de490b5f25f6d41",
+    "thread5SafeFinalModuleRoutesAtPreflight": 0,
+    "durableRoutedRecordObservedAfterLatestClassification": false
+  },
+  "currentState": "BLOCKED_FOR_DURABLE_THREAD5_ROUTED_INPUT",
+  "blocker": "Thread 6 must not create per-record agent work from classification or routing preflight alone. The Thread 5 routing contract allows downstream consumption only after a durable ROUTED edge, or an explicit provenance-bound REVIEW_REQUIRED route eligible for review work.",
+  "nextEligibleAction": "Consume each newly durable Thread 5 ROUTED record exactly once by deterministic workUnitKey, generate only applicable preparation work types, bind canonical/route/classification/provenance pointers, and leave deployment/release authority outside Thread 6.",
+  "ownershipBoundaries": {
+    "thread5OwnsRouting": true,
+    "thread8OwnsEvidencePlane": true,
+    "thread9OwnsDurableExecutionRuntime": true,
+    "thread6DeploysOrReleases": false
+  },
+  "safety": {
+    "zeroDeletions": true,
+    "zeroDestructiveVercelMutations": true,
+    "secretsRecorded": false,
+    "sourceEvidenceMutated": false,
+    "duplicatePhysicalRecordsCreated": false
+  },
+  "completionTruth": {
+    "thread6Complete": false,
+    "unresolvedTreatedAsComplete": false,
+    "readyOrDeployedTreatedAsVerifiedLive": false
+  }
+}
