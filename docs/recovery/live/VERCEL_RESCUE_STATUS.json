@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-09-15T15:12:40Z",
-  "coordinatorObservedAt": "2026-09-15T15:12:40Z",
+  "updatedAt": "2026-09-15T17:41:00Z",
+  "coordinatorObservedAt": "2026-09-15T17:41:00Z",
   "phase": "EMERGENCY_VERCEL_RESCUE_CANONICAL_INGESTION_AND_EXECUTION",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total and not directly comparable with mirrored deployment counts",
@@ -25,10 +25,10 @@
     "rescue_state": "TERMINAL_VERIFIED"
   },
   "latestBatch": {
-    "records": 219,
     "canonicalRecords": 219,
+    "rehydratedPayloadRecordsPendingF": 400,
     "mirrorRecords": 0,
-    "note": "Lane F has 219 payload-backed canonical records. Lane-A ranges 201-600 remain a 400-record per-record payload gap and are not counted as canonicalized until durable individual payload evidence exists and F deduplicates/binds it."
+    "note": "Lane G has durably rehydrated all 400 formerly summary-only Lane-A records 201-600 with 400 unique deployment IDs and audit PASS. They are preserved per-record but are not counted as canonicalized until Lane F performs idempotent dedup/binding."
   },
   "lanes": {
     "A": {"status": "TERMINAL_CHECKPOINTED", "historyTerminal": true},
@@ -36,24 +36,35 @@
     "C": {"status": "TERMINAL_VERIFIED", "projectsTerminal": "6/6", "deploymentRecords": 73},
     "D": {"status": "BLOCKED_VERCEL_HISTORICAL_RUNTIME_BILLING_LIMIT", "deploymentHistoriesTerminal": "7/7", "historicalRuntimeExportBlocked": true},
     "E": {"status": "BLOCKED_AUTH_EXPORT_WITH_VERIFIED_SECRETLESS_RUNTIME", "projectMetadataCaptured": "15/15", "verifiedEnvNameFloor": 128, "secretValuesCaptured": false, "founderBoundaryLive": true, "secretlessSchedulerLive": true},
-    "F": {"status": "ACTIVE_STALLED_NO_NEW_DURABLE_CANONICAL_ARTIFACT", "canonicalizedRecordsFloor": 219, "sourceRecordsAvailableFloor": 3679, "laneARunPayloadGap": 400},
-    "G": {"status": "ACTIVE_REASSIGNED_GAP_RECOVERY_NO_SHARD_YET", "scope": "Lane-A records 201-600 only", "gapRecords": 400, "shardPresent": false, "dedupKey": "projectId:deploymentId"},
-    "H": {"status": "TERMINAL_VERIFIED_HISTORICAL_CLASSIFICATION_NEEDS_RUNTIME_REFRESH", "historicalRuntimeFailurePreserved": true},
+    "F": {"status": "ACTIVE_STALLED_PENDING_G_INGEST_AND_GLOBAL_DEDUP", "canonicalizedRecordsFloor": 219, "sourceRecordsAvailableFloor": 3679, "rehydratedRecordsAwaitingCanonicalization": 400},
+    "G": {"status": "TERMINAL_VERIFIED_REHYDRATED", "scope": "Lane-A records 201-600 only", "rehydratedRecords": 400, "uniqueDeploymentIds": 400, "duplicateDeploymentIds": 0, "audit": "PASS", "dedupKey": "projectId:deploymentId", "shard": "docs/recovery/live/shards/lane-g-20260915-rehydrated-terminal.json"},
+    "H": {"status": "TERMINAL_VERIFIED_RUNTIME_REFRESHED", "historicalRuntimeFailurePreserved": true, "currentSchedulerHealthy": true},
     "I": {"status": "TERMINAL_VERIFIED_WITH_EXPLICIT_GAPS", "projectsClassified": "4/4", "historicallyEmptyProven": 0},
     "J": {"status": "ACTIVE_PARTIAL", "moduleClassificationPresent": true, "unsupportedModulesRemainReviewRequired": true},
-    "K": {"status": "ACTIVE_PARTIAL_STALE_PRE_J", "founderFeedRefreshRequired": true},
-    "L": {"status": "ACTIVE_GAPS_FOUND_STALE_PRE_J", "auditRefreshRequired": true}
+    "K": {"status": "ACTIVE_PARTIAL_STALE_PRE_J_G_RUNTIME", "founderFeedRefreshRequired": true},
+    "L": {"status": "ACTIVE_GAPS_FOUND_STALE_PRE_G_RUNTIME", "auditRefreshRequired": true}
   },
   "canonicalIngestion": {
     "lane": "F",
-    "status": "ACTIVE_PARTIAL",
+    "status": "ACTIVE_PARTIAL_STALLED",
     "canonicalizedRecordsFloor": 219,
     "sourceRecordsAvailableFloor": 3679,
     "laneARunCaptured": 619,
     "laneARunPayloadBackedCanonicalized": 219,
-    "laneARunSummaryOnlyPayloadGap": 400,
-    "gapRecoveryOwner": "G/coordinator reassignment",
-    "gapRecoveryLock": "docs/recovery/live/claims/COORDINATOR_GAP_A_201_600.lock",
+    "laneARunRehydratedPayloadBackedPendingCanonicalization": 400,
+    "laneARunPayloadPreservationGap": 0,
+    "gRehydrationAudit": {
+      "status": "PASS",
+      "rehydratedRecords": 400,
+      "uniqueDeploymentIds": 400,
+      "duplicateDeploymentIds": 0,
+      "artifact": "docs/recovery/live/shards/lane-g-20260915-rehydrated-terminal.json"
+    },
+    "remaining": [
+      "Lane F must idempotently deduplicate and canonicalize the 400 G-rehydrated records by projectId:deploymentId.",
+      "Lane F must ingest/deduplicate payload-backed Lane B/C/D histories and earlier durable recovery batches.",
+      "Lane J/K/L must consume the resulting canonical evidence and refresh their outputs."
+    ],
     "completionRule": "CAPTURED -> CLASSIFIED -> CANONICALIZED -> GITHUB_EVIDENCE_BOUND -> PANTAVION_FOUNDER_FEED_BOUND -> VERIFIED_OR_EXPLICIT_GAP"
   },
   "liveProduction": {
@@ -61,42 +72,35 @@
     "apexRedirect": "pantavion.com -> www.pantavion.com",
     "authoritativeProject": "pantavion-planet",
     "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
-    "deploymentId": "dpl_78oz9uKZpyJxy97QGWdZbkTVXA5B",
+    "deploymentId": "dpl_6NLyCMTnyzvi481Xz4UAQHrE2PHj",
     "gitRef": "main",
-    "gitSha": "585a0a79372ff7fea5ee75d96cfec2445a6191ec",
-    "gitMessage": "docs: preserve live atomic recovery partition RPC SQL",
+    "gitSha": "170ffb3b9e5c48313d08fb6e27ecafb715bfec90",
+    "gitMessage": "feat: add GitHub OIDC recovery partition executor",
     "state": "READY",
     "target": "production",
     "founderRecoveryRoute": {
       "route": "/admin/pantavion/recovery",
-      "httpStatus": 200,
+      "httpStatusLastDirectCheck": 200,
       "renderedBoundary": "Founder Access Required",
       "liveTruth": "VERIFIED_LIVE_ACCESS_BOUNDARY_ONLY",
       "authenticatedFounderFeedVerified": false
     }
   },
   "productionRuntime": {
-    "status": "SECRETLESS_SCHEDULER_HEALTHY_EXECUTION_VERIFIED",
-    "revision": "585a0a79372ff7fea5ee75d96cfec2445a6191ec",
+    "status": "SECRETLESS_SCHEDULER_HEALTHY_EXECUTION_VERIFIED_RECOVERY_ACTIVE",
+    "revision": "170ffb3b9e5c48313d08fb6e27ecafb715bfec90",
     "transport": "vercel_oidc_to_supabase_edge",
     "secretless": true,
-    "oidcTrust": {
-      "route": "/api/pantavion/intelligence/oidc-supabase-trust",
-      "httpStatus": 200,
-      "status": "verified",
-      "trust": "vercel_oidc_verified_by_supabase",
-      "privilegedDataAccess": false
-    },
     "schedulerHealth": {
       "route": "/api/pantavion/intelligence/scheduler-health",
       "httpStatus": 200,
       "status": "healthy",
       "schedule": "*/5 * * * *",
       "executionVerified": true,
-      "workerTotalRuns": 11,
+      "workerTotalRuns": 40,
       "workerLastStatus": "succeeded",
-      "workerLastRunKey": "pantavion-intelligence-5m:2026-09-15T15:10",
-      "workerLastFinishedAt": "2026-09-15T15:10:42.090354+00:00"
+      "workerLastRunKey": "pantavion-intelligence-5m:2026-09-15T17:35",
+      "workerLastFinishedAt": "2026-09-15T17:35:41.70818+00:00"
     },
     "recoveryPartitions": {
       "taskName": "pantavion:recovery_partition:v1",
@@ -111,9 +115,8 @@
     "historicalCredentialFailure": {
       "preserved": true,
       "errorGroup": "pantavion_secure_scheduled_worker_failed",
-      "rolling7dObservedCountAt1510Z": 1998,
       "lastSeen": "2026-09-15T13:40:38Z",
-      "truth": "Historical failures remain in the rolling window but no cron runtime errors were found in the directly queried last 30 minutes."
+      "truth": "Historical failures remain preserved, but direct current checks show healthy scheduler execution and no cron errors in the queried last 30 minutes."
     },
     "liveTruth": "SCHEDULER_EXECUTION_VERIFIED_RECOVERY_PARTITIONS_ACTIVE_NOT_COMPLETE"
   },
@@ -121,7 +124,6 @@
     "mode": "PARALLEL_A_TO_L_ALL_CLAIMED_VERIFY_COORDINATE",
     "claimedLocks": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
     "availableAdditionalLanes": [],
-    "coordinatorGapLock": "COORDINATOR_GAP_A_201_600.lock",
     "vercelProjectInventoryVerified": true,
     "vercelProjectCount": 15,
     "deepPaginationDuplicated": false,
@@ -130,22 +132,20 @@
     "secretValuesRecorded": false
   },
   "recentEvidence": [
-    "Direct Vercel verification at 2026-09-15T15:12Z resolved www.pantavion.com to production deployment dpl_78oz9uKZpyJxy97QGWdZbkTVXA5B / git SHA 585a0a79372ff7fea5ee75d96cfec2445a6191ec.",
-    "Direct Vercel fetch of /admin/pantavion/recovery returned HTTP 200 and rendered Founder Access Required; the protected route boundary is live, but authenticated founder-feed access is not yet proven by this runtime.",
-    "Direct Vercel fetch of /api/pantavion/intelligence/oidc-supabase-trust returned HTTP 200, status verified and vercel_oidc_verified_by_supabase.",
-    "Direct Vercel fetch of /api/pantavion/intelligence/scheduler-health returned healthy with executionVerified=true, 11 worker runs and lastStatus=succeeded.",
-    "Recovery partition materialization is now visible: 165 total/active, 0 succeeded, 0 failed. This is real execution progress but not recovery completion.",
-    "Direct Vercel runtime-error query found zero cron errors in the last 30 minutes; earlier missing-admin-key failures remain historical evidence.",
-    "Lane J v2 consumes Lane I evidence; Lane K and L remain stale relative to current J/runtime truth.",
-    "Lane G still has no shard and Lane F canonicalized floor remains 219; no recovery count inflation was performed."
+    "Lane G is TERMINAL_VERIFIED_REHYDRATED: all 400 formerly summary-only Lane-A records 201-600 are durably GitHub-bound with 400 unique deployment IDs, zero duplicate deployment IDs, zero private fields and audit PASS.",
+    "Lane G closes the per-record payload preservation gap but does not itself raise the canonicalized floor; Lane F still owns idempotent dedup/canonicalization.",
+    "Direct Vercel production lookup at 2026-09-15T17:40Z resolves www.pantavion.com to dpl_6NLyCMTnyzvi481Xz4UAQHrE2PHj / SHA 170ffb3b9e5c48313d08fb6e27ecafb715bfec90.",
+    "Direct scheduler-health at 2026-09-15T17:40Z is healthy with executionVerified=true and 40 successful worker runs; recovery remains 165 active, 0 succeeded, 0 failed.",
+    "Direct cron runtime-error query found no errors in the selected last 30 minutes.",
+    "Lane K remains stale pre-J/G/runtime and Lane L remains stale relative to G terminal rehydration and current runtime truth."
   ],
   "hardGaps": [
-    "Lane A ranges 201-600 still lack durable individual deployment record payloads; 400 records remain open.",
-    "Lane F still must idempotently canonicalize/deduplicate payload-backed B/C/D histories, earlier durable batches and any future G gap payloads before canonical completion can rise.",
-    "All 165 recovery partitions are currently active with 0 succeeded and 0 failed; full recovery-partition completion is not verified.",
-    "Lane J remains partial; unsupported modules remain review-required until direct evidence is bound.",
-    "Lane K founder feed and Lane L audit are stale and must consume current J and current secretless runtime evidence.",
-    "Authenticated founder access to the recovery feed has not been directly verified from this runtime; only the public protected access boundary is verified live.",
+    "Lane F has not yet canonicalized/deduplicated the 400 G-rehydrated per-record payloads; canonicalized floor therefore remains 219.",
+    "Lane F still must canonicalize/deduplicate payload-backed B/C/D histories and earlier durable recovery batches before canonical completion can rise toward the source floor.",
+    "All 165 recovery partitions remain active with 0 succeeded and 0 failed; full recovery-partition completion is not verified.",
+    "Lane J remains partial and must consume new canonical evidence after F ingestion.",
+    "Lane K founder feed and Lane L audit remain stale relative to current G/runtime evidence.",
+    "Authenticated founder access to the recovery feed has not been directly verified; only the protected access boundary is verified live.",
     "Authenticated Vercel secret-value inventory/decryption is not exposed by the current connected tool surface; values must remain private.",
     "Complete deployment filesystem/build-output export is not available through the current connected Vercel tool surface.",
     "Lane D historical runtime log retrieval remains blocked by Vercel billing/retention limits; this is not evidence that historical logs are absent."
@@ -153,10 +153,10 @@
   "rules": [
     "zero deletions",
     "zero direct Vercel mutations during emergency rescue",
-    "READY or production is deployment/build evidence, not automatically VERIFIED_LIVE",
+    "READY or production is deployment/build evidence, not automatically module VERIFIED_LIVE",
     "no secret values in public GitHub or chat",
     "terminal deployment history requires explicit count=0/no older records",
-    "summary-only checkpoints are not per-record preservation and are not counted as canonicalized",
+    "rehydrated payload preservation is not canonicalization until F deduplicates/binds records",
     "deduplicate by projectId:deploymentId before canonical counts rise",
     "historical runtime failures must not be presented as current failures after direct healthy runtime evidence supersedes them",
     "recovery execution is not complete until partitions reach terminal outcomes and downstream canonical/feed/audit states are reconciled"
