@@ -1,0 +1,51 @@
+{
+  "capturedAt": "2026-09-15T14:00:00Z",
+  "lane": "A",
+  "project": "pantavion-planet",
+  "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+  "teamId": "team_tGNSGGjcV3VNecscMvaAniGY",
+  "fromCursorExclusive": 1776883214626,
+  "lastNonEmptyNextCursor": 1775918227754,
+  "recordCount": 19,
+  "lastNonEmptyPageCount": 19,
+  "terminalProbe": {
+    "until": 1775918227754,
+    "count": 0,
+    "deployments": []
+  },
+  "terminal": true,
+  "rescue_state": "TERMINAL_CHECKPOINTED",
+  "live_truth": "HISTORICAL_ONLY",
+  "privacy": "PUBLIC_SAFE",
+  "source_surface": "Vercel list_deployments",
+  "sanitized": true,
+  "secretValuesIncluded": false,
+  "schema": ["deployment_id","created_at","state","target","git_sha","git_ref","git_message"],
+  "records": [
+    ["dpl_HEeTimYBMiiyRyRa9oWPyjEmey3t",1776881920982,"READY","production","c67f9aa71ea2769e0eb150a8d9e1e2675accfd2f","kernel-canonicalization-20260411-200129","Fix multimodal channel typing in kernel"],
+    ["dpl_CuUS4wpk3gAZmSsA1hpK8wyjBu1s",1775979739581,"READY",null,"c67f9aa71ea2769e0eb150a8d9e1e2675accfd2f","kernel-canonicalization-20260411-200129","Fix multimodal channel typing in kernel"],
+    ["dpl_DXYJrSQftYk5vneRcRwqi1mcw7Sx",1775978618292,"READY",null,"7514e24a9375f75c0fa59c917fc81c879560c189","kernel-canonicalization-20260411-200129","Deepen kernel retrieval and routing flow"],
+    ["dpl_Fk6HdFGfBz8WVoaGy9ymvEhbTNYh",1775977108265,"READY",null,"135428b5dca1fb004319fbd314e25ab29fb16165","kernel-canonicalization-20260411-200129","Add memory-aware kernel orchestration flow"],
+    ["dpl_AMyo3UKZLd9Hb4P6rNuYKM58uKiV",1775976311402,"READY",null,"7cb3ee72cfa5d21c1b3eccaca164dafaacb167e9","kernel-canonicalization-20260411-200129","Isolate legacy store persistence path"],
+    ["dpl_5Z5GYq4ecYh8tbYoD29S9qTcnWoi",1775976047959,"READY",null,"e16333aca6c6a17b4cf90137c13d654cd536d96c","kernel-canonicalization-20260411-200129","Tighten memory store dependency boundary"],
+    ["dpl_476WTfNoFZ5GhT3umYvBfZFDZnMX",1775974184858,"READY",null,"fd0deb42613608d85342fed96f65bfd6ad9a765f","kernel-canonicalization-20260411-200129","Align kernel routes with canonical runtime access"],
+    ["dpl_GBWgmMVgGMoUjN3eFgo722ufht4N",1775973745528,"READY",null,"f6be9c9c89b9bb2e48f9235ee82390f17a28c0db","kernel-canonicalization-20260411-200129","Add canonical runtime export bridge"],
+    ["dpl_8EiUHoLLaKDL8gttUEMAA8psed8i",1775935194766,"READY",null,"b836dc510baf44f40548d2056a49f08082c51fc4","kernel-canonicalization-20260411-200129","Add canonical kernel runtime composition layer"],
+    ["dpl_3Smc1qdVujaXGNdfwUaBgYQ2WeGc",1775931807643,"READY",null,"0b4dd01cffb1e7a48b292b66ab9a4d69870561c6","kernel-canonicalization-20260411-200129","Fix canonical memory audit entry compatibility"],
+    ["dpl_48MLp77LtGD8A1WuTgYGE24KyqkM",1775929155027,"READY",null,"3ff9681683e1add38080dadcb90bd11f6edc0d2d","kernel-canonicalization-20260411-200129","Patch 6 align kernel store with canonical compatibility bridge"],
+    ["dpl_GnzJUQiEkEnFGeCSFyr8cm9jzHp3",1775928076457,"READY",null,"f594eca46cb64dcd6258b47babee1a7390ac2c73","kernel-canonicalization-20260411-200129","Patch 5 add canonical store layer"],
+    ["dpl_9xcACYCAw6n3EYdquhKG28JZyYSQ",1775927887241,"READY",null,"26dc5c80a05ade85d7a9da1340353b3e3b682e7e","kernel-canonicalization-20260411-200129","Patch 4 align kernel audit with canonical compatibility bridge"],
+    ["dpl_75Po8F5JoG97jtweeUxQUxYXbsdS",1775927668380,"READY",null,"85f00e786a0fda603f33c5224b11533bc9441400","kernel-canonicalization-20260411-200129","Patch 3 align kernel types with canonical compatibility bridge"],
+    ["dpl_B6ur6U6JzR9Sswg9SUucP8qSFTLm",1775927456948,"READY",null,"3ee79d6240f557744cd5dbf1efa4417733ee4069","kernel-canonicalization-20260411-200129","Patch 2 add canonical audit layer"],
+    ["dpl_8tnSgJMjE9riBC6inGiaX23PvgCP",1775927283276,"READY",null,"f330f22551b026f9cd0a639be81e5e6f607583c2","kernel-canonicalization-20260411-200129","Patch 1 add canonical shared types foundation"],
+    ["dpl_4X5tLzXUijoush97o4D5T7kqEkbb",1775926934994,"READY",null,"a910e011c49051dd51daf62596c9ae41080aacab","kernel-canonicalization-20260411-200129","Create kernel canonicalization baseline inventory"],
+    ["dpl_8NKBFrGghec1cENP6itaqRstizMN",1775926621840,"READY",null,"ac092b514451269df4d614a840a374bdfc5f45b5","phase-c-ui-port-20260411-194906","Phase C port clean UI module shells into pantavion-planet"],
+    ["dpl_E2bVPTBgBkqHWLCMSgaYBsN97MGq",1775918227754,"READY","production","6ef6398bf219de227cb3ba1bce536a485b95a54f","main","Fix tsconfig and memory compatibility build blockers"]
+  ],
+  "notes": [
+    "The immediately following pagination request at until=1775918227754 returned count=0 and an empty deployment array; this is the explicit terminal proof required by the rescue command.",
+    "No Vercel mutation or deletion was performed.",
+    "No creator identity/email or secret values are copied into this public checkpoint.",
+    "READY or production remains historical deployment evidence and is not classified as VERIFIED_LIVE."
+  ]
+}
