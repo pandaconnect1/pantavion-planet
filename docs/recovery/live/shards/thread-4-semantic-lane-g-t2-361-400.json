@@ -1,0 +1,32 @@
+{
+  "schema":"pantavion_semantic_classification_v1_compact","protocol":"PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15","thread":4,"scope":"AI_SEMANTIC_CLASSIFICATION_SWARM","generatedAtUtc":"2026-09-15T18:56:00Z",
+  "canonicalInput":{"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-361-400.json","blobSha":"d0cff6e68e4d963cbca48b27aebc0d005f63d227","canonicalRecordCount":21,"ownerThread":2,"ownershipBuckets":[0,1,2,3,4]},
+  "sourceEvidence":[{"path":"docs/recovery/live/batches/lane-g-20260915-361-380-rehydrated.json","blobSha":"3b8f9e4c0372ed9125e81cd766ec97c888afa461"},{"path":"docs/recovery/live/batches/lane-g-20260915-381-400-rehydrated.json","blobSha":"878e7949d3a6f332942ba3834437a2ea92727857"}],
+  "evidenceLimitation":"Source rows contain only main gitRef/gitSha and no semantic message. Exact classification cannot be supported from preserved evidence alone.",
+  "rules":{"classificationOnly":true,"canonicalCountDelta":0,"sourceEvidenceMutated":false,"routingPerformed":false,"unsupportedSemanticsGuessed":false},
+  "profile":{"theme":"REVIEW_REQUIRED","section":"REVIEW_REQUIRED","type":"deployment_provenance","module":"REVIEW_REQUIRED","subsystem":"REVIEW_REQUIRED","capability":"REVIEW_REQUIRED","feature":"REVIEW_REQUIRED","canonicalTarget":"REVIEW_REQUIRED","confidence":0.0,"reviewRequired":true},
+  "records":[
+    ["50de5bed430a65cc20bfb869c1155b4737efd4e2d3614d099090b510d0f1fe65","dpl_GmremHH9NxoZSbiPD2duUAhKQSwc",361,"c53dfd79950ad115e6ddb5389c9dbbe845bb564c","READY"],
+    ["809ce43db30065b6fee511f6affc50e4127fb9f214d648bf6e3ff02fd66646a9","dpl_A5FZRn2U4Gsp5Es6Soh85bnaBNGs",363,"792467801427685d6478d9d79fccdb8b8e1b85ca","READY"],
+    ["1c3a56237899dd6bf88444ea56ecb8aafe7e75d06b61daf94e3c151b19950a38","dpl_HwARS54RQsRRQiHezAgtniTJb8HX",364,"a5f58e3e3c59e7bf51a4fde1517b56326a0ea5c0","READY"],
+    ["7b2bd511ca098be37c6665d66641f96b9ca6a765aa3cb484f44afa069dcae813","dpl_GdVRTZBH7oGEF289rNUGpyM5iZga",368,"3d258aa5fd57adc663a369851e279890785efa6e","READY"],
+    ["956f31192881cdb7d5067e3505cdffd96600113321e7addd52e41a4682c9348e","dpl_GbVQwvKC68C6JJ4nvCLXfAdf9x2o",371,"0475b8d81bf5794a888a305b5654097226b2fb1f","READY"],
+    ["18d3d208806eec01b7c4c9b4a552dd70f301fa652678dbece180db40b0f7b572","dpl_CXmirBSvAtxVZ33cxGmnNFkHhmS5",372,"20bada32331fb6c96cbc00d2d74f0fdd072d9bef","READY"],
+    ["9bd03fc9424c8f6298884b811f236a24ae67379625464e6093c135389b2d1b0a","dpl_8T11Lna7iF2XgN9urYb2pvPoPctm",373,"34945b5ab317aed04cc9816085d5ca64a3c9763f","READY"],
+    ["67ec9061ac1ca12cff595d206db301a00669b69fa1eab16016e36a3e36d98f08","dpl_6ogjWGJcuqWtFXLF2tRtPTuHQ8SW",376,"1e6c8c1ae45df015088cbb956fe2b389aaed30c4","READY"],
+    ["3f993d31cc9d8f00d76eee264bfee3076d89d9dd1d84c1e38d667dfd8e5a252d","dpl_4z68HNEPSx6PTujJYhWebSZyuvLs",380,"ed961036cb58807c7b71648501ceded8d9314b0f","READY"],
+    ["1d3bb3ee57a76bff016ca4de289a16980593dde69347eefe6f7b302ffb27e8ac","dpl_4szuXumVAWpRmCevCmkcAektqqkw",383,"fc63f35418f7142159b03a73630b4462933d070f","READY"],
+    ["3f490e33f060b3879a56b227a1a859cadb152820a561567bd5de0e0b3adc4c6f","dpl_5i1RxQcDqkRh5uhkwWaCGoSM4dMW",385,"3ec0a32c9d303bafb99a6ccd164c607dfed82fdd","READY"],
+    ["80db8f62125a2bcec54ea93d11c0e5d3fd9d6ab000f2338648f26fb0a3f5f25a","dpl_48bqPAhZoa7NSemeF69SjPkAu64G",387,"9caea059659e151721e0c8815e7593e5ed581628","READY"],
+    ["007ea61d85ea70643c7e7d4ab82d94adf8879757ed20646603c8bec5290b219f","dpl_7rDuPLiYek5yWwzhjCmf6vuCFjLf",388,"0ffb5c11b477ca894086cb2ff12b5d73ff2b87db","READY"],
+    ["11655521f6bb7e1773f818231f8c79dcf48293504c6e6ebce9fb4d882fa879cb","dpl_FHrCKCNFbQWMtdFCP4PPmRhWhVNW",389,"84436e7a304fff91340586df09c070e1959878be","READY"],
+    ["96eaf99d18844a28c3b346fc5f7cfa364cbfa28dd5215506dc747bf2cdb6a784","dpl_FU8VLHgBdjrZp2d9oiayL9Vnts8F",390,"1579fc203644a7102ad9d024a9b8705c4ea1ed73","READY"],
+    ["00b3c02f6834c6d1384f459f2a366064b9f542b9c6f6c30d310ffc36f190f3c3","dpl_CHCNLnmf7RRtu8VSmczuEPzWp5ys",391,"f5ae14d8c33ce8fdbae3534b776924004c9ada42","READY"],
+    ["a6ba130e524d332103e0642841154af882e033f2d5fb45bac64312b8c26a17f8","dpl_8f4JPX2a7HBKjhzHbUgZ79Qc3mMU",392,"5774c84cc69d9d971cca9818a710c2ccd9bdbdd3","READY"],
+    ["12af18bb1cd4ba14151addaaeb712fdd0f7343fe6bb856070ed474a9e1f4bd91","dpl_ERGX2SLtZwDhWaz1rvYkieVnK8p7",395,"3e7246b2392d5efd4c7847ad4c75d57ab714d3ed","READY"],
+    ["4626e967b91644d0ec1971e7fe9a5110a33f807382025a925fb09ec27a9d987e","dpl_F3k1XFtxafURtXVNgL7gtERkVX5R",396,"8c2312a3dd07bc01301f2406fa4e664e6d3782ff","READY"],
+    ["3416d7528f92cdb707348eca448bfd9354b2466c955a366bdf1baaba132e2bd3","dpl_Eh8D3gGfMmBhogx7A5EMMrKvCUoQ",398,"2630ef01ecca06f0e2211625615129acbd153dff","READY"],
+    ["853a8ada4f531551791a20cb916e6ab8afa98b690d5ee6fc08f2342affec52a8","dpl_FZp2tn3ZiKdkt3P2AxtCmGtCknBJ",400,"4358b8ce5cfb2ec82ea01da6d9dbeab23625e901","READY"]
+  ],
+  "recordTuple":"[stableRecordKeySha256,deploymentId,laneARecordOrdinal,gitSha,state]","summary":{"classified":21,"reviewRequired":21,"canonicalCountDelta":0},"status":"DURABLE_CLASSIFIED_WITH_REVIEW_HOLDS"
+}
