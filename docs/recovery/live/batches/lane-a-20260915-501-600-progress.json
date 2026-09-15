@@ -1,0 +1,26 @@
+{
+  "capturedAt": "2026-09-15T13:55:00Z",
+  "lane": "A",
+  "project": "pantavion-planet",
+  "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+  "teamId": "team_tGNSGGjcV3VNecscMvaAniGY",
+  "fromCursorExclusive": 1778033520555,
+  "nextCursor": 1776883214626,
+  "pagesTraversed": 5,
+  "recordCount": 100,
+  "pageCounts": [20,20,20,20,20],
+  "terminal": false,
+  "rescue_state": "CURSOR_CHECKPOINTED",
+  "live_truth": "HISTORICAL_ONLY",
+  "privacy": "PUBLIC_SAFE",
+  "source_surface": "Vercel list_deployments",
+  "sanitized": true,
+  "secretValuesIncluded": false,
+  "notes": [
+    "Read-only canonical Lane A traversal; no Vercel mutations.",
+    "Successful, failed, production, and preview deployment records are preserved as provenance.",
+    "Creator identity/email and secret-bearing values are intentionally not copied into this public checkpoint.",
+    "READY or production is not VERIFIED_LIVE.",
+    "Continue from nextCursor until an explicit zero-record page/no older records."
+  ]
+}
