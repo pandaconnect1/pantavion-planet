@@ -1,0 +1,40 @@
+{
+  "capturedAt": "2026-09-15T14:44:00Z",
+  "sanitized": true,
+  "secretValuesIncluded": false,
+  "records": 20,
+  "canonical": {
+    "fromCursorExclusive": 1786126296277,
+    "nextCursor": 1786114253027,
+    "terminal": false,
+    "records": [
+      ["dpl_EznqjLGBkopodpXc93thRyYwWdMU",1786126220171,"READY","81f197d5d83134d02b86c1126d192b72ef217489"],
+      ["dpl_DwRBA3FrCFc7zE7TB1cEZs83kufi",1786126205212,"READY","b6668a1d29255678b85908b00fbd4067bda39820"],
+      ["dpl_5k2L1EFaXvB39vjHny3UxkcMX3Sn",1786126153619,"READY","e7f964228cf1f19daf0515e12d534d8a9e7fe211"],
+      ["dpl_43VzVYpt6EhJyUH1Rf4n9BGyakWA",1786125812327,"READY","5cf7bc9142827733d3e8b99a2612f449abec1563"],
+      ["dpl_9Bbcf3WMoZEvkdtGxn27yWhWKbBq",1786125447291,"READY","473d5f61c83f1d2ee0518b2d7c1b31cc9040c095"],
+      ["dpl_2sFUGQagyiJ2EYcDvznuy5pLyfvy",1786125375716,"READY","1a5b74922ad554802b4c96761c68596309865fb9"],
+      ["dpl_c3kKePUHsGGZ35NhsgVZgvSsJaYJ",1786125343627,"READY","22791e45734421820e496e35f751006ff1ad7907"],
+      ["dpl_C7iZqkbUR7Uds841hrb1NpHcr26B",1786125307190,"READY","adc33dd3f5014ea4f496d367f78027b004619a5d"],
+      ["dpl_6ZPL84GaUyDEmHMioiVBgXx1xxm5",1786125283432,"READY","039ce755d6e74c33d50abc89d3779b6dd71f96f7"],
+      ["dpl_71haj4rEACc49FoJzY1wWzi35igc",1786125154454,"READY","e160512f9036f83ee8f151c37e933c527184dd07"],
+      ["dpl_D5bmrSF5wGppvPbacE6zpn2P5F2s",1786115139317,"READY","1a097939c43ac4717afa933055fa94fd579af969"],
+      ["dpl_CsirEsk6Xj76G2mprdK5NMCSZoWT",1786115114592,"READY","6476a3275944a98685060b754b93a874fb7b7306"],
+      ["dpl_JBWWdLUtU11vaDJdfTmi57vRuFSr",1786114974892,"READY","73d13a72203aec56bddf48c7e706631e4246823d"],
+      ["dpl_Ek1q3PmFxxM8DLAhkoLfGpDfwL85",1786114736220,"READY","881cca8e8aa2319e08ffda5d766c30db8b61b5eb"],
+      ["dpl_4H27eyccvBgwagWGvJzVdoiwnQJk",1786114725870,"READY","841ec3d137e58152463e9aa446318b7a930593fb"],
+      ["dpl_DpaikQ5qXm8pzP26rx4FYE5e5LAh",1786114715494,"READY","a782002974c712142ee4cb632e64f511c6e3884c"],
+      ["dpl_2TALxmhW7VkHgju65bv1xhbWJ5dw",1786114699697,"READY","007b56445b194cf3e2d1c1ae52b4e4daab16dbc9"],
+      ["dpl_6VfbvRYiWELscK4KkA4NVBEAYx2U",1786114677077,"READY","e5ec18e68842b36738978a7db270b7df8e4510cd"],
+      ["dpl_3KXMBBRAH6fy6pPTkT3DAZ2DZeMm",1786114279867,"READY","6476a82693881f30dca4f1d213b4e6acc3a39d22"],
+      ["dpl_7ZxPWDShE5MxK3vwyWjoEXTc4UCB",1786114253027,"READY","43f75654702b00613b0504f2c956fdf71e216b98"]
+    ]
+  },
+  "mirror": {"terminal": true,"records":[]},
+  "tupleSchema": ["deploymentId","created","state","githubCommitSha"],
+  "notes": [
+    "Evidence includes Social Core runtime, live text translation, consent-first contacts, Ads directory and production real-features-only provenance.",
+    "Creator identity/email and secret-bearing fields are excluded.",
+    "Canonical pagination remains non-terminal."
+  ]
+}
