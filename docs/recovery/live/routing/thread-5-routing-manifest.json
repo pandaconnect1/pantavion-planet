@@ -5,7 +5,7 @@
   "contract": "docs/recovery/live/routing/MODULE_GRAPH_ROUTING_CONTRACT_V1.json",
   "canonicalIndex": {
     "artifactDirectory": "docs/recovery/live/canonical",
-    "uniqueStableRecordKeys": 489,
+    "uniqueStableRecordKeys": 490,
     "ambiguousStableRecordKeys": 3
   },
   "entries": [
