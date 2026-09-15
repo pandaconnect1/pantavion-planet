@@ -1,0 +1,173 @@
+{
+  "schema": "pantavion_thread8_parallel_output_receipt_v1",
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_20260915",
+  "thread": 8,
+  "scope": "GITHUB_EVIDENCE_DURABILITY",
+  "observedAtUtc": "2026-09-15T18:15:07.871350Z",
+  "recoveryBranch": "backup/pre-vercel-risk-20260914",
+  "branchHeadObserved": {
+    "commitSha": "dcb27718da20970b6a504a1269196dd733cb1338",
+    "treeSha": "7d65ed2c9f83237aded30b86cfb5fbeeeef1d0ad",
+    "message": "recovery: add deterministic Thread 5 classification router"
+  },
+  "truthRules": {
+    "activityEvidenceIsNotCompletion": true,
+    "commitMessageAloneDoesNotRaiseCounts": true,
+    "readyOrDeployedIsNotVerifiedLive": true,
+    "preflightIsNotRouted": true,
+    "routerCodePresentIsNotRouterExecution": true,
+    "blockedIsNotComplete": true,
+    "noDatasetConflation": true
+  },
+  "boundOutputs": [
+    {
+      "ownerThread": 2,
+      "scope": "CANONICAL_BUCKETS_0_4",
+      "commitSha": "c8ceb6ac8355539360efd8d219fbc882e91841b2",
+      "treeSha": "76725789e4713d38b95c261cf25635b58a30471d",
+      "artifact": {
+        "path": "docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-321-360.json",
+        "gitBlobSha": "ca3918bfe10d17a31a5c9716f76f6cc683e654b8"
+      },
+      "inspectedTruth": {
+        "sourceRecordCount": 40,
+        "canonicalRecordCountThread2": 19,
+        "skippedOutsideOwnership": 21,
+        "duplicateStableKeysWithinOutput": 0,
+        "ownershipBuckets": [0,1,2,3,4]
+      },
+      "completionAssertion": "PARTIAL_BATCH_ONLY"
+    },
+    {
+      "ownerThread": 3,
+      "scope": "CANONICAL_BUCKETS_5_9",
+      "commitSha": "0029a4351cdd14121ad0a7c46a84b3b8c77ce6f2",
+      "treeSha": "1a1e183859d68a7f99e3c15cd639e64b08b98ff3",
+      "commitMessage": "recovery: canonicalize Thread 3 G buckets 5-9",
+      "inspectionLevel": "COMMIT_TREE_BOUND_NO_AGGREGATE_COUNT_ASSERTED",
+      "completionAssertion": "PARTIAL_BATCH_ONLY"
+    },
+    {
+      "ownerThread": 3,
+      "scope": "CANONICAL_BUCKETS_5_9",
+      "commitSha": "f878127b83ed48bf4c86d4772a39b51f0c73b6a5",
+      "treeSha": "ce6cdac7ca3e7df0113c3d762934f329530fa895",
+      "commitMessage": "recovery: canonicalize Thread 3 B D buckets 5-9",
+      "inspectedArtifactExample": {
+        "path": "docs/recovery/live/canonical/thread3-bd-bucket-5.json",
+        "gitBlobSha": "266050a47fd254d50ac3562f26e26776e4746fb7",
+        "ownedBucket": 5,
+        "recordCount": 6
+      },
+      "inspectionLevel": "MULTI_FILE_COMMIT_TREE_BOUND_AGGREGATE_COUNT_NOT_ASSERTED",
+      "completionAssertion": "PARTIAL_BATCH_ONLY"
+    },
+    {
+      "ownerThread": 4,
+      "scope": "AI_SEMANTIC_CLASSIFICATION",
+      "commitSha": "22cd84e9d31b5d5e81377082a21f6c13b363635f",
+      "treeSha": "adec7f15d7805ccd0bc07c4256be5cf088ba914e",
+      "artifact": {
+        "path": "docs/recovery/live/shards/thread-4-semantic-601-619.json",
+        "gitBlobSha": "4044403179cf2d55391195fdeff4ef2626d9d1d7"
+      },
+      "inspectedTruth": {
+        "status": "PARTIAL_DURABLE_BATCH",
+        "classifiedRecords": 19,
+        "reviewRequired": 0,
+        "canonicalCountDelta": 0,
+        "classificationOnly": true,
+        "routingPerformed": false
+      },
+      "completionAssertion": "PARTIAL_BATCH_ONLY"
+    },
+    {
+      "ownerThread": 5,
+      "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
+      "commitSha": "b9e740399080ac360ee6856e69fee825276f96a4",
+      "treeSha": "33bf2b1baf113acb02694620cabd3e54b3359911",
+      "artifact": {
+        "path": "docs/recovery/live/routing/THREAD_5_ROUTING_PREFLIGHT_20260915.json",
+        "gitBlobSha": "7d13a052da8f5d9dbc37f2644523e378dbc5e993"
+      },
+      "inspectedTruth": {
+        "status": "ACTIVE_WAITING_RECORD_LEVEL_CANONICAL_AND_CLASSIFICATION_BINDINGS",
+        "safeFinalModuleRoutesWritten": 0,
+        "preflightCountedAsRouted": false
+      },
+      "completionAssertion": "PREFLIGHT_NOT_ROUTED"
+    },
+    {
+      "ownerThread": 5,
+      "scope": "MODULE_KNOWLEDGE_GRAPH_ROUTING",
+      "commitSha": "dcb27718da20970b6a504a1269196dd733cb1338",
+      "treeSha": "7d65ed2c9f83237aded30b86cfb5fbeeeef1d0ad",
+      "artifact": {
+        "path": "scripts/recovery/thread5-route-classifications.mjs",
+        "gitBlobSha": "f0ff02da900e330483e813692635ccf385afaf00"
+      },
+      "inspectedTruth": {
+        "routerCodePresent": true,
+        "routeOutputFromThisCommit": false
+      },
+      "completionAssertion": "CODE_PRESENT_NOT_EXECUTION_PROOF"
+    },
+    {
+      "ownerThread": 6,
+      "scope": "AI_AGENT_WORK_QUEUE_EXECUTION_PREPARATION",
+      "commitSha": "bb1fc776941fc82681c36bb8199cc7408f8284c7",
+      "treeSha": "2b7d5890664515cb997872bc8b3042c7ed65f044",
+      "artifact": {
+        "path": "docs/recovery/live/checkpoints/thread-6-agent-work-queue-20260915T1812Z.json",
+        "gitBlobSha": "1a2301301aa00c3afc70bd9b3ff957190931cf84"
+      },
+      "inspectedTruth": {
+        "pendingRowsEnriched": 16,
+        "newRowsInsertedByThread6": 0,
+        "idempotencyRecheckChangedRows": 0,
+        "durableRoutedRecordObservedAfterLatestClassification": false,
+        "currentState": "BLOCKED_FOR_DURABLE_THREAD5_ROUTED_INPUT"
+      },
+      "completionAssertion": "BLOCKED_NOT_COMPLETE"
+    }
+  ],
+  "thread9RuntimeTruth": {
+    "taskName": "pantavion:recovery_partition:v1",
+    "observedAtUtc": "2026-09-15T18:15:07.871350Z",
+    "total": 165,
+    "planned": 165,
+    "queued": 0,
+    "running": 0,
+    "succeeded": 0,
+    "failed": 0,
+    "leased": 0,
+    "maxAttempt": 0,
+    "latestLeaseHeartbeat": null,
+    "latestExecutionUpdateUtc": "2026-09-15T14:30:27.011720Z",
+    "executionProofState": "NO_FENCED_EXECUTION_PROOF_YET",
+    "thread9LockExists": true,
+    "lockIsNotExecutionProof": true
+  },
+  "thread8IntegrityWorkflow": {
+    "workflowPath": ".github/workflows/pantavion-recovery-evidence-integrity.yml",
+    "runId": 35006148580,
+    "headSha": "6881b30978d64fd6e97d6c033075517dc73a183f",
+    "status": "completed",
+    "conclusion": "success",
+    "verifiedImmutableHistoricalEvidence": true
+  },
+  "notAsserted": {
+    "thread1Completion": "NOT_ASSERTED_BY_THIS_RECEIPT",
+    "thread7Execution": "NOT_ASSERTED_BY_THIS_RECEIPT",
+    "thread9Execution": "EXPLICITLY_NOT_OBSERVED",
+    "finalConvergence": false
+  },
+  "safety": {
+    "zeroDeletions": true,
+    "zeroDestructiveVercelMutations": true,
+    "secretsRecorded": false,
+    "rawPayloadsDuplicated": false,
+    "foreignThreadArtifactsMutated": false
+  },
+  "state": "DURABLE_EVIDENCE_BOUND_OPEN_NOT_COMPLETE"
+}
