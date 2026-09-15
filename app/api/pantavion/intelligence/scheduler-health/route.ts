@@ -4,6 +4,7 @@ import {
   hasSupabaseAdminCredential,
   PantavionSupabaseAdminConfigurationError,
 } from "@/lib/supabase/admin";
+import { getPantavionSchedulerBridgeSnapshot } from "@/lib/supabase/oidc-scheduler-bridge";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -34,7 +35,7 @@ function blockedSupabaseConfiguration(revision: string | null) {
       executionVerified: false,
       dependency: "supabase_admin",
       code: "SUPABASE_ADMIN_CREDENTIAL_MISSING",
-      diagnostics: ["supabase_admin_credential_missing"],
+      diagnostics: ["supabase_admin_credential_missing", "oidc_scheduler_bridge_unavailable"],
       retryable: true,
       privacy:
         "Sanitized dependency state only. No secret value, user data, recovered payload, lease token or request token is exposed.",
@@ -43,11 +44,41 @@ function blockedSupabaseConfiguration(revision: string | null) {
   );
 }
 
+async function secretlessBridgeHealth(revision: string | null) {
+  try {
+    const snapshot = await getPantavionSchedulerBridgeSnapshot();
+    const executionVerified =
+      snapshot.worker.totalRuns > 0 &&
+      snapshot.worker.lastStatus === "succeeded" &&
+      snapshot.recovery.totalPartitions > 0;
+
+    return json(
+      {
+        ok: true,
+        status: executionVerified ? "healthy" : "degraded",
+        route: "/api/pantavion/intelligence/scheduler-health",
+        revision,
+        schedule: SCHEDULE,
+        executionVerified,
+        transport: snapshot.transport,
+        secretless: true,
+        worker: snapshot.worker,
+        internalScheduler: snapshot.internalScheduler,
+        recovery: snapshot.recovery,
+        privacy: snapshot.privacy,
+      },
+      200,
+    );
+  } catch {
+    return blockedSupabaseConfiguration(revision);
+  }
+}
+
 export async function GET() {
   const revision = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? null;
 
   if (!hasSupabaseAdminCredential()) {
-    return blockedSupabaseConfiguration(revision);
+    return secretlessBridgeHealth(revision);
   }
 
   try {
@@ -131,6 +162,8 @@ export async function GET() {
         revision,
         schedule: SCHEDULE,
         executionVerified,
+        transport: "direct_supabase_admin",
+        secretless: false,
         worker: {
           name: WORKER_NAME,
           totalRuns: workerRunCount,
@@ -159,7 +192,7 @@ export async function GET() {
     );
   } catch (error) {
     if (error instanceof PantavionSupabaseAdminConfigurationError) {
-      return blockedSupabaseConfiguration(revision);
+      return secretlessBridgeHealth(revision);
     }
 
     return json(
