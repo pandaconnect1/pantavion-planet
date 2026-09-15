@@ -1,0 +1,44 @@
+{
+  "schema": "pantavion_recovery_coordinator_checkpoint_v1",
+  "observed_at_utc": "2026-09-15T14:29:00Z",
+  "aggregate_commit": "14f732f3de4590ba25e3a658bbdb6a7aee080a3e",
+  "aggregate_path": "docs/recovery/live/VERCEL_RESCUE_STATUS.json",
+  "aggregate_content_sha": "076e5cf7f2ed7672a5c26833ba66afa4754d5d39",
+  "truth": {
+    "source_records_floor": 3679,
+    "canonicalized_records_floor": 219,
+    "canonical_history_terminal": true,
+    "vmxx_history_terminal": true,
+    "all_lanes_claimed": true,
+    "available_lanes": [],
+    "lane_g_gap_records": 400,
+    "lane_g_shard_present": false,
+    "lane_h_status": "TERMINAL_VERIFIED",
+    "lane_i_status": "TERMINAL_VERIFIED_WITH_EXPLICIT_GAPS",
+    "lane_j_status": "ACTIVE_PARTIAL",
+    "lane_k_status": "ACTIVE_PARTIAL_INPUT",
+    "lane_l_status": "ACTIVE_GAPS_FOUND"
+  },
+  "runtime": {
+    "production_build": "BUILD_SUCCEEDED",
+    "production_runtime": "RUNTIME_FAILURE_CONFIRMED",
+    "runtime_error_group": "pantavion_secure_scheduled_worker_failed",
+    "runtime_error_count_7d": 2012,
+    "runtime_last_seen": "2026-09-15T13:40:38Z",
+    "secret_value_recorded": false
+  },
+  "next_handoff": [
+    "G/coordinator gap worker produces durable individual payload evidence for Lane-A records 201-600 without overlap",
+    "F idempotently canonicalizes and deduplicates new payload-backed records plus remaining B/C/D and earlier durable evidence",
+    "J consumes only new payload-backed canonical evidence and resolves module classifications without guessing",
+    "K refreshes founder feed from current F/J outputs",
+    "L reruns global completeness/dedup audit after F/G/J/K refresh"
+  ],
+  "rules": {
+    "zero_deletions": true,
+    "zero_vercel_mutations": true,
+    "secret_values_written": false,
+    "ready_is_verified_live": false,
+    "canonical_counts_raise_only_after_payload_and_dedup": true
+  }
+}
