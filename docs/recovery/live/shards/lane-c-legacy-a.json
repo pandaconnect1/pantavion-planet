@@ -1,0 +1,26 @@
+{
+  "lane":"C",
+  "status":"TERMINAL_VERIFIED",
+  "updated_at_utc":"2026-09-15T13:21:00Z",
+  "team_id":"team_tGNSGGjcV3VNecscMvaAniGY",
+  "zero_deletions":true,
+  "secret_values_written":false,
+  "private_source_written":false,
+  "deployment_total":73,
+  "projects":[
+    {"project":"pantavion-one","project_id":"prj_Rld6OiU8Iu0TeBDYZ6Y2igDd200e","deployment_count":14,"terminal_zero":true,"latest_state":"READY","latest_target":"production","domains":["pantavion-one.vercel.app","pantavion-one-pandaconnect.vercel.app","pantavion-one-git-main-pandaconnect.vercel.app"],"git_binding":"pandaconnect1/pantavion-one (public; observed in Vercel deployment metadata)","live_truth":"HISTORICAL_ONLY"},
+    {"project":"pantavion-one-clean-98it","project_id":"prj_jQ4NAbtiHfxC68CazUHwIARlDa1E","deployment_count":4,"terminal_zero":true,"latest_state":"READY","latest_target":"production","domains":["pantavion.com","pantavion-one-clean-98it.vercel.app","pantavion-one-clean-98it-pandaconnect.vercel.app","pantavion-one-clean-98it-git-main-pandaconnect.vercel.app"],"git_binding":"pandaconnect1/pantavion-one-clean (public; observed in Vercel deployment metadata)","uniqueness":"mirror_candidate against pantavion-one-clean by shared Git SHAs","live_truth":"HISTORICAL_ONLY"},
+    {"project":"pantavion-one-clean","project_id":"prj_PZD1t2hOc6SaiY5pKithCHILboHF","deployment_count":52,"terminal_zero":true,"latest_state":"READY","latest_target":"production","domains":["pantavion-one-clean.vercel.app","pantavion-one-clean-pandaconnect.vercel.app","pantavion-one-clean-git-main-pandaconnect.vercel.app"],"git_binding":"pandaconnect1/pantavion-one-clean (public; observed in Vercel deployment metadata)","error_deployments":5,"build_error_pattern":"app/compass/page.js cannot resolve ../../components/ui/card","live_truth":"HISTORICAL_ONLY"},
+    {"project":"pantaai","project_id":"prj_ViFBWhpM0mPurIwxsdvKKmjGrNEs","deployment_count":1,"terminal_zero":true,"latest_state":"ERROR","latest_target":"production","domains":["pantaai-pandaconnect.vercel.app","pantaai-git-main-pandaconnect.vercel.app"],"git_binding":"pandaconnect1/nextjs-ai-chatbot (private; metadata only, no source copied)","build_error_pattern":"POSTGRES_URL is not defined during migration/build","env_name_evidence":["POSTGRES_URL"],"live_truth":"HISTORICAL_ONLY"},
+    {"project":"pantavion-one-clean-ui","project_id":"prj_e5oghsEalj1r5sIKmXFyRlXGYUdC","deployment_count":2,"terminal_zero":true,"latest_state":"READY","latest_target":null,"domains":["pantavion-one-clean-ui.vercel.app","pantavion-one-clean-ui-pandaconnect.vercel.app","pantavion-one-clean-ui-git-main-pandaconnect.vercel.app"],"git_binding":"pandaconnect1/pantavion-one-clean-ui (public; observed in Vercel deployment metadata)","live_truth":"HISTORICAL_ONLY"},
+    {"project":"pantaai-template","project_id":"prj_QXmlk9C7ICX24Pi9cITJPJS4fFQ7","deployment_count":0,"terminal_zero":true,"latest_state":null,"latest_target":null,"domains":[],"git_binding":"UNKNOWN_NOT_EXPOSED","note":"Explicit Vercel deployment query returned count=0; project is not labeled empty solely from missing Git/latest/domain metadata.","live_truth":"HISTORICAL_ONLY"}
+  ],
+  "runtime_errors_last_7d":{"pantavion-one":0,"pantavion-one-clean-98it":0,"pantavion-one-clean":0,"pantaai":0,"pantavion-one-clean-ui":0,"pantaai-template":0},
+  "toolbar_threads":{"scope":"resolved + unresolved","pantavion-one":0,"pantavion-one-clean-98it":0,"pantavion-one-clean":0,"pantaai":0,"pantavion-one-clean-ui":0,"pantaai-template":0},
+  "agent_runs":{"team_scope_from":"2025-01-01T00:00:00Z","to":"now","projects_with_data":0,"data_confidence":"real"},
+  "auth_export_gaps":[
+    {"evidence_type":"env_name/export","rescue_state":"BLOCKED_AUTH_EXPORT","reason":"Connected Vercel tool in this chat exposes no project environment-variable listing/decryption action.","required_authenticated_action":"GET /v10/projects/{idOrName}/env?teamId=team_tGNSGGjcV3VNecscMvaAniGY for names/scopes; decrypt=true only into a private secret store, never public GitHub/chat."},
+    {"evidence_type":"deployment_file_gap","rescue_state":"BLOCKED_AUTH_EXPORT","reason":"Connected Vercel tool exposes deployment metadata/logs but not deployment file-tree/content export.","required_authenticated_action":"GET /v6/deployments/{id}/files?teamId=team_tGNSGGjcV3VNecscMvaAniGY, then GET /v8/deployments/{id}/files/{fileId} where permitted; private source must go only to a private archive."}
+  ],
+  "completion_truth":"All six Lane C deployment histories reached explicit count=0. Accessible project/deployment/build/runtime/toolbar/agent surfaces were inspected. Remaining env/deployment-file export surfaces are explicitly documented authenticated-export gaps; no deletion or Vercel mutation was performed. READY/production was not promoted to VERIFIED_LIVE."
+}
