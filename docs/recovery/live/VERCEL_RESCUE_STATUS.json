@@ -1,35 +1,75 @@
 {
-  "updatedAt": "2026-09-15T13:26:00Z",
-  "coordinatorObservedAt": "2026-09-15T13:25:00Z",
+  "updatedAt": "2026-09-15T13:48:00Z",
+  "coordinatorObservedAt": "2026-09-15T13:48:00Z",
   "phase": "EMERGENCY_VERCEL_RESCUE",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total and not directly comparable with mirrored deployment counts",
-  "recoveredDeploymentRecordsFloor": 3300,
-  "recoveredDeploymentRecordsFloorBasis": "durably checkpointed verified lower bound after four additional non-overlapping canonical pages from 1782858024554 to 1781340813841. Mirror overlap may exist across projects.",
+  "recoveredDeploymentRecordsFloor": 3560,
+  "recoveredDeploymentRecordsFloorBasis": "Durably checkpointed verified lower bound. Lane A has captured 500 non-terminal canonical deployment records in 25 pages in its current run; mirror overlap across projects may exist.",
   "canonical": {
     "project": "pantavion-planet",
     "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
-    "sourceCursor": 1782858024554,
-    "nextCursor": 1781340813841,
+    "sourceCursor": 1786126296277,
+    "nextCursor": 1778033520555,
+    "pagesCapturedThisLaneRun": 25,
+    "recordsCapturedThisLaneRun": 500,
     "lastPageCount": 20,
     "terminal": false,
     "rescue_state": "CHECKPOINTED",
     "live_truth": "HISTORICAL_ONLY",
-    "checkpoint": "docs/recovery/VERCEL_CANONICAL_PROGRESS_20260915_1325Z.md"
+    "shard": "docs/recovery/live/shards/lane-a-canonical.json"
   },
   "mirror": {
     "project": "pantavion-planet-vmxx",
     "projectId": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
     "nextCursor": 1786177840266,
     "lastPageCount": 0,
-    "terminal": true
+    "terminal": true,
+    "rescue_state": "TERMINAL_VERIFIED"
   },
-  "latestBatch": {
-    "records": 80,
-    "pages": 4,
-    "canonicalRecords": 80,
-    "mirrorRecords": 0,
-    "note": "Four full non-overlapping canonical pages were durably checkpointed. Canonical remains non-terminal; VMXX remains terminal."
+  "lanes": {
+    "A": {"status": "ACTIVE", "historyTerminal": false, "nextCursor": 1778033520555},
+    "B": {"status": "TERMINAL_VERIFIED", "historyTerminal": true},
+    "C": {"status": "TERMINAL_VERIFIED", "projectsTerminal": "6/6", "deploymentRecords": 73},
+    "D": {"status": "BLOCKED_VERCEL_HISTORICAL_RUNTIME_BILLING_LIMIT", "deploymentHistoriesTerminal": "7/7", "historicalRuntimeExportBlocked": true},
+    "E": {"status": "BLOCKED_AUTH_EXPORT", "projectMetadataCaptured": "15/15", "envConfigNamesCaptured": 111, "secretValuesCaptured": false}
+  },
+  "liveProduction": {
+    "domain": "www.pantavion.com",
+    "apexRedirect": "pantavion.com -> www.pantavion.com",
+    "authoritativeProject": "pantavion-planet",
+    "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+    "deploymentId": "dpl_FGfYCSEAhtQwVhGiW57nCyrFi6et",
+    "gitRef": "main",
+    "gitSha": "7d7d429f9dc669a9479c63987aafda0464b703d5",
+    "state": "READY",
+    "target": "production",
+    "rootHttpVerified": true,
+    "rootLiveTruth": "VERIFIED_LIVE",
+    "founderRecoveryRoute": {
+      "route": "/admin/pantavion/recovery",
+      "productionBuildPresent": true,
+      "unauthorizedProbeStatus": 404,
+      "liveTruth": "PRODUCTION_BUILD_PRESENT_AUTH_GUARDED"
+    }
+  },
+  "productionRuntime": {
+    "status": "RUNTIME_FAILURE_CONFIRMED",
+    "route": "/api/pantavion/intelligence/cron",
+    "errorGroup": "pantavion_secure_scheduled_worker_failed",
+    "observedErrorCount": 287,
+    "lastSeen": "2026-09-15T13:20:38Z",
+    "blocker": "Supabase admin runtime requires SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY; no secret value was exposed or captured.",
+    "rescueState": "BLOCKED_SECRET_CONFIGURATION"
+  },
+  "buildRemediation": {
+    "commit": "376828fb0e011dc9d413e9bf0cc55f55ee155801",
+    "change": "docs/recovery/** excluded from TypeScript application build scope",
+    "vmxxPreviewDeployment": "dpl_HNpiyniN12RfZQ7pNF8BpTkKwYfp",
+    "vmxxPreviewState": "READY",
+    "canonicalPreviewDeployment": "dpl_8s1W8tDmQ13m4mY6RumqsunxW8eK",
+    "canonicalPreviewState": "READY",
+    "liveTruth": "BUILD_VERIFIED_NOT_RUNTIME_VERIFIED"
   },
   "parallelCoordinator": {
     "mode": "VERIFY_COORDINATE_ONLY",
@@ -46,26 +86,22 @@
     "noGitProjectCount": 4,
     "deepPaginationDuplicated": false,
     "zeroDeletions": true,
-    "zeroVercelMutations": true,
+    "zeroDirectVercelMutations": true,
     "secretValuesRecorded": false
   },
-  "recentEvidence": [
-    "security-fix provenance for conversion path traversal, sensitive bare-dotfile blocking and timing-safe kernel-secret comparison",
-    "Python worker, conversion engine, universal omnimodal intake, user-signal intake and ecosystem gap-finder foundations",
-    "Water asset and operational overlay, device geolocation, original/licensed DWG intake and viewer foundations",
-    "Founder Command, code-writer, Evolution Engine, project inventory/intake and autonomous work-order dispatch foundations",
-    "execution-engine scheduler, runtime ledger, repair loop, PR creation, thread locks and executor-adapter provenance",
-    "language selector and translation UI synchronization plus protected B-map/DWG delivery provenance"
-  ],
   "hardGaps": [
-    "decrypted environment-secret values require authorized CLI/API export or reissue/rotation",
-    "complete deployment filesystem/build-output export is not available through the current Vercel connector"
+    "Lane A canonical history is still non-terminal and must continue from cursor 1778033520555 until explicit count=0/no older records.",
+    "Canonical production scheduled worker is failing because a required Supabase admin credential is not configured or not readable in production.",
+    "Authenticated Vercel environment-variable inventory/decryption/write actions are not exposed by the connected tool surface in this coordinator thread; values must remain private.",
+    "Complete deployment filesystem/build-output export is not available through the current connected Vercel tool surface.",
+    "Lane D historical runtime log retrieval is blocked by Vercel billing/retention limits; this is not evidence that historical logs are absent."
   ],
   "rules": [
     "zero deletions",
-    "READY or production is historical provenance, not VERIFIED_LIVE",
-    "no secret values in public GitHub",
-    "mirror terminal is verified; continue canonical until its own explicit terminal zero",
-    "all A-E lanes are currently claimed; extra workers must coordinate only and must not duplicate lane pagination"
+    "READY or production is deployment evidence, not automatically VERIFIED_LIVE",
+    "no secret values in public GitHub or chat",
+    "public root is VERIFIED_LIVE only because it received direct HTTP runtime proof",
+    "mirror terminal is verified; canonical must continue until its own explicit terminal zero",
+    "all A-E lanes remain claimed; coordinator must not duplicate lane pagination"
   ]
 }
