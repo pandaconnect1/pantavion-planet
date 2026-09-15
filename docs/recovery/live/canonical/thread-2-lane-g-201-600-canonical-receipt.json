@@ -1,0 +1,55 @@
+{
+  "protocol": "PANTAVION_10_THREAD_PARALLEL_ABSORPTION_2026-09-15",
+  "thread": 2,
+  "scope": "CANONICAL_WORKERS_F01_F05_BUCKETS_0_4",
+  "receiptAt": "2026-09-15T18:37:00Z",
+  "source": {
+    "lane": "G",
+    "recordRange": [201, 600],
+    "sourceRecordCount": 400,
+    "sourceUniquenessAudit": "400 unique deployment IDs; 0 duplicates in preserved Lane-G terminal audit",
+    "stableRecordKey": "projectId:deploymentId",
+    "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh"
+  },
+  "shardingContract": {
+    "path": "docs/recovery/live/canonical/CANONICAL_SHARDING_CONTRACT_V1.json",
+    "commit": "443cdf6000855765ad449497ead13960b5d354b8",
+    "thread2Buckets": [0,1,2,3,4],
+    "thread3Buckets": [5,6,7,8,9]
+  },
+  "outputs": [
+    {"range":[201,240],"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-201-240.json","canonicalCount":19,"commit":"44e437b60941dc373910fd020b44ef7068f5bcab"},
+    {"range":[241,280],"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-241-280.json","canonicalCount":22,"commit":"76ca816af71081c7f42c403e151b4f09f32b67fd"},
+    {"range":[281,320],"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-281-320.json","canonicalCount":20,"commit":"2a309a2660eb5e6b1cebb343cb99a89db48a240c"},
+    {"range":[321,360],"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-321-360.json","canonicalCount":19,"commit":"c8ceb6ac8355539360efd8d219fbc882e91841b2"},
+    {"range":[361,400],"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-361-400.json","canonicalCount":21,"commit":"c44cd87bb9a335f06188448124f760f1140e8181"},
+    {"range":[401,440],"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-401-440.json","canonicalCount":14,"commit":"5be8fe10353af849bb9ec52ef7454cc9f5cffb2f"},
+    {"range":[441,480],"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-441-480.json","canonicalCount":19,"commit":"82ff0cac17843795c8fdaa6f897461349525e17e"},
+    {"range":[481,520],"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-481-520.json","canonicalCount":27,"commit":"9b5a4a572e5e2673c026991aff2f53b274fd1164"},
+    {"range":[521,560],"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-521-560.json","canonicalCount":18,"commit":"56169fe9accae3a9e363c585b167dd9541739331"},
+    {"range":[561,600],"path":"docs/recovery/live/canonical/thread-2-buckets-0-4-lane-g-561-600.json","canonicalCount":22,"commit":"7bce260ddc16c3531a79c7f1f128fdafb29ef9ef"}
+  ],
+  "totals": {
+    "sourceRecordsExamined": 400,
+    "thread2CanonicalDurableWrites": 201,
+    "outsideThread2OwnershipSkipped": 199,
+    "duplicateStableKeysInSource": 0,
+    "sourceRecordsDeleted": 0,
+    "buckets5to9WrittenByThread2": 0
+  },
+  "state": "THREAD2_LANE_G_201_600_CANONICALIZATION_TERMINAL",
+  "notClaimed": [
+    "This is not global recovery completion.",
+    "Classification is owned by Thread 4 and is not claimed here.",
+    "Module/graph routing is owned by Thread 5 and is not claimed here.",
+    "Agent work binding is owned by Thread 6 and is not claimed here.",
+    "READY deployments are not claimed VERIFIED_LIVE here."
+  ],
+  "rules": {
+    "zeroDeletions": true,
+    "zeroDestructiveVercelMutations": true,
+    "immutableSourceProvenance": true,
+    "deterministicDedup": true,
+    "noCountInflation": true
+  }
+}
