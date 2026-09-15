@@ -1,0 +1,41 @@
+{
+  "observedAtUtc": "2026-09-15T18:06:00Z",
+  "mode": "VERIFY_COORDINATE_ONLY",
+  "sourceFloor": 3679,
+  "canonicalizedFloor": 219,
+  "rehydratedPendingCanonicalization": 400,
+  "scheduler": {
+    "status": "healthy",
+    "workerTotalRuns": 45,
+    "lastSuccessfulRunKey": "pantavion-intelligence-5m:2026-09-15T18:00"
+  },
+  "recoveryPartitions": {
+    "total": 165,
+    "planned": 165,
+    "running": 0,
+    "succeeded": 0,
+    "failed": 0,
+    "minAttempt": 0,
+    "maxAttempt": 0,
+    "materializationCheckpoints": 165,
+    "claimOrExecutionObserved": false,
+    "terminalProgressObserved": false
+  },
+  "blockingFinding": {
+    "code": "RECOVERY_EXECUTOR_NOT_STARTED",
+    "summary": "The scheduler is healthy, but all recovery partitions remain planned with attempt zero. Materialization is verified; execution is not."
+  },
+  "downstream": {
+    "canonical": "400 rehydrated records remain pending durable idempotent canonical binding; canonical floor stays 219",
+    "classification": "partial until new canonical evidence is durable",
+    "founderFeed": "refresh required after canonical/classification progress",
+    "audit": "refresh required after downstream state changes",
+    "durableWorkerPlane": "must activate the existing fenced execution path inside the current durable fabric rather than create a competing execution system"
+  },
+  "safety": {
+    "zeroDeletions": true,
+    "zeroVercelMutations": true,
+    "countsInflated": false,
+    "duplicateShardWorkPerformed": false
+  }
+}
