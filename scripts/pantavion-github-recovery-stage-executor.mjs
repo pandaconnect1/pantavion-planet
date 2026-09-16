@@ -12,6 +12,9 @@ const ORDERED_ID_FINGERPRINT = "d796a55c548655fda8b1014f4db810a7cf7b5f1aef8c7441
 const WORK_UNITS_PATH = "data/recovery/runtime-fabric-v1/recovery-work-units.ndjson";
 const STAGES = ["classify", "canonicalize", "route", "audit", "work_unit_generation"];
 const CONCURRENCY = Math.max(1, Math.min(24, Number(process.env.PANTAVION_RECOVERY_STAGE_CONCURRENCY ?? 16)));
+const CATALOG_CONCURRENCY = Math.max(1, Math.min(6, Number(process.env.PANTAVION_RECOVERY_CATALOG_CONCURRENCY ?? 4)));
+const CATALOG_CHUNK_SIZE = Math.max(25, Math.min(100, Number(process.env.PANTAVION_RECOVERY_CATALOG_CHUNK_SIZE ?? 100)));
+const CATALOG_RETRIES = 5;
 const SHA256_RE = /^[0-9a-f]{64}$/;
 
 let cachedOidcToken = null;
@@ -69,6 +72,24 @@ async function invokeBridge(payload, allowRefresh = true) {
     throw new Error(`recovery_stage_bridge_call_failed:${payload.action}:${code}`);
   }
   return body;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function invokeBridgeWithRetry(payload, retries = CATALOG_RETRIES) {
+  let lastError = null;
+  for (let attempt = 1; attempt <= retries; attempt += 1) {
+    try {
+      return await invokeBridge(payload);
+    } catch (error) {
+      lastError = error;
+      if (attempt === retries) break;
+      await sleep(Math.min(8000, 350 * (2 ** (attempt - 1))));
+    }
+  }
+  throw lastError instanceof Error ? lastError : new Error(String(lastError ?? "bridge_retry_exhausted"));
 }
 
 function hashJson(value) {
@@ -207,6 +228,20 @@ function catalogRows(units, partitionOrdinal) {
   }));
 }
 
+async function upsertCatalogPartition(rows, partitionOrdinal) {
+  let storedForPartition = 0;
+  for (let offset = 0; offset < rows.length; offset += CATALOG_CHUNK_SIZE) {
+    const chunk = rows.slice(offset, offset + CATALOG_CHUNK_SIZE);
+    const result = await invokeBridgeWithRetry({
+      action: "upsert_catalog",
+      partitionOrdinal,
+      rows: chunk,
+    });
+    storedForPartition = Number(result.storedForPartition ?? 0);
+  }
+  return storedForPartition;
+}
+
 async function runPool(items, worker, concurrency = CONCURRENCY) {
   let cursor = 0;
   const failures = [];
@@ -225,7 +260,7 @@ async function runPool(items, worker, concurrency = CONCURRENCY) {
 const runId = requireEnv("GITHUB_RUN_ID");
 const runAttempt = requireEnv("GITHUB_RUN_ATTEMPT");
 const partitions = await loadWorkUnits();
-console.log(JSON.stringify({ marker: "pantavion_recovery_stage_executor_loaded_v1", records: EXPECTED_RECORDS, partitions: EXPECTED_PARTITIONS, concurrency: CONCURRENCY }));
+console.log(JSON.stringify({ marker: "pantavion_recovery_stage_executor_loaded_v2", records: EXPECTED_RECORDS, partitions: EXPECTED_PARTITIONS, concurrency: CONCURRENCY, catalogConcurrency: CATALOG_CONCURRENCY, catalogChunkSize: CATALOG_CHUNK_SIZE }));
 
 for (const stage of STAGES) {
   const listed = await invokeBridge({ action: "list_stage", stage });
@@ -234,7 +269,7 @@ for (const stage of STAGES) {
   if (failedExisting.length) throw new Error(`stage_has_failed_jobs:${stage}:${failedExisting.length}`);
   const pending = listed.records.filter((r) => ["planned", "queued"].includes(r.status));
   const paused = listed.records.filter((r) => r.status === "paused");
-  console.log(JSON.stringify({ marker: "pantavion_recovery_stage_start_v1", stage, pending: pending.length, paused: paused.length, succeeded: listed.records.filter((r) => r.status === "succeeded").length }));
+  console.log(JSON.stringify({ marker: "pantavion_recovery_stage_start_v2", stage, pending: pending.length, paused: paused.length, succeeded: listed.records.filter((r) => r.status === "succeeded").length }));
 
   if (pending.length === 0 && paused.length > 0) throw new Error(`stage_dependency_not_unlocked:${stage}:${paused.length}`);
 
@@ -248,22 +283,22 @@ for (const stage of STAGES) {
       const units = partitions[partitionOrdinal - 1];
       let output = summarizePartition(units, partitionOrdinal, stage);
       if (stage === "work_unit_generation") {
-        const catalog = await invokeBridge({ action: "upsert_catalog", partitionOrdinal, rows: catalogRows(units, partitionOrdinal) });
-        if (catalog.storedForPartition !== units.length) throw new Error(`catalog_partition_count_mismatch:${partitionOrdinal}:${catalog.storedForPartition}:${units.length}`);
-        output = { ...output, catalogRecordsStored: catalog.storedForPartition };
+        const storedForPartition = await upsertCatalogPartition(catalogRows(units, partitionOrdinal), partitionOrdinal);
+        if (storedForPartition !== units.length) throw new Error(`catalog_partition_count_mismatch:${partitionOrdinal}:${storedForPartition}:${units.length}`);
+        output = { ...output, catalogRecordsStored: storedForPartition };
       }
       await invokeBridge({ action: "finish_stage", executionId: record.executionId, ownerId, fencingToken: claimed.fence.fencingToken, succeeded: true, output });
     } catch (error) {
       await invokeBridge({ action: "finish_stage", executionId: record.executionId, ownerId, fencingToken: claimed.fence.fencingToken, succeeded: false, error: error instanceof Error ? error.message : String(error) }).catch(() => null);
       throw error;
     }
-  });
+  }, stage === "work_unit_generation" ? CATALOG_CONCURRENCY : CONCURRENCY);
 
   const verified = await invokeBridge({ action: "list_stage", stage });
   const succeeded = verified.records.filter((r) => r.status === "succeeded").length;
   const failed = verified.records.filter((r) => r.status === "failed").length;
   const remaining = verified.records.filter((r) => ["planned", "queued", "running", "paused"].includes(r.status)).length;
-  console.log(JSON.stringify({ marker: "pantavion_recovery_stage_terminal_check_v1", stage, succeeded, failed, remaining }));
+  console.log(JSON.stringify({ marker: "pantavion_recovery_stage_terminal_check_v2", stage, succeeded, failed, remaining }));
   if (succeeded !== EXPECTED_PARTITIONS || failed !== 0 || remaining !== 0) throw new Error(`stage_not_terminal:${stage}:${succeeded}:${failed}:${remaining}`);
 }
 
@@ -272,5 +307,5 @@ if (finalStatus.catalogRecords !== EXPECTED_RECORDS) throw new Error(`catalog_to
 for (const stage of STAGES) {
   if (finalStatus.stages?.[stage]?.succeeded !== EXPECTED_PARTITIONS || finalStatus.stages?.[stage]?.failed !== 0) throw new Error(`final_stage_status_invalid:${stage}`);
 }
-console.log(JSON.stringify({ marker: "pantavion_recovery_downstream_terminal_v1", ...finalStatus }));
+console.log(JSON.stringify({ marker: "pantavion_recovery_downstream_terminal_v2", ...finalStatus }));
 console.log("Pantavion Recovery Downstream Executor: VERIFIED 82,413 catalog records and 825/825 stage jobs succeeded");
