@@ -1,0 +1,14 @@
+{
+  "lane": "L",
+  "observedAtUtc": "2026-09-16T04:13:00Z",
+  "status": "ACTIVE_GAPS_FOUND",
+  "auditCommit": "aec877a8531a449bfcd257f049b7ccff7c912944",
+  "sourceFloor": 3679,
+  "canonicalizedFloor": 219,
+  "laneG": {"status": "TERMINAL_VERIFIED_REHYDRATED", "records": 400, "uniqueDeploymentIds": 400, "duplicateDeploymentIds": 0, "audit": "PASS"},
+  "scheduler": {"status": "healthy", "successfulRunsObserved": 45, "latestDurableObservationUtc": "2026-09-15T18:06:00Z"},
+  "recoveryPartitions": {"total": 165, "planned": 165, "running": 0, "succeeded": 0, "failed": 0, "attemptMin": 0, "attemptMax": 0, "claimOrExecutionObserved": false},
+  "blockingFinding": "RECOVERY_EXECUTOR_NOT_STARTED",
+  "completion": false,
+  "safety": {"zeroDeletions": true, "zeroVercelMutations": true, "secretValuesRecorded": false, "deepPaginationPerformed": false}
+}
