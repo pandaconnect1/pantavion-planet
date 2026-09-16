@@ -6,7 +6,11 @@ on:
       - main
     paths:
       - ".github/workflows/pantavion-recovery-partition-executor.yml"
+      - "scripts/pantavion-github-recovery-partition-executor.mjs"
+      - "scripts/pantavion-github-recovery-stage-executor.mjs"
   workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
 
 permissions:
   contents: read
@@ -17,10 +21,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  execute-recovery-partitions:
-    name: Execute fenced recovery partitions to terminal
+  execute-recovery-pipeline:
+    name: Execute fenced recovery pipeline to terminal
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - name: Checkout exact main revision
         uses: actions/checkout@v4
@@ -38,3 +42,17 @@ jobs:
 
       - name: Execute recovery partitions through GitHub OIDC fencing bridge
         run: node --no-warnings --experimental-strip-types scripts/pantavion-github-recovery-partition-executor.mjs
+
+      - name: Rebuild semantic truth for all 82,413 records
+        run: node scripts/pantavion-canonical-semantic-classification-v3.cjs
+
+      - name: Verify fail-closed recovery runtime contract
+        run: npm run test:recovery-runtime-fabric
+
+      - name: Materialize all 82,413 deterministic recovery work units
+        run: npm run materialize:recovery-runtime-fabric
+
+      - name: Execute classify → canonicalize → route → audit → work-unit stages
+        env:
+          PANTAVION_RECOVERY_STAGE_CONCURRENCY: "16"
+        run: node scripts/pantavion-github-recovery-stage-executor.mjs
