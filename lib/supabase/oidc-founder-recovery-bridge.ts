@@ -14,6 +14,10 @@ export interface PantavionRecoveryStageCounts {
   failed: number;
 }
 
+export interface PantavionRecoveryAgentBundleCounts extends PantavionRecoveryStageCounts {
+  total: number;
+}
+
 export interface PantavionRecoveryFounderSnapshot {
   ok: true;
   marker: "pantavion_recovery_founder_snapshot_v1";
@@ -21,6 +25,7 @@ export interface PantavionRecoveryFounderSnapshot {
   expectedPartitions: number;
   catalogRecords: number;
   stages: Record<string, PantavionRecoveryStageCounts>;
+  agentBundles: PantavionRecoveryAgentBundleCounts;
   reviewStatus: Record<string, number>;
   runtimeLanes: Record<string, number>;
   modules: Array<{
