@@ -40,7 +40,14 @@ export interface PantavionRecoveryFounderSnapshot {
   generatedAt: string;
 }
 
-export async function getPantavionRecoveryFounderSnapshot(): Promise<PantavionRecoveryFounderSnapshot> {
+export type PantavionRecoveryFounderAction =
+  | "pause_stage"
+  | "resume_stage"
+  | "retry_failed"
+  | "pause_all"
+  | "resume_all";
+
+async function founderBridgeRequest(body: Record<string, unknown>) {
   const token = await getVercelOidcToken();
   if (!token) throw new Error("vercel_oidc_token_unavailable");
 
@@ -50,33 +57,59 @@ export async function getPantavionRecoveryFounderSnapshot(): Promise<PantavionRe
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ action: "snapshot" }),
+    body: JSON.stringify(body),
     cache: "no-store",
     signal: AbortSignal.timeout(8_000),
   });
 
-  const payload = (await response.json().catch(() => null)) as
-    | {
-        ok?: boolean;
-        capability?: string;
-        transport?: string;
-        snapshot?: PantavionRecoveryFounderSnapshot;
-        code?: string;
-      }
-    | null;
+  const payload = (await response.json().catch(() => null)) as Record<string, unknown> | null;
+  if (!response.ok || !payload || payload.ok !== true) {
+    throw new Error(
+      typeof payload?.code === "string"
+        ? payload.code
+        : `founder_recovery_bridge_http_${response.status}`,
+    );
+  }
+  return payload;
+}
 
+export async function getPantavionRecoveryFounderSnapshot(): Promise<PantavionRecoveryFounderSnapshot> {
+  const payload = await founderBridgeRequest({ action: "snapshot" });
   if (
-    !response.ok ||
-    !payload ||
-    payload.ok !== true ||
     payload.capability !== "founder_recovery_snapshot" ||
     payload.transport !== "vercel_oidc_to_supabase_edge" ||
     !payload.snapshot ||
-    payload.snapshot.ok !== true ||
-    payload.snapshot.marker !== "pantavion_recovery_founder_snapshot_v1"
+    typeof payload.snapshot !== "object" ||
+    (payload.snapshot as PantavionRecoveryFounderSnapshot).ok !== true ||
+    (payload.snapshot as PantavionRecoveryFounderSnapshot).marker !== "pantavion_recovery_founder_snapshot_v1"
   ) {
-    throw new Error(payload?.code ?? `founder_recovery_bridge_http_${response.status}`);
+    throw new Error("founder_recovery_snapshot_invalid_response");
   }
+  return payload.snapshot as PantavionRecoveryFounderSnapshot;
+}
 
-  return payload.snapshot;
+export async function runPantavionRecoveryFounderControl(input: {
+  action: PantavionRecoveryFounderAction;
+  stage?: "classify" | "canonicalize" | "route" | "audit" | "work_unit_generation";
+}) {
+  const payload = await founderBridgeRequest({
+    action: "control",
+    actionName: input.action,
+    stage: input.stage ?? null,
+  });
+  if (
+    payload.capability !== "founder_recovery_control" ||
+    payload.transport !== "vercel_oidc_to_supabase_edge" ||
+    !payload.result ||
+    typeof payload.result !== "object"
+  ) {
+    throw new Error("founder_recovery_control_invalid_response");
+  }
+  return {
+    result: payload.result as Record<string, unknown>,
+    snapshot:
+      payload.snapshot && typeof payload.snapshot === "object"
+        ? (payload.snapshot as PantavionRecoveryFounderSnapshot)
+        : null,
+  };
 }
