@@ -2,7 +2,9 @@ import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 
 import { runPantavionRecoveryAgentBundleTick } from "@/core/recovery/pantavion-recovery-agent-bundle-runtime";
+import { runPantavionRecoveryBuilderFileTick } from "@/core/recovery/pantavion-recovery-builder-file-runtime";
 import { getPantavionRecoveryAgentBundleStatusViaOidc } from "@/lib/supabase/oidc-agent-bundle-bridge";
+import { getPantavionRecoveryBuilderFileStatusViaOidc } from "@/lib/supabase/oidc-recovery-builder-bridge";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -35,21 +37,32 @@ export async function GET(request: Request) {
   }
 
   try {
-    const tick = await runPantavionRecoveryAgentBundleTick({ limit: 6 });
-    const snapshot = await getPantavionRecoveryAgentBundleStatusViaOidc();
+    const [plannerTick, builderTick] = await Promise.all([
+      runPantavionRecoveryAgentBundleTick({ limit: 6 }),
+      runPantavionRecoveryBuilderFileTick({ limit: 1 }),
+    ]);
+    const [plannerSnapshot, builderSnapshot] = await Promise.all([
+      getPantavionRecoveryAgentBundleStatusViaOidc(),
+      getPantavionRecoveryBuilderFileStatusViaOidc(),
+    ]);
 
     return NextResponse.json({
-      ok: tick.status !== "degraded",
+      ok: plannerTick.status !== "degraded" && builderTick.status !== "degraded",
       route: "/api/pantavion/recovery/agent-bundles/cron",
-      tick,
-      snapshot,
+      plannerTick,
+      builderTick,
+      plannerSnapshot,
+      builderSnapshot,
       runtimeSafety: {
-        transport: "Vercel OIDC -> scoped Supabase Edge capability",
+        transport: "Vercel OIDC -> scoped Supabase Edge capabilities",
         ai: "Vercel AI Gateway with deployment OIDC authentication",
         durableStore: "existing Supabase durable_executions",
         executionClaim: "monotonic fenced lease",
+        repositoryRead: "public Pantavion source pinned to exact repository commit SHA",
+        patchMode: "proposal only; separate GitHub CI must apply and test",
         rawRecoveryPayloadExternalExport: false,
         productionWriteAuthority: false,
+        mainBranchWriteAuthority: false,
         mergeAuthority: false,
         deploymentAuthority: false,
         publicReleaseAuthority: false,
@@ -64,7 +77,7 @@ export async function GET(request: Request) {
       {
         ok: false,
         route: "/api/pantavion/recovery/agent-bundles/cron",
-        error: "Recovery-agent bundle tick failed; durable state is preserved for retry.",
+        error: "Recovery planner/builder tick failed; durable state is preserved for retry.",
       },
       { status: 500 },
     );
