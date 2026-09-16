@@ -8,6 +8,7 @@ on:
       - ".github/workflows/pantavion-recovery-partition-executor.yml"
       - "scripts/pantavion-github-recovery-partition-executor.mjs"
       - "scripts/pantavion-github-recovery-stage-executor.mjs"
+      - "scripts/pantavion-github-recovery-provenance-enrichment.mjs"
   workflow_dispatch:
   schedule:
     - cron: "*/5 * * * *"
@@ -56,3 +57,6 @@ jobs:
         env:
           PANTAVION_RECOVERY_STAGE_CONCURRENCY: "16"
         run: node scripts/pantavion-github-recovery-stage-executor.mjs
+
+      - name: Enrich all 82,413 catalog records with verified repository provenance locators
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-github-recovery-provenance-enrichment.mjs
