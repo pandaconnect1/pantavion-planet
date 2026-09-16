@@ -1,33 +1,51 @@
 {
-  "schema": "pantavion_lane_l_completeness_dedup_audit_v5",
+  "schema": "pantavion_lane_l_completeness_dedup_audit_v6",
   "lane": "L",
-  "updated_at_utc": "2026-09-16T04:13:00Z",
-  "status": "ACTIVE_GAPS_FOUND",
-  "aggregate_base": {"commit": "6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5", "source_records_floor": 3679, "canonicalized_records_floor": 219},
-  "rules": {"zero_deletions": true, "zero_vercel_mutations": true, "secret_values_written": false, "deep_pagination_performed": false, "ready_promoted_to_verified_live": false, "dedup_key": "projectId:deploymentId"},
-  "coverage": {"expected_projects": 15, "project_history_ownership": {"A": 1, "B": 1, "C": 6, "D": 7}, "all_15_projects_assigned": true, "lane_g": "TERMINAL_VERIFIED_REHYDRATED", "lane_j": "ACTIVE_PARTIAL", "lane_k": "ACTIVE_PARTIAL_CURRENT_INPUT"},
+  "updated_at_utc": "2026-09-16T06:15:00Z",
+  "status": "ACTIVE_GAPS_FOUND_NO_NEW_DOWNSTREAM_PROGRESS",
+  "aggregate_base": {
+    "commit": "6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5",
+    "source_records_floor": 3679,
+    "canonicalized_records_floor": 219
+  },
+  "rules": {
+    "zero_deletions": true,
+    "zero_vercel_mutations": true,
+    "secret_values_written": false,
+    "deep_pagination_performed": false,
+    "ready_promoted_to_verified_live": false,
+    "dedup_key": "projectId:deploymentId"
+  },
+  "coverage": {
+    "expected_projects": 15,
+    "project_history_ownership": {"A": 1, "B": 1, "C": 6, "D": 7},
+    "all_15_projects_assigned": true,
+    "lane_g": "TERMINAL_VERIFIED_REHYDRATED",
+    "lane_j": "ACTIVE_PARTIAL",
+    "lane_k": "ACTIVE_PARTIAL_CURRENT_INPUT"
+  },
   "audit_matrix": [
     {"check": "project coverage", "state": "PASS_AT_HISTORY_OWNER_LEVEL", "evidence": "A=1,B=1,C=6,D=7 => 15 projects"},
     {"check": "A/201-600 payload preservation", "state": "PASS_CLOSED", "evidence": "Lane G rehydrated 400/400 records, 400 unique deployment IDs, 0 duplicate deployment IDs, contiguous range verified, audit PASS", "note": "Do not re-page G."},
-    {"check": "canonical ingestion completeness", "state": "FAIL_ACTIVE", "evidence": "F remains 219 canonicalized vs source floor 3679; G has 400 durable rehydrated records pending F", "gap": "F must idempotently bind/deduplicate G, then B/C/D and earlier durable evidence."},
-    {"check": "cross-lane duplicate deployment IDs", "state": "PARTIAL_PASS", "evidence": "G scope contains 400 unique deployment IDs and zero duplicates", "gap": "Global projectId:deploymentId audit awaits complete F ingestion across G+B/C/D+earlier durable evidence."},
-    {"check": "semantic mirrors/conflicts", "state": "PARTIAL", "evidence": "Known/candidate semantic mirrors remain separate deployment IDs", "gap": "Global semantic mirror/conflict reconciliation awaits complete F canonical evidence."},
-    {"check": "module/theme classification", "state": "PARTIAL_PASS", "evidence": "J ACTIVE_PARTIAL has provenance-bound classifications", "gap": "J still contains stale pre-G source-state notes and must refresh only from newly durable F canonical evidence."},
-    {"check": "founder feed freshness", "state": "PARTIAL_STALE_RUNTIME_COUNTS", "evidence": "K v2 includes G/J and 17:41 runtime truth", "gap": "18:06 coordinator truth supersedes K partition counts: 165 planned, 0 running/succeeded/failed, attempts all zero; K requires refresh."},
-    {"check": "scheduler health", "state": "PASS_SCOPED", "evidence": "Latest durable coordinator checkpoint: scheduler healthy, 45 successful worker runs, last successful run 2026-09-15T18:00Z", "gap": "Scheduler health does not prove recovery partition claim/execution."},
-    {"check": "recovery partition execution", "state": "FAIL_NOT_STARTED", "evidence": "165 total/planned, 0 running, 0 succeeded, 0 failed, minAttempt=0, maxAttempt=0, 165 materialization checkpoints, claimOrExecutionObserved=false", "gap": "RECOVERY_EXECUTOR_NOT_STARTED: materialization is verified but partition claim/execution is not."},
-    {"check": "live truth consistency", "state": "PASS_CURRENT_SCOPED", "evidence": "Production SHA 170ffb3b9e5c48313d08fb6e27ecafb715bfec90 is READY; protected founder route/OIDC/scheduler evidence remains scoped", "gap": "READY is not module-wide VERIFIED_LIVE and recovery execution is not complete."},
+    {"check": "canonical ingestion completeness", "state": "FAIL_ACTIVE_UNCHANGED", "evidence": "F file remains 219 canonicalized vs source floor 3679; G has 400 durable rehydrated records pending F", "gap": "F must idempotently bind/deduplicate G, then B/C/D and earlier durable evidence."},
+    {"check": "cross-lane duplicate deployment IDs", "state": "PARTIAL_PASS_UNCHANGED", "evidence": "G scope contains 400 unique deployment IDs and zero duplicates", "gap": "Global projectId:deploymentId audit awaits complete F ingestion across G+B/C/D+earlier durable evidence."},
+    {"check": "semantic mirrors/conflicts", "state": "PARTIAL_UNCHANGED", "evidence": "Known/candidate semantic mirrors remain separate deployment IDs", "gap": "Global semantic mirror/conflict reconciliation awaits complete F canonical evidence."},
+    {"check": "module/theme classification", "state": "PARTIAL_PASS_STALE_INPUT_NOTES", "evidence": "J remains ACTIVE_PARTIAL with provenance-bound classifications", "gap": "J still records pre-G source state and should refresh only after F publishes new durable canonical evidence."},
+    {"check": "founder feed freshness", "state": "PARTIAL_STALE_RUNTIME_COUNTS", "evidence": "K v2 includes G/J but still records 40 scheduler runs and 165 active partitions from 17:41", "gap": "18:06 durable coordinator evidence supersedes K runtime counts: 45 successful runs; 165 planned/materialized, 0 running/succeeded/failed, attempts zero; K refresh remains required."},
+    {"check": "scheduler health", "state": "PASS_SCOPED", "evidence": "Latest durable coordinator checkpoint available on branch remains 2026-09-15T18:06Z: scheduler healthy, 45 successful worker runs, last successful run 18:00Z", "gap": "Scheduler health does not prove recovery partition claim/execution."},
+    {"check": "recovery partition execution", "state": "FAIL_NOT_STARTED", "evidence": "Latest durable partition evidence: 165 total/planned, 0 running, 0 succeeded, 0 failed, minAttempt=0, maxAttempt=0, 165 materialization checkpoints, claimOrExecutionObserved=false", "gap": "RECOVERY_EXECUTOR_NOT_STARTED remains the latest durable truth; no newer coordinator checkpoint was present in the branch at this audit."},
+    {"check": "live truth consistency", "state": "PASS_CURRENT_SCOPED", "evidence": "Production SHA 170ffb3b9e5c48313d08fb6e27ecafb715bfec90 is READY in coordinator evidence; protected founder route/OIDC/scheduler evidence remains scoped", "gap": "READY is not module-wide VERIFIED_LIVE and recovery execution is not complete."},
     {"check": "auth/billing/export blockers", "state": "OPEN_EXPLICIT", "evidence": "Exact decrypted secret continuity remains authenticated/private; complete deployment file-tree/build-output export is unavailable through current connector; historical runtime logs remain subject to Vercel billing/retention limits"}
   ],
   "unresolved_gap_queue": [
-    {"priority": 1, "owner": "runtime/coordinator", "gap": "Activate the existing fenced recovery execution path inside the durable worker fabric; all 165 partitions are materialized but unclaimed/unexecuted at attempt zero."},
+    {"priority": 1, "owner": "runtime/coordinator", "gap": "Activate/verify the existing fenced recovery execution path; latest durable evidence still has all 165 partitions materialized but unclaimed/unexecuted at attempt zero."},
     {"priority": 2, "owner": "F", "gap": "Idempotently ingest/bind the 400 G records by projectId:deploymentId, then B/C/D and earlier durable evidence; raise counts only from durable canonical records."},
     {"priority": 3, "owner": "F/L", "gap": "Complete cross-lane duplicate-ID and semantic-mirror/conflict reconciliation after canonical ingestion advances."},
     {"priority": 4, "owner": "J", "gap": "Refresh module classification only from new durable F canonical evidence; supersede stale pre-G source-state notes."},
-    {"priority": 5, "owner": "K", "gap": "Refresh founder feed with 18:06 partition truth and subsequent F/J/runtime progress."},
+    {"priority": 5, "owner": "K", "gap": "Refresh founder feed with the 18:06 partition truth and subsequent F/J/runtime progress."},
     {"priority": 6, "owner": "E/H", "gap": "Resolve private credential continuity, deployment file-tree/build-output export and historical runtime-log billing/retention blockers without exposing secrets."}
   ],
-  "dedup_conclusion": "The former 400-record preservation blocker is closed: G has 400 unique IDs, zero duplicates and PASS audit. Global dedup remains non-terminal because F is still 219/3679 and has not canonicalized G plus B/C/D and earlier durable evidence.",
-  "runtime_conclusion": "The latest durable coordinator truth available to this audit is 2026-09-15T18:06Z: scheduler healthy with 45 successful runs, but all 165 recovery partitions are planned/materialized at attempt zero with no claim or execution observed.",
-  "completion_truth": "Recovery is not complete: F remains 219/3679, J and K are partial/stale relative to newer evidence, global dedup/mirror reconciliation is incomplete, the 165 recovery partitions have not started execution, and explicit auth/billing/export blockers remain."
+  "dedup_conclusion": "The 400-record preservation blocker remains closed: G has 400 unique IDs, zero duplicates and PASS audit. Global dedup remains non-terminal because F is still 219/3679 and has not canonicalized G plus B/C/D and earlier durable evidence.",
+  "runtime_conclusion": "No newer durable coordinator checkpoint was found beyond 2026-09-15T18:06Z. Latest durable truth remains scheduler healthy with 45 successful runs, while all 165 recovery partitions are planned/materialized at attempt zero with no claim or execution observed.",
+  "completion_truth": "Recovery is not complete: F remains 219/3679, J/K remain partial or stale relative to newer durable evidence, global dedup/mirror reconciliation is incomplete, the latest durable evidence shows 165 recovery partitions have not started execution, and explicit auth/billing/export blockers remain."
 }
