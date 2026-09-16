@@ -1,112 +1,92 @@
 {
-  "updatedAt": "2026-09-15T18:05:00Z",
+  "updatedAt": "2026-09-16T12:07:39Z",
   "protocol": "docs/recovery/PANTAVION_10_THREAD_PARALLEL_ABSORPTION_PROTOCOL_20260915.md",
   "role": "THREAD_0_COORDINATOR_RUNTIME_TRUTH",
   "ingestionShardClaimed": false,
-  "legacyRescue": {
-    "master": "docs/recovery/PARALLEL_RESCUE_MASTER_COMMAND_20260915.md",
-    "aggregateStatus": "docs/recovery/live/VERCEL_RESCUE_STATUS.json",
-    "legacyLocks": "A-L already claimed according to current aggregate coordinator truth",
-    "deepPaginationDuplicationAllowed": false,
-    "terminalHistoryRepagingAllowed": false
-  },
+  "day": 3,
   "vercelProduction": {
     "project": "pantavion-planet",
-    "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
-    "deploymentId": "dpl_6NLyCMTnyzvi481Xz4UAQHrE2PHj",
-    "gitSha": "170ffb3b9e5c48313d08fb6e27ecafb715bfec90",
-    "state": "READY",
-    "target": "production",
-    "verifiedAt": "2026-09-15T18:04:41Z",
-    "readyIsVerifiedLive": false
-  },
-  "founderRecoveryRoute": {
-    "route": "/admin/pantavion/recovery",
-    "httpStatus": 200,
-    "verifiedAt": "2026-09-15T18:04:44Z",
-    "visibleBoundary": "Founder Access Required",
-    "authenticatedFounderFeedVerified": false,
-    "liveTruth": "VERIFIED_LIVE_ACCESS_BOUNDARY_ONLY"
-  },
-  "scheduler": {
-    "route": "/api/pantavion/intelligence/scheduler-health",
+    "revision": "5ee1389f4786da32da408b2e1000692187ea09bb",
+    "schedulerRoute": "/api/pantavion/intelligence/scheduler-health",
     "httpStatus": 200,
     "status": "healthy",
     "executionVerified": true,
-    "schedule": "*/5 * * * *",
-    "workerTotalRuns": 45,
-    "lastRunKey": "pantavion-intelligence-5m:2026-09-15T18:00",
-    "lastStatus": "succeeded",
-    "verifiedAt": "2026-09-15T18:04:41Z"
+    "workerSuccessfulRuns": 262,
+    "lastRunKey": "pantavion-intelligence-5m:2026-09-16T12:05",
+    "lastWorkerStatus": "succeeded",
+    "verifiedAt": "2026-09-16T12:07:39Z"
   },
   "recoveryPartitions": {
     "taskName": "pantavion:recovery_partition:v1",
-    "sourceCorpusCount": 82413,
     "partitionCount": 165,
-    "apiSemanticRollup": {
-      "active": 165,
-      "succeeded": 0,
-      "failed": 0,
-      "other": 0,
-      "note": "The scheduler-health route intentionally groups queued/planned/running rows into active. This must not be interpreted as RUNNING."
-    },
-    "directDatabaseTruth": {
+    "succeeded": 165,
+    "failed": 0,
+    "active": 0,
+    "terminal": true,
+    "completedAtFloor": "2026-09-15T18:25:10.028440Z"
+  },
+  "downstreamStages": {
+    "classify": {
+      "taskName": "pantavion:recovery_stage:classify:v1",
       "planned": 165,
       "succeeded": 0,
       "failed": 0,
-      "attemptZeroSampleConfirmed": true,
-      "sampleLeaseOwner": null,
-      "sampleLeaseToken": 0,
-      "checkpointCount": 165,
-      "latestCheckpointAt": "2026-09-15T14:30:27.011801Z",
-      "latestExecutionUpdateAt": "2026-09-15T14:30:27.011720Z"
+      "status": "READY_NOT_EXECUTING"
     },
-    "completionVerified": false,
-    "stallClassification": "MATERIALIZED_NOT_EXECUTING"
+    "canonicalize": {
+      "taskName": "pantavion:recovery_stage:canonicalize:v1",
+      "paused": 165,
+      "status": "WAITING_FOR_CLASSIFY"
+    },
+    "route": {
+      "taskName": "pantavion:recovery_stage:route:v1",
+      "paused": 165,
+      "status": "WAITING_FOR_CANONICALIZE"
+    },
+    "audit": {
+      "taskName": "pantavion:recovery_stage:audit:v1",
+      "paused": 165,
+      "status": "WAITING_FOR_ROUTE"
+    },
+    "workUnitGeneration": {
+      "taskName": "pantavion:recovery_stage:work_unit_generation:v1",
+      "paused": 165,
+      "status": "WAITING_FOR_AUDIT"
+    },
+    "totalStageExecutionsOutstanding": 825
   },
-  "runtimeBlocker": {
-    "codeEvidence": "app/api/pantavion/intelligence/cron/route.ts",
-    "currentProductionMode": "secretless_oidc",
-    "finding": "Secretless OIDC path materializes recovery partitions and runs the intelligence tick, but recovery_fenced_executor is explicitly listed as a pending capability. Therefore the 165 partitions remain planned rather than being atomically claimed/executed.",
-    "doNotMisreportAs": [
-      "165 running",
-      "165 completed",
-      "recovery executor verified"
-    ]
-  },
-  "handoffs": {
-    "THREAD_9": {
-      "priority": "P0",
-      "task": "Extend the existing Supabase/Vercel OIDC durable fabric so planned recovery partitions can be atomically claimed with leases/fencing and progress through multi-stage durable execution without introducing a second execution system.",
-      "requiredStages": ["classify", "canonicalize", "route", "audit", "work_unit_generation"],
-      "requirements": ["idempotent task keys", "atomic claims", "leases/fencing", "retry policy", "explicit failure/dead-letter", "RLS/security preserved", "no secret leakage", "no double ownership"]
-    },
-    "THREAD_2_THREAD_3": {
-      "task": "Do not count the 400 G-rehydrated records or B/C/D payload-backed evidence as canonical until durable canonical writes exist in their deterministic hash buckets."
-    },
-    "THREAD_4_THREAD_5_THREAD_6": {
-      "task": "Consume only canonical/preserved evidence with provenance; REVIEW_REQUIRED for uncertainty; preserve one canonical identity with multiple graph edges; generate work units with immutable back-links."
-    },
-    "THREAD_7": {
-      "task": "Audit the semantic difference between scheduler-health active rollup and database planned status so aggregate progress cannot be inflated."
-    },
-    "THREAD_8": {
-      "task": "Bind receipts/checksums/evidence pointers for this protocol transition and subsequent durable worker execution evidence."
-    }
-  },
-  "countIntegrity": {
-    "vercelEstimatedSourceRecords": 18000,
-    "vercelEstimateVerified": false,
-    "pantavionCorpusRecords": 82413,
-    "datasetsComparable": false,
-    "canonicalizedRecoveryFloorFromLegacyStatus": 219,
+  "legacyVercelRecovery": {
+    "estimatedSourceRecords": 18000,
+    "estimateVerified": false,
+    "recoveredDeploymentRecordsFloor": 3679,
+    "canonicalizedRecordsFloor": 219,
     "rehydratedPendingCanonicalization": 400,
-    "recoveredDeploymentRecordsFloorFromLegacyStatus": 3679
+    "note": "Vercel recovery evidence counts and the 82,413-record Pantavion corpus are distinct datasets and must not be compared as one total. The difference 3679-219 is not an exact remaining count because mirror/dedup reconciliation is still required."
+  },
+  "currentCriticalPath": [
+    "execute all 165 classify stages with atomic leases/fencing",
+    "unlock and execute 165 canonicalize stages with deterministic shard ownership and idempotent writes",
+    "unlock and execute 165 module/graph route stages",
+    "unlock and execute 165 audit stages",
+    "unlock and execute 165 work-unit-generation stages",
+    "refresh legacy Lane F canonical evidence from all durable Vercel batches",
+    "refresh Lane J classification, Lane K founder feed and Lane L completeness audit",
+    "verify authenticated founder feed and module-level live behavior separately from deployment READY"
+  ],
+  "completionTruth": {
+    "partitionExecutionComplete": true,
+    "semanticClassificationComplete": false,
+    "canonicalizationComplete": false,
+    "moduleRoutingComplete": false,
+    "auditComplete": false,
+    "agentWorkBindingComplete": false,
+    "founderFeedFullyReconciled": false,
+    "overallRecoveryComplete": false
   },
   "safety": {
     "zeroDeletions": true,
     "zeroDestructiveVercelMutations": true,
     "secretValuesRecorded": false,
-    "anotherWorkersShardRewritten": false
+    "duplicateShardWorkAllowed": false
   }
 }
