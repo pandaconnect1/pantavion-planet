@@ -13,6 +13,7 @@ import {
   type PantavionRecoveryFounderSnapshot,
   type PantavionRecoveryStageCounts,
 } from "@/lib/supabase/oidc-founder-recovery-bridge";
+import { RecoveryFounderControls } from "./recovery-founder-controls";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -118,6 +119,8 @@ export default async function FounderRecoveryControlPage({ searchParams }: PageP
               <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-5">{stageOrder.map((stage) => <StageCard key={stage} name={stage} counts={snapshot.stages[stage]} />)}</div>
             </section>
 
+            <RecoveryFounderControls />
+
             <section className="grid gap-4 lg:grid-cols-2">
               <article className="rounded-3xl border border-amber-300/20 bg-amber-300/5 p-6">
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-amber-200">Gaps / holds</p>
@@ -147,7 +150,7 @@ export default async function FounderRecoveryControlPage({ searchParams }: PageP
 
             <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 text-sm leading-6 text-slate-300">
               <p className="font-black text-white">Founder authority boundary</p>
-              <p className="mt-1">This page exposes full recovery-control visibility to the authenticated founder. Execution remains fenced and audited: administrative control does not require disabling provenance, idempotency, lease/fencing or secret-protection boundaries.</p>
+              <p className="mt-1">This page exposes full recovery-control visibility and audited operational controls to the authenticated founder. Execution remains fenced: administrative control does not require disabling provenance, idempotency, lease/fencing or secret-protection boundaries.</p>
             </section>
           </>
         )}
