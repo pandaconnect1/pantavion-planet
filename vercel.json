@@ -3,6 +3,10 @@
     {
       "path": "/api/pantavion/intelligence/cron",
       "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/pantavion/recovery/agent-bundles/cron",
+      "schedule": "*/5 * * * *"
     }
   ]
 }
