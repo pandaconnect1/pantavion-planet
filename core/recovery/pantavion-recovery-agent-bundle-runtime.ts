@@ -8,9 +8,9 @@ import {
   type PantavionRecoveryAgentBundleClaim,
 } from "@/lib/supabase/oidc-agent-bundle-bridge";
 
-const DEFAULT_MODEL = "openai/gpt-5.6-sol";
-const DEFAULT_LIMIT = 4;
-const MAX_LIMIT = 6;
+const DEFAULT_MODEL = "inclusionai/ling-3.0-flash-vl-free";
+const DEFAULT_LIMIT = 2;
+const MAX_LIMIT = 2;
 
 export type PantavionRecoveryAgentBundleTickReport = {
   marker: "pantavion_recovery_agent_bundle_tick_v1";
@@ -154,7 +154,7 @@ async function executeClaim(claim: PantavionRecoveryAgentBundleClaim, model: str
       prompt: buildPrompt(claim),
       temperature: 0,
       maxOutputTokens: 2200,
-      maxRetries: 2,
+      maxRetries: 0,
       abortSignal: AbortSignal.timeout(75_000),
       providerOptions: {
         gateway: {
