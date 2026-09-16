@@ -116,7 +116,7 @@ export default async function FounderRecoveryControlPage({ searchParams }: PageP
 
             <section>
               <div className="mb-3"><p className="text-xs font-black uppercase tracking-[0.2em] text-violet-200">Durable pipeline</p><h2 className="mt-1 text-2xl font-black">165 partitions × 5 stages</h2></div>
-              <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-5">{stageOrder.map((stage) => <StageCard key={stage} name={stage} counts={snapshot.stages[stage]} />)}</div>
+              <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-5">{stageOrder.map((stage) => <StageCard key={stage} name={stage} counts={snapshot?.stages[stage]} />)}</div>
             </section>
 
             <RecoveryFounderControls />
