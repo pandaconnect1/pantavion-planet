@@ -1,0 +1,48 @@
+name: Pantavion Recovery Patch Verifier
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/pantavion-recovery-patch-verifier.yml"
+      - "scripts/pantavion-github-recovery-patch-verifier.mjs"
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: pantavion-recovery-patch-verifier
+  cancel-in-progress: false
+
+jobs:
+  verify-recovery-patches:
+    name: Verify recovery patches in isolated checkout
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout full repository history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Verify clean baseline typecheck
+        run: npm run typecheck
+
+      - name: Execute fenced patch verifier through GitHub OIDC
+        env:
+          PANTAVION_PATCH_VERIFIER_MAX_TASKS: "3"
+        run: node scripts/pantavion-github-recovery-patch-verifier.mjs
