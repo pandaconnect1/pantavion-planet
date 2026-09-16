@@ -81,6 +81,10 @@ export default async function FounderRecoveryControlPage({ searchParams }: PageP
 
   const gaps = snapshot?.gaps;
   const completionPercent = snapshot ? Math.round((snapshot.catalogRecords / snapshot.expectedRecords) * 10000) / 100 : 0;
+  const agentBundles = snapshot?.agentBundles;
+  const agentBundlePercent = agentBundles?.total
+    ? Math.round((agentBundles.succeeded / agentBundles.total) * 10000) / 100
+    : 0;
 
   return (
     <main className="min-h-screen bg-[#05070d] px-4 py-6 text-white sm:px-6">
@@ -90,7 +94,7 @@ export default async function FounderRecoveryControlPage({ searchParams }: PageP
             <div>
               <p className="text-xs font-black uppercase tracking-[0.25em] text-cyan-200">Founder only · control plane</p>
               <h1 className="mt-2 text-3xl font-black">Pantavion Recovery Control Room</h1>
-              <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300">Live durable truth from Supabase. Classification, canonicalization, module routing, audit and work-unit generation are counted only from durable execution state.</p>
+              <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300">Live durable truth from Supabase. Classification, canonicalization, module routing, audit, work-unit generation and autonomous agent bundles are counted only from durable execution state.</p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Link href="/admin/pantavion/recovery" className="rounded-2xl border border-cyan-300/25 px-4 py-2 text-sm font-bold text-cyan-100">Recovery evidence</Link>
@@ -107,9 +111,10 @@ export default async function FounderRecoveryControlPage({ searchParams }: PageP
           </section>
         ) : (
           <>
-            <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
               <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"><p className="text-xs uppercase text-slate-400">Catalog records</p><p className="mt-2 text-3xl font-black">{snapshot.catalogRecords.toLocaleString()} / {snapshot.expectedRecords.toLocaleString()}</p></article>
               <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"><p className="text-xs uppercase text-slate-400">Operational absorption</p><p className="mt-2 text-3xl font-black">{completionPercent}%</p></article>
+              <article className="rounded-2xl border border-violet-300/20 bg-violet-300/5 p-5"><p className="text-xs uppercase text-violet-200">Agent bundles</p><p className="mt-2 text-3xl font-black">{agentBundles?.succeeded ?? 0} / {agentBundles?.total ?? 0}</p><p className="mt-1 text-xs text-slate-400">{agentBundlePercent}% AI plan terminal</p></article>
               <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"><p className="text-xs uppercase text-slate-400">Review required</p><p className="mt-2 text-3xl font-black">{(snapshot.reviewStatus.REVIEW_REQUIRED ?? 0).toLocaleString()}</p></article>
               <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"><p className="text-xs uppercase text-slate-400">Last live snapshot</p><p className="mt-2 text-sm font-black">{snapshot.generatedAt}</p></article>
             </section>
@@ -117,6 +122,22 @@ export default async function FounderRecoveryControlPage({ searchParams }: PageP
             <section>
               <div className="mb-3"><p className="text-xs font-black uppercase tracking-[0.2em] text-violet-200">Durable pipeline</p><h2 className="mt-1 text-2xl font-black">165 partitions × 5 stages</h2></div>
               <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-5">{stageOrder.map((stage) => <StageCard key={stage} name={stage} counts={snapshot?.stages[stage]} />)}</div>
+            </section>
+
+            <section className="rounded-3xl border border-violet-300/20 bg-violet-300/5 p-6">
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div><p className="text-xs font-black uppercase tracking-[0.2em] text-violet-200">Autonomous agent execution</p><h2 className="mt-1 text-2xl font-black">279 canonical work bundles</h2></div>
+                <p className="text-sm font-black text-violet-100">{agentBundlePercent}% terminal</p>
+              </div>
+              <dl className="mt-5 grid grid-cols-2 gap-3 text-sm sm:grid-cols-3 lg:grid-cols-6">
+                <div><dt className="text-slate-400">Planned</dt><dd className="text-2xl font-black">{agentBundles?.planned ?? 0}</dd></div>
+                <div><dt className="text-slate-400">Queued</dt><dd className="text-2xl font-black">{agentBundles?.queued ?? 0}</dd></div>
+                <div><dt className="text-slate-400">Running</dt><dd className="text-2xl font-black">{agentBundles?.running ?? 0}</dd></div>
+                <div><dt className="text-slate-400">Paused</dt><dd className="text-2xl font-black">{agentBundles?.paused ?? 0}</dd></div>
+                <div><dt className="text-slate-400">Succeeded</dt><dd className="text-2xl font-black text-emerald-200">{agentBundles?.succeeded ?? 0}</dd></div>
+                <div><dt className="text-slate-400">Failed</dt><dd className={`text-2xl font-black ${(agentBundles?.failed ?? 0) > 0 ? "text-rose-200" : ""}`}>{agentBundles?.failed ?? 0}</dd></div>
+              </dl>
+              <p className="mt-4 text-xs leading-5 text-slate-400">Each bundle owns one canonical target/content-type combination and carries the evidence of the underlying classified records. AI completion here means an evidence-bound internal engineering plan exists; it does not mean implementation, deployment or VERIFIED_LIVE.</p>
             </section>
 
             <RecoveryFounderControls />
