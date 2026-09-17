@@ -18,6 +18,8 @@ function SubmitButton() {
 }
 
 export default function LoginClient({ nextPath }: { nextPath: string }) {
+  const forgotHref = `/auth/forgot-password?next=${encodeURIComponent(nextPath)}`;
+
   return (
     <form
       className="w-full rounded-3xl border border-white/10 bg-slate-950/75 p-5 shadow-2xl backdrop-blur-xl sm:p-7"
@@ -54,9 +56,14 @@ export default function LoginClient({ nextPath }: { nextPath: string }) {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-bold text-slate-200" htmlFor="password">
-            Κωδικός πρόσβασης
-          </label>
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <label className="block text-sm font-bold text-slate-200" htmlFor="password">
+              Κωδικός πρόσβασης
+            </label>
+            <Link className="text-xs font-bold text-cyan-200 hover:text-cyan-100" href={forgotHref}>
+              Ξέχασα τον κωδικό
+            </Link>
+          </div>
           <input
             className="min-h-12 w-full rounded-2xl border border-white/15 bg-slate-900/90 px-4 py-3 text-base text-white outline-none transition focus:border-cyan-300/70 focus:ring-2 focus:ring-cyan-300/20"
             id="password"
