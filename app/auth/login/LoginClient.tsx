@@ -13,9 +13,10 @@ function SubmitButton() {
   );
 }
 
-export default function LoginClient() {
+export default function LoginClient({ nextPath }: { nextPath: string }) {
   return (
     <form className="pv-form pv-panel" action={signIn}>
+      <input type="hidden" name="next" value={nextPath} />
       <span className="pv-status">Secure Login</span>
       <h1>Login to Pantavion</h1>
       <p className="pv-muted">Secure email and password authentication powered by Supabase.</p>

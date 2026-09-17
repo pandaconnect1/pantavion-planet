@@ -19,6 +19,11 @@ function firstRow<T>(value: T[] | T | null | undefined): T | null {
   return value ?? null;
 }
 
+function safeNextPath(value: string, fallback = "/profile") {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return fallback;
+  return value;
+}
+
 export async function signUp(formData: FormData) {
   const firstName = getString(formData, "firstName");
   const lastName = getString(formData, "lastName");
@@ -90,13 +95,18 @@ export async function signUp(formData: FormData) {
 export async function signIn(formData: FormData) {
   const email = getString(formData, "email").toLowerCase();
   const password = getString(formData, "password");
+  const nextPath = safeNextPath(getString(formData, "next"));
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-  if (error) redirect(`/auth/login?error=${encodeURIComponent(error.message)}`);
+  if (error) {
+    redirect(`/auth/login?error=${encodeURIComponent(error.message)}&next=${encodeURIComponent(nextPath)}`);
+  }
 
   const userId = data.user?.id;
-  if (!userId) redirect("/auth/login?error=authentication_failed");
+  if (!userId) {
+    redirect(`/auth/login?error=authentication_failed&next=${encodeURIComponent(nextPath)}`);
+  }
 
   const { data: registration } = await supabase
     .from("profile_registration_states")
@@ -111,7 +121,7 @@ export async function signIn(formData: FormData) {
     redirect("/auth/complete-profile");
   }
 
-  redirect("/profile");
+  redirect(nextPath);
 }
 
 export async function completeRegistrationProfile(formData: FormData) {

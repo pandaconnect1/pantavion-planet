@@ -10,7 +10,7 @@ type TotpEnrollment = {
   secret: string;
 };
 
-export default function OwnerSafetyVerifyClient() {
+export default function OwnerSafetyVerifyClient({ nextPath }: { nextPath: string }) {
   const router = useRouter();
   const supabase = useMemo(() => createClient(), []);
   const [factorId, setFactorId] = useState<string | null>(null);
@@ -34,7 +34,7 @@ export default function OwnerSafetyVerifyClient() {
         return;
       }
       if (aal?.currentLevel === "aal2") {
-        router.replace("/owner/safety");
+        router.replace(nextPath);
         return;
       }
 
@@ -77,7 +77,7 @@ export default function OwnerSafetyVerifyClient() {
     return () => {
       active = false;
     };
-  }, [router, supabase]);
+  }, [nextPath, router, supabase]);
 
   async function verify(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -104,7 +104,7 @@ export default function OwnerSafetyVerifyClient() {
       return;
     }
 
-    router.replace("/owner/safety");
+    router.replace(nextPath);
     router.refresh();
   }
 
@@ -121,7 +121,6 @@ export default function OwnerSafetyVerifyClient() {
             Scan this QR code with a trusted authenticator app, then enter the current six-digit code below. Keep the secret private.
           </p>
           <div className="mt-4 flex justify-center rounded-xl bg-white p-4">
-            {/* Supabase returns a data URL for the TOTP QR code. */}
             <img src={enrollment.qrCode} alt="Pantavion Owner MFA QR code" className="h-48 w-48" />
           </div>
           <details className="mt-3 text-xs text-amber-100/80">
@@ -153,7 +152,7 @@ export default function OwnerSafetyVerifyClient() {
           disabled={submitting || !factorId || code.trim().length < 6}
           className="w-full rounded-xl bg-cyan-400 px-4 py-3 text-sm font-black text-slate-950 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {submitting ? "Verifying…" : "Verify & unlock Owner Control"}
+          {submitting ? "Verifying…" : "Verify & continue"}
         </button>
       </form>
     </div>
