@@ -1,7 +1,7 @@
 {
-  "schema": "pantavion_lane_l_completeness_dedup_audit_v9",
+  "schema": "pantavion_lane_l_completeness_dedup_audit_v10",
   "lane": "L",
-  "updated_at_utc": "2026-09-17T19:13:50Z",
+  "updated_at_utc": "2026-09-17T20:23:00Z",
   "status": "ACTIVE_GAPS_FOUND_NO_NEW_DOWNSTREAM_PROGRESS",
   "aggregate_base": {"commit":"6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5","source_records_floor":3679,"canonicalized_records_floor":219},
   "rules": {"zero_deletions":true,"zero_vercel_mutations":true,"secret_values_written":false,"deep_pagination_performed":false,"ready_promoted_to_verified_live":false,"dedup_key":"projectId:deploymentId"},
@@ -12,7 +12,7 @@
     {"check":"canonical ingestion completeness","state":"FAIL_ACTIVE_UNCHANGED","evidence":"F remains 219 canonicalized vs source floor 3679; G has 400 durable rehydrated records pending F","gap":"F must idempotently bind/deduplicate G, then B/C/D and earlier durable evidence."},
     {"check":"cross-lane duplicate deployment IDs","state":"PARTIAL_PASS_UNCHANGED","evidence":"G scope contains 400 unique deployment IDs and zero duplicates","gap":"Global projectId:deploymentId audit awaits complete F ingestion."},
     {"check":"semantic mirrors/conflicts","state":"PARTIAL_UNCHANGED","gap":"Global reconciliation awaits complete F canonical evidence."},
-    {"check":"module/theme classification","state":"PARTIAL_PASS_STALE_INPUT_NOTES","evidence":"J remains ACTIVE_PARTIAL and still records pre-G source state","gap":"Refresh J only after new durable F canonical evidence."},
+    {"check":"module/theme classification","state":"PARTIAL_PASS_STALE_INPUT_NOTES","evidence":"J remains ACTIVE_PARTIAL and records pre-G source state","gap":"Refresh J only after new durable F canonical evidence."},
     {"check":"founder feed freshness","state":"PARTIAL_STALE_RUNTIME_COUNTS","evidence":"K v2 includes G/J but records 40 scheduler runs and 165 active partitions from 17:41","gap":"18:06Z durable coordinator truth supersedes K runtime counts."},
     {"check":"latest durable runtime evidence","state":"NO_NEW_CHECKPOINT_FOUND","evidence":"Checkpoint directory contains coordinator-chat checkpoints only through 20260915T1806Z; no later coordinator checkpoint was present at this audit."},
     {"check":"recovery partition execution","state":"FAIL_NOT_STARTED_LATEST_DURABLE","evidence":"18:06Z: 165 planned/materialized, 0 running, 0 succeeded, 0 failed, attempts zero, no claim/execution observed; scheduler had 45 successful runs."},
