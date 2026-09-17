@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-09-17T20:23:00Z",
+  "lane": "L",
+  "mode": "COMPLETENESS_DEDUP_AUDIT_ONLY",
+  "auditCommit": "2a42be58c6054f766c7872401753ada72db99abb",
+  "aggregateBaseCommit": "6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5",
+  "status": "ACTIVE_GAPS_FOUND_NO_NEW_DOWNSTREAM_PROGRESS",
+  "projectCoverage": {"expected":15,"assigned":15,"status":"PASS_AT_HISTORY_OWNER_LEVEL"},
+  "laneG": {"status":"TERMINAL_VERIFIED_REHYDRATED","records":400,"uniqueDeploymentIds":400,"duplicateDeploymentIds":0,"audit":"PASS"},
+  "laneF": {"canonicalizedFloor":219,"sourceFloor":3679,"status":"NON_TERMINAL"},
+  "latestDurableRuntime": {"checkpoint":"coordinator-chat-20260915T1806Z.json","schedulerSuccessfulRuns":45,"partitionsTotal":165,"planned":165,"running":0,"succeeded":0,"failed":0,"minAttempt":0,"maxAttempt":0,"executionObserved":false},
+  "downstream": {"J":"ACTIVE_PARTIAL_STALE_INPUT","K":"ACTIVE_PARTIAL_STALE_RUNTIME_COUNTS","L":"ACTIVE_GAPS_FOUND"},
+  "globalDedup": "NON_TERMINAL_PENDING_COMPLETE_F_INGESTION",
+  "semanticMirrorConflictReconciliation": "NON_TERMINAL_PENDING_COMPLETE_F_INGESTION",
+  "recoveryComplete": false,
+  "safety": {"zeroDeletions":true,"zeroVercelMutations":true,"secretValuesWritten":false,"deepPaginationPerformed":false}
+}
