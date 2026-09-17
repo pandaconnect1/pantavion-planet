@@ -1,29 +1,11 @@
 {
-  "schema": "pantavion_lane_l_completeness_dedup_audit_v8",
+  "schema": "pantavion_lane_l_completeness_dedup_audit_v9",
   "lane": "L",
-  "updated_at_utc": "2026-09-17T16:15:35Z",
+  "updated_at_utc": "2026-09-17T19:13:50Z",
   "status": "ACTIVE_GAPS_FOUND_NO_NEW_DOWNSTREAM_PROGRESS",
-  "aggregate_base": {
-    "commit": "6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5",
-    "source_records_floor": 3679,
-    "canonicalized_records_floor": 219
-  },
-  "rules": {
-    "zero_deletions": true,
-    "zero_vercel_mutations": true,
-    "secret_values_written": false,
-    "deep_pagination_performed": false,
-    "ready_promoted_to_verified_live": false,
-    "dedup_key": "projectId:deploymentId"
-  },
-  "coverage": {
-    "expected_projects": 15,
-    "project_history_ownership": {"A":1,"B":1,"C":6,"D":7},
-    "all_15_projects_assigned": true,
-    "lane_g": "TERMINAL_VERIFIED_REHYDRATED",
-    "lane_j": "ACTIVE_PARTIAL",
-    "lane_k": "ACTIVE_PARTIAL_CURRENT_INPUT"
-  },
+  "aggregate_base": {"commit":"6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5","source_records_floor":3679,"canonicalized_records_floor":219},
+  "rules": {"zero_deletions":true,"zero_vercel_mutations":true,"secret_values_written":false,"deep_pagination_performed":false,"ready_promoted_to_verified_live":false,"dedup_key":"projectId:deploymentId"},
+  "coverage": {"expected_projects":15,"project_history_ownership":{"A":1,"B":1,"C":6,"D":7},"all_15_projects_assigned":true,"lane_g":"TERMINAL_VERIFIED_REHYDRATED","lane_j":"ACTIVE_PARTIAL","lane_k":"ACTIVE_PARTIAL_CURRENT_INPUT"},
   "audit_matrix": [
     {"check":"project coverage","state":"PASS_AT_HISTORY_OWNER_LEVEL","evidence":"A=1,B=1,C=6,D=7 => 15 projects"},
     {"check":"A/201-600 payload preservation","state":"PASS_CLOSED","evidence":"Lane G rehydrated 400/400 records, 400 unique deployment IDs, 0 duplicate deployment IDs, contiguous range verified, audit PASS","note":"Do not re-page G."},
@@ -31,9 +13,9 @@
     {"check":"cross-lane duplicate deployment IDs","state":"PARTIAL_PASS_UNCHANGED","evidence":"G scope contains 400 unique deployment IDs and zero duplicates","gap":"Global projectId:deploymentId audit awaits complete F ingestion."},
     {"check":"semantic mirrors/conflicts","state":"PARTIAL_UNCHANGED","gap":"Global reconciliation awaits complete F canonical evidence."},
     {"check":"module/theme classification","state":"PARTIAL_PASS_STALE_INPUT_NOTES","evidence":"J remains ACTIVE_PARTIAL and still records pre-G source state","gap":"Refresh J only after new durable F canonical evidence."},
-    {"check":"founder feed freshness","state":"PARTIAL_STALE_RUNTIME_COUNTS","evidence":"K v2 includes G/J but records 40 scheduler runs and 165 active partitions from 17:41","gap":"Latest durable coordinator checkpoint remains 18:06Z and supersedes these runtime counts."},
-    {"check":"latest durable runtime evidence","state":"NO_NEW_CHECKPOINT_FOUND","evidence":"Checkpoint directory still contains coordinator-chat checkpoints only through 20260915T1806Z; no later coordinator checkpoint was present at this audit."},
-    {"check":"recovery partition execution","state":"FAIL_NOT_STARTED_LATEST_DURABLE","evidence":"18:06Z durable truth: 165 planned/materialized, 0 running, 0 succeeded, 0 failed, attempts zero, no claim/execution observed; scheduler had 45 successful runs."},
+    {"check":"founder feed freshness","state":"PARTIAL_STALE_RUNTIME_COUNTS","evidence":"K v2 includes G/J but records 40 scheduler runs and 165 active partitions from 17:41","gap":"18:06Z durable coordinator truth supersedes K runtime counts."},
+    {"check":"latest durable runtime evidence","state":"NO_NEW_CHECKPOINT_FOUND","evidence":"Checkpoint directory contains coordinator-chat checkpoints only through 20260915T1806Z; no later coordinator checkpoint was present at this audit."},
+    {"check":"recovery partition execution","state":"FAIL_NOT_STARTED_LATEST_DURABLE","evidence":"18:06Z: 165 planned/materialized, 0 running, 0 succeeded, 0 failed, attempts zero, no claim/execution observed; scheduler had 45 successful runs."},
     {"check":"live truth consistency","state":"PASS_CURRENT_SCOPED","evidence":"Production SHA 170ffb3b9e5c48313d08fb6e27ecafb715bfec90 remains the latest durable coordinator production evidence; READY is not module-wide VERIFIED_LIVE."},
     {"check":"auth/billing/export blockers","state":"OPEN_EXPLICIT","evidence":"Exact decrypted secret continuity remains authenticated/private; complete deployment file-tree/build-output export remains unavailable through current connector; historical runtime logs remain subject to Vercel billing/retention limits."}
   ],
