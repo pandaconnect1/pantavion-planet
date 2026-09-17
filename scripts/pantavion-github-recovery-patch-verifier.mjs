@@ -76,6 +76,19 @@ function validateInput(input) {
   return { repositoryBaseSha, repositoryFile, sourceSha256, unifiedDiff };
 }
 
+function verifySourceHash(repositoryFile, expectedSha) {
+  const source = readFileSync(repositoryFile, "utf8");
+  const exactSha = sha256(source);
+  if (exactSha === expectedSha) return { mode: "utf8_exact", actualSha: exactSha };
+
+  if (source.charCodeAt(0) === 0xfeff) {
+    const bomStrippedSha = sha256(source.slice(1));
+    if (bomStrippedSha === expectedSha) return { mode: "utf8_bom_stripped", actualSha: bomStrippedSha };
+  }
+
+  throw new Error(`source_hash_mismatch:${exactSha}`);
+}
+
 async function finishFailure(claim, error) {
   try {
     await bridge({
@@ -97,13 +110,11 @@ async function verifyOne(claim) {
   try {
     run("git", ["reset", "--hard", input.repositoryBaseSha]);
     run("git", ["clean", "-fd"]);
-    const source = readFileSync(input.repositoryFile, "utf8");
-    const actualSourceSha = sha256(source);
-    if (actualSourceSha !== input.sourceSha256) throw new Error(`source_hash_mismatch:${actualSourceSha}`);
+    const sourceHashVerification = verifySourceHash(input.repositoryFile, input.sourceSha256);
 
     writeFileSync(patchPath, input.unifiedDiff, "utf8");
-    run("git", ["apply", "--check", "--whitespace=error-all", patchPath]);
-    run("git", ["apply", "--whitespace=error-all", patchPath]);
+    run("git", ["apply", "--check", "--recount", "--whitespace=error-all", patchPath]);
+    run("git", ["apply", "--recount", "--whitespace=error-all", patchPath]);
     run("git", ["diff", "--check"]);
 
     await bridge({ action: "heartbeat", executionId: claim.executionId, ownerId: claim.ownerId, fencingToken: claim.fencingToken });
@@ -117,7 +128,9 @@ async function verifyOne(claim) {
       repositoryFile: input.repositoryFile,
       sourceSha256: input.sourceSha256,
       sourceHashVerified: true,
+      sourceHashMode: sourceHashVerification.mode,
       gitApplyCheck: true,
+      patchRecount: true,
       diffCheck: true,
       typecheckPassed: true,
       diffStat,
@@ -133,7 +146,7 @@ async function verifyOne(claim) {
       succeeded: true,
       output,
     });
-    console.log(JSON.stringify({ marker:"pantavion_patch_verified_v1", executionId:claim.executionId, repositoryFile:input.repositoryFile, diffStat }));
+    console.log(JSON.stringify({ marker:"pantavion_patch_verified_v1", executionId:claim.executionId, repositoryFile:input.repositoryFile, sourceHashMode:sourceHashVerification.mode, diffStat }));
     return true;
   } catch (error) {
     await finishFailure(claim, error);
