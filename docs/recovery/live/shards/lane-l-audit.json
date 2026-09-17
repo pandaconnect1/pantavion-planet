@@ -1,7 +1,7 @@
 {
-  "schema": "pantavion_lane_l_completeness_dedup_audit_v7",
+  "schema": "pantavion_lane_l_completeness_dedup_audit_v8",
   "lane": "L",
-  "updated_at_utc": "2026-09-17T14:15:00Z",
+  "updated_at_utc": "2026-09-17T16:15:35Z",
   "status": "ACTIVE_GAPS_FOUND_NO_NEW_DOWNSTREAM_PROGRESS",
   "aggregate_base": {
     "commit": "6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5",
@@ -31,9 +31,9 @@
     {"check":"cross-lane duplicate deployment IDs","state":"PARTIAL_PASS_UNCHANGED","evidence":"G scope contains 400 unique deployment IDs and zero duplicates","gap":"Global projectId:deploymentId audit awaits complete F ingestion."},
     {"check":"semantic mirrors/conflicts","state":"PARTIAL_UNCHANGED","gap":"Global reconciliation awaits complete F canonical evidence."},
     {"check":"module/theme classification","state":"PARTIAL_PASS_STALE_INPUT_NOTES","evidence":"J remains ACTIVE_PARTIAL and still records pre-G source state","gap":"Refresh J only after new durable F canonical evidence."},
-    {"check":"founder feed freshness","state":"PARTIAL_STALE_RUNTIME_COUNTS","evidence":"K v2 includes G/J but records 40 scheduler runs and 165 active partitions from 17:41","gap":"Latest durable coordinator checkpoint present remains 18:06Z and supersedes these runtime counts."},
+    {"check":"founder feed freshness","state":"PARTIAL_STALE_RUNTIME_COUNTS","evidence":"K v2 includes G/J but records 40 scheduler runs and 165 active partitions from 17:41","gap":"Latest durable coordinator checkpoint remains 18:06Z and supersedes these runtime counts."},
     {"check":"latest durable runtime evidence","state":"NO_NEW_CHECKPOINT_FOUND","evidence":"Checkpoint directory still contains coordinator-chat checkpoints only through 20260915T1806Z; no later coordinator checkpoint was present at this audit."},
-    {"check":"recovery partition execution","state":"FAIL_NOT_STARTED_LATEST_DURABLE","evidence":"Latest durable truth previously established at 18:06Z: 165 planned/materialized, 0 running, 0 succeeded, 0 failed, attempts zero, no claim/execution observed."},
+    {"check":"recovery partition execution","state":"FAIL_NOT_STARTED_LATEST_DURABLE","evidence":"18:06Z durable truth: 165 planned/materialized, 0 running, 0 succeeded, 0 failed, attempts zero, no claim/execution observed; scheduler had 45 successful runs."},
     {"check":"live truth consistency","state":"PASS_CURRENT_SCOPED","evidence":"Production SHA 170ffb3b9e5c48313d08fb6e27ecafb715bfec90 remains the latest durable coordinator production evidence; READY is not module-wide VERIFIED_LIVE."},
     {"check":"auth/billing/export blockers","state":"OPEN_EXPLICIT","evidence":"Exact decrypted secret continuity remains authenticated/private; complete deployment file-tree/build-output export remains unavailable through current connector; historical runtime logs remain subject to Vercel billing/retention limits."}
   ],
@@ -46,6 +46,6 @@
     {"priority":6,"owner":"E/H","gap":"Resolve private credential continuity, deployment file-tree/build-output export and historical runtime-log blockers without exposing secrets."}
   ],
   "dedup_conclusion":"The 400-record preservation blocker remains closed. Global dedup remains non-terminal because F is still 219/3679 and has not canonicalized G plus B/C/D and earlier durable evidence.",
-  "runtime_conclusion":"No newer durable coordinator checkpoint was found beyond 2026-09-15T18:06Z in the checkpoint directory during this audit. Do not infer partition progress without new durable evidence.",
-  "completion_truth":"Recovery is not complete: F remains 219/3679, J/K remain partial/stale relative to required downstream completion, global dedup/mirror reconciliation is incomplete, no newer durable partition-execution evidence was found, and explicit auth/billing/export blockers remain."
+  "runtime_conclusion":"No newer durable coordinator checkpoint was found beyond 2026-09-15T18:06Z during this audit. Latest durable partition truth remains 165 planned/materialized with attempt zero and no execution observed.",
+  "completion_truth":"Recovery is not complete: F remains 219/3679, J/K remain partial/stale relative to required downstream completion, global dedup/mirror reconciliation is incomplete, partition execution has no newer durable terminal evidence, and explicit auth/billing/export blockers remain."
 }
