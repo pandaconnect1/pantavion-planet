@@ -1,0 +1,13 @@
+{
+  "lane":"L",
+  "observedAtUtc":"2026-09-17T19:13:50Z",
+  "status":"ACTIVE_GAPS_FOUND_NO_NEW_DOWNSTREAM_PROGRESS",
+  "auditCommit":"1fae2a758a2f95a6fb18399007f648e700b59f2b",
+  "latestDurableCoordinatorCheckpoint":"docs/recovery/live/checkpoints/coordinator-chat-20260915T1806Z.json",
+  "sourceFloor":3679,
+  "canonicalizedFloor":219,
+  "laneG":{"status":"TERMINAL_VERIFIED_REHYDRATED","records":400,"uniqueDeploymentIds":400,"duplicateDeploymentIds":0,"audit":"PASS"},
+  "latestDurableRuntime":{"schedulerSuccessfulRuns":45,"recoveryPartitionsTotal":165,"planned":165,"running":0,"succeeded":0,"failed":0,"attemptsObserved":0,"claimOrExecutionObserved":false},
+  "completion":false,
+  "safety":{"zeroDeletions":true,"zeroVercelMutations":true,"secretValuesRecorded":false,"deepPaginationPerformed":false}
+}
