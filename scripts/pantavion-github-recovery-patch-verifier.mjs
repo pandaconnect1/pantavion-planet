@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync, unlinkSync } from "node:fs";
 
 const BRIDGE_URL = "https://cxhulvwkagzufbjsdwwu.supabase.co/functions/v1/pantavion-github-recovery-patch-verifier-bridge";
 const OIDC_AUDIENCE = "pantavion-supabase-patch-verifier";
-const MAX_TASKS = Math.max(1, Math.min(3, Number(process.env.PANTAVION_PATCH_VERIFIER_MAX_TASKS ?? 3)));
+const MAX_TASKS = 20;
 const SAFE_PATH = /^(?:[a-zA-Z0-9._-]+\/)*[a-zA-Z0-9._-]+$/;
 const SHA40 = /^[0-9a-f]{40}$/;
 const SHA256 = /^[0-9a-f]{64}$/;
