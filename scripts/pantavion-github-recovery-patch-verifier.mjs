@@ -4,7 +4,6 @@ import { readFileSync, writeFileSync, unlinkSync } from "node:fs";
 
 const BRIDGE_URL = "https://cxhulvwkagzufbjsdwwu.supabase.co/functions/v1/pantavion-github-recovery-patch-verifier-bridge";
 const OIDC_AUDIENCE = "pantavion-supabase-patch-verifier";
-const MAX_TASKS = 20;
 const SAFE_PATH = /^(?:[a-zA-Z0-9._-]+\/)*[a-zA-Z0-9._-]+$/;
 const SHA40 = /^[0-9a-f]{40}$/;
 const SHA256 = /^[0-9a-f]{64}$/;
@@ -15,6 +14,13 @@ function requireEnv(name) {
   const value = process.env[name]?.trim();
   if (!value) throw new Error(`missing_environment:${name}`);
   return value;
+}
+
+function boundedTaskLimit() {
+  const raw = process.env.PANTAVION_PATCH_VERIFIER_MAX_TASKS?.trim() || "3";
+  const parsed = Number.parseInt(raw, 10);
+  if (!Number.isSafeInteger(parsed) || parsed < 1) throw new Error("invalid_environment:PANTAVION_PATCH_VERIFIER_MAX_TASKS");
+  return Math.min(parsed, 20);
 }
 
 function decodeExpiry(token) {
@@ -62,16 +68,20 @@ function sha256(value) {
   return createHash("sha256").update(value, "utf8").digest("hex");
 }
 
+function normalizeUnifiedDiff(value) {
+  return value.endsWith("\n") ? value : `${value}\n`;
+}
+
 function validateInput(input) {
   if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("verifier_input_missing");
   const repositoryBaseSha = String(input.repositoryBaseSha ?? "");
   const repositoryFile = String(input.repositoryFile ?? "");
   const sourceSha256 = String(input.sourceSha256 ?? "");
-  const unifiedDiff = String(input.unifiedDiff ?? "");
+  const unifiedDiff = normalizeUnifiedDiff(String(input.unifiedDiff ?? ""));
   if (!SHA40.test(repositoryBaseSha)) throw new Error("verifier_base_sha_invalid");
   if (!SAFE_PATH.test(repositoryFile)) throw new Error("verifier_repository_file_invalid");
   if (!SHA256.test(sourceSha256)) throw new Error("verifier_source_sha_invalid");
-  if (!unifiedDiff || unifiedDiff.length > 30000) throw new Error("verifier_diff_invalid");
+  if (!unifiedDiff || unifiedDiff.length > 30001) throw new Error("verifier_diff_invalid");
   if (!unifiedDiff.startsWith(`--- a/${repositoryFile}\n+++ b/${repositoryFile}\n`)) throw new Error("verifier_diff_scope_invalid");
   return { repositoryBaseSha, repositoryFile, sourceSha256, unifiedDiff };
 }
@@ -160,18 +170,21 @@ async function verifyOne(claim) {
 
 const runId = requireEnv("GITHUB_RUN_ID");
 const runAttempt = requireEnv("GITHUB_RUN_ATTEMPT");
+const maxTasks = boundedTaskLimit();
+const attemptedExecutionIds = new Set();
 let attempted = 0;
 let succeeded = 0;
 let failed = 0;
 
-for (let index = 0; index < MAX_TASKS; index += 1) {
+for (let index = 0; index < maxTasks; index += 1) {
   const ownerId = `github-patch-verifier:${runId}:${runAttempt}:${index}`;
-  const claim = await bridge({ action: "claim", ownerId });
+  const claim = await bridge({ action: "claim", ownerId, excludeExecutionIds: [...attemptedExecutionIds] });
   if (claim.acquired !== true) break;
+  attemptedExecutionIds.add(claim.executionId);
   attempted += 1;
   if (await verifyOne(claim)) succeeded += 1; else failed += 1;
 }
 
 const status = await bridge({ action: "status" });
-console.log(JSON.stringify({ marker:"pantavion_patch_verifier_run_v1", attempted, succeeded, failed, queue:status }));
+console.log(JSON.stringify({ marker:"pantavion_patch_verifier_run_v1", maxTasks, attempted, succeeded, failed, queue:status }));
 if (failed > 0) process.exitCode = 1;
