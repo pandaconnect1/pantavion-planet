@@ -9,7 +9,7 @@ import {
   type PantavionRecoveryBuilderFileClaim,
 } from "@/lib/supabase/oidc-recovery-builder-bridge";
 
-const DEFAULT_MODEL = "inclusionai/ling-3.0-flash-vl-free";
+const DEFAULT_MODEL = "minimax/minimax-m3-free";
 const DEFAULT_LIMIT = 1;
 const MAX_LIMIT = 2;
 const MAX_SOURCE_BYTES = 80_000;
@@ -322,7 +322,7 @@ export async function runPantavionRecoveryBuilderFileTick(input?: {
   const checkedAt = new Date().toISOString();
   const requestedLimit = input?.limit ?? DEFAULT_LIMIT;
   const limit = Math.max(1, Math.min(MAX_LIMIT, Math.floor(requestedLimit)));
-  const model = process.env.PANTAVION_RECOVERY_AGENT_MODEL?.trim() || DEFAULT_MODEL;
+  const model = process.env.PANTAVION_RECOVERY_BUILDER_MODEL?.trim() || DEFAULT_MODEL;
   const claims: PantavionRecoveryBuilderFileClaim[] = [];
 
   for (let index = 0; index < limit; index += 1) {
