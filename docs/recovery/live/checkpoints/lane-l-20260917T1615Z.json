@@ -1,0 +1,15 @@
+{
+  "lane":"L",
+  "observedAtUtc":"2026-09-17T16:15:35Z",
+  "status":"ACTIVE_GAPS_FOUND_NO_NEW_DOWNSTREAM_PROGRESS",
+  "auditCommit":"a7403b87096f61d5226d6574becc26b70a2f0e44",
+  "sourceFloor":3679,
+  "canonicalizedFloor":219,
+  "laneG":{"status":"TERMINAL_VERIFIED_REHYDRATED","rehydrated":400,"uniqueDeploymentIds":400,"duplicateDeploymentIds":0,"audit":"PASS"},
+  "latestDurableRuntimeCheckpoint":"docs/recovery/live/checkpoints/coordinator-chat-20260915T1806Z.json",
+  "partitions":{"total":165,"planned":165,"running":0,"succeeded":0,"failed":0,"attemptsObserved":0},
+  "schedulerSuccessfulRunsAtLatestDurableCheckpoint":45,
+  "completion":false,
+  "next":"F idempotent projectId:deploymentId ingestion/dedup of G then B/C/D and earlier durable evidence; runtime must produce durable partition claim/execution terminal evidence before completion.",
+  "safety":{"zeroDeletions":true,"zeroVercelMutations":true,"secretValuesWritten":false,"deepPaginationPerformed":false,"readyPromotedToVerifiedLive":false}
+}
