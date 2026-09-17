@@ -7,6 +7,9 @@ const OIDC_AUDIENCE = "pantavion-supabase-patch-verifier";
 const SAFE_PATH = /^(?:[a-zA-Z0-9._-]+\/)*[a-zA-Z0-9._-]+$/;
 const SHA40 = /^[0-9a-f]{40}$/;
 const SHA256 = /^[0-9a-f]{64}$/;
+const MAX_EDIT_COUNT = 8;
+const MAX_OLD_TEXT_CHARS = 8_000;
+const MAX_NEW_TEXT_CHARS = 12_000;
 let cachedToken = null;
 let cachedExpiryMs = 0;
 
@@ -69,7 +72,22 @@ function sha256(value) {
 }
 
 function normalizeUnifiedDiff(value) {
-  return value.endsWith("\n") ? value : `${value}\n`;
+  const text = String(value ?? "");
+  return text ? (text.endsWith("\n") ? text : `${text}\n`) : "";
+}
+
+function normalizeStructuredEdits(value) {
+  if (!Array.isArray(value)) return [];
+  if (value.length < 1 || value.length > MAX_EDIT_COUNT) throw new Error("verifier_structured_edit_count_invalid");
+  return value.map((item) => {
+    if (!item || typeof item !== "object" || Array.isArray(item)) throw new Error("verifier_structured_edit_invalid");
+    const oldText = typeof item.oldText === "string" ? item.oldText : "";
+    const newText = typeof item.newText === "string" ? item.newText : "";
+    if (!oldText || oldText.length > MAX_OLD_TEXT_CHARS || newText.length > MAX_NEW_TEXT_CHARS || oldText.includes("\u0000") || newText.includes("\u0000") || oldText === newText) {
+      throw new Error("verifier_structured_edit_bounds_invalid");
+    }
+    return { oldText, newText };
+  });
 }
 
 function validateInput(input) {
@@ -77,26 +95,62 @@ function validateInput(input) {
   const repositoryBaseSha = String(input.repositoryBaseSha ?? "");
   const repositoryFile = String(input.repositoryFile ?? "");
   const sourceSha256 = String(input.sourceSha256 ?? "");
-  const unifiedDiff = normalizeUnifiedDiff(String(input.unifiedDiff ?? ""));
+  const structuredEdits = normalizeStructuredEdits(input.structuredEdits);
+  const unifiedDiff = normalizeUnifiedDiff(input.unifiedDiff);
   if (!SHA40.test(repositoryBaseSha)) throw new Error("verifier_base_sha_invalid");
   if (!SAFE_PATH.test(repositoryFile)) throw new Error("verifier_repository_file_invalid");
   if (!SHA256.test(sourceSha256)) throw new Error("verifier_source_sha_invalid");
-  if (!unifiedDiff || unifiedDiff.length > 30001) throw new Error("verifier_diff_invalid");
-  if (!unifiedDiff.startsWith(`--- a/${repositoryFile}\n+++ b/${repositoryFile}\n`)) throw new Error("verifier_diff_scope_invalid");
-  return { repositoryBaseSha, repositoryFile, sourceSha256, unifiedDiff };
+  if (structuredEdits.length === 0) {
+    if (!unifiedDiff || unifiedDiff.length > 30001) throw new Error("verifier_diff_invalid");
+    if (!unifiedDiff.startsWith(`--- a/${repositoryFile}\n+++ b/${repositoryFile}\n`)) throw new Error("verifier_diff_scope_invalid");
+  }
+  return {
+    repositoryBaseSha,
+    repositoryFile,
+    sourceSha256,
+    structuredEdits,
+    unifiedDiff,
+    applyMode: structuredEdits.length > 0 ? "structured_exact_edits_v1" : "legacy_unified_diff_v1",
+  };
 }
 
 function verifySourceHash(repositoryFile, expectedSha) {
   const source = readFileSync(repositoryFile, "utf8");
   const exactSha = sha256(source);
   if (exactSha === expectedSha) return { mode: "utf8_exact", actualSha: exactSha };
-
   if (source.charCodeAt(0) === 0xfeff) {
     const bomStrippedSha = sha256(source.slice(1));
     if (bomStrippedSha === expectedSha) return { mode: "utf8_bom_stripped", actualSha: bomStrippedSha };
   }
-
   throw new Error(`source_hash_mismatch:${exactSha}`);
+}
+
+function occurrenceCount(source, needle) {
+  if (!needle) return 0;
+  let count = 0;
+  let offset = 0;
+  while (true) {
+    const index = source.indexOf(needle, offset);
+    if (index < 0) break;
+    count += 1;
+    offset = index + needle.length;
+    if (count > 1) break;
+  }
+  return count;
+}
+
+function applyStructuredEdits(repositoryFile, edits) {
+  const original = readFileSync(repositoryFile, "utf8");
+  let next = original;
+  for (const edit of edits) {
+    if (occurrenceCount(next, edit.oldText) !== 1) throw new Error("structured_edit_old_text_not_unique");
+    next = next.replace(edit.oldText, edit.newText);
+  }
+  if (next === original) throw new Error("structured_edit_noop");
+  writeFileSync(repositoryFile, next, "utf8");
+  const changedFiles = run("git", ["diff", "--name-only"]).trim().split("\n").filter(Boolean);
+  if (changedFiles.length !== 1 || changedFiles[0] !== repositoryFile) throw new Error("structured_edit_scope_violation");
+  return { editCount: edits.length };
 }
 
 async function finishFailure(claim, error) {
@@ -122,27 +176,35 @@ async function verifyOne(claim) {
     run("git", ["clean", "-fd"]);
     const sourceHashVerification = verifySourceHash(input.repositoryFile, input.sourceSha256);
 
-    writeFileSync(patchPath, input.unifiedDiff, "utf8");
-    run("git", ["apply", "--check", "--recount", "--whitespace=error-all", patchPath]);
-    run("git", ["apply", "--recount", "--whitespace=error-all", patchPath]);
-    run("git", ["diff", "--check"]);
+    let structuredEditCount = 0;
+    if (input.applyMode === "structured_exact_edits_v1") {
+      structuredEditCount = applyStructuredEdits(input.repositoryFile, input.structuredEdits).editCount;
+    } else {
+      writeFileSync(patchPath, input.unifiedDiff, "utf8");
+      run("git", ["apply", "--check", "--recount", "--whitespace=error-all", patchPath]);
+      run("git", ["apply", "--recount", "--whitespace=error-all", patchPath]);
+    }
 
+    run("git", ["diff", "--check"]);
     await bridge({ action: "heartbeat", executionId: claim.executionId, ownerId: claim.ownerId, fencingToken: claim.fencingToken });
     run("npm", ["run", "typecheck"], { timeout: 8 * 60 * 1000 });
 
     const diffStat = run("git", ["diff", "--stat", "--", input.repositoryFile]).trim().slice(0, 1000);
+    const generatedDiffSha256 = sha256(run("git", ["diff", "--", input.repositoryFile]));
     const output = {
-      marker: "pantavion_recovery_patch_verifier_output_v1",
+      marker: "pantavion_recovery_patch_verifier_output_v2",
       parentBuilderFileExecutionId: claim.input.parentBuilderFileExecutionId ?? null,
       repositoryBaseSha: input.repositoryBaseSha,
       repositoryFile: input.repositoryFile,
       sourceSha256: input.sourceSha256,
       sourceHashVerified: true,
       sourceHashMode: sourceHashVerification.mode,
-      gitApplyCheck: true,
-      patchRecount: true,
+      applyMode: input.applyMode,
+      structuredEditCount,
+      gitApplyCheck: input.applyMode === "legacy_unified_diff_v1",
       diffCheck: true,
       typecheckPassed: true,
+      generatedDiffSha256,
       diffStat,
       authority: { mainBranchWrite:false, merge:false, deployment:false, productionWrite:false, publicRelease:false },
       checkedAt: new Date().toISOString(),
@@ -156,15 +218,16 @@ async function verifyOne(claim) {
       succeeded: true,
       output,
     });
-    console.log(JSON.stringify({ marker:"pantavion_patch_verified_v1", executionId:claim.executionId, repositoryFile:input.repositoryFile, sourceHashMode:sourceHashVerification.mode, diffStat }));
+    console.log(JSON.stringify({ marker:"pantavion_patch_verified_v2", executionId:claim.executionId, repositoryFile:input.repositoryFile, applyMode:input.applyMode, diffStat }));
     return true;
   } catch (error) {
     await finishFailure(claim, error);
-    console.error(JSON.stringify({ marker:"pantavion_patch_verification_failed_v1", executionId:claim.executionId, error:String(error instanceof Error ? error.message : error).slice(0,500) }));
+    console.error(JSON.stringify({ marker:"pantavion_patch_verification_failed_v2", executionId:claim.executionId, error:String(error instanceof Error ? error.message : error).slice(0,500) }));
     return false;
   } finally {
     try { unlinkSync(patchPath); } catch {}
     try { run("git", ["reset", "--hard", input.repositoryBaseSha]); } catch {}
+    try { run("git", ["clean", "-fd"]); } catch {}
   }
 }
 
@@ -186,5 +249,5 @@ for (let index = 0; index < maxTasks; index += 1) {
 }
 
 const status = await bridge({ action: "status" });
-console.log(JSON.stringify({ marker:"pantavion_patch_verifier_run_v1", maxTasks, attempted, succeeded, failed, queue:status }));
+console.log(JSON.stringify({ marker:"pantavion_patch_verifier_run_v2", maxTasks, attempted, succeeded, failed, queue:status }));
 if (failed > 0) process.exitCode = 1;
