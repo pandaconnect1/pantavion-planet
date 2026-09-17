@@ -16,10 +16,10 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
   const nextPath = safeNextPath(firstParam(params.next));
 
   return (
-    <section className="pv-section">
-      <div className="pv-container">
+    <main className="min-h-screen px-4 py-8 sm:px-6 sm:py-12">
+      <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-md items-center justify-center">
         <LoginClient nextPath={nextPath} />
       </div>
-    </section>
+    </main>
   );
 }
