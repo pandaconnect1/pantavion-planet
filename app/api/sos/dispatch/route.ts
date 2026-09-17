@@ -38,24 +38,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    let kernelIntakePersisted = false;
     try {
       await persistPantavionSosKernelIntake(packet, receivedAt);
+      kernelIntakePersisted = true;
     } catch {
-      return NextResponse.json<PantavionSosDispatchResult>(
-        {
-          ok: false,
-          delivery: "manual",
-          message:
-            "SOS could not be durably recorded inside Pantavion. No external delivery is claimed. Use local emergency phone, SMS, or trusted-contact actions now.",
-          receivedAt,
-        },
-        { status: 503 },
-      );
+      kernelIntakePersisted = false;
     }
 
     const webhookUrl = process.env.PANTAVION_SOS_WEBHOOK_URL;
 
     if (!webhookUrl) {
+      if (!kernelIntakePersisted) {
+        return NextResponse.json<PantavionSosDispatchResult>(
+          {
+            ok: false,
+            delivery: "manual",
+            message:
+              "SOS could not be durably recorded inside Pantavion and no external emergency channel is configured. No delivery is claimed. Use local emergency phone, SMS, or trusted-contact actions now.",
+            receivedAt,
+          },
+          { status: 503 },
+        );
+      }
+
       return NextResponse.json<PantavionSosDispatchResult>({
         ok: true,
         delivery: "internal-api",
@@ -65,27 +71,43 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const webhookResponse = await fetch(webhookUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Pantavion-Event": "lifeshield.sos",
-      },
-      body: JSON.stringify({
-        event: "lifeshield.sos",
-        receivedAt,
-        packet,
-      }),
-      cache: "no-store",
-    });
+    let webhookResponse: Response;
+    try {
+      webhookResponse = await fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Pantavion-Event": "lifeshield.sos",
+        },
+        body: JSON.stringify({
+          event: "lifeshield.sos",
+          receivedAt,
+          packet,
+        }),
+        cache: "no-store",
+      });
+    } catch {
+      return NextResponse.json<PantavionSosDispatchResult>(
+        {
+          ok: false,
+          delivery: "manual",
+          message: kernelIntakePersisted
+            ? "SOS was recorded inside Pantavion, but the configured external emergency channel could not be reached. No authority dispatch is claimed. Keep using phone, SMS, share, and local rescue actions."
+            : "Pantavion could not durably record the SOS and the configured external emergency channel could not be reached. No delivery is claimed. Use local emergency phone, SMS, or trusted-contact actions now.",
+          receivedAt,
+        },
+        { status: 502 },
+      );
+    }
 
     if (!webhookResponse.ok) {
       return NextResponse.json<PantavionSosDispatchResult>(
         {
           ok: false,
           delivery: "manual",
-          message:
-            "SOS was recorded inside Pantavion, but the configured external emergency channel failed. No authority dispatch is claimed. Keep using phone, SMS, share, and local rescue actions.",
+          message: kernelIntakePersisted
+            ? "SOS was recorded inside Pantavion, but the configured external emergency channel rejected the request. No authority dispatch is claimed. Keep using phone, SMS, share, and local rescue actions."
+            : "Pantavion could not durably record the SOS and the configured external emergency channel rejected the request. No delivery is claimed. Use local emergency phone, SMS, or trusted-contact actions now.",
           receivedAt,
         },
         { status: 502 },
@@ -95,8 +117,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json<PantavionSosDispatchResult>({
       ok: true,
       delivery: "webhook",
-      message:
-        "SOS was durably recorded and delivered to the configured Pantavion emergency channel. This does not by itself confirm dispatch by police, ambulance, fire, or another authority.",
+      message: kernelIntakePersisted
+        ? "SOS was durably recorded and delivered to the configured Pantavion emergency channel. This does not by itself confirm dispatch by police, ambulance, fire, or another authority."
+        : "The configured Pantavion emergency channel accepted the SOS, but durable Kernel audit persistence failed. This does not by itself confirm dispatch by police, ambulance, fire, or another authority.",
       receivedAt,
     });
   } catch {
