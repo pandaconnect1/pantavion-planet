@@ -1,33 +1,32 @@
 {
-  "schema": "pantavion_lane_l_completeness_dedup_audit_v10",
+  "schema": "pantavion_lane_l_completeness_dedup_audit_v11",
   "lane": "L",
-  "updated_at_utc": "2026-09-17T20:23:00Z",
-  "status": "ACTIVE_GAPS_FOUND_NO_NEW_DOWNSTREAM_PROGRESS",
+  "updated_at_utc": "2026-09-18T10:21:00Z",
+  "status": "ACTIVE_GAPS_FOUND_NO_NEW_FJK_OR_PARTITION_TERMINAL_EVIDENCE",
   "aggregate_base": {"commit":"6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5","source_records_floor":3679,"canonicalized_records_floor":219},
   "rules": {"zero_deletions":true,"zero_vercel_mutations":true,"secret_values_written":false,"deep_pagination_performed":false,"ready_promoted_to_verified_live":false,"dedup_key":"projectId:deploymentId"},
   "coverage": {"expected_projects":15,"project_history_ownership":{"A":1,"B":1,"C":6,"D":7},"all_15_projects_assigned":true,"lane_g":"TERMINAL_VERIFIED_REHYDRATED","lane_j":"ACTIVE_PARTIAL","lane_k":"ACTIVE_PARTIAL_CURRENT_INPUT"},
   "audit_matrix": [
     {"check":"project coverage","state":"PASS_AT_HISTORY_OWNER_LEVEL","evidence":"A=1,B=1,C=6,D=7 => 15 projects"},
     {"check":"A/201-600 payload preservation","state":"PASS_CLOSED","evidence":"Lane G rehydrated 400/400 records, 400 unique deployment IDs, 0 duplicate deployment IDs, contiguous range verified, audit PASS","note":"Do not re-page G."},
-    {"check":"canonical ingestion completeness","state":"FAIL_ACTIVE_UNCHANGED","evidence":"F remains 219 canonicalized vs source floor 3679; G has 400 durable rehydrated records pending F","gap":"F must idempotently bind/deduplicate G, then B/C/D and earlier durable evidence."},
+    {"check":"canonical ingestion completeness","state":"FAIL_ACTIVE_UNCHANGED","evidence":"Current Lane F shard remains ACTIVE at 219 canonicalized vs source floor 3679 and still contains stale pre-G 400-record payload-gap wording.","gap":"F must supersede its stale gap, idempotently bind/deduplicate G, then B/C/D and earlier durable evidence."},
     {"check":"cross-lane duplicate deployment IDs","state":"PARTIAL_PASS_UNCHANGED","evidence":"G scope contains 400 unique deployment IDs and zero duplicates","gap":"Global projectId:deploymentId audit awaits complete F ingestion."},
     {"check":"semantic mirrors/conflicts","state":"PARTIAL_UNCHANGED","gap":"Global reconciliation awaits complete F canonical evidence."},
-    {"check":"module/theme classification","state":"PARTIAL_PASS_STALE_INPUT_NOTES","evidence":"J remains ACTIVE_PARTIAL and records pre-G source state","gap":"Refresh J only after new durable F canonical evidence."},
-    {"check":"founder feed freshness","state":"PARTIAL_STALE_RUNTIME_COUNTS","evidence":"K v2 includes G/J but records 40 scheduler runs and 165 active partitions from 17:41","gap":"18:06Z durable coordinator truth supersedes K runtime counts."},
-    {"check":"latest durable runtime evidence","state":"NO_NEW_CHECKPOINT_FOUND","evidence":"Checkpoint directory contains coordinator-chat checkpoints only through 20260915T1806Z; no later coordinator checkpoint was present at this audit."},
-    {"check":"recovery partition execution","state":"FAIL_NOT_STARTED_LATEST_DURABLE","evidence":"18:06Z: 165 planned/materialized, 0 running, 0 succeeded, 0 failed, attempts zero, no claim/execution observed; scheduler had 45 successful runs."},
-    {"check":"live truth consistency","state":"PASS_CURRENT_SCOPED","evidence":"Production SHA 170ffb3b9e5c48313d08fb6e27ecafb715bfec90 remains the latest durable coordinator production evidence; READY is not module-wide VERIFIED_LIVE."},
+    {"check":"module/theme classification","state":"PARTIAL_STALE_INPUT","evidence":"J remains ACTIVE_PARTIAL and its source_state still says Lane G had no shard at last check.","gap":"Refresh J only after new durable F canonical evidence."},
+    {"check":"founder feed freshness","state":"PARTIAL_STALE_RUNTIME_COUNTS","evidence":"K remains ACTIVE_PARTIAL_CURRENT_INPUT with 219 canonicalized, 400 G pending F, 40 scheduler runs and 165 active/0 succeeded/0 failed partitions.","gap":"Refresh K only from newer durable F/J/runtime truth."},
+    {"check":"recovery partition execution","state":"NON_TERMINAL_LATEST_BOUND_EVIDENCE","evidence":"No Lane F/J/K shard update proves partition terminal outcomes; K still binds 165 active, 0 succeeded, 0 failed and completionVerified=false."},
+    {"check":"live truth consistency","state":"PASS_SCOPED_NON_COMPLETION","evidence":"Bound coordinator/K production evidence is SHA 170ffb3b9e5c48313d08fb6e27ecafb715bfec90 READY with healthy execution-verified scheduler; READY is not module-wide VERIFIED_LIVE."},
+    {"check":"newer repository implementation commits","state":"OUTSIDE_LANE_L_COMPLETION_PROOF","evidence":"Newer repository commits exist after the recovery checkpoints, including recovery verifier fixes and durable SOS/control-plane work, but they do not by themselves prove F/K/L or recovery partitions terminal and are not promoted to recovery completion."},
     {"check":"auth/billing/export blockers","state":"OPEN_EXPLICIT","evidence":"Exact decrypted secret continuity remains authenticated/private; complete deployment file-tree/build-output export remains unavailable through current connector; historical runtime logs remain subject to Vercel billing/retention limits."}
   ],
   "unresolved_gap_queue": [
-    {"priority":1,"owner":"runtime/coordinator","gap":"Produce durable evidence that the 165 recovery partitions have actually been claimed/executed and reached terminal outcomes."},
-    {"priority":2,"owner":"F","gap":"Idempotently ingest/bind the 400 G records by projectId:deploymentId, then B/C/D and earlier durable evidence."},
+    {"priority":1,"owner":"runtime/coordinator","gap":"Produce durable evidence that the 165 recovery partitions have actually reached terminal outcomes."},
+    {"priority":2,"owner":"F","gap":"Supersede stale pre-G gap text and idempotently ingest/bind the 400 G records by projectId:deploymentId, then B/C/D and earlier durable evidence."},
     {"priority":3,"owner":"F/L","gap":"Complete global duplicate-ID and semantic-mirror/conflict reconciliation after F advances."},
-    {"priority":4,"owner":"J","gap":"Refresh classifications from new durable F evidence."},
+    {"priority":4,"owner":"J","gap":"Refresh classifications from new durable F evidence and supersede stale no-G-shard state."},
     {"priority":5,"owner":"K","gap":"Refresh founder feed from latest durable runtime plus F/J progress."},
     {"priority":6,"owner":"E/H","gap":"Resolve private credential continuity, deployment file-tree/build-output export and historical runtime-log blockers without exposing secrets."}
   ],
-  "dedup_conclusion":"The 400-record preservation blocker remains closed. Global dedup remains non-terminal because F is still 219/3679 and has not canonicalized G plus B/C/D and earlier durable evidence.",
-  "runtime_conclusion":"No newer durable coordinator checkpoint was found beyond 2026-09-15T18:06Z during this audit. Latest durable partition truth remains 165 planned/materialized with attempt zero and no execution observed.",
-  "completion_truth":"Recovery is not complete: F remains 219/3679, J/K remain partial/stale relative to required downstream completion, global dedup/mirror reconciliation is incomplete, partition execution has no newer durable terminal evidence, and explicit auth/billing/export blockers remain."
+  "dedup_conclusion":"The 400-record preservation blocker is closed. Global dedup remains non-terminal because F is still durably 219/3679 and has not recorded canonical binding of G plus B/C/D and earlier durable evidence.",
+  "completion_truth":"Recovery is not complete: F remains 219/3679, J and K remain partial/stale relative to required downstream completion, global dedup/mirror reconciliation is incomplete, and no newer bound evidence proves all 165 recovery partitions terminal."
 }
