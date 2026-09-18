@@ -1,0 +1,18 @@
+{
+  "observedAtUtc": "2026-09-18T10:21:00Z",
+  "lane": "L",
+  "mode": "COMPLETENESS_DEDUP_AUDIT_ONLY",
+  "auditCommit": "9808730fd2d843b7fd657632d66e7d2582e2742e",
+  "aggregateCommit": "6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5",
+  "branch": "backup/pre-vercel-risk-20260914",
+  "sourceFloor": 3679,
+  "canonicalizedFloor": 219,
+  "laneG": {"status":"TERMINAL_VERIFIED_REHYDRATED","rehydratedRecords":400,"uniqueDeploymentIds":400,"duplicateDeploymentIds":0,"audit":"PASS"},
+  "laneF": {"status":"ACTIVE_NON_TERMINAL","canonicalizedFloor":219,"note":"Current F shard still contains stale pre-G payload-gap wording; G preservation gap is closed but canonical binding remains unproven."},
+  "laneJ": "ACTIVE_PARTIAL_STALE_RELATIVE_TO_G",
+  "laneK": "ACTIVE_PARTIAL_CURRENT_INPUT_NON_TERMINAL",
+  "partitions": {"latestBoundTotal":165,"terminalCompletionProven":false},
+  "completion": false,
+  "safety": {"zeroDeletions":true,"zeroVercelMutations":true,"secretValuesRecorded":false,"deepPaginationPerformed":false},
+  "nextRequiredEvidence": ["F canonical binding/dedup advancement beyond 219", "global duplicate and semantic mirror reconciliation", "J refresh from new F evidence", "K refresh from new F/J/runtime evidence", "terminal outcomes for all recovery partitions"]
+}
