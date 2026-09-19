@@ -1,7 +1,7 @@
 {
-  "schema": "pantavion_lane_l_completeness_dedup_audit_v15",
+  "schema": "pantavion_lane_l_completeness_dedup_audit_v16",
   "lane": "L",
-  "updated_at_utc": "2026-09-19T21:14:16Z",
+  "updated_at_utc": "2026-09-19T23:12:05Z",
   "status": "ACTIVE_GAPS_UNCHANGED_PARTITIONS_TERMINAL_J_G_CANONICAL_CLASSIFIED_K_STALE_F_MASTER_STALE",
   "aggregate_base": {"commit":"6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5","source_records_floor":3679,"legacy_f_master_canonicalized_floor":219},
   "rules": {"zero_deletions":true,"zero_vercel_mutations":true,"secret_values_written":false,"deep_pagination_performed":false,"ready_promoted_to_verified_live":false,"dedup_key":"projectId:deploymentId"},
@@ -16,7 +16,7 @@
     {"check":"module/theme classification","state":"PARTIAL_ADVANCED","evidence":"Lane J v3 is current relative to G and reviews 619 canonical records; unsupported exact semantics remain REVIEW_REQUIRED and module VERIFIED_LIVE is not inferred."},
     {"check":"founder feed freshness","state":"FAIL_STALE","evidence":"Lane K still reports G pending F and partitions 165 active/0 succeeded, superseded by durable terminal partition truth and current J."},
     {"check":"recovery partitions","state":"PASS_TERMINAL","evidence":"TEN_THREAD_COORDINATOR_STATUS records 165/165 succeeded, 0 failed, 0 active, terminal=true."},
-    {"check":"downstream recovery stages","state":"OPEN_AT_DURABLE_COORDINATOR_SNAPSHOT","evidence":"Latest durable coordinator status records classify 165 planned/0 succeeded and canonicalize/route/audit/work-unit-generation waiting; no newer terminal downstream proof was found in current A-K evidence."},
+    {"check":"downstream recovery stages","state":"OPEN_AT_DURABLE_COORDINATOR_SNAPSHOT","evidence":"Latest durable coordinator status available to Lane L records classify 165 planned/0 succeeded and canonicalize/route/audit/work-unit-generation waiting; no newer terminal downstream proof was found in current A-K evidence."},
     {"check":"live truth consistency","state":"PASS_SCOPED_NON_COMPLETION","evidence":"Partition execution is terminal, but READY/production is not promoted to VERIFIED_LIVE and module-level live proof remains separate."},
     {"check":"auth/export blockers","state":"OPEN_EXPLICIT","evidence":"Authenticated founder-feed content and remaining private/export/runtime-history gaps are not proven closed by current Lane L inputs."}
   ],
@@ -28,7 +28,7 @@
     {"priority":5,"owner":"K","gap":"Refresh founder feed from terminal partition truth and current F/J evidence."},
     {"priority":6,"owner":"E/H","gap":"Verify authenticated founder feed and remaining private/export/runtime-history gaps without exposing secrets."}
   ],
-  "change_since_v14":"NO_MATERIAL_DURABLE_STATE_CHANGE_FOUND",
+  "change_since_v15":"NO_MATERIAL_DURABLE_STATE_CHANGE_FOUND",
   "dedup_conclusion":"The 400-record preservation gap is closed and scoped G canonical binding is clean. Global dedup remains non-terminal because F is stale at 219/3679 and complete B/C/D/earlier ingestion is not reconciled there.",
   "runtime_conclusion":"Recovery partitions are terminal 165/165 succeeded, 0 failed, 0 active. Current durable coordinator evidence available to Lane L does not prove downstream stages terminal.",
   "founder_feed_conclusion":"Lane K remains stale relative to terminal partition truth and current Lane J.",
