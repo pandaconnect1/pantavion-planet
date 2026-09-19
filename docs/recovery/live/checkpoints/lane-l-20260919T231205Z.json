@@ -1,0 +1,11 @@
+{
+  "schema":"pantavion_lane_l_checkpoint_v16",
+  "lane":"L",
+  "observed_at_utc":"2026-09-19T23:12:05Z",
+  "branch":"backup/pre-vercel-risk-20260914",
+  "aggregate_base":"6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5",
+  "audit_commit":"89da5e7f9ab43a417bdf99b976990dae08be2425",
+  "material_change":false,
+  "truth":{"g_preservation":"TERMINAL_VERIFIED_REHYDRATED_400_UNIQUE_0_DUPLICATES","g_canonical_binding":"PASS_SCOPED_400","partitions":"TERMINAL_165_SUCCEEDED_0_FAILED_0_ACTIVE","f":"STALE_219_OF_SOURCE_FLOOR_3679_GLOBAL_DEDUP_OPEN","j":"ACTIVE_PARTIAL_CANONICAL_G_CLASSIFIED","k":"STALE","downstream":"NOT_TERMINAL_PROVEN","overall_recovery_complete":false},
+  "safety":{"zero_deletions":true,"zero_vercel_mutations":true,"secret_values_written":false,"deep_pagination_performed":false}
+}
