@@ -1,0 +1,171 @@
+{
+  "schema": "pantavion_lane_j_checkpoint_v1",
+  "lane": "J",
+  "checkpoint_at_utc": "2026-09-19T09:07:52Z",
+  "status": "ACTIVE_PARTIAL_CANONICAL_G_CLASSIFIED",
+  "branch": "backup/pre-vercel-risk-20260914",
+  "lane_j_master": {
+    "path": "docs/recovery/live/shards/lane-j-module-classification.json",
+    "previous_blob_sha": "2aa9e2ef1746d5deee626c595b58aacb5e56538f",
+    "update_commit": "ae59d65cc01b0f29971aa472181778bcd49a841e",
+    "updated_blob_sha": "3576a062d82fd28c15468d16b893423dc489c449"
+  },
+  "canonical_gate": {
+    "materially_changed": true,
+    "stable_key": "projectId:deploymentId",
+    "source_records": 400,
+    "unique_records": 400,
+    "thread_2_writes": 201,
+    "thread_3_writes": 199,
+    "total_canonical": 400,
+    "overlap": 0,
+    "duplicate_keys": 0,
+    "payload_conflicts": 0,
+    "evidence": [
+      {
+        "path": "docs/recovery/live/canonical/thread-2-lane-g-201-600-canonical-receipt.json",
+        "blob_sha": "6fa343a59332a750828ce002502f07898cb993c9"
+      },
+      {
+        "path": "docs/recovery/live/canonical/thread3-g-manifest.json",
+        "blob_sha": "0eeb99294cb1395d1c3511cc4414be1b83e0de31"
+      },
+      {
+        "bucket": 5,
+        "path": "docs/recovery/live/canonical/thread3-g-bucket-5.json",
+        "blobSha": "64b50becb2ae9d68613b3dbe99d60aa8075012af",
+        "recordCount": 43
+      },
+      {
+        "bucket": 6,
+        "path": "docs/recovery/live/canonical/thread3-g-bucket-6.json",
+        "blobSha": "91bb0b211a4bf70d531f47164bbbbeb36a6c038d",
+        "recordCount": 41
+      },
+      {
+        "bucket": 7,
+        "path": "docs/recovery/live/canonical/thread3-g-bucket-7.json",
+        "blobSha": "41eb2e96b269bb7571b93e14145837d413523de3",
+        "recordCount": 41
+      },
+      {
+        "bucket": 8,
+        "path": "docs/recovery/live/canonical/thread3-g-bucket-8.json",
+        "blobSha": "2604b487b3cb24f88b193349650e1091beae1088",
+        "recordCount": 39
+      },
+      {
+        "bucket": 9,
+        "path": "docs/recovery/live/canonical/thread3-g-bucket-9.json",
+        "blobSha": "af885127167aff87dd31b7946c12173b2bae5ddb",
+        "recordCount": 35
+      }
+    ]
+  },
+  "classification_delta": {
+    "records_reviewed": 199,
+    "broad_module_classified": 27,
+    "review_required": 172,
+    "module_counts": {
+      "Interpreter/Translation": 3,
+      "AI/Orchestration": 19,
+      "Security": 1,
+      "Minors/Safety": 2,
+      "Infrastructure": 2
+    },
+    "deterministic_ref_mapping": {
+      "feat/global-emergency-languages-20260503-000515": {
+        "module": "Interpreter/Translation",
+        "theme": "Emergency language coverage"
+      },
+      "feat/world-language-coverage-20260503-102839": {
+        "module": "Interpreter/Translation",
+        "theme": "World language coverage"
+      },
+      "pantavion/execution-engine-v1": {
+        "module": "AI/Orchestration",
+        "theme": "Execution engine"
+      },
+      "kernel-canonicalization-20260411-200129": {
+        "module": "AI/Orchestration",
+        "theme": "Kernel canonicalization"
+      },
+      "pantavion-agent/evolution-engine-v1": {
+        "module": "AI/Orchestration",
+        "theme": "Agent evolution engine"
+      },
+      "pantavion/evolution-engine-v2": {
+        "module": "AI/Orchestration",
+        "theme": "Evolution engine"
+      },
+      "pantavion/ecosystem-readiness-gate-v1": {
+        "module": "Infrastructure",
+        "theme": "Ecosystem readiness gate"
+      },
+      "pantavion/real-runtime-safety-gate": {
+        "module": "Security",
+        "theme": "Runtime safety gate"
+      },
+      "real/live-sos-20260502-173628": {
+        "module": "Minors/Safety",
+        "theme": "Emergency/SOS safety"
+      },
+      "save/lifeshield-emergency-device-support-20260502-170452": {
+        "module": "Minors/Safety",
+        "theme": "LifeShield emergency device support"
+      }
+    },
+    "main_ref_without_semantic_message": 172,
+    "unsupported_semantics_guessed": 0
+  },
+  "cumulative_canonical_classification": {
+    "records_reviewed": 619,
+    "broad_or_regular_routing_eligible": 263,
+    "review_required": 356,
+    "module_verified_live": 0
+  },
+  "runtime_reconciliation": {
+    "source": "docs/recovery/live/TEN_THREAD_COORDINATOR_STATUS.json",
+    "observed_at": "2026-09-16T12:07:39Z",
+    "production_revision": "5ee1389f4786da32da408b2e1000692187ea09bb",
+    "scheduler_status": "healthy",
+    "execution_verified": true,
+    "worker_successful_runs": 262,
+    "recovery_partitions": {
+      "total": 165,
+      "succeeded": 165,
+      "failed": 0,
+      "active": 0,
+      "terminal": true
+    },
+    "historical_missing_admin_key_failures": "HISTORICAL_ONLY_SUPERSEDED",
+    "module_verified_live": false
+  },
+  "safety": {
+    "zero_deletions": true,
+    "zero_vercel_mutations": true,
+    "secret_values_written": false,
+    "deep_pagination_performed": false,
+    "only_lane_j_files_written": true,
+    "ready_or_production_promoted_to_verified_live": false
+  },
+  "remaining": {
+    "review_required_records": 356,
+    "review_required_or_unbound_module_taxonomy": [
+      "Ads Center",
+      "Business",
+      "Dating",
+      "Events",
+      "Marketplace",
+      "Pulse",
+      "Compass",
+      "Mind",
+      "Create",
+      "Tools Hub",
+      "Research Layer"
+    ],
+    "no_git_project_module_gaps": 4,
+    "module_verified_live": 0,
+    "global_recovery_complete": false
+  }
+}
