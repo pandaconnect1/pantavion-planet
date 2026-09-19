@@ -1,8 +1,8 @@
 {
-  "schema": "pantavion_lane_j_module_classification_v2",
+  "schema": "pantavion_lane_j_module_classification_v3",
   "lane": "J",
-  "updated_at_utc": "2026-09-15T14:25:00Z",
-  "status": "ACTIVE_PARTIAL",
+  "updated_at_utc": "2026-09-19T09:07:52Z",
+  "status": "ACTIVE_PARTIAL_CANONICAL_G_CLASSIFIED",
   "claim": {
     "path": "docs/recovery/live/claims/LANE_J.lock",
     "commit": "5bd69237952ef1fed5ffef545e861bb7d424c599",
@@ -29,7 +29,18 @@
     "docs/recovery/live/shards/lane-h-runtime-build.json",
     "docs/recovery/live/shards/lane-i-nogit-v0.json",
     "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
-    "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md"
+    "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
+    "docs/recovery/live/checkpoints/coordinator-chat-20260915T1741Z.json",
+    "docs/recovery/live/TEN_THREAD_COORDINATOR_STATUS.json",
+    "docs/recovery/live/canonical/thread-2-lane-g-201-600-canonical-receipt.json",
+    "docs/recovery/live/canonical/thread3-g-manifest.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-5.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-6.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-7.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-8.json",
+    "docs/recovery/live/canonical/thread3-g-bucket-9.json",
+    "docs/recovery/live/checkpoints/thread-4-semantic-20260915T1914Z.json",
+    "docs/recovery/live/checkpoints/lane-j-module-taxonomy-delta-20260915T1429Z.json"
   ],
   "source_state": {
     "lane_a": "TERMINAL_CHECKPOINTED",
@@ -37,11 +48,11 @@
     "lane_c": "TERMINAL_VERIFIED",
     "lane_d": "DEPLOYMENT_HISTORIES_TERMINAL_WITH_HISTORICAL_RUNTIME_EXPORT_BLOCKER",
     "lane_e": "BLOCKED_AUTH_EXPORT",
-    "lane_f": "ACTIVE_PARTIAL_CANONICALIZATION",
-    "lane_g": "NO_SHARD_FOUND_AT_LAST_CHECK",
-    "lane_h": "TERMINAL_VERIFIED",
+    "lane_f": "ACTIVE_PARTIAL_GLOBAL; LANE_G_201_600_FULLY_CANONICAL_BOUND_BY_THREAD2_AND_THREAD3",
+    "lane_g": "TERMINAL_VERIFIED_REHYDRATED_AND_CANONICALIZED_400_OF_400",
+    "lane_h": "TERMINAL_VERIFIED_CURRENT_SECRETLESS_SCHEDULER_HEALTHY; RECOVERY_PARTITIONS_165_OF_165_SUCCEEDED",
     "lane_i": "TERMINAL_VERIFIED_WITH_EXPLICIT_GAPS",
-    "classification_scope": "Only source-bound evidence currently available to Lane J; no unsupported completion percentages."
+    "classification_scope": "619 durable canonical records reviewed (219 prior F + 400 Lane G); unsupported exact semantics remain REVIEW_REQUIRED."
   },
   "modules": {
     "Social": {
@@ -110,6 +121,25 @@
           "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_1419Z.md",
           "live_truth": "HISTORICAL_ONLY",
           "note": "Production provenance is not a current functional translation test."
+        },
+        {
+          "summary": "3 Thread-3 Lane-G canonical deployment records provide broad Interpreter/Translation theme evidence from explicit non-main Git refs.",
+          "classification_run": "lane-j-20260919T090752Z",
+          "source": "docs/recovery/live/canonical/thread3-g-manifest.json",
+          "canonical_bucket_paths": [
+            "docs/recovery/live/canonical/thread3-g-bucket-5.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-6.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-7.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-8.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-9.json"
+          ],
+          "ref_counts": {
+            "feat/world-language-coverage-20260503-102839": 1,
+            "feat/global-emergency-languages-20260503-000515": 2
+          },
+          "semantic_depth": "BROAD_MODULE_THEME_ONLY",
+          "exact_capability": "REVIEW_REQUIRED_WITHOUT_COMMIT_SUBJECT_OR_PATH_EVIDENCE",
+          "live_truth": "HISTORICAL_ONLY"
         }
       ]
     },
@@ -156,6 +186,25 @@
           "summary": "Youth/curriculum policy runtime, policy-aware minors surface, adaptive age/jurisdiction, support-network safeguards and minor messaging enforcement were recovered as historical deployment provenance.",
           "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
           "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "2 Thread-3 Lane-G canonical deployment records provide broad Minors/Safety theme evidence from explicit non-main Git refs.",
+          "classification_run": "lane-j-20260919T090752Z",
+          "source": "docs/recovery/live/canonical/thread3-g-manifest.json",
+          "canonical_bucket_paths": [
+            "docs/recovery/live/canonical/thread3-g-bucket-5.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-6.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-7.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-8.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-9.json"
+          ],
+          "ref_counts": {
+            "save/lifeshield-emergency-device-support-20260502-170452": 1,
+            "real/live-sos-20260502-173628": 1
+          },
+          "semantic_depth": "BROAD_MODULE_THEME_ONLY",
+          "exact_capability": "REVIEW_REQUIRED_WITHOUT_COMMIT_SUBJECT_OR_PATH_EVIDENCE",
+          "live_truth": "HISTORICAL_ONLY"
         }
       ]
     },
@@ -181,6 +230,27 @@
           "pr": 304,
           "source": "docs/recovery/VERCEL_PAGINATION_PROGRESS_20260915_0938Z.md",
           "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "19 Thread-3 Lane-G canonical deployment records provide broad AI/Orchestration theme evidence from explicit non-main Git refs.",
+          "classification_run": "lane-j-20260919T090752Z",
+          "source": "docs/recovery/live/canonical/thread3-g-manifest.json",
+          "canonical_bucket_paths": [
+            "docs/recovery/live/canonical/thread3-g-bucket-5.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-6.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-7.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-8.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-9.json"
+          ],
+          "ref_counts": {
+            "pantavion-agent/evolution-engine-v1": 2,
+            "kernel-canonicalization-20260411-200129": 3,
+            "pantavion/evolution-engine-v2": 1,
+            "pantavion/execution-engine-v1": 13
+          },
+          "semantic_depth": "BROAD_MODULE_THEME_ONLY",
+          "exact_capability": "REVIEW_REQUIRED_WITHOUT_COMMIT_SUBJECT_OR_PATH_EVIDENCE",
+          "live_truth": "HISTORICAL_ONLY"
         }
       ]
     },
@@ -204,7 +274,7 @@
       ]
     },
     "Security": {
-      "classification": "EVIDENCE_BOUND_WITH_ACTIVE_BLOCKER",
+      "classification": "EVIDENCE_BOUND",
       "evidence": [
         {
           "summary": "Personal AI v1 provenance includes forced RLS, truth-state hardening and protected handoffs.",
@@ -219,12 +289,38 @@
           "live_truth": "HISTORICAL_ONLY"
         },
         {
-          "summary": "Current canonical scheduled worker runtime failure: Supabase admin credential is unavailable/unreadable in production.",
+          "summary": "Historical missing-admin-key scheduler failures are preserved as historical evidence only and are superseded for the current secretless scheduler path.",
           "route": "/api/pantavion/intelligence/cron",
           "error_group": "pantavion_secure_scheduled_worker_failed",
           "source": "docs/recovery/live/shards/lane-h-runtime-build.json",
-          "live_truth": "RUNTIME_FAILURE_CONFIRMED",
-          "privacy": "SECRET_NAME_ONLY_NO_VALUE"
+          "live_truth": "HISTORICAL_FAILURE_SUPERSEDED",
+          "privacy": "SECRET_NAME_ONLY_NO_VALUE",
+          "superseded_by": "docs/recovery/live/TEN_THREAD_COORDINATOR_STATUS.json"
+        },
+        {
+          "summary": "1 Thread-3 Lane-G canonical deployment records provide broad Security theme evidence from explicit non-main Git refs.",
+          "classification_run": "lane-j-20260919T090752Z",
+          "source": "docs/recovery/live/canonical/thread3-g-manifest.json",
+          "canonical_bucket_paths": [
+            "docs/recovery/live/canonical/thread3-g-bucket-5.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-6.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-7.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-8.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-9.json"
+          ],
+          "ref_counts": {
+            "pantavion/real-runtime-safety-gate": 1
+          },
+          "semantic_depth": "BROAD_MODULE_THEME_ONLY",
+          "exact_capability": "REVIEW_REQUIRED_WITHOUT_COMMIT_SUBJECT_OR_PATH_EVIDENCE",
+          "live_truth": "HISTORICAL_ONLY"
+        },
+        {
+          "summary": "Latest aggregate shows the secretless scheduler healthy with executionVerified=true and 262 successful runs; 165/165 recovery partitions succeeded with 0 failed and 0 active.",
+          "classification_run": "lane-j-20260919T090752Z",
+          "source": "docs/recovery/live/TEN_THREAD_COORDINATOR_STATUS.json",
+          "production_revision": "5ee1389f4786da32da408b2e1000692187ea09bb",
+          "live_truth": "SYSTEM_RUNTIME_HEALTH_ONLY_NOT_MODULE_VERIFIED_LIVE"
         }
       ]
     },
@@ -247,6 +343,24 @@
           "summary": "Historical runtime log retrieval for old deployments is blocked by Vercel billing/retention limits.",
           "source": "docs/recovery/live/shards/lane-d-legacy-b.json",
           "rescue_state": "BLOCKED_VERCEL_HISTORICAL_RUNTIME_BILLING_LIMIT"
+        },
+        {
+          "summary": "2 Thread-3 Lane-G canonical deployment records provide broad Infrastructure theme evidence from explicit non-main Git refs.",
+          "classification_run": "lane-j-20260919T090752Z",
+          "source": "docs/recovery/live/canonical/thread3-g-manifest.json",
+          "canonical_bucket_paths": [
+            "docs/recovery/live/canonical/thread3-g-bucket-5.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-6.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-7.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-8.json",
+            "docs/recovery/live/canonical/thread3-g-bucket-9.json"
+          ],
+          "ref_counts": {
+            "pantavion/ecosystem-readiness-gate-v1": 2
+          },
+          "semantic_depth": "BROAD_MODULE_THEME_ONLY",
+          "exact_capability": "REVIEW_REQUIRED_WITHOUT_COMMIT_SUBJECT_OR_PATH_EVIDENCE",
+          "live_truth": "HISTORICAL_ONLY"
         }
       ]
     },
@@ -285,23 +399,133 @@
           "rescue_state": "VERIFIED_OR_EXPLICIT_GAP",
           "live_truth": "HISTORICAL_ONLY"
         }
-      ]
+      ],
+      "children": {
+        "Voice": {
+          "classification": "EVIDENCE_BOUND_HISTORICAL_AND_REPOSITORY_PRESENT",
+          "evidence_source": "docs/recovery/live/checkpoints/lane-j-module-taxonomy-delta-20260915T1429Z.json",
+          "live_truth": "CODE_PRESENT_NOT_VERIFIED_LIVE"
+        },
+        "PantaLearn": {
+          "classification": "EVIDENCE_BOUND_HISTORICAL_AND_REPOSITORY_PRESENT",
+          "evidence_source": "docs/recovery/live/checkpoints/lane-j-module-taxonomy-delta-20260915T1429Z.json",
+          "live_truth": "CODE_PRESENT_NOT_VERIFIED_LIVE"
+        }
+      }
     }
   },
   "classification_notes": [
-    "The 14:19 pagination checkpoint reported histories OPEN at that moment; this is superseded for completion state by later owner-lane A/B terminal-zero evidence. Its deployment provenance remains usable as historical evidence.",
-    "Lane F currently exposes 219 payload-backed canonicalized records and an explicit 400-record summary-only payload gap in one Lane-A run. Lane J does not convert summary-only counts into item-level classifications.",
-    "Lane I proves four distinct no-Git Vercel project entities but proves neither historical emptiness nor content uniqueness; Lane J therefore leaves their module assignment unresolved.",
-    "A missing direct classification for Ads Center, Business, Dating, Events or Marketplace does not mean the capability is absent from the repository; it means the current source-bound Lane J input does not prove a classification yet.",
-    "No module is marked complete or VERIFIED_LIVE solely from deployment metadata."
+    "Lane G records 201-600 are now canonical module-classification inputs because F workers durably bound all 400 records by projectId:deploymentId across disjoint Thread-2 (201) and Thread-3 (199) buckets with zero duplicate keys or payload conflicts.",
+    "The previous 400-record summary-only gap is superseded only for this Lane-G range; Lane F remains globally partial for other recovery evidence.",
+    "Thread-4 previously classified 420 canonical records (219 prior F + 201 Thread-2 G): 236 regular-routing eligible and 184 review-required.",
+    "Lane J conservatively reviewed the newly durable 199 Thread-3 G records: 27 have explicit non-main refs supporting broad module/theme classification; 172 main-ref records without semantic messages remain REVIEW_REQUIRED.",
+    "Historical missing-admin-key failures remain historical and do not describe the latest healthy secretless scheduler path.",
+    "Lane I proves four distinct no-Git Vercel project entities but not historical emptiness or content uniqueness; their module assignment remains unresolved.",
+    "Voice and PantaLearn remain evidence-bound under other; Pulse, Compass, Mind, Create, Tools Hub and Research Layer remain taxonomy review items.",
+    "No module is marked complete or VERIFIED_LIVE solely from READY/production metadata, scheduler health, canonicalization, or branch names."
   ],
   "handoff": {
     "to_lane_k": "This shard is public-safe founder-feed classification input. Lane K may consume it without reclassifying unsupported modules as present.",
     "to_lane_l": "Audit module provenance, ambiguity queue and conflicts against later F/G outputs."
   },
   "next_unique_work": [
-    "Consume newly canonicalized Lane F records as they appear and classify only payload-backed evidence.",
-    "Consume Lane G provenance shard if/when created and reconcile unique-vs-mirror classifications.",
-    "Resolve review-required module themes only from direct evidence, not project names or assumptions."
-  ]
+    "Obtain commit-subject or path-level evidence for the 356 review-required canonical records before exact capability routing.",
+    "Reconcile later Lane F global canonical evidence without double-counting the 400 Lane-G stable keys already partitioned here.",
+    "Verify module behavior end-to-end separately before any VERIFIED_LIVE claim."
+  ],
+  "canonical_classification_snapshot": {
+    "observed_at_utc": "2026-09-19T09:07:52Z",
+    "stable_key": "projectId:deploymentId",
+    "lane_g_source_records": 400,
+    "lane_g_unique_source_records": 400,
+    "lane_g_duplicate_source_keys": 0,
+    "thread_2_canonical_records": 201,
+    "thread_3_canonical_records": 199,
+    "lane_g_canonical_total": 400,
+    "thread_2_thread_3_overlap": 0,
+    "payload_conflicts": 0,
+    "total_durable_canonical_records_reviewed": 619,
+    "broad_or_regular_routing_eligible": 263,
+    "review_required": 356,
+    "composition": {
+      "prior_f_records": {
+        "count": 219,
+        "regular_or_broad": 217,
+        "review_required": 2
+      },
+      "lane_g_thread_2": {
+        "count": 201,
+        "regular_or_broad": 19,
+        "review_required": 182
+      },
+      "lane_g_thread_3": {
+        "count": 199,
+        "broad_module_classified": 27,
+        "review_required": 172
+      }
+    },
+    "thread_3_module_counts": {
+      "Interpreter/Translation": 3,
+      "AI/Orchestration": 19,
+      "Security": 1,
+      "Minors/Safety": 2,
+      "Infrastructure": 2
+    },
+    "rule": "Branch-only provenance supports broad module/theme only. Exact capability remains review-bound where no commit subject/path evidence exists. READY/production is never promoted to VERIFIED_LIVE."
+  },
+  "runtime_truth": {
+    "latest_aggregate_observed_at": "2026-09-16T12:07:39Z",
+    "production_revision": "5ee1389f4786da32da408b2e1000692187ea09bb",
+    "scheduler_status": "healthy",
+    "execution_verified": true,
+    "worker_successful_runs": 262,
+    "recovery_partitions": {
+      "total": 165,
+      "succeeded": 165,
+      "failed": 0,
+      "active": 0,
+      "terminal": true
+    },
+    "historical_missing_admin_key_failures": "PRESERVED_AS_HISTORICAL_ONLY_SUPERSEDED_FOR_CURRENT_SECRETLESS_SCHEDULER_PATH",
+    "module_verified_live": false,
+    "note": "Runtime health and terminal recovery partitions do not provide direct functional proof for any Pantavion module."
+  },
+  "review_queue": {
+    "record_level": {
+      "total": 356,
+      "thread_3_main_without_semantic_message": 172,
+      "disposition": "REVIEW_REQUIRED",
+      "reason": "main-branch deployment metadata lacks semantic subject/path evidence"
+    },
+    "module_taxonomy": {
+      "review_required": [
+        "Ads Center",
+        "Business",
+        "Dating",
+        "Events",
+        "Marketplace",
+        "Pulse",
+        "Compass",
+        "Mind",
+        "Create",
+        "Tools Hub",
+        "Research Layer"
+      ],
+      "note": "Business Layer is not silently equated to Business."
+    },
+    "no_git_projects": {
+      "count": 4,
+      "classification": "EXPLICIT_GAP_NO_MODULE_INFERENCE",
+      "source": "docs/recovery/live/shards/lane-i-nogit-v0.json"
+    }
+  },
+  "verification_truth": {
+    "module_verified_live_count": 0,
+    "direct_functional_module_proofs_added_this_run": 0,
+    "ready_or_production_promotions": 0,
+    "deletions": 0,
+    "vercel_mutations": 0,
+    "secret_values_written": 0,
+    "deep_pagination_performed": false
+  }
 }
