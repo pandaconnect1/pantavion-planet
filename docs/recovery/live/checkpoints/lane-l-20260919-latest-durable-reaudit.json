@@ -1,0 +1,34 @@
+{
+  "lane": "L",
+  "schema": "pantavion_lane_l_checkpoint_v12",
+  "observed_at_utc": "2026-09-19",
+  "aggregate_base_commit": "6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5",
+  "audit_commit": "75992efd1d04272230a949703bd4de16d648f5b3",
+  "latest_durable_runtime_checkpoint": "docs/recovery/live/checkpoints/coordinator-chat-20260915T1806Z.json",
+  "truth": {
+    "source_records_floor": 3679,
+    "canonicalized_records_floor": 219,
+    "lane_g_rehydrated": 400,
+    "lane_g_unique_deployment_ids": 400,
+    "lane_g_duplicate_deployment_ids": 0,
+    "lane_g_audit": "PASS",
+    "scheduler_successful_runs_latest_durable": 45,
+    "recovery_partitions_total": 165,
+    "recovery_partitions_planned": 165,
+    "recovery_partitions_running": 0,
+    "recovery_partitions_succeeded": 0,
+    "recovery_partitions_failed": 0,
+    "min_attempt": 0,
+    "max_attempt": 0,
+    "claim_or_execution_observed": false,
+    "completion": false
+  },
+  "next": [
+    "runtime/coordinator: activate existing fenced executor and persist terminal partition outcomes",
+    "F: idempotently bind G then B/C/D and earlier durable evidence using projectId:deploymentId",
+    "J: refresh only after new durable F evidence",
+    "K: refresh from latest durable runtime plus F/J",
+    "L: final global dedup/completeness audit after downstream advances"
+  ],
+  "safety": {"zero_deletions":true,"zero_vercel_mutations":true,"secret_values_written":false,"deep_pagination_performed":false}
+}
