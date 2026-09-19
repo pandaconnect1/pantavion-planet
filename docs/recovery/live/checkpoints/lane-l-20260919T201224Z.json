@@ -1,0 +1,31 @@
+{
+  "schema": "pantavion_lane_l_checkpoint_v1",
+  "lane": "L",
+  "observed_at_utc": "2026-09-19T20:12:24Z",
+  "audit_commit": "b37303872744d045bc5e97cdd1f36aed00b0aa03",
+  "aggregate_base_commit": "6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5",
+  "status": "ACTIVE_GAPS_FOUND",
+  "verified_truth": {
+    "lane_g_rehydrated": 400,
+    "lane_g_unique_deployment_ids": 400,
+    "lane_g_duplicate_deployment_ids": 0,
+    "lane_g_audit": "PASS",
+    "recovery_partitions_total": 165,
+    "recovery_partitions_succeeded": 165,
+    "recovery_partitions_failed": 0,
+    "recovery_partitions_active": 0,
+    "lane_f_master_canonicalized_floor": 219,
+    "lane_f_source_records_floor": 3679,
+    "lane_f_global_reconciliation_terminal": false,
+    "lane_j_current_relative_to_g": true,
+    "lane_k_fresh": false,
+    "overall_recovery_complete": false
+  },
+  "next_required": [
+    "F reconcile G canonical receipts and complete B/C/D plus earlier durable global ingestion/dedup",
+    "runtime/coordinator prove downstream classify/canonicalize/route/audit/work-unit-generation terminality",
+    "K refresh founder feed from current durable truth",
+    "L re-audit after upstream durable state changes"
+  ],
+  "safety": {"zero_deletions":true,"zero_vercel_mutations":true,"secret_values_recorded":false,"deep_pagination_performed":false}
+}
