@@ -1,0 +1,28 @@
+{
+  "schema": "pantavion_lane_l_checkpoint_v1",
+  "lane": "L",
+  "checkpoint_at_utc": "2026-09-19T10:16:34Z",
+  "status": "ACTIVE_GAPS_FOUND_PARTITIONS_TERMINAL_J_G_CANONICAL_CLASSIFIED_K_STALE_F_MASTER_STALE",
+  "branch": "backup/pre-vercel-risk-20260914",
+  "lane_l_master": {
+    "path": "docs/recovery/live/shards/lane-l-audit.json",
+    "update_commit": "cff178a89d42fceaf347c2e8bf84085cf02317fc",
+    "updated_blob_sha": "a113bbe209001f6c13d776616021bd58627724ae"
+  },
+  "material_changes": {
+    "recovery_partitions": {"total":165,"succeeded":165,"failed":0,"active":0,"terminal":true},
+    "lane_g_canonical_scope": {"source":400,"unique":400,"thread_2":201,"thread_3":199,"overlap":0,"duplicate_keys":0,"payload_conflicts":0},
+    "lane_j": {"status":"ACTIVE_PARTIAL_CANONICAL_G_CLASSIFIED","records_reviewed":619,"routing_eligible":263,"review_required":356,"module_verified_live":0},
+    "lane_f_master": {"status":"STALE_ACTIVE","canonicalized_floor_recorded":219,"source_floor":3679,"global_ingestion_complete":false},
+    "lane_k": {"status":"STALE_PRE_TERMINAL_PARTITIONS_AND_PRE_J_G_CANONICAL"}
+  },
+  "completion": false,
+  "reason_not_complete": [
+    "Lane F master has not reconciled complete global canonical ingestion/dedup.",
+    "Global cross-lane duplicate and semantic mirror/conflict reconciliation is not terminal.",
+    "Lane K founder feed is stale relative to terminal partitions and Lane J v3.",
+    "Branch coordinator evidence used by this audit does not prove downstream classify/canonicalize/route/audit/work-unit stages terminal.",
+    "Module-level VERIFIED_LIVE remains unproven."
+  ],
+  "safety": {"zero_deletions":true,"zero_vercel_mutations":true,"secret_values_written":false,"deep_pagination_performed":false,"only_lane_l_files_written":true}
+}
