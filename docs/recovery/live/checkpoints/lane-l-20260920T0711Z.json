@@ -1,0 +1,13 @@
+{
+  "schema":"pantavion_lane_l_checkpoint_v1",
+  "lane":"L",
+  "observed_at_utc":"2026-09-20T07:11:16Z",
+  "audit_path":"docs/recovery/live/shards/lane-l-audit.json",
+  "audit_schema":"pantavion_lane_l_completeness_dedup_audit_v17",
+  "material_change":false,
+  "state":"ACTIVE_GAPS_UNCHANGED",
+  "verified_facts":{"lane_g_rehydrated":400,"lane_g_unique_deployment_ids":400,"lane_g_duplicate_deployment_ids":0,"lane_g_audit":"PASS","f_canonicalized_floor":219,"source_records_floor":3679,"j_status":"ACTIVE_PARTIAL_CANONICAL_G_CLASSIFIED","k_stale":true,"recovery_partitions_terminal_succeeded":165,"recovery_partitions_failed":0},
+  "completion":false,
+  "next_required":"F global idempotent ingestion/dedup, durable downstream terminal proof, K refresh, then final L audit.",
+  "safety":{"zero_deletions":true,"zero_vercel_mutations":true,"secret_values_written":false,"deep_pagination_performed":false}
+}
