@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { postSignInDestination, safeNextPath } from "../../lib/auth/flow";
 import { createClient } from "../../lib/supabase/server";
 
 const CONSENT_VERSION = "2026-08-22";
@@ -17,11 +18,6 @@ function getChecked(formData: FormData, key: string) {
 function firstRow<T>(value: T[] | T | null | undefined): T | null {
   if (Array.isArray(value)) return value[0] ?? null;
   return value ?? null;
-}
-
-function safeNextPath(value: string, fallback = "/profile") {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) return fallback;
-  return value;
 }
 
 export async function signUp(formData: FormData) {
@@ -108,20 +104,24 @@ export async function signIn(formData: FormData) {
     redirect(`/auth/login?error=authentication_failed&next=${encodeURIComponent(nextPath)}`);
   }
 
-  const { data: registration } = await supabase
+  const { data: registration, error: registrationError } = await supabase
     .from("profile_registration_states")
     .select("state")
     .eq("user_id", userId)
     .maybeSingle();
 
-  if (registration?.state === "email_confirmation_pending") {
-    redirect("/auth/check-email");
-  }
-  if (registration?.state === "profile_completion_required") {
-    redirect("/auth/complete-profile");
+  if (registrationError) {
+    await supabase.auth.signOut();
+    redirect("/auth/login?error=registration_state_unavailable");
   }
 
-  redirect(nextPath);
+  const destination = postSignInDestination(registration?.state, nextPath);
+  if (!destination) {
+    await supabase.auth.signOut();
+    redirect("/auth/login?error=account_not_active");
+  }
+
+  redirect(destination);
 }
 
 export async function completeRegistrationProfile(formData: FormData) {
