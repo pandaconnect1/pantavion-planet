@@ -1,17 +1,11 @@
 import { NextResponse } from "next/server";
+import { safeNextPath } from "@/lib/auth/flow";
 import { createClient } from "@/lib/supabase/server";
-
-function safeNextPath(value: string | null) {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) {
-    return "/auth/complete-profile";
-  }
-  return value;
-}
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
-  const next = safeNextPath(url.searchParams.get("next"));
+  const next = safeNextPath(url.searchParams.get("next"), "/auth/complete-profile");
 
   if (code) {
     const supabase = await createClient();
