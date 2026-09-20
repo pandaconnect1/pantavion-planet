@@ -1,0 +1,36 @@
+{
+  "schema": "pantavion_lane_l_checkpoint_v1",
+  "lane": "L",
+  "observed_at_utc": "2026-09-20T01:14:09Z",
+  "branch": "backup/pre-vercel-risk-20260914",
+  "aggregate_base_commit": "6135a0a13358bfb5acfdf6d18ffd3e60bb0113f5",
+  "audit_artifact": "docs/recovery/live/shards/lane-l-audit.json",
+  "audit_schema_observed": "pantavion_lane_l_completeness_dedup_audit_v16",
+  "material_change_since_audit_v16": false,
+  "truth": {
+    "lane_g": "TERMINAL_VERIFIED_REHYDRATED_400_OF_400_UNIQUE_400_DUPLICATES_0_AUDIT_PASS",
+    "recovery_partitions": "TERMINAL_165_OF_165_SUCCEEDED_0_FAILED_0_ACTIVE",
+    "lane_f": "STALE_MASTER_219_OF_3679_GLOBAL_INGESTION_DEDUP_NOT_PROVEN",
+    "lane_j": "ACTIVE_PARTIAL_CANONICAL_G_CLASSIFIED",
+    "lane_k": "STALE_PRE_TERMINAL_PARTITIONS_AND_PRE_CURRENT_J",
+    "downstream_stages": "NOT_PROVEN_TERMINAL_IN_CURRENT_DURABLE_COORDINATOR_EVIDENCE",
+    "overall_recovery_complete": false
+  },
+  "dedup": {
+    "key": "projectId:deploymentId",
+    "g_scope_duplicates": 0,
+    "global_cross_lane_dedup_terminal": false
+  },
+  "safety": {
+    "zero_deletions": true,
+    "zero_vercel_mutations": true,
+    "secret_values_written": false,
+    "deep_pagination_performed": false,
+    "ready_promoted_to_verified_live": false
+  },
+  "next": [
+    "F must reconcile the 400 G canonical receipts and complete deterministic B/C/D plus earlier durable ingestion/global dedup.",
+    "Refresh K only from current durable F/J/runtime truth.",
+    "Re-run L after a material F/K/downstream state change."
+  ]
+}
