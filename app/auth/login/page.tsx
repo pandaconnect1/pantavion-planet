@@ -1,3 +1,4 @@
+import { safeNextPath } from "@/lib/auth/flow";
 import LoginClient from "./LoginClient";
 
 type SearchParams = Promise<{
@@ -8,11 +9,6 @@ type SearchParams = Promise<{
 
 function firstParam(value: string | string[] | undefined): string | null {
   return Array.isArray(value) ? value[0] ?? null : value ?? null;
-}
-
-function safeNextPath(value: string | null): string {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/profile";
-  return value;
 }
 
 export default async function LoginPage({ searchParams }: { searchParams: SearchParams }) {
