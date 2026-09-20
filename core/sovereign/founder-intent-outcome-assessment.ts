@@ -1,0 +1,23 @@
+import { createHash } from "node:crypto";
+import { compileOutcomePlan, type OutcomePolicy, type OutcomeRisk, type OutcomeStep, type OutcomeStepKind, type UserIntent } from "./intent-to-outcome-fabric.ts";
+
+export const INTENT_OUTCOME_SCHEMA="pantavion.intent-outcome.assessment.v1" as const;
+export const INTENT_OUTCOME_POLICY="intent-outcome-assessment-only-v1" as const;
+const ROOT=new Set(["intent","steps","estimatedCost","policy"]);
+const INTENT=new Set(["id","userId","text","desiredOutcome","jurisdiction","maxCost","deadlineAt"]);
+const STEP=new Set(["id","title","kind","capability","risk","reversible","requiresOwnerApproval","dependsOn"]);
+const POLICY=new Set(["ownerApprovalRisks","requireApprovalForIrreversible","maximumAutomaticCost"]);
+const KINDS=new Set<OutcomeStepKind>(["deterministic","model","agent","workflow","human_approval"]);
+const RISKS=new Set<OutcomeRisk>(["low","medium","high","critical"]);
+type R=Record<string,unknown>;
+function rec(v:unknown,l:string):R{if(!v||typeof v!=="object"||Array.isArray(v))throw new Error(`invalid_intent_outcome:${l}_object_required`);return v as R;}
+function keys(v:R,a:Set<string>,l:string){for(const k of Object.keys(v))if(!a.has(k))throw new Error(`invalid_intent_outcome:unknown_${l}_field:${k}`);}
+function str(v:unknown,l:string,m:number){if(typeof v!=="string")throw new Error(`invalid_intent_outcome:${l}_string_required`);const n=v.trim();if(!n||n.length>m)throw new Error(`invalid_intent_outcome:${l}_length`);return n;}
+function num(v:unknown,l:string,m=1_000_000){if(typeof v!=="number"||!Number.isFinite(v)||v<0||v>m)throw new Error(`invalid_intent_outcome:${l}`);return v;}
+function bool(v:unknown,l:string){if(typeof v!=="boolean")throw new Error(`invalid_intent_outcome:${l}_boolean_required`);return v;}
+function optionalStr(v:unknown,l:string,m:number){return v===undefined?undefined:str(v,l,m);}
+function intent(v:unknown):UserIntent{const x=rec(v,"intent");keys(x,INTENT,"intent");const deadlineAt=optionalStr(x.deadlineAt,"deadlineAt",64);if(deadlineAt&&!Number.isFinite(Date.parse(deadlineAt)))throw new Error("invalid_intent_outcome:deadlineAt");return{id:str(x.id,"intentId",160),userId:str(x.userId,"userId",160),text:str(x.text,"text",4000),desiredOutcome:str(x.desiredOutcome,"desiredOutcome",2000),jurisdiction:optionalStr(x.jurisdiction,"jurisdiction",80),maxCost:x.maxCost===undefined?undefined:num(x.maxCost,"maxCost"),deadlineAt};}
+function step(v:unknown,i:number):OutcomeStep{const x=rec(v,"step");keys(x,STEP,"step");if(typeof x.kind!=="string"||!KINDS.has(x.kind as OutcomeStepKind))throw new Error("invalid_intent_outcome:kind");if(typeof x.risk!=="string"||!RISKS.has(x.risk as OutcomeRisk))throw new Error("invalid_intent_outcome:risk");if(!Array.isArray(x.dependsOn)||x.dependsOn.length>32)throw new Error("invalid_intent_outcome:dependsOn");return{id:str(x.id,`stepId_${i}`,160),title:str(x.title,`title_${i}`,300),kind:x.kind as OutcomeStepKind,capability:str(x.capability,`capability_${i}`,160),risk:x.risk as OutcomeRisk,reversible:bool(x.reversible,`reversible_${i}`),requiresOwnerApproval:bool(x.requiresOwnerApproval,`requiresOwnerApproval_${i}`),dependsOn:x.dependsOn.map((d,j)=>str(d,`dependency_${i}_${j}`,160))};}
+function policy(v:unknown):OutcomePolicy{const x=rec(v,"policy");keys(x,POLICY,"policy");if(!Array.isArray(x.ownerApprovalRisks)||x.ownerApprovalRisks.length>4||x.ownerApprovalRisks.some(r=>typeof r!=="string"||!RISKS.has(r as OutcomeRisk)))throw new Error("invalid_intent_outcome:ownerApprovalRisks");return{ownerApprovalRisks:x.ownerApprovalRisks as OutcomeRisk[],requireApprovalForIrreversible:bool(x.requireApprovalForIrreversible,"requireApprovalForIrreversible"),maximumAutomaticCost:num(x.maximumAutomaticCost,"maximumAutomaticCost")};}
+export function parseFounderIntentOutcome(input:unknown){const x=rec(input,"request");keys(x,ROOT,"request");if(!Array.isArray(x.steps)||x.steps.length<1||x.steps.length>32)throw new Error("invalid_intent_outcome:step_count");return{intent:intent(x.intent),steps:x.steps.map(step),estimatedCost:num(x.estimatedCost,"estimatedCost"),policy:policy(x.policy)};}
+export function createFounderIntentOutcomeAssessment(input:unknown){const parsed=parseFounderIntentOutcome(input);const plan=compileOutcomePlan(parsed.intent,parsed.steps,parsed.estimatedCost,parsed.policy);const canonical={schema:INTENT_OUTCOME_SCHEMA,policyVersion:INTENT_OUTCOME_POLICY,intent:parsed.intent,policy:parsed.policy,plan,assessmentOnly:true,planPersisted:false,executionPlanIssued:false,executionAllowed:false,budgetConsumed:false,authorizationEffect:"none" as const};return{...canonical,receiptSha256:createHash("sha256").update(JSON.stringify(canonical)).digest("hex")};}
