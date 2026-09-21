@@ -1,7 +1,11 @@
 import { createHash } from "crypto";
 
-import { list, put } from "@vercel/blob";
 import { NextResponse } from "next/server";
+
+import {
+  getWaterAccessRequestByDevice,
+  upsertWaterAccessRequest,
+} from "@/core/water/water-access-store";
 
 type WaterAccessRequestBody = {
   firstName?: string;
@@ -16,12 +20,6 @@ type WaterAccessRequestBody = {
   deviceToken?: string;
   deviceLabel?: string;
   userAgent?: string;
-};
-
-type BlobLike = {
-  url: string;
-  downloadUrl?: string;
-  pathname: string;
 };
 
 function clean(value: unknown) {
@@ -42,35 +40,6 @@ function stableRequestId(deviceId: string) {
   return `water-access-device-${createHash("sha256").update(deviceId).digest("hex").slice(0, 32)}`;
 }
 
-function privateBlobHeaders(): HeadersInit {
-  const token = process.env.BLOB_READ_WRITE_TOKEN || "";
-
-  return token
-    ? {
-        Authorization: `Bearer ${token}`,
-      }
-    : {};
-}
-
-async function readExistingRequest(pathname: string) {
-  const result = await list({
-    prefix: pathname,
-    limit: 1,
-  });
-  const blob = (result.blobs as BlobLike[]).find((item) => item.pathname === pathname);
-
-  if (!blob) return null;
-
-  const response = await fetch(blob.downloadUrl || blob.url, {
-    cache: "no-store",
-    headers: privateBlobHeaders(),
-  });
-
-  if (!response.ok) return null;
-
-  return (await response.json()) as Record<string, unknown>;
-}
-
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as WaterAccessRequestBody;
@@ -87,73 +56,56 @@ export async function POST(request: Request) {
 
     if (!clean(body.firstName) || !clean(body.lastName) || !title || !emailOrPhone) {
       return NextResponse.json(
-        {
-          ok: false,
-          error: "missing_required_fields",
-        },
+        { ok: false, error: "missing_required_fields" },
         { status: 400 },
       );
     }
 
     if (!deviceId || !deviceToken) {
       return NextResponse.json(
-        {
-          ok: false,
-          error: "missing_device_claim",
-        },
+        { ok: false, error: "missing_device_claim" },
         { status: 400 },
       );
     }
 
     const requestId = stableRequestId(deviceId);
-    const requestPath = `water/private/access-requests/${requestId}.json`;
-    const existingRequest = await readExistingRequest(requestPath);
-    const previousAttemptCount = Number(existingRequest?.attemptCount || 0);
+    const existingRequest = await getWaterAccessRequestByDevice(deviceId);
+    const previousAttemptCount = Number(existingRequest?.attempt_count || 0);
     const attemptCount =
       Number.isFinite(previousAttemptCount) && previousAttemptCount > 0
         ? Math.floor(previousAttemptCount) + 1
         : 1;
 
-    const payload = {
+    const saved = await upsertWaterAccessRequest({
       id: requestId,
-      firstName: clean(body.firstName),
-      lastName: clean(body.lastName),
+      device_id: deviceId,
+      token_hash: hashToken(deviceToken),
+      first_name: clean(body.firstName),
+      last_name: clean(body.lastName),
       title,
       organization: clean(body.organization),
-      emailOrPhone,
+      email_or_phone: emailOrPhone,
       reason: clean(body.reason),
+      device_label: deviceLabel,
+      user_agent: clean(request.headers.get("user-agent")).slice(0, 300),
       status: "pending_founder_review",
-      createdAt: clean(existingRequest?.createdAt) || now,
-      updatedAt: now,
-      lastRequestedAt: now,
-      attemptCount,
-      source: "pantavion-water-live-access-request",
-      device: {
-        id: deviceId,
-        tokenHash: hashToken(deviceToken),
-        label: deviceLabel,
-        requestedAt: now,
-        userAgent: clean(request.headers.get("user-agent")).slice(0, 300),
-      },
-    };
-
-    await put(
-      requestPath,
-      JSON.stringify(payload, null, 2),
-      {
-        access: "private",
-        allowOverwrite: true,
-        contentType: "application/json",
-      },
-    );
+      attempt_count: attemptCount,
+      created_at: existingRequest?.created_at || now,
+      updated_at: now,
+      last_requested_at: now,
+      decided_at: null,
+      decided_by: null,
+      revoked_device_id: null,
+    });
 
     return NextResponse.json({
       ok: true,
-      requestId,
-      status: payload.status,
+      requestId: saved.id,
+      status: saved.status,
       deviceBound: true,
       deduplicated: Boolean(existingRequest),
-      attemptCount,
+      attemptCount: saved.attempt_count,
+      storage: "supabase",
     });
   } catch (error) {
     return NextResponse.json(
