@@ -217,9 +217,17 @@ export async function migrateLegacyApprovedDeviceIfPresent(
 ) {
   if (!deviceId || !tokenHash) return null;
 
-  const current = await waterApprovedDeviceMatches(deviceId, tokenHash);
-  if (current) return current;
+  // Primary path: the approval has already been migrated to Supabase.
+  try {
+    const current = await waterApprovedDeviceMatches(deviceId, tokenHash);
+    if (current) return current;
+  } catch {
+    // Continuity rule: an unavailable Supabase admin credential must not
+    // invalidate a previously approved device while the migration is in flight.
+  }
 
+  // Continuity fallback: validate the exact pre-existing approval in the old
+  // private Blob store. This does not approve any new device.
   const legacy = await readLegacyApprovedDevice(deviceId);
   if (!legacy) return null;
 
@@ -239,7 +247,7 @@ export async function migrateLegacyApprovedDeviceIfPresent(
   }
 
   const now = new Date().toISOString();
-  const imported = await upsertWaterApprovedDevice({
+  const candidate: WaterApprovedDeviceRecord = {
     device_id: deviceId,
     token_hash: legacyTokenHash,
     phone: legacyString(legacy.phone) || legacyString(legacy.emailOrPhone),
@@ -255,15 +263,23 @@ export async function migrateLegacyApprovedDeviceIfPresent(
     revoked_at: null,
     revoked_by: null,
     updated_at: now,
-  });
+  };
 
-  await appendWaterAccessAudit({
-    event: "legacy_approval_imported",
-    actor: "pantavion-migration",
-    deviceId,
-    requestId: imported.request_id || undefined,
-    payload: { source: "vercel-blob", target: "supabase" },
-  });
+  // Best-effort migration. Access continuity is based on the already-existing
+  // legacy approval + matching device token, never on a new implicit approval.
+  try {
+    const imported = await upsertWaterApprovedDevice(candidate);
 
-  return imported;
+    await appendWaterAccessAudit({
+      event: "legacy_approval_imported",
+      actor: "pantavion-migration",
+      deviceId,
+      requestId: imported.request_id || undefined,
+      payload: { source: "vercel-blob", target: "supabase" },
+    });
+
+    return imported;
+  } catch {
+    return candidate;
+  }
 }
