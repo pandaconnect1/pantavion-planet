@@ -107,7 +107,10 @@ export function getWaterSegmentDiagnosticCode(error: unknown) {
 }
 
 function shouldUseProductionBlobSource() {
-  return process.env.VERCEL === "1" && Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+  // Railway is now the production runtime. The private water source is usable
+  // anywhere the server-only Blob credential is configured; do not couple
+  // authentic Map A serving to the Vercel runtime flag.
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim());
 }
 
 function getPrivateBlobToken() {
