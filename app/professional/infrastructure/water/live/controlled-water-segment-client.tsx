@@ -163,9 +163,6 @@ const MAX_VIEWPORT_TILES = 16;
 const MAX_FEATURES_PER_TILE = 1200;
 
 const LEGACY_WATER_DEVICE_APPROVAL_KEY = "pantavion:water:approved-until:v4";
-const WATER_ADMIN_RELOGIN_URL =
-  "/professional/infrastructure/water/admin/access?next=%2Fprofessional%2Finfrastructure%2Fwater%2Flive";
-
 function clearLegacyWaterDeviceApproval() {
   if (typeof window === "undefined") return;
   window.localStorage.removeItem(LEGACY_WATER_DEVICE_APPROVAL_KEY);
@@ -1129,17 +1126,11 @@ export default function ControlledWaterSegmentClient() {
             </div>
 
             {accessState !== "checking" ? (
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <a
-                  href={WATER_ADMIN_RELOGIN_URL}
-                  className="rounded-2xl bg-[#f2c766] px-5 py-4 text-center text-base font-black text-black"
-                >
-                  {t.adminLogin}
-                </a>
+              <div className="mt-4">
                 <button
                   type="button"
                   onClick={() => setAccessCheckVersion((value) => value + 1)}
-                  className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-4 text-base font-black text-sky-100"
+                  className="w-full rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-4 text-base font-black text-sky-100"
                 >
                   {t.retryAccess}
                 </button>
