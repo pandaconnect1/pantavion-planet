@@ -3,7 +3,7 @@ import { createHash } from "crypto";
 import { NextResponse } from "next/server";
 
 import { hasWaterAdminSession } from "@/core/security/water-admin-session";
-import { waterApprovedDeviceMatches } from "@/core/water/water-access-store";
+import { migrateLegacyApprovedDeviceIfPresent } from "@/core/water/water-access-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const approvedDevice = await waterApprovedDeviceMatches(
+    const approvedDevice = await migrateLegacyApprovedDeviceIfPresent(
       deviceId,
       hashToken(deviceToken),
     );
