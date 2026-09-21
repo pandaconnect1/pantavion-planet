@@ -15,6 +15,16 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
+type WaterSegmentAccessDecision =
+  | {
+      ok: true;
+      mode: "admin-session" | "approved-device";
+    }
+  | {
+      ok: false;
+      error: "access_not_approved";
+    };
+
 function clean(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
