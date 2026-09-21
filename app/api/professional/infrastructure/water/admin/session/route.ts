@@ -55,7 +55,7 @@ export async function POST(request: Request) {
         {
           ok: false,
           error: "admin_secret_not_configured",
-          message: "Δεν έχει ρυθμιστεί σωστά το founder/admin security secret στο Vercel.",
+          message: "Δεν έχει ρυθμιστεί σωστά το founder/admin security secret στο ενεργό production runtime.",
         },
         { status: 500, headers: { "Cache-Control": "no-store" } },
       );
