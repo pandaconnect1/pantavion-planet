@@ -9,7 +9,7 @@ import {
   parseWaterSegmentLimit,
 } from "@/core/infrastructure/water/controlled-water-segment-index-provider";
 import { hasWaterAdminSession } from "@/core/security/water-admin-session";
-import { waterApprovedDeviceMatches } from "@/core/water/water-access-store";
+import { migrateLegacyApprovedDeviceIfPresent } from "@/core/water/water-access-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -34,7 +34,7 @@ async function authorizeWaterSegmentRequest(request: Request): Promise<WaterSegm
     };
   }
 
-  const deviceApproved = await waterApprovedDeviceMatches(
+  const deviceApproved = await migrateLegacyApprovedDeviceIfPresent(
     deviceId,
     hashToken(deviceToken),
   );
