@@ -1,3 +1,5 @@
+import { list } from "@vercel/blob";
+
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export type WaterAccessRequestRecord = {
@@ -164,4 +166,104 @@ export async function appendWaterAccessAudit(input: {
   });
 
   if (error) throw error;
+}
+
+
+type LegacyBlob = {
+  pathname: string;
+  url?: string;
+  downloadUrl?: string;
+};
+
+function legacyBlobToken() {
+  return process.env.BLOB_READ_WRITE_TOKEN?.trim() || "";
+}
+
+async function readLegacyApprovedDevice(deviceId: string) {
+  const token = legacyBlobToken();
+  if (!token || !deviceId) return null;
+
+  const pathname = `water/private/approved-devices/${deviceId}.json`;
+  const result = await list({
+    prefix: pathname,
+    limit: 1,
+    token,
+  });
+
+  const blob = (result.blobs as LegacyBlob[]).find(
+    (item) => item.pathname === pathname,
+  );
+  if (!blob) return null;
+
+  const url = blob.downloadUrl || blob.url;
+  if (!url) return null;
+
+  const response = await fetch(url, {
+    cache: "no-store",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!response.ok) return null;
+  return (await response.json()) as Record<string, unknown>;
+}
+
+function legacyString(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+export async function migrateLegacyApprovedDeviceIfPresent(
+  deviceId: string,
+  tokenHash: string,
+) {
+  if (!deviceId || !tokenHash) return null;
+
+  const current = await waterApprovedDeviceMatches(deviceId, tokenHash);
+  if (current) return current;
+
+  const legacy = await readLegacyApprovedDevice(deviceId);
+  if (!legacy) return null;
+
+  const legacyStatus = legacyString(legacy.status) || "approved";
+  const legacyRevoked = legacy.revoked === true;
+  const legacyTokenHash =
+    legacyString(legacy.tokenHash) ||
+    legacyString((legacy.device as Record<string, unknown> | undefined)?.tokenHash);
+
+  if (
+    legacyStatus !== "approved" ||
+    legacyRevoked ||
+    !legacyTokenHash ||
+    legacyTokenHash !== tokenHash
+  ) {
+    return null;
+  }
+
+  const now = new Date().toISOString();
+  const imported = await upsertWaterApprovedDevice({
+    device_id: deviceId,
+    token_hash: legacyTokenHash,
+    phone: legacyString(legacy.phone) || legacyString(legacy.emailOrPhone),
+    first_name: legacyString(legacy.firstName),
+    last_name: legacyString(legacy.lastName),
+    title: legacyString(legacy.title) || legacyString(legacy.roleTitle),
+    organization: legacyString(legacy.organization),
+    request_id: legacyString(legacy.requestId) || null,
+    approved_at: legacyString(legacy.approvedAt) || now,
+    approved_by: legacyString(legacy.approvedBy) || "legacy-vercel-blob",
+    status: "approved",
+    revoked: false,
+    revoked_at: null,
+    revoked_by: null,
+    updated_at: now,
+  });
+
+  await appendWaterAccessAudit({
+    event: "legacy_approval_imported",
+    actor: "pantavion-migration",
+    deviceId,
+    requestId: imported.request_id || undefined,
+    payload: { source: "vercel-blob", target: "supabase" },
+  });
+
+  return imported;
 }
