@@ -81,7 +81,7 @@ const UI = {
     accessApproved: "Η πρόσβαση εγκρίθηκε.",
     accessChecking: "Γίνεται ασφαλής έλεγχος πρόσβασης από τον server...",
     accessRequired:
-      "Η ασφαλής έγκριση δεν είναι ενεργή ή το Administrator session έληξε. Οι σωληνώσεις και ο χάρτης παραμένουν ασφαλείς.",
+      "Η συσκευή δεν αναγνωρίστηκε ακόμη ως εγκεκριμένη. Αν είσαι ήδη εγκεκριμένος χρήστης, πάτησε Επανέλεγχος πρόσβασης. Δεν χρειάζεται νέο αίτημα εκτός αν η συσκευή σου έχει αλλάξει.",
     accessCheckFailed:
       "Ο έλεγχος πρόσβασης δεν ολοκληρώθηκε λόγω προσωρινού τεχνικού προβλήματος. Οι σωληνώσεις δεν έχουν χαθεί.",
     adminLogin: "Είσοδος Administrator",
@@ -139,7 +139,7 @@ const UI = {
     accessApproved: "Access approved.",
     accessChecking: "Securely checking access with the server...",
     accessRequired:
-      "Secure approval is not active or the Administrator session has expired. The pipes and map remain protected.",
+      "This device is not yet recognized as approved. If you were already approved, tap Check access again. Do not submit a new request unless your device has changed.",
     accessCheckFailed:
       "The access check could not complete because of a temporary technical problem. The pipes have not been lost.",
     adminLogin: "Administrator sign-in",
@@ -196,8 +196,44 @@ function getOrCreateWaterAccessDevice() {
     };
   }
 
+  const legacyDeviceIdKeys = [
+    "pantavion_water_device_id",
+    "pantavion-water-device-id",
+    "waterDeviceId",
+  ];
+  const legacyDeviceTokenKeys = [
+    "pantavion_water_device_token",
+    "pantavion-water-device-token",
+    "waterDeviceToken",
+  ];
+
   let deviceId = window.localStorage.getItem(PANTAVION_WATER_DEVICE_ID_KEY) || "";
   let deviceToken = window.localStorage.getItem(PANTAVION_WATER_DEVICE_TOKEN_KEY) || "";
+
+  // Preserve the exact identity of devices that were already approved before
+  // the Railway/Supabase migration. Do not generate a new identity until all
+  // known legacy keys have been checked.
+  if (!deviceId) {
+    for (const key of legacyDeviceIdKeys) {
+      const value = window.localStorage.getItem(key) || "";
+      if (value) {
+        deviceId = value;
+        window.localStorage.setItem(PANTAVION_WATER_DEVICE_ID_KEY, value);
+        break;
+      }
+    }
+  }
+
+  if (!deviceToken) {
+    for (const key of legacyDeviceTokenKeys) {
+      const value = window.localStorage.getItem(key) || "";
+      if (value) {
+        deviceToken = value;
+        window.localStorage.setItem(PANTAVION_WATER_DEVICE_TOKEN_KEY, value);
+        break;
+      }
+    }
+  }
 
   if (!deviceId) {
     deviceId = `water-device-${Date.now().toString(36)}-${randomWaterDeviceSecret()}`;
