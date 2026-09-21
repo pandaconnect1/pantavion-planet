@@ -1,6 +1,5 @@
 import { createHash } from "crypto";
 
-import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 import {
@@ -10,32 +9,11 @@ import {
   parseWaterSegmentLimit,
 } from "@/core/infrastructure/water/controlled-water-segment-index-provider";
 import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { waterApprovedDeviceMatches } from "@/core/water/water-access-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
-
-type BlobLike = {
-  url: string;
-  downloadUrl?: string;
-  pathname: string;
-};
-
-type ApprovedWaterDevicePayload = {
-  status?: string;
-  revoked?: boolean;
-  tokenHash?: string;
-};
-
-type WaterSegmentAccessDecision =
-  | {
-      ok: true;
-      mode: "admin-session" | "approved-device";
-    }
-  | {
-      ok: false;
-      error: "access_not_approved";
-    };
 
 function clean(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -43,55 +21,6 @@ function clean(value: unknown) {
 
 function hashToken(value: string) {
   return createHash("sha256").update(value).digest("hex");
-}
-
-function privateBlobHeaders(): HeadersInit {
-  const token = process.env.BLOB_READ_WRITE_TOKEN || "";
-
-  return token
-    ? {
-        Authorization: `Bearer ${token}`,
-      }
-    : {};
-}
-
-async function readJsonBlob(blob: BlobLike) {
-  const response = await fetch(blob.downloadUrl || blob.url, {
-    cache: "no-store",
-    headers: privateBlobHeaders(),
-  });
-
-  if (!response.ok) {
-    throw new Error(`blob_read_failed_${response.status}`);
-  }
-
-  return response.json() as Promise<ApprovedWaterDevicePayload>;
-}
-
-async function approvedDeviceMatches(deviceId: string, deviceToken: string) {
-  if (!deviceId || !deviceToken) return false;
-
-  try {
-    const pathname = `water/private/approved-devices/${deviceId}.json`;
-    const result = await list({
-      prefix: pathname,
-      limit: 1,
-    });
-
-    const blob = (result.blobs as BlobLike[]).find((item) => item.pathname === pathname);
-    if (!blob) return false;
-
-    const payload = await readJsonBlob(blob);
-    const tokenHash = hashToken(deviceToken);
-
-    if (clean(payload.status) !== "approved") return false;
-    if (payload.revoked === true) return false;
-    if (clean(payload.tokenHash) !== tokenHash) return false;
-
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 async function authorizeWaterSegmentRequest(request: Request): Promise<WaterSegmentAccessDecision> {
@@ -105,7 +34,10 @@ async function authorizeWaterSegmentRequest(request: Request): Promise<WaterSegm
     };
   }
 
-  const deviceApproved = await approvedDeviceMatches(deviceId, deviceToken);
+  const deviceApproved = await waterApprovedDeviceMatches(
+    deviceId,
+    hashToken(deviceToken),
+  );
 
   if (deviceApproved) {
     return {
