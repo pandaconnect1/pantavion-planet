@@ -113,6 +113,14 @@ jobs:
           await fsp.mkdir(reportDir, { recursive: true });
           await fsp.mkdir(tempDir, { recursive: true });
 
+          const priorityPrefixes = [
+            "water/private/access-requests/",
+            "water/private/approved-devices/",
+            "water/private/approved-contacts/",
+            "water/private/rejected-requests/",
+            "water/private/revoked-devices/"
+          ];
+
           const projects = [
             ["pantavion-planet","prj_BxhpnjvAs1seyfBU1UYFU8nDykwh"],
             ["pantavion-planet-vmxx","prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU"],
@@ -140,7 +148,9 @@ jobs:
               zeroVercelMutations: true,
               secretValuesWritten: false,
               supabaseBucket: bucket,
-              supabaseBucketPublic: false
+              supabaseBucketPublic: false,
+              priorityPrefixes,
+              sensitiveSourceUrlsPersisted: false
             },
             projects: [],
             stores: [],
@@ -292,6 +302,186 @@ jobs:
             return { bytes, sha256: hash.digest("hex") };
           }
 
+          async function migrateBlob(storeReport, store, blob, observed) {
+            const identity = `${blob.pathname}|${blob.size ?? ""}|${blob.uploadedAt ?? ""}`;
+            if (observed.has(identity)) return;
+            observed.add(identity);
+            report.totals.blobsObserved += 1;
+            const localName = crypto.createHash("sha256").update(identity).digest("hex");
+            const localPath = path.join(tempDir, localName);
+            const objectName = safeObjectName(store.id, blob.pathname);
+            const isPriority = priorityPrefixes.some((prefix) => String(blob.pathname || "").startsWith(prefix));
+            const entry = {
+              pathname: blob.pathname,
+              priority: isPriority ? "water_access_protected_state" : "standard",
+              sizeReported: blob.size ?? null,
+              uploadedAt: blob.uploadedAt ?? null,
+              contentType: blob.contentType ?? null,
+              supabaseBucket: bucket,
+              supabaseObject: objectName,
+              status: "STARTED"
+            };
+            storeReport.blobs.push(entry);
+            await saveReport();
+
+            try {
+              const downloaded = await downloadBlob(blob, store.token, localPath);
+              entry.downloadedBytes = downloaded.bytes;
+              entry.sha256 = downloaded.sha256;
+              if (blob.size != null && Number(blob.size) !== downloaded.bytes) {
+                throw new Error(`blob_size_mismatch_${blob.size}_${downloaded.bytes}`);
+              }
+              await tusUpload(localPath, objectName, blob.contentType, downloaded.bytes);
+              entry.status = "MIGRATED_TO_SUPABASE";
+              report.totals.blobsMigrated += 1;
+              report.totals.bytesMigrated += downloaded.bytes;
+            } catch (error) {
+              entry.status = "FAILED";
+              entry.error = String(error?.message || error).slice(0, 1000);
+              report.totals.failures += 1;
+            } finally {
+              await fsp.rm(localPath, { force: true });
+              await saveReport();
+            }
+          }
+
+          async function paginateStore(storeReport, store, prefix, observed) {
+            let cursor = undefined;
+            while (true) {
+              const page = await list({
+                token: store.token,
+                limit: 1000,
+                ...(prefix ? { prefix } : {}),
+                ...(cursor ? { cursor } : {})
+              });
+              const blobs = Array.isArray(page.blobs) ? page.blobs : [];
+              for (const blob of blobs) {
+                await migrateBlob(storeReport, store, blob, observed);
+              }
+              const next = page.cursor || null;
+              if (!page.hasMore || !next) return;
+              cursor = next;
+              await saveReport();
+            }
+          }
+
+          for (const store of tokenMap.values()) {
+            const storeReport = {
+              storeFingerprint: store.id,
+              sourceProjects: store.sources,
+              priorityPrefixes,
+              priorityPasses: [],
+              blobs: [],
+              terminalCursor: null,
+              terminalVerified: false
+            };
+            report.stores.push(storeReport);
+            const observed = new Set();
+
+            // First preserve the historically verified Water access/user state.
+            for (const prefix of priorityPrefixes) {
+              const before = observed.size;
+              await paginateStore(storeReport, store, prefix, observed);
+              storeReport.priorityPasses.push({
+                prefix,
+                uniqueObjectsObserved: observed.size - before,
+                terminalVerified: true
+              });
+              await saveReport();
+            }
+
+            // Then sweep the entire Blob store to terminal. Already-saved priority objects are skipped idempotently.
+            await paginateStore(storeReport, store, null, observed);
+            storeReport.terminalCursor = null;
+            storeReport.terminalVerified = true;
+            await saveReport();
+          }
+
+          report.finishedAt = new Date().toISOString();
+            await saveReport();
+            throw new Error("No decryptable Blob token was recoverable from the 15 project environment inventories.");
+          }
+
+          function metaValue(value) {
+            return Buffer.from(String(value), "utf8").toString("base64");
+          }
+
+          function supabaseHeaders(extra = {}) {
+            const headers = { apikey: supabaseKey, ...extra };
+            if (supabaseKey.startsWith("eyJ")) headers.Authorization = `Bearer ${supabaseKey}`;
+            return headers;
+          }
+
+          async function tusUpload(filePath, objectName, contentType, size) {
+            const endpoint = `https://${projectRef}.supabase.co/storage/v1/upload/resumable`;
+            const metadata = [
+              ["bucketName", bucket],
+              ["objectName", objectName],
+              ["contentType", contentType || "application/octet-stream"],
+              ["cacheControl", "0"]
+            ].map(([k,v]) => `${k} ${metaValue(v)}`).join(",");
+
+            const create = await fetch(endpoint, {
+              method: "POST",
+              headers: supabaseHeaders({
+                "Tus-Resumable": "1.0.0",
+                "Upload-Length": String(size),
+                "Upload-Metadata": metadata,
+                "x-upsert": "true"
+              })
+            });
+            if (!create.ok) throw new Error(`supabase_tus_create_${create.status}_${await create.text()}`);
+            const location = create.headers.get("location");
+            if (!location) throw new Error("supabase_tus_missing_location");
+            const uploadUrl = new URL(location, endpoint).toString();
+
+            const handle = await fsp.open(filePath, "r");
+            try {
+              const chunkSize = 6 * 1024 * 1024;
+              let offset = 0;
+              while (offset < size) {
+                const length = Math.min(chunkSize, size - offset);
+                const buffer = Buffer.allocUnsafe(length);
+                const { bytesRead } = await handle.read(buffer, 0, length, offset);
+                if (bytesRead !== length) throw new Error(`local_read_short_${bytesRead}_${length}`);
+                const patch = await fetch(uploadUrl, {
+                  method: "PATCH",
+                  headers: supabaseHeaders({
+                    "Tus-Resumable": "1.0.0",
+                    "Upload-Offset": String(offset),
+                    "Content-Type": "application/offset+octet-stream"
+                  }),
+                  body: buffer
+                });
+                if (!patch.ok) throw new Error(`supabase_tus_patch_${patch.status}_${await patch.text()}`);
+                const next = Number(patch.headers.get("upload-offset"));
+                offset = Number.isFinite(next) && next > offset ? next : offset + bytesRead;
+              }
+            } finally {
+              await handle.close();
+            }
+          }
+
+          async function downloadBlob(blob, token, targetPath) {
+            const sourceUrl = blob.downloadUrl || blob.url;
+            const res = await fetch(sourceUrl, {
+              headers: { Authorization: `Bearer ${token}` },
+              redirect: "follow"
+            });
+            if (!res.ok || !res.body) throw new Error(`blob_download_http_${res.status}`);
+            const file = fs.createWriteStream(targetPath, { mode: 0o600 });
+            const hash = crypto.createHash("sha256");
+            let bytes = 0;
+            for await (const chunk of res.body) {
+              const buf = Buffer.from(chunk);
+              hash.update(buf);
+              bytes += buf.length;
+              if (!file.write(buf)) await new Promise((resolve) => file.once("drain", resolve));
+            }
+            await new Promise((resolve, reject) => file.end((err) => err ? reject(err) : resolve()));
+            return { bytes, sha256: hash.digest("hex") };
+          }
+
           for (const store of tokenMap.values()) {
             const storeReport = {
               storeFingerprint: store.id,
@@ -317,7 +507,6 @@ jobs:
                 const objectName = safeObjectName(store.id, blob.pathname);
                 const entry = {
                   pathname: blob.pathname,
-                  sourceUrl: blob.url ?? null,
                   sizeReported: blob.size ?? null,
                   uploadedAt: blob.uploadedAt ?? null,
                   contentType: blob.contentType ?? null,
