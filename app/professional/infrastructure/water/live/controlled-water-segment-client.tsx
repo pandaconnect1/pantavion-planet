@@ -518,6 +518,7 @@ export default function ControlledWaterSegmentClient() {
           method: "POST",
           cache: "no-store",
           credentials: "include",
+          signal: AbortSignal.timeout(8000),
           headers: {
             "content-type": "application/json",
           },
