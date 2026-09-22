@@ -8,6 +8,7 @@ import {
   getPantavionLanguageRuntimeSnapshot,
   pantavionPublicTranslationFallbackAllowed,
 } from "@/core/translation/pantavion-language-provider-runtime";
+import { getPantavionDeploymentRevision } from "@/core/runtime/pantavion-deployment-revision";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -112,7 +113,7 @@ async function probeConfiguredProvider(): Promise<ProviderProbe> {
 }
 
 export async function GET() {
-  const revision = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? null;
+  const revision = getPantavionDeploymentRevision().revision;
   const languageRuntime = await getPantavionLanguageRuntimeSnapshot();
 
   const gatewayProbe = await probeGateway(languageRuntime.gatewayRuntimeAvailable);

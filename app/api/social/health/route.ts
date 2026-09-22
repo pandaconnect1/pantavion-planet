@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabasePublicConfig } from "@/lib/supabase/public-config";
+import { getPantavionDeploymentRevision } from "@/core/runtime/pantavion-deployment-revision";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -87,7 +88,7 @@ function json(body: unknown, status: number) {
 }
 
 export async function GET() {
-  const revision = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? null;
+  const revision = getPantavionDeploymentRevision().revision;
   const publicConfig = getSupabasePublicConfig();
 
   let supabase: Awaited<ReturnType<typeof createClient>>;

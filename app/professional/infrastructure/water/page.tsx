@@ -43,6 +43,12 @@ const primary = [
 
 const professional = [
   {
+    title: "Cyprus GIS Federation",
+    description:
+      "Επίσημα DLS/Open Data επίπεδα για δρόμους, υδρογραφία, DTM/DSM/ισοϋψείς και γεωλογία, μαζί με private-authorized θέσεις για τα δίκτυα των 5 ΕΟΑ.",
+    href: "/professional/infrastructure/water/cyprus",
+  },
+  {
     title: "Field Operations",
     description:
       "Καταχωρήσεις πεδίου, βλάβες, πιθανές βάνες, δρόμοι, βάθη, υλικά σωλήνων και τεκμήρια από κινητό.",

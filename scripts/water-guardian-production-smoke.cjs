@@ -3,19 +3,18 @@
 const { setTimeout: delay } = require("node:timers/promises");
 
 const DEFAULT_BASE_URL = "https://www.pantavion.com";
+const DEFAULT_APEX_URL = "https://pantavion.com";
 const DEFAULT_DEPLOY_WAIT_MS = 8 * 60 * 1000;
 const DEFAULT_ALIAS_WAIT_MS = 2 * 60 * 1000;
-const DEFAULT_VERCEL_CONTEXT = "Vercel – pantavion-planet";
 
 const baseUrl = (
   process.env.PANTAVION_PRODUCTION_BASE_URL || DEFAULT_BASE_URL
 ).replace(/\/$/, "");
-const repository = process.env.GITHUB_REPOSITORY || "";
+const apexUrl = (
+  process.env.PANTAVION_CANONICAL_APEX_URL || DEFAULT_APEX_URL
+).replace(/\/$/, "");
 const expectedCommitSha =
   process.env.PANTAVION_EXPECTED_GITHUB_SHA || process.env.GITHUB_SHA || "";
-const githubToken = process.env.GITHUB_TOKEN || "";
-const preferredVercelContext =
-  process.env.PANTAVION_VERCEL_STATUS_CONTEXT || DEFAULT_VERCEL_CONTEXT;
 const deployWaitMs = Number(
   process.env.PANTAVION_DEPLOY_WAIT_MS || DEFAULT_DEPLOY_WAIT_MS,
 );
@@ -45,193 +44,136 @@ async function fetchWithTimeout(url, options = {}) {
   });
 }
 
-function deploymentIdFromTargetUrl(targetUrl) {
-  if (typeof targetUrl !== "string" || !targetUrl.startsWith("https://")) {
-    return "";
-  }
-
-  const id = new URL(targetUrl).pathname.split("/").filter(Boolean).at(-1) || "";
-  return id ? `dpl_${id}` : "";
-}
-
-function pickVercelStatus(statuses) {
-  const candidates = statuses.filter((status) => {
-    const context = typeof status?.context === "string" ? status.context : "";
-    return context === "Vercel" || context.startsWith("Vercel ");
-  });
-
-  if (candidates.length === 0) return null;
-
-  return (
-    candidates.find((status) => status.context === preferredVercelContext) ||
-    candidates.find((status) => status.context === DEFAULT_VERCEL_CONTEXT) ||
-    candidates.find((status) => {
-      const context = String(status.context || "");
-      return context.includes("pantavion-planet") && !context.includes("vmxx");
-    }) ||
-    candidates.find((status) => status.context === "Vercel") ||
-    candidates.find((status) => status.state === "success") ||
-    candidates[0]
-  );
-}
-
-async function readVercelCommitStatus() {
-  if (!repository || !expectedCommitSha) return null;
-
-  const headers = {
-    Accept: "application/vnd.github+json",
-    "X-GitHub-Api-Version": "2022-11-28",
-    "User-Agent": "pantavion-water-production-guardian",
-  };
-
-  if (githubToken) {
-    headers.Authorization = `Bearer ${githubToken}`;
-  }
-
+async function readRuntimeRevision(origin) {
   const response = await fetchWithTimeout(
-    `https://api.github.com/repos/${repository}/commits/${expectedCommitSha}/status`,
-    { headers },
+    `${origin}/api/pantavion/runtime/revision?water_guard=${encodeURIComponent(
+      expectedCommitSha || Date.now().toString(),
+    )}`,
   );
+  const text = await response.text();
+  let payload;
 
-  if (!response.ok) {
-    fail(`GitHub commit status request returned ${response.status}`);
+  try {
+    payload = JSON.parse(text);
+  } catch {
+    fail(`runtime revision endpoint at ${origin} returned non-JSON: ${text.slice(0, 200)}`);
   }
 
-  const payload = await response.json();
-  const statuses = Array.isArray(payload.statuses) ? payload.statuses : [];
-  const selected = pickVercelStatus(statuses);
-
-  if (!selected && statuses.length > 0) {
-    const contexts = statuses
-      .map((status) => String(status?.context || ""))
-      .filter(Boolean)
-      .join(", ");
-    console.log(`[INFO] No matching Vercel status yet. Available contexts: ${contexts}`);
-  }
-
-  return selected;
+  return {
+    response,
+    payload,
+  };
 }
 
-async function waitForVercelDeployment() {
-  if (!repository || !expectedCommitSha) {
-    console.log(
-      "[INFO] No GitHub repository/SHA supplied; validating the currently served production deployment.",
-    );
-    return "";
-  }
-
-  const deadline = Date.now() + deployWaitMs;
-  let lastState = "missing";
+async function waitForExactProductionRevision(origin, waitMs = deployWaitMs) {
+  const deadline = Date.now() + waitMs;
+  let lastRevision = "";
+  let lastProvider = "";
 
   while (Date.now() < deadline) {
-    const status = await readVercelCommitStatus();
+    try {
+      const { response, payload } = await readRuntimeRevision(origin);
+      const revision = typeof payload?.revision === "string" ? payload.revision : "";
+      const provider = typeof payload?.provider === "string" ? payload.provider : "unknown";
 
-    if (status?.state === "success") {
-      const deploymentId = deploymentIdFromTargetUrl(status.target_url);
-
-      if (!deploymentId) {
-        fail("Vercel succeeded without a valid deployment target URL");
+      if (revision !== lastRevision || provider !== lastProvider) {
+        console.log(
+          `[INFO] ${origin} runtime provider=${provider} revision=${revision || "missing"} expected=${expectedCommitSha || "<any>"}`,
+        );
+        lastRevision = revision;
+        lastProvider = provider;
       }
 
-      pass(
-        `Vercel completed deployment ${deploymentId} for ${expectedCommitSha} via ${status.context}`,
+      if (
+        response.status === 200 &&
+        payload?.ok === true &&
+        revision &&
+        (!expectedCommitSha || revision === expectedCommitSha)
+      ) {
+        pass(
+          `${origin} serves exact runtime revision ${revision} via ${provider}`,
+        );
+        return payload;
+      }
+    } catch (error) {
+      console.log(
+        `[INFO] Runtime revision probe at ${origin} not ready: ${error instanceof Error ? error.message : error}`,
       );
-      return deploymentId;
-    }
-
-    if (status?.state === "failure" || status?.state === "error") {
-      fail(`Vercel deployment finished with state ${status.state} (${status.context || "unknown context"})`);
-    }
-
-    const currentState = status
-      ? `${status.context || "Vercel"}:${status.state || "missing"}`
-      : "missing";
-    if (currentState !== lastState) {
-      console.log(`[INFO] Waiting for Vercel production status: ${currentState}`);
-      lastState = currentState;
     }
 
     await delay(10_000);
   }
 
   fail(
-    `No successful Vercel deployment appeared for ${expectedCommitSha} within ${deployWaitMs}ms`,
+    `${origin} did not serve expected revision ${expectedCommitSha || "<any>"} within ${waitMs}ms; last revision=${lastRevision || "missing"} provider=${lastProvider || "unknown"}`,
   );
 }
 
-function readDeploymentId(html) {
-  return html.match(/\bdpl_[A-Za-z0-9]+\b/)?.[0] || "";
-}
-
-function readWaterClientScript(html) {
-  const match = html.match(
-    /src="([^"]*\/app\/professional\/infrastructure\/water\/live\/page-[^"]+\.js[^"]*)"/,
+function readScriptPaths(html) {
+  return Array.from(
+    html.matchAll(/<script[^>]+src=["']([^"']+)["'][^>]*>/gi),
+    (match) => match[1].replaceAll("&amp;", "&"),
   );
-
-  return match?.[1]?.replaceAll("&amp;", "&") || "";
 }
 
-async function loadExactProductionPage(expectedDeploymentId) {
+async function loadProductionWaterPage() {
   const deadline = Date.now() + aliasWaitMs;
-  let lastDeploymentId = "";
 
   while (Date.now() < deadline) {
-    const url = `${baseUrl}/professional/infrastructure/water/live?water_guard=${encodeURIComponent(
-      expectedCommitSha || Date.now().toString(),
-    )}`;
-    const response = await fetchWithTimeout(url);
+    const response = await fetchWithTimeout(
+      `${baseUrl}/professional/infrastructure/water/live?water_guard=${encodeURIComponent(
+        expectedCommitSha || Date.now().toString(),
+      )}`,
+    );
     const html = await response.text();
 
-    if (response.status !== 200) {
-      fail(`water live page returned ${response.status}`);
-    }
-
-    const deploymentId = readDeploymentId(html);
-    lastDeploymentId = deploymentId || lastDeploymentId;
-
-    if (!expectedDeploymentId || deploymentId === expectedDeploymentId) {
-      assert(Boolean(deploymentId), "water live page exposes a Vercel deployment identity");
-      pass(`pantavion.com serves ${deploymentId}`);
-      return { html, deploymentId };
+    if (response.status === 200) {
+      assert(
+        /Pantavion/i.test(html),
+        "water live page is served by the Pantavion application",
+      );
+      pass("water live page returns 200");
+      return html;
     }
 
     console.log(
-      `[INFO] Waiting for production alias: current=${deploymentId || "missing"} expected=${expectedDeploymentId}`,
+      `[INFO] Waiting for Water live page at ${baseUrl}: HTTP ${response.status}`,
     );
     await delay(8_000);
   }
 
-  fail(
-    `pantavion.com did not switch to ${expectedDeploymentId}; last served ${lastDeploymentId || "unknown"}`,
-  );
+  fail("water live page did not become available");
 }
 
-async function verifyWaterClientBundle(html, deploymentId) {
-  const scriptPath = readWaterClientScript(html);
+async function verifyWaterClientBundle(html) {
+  const scriptPaths = readScriptPaths(html);
+  assert(scriptPaths.length > 0, "water live page references JavaScript bundles");
 
-  assert(Boolean(scriptPath), "water live page references its dedicated client bundle");
-  assert(
-    scriptPath.includes(`dpl=${deploymentId}`),
-    "water client bundle belongs to the active production deployment",
-  );
+  for (const scriptPath of scriptPaths) {
+    try {
+      const response = await fetchWithTimeout(new URL(scriptPath, baseUrl));
+      if (response.status !== 200) continue;
+      const source = await response.text();
 
-  const response = await fetchWithTimeout(new URL(scriptPath, baseUrl));
-  const source = await response.text();
+      const isWaterClient =
+        source.includes("/api/professional/infrastructure/water/segment/bbox") &&
+        source.includes("WATER_CLIENT_LOAD") &&
+        source.includes("WATER_NO_VISIBLE_FEATURES");
 
-  assert(response.status === 200, "water client bundle returns 200");
-  assert(source.includes("WATER_CLIENT_LOAD"), "client keeps safe load diagnostics");
-  assert(
-    source.includes("WATER_NO_VISIBLE_FEATURES"),
-    "client detects missing visible pipe features",
-  );
-  assert(
-    source.includes("/api/professional/infrastructure/water/segment/bbox"),
-    "client remains connected to the protected segment endpoint",
-  );
-  assert(
-    source.includes("moveend") && source.includes("zoomend"),
-    "client retains automatic pipe reload on map movement",
-  );
+      if (!isWaterClient) continue;
+
+      assert(
+        source.includes("moveend") && source.includes("zoomend"),
+        "water client retains automatic pipe reload on map movement",
+      );
+      pass("water client bundle is connected to protected segmented network API");
+      return;
+    } catch {
+      // Continue across Next.js chunks until the Water client chunk is found.
+    }
+  }
+
+  fail("could not locate the Water client bundle with protected segmented-network diagnostics");
 }
 
 async function verifyUnauthenticatedFailClosed() {
@@ -278,16 +220,27 @@ async function verifyUnauthenticatedFailClosed() {
   assert(!text.includes('"features"'), "access-denied body contains no feature collection");
 }
 
+async function verifyCanonicalApex() {
+  if (!apexUrl || apexUrl === baseUrl) return;
+
+  const payload = await waitForExactProductionRevision(apexUrl, aliasWaitMs);
+
+  assert(
+    payload.revision === expectedCommitSha,
+    "canonical apex serves the same exact production revision",
+  );
+}
+
 async function runProductionSmoke() {
-  console.log("=== Pantavion Water Production Guardian v2 ===");
-  console.log(`Base URL: ${baseUrl}`);
+  console.log("=== Pantavion Water Production Guardian v3 ===");
+  console.log(`Primary production URL: ${baseUrl}`);
+  console.log(`Canonical apex URL: ${apexUrl}`);
 
-  const expectedDeploymentId = await waitForVercelDeployment();
-  const { html, deploymentId } =
-    await loadExactProductionPage(expectedDeploymentId);
-
-  await verifyWaterClientBundle(html, deploymentId);
+  await waitForExactProductionRevision(baseUrl);
+  const html = await loadProductionWaterPage();
+  await verifyWaterClientBundle(html);
   await verifyUnauthenticatedFailClosed();
+  await verifyCanonicalApex();
 
   console.log("Pantavion water production guardian PASSED.");
 }
@@ -300,5 +253,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+  readRuntimeRevision,
+  waitForExactProductionRevision,
   runProductionSmoke,
 };
