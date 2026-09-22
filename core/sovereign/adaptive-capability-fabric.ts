@@ -10,10 +10,15 @@ import {
   type OutcomeStep,
 } from "./intent-to-outcome-fabric.ts";
 import {
-  createEphemeralAgent,
-  type EphemeralAgent,
-  type SwarmRole,
-} from "./ephemeral-agent-swarm.ts";
+  createAdaptiveDomainRecord,
+  type PantavionAdaptiveDomainRecord,
+} from "../registry/adaptive-domain-ontology.ts";
+import {
+  createPersonalAgentMeshPlan,
+  type PantavionPersonalAICoreIdentity,
+  type PantavionPersonalAgentMeshPlan,
+  type PantavionPersonalAgentNeed,
+} from "../intelligence/personal-ai-agent-mesh.ts";
 import { getPantavionLifelongHumanityEcosystemSnapshot } from "../pantavion/lifelong-humanity-ecosystem.ts";
 
 export const PANTAVION_ADAPTIVE_CAPABILITY_FABRIC_V1 = {
@@ -59,6 +64,7 @@ export interface PantavionAdaptiveIntentRequest {
   maxCost?: number;
   deadlineAt?: string;
   nowIso?: string;
+  personalAiCore?: PantavionPersonalAICoreIdentity;
 }
 
 export interface PantavionCapabilityBlueprint {
@@ -71,17 +77,7 @@ export interface PantavionCapabilityBlueprint {
   verificationGates: string[];
   providerStrategy: "pantavion_owned_first" | "adapter_with_fallback" | "external_required_until_replaced";
   productionState: "proposal_only";
-}
-
-export interface PantavionPersonalSwarmBlueprint {
-  persistentUserCore: {
-    userId: string;
-    memoryIdentity: string;
-    lifetime: "persistent_until_user_or_policy_changes";
-    activeWorkerCount: 0;
-  };
-  agents: EphemeralAgent[];
-  rule: "persistent_identity_ephemeral_specialists";
+  domainKey: string;
 }
 
 export interface PantavionTranslationBridgePlan {
@@ -106,9 +102,10 @@ export interface PantavionAdaptiveCapabilityPlan {
   risk: PantavionAdaptiveRisk;
   inferredFamily: string;
   matchedCapabilityIds: string[];
+  dynamicDomain: PantavionAdaptiveDomainRecord;
   blueprint: PantavionCapabilityBlueprint | null;
   outcomePlan: OutcomePlan;
-  personalSwarm: PantavionPersonalSwarmBlueprint;
+  personalSwarm: PantavionPersonalAgentMeshPlan;
   translation: PantavionTranslationBridgePlan;
   latencyBudget: typeof PANTAVION_ADAPTIVE_CAPABILITY_FABRIC_V1.hotPath;
   truth: {
@@ -116,6 +113,7 @@ export interface PantavionAdaptiveCapabilityPlan {
     buildMustUseDurableExecution: true;
     verifiedLiveRequiredBeforeUserReadyClaim: true;
     humanAuthorityPreserved: true;
+    personalAiProfileBound: boolean;
   };
 }
 
@@ -241,6 +239,7 @@ function buildCapabilityBlueprint(
   input: PantavionAdaptiveIntentRequest,
   familyKey: string,
   risk: PantavionAdaptiveRisk,
+  domain: PantavionAdaptiveDomainRecord,
 ): PantavionCapabilityBlueprint {
   const semantic = slug(input.desiredOutcome || input.text);
   const capabilityKey = `dynamic:${familyKey}:${stableKey(
@@ -259,7 +258,7 @@ function buildCapabilityBlueprint(
     title: input.desiredOutcome.trim() || input.text.trim(),
     familyKey,
     risk,
-    canonicalNamespace: `capabilities/generated/${familyKey}/${semantic}`,
+    canonicalNamespace: domain.canonicalNamespace + "/capability/" + semantic,
     requiredLayers: [
       "intent_contract",
       "canonical_data_contract",
@@ -283,6 +282,7 @@ function buildCapabilityBlueprint(
     ],
     providerStrategy,
     productionState: "proposal_only",
+    domainKey: domain.domainKey,
   };
 }
 
@@ -393,65 +393,96 @@ function buildOutcomeSteps(
   return steps;
 }
 
-function roleGrant(role: SwarmRole): string[] {
-  const grants: Record<SwarmRole, string[]> = {
-    planner: ["intent", "plan"],
-    researcher: ["research", "evidence"],
-    builder: ["build", "code"],
-    verifier: ["test", "verify"],
-    security: ["security", "policy"],
-    translator: ["translate", "language"],
-    domain_specialist: ["domain", "analysis"],
-  };
-  return grants[role];
-}
-
-function buildPersonalSwarm(
+function buildPersonalAgentNeeds(
   input: PantavionAdaptiveIntentRequest,
   disposition: PantavionAdaptiveDisposition,
   risk: PantavionAdaptiveRisk,
   needsTranslation: boolean,
-): PantavionPersonalSwarmBlueprint {
-  const roles = new Set<SwarmRole>(["planner", "verifier"]);
-  if (disposition === "synthesize_capability") {
-    roles.add("researcher");
-    roles.add("builder");
-    roles.add("domain_specialist");
-  }
-  if (risk === "high" || risk === "restricted") roles.add("security");
-  if (needsTranslation) roles.add("translator");
-
-  const createdAt = input.nowIso || new Date().toISOString();
-  const createdMs = Date.parse(createdAt);
-  if (!Number.isFinite(createdMs)) throw new Error("invalid_now_iso");
-  const expiresAt = new Date(createdMs + 15 * 60 * 1000).toISOString();
-
-  const agents = [...roles].map((role, index) =>
-    createEphemeralAgent({
-      id: `${input.intentId}:${role}:${index + 1}`,
-      parentIntentId: input.intentId,
-      role,
-      capabilities: roleGrant(role).map((capability) => ({
-        capability,
-        scope: `user:${input.userId}:intent:${input.intentId}`,
-        readOnly: role === "researcher" || role === "verifier" || role === "security",
-        expiresAt,
-      })),
-      budget: role === "builder" ? 3 : role === "researcher" ? 2 : 1,
-      createdAt,
-      expiresAt,
-    }),
-  );
-
-  return {
-    persistentUserCore: {
-      userId: input.userId,
-      memoryIdentity: `personal-ai:${input.userId}`,
-      lifetime: "persistent_until_user_or_policy_changes",
-      activeWorkerCount: 0,
+): PantavionPersonalAgentNeed[] {
+  const needs: PantavionPersonalAgentNeed[] = [
+    {
+      intentId: input.intentId,
+      specialistClass: "planner",
+      capability: "intent.plan",
+      risk,
+      readOnly: true,
+      budget: 1,
     },
-    agents,
-    rule: "persistent_identity_ephemeral_specialists",
+    {
+      intentId: input.intentId,
+      specialistClass: "verification",
+      capability: "truth.verify",
+      risk,
+      readOnly: true,
+      budget: 1,
+    },
+  ];
+
+  if (disposition === "synthesize_capability") {
+    needs.push(
+      {
+        intentId: input.intentId,
+        specialistClass: "research",
+        capability: "capability.research",
+        risk,
+        readOnly: true,
+        budget: 2,
+      },
+      {
+        intentId: input.intentId,
+        specialistClass: "builder",
+        capability: "capability.build_candidate",
+        risk,
+        readOnly: false,
+        budget: 3,
+      },
+      {
+        intentId: input.intentId,
+        specialistClass: "domain",
+        capability: "domain.analysis",
+        risk,
+        readOnly: true,
+        budget: 2,
+      },
+    );
+  }
+
+  if (risk === "high" || risk === "restricted") {
+    needs.push({
+      intentId: input.intentId,
+      specialistClass: "security",
+      capability: "security.review",
+      risk,
+      readOnly: true,
+      budget: 1,
+    });
+  }
+
+  if (needsTranslation) {
+    needs.push({
+      intentId: input.intentId,
+      specialistClass: "language",
+      capability: "translation.bridge",
+      risk,
+      readOnly: true,
+      budget: 1,
+    });
+  }
+
+  return needs;
+}
+
+function fallbackPersonalAICore(
+  input: PantavionAdaptiveIntentRequest,
+): PantavionPersonalAICoreIdentity {
+  return {
+    userId: input.userId,
+    personalAiId: `unbound:${input.userId}`,
+    memoryEnabled: false,
+    crossThreadEnabled: false,
+    voiceEnabled: false,
+    preferredLocale: input.locale || null,
+    assistanceLevel: "balanced",
   };
 }
 
@@ -495,9 +526,22 @@ export function planAdaptiveCapability(
       normalize(input.text).includes("μεταφρ"),
   );
 
+  const resolvedFamily = familyEvaluation.recommendedFamilyKey || familyKey;
+  const dynamicDomain = createAdaptiveDomainRecord({
+    userId: input.userId,
+    intentId: input.intentId,
+    title: input.desiredOutcome || input.text,
+    description: input.text || input.desiredOutcome,
+    parentFamily: resolvedFamily,
+    risk,
+    tags: [input.domainHint || "", input.locale || "", input.targetLocale || ""].filter(Boolean),
+    jurisdiction: input.jurisdiction || null,
+    locale: input.locale || null,
+  });
+
   const blueprint =
     disposition === "synthesize_capability"
-      ? buildCapabilityBlueprint(input, familyEvaluation.recommendedFamilyKey || familyKey, risk)
+      ? buildCapabilityBlueprint(input, resolvedFamily, risk, dynamicDomain)
       : null;
 
   const steps = buildOutcomeSteps(disposition, risk, needsTranslation);
@@ -520,7 +564,11 @@ export function planAdaptiveCapability(
     },
   );
 
-  const personalSwarm = buildPersonalSwarm(input, disposition, risk, needsTranslation);
+  const personalSwarm = createPersonalAgentMeshPlan({
+    core: input.personalAiCore || fallbackPersonalAICore(input),
+    needs: buildPersonalAgentNeeds(input, disposition, risk, needsTranslation),
+    nowIso: input.nowIso,
+  });
   const lifelong = getPantavionLifelongHumanityEcosystemSnapshot();
 
   return {
@@ -530,8 +578,9 @@ export function planAdaptiveCapability(
     userId: input.userId,
     disposition,
     risk,
-    inferredFamily: familyEvaluation.recommendedFamilyKey || familyKey,
+    inferredFamily: resolvedFamily,
     matchedCapabilityIds: allowedMatches.map((item) => item.capability.id),
+    dynamicDomain,
     blueprint,
     outcomePlan,
     personalSwarm,
@@ -554,6 +603,7 @@ export function planAdaptiveCapability(
       buildMustUseDurableExecution: true,
       verifiedLiveRequiredBeforeUserReadyClaim: true,
       humanAuthorityPreserved: lifelong.humanAgencyRequired,
+      personalAiProfileBound: Boolean(input.personalAiCore),
     },
   };
 }
