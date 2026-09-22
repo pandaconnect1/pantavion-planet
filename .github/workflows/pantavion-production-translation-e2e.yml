@@ -20,8 +20,32 @@ permissions:
   contents: read
 
 jobs:
+  translation-pr-contract:
+    name: Verify translation contract before merge
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify translation runtime contract
+        run: npm run audit:translation-runtime
+
+      - name: Verify translation gateway resilience
+        run: npm run test:translation-gateway-resilience
+
   production-translation-e2e:
     name: Verify live bidirectional translation
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
