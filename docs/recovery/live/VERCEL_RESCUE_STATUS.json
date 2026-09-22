@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-09-22T19:41:00Z",
-  "phase": "VERCEL_PHASE2_CANONICALIZED_ROUTED_BLOB_GAP_REMAINS",
+  "updatedAt": "2026-09-22T19:58:00Z",
+  "phase": "VERCEL_PHASE3_MATERIALIZED_RESIDUAL_EVIDENCE_CAPTURED_SECRET_BLOB_EXPORT_BLOCKED",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total",
   "recoveredDeploymentRecordsFloor": 3679,
@@ -67,6 +67,9 @@
     "Partition execution terminality does not raise Lane F canonicalized floor and does not imply module-level VERIFIED_LIVE."
   ],
   "remaining": [
+    "Authorized VERCEL_TOKEN is still required before private Vercel environment values can be migrated directly into Supabase Vault.",
+    "Authorized VERCEL_TOKEN is still required before Vercel Blob/private object bytes can be migrated into private Supabase Storage.",
+    "Build-log preservation remains blocked because the connected Vercel backend currently reports the advertised build-log tool as unavailable.",
     "Close the Vercel Blob/private-object gap when an authorized VERCEL_TOKEN becomes available to the prepared recovery workflow.",
     "Use Phase 2 module/source groups as inputs for implementation prioritization; classification is not VERIFIED_LIVE implementation evidence.",
     "Provide an authorized VERCEL_TOKEN to the existing GitHub Actions secret name so the prepared read-only Blob rescue can enumerate/download Vercel Blob and copy it into private Supabase Storage.",
@@ -109,6 +112,9 @@
     "sourceUniqueCountIncremented": false
   },
   "recentEvidence": [
+    "2026-09-22: Phase 3 founder execution intent materialized successfully into Pantavion durable work order pwo_8e27280d-b970-49ad-9674-abed043f3971 with 3,138 units / 13 batches.",
+    "2026-09-22: residual Vercel observability captured: 3 canonical runtime-error groups (11 occurrences), zero vmxx runtime-error groups, zero toolbar threads and zero Agent Run projects.",
+    "Supabase Vault secret receiver and forced-RLS metadata catalog are ready; zero Vercel secret values have been exported yet.",
     "2026-09-22: Vercel recovery Phase 2 completed for the terminal 5,569-deployment corpus.",
     "Phase 2 produced 3,138 unique Git source groups, 2,400 mirrored source groups and 14 module routes.",
     "All 5,569 canonical deployment records were upserted into public.pantavion_vercel_recovery_catalog with RLS enabled.",
@@ -177,5 +183,40 @@
     "supabaseTable": "public.pantavion_vercel_recovery_catalog",
     "supabaseRows": 5569,
     "zeroDelete": true
+  },
+  "phase3": {
+    "state": "MATERIALIZED",
+    "workflowRunId": 35776417068,
+    "workOrderExecutionId": "pwo_8e27280d-b970-49ad-9674-abed043f3971",
+    "intentId": "vercel_phase3_20260922",
+    "unitCount": 3138,
+    "batchSize": 250,
+    "batchCount": 13,
+    "approvalScope": "proposal_only",
+    "productionDeployAllowed": false,
+    "externalWorkerDependency": false,
+    "zeroDelete": true
+  },
+  "residualEvidence20260922": {
+    "evidence": "docs/recovery/vercel-evidence/20260922/VERCEL_RESIDUAL_EVIDENCE_AND_SECRET_BOUNDARY_20260922.md",
+    "commit": "76ad7947d9d338659a7a6f7ac16b4ddb69f0d75a",
+    "toolbarThreads": {
+      "resolved": 0,
+      "unresolved": 0
+    },
+    "agentRunProjects": 0,
+    "runtimeErrorsCanonical": {
+      "groups": 3,
+      "occurrences": 11
+    },
+    "runtimeErrorsVmxx": {
+      "groups": 0,
+      "occurrences": 0
+    },
+    "buildLogExport": "BLOCKED_CONNECTOR_TOOL_UNAVAILABLE",
+    "environmentNamesVerifiedFloor": 128,
+    "secretDestination": "SUPABASE_VAULT_READY",
+    "secretMetadataCatalog": "public.pantavion_secret_recovery_catalog",
+    "secretValuesMigrated": 0
   }
 }
