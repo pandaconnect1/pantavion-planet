@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-22T19:58:00Z",
+  "updatedAt": "2026-09-22T20:13:00Z",
   "phase": "VERCEL_PHASE3_MATERIALIZED_RESIDUAL_EVIDENCE_CAPTURED_SECRET_BLOB_EXPORT_BLOCKED",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total",
@@ -112,6 +112,9 @@
     "sourceUniqueCountIncremented": false
   },
   "recentEvidence": [
+    "2026-09-22: historical Water protected-state recovery was prioritized. July 21 evidence shows 44 historical request/device attempts and 16 approved Users; 44 was not necessarily 44 unique people.",
+    "Five exact historical Vercel Blob prefixes for Water access/approved/rejected/revoked state are now first-priority in the Blob rescue workflow.",
+    "Current Supabase Water access tables and matching Storage objects are all zero; canonical import remains blocked until real Vercel Blob objects are preserved.",
     "2026-09-22: Phase 3 founder execution intent materialized successfully into Pantavion durable work order pwo_8e27280d-b970-49ad-9674-abed043f3971 with 3,138 units / 13 batches.",
     "2026-09-22: residual Vercel observability captured: 3 canonical runtime-error groups (11 occurrences), zero vmxx runtime-error groups, zero toolbar threads and zero Agent Run projects.",
     "Supabase Vault secret receiver and forced-RLS metadata catalog are ready; zero Vercel secret values have been exported yet.",
@@ -218,5 +221,40 @@
     "secretDestination": "SUPABASE_VAULT_READY",
     "secretMetadataCatalog": "public.pantavion_secret_recovery_catalog",
     "secretValuesMigrated": 0
+  },
+  "waterAccessProtectedState": {
+    "state": "HISTORICAL_VERCEL_BLOB_STATE_IDENTIFIED_RECOVERY_PRIORITY_ARMED",
+    "evidence": "docs/recovery/vercel-evidence/20260922/WATER_ACCESS_PROTECTED_STATE_RECOVERY_20260922.md",
+    "evidenceCommit": "cc68a4028b85459330f33e32461ad8e6f1406641",
+    "blobPriorityWorkflowCommit": "6b7768a1146c19575c8b47515dbde234d32545cb",
+    "importer": "scripts/recovery/import-recovered-water-access.mjs",
+    "importerCommit": "e40ad7cfd6dc815e7ebe988af649c9f878064397",
+    "historicalEvidence": {
+      "date": "2026-07-21",
+      "accessRequestDeviceAttempts": 44,
+      "approvedUsersReported": 16,
+      "note": "44 represented historical request/device attempts, not necessarily 44 unique people."
+    },
+    "historicalPrefixes": [
+      "water/private/access-requests/",
+      "water/private/approved-devices/",
+      "water/private/approved-contacts/",
+      "water/private/rejected-requests/",
+      "water/private/revoked-devices/"
+    ],
+    "currentSupabase": {
+      "waterAccessRequests": 0,
+      "waterApprovedDevices": 0,
+      "waterAccessAudit": 0,
+      "matchingStorageObjects": 0
+    },
+    "migrationPolicy": {
+      "rawBlobPreservationFirst": true,
+      "dryRunBeforeCanonicalImport": true,
+      "dedupByRequestIdAndDeviceId": true,
+      "zeroDelete": true,
+      "piiRemainsPrivate": true
+    },
+    "blocker": "VERCEL_TOKEN_REQUIRED_FOR_BLOB_ENUMERATION"
   }
 }
