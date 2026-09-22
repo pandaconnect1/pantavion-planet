@@ -1,21 +1,21 @@
-import { matchCapabilities } from "../registry/capability-registry";
+import { matchCapabilities } from "../registry/capability-registry.ts";
 import {
   evaluateCapabilityFamilyCandidate,
   type PantavionCapabilityRiskClass,
-} from "../registry/capability-family-registry";
+} from "../registry/capability-family-registry.ts";
 import {
   compileOutcomePlan,
   type OutcomePlan,
   type OutcomeRisk,
   type OutcomeStep,
-} from "./intent-to-outcome-fabric";
+} from "./intent-to-outcome-fabric.ts";
 import {
   createEphemeralAgent,
   type EphemeralAgent,
   type SwarmRole,
-} from "./ephemeral-agent-swarm";
-import { pantavionNaturalLanguageUniverse } from "../translation/pantavion-natural-language-universe";
-import { getPantavionLifelongHumanityEcosystemSnapshot } from "../pantavion/lifelong-humanity-ecosystem";
+} from "./ephemeral-agent-swarm.ts";
+import { pantavionNaturalLanguageUniverse } from "../translation/pantavion-natural-language-universe.ts";
+import { getPantavionLifelongHumanityEcosystemSnapshot } from "../pantavion/lifelong-humanity-ecosystem.ts";
 
 export const PANTAVION_ADAPTIVE_CAPABILITY_FABRIC_V1 = {
   id: "pantavion_adaptive_capability_fabric_v1",
