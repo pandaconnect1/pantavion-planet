@@ -184,11 +184,16 @@ async function readLegacyApprovedDevice(deviceId: string) {
   if (!token || !deviceId) return null;
 
   const pathname = `water/private/approved-devices/${deviceId}.json`;
-  const result = await list({
-    prefix: pathname,
-    limit: 1,
-    token,
-  });
+  const result = await Promise.race([
+    list({
+      prefix: pathname,
+      limit: 1,
+      token,
+    }),
+    new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error("legacy_blob_timeout")), 5000);
+    }),
+  ]);
 
   const blob = (result.blobs as LegacyBlob[]).find(
     (item) => item.pathname === pathname,
@@ -228,7 +233,16 @@ export async function migrateLegacyApprovedDeviceIfPresent(
 
   // Continuity fallback: validate the exact pre-existing approval in the old
   // private Blob store. This does not approve any new device.
-  const legacy = await readLegacyApprovedDevice(deviceId);
+  let legacy: Record<string, unknown> | null = null;
+
+  try {
+    legacy = await readLegacyApprovedDevice(deviceId);
+  } catch {
+    // Railway must never hang while a legacy Vercel Blob lookup is unavailable.
+    // Existing Supabase approvals still work; legacy migration can be retried later.
+    return null;
+  }
+
   if (!legacy) return null;
 
   const legacyStatus = legacyString(legacy.status) || "approved";
