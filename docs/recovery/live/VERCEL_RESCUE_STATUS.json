@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-22T19:15:00Z",
+  "updatedAt": "2026-09-22T19:20:00Z",
   "phase": "DEPLOYMENT_PAGINATION_TERMINAL_VERCEL_ONLY_ASSET_GAPS_REMAIN",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total",
@@ -67,6 +67,7 @@
     "Partition execution terminality does not raise Lane F canonicalized floor and does not imply module-level VERIFIED_LIVE."
   ],
   "remaining": [
+    "Provide an authorized VERCEL_TOKEN to the existing GitHub Actions secret name so the prepared read-only Blob rescue can enumerate/download Vercel Blob and copy it into private Supabase Storage.",
     "Preserve/migrate Vercel Blob and storage-only assets through an authorized Blob-capable path before any Vercel cleanup.",
     "Preserve required environment-variable names/scopes and reissue/rotate private secret values outside public GitHub.",
     "Complete global canonical dedup/classification/founder-feed reconciliation for the already preserved deployment evidence.",
@@ -135,8 +136,22 @@
     "scope": "DEPLOYMENT_HISTORY_ONLY"
   },
   "hardGaps": [
+    "Vercel Blob/private object bytes remain unpreserved because GitHub Actions lacks VERCEL_TOKEN; recovery-only workflow run 35772871657 failed closed before any Vercel access.",
     "Vercel Blob objects/private Blob contents are not enumerable through the current connected Vercel tool surface.",
     "Secret environment-variable values are intentionally not exported or written to public recovery metadata.",
     "Storage-only data not represented by deployment metadata remains unresolved until a Blob-capable/private export path is available."
-  ]
+  ],
+  "blobRescue20260922": {
+    "state": "BLOCKED_MISSING_GITHUB_VERCEL_TOKEN",
+    "evidence": "docs/recovery/vercel-evidence/20260922/VERCEL_BLOB_RESCUE_BLOCKER_20260922.md",
+    "workflow": ".github/workflows/pantavion-vercel-blob-rescue.yml",
+    "workflowRunId": 35772871657,
+    "supabaseBucket": "vercel-recovery-private",
+    "supabaseBucketPublic": false,
+    "supabaseCredentialsPresent": true,
+    "githubVercelTokenPresent": false,
+    "directProtectedRouteAttempt": "HTTP_402_DEPLOYMENT_DISABLED",
+    "zeroDelete": true,
+    "zeroVercelMutations": true
+  }
 }
