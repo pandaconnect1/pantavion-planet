@@ -1,5 +1,15 @@
-import { createAdminClient } from "../../lib/supabase/admin.ts";
-import { persistPantavionFounderWorkOrder } from "../../core/kernel/pantavion-work-order-runtime.ts";
+const adminModule = await import("../../lib/supabase/admin.ts");
+const workOrderModule = await import("../../core/kernel/pantavion-work-order-runtime.ts");
+
+const createAdminClient =
+  (adminModule as any).createAdminClient ??
+  (adminModule as any).default?.createAdminClient;
+const persistPantavionFounderWorkOrder =
+  (workOrderModule as any).persistPantavionFounderWorkOrder ??
+  (workOrderModule as any).default?.persistPantavionFounderWorkOrder;
+
+if (typeof createAdminClient !== "function") throw new Error("createAdminClient_export_unavailable");
+if (typeof persistPantavionFounderWorkOrder !== "function") throw new Error("persistPantavionFounderWorkOrder_export_unavailable");
 
 const INTENT_ID = "vercel_phase3_20260922";
 
