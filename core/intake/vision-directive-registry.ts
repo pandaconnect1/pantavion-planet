@@ -11,7 +11,13 @@ export interface PantavionVisionDirectiveRecord {
     | 'surface'
     | 'safety'
     | 'device'
-    | 'economy';
+    | 'economy'
+    | 'architecture'
+    | 'memory'
+    | 'intelligence'
+    | 'security'
+    | 'continuity'
+    | 'innovation';
   priority: 'critical' | 'high' | 'medium';
   statement: string;
   founderLocked: boolean;
@@ -95,6 +101,54 @@ const VISION_DIRECTIVES: PantavionVisionDirectiveRecord[] = [
     category: 'economy',
     priority: 'high',
     statement: 'Pantavion must generate sustainable revenue through useful production, services, premium experiences and platform value.',
+    founderLocked: true,
+  },
+  {
+    directiveKey: 'architecture-multi-kernel-one-truth',
+    title: 'Multi-Kernel One Truth',
+    category: 'architecture',
+    priority: 'critical',
+    statement: 'Pantavion may execute through many kernels, agents, models and workers in parallel, but they must share one canonical truth, authority, provenance, implementation lifecycle and audit plane.',
+    founderLocked: true,
+  },
+  {
+    directiveKey: 'continuity-no-orphan-founder-vision',
+    title: 'No-Orphan Founder Vision',
+    category: 'continuity',
+    priority: 'critical',
+    statement: 'Every founder directive, historical idea, artifact, recovery record and unresolved requirement must retain provenance and an explicit canonical disposition; no idea may disappear because a thread, branch, deployment or provider changes.',
+    founderLocked: true,
+  },
+  {
+    directiveKey: 'memory-constitutional-continuity',
+    title: 'Constitutional Continuity Memory',
+    category: 'memory',
+    priority: 'critical',
+    statement: 'Pantavion memory must preserve chronology, decisions, commitments, source, confidence and supersession across hot context, warm indexed summaries and cold private immutable archives.',
+    founderLocked: true,
+  },
+  {
+    directiveKey: 'intelligence-maximum-bounded-routing',
+    title: 'Maximum Bounded Intelligence',
+    category: 'intelligence',
+    priority: 'critical',
+    statement: 'Each task should use the strongest suitable intelligence for quality, latency, trust, privacy, cost and jurisdiction while execution authority remains bounded by identity, consent, policy, risk, budget and reversibility.',
+    founderLocked: true,
+  },
+  {
+    directiveKey: 'security-zero-trust-fail-closed',
+    title: 'Zero-Trust Fail-Closed Security',
+    category: 'security',
+    priority: 'critical',
+    statement: 'Privileged operations are deny-by-default, secrets remain isolated, and uncertain authority or truth must fail closed with explicit evidence and blocker visibility.',
+    founderLocked: true,
+  },
+  {
+    directiveKey: 'innovation-continuous-modern-technology-intake',
+    title: 'Continuous Modern Technology Intake',
+    category: 'innovation',
+    priority: 'critical',
+    statement: 'Pantavion continuously evaluates relevant modern technology through research, legal and security review, benchmarking, sandboxing, comparison and canary gates before production adoption.',
     founderLocked: true,
   },
 ];
