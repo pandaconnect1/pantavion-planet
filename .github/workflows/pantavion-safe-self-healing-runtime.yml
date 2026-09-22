@@ -1,0 +1,38 @@
+name: Pantavion Safe Self Healing Runtime
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "core/runtime/safe-self-healing-runtime.ts"
+      - "scripts/pantavion-safe-self-healing-runtime-test.mjs"
+      - "package.json"
+      - ".github/workflows/pantavion-safe-self-healing-runtime.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-safe-self-healing-runtime
+  cancel-in-progress: false
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout recovery branch
+        uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run safe self-healing runtime contract
+        run: npm run test:safe-self-healing
