@@ -1,0 +1,821 @@
+{
+  "schema": "pantavion_env_recovery_priority_v1",
+  "updatedAt": "2026-09-22T20:18:00Z",
+  "verifiedNamesFloor": 128,
+  "explicitlyEnumeratedNames": 114,
+  "floorIsCompleteVercelInventory": false,
+  "secretValuesCaptured": false,
+  "exportBlocker": "GitHub Actions secret VERCEL_TOKEN is absent.",
+  "rules": [
+    "Never write secret values to GitHub or chat.",
+    "Actual secret values must move directly into Supabase Vault.",
+    "Public NEXT_PUBLIC values are configuration, not secret material, but remain provenance-tracked.",
+    "Presence/scope in Vercel remains unknown until authenticated export."
+  ],
+  "priorityMeaning": {
+    "0": "restore/auth/storage/control-plane continuity first",
+    "1": "critical application services and Water/translation/billing integrations",
+    "2": "kernel, GitHub and orchestration continuity",
+    "3": "remaining runtime/config dependencies"
+  },
+  "rows": [
+    {
+      "name": "CRON_SECRET",
+      "tier": 0,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_AUTONOMOUS_SECRET",
+      "tier": 0,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_CONTROL_SHARED_SECRET",
+      "tier": 0,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_INTERNAL_AGENT_RUNTIME_TOKEN",
+      "tier": 0,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_KERNEL_SECRET",
+      "tier": 0,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_ADMIN_ACCESS_CODE",
+      "tier": 0,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "VERCEL_OIDC_TOKEN",
+      "tier": 0,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "BLOB_READ_WRITE_TOKEN",
+      "tier": 0,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_BLOB_READ_WRITE_TOKEN",
+      "tier": 0,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_ADMIN_ACCESS_CODE",
+      "tier": 0,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_ADMIN_SESSION_SECRET",
+      "tier": 0,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_FOUNDER_ACCESS_CODE",
+      "tier": 0,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "ANTHROPIC_API_KEY",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "ANTHROPIC_MODEL",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "AZURE_TRANSLATOR_ENDPOINT",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "AZURE_TRANSLATOR_KEY",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "AZURE_TRANSLATOR_REGION",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "DEEPL_API_KEY",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "DEEPL_TRANSLATE_ENDPOINT",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "GOOGLE_APPLICATION_CREDENTIALS",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "GOOGLE_TRANSLATE_API_KEY",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "OPENAI_API_KEY",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "OPENAI_MODEL",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_ENABLE_DIRECT_OPENAI_STT",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_REALTIME_TRANSLATION_PROVIDER",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_REALTIME_TRANSLATION_PROVIDER_KEY",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_REALTIME_TRANSLATION_RUNTIME_ENABLED",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_REALTIME_TRANSLATION_SENSITIVE_CONTEXT_APPROVED",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_SPEECH_NORMALIZATION_GATEWAY_MODEL",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_SPEECH_NORMALIZATION_MODEL",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_SPEECH_TO_TEXT_API_KEY",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_SPEECH_TO_TEXT_ENDPOINT",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_SPEECH_TO_TEXT_GATEWAY_MODEL",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_SPEECH_TO_TEXT_MODEL",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_TRANSLATE_ALLOW_PUBLIC_FALLBACK",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_TRANSLATE_API_KEY",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_TRANSLATE_ENDPOINT",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_TRANSLATE_PROVIDER",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_TRANSLATION_DIRECT_OPENAI_MODEL",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_TRANSLATION_MODEL",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "TRANSLATION_AGENT_POLL_MS",
+      "tier": 1,
+      "category": "ai_translation",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "NEXT_PUBLIC_STRIPE_FOUNDING_LINK",
+      "tier": 1,
+      "category": "billing",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_STRIPE_LISTING_BOOST_PRICE_ID",
+      "tier": 1,
+      "category": "billing",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "STRIPE_SECRET_KEY",
+      "tier": 1,
+      "category": "billing",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_PARTNER_INTEREST_WEBHOOK_URL",
+      "tier": 1,
+      "category": "sos_integrations",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_SOS_WEBHOOK_URL",
+      "tier": 1,
+      "category": "sos_integrations",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_B_MAP_PDF_URL",
+      "tier": 1,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_B_MASTER_BLOB_PATH",
+      "tier": 1,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_DTX_BLOB_PATH",
+      "tier": 1,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_DWG_BLOB_PATH",
+      "tier": 1,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_HELP_USER_DIRECTORY_JSON",
+      "tier": 1,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_MAP_B_DWG_PATH",
+      "tier": 1,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_MAP_B_INVENTORY_OUT",
+      "tier": 1,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_MASTER_DWG_BLOB_PATH",
+      "tier": 1,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_NETWORK_GEOJSON_BEARER_TOKEN",
+      "tier": 1,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_NETWORK_GEOJSON_URL",
+      "tier": 1,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_SOURCE_BLOB_PATH",
+      "tier": 1,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_WATER_TELEMETRY_PROVIDER",
+      "tier": 1,
+      "category": "water_storage",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "GITHUB_REPOSITORY",
+      "tier": 2,
+      "category": "github",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "GITHUB_SHA",
+      "tier": 2,
+      "category": "github",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "GITHUB_TOKEN",
+      "tier": 2,
+      "category": "github",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_EXPECTED_GITHUB_SHA",
+      "tier": 2,
+      "category": "github",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_GITHUB_BASE_BRANCH",
+      "tier": 2,
+      "category": "github",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_GITHUB_TOKEN",
+      "tier": 2,
+      "category": "github",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_AGENT_DAEMON_INTERVAL_MS",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_AGENT_DAEMON_TICKS",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_AGENT_LOOP_DRY_RUN",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_AGENT_LOOP_FORCE_SAFE_PATCH",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_AGENT_TICK_SOURCE",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_ALLOW_VERCEL_CRON_USER_AGENT",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_INTELLIGENCE_LEDGER_ENDPOINT",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_INTELLIGENCE_LEDGER_TOKEN",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_INTERNAL_AGENT_RUNTIME_OWNERSHIP",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_INTERNAL_AGENT_RUNTIME_URL",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_KERNEL_BASE_URL",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_KERNEL_PANEL_TOKEN",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_KERNEL_REGION",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_KERNEL_STATE_DIR",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_RESERVE_KERNEL_COUNT",
+      "tier": 2,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_INTERNAL_BASE",
+      "tier": 2,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_PRODUCTION_BASE_URL",
+      "tier": 2,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_ALLOW_LOCAL_CRON",
+      "tier": 3,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_AUTONOMOUS_BRANCH_PREFIX",
+      "tier": 3,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_AUTONOMOUS_WRITE_MODE",
+      "tier": 3,
+      "category": "kernel_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "AI_GATEWAY_API_KEY",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "EXPECTED_SHA",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "NODE_ENV",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_AI_PROVIDER",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_ALIAS_WAIT_MS",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_CODE_GENERATION_MODE",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_CONVERSION_ENGINE_ENABLED",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_DEPLOY_WAIT_MS",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_FOUNDER_APPROVED",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_FOUNDER_COMMAND_INBOX_ENABLED",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_HLU_ENABLED",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_HLU_MODEL",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_OMNIMODAL_INTAKE_ENABLED",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_SMOKE_PORT",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_TRANSCRIPTION_MODEL",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_USER_SIGNAL_INTAKE_ENABLED",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "PANTAVION_VERCEL_STATUS_CONTEXT",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "SPEC_BASE64",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "VERCEL",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "VERCEL_ENV",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "VERCEL_GIT_COMMIT_SHA",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "VERCEL_REGION",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "VERCEL_URL",
+      "tier": 3,
+      "category": "other_runtime",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "NEXT_PUBLIC_PANTAVION_DEFAULT_EMERGENCY_NUMBER",
+      "tier": 3,
+      "category": "public_config",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "NEXT_PUBLIC_SITE_URL",
+      "tier": 3,
+      "category": "public_config",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+      "tier": 3,
+      "category": "supabase",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "NEXT_PUBLIC_SUPABASE_URL",
+      "tier": 3,
+      "category": "supabase",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "SUPABASE_SECRET_KEY",
+      "tier": 3,
+      "category": "supabase",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "SUPABASE_SERVICE_ROLE_KEY",
+      "tier": 3,
+      "category": "supabase",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    },
+    {
+      "name": "SUPABASE_URL",
+      "tier": 3,
+      "category": "supabase",
+      "valueCaptured": false,
+      "vercelPresence": "UNKNOWN_UNTIL_AUTHENTICATED_EXPORT"
+    }
+  ]
+}
