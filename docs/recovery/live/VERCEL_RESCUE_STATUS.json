@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-09-22T20:13:00Z",
-  "phase": "VERCEL_PHASE3_MATERIALIZED_RESIDUAL_EVIDENCE_CAPTURED_SECRET_BLOB_EXPORT_BLOCKED",
+  "updatedAt": "2026-09-22T20:21:00Z",
+  "phase": "X10_CONNECTED_SURFACES_EXHAUSTED_PRIVATE_BLOB_AND_SECRET_EXPORT_BLOCKED",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total",
   "recoveredDeploymentRecordsFloor": 3679,
@@ -67,6 +67,8 @@
     "Partition execution terminality does not raise Lane F canonicalized floor and does not imply module-level VERIFIED_LIVE."
   ],
   "remaining": [
+    "Add authorized GitHub Actions VERCEL_TOKEN to unlock the prepared private Blob and environment-secret rescue workflows.",
+    "After Blob capture, run Water access importer in dry-run mode first; only then reconcile approved users/devices into canonical Supabase tables.",
     "Authorized VERCEL_TOKEN is still required before private Vercel environment values can be migrated directly into Supabase Vault.",
     "Authorized VERCEL_TOKEN is still required before Vercel Blob/private object bytes can be migrated into private Supabase Storage.",
     "Build-log preservation remains blocked because the connected Vercel backend currently reports the advertised build-log tool as unavailable.",
@@ -112,6 +114,9 @@
     "sourceUniqueCountIncremented": false
   },
   "recentEvidence": [
+    "2026-09-22 X10 audit: 15 visible projects snapshotted; only pantavion-planet has runtime error groups in the 7-day window (11 error occurrences); the other 14 returned zero groups.",
+    "Environment continuity now has 128 verified-name lower bound and 114 explicitly enumerated names in the priority manifest; values remain unexported.",
+    "Water Blob rescue is tiered: identity/access state first, then human operational records, derived truth, and master/map binaries.",
     "2026-09-22: historical Water protected-state recovery was prioritized. July 21 evidence shows 44 historical request/device attempts and 16 approved Users; 44 was not necessarily 44 unique people.",
     "Five exact historical Vercel Blob prefixes for Water access/approved/rejected/revoked state are now first-priority in the Blob rescue workflow.",
     "Current Supabase Water access tables and matching Storage objects are all zero; canonical import remains blocked until real Vercel Blob objects are preserved.",
@@ -256,5 +261,31 @@
       "piiRemainsPrivate": true
     },
     "blocker": "VERCEL_TOKEN_REQUIRED_FOR_BLOB_ENUMERATION"
+  },
+  "x10ResidualAudit": {
+    "state": "CONNECTED_NON_DESTRUCTIVE_SURFACES_EXHAUSTED_OR_EXPLICITLY_BLOCKED",
+    "evidence": "docs/recovery/vercel-evidence/20260922/VERCEL_X10_RESIDUAL_SURFACE_AUDIT_20260922.json",
+    "evidenceCommit": "ad1419a42abc7ed11ff5942018560aff35f5dca4",
+    "visibleProjects": 15,
+    "deploymentRecordsPreserved": 5569,
+    "uniqueGitSources": 3138,
+    "phase3WorkOrderExecutionId": "pwo_8e27280d-b970-49ad-9674-abed043f3971",
+    "runtimeWindow": "7d",
+    "projectsWithRuntimeErrors": 1,
+    "projectsWithoutRuntimeErrors": 14,
+    "canonicalRuntimeErrorOccurrences": 11,
+    "canonicalRuntimeWarnings": 4,
+    "envNamesVerifiedFloor": 128,
+    "envNamesExplicitlyEnumerated": 114,
+    "blobBytesMigrated": 0,
+    "secretValuesMigrated": 0,
+    "remainingCriticalBlockers": [
+      "VERCEL_TOKEN_ABSENT_FOR_BLOB_EXPORT",
+      "VERCEL_TOKEN_ABSENT_FOR_ENV_SECRET_EXPORT",
+      "GET_PROJECT_CONNECTOR_SCHEMA_MISMATCH",
+      "BUILD_LOG_CONNECTOR_TOOL_UNAVAILABLE"
+    ],
+    "zeroDelete": true,
+    "zeroVercelMutations": true
   }
 }
