@@ -1,0 +1,80 @@
+{
+  "schema": "pantavion_water_blob_rescue_priority_v1",
+  "updatedAt": "2026-09-22T20:16:00Z",
+  "branch": "backup/pre-vercel-risk-20260914",
+  "zeroDelete": true,
+  "zeroVercelMutations": true,
+  "tiers": [
+    {
+      "tier": 0,
+      "name": "identity_access_protected_state",
+      "restoreTarget": "canonical Supabase water access tables after dry-run validation",
+      "prefixes": [
+        "water/private/access-requests/",
+        "water/private/approved-devices/",
+        "water/private/approved-contacts/",
+        "water/private/rejected-requests/",
+        "water/private/revoked-devices/"
+      ]
+    },
+    {
+      "tier": 1,
+      "name": "human_operational_records",
+      "restoreTarget": "private Supabase recovery storage first; canonical schema later",
+      "prefixes": [
+        "water/private/field-submissions/",
+        "water/private/fault-dossiers/pending/",
+        "water/private/fault-approval-inbox/founder-admin/",
+        "water/private/help-requests/",
+        "water/private/help-inbox/founder-admin/",
+        "water/private/help-inbox/users/",
+        "water/private/help-inbox/roles/",
+        "water/private/help-threads/",
+        "water/private/help-thread-inbox/founder-admin/",
+        "water/private/help-thread-inbox/users/",
+        "water/private/help-thread-inbox/roles/"
+      ]
+    },
+    {
+      "tier": 2,
+      "name": "derived_processed_truth",
+      "restoreTarget": "private Supabase recovery storage with checksum/provenance",
+      "prefixes": [
+        "water/private/processed/",
+        "water/private/derived/"
+      ]
+    },
+    {
+      "tier": 3,
+      "name": "master_private_map_sources",
+      "restoreTarget": "private Supabase recovery storage; large-file TUS upload",
+      "prefixes": [
+        "water/private/maps/"
+      ]
+    }
+  ],
+  "historicalEvidence": {
+    "accessRequestDeviceAttempts": 44,
+    "approvedUsersReported": 16,
+    "date": "2026-07-21",
+    "caution": "44 represented historical request/device attempts, not necessarily 44 unique people."
+  },
+  "currentCanonicalState": {
+    "waterAccessRequests": 0,
+    "waterApprovedDevices": 0,
+    "waterAccessAudit": 0,
+    "matchingRecoveredStorageObjects": 0,
+    "accessTablesDirectAnonRead": false,
+    "accessTablesDirectAuthenticatedRead": false,
+    "accessTablesServiceRoleRead": true
+  },
+  "importer": {
+    "path": "scripts/recovery/import-recovered-water-access.mjs",
+    "modeDefault": "dry-run",
+    "dedupKeys": [
+      "request id",
+      "device id"
+    ]
+  },
+  "blocker": "GitHub Actions secret VERCEL_TOKEN is absent."
+}
