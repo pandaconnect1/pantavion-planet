@@ -26,6 +26,19 @@ jobs:
             nslookup "$host" || true
           done
 
+      - name: Custom-domain target and TLS certificate
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "===== Railway custom-domain target ====="
+          curl -sS -I --connect-timeout 10 --max-time 20 https://0ipf8php.up.railway.app/ || true
+          echo
+          echo "===== TLS www.pantavion.com ====="
+          echo | openssl s_client -connect 0ipf8php.up.railway.app:443 -servername www.pantavion.com 2>/dev/null | openssl x509 -noout -subject -issuer -ext subjectAltName || true
+          echo
+          echo "===== TLS direct Railway ====="
+          echo | openssl s_client -connect pantavion-planet-production.up.railway.app:443 -servername pantavion-planet-production.up.railway.app 2>/dev/null | openssl x509 -noout -subject -issuer -ext subjectAltName || true
+
       - name: HTTP probes
         shell: bash
         run: |
