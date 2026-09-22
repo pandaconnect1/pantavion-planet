@@ -1,0 +1,240 @@
+{
+  "capturedAt": "2026-09-22T18:54:00Z",
+  "project": "pantavion-planet",
+  "startCursor": 1775973745528,
+  "count": 11,
+  "nextCursor": 1775918227754,
+  "deployments": [
+    {
+      "id": "dpl_8EiUHoLLaKDL8gttUEMAA8psed8i",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-qfldklday-pandaconnect.vercel.app",
+      "created": 1775935194766,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "kernel-canonicalization-20260411-200129",
+        "githubCommitSha": "b836dc510baf44f40548d2056a49f08082c51fc4",
+        "githubCommitMessage": "Add canonical kernel runtime composition layer",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet/8EiUHoLLaKDL8gttUEMAA8psed8i",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_3Smc1qdVujaXGNdfwUaBgYQ2WeGc",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-2ezj70ypj-pandaconnect.vercel.app",
+      "created": 1775931807643,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "kernel-canonicalization-20260411-200129",
+        "githubCommitSha": "0b4dd01cffb1e7a48b292b66ab9a4d69870561c6",
+        "githubCommitMessage": "Fix canonical memory audit entry compatibility",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet/3Smc1qdVujaXGNdfwUaBgYQ2WeGc",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_48MLp77LtGD8A1WuTgYGE24KyqkM",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-bx7kaka0l-pandaconnect.vercel.app",
+      "created": 1775929155027,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "kernel-canonicalization-20260411-200129",
+        "githubCommitSha": "3ff9681683e1add38080dadcb90bd11f6edc0d2d",
+        "githubCommitMessage": "Patch 6 align kernel store with canonical compatibility bridge",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet/48MLp77LtGD8A1WuTgYGE24KyqkM",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_GnzJUQiEkEnFGeCSFyr8cm9jzHp3",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-g16wy4nla-pandaconnect.vercel.app",
+      "created": 1775928076457,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "kernel-canonicalization-20260411-200129",
+        "githubCommitSha": "f594eca46cb64dcd6258b47babee1a7390ac2c73",
+        "githubCommitMessage": "Patch 5 add canonical store layer",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet/GnzJUQiEkEnFGeCSFyr8cm9jzHp3",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_9xcACYCAw6n3EYdquhKG28JZyYSQ",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-jzrrbb4ri-pandaconnect.vercel.app",
+      "created": 1775927887241,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "kernel-canonicalization-20260411-200129",
+        "githubCommitSha": "26dc5c80a05ade85d7a9da1340353b3e3b682e7e",
+        "githubCommitMessage": "Patch 4 align kernel audit with canonical compatibility bridge",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet/9xcACYCAw6n3EYdquhKG28JZyYSQ",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_75Po8F5JoG97jtweeUxQUxYXbsdS",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-egwefjpsi-pandaconnect.vercel.app",
+      "created": 1775927668380,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "kernel-canonicalization-20260411-200129",
+        "githubCommitSha": "85f00e786a0fda603f33c5224b11533bc9441400",
+        "githubCommitMessage": "Patch 3 align kernel types with canonical compatibility bridge",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet/75Po8F5JoG97jtweeUxQUxYXbsdS",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_B6ur6U6JzR9Sswg9SUucP8qSFTLm",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-p34efzd92-pandaconnect.vercel.app",
+      "created": 1775927456948,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "kernel-canonicalization-20260411-200129",
+        "githubCommitSha": "3ee79d6240f557744cd5dbf1efa4417733ee4069",
+        "githubCommitMessage": "Patch 2 add canonical audit layer",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet/B6ur6U6JzR9Sswg9SUucP8qSFTLm",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_8tnSgJMjE9riBC6inGiaX23PvgCP",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-e95ly98qo-pandaconnect.vercel.app",
+      "created": 1775927283276,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "kernel-canonicalization-20260411-200129",
+        "githubCommitSha": "f330f22551b026f9cd0a639be81e5e6f607583c2",
+        "githubCommitMessage": "Patch 1 add canonical shared types foundation",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet/8tnSgJMjE9riBC6inGiaX23PvgCP",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_4X5tLzXUijoush97o4D5T7kqEkbb",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-orjwitd9e-pandaconnect.vercel.app",
+      "created": 1775926934994,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "kernel-canonicalization-20260411-200129",
+        "githubCommitSha": "a910e011c49051dd51daf62596c9ae41080aacab",
+        "githubCommitMessage": "Create kernel canonicalization baseline inventory",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet/4X5tLzXUijoush97o4D5T7kqEkbb",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_8NKBFrGghec1cENP6itaqRstizMN",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-8hnr1aa6h-pandaconnect.vercel.app",
+      "created": 1775926621840,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "phase-c-ui-port-20260411-194906",
+        "githubCommitSha": "ac092b514451269df4d614a840a374bdfc5f45b5",
+        "githubCommitMessage": "Phase C port clean UI module shells into pantavion-planet",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet/8NKBFrGghec1cENP6itaqRstizMN",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_E2bVPTBgBkqHWLCMSgaYBsN97MGq",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-jl9hgbqda-pandaconnect.vercel.app",
+      "created": 1775918227754,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "6ef6398bf219de227cb3ba1bce536a485b95a54f",
+        "githubCommitMessage": "Fix tsconfig and memory compatibility build blockers",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet/E2bVPTBgBkqHWLCMSgaYBsN97MGq",
+      "isRollbackCandidate": true
+    }
+  ]
+}
