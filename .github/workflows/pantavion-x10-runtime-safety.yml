@@ -1,0 +1,51 @@
+name: Pantavion X10 Runtime Safety
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "core/**"
+      - "app/**"
+      - "lib/**"
+      - "services/**"
+      - "src/**"
+      - "types/**"
+      - "scripts/**"
+      - "supabase/**"
+      - "package.json"
+      - "package-lock.json"
+      - "middleware.ts"
+      - "next.config.mjs"
+      - ".github/workflows/pantavion-x10-runtime-safety.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-x10-runtime-safety
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout recovery branch
+        uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Full runtime safety verification
+        run: npm run verify:runtime-safety
