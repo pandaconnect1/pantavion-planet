@@ -1,0 +1,90 @@
+{
+  "schema": "pantavion_vercel_phase2_v1",
+  "generatedAt": "2026-09-22T19:39:35.283Z",
+  "sourceRoot": "docs/recovery/vercel-evidence/20260922",
+  "sourceFilesRead": [
+    "docs/recovery/vercel-evidence/20260922/legacy-ai-and-empty-projects.json",
+    "docs/recovery/vercel-evidence/20260922/legacy-pantavion-deployments.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1841a.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1841b.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1843c.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1844d.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1845e.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1846f.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1847g.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1848h.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1849i.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1850j.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1851k.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1852l.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1853m.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1854n.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-batch-20260922-1855o.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-deployments.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-vmxx-batch-20260922-1841a.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-vmxx-batch-20260922-1843b.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-vmxx-batch-20260922-1844c.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-vmxx-batch-20260922-1845d.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-vmxx-batch-20260922-1846e.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-vmxx-batch-20260922-1847f.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-vmxx-batch-20260922-1848g.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-vmxx-batch-20260922-1849h.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-vmxx-batch-20260922-1850i.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-vmxx-batch-20260922-1851j.json",
+    "docs/recovery/vercel-evidence/20260922/pantavion-planet-vmxx-deployments.json"
+  ],
+  "parseFailures": [],
+  "preservation": {
+    "candidateOccurrences": 5569,
+    "uniqueDeployments": 5569,
+    "duplicateOccurrencesMerged": 0,
+    "uniqueSources": 3138,
+    "gitCommitSources": 3138,
+    "deploymentOnlySources": 0,
+    "mirroredSourceGroups": 2400
+  },
+  "productionDeployments": 1550,
+  "rollbackCandidates": 1496,
+  "projectCounts": {
+    "pantavion-planet": 3091,
+    "pantavion-planet-vmxx": 2393,
+    "pantavion-one-clean": 52,
+    "pantavion-one": 14,
+    "pantaai-v1": 6,
+    "pantaai-v1-nf17": 6,
+    "pantavion-one-clean-98it": 4,
+    "pantavion-one-clean-ui": 2,
+    "pantaai": 1
+  },
+  "moduleCounts": {
+    "Recovery / Provenance": 2144,
+    "Kernel / Guardian / Runtime": 1191,
+    "Resilience / Offline / Infrastructure": 441,
+    "Interpreter / Translation": 426,
+    "Maps / World / Water": 381,
+    "Social / Pulse / Communities": 203,
+    "Safety / Trust / Minors": 187,
+    "Learning / Knowledge": 182,
+    "Chat": 132,
+    "Identity / Auth / Consent": 88,
+    "People": 68,
+    "SOS / Crisis": 63,
+    "Music / Media / Creation": 38,
+    "Marketplace / Work / Business": 25
+  },
+  "stateCounts": {
+    "READY": 5105,
+    "ERROR": 464
+  },
+  "routeCount": 14,
+  "rules": {
+    "deploymentIdentity": "projectId:deploymentId",
+    "sourceIdentity": "git org/repo + commit SHA when available; deployment identity fallback otherwise",
+    "deletePolicy": "ZERO_DELETE",
+    "classificationTruth": "Classification/routing is recovery organization, not implementation or VERIFIED_LIVE proof."
+  },
+  "fingerprints": {
+    "orderedDeploymentKeys": "a79a309fa942d085feb032eedc514e309f00569a3349251931ecdcd98629f00c",
+    "orderedSourceKeys": "21fe38974dfd7b1ed17e4fde70c208c40f7da2c883bc7f9a332227089aa0450d"
+  }
+}

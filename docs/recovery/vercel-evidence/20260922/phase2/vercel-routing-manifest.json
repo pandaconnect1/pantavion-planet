@@ -1,0 +1,141 @@
+{
+  "Recovery / Provenance": {
+    "deploymentCount": 2144,
+    "uniqueSourceCount": 1079,
+    "projects": [
+      "pantavion-one",
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://recovery-provenance"
+  },
+  "SOS / Crisis": {
+    "deploymentCount": 63,
+    "uniqueSourceCount": 46,
+    "projects": [
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://sos-crisis"
+  },
+  "Kernel / Guardian / Runtime": {
+    "deploymentCount": 1191,
+    "uniqueSourceCount": 643,
+    "projects": [
+      "pantavion-one-clean",
+      "pantavion-one-clean-98it",
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://kernel-guardian-runtime"
+  },
+  "Resilience / Offline / Infrastructure": {
+    "deploymentCount": 441,
+    "uniqueSourceCount": 287,
+    "projects": [
+      "pantaai",
+      "pantaai-v1",
+      "pantaai-v1-nf17",
+      "pantavion-one",
+      "pantavion-one-clean",
+      "pantavion-one-clean-98it",
+      "pantavion-one-clean-ui",
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://resilience-offline-infrastructure"
+  },
+  "Identity / Auth / Consent": {
+    "deploymentCount": 88,
+    "uniqueSourceCount": 50,
+    "projects": [
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://identity-auth-consent"
+  },
+  "Safety / Trust / Minors": {
+    "deploymentCount": 187,
+    "uniqueSourceCount": 101,
+    "projects": [
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://safety-trust-minors"
+  },
+  "Social / Pulse / Communities": {
+    "deploymentCount": 203,
+    "uniqueSourceCount": 131,
+    "projects": [
+      "pantavion-one-clean",
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://social-pulse-communities"
+  },
+  "Learning / Knowledge": {
+    "deploymentCount": 182,
+    "uniqueSourceCount": 91,
+    "projects": [
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://learning-knowledge"
+  },
+  "Interpreter / Translation": {
+    "deploymentCount": 426,
+    "uniqueSourceCount": 258,
+    "projects": [
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://interpreter-translation"
+  },
+  "Chat": {
+    "deploymentCount": 132,
+    "uniqueSourceCount": 72,
+    "projects": [
+      "pantavion-one",
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://chat"
+  },
+  "Music / Media / Creation": {
+    "deploymentCount": 38,
+    "uniqueSourceCount": 23,
+    "projects": [
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://music-media-creation"
+  },
+  "Maps / World / Water": {
+    "deploymentCount": 381,
+    "uniqueSourceCount": 309,
+    "projects": [
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://maps-world-water"
+  },
+  "Marketplace / Work / Business": {
+    "deploymentCount": 25,
+    "uniqueSourceCount": 13,
+    "projects": [
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://marketplace-work-business"
+  },
+  "People": {
+    "deploymentCount": 68,
+    "uniqueSourceCount": 36,
+    "projects": [
+      "pantavion-one-clean",
+      "pantavion-planet",
+      "pantavion-planet-vmxx"
+    ],
+    "route": "module://people"
+  }
+}
