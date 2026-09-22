@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-09-22T19:20:00Z",
-  "phase": "DEPLOYMENT_PAGINATION_TERMINAL_VERCEL_ONLY_ASSET_GAPS_REMAIN",
+  "updatedAt": "2026-09-22T19:41:00Z",
+  "phase": "VERCEL_PHASE2_CANONICALIZED_ROUTED_BLOB_GAP_REMAINS",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total",
   "recoveredDeploymentRecordsFloor": 3679,
@@ -67,6 +67,8 @@
     "Partition execution terminality does not raise Lane F canonicalized floor and does not imply module-level VERIFIED_LIVE."
   ],
   "remaining": [
+    "Close the Vercel Blob/private-object gap when an authorized VERCEL_TOKEN becomes available to the prepared recovery workflow.",
+    "Use Phase 2 module/source groups as inputs for implementation prioritization; classification is not VERIFIED_LIVE implementation evidence.",
     "Provide an authorized VERCEL_TOKEN to the existing GitHub Actions secret name so the prepared read-only Blob rescue can enumerate/download Vercel Blob and copy it into private Supabase Storage.",
     "Preserve/migrate Vercel Blob and storage-only assets through an authorized Blob-capable path before any Vercel cleanup.",
     "Preserve required environment-variable names/scopes and reissue/rotate private secret values outside public GitHub.",
@@ -107,6 +109,9 @@
     "sourceUniqueCountIncremented": false
   },
   "recentEvidence": [
+    "2026-09-22: Vercel recovery Phase 2 completed for the terminal 5,569-deployment corpus.",
+    "Phase 2 produced 3,138 unique Git source groups, 2,400 mirrored source groups and 14 module routes.",
+    "All 5,569 canonical deployment records were upserted into public.pantavion_vercel_recovery_catalog with RLS enabled.",
     "2026-09-22: all 15 visible Vercel projects paginated to terminal deployment history.",
     "Preserved deployment records: pantavion-planet 3,091; pantavion-planet-vmxx 2,393; all projects total 5,569.",
     "Terminal deployment pagination is proven, but Vercel Blob/private storage and secret environment-variable values remain separate unresolved asset categories.",
@@ -153,5 +158,24 @@
     "directProtectedRouteAttempt": "HTTP_402_DEPLOYMENT_DISABLED",
     "zeroDelete": true,
     "zeroVercelMutations": true
+  },
+  "phase2": {
+    "state": "CANONICALIZED_ROUTED_SUPABASE_BOUND",
+    "workflowRunId": 35775175547,
+    "manifest": "docs/recovery/vercel-evidence/20260922/phase2/manifest.json",
+    "manifestSha": "566df03f31808d1880e769f1febd8a2c1413b53e",
+    "durableCommit": "b88ea2a71ce044325bfcee52e17670cb33c754ea",
+    "uniqueDeployments": 5569,
+    "uniqueSources": 3138,
+    "gitCommitSources": 3138,
+    "mirroredSourceGroups": 2400,
+    "productionDeployments": 1550,
+    "rollbackCandidates": 1496,
+    "readyDeployments": 5105,
+    "errorDeployments": 464,
+    "routeCount": 14,
+    "supabaseTable": "public.pantavion_vercel_recovery_catalog",
+    "supabaseRows": 5569,
+    "zeroDelete": true
   }
 }
