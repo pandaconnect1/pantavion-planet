@@ -1,0 +1,42 @@
+name: Pantavion Elastic Ecosystem Audit
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "core/kernel/pantavion-elastic-capability-factory.ts"
+      - "core/intelligence/pantavion-personal-agent-mesh.ts"
+      - "core/kernel/pantavion-self-repair-loop.ts"
+      - "core/translation/pantavion-natural-language-universe.ts"
+      - "core/translation/pantavion-language-coverage-matrix.ts"
+      - "scripts/pantavion-elastic-ecosystem-audit.mjs"
+      - "package.json"
+      - ".github/workflows/pantavion-elastic-ecosystem-audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-elastic-ecosystem-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout recovery branch
+        uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run elastic ecosystem audit
+        run: npm run audit:elastic-ecosystem
