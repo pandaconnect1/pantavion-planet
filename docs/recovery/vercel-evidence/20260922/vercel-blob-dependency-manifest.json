@@ -1,0 +1,131 @@
+{
+  "capturedAt": "2026-09-22",
+  "purpose": "Enumerate code-declared Vercel Blob namespaces and environment dependencies that must be preserved/migrated before Vercel cleanup.",
+  "rule": "No secret values are stored here.",
+  "rows": [
+    {
+      "path": "app/api/professional/infrastructure/water/access/admin/approve/route.ts",
+      "waterStrings": [
+        "water/private/access-requests/${requestId}.json",
+        "water/private/access-requests/",
+        "water/private/access-requests/${accessRequest.id}.json",
+        "water/private/approved-devices/${deviceId}.json"
+      ],
+      "envDependencies": []
+    },
+    {
+      "path": "app/api/professional/infrastructure/water/maps/registry/route.ts",
+      "waterStrings": [
+        "@/core/infrastructure/water/water-abc-map-system-contract",
+        "water/private/approved-devices/${deviceId}.json"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN",
+        "PANTAVION_WATER_B_MASTER_BLOB_PATH",
+        "PANTAVION_WATER_DTX_BLOB_PATH",
+        "PANTAVION_WATER_DWG_BLOB_PATH",
+        "PANTAVION_WATER_SOURCE_BLOB_PATH",
+        "PANTAVION_WATER_TELEMETRY_PROVIDER"
+      ]
+    },
+    {
+      "path": "app/api/professional/infrastructure/water/master-dwg/route.ts",
+      "waterStrings": [
+        "water/private/maps/dwg/2026_ANDREASPAP-01-02-014.dwg",
+        "water/private/approved-devices/${deviceId}.json"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN",
+        "PANTAVION_WATER_MASTER_DWG_BLOB_PATH"
+      ]
+    },
+    {
+      "path": "app/api/professional/infrastructure/water/master/b/route.ts",
+      "waterStrings": [],
+      "envDependencies": []
+    },
+    {
+      "path": "app/api/professional/infrastructure/water/field/submission/route.ts",
+      "waterStrings": [
+        "water/private/field-submissions/${payload.id}.json"
+      ],
+      "envDependencies": []
+    },
+    {
+      "path": "app/api/professional/infrastructure/water/field/admin/submissions/route.ts",
+      "waterStrings": [
+        "water/private/field-submissions/"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ]
+    },
+    {
+      "path": "app/api/professional/infrastructure/water/field/fault/route.ts",
+      "waterStrings": [
+        "@/core/water/water-fault-lifecycle-model",
+        "water/private/fault-dossiers/pending/${safeSegment(recordNumber)}.json",
+        "water/private/fault-approval-inbox/founder-admin/${safeSegment(recordNumber)}.json"
+      ],
+      "envDependencies": []
+    },
+    {
+      "path": "app/api/professional/infrastructure/water/admin/faults/route.ts",
+      "waterStrings": [
+        "water/private/fault-approval-inbox/founder-admin/"
+      ],
+      "envDependencies": []
+    },
+    {
+      "path": "app/api/professional/infrastructure/water/help/request/route.ts",
+      "waterStrings": [
+        "water/private/help-inbox/users/${safePathSegment(target.id)}/${requestId}.json",
+        "water/private/help-inbox/roles/${safePathSegment(target.id)}/${requestId}.json",
+        "water/private/help-inbox/founder-admin/${requestId}.json",
+        "water/private/help-requests/${payload.id}.json"
+      ],
+      "envDependencies": [
+        "PANTAVION_WATER_HELP_USER_DIRECTORY_JSON"
+      ]
+    },
+    {
+      "path": "app/api/professional/infrastructure/water/help/thread/route.ts",
+      "waterStrings": [
+        "water/private/help-threads/${safePathSegment(requestId)}/",
+        "water/private/help-threads/${safePathSegment(requestId)}/${event.id}.json",
+        "water/private/help-thread-inbox/founder-admin/${event.id}.json",
+        "water/private/help-thread-inbox/users/${safePathSegment(toUserId)}/${event.id}.json",
+        "water/private/help-thread-inbox/roles/${safePathSegment(toRole)}/${event.id}.json"
+      ],
+      "envDependencies": []
+    },
+    {
+      "path": "app/api/professional/infrastructure/water/help/inbox/route.ts",
+      "waterStrings": [
+        "water/private/help-requests/"
+      ],
+      "envDependencies": []
+    },
+    {
+      "path": "core/infrastructure/water/controlled-water-segment-index-provider.ts",
+      "waterStrings": [
+        "water/private/processed/water-source-truth-report.json",
+        "water/private/derived/water-segment-index-manifest.json",
+        "water/private/derived/water-feature-bbox-index.json",
+        "water/private/derived/water-features.ndjson"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ]
+    },
+    {
+      "path": "core/water/water-access-store.ts",
+      "waterStrings": [
+        "water/private/approved-devices/${deviceId}.json"
+      ],
+      "envDependencies": [
+        "BLOB_READ_WRITE_TOKEN"
+      ]
+    }
+  ]
+}
