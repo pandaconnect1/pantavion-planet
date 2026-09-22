@@ -1,0 +1,136 @@
+name: Pantavion Vercel Recovery Phase 2
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "scripts/recovery/vercel-phase2-process.mjs"
+      - ".github/workflows/pantavion-vercel-recovery-phase2.yml"
+      - "docs/recovery/vercel-evidence/20260922/*.json"
+      - "docs/recovery/vercel-evidence/20260922/*.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pantavion-vercel-recovery-phase2-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+
+    steps:
+      - name: Checkout recovery branch
+        uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run deterministic dedup, classification and routing
+        run: node scripts/recovery/vercel-phase2-process.mjs
+
+      - name: Verify phase 2 artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s docs/recovery/vercel-evidence/20260922/phase2/manifest.json
+          test -s docs/recovery/vercel-evidence/20260922/phase2/vercel-deployment-canonical.ndjson
+          test -s docs/recovery/vercel-evidence/20260922/phase2/vercel-source-groups.json
+          test -s docs/recovery/vercel-evidence/20260922/phase2/vercel-routing-manifest.json
+          node - <<'NODE'
+          const fs=require('fs');
+          const m=JSON.parse(fs.readFileSync('docs/recovery/vercel-evidence/20260922/phase2/manifest.json','utf8'));
+          if(m.parseFailures.length) throw new Error('Phase 2 parse failures: '+JSON.stringify(m.parseFailures));
+          if(m.preservation.uniqueDeployments !== 5569) throw new Error('Expected 5569 unique deployment records, got '+m.preservation.uniqueDeployments);
+          if(!m.preservation.uniqueSources) throw new Error('No source groups produced');
+          console.log(JSON.stringify({uniqueDeployments:m.preservation.uniqueDeployments,uniqueSources:m.preservation.uniqueSources,duplicatesMerged:m.preservation.duplicateOccurrencesMerged,moduleCounts:m.moduleCounts},null,2));
+          NODE
+
+      - name: Require Supabase recovery credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_ACCESS_TOKEN SUPABASE_PROJECT_REF; do
+            if [ -z "${!name:-}" ]; then echo "::error::$name missing"; exit 1; fi
+          done
+          if [ "$SUPABASE_PROJECT_REF" != "cxhulvwkagzufbjsdwwu" ]; then
+            echo "::error::Wrong Supabase project ref"; exit 1
+          fi
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Resolve elevated Supabase key without logging it
+        id: supabase-key
+        shell: bash
+        run: |
+          set -euo pipefail
+          json_file="$RUNNER_TEMP/supabase-api-keys.json"
+          key_file="$RUNNER_TEMP/supabase-recovery-key"
+          umask 077
+          supabase projects api-keys --project-ref "$SUPABASE_PROJECT_REF" --output json > "$json_file"
+          jq -r '[.[] | select(.name == "service_role") | .api_key][0] // [.[] | select(.type == "secret") | .api_key][0] // empty' "$json_file" > "$key_file"
+          rm -f "$json_file"
+          key="$(cat "$key_file")"
+          if [ ${#key} -lt 24 ]; then echo "::error::No elevated Supabase key"; rm -f "$key_file"; exit 1; fi
+          echo "::add-mask::$key"
+          echo "key_file=$key_file" >> "$GITHUB_OUTPUT"
+
+      - name: Upsert canonical Vercel recovery catalog into Supabase
+        shell: bash
+        env:
+          SUPABASE_KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs=require('fs');
+          const key=fs.readFileSync(process.env.SUPABASE_KEY_FILE,'utf8').trim();
+          console.log('::add-mask::'+key);
+          const lines=fs.readFileSync('docs/recovery/vercel-evidence/20260922/phase2/vercel-deployment-canonical.ndjson','utf8').trim().split('\n');
+          const rows=lines.map(line=>JSON.parse(line));
+          const endpoint=`https://${process.env.SUPABASE_PROJECT_REF}.supabase.co/rest/v1/pantavion_vercel_recovery_catalog?on_conflict=deployment_key`;
+          const baseHeaders={'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal','apikey':key};
+          if(key.startsWith('eyJ')) baseHeaders.Authorization='Bearer '+key;
+          (async()=>{
+            for(let i=0;i<rows.length;i+=200){
+              const chunk=rows.slice(i,i+200).map(r=>({...r,updated_at:new Date().toISOString()}));
+              const res=await fetch(endpoint,{method:'POST',headers:baseHeaders,body:JSON.stringify(chunk)});
+              if(!res.ok) throw new Error(`Supabase upsert failed ${res.status}: ${await res.text()}`);
+              console.log(`upserted ${Math.min(i+chunk.length,rows.length)}/${rows.length}`);
+            }
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+
+      - name: Commit durable phase 2 artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "pantavion-recovery-bot"
+          git config user.email "pantavion-recovery-bot@users.noreply.github.com"
+          git add docs/recovery/vercel-evidence/20260922/phase2
+          if git diff --cached --quiet; then
+            echo "Idempotent no-op: phase 2 artifacts unchanged."
+          else
+            git commit -m "recovery: materialize Vercel phase 2 canonical classification"
+            git pull --rebase origin backup/pre-vercel-risk-20260914
+            git push origin HEAD:backup/pre-vercel-risk-20260914
+          fi
+
+      - name: Remove temporary credential material
+        if: always()
+        shell: bash
+        run: rm -f "${{ steps.supabase-key.outputs.key_file }}" || true
