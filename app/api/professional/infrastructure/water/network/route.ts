@@ -14,7 +14,7 @@ export async function GET() {
       productionServingStatus: "blocked",
       rendererStatus: "blocked",
       reason:
-        "Legacy network endpoint is disabled. Full, sampled, preview, or mobile water network payloads must not be returned to the browser. Use readiness, target viewport, address candidates, and controlled bbox contracts only.",
+        "Legacy network endpoint is disabled. This route returns no network geometry or feature payload. Use readiness, target viewport, address candidates, and the protected segmented bbox endpoint.",
       dataReturned: false,
       noDataReturned: true,
       waterNetworkDataReturned: false,
