@@ -13,6 +13,10 @@ import { listToolCapabilities, getToolCapabilitySnapshot } from './tool-capabili
 import { listBrandAssets, getBrandAssetSnapshot } from './brand-asset-registry';
 import { listDeviceCapabilities, getDeviceCapabilitySnapshot } from './device-capability-registry';
 import { listProjectLineageRecords, getProjectLineageSnapshot } from './project-lineage-registry';
+import {
+  listPantavionPermanentInvariants,
+  getPantavionPermanentInvariantSnapshot,
+} from '../pantavion/permanent-system-invariants';
 
 export interface PantavionKernelIntakeExpansionWaveOutput {
   generatedAt: string;
@@ -28,6 +32,7 @@ export interface PantavionKernelIntakeExpansionWaveOutput {
   brandSnapshot: ReturnType<typeof getBrandAssetSnapshot>;
   deviceSnapshot: ReturnType<typeof getDeviceCapabilitySnapshot>;
   lineageSnapshot: ReturnType<typeof getProjectLineageSnapshot>;
+  permanentInvariantSnapshot: ReturnType<typeof getPantavionPermanentInvariantSnapshot>;
   rendered: string;
 }
 
@@ -114,6 +119,11 @@ function renderWave(output: PantavionKernelIntakeExpansionWaveOutput): string {
     `criticalCount=${output.lineageSnapshot.criticalCount}`,
     `recoveryCandidateCount=${output.lineageSnapshot.recoveryCandidateCount}`,
     `legacyFragmentCount=${output.lineageSnapshot.legacyFragmentCount}`,
+    '',
+    'PERMANENT SYSTEM INVARIANTS',
+    `invariantCount=${output.permanentInvariantSnapshot.invariantCount}`,
+    `founderLockedCount=${output.permanentInvariantSnapshot.founderLockedCount}`,
+    `failClosedCount=${output.permanentInvariantSnapshot.failClosedCount}`,
   ].join('\n');
 }
 
@@ -132,6 +142,7 @@ export async function runKernelIntakeExpansionWave(): Promise<PantavionKernelInt
     brandSnapshot: getBrandAssetSnapshot(),
     deviceSnapshot: getDeviceCapabilitySnapshot(),
     lineageSnapshot: getProjectLineageSnapshot(),
+    permanentInvariantSnapshot: getPantavionPermanentInvariantSnapshot(),
     rendered: '',
   };
 
@@ -153,6 +164,7 @@ export async function runKernelIntakeExpansionWave(): Promise<PantavionKernelInt
       brandAssets: listBrandAssets(),
       deviceCapabilities: listDeviceCapabilities(),
       projectLineage: listProjectLineageRecords(),
+      permanentSystemInvariants: listPantavionPermanentInvariants(),
       snapshots: {
         vision: output.visionSnapshot,
         users: output.userSnapshot,
@@ -166,6 +178,7 @@ export async function runKernelIntakeExpansionWave(): Promise<PantavionKernelInt
         brand: output.brandSnapshot,
         devices: output.deviceSnapshot,
         lineage: output.lineageSnapshot,
+        permanentSystemInvariants: output.permanentInvariantSnapshot,
       },
     },
     tags: ['kernel', 'intake', 'categories', 'vision', 'locales', 'devices', 'lineage', 'latest'],
@@ -175,6 +188,9 @@ export async function runKernelIntakeExpansionWave(): Promise<PantavionKernelInt
       aiCategoryCount: output.aiSnapshot.categoryCount,
       localeCount: output.localeSnapshot.localeCount,
       surfaceCount: output.surfaceSnapshot.categoryCount,
+      permanentInvariantCount: output.permanentInvariantSnapshot.invariantCount,
+      permanentInvariantFounderLockedCount: output.permanentInvariantSnapshot.founderLockedCount,
+      permanentInvariantFailClosedCount: output.permanentInvariantSnapshot.failClosedCount,
     },
   });
 
