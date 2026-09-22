@@ -58,7 +58,20 @@
     },
     "orderedRecordIdSha256": "443a0226082adec24cf671dd21dcf3d677cc516d0f46b48bddbc27c716bb2d2f",
     "currentAction": "PRESERVE_GOVERNED_HOLD",
-    "rule": "Do not auto-resolve ambiguous module/subsystem/capability conflicts. Route through founder-gated evidence review."
+    "rule": "Do not auto-resolve ambiguous module/subsystem/capability conflicts. Route through founder-gated evidence review.",
+    "closureWorkOrder": {
+      "intentId": "recovery_review_required_closure_20260922",
+      "materializationRunId": 35781953848,
+      "materializationConclusion": "success",
+      "executionId": "pwo_b5bef05d-2044-436e-b710-54e9c93ac0da",
+      "status": "planned",
+      "approvalScope": "proposal_only",
+      "unitCount": 355,
+      "batchSize": 100,
+      "batchCount": 4,
+      "productionDeployAllowed": false,
+      "truth": "Materialized planning/analysis authority only. Does not mean the 355 holds are resolved."
+    }
   },
   "permanentInvariantEvidence": {
     "auditRunId": 35781327445,
@@ -67,7 +80,10 @@
     "founderLocked": 16,
     "failClosed": 16,
     "visionDirectives": 14,
-    "constitutionalKernels": 5
+    "constitutionalKernels": 5,
+    "latestMasterDoctrineCommit": "ae3f05c4e79745d3a1377c6ce2014aee785734e0",
+    "latestAuditRunId": 35782090787,
+    "latestAuditConclusion": "success"
   },
   "truth": {
     "noOrphanSatisfiedForIdentityAndProvenance": true,
@@ -81,5 +97,6 @@
     "noAutoMerge": true,
     "noAutoDeploy": true,
     "provenancePreserved": true
-  }
+  },
+  "updatedAt": "2026-09-22T20:44:00Z"
 }
