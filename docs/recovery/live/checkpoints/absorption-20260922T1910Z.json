@@ -1,0 +1,54 @@
+{
+  "schema": "pantavion_vercel_absorption_checkpoint_v1",
+  "updatedAt": "2026-09-22T19:10:00Z",
+  "repository": "pandaconnect1/pantavion-planet",
+  "branch": "backup/pre-vercel-risk-20260914",
+  "policy": {
+    "zeroDelete": true,
+    "zeroVercelMutations": true,
+    "secretValuesIncluded": false,
+    "dedupKey": "projectId:deploymentId"
+  },
+  "capture": {
+    "canonical": {
+      "project": "pantavion-planet",
+      "projectId": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+      "recordsCaptured": 300,
+      "pagesCaptured": 15,
+      "newestCreated": 1789729948101,
+      "oldestCreated": 1789479723355,
+      "nextCursor": 1789479723355,
+      "terminal": false,
+      "batches": [
+        "docs/recovery/live/batches/absorption-20260922T1902Z-pantavion-planet-01.json",
+        "docs/recovery/live/batches/absorption-20260922T1904Z-pantavion-planet-02.json",
+        "docs/recovery/live/batches/absorption-20260922T1907Z-pantavion-planet-03.json"
+      ],
+      "continuity": "HEAD_CAPTURED; BRIDGE_TO_PRIOR_HISTORICAL_CHAIN_PENDING"
+    },
+    "mirror": {
+      "project": "pantavion-planet-vmxx",
+      "projectId": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+      "recordsCaptured": 300,
+      "pagesCaptured": 15,
+      "newestCreated": 1789729948073,
+      "oldestCreated": 1789479723426,
+      "nextCursor": 1789479723426,
+      "terminal": false,
+      "batches": [
+        "docs/recovery/live/batches/absorption-20260922T1903Z-pantavion-planet-vmxx-01.json",
+        "docs/recovery/live/batches/absorption-20260922T1905Z-pantavion-planet-vmxx-02.json",
+        "docs/recovery/live/batches/absorption-20260922T1908Z-pantavion-planet-vmxx-03.json"
+      ],
+      "priorDurableHeadLatestObserved": 1789480369757,
+      "continuity": "OVERLAP_PROVEN_WITH_PRIOR_DURABLE_HEAD"
+    }
+  },
+  "totals": {
+    "deploymentObservationsCaptured": 600,
+    "canonicalObservations": 300,
+    "mirrorObservations": 300,
+    "sourceUniqueCount": "PENDING_GLOBAL_DEDUP"
+  },
+  "state": "ACTIVE_CONTINUITY_CAPTURE"
+}
