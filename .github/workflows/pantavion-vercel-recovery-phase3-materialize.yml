@@ -73,7 +73,7 @@ jobs:
 
       - name: Install pinned TS runner ephemerally
         shell: bash
-        run: npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund tsx@4.20.6
+        run: npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund tsx@4.20.6 server-only@0.0.1
 
       - name: Materialize Vercel Phase 3 through canonical work-order constructor
         shell: bash
