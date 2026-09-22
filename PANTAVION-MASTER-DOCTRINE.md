@@ -204,3 +204,37 @@ Modern technology intake is continuous but evidence-driven:
 `DISCOVER -> RESEARCH -> LICENSE/LEGAL CHECK -> SECURITY CHECK -> BENCHMARK -> SANDBOX -> COMPARE -> CODE CANDIDATE -> TEST -> CANARY -> PROMOTE OR REJECT`
 
 These invariants are enforced by the permanent-invariants audit and form part of runtime-safety verification.
+
+
+## 20. LIFELONG HUMANITY ECOSYSTEM — FOUNDER LOCKED
+
+Canonical mission:
+`docs/architecture/PANTAVION_LIFELONG_HUMANITY_ECOSYSTEM_20260922.md`
+
+Machine-readable contract:
+`core/pantavion/lifelong-humanity-ecosystem.ts`
+
+Supreme mission:
+Pantavion must evolve into a durable human-centered global ecosystem that assists each person across the life course while connecting all seven continents through one interoperable network that preserves language, culture, jurisdiction, privacy, consent, dignity and human agency.
+
+Life-course scope includes protected childhood, learning, identity, relationships, work, communication, translation, health information, accessibility, travel, finance, creativity, safety, community, ageing, elder support, legacy and lawful end-of-life support.
+
+Pantavion intelligence must combine:
+- fast routing;
+- deep reasoning;
+- specialist brains;
+- deterministic truth systems;
+- consent-aware memory;
+- multimodal interaction;
+- scoped agents;
+- evidence-bound self-improvement.
+
+Innovation mission:
+Pantavion continuously researches and benchmarks advances in AI, science, medicine/health technology, neuroscience, cognitive assistance, healthy ageing/longevity, accessibility, robotics, cybersecurity, infrastructure, education, humanitarian technology and scientific computation.
+
+Health, neuroscience and longevity claims remain evidence-gated and may never be presented as proven merely because they are novel.
+
+Economic ambition may be world-scale, but no valuation is guaranteed. Value must be earned through real utility, reliability, security, defensibility, sustainable revenue and responsible global adoption.
+
+Permanent rule:
+`HUMAN BENEFIT + TRUTH + SAFETY + MEMORY + GLOBAL CONTINUITY > HYPE OR UNCONTROLLED AUTONOMY`
