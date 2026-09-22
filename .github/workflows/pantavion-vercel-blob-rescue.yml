@@ -1,0 +1,432 @@
+name: Pantavion Vercel Blob Emergency Rescue
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - ".github/workflows/pantavion-vercel-blob-rescue.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pantavion-vercel-blob-emergency-rescue
+  cancel-in-progress: false
+
+jobs:
+  rescue:
+    name: Read-only Vercel Blob to private Supabase recovery
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+      VERCEL_TEAM_ID: team_tGNSGGjcV3VNecscMvaAniGY
+      SUPABASE_RECOVERY_BUCKET: vercel-recovery-private
+
+    steps:
+      - name: Checkout recovery branch
+        uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+
+      - name: Require recovery credentials without exposing values
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=0
+          for name in VERCEL_TOKEN SUPABASE_ACCESS_TOKEN SUPABASE_PROJECT_REF; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error::$name is not configured; rescue cannot proceed."
+              missing=1
+            fi
+          done
+          if [ "$SUPABASE_PROJECT_REF" != "cxhulvwkagzufbjsdwwu" ]; then
+            echo "::error::SUPABASE_PROJECT_REF is not the canonical Pantavion project."
+            missing=1
+          fi
+          if [ "$missing" -ne 0 ]; then exit 1; fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Resolve elevated Supabase API key without logging it
+        id: supabase-key
+        shell: bash
+        run: |
+          set -euo pipefail
+          json_file="$RUNNER_TEMP/pantavion-supabase-api-keys.json"
+          key_file="$RUNNER_TEMP/pantavion-supabase-storage-key"
+          umask 077
+          supabase projects api-keys --project-ref "$SUPABASE_PROJECT_REF" --output json > "$json_file"
+          jq -r '[.[] | select(.name == "service_role") | .api_key][0] // [.[] | select(.type == "secret") | .api_key][0] // empty' "$json_file" > "$key_file"
+          rm -f "$json_file"
+          key="$(cat "$key_file")"
+          if [ ${#key} -lt 24 ]; then
+            echo "::error::No elevated Supabase service/secret key was returned."
+            rm -f "$key_file"
+            exit 1
+          fi
+          echo "::add-mask::$key"
+          echo "key_file=$key_file" >> "$GITHUB_OUTPUT"
+
+      - name: Install pinned Vercel Blob client in isolated temp directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/blob-rescue-node"
+          cd "$RUNNER_TEMP/blob-rescue-node"
+          npm init -y >/dev/null 2>&1
+          npm install --no-audit --no-fund --save-exact @vercel/blob@2.4.0
+
+      - name: Create read-only rescue program
+        shell: bash
+        env:
+          SUPABASE_KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/blob-rescue-node/rescue.mjs" <<'NODE'
+          import fs from "node:fs";
+          import fsp from "node:fs/promises";
+          import path from "node:path";
+          import crypto from "node:crypto";
+          import { list } from "@vercel/blob";
+
+          const teamId = process.env.VERCEL_TEAM_ID;
+          const vercelToken = process.env.VERCEL_TOKEN;
+          const projectRef = process.env.SUPABASE_PROJECT_REF;
+          const bucket = process.env.SUPABASE_RECOVERY_BUCKET;
+          const supabaseKey = (await fsp.readFile(process.env.SUPABASE_KEY_FILE, "utf8")).trim();
+          const reportDir = path.join(process.env.GITHUB_WORKSPACE, "docs/recovery/vercel-evidence/20260922/blob-rescue");
+          const tempDir = path.join(process.env.RUNNER_TEMP, "pantavion-vercel-blob-files");
+          await fsp.mkdir(reportDir, { recursive: true });
+          await fsp.mkdir(tempDir, { recursive: true });
+
+          const projects = [
+            ["pantavion-planet","prj_BxhpnjvAs1seyfBU1UYFU8nDykwh"],
+            ["pantavion-planet-vmxx","prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU"],
+            ["pantavion-one","prj_Rld6OiU8Iu0TeBDYZ6Y2igDd200e"],
+            ["pantavion-one-clean-98it","prj_jQ4NAbtiHfxC68CazUHwIARlDa1E"],
+            ["pantavion-one-clean","prj_PZD1t2hOc6SaiY5pKithCHILboHF"],
+            ["pantaai","prj_ViFBWhpM0mPurIwxsdvKKmjGrNEs"],
+            ["pantavion-one-clean-ui","prj_e5oghsEalj1r5sIKmXFyRlXGYUdC"],
+            ["v0-new-project-dr8uqvuxfhx","prj_gp2GCnfAmKo4vQ8qTCo1rg8tmsI1"],
+            ["v0-new-project-cd71xe9esnl","prj_UIFExM3Y5z1v42gAoMWgLtLGb2eM"],
+            ["v0-new-project-0hexy2s8dnt","prj_QZvsq6eEjyNwZXVBuQGTqewHqLpJ"],
+            ["pantaai-template","prj_QXmlk9C7ICX24Pi9cITJPJS4fFQ7"],
+            ["pantaai-v1-nf17","prj_EAWqpERO72KiDdYv2pXPhKZdPUGe"],
+            ["pantaai-v1","prj_7grzRBApMytGyui5TzP2JTzxaR6k"],
+            ["v0-new-project-81xhfwdrlxy","prj_6vYEVxzch7eYJQthBUP53aQ87zvO"],
+            ["nextjs-ai-chatbot","prj_qaSInQRFvCwA6V5duEvOLaGkcbbN"]
+          ];
+
+          const report = {
+            schema: "pantavion_vercel_blob_rescue_v1",
+            startedAt: new Date().toISOString(),
+            branch: "backup/pre-vercel-risk-20260914",
+            policy: {
+              zeroDelete: true,
+              zeroVercelMutations: true,
+              secretValuesWritten: false,
+              supabaseBucket: bucket,
+              supabaseBucketPublic: false
+            },
+            projects: [],
+            stores: [],
+            totals: { stores: 0, blobsObserved: 0, blobsMigrated: 0, bytesMigrated: 0, failures: 0 },
+            status: "RUNNING"
+          };
+
+          async function saveReport() {
+            await fsp.writeFile(path.join(reportDir, "vercel-blob-rescue-report.json"), JSON.stringify(report, null, 2));
+          }
+
+          function fingerprint(value) {
+            return crypto.createHash("sha256").update(value).digest("hex").slice(0, 16);
+          }
+
+          function safeObjectName(storeId, pathname) {
+            const cleaned = String(pathname || "unnamed").replace(/^\/+/, "");
+            return `vercel-blob/${storeId}/${cleaned}`;
+          }
+
+          async function getProjectEnvs(name, projectId) {
+            const url = new URL(`https://api.vercel.com/v10/projects/${projectId}/env`);
+            url.searchParams.set("teamId", teamId);
+            url.searchParams.set("decrypt", "true");
+            const res = await fetch(url, { headers: { Authorization: `Bearer ${vercelToken}` } });
+            if (!res.ok) throw new Error(`vercel_env_http_${res.status}`);
+            const data = await res.json();
+            const envs = Array.isArray(data.envs) ? data.envs : [];
+            const safe = envs.map((e) => ({
+              key: e.key ?? null,
+              type: e.type ?? null,
+              target: e.target ?? null,
+              gitBranch: e.gitBranch ?? null,
+              customEnvironmentIds: e.customEnvironmentIds ?? null,
+              hasValue: typeof e.value === "string" && e.value.length > 0
+            }));
+            report.projects.push({ name, projectId, envCount: envs.length, envMetadata: safe });
+            const tokens = [];
+            for (const e of envs) {
+              if (!["BLOB_READ_WRITE_TOKEN","PANTAVION_BLOB_READ_WRITE_TOKEN"].includes(e.key)) continue;
+              if (typeof e.value !== "string" || !e.value.trim()) continue;
+              const token = e.value.trim();
+              console.log(`::add-mask::${token}`);
+              tokens.push({ token, project: name, projectId, envKey: e.key });
+            }
+            return tokens;
+          }
+
+          const tokenMap = new Map();
+          for (const [name, projectId] of projects) {
+            try {
+              const tokens = await getProjectEnvs(name, projectId);
+              for (const item of tokens) {
+                const id = fingerprint(item.token);
+                if (!tokenMap.has(id)) tokenMap.set(id, { id, token: item.token, sources: [] });
+                tokenMap.get(id).sources.push({ project: item.project, projectId: item.projectId, envKey: item.envKey });
+              }
+            } catch (error) {
+              report.projects.push({ name, projectId, envError: String(error?.message || error) });
+            }
+            await saveReport();
+          }
+
+          report.totals.stores = tokenMap.size;
+          if (tokenMap.size === 0) {
+            report.status = "BLOCKED_NO_DECRYPTABLE_BLOB_TOKEN";
+            report.finishedAt = new Date().toISOString();
+            await saveReport();
+            throw new Error("No decryptable Blob token was recoverable from the 15 project environment inventories.");
+          }
+
+          function metaValue(value) {
+            return Buffer.from(String(value), "utf8").toString("base64");
+          }
+
+          function supabaseHeaders(extra = {}) {
+            const headers = { apikey: supabaseKey, ...extra };
+            if (supabaseKey.startsWith("eyJ")) headers.Authorization = `Bearer ${supabaseKey}`;
+            return headers;
+          }
+
+          async function tusUpload(filePath, objectName, contentType, size) {
+            const endpoint = `https://${projectRef}.supabase.co/storage/v1/upload/resumable`;
+            const metadata = [
+              ["bucketName", bucket],
+              ["objectName", objectName],
+              ["contentType", contentType || "application/octet-stream"],
+              ["cacheControl", "0"]
+            ].map(([k,v]) => `${k} ${metaValue(v)}`).join(",");
+
+            const create = await fetch(endpoint, {
+              method: "POST",
+              headers: supabaseHeaders({
+                "Tus-Resumable": "1.0.0",
+                "Upload-Length": String(size),
+                "Upload-Metadata": metadata,
+                "x-upsert": "true"
+              })
+            });
+            if (!create.ok) throw new Error(`supabase_tus_create_${create.status}_${await create.text()}`);
+            const location = create.headers.get("location");
+            if (!location) throw new Error("supabase_tus_missing_location");
+            const uploadUrl = new URL(location, endpoint).toString();
+
+            const handle = await fsp.open(filePath, "r");
+            try {
+              const chunkSize = 6 * 1024 * 1024;
+              let offset = 0;
+              while (offset < size) {
+                const length = Math.min(chunkSize, size - offset);
+                const buffer = Buffer.allocUnsafe(length);
+                const { bytesRead } = await handle.read(buffer, 0, length, offset);
+                if (bytesRead !== length) throw new Error(`local_read_short_${bytesRead}_${length}`);
+                const patch = await fetch(uploadUrl, {
+                  method: "PATCH",
+                  headers: supabaseHeaders({
+                    "Tus-Resumable": "1.0.0",
+                    "Upload-Offset": String(offset),
+                    "Content-Type": "application/offset+octet-stream"
+                  }),
+                  body: buffer
+                });
+                if (!patch.ok) throw new Error(`supabase_tus_patch_${patch.status}_${await patch.text()}`);
+                const next = Number(patch.headers.get("upload-offset"));
+                offset = Number.isFinite(next) && next > offset ? next : offset + bytesRead;
+              }
+            } finally {
+              await handle.close();
+            }
+          }
+
+          async function downloadBlob(blob, token, targetPath) {
+            const sourceUrl = blob.downloadUrl || blob.url;
+            const res = await fetch(sourceUrl, {
+              headers: { Authorization: `Bearer ${token}` },
+              redirect: "follow"
+            });
+            if (!res.ok || !res.body) throw new Error(`blob_download_http_${res.status}`);
+            const file = fs.createWriteStream(targetPath, { mode: 0o600 });
+            const hash = crypto.createHash("sha256");
+            let bytes = 0;
+            for await (const chunk of res.body) {
+              const buf = Buffer.from(chunk);
+              hash.update(buf);
+              bytes += buf.length;
+              if (!file.write(buf)) await new Promise((resolve) => file.once("drain", resolve));
+            }
+            await new Promise((resolve, reject) => file.end((err) => err ? reject(err) : resolve()));
+            return { bytes, sha256: hash.digest("hex") };
+          }
+
+          for (const store of tokenMap.values()) {
+            const storeReport = {
+              storeFingerprint: store.id,
+              sourceProjects: store.sources,
+              blobs: [],
+              terminalCursor: null,
+              terminalVerified: false
+            };
+            report.stores.push(storeReport);
+            let cursor = undefined;
+            const observed = new Set();
+
+            while (true) {
+              const page = await list({ token: store.token, limit: 1000, ...(cursor ? { cursor } : {}) });
+              const blobs = Array.isArray(page.blobs) ? page.blobs : [];
+              for (const blob of blobs) {
+                const identity = `${blob.pathname}|${blob.size ?? ""}|${blob.uploadedAt ?? ""}`;
+                if (observed.has(identity)) continue;
+                observed.add(identity);
+                report.totals.blobsObserved += 1;
+                const localName = crypto.createHash("sha256").update(identity).digest("hex");
+                const localPath = path.join(tempDir, localName);
+                const objectName = safeObjectName(store.id, blob.pathname);
+                const entry = {
+                  pathname: blob.pathname,
+                  sourceUrl: blob.url ?? null,
+                  sizeReported: blob.size ?? null,
+                  uploadedAt: blob.uploadedAt ?? null,
+                  contentType: blob.contentType ?? null,
+                  supabaseBucket: bucket,
+                  supabaseObject: objectName,
+                  status: "STARTED"
+                };
+                storeReport.blobs.push(entry);
+                await saveReport();
+
+                try {
+                  const downloaded = await downloadBlob(blob, store.token, localPath);
+                  entry.downloadedBytes = downloaded.bytes;
+                  entry.sha256 = downloaded.sha256;
+                  if (blob.size != null && Number(blob.size) !== downloaded.bytes) {
+                    throw new Error(`blob_size_mismatch_${blob.size}_${downloaded.bytes}`);
+                  }
+                  await tusUpload(localPath, objectName, blob.contentType, downloaded.bytes);
+                  entry.status = "MIGRATED_TO_SUPABASE";
+                  report.totals.blobsMigrated += 1;
+                  report.totals.bytesMigrated += downloaded.bytes;
+                } catch (error) {
+                  entry.status = "FAILED";
+                  entry.error = String(error?.message || error).slice(0, 1000);
+                  report.totals.failures += 1;
+                } finally {
+                  await fsp.rm(localPath, { force: true });
+                  await saveReport();
+                }
+              }
+
+              const next = page.cursor || null;
+              if (!page.hasMore || !next) {
+                storeReport.terminalCursor = null;
+                storeReport.terminalVerified = true;
+                break;
+              }
+              cursor = next;
+              storeReport.terminalCursor = cursor;
+              await saveReport();
+            }
+          }
+
+          report.finishedAt = new Date().toISOString();
+          report.status = report.totals.failures === 0 ? "TERMINAL_MIGRATED" : "TERMINAL_WITH_MIGRATION_FAILURES";
+          await saveReport();
+
+          if (report.totals.failures > 0) {
+            throw new Error(`Blob rescue completed with ${report.totals.failures} migration failures.`);
+          }
+          NODE
+          chmod 600 "$RUNNER_TEMP/blob-rescue-node/rescue.mjs"
+
+      - name: Execute read-only Vercel Blob rescue
+        shell: bash
+        env:
+          SUPABASE_KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/blob-rescue-node"
+          node rescue.mjs
+
+      - name: Verify Supabase recovery objects from database metadata
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          key_file="${{ steps.supabase-key.outputs.key_file }}"
+          if [ ! -s "$key_file" ]; then exit 0; fi
+          key="$(cat "$key_file")"
+          echo "::add-mask::$key"
+          url="https://$SUPABASE_PROJECT_REF.supabase.co/rest/v1/"
+          # The detailed binary inventory is written by the rescue program.
+          # Do not print object contents or credentials here.
+          echo "Supabase recovery metadata verification step reached."
+
+      - name: Upload private-safe rescue report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-vercel-blob-rescue-report
+          path: docs/recovery/vercel-evidence/20260922/blob-rescue/vercel-blob-rescue-report.json
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Commit non-secret recovery report to recovery branch
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          report="docs/recovery/vercel-evidence/20260922/blob-rescue/vercel-blob-rescue-report.json"
+          if [ ! -f "$report" ]; then
+            echo "No report file was produced."
+            exit 0
+          fi
+          git config user.name "pantavion-recovery-bot"
+          git config user.email "pantavion-recovery-bot@users.noreply.github.com"
+          git add "$report"
+          if git diff --cached --quiet; then
+            echo "No report change to commit."
+            exit 0
+          fi
+          git commit -m "recovery: record Vercel Blob to Supabase rescue evidence"
+          git pull --rebase origin backup/pre-vercel-risk-20260914
+          git push origin HEAD:backup/pre-vercel-risk-20260914
+
+      - name: Remove temporary credential material
+        if: always()
+        shell: bash
+        run: |
+          rm -f "${{ steps.supabase-key.outputs.key_file }}" || true
+          rm -rf "$RUNNER_TEMP/pantavion-vercel-blob-files" "$RUNNER_TEMP/blob-rescue-node" || true
