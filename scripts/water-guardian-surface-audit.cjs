@@ -56,16 +56,21 @@ const layout = requireFile("app/layout.tsx");
 
 requireMarker(layout, "app layout", "leaflet/dist/leaflet.css");
 
-requireMarker(liveClient, "live water map", "Χάρτης δικτύου ύδρευσης");
-requireMarker(liveClient, "live water map", "Αναζήτηση διεύθυνσης");
-requireMarker(liveClient, "live water map", "Οδός");
-requireMarker(liveClient, "live water map", "Αριθμός");
-requireMarker(liveClient, "live water map", "Περιοχή / Δήμος");
-requireMarker(liveClient, "live water map", "Ταχυδρομικός");
-requireMarker(liveClient, "live water map", "Διάλεξε σωστή διεύθυνση");
-requireMarker(liveClient, "live water map", "leaflet.geoJSON");
+requireMarker(liveClient, "live water map", "Δίκτυο Ύδρευσης Pantavion");
+requireMarker(liveClient, "live water map", "street: \"Οδός\"");
+requireMarker(liveClient, "live water map", "number: \"Αριθμός\"");
+requireMarker(liveClient, "live water map", "area: \"Περιοχή\"");
+requireMarker(liveClient, "live water map", "postal: \"Ταχυδρομικός\"");
+requireMarker(liveClient, "live water map", "locateMe()");
+requireMarker(liveClient, "live water map", "searchAddressMarker()");
+requireMarker(liveClient, "live water map", "L.geoJSON");
 requireMarker(liveClient, "live water map", "tile.openstreetmap.org");
-requireMarker(liveClient, "live water map", "Φόρτωσε δίκτυο στην περιοχή του χάρτη");
+requireMarker(liveClient, "live water map", "loadPipes()");
+requireMarker(liveClient, "live water map", "moveend zoomend");
+requireMarker(liveClient, "live water map", "/api/professional/infrastructure/water/segment/bbox");
+requireMarker(liveClient, "live water map", "completeNetworkReturned === true");
+requireMarker(liveClient, "live water map", "rawMasterReturned === true");
+requireMarker(liveClient, "live water map", "browserFullNetworkLoaded === true");
 
 forbidMarker(liveClient, "live water map", "Κατάσταση segment");
 forbidMarker(liveClient, "live water map", "Κατάσταση");

@@ -5,8 +5,10 @@ const root = process.cwd();
 
 const requiredFiles = [
   "core/infrastructure/water/water-kernel-constitution.ts",
-  "data/water-network-private/processed/water-network.geojson",
-  "data/water-network-private/mobile/water-network-mobile.geojson",
+  "core/infrastructure/water/controlled-water-segment-index-provider.ts",
+  "core/infrastructure/water/private-water-segment-reader.ts",
+  "core/infrastructure/water/water-network-runtime-lock.json",
+  "app/api/professional/infrastructure/water/segment/bbox/route.ts",
   "docs/requirements/pantavion-water-data-truth-report.md",
   "docs/requirements/pantavion-water-full-master-strategy.md",
   "docs/requirements/pantavion-water-data-serving-strategy.md",
@@ -36,12 +38,21 @@ const forbiddenRootFiles = [
 
 const forbiddenPublicExtensions = [".kmz", ".kml", ".geojson"];
 
+const forbiddenPrivateDataPaths = [
+  "data/water-network-private/processed/water-network.geojson",
+  "data/water-network-private/mobile/water-network-mobile.geojson",
+  "data/water-network-private/derived/water-feature-bbox-index.json",
+  "data/water-network-private/derived/water-features.ndjson",
+  "data/water-network-private/derived/water-segment-index-manifest.json",
+  "data/water-network-private/processed/water-source-truth-report.json",
+];
+
 const sourceTruthScanFiles = [
   "core/infrastructure/water/cloud-water-network-source.ts",
   "app/api/professional/infrastructure/water/network/route.ts",
   "app/api/professional/infrastructure/water/network/status/route.ts",
   "app/professional/infrastructure/water/page.tsx",
-  "app/professional/infrastructure/water/water-network-client.tsx",
+  "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx",
 ];
 
 const dataTruthReportPath = "docs/requirements/pantavion-water-data-truth-report.md";
@@ -128,7 +139,7 @@ const controlledServingRequiredMarkers = [
   "mayReturnCompleteNetwork: false",
   "Invalid bbox. Controlled serving requires a valid visible spatial area.",
   "Invalid zoom. Controlled serving requires a valid zoom level.",
-  "Requester is not active.",
+  "evaluateControlledWaterAccess",
   "The full raw master network must never be returned to the browser.",
   "bbox-api",
 ];
@@ -221,6 +232,14 @@ for (const file of forbiddenRootFiles) {
     fail("Forbidden temporary root geodata file found: " + file);
   } else {
     pass("No forbidden temporary root geodata file: " + file);
+  }
+}
+
+for (const file of forbiddenPrivateDataPaths) {
+  if (exists(file)) {
+    fail("Private runtime network data must not be committed to Git: " + file);
+  } else {
+    pass("Private runtime data is absent from repository: " + file);
   }
 }
 
@@ -478,8 +497,8 @@ if (exists(servingReadinessRouteRelativePath)) {
     "mayReturnCompleteNetwork: false",
     "No water network data is returned by this route.",
     "Founder/admin approval is required before production activation",
-    "spatialServingReady: false",
-    "accessControlReady: false"
+    "PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.spatialServingReady",
+    "PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS.accessControlReady"
   ];
 
   for (const marker of servingReadinessRouteRequiredMarkers) {
@@ -506,9 +525,11 @@ if (exists(servingBboxRouteRelativePath)) {
     "mayReturnCompleteNetwork: false",
     "No water network data is returned by this bbox route.",
     "Founder/admin approval is required before production activation",
-    "spatialServingReady: false",
-    "accessControlReady: false",
-    "founderApprovedProductionActivation: false",
+    "PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.spatialServingReady",
+    "PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS.accessControlReady",
+    "founderApprovedProductionActivation:",
+    "productionActivationAllowed",
+    "productionAccessAllowed",
     "requestedViewport",
     "missingParameters",
     "bbox-api"

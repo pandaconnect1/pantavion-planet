@@ -1,0 +1,67 @@
+name: Pantavion Water Production Hotfix Verify
+
+on:
+  push:
+    branches:
+      - hotfix/water-live-production-20260923
+    paths:
+      - "app/professional/infrastructure/water/**"
+      - "app/api/professional/infrastructure/water/**"
+      - "core/water/**"
+      - "core/infrastructure/water/water-network-runtime-lock.json"
+      - "scripts/pantavion-water-universal-map-ingest-test.mjs"
+      - "scripts/pantavion-water-kernel-gate.cjs"
+      - "scripts/water-guardian-surface-audit.cjs"
+      - ".github/workflows/pantavion-water-production-hotfix-verify.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-water-production-hotfix-verify
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout hotfix
+        uses: actions/checkout@v4
+        with:
+          ref: hotfix/water-live-production-20260923
+          fetch-depth: 0
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify canonical universal artifact intake
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-universal-artifact-intake-contract-test.mjs
+
+      - name: Verify canonical universal artifact upload
+        run: node scripts/pantavion-universal-artifact-upload-contract-test.mjs
+
+      - name: Verify Water universal map specialization
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-water-universal-map-ingest-test.mjs
+
+      - name: Verify Water protected network lock
+        run: npm run audit:water:network-lock
+
+      - name: Verify Water kernel and surfaces
+        run: npm run audit:water
+
+      - name: Verify A/B/C map boundaries
+        run: npm run audit:water:abc
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Production build
+        run: npm run build
