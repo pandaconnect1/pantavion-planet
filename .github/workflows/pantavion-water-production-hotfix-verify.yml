@@ -10,6 +10,8 @@ on:
       - "core/water/**"
       - "core/infrastructure/water/water-network-runtime-lock.json"
       - "scripts/pantavion-water-universal-map-ingest-test.mjs"
+      - "scripts/pantavion-water-kernel-gate.cjs"
+      - "scripts/water-guardian-surface-audit.cjs"
       - ".github/workflows/pantavion-water-production-hotfix-verify.yml"
   workflow_dispatch:
 
