@@ -84,6 +84,9 @@ jobs:
       - name: Verify founder-only release gate
         run: npm run test:owner-release-gate
 
+      - name: Verify Sovereign status catalog truth
+        run: npm run test:sovereign-verification-catalog
+
       - name: Typecheck
         shell: bash
         run: |
