@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { planAdaptiveCapability } from "@/core/sovereign/adaptive-capability-fabric";
+import { getPersonalAIState } from "@/core/intelligence/personal-ai-runtime";
 
 export const dynamic = "force-dynamic";
 
@@ -79,6 +80,23 @@ export async function POST(request: NextRequest) {
     return json({ ok: false, error: "intent_too_large" }, 413);
   }
 
+  let personalAI;
+  try {
+    personalAI = await getPersonalAIState(supabase, user.id);
+  } catch {
+    return json(
+      {
+        ok: false,
+        error: "personal_ai_core_unavailable",
+        execution: {
+          status: "blocked",
+          productionMutation: false,
+        },
+      },
+      503,
+    );
+  }
+
   const plan = planAdaptiveCapability({
     intentId: crypto.randomUUID(),
     userId: user.id,
@@ -95,6 +113,15 @@ export async function POST(request: NextRequest) {
         ? Math.max(0, body.maxCost)
         : undefined,
     deadlineAt: body.deadlineAt,
+    personalAiCore: {
+      userId: personalAI.profile.user_id,
+      personalAiId: personalAI.profile.personal_ai_id,
+      memoryEnabled: personalAI.profile.memory_enabled,
+      crossThreadEnabled: personalAI.profile.cross_thread_enabled,
+      voiceEnabled: personalAI.profile.voice_enabled,
+      preferredLocale: personalAI.profile.preferred_locale,
+      assistanceLevel: personalAI.profile.assistance_level,
+    },
   });
 
   return json({
