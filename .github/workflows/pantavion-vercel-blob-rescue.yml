@@ -114,11 +114,32 @@ jobs:
           await fsp.mkdir(tempDir, { recursive: true });
 
           const priorityPrefixes = [
+            // Tier 0 — identity/access protected state
             "water/private/access-requests/",
             "water/private/approved-devices/",
             "water/private/approved-contacts/",
             "water/private/rejected-requests/",
-            "water/private/revoked-devices/"
+            "water/private/revoked-devices/",
+
+            // Tier 1 — human/operational records
+            "water/private/field-submissions/",
+            "water/private/fault-dossiers/pending/",
+            "water/private/fault-approval-inbox/founder-admin/",
+            "water/private/help-requests/",
+            "water/private/help-inbox/founder-admin/",
+            "water/private/help-inbox/users/",
+            "water/private/help-inbox/roles/",
+            "water/private/help-threads/",
+            "water/private/help-thread-inbox/founder-admin/",
+            "water/private/help-thread-inbox/users/",
+            "water/private/help-thread-inbox/roles/",
+
+            // Tier 2 — derived and processed operational truth
+            "water/private/processed/",
+            "water/private/derived/",
+
+            // Tier 3 — master/private map source binaries
+            "water/private/maps/"
           ];
 
           const projects = [
