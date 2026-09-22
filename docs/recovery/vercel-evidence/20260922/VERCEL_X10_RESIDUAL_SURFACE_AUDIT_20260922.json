@@ -1,0 +1,215 @@
+{
+  "schema": "pantavion_vercel_x10_residual_surface_audit_v1",
+  "capturedAt": "2026-09-22T20:20:00Z",
+  "team": {
+    "id": "team_tGNSGGjcV3VNecscMvaAniGY",
+    "projectCount": 15
+  },
+  "projects": [
+    {
+      "name": "pantavion-planet",
+      "id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+      "createdAtMs": 1775913924661,
+      "createdAtIso": "2026-04-11T13:25:24.661Z",
+      "updatedAtMs": 1789677555845,
+      "updatedAtIso": "2026-09-17T20:39:15.845Z"
+    },
+    {
+      "name": "pantavion-planet-vmxx",
+      "id": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+      "createdAtMs": 1786177837877,
+      "createdAtIso": "2026-08-08T08:30:37.877Z",
+      "updatedAtMs": 1789677550823,
+      "updatedAtIso": "2026-09-17T20:39:10.823Z"
+    },
+    {
+      "name": "pantavion-one",
+      "id": "prj_Rld6OiU8Iu0TeBDYZ6Y2igDd200e",
+      "createdAtMs": 1763754854533,
+      "createdAtIso": "2025-11-21T19:54:14.533Z",
+      "updatedAtMs": 1781893431880,
+      "updatedAtIso": "2026-06-19T18:23:51.880Z"
+    },
+    {
+      "name": "pantavion-one-clean-98it",
+      "id": "prj_jQ4NAbtiHfxC68CazUHwIARlDa1E",
+      "createdAtMs": 1764158606615,
+      "createdAtIso": "2025-11-26T12:03:26.615Z",
+      "updatedAtMs": 1774465630672,
+      "updatedAtIso": "2026-03-25T19:07:10.672Z"
+    },
+    {
+      "name": "pantavion-one-clean",
+      "id": "prj_PZD1t2hOc6SaiY5pKithCHILboHF",
+      "createdAtMs": 1763936817171,
+      "createdAtIso": "2025-11-23T22:26:57.171Z",
+      "updatedAtMs": 1774465626475,
+      "updatedAtIso": "2026-03-25T19:07:06.475Z"
+    },
+    {
+      "name": "pantaai",
+      "id": "prj_ViFBWhpM0mPurIwxsdvKKmjGrNEs",
+      "createdAtMs": 1749185543133,
+      "createdAtIso": "2025-06-06T04:52:23.133Z",
+      "updatedAtMs": 1765284030809,
+      "updatedAtIso": "2025-12-09T12:40:30.809Z"
+    },
+    {
+      "name": "pantavion-one-clean-ui",
+      "id": "prj_e5oghsEalj1r5sIKmXFyRlXGYUdC",
+      "createdAtMs": 1764523333898,
+      "createdAtIso": "2025-11-30T17:22:13.898Z",
+      "updatedAtMs": 1764523366081,
+      "updatedAtIso": "2025-11-30T17:22:46.081Z"
+    },
+    {
+      "name": "v0-new-project-dr8uqvuxfhx",
+      "id": "prj_gp2GCnfAmKo4vQ8qTCo1rg8tmsI1",
+      "createdAtMs": 1749417764420,
+      "createdAtIso": "2025-06-08T21:22:44.420Z",
+      "updatedAtMs": 1763496980945,
+      "updatedAtIso": "2025-11-18T20:16:20.945Z"
+    },
+    {
+      "name": "v0-new-project-cd71xe9esnl",
+      "id": "prj_UIFExM3Y5z1v42gAoMWgLtLGb2eM",
+      "createdAtMs": 1749416222516,
+      "createdAtIso": "2025-06-08T20:57:02.516Z",
+      "updatedAtMs": 1763477181486,
+      "updatedAtIso": "2025-11-18T14:46:21.486Z"
+    },
+    {
+      "name": "v0-new-project-0hexy2s8dnt",
+      "id": "prj_QZvsq6eEjyNwZXVBuQGTqewHqLpJ",
+      "createdAtMs": 1749417764814,
+      "createdAtIso": "2025-06-08T21:22:44.814Z",
+      "updatedAtMs": 1763471621527,
+      "updatedAtIso": "2025-11-18T13:13:41.527Z"
+    },
+    {
+      "name": "pantaai-template",
+      "id": "prj_QXmlk9C7ICX24Pi9cITJPJS4fFQ7",
+      "createdAtMs": 1749350438328,
+      "createdAtIso": "2025-06-08T02:40:38.328Z",
+      "updatedAtMs": 1763471571349,
+      "updatedAtIso": "2025-11-18T13:12:51.349Z"
+    },
+    {
+      "name": "pantaai-v1-nf17",
+      "id": "prj_EAWqpERO72KiDdYv2pXPhKZdPUGe",
+      "createdAtMs": 1749416300084,
+      "createdAtIso": "2025-06-08T20:58:20.084Z",
+      "updatedAtMs": 1763453560968,
+      "updatedAtIso": "2025-11-18T08:12:40.968Z"
+    },
+    {
+      "name": "pantaai-v1",
+      "id": "prj_7grzRBApMytGyui5TzP2JTzxaR6k",
+      "createdAtMs": 1749352752101,
+      "createdAtIso": "2025-06-08T03:19:12.101Z",
+      "updatedAtMs": 1763443926996,
+      "updatedAtIso": "2025-11-18T05:32:06.996Z"
+    },
+    {
+      "name": "v0-new-project-81xhfwdrlxy",
+      "id": "prj_6vYEVxzch7eYJQthBUP53aQ87zvO",
+      "createdAtMs": 1749416223526,
+      "createdAtIso": "2025-06-08T20:57:03.526Z",
+      "updatedAtMs": 1763442840322,
+      "updatedAtIso": "2025-11-18T05:14:00.322Z"
+    },
+    {
+      "name": "nextjs-ai-chatbot",
+      "id": "prj_qaSInQRFvCwA6V5duEvOLaGkcbbN",
+      "createdAtMs": 1748889070250,
+      "createdAtIso": "2025-06-02T18:31:10.250Z",
+      "updatedAtMs": 1763417375811,
+      "updatedAtIso": "2025-11-17T22:09:35.811Z"
+    }
+  ],
+  "deploymentHistory": {
+    "terminal": true,
+    "totalDeploymentRecordsPreserved": 5569,
+    "canonicalRecords": 3091,
+    "vmxxRecords": 2393,
+    "allVisibleProjectsTerminal": true
+  },
+  "phase2": {
+    "canonicalDeploymentRows": 5569,
+    "uniqueGitSources": 3138,
+    "mirroredSourceGroups": 2400,
+    "moduleRoutes": 14,
+    "supabaseTable": "public.pantavion_vercel_recovery_catalog"
+  },
+  "phase3": {
+    "materialized": true,
+    "workOrderExecutionId": "pwo_8e27280d-b970-49ad-9674-abed043f3971",
+    "unitCount": 3138,
+    "batchSize": 250,
+    "batchCount": 13,
+    "productionDeployAllowed": false
+  },
+  "runtimeObservability": {
+    "window": "7d",
+    "projectsQueried": 15,
+    "projectsWithRuntimeErrorGroups": 1,
+    "projectsWithNoRuntimeErrorGroups": 14,
+    "canonical": {
+      "errorGroups": 3,
+      "errorOccurrences": 11,
+      "groupedByLevel": {
+        "error": 11,
+        "warn": 4
+      }
+    },
+    "vmxx": {
+      "errorGroups": 0,
+      "errorOccurrences": 0
+    },
+    "groupByRouteAndStatusCode": "TIMEOUT_ON_CONNECTED_SURFACE"
+  },
+  "zeroSurfaces": {
+    "toolbarResolvedThreads": 0,
+    "toolbarUnresolvedThreads": 0,
+    "agentRunProjects90d": 0
+  },
+  "environmentContinuity": {
+    "verifiedNamesFloor": 128,
+    "explicitlyEnumeratedNames": 114,
+    "priorityManifest": "docs/recovery/vercel-evidence/20260922/ENV_RECOVERY_PRIORITY_20260922.json",
+    "secretValuesMigrated": 0,
+    "secureDestination": "Supabase Vault",
+    "blocker": "VERCEL_TOKEN_ABSENT"
+  },
+  "blobContinuity": {
+    "secureDestination": "private Supabase Storage bucket vercel-recovery-private",
+    "bytesMigrated": 0,
+    "priorityPlan": "docs/recovery/vercel-evidence/20260922/WATER_BLOB_RESCUE_PRIORITY_20260922.json",
+    "priorityWorkflowCommit": "c7126ab207936f329f89964bf61f33172408daa8",
+    "blocker": "VERCEL_TOKEN_ABSENT"
+  },
+  "connectorBlockers": [
+    {
+      "surface": "get_project_deep_configuration",
+      "state": "BLOCKED_CONNECTOR_SCHEMA_MISMATCH",
+      "detail": "Public tool schema requires projectId but backend requests idOrName."
+    },
+    {
+      "surface": "deployment_build_logs",
+      "state": "BLOCKED_CONNECTOR_TOOL_UNAVAILABLE",
+      "detail": "Advertised tool returns Tool get_deployment_build_logs not found."
+    },
+    {
+      "surface": "runtime_group_by_route_status",
+      "state": "BLOCKED_TIMEOUT",
+      "detail": "7-day grouped queries timed out for route/statusCode."
+    }
+  ],
+  "safety": {
+    "zeroDelete": true,
+    "zeroVercelMutations": true,
+    "secretValuesWrittenToGithub": false,
+    "privateUserPayloadsWrittenToAudit": false
+  },
+  "conclusion": "All connected non-destructive deployment-history surfaces are terminal or explicitly blocked. Remaining high-value unrecovered state is private Blob/storage bytes and actual Vercel environment secret values, both blocked on authorized VERCEL_TOKEN."
+}
