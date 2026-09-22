@@ -12,6 +12,7 @@ on:
       - "core/intelligence/personal-ai-*.ts"
       - "scripts/pantavion-adaptive-capability-fabric-test.mjs"
       - "scripts/pantavion-safe-self-healing-runtime-test.mjs"
+      - "scripts/pantavion-adaptive-capability-latency-benchmark.mjs"
       - "scripts/pantavion-translation-integrity-check.cjs"
       - "package.json"
       - ".github/workflows/pantavion-adaptive-core-integration.yml"
@@ -49,6 +50,9 @@ jobs:
 
       - name: Safe self-healing contract
         run: npm run test:safe-self-healing
+
+      - name: Adaptive planning latency benchmark
+        run: npm run bench:adaptive-capability-latency
 
       - name: Translation integrity
         run: node scripts/pantavion-translation-integrity-check.cjs
