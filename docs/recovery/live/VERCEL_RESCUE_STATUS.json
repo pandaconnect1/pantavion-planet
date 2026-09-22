@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-09-15T21:15:00Z",
-  "phase": "EMERGENCY_VERCEL_RESCUE_CANONICAL_INGESTION_AND_RECONCILIATION",
+  "updatedAt": "2026-09-22T19:11:00Z",
+  "phase": "EMERGENCY_VERCEL_RESCUE_CONTINUITY_CAPTURE_AND_RECONCILIATION",
   "estimatedSourceRecords": 18000,
   "estimatedSourceRecordsBasis": "user estimate; not a verified Vercel total",
   "recoveredDeploymentRecordsFloor": 3679,
@@ -67,6 +67,8 @@
     "Partition execution terminality does not raise Lane F canonicalized floor and does not imply module-level VERIFIED_LIVE."
   ],
   "remaining": [
+    "Continue canonical head reconciliation until an explicit bridge to prior durable history is proven.",
+    "Globally deduplicate canonical/vmxx observations; mirrored recovery deployments must not inflate unique recovered-source counts.",
     "Lane F must idempotently canonicalize/deduplicate the 400 G-rehydrated records, then B/C/D and earlier durable evidence.",
     "Lane J must refresh only from new canonical F evidence.",
     "Lane K founder feed and Lane L audit must refresh their stale partition/runtime counts.",
@@ -79,5 +81,32 @@
     "secretValuesRecorded": false,
     "deepPaginationDuplicated": false,
     "readyIsModuleVerifiedLive": false
-  }
+  },
+  "latestBatch": {
+    "records": 600,
+    "pages": 30,
+    "note": "2026-09-22 durable head capture: 300 canonical + 300 vmxx deployment observations. Source-unique count not incremented pending global dedup."
+  },
+  "absorptionRefresh20260922": {
+    "checkpoint": "docs/recovery/live/checkpoints/absorption-20260922T1910Z.json",
+    "canonical": {
+      "records": 300,
+      "nextCursor": 1789479723355,
+      "terminal": false
+    },
+    "mirror": {
+      "records": 300,
+      "nextCursor": 1789479723426,
+      "terminal": false,
+      "priorHeadOverlapProven": true
+    },
+    "zeroDelete": true,
+    "zeroVercelMutations": true,
+    "sourceUniqueCountIncremented": false
+  },
+  "recentEvidence": [
+    "2026-09-22: 600 deployment observations captured durably in six new GitHub batches on backup/pre-vercel-risk-20260914.",
+    "VMXX new head capture overlaps the prior durable head watermark; historical terminal proof remains preserved.",
+    "Canonical head capture reached 2026-09-15T13:42:03.355Z; explicit bridge reconciliation remains pending."
+  ]
 }
