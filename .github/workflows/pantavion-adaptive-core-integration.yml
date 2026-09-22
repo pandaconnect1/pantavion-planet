@@ -1,0 +1,60 @@
+name: Pantavion Adaptive Core Integration
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "core/sovereign/adaptive-capability-fabric.ts"
+      - "core/runtime/safe-self-healing-runtime.ts"
+      - "app/api/pantai/execute/route.ts"
+      - "core/translation/**"
+      - "core/intelligence/personal-ai-*.ts"
+      - "scripts/pantavion-adaptive-capability-fabric-test.mjs"
+      - "scripts/pantavion-safe-self-healing-runtime-test.mjs"
+      - "scripts/pantavion-translation-integrity-check.cjs"
+      - "package.json"
+      - ".github/workflows/pantavion-adaptive-core-integration.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-adaptive-core-integration
+  cancel-in-progress: false
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout recovery branch
+        uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Adaptive capability contract
+        run: npm run test:adaptive-capability-fabric
+
+      - name: Safe self-healing contract
+        run: npm run test:safe-self-healing
+
+      - name: Translation integrity
+        run: node scripts/pantavion-translation-integrity-check.cjs
+
+      - name: Translation gateway resilience
+        run: npm run test:translation-gateway-resilience
+
+      - name: Typecheck
+        run: npm run typecheck
