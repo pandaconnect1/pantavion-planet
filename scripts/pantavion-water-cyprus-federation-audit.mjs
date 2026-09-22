@@ -1,6 +1,9 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 
+const registryModule = await import("../core/water/cyprus-geospatial-source-registry.ts");
+const snapshot = registryModule.getCyprusWaterGeospatialSourceSnapshot();
+const sourceIds = new Set(snapshot.sources.map((source) => source.id));
 const registry = fs.readFileSync("core/water/cyprus-geospatial-source-registry.ts", "utf8");
 const center = fs.readFileSync("app/professional/infrastructure/water/page.tsx", "utf8");
 const cyprus = fs.readFileSync("app/professional/infrastructure/water/cyprus/page.tsx", "utf8");
@@ -19,11 +22,13 @@ for (const marker of [
   "eoa-ammochostos-private-water-network",
   "eoa-pafos-private-water-network",
 ]) {
-  assert(registry.includes(marker), `missing Cyprus source: ${marker}`);
+  assert(sourceIds.has(marker), `missing Cyprus source: ${marker}`);
 }
 
-assert(registry.includes("critical_infrastructure_private"));
-assert(registry.includes("AUTHORITY_DATA_AGREEMENT_REQUIRED"));
+assert.equal(snapshot.totalSources, 11);
+assert.equal(snapshot.authorityAgreementSources, 5);
+assert(snapshot.sources.some((source) => source.sensitivity === "critical_infrastructure_private"));
+assert(snapshot.sources.some((source) => source.access === "AUTHORITY_DATA_AGREEMENT_REQUIRED"));
 assert(registry.includes("No scraping or public exposure"));
 
 assert(center.includes("/professional/infrastructure/water/cyprus"));
