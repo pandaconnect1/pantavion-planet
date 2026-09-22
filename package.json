@@ -61,7 +61,8 @@
     "test:translation-gateway-resilience": "node --no-warnings --experimental-strip-types scripts/pantavion-translation-gateway-resilience-test.mjs",
     "audit:permanent-invariants": "node --no-warnings --experimental-strip-types scripts/pantavion-permanent-invariants-audit.mjs",
     "test:adaptive-capability-fabric": "node --no-warnings --experimental-strip-types scripts/pantavion-adaptive-capability-fabric-test.mjs",
-    "test:safe-self-healing": "node --no-warnings --experimental-strip-types scripts/pantavion-safe-self-healing-runtime-test.mjs"
+    "test:safe-self-healing": "node --no-warnings --experimental-strip-types scripts/pantavion-safe-self-healing-runtime-test.mjs",
+    "bench:adaptive-capability-latency": "node --no-warnings --experimental-strip-types scripts/pantavion-adaptive-capability-latency-benchmark.mjs"
   },
   "dependencies": {
     "@ai-sdk/gateway": "4.0.28",
