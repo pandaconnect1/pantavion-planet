@@ -1,0 +1,44 @@
+name: Pantavion Permanent Invariants Audit
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "PANTAVION-MASTER-DOCTRINE.md"
+      - "docs/architecture/PANTAVION_PERMANENT_SYSTEM_INVARIANTS_20260922.md"
+      - "core/pantavion/permanent-system-invariants.ts"
+      - "core/intake/vision-directive-registry.ts"
+      - "core/intake/kernel-intake-expansion-wave.ts"
+      - "core/kernel/kernel-constitution-registry.ts"
+      - "core/kernel/kernel-continuity-memory.ts"
+      - "scripts/pantavion-permanent-invariants-audit.mjs"
+      - "package.json"
+      - ".github/workflows/pantavion-permanent-invariants-audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-permanent-invariants-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout recovery branch
+        uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run permanent invariants audit
+        run: npm run audit:permanent-invariants
