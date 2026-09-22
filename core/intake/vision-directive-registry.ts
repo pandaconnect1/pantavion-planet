@@ -151,6 +151,38 @@ const VISION_DIRECTIVES: PantavionVisionDirectiveRecord[] = [
     statement: 'Pantavion continuously evaluates relevant modern technology through research, legal and security review, benchmarking, sandboxing, comparison and canary gates before production adoption.',
     founderLocked: true,
   },
+  {
+    directiveKey: 'mission-lifelong-humanity-ecosystem',
+    title: 'Lifelong Humanity Ecosystem',
+    category: 'mission',
+    priority: 'critical',
+    statement: 'Pantavion must evolve into a durable human-centered ecosystem that supports each person across the life course, from protected childhood experiences through learning, relationships, work, health information, safety, ageing, legacy and end-of-life support, while preserving consent, dignity, privacy and human agency.',
+    founderLocked: true,
+  },
+  {
+    directiveKey: 'mission-seven-continent-human-unity',
+    title: 'Seven-Continent Human Unity',
+    category: 'mission',
+    priority: 'critical',
+    statement: 'Pantavion must connect all seven continents through one interoperable human network while preserving language, culture, jurisdiction, accessibility, local law and regional resilience.',
+    founderLocked: true,
+  },
+  {
+    directiveKey: 'innovation-human-benefit-invention-engine',
+    title: 'Human-Benefit Innovation and Invention Engine',
+    category: 'innovation',
+    priority: 'critical',
+    statement: 'Pantavion must continuously discover, research, benchmark and propose high-value advances in AI, science, health technology, neuroscience, healthy ageing, accessibility, security, infrastructure and other human-benefit domains, with evidence, safety and regulatory gates before adoption.',
+    founderLocked: true,
+  },
+  {
+    directiveKey: 'intelligence-lifelong-human-companion',
+    title: 'Lifelong Human Capability Companion',
+    category: 'intelligence',
+    priority: 'critical',
+    statement: 'Pantavion intelligence should become a trusted extension of human capability by combining consent-aware memory, fast and deep reasoning, specialist intelligence, deterministic truth systems, multimodal interaction and scoped agents without replacing human decision authority.',
+    founderLocked: true,
+  },
 ];
 
 export function listVisionDirectives(): PantavionVisionDirectiveRecord[] {
