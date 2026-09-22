@@ -17,6 +17,9 @@ import {
   listPantavionPermanentInvariants,
   getPantavionPermanentInvariantSnapshot,
 } from '../pantavion/permanent-system-invariants';
+import {
+  getPantavionLifelongHumanityEcosystemSnapshot,
+} from '../pantavion/lifelong-humanity-ecosystem';
 
 export interface PantavionKernelIntakeExpansionWaveOutput {
   generatedAt: string;
@@ -33,6 +36,7 @@ export interface PantavionKernelIntakeExpansionWaveOutput {
   deviceSnapshot: ReturnType<typeof getDeviceCapabilitySnapshot>;
   lineageSnapshot: ReturnType<typeof getProjectLineageSnapshot>;
   permanentInvariantSnapshot: ReturnType<typeof getPantavionPermanentInvariantSnapshot>;
+  lifelongHumanitySnapshot: ReturnType<typeof getPantavionLifelongHumanityEcosystemSnapshot>;
   rendered: string;
 }
 
@@ -124,6 +128,12 @@ function renderWave(output: PantavionKernelIntakeExpansionWaveOutput): string {
     `invariantCount=${output.permanentInvariantSnapshot.invariantCount}`,
     `founderLockedCount=${output.permanentInvariantSnapshot.founderLockedCount}`,
     `failClosedCount=${output.permanentInvariantSnapshot.failClosedCount}`,
+    '',
+    'LIFELONG HUMANITY ECOSYSTEM',
+    `founderLocked=${output.lifelongHumanitySnapshot.founderLocked}`,
+    `lifeStageCount=${output.lifelongHumanitySnapshot.lifeStages.length}`,
+    `sevenContinentCoverageRequired=${output.lifelongHumanitySnapshot.sevenContinentCoverageRequired}`,
+    `evidenceBoundInnovation=${output.lifelongHumanitySnapshot.evidenceBoundInnovation}`,
   ].join('\n');
 }
 
@@ -143,6 +153,7 @@ export async function runKernelIntakeExpansionWave(): Promise<PantavionKernelInt
     deviceSnapshot: getDeviceCapabilitySnapshot(),
     lineageSnapshot: getProjectLineageSnapshot(),
     permanentInvariantSnapshot: getPantavionPermanentInvariantSnapshot(),
+    lifelongHumanitySnapshot: getPantavionLifelongHumanityEcosystemSnapshot(),
     rendered: '',
   };
 
@@ -165,6 +176,7 @@ export async function runKernelIntakeExpansionWave(): Promise<PantavionKernelInt
       deviceCapabilities: listDeviceCapabilities(),
       projectLineage: listProjectLineageRecords(),
       permanentSystemInvariants: listPantavionPermanentInvariants(),
+      lifelongHumanityEcosystem: getPantavionLifelongHumanityEcosystemSnapshot(),
       snapshots: {
         vision: output.visionSnapshot,
         users: output.userSnapshot,
@@ -179,6 +191,7 @@ export async function runKernelIntakeExpansionWave(): Promise<PantavionKernelInt
         devices: output.deviceSnapshot,
         lineage: output.lineageSnapshot,
         permanentSystemInvariants: output.permanentInvariantSnapshot,
+        lifelongHumanityEcosystem: output.lifelongHumanitySnapshot,
       },
     },
     tags: ['kernel', 'intake', 'categories', 'vision', 'locales', 'devices', 'lineage', 'latest'],
@@ -191,6 +204,8 @@ export async function runKernelIntakeExpansionWave(): Promise<PantavionKernelInt
       permanentInvariantCount: output.permanentInvariantSnapshot.invariantCount,
       permanentInvariantFounderLockedCount: output.permanentInvariantSnapshot.founderLockedCount,
       permanentInvariantFailClosedCount: output.permanentInvariantSnapshot.failClosedCount,
+      lifelongHumanityLifeStageCount: output.lifelongHumanitySnapshot.lifeStages.length,
+      lifelongHumanitySevenContinentCoverageRequired: output.lifelongHumanitySnapshot.sevenContinentCoverageRequired,
     },
   });
 
