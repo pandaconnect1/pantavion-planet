@@ -8,8 +8,19 @@ const outRoot = path.join(evidenceRoot, "phase2");
 fs.mkdirSync(outRoot, { recursive: true });
 
 const ignoredDirs = new Set(["phase2", "blob-rescue"]);
+const canonicalDeploymentFiles = new Set([
+  "pantavion-planet-deployments.json",
+  "pantavion-planet-vmxx-deployments.json",
+  "legacy-pantavion-deployments.json",
+  "legacy-ai-and-empty-projects.json"
+]);
+
 const sourceFiles = fs.readdirSync(evidenceRoot, { withFileTypes: true })
-  .filter(d => d.isFile() && d.name.endsWith(".json"))
+  .filter(d =>
+    d.isFile() &&
+    d.name.endsWith(".json") &&
+    (canonicalDeploymentFiles.has(d.name) || d.name.includes("-batch-"))
+  )
   .map(d => path.join(evidenceRoot, d.name))
   .sort();
 
