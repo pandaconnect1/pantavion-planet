@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-09-22T21:31:04.130Z",
+  "lockedAtUtc": "2026-09-22T22:04:32.129Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -17,7 +17,7 @@
   },
   "protectedFiles": {
     ".github/CODEOWNERS": "93789477aca8ffe37c6f179ca004113c8edba37ecc159d1e67dee9f720955e52",
-    ".github/workflows/pantavion-water-network-lock.yml": "889a686b00ac2b4fed1612e5c1e5f4b6cf72836e5a3e04f89f082dbe7928d9a3",
+    ".github/workflows/pantavion-water-network-lock.yml": "cc31df78ddf31546fdcb7ce38fa521d0385c281a3375296537b2762a394d7291",
     "app/api/professional/infrastructure/water/access/authorize/route.ts": "472ca92cfef6e8d421267c30bb9a9f756a174cb50684a40fe55bba36359952af",
     "app/api/professional/infrastructure/water/admin/session/route.ts": "ace584102ae5ed57500a84b3b2271ae5526fc556c69fed17e5096ec00281e7aa",
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "05be8bb492c3a05440285efc519dfc6fcd634d11038d8aedd40910fa335fa264",
@@ -29,12 +29,12 @@
     "core/security/privileged-request-boundary.ts": "44376bf768b225f9228f676238c33b2cab69b517963089460e9e4cabcf3bcf49",
     "core/security/water-admin-session.ts": "1f563864a0c58761404b06d682a59abdea618939abb7c905236417a6a2e3f7f1",
     "scripts/pantavion-water-network-runtime-lock.cjs": "022b40a9b5db9fdb2e1cda8afac43a83d235909539b592f7f2f222bda6fbdd58",
-    "scripts/water-guardian-production-smoke.cjs": "bee43272dafce5ea6b4fa31c64ba77c80ae6d7cfccf3e46731da202d2df6b568",
+    "scripts/water-guardian-production-smoke.cjs": "fa85132fb88419f98429c9dcd6b779b313bf0345d0d1787aaa348ddc7707aa21",
     "scripts/water-segment-reader-regression.mjs": "44bfd0d2df2cb67d6e61463af4ede2667717b1347dd69ac6e0c5901d0ca898da"
   },
   "refreshEvidence": {
-    "reason": "Production Water hotfix: reconcile existing protected runtime with current main before deployment.",
-    "sourceCommit": "894a69314a4b8d714028960da9182a893381cac6",
+    "reason": "Provider-neutral production verification: replace Vercel deployment-ID dependency with exact Railway/Git revision verification. No water source truth, geometry, access invariant or segmented-delivery invariant changes.",
+    "sourceCommit": "2b11f92864d7d814db53db32014222eb065ec4b6",
     "protectedFileCount": 15,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
