@@ -1,0 +1,54 @@
+name: Pantavion Water Lock Refresh Hotfix
+
+on:
+  push:
+    branches:
+      - hotfix/water-live-production-20260923
+    paths:
+      - "scripts/refresh-water-network-runtime-lock.cjs"
+      - ".github/workflows/pantavion-water-lock-refresh-hotfix.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pantavion-water-lock-refresh-hotfix
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout hotfix branch
+        uses: actions/checkout@v4
+        with:
+          ref: hotfix/water-live-production-20260923
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Refresh protected Water hashes only
+        env:
+          PANTAVION_WATER_LOCK_REFRESH: "YES"
+          PANTAVION_WATER_LOCK_REFRESH_REASON: "Production Water hotfix: reconcile existing protected runtime with current main before deployment."
+        run: node scripts/refresh-water-network-runtime-lock.cjs
+
+      - name: Verify refreshed lock
+        run: npm run audit:water:network-lock
+
+      - name: Prove only lock manifest changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(git diff --name-only)"
+          test "$changed" = "core/infrastructure/water/water-network-runtime-lock.json"
+
+      - name: Commit deliberate lock refresh evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "pantavion-water-guardian"
+          git config user.email "pantavion-water-guardian@users.noreply.github.com"
+          git add core/infrastructure/water/water-network-runtime-lock.json
+          git commit -m "water: deliberately refresh protected runtime lock"
+          git push origin HEAD:hotfix/water-live-production-20260923
