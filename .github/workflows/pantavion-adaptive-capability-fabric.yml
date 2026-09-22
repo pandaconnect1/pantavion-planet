@@ -1,0 +1,42 @@
+name: Pantavion Adaptive Capability Fabric
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "core/sovereign/adaptive-capability-fabric.ts"
+      - "core/sovereign/intent-to-outcome-fabric.ts"
+      - "core/sovereign/ephemeral-agent-swarm.ts"
+      - "core/translation/pantavion-natural-language-universe.ts"
+      - "core/pantavion/lifelong-humanity-ecosystem.ts"
+      - "scripts/pantavion-adaptive-capability-fabric-test.mjs"
+      - "package.json"
+      - ".github/workflows/pantavion-adaptive-capability-fabric.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-adaptive-capability-fabric
+  cancel-in-progress: false
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout recovery branch
+        uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run adaptive capability fabric contract
+        run: npm run test:adaptive-capability-fabric
