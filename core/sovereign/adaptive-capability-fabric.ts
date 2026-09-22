@@ -14,7 +14,6 @@ import {
   type EphemeralAgent,
   type SwarmRole,
 } from "./ephemeral-agent-swarm.ts";
-import { pantavionNaturalLanguageUniverse } from "../translation/pantavion-natural-language-universe.ts";
 import { getPantavionLifelongHumanityEcosystemSnapshot } from "../pantavion/lifelong-humanity-ecosystem.ts";
 
 export const PANTAVION_ADAPTIVE_CAPABILITY_FABRIC_V1 = {
@@ -93,7 +92,7 @@ export interface PantavionTranslationBridgePlan {
   speech: true;
   captions: true;
   targetNaturalLanguageCount: number;
-  currentlyRegisteredLanguageCount: number;
+  currentlyRegisteredLanguageCount: number | null;
   providerCoverageMustBeVerified: true;
   truthBoundary: string;
 }
@@ -543,10 +542,11 @@ export function planAdaptiveCapability(
       text: true,
       speech: true,
       captions: true,
-      targetNaturalLanguageCount: pantavionNaturalLanguageUniverse.targetNaturalLanguageCount,
-      currentlyRegisteredLanguageCount: pantavionNaturalLanguageUniverse.currentPracticalLanguages.length,
+      targetNaturalLanguageCount: 7000,
+      currentlyRegisteredLanguageCount: null,
       providerCoverageMustBeVerified: true,
-      truthBoundary: pantavionNaturalLanguageUniverse.truthBoundary,
+      truthBoundary:
+        "7000 is the Pantavion natural-language target. Real live speech/text support must be resolved by the translation coverage matrix and verified provider/model coverage at execution time.",
     },
     latencyBudget: PANTAVION_ADAPTIVE_CAPABILITY_FABRIC_V1.hotPath,
     truth: {
