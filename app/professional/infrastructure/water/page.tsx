@@ -39,9 +39,23 @@ const cards = [
     href: "/professional/infrastructure/water/live",
     action: "Άνοιγμα Map A",
   },
-];
-
-export default function WaterControlCenterPage() {
+  {
+    title: "Cyprus GIS Federation",
+    label: "CYPRUS DATA",
+    description:
+      "Επίσημα DLS/INSPIRE/Geological Survey επίπεδα για δρόμους, τεμάχια, υψόμετρα, DTM/DSM, ορθοφωτοχάρτες και γεωλογία, μαζί με private-authorized θέσεις για τα δίκτυα των 5 ΕΟΑ.",
+    href: "/professional/infrastructure/water/cyprus",
+    action: "Άνοιγμα Cyprus GIS Federation",
+  },
+  {
+    title: "Universal Import Center",
+    label: "CAD • GIS • PDF",
+    description:
+      "Ασφαλές intake για DWG, DXF, DGN, PDF, SHP/GPKG/GML, KML/KMZ, GeoTIFF/DEM, MBTiles/PMTiles και άγνωστα μελλοντικά formats με preserve/quarantine/adapter routing.",
+    href: "/professional/infrastructure/water/import",
+    action: "Άνοιγμα Import Center",
+  },
+];\n\nexport default function WaterControlCenterPage() {
   return (
     <>
       <WaterMapNavigation title="Water Control Center" />
@@ -60,7 +74,7 @@ export default function WaterControlCenterPage() {
             Οι χάρτες A, B και C είναι ξεχωριστές προστατευμένες εμπειρίες. Ο Map A παραμένει ανέγγιχτος. Ο Map B υλοποιείται από το πραγματικό DWG με QGIS-compatible γεωαναφορά, GPS/GNSS και αναζήτηση οδού. Ο Map C παραμένει ξεχωριστό intelligent engineering workspace και δεν συγχέεται με τον B.
           </p>
 
-          <div className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {cards.map((card) => (
               <article
                 key={card.href}
