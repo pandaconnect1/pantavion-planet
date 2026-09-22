@@ -176,3 +176,31 @@ Canonical branch: `main`
 
 All implementation claims must be tied to real code, tests, deployment and verification evidence.
 Other Pantavion projects/branches are donor/recovery sources until explicitly integrated into canonical main.
+
+
+## 19. PERMANENT SYSTEM INVARIANTS — LOCKED
+
+Canonical constitutional addendum:
+`docs/architecture/PANTAVION_PERMANENT_SYSTEM_INVARIANTS_20260922.md`
+
+Machine-readable contract:
+`core/pantavion/permanent-system-invariants.ts`
+
+Non-negotiable system rule:
+`TRUTH + CONTINUITY + MEMORY + SECURITY + REVERSIBILITY + OBSERVABILITY > SPEED OR APPEARANCE`
+
+Pantavion must optimize intelligence and latency aggressively, but never by bypassing authority, provenance, deterministic writes, idempotency, validation, security, rollback or evidence.
+
+Permanent error lifecycle:
+`PREVENT -> DETECT -> CONTAIN -> RECOVER -> VERIFY -> LEARN`
+
+Permanent truth lifecycle:
+`IDEA -> CODED -> TESTED -> MERGED -> DEPLOYED -> VERIFIED_LIVE -> OWNER_OK_FOR_USERS`
+
+Founder-vision continuity is no-orphan:
+every directive, historical idea, unresolved requirement and recovered artifact retains provenance plus an explicit canonical disposition. Ambiguity remains fail-closed until evidence resolves it.
+
+Modern technology intake is continuous but evidence-driven:
+`DISCOVER -> RESEARCH -> LICENSE/LEGAL CHECK -> SECURITY CHECK -> BENCHMARK -> SANDBOX -> COMPARE -> CODE CANDIDATE -> TEST -> CANARY -> PROMOTE OR REJECT`
+
+These invariants are enforced by the permanent-invariants audit and form part of runtime-safety verification.
