@@ -1,0 +1,142 @@
+name: Pantavion Governed Hold Closure Materialization
+
+on:
+  push:
+    branches:
+      - backup/pre-vercel-risk-20260914
+    paths:
+      - "scripts/recovery/materialize-founder-intent.mts"
+      - ".github/workflows/pantavion-governed-hold-closure-materialize.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-governed-hold-closure-materialize
+  cancel-in-progress: false
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+      PANTAVION_INTENT_ID: recovery_review_required_closure_20260922
+
+    steps:
+      - name: Checkout recovery branch
+        uses: actions/checkout@v4
+        with:
+          ref: backup/pre-vercel-risk-20260914
+          fetch-depth: 0
+
+      - name: Require canonical Supabase credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_ACCESS_TOKEN SUPABASE_PROJECT_REF; do
+            if [ -z "${!name:-}" ]; then echo "::error::$name missing"; exit 1; fi
+          done
+          if [ "$SUPABASE_PROJECT_REF" != "cxhulvwkagzufbjsdwwu" ]; then
+            echo "::error::Wrong Supabase project ref"; exit 1
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install locked project dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Resolve elevated Supabase key without logging it
+        id: supabase-key
+        shell: bash
+        run: |
+          set -euo pipefail
+          json_file="$RUNNER_TEMP/supabase-api-keys.json"
+          key_file="$RUNNER_TEMP/supabase-recovery-key"
+          umask 077
+          supabase projects api-keys --project-ref "$SUPABASE_PROJECT_REF" --output json > "$json_file"
+          jq -r '[.[] | select(.name == "service_role") | .api_key][0] // [.[] | select(.type == "secret") | .api_key][0] // empty' "$json_file" > "$key_file"
+          rm -f "$json_file"
+          key="$(cat "$key_file")"
+          if [ ${#key} -lt 24 ]; then echo "::error::No elevated Supabase key"; rm -f "$key_file"; exit 1; fi
+          echo "::add-mask::$key"
+          echo "key_file=$key_file" >> "$GITHUB_OUTPUT"
+
+      - name: Install pinned TS runner ephemerally
+        shell: bash
+        run: npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund tsx@4.20.6 server-only@0.0.1
+
+      - name: Materialize governed-hold closure through canonical constructor
+        shell: bash
+        env:
+          SUPABASE_KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
+          NEXT_PUBLIC_SUPABASE_URL: https://cxhulvwkagzufbjsdwwu.supabase.co
+          NODE_OPTIONS: --conditions=react-server
+        run: |
+          set -euo pipefail
+          key="$(cat "$SUPABASE_KEY_FILE")"
+          echo "::add-mask::$key"
+          export SUPABASE_SERVICE_ROLE_KEY="$key"
+          ./node_modules/.bin/tsx scripts/recovery/materialize-founder-intent.mts
+
+      - name: Verify governed-hold intent and durable work order
+        shell: bash
+        env:
+          SUPABASE_KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
+        run: |
+          set -euo pipefail
+          key="$(cat "$SUPABASE_KEY_FILE")"
+          echo "::add-mask::$key"
+          node - <<'NODE'
+          const fs=require('fs');
+          const key=fs.readFileSync(process.env.SUPABASE_KEY_FILE,'utf8').trim();
+          const headers={apikey:key};
+          if(key.startsWith('eyJ')) headers.Authorization='Bearer '+key;
+          const base='https://cxhulvwkagzufbjsdwwu.supabase.co/rest/v1';
+          async function get(url){
+            const r=await fetch(url,{headers});
+            if(!r.ok) throw new Error(`HTTP ${r.status}: ${await r.text()}`);
+            return r.json();
+          }
+          (async()=>{
+            const intents=await get(base+'/pantavion_founder_execution_intents?intent_id=eq.recovery_review_required_closure_20260922&select=intent_id,status,approval_scope,work_order_execution_id,last_error');
+            if(intents.length!==1) throw new Error('governed hold intent missing');
+            const intent=intents[0];
+            if(intent.status!=='materialized' || intent.approval_scope!=='proposal_only' || !intent.work_order_execution_id) {
+              throw new Error('governed hold intent not safely materialized: '+JSON.stringify(intent));
+            }
+            const work=await get(base+`/durable_executions?execution_id=eq.${encodeURIComponent(intent.work_order_execution_id)}&select=execution_id,idempotency_key,task_name,status,input`);
+            if(work.length!==1) throw new Error('governed hold durable work order missing');
+            const row=work[0];
+            if(row.task_name!=='pantavion_founder_work_order_v1') throw new Error('unexpected task name');
+            const plan=row.input?.workloadPlan;
+            if(plan?.unitCount!==355 || plan?.partitionContract?.batchCount!==4 || plan?.partitionContract?.batchSize!==100) {
+              throw new Error('governed hold workload mismatch: '+JSON.stringify(plan));
+            }
+            console.log(JSON.stringify({
+              intent,
+              workOrder:{
+                execution_id:row.execution_id,
+                status:row.status,
+                unitCount:plan.unitCount,
+                batchSize:plan.partitionContract.batchSize,
+                batchCount:plan.partitionContract.batchCount
+              }
+            },null,2));
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+
+      - name: Remove temporary credential material
+        if: always()
+        shell: bash
+        run: rm -f "${{ steps.supabase-key.outputs.key_file }}" || true
