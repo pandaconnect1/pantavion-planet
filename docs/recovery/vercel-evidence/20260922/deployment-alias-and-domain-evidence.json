@@ -1,0 +1,277 @@
+{
+  "capturedAt": "2026-09-22",
+  "teamId": "team_tGNSGGjcV3VNecscMvaAniGY",
+  "note": "Alias/domain evidence captured before any Vercel cleanup. No mutations performed.",
+  "details": [
+    {
+      "label": "pantavion-planet-production",
+      "id": "dpl_5JcVNQ62kfcw5tm4CNTHpDFKnP5h",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-omm0wgczg-pandaconnect.vercel.app",
+      "type": "LAMBDAS",
+      "state": "READY",
+      "createdAt": 1789677457266,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "project": {
+        "id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "name": "pantavion-planet",
+        "framework": "nextjs"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "92c0380e1c69c0fca4b58b96fe4e02f9f724177c",
+        "githubCommitMessage": "fix(sos): keep emergency delivery independent from audit persistence",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "alias": [
+        "www.pantavion.com",
+        "pantavion-planet.vercel.app",
+        "pantavion.com",
+        "pantavion-planet-pandaconnect.vercel.app",
+        "pantavion-planet-git-main-pandaconnect.vercel.app"
+      ],
+      "target": "production",
+      "regions": [
+        "iad1"
+      ],
+      "buildingAt": 1789677458602,
+      "ready": 1789677555299,
+      "readyState": "READY",
+      "source": "git",
+      "aliasError": null
+    },
+    {
+      "label": "pantavion-planet-latest-backup",
+      "id": "dpl_J8q3EbdJTiZKLvCqaJ7sF5NFSerp",
+      "name": "pantavion-planet",
+      "url": "pantavion-planet-3w2txvtcx-pandaconnect.vercel.app",
+      "type": "LAMBDAS",
+      "state": "READY",
+      "createdAt": 1789729948101,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "project": {
+        "id": "prj_BxhpnjvAs1seyfBU1UYFU8nDykwh",
+        "name": "pantavion-planet",
+        "framework": "nextjs"
+      },
+      "meta": {
+        "githubCommitRef": "backup/pre-vercel-risk-20260914",
+        "githubCommitSha": "d584444cdffdee9cc2917426db69d393ddf09b55",
+        "githubCommitMessage": "checkpoint(recovery): record Lane L audit 20260918T1021Z",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "alias": [
+        "pantavion-planet-git-backup-pre-vercel-risk-d61edd-pandaconnect.vercel.app"
+      ],
+      "target": null,
+      "regions": [
+        "iad1"
+      ],
+      "buildingAt": 1789729949322,
+      "ready": 1789730025867,
+      "readyState": "READY",
+      "source": "git",
+      "aliasError": null
+    },
+    {
+      "label": "pantavion-planet-vmxx-latest",
+      "id": "dpl_BN7huVYLcnPLigHbAoBaEmWrN971",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-5myauxix8-pandaconnect.vercel.app",
+      "type": "LAMBDAS",
+      "state": "READY",
+      "createdAt": 1789729948073,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "project": {
+        "id": "prj_YsZ25kIBmTByMYfT3WqpfrE9mFPU",
+        "name": "pantavion-planet-vmxx",
+        "framework": "nextjs"
+      },
+      "meta": {
+        "githubCommitRef": "backup/pre-vercel-risk-20260914",
+        "githubCommitSha": "d584444cdffdee9cc2917426db69d393ddf09b55",
+        "githubCommitMessage": "checkpoint(recovery): record Lane L audit 20260918T1021Z",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "alias": [
+        "pantavion-planet-vmxx-git-backup-pre-vercel-7f068c-pandaconnect.vercel.app"
+      ],
+      "target": null,
+      "regions": [
+        "iad1"
+      ],
+      "buildingAt": 1789729949318,
+      "ready": 1789730037331,
+      "readyState": "READY",
+      "source": "git",
+      "aliasError": null
+    },
+    {
+      "label": "pantavion-one-latest",
+      "id": "dpl_7n748GPUgAahXvmgBDbLJUBLUDYi",
+      "name": "pantavion-one",
+      "url": "pantavion-9c8wman74-pandaconnect.vercel.app",
+      "type": "LAMBDAS",
+      "state": "READY",
+      "createdAt": 1781893399892,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "project": {
+        "id": "prj_Rld6OiU8Iu0TeBDYZ6Y2igDd200e",
+        "name": "pantavion-one",
+        "framework": "nextjs"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "402522eaaa8c30bb8cc0ef05829524ad6f1241d9",
+        "githubCommitMessage": "fix(seo): redirect legacy Pantavion app to canonical site",
+        "githubRepo": "pantavion-one",
+        "githubOrg": "pandaconnect1"
+      },
+      "alias": [
+        "pantavion-one.vercel.app",
+        "pantavion-one-pandaconnect.vercel.app",
+        "pantavion-one-git-main-pandaconnect.vercel.app"
+      ],
+      "target": "production",
+      "regions": [
+        "iad1"
+      ],
+      "buildingAt": 1781893400987,
+      "ready": 1781893431595,
+      "readyState": "READY",
+      "source": "git",
+      "aliasError": null
+    },
+    {
+      "label": "pantavion-one-clean-latest",
+      "id": "dpl_D8Kridd58RMaMUw473aLNiDedYjV",
+      "name": "pantavion-one-clean",
+      "url": "pantavion-one-clean-42f4rdnvt-pandaconnect.vercel.app",
+      "type": "LAMBDAS",
+      "state": "READY",
+      "createdAt": 1774465602514,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "project": {
+        "id": "prj_PZD1t2hOc6SaiY5pKithCHILboHF",
+        "name": "pantavion-one-clean",
+        "framework": "nextjs"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "473429b1f11233181e35a3593b798888c414d4ad",
+        "githubCommitMessage": "Implement global state engine for Pantavion\n\nThis file implements a global state engine for Pantavion, managing navigation, project memory, UI state, and local storage persistence.",
+        "githubRepo": "pantavion-one-clean",
+        "githubOrg": "pandaconnect1"
+      },
+      "alias": [
+        "pantavion-one-clean.vercel.app",
+        "pantavion-one-clean-pandaconnect.vercel.app",
+        "pantavion-one-clean-git-main-pandaconnect.vercel.app"
+      ],
+      "target": "production",
+      "regions": [
+        "iad1"
+      ],
+      "buildingAt": 1774465603654,
+      "ready": 1774465626207,
+      "readyState": "READY",
+      "source": "git",
+      "aliasError": null
+    },
+    {
+      "label": "pantavion-one-clean-98it-latest",
+      "id": "dpl_2jsPyCC3zm3HnjehCS8QLDUTUtw4",
+      "name": "pantavion-one-clean-98it",
+      "url": "pantavion-one-clean-98it-jyvm5gfai-pandaconnect.vercel.app",
+      "type": "LAMBDAS",
+      "state": "READY",
+      "createdAt": 1774465602547,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "project": {
+        "id": "prj_jQ4NAbtiHfxC68CazUHwIARlDa1E",
+        "name": "pantavion-one-clean-98it",
+        "framework": "nextjs"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "473429b1f11233181e35a3593b798888c414d4ad",
+        "githubCommitMessage": "Implement global state engine for Pantavion\n\nThis file implements a global state engine for Pantavion, managing navigation, project memory, UI state, and local storage persistence.",
+        "githubRepo": "pantavion-one-clean",
+        "githubOrg": "pandaconnect1"
+      },
+      "alias": [
+        "pantavion.com",
+        "pantavion-one-clean-98it.vercel.app",
+        "pantavion-one-clean-98it-pandaconnect.vercel.app",
+        "pantavion-one-clean-98it-git-main-pandaconnect.vercel.app"
+      ],
+      "target": "production",
+      "regions": [
+        "iad1"
+      ],
+      "buildingAt": 1774465603974,
+      "ready": 1774465630380,
+      "readyState": "READY",
+      "source": "git",
+      "aliasError": null
+    },
+    {
+      "label": "pantavion-one-clean-ui-latest",
+      "id": "dpl_DRLLhUiVL8trrcKDEgyNXDo714rz",
+      "name": "pantavion-one-clean-ui",
+      "url": "pantavion-one-clean-q7vsis976-pandaconnect.vercel.app",
+      "type": "LAMBDAS",
+      "state": "READY",
+      "createdAt": 1776864574346,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "project": {
+        "id": "prj_e5oghsEalj1r5sIKmXFyRlXGYUdC",
+        "name": "pantavion-one-clean-ui",
+        "framework": "nextjs"
+      },
+      "meta": {
+        "githubCommitRef": "vercel/react-server-components-cve-vu-68t1ie",
+        "githubCommitSha": "833bbbfd1308174be414db9230c7643f83579f62",
+        "githubCommitMessage": "Fix React Server Components CVE vulnerabilities\n\nUpdated dependencies to fix Next.js and React CVE vulnerabilities.\n\nThe fix-react2shell-next tool automatically updated the following packages to their secure versions:\n- next\n- react-server-dom-webpack\n- react-server-dom-parcel  \n- react-server-do...",
+        "githubRepo": "pantavion-one-clean-ui",
+        "githubOrg": "pandaconnect1"
+      },
+      "alias": [
+        "pantavion-one-clean-ui-git-vercel-react-ser-67d85a-pandaconnect.vercel.app"
+      ],
+      "target": null,
+      "regions": [
+        "iad1"
+      ],
+      "buildingAt": 1776864576862,
+      "ready": 1776864601840,
+      "readyState": "READY",
+      "source": "git",
+      "aliasError": null
+    }
+  ]
+}
