@@ -1,0 +1,361 @@
+{
+  "capturedAt": "2026-09-22",
+  "teamId": "team_tGNSGGjcV3VNecscMvaAniGY",
+  "note": "Non-destructive Vercel metadata snapshot; no secret values.",
+  "projects": [
+    {
+      "project": "pantaai",
+      "projectId": "prj_ViFBWhpM0mPurIwxsdvKKmjGrNEs",
+      "pagination": {
+        "count": 1,
+        "next": 1749185544520,
+        "prev": 1749185544520
+      },
+      "deployments": [
+        {
+          "id": "dpl_EwYtxUjRFHh8rqmsTCeCFRs8gvgm",
+          "name": "pantaai",
+          "url": "pantaai-43hqy2qcf-pandaconnect.vercel.app",
+          "created": 1749185544520,
+          "state": "ERROR",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "1410fd14343a421974d504d271d7582216975dff",
+            "githubCommitMessage": "Initial commit\n\nCreated from https://vercel.com/new",
+            "githubRepo": "nextjs-ai-chatbot",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai/EwYtxUjRFHh8rqmsTCeCFRs8gvgm",
+          "isRollbackCandidate": false
+        }
+      ]
+    },
+    {
+      "project": "pantaai-v1-nf17",
+      "projectId": "prj_EAWqpERO72KiDdYv2pXPhKZdPUGe",
+      "pagination": {
+        "count": 6,
+        "next": 1750092512521,
+        "prev": 1751871539965
+      },
+      "deployments": [
+        {
+          "id": "dpl_AMTM9LwAoGcWEMVcuMbJAQRitHH4",
+          "name": "pantaai-v1-nf17",
+          "url": "pantaai-v1-nf17-kbmqdytcd-pandaconnect.vercel.app",
+          "created": 1751871539965,
+          "state": "ERROR",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "cab42ccc04bafb9f7f0261156243b37cb46e97a3",
+            "githubCommitMessage": "Create next.config.js",
+            "githubRepo": "pantaai-v1",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai-v1-nf17/AMTM9LwAoGcWEMVcuMbJAQRitHH4",
+          "isRollbackCandidate": false
+        },
+        {
+          "id": "dpl_JEHu4FS13hEasuCHHXm9jgB8DnSm",
+          "name": "pantaai-v1-nf17",
+          "url": "pantaai-v1-nf17-l3pv9yl1m-pandaconnect.vercel.app",
+          "created": 1751870949744,
+          "state": "ERROR",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "af2c83f95d75cb58f8cb388aa7e20f52685e75ca",
+            "githubCommitMessage": "Delete pages/next.config.js",
+            "githubRepo": "pantaai-v1",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai-v1-nf17/JEHu4FS13hEasuCHHXm9jgB8DnSm",
+          "isRollbackCandidate": false
+        },
+        {
+          "id": "dpl_GZeVMTT7Xvvo5Kwk7PCu8LB4Tg6F",
+          "name": "pantaai-v1-nf17",
+          "url": "pantaai-v1-nf17-466mj0i3z-pandaconnect.vercel.app",
+          "created": 1751870007496,
+          "state": "ERROR",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "7854a6cce4e0bb58348c9efa5b910615a0c34552",
+            "githubCommitMessage": "Create next.config.js",
+            "githubRepo": "pantaai-v1",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai-v1-nf17/GZeVMTT7Xvvo5Kwk7PCu8LB4Tg6F",
+          "isRollbackCandidate": false
+        },
+        {
+          "id": "dpl_EzVfg6NnZKAneazfRnssW2L3jBW9",
+          "name": "pantaai-v1-nf17",
+          "url": "pantaai-v1-nf17-ldn6hib31-pandaconnect.vercel.app",
+          "created": 1751695969730,
+          "state": "ERROR",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "b1b83470c153488264cce7aaf5cb0c252d3fa5c4",
+            "githubCommitMessage": "Create package.json",
+            "githubRepo": "pantaai-v1",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai-v1-nf17/EzVfg6NnZKAneazfRnssW2L3jBW9",
+          "isRollbackCandidate": false
+        },
+        {
+          "id": "dpl_3Y4PmUcY3WUt1KsFsySTkyZ8uSFh",
+          "name": "pantaai-v1-nf17",
+          "url": "pantaai-v1-nf17-js27kevsm-pandaconnect.vercel.app",
+          "created": 1751694706103,
+          "state": "READY",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "1b514a9c353a6828eecf8ef85f6f5a7cc5d09c6b",
+            "githubCommitMessage": "initial homepage setup",
+            "githubRepo": "pantaai-v1",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai-v1-nf17/3Y4PmUcY3WUt1KsFsySTkyZ8uSFh",
+          "isRollbackCandidate": true
+        },
+        {
+          "id": "dpl_HzYBXvoYFUR8evtApWhELtXUkbJu",
+          "name": "pantaai-v1-nf17",
+          "url": "pantaai-v1-nf17-qxlf8caq5-pandaconnect.vercel.app",
+          "created": 1750092512521,
+          "state": "READY",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "9f6db83b15c9401647e14b98f72401f17c7b2905",
+            "githubCommitMessage": "Initial commit",
+            "githubRepo": "pantaai-v1",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai-v1-nf17/HzYBXvoYFUR8evtApWhELtXUkbJu",
+          "isRollbackCandidate": true
+        }
+      ]
+    },
+    {
+      "project": "pantaai-v1",
+      "projectId": "prj_7grzRBApMytGyui5TzP2JTzxaR6k",
+      "pagination": {
+        "count": 6,
+        "next": 1750092512550,
+        "prev": 1751871540349
+      },
+      "deployments": [
+        {
+          "id": "dpl_328tZJ6sJ2WXCHmRwtvyLSf4tbQV",
+          "name": "pantaai-v1",
+          "url": "pantaai-v1-g3rmoaov6-pandaconnect.vercel.app",
+          "created": 1751871540349,
+          "state": "ERROR",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "cab42ccc04bafb9f7f0261156243b37cb46e97a3",
+            "githubCommitMessage": "Create next.config.js",
+            "githubRepo": "pantaai-v1",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai-v1/328tZJ6sJ2WXCHmRwtvyLSf4tbQV",
+          "isRollbackCandidate": false
+        },
+        {
+          "id": "dpl_5DvmFi5N5Jbw8Fgu3PSbUgEcqQRa",
+          "name": "pantaai-v1",
+          "url": "pantaai-v1-jvg9mtvlk-pandaconnect.vercel.app",
+          "created": 1751870949748,
+          "state": "ERROR",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "af2c83f95d75cb58f8cb388aa7e20f52685e75ca",
+            "githubCommitMessage": "Delete pages/next.config.js",
+            "githubRepo": "pantaai-v1",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai-v1/5DvmFi5N5Jbw8Fgu3PSbUgEcqQRa",
+          "isRollbackCandidate": false
+        },
+        {
+          "id": "dpl_FHyp8NaQXzzWspjP6enEkAA2sEDf",
+          "name": "pantaai-v1",
+          "url": "pantaai-v1-izfpheev4-pandaconnect.vercel.app",
+          "created": 1751870007473,
+          "state": "ERROR",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "7854a6cce4e0bb58348c9efa5b910615a0c34552",
+            "githubCommitMessage": "Create next.config.js",
+            "githubRepo": "pantaai-v1",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai-v1/FHyp8NaQXzzWspjP6enEkAA2sEDf",
+          "isRollbackCandidate": false
+        },
+        {
+          "id": "dpl_9rjD7GH4k8TxxiFQ38uQou5bWmKu",
+          "name": "pantaai-v1",
+          "url": "pantaai-v1-844db5phg-pandaconnect.vercel.app",
+          "created": 1751695969738,
+          "state": "ERROR",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "b1b83470c153488264cce7aaf5cb0c252d3fa5c4",
+            "githubCommitMessage": "Create package.json",
+            "githubRepo": "pantaai-v1",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai-v1/9rjD7GH4k8TxxiFQ38uQou5bWmKu",
+          "isRollbackCandidate": false
+        },
+        {
+          "id": "dpl_5f1oFWZCj45Z6AG8vZfbeMNZkonq",
+          "name": "pantaai-v1",
+          "url": "pantaai-v1-h84zevic5-pandaconnect.vercel.app",
+          "created": 1751694706109,
+          "state": "READY",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "1b514a9c353a6828eecf8ef85f6f5a7cc5d09c6b",
+            "githubCommitMessage": "initial homepage setup",
+            "githubRepo": "pantaai-v1",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai-v1/5f1oFWZCj45Z6AG8vZfbeMNZkonq",
+          "isRollbackCandidate": true
+        },
+        {
+          "id": "dpl_CFKpP49mv38XPnHz7EGVm6nBxxRa",
+          "name": "pantaai-v1",
+          "url": "pantaai-v1-3184eq5ig-pandaconnect.vercel.app",
+          "created": 1750092512550,
+          "state": "READY",
+          "target": "production",
+          "creator": {
+            "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+            "username": "infopandaconnect-6915"
+          },
+          "meta": {
+            "githubCommitRef": "main",
+            "githubCommitSha": "9f6db83b15c9401647e14b98f72401f17c7b2905",
+            "githubCommitMessage": "Initial commit",
+            "githubRepo": "pantaai-v1",
+            "githubOrg": "pandaconnect1"
+          },
+          "inspectorUrl": "https://vercel.com/pandaconnect/pantaai-v1/CFKpP49mv38XPnHz7EGVm6nBxxRa",
+          "isRollbackCandidate": true
+        }
+      ]
+    },
+    {
+      "project": "v0-new-project-dr8uqvuxfhx",
+      "projectId": "prj_gp2GCnfAmKo4vQ8qTCo1rg8tmsI1",
+      "pagination": {
+        "count": 0
+      },
+      "deployments": []
+    },
+    {
+      "project": "v0-new-project-cd71xe9esnl",
+      "projectId": "prj_UIFExM3Y5z1v42gAoMWgLtLGb2eM",
+      "pagination": {
+        "count": 0
+      },
+      "deployments": []
+    },
+    {
+      "project": "v0-new-project-0hexy2s8dnt",
+      "projectId": "prj_QZvsq6eEjyNwZXVBuQGTqewHqLpJ",
+      "pagination": {
+        "count": 0
+      },
+      "deployments": []
+    },
+    {
+      "project": "pantaai-template",
+      "projectId": "prj_QXmlk9C7ICX24Pi9cITJPJS4fFQ7",
+      "pagination": {
+        "count": 0
+      },
+      "deployments": []
+    },
+    {
+      "project": "v0-new-project-81xhfwdrlxy",
+      "projectId": "prj_6vYEVxzch7eYJQthBUP53aQ87zvO",
+      "pagination": {
+        "count": 0
+      },
+      "deployments": []
+    },
+    {
+      "project": "nextjs-ai-chatbot",
+      "projectId": "prj_qaSInQRFvCwA6V5duEvOLaGkcbbN",
+      "pagination": {
+        "count": 0
+      },
+      "deployments": []
+    }
+  ]
+}
