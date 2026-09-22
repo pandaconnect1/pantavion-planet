@@ -1,0 +1,85 @@
+{
+  "schema": "pantavion_x10_no_orphan_census_v1",
+  "capturedAt": "2026-09-22T20:39:00Z",
+  "repository": "pandaconnect1/pantavion-planet",
+  "branch": "backup/pre-vercel-risk-20260914",
+  "recoveryCatalog": {
+    "totalRows": 82413,
+    "distinctRecordIds": 82413,
+    "distinctWorkUnits": 82413,
+    "distinctIdempotencyKeys": 82413,
+    "missingRepositoryProvenance": 0,
+    "missingWorkUnit": 0,
+    "missingIdempotency": 0,
+    "missingDigest": 0,
+    "missingModule": 1,
+    "missingModuleExplanation": {
+      "recordId": "pk_2b620b9cd0743dcfbadff72d",
+      "reviewStatus": "PRESERVED_RECURSIVE_ARTIFACT",
+      "implementationState": "blocked",
+      "nextAction": "PRESERVE_RECURSIVE_PROVENANCE",
+      "canonicalTarget": "canonical/recovery/quarantine/batch-l2",
+      "reason": "Intentional recursive-ledger wrapper quarantine; not an orphan and must not be force-classified."
+    }
+  },
+  "founderContinuity": {
+    "canonicalFounderVisionRows": 9741,
+    "canonicalUnfinishedGapRows": 11867,
+    "combinedRows": 21608,
+    "combinedDistinctWorkUnits": 21608,
+    "combinedDistinctIdempotencyKeys": 21608,
+    "missingModule": 0,
+    "missingRepositoryProvenance": 0,
+    "missingCanonicalTarget": 242,
+    "semanticallyClassified": 21366,
+    "reviewRequired": 242,
+    "implementationStates": {
+      "founderVision": {
+        "idea": 9620,
+        "blocked": 121
+      },
+      "unfinishedGap": {
+        "idea": 11746,
+        "blocked": 121
+      }
+    },
+    "historicalPreDedupReports": {
+      "founderVisionFindings": 13801,
+      "unfinishedPlanFindings": 11360,
+      "truth": "Historical scan findings are not 1:1 unique canonical ideas; canonical catalog counts reflect later deduplication/classification."
+    }
+  },
+  "globalGovernedHolds": {
+    "reviewRequired": 355,
+    "bySourceFamily": {
+      "founderVision": 121,
+      "unfinishedGap": 121,
+      "currentCode": 113
+    },
+    "orderedRecordIdSha256": "443a0226082adec24cf671dd21dcf3d677cc516d0f46b48bddbc27c716bb2d2f",
+    "currentAction": "PRESERVE_GOVERNED_HOLD",
+    "rule": "Do not auto-resolve ambiguous module/subsystem/capability conflicts. Route through founder-gated evidence review."
+  },
+  "permanentInvariantEvidence": {
+    "auditRunId": 35781327445,
+    "auditConclusion": "success",
+    "permanentInvariants": 16,
+    "founderLocked": 16,
+    "failClosed": 16,
+    "visionDirectives": 14,
+    "constitutionalKernels": 5
+  },
+  "truth": {
+    "noOrphanSatisfiedForIdentityAndProvenance": true,
+    "noOrphanSatisfiedForFounderIdeaCapture": true,
+    "allGovernedHoldsResolved": false,
+    "blocker": "355 REVIEW_REQUIRED records remain intentionally fail-closed pending evidence-based closure."
+  },
+  "safety": {
+    "zeroDelete": true,
+    "zeroSilentReclassification": true,
+    "noAutoMerge": true,
+    "noAutoDeploy": true,
+    "provenancePreserved": true
+  }
+}
