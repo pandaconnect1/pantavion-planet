@@ -1,0 +1,3369 @@
+{
+  "capturedAt": "2026-09-22T18:49:00Z",
+  "project": "pantavion-planet-vmxx",
+  "startCursor": 1786807623576,
+  "count": 160,
+  "nextCursor": 1786447427600,
+  "deployments": [
+    {
+      "id": "dpl_57jVcZxz433YPqf2zYETEN8StzFk",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-6jw2uq5r6-pandaconnect.vercel.app",
+      "created": 1786807585846,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "recovery/personalized-sections-wave-20260815",
+        "githubCommitSha": "fa59940746eabdb584ee141a0fa6a60168cdd10a",
+        "githubCommitMessage": "feat: map recovered capabilities into personalized sections",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/57jVcZxz433YPqf2zYETEN8StzFk",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_7MMUVnU9FLqNd5ok9XdQpjj9WkxL",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-arr8hlgmv-pandaconnect.vercel.app",
+      "created": 1786807198588,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "417e8c9cc68adacc99adba1d75c7d3ef2cfd8aeb",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/7MMUVnU9FLqNd5ok9XdQpjj9WkxL",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_2y7TwCqHRsQpcpbTEvVcRxcbB3UN",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-53twxhk6w-pandaconnect.vercel.app",
+      "created": 1786806807311,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/core-four-verified-wave-20260815",
+        "githubCommitSha": "41da3e0a70594a464abd49507d8056e4c72436e6",
+        "githubCommitMessage": "feat(social): add realtime feed reactions and comments",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/2y7TwCqHRsQpcpbTEvVcRxcbB3UN",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_444Zp63RreQ4Un9vRD1kWtNcUone",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-gtppoj8sg-pandaconnect.vercel.app",
+      "created": 1786806742324,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/core-four-verified-wave-20260815",
+        "githubCommitSha": "0c69e238a7c889f067c063120edcb73b7c8f10ed",
+        "githubCommitMessage": "fix(people): load block state in effect",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/444Zp63RreQ4Un9vRD1kWtNcUone",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_BguJwK5fQV4JQgBMgho96TTMd32v",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-k5z1dt6eb-pandaconnect.vercel.app",
+      "created": 1786806706216,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/core-four-verified-wave-20260815",
+        "githubCommitSha": "9a16d575c600c6a857542afd45a712290da98b53",
+        "githubCommitMessage": "feat(people): add search and block controls",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/BguJwK5fQV4JQgBMgho96TTMd32v",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_DKtavVJyN42xer9wHrkW5xPqrrJn",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-195fs6jf5-pandaconnect.vercel.app",
+      "created": 1786806225967,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/core-four-verified-wave-20260815",
+        "githubCommitSha": "b7adefcc4e2753c9faa4f78953ae9a97040eb591",
+        "githubCommitMessage": "docs(chat): record live verification and recovery evidence",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/DKtavVJyN42xer9wHrkW5xPqrrJn",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_EBGftLzFe1eXvWpAAEZ1qpYo6YF8",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-nvdwsh3jn-pandaconnect.vercel.app",
+      "created": 1786806157609,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/core-four-verified-wave-20260815",
+        "githubCommitSha": "c5a7b0f7971c7f165677731a585e19d1115a2e58",
+        "githubCommitMessage": "feat(chat): automatic per-recipient translation across language registry",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/EBGftLzFe1eXvWpAAEZ1qpYo6YF8",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_AZkSnKQGJhA83JzxYmYfd5jJ7VaE",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-83nijv1ga-pandaconnect.vercel.app",
+      "created": 1786806115099,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/core-four-verified-wave-20260815",
+        "githubCommitSha": "0995f192fa7cee1ec30d296bc1456ebf72e93136",
+        "githubCommitMessage": "feat(chat): derive participant languages for automatic translation",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/AZkSnKQGJhA83JzxYmYfd5jJ7VaE",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_88P8KDPPLYBARZVoth6ZbA25JaHC",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-c18q2xfvq-pandaconnect.vercel.app",
+      "created": 1786805771389,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/core-four-verified-wave-20260815",
+        "githubCommitSha": "3b4a1c49025c2c5174707950383ab6f49baa73ed",
+        "githubCommitMessage": "feat(chat): recover realtime status and in-message translation",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/88P8KDPPLYBARZVoth6ZbA25JaHC",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_6j8Gk5t2Xeht3bcPv1v6ZU8Bf47d",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-c3o060qs5-pandaconnect.vercel.app",
+      "created": 1786805727785,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/interpreter-full-turn-audio-20260815",
+        "githubCommitSha": "d4204aa900adee2c1d1e887e37f629cfc18e52be",
+        "githubCommitMessage": "docs(core): record verified live backend state for four flagship surfaces",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/6j8Gk5t2Xeht3bcPv1v6ZU8Bf47d",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_2UpjME7MYv57rLxtG1dCUxLqax3a",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-4xj2znki0-pandaconnect.vercel.app",
+      "created": 1786805670883,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/interpreter-full-turn-audio-20260815",
+        "githubCommitSha": "e34d66f9811981e06681871745a18a7e773d5015",
+        "githubCommitMessage": "fix(interpreter): bound STT failover and eliminate long retry stalls",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/2UpjME7MYv57rLxtG1dCUxLqax3a",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_4gXrtpzeip9rNsDTux7igj1z3S8D",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-abs1243ug-pandaconnect.vercel.app",
+      "created": 1786803691406,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "d47aa0e4eca250075149d9147a5821a1becb80d1",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/4gXrtpzeip9rNsDTux7igj1z3S8D",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_CBpfaQQEVGAVihrdBs7bfKrkBrv1",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-qgiz87nxa-pandaconnect.vercel.app",
+      "created": 1786800606434,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "2bb51e3fccbb39b281a1e8c9da0a684b9a5c154b",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/CBpfaQQEVGAVihrdBs7bfKrkBrv1",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_D1QgciJfxiceG74ZzJRtBw9KHMZV",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-p513xl9z5-pandaconnect.vercel.app",
+      "created": 1786797310222,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "159644c9f7383cb32ca36ea112fa860dd8f55809",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/D1QgciJfxiceG74ZzJRtBw9KHMZV",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_BwbZ2oN1j96FTp8Mjv79woWyrv9U",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-g48n26ssb-pandaconnect.vercel.app",
+      "created": 1786792830151,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "fc723483356da295272e5951de78818ce6f7e0ed",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/BwbZ2oN1j96FTp8Mjv79woWyrv9U",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_J7tiscoBgwCrx81j9hZ8nynEku2M",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-q35bwf4n8-pandaconnect.vercel.app",
+      "created": 1786789321371,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "c6e7620c2cb55f1e1dd255a181fb1aab90e024be",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/J7tiscoBgwCrx81j9hZ8nynEku2M",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_J22CTX4qExdxDZbV3J9EMboDM3dy",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-nt8cb83t7-pandaconnect.vercel.app",
+      "created": 1786787601994,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/interpreter-full-turn-audio-20260815",
+        "githubCommitSha": "9a9af65ac919746a783a0b9cedf06b60c6517ef1",
+        "githubCommitMessage": "feat(interpreter): show recording countdown before turn limit",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/J22CTX4qExdxDZbV3J9EMboDM3dy",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_CBHKMpXBetqbPVcMvWXePUjfkw3D",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-86px566fo-pandaconnect.vercel.app",
+      "created": 1786787223272,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/interpreter-full-turn-audio-20260815",
+        "githubCommitSha": "f52c7cd6485191263807e84fd73b0c9bce73d1fa",
+        "githubCommitMessage": "docs(interpreter): record full-turn audio recovery evidence",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/CBHKMpXBetqbPVcMvWXePUjfkw3D",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_8fRLgW1xyJhgepHFvbGcDsrN7RPr",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-4l7pdhaep-pandaconnect.vercel.app",
+      "created": 1786787213990,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/interpreter-full-turn-audio-20260815",
+        "githubCommitSha": "13aeddf91568ced162392b40266b9dfaec485f7a",
+        "githubCommitMessage": "fix(interpreter): use full-turn noise-suppressed recording for all languages",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/8fRLgW1xyJhgepHFvbGcDsrN7RPr",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_EuiGnfNcvHJCP7iVMf8YhZMrNvo7",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-2nflrcnmc-pandaconnect.vercel.app",
+      "created": 1786785963252,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "e1b20ea632bf9293ea74969752000397b2c03b20",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/EuiGnfNcvHJCP7iVMf8YhZMrNvo7",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_EYfSPSWv8U3fhxLFZU2cgtQTx3XL",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-2f5529o6x-pandaconnect.vercel.app",
+      "created": 1786783491238,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "d63a97aacef9fcb64a07982972aee5e16db1d44a",
+        "githubCommitMessage": "Route legacy live interpreter to canonical PantaInterpreter",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/EYfSPSWv8U3fhxLFZU2cgtQTx3XL",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_AH7Wb1mFEo6kjf3GR5gfCjxXPJ1P",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-4i161d67o-pandaconnect.vercel.app",
+      "created": 1786782449994,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "2b2750093b7fc338ce2965e1f9b0bcc85b6ffbf0",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/AH7Wb1mFEo6kjf3GR5gfCjxXPJ1P",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_CmzpwWpiUDNieW4p98DarTm2Pd36",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-ph6n8ho03-pandaconnect.vercel.app",
+      "created": 1786781960880,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "sandbox/interpreter-runtime-20260815-1057",
+        "githubCommitSha": "3c7982f02e6e3bba2d09b6773646a043bb2f6c97",
+        "githubCommitMessage": "fix(interpreter): route legacy live surface to canonical interpreter",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/CmzpwWpiUDNieW4p98DarTm2Pd36",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_FyEsT8MMEciLUMBYThsiiSoxnKKo",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-7iegs29x7-pandaconnect.vercel.app",
+      "created": 1786779042209,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "6c2d099ed0fb74c6026fa19b647877311f57e63a",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/FyEsT8MMEciLUMBYThsiiSoxnKKo",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_5zJPVhycCjc7z7vNaU7UCPNWLMJ5",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-npqrkfb5b-pandaconnect.vercel.app",
+      "created": 1786775805343,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "0880b7c105d160822dec40de07d1f2d1d37d9b7d",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5zJPVhycCjc7z7vNaU7UCPNWLMJ5",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_BF6TYaFWG3Ym2dfmGPAq2wWZUut9",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-3oyewydul-pandaconnect.vercel.app",
+      "created": 1786771456650,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "600a05cbfe18609056bc701db9d07372c2345495",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/BF6TYaFWG3Ym2dfmGPAq2wWZUut9",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_EsvyWSNZu6SC7RZTHXWXwUph2fhu",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-l1xbyjc31-pandaconnect.vercel.app",
+      "created": 1786768216085,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "7487ee6286cd8d04649061b57df409ff203bc45a",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/EsvyWSNZu6SC7RZTHXWXwUph2fhu",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_5ShhQE4Q9uXFMsxWWoqxbey9PiWw",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-qwdy73lwn-pandaconnect.vercel.app",
+      "created": 1786765112104,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "7cd2f66c20f34d22d8a848817735d3b29c0e74ff",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5ShhQE4Q9uXFMsxWWoqxbey9PiWw",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_J73VHx2XSfPteeeGx55qbRWCTB2N",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-d5q76ad4d-pandaconnect.vercel.app",
+      "created": 1786762299115,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "7f7216ab1ef609b517a6c88960808024992215c4",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/J73VHx2XSfPteeeGx55qbRWCTB2N",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_F9TR7Xz7Pbr7qJ1UXY119hVRQV1E",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-2juapqq2y-pandaconnect.vercel.app",
+      "created": 1786756145483,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "745690cbc1fd80cbdb6b3274c638c1c8463de571",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/F9TR7Xz7Pbr7qJ1UXY119hVRQV1E",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_Eo1nV6wdXhfptF4uqBEv4a8bV4KV",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-gxeadvoaf-pandaconnect.vercel.app",
+      "created": 1786749667792,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "0117cb5fcbb7f37d00a620b72897504d93788126",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/Eo1nV6wdXhfptF4uqBEv4a8bV4KV",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_tgPpd2RywxmdjeXiLYxHjwVwJEfi",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-iq3z7rw8q-pandaconnect.vercel.app",
+      "created": 1786746752344,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "sandbox/global-connect-foundation-20260815-0058",
+        "githubCommitSha": "67ad7460ec9a474acc4ddd3fe8f78922fbb7bf35",
+        "githubCommitMessage": "feat(global-connect): add foundation contracts and readiness ledger",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/tgPpd2RywxmdjeXiLYxHjwVwJEfi",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_9v6oA7wG7RiV68rcGyR9DTshfwrn",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-djec1u5cx-pandaconnect.vercel.app",
+      "created": 1786746126346,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "c31122b86f0cecc8f1d538b843961fad74525191",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/9v6oA7wG7RiV68rcGyR9DTshfwrn",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_HqhwdXmxw6rtA1URFRatR79ibbU5",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-or0i5o07j-pandaconnect.vercel.app",
+      "created": 1786745518889,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "sandbox/global-connect-foundation-20260815-0100",
+        "githubCommitSha": "79fc8fdb0f715f6a5957575f949a361a6ec6c7c7",
+        "githubCommitMessage": "chore(global-connect): add manual rollback companion",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/HqhwdXmxw6rtA1URFRatR79ibbU5",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_EETQ2Z92rsUhAmyM3afHQPe6W5Yf",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-d6zaju6js-pandaconnect.vercel.app",
+      "created": 1786745383379,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "sandbox/global-connect-foundation-20260815-0100",
+        "githubCommitSha": "3afff0899f2a8e4603a64cb35d538cc422256e2a",
+        "githubCommitMessage": "feat(global-connect): add bounded provider-neutral foundation",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/EETQ2Z92rsUhAmyM3afHQPe6W5Yf",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_BgvHhVhbXPChtSjfLEhzur8uoXQf",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-o2vm46zwo-pandaconnect.vercel.app",
+      "created": 1786743924681,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "sandbox/global-connect-foundation-20260815-0025",
+        "githubCommitSha": "0e4cbc303af0d073dd9537c2d7c53905aea3fb71",
+        "githubCommitMessage": "feat(global): expose truthful Global Connect readiness endpoint",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/BgvHhVhbXPChtSjfLEhzur8uoXQf",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_3qX8uSL1NqEgjXgzyJBf19B15L6e",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-2tqevpfs1-pandaconnect.vercel.app",
+      "created": 1786743914952,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "sandbox/global-connect-foundation-20260815-0025",
+        "githubCommitSha": "f6e736bee36e8dd3b838ff4ae2dac1fe17e3b86c",
+        "githubCommitMessage": "feat(global): add canonical 249-country registry",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/3qX8uSL1NqEgjXgzyJBf19B15L6e",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_cDC8HKbkBSZT9Qy2vcFw23U5Aek7",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-g5mo4cyhv-pandaconnect.vercel.app",
+      "created": 1786743297507,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/translation-agent",
+        "githubCommitSha": "126c49ad60432bc44f6f8e1768e624d6df2f8cc5",
+        "githubCommitMessage": "Add translation agent scaffolding: control endpoint, background worker, control-client, control-store, docs and tests.",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/cDC8HKbkBSZT9Qy2vcFw23U5Aek7",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_6MFt8rc4eourrvWfntRNg43V9Swo",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-31yztqdzu-pandaconnect.vercel.app",
+      "created": 1786742695793,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "ea6d235a4484a5b068120adeab8938bca66644e8",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/6MFt8rc4eourrvWfntRNg43V9Swo",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_5khXetn7F5mE61ZeybrCRrhkmTUv",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-pa3beq6o0-pandaconnect.vercel.app",
+      "created": 1786742328546,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "recovery/identity-registration-current-main",
+        "githubCommitSha": "93634f4e6d4a2c1ac91ed4f2a5ed2a417b017b74",
+        "githubCommitMessage": "recovery: align registration UI with current production identity model",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5khXetn7F5mE61ZeybrCRrhkmTUv",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_6yWhcQpWxpDVTgfYiq8cZRXApxAq",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-hcj7y0iu5-pandaconnect.vercel.app",
+      "created": 1786742313675,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "recovery/identity-registration-current-main",
+        "githubCommitSha": "19a555412fafc6e9c29b7c4ea36363cedfd979f9",
+        "githubCommitMessage": "recovery: align registration action with current production identity gate",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/6yWhcQpWxpDVTgfYiq8cZRXApxAq",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_8fWypb8Sst13i26b38tCjKLqzJHk",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-ip6kuq4g4-pandaconnect.vercel.app",
+      "created": 1786739436700,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "89d6de137b754f63fe582bc78e802ab2c727654e",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/8fWypb8Sst13i26b38tCjKLqzJHk",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_8dPjYXp1pVBSc8ZVJaYH7Et9G4fT",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-ag8k3nciv-pandaconnect.vercel.app",
+      "created": 1786736936146,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "056f561cebd93f23640b4d7a7919ec97a552d01d",
+        "githubCommitMessage": "Gate production on live Interpreter readiness (#196)",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/8dPjYXp1pVBSc8ZVJaYH7Et9G4fT",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_7ichUmxQBNHYFcN5YtGVP4qtEYXy",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-nteubwfq3-pandaconnect.vercel.app",
+      "created": 1786736896925,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "73c44bea81aa6916a4ef4001acd134e665879dc9",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/7ichUmxQBNHYFcN5YtGVP4qtEYXy",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_JDNEdwUVuP2E91Uth9QD2h6QGQyo",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-8weixvz4q-pandaconnect.vercel.app",
+      "created": 1786736324623,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feat/interpreter-production-sync-gate",
+        "githubCommitSha": "524f459421b5a788a5dcedbdceae827ea261d1bf",
+        "githubCommitMessage": "Rebase Interpreter production sync gate onto current main",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/JDNEdwUVuP2E91Uth9QD2h6QGQyo",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_A2KjDbnu9q4GoX6yNehTCjybn6iR",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-k6q7hiwiz-pandaconnect.vercel.app",
+      "created": 1786733576245,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "4be11947da32693c8c8669cb7275fd914bcb94ed",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/A2KjDbnu9q4GoX6yNehTCjybn6iR",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_5AMXHMLjPExiZLQ72fi2a3p7fd81",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-hqmqgtxtk-pandaconnect.vercel.app",
+      "created": 1786732932756,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feat/interpreter-production-sync-gate",
+        "githubCommitSha": "0e18fa13ab411e139119ba6d442563cd3dd0aef3",
+        "githubCommitMessage": "Add Interpreter to production sync verification gate",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5AMXHMLjPExiZLQ72fi2a3p7fd81",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_HcgMp5KAS1B3tr8U6rj23H6xs9Mx",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-effxovjvn-pandaconnect.vercel.app",
+      "created": 1786732240701,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "5ab41eca02e6d7fed6524c565d27ee7b19f5ab2d",
+        "githubCommitMessage": "Add live Interpreter provider health verification (#195)",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/HcgMp5KAS1B3tr8U6rj23H6xs9Mx",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_6k1kmFCD1KbC9xxxbxjgmeo3zEfR",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-eojy1ag8h-pandaconnect.vercel.app",
+      "created": 1786731328936,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feat/interpreter-runtime-health",
+        "githubCommitSha": "e48071581b4c5bcf3b3190ac8148dbc57d546e44",
+        "githubCommitMessage": "add live Interpreter provider health probe",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/6k1kmFCD1KbC9xxxbxjgmeo3zEfR",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_3yqgCQaA43KzsyztEBBFCA9ZiEJX",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-gcu4mq9tx-pandaconnect.vercel.app",
+      "created": 1786730048920,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "7209578cdae5959904955772a037b4cd51f9b174",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/3yqgCQaA43KzsyztEBBFCA9ZiEJX",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_6os35Z5v77Wy3qfiCRokTELag4z4",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-quwi5qkwy-pandaconnect.vercel.app",
+      "created": 1786728615999,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "3d7122df47c4e19680da3fd8c5f0c8cab321b343",
+        "githubCommitMessage": "Recover Interpreter language detection and transcription runtime (#194)\n\n* recover interpreter language detection runtime\n\n* recover interpreter multilingual transcription runtime",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/6os35Z5v77Wy3qfiCRokTELag4z4",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_9jgier11saDUi9FJogqsBNFNn4F2",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-dsbyx47xj-pandaconnect.vercel.app",
+      "created": 1786728140881,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "recovery/interpreter-language-runtime",
+        "githubCommitSha": "25e05f7901e6f8bd693f555761189c87189bb341",
+        "githubCommitMessage": "recover interpreter multilingual transcription runtime",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/9jgier11saDUi9FJogqsBNFNn4F2",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_4VmMLma88HtPJsFkxd5v6R1VvTrm",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-r0vj5aad6-pandaconnect.vercel.app",
+      "created": 1786728129490,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "recovery/interpreter-language-runtime",
+        "githubCommitSha": "b9a3da4248b0b4477f9186ea295f6e11186a1e12",
+        "githubCommitMessage": "recover interpreter language detection runtime",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/4VmMLma88HtPJsFkxd5v6R1VvTrm",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_FMWxgVDKbuPFTZTH9t4aKqyyACUX",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-60w9aogsh-pandaconnect.vercel.app",
+      "created": 1786726642209,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "recovery/interpreter-backend-20260814",
+        "githubCommitSha": "b71a5a9258ac5b3a7d198f1ee12dbf24c4803538",
+        "githubCommitMessage": "Recover Interpreter language detection backend from PR #143",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/FMWxgVDKbuPFTZTH9t4aKqyyACUX",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_Go1zmKBqzYrZaKcEBT9qTzUu25YK",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-jbzivcovz-pandaconnect.vercel.app",
+      "created": 1786726626259,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "recovery/interpreter-backend-20260814",
+        "githubCommitSha": "066f6eb72e3ec51ee77eafd26ddb42f11e5b690f",
+        "githubCommitMessage": "Recover Interpreter transcription backend from PR #143",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/Go1zmKBqzYrZaKcEBT9qTzUu25YK",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_7EV1H8JdYzrYNpi4sVEmkHnHxumo",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-kmpvp8dot-pandaconnect.vercel.app",
+      "created": 1786726334566,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "0e2a7d921befbb146ae7a4ff10066b357a09850b",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/7EV1H8JdYzrYNpi4sVEmkHnHxumo",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_FdqurnpJuvbCNXk2wsGLWgihGFfp",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-pml0pfz2b-pandaconnect.vercel.app",
+      "created": 1786722718789,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "e6671d068a62ea982a9986472d91add320faff70",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/FdqurnpJuvbCNXk2wsGLWgihGFfp",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_ZXTCMrRPnc2rXBm4Bwi6j7Urroio",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-fiv3y5atv-pandaconnect.vercel.app",
+      "created": 1786719047123,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "ce920724ef70cf00e16a5df35404d14c19741d67",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/ZXTCMrRPnc2rXBm4Bwi6j7Urroio",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_A3Vj8mgkXc1ocKmTugBa2G4yHnHY",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-pp70yy4d8-pandaconnect.vercel.app",
+      "created": 1786713968285,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "d7348962afb4b4ca2b8d96572a0ff247e237b1f9",
+        "githubCommitMessage": "Add Owner Safety TOTP step-up flow",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/A3Vj8mgkXc1ocKmTugBa2G4yHnHY",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_DVFyFpiMLkPDf4qfYvJqxY49TB9a",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-jt8n7myns-pandaconnect.vercel.app",
+      "created": 1786713946502,
+      "state": "ERROR",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "4572a7eead9c501dcba2361ceefa14dfa5f39286",
+        "githubCommitMessage": "Add Owner Safety AAL2 verification surface",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/DVFyFpiMLkPDf4qfYvJqxY49TB9a",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_AcdVy6dV6mydMuDghqMzVxAPQBHK",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-2e0xcbmiy-pandaconnect.vercel.app",
+      "created": 1786713930729,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "2db3800593796ddc7e9a5a3765a133d81c37be72",
+        "githubCommitMessage": "Require AAL2 on Owner Safety dossier API",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/AcdVy6dV6mydMuDghqMzVxAPQBHK",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_7UX2FxQcmxdAGZBmdADpqk4aaSbP",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-o0zoa8bfq-pandaconnect.vercel.app",
+      "created": 1786713916735,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "91518c86ae4b0960e6c93ef39fc8f3434cb906c0",
+        "githubCommitMessage": "Require AAL2 on Owner Safety cases API",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/7UX2FxQcmxdAGZBmdADpqk4aaSbP",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_2xMy9BFCPbFPEjv3c66RkifEszUR",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-77msriw93-pandaconnect.vercel.app",
+      "created": 1786713906863,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "c3659d361f3ace94d1eb457b582cc58ae3edbc63",
+        "githubCommitMessage": "Enforce AAL2 before Owner Safety case access",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/2xMy9BFCPbFPEjv3c66RkifEszUR",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_DbgL6yeXMxTqS6WNcE9QwByqnHyH",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-qsopmjgy9-pandaconnect.vercel.app",
+      "created": 1786713193929,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "f924e571b96a1b70edec97e9a8b0a078b18d4f4d",
+        "githubCommitMessage": "Make Social health probe auth-aware",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/DbgL6yeXMxTqS6WNcE9QwByqnHyH",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_B3TVDXCZUisQQgZJYjJUmmmC1rTG",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-36x0g1aih-pandaconnect.vercel.app",
+      "created": 1786713178364,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "9aae5a4be328879742ac6d8208d476359bca48b0",
+        "githubCommitMessage": "Fix production sync expected Social schema",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/B3TVDXCZUisQQgZJYjJUmmmC1rTG",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_EKP9NS6a1YicQgpCGj3YGpTE6ERG",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-2ank1bo1c-pandaconnect.vercel.app",
+      "created": 1786712646145,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "5c83ddd2ac3abc7dce5c8de8f17970af54864fed",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/EKP9NS6a1YicQgpCGj3YGpTE6ERG",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_DywYbvEWHysyjHLV2KwVdL7bACui",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-fmj0g219f-pandaconnect.vercel.app",
+      "created": 1786705492277,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "03a5edafa2fbf9d7316a6a8ca818a742e90a7632",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/DywYbvEWHysyjHLV2KwVdL7bACui",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_9W3BQedTrz3XprkpHSAkrhhVvip7",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-5u21uiyo9-pandaconnect.vercel.app",
+      "created": 1786702501451,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "2ae14585db37436d1557cd38902e67d63f40c207",
+        "githubCommitMessage": "Add non-sensitive Owner Safety runtime health probe",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/9W3BQedTrz3XprkpHSAkrhhVvip7",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_9SBCiGQp2rEGHjuUDoFDBHDxS2x2",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-jz00vtwv6-pandaconnect.vercel.app",
+      "created": 1786702024566,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "00ea3befddea54a5091531195069c17fe9c3808d",
+        "githubCommitMessage": "Add Pantavion signature dimensional entrance",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/9SBCiGQp2rEGHjuUDoFDBHDxS2x2",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_5kiNanJ6fWhzAooYAP6x9SdjnKRv",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-ipbwfn8yl-pandaconnect.vercel.app",
+      "created": 1786701643999,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "556a03fca8651b918e204c7fdd424d5f4e2f6c5b",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5kiNanJ6fWhzAooYAP6x9SdjnKRv",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_9hrxhHqpmmX1fdaL46CJFT1KHipA",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-gwiemdu4b-pandaconnect.vercel.app",
+      "created": 1786698367664,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "cd8991a91c1f0c5513ef29f73a1cbd5fb6780eef",
+        "githubCommitMessage": "Clarify Pantavion public positioning for funding review",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/9hrxhHqpmmX1fdaL46CJFT1KHipA",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_2B5QoZ49d1sFJkwRX2YmmAMWZUbh",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-3vcf46f0x-pandaconnect.vercel.app",
+      "created": 1786698311732,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "dd3da8533f5284b467861122d0cfac409685907d",
+        "githubCommitMessage": "Stabilize Owner Safety UI with canonical dossier scopes",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/2B5QoZ49d1sFJkwRX2YmmAMWZUbh",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_7T2uywzw5PaJkET1TwefKLfUWANz",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-2wc7pnlth-pandaconnect.vercel.app",
+      "created": 1786695318495,
+      "state": "ERROR",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "6bf54e6b531ac604482eff5806e139389beea2ba",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/7T2uywzw5PaJkET1TwefKLfUWANz",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_6Ugx9DY8VNvVVzjyN9AWyqF3LuUZ",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-llwnkihhb-pandaconnect.vercel.app",
+      "created": 1786693673503,
+      "state": "ERROR",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "c54d015496d519506be2cd32da51a98af86c97b8",
+        "githubCommitMessage": "Align Owner Safety dossier scopes with production RPC",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/6Ugx9DY8VNvVVzjyN9AWyqF3LuUZ",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_BhGRHdRt6XJnfuhPbDb8QCeB1nds",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-kfghjf6ul-pandaconnect.vercel.app",
+      "created": 1786693656843,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "ad8ae921b7350b18066336b8b88b86d09b37cdd4",
+        "githubCommitMessage": "Connect audited Owner Safety dossier access",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/BhGRHdRt6XJnfuhPbDb8QCeB1nds",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_3JbBfREE2aRDhZXjYf3kDiTvHi2h",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-3ouq2hhuo-pandaconnect.vercel.app",
+      "created": 1786693647107,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "0b8549ced14865f84913f692cd861e49fab5deac",
+        "githubCommitMessage": "Connect Owner Safety case queue to canonical backend",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/3JbBfREE2aRDhZXjYf3kDiTvHi2h",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_5WtCBpz8rJr6cHxkv6mUR4pNkW4U",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-nyx713loj-pandaconnect.vercel.app",
+      "created": 1786691334042,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "80f7eb269957c97447c48c4401a359df902a7eb5",
+        "githubCommitMessage": "feat(people): expose block management page",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5WtCBpz8rJr6cHxkv6mUR4pNkW4U",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_BmjBJDx2bQAZgjbZ52CPyTFtgUiE",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-806c4hu2p-pandaconnect.vercel.app",
+      "created": 1786691321196,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "4173ca6f26b221217a651df12707b7a12a7df00b",
+        "githubCommitMessage": "feat(people): add isolated block management UI",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/BmjBJDx2bQAZgjbZ52CPyTFtgUiE",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_5RXfCdEeuqQDNwoYs6QjgNNkbmED",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-amcqhmxu9-pandaconnect.vercel.app",
+      "created": 1786691276428,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "cb8ae62fb3f1331145310f239ee7caefc5d1e8a2",
+        "githubCommitMessage": "fix(people): restore known-good People client after failed block UI build",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5RXfCdEeuqQDNwoYs6QjgNNkbmED",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_EpnCc6df8YXPHfJ13CUuE1Txq5ha",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-b3mywwazh-pandaconnect.vercel.app",
+      "created": 1786690985435,
+      "state": "ERROR",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "6212cb06e7c13350f30fd9d2d6860e670363dd50",
+        "githubCommitMessage": "Add People block and unblock controls",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/EpnCc6df8YXPHfJ13CUuE1Txq5ha",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_GGxwvUsYzxDLUrN3hGPFDNcyQr4f",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-ngd7kjfg2-pandaconnect.vercel.app",
+      "created": 1786690960274,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "b9912c78ea0f653f2216e1f434af90c0f0f7719f",
+        "githubCommitMessage": "Connect People block and unblock commands",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/GGxwvUsYzxDLUrN3hGPFDNcyQr4f",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_E2BS1AhQuyfVm6x5TBFXZpzdkwxu",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-prolhg5pm-pandaconnect.vercel.app",
+      "created": 1786689541307,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "390630a1217ff94e4c29d51355a72756234b14ee",
+        "githubCommitMessage": "feat(people): connect privacy-safe nearby discovery",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/E2BS1AhQuyfVm6x5TBFXZpzdkwxu",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_AXx7WyE3dTmKmwBq1rXPgFtUko59",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-fuwe1ekcx-pandaconnect.vercel.app",
+      "created": 1786688063269,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "a7bec9488a16b95b3de35f504e0b89d781ede242",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/AXx7WyE3dTmKmwBq1rXPgFtUko59",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_2csBWQbvpEpzVzUhmiznVyEDCjYJ",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-fc7dht5k4-pandaconnect.vercel.app",
+      "created": 1786687733126,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "28fb1fd113b4d740178bf4adf33ad4f797eaa8e3",
+        "githubCommitMessage": "feat(people): move contacts import behind canonical commands",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/2csBWQbvpEpzVzUhmiznVyEDCjYJ",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_A65zEQtJWmEjDPActb14m68w29bc",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-l6j8rczdd-pandaconnect.vercel.app",
+      "created": 1786687139449,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "7a2b1d4a94b889a1f1f2f1c8715f8f6bf8be18a6",
+        "githubCommitMessage": "feat(people): enforce canonical contact discovery commands",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/A65zEQtJWmEjDPActb14m68w29bc",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_DxhHvwuH1YgPFpBaFNB8HuAg1eBa",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-3j5hknkja-pandaconnect.vercel.app",
+      "created": 1786687010228,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/identity-trust-security-core",
+        "githubCommitSha": "20d73410aa5ef8782721a4e9cb2293218b6869c5",
+        "githubCommitMessage": "feat(people): route contact discovery through canonical commands",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/DxhHvwuH1YgPFpBaFNB8HuAg1eBa",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_GdFuMm8TnJek5GMezConQx51EW7w",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-8dmzque75-pandaconnect.vercel.app",
+      "created": 1786683302718,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/identity-trust-security-core",
+        "githubCommitSha": "80c98a12a21c37be29025759b8c90cac1e8a491b",
+        "githubCommitMessage": "feat(recovery): place human communication domains into kernels",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/GdFuMm8TnJek5GMezConQx51EW7w",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_6ZymwYCeDD41xSKhdJ44hArpnGng",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-edvqpizng-pandaconnect.vercel.app",
+      "created": 1786683132117,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/identity-trust-security-core",
+        "githubCommitSha": "544f7e3d4805e6139251c691e3d7080e1a7ab123",
+        "githubCommitMessage": "feat(recovery): bind recovered items to central and domain kernels",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/6ZymwYCeDD41xSKhdJ44hArpnGng",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_4qPn238bFiJNkjghbdHUWTXfnQMf",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-2l2syhuyq-pandaconnect.vercel.app",
+      "created": 1786682872556,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/identity-trust-security-core",
+        "githubCommitSha": "746236fb2045c6e372ed5302a5e27603567a2868",
+        "githubCommitMessage": "feat(recovery): add canonical placement registry for recovered Pantavion assets",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/4qPn238bFiJNkjghbdHUWTXfnQMf",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_8Kc3mFk5bYHfB8e4nyrhgFPJHqnM",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-b0jw8a10w-pandaconnect.vercel.app",
+      "created": 1786680542411,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "7428cdd72149802dc994ed4c0a759e7bfe1637a2",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/8Kc3mFk5bYHfB8e4nyrhgFPJHqnM",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_HxMJC1ZpaSWnpxPDNArjyqswqWzv",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-h3s9tj7hu-pandaconnect.vercel.app",
+      "created": 1786672162413,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "3ed9bf577eef754eeef745a676dd8e0ff08822ea",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/HxMJC1ZpaSWnpxPDNArjyqswqWzv",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_7qyLXKaWqPvj2hVv6RUMDMpewSre",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-7a6f8vzwb-pandaconnect.vercel.app",
+      "created": 1786664451707,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "47fd2db4ac644ce52b409ebc65a9e55271823b6e",
+        "githubCommitMessage": "chore(runtime): update autonomy reports",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/7qyLXKaWqPvj2hVv6RUMDMpewSre",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_BWRvUskAD4ZJMafACVzjzjjS5Kct",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-nmd2vhpov-pandaconnect.vercel.app",
+      "created": 1786659067306,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/identity-trust-security-core",
+        "githubCommitSha": "b43f527cfed616b2dc00574f3039e91416d3ba10",
+        "githubCommitMessage": "document canonical identity trust security and registration launch gates",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/BWRvUskAD4ZJMafACVzjzjjS5Kct",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_AA6YV1vzgbyaLi5B9qBhtiiB9Y2g",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-itzh324kz-pandaconnect.vercel.app",
+      "created": 1786647091327,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "566431b07f359f3f39dbe0b7b7fb9d4433b36f5a",
+        "githubCommitMessage": "Merge pull request #191 from pandaconnect1/feature/owner-safety-control-plane\n\nfeat: add Owner Trust & Safety control plane",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/AA6YV1vzgbyaLi5B9qBhtiiB9Y2g",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_AJtitCfgureDLaVz4FuZLnXvjqXP",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-19nqctux1-pandaconnect.vercel.app",
+      "created": 1786646976007,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/owner-safety-control-plane",
+        "githubCommitSha": "f993f4d72ccd728ff218a1f3c6a3c22ae24e3b3e",
+        "githubCommitMessage": "feat(owner): add audited privileged safety review client",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/AJtitCfgureDLaVz4FuZLnXvjqXP",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_4XHV6Y8cVCNX8uUttUHLCfFe6nQH",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-cajo0qxfp-pandaconnect.vercel.app",
+      "created": 1786646915609,
+      "state": "ERROR",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/owner-safety-control-plane",
+        "githubCommitSha": "305d22dc11a51deb928b2b30944189322482ee2f",
+        "githubCommitMessage": "feat(owner): add safety control plane page",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/4XHV6Y8cVCNX8uUttUHLCfFe6nQH",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_EvJ5C5YJiWWP4yL4LjCrtez5pkBy",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-lh5z297po-pandaconnect.vercel.app",
+      "created": 1786628866091,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "c87db507f27dffb5b6ac8355a2872650a921a2f3",
+        "githubCommitMessage": "fix(guardian): restore broken audit gates\n\nRepair malformed Guardian audit scripts and align audit baselines with the current Pantavion runtime.",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/EvJ5C5YJiWWP4yL4LjCrtez5pkBy",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_4F7mMMvSy1q8tP2cZKaYFy6wzxVA",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-htt9wso6b-pandaconnect.vercel.app",
+      "created": 1786628576764,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/guardian-audit-script-repair",
+        "githubCommitSha": "43c9e5271fa208b905b29be49853684db2caa59b",
+        "githubCommitMessage": "fix(guardian): align translation audit with live runtime",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/4F7mMMvSy1q8tP2cZKaYFy6wzxVA",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_8kc5A91NmE3dN3vkuxbNyNkdaHr5",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-j7qaeq27c-pandaconnect.vercel.app",
+      "created": 1786628575350,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/guardian-audit-script-repair",
+        "githubCommitSha": "711eb0b3c61cdd53280f144568b3797431301664",
+        "githubCommitMessage": "fix(guardian): align Guardian 365 baseline",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/8kc5A91NmE3dN3vkuxbNyNkdaHr5",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_ATtgoZoghLboyiVERexyDNEtoMK7",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-ilhxyt60w-pandaconnect.vercel.app",
+      "created": 1786628573428,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/guardian-audit-script-repair",
+        "githubCommitSha": "1a91d199a3e72c52433cd04ee5a88ec84d23f00c",
+        "githubCommitMessage": "fix(guardian): audit current public gateway",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/ATtgoZoghLboyiVERexyDNEtoMK7",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_9qwth6jLDYVA4nceyi3YLmTqgYnS",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-c00u9ffve-pandaconnect.vercel.app",
+      "created": 1786628571602,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/guardian-audit-script-repair",
+        "githubCommitSha": "d05f3376cd8cbfaf918fc36c2572ba0c00fc3b7c",
+        "githubCommitMessage": "fix(guardian): distinguish safety policy from unsafe claims",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/9qwth6jLDYVA4nceyi3YLmTqgYnS",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_7JJEJBoYJDShqU6N3yuf8vBaYE4D",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-42mvh94z8-pandaconnect.vercel.app",
+      "created": 1786628569917,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/guardian-audit-script-repair",
+        "githubCommitSha": "08a08e255c0dd0b01740ad10ecdd6f7f3d219ebd",
+        "githubCommitMessage": "fix(ui): replace internal roadmap labels",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/7JJEJBoYJDShqU6N3yuf8vBaYE4D",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_GVJGyDqNmSomtH719H3zghvQcVMv",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-45y9f0etp-pandaconnect.vercel.app",
+      "created": 1786627793969,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/guardian-audit-script-repair",
+        "githubCommitSha": "014a56690af0786a1993683326147cdebdeaeca6",
+        "githubCommitMessage": "fix(guardian): repair AI integrity audit syntax",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/GVJGyDqNmSomtH719H3zghvQcVMv",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_9KvzATJyoN46hMoCeDuNKaNmNKtw",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-jqz7f3j0f-pandaconnect.vercel.app",
+      "created": 1786627789264,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/guardian-audit-script-repair",
+        "githubCommitSha": "ae731f7b5f76bcdad8bd8dc2d00cd2d27c8a7b1a",
+        "githubCommitMessage": "fix(guardian): restore autonomous builder audit gate",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/9KvzATJyoN46hMoCeDuNKaNmNKtw",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_Bh7JNxrF75tbuPs3N9ToRYgZrrs7",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-h3q9qcczz-pandaconnect.vercel.app",
+      "created": 1786615992799,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "571d349a04143e0cc8194130f81cdf2594259a67",
+        "githubCommitMessage": "Merge pull request #189 from pandaconnect1/fix/social-health-auth-aware\n\nfix: make Social health auth-aware and restore public content schema",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/Bh7JNxrF75tbuPs3N9ToRYgZrrs7",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_ATo7HJkM77rEQbEaxdSrN9Qjwhmm",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-pmlb1vq0n-pandaconnect.vercel.app",
+      "created": 1786609530304,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/social-health-auth-aware",
+        "githubCommitSha": "8a46625b468f137834e4265727559aee065be7a3",
+        "githubCommitMessage": "fix: align public listing anon read grant",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/ATo7HJkM77rEQbEaxdSrN9Qjwhmm",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_GLJXP9kZvcA2bsxCuzgB41xsPa3T",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-orlaavcb5-pandaconnect.vercel.app",
+      "created": 1786609512046,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/social-health-auth-aware",
+        "githubCommitSha": "15ba0f5fbad4a5f70aec3de9b936b9b1430d0882",
+        "githubCommitMessage": "fix: make social health auth-aware",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/GLJXP9kZvcA2bsxCuzgB41xsPa3T",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_2LLayxPsorR85BE6AJDabHSFFmjX",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-1n0rzs85y-pandaconnect.vercel.app",
+      "created": 1786598780068,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "8f0320faaaae5422b90a38ace6dcf2ceb85dc21b",
+        "githubCommitMessage": "Merge pull request #187 from pandaconnect1/fix/force-canonical-supabase-auth\n\nfix: force verified production Supabase auth",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/2LLayxPsorR85BE6AJDabHSFFmjX",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_CP1JdnQGAHySoRj4R2PFgCnnWUJq",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-lsd6wlkmr-pandaconnect.vercel.app",
+      "created": 1786596947296,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/identity-trust-security-core",
+        "githubCommitSha": "a13c58af7d9823e69f9e496483b41ad8bc11eb15",
+        "githubCommitMessage": "feat(identity): seed signup phone and explicit consent records",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/CP1JdnQGAHySoRj4R2PFgCnnWUJq",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_68x4jx2a36Ez6V3oVSWtBgBS7acX",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-k7f9lva0n-pandaconnect.vercel.app",
+      "created": 1786596936365,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/identity-trust-security-core",
+        "githubCommitSha": "44c31ea8cf8e5aa8427228ce98b66a11b957733b",
+        "githubCommitMessage": "feat(auth): build global identity registration form",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/68x4jx2a36Ez6V3oVSWtBgBS7acX",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_9oHP1H7C3XsKbefVm5JLwHxLruP7",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-lzd3ngmye-pandaconnect.vercel.app",
+      "created": 1786596913608,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/identity-trust-security-core",
+        "githubCommitSha": "b355983f5264d139ca73c186d3f3b8743805f0a5",
+        "githubCommitMessage": "feat(auth): capture canonical identity metadata at signup",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/9oHP1H7C3XsKbefVm5JLwHxLruP7",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_Fn9qXYgVnpyehbA4zDnVsSpUCnCQ",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-mctw88xll-pandaconnect.vercel.app",
+      "created": 1786596885214,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/identity-trust-security-core",
+        "githubCommitSha": "78927320a1211398eae57f643966f31d40f742f3",
+        "githubCommitMessage": "feat(identity): add trust security and multi-identifier core",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/Fn9qXYgVnpyehbA4zDnVsSpUCnCQ",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_DrSAZCVerFyeT1SvVTdrrsUuwXZV",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-wvjfytmgh-pandaconnect.vercel.app",
+      "created": 1786594609658,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/force-canonical-supabase-auth",
+        "githubCommitSha": "9aea8dd7c063557f29fca4afb4cf3854f95e3256",
+        "githubCommitMessage": "fix: force verified production Supabase client config",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/DrSAZCVerFyeT1SvVTdrrsUuwXZV",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_ENxXevVtPPyJcmYMha7Bs4QwYum9",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-gzylqeoq2-pandaconnect.vercel.app",
+      "created": 1786594098855,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "13c67d0f0740e6ae1d29e99d0f937cac22d763b6",
+        "githubCommitMessage": "Merge pull request #186 from pandaconnect1/fix/supabase-anon-compat\n\nfix: restore Supabase REST auth compatibility",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/ENxXevVtPPyJcmYMha7Bs4QwYum9",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_5A4yxTshPFYHyXEVAomwtR51jX2L",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-b94a6dkeu-pandaconnect.vercel.app",
+      "created": 1786593924866,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/supabase-anon-compat",
+        "githubCommitSha": "bb4b6a3856872960d5a6df52373d463e1cee1e22",
+        "githubCommitMessage": "fix: use legacy anon fallback for Supabase REST compatibility",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5A4yxTshPFYHyXEVAomwtR51jX2L",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_j4j5gNnft5jBJAMMFG7XQyQoa5pY",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-rhx3aani4-pandaconnect.vercel.app",
+      "created": 1786570785661,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "cb5b7bd9d8ab35202c527a25c3f8d88d07c87b33",
+        "githubCommitMessage": "fix: restore Supabase runtime without Vercel env dependency\n\n* fix: add canonical Supabase public runtime fallback\n\n* fix: resolve browser Supabase config from canonical public fallback\n\n* fix: resolve server Supabase config from canonical public fallback\n\n* fix: health check canonical Supabase r...",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/j4j5gNnft5jBJAMMFG7XQyQoa5pY",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_5ncxg38TCPoChCZhF6pm4m2JrfRu",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-6kovo7w4i-pandaconnect.vercel.app",
+      "created": 1786570513742,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/supabase-public-runtime-fallback",
+        "githubCommitSha": "aa3070158d229f158080b5d130c4d0458a16d33d",
+        "githubCommitMessage": "fix: health check canonical Supabase runtime config",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5ncxg38TCPoChCZhF6pm4m2JrfRu",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_CwVGwfbgGkPFMXxhDuxk56uWN1Lc",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-hthqbmgbu-pandaconnect.vercel.app",
+      "created": 1786570494793,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/supabase-public-runtime-fallback",
+        "githubCommitSha": "4f001fb5eea50b051e4e492716dd07a48a8a58ef",
+        "githubCommitMessage": "fix: resolve server Supabase config from canonical public fallback",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/CwVGwfbgGkPFMXxhDuxk56uWN1Lc",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_sebMpjDYqENtFiQ2nmswxC8jnRoa",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-o6zt3czwy-pandaconnect.vercel.app",
+      "created": 1786570479573,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/supabase-public-runtime-fallback",
+        "githubCommitSha": "24ee5798bda17975249f3541491c5b328b7f03e2",
+        "githubCommitMessage": "fix: resolve browser Supabase config from canonical public fallback",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/sebMpjDYqENtFiQ2nmswxC8jnRoa",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_5mYeqmLekGY5543ZTLviCqSWZWdt",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-5uf79og14-pandaconnect.vercel.app",
+      "created": 1786570467868,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/supabase-public-runtime-fallback",
+        "githubCommitSha": "206c8fe10f404d6fc65f971114a0ae3f95b76f66",
+        "githubCommitMessage": "fix: add canonical Supabase public runtime fallback",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5mYeqmLekGY5543ZTLviCqSWZWdt",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_CoaBoXLb43EZhgHrjWZKn7PEz4MB",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-jr1fh8kot-pandaconnect.vercel.app",
+      "created": 1786570217347,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "agent/realtime-chat-translation",
+        "githubCommitSha": "334fac91f618df00d22d75cd8de66223d93c3a82",
+        "githubCommitMessage": "feat: wire realtime chat translation controls",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/CoaBoXLb43EZhgHrjWZKn7PEz4MB",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_4ngTGusbt696rrKWPBywHzFHjvvs",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-rk14zp2z6-pandaconnect.vercel.app",
+      "created": 1786568200071,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "213f3fd74335341c070be46021eeae13d22bc9b6",
+        "githubCommitMessage": "security: harden Social Data API access",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/4ngTGusbt696rrKWPBywHzFHjvvs",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_FHAMHxKXiLhcBkCTnWeHbXQAUZev",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-hqvx7bzok-pandaconnect.vercel.app",
+      "created": 1786567532408,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "agent/social-production-hardening",
+        "githubCommitSha": "4672a00f352e96220f269cda6b77e37dad3bb8d4",
+        "githubCommitMessage": "security: harden Social Data API grants",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/FHAMHxKXiLhcBkCTnWeHbXQAUZev",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_4RZvWHVUjub6CKzyWTL2vMuta6rv",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-eyy7etq7p-pandaconnect.vercel.app",
+      "created": 1786567433788,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "2ad64ea5ae2f887a9766f40bb051155bdbef5c05",
+        "githubCommitMessage": "feat: start canonical Social flagship integration wave\n\n* feat: promote Social World as canonical consumer entry\n\n* feat: keep canonical Social flagship homepage aligned",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/4RZvWHVUjub6CKzyWTL2vMuta6rv",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_GnVakrE3cRHQLs6mdNyfsXxg9Tyh",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-9g79gj8r4-pandaconnect.vercel.app",
+      "created": 1786567394817,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "agent/canonical-social-flagship-wave",
+        "githubCommitSha": "6a2f0aaf1b8ef3a2fec42b3830c140343c625c7f",
+        "githubCommitMessage": "feat: keep canonical Social flagship homepage aligned",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/GnVakrE3cRHQLs6mdNyfsXxg9Tyh",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_8CuBkZXo44qTjCyYe4rkKKjqptkV",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-9kxisii97-pandaconnect.vercel.app",
+      "created": 1786566160649,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "agent/canonical-social-flagship-wave",
+        "githubCommitSha": "61468d57f0a5526a5dab298cf23e9651dead1c37",
+        "githubCommitMessage": "feat: promote Social World as canonical consumer entry",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/8CuBkZXo44qTjCyYe4rkKKjqptkV",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_HycVDGYjEBHjaSUKLCDvi1beGFw3",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-c6jc14jgp-pandaconnect.vercel.app",
+      "created": 1786564404683,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "812502d0ae4234cc52cefc050a19fe8f51583e60",
+        "githubCommitMessage": "Merge PR #181: align translation audit and CI runtime\n\nfix: align translation audit and CI runtime",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/HycVDGYjEBHjaSUKLCDvi1beGFw3",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_2rn5qnkDT4B1kPfTcHptEikZSZtL",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-6aohv6vg7-pandaconnect.vercel.app",
+      "created": 1786564097963,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/translation-audit-node22",
+        "githubCommitSha": "8caa8f1b4f7d3834576eb0b6f37e66350be6c37d",
+        "githubCommitMessage": "ci: align deploy spine with Node 22",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/2rn5qnkDT4B1kPfTcHptEikZSZtL",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_AYphijJmyvfihJCRmPvCvpyKRz5p",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-erup2jnt2-pandaconnect.vercel.app",
+      "created": 1786564064505,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/translation-audit-node22",
+        "githubCommitSha": "3aed92ed8aec87132e3c955b21d505d6a40d54a8",
+        "githubCommitMessage": "fix: align translation audit with explicit fallback gate",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/AYphijJmyvfihJCRmPvCvpyKRz5p",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_2cdgJR4Ybs34tqxv6C5dnyLxUx3k",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-iwrn0wizw-pandaconnect.vercel.app",
+      "created": 1786560185374,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "468feaf8c314ab101f1dffd64dc61f45ae8920ed",
+        "githubCommitMessage": "fix: restore translation gateway runtime visibility\n\nfix: restore translation gateway runtime visibility",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/2cdgJR4Ybs34tqxv6C5dnyLxUx3k",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_BPHeFJSmMj1VzK4BqHKka9Qrd5e1",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-l0atqloh5-pandaconnect.vercel.app",
+      "created": 1786559934472,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/translation-provider-runtime-diagnostics",
+        "githubCommitSha": "3b6a4180f3a19a8c5412a53e5d93d48c3dc90460",
+        "githubCommitMessage": "fix: harden translation gateway runtime and diagnostics",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/BPHeFJSmMj1VzK4BqHKka9Qrd5e1",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_7do6pjqjZK7cJ9JZx7Ufts5Mm4LP",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-ay4rbffc1-pandaconnect.vercel.app",
+      "created": 1786554655428,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/global-knowledge-vault",
+        "githubCommitSha": "33defe9ca6c9c1aeae5d46652fdf0e5c8e44ebe9",
+        "githubCommitMessage": "architecture: lock Global Knowledge Vault and rights-aware document access",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/7do6pjqjZK7cJ9JZx7Ufts5Mm4LP",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_75zpkHTLKD5w6stdUC8qPDxssT4X",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-coiikwbcr-pandaconnect.vercel.app",
+      "created": 1786553202092,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "ced7d621c4c99dc470bd382ea21f0dc0c0c49f90",
+        "githubCommitMessage": "architecture: lock global knowledge scale and membership integrity into PAES",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/75zpkHTLKD5w6stdUC8qPDxssT4X",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_vjySM5iwmtqUcBGEuMKPtE2AHRVy",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-b3fw6rnsi-pandaconnect.vercel.app",
+      "created": 1786552875510,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "94ed816160e95686c76c673f3fa82927ede688b5",
+        "githubCommitMessage": "architecture: require deep international research and comparative evidence views",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/vjySM5iwmtqUcBGEuMKPtE2AHRVy",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_46yTi2AYi49LZgS7qS1Qh5MsEGDo",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-p6lb7ewgc-pandaconnect.vercel.app",
+      "created": 1786552250454,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "0b4027917425a81a7a8d0e1187a0d3b8176a115e",
+        "githubCommitMessage": "fix: expose precise Social Supabase production diagnostics",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/46yTi2AYi49LZgS7qS1Qh5MsEGDo",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_CqMD7Tqw1cpu6rLTxahr7zbzxNaY",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-3un2u2506-pandaconnect.vercel.app",
+      "created": 1786551039122,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "d51c857ab4ebc7cade61524941f2ea8a15222062",
+        "githubCommitMessage": "architecture: establish Pantavion-wide academic evidence standard",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/CqMD7Tqw1cpu6rLTxahr7zbzxNaY",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_54EWSSTPHsmPnh3Pn2CkNA7Wi1sg",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-pwcjo4z1p-pandaconnect.vercel.app",
+      "created": 1786550261827,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "feature/music-voice-studio",
+        "githubCommitSha": "1b694997b3e71abd328af49cce3a7e8c7845689b",
+        "githubCommitMessage": "architecture: define Music Voice Studio domain model",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/54EWSSTPHsmPnh3Pn2CkNA7Wi1sg",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_9X8ouCHcVwRkuznfZyxvrfUhnrNY",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-7kid5eeak-pandaconnect.vercel.app",
+      "created": 1786550089363,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "05971fd86ff8902e0f7115b1726aea69924d678a",
+        "githubCommitMessage": "docs: make Music Voice Studio global by design",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/9X8ouCHcVwRkuznfZyxvrfUhnrNY",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_CGh5AXeDWRsgAm4VPj3Xe9Jnj5dT",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-466dshro1-pandaconnect.vercel.app",
+      "created": 1786549826600,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "d77e23cbe75e224e00e9c6553a5491ccfa3c9fde",
+        "githubCommitMessage": "docs: adopt Pantavion Music and Voice Studio canon",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/CGh5AXeDWRsgAm4VPj3Xe9Jnj5dT",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_BNgtbwazGFrRopEwnT5iBgUwPui1",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-llmswal0l-pandaconnect.vercel.app",
+      "created": 1786549750681,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/social-health-diagnostics",
+        "githubCommitSha": "30d1990c7aa5a41c67f56bd651ac05442f6122ab",
+        "githubCommitMessage": "fix: make Social production health diagnostic and non-crashing",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/BNgtbwazGFrRopEwnT5iBgUwPui1",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_5DXRxJDZzsDVsQ7wn79arHNKLMzT",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-medqsmqkl-pandaconnect.vercel.app",
+      "created": 1786548655563,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "0a7dc2ceb98ea8931105456544ce685c17a418f4",
+        "githubCommitMessage": "fix: repair production sync verifier workflow",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5DXRxJDZzsDVsQ7wn79arHNKLMzT",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_HuiTXjKEiXBKjFcxnoV6f9m8Spsg",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-nswli9lf2-pandaconnect.vercel.app",
+      "created": 1786548444759,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/production-sync-yaml",
+        "githubCommitSha": "f57f2ee3a2bcf506004a2dea74ba8c9718e740ff",
+        "githubCommitMessage": "fix: make production sync verifier valid yaml",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/HuiTXjKEiXBKjFcxnoV6f9m8Spsg",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_36rkrKetk9RZtDR943p5okpnDd9F",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-mbgctzib6-pandaconnect.vercel.app",
+      "created": 1786547308519,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "60efa9291f39a5378ebc7a75825af9a17013a451",
+        "githubCommitMessage": "fix: verify production code and Supabase stay synchronized\n\n* fix: expose safe production social sync health\n\n* ci: verify production code and Supabase stay synchronized",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/36rkrKetk9RZtDR943p5okpnDd9F",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_2s8QuzGseyVZpBfJ71brr7AJSWjo",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-9uqvxcevh-pandaconnect.vercel.app",
+      "created": 1786547048208,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/production-sync-verification",
+        "githubCommitSha": "49c69c990c3428204b3ba5f9b320d29cd8a55206",
+        "githubCommitMessage": "ci: verify production code and Supabase stay synchronized",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/2s8QuzGseyVZpBfJ71brr7AJSWjo",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_9XsZPDeGEMsWzLHGzxSvdf1SZUoR",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-5qlermtro-pandaconnect.vercel.app",
+      "created": 1786547007227,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/production-sync-verification",
+        "githubCommitSha": "3e2443272336681d9bcc650649b0e7d54f4ae4dd",
+        "githubCommitMessage": "fix: expose safe production social sync health",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/9XsZPDeGEMsWzLHGzxSvdf1SZUoR",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_DrXYTTbyzSDX2fMnWnJ8McpzurC5",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-16jyfusad-pandaconnect.vercel.app",
+      "created": 1786546659230,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "80613d3461a968dd20fc9f363eb5de4462553158",
+        "githubCommitMessage": "fix: make Social capability-aware and expose live backend health\n\n* fix: add capability-level Social backend health check\n\n* fix: isolate Social capabilities so one backend gap does not disable all actions\n\n* fix: make Social actions capability-aware instead of globally static",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/DrXYTTbyzSDX2fMnWnJ8McpzurC5",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_77JQGYHoWuzWuLGpe7DDc7sYseda",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-mp3v0m1nj-pandaconnect.vercel.app",
+      "created": 1786546456570,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/social-live-backend-gate",
+        "githubCommitSha": "b66b16615e0f2884a0f43292f710803aa1f8abf7",
+        "githubCommitMessage": "fix: make Social actions capability-aware instead of globally static",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/77JQGYHoWuzWuLGpe7DDc7sYseda",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_4kdgyuARJVCJfEnuDzscRskGLszg",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-womyuwg8a-pandaconnect.vercel.app",
+      "created": 1786546366648,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/social-live-backend-gate",
+        "githubCommitSha": "71f9d9fd88722b177297a62257e618e20fbc887e",
+        "githubCommitMessage": "fix: isolate Social capabilities so one backend gap does not disable all actions",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/4kdgyuARJVCJfEnuDzscRskGLszg",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_C718ZCKBHP1QZPBYsXWRxQxr16RX",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-n89rnxifk-pandaconnect.vercel.app",
+      "created": 1786546303386,
+      "state": "READY",
+      "target": null,
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "fix/social-live-backend-gate",
+        "githubCommitSha": "55a0ebb02a6a8584616536b5ce3ca6ab8d511385",
+        "githubCommitMessage": "fix: add capability-level Social backend health check",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/C718ZCKBHP1QZPBYsXWRxQxr16RX",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_89FejTJ4KiH6vJjXKzSGxkm1HbWQ",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-5w9820eos-pandaconnect.vercel.app",
+      "created": 1786538836335,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "92acddf92fb3cc74912f952a2f4846d2466235d6",
+        "githubCommitMessage": "docs: define unified messaging and Move to Pantavion interoperability contract",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/89FejTJ4KiH6vJjXKzSGxkm1HbWQ",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_BboCdPDQXGsqTRXJtJTQyi7jgZEM",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-iipqfte6f-pandaconnect.vercel.app",
+      "created": 1786447737120,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "03d5252a572dbcec6731dea72f89371e2a3daad5",
+        "githubCommitMessage": "feat: make Social posts use real personal media and comments",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/BboCdPDQXGsqTRXJtJTQyi7jgZEM",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_5gjU3D2yzkCkuABZb9PRibKhdmNb",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-rn6qowbpg-pandaconnect.vercel.app",
+      "created": 1786447688936,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "f8127fdec4c8e99ca0acce7f998068bdc5402f14",
+        "githubCommitMessage": "feat: connect Social feed to canonical post media on main",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5gjU3D2yzkCkuABZb9PRibKhdmNb",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_8VrYucqMVkYufRdq6UYoUeinaXfz",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-acy4dy659-pandaconnect.vercel.app",
+      "created": 1786447657336,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "24fcc7c961f4980952fe5360ec934f74f70da7f7",
+        "githubCommitMessage": "feat: connect Find My People UI to production main",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/8VrYucqMVkYufRdq6UYoUeinaXfz",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_EP8YSXesRRS42n7JjWLFt68pjMHR",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-n6lorq6f5-pandaconnect.vercel.app",
+      "created": 1786447601502,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "16949b4f42b10b0538c3ab3ca5962d4f3bc1f46e",
+        "githubCommitMessage": "feat: ship live Social Map client to main",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/EP8YSXesRRS42n7JjWLFt68pjMHR",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_5pWgFeFrKJVQjvbhbcgPpLniUjfL",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-i5ojcqwke-pandaconnect.vercel.app",
+      "created": 1786447560175,
+      "state": "ERROR",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "9b617d28eacf3e2d67cc192074705f3278155cfa",
+        "githubCommitMessage": "feat: ship fault-isolated Social Map route to main",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/5pWgFeFrKJVQjvbhbcgPpLniUjfL",
+      "isRollbackCandidate": false
+    },
+    {
+      "id": "dpl_Fw9gHhfmfK7n1Jpf8HN8z7EUYDSi",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-reux1wqks-pandaconnect.vercel.app",
+      "created": 1786447510867,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "853476a6e40f5d0cc97208cf98f15dc39304acf8",
+        "githubCommitMessage": "feat: ship secure social media delivery API to main",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/Fw9gHhfmfK7n1Jpf8HN8z7EUYDSi",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_qCiNVPRYTnouc8ChHrn2FWBKKtpw",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-8kbcku6fh-pandaconnect.vercel.app",
+      "created": 1786447494968,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "d1c51bfa233bf9ad46bc3fc1ea07198f0aa13c02",
+        "githubCommitMessage": "feat: ship contact discovery API to production main",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/qCiNVPRYTnouc8ChHrn2FWBKKtpw",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_7v3nGUyjH3xinEkB7qCkc4Mp6DgQ",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-6l7rslvqs-pandaconnect.vercel.app",
+      "created": 1786447478655,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "869a1cf3c34dbcc715ff9c9753c916eabb866e2c",
+        "githubCommitMessage": "feat: ship social map visibility migration to main",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/7v3nGUyjH3xinEkB7qCkc4Mp6DgQ",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_HTEmRM99egoTxZ3EehJwmLW9zNa6",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-ijd3c96xg-pandaconnect.vercel.app",
+      "created": 1786447459037,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "964fdefa663eed19f4247c003bfeea5626d8679c",
+        "githubCommitMessage": "feat: ship private contact discovery migration to main",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/HTEmRM99egoTxZ3EehJwmLW9zNa6",
+      "isRollbackCandidate": true
+    },
+    {
+      "id": "dpl_3yeQoXS5vp5D6GMXWGkwwNQiobUF",
+      "name": "pantavion-planet-vmxx",
+      "url": "pantavion-planet-vmxx-c9o7tt6gt-pandaconnect.vercel.app",
+      "created": 1786447427600,
+      "state": "READY",
+      "target": "production",
+      "creator": {
+        "uid": "DC3mzqiLQEDYgh7eOhargCVP",
+        "username": "infopandaconnect-6915"
+      },
+      "meta": {
+        "githubCommitRef": "main",
+        "githubCommitSha": "01e25af3510b2118f2397fbab08b786b7aa7567a",
+        "githubCommitMessage": "feat: link social posts to canonical personal media",
+        "githubRepo": "pantavion-planet",
+        "githubOrg": "pandaconnect1"
+      },
+      "inspectorUrl": "https://vercel.com/pandaconnect/pantavion-planet-vmxx/3yeQoXS5vp5D6GMXWGkwwNQiobUF",
+      "isRollbackCandidate": true
+    }
+  ]
+}
