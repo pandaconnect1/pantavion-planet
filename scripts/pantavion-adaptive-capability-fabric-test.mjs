@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import { planAdaptiveCapability } from "../core/sovereign/adaptive-capability-fabric.ts";
 
 const nowIso = "2026-09-22T21:10:00.000Z";
@@ -83,3 +84,13 @@ console.log(
     2,
   ),
 );
+
+
+const route = fs.readFileSync("app/api/pantai/execute/route.ts", "utf8");
+assert.ok(route.includes("supabase.auth.getUser()"));
+assert.ok(route.includes('"Cache-Control": "private, no-store"'));
+assert.ok(route.includes('actorScopes: ["read"]'));
+assert.ok(route.includes('productionMutation: false'));
+assert.ok(route.includes('mode: "adaptive_capability_planning"'));
+assert.ok(!route.includes("foundation_stub"));
+assert.ok(!route.includes("body.actorScopes"));
