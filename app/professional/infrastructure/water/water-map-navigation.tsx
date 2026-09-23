@@ -11,7 +11,12 @@ const links = [
   {
     href: "/professional/infrastructure/water/access",
     label: "Users / Access",
-    description: "αιτήσεις / approvals",
+    description: "αιτήσεις χρηστών",
+  },
+  {
+    href: "/professional/infrastructure/water/admin",
+    label: "Administrator",
+    description: "έγκριση / απόρριψη",
   },
   {
     href: "/professional/infrastructure/water/maps",
