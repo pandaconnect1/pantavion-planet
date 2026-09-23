@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-09-23T04:12:00.000Z",
+  "lockedAtUtc": "2026-09-23T04:30:00.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -22,7 +22,7 @@
     "app/api/professional/infrastructure/water/admin/session/route.ts": "ace584102ae5ed57500a84b3b2271ae5526fc556c69fed17e5096ec00281e7aa",
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "53abf069744cb5f3119b100ddca3b821a1672b02ed71079b60b581eec6fc7997",
     "app/professional/infrastructure/water/admin/access/page.tsx": "487b03889c8697149025a710aff941eefdc0bb642d95bbd118d9eb1302f9ccca",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "adce3b9bd36d81ad38e27afb5124f64d387ac9ce1fa923f465adae7d30afd3ff",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "9f5327d28446ed785a6d951f0f89dd9666c4d9e8a769065c2c3a29c6cd5299da",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "4e4711818dd5e5c3b924677db72e6816d06221760f20cd5e10217a86a199a7eb",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
@@ -30,12 +30,13 @@
     "core/security/water-admin-session.ts": "1f563864a0c58761404b06d682a59abdea618939abb7c905236417a6a2e3f7f1",
     "scripts/pantavion-water-network-runtime-lock.cjs": "022b40a9b5db9fdb2e1cda8afac43a83d235909539b592f7f2f222bda6fbdd58",
     "scripts/water-guardian-production-smoke.cjs": "fa85132fb88419f98429c9dcd6b779b313bf0345d0d1787aaa348ddc7707aa21",
-    "scripts/water-segment-reader-regression.mjs": "44bfd0d2df2cb67d6e61463af4ede2667717b1347dd69ac6e0c5901d0ca898da"
+    "scripts/water-segment-reader-regression.mjs": "44bfd0d2df2cb67d6e61463af4ede2667717b1347dd69ac6e0c5901d0ca898da",
+    "app/api/professional/infrastructure/water/access/invite/claim/route.ts": "ac91b1fbf67e03330171004c1c38b0b314b76db3321b758ba71a502523de288f"
   },
   "refreshEvidence": {
-    "reason": "Field usability follow-up: make the current user's position clearly visible with a larger high-contrast marker and permanent 'Η θέση μου' label, while retaining the iPhone/Safari geolocation retry. Protected pipe/network authorization and all source-truth/security invariants remain unchanged.",
-    "sourceCommit": "8c6270e4d260fd20ffe7f53a1bfa8268340aa918",
-    "protectedFileCount": 15,
+    "reason": "Add one-time SMS invite access that binds to the first claiming device. Forwarded links fail after first claim. Invite secrets stay in URL fragment and are exchanged server-side as hashes. Existing pipe/network authorization, source truth, raw master, full-network exposure, and segmented-delivery invariants remain unchanged.",
+    "sourceCommit": "e038a97a2809e6df9106753c4c9f9e88fadb48b7",
+    "protectedFileCount": 16,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
   }
