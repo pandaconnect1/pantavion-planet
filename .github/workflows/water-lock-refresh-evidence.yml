@@ -22,6 +22,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          echo "water-access-authorize route sha256:"
+          sha256sum app/api/professional/infrastructure/water/access/authorize/route.ts
+          echo "water-segment-bbox route sha256:"
+          sha256sum app/api/professional/infrastructure/water/segment/bbox/route.ts
           echo "water-admin-session route sha256:"
           sha256sum app/api/professional/infrastructure/water/admin/session/route.ts
           echo "privileged-request-boundary sha256:"
