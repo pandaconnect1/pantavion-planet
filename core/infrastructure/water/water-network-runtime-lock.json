@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-09-23T02:05:00.000Z",
+  "lockedAtUtc": "2026-09-23T03:07:00.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -18,7 +18,7 @@
   "protectedFiles": {
     ".github/CODEOWNERS": "93789477aca8ffe37c6f179ca004113c8edba37ecc159d1e67dee9f720955e52",
     ".github/workflows/pantavion-water-network-lock.yml": "cc31df78ddf31546fdcb7ce38fa521d0385c281a3375296537b2762a394d7291",
-    "app/api/professional/infrastructure/water/access/authorize/route.ts": "ca54518e5b60962db48424293974f2c7589b8c1ec489dc7d7dde409aa3947397",
+    "app/api/professional/infrastructure/water/access/authorize/route.ts": "f385d1c58e8260b09dabf1a8b580c42d21d07330d65a8a29d0871739427c72d3",
     "app/api/professional/infrastructure/water/admin/session/route.ts": "ace584102ae5ed57500a84b3b2271ae5526fc556c69fed17e5096ec00281e7aa",
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "53abf069744cb5f3119b100ddca3b821a1672b02ed71079b60b581eec6fc7997",
     "app/professional/infrastructure/water/admin/access/page.tsx": "487b03889c8697149025a710aff941eefdc0bb642d95bbd118d9eb1302f9ccca",
@@ -33,8 +33,8 @@
     "scripts/water-segment-reader-regression.mjs": "44bfd0d2df2cb67d6e61463af4ede2667717b1347dd69ac6e0c5901d0ca898da"
   },
   "refreshEvidence": {
-    "reason": "Founder-approved Water admin recovery: authenticated Pantavion founder at AAL2 may administer Water users and access protected Map A. No source truth, geometry, public exposure, full-network browser load, or segmented-delivery invariant changed.",
-    "sourceCommit": "3adf3f369ece099eb936966044fc770a39ae2556",
+    "reason": "Emergency production continuity: Water access requests and exact approved-device authorization no longer depend on a missing Railway service-role runtime secret. No source truth, geometry, public exposure, full-network browser load, or segmented-delivery invariant changed.",
+    "sourceCommit": "1cdb32e2ba72aeb9a0baaafe72d775bd748f0f06",
     "protectedFileCount": 15,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
