@@ -25,7 +25,7 @@ export default function PantavionHomeClient() {
   }, []);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#071a35] text-white" data-pantavion-live-ui="true">
+    <main className="min-h-screen overflow-hidden bg-[#04101f] text-white" data-pantavion-live-ui="true">
       <style jsx global>{`
         @keyframes pantaEntrance {
           0% { transform: perspective(900px) translateZ(-260px) scale(.55) rotateY(-18deg); opacity: 0; filter: blur(10px); }
@@ -43,7 +43,7 @@ export default function PantavionHomeClient() {
       `}</style>
 
       <section className="relative mx-auto min-h-screen max-w-[1500px] px-4 pb-12 pt-4 sm:px-8 lg:px-12">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_56%_37%,rgba(35,126,255,.24),transparent_25%),radial-gradient(circle_at_68%_30%,rgba(166,74,255,.14),transparent_22%),linear-gradient(180deg,#071a35_0%,#06162e_60%,#041126_100%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(34,211,238,.16),transparent_26%),radial-gradient(circle_at_78%_28%,rgba(99,102,241,.25),transparent_30%),radial-gradient(circle_at_52%_72%,rgba(14,165,233,.10),transparent_34%),linear-gradient(145deg,#020817_0%,#061a35_45%,#090b24_100%)]" />
 
         <nav className="relative z-30 flex items-center justify-between gap-3 border-b border-white/10 py-3">
           <Link href="/" className="text-sm font-black tracking-[0.16em] text-white no-underline sm:text-base">PANTAVION</Link>
@@ -71,7 +71,7 @@ export default function PantavionHomeClient() {
             <div className="panta-orbit absolute h-[300px] w-[300px] rounded-full border border-cyan-300/25 sm:h-[430px] sm:w-[430px]"><span className="absolute -top-1 left-1/2 h-2 w-2 rounded-full bg-cyan-200 shadow-[0_0_18px_#67e8f9]" /></div>
             <div className={`panta-mark relative flex h-[250px] w-[250px] items-center justify-center sm:h-[370px] sm:w-[370px] ${entered ? "" : "opacity-0"}`} aria-label="Pantavion">
               <div className="absolute inset-4 rounded-full bg-gradient-to-br from-cyan-300 via-blue-500 to-violet-500 p-[3px] shadow-[0_0_70px_rgba(76,132,255,.42)]">
-                <div className="flex h-full w-full items-center justify-center rounded-full bg-[#071a35] shadow-[inset_0_0_55px_rgba(71,114,255,.35)]">
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-[#06162e] shadow-[inset_0_0_55px_rgba(71,114,255,.35)]">
                   <span className="translate-y-[-4%] bg-gradient-to-br from-cyan-200 via-blue-400 to-violet-400 bg-clip-text text-[10rem] font-black leading-none text-transparent drop-shadow-[0_20px_24px_rgba(0,0,0,.35)] sm:text-[15rem]">P</span>
                 </div>
               </div>
@@ -82,7 +82,7 @@ export default function PantavionHomeClient() {
 
         <section id="all-pantavion" className="relative z-20 rounded-[1.6rem] border border-white/10 bg-white/[.045] p-4 shadow-2xl backdrop-blur-xl sm:p-6">
           <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end"><div><p className="text-[10px] font-black uppercase tracking-[.25em] text-cyan-300">ALL PANTAVION</p><h2 className="mt-1 text-2xl font-black">Everything you need. One clear place.</h2></div><div className="rounded-full border border-white/10 bg-black/10 px-4 py-2 text-xs text-blue-100/70">What are you looking for? ⌕</div></div>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{journeys.map(([title, subtitle, href, icon]) => <Link key={title} href={href} className="group rounded-2xl border border-white/10 bg-[#0a2243]/75 p-4 text-white no-underline transition hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-[#0c2a52]"><div className="mb-3 text-xl text-cyan-200/90">{icon}</div><h3 className="font-black">{title}</h3><p className="mt-1 text-xs leading-5 text-blue-100/65">{subtitle}</p></Link>)}</div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{journeys.map(([title, subtitle, href, icon]) => <Link key={title} href={href} className="group rounded-2xl border border-white/10 bg-[#081d38]/80 p-4 text-white no-underline transition hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-[#0b294d]"><div className="mb-3 text-xl text-cyan-200/90">{icon}</div><h3 className="font-black">{title}</h3><p className="mt-1 text-xs leading-5 text-blue-100/65">{subtitle}</p></Link>)}</div>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             <Link href="/professional/infrastructure/water" className="rounded-2xl border border-cyan-300/20 bg-cyan-300/[.06] p-4 text-white no-underline"><p className="text-xs font-black text-cyan-300">💧 PROFESSIONAL & INFRASTRUCTURE</p><h3 className="mt-1 font-black">Water Network</h3><p className="mt-1 text-xs text-blue-100/65">Protected infrastructure and mapping tools for approved users.</p></Link>
             <Link href="/translate" className="rounded-2xl border border-violet-300/20 bg-violet-300/[.06] p-4 text-white no-underline"><p className="text-xs font-black text-violet-200">🌐 UNIVERSAL LANGUAGE</p><h3 className="mt-1 font-black">Language & Translation</h3><p className="mt-1 text-xs text-blue-100/65">Automatic or user-selected language experiences.</p></Link>
