@@ -675,7 +675,7 @@ export default function ControlledWaterSegmentClient() {
         mapRef.current = null;
       }
     };
-  }, [lang]);
+  }, [lang, accessApproved]);
 
   async function submitAccessRequest() {
     if (!firstName.trim() || !lastName.trim() || !roleTitle.trim() || !emailOrPhone.trim()) {
