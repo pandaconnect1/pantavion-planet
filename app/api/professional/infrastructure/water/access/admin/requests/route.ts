@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { listWaterAccessRequests } from "@/core/water/water-access-store";
 
 function normalizePhone(value: unknown) {
@@ -11,7 +11,7 @@ function normalizePhone(value: unknown) {
 
 export async function POST(request: Request) {
   try {
-    if (!hasWaterAdminSession(request)) {
+    if (!(await hasWaterAdminAuthorization(request))) {
       return NextResponse.json(
         { ok: false, error: "admin_session_required" },
         { status: 403 },
