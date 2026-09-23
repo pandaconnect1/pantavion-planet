@@ -21,7 +21,6 @@ type Props = {
   expectedSha256: string;
 };
 
-const SUPABASE_URL = "https://cxhulvwkagzufbjsdwwu.supabase.co";
 const SUPABASE_PROJECT_ID = "cxhulvwkagzufbjsdwwu";
 const PROTECTED_UPLOAD_TICKET_URL = "/api/professional/infrastructure/water/final-master-dwg/upload-url";
 const TUS_ENDPOINT = `https://${SUPABASE_PROJECT_ID}.storage.supabase.co/storage/v1/upload/resumable`;
