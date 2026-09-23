@@ -89,7 +89,7 @@ requireIncludes("core/translation/pantavion-public-text-fallback.ts", [
 // The public homepage should remain product-facing; development-only modules
 // are not required to be advertised there.
 requireIncludes("app/pantavion-home-client.tsx", [
-  "PANTAVION ONE",
+  "PANTAVION",
   "Here We Are One. For All Humanity.",
   "/professional/infrastructure/water",
 ]);
