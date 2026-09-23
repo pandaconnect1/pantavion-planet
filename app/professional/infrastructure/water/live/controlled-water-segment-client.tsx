@@ -670,14 +670,26 @@ export default function ControlledWaterSegmentClient() {
     const markerColor = options.kind === "user" ? "#f2c766" : "#ef4444";
 
     markerRef.current = L.circleMarker([options.lat, options.lng], {
-      radius: 9,
-      color: "#07111f",
-      weight: 3,
+      radius: options.kind === "user" ? 15 : 9,
+      color: options.kind === "user" ? "#ffffff" : "#07111f",
+      weight: options.kind === "user" ? 5 : 3,
       fillColor: markerColor,
-      fillOpacity: 0.95,
+      fillOpacity: 1,
     })
       .addTo(map)
-      .bindPopup(options.title);
+      .bindPopup(options.kind === "user" ? "Η θέση μου" : options.title);
+
+    if (options.kind === "user") {
+      markerRef.current
+        .bindTooltip("Η θέση μου", {
+          permanent: true,
+          direction: "top",
+          offset: [0, -14],
+          opacity: 0.95,
+        })
+        .openTooltip()
+        .bringToFront();
+    }
 
     if (options.kind === "user") {
       if (userAccuracyRef.current) {
