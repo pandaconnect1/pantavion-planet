@@ -1,6 +1,7 @@
 import { list } from "@vercel/blob";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 
 export type WaterAccessRequestRecord = {
   id: string;
@@ -227,8 +228,44 @@ export async function migrateLegacyApprovedDeviceIfPresent(
     const current = await waterApprovedDeviceMatches(deviceId, tokenHash);
     if (current) return current;
   } catch {
-    // Continuity rule: an unavailable Supabase admin credential must not
-    // invalidate a previously approved device while the migration is in flight.
+    // Railway may intentionally run without a Supabase service-role credential.
+    // Fall through to the same scoped RPC used by the live authorize endpoint.
+  }
+
+  // Railway-safe path: validate the exact device + token hash through the
+  // narrowly scoped Supabase RPC. This does not approve or mutate a device.
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc("pantavion_water_authorize_device", {
+      p_device_id: deviceId,
+      p_token_hash: tokenHash,
+    });
+
+    if (!error) {
+      const approved = Array.isArray(data) ? data[0] : data;
+
+      if (approved) {
+        return {
+          device_id: deviceId,
+          token_hash: tokenHash,
+          phone: legacyString(approved.phone),
+          first_name: legacyString(approved.first_name),
+          last_name: legacyString(approved.last_name),
+          title: legacyString(approved.title),
+          organization: "",
+          request_id: null,
+          approved_at: legacyString(approved.approved_at) || new Date().toISOString(),
+          approved_by: "supabase-rpc",
+          status: "approved",
+          revoked: false,
+          revoked_at: null,
+          revoked_by: null,
+          updated_at: new Date().toISOString(),
+        } satisfies WaterApprovedDeviceRecord;
+      }
+    }
+  } catch {
+    // Preserve the legacy continuity path below.
   }
 
   // Continuity fallback: validate the exact pre-existing approval in the old
