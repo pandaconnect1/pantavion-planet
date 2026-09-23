@@ -513,6 +513,78 @@ export default function ControlledWaterSegmentClient() {
 
       const device = getOrCreateWaterAccessDevice();
 
+      const fragment = typeof window !== "undefined" ? window.location.hash.replace(/^#/, "") : "";
+      const inviteToken = new URLSearchParams(fragment).get("invite")?.trim() || "";
+
+      if (inviteToken) {
+        try {
+          const inviteResponse = await fetch(
+            "/api/professional/infrastructure/water/access/invite/claim",
+            {
+              method: "POST",
+              cache: "no-store",
+              credentials: "include",
+              signal: AbortSignal.timeout(8000),
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify({
+                inviteToken,
+                deviceId: device.deviceId,
+                deviceToken: device.deviceToken,
+              }),
+            },
+          );
+
+          const inviteJson = (await inviteResponse.json().catch(() => ({}))) as {
+            ok?: boolean;
+            error?: string;
+            recipientLabel?: string;
+          };
+
+          if (!cancelled && inviteResponse.ok && inviteJson.ok) {
+            window.history.replaceState(
+              {},
+              document.title,
+              `${window.location.pathname}${window.location.search}`,
+            );
+            setAccessMessage(
+              inviteJson.recipientLabel
+                ? `Η πρόσβαση ενεργοποιήθηκε για ${inviteJson.recipientLabel} και κλειδώθηκε σε αυτή τη συσκευή.`
+                : "Η πρόσβαση ενεργοποιήθηκε και κλειδώθηκε σε αυτή τη συσκευή.",
+            );
+            setAccessState("approved");
+            return;
+          }
+
+          if (
+            !cancelled &&
+            (inviteJson.error === "already_claimed_other_device" ||
+              inviteJson.error === "revoked" ||
+              inviteJson.error === "expired")
+          ) {
+            window.history.replaceState(
+              {},
+              document.title,
+              `${window.location.pathname}${window.location.search}`,
+            );
+            setAccessMessage(
+              inviteJson.error === "already_claimed_other_device"
+                ? "Αυτό το SMS link έχει ήδη κλειδωθεί σε άλλη συσκευή και δεν μπορεί να χρησιμοποιηθεί εδώ."
+                : "Αυτό το SMS link δεν είναι πλέον ενεργό.",
+            );
+            setAccessState("denied");
+            return;
+          }
+        } catch {
+          if (!cancelled) {
+            setAccessMessage(
+              "Δεν ολοκληρώθηκε προσωρινά η ενεργοποίηση του SMS link. Δοκίμασε ξανά από την ίδια συσκευή.",
+            );
+          }
+        }
+      }
+
       try {
         const response = await fetch("/api/professional/infrastructure/water/access/authorize", {
           method: "POST",
