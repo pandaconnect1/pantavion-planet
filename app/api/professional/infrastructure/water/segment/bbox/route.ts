@@ -10,6 +10,7 @@ import {
 } from "@/core/infrastructure/water/controlled-water-segment-index-provider";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { migrateLegacyApprovedDeviceIfPresent } from "@/core/water/water-access-store";
+import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -44,9 +45,43 @@ async function authorizeWaterSegmentRequest(request: Request): Promise<WaterSegm
     };
   }
 
+  if (!deviceId || !deviceToken) {
+    return {
+      ok: false,
+      error: "access_not_approved",
+    };
+  }
+
+  const tokenHash = hashToken(deviceToken);
+
+  // Keep the protected segment route on the exact same Supabase authorization
+  // path used by /access/authorize. This avoids a false denial when the runtime
+  // does not have a privileged admin credential but the approved-device RPC is
+  // available and has already validated the device + token pair.
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc("pantavion_water_authorize_device", {
+      p_device_id: deviceId,
+      p_token_hash: tokenHash,
+    });
+
+    if (!error) {
+      const approvedDevice = Array.isArray(data) ? data[0] : data;
+
+      if (approvedDevice) {
+        return {
+          ok: true,
+          mode: "approved-device",
+        };
+      }
+    }
+  } catch {
+    // Legacy continuity fallback below remains fail-closed if unavailable.
+  }
+
   const deviceApproved = await migrateLegacyApprovedDeviceIfPresent(
     deviceId,
-    hashToken(deviceToken),
+    tokenHash,
   );
 
   if (deviceApproved) {
