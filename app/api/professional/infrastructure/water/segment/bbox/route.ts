@@ -8,7 +8,7 @@ import {
   parseWaterSegmentBbox,
   parseWaterSegmentLimit,
 } from "@/core/infrastructure/water/controlled-water-segment-index-provider";
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { migrateLegacyApprovedDeviceIfPresent } from "@/core/water/water-access-store";
 
 export const runtime = "nodejs";
@@ -37,7 +37,7 @@ async function authorizeWaterSegmentRequest(request: Request): Promise<WaterSegm
   const deviceId = clean(request.headers.get("x-pantavion-water-device-id"));
   const deviceToken = clean(request.headers.get("x-pantavion-water-device-token"));
 
-  if (hasWaterAdminSession(request)) {
+  if (await hasWaterAdminAuthorization(request)) {
     return {
       ok: true,
       mode: "admin-session",

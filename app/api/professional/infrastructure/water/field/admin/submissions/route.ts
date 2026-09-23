@@ -1,7 +1,7 @@
 import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 
 type BlobLike = {
   url: string;
@@ -72,7 +72,7 @@ function normalizeSubmission(payload: Record<string, unknown>) {
 
 export async function POST(request: Request) {
   try {
-    if (!hasWaterAdminSession(request)) {
+    if (!(await hasWaterAdminAuthorization(request))) {
       return NextResponse.json(
         {
           ok: false,

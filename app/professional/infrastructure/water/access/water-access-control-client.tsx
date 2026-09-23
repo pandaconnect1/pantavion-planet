@@ -215,27 +215,30 @@ export default function WaterAccessControlClient({ isAdmin = false }: { isAdmin?
         </h1>
 
         <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300 md:text-base">
-          Εδώ γίνεται μόνο η αίτηση πρόσβασης και ο έλεγχος της εγκεκριμένης
-          συσκευής. Τα εργαλεία διαχείρισης δεν εμφανίζονται στη δημόσια σελίδα.
+          Εδώ γίνεται η αίτηση πρόσβασης και ο έλεγχος της εγκεκριμένης
+          συσκευής. Η διαχείριση χρηστών παραμένει προστατευμένη, αλλά ο
+          Administrator έχει πλέον ξεκάθαρη είσοδο πιο κάτω.
         </p>
 
-        {isAdmin ? (
-          <section className="mt-6 rounded-3xl border border-[#f2c766]/70 bg-[#f2c766]/10 p-5">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f2c766]">
-              Administrator session ενεργό
-            </p>
-            <h2 className="mt-3 text-2xl font-black text-white">Administrator / Users Management</h2>
-            <p className="mt-2 text-sm leading-7 text-slate-200">
-              Εμφανίζεται μόνο σε browser με έγκυρο ασφαλές Administrator session.
-            </p>
-            <a
-              href="/professional/infrastructure/water/admin/approvals"
-              className="mt-4 block rounded-2xl bg-[#f2c766] px-5 py-3 text-center font-black text-black"
-            >
-              Άνοιγμα Administrator
-            </a>
-          </section>
-        ) : null}
+        <section className="mt-6 rounded-3xl border border-[#f2c766]/70 bg-[#f2c766]/10 p-5">
+          <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f2c766]">
+            {isAdmin ? "Administrator session ενεργό" : "Administrator"}
+          </p>
+          <h2 className="mt-3 text-2xl font-black text-white">Users / Approvals</h2>
+          <p className="mt-2 text-sm leading-7 text-slate-200">
+            {isAdmin
+              ? "Η ασφαλής Administrator session είναι ενεργή. Μπορείς να εγκρίνεις, να απορρίψεις ή να μπλοκάρεις χρήστες."
+              : "Founder / Administrator: πάτησε εδώ για ασφαλή σύνδεση και έγκριση ή απόρριψη νέων χρηστών."}
+          </p>
+          <a
+            href={isAdmin
+              ? "/professional/infrastructure/water/admin/approvals"
+              : "/professional/infrastructure/water/admin"}
+            className="mt-4 block rounded-2xl bg-[#f2c766] px-5 py-3 text-center font-black text-black"
+          >
+            {isAdmin ? "Άνοιγμα Κέντρου Εγκρίσεων" : "Σύνδεση ως Administrator"}
+          </a>
+        </section>
 
         {checkingAccess ? (
           <div className="mt-6 rounded-3xl border border-white/10 bg-black/20 p-5 text-slate-200">

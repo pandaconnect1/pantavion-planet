@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { listWaterApprovedDevices } from "@/core/water/water-access-store";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
-  if (!hasWaterAdminSession(request)) {
+  if (!(await hasWaterAdminAuthorization(request))) {
     return NextResponse.json(
       { ok: false, error: "admin_session_required" },
       { status: 401, headers: { "Cache-Control": "no-store" } },

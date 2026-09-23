@@ -2,7 +2,7 @@ import { createHash } from "crypto";
 
 import { NextResponse } from "next/server";
 
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { migrateLegacyApprovedDeviceIfPresent } from "@/core/water/water-access-store";
 
 export const runtime = "nodejs";
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const isAdminSession = hasWaterAdminSession(request);
+  const isAdminSession = await hasWaterAdminAuthorization(request);
   const deviceId = clean(body.deviceId);
   const deviceToken = clean(body.deviceToken);
 

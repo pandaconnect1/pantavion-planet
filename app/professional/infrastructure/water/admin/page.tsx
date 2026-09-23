@@ -12,9 +12,10 @@ export default async function WaterAdminPage() {
     cookieStore.get(WATER_ADMIN_SESSION_COOKIE)?.value || "",
   );
 
-  redirect(
-    isAdmin
-      ? "/professional/infrastructure/water/admin/approvals"
-      : "/professional/infrastructure/water/admin/login",
-  );
+  if (isAdmin) {
+    redirect("/professional/infrastructure/water/admin/approvals");
+  }
+
+  const next = encodeURIComponent("/professional/infrastructure/water/admin/approvals");
+  redirect(`/owner/safety/verify?next=${next}`);
 }
