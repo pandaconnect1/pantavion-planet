@@ -31,7 +31,7 @@ const links = [
   {
     href: "/professional/infrastructure/water/b",
     label: "Map B",
-    description: "DWG + GIS",
+    description: "αυθεντικό DWG · κτηματολογική λειτουργία",
   },
 ];
 
