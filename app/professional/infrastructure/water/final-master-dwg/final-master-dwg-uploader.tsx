@@ -21,9 +21,8 @@ type Props = {
   expectedSha256: string;
 };
 
-const SUPABASE_URL = "https://cxhulvwkagzufbjsdwwu.supabase.co";
 const SUPABASE_PROJECT_ID = "cxhulvwkagzufbjsdwwu";
-const ONE_TIME_UPLOAD_BRIDGE = `${SUPABASE_URL}/functions/v1/pantavion-map-b-one-time-upload`;
+const PROTECTED_UPLOAD_TICKET_URL = "/api/professional/infrastructure/water/final-master-dwg/upload-url";
 const TUS_ENDPOINT = `https://${SUPABASE_PROJECT_ID}.storage.supabase.co/storage/v1/upload/resumable`;
 const TUS_CHUNK_SIZE = 6 * 1024 * 1024;
 
@@ -80,8 +79,10 @@ export default function FinalMasterDwgUploader({
     setMessage("Creating one-time private upload authorization…");
 
     try {
-      const authResponse = await fetch(ONE_TIME_UPLOAD_BRIDGE, {
+      const authResponse = await fetch(PROTECTED_UPLOAD_TICKET_URL, {
         method: "POST",
+        cache: "no-store",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: "{}",
       });

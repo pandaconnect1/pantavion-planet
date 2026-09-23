@@ -1,4 +1,7 @@
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { createHash } from "crypto";
+
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
+import { migrateLegacyApprovedDeviceIfPresent } from "@/core/water/water-access-store";
 import {
   FINAL_MASTER_DWG_FILE_NAME,
   FINAL_MASTER_DWG_SHA256,
@@ -22,10 +25,34 @@ function privateHeaders() {
   };
 }
 
+function clean(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function hashToken(value: string) {
+  return createHash("sha256").update(value).digest("hex");
+}
+
+async function hasApprovedMapBAccess(request: Request) {
+  if (await hasWaterAdminAuthorization(request)) return true;
+
+  const deviceId = clean(request.headers.get("x-pantavion-water-device-id"));
+  const deviceToken = clean(request.headers.get("x-pantavion-water-device-token"));
+
+  if (!deviceId || !deviceToken) return false;
+
+  return Boolean(
+    await migrateLegacyApprovedDeviceIfPresent(
+      deviceId,
+      hashToken(deviceToken),
+    ),
+  );
+}
+
 export async function GET(request: Request) {
-  if (!hasWaterAdminSession(request)) {
+  if (!(await hasApprovedMapBAccess(request))) {
     return Response.json(
-      { ok: false, status: "water_admin_session_required" },
+      { ok: false, status: "water_access_not_approved" },
       { status: 403, headers: privateHeaders() },
     );
   }
