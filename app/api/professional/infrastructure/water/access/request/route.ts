@@ -2,10 +2,7 @@ import { createHash } from "crypto";
 
 import { NextResponse } from "next/server";
 
-import {
-  getWaterAccessRequestByDevice,
-  upsertWaterAccessRequest,
-} from "@/core/water/water-access-store";
+import { createClient } from "@/lib/supabase/server";
 
 type WaterAccessRequestBody = {
   firstName?: string;
@@ -69,43 +66,34 @@ export async function POST(request: Request) {
     }
 
     const requestId = stableRequestId(deviceId);
-    const existingRequest = await getWaterAccessRequestByDevice(deviceId);
-    const previousAttemptCount = Number(existingRequest?.attempt_count || 0);
-    const attemptCount =
-      Number.isFinite(previousAttemptCount) && previousAttemptCount > 0
-        ? Math.floor(previousAttemptCount) + 1
-        : 1;
-
-    const saved = await upsertWaterAccessRequest({
-      id: requestId,
-      device_id: deviceId,
-      token_hash: hashToken(deviceToken),
-      first_name: clean(body.firstName),
-      last_name: clean(body.lastName),
-      title,
-      organization: clean(body.organization),
-      email_or_phone: emailOrPhone,
-      reason: clean(body.reason),
-      device_label: deviceLabel,
-      user_agent: clean(request.headers.get("user-agent")).slice(0, 300),
-      status: "pending_founder_review",
-      attempt_count: attemptCount,
-      created_at: existingRequest?.created_at || now,
-      updated_at: now,
-      last_requested_at: now,
-      decided_at: null,
-      decided_by: null,
-      revoked_device_id: null,
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc("pantavion_water_submit_access_request", {
+      p_id: requestId,
+      p_device_id: deviceId,
+      p_token_hash: hashToken(deviceToken),
+      p_first_name: clean(body.firstName),
+      p_last_name: clean(body.lastName),
+      p_title: title,
+      p_organization: clean(body.organization),
+      p_email_or_phone: emailOrPhone,
+      p_reason: clean(body.reason),
+      p_device_label: deviceLabel,
+      p_user_agent: clean(request.headers.get("user-agent")).slice(0, 300),
     });
+
+    if (error) throw error;
+
+    const saved = Array.isArray(data) ? data[0] : data;
+    const attemptCount = Number(saved?.attempt_count || 1);
 
     return NextResponse.json({
       ok: true,
-      requestId: saved.id,
-      status: saved.status,
+      requestId: saved?.id || requestId,
+      status: saved?.status || "pending_founder_review",
       deviceBound: true,
-      deduplicated: Boolean(existingRequest),
-      attemptCount: saved.attempt_count,
-      storage: "supabase",
+      deduplicated: attemptCount > 1,
+      attemptCount,
+      storage: "supabase-rpc",
     });
   } catch (error) {
     return NextResponse.json(
