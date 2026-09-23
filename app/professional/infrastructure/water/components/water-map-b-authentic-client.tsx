@@ -29,22 +29,35 @@ function importBrowserModule(url: string) {
   return nativeImport(url);
 }
 
+function firstStoredValue(keys: string[]) {
+  if (typeof window === "undefined") return "";
+
+  for (const key of keys) {
+    const value = window.localStorage.getItem(key)?.trim();
+    if (value) return value;
+  }
+
+  return "";
+}
+
 function readStoredWaterDevice() {
   if (typeof window === "undefined") {
     return { deviceId: "", deviceToken: "" };
   }
 
-  const deviceId =
-    window.localStorage.getItem("pantavion_water_device_id") ||
-    window.localStorage.getItem("pantavion-water-device-id") ||
-    window.localStorage.getItem("waterDeviceId") ||
-    "";
+  const deviceId = firstStoredValue([
+    "pantavion:water:device-id:v1",
+    "pantavion_water_device_id",
+    "pantavion-water-device-id",
+    "waterDeviceId",
+  ]);
 
-  const deviceToken =
-    window.localStorage.getItem("pantavion_water_device_token") ||
-    window.localStorage.getItem("pantavion-water-device-token") ||
-    window.localStorage.getItem("waterDeviceToken") ||
-    "";
+  const deviceToken = firstStoredValue([
+    "pantavion:water:device-token:v1",
+    "pantavion_water_device_token",
+    "pantavion-water-device-token",
+    "waterDeviceToken",
+  ]);
 
   if (deviceId && deviceToken) return { deviceId, deviceToken };
 
@@ -67,7 +80,7 @@ function readStoredWaterDevice() {
         return { deviceId: parsedDeviceId, deviceToken: parsedDeviceToken };
       }
     } catch {
-      // Ignore invalid legacy localStorage values and continue fail-closed.
+      // Invalid stored values must never grant access.
     }
   }
 
@@ -76,6 +89,7 @@ function readStoredWaterDevice() {
 
 export default function WaterMapBAuthenticClient() {
   const cadContainerRef = useRef<HTMLDivElement | null>(null);
+  const managerRef = useRef<any>(null);
   const [viewerState, setViewerState] = useState<"loading" | "ready" | "error">("loading");
   const [viewerError, setViewerError] = useState("");
   const [position, setPosition] = useState<PositionState>(null);
@@ -106,6 +120,8 @@ export default function WaterMapBAuthenticClient() {
           manager = AcApDocManager.instance;
         }
 
+        managerRef.current = manager;
+
         const storedDevice = readStoredWaterDevice();
         const response = await fetch(MAP_B_URL, {
           method: "GET",
@@ -128,6 +144,8 @@ export default function WaterMapBAuthenticClient() {
           readOnly: true,
         });
 
+        manager.curView?.zoomToFitDrawing?.();
+
         if (!cancelled) setViewerState("ready");
       } catch (error) {
         if (cancelled) return;
@@ -140,8 +158,13 @@ export default function WaterMapBAuthenticClient() {
 
     return () => {
       cancelled = true;
+      managerRef.current = null;
     };
   }, []);
+
+  function fitDrawing() {
+    managerRef.current?.curView?.zoomToFitDrawing?.();
+  }
 
   function locateMe() {
     if (!navigator.geolocation) return;
@@ -175,8 +198,20 @@ export default function WaterMapBAuthenticClient() {
   }
 
   return (
-    <main className="relative min-h-screen bg-black text-white">
+    <main className="relative min-h-screen overflow-hidden bg-black text-white">
       <div ref={cadContainerRef} className="h-[calc(100vh-72px)] min-h-[680px] w-full bg-black" />
+
+      <div className="pointer-events-none absolute left-3 top-3 z-30 max-w-[78vw] rounded-xl border border-[#d8b45d]/40 bg-black/85 px-3 py-2 shadow-xl backdrop-blur">
+        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#f6c85f]">
+          Map B · Authentic Master
+        </p>
+        <p className="mt-1 text-xs font-bold text-white">
+          Κτηματολογική πλοήγηση · read-only
+        </p>
+        <p className="mt-1 text-[11px] leading-4 text-slate-300">
+          Σύρε για μετακίνηση · pinch/scroll για zoom · tap/click για επιλογή.
+        </p>
+      </div>
 
       {viewerState === "loading" ? (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black text-sm font-black tracking-wide text-[#f6c85f]">
@@ -185,24 +220,45 @@ export default function WaterMapBAuthenticClient() {
       ) : null}
 
       {viewerState === "error" ? (
-        <div className="absolute inset-x-4 top-4 z-20 rounded-xl border border-red-400/40 bg-black/90 p-4 text-sm font-bold text-red-100">
+        <div className="absolute inset-x-4 top-28 z-40 rounded-xl border border-red-400/40 bg-black/90 p-4 text-sm font-bold text-red-100">
           Ο αυθεντικός DWG δεν άνοιξε: {viewerError}
         </div>
       ) : null}
 
-      <button
-        type="button"
-        onClick={locateMe}
-        disabled={locating}
-        aria-label="Η θέση μου"
-        className="absolute bottom-5 right-5 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-black/85 text-xl shadow-xl disabled:opacity-60"
-      >
-        📍
-      </button>
+      {viewerState === "ready" ? (
+        <div className="absolute right-3 top-3 z-40 flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={fitDrawing}
+            aria-label="Ολόκληρο σχέδιο"
+            className="rounded-xl border border-white/25 bg-black/85 px-3 py-2 text-xs font-black text-white shadow-xl backdrop-blur"
+          >
+            ⛶ Ολόκληρο
+          </button>
+          <button
+            type="button"
+            onClick={locateMe}
+            disabled={locating}
+            aria-label="Η θέση μου"
+            className="rounded-xl border border-[#d8b45d]/50 bg-black/85 px-3 py-2 text-xs font-black text-[#f6c85f] shadow-xl backdrop-blur disabled:opacity-60"
+          >
+            📍 {locating ? "Εντοπισμός…" : "Το σημείο μου"}
+          </button>
+        </div>
+      ) : null}
 
       {position ? (
-        <div className="absolute bottom-5 left-5 z-30 rounded-lg bg-black/80 px-3 py-2 text-xs font-bold text-white">
-          {position.latitude.toFixed(6)}, {position.longitude.toFixed(6)} · ±{Math.round(position.accuracyMeters)} m
+        <div className="absolute bottom-4 left-4 z-30 max-w-[calc(100%-2rem)] rounded-xl border border-white/15 bg-black/85 px-3 py-2 text-xs font-bold text-white shadow-xl backdrop-blur">
+          <div>
+            GPS: {position.latitude.toFixed(6)}, {position.longitude.toFixed(6)} · ±
+            {Math.round(position.accuracyMeters)} m
+          </div>
+          {position.warning === "map_b_master_alignment_not_verified" ? (
+            <div className="mt-1 text-[11px] font-semibold text-amber-200">
+              Το GPS καταγράφηκε. Η γεωγραφική ευθυγράμμιση του DWG δεν έχει ακόμη επαληθευτεί,
+              οπότε δεν μετακινούμε τεχνητά το σχέδιο στο στίγμα.
+            </div>
+          ) : null}
         </div>
       ) : null}
     </main>
