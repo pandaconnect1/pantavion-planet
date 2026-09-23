@@ -569,8 +569,6 @@ export default function ControlledWaterSegmentClient() {
   }, [lang, pipeCount]);
 
   useEffect(() => {
-    if (!accessApproved) return;
-
     let cancelled = false;
 
     ensureLeaflet()
@@ -605,7 +603,7 @@ export default function ControlledWaterSegmentClient() {
         mapRef.current = null;
       }
     };
-  }, [accessApproved, lang]);
+  }, [lang]);
 
   async function submitAccessRequest() {
     if (!firstName.trim() || !lastName.trim() || !roleTitle.trim() || !emailOrPhone.trim()) {
@@ -925,6 +923,13 @@ export default function ControlledWaterSegmentClient() {
 
     if (!map || loadInProgressRef.current) return;
 
+    if (!accessApproved) {
+      setMessage(
+        "Ο χάρτης δρόμων, η αναζήτηση και το στίγμα είναι διαθέσιμα άμεσα. Τα προστατευμένα δεδομένα αγωγών εμφανίζονται μόνο σε εγκεκριμένες συσκευές.",
+      );
+      return;
+    }
+
     loadInProgressRef.current = true;
     setLoading(true);
     setMessage(t.loading);
@@ -1057,7 +1062,7 @@ export default function ControlledWaterSegmentClient() {
   useEffect(() => {
     const map = mapRef.current;
 
-    if (!mapReady || !map) return;
+    if (!accessApproved || !mapReady || !map) return;
 
     function clearAutoLoadTimer() {
       if (autoLoadTimerRef.current) {
@@ -1081,12 +1086,55 @@ export default function ControlledWaterSegmentClient() {
       clearAutoLoadTimer();
       map.off("moveend zoomend", scheduleAutoLoad);
     };
-  }, [mapReady, lang, street, number, area, postal]);
+  }, [accessApproved, mapReady, lang, street, number, area, postal]);
 
   if (!accessApproved) {
     return (
       <main className="min-h-screen bg-[#06111f] px-4 py-6 text-white">
-        <section className="mx-auto flex min-h-[80vh] w-full max-w-5xl items-center">
+      <section className="mx-auto mb-4 w-full max-w-5xl rounded-3xl border border-sky-400/30 bg-[#0d1a2d] p-4 shadow-2xl sm:p-5">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-sky-300">
+              ΑΜΕΣΟΣ ΧΑΡΤΗΣ ΠΕΔΙΟΥ
+            </p>
+            <h1 className="mt-2 text-2xl font-black text-white sm:text-3xl">
+              Δρόμοι, αναζήτηση και στίγμα χωρίς αναμονή
+            </h1>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Ο βασικός χάρτης ανοίγει αμέσως για όλους. Οι αγωγοί και τα λοιπά
+              προστατευμένα δεδομένα δικτύου παραμένουν κλειδωμένα μέχρι την έγκριση.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <input value={street} onChange={(event) => setStreet(event.target.value)} placeholder={t.street} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+          <input value={number} onChange={(event) => setNumber(event.target.value)} placeholder={t.number} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+          <input value={area} onChange={(event) => setArea(event.target.value)} placeholder={t.area} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+          <input value={postal} onChange={(event) => setPostal(event.target.value)} placeholder={t.postal} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+        </div>
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <button type="button" onClick={() => void locateMe()} disabled={loading} className="rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-3 text-sm font-black text-[#f8e6ad] disabled:opacity-60">
+            {t.locate}
+          </button>
+          <button type="button" onClick={() => void searchAddressMarker()} disabled={loading} className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-3 text-sm font-black text-sky-100 disabled:opacity-60">
+            {t.search}
+          </button>
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-sm text-slate-200">
+          {message}
+        </div>
+
+        <div className="mt-4 overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
+          <div className="border-b border-slate-700 px-4 py-3 text-sm font-black text-[#f2c766]">
+            Δημόσιος επιχειρησιακός χάρτης — χωρίς στοιχεία αγωγών
+          </div>
+          <div ref={mapEl} className="h-[58vh] min-h-[360px] w-full bg-slate-200 sm:min-h-[480px]" />
+        </div>
+      </section>
+        <section className="mx-auto flex w-full max-w-5xl items-center">
           <div className="w-full rounded-3xl border border-[#b89445]/50 bg-[#0d1a2d] p-5 shadow-2xl sm:p-6">
             <div className="mb-5 flex justify-end">
               <label className="flex min-w-[180px] flex-col gap-2 text-sm font-bold text-[#f2c766]">
