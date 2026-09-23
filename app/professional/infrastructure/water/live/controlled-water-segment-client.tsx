@@ -713,36 +713,99 @@ export default function ControlledWaterSegmentClient() {
       return;
     }
 
+    if (!mapRef.current) {
+      setMessage("Ο χάρτης φορτώνει. Πάτησε ξανά «Το σημείο μου» σε ένα δευτερόλεπτο.");
+      return;
+    }
+
     setMessage(t.locating);
 
+    let settled = false;
+
+    const acceptPosition = (position: GeolocationPosition) => {
+      if (settled) return;
+      settled = true;
+
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      const accuracy = position.coords.accuracy;
+
+      void placeCircleMarker({
+        lat,
+        lng,
+        accuracy,
+        kind: "user",
+        title: t.locate,
+      });
+
+      moveMapToPoint(lat, lng);
+      setMessage(
+        Number.isFinite(accuracy)
+          ? `${t.located} Ακρίβεια περίπου ${Math.round(accuracy)} m.`
+          : t.located,
+      );
+
+      window.setTimeout(() => {
+        void loadPipes();
+      }, 1100);
+    };
+
+    const finalFailure = (error: GeolocationPositionError) => {
+      if (settled) return;
+      settled = true;
+
+      if (error.code === error.PERMISSION_DENIED) {
+        setMessage(
+          "Το iPhone δεν έδωσε άδεια τοποθεσίας. Ρυθμίσεις → Απόρρητο και ασφάλεια → Υπηρεσίες τοποθεσίας → Safari Websites → Κατά τη χρήση και ενεργοποίησε Ακριβής τοποθεσία.",
+        );
+        return;
+      }
+
+      if (error.code === error.POSITION_UNAVAILABLE) {
+        setMessage(
+          "Το iPhone δεν έδωσε διαθέσιμο στίγμα. Έλεγξε ότι οι Υπηρεσίες τοποθεσίας είναι ενεργές και δοκίμασε ξανά σε ανοικτό χώρο.",
+        );
+        return;
+      }
+
+      setMessage(
+        "Το iPhone δεν πρόλαβε να δώσει στίγμα. Πάτησε ξανά «Το σημείο μου».",
+      );
+    };
+
+    const fallbackToBalancedAccuracy = () => {
+      if (settled) return;
+
+      window.navigator.geolocation.getCurrentPosition(
+        acceptPosition,
+        finalFailure,
+        {
+          enableHighAccuracy: false,
+          timeout: 15000,
+          maximumAge: 60000,
+        },
+      );
+    };
+
     window.navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        const accuracy = position.coords.accuracy;
+      acceptPosition,
+      (error) => {
+        if (settled) return;
 
-        void placeCircleMarker({
-          lat,
-          lng,
-          accuracy,
-          kind: "user",
-          title: t.locate,
-        });
+        if (error.code === error.PERMISSION_DENIED) {
+          finalFailure(error);
+          return;
+        }
 
-        moveMapToPoint(lat, lng);
-        setMessage(t.located);
-
-        window.setTimeout(() => {
-          void loadPipes();
-        }, 1100);
-      },
-      () => {
-        setMessage(t.locationUnavailable);
+        // iOS/Safari can time out while forcing GPS even though a usable
+        // Wi-Fi/cell-assisted position is available. Retry once without the
+        // high-accuracy requirement so field crews still get an immediate pin.
+        fallbackToBalancedAccuracy();
       },
       {
         enableHighAccuracy: true,
-        timeout: 12000,
-        maximumAge: 30000,
+        timeout: 10000,
+        maximumAge: 0,
       },
     );
   }
