@@ -19,6 +19,11 @@ const FOUNDER = new Set<PantavionRole>(['founder']);
 const WATER_ADMIN_PREFIX = '/professional/infrastructure/water/admin';
 const WATER_ADMIN_ACCESS_PATH = `${WATER_ADMIN_PREFIX}/access`;
 const WATER_MOBILE_FOUNDER_PATH = '/professional/infrastructure/water/mobile-founder';
+const WATER_FOUNDER_AUTH_ENTRY_PATHS = new Set([
+  WATER_ADMIN_PREFIX,
+  WATER_ADMIN_ACCESS_PATH,
+  `${WATER_ADMIN_PREFIX}/approvals`,
+]);
 const WATER_ADMIN_SESSION_COOKIE = 'pantavion_water_admin_session';
 const WATER_ADMIN_SESSION_VERSION = 'v2';
 const WATER_ADMIN_SESSION_TTL_SECONDS = 60 * 60 * 2;
@@ -137,12 +142,15 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   if (path === WATER_MOBILE_FOUNDER_PATH) {
-    return waterAdminAccessRedirect(request);
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = WATER_ADMIN_PREFIX;
+    redirectUrl.search = '';
+    return NextResponse.redirect(redirectUrl);
   }
 
   const isProtectedWaterAdminPath =
-    path === WATER_ADMIN_PREFIX ||
-    (path.startsWith(`${WATER_ADMIN_PREFIX}/`) && path !== WATER_ADMIN_ACCESS_PATH) ||
+    (!WATER_FOUNDER_AUTH_ENTRY_PATHS.has(path) &&
+      path.startsWith(`${WATER_ADMIN_PREFIX}/`)) ||
     WATER_ADMIN_ONLY_PATHS.some(
       (prefix) => path === prefix || path.startsWith(`${prefix}/`),
     );
