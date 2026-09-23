@@ -32,6 +32,14 @@ const primary = [
     action: "Άνοιγμα Users / Access",
   },
   {
+    title: "Administrator / Approvals",
+    label: "ADMIN CONTROL",
+    description:
+      "Founder/admin είσοδος για έγκριση ή απόρριψη νέων χρηστών, ενεργές/μπλοκαρισμένες συσκευές και protected operational control.",
+    href: "/professional/infrastructure/water/admin",
+    action: "Άνοιγμα Administrator",
+  },
+  {
     title: "Maps A / B / C",
     label: "MAP CENTER",
     description:
