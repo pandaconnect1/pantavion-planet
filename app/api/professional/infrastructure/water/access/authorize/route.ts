@@ -3,7 +3,7 @@ import { createHash } from "crypto";
 import { NextResponse } from "next/server";
 
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
-import { migrateLegacyApprovedDeviceIfPresent } from "@/core/water/water-access-store";
+import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -69,11 +69,23 @@ export async function POST(request: Request) {
     });
   }
 
-  try {
-    const approvedDevice = await migrateLegacyApprovedDeviceIfPresent(
-      deviceId,
-      hashToken(deviceToken),
+  if (!deviceId || !deviceToken) {
+    return noStoreJson(
+      { ok: false, error: "missing_device_claim" },
+      { status: 400 },
     );
+  }
+
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc("pantavion_water_authorize_device", {
+      p_device_id: deviceId,
+      p_token_hash: hashToken(deviceToken),
+    });
+
+    if (error) throw error;
+
+    const approvedDevice = Array.isArray(data) ? data[0] : data;
 
     if (!approvedDevice) {
       return noStoreJson(
@@ -94,7 +106,7 @@ export async function POST(request: Request) {
         phone: approvedDevice.phone,
         deviceId,
       },
-      storage: "supabase",
+      storage: "supabase-rpc",
     });
   } catch {
     return noStoreJson(
