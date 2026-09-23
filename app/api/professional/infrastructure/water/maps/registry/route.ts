@@ -2,7 +2,7 @@ import { createHash } from "crypto";
 import { NextResponse } from "next/server";
 
 import { getPantavionWaterAbcMapSystemContract } from "@/core/infrastructure/water/water-abc-map-system-contract";
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { waterApprovedDeviceMatches } from "@/core/water/water-access-store";
 
 export const runtime = "nodejs";
@@ -14,7 +14,7 @@ function clean(value: unknown) { return typeof value === "string" ? value.trim()
 function hashToken(value: string) { return createHash("sha256").update(value).digest("hex"); }
 
 async function authorizeRegistryAccess(request: Request, body: RegistryRequestBody) {
-  if (hasWaterAdminSession(request)) return { ok: true, mode: "admin-session" as const };
+  if (await hasWaterAdminAuthorization(request)) return { ok: true, mode: "admin-session" as const };
   const deviceId = clean(body.deviceId);
   const deviceToken = clean(body.deviceToken);
   if (!deviceId || !deviceToken) return { ok: false, mode: "denied" as const };
