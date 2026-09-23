@@ -29,6 +29,31 @@ const WATER_ADMIN_SESSION_VERSION = 'v2';
 const WATER_ADMIN_SESSION_TTL_SECONDS = 60 * 60 * 2;
 const WATER_ADMIN_SESSION_CONTEXT = 'pantavion-water-admin-session-v2';
 const WATER_ADMIN_CLOCK_SKEW_SECONDS = 60;
+const PANTAVION_CANONICAL_HOST = 'pantavion.com';
+const PANTAVION_ALIAS_HOSTS = new Set([
+  'www.pantavion.com',
+  'pantavion-planet-production.up.railway.app',
+]);
+
+function canonicalPantavionHostRedirect(request: NextRequest) {
+  const forwardedHost = (request.headers.get('x-forwarded-host') || '')
+    .split(',')[0]
+    .trim()
+    .toLowerCase();
+  const rawHost = forwardedHost || request.headers.get('host') || request.nextUrl.host || '';
+  const host = rawHost.split(':')[0].toLowerCase();
+
+  if (!PANTAVION_ALIAS_HOSTS.has(host)) return null;
+
+  const redirectUrl = request.nextUrl.clone();
+  redirectUrl.protocol = 'https:';
+  redirectUrl.host = PANTAVION_CANONICAL_HOST;
+
+  const response = NextResponse.redirect(redirectUrl, 308);
+  response.headers.set('Cache-Control', 'no-store');
+  return response;
+}
+
 const WATER_ADMIN_ONLY_PATHS = [
   '/professional/infrastructure/water/intelligence',
   '/professional/infrastructure/water/master',
@@ -139,6 +164,9 @@ function waterAdminAccessRedirect(request: NextRequest) {
 }
 
 export async function middleware(request: NextRequest) {
+  const canonicalRedirect = canonicalPantavionHostRedirect(request);
+  if (canonicalRedirect) return canonicalRedirect;
+
   const path = request.nextUrl.pathname;
 
   if (path === WATER_MOBILE_FOUNDER_PATH) {
