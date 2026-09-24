@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,7 +16,7 @@ const ALLOWED_SOURCE_IDS = new Set([
 ]);
 
 export async function POST(request: Request) {
-  if (!hasWaterAdminSession(request)) {
+  if (!await hasWaterAdminAuthorization(request)) {
     return NextResponse.json(
       { ok: false, error: "water_admin_session_required" },
       { status: 403, headers: { "Cache-Control": "private, no-store" } },
