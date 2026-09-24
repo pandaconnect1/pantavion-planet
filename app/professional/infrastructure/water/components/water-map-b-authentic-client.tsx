@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 
 import { assessWaterMapBPosition } from "@/core/water/water-map-b-position-truth";
+import { createClient as createSupabaseClient } from "@/lib/supabase/client";
+import { getSupabasePublicConfig } from "@/lib/supabase/public-config";
 
 type PositionState = {
   latitude: number;
@@ -13,8 +15,47 @@ type PositionState = {
   warning: string | null;
 } | null;
 
-const MAP_B_FILE_NAME = "MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg";
-const MAP_B_URL = "/api/professional/infrastructure/water/final-master-dwg";
+type ViewerState =
+  | "checking"
+  | "loading"
+  | "ready"
+  | "missing"
+  | "uploading"
+  | "auth"
+  | "error";
+
+type OwnerFunctionPayload = {
+  ok?: boolean;
+  status?: string;
+  error?: string;
+  signedUrl?: string;
+  bucket?: string;
+  path?: string;
+  token?: string;
+  fileName?: string;
+  sizeBytes?: number;
+  sha256?: string;
+  expectedSizeBytes?: number;
+  expectedSha256?: string;
+};
+
+class MapBOwnerFunctionError extends Error {
+  status: number;
+  code: string;
+
+  constructor(status: number, code: string) {
+    super(code);
+    this.name = "MapBOwnerFunctionError";
+    this.status = status;
+    this.code = code;
+  }
+}
+
+const MAP_B_FILE_NAME = "GEORGE_MAP_MASTER_B_C_FINAL (4).dwg";
+const MAP_B_SIZE_BYTES = 85703125;
+const MAP_B_SHA256 = "038b9bceda2a660296a9162723f5279e5a2d10eb18d499b087d0e8ffa393b800";
+const MAP_B_FUNCTION = "pantavion-map-b-owner-dwg";
+
 const CAD_VIEWER_MODULE_URL =
   "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/+esm";
 
@@ -29,119 +70,186 @@ function importBrowserModule(url: string) {
   return nativeImport(url);
 }
 
-function readStoredWaterDevice() {
-  if (typeof window === "undefined") {
-    return { deviceId: "", deviceToken: "" };
+async function callOwnerFunction(action: "status" | "sign" | "verify" | "download") {
+  const supabase = createSupabaseClient();
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.getSession();
+
+  if (error || !session?.access_token) {
+    throw new MapBOwnerFunctionError(401, "MAP_B_AUTH_REQUIRED");
   }
 
-  const deviceId =
-    window.localStorage.getItem("pantavion_water_device_id") ||
-    window.localStorage.getItem("pantavion-water-device-id") ||
-    window.localStorage.getItem("waterDeviceId") ||
-    "";
+  const { url, publishableKey } = getSupabasePublicConfig();
+  const response = await fetch(`${url}/functions/v1/${MAP_B_FUNCTION}`, {
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session.access_token}`,
+      apikey: publishableKey,
+    },
+    body: JSON.stringify({ action }),
+  });
 
-  const deviceToken =
-    window.localStorage.getItem("pantavion_water_device_token") ||
-    window.localStorage.getItem("pantavion-water-device-token") ||
-    window.localStorage.getItem("waterDeviceToken") ||
-    "";
+  const payload = (await response.json().catch(() => ({}))) as OwnerFunctionPayload;
 
-  if (deviceId && deviceToken) return { deviceId, deviceToken };
-
-  const possibleJsonKeys = [
-    "pantavion_water_access_device",
-    "pantavion-water-access-device",
-    "waterAccessDevice",
-    "water-approved-device",
-  ];
-
-  for (const key of possibleJsonKeys) {
-    const raw = window.localStorage.getItem(key);
-    if (!raw) continue;
-
-    try {
-      const parsed = JSON.parse(raw);
-      const parsedDeviceId = String(parsed.deviceId || parsed.id || "");
-      const parsedDeviceToken = String(parsed.deviceToken || parsed.token || "");
-      if (parsedDeviceId && parsedDeviceToken) {
-        return { deviceId: parsedDeviceId, deviceToken: parsedDeviceToken };
-      }
-    } catch {
-      // Ignore invalid legacy localStorage values and continue fail-closed.
-    }
+  if (!response.ok) {
+    throw new MapBOwnerFunctionError(
+      response.status,
+      payload.error || `MAP_B_FUNCTION_HTTP_${response.status}`,
+    );
   }
 
-  return { deviceId: "", deviceToken: "" };
+  return payload;
+}
+
+async function sha256Hex(file: File) {
+  const bytes = await file.arrayBuffer();
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((value) => value.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 export default function WaterMapBAuthenticClient() {
   const cadContainerRef = useRef<HTMLDivElement | null>(null);
-  const [viewerState, setViewerState] = useState<"loading" | "ready" | "error">("loading");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [viewerState, setViewerState] = useState<ViewerState>("checking");
   const [viewerError, setViewerError] = useState("");
+  const [uploadLabel, setUploadLabel] = useState("");
   const [position, setPosition] = useState<PositionState>(null);
   const [locating, setLocating] = useState(false);
 
+  async function openSignedMapB(signedUrl: string) {
+    if (!cadContainerRef.current) return;
+
+    setViewerState("loading");
+    const cadViewerModule = await importBrowserModule(CAD_VIEWER_MODULE_URL);
+    const AcApDocManager = cadViewerModule?.AcApDocManager;
+    if (!AcApDocManager) throw new Error("CAD_VIEWER_MODULE_NOT_AVAILABLE");
+    if (!cadContainerRef.current) return;
+
+    let manager: any;
+    try {
+      manager = AcApDocManager.instance;
+    } catch {
+      AcApDocManager.createInstance({
+        container: cadContainerRef.current,
+        autoResize: true,
+        webworkerFileUrls: CAD_WORKERS,
+        checkWorkersOnInit: true,
+      });
+      manager = AcApDocManager.instance;
+    }
+
+    const response = await fetch(signedUrl, {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    if (!response.ok) throw new Error(`MAP_B_DWG_HTTP_${response.status}`);
+
+    const fileContent = await response.arrayBuffer();
+    if (fileContent.byteLength !== MAP_B_SIZE_BYTES) {
+      throw new Error(`MAP_B_SIZE_MISMATCH_${fileContent.byteLength}`);
+    }
+
+    await manager.openDocument(MAP_B_FILE_NAME, fileContent, {
+      minimumChunkSize: 1000,
+      readOnly: true,
+    });
+
+    setViewerState("ready");
+    setViewerError("");
+  }
+
+  async function loadVerifiedMapB() {
+    try {
+      setViewerState("checking");
+      setViewerError("");
+      const payload = await callOwnerFunction("download");
+      if (!payload.signedUrl) throw new Error("MAP_B_SIGNED_URL_MISSING");
+      await openSignedMapB(payload.signedUrl);
+    } catch (error) {
+      if (error instanceof MapBOwnerFunctionError) {
+        if (error.status === 401 || error.status === 403) {
+          setViewerError(error.code);
+          setViewerState("auth");
+          return;
+        }
+        if (error.status === 409 || error.status === 404) {
+          setViewerError("");
+          setViewerState("missing");
+          return;
+        }
+      }
+
+      setViewerError(error instanceof Error ? error.message : String(error));
+      setViewerState("error");
+    }
+  }
+
   useEffect(() => {
-    let cancelled = false;
+    void loadVerifiedMapB();
+    // Intentionally run only once when the Map B workspace mounts.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    async function openExactMapB() {
-      try {
-        if (!cadContainerRef.current) return;
+  async function uploadExactMapB(file: File) {
+    try {
+      setViewerState("uploading");
+      setViewerError("");
 
-        const cadViewerModule = await importBrowserModule(CAD_VIEWER_MODULE_URL);
-        const AcApDocManager = cadViewerModule?.AcApDocManager;
-        if (!AcApDocManager) throw new Error("CAD_VIEWER_MODULE_NOT_AVAILABLE");
-        if (cancelled || !cadContainerRef.current) return;
+      if (file.size !== MAP_B_SIZE_BYTES) {
+        throw new Error(`MAP_B_WRONG_SIZE_${file.size}`);
+      }
 
-        let manager: any;
-        try {
-          manager = AcApDocManager.instance;
-        } catch {
-          AcApDocManager.createInstance({
-            container: cadContainerRef.current,
-            autoResize: true,
-            webworkerFileUrls: CAD_WORKERS,
-            checkWorkersOnInit: true,
-          });
-          manager = AcApDocManager.instance;
+      setUploadLabel("Έλεγχος SHA-256…");
+      const sha256 = await sha256Hex(file);
+      if (sha256 !== MAP_B_SHA256) {
+        throw new Error("MAP_B_SHA256_MISMATCH");
+      }
+
+      setUploadLabel("Δημιουργία ασφαλούς upload…");
+      const signed = await callOwnerFunction("sign");
+
+      if (signed.status !== "already_present") {
+        if (!signed.bucket || !signed.path || !signed.token) {
+          throw new Error("MAP_B_UPLOAD_TOKEN_MISSING");
         }
 
-        const storedDevice = readStoredWaterDevice();
-        const response = await fetch(MAP_B_URL, {
-          method: "GET",
-          cache: "no-store",
-          credentials: "include",
-          headers: {
-            Accept: "application/acad,application/octet-stream",
-            "x-pantavion-water-device-id": storedDevice.deviceId,
-            "x-pantavion-water-device-token": storedDevice.deviceToken,
-          },
-        });
+        setUploadLabel("Ανέβασμα αυθεντικού DWG…");
+        const supabase = createSupabaseClient();
+        const { error } = await supabase.storage
+          .from(signed.bucket)
+          .uploadToSignedUrl(signed.path, signed.token, file, {
+            contentType: "application/acad",
+          });
 
-        if (!response.ok) throw new Error(`MAP_B_DWG_HTTP_${response.status}`);
+        if (error) throw new Error(`MAP_B_UPLOAD_FAILED: ${error.message}`);
+      }
 
-        const fileContent = await response.arrayBuffer();
-        if (cancelled) return;
+      setUploadLabel("Server-side επαλήθευση DWG…");
+      await callOwnerFunction("verify");
 
-        await manager.openDocument(MAP_B_FILE_NAME, fileContent, {
-          minimumChunkSize: 1000,
-          readOnly: true,
-        });
-
-        if (!cancelled) setViewerState("ready");
-      } catch (error) {
-        if (cancelled) return;
+      setUploadLabel("Άνοιγμα Map B…");
+      await loadVerifiedMapB();
+      setUploadLabel("");
+    } catch (error) {
+      if (error instanceof MapBOwnerFunctionError && (error.status === 401 || error.status === 403)) {
+        setViewerError(error.code);
+        setViewerState("auth");
+      } else {
         setViewerError(error instanceof Error ? error.message : String(error));
         setViewerState("error");
       }
+      setUploadLabel("");
+    } finally {
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
-
-    void openExactMapB();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  }
 
   function locateMe() {
     if (!navigator.geolocation) return;
@@ -174,21 +282,84 @@ export default function WaterMapBAuthenticClient() {
     );
   }
 
+  const canUpload = viewerState === "missing" || viewerState === "error";
+
   return (
     <main className="relative min-h-screen bg-black text-white">
       <div ref={cadContainerRef} className="h-[calc(100vh-72px)] min-h-[680px] w-full bg-black" />
 
-      {viewerState === "loading" ? (
+      {viewerState === "checking" || viewerState === "loading" ? (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black text-sm font-black tracking-wide text-[#f6c85f]">
-          Φόρτωση αυθεντικού Map B DWG…
+          {viewerState === "checking" ? "Έλεγχος Map B…" : "Φόρτωση αυθεντικού Map B DWG…"}
+        </div>
+      ) : null}
+
+      {viewerState === "missing" ? (
+        <div className="absolute inset-x-4 top-4 z-30 mx-auto max-w-xl rounded-2xl border border-[#f6c85f]/40 bg-black/95 p-5 text-white shadow-2xl">
+          <p className="text-base font-black">Map B — φόρτωση αυθεντικού DWG</p>
+          <p className="mt-2 text-sm text-white/75">
+            Επιλέγεται μόνο το ακριβές owner-confirmed αρχείο. Πριν αποθηκευτεί γίνεται έλεγχος μεγέθους και SHA-256 και μετά server-side επαλήθευση.
+          </p>
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="mt-4 rounded-xl bg-[#f6c85f] px-4 py-3 text-sm font-black text-black"
+          >
+            Φόρτωση Map B
+          </button>
+        </div>
+      ) : null}
+
+      {viewerState === "uploading" ? (
+        <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/90 px-6 text-center">
+          <div className="rounded-2xl border border-[#f6c85f]/40 bg-black p-6 text-sm font-black text-[#f6c85f]">
+            {uploadLabel || "Επεξεργασία Map B…"}
+          </div>
+        </div>
+      ) : null}
+
+      {viewerState === "auth" ? (
+        <div className="absolute inset-x-4 top-4 z-30 mx-auto max-w-xl rounded-2xl border border-amber-400/40 bg-black/95 p-5 text-sm text-white">
+          <p className="font-black text-amber-200">Απαιτείται ενεργή σύνδεση ιδιοκτήτη Pantavion.</p>
+          <p className="mt-2 text-white/70">
+            Ο Map B παραμένει private και δεν εκτίθεται χωρίς authenticated founder session.
+          </p>
         </div>
       ) : null}
 
       {viewerState === "error" ? (
-        <div className="absolute inset-x-4 top-4 z-20 rounded-xl border border-red-400/40 bg-black/90 p-4 text-sm font-bold text-red-100">
-          Ο αυθεντικός DWG δεν άνοιξε: {viewerError}
+        <div className="absolute inset-x-4 top-4 z-30 mx-auto max-w-xl rounded-2xl border border-red-400/40 bg-black/95 p-5 text-sm font-bold text-red-100">
+          <p>Ο Map B δεν άνοιξε: {viewerError}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => void loadVerifiedMapB()}
+              className="rounded-lg border border-white/30 px-3 py-2 text-white"
+            >
+              Ξανά έλεγχος
+            </button>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="rounded-lg bg-[#f6c85f] px-3 py-2 text-black"
+            >
+              Φόρτωση σωστού DWG
+            </button>
+          </div>
         </div>
       ) : null}
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".dwg,application/acad,application/octet-stream"
+        className="hidden"
+        onChange={(event) => {
+          const file = event.currentTarget.files?.[0];
+          if (file) void uploadExactMapB(file);
+        }}
+        disabled={!canUpload && viewerState !== "missing"}
+      />
 
       <button
         type="button"
