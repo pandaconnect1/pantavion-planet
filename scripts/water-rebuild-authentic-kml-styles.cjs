@@ -53,7 +53,7 @@ function stripTags(value) {
 
 function extractFirst(block, tag) {
   const m = block.match(
-    new RegExp(`<${tag}(?:\\\\s[^>]*)?>([\\\\s\\\\S]*?)<\\\\/${tag}>`, "i"),
+    new RegExp(`<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${tag}>`, "i"),
   );
   return m ? stripTags(m[1]) : "";
 }
