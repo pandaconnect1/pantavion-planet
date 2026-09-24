@@ -91,6 +91,69 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const bbox = parseWaterSegmentBbox(url.searchParams);
     const maxFeatures = parseWaterSegmentLimit(url.searchParams);
+
+    const deviceId = clean(request.headers.get("x-pantavion-water-device-id"));
+    const deviceToken = clean(request.headers.get("x-pantavion-water-device-token"));
+
+    if (deviceId && deviceToken) {
+      const directUrl = new URL(
+        "https://cxhulvwkagzufbjsdwwu.supabase.co/functions/v1/pantavion-map-a-live-segment",
+      );
+
+      directUrl.searchParams.set("minLng", String(bbox.minLng));
+      directUrl.searchParams.set("minLat", String(bbox.minLat));
+      directUrl.searchParams.set("maxLng", String(bbox.maxLng));
+      directUrl.searchParams.set("maxLat", String(bbox.maxLat));
+      directUrl.searchParams.set("maxFeatures", String(maxFeatures));
+
+      const directResponse = await fetch(directUrl, {
+        cache: "no-store",
+        headers: {
+          "x-pantavion-water-device-id": deviceId,
+          "x-pantavion-water-device-token": deviceToken,
+        },
+      });
+
+      const directJson = await directResponse.json().catch(() => null);
+
+      if (directResponse.ok && directJson) {
+        return NextResponse.json(directJson, {
+          status: 200,
+          headers: {
+            "Cache-Control": "no-store",
+            "X-Pantavion-Water-Segment": "supabase-private-index-authentic-source",
+            "X-Pantavion-Water-Access-Mode": access.mode,
+            "X-Pantavion-Data-Returned": "segment-only",
+          },
+        });
+      }
+
+      if (directResponse.status === 400 || directResponse.status === 403) {
+        return NextResponse.json(
+          directJson || {
+            status: "segment_error",
+            error: "water_segment_unavailable",
+            diagnosticCode:
+              directResponse.status === 403 ? "WATER_ACCESS" : "WATER_BBOX",
+            dataReturned: false,
+            segmentReturned: false,
+            completeNetworkReturned: false,
+            rawMasterReturned: false,
+            browserFullNetworkLoaded: false,
+          },
+          {
+            status: directResponse.status,
+            headers: {
+              "Cache-Control": "no-store",
+              "X-Pantavion-Water-Segment": "supabase-direct-rejected",
+              "X-Pantavion-Water-Access-Mode": access.mode,
+              "X-Pantavion-Data-Returned": "false",
+            },
+          },
+        );
+      }
+    }
+
     const result = await getControlledWaterSegmentFromPrivateIndex(bbox, maxFeatures);
 
     return NextResponse.json(result, {
