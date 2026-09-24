@@ -1,0 +1,41 @@
+name: Pantavion Map A Exact Visible Loader Validation
+
+on:
+  push:
+    branches:
+      - water/map-a-authentic-styles-20260925
+    paths:
+      - 'app/professional/infrastructure/water/live/controlled-water-segment-client.tsx'
+      - '.github/workflows/pantavion-map-a-exact-loader-validation.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-map-a-exact-loader-validation
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Typecheck and build exact visible loader
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout isolated branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Full Next.js build
+        run: npm run build
