@@ -15,6 +15,8 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
+// PANTAVION_MAP_A_SUPABASE_LIVE_BRIDGE_V1
+
 type WaterSegmentAccessDecision =
   | {
       ok: true;
