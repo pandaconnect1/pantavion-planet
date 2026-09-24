@@ -48,32 +48,47 @@ export async function POST(request: Request) {
   if (boundaryResponse) return boundaryResponse;
 
   try {
-    const expectedAccessCode = getWaterAdminAccessCode();
     const sessionSecret = getWaterAdminSessionSecret();
 
-    if (!expectedAccessCode || !sessionSecret) {
+    if (!sessionSecret) {
       return NextResponse.json(
         {
           ok: false,
-          error: "admin_secret_not_configured",
-          message: "Δεν έχει ρυθμιστεί σωστά το founder/admin security secret στο ενεργό production runtime.",
+          error: "admin_session_secret_not_configured",
+          message: "Δεν έχει ρυθμιστεί το founder/admin session secret στο ενεργό production runtime.",
         },
         { status: 500, headers: { "Cache-Control": "no-store" } },
       );
     }
 
-    const body = (await request.json()) as AdminSessionBody;
-    const accessCode = clean(body.accessCode, 1000);
+    const founderAuthorized = await hasWaterAdminAuthorization(request);
 
-    if (!accessCode || !safeSecretEqual(accessCode, expectedAccessCode)) {
-      return NextResponse.json(
-        {
-          ok: false,
-          error: "invalid_admin_access_code",
-          message: "Λάθος founder/admin access code.",
-        },
-        { status: 401, headers: { "Cache-Control": "no-store" } },
-      );
+    if (!founderAuthorized) {
+      const expectedAccessCode = getWaterAdminAccessCode();
+      const body = (await request.json().catch(() => ({}))) as AdminSessionBody;
+      const accessCode = clean(body.accessCode, 1000);
+
+      if (!expectedAccessCode) {
+        return NextResponse.json(
+          {
+            ok: false,
+            error: "founder_sign_in_required",
+            message: "Συνδέσου ως ενεργός founder με AAL2 ή χρησιμοποίησε ρυθμισμένο founder/admin access code.",
+          },
+          { status: 401, headers: { "Cache-Control": "no-store" } },
+        );
+      }
+
+      if (!accessCode || !safeSecretEqual(accessCode, expectedAccessCode)) {
+        return NextResponse.json(
+          {
+            ok: false,
+            error: "invalid_admin_access_code",
+            message: "Λάθος founder/admin access code.",
+          },
+          { status: 401, headers: { "Cache-Control": "no-store" } },
+        );
+      }
     }
 
     const response = NextResponse.json(
