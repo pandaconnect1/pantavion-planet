@@ -24,7 +24,9 @@ function hashToken(value: string) {
   return createHash("sha256").update(value).digest("hex");
 }
 
-function toClientFault(row: any) {
+type FaultRow = Record<string, unknown>;
+
+function toClientFault(row: FaultRow) {
   return {
     id: String(row.id || ""),
     createdAt: String(row.created_at || ""),
