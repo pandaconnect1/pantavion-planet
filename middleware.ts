@@ -32,7 +32,6 @@ const WATER_ADMIN_CLOCK_SKEW_SECONDS = 60;
 const PANTAVION_CANONICAL_HOST = 'pantavion.com';
 const PANTAVION_ALIAS_HOSTS = new Set([
   'www.pantavion.com',
-  'pantavion-planet-production.up.railway.app',
 ]);
 
 function canonicalPantavionHostRedirect(request: NextRequest) {
