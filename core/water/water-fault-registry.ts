@@ -52,35 +52,35 @@ export type WaterFaultRecord = {
 
 export const WATER_FAULT_TYPE_LABELS: Record<WaterFaultType, string> = {
   broken_pipe: "Σπασμένος αγωγός",
-  service_leak: "ιαρροή παροχής",
-  low_pressure: "αμηλή πίεση",
-  no_water: "ωρίς νερό",
-  broken_valve: "αλασμένη βάνα / ρεούλα",
-  valve_not_found: "άνα / ρεούλα δεν βρέθηκε",
-  valve_not_closing: "άνα / ρεούλα δεν κλείνει",
-  tank_leak: "ιαρροή δεξαμενής",
+  service_leak: "Διαρροή παροχής",
+  low_pressure: "ΧΧαμηλή πίεση",
+  no_water: "Χωρίς νερό",
+  broken_valve: "Χαλασμένη βάνα / ρεούλα",
+  valve_not_found: "Βάνα / ρεούλα δεν βρέθηκε",
+  valve_not_closing: "Βάνα / ρεούλα δεν κλείνει",
+  tank_leak: "Διαρροή δεξαμενής",
   suspected_loss: "Ύποπτη απώλεια νερού",
-  road_safety: "ίνδυνος δρόμου / ασφάλειας",
-  after_works_fault: "λάβη μετά από έργο",
+  road_safety: "Κίνδυνος δρόμου / ασφάλειας",
+  after_works_fault: "Βλάβη μετά από έργο",
   other: "Άλλη βλάβη",
 };
 
 export const WATER_FAULT_PRIORITY_LABELS: Record<WaterFaultPriority, string> = {
-  critical: "ρίσιμη",
-  high: "ψηλή",
-  normal: "ανονική",
-  low: "αμηλή",
+  critical: "Κρίσιμη",
+  high: "Υψηλή",
+  normal: "Κανονική",
+  low: "Χαμηλή",
 };
 
 export const WATER_FAULT_STATUS_LABELS: Record<WaterFaultStatus, string> = {
-  new: "έα",
-  assigned: "νατέθηκε",
+  new: "Νέα",
+  assigned: "Ανατέθηκε",
   in_progress: "Σε εξέλιξη",
-  waiting_materials: "ναμονή υλικών",
-  waiting_supervisor: "ναμονή επιστάτη",
-  completed: "λοκληρώθηκε",
-  needs_review: "ρειάζεται έλεγχο",
-  archived: "ρχείο",
+  waiting_materials: "Αναμονή υλικών",
+  waiting_supervisor: "Αναμονή επιστάτη",
+  completed: "Ολοκληρώθηκε",
+  needs_review: "Χρειάζεται έλεγχο",
+  archived: "Αρχείο",
 };
 
 export const WATER_FAULT_PRIORITY_ORDER: Record<WaterFaultPriority, number> = {
@@ -91,11 +91,11 @@ export const WATER_FAULT_PRIORITY_ORDER: Record<WaterFaultPriority, number> = {
 };
 
 export const WATER_FAULT_REGISTRY_DOCTRINE = {
-  name: "ητρώο λαβών Ύδρευσης",
+  name: "Μητρώο Βλαβών Ύδρευσης",
   purpose:
-    "άθε βλάβη καταγράφεται με περιοχή, οδό, είδος, προτεραιότητα, συνεργείο, υλικά, αποκοπή νερού, βάνες/ρεούλες και κατάσταση.",
+    "Κάθε βλάβη καταγράφεται με περιοχή, οδό, είδος, προτεραιότητα, συνεργείο, υλικά, αποκοπή νερού, βάνες/ρεούλες και κατάσταση.",
   safety:
-    " καταχώρηση δεν αλλάζει το κύριο δίκτυο. ρώτα γίνεται αρχείο, μετά έλεγχος επιστάτη, μετά έγκριση και μόνο τότε μπορεί να ενημερώσει κοινό χάρτη ή κύριο μητρώο.",
+    "Η καταχώρηση δεν αλλάζει το κύριο δίκτυο. ρώτα γίνεται αΑρχείο, μετά έλεγχος επιστάτη, μετά έγκριση και μόνο τότε μπορεί να ενημερώσει κοινό χάρτη ή κύριο μητρώο.",
   nextDatabaseStep:
-    " πρώτη έκδοση αποθηκεύει στη συσκευή.  επόμενη έκδοση θα συνδεθεί με πραγματική βάση δεδομένων και API για μόνιμη οργανισμική χρήση.",
+    "Η πρώτη έκδοση αποθηκεύει στη συσκευή. Η επόμενη έκδοση θα συνδεθεί με πραγματική βάση δεδομένων και API για μόνιμη οργανισμική χρήση.",
 } as const;
