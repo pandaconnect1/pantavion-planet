@@ -126,7 +126,7 @@ export default function WaterFaultRegistryClient() {
     event.preventDefault();
 
     if (!form.area.trim() && !form.street.trim()) {
-      setMessage("ρειάζεται τουλάχιστον περιοχή ή οδός.");
+      setMessage("Χρειάζεται τουλάχιστον περιοχή ή οδός.");
       return;
     }
 
@@ -141,7 +141,7 @@ export default function WaterFaultRegistryClient() {
     const next = [record, ...faults];
     persist(next);
     setForm(emptyFault);
-    setMessage(" βλάβη καταχωρήθηκε στο μητρώο της συσκευής και είναι έτοιμη για έλεγχο επιστάτη.");
+    setMessage("Η βλάβη καταχωρήθηκε στο μητρώο της συσκευής και είναι έτοιμη για έλεγχο επιστάτη.");
   }
 
   function updateStatus(id: string, status: WaterFaultStatus) {
@@ -155,7 +155,7 @@ export default function WaterFaultRegistryClient() {
   }
 
   function removeFault(id: string) {
-    const ok = window.confirm("α αρχειοθετηθεί/διαγραφεί αυτή η τοπική καταχώρηση;");
+    const ok = window.confirm("Να αρχειοθετηθεί/διαγραφεί αυτή η τοπική καταχώρηση;");
     if (!ok) return;
 
     const next = faults.filter((fault) => fault.id !== id);
@@ -210,7 +210,7 @@ export default function WaterFaultRegistryClient() {
             Pantavion Ύδρευση
           </p>
           <h1 className="mt-4 max-w-5xl text-4xl font-black leading-tight text-white sm:text-5xl">
-            ητρώο λαβών Ύδρευσης
+            Μητρώο Βλαβών Ύδρευσης
           </h1>
           <p className="mt-4 max-w-5xl text-base font-semibold leading-8 text-slate-200">
             {WATER_FAULT_REGISTRY_DOCTRINE.purpose}
@@ -224,19 +224,19 @@ export default function WaterFaultRegistryClient() {
               href="/professional/infrastructure/water/supervisor"
               className="rounded-full border border-[#f6c85f]/50 bg-[#f6c85f]/15 px-5 py-3 text-sm font-black text-[#ffe29a]"
             >
-              θόνη επιστάτη
+              Οθόνη επιστάτη
             </Link>
             <Link
               href="/professional/infrastructure/water/workspaces"
               className="rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-black text-white"
             >
-              όλοι
+              Ρόλοι
             </Link>
             <Link
               href="/professional/infrastructure/water/live"
               className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-black text-emerald-100"
             >
-              άρτης
+              Χάρτης
             </Link>
           </div>
         </div>
@@ -247,19 +247,19 @@ export default function WaterFaultRegistryClient() {
             <p className="mt-2 text-3xl font-black">{stats.total}</p>
           </div>
           <div className="rounded-3xl border border-white/10 bg-[#071425] p-4">
-            <p className="text-xs font-black text-[#f6c85f]">νοικτές</p>
+            <p className="text-xs font-black text-[#f6c85f]">Ανοικτές</p>
             <p className="mt-2 text-3xl font-black">{stats.open}</p>
           </div>
           <div className="rounded-3xl border border-red-400/30 bg-red-500/10 p-4">
-            <p className="text-xs font-black text-red-100">ρίσιμες</p>
+            <p className="text-xs font-black text-red-100">Κρίσιμες</p>
             <p className="mt-2 text-3xl font-black">{stats.critical}</p>
           </div>
           <div className="rounded-3xl border border-sky-400/30 bg-sky-500/10 p-4">
-            <p className="text-xs font-black text-sky-100">ποκοπές</p>
+            <p className="text-xs font-black text-sky-100">Αποκοπές</p>
             <p className="mt-2 text-3xl font-black">{stats.cutoff}</p>
           </div>
           <div className="rounded-3xl border border-orange-400/30 bg-orange-500/10 p-4">
-            <p className="text-xs font-black text-orange-100">άνες/ρεούλες</p>
+            <p className="text-xs font-black text-orange-100">Βάνες/ρεούλες</p>
             <p className="mt-2 text-3xl font-black">{stats.valve}</p>
           </div>
         </section>
@@ -269,14 +269,14 @@ export default function WaterFaultRegistryClient() {
             onSubmit={submitFault}
             className="rounded-[2rem] border border-[#f6c85f]/20 bg-[#071425] p-5 shadow-[0_20px_70px_rgba(0,0,0,0.28)]"
           >
-            <h2 className="text-2xl font-black text-white">έα βλάβη</h2>
+            <h2 className="text-2xl font-black text-white">Νέα βλάβη</h2>
             <p className="mt-2 text-sm font-semibold leading-7 text-slate-300">
-              αταχώρησε γρήγορα τη βλάβη. ετά θα συνδεθεί με επιστάτη,
+              Καταχώρησε γρήγορα τη βλάβη. Μετά θα συνδεθεί με επιστάτη,
               συνεργείο, υλικά, αποθήκη, λογιστήριο και HR.
             </p>
 
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
-              <Field label="οιος την ανέφερε">
+              <Field label="Ποιος την ανέφερε">
                 <Input
                   value={form.reportedBy}
                   onChange={(event) => setForm({ ...form, reportedBy: event.target.value })}
@@ -284,23 +284,23 @@ export default function WaterFaultRegistryClient() {
                 />
               </Field>
 
-              <Field label="εριοχή / χωριό">
+              <Field label="Περιοχή / χωριό">
                 <Input
                   value={form.area}
                   onChange={(event) => setForm({ ...form, area: event.target.value })}
-                  placeholder="π.χ. ερμασόγεια"
+                  placeholder="π.χ. Γερμασόγεια"
                 />
               </Field>
 
-              <Field label="δός">
+              <Field label="Οδός">
                 <Input
                   value={form.street}
                   onChange={(event) => setForm({ ...form, street: event.target.value })}
-                  placeholder="π.χ. γίου εωργίου"
+                  placeholder="π.χ. Αγίου Γεωργίου"
                 />
               </Field>
 
-              <Field label="ριθμός">
+              <Field label="Αριθμός">
                 <Input
                   value={form.number}
                   onChange={(event) => setForm({ ...form, number: event.target.value })}
@@ -308,7 +308,7 @@ export default function WaterFaultRegistryClient() {
                 />
               </Field>
 
-              <Field label="αχυδρομικός / ζώνη">
+              <Field label="Ταχυδρομικός / ζώνη">
                 <Input
                   value={form.postal}
                   onChange={(event) => setForm({ ...form, postal: event.target.value })}
@@ -316,15 +316,15 @@ export default function WaterFaultRegistryClient() {
                 />
               </Field>
 
-              <Field label="ώνη ύδρευσης">
+              <Field label="Ζώνη ύδρευσης">
                 <Input
                   value={form.zone}
                   onChange={(event) => setForm({ ...form, zone: event.target.value })}
-                  placeholder="π.χ. ώνη 12"
+                  placeholder="π.χ. Ζώνη 12"
                 />
               </Field>
 
-              <Field label="ίδος βλάβης">
+              <Field label="Είδος βλάβης">
                 <Select
                   value={form.faultType}
                   onChange={(event) =>
@@ -339,7 +339,7 @@ export default function WaterFaultRegistryClient() {
                 </Select>
               </Field>
 
-              <Field label="ροτεραιότητα">
+              <Field label="Προτεραιότητα">
                 <Select
                   value={form.priority}
                   onChange={(event) =>
@@ -354,7 +354,7 @@ export default function WaterFaultRegistryClient() {
                 </Select>
               </Field>
 
-              <Field label="ατάσταση">
+              <Field label="Κατάσταση">
                 <Select
                   value={form.status}
                   onChange={(event) =>
@@ -377,7 +377,7 @@ export default function WaterFaultRegistryClient() {
                 />
               </Field>
 
-              <Field label="πηρεαζόμενοι καταναλωτές">
+              <Field label="Επηρεαζόμενοι καταναλωτές">
                 <Input
                   value={form.affectedConsumers}
                   onChange={(event) =>
@@ -394,7 +394,7 @@ export default function WaterFaultRegistryClient() {
                     checked={form.waterCutoff}
                     onChange={(event) => setForm({ ...form, waterCutoff: event.target.checked })}
                   />
-                  πάρχει αποκοπή νερού
+                  πάρχει αΑποκοπή νερού
                 </label>
                 <label className="flex items-center gap-3 text-sm font-black text-white">
                   <input
@@ -402,13 +402,13 @@ export default function WaterFaultRegistryClient() {
                     checked={form.valveProblem}
                     onChange={(event) => setForm({ ...form, valveProblem: event.target.checked })}
                   />
-                  πάρχει πρόβλημα σε βάνα / ρεούλα
+                  πάρχει πρόβλημα σε βΒάνα / ρεούλα
                 </label>
               </div>
             </div>
 
             <div className="mt-4 grid gap-4">
-              <Field label="λικά">
+              <Field label="Υλικά">
                 <TextArea
                   value={form.materials}
                   onChange={(event) => setForm({ ...form, materials: event.target.value })}
@@ -420,11 +420,11 @@ export default function WaterFaultRegistryClient() {
                 <TextArea
                   value={form.notes}
                   onChange={(event) => setForm({ ...form, notes: event.target.value })}
-                  placeholder="εριγραφή βλάβης, σημείο, παρατηρήσεις πεδίου"
+                  placeholder="Περιγραφή βλάβης, σημείο, παρατηρήσεις πεδίου"
                 />
               </Field>
 
-              <Field label="πόφαση / οδηγία επιστάτη">
+              <Field label="Απόφαση / οδηγία επιστάτη">
                 <TextArea
                   value={form.supervisorDecision}
                   onChange={(event) =>
@@ -450,22 +450,22 @@ export default function WaterFaultRegistryClient() {
           <section className="rounded-[2rem] border border-[#f6c85f]/20 bg-[#071425] p-5 shadow-[0_20px_70px_rgba(0,0,0,0.28)]">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-2xl font-black text-white">ίστα βλαβών</h2>
+                <h2 className="text-2xl font-black text-white">Λίστα βλαβών</h2>
                 <p className="mt-2 text-sm font-semibold text-slate-300">
-                  α πιο επείγοντα εμφανίζονται πρώτα.
+                  Τα πιο επείγοντα εμφανίζονται πρώτα.
                 </p>
               </div>
               <Input
                 value={filter}
                 onChange={(event) => setFilter(event.target.value)}
-                placeholder="ναζήτηση βλάβης..."
+                placeholder="Αναζήτηση βλάβης..."
               />
             </div>
 
             <div className="mt-5 grid gap-4">
               {filteredFaults.length === 0 ? (
                 <div className="rounded-3xl border border-white/10 bg-black/20 p-5 text-sm font-bold text-slate-300">
-                  εν υπάρχουν καταχωρημένες βλάβες σε αυτή τη συσκευή.
+                  Δεν υπάρχουν καταχωρημένες βλάβες σε αυτή τη συσκευή.
                 </div>
               ) : (
                 filteredFaults.map((fault) => (
@@ -484,12 +484,12 @@ export default function WaterFaultRegistryClient() {
                           </span>
                           {fault.waterCutoff ? (
                             <span className="rounded-full border border-sky-400/40 bg-sky-500/10 px-3 py-1 text-xs font-black text-sky-100">
-                              ποκοπή νερού
+                              Αποκοπή νερού
                             </span>
                           ) : null}
                           {fault.valveProblem ? (
                             <span className="rounded-full border border-orange-400/40 bg-orange-500/10 px-3 py-1 text-xs font-black text-orange-100">
-                              άνα / ρεούλα
+                              Βάνα / ρεούλα
                             </span>
                           ) : null}
                         </div>
@@ -506,7 +506,7 @@ export default function WaterFaultRegistryClient() {
                             fault.postal,
                           ]
                             .filter(Boolean)
-                            .join(" · ") || "ωρίς πλήρη διεύθυνση"}
+                            .join(" · ") || "Χωρίς πλήρη διεύθυνση"}
                         </p>
                       </div>
 
@@ -536,9 +536,9 @@ export default function WaterFaultRegistryClient() {
                     <div className="mt-4 grid gap-3 text-sm font-semibold leading-7 text-slate-300">
                       {fault.assignedCrew ? <p>Συνεργείο: {fault.assignedCrew}</p> : null}
                       {fault.affectedConsumers ? (
-                        <p>πηρεαζόμενοι: {fault.affectedConsumers}</p>
+                        <pΕπηρεαζόμενοι: {fault.affectedConsumers}</p>
                       ) : null}
-                      {fault.materials ? <p>λικά: {fault.materials}</p> : null}
+                      {fault.materials ? <pΥλικά: {fault.materials}</p> : null}
                       {fault.notes ? <p>Σημειώσεις: {fault.notes}</p> : null}
                       {fault.supervisorDecision ? (
                         <p className="rounded-2xl border border-[#f6c85f]/25 bg-[#f6c85f]/10 px-4 py-3 text-[#ffe29a]">
@@ -546,7 +546,7 @@ export default function WaterFaultRegistryClient() {
                         </p>
                       ) : null}
                       <p className="text-xs text-slate-500">
-                        ημιουργία: {new Date(fault.createdAt).toLocaleString("el-CY")}
+                        Δημιουργία: {new Date(fault.createdAt).toLocaleString("el-CY")}
                       </p>
                     </div>
                   </article>
@@ -557,7 +557,7 @@ export default function WaterFaultRegistryClient() {
         </section>
 
         <section className="mt-6 rounded-[2rem] border border-white/10 bg-[#071425] p-5">
-          <h2 className="text-2xl font-black text-white">πόμενη αναβάθμιση</h2>
+          <h2 className="text-2xl font-black text-white">Επόμενη αναβάθμιση</h2>
           <p className="mt-3 text-sm font-semibold leading-7 text-slate-300">
             {WATER_FAULT_REGISTRY_DOCTRINE.nextDatabaseStep}
           </p>
