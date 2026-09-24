@@ -15,6 +15,111 @@ import {
 } from "@/core/water/water-fault-registry";
 
 const STORAGE_KEY = "pantavion.water.fault.registry.v1";
+const DEVICE_ID_KEY = "pantavion:water:device-id:v1";
+const DEVICE_TOKEN_KEY = "pantavion:water:device-token:v1";
+const FAULT_API = "/api/professional/infrastructure/water/faults";
+
+type DeviceIdentity = {
+  deviceId: string;
+  deviceToken: string;
+};
+
+type FaultApiResult = {
+  ok?: boolean;
+  error?: string;
+  faults?: WaterFaultRecord[];
+  fault?: WaterFaultRecord;
+  storage?: string;
+};
+
+function randomDevicePart() {
+  if (typeof window !== "undefined" && window.crypto?.getRandomValues) {
+    const values = window.crypto.getRandomValues(new Uint32Array(4));
+    return Array.from(values).map((value) => value.toString(36)).join("");
+  }
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+}
+
+function getOrCreateWaterDevice(): DeviceIdentity {
+  const legacyIdKeys = [
+    "pantavion_water_device_id",
+    "pantavion-water-device-id",
+    "waterDeviceId",
+  ];
+  const legacyTokenKeys = [
+    "pantavion_water_device_token",
+    "pantavion-water-device-token",
+    "waterDeviceToken",
+  ];
+
+  let deviceId = window.localStorage.getItem(DEVICE_ID_KEY) || "";
+  let deviceToken = window.localStorage.getItem(DEVICE_TOKEN_KEY) || "";
+
+  if (!deviceId) {
+    for (const key of legacyIdKeys) {
+      const value = window.localStorage.getItem(key) || "";
+      if (value) {
+        deviceId = value;
+        break;
+      }
+    }
+  }
+
+  if (!deviceToken) {
+    for (const key of legacyTokenKeys) {
+      const value = window.localStorage.getItem(key) || "";
+      if (value) {
+        deviceToken = value;
+        break;
+      }
+    }
+  }
+
+  if (!deviceId) deviceId = `water-device-${Date.now().toString(36)}-${randomDevicePart()}`;
+  if (!deviceToken) deviceToken = `water-token-${randomDevicePart()}-${randomDevicePart()}`;
+
+  window.localStorage.setItem(DEVICE_ID_KEY, deviceId);
+  window.localStorage.setItem(DEVICE_TOKEN_KEY, deviceToken);
+  window.localStorage.setItem("pantavion_water_device_id", deviceId);
+  window.localStorage.setItem("pantavion_water_device_token", deviceToken);
+  window.localStorage.setItem(
+    "pantavion_water_access_device",
+    JSON.stringify({ deviceId, deviceToken }),
+  );
+
+  return { deviceId, deviceToken };
+}
+
+async function postFaultApi(
+  device: DeviceIdentity,
+  action: "list" | "create" | "status",
+  extra: Record<string, unknown> = {},
+): Promise<FaultApiResult> {
+  const response = await fetch(FAULT_API, {
+    method: "POST",
+    credentials: "include",
+    cache: "no-store",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action,
+      deviceId: device.deviceId,
+      deviceToken: device.deviceToken,
+      ...extra,
+    }),
+  });
+
+  const payload = (await response.json().catch(() => ({}))) as FaultApiResult;
+
+  if (!response.ok) {
+    return {
+      ...payload,
+      ok: false,
+      error: payload.error || `HTTP_${response.status}`,
+    };
+  }
+
+  return payload;
+}
 
 const emptyFault = {
   reportedBy: "",
@@ -109,12 +214,61 @@ function priorityClass(priority: WaterFaultPriority) {
 
 export default function WaterFaultRegistryClient() {
   const [faults, setFaults] = useState<WaterFaultRecord[]>([]);
+  const [device, setDevice] = useState<DeviceIdentity | null>(null);
   const [form, setForm] = useState(emptyFault);
   const [message, setMessage] = useState("Έτοιμο για καταχώρηση βλάβης.");
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    setFaults(loadFaults());
+    let cancelled = false;
+
+    async function loadRegistry() {
+      const currentDevice = getOrCreateWaterDevice();
+      const localRecords = loadFaults();
+      setDevice(currentDevice);
+      setMessage("Σύνδεση με το κεντρικό Μητρώο Βλαβών...");
+
+      const first = await postFaultApi(currentDevice, "list");
+
+      if (cancelled) return;
+
+      if (!first.ok) {
+        setFaults(localRecords);
+        setMessage(
+          first.error === "water_access_required"
+            ? "Η συσκευή δεν έχει ενεργή έγκριση για το κεντρικό Μητρώο. Τα τοπικά δεδομένα παραμένουν ασφαλή."
+            : "Δεν ήταν διαθέσιμο το κεντρικό Μητρώο. Εμφανίζεται το offline cache.",
+        );
+        return;
+      }
+
+      // One-time idempotent migration of any older local-only records.
+      for (const record of localRecords) {
+        await postFaultApi(currentDevice, "create", { fault: record });
+      }
+
+      const refreshed = localRecords.length
+        ? await postFaultApi(currentDevice, "list")
+        : first;
+
+      if (cancelled) return;
+
+      const remoteRecords = refreshed.ok && Array.isArray(refreshed.faults)
+        ? refreshed.faults
+        : Array.isArray(first.faults)
+          ? first.faults
+          : [];
+
+      setFaults(remoteRecords);
+      saveFaults(remoteRecords);
+      setMessage("Κεντρικό Μητρώο Βλαβών συνδεδεμένο με Supabase.");
+    }
+
+    void loadRegistry();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   function persist(next: WaterFaultRecord[]) {
@@ -122,11 +276,16 @@ export default function WaterFaultRegistryClient() {
     saveFaults(next);
   }
 
-  function submitFault(event: React.FormEvent<HTMLFormElement>) {
+  async function submitFault(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!form.area.trim() && !form.street.trim()) {
       setMessage("Χρειάζεται τουλάχιστον περιοχή ή οδός.");
+      return;
+    }
+
+    if (!device) {
+      setMessage("Δεν έχει αρχικοποιηθεί η ταυτότητα της Water συσκευής.");
       return;
     }
 
@@ -138,28 +297,55 @@ export default function WaterFaultRegistryClient() {
       ...form,
     };
 
-    const next = [record, ...faults];
+    setMessage("Αποθήκευση στο κεντρικό Μητρώο Βλαβών...");
+    const result = await postFaultApi(device, "create", { fault: record });
+
+    if (!result.ok || !result.fault) {
+      setMessage(
+        result.error === "water_access_required"
+          ? "Η συσκευή χρειάζεται ενεργή έγκριση πριν γράψει στο κεντρικό Μητρώο."
+          : "Η βλάβη δεν αποθηκεύτηκε στο κεντρικό Μητρώο. Δοκίμασε ξανά.",
+      );
+      return;
+    }
+
+    const next = [result.fault, ...faults.filter((fault) => fault.id !== result.fault?.id)];
     persist(next);
     setForm(emptyFault);
-    setMessage("Η βλάβη καταχωρήθηκε στο μητρώο της συσκευής και είναι έτοιμη για έλεγχο επιστάτη.");
+    setMessage("Η βλάβη αποθηκεύτηκε μόνιμα στο κεντρικό Μητρώο Supabase.");
   }
 
-  function updateStatus(id: string, status: WaterFaultStatus) {
+  async function updateStatus(id: string, status: WaterFaultStatus) {
+    if (!device) return;
+
+    const result = await postFaultApi(device, "status", { id, status });
+    if (!result.ok || !result.fault) {
+      setMessage("Δεν ενημερώθηκε η κατάσταση στο κεντρικό Μητρώο.");
+      return;
+    }
+
     const next = faults.map((fault) =>
-      fault.id === id
-        ? { ...fault, status, updatedAt: new Date().toISOString() }
-        : fault,
+      fault.id === id ? result.fault as WaterFaultRecord : fault,
     );
-
     persist(next);
+    setMessage("Η κατάσταση ενημερώθηκε στο κεντρικό Μητρώο.");
   }
 
-  function removeFault(id: string) {
-    const ok = window.confirm("Να αρχειοθετηθεί/διαγραφεί αυτή η τοπική καταχώρηση;");
-    if (!ok) return;
+  async function removeFault(id: string) {
+    const ok = window.confirm("Να αρχειοθετηθεί αυτή η καταχώρηση;");
+    if (!ok || !device) return;
 
-    const next = faults.filter((fault) => fault.id !== id);
+    const result = await postFaultApi(device, "status", { id, status: "archived" });
+    if (!result.ok || !result.fault) {
+      setMessage("Δεν αρχειοθετήθηκε η καταχώρηση στο κεντρικό Μητρώο.");
+      return;
+    }
+
+    const next = faults.map((fault) =>
+      fault.id === id ? result.fault as WaterFaultRecord : fault,
+    );
     persist(next);
+    setMessage("Η καταχώρηση αρχειοθετήθηκε.");
   }
 
   const filteredFaults = useMemo(() => {
@@ -514,7 +700,7 @@ export default function WaterFaultRegistryClient() {
                         <Select
                           value={fault.status}
                           onChange={(event) =>
-                            updateStatus(fault.id, event.target.value as WaterFaultStatus)
+                            void updateStatus(fault.id, event.target.value as WaterFaultStatus)
                           }
                         >
                           {Object.entries(WATER_FAULT_STATUS_LABELS).map(([value, label]) => (
@@ -525,7 +711,7 @@ export default function WaterFaultRegistryClient() {
                         </Select>
                         <button
                           type="button"
-                          onClick={() => removeFault(fault.id)}
+                          onClick={() => void removeFault(fault.id)}
                           className="rounded-2xl border border-red-400/35 bg-red-500/10 px-4 py-3 text-sm font-black text-red-100"
                         >
                           φαίρεση
