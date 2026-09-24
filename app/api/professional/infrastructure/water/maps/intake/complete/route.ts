@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 
 import {
   PANTAVION_ARTIFACT_HEADER_SAMPLE_BYTES,
-  PANTAVION_ARTIFACT_SYNC_SHA256_MAX_BYTES,
 } from "@/core/intake/pantavion-artifact-storage-policy";
 import { createPantavionArtifactWorkOrderCandidate } from "@/core/intake/pantavion-universal-artifact-intake";
 import { persistPantavionFounderWorkOrder } from "@/core/kernel/pantavion-work-order-runtime";
@@ -17,6 +16,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 const BUCKET = "water-map-ingest-private";
+const INLINE_STREAM_SHA256_MAX_BYTES = 256 * 1024 * 1024;
 
 function clean(value: unknown, max = 1000) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
@@ -103,20 +103,35 @@ async function inspectStoredHeader(path: string, expectedSize: number) {
 }
 
 async function computeStoredSha256(path: string, expectedSize: number) {
-  if (expectedSize > PANTAVION_ARTIFACT_SYNC_SHA256_MAX_BYTES) {
+  if (expectedSize > INLINE_STREAM_SHA256_MAX_BYTES) {
     return null;
   }
 
   const url = await signedReadUrl(path);
   const response = await fetch(url, { cache: "no-store" });
-  if (!response.ok) throw new Error("water_map_storage_full_read_failed");
+  if (!response.ok || !response.body) {
+    throw new Error("water_map_storage_full_read_failed");
+  }
 
-  const bytes = Buffer.from(await response.arrayBuffer());
-  if (bytes.byteLength !== expectedSize) {
+  const hash = createHash("sha256");
+  const reader = response.body.getReader();
+  let observedSize = 0;
+
+  while (true) {
+    const part = await reader.read();
+    if (part.done) break;
+    observedSize += part.value.byteLength;
+    if (observedSize > expectedSize) {
+      throw new Error("water_map_stored_size_mismatch");
+    }
+    hash.update(part.value);
+  }
+
+  if (observedSize !== expectedSize) {
     throw new Error("water_map_stored_size_mismatch");
   }
 
-  return createHash("sha256").update(bytes).digest("hex");
+  return hash.digest("hex");
 }
 
 function databaseAdapterState(
