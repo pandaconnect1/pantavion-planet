@@ -1,7 +1,7 @@
 ﻿import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -65,7 +65,7 @@ async function checkPrivateBlobPrefix(
 }
 
 export async function GET(request: Request) {
-  if (!hasWaterAdminSession(request)) {
+  if (!await hasWaterAdminAuthorization(request)) {
     return NextResponse.json(
       {
         ok: false,
