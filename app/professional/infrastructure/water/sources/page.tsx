@@ -2,13 +2,14 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import {
   WATER_NETWORK_LAYER_PLAN,
+  WATER_RECOVERED_MASTER_SOURCES,
   WATER_SECOND_NETWORK_SOURCE,
 } from "@/core/water/water-second-network-source-registry";
 
 export const metadata: Metadata = {
   title: "ηγές ικτύου Ύδρευσης | Pantavion",
   description:
-    "Founder-only registry για το υπάρχον live δίκτυο και τη δεύτερη DWG πηγή στο Vercel Blob.",
+    "Founder-only registry για το live δίκτυο και τα ανακτημένα αυθεντικά DWG masters του Pantavion Water.",
 };
 
 function Text({ children, className = "" }: { children: React.ReactNode; className?: string }) {
@@ -77,9 +78,7 @@ export default function WaterSourcesPage() {
 
           <p className="mt-4 max-w-5xl text-base font-semibold leading-8 text-slate-200">
             <Text>
-              ο δεύτερο DWG δίκτυο υπάρχει ως ανεβασμένη προστατευμένη πηγή στο Vercel Blob.
-              εν είναι ακόμη ζωντανό επίπεδο χάρτη. ρώτα καταγράφεται, προστατεύεται,
-              μετατρέπεται και συγκρίνεται.
+              Τα ανακτημένα αυθεντικά DWG masters καταγράφονται ξεχωριστά στο Pantavion Water Source Vault. Δεν γίνεται overwrite ή αυτόματη συγχώνευση. Τα raw masters παραμένουν προστατευμένα και τα live layers παράγονται μόνο ως ελεγχόμενα derivatives.
             </Text>
           </p>
 
@@ -104,6 +103,33 @@ export default function WaterSourcesPage() {
             </Link>
           </div>
         </div>
+
+        <section className="mt-6 rounded-[2rem] border border-[#f6c85f]/20 bg-[#071425] p-5">
+          <h2 className="text-2xl font-black text-white">
+            <Text>Recovered authentic masters</Text>
+          </h2>
+          <div className="mt-5 grid gap-4">
+            {WATER_RECOVERED_MASTER_SOURCES.map((source) => (
+              <article key={source.id} className="rounded-3xl border border-white/10 bg-black/20 p-5">
+                <p className="text-sm font-black text-[#ffe29a]">
+                  <Text>{source.classification}</Text>
+                </p>
+                <p className="mt-2 text-sm font-bold text-slate-100">
+                  <Text>{source.fileName}</Text>
+                </p>
+                <p className="mt-2 text-xs font-semibold text-slate-300">
+                  <Text>{source.sizeBytes.toLocaleString("en-US")} bytes · {source.dwgHeader}</Text>
+                </p>
+                <p className="mt-2 break-all text-xs font-semibold text-slate-400">
+                  <Text>SHA-256: {source.sha256}</Text>
+                </p>
+                <p className="mt-2 text-xs font-black text-emerald-200">
+                  <Text>{source.state}</Text>
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <section className="mt-6 rounded-[2rem] border border-[#f6c85f]/20 bg-[#071425] p-5 shadow-[0_20px_70px_rgba(0,0,0,0.28)]">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f6c85f]">
