@@ -406,7 +406,7 @@ export default function WaterMapBAuthenticClient() {
           const file = event.currentTarget.files?.[0];
           if (file) void uploadExactMapB(file);
         }}
-        disabled={!canUpload && viewerState !== "missing"}
+        disabled={!canUpload}
       />
 
       <button
