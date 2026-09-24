@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const canonicalOrigin = "https://www.pantavion.com";
+const canonicalOrigin = "https://pantavion.com";
 
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
@@ -36,7 +36,7 @@ const nextConfig = {
     return [
       {
         source: "/:path*",
-        has: [{ type: "host", value: "pantavion.com" }],
+        has: [{ type: "host", value: "www.pantavion.com" }],
         destination: `${canonicalOrigin}/:path*`,
         permanent: true,
       },
