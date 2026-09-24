@@ -11,8 +11,21 @@ import { createAdminClient } from "@/lib/supabase/admin";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const TEMP_UPLOAD_HOST = "pantavion-planet-production-deb2.up.railway.app";
+
+function hasTemporaryUploadWindow(request: Request) {
+  if (process.env.PANTAVION_WATER_TEMP_UPLOAD_OPEN !== "true") return false;
+
+  const host = (request.headers.get("host") || "").split(":")[0].toLowerCase();
+  if (host !== TEMP_UPLOAD_HOST) return false;
+
+  const until = Date.parse(process.env.PANTAVION_WATER_TEMP_UPLOAD_UNTIL || "");
+  return Number.isFinite(until) && Date.now() < until;
+}
+
+
 export async function POST(request: Request) {
-  if (!await hasWaterAdminAuthorization(request)) {
+  if (!(await hasWaterAdminAuthorization(request)) && !hasTemporaryUploadWindow(request)) {
     return Response.json(
       { ok: false, status: "water_admin_session_required" },
       { status: 403, headers: { "Cache-Control": "private, no-store" } },
