@@ -1,0 +1,77 @@
+name: Pantavion Water Live Verification 2026-09-24
+
+on:
+  push:
+    branches:
+      - verify/water-live-20260924
+    paths:
+      - '.github/workflows/pantavion-water-live-verify-20260924.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      BASE_URL: https://pantavion-planet-production-deb2.up.railway.app
+
+    steps:
+      - name: Verify MapServer metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -L --connect-timeout 10 --max-time 30             -o /tmp/mapserver.json -w "%{http_code}"             "$BASE_URL/api/professional/infrastructure/water/mapserver")
+          echo "MAPSERVER_HTTP=$code"
+          if [ "$code" != "200" ]; then
+            cat /tmp/mapserver.json
+            exit 1
+          fi
+          jq -e '
+            .currentVersion == 1 and
+            .mapName == "Pantavion Water" and
+            .spatialReference.wkid == 4326 and
+            .layers[0].id == 0 and
+            .layers[0].name == "Water Network A" and
+            .layers[0].access == "approved-device-or-water-admin" and
+            .safety.rawMasterPublicAccess == false and
+            .safety.wholeNetworkBrowserLoad == false and
+            .safety.viewportOnly == true and
+            .safety.failClosed == true
+          ' /tmp/mapserver.json >/dev/null
+          jq '{currentVersion,mapName,spatialReference,maxRecordCount,layers,safety}' /tmp/mapserver.json
+
+      - name: Verify unauthenticated query fails closed
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -L --connect-timeout 10 --max-time 30             -o /tmp/query.json -w "%{http_code}"             "$BASE_URL/api/professional/infrastructure/water/mapserver/0/query?bbox=33.00,34.64,33.06,34.70&maxFeatures=20")
+          echo "UNAUTH_QUERY_HTTP=$code"
+          if [ "$code" != "403" ]; then
+            cat /tmp/query.json
+            exit 1
+          fi
+          jq -e '
+            .mapServer.layerId == 0 and
+            .mapServer.layerName == "Water Network A" and
+            .mapServer.geometryMode == "visible-viewport-only" and
+            .mapServer.rawMasterIncluded == false
+          ' /tmp/query.json >/dev/null
+          jq '{ok,error,message,mapServer}' /tmp/query.json
+
+      - name: Verify live Water pages answer
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in             /professional/infrastructure/water/live             /professional/infrastructure/water/sources
+          do
+            code=$(curl -sS -L --connect-timeout 10 --max-time 30               -o /dev/null -w "%{http_code}" "$BASE_URL$path")
+            echo "$path HTTP=$code"
+            if [ "$code" != "200" ]; then exit 1; fi
+          done
+
+      - name: Verification result
+        run: |
+          echo "PANTAVION_WATER_LIVE_VERIFY=PASS"
+          echo "NOTE=Authentic Map A geometry bytes are still a separate source-recovery gate; this verifies deployment, routes, runtime, and fail-closed access only."
