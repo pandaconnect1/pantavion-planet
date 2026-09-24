@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { evaluatePrivilegedRequestBoundary } from "@/core/security/privileged-request-boundary";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import {
   createWaterAdminSessionValue,
   getWaterAdminAccessCode,
@@ -112,7 +113,7 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  const authorized = hasWaterAdminSession(request);
+  const authorized = await hasWaterAdminAuthorization(request);
 
   return NextResponse.json(
     {
