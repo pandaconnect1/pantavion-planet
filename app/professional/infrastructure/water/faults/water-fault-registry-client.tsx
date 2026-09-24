@@ -216,7 +216,7 @@ export default function WaterFaultRegistryClient() {
   const [faults, setFaults] = useState<WaterFaultRecord[]>([]);
   const [device, setDevice] = useState<DeviceIdentity | null>(null);
   const [form, setForm] = useState(emptyFault);
-  const [message, setMessage] = useState("Έτοιμο για καταχώρηση βλάβης.");
+  const [message, setMessage] = useState("Έτοιμο για κΚαταχώρηση βλάβης.");
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
@@ -580,7 +580,7 @@ export default function WaterFaultRegistryClient() {
                     checked={form.waterCutoff}
                     onChange={(event) => setForm({ ...form, waterCutoff: event.target.checked })}
                   />
-                  πάρχει αΑποκοπή νερού
+                  Υπάρχει αποκοπή νερού
                 </label>
                 <label className="flex items-center gap-3 text-sm font-black text-white">
                   <input
@@ -588,7 +588,7 @@ export default function WaterFaultRegistryClient() {
                     checked={form.valveProblem}
                     onChange={(event) => setForm({ ...form, valveProblem: event.target.checked })}
                   />
-                  πάρχει πρόβλημα σε βΒάνα / ρεούλα
+                  Υπάρχει πρόβλημα σε βάνα / ρεούλα
                 </label>
               </div>
             </div>
@@ -625,7 +625,7 @@ export default function WaterFaultRegistryClient() {
               type="submit"
               className="mt-5 w-full rounded-2xl bg-[#f6c85f] px-5 py-4 text-sm font-black text-black"
             >
-              αταχώρηση βλάβης
+              Καταχώρηση βλάβης
             </button>
 
             <p className="mt-4 rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm font-bold leading-7 text-[#ffe29a]">
@@ -714,7 +714,7 @@ export default function WaterFaultRegistryClient() {
                           onClick={() => void removeFault(fault.id)}
                           className="rounded-2xl border border-red-400/35 bg-red-500/10 px-4 py-3 text-sm font-black text-red-100"
                         >
-                          φαίρεση
+                          Αφαίρεση
                         </button>
                       </div>
                     </div>
@@ -722,13 +722,13 @@ export default function WaterFaultRegistryClient() {
                     <div className="mt-4 grid gap-3 text-sm font-semibold leading-7 text-slate-300">
                       {fault.assignedCrew ? <p>Συνεργείο: {fault.assignedCrew}</p> : null}
                       {fault.affectedConsumers ? (
-                        <pΕπηρεαζόμενοι: {fault.affectedConsumers}</p>
+                        <p>Επηρεαζόμενοι: {fault.affectedConsumers}</p>
                       ) : null}
-                      {fault.materials ? <pΥλικά: {fault.materials}</p> : null}
+                      {fault.materials ? <p>Υλικά: {fault.materials}</p> : null}
                       {fault.notes ? <p>Σημειώσεις: {fault.notes}</p> : null}
                       {fault.supervisorDecision ? (
                         <p className="rounded-2xl border border-[#f6c85f]/25 bg-[#f6c85f]/10 px-4 py-3 text-[#ffe29a]">
-                          πόφαση επιστάτη: {fault.supervisorDecision}
+                          Απόφαση επιστάτη: {fault.supervisorDecision}
                         </p>
                       ) : null}
                       <p className="text-xs text-slate-500">
