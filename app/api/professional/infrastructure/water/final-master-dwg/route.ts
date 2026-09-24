@@ -1,4 +1,4 @@
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import {
   FINAL_MASTER_DWG_FILE_NAME,
   FINAL_MASTER_DWG_SHA256,
@@ -23,7 +23,7 @@ function privateHeaders() {
 }
 
 export async function GET(request: Request) {
-  if (!hasWaterAdminSession(request)) {
+  if (!await hasWaterAdminAuthorization(request)) {
     return Response.json(
       { ok: false, status: "water_admin_session_required" },
       { status: 403, headers: privateHeaders() },
