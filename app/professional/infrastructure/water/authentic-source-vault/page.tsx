@@ -46,6 +46,7 @@ type VaultResponse = {
   expectedSha256?: string;
   actualSizeBytes?: number;
   actualSha256?: string;
+  sha256?: string;
   header?: string;
 };
 
