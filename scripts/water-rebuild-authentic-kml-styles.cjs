@@ -6,7 +6,7 @@ const cp = require("child_process");
 
 const PROJECT_REF = process.env.SUPABASE_PROJECT_REF || "cxhulvwkagzufbjsdwwu";
 const SUPABASE_URL =
-  process.env.SUPABASE_URL || \`https://\${PROJECT_REF}.supabase.co\`;
+  process.env.SUPABASE_URL || `https://${PROJECT_REF}.supabase.co`;
 const KEY_FILE = process.env.SUPABASE_KEY_FILE;
 
 const BUCKET = "personal-media";
@@ -30,7 +30,7 @@ if (serviceKey.length < 32) {
 function apiHeaders(extra = {}) {
   return {
     apikey: serviceKey,
-    Authorization: \`Bearer \${serviceKey}\`,
+    Authorization: `Bearer ${serviceKey}`,
     ...extra,
   };
 }
@@ -53,7 +53,7 @@ function stripTags(value) {
 
 function extractFirst(block, tag) {
   const m = block.match(
-    new RegExp(\`<\${tag}(?:\\\\s[^>]*)?>([\\\\s\\\\S]*?)<\\\\/\${tag}>\`, "i"),
+    new RegExp(`<${tag}(?:\\\\s[^>]*)?>([\\\\s\\\\S]*?)<\\\\/${tag}>`, "i"),
   );
   return m ? stripTags(m[1]) : "";
 }
@@ -76,7 +76,7 @@ function kmlColorToCss(raw) {
 
   return {
     colorKml: clean.toLowerCase(),
-    color: \`#\${red}\${green}\${blue}\`.toLowerCase(),
+    color: `#${red}${green}${blue}`.toLowerCase(),
     opacity: parseInt(alpha, 16) / 255,
   };
 }
@@ -98,7 +98,7 @@ function parseStyleBlock(id, block) {
   const labelColor = kmlColorToCss(extractFirst(labelStyle, "color"));
 
   return {
-    styleUrl: \`#\${id}\`,
+    styleUrl: `#${id}`,
     line: {
       colorKml: lineColor.colorKml,
       color: lineColor.color,
@@ -127,7 +127,7 @@ function parseStyleBlock(id, block) {
       opacity: labelColor.opacity,
       scale: Number(extractFirst(labelStyle, "scale")) || null,
     },
-    rawStyleXml: \`<Style id="\${id}">\${block}</Style>\`,
+    rawStyleXml: `<Style id="${id}">${block}</Style>`,
   };
 }
 
@@ -138,7 +138,7 @@ function parseStyles(kml) {
   let m;
 
   while ((m = styleRegex.exec(kml))) {
-    direct.set(\`#\${m[1]}\`, parseStyleBlock(m[1], m[2]));
+    direct.set(`#${m[1]}`, parseStyleBlock(m[1], m[2]));
   }
 
   const maps = new Map();
@@ -146,7 +146,7 @@ function parseStyles(kml) {
     /<StyleMap\s+[^>]*id=["']([^"']+)["'][^>]*>([\s\S]*?)<\/StyleMap>/gi;
 
   while ((m = mapRegex.exec(kml))) {
-    const id = \`#\${m[1]}\`;
+    const id = `#${m[1]}`;
     const body = m[2];
     const pairRegex = /<Pair>([\s\S]*?)<\/Pair>/gi;
     const pairs = [];
@@ -161,7 +161,7 @@ function parseStyles(kml) {
     maps.set(id, {
       styleUrl: id,
       pairs,
-      rawStyleMapXml: \`<StyleMap id="\${m[1]}">\${body}</StyleMap>\`,
+      rawStyleMapXml: `<StyleMap id="${m[1]}">${body}</StyleMap>`,
     });
   }
 
@@ -204,7 +204,7 @@ async function main() {
   const kmlPath = path.join(tempDir, "doc.kml");
 
   const objectUrl =
-    \`\${SUPABASE_URL}/storage/v1/object/authenticated/\${BUCKET}/\${encodeStoragePath(SOURCE_PATH)}\`;
+    `${SUPABASE_URL}/storage/v1/object/authenticated/${BUCKET}/${encodeStoragePath(SOURCE_PATH)}`;
 
   const download = await fetch(objectUrl, {
     headers: apiHeaders(),
@@ -212,7 +212,7 @@ async function main() {
 
   if (!download.ok) {
     throw new Error(
-      \`Private KMZ download failed: HTTP \${download.status}\`,
+      `Private KMZ download failed: HTTP ${download.status}`,
     );
   }
 
@@ -221,13 +221,13 @@ async function main() {
 
   if (bytes.length !== SOURCE_SIZE) {
     throw new Error(
-      \`Map A size mismatch: \${bytes.length} != \${SOURCE_SIZE}\`,
+      `Map A size mismatch: ${bytes.length} != ${SOURCE_SIZE}`,
     );
   }
 
   const sha = crypto.createHash("sha256").update(bytes).digest("hex");
   if (sha !== SOURCE_SHA256) {
-    throw new Error(\`Map A SHA mismatch: \${sha}\`);
+    throw new Error(`Map A SHA mismatch: ${sha}`);
   }
 
   const entries = cp
@@ -256,13 +256,13 @@ async function main() {
 
   if (placemarkCount !== EXPECTED_PLACEMARKS) {
     throw new Error(
-      \`Placemark count mismatch: \${placemarkCount} != \${EXPECTED_PLACEMARKS}\`,
+      `Placemark count mismatch: ${placemarkCount} != ${EXPECTED_PLACEMARKS}`,
     );
   }
 
   if (lineStringCount !== EXPECTED_LINESTRINGS) {
     throw new Error(
-      \`LineString count mismatch: \${lineStringCount} != \${EXPECTED_LINESTRINGS}\`,
+      `LineString count mismatch: ${lineStringCount} != ${EXPECTED_LINESTRINGS}`,
     );
   }
 
@@ -309,7 +309,7 @@ async function main() {
 
   if (unresolved.length) {
     throw new Error(
-      \`Unresolved KML style URLs: \${unresolved.join(", ")}\`,
+      `Unresolved KML style URLs: ${unresolved.join(", ")}`,
     );
   }
 
@@ -318,7 +318,7 @@ async function main() {
   }
 
   const restUrl =
-    \`\${SUPABASE_URL}/rest/v1/water_map_a_kml_styles?on_conflict=style_url\`;
+    `${SUPABASE_URL}/rest/v1/water_map_a_kml_styles?on_conflict=style_url`;
 
   for (let offset = 0; offset < rows.length; offset += 200) {
     const part = rows.slice(offset, offset + 200);
@@ -334,7 +334,7 @@ async function main() {
     if (!response.ok) {
       const body = await response.text();
       throw new Error(
-        \`KML style upsert failed: HTTP \${response.status} \${body}\`,
+        `KML style upsert failed: HTTP ${response.status} ${body}`,
       );
     }
   }
@@ -374,7 +374,7 @@ async function main() {
   const manifestPath =
     "water-network-private/derived/water-original-kml-style-manifest.json";
   const manifestUrl =
-    \`\${SUPABASE_URL}/storage/v1/object/\${BUCKET}/\${encodeStoragePath(manifestPath)}\`;
+    `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${encodeStoragePath(manifestPath)}`;
 
   const upload = await fetch(manifestUrl, {
     method: "POST",
@@ -389,7 +389,7 @@ async function main() {
   if (!upload.ok) {
     const body = await upload.text();
     throw new Error(
-      \`Private style manifest upload failed: HTTP \${upload.status} \${body}\`,
+      `Private style manifest upload failed: HTTP ${upload.status} ${body}`,
     );
   }
 
