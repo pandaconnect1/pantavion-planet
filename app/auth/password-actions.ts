@@ -14,7 +14,11 @@ function safeNextPath(value: string, fallback = "/admin/pantavion/recovery"): st
 }
 
 function siteUrl(): string {
-  return (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/+$/, "");
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (configured) return configured.replace(/\/+$/, "");
+  return process.env.NODE_ENV === "production"
+    ? "https://pantavion.com"
+    : "http://localhost:3000";
 }
 
 export async function requestPasswordReset(formData: FormData) {
