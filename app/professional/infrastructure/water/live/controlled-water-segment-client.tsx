@@ -23,6 +23,7 @@ type SegmentResponse = {
     features: any[];
   };
   segmentCount?: number;
+  segmentTruncated?: boolean;
   pipeSegmentCount?: number;
   completeNetworkReturned?: boolean;
   rawMasterReturned?: boolean;
@@ -161,6 +162,9 @@ const UI = {
 const VIEWPORT_TILE_SPAN_DEGREES = 0.055;
 const MAX_VIEWPORT_TILES = 16;
 const MAX_FEATURES_PER_TILE = 1200;
+const MAX_RECURSIVE_TILE_DEPTH = 6;
+const MAX_SEGMENT_REQUESTS = 128;
+const MIN_RECURSIVE_TILE_SPAN_DEGREES = 0.00025;
 
 const LEGACY_WATER_DEVICE_APPROVAL_KEY = "pantavion:water:approved-until:v4";
 function clearLegacyWaterDeviceApproval() {
@@ -360,6 +364,38 @@ function splitVisibleBboxIntoSafeTiles(bbox: Bbox) {
   }
 
   return tiles;
+}
+
+function splitBboxIntoQuadrants(bbox: Bbox) {
+  const midLng = (bbox.minLng + bbox.maxLng) / 2;
+  const midLat = (bbox.minLat + bbox.maxLat) / 2;
+
+  return [
+    {
+      minLng: bbox.minLng,
+      minLat: bbox.minLat,
+      maxLng: midLng,
+      maxLat: midLat,
+    },
+    {
+      minLng: midLng,
+      minLat: bbox.minLat,
+      maxLng: bbox.maxLng,
+      maxLat: midLat,
+    },
+    {
+      minLng: bbox.minLng,
+      minLat: midLat,
+      maxLng: midLng,
+      maxLat: bbox.maxLat,
+    },
+    {
+      minLng: midLng,
+      minLat: midLat,
+      maxLng: bbox.maxLng,
+      maxLat: bbox.maxLat,
+    },
+  ];
 }
 
 function featureKey(feature: any, fallback: string) {
@@ -1086,8 +1122,16 @@ export default function ControlledWaterSegmentClient() {
       const tiles = splitVisibleBboxIntoSafeTiles(visibleBbox);
       const allFeatures: any[] = [];
       const device = getOrCreateWaterAccessDevice();
+      let segmentRequestCount = 0;
+      let accessRevoked = false;
 
-      for (const tile of tiles) {
+      async function fetchExactVisibleTile(tile: Bbox, depth: number): Promise<any[]> {
+        segmentRequestCount += 1;
+
+        if (segmentRequestCount > MAX_SEGMENT_REQUESTS) {
+          throw new Error("WATER_SEGMENT_REQUEST_LIMIT");
+        }
+
         const params = new URLSearchParams({
           ...bboxParams(tile),
           maxFeatures: String(MAX_FEATURES_PER_TILE),
@@ -1119,7 +1163,8 @@ export default function ControlledWaterSegmentClient() {
           clearLegacyWaterDeviceApproval();
           setAccessMessage("");
           setAccessState("denied");
-          return;
+          accessRevoked = true;
+          return [];
         }
 
         if (
@@ -1136,9 +1181,38 @@ export default function ControlledWaterSegmentClient() {
           );
         }
 
-        if (json.segment?.features?.length) {
-          allFeatures.push(...json.segment.features);
+        const features = json.segment?.features || [];
+
+        if (json.segmentTruncated === true) {
+          const lngSpan = tile.maxLng - tile.minLng;
+          const latSpan = tile.maxLat - tile.minLat;
+
+          if (
+            depth >= MAX_RECURSIVE_TILE_DEPTH ||
+            lngSpan <= MIN_RECURSIVE_TILE_SPAN_DEGREES ||
+            latSpan <= MIN_RECURSIVE_TILE_SPAN_DEGREES
+          ) {
+            throw new Error("WATER_SEGMENT_TRUNCATED");
+          }
+
+          const childFeatures: any[] = [];
+
+          for (const childTile of splitBboxIntoQuadrants(tile)) {
+            childFeatures.push(...(await fetchExactVisibleTile(childTile, depth + 1)));
+
+            if (accessRevoked) return [];
+          }
+
+          return childFeatures;
         }
+
+        return features;
+      }
+
+      for (const tile of tiles) {
+        allFeatures.push(...(await fetchExactVisibleTile(tile, 0)));
+
+        if (accessRevoked) return;
       }
 
       const deduped = new Map<string, any>();
@@ -1186,7 +1260,7 @@ export default function ControlledWaterSegmentClient() {
 
       const count = features.length;
       setPipeCount(count);
-      setMessage(`${t.loaded}: ${count} (${tiles.length} ${t.chunks})`);
+      setMessage(`${t.loaded}: ${count} (${segmentRequestCount} ${t.chunks})`);
     } catch (error) {
       setPipeCount(null);
 
