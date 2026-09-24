@@ -1,4 +1,4 @@
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import {
   LEGACY_MAP_BC_FILE_NAME,
   LEGACY_MAP_BC_SHA256,
@@ -12,7 +12,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-  if (!hasWaterAdminSession(request)) {
+  if (!await hasWaterAdminAuthorization(request)) {
     return Response.json(
       { ok: false, status: "water_admin_session_required" },
       { status: 403, headers: { "Cache-Control": "private, no-store" } },
