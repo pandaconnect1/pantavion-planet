@@ -1,7 +1,7 @@
 import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -156,7 +156,7 @@ function publicFault(item: FaultDossier) {
 
 export async function GET(request: Request) {
   try {
-    if (!hasWaterAdminSession(request)) {
+    if (!await hasWaterAdminAuthorization(request)) {
       return NextResponse.json(
         {
           ok: false,
