@@ -23,6 +23,7 @@ const SUPABASE_FUNCTION_URL =
   "https://cxhulvwkagzufbjsdwwu.supabase.co/functions/v1/pantavion-water-authentic-source-vault-signer";
 
 const ALLOWED_SOURCE_IDS = new Set([
+  "map-a-original",
   "map-b-canonical",
   "legacy-map-bc-george",
   "older-2025-master",

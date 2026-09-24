@@ -13,11 +13,11 @@ export default function LegacyMapBcPage() {
     <main style={{ minHeight: "100vh", background: "#05070d", color: "#f8e7b0", padding: 24 }}>
       <section style={{ maxWidth: 900, margin: "0 auto" }}>
         <p style={{ color: "#5eead4", letterSpacing: 2, textTransform: "uppercase", fontWeight: 800 }}>
-          Pantavion Water / Legacy B-C source
+          Pantavion Water / Map A authentic source
         </p>
-        <h1>GEORGE legacy Map B/C master</h1>
+        <h1>Map A authentic original</h1>
         <p>
-          Preserved as a separate authentic legacy source. It does not replace the current canonical Map B.
+          Owner-confirmed Map A. The historical filename is retained exactly as-is; the DWG bytes are never converted, merged or edited. Canonical Map B remains separate.
         </p>
         <div style={{ marginTop: 18, padding: 16, border: "1px solid rgba(244,200,91,0.35)", borderRadius: 14 }}>
           <div><strong>File:</strong> {LEGACY_MAP_BC_FILE_NAME}</div>

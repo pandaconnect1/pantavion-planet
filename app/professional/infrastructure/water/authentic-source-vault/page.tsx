@@ -17,8 +17,8 @@ const SOURCES = [
     sha256: "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16",
   },
   {
-    id: "legacy-map-bc-george",
-    title: "GEORGE legacy B/C",
+    id: "map-a-original",
+    title: "Map A — authentic original (owner-confirmed)",
     fileName: "GEORGE_MAP_MASTER_B_C_FINAL.dwg",
     sizeBytes: 205877448,
     sha256: "0070db27b6b22cc3aa24353c9445f87910925b6d18bea27914c915da13bbc1d9",
@@ -391,6 +391,11 @@ function SourceUploader({ source }: { source: Source }) {
   return (
     <article className="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
       <h2 className="text-xl font-black text-white">{source.title}</h2>
+      {source.id === "map-a-original" ? (
+        <p className="mt-2 text-sm font-black text-emerald-300">
+          OWNER-CONFIRMED MAP A · historical filename retained unchanged · raw bytes unchanged.
+        </p>
+      ) : null}
       <p className="mt-2 break-all text-sm font-bold text-slate-200">
         {source.fileName}
       </p>

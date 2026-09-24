@@ -40,14 +40,14 @@ export const WATER_RECOVERED_MASTER_SOURCES = [
     classification: "Map B canonical source",
   },
   {
-    id: "legacy-map-bc-george",
-    role: "legacy_map_bc",
+    id: "map-a-original",
+    role: "canonical_map_a_owner_confirmed",
     fileName: "GEORGE_MAP_MASTER_B_C_FINAL.dwg",
     sizeBytes: 205877448,
     sha256: "0070db27b6b22cc3aa24353c9445f87910925b6d18bea27914c915da13bbc1d9",
     dwgHeader: "AC1032",
-    state: "authentic_binary_recovered",
-    classification: "Legacy B/C source — kept separate",
+    state: "authentic_binary_recovered_owner_confirmed",
+    classification: "Map A authentic original — owner-confirmed; historical filename retained unchanged",
   },
   {
     id: "legacy-master-2025-09-22",
@@ -64,9 +64,9 @@ export const WATER_RECOVERED_MASTER_SOURCES = [
 export const WATER_NETWORK_LAYER_PLAN = [
   {
     layer: "Δίκτυο A",
-    status: "Protected live operational layer contract",
+    status: "Authentic original recovered / owner-confirmed / storage transfer pending",
     meaning:
-      "Το λειτουργικό layer φορτώνεται ανά viewport μέσω του protected MapServer endpoint. Η αυθεντική γεωμετρία του A παραμένει recovery blocker μέχρι να βρεθεί το source dataset.",
+      "Το αυθεντικό Map A έχει ταυτοποιηθεί από τον ιδιοκτήτη ως GEORGE_MAP_MASTER_B_C_FINAL.dwg και διατηρείται byte-for-byte χωρίς μετατροπή. Η μεταφορά στο private source vault και η live σύνδεση παραμένουν ξεχωριστά verification gates.",
   },
   {
     layer: "Map B",
@@ -75,9 +75,9 @@ export const WATER_NETWORK_LAYER_PLAN = [
       "Ο canonical Map B master έχει ανακτηθεί χωρίς αλλοίωση και παραμένει ξεχωριστός από το A.",
   },
   {
-    layer: "Legacy B/C + 2025 master",
+    layer: "Other recovered masters",
     status: "Recovered / isolated / comparison pending",
     meaning:
-      "Τα δύο επιπλέον αυθεντικά masters διατηρούνται ξεχωριστά μέχρι να ολοκληρωθεί σύγκριση layers, extents και provenance.",
+      "Ο canonical Map B και ο παλαιότερος 2025 master παραμένουν ξεχωριστοί από το owner-confirmed Map A, χωρίς merge ή geometry mutation.",
   },
 ] as const;
