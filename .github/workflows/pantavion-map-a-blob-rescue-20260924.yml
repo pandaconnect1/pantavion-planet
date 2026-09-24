@@ -1,0 +1,395 @@
+name: Pantavion Map A Blob Rescue 2026-09-24
+
+on:
+  push:
+    branches:
+      - recovery/map-a-blob-rescue-20260924
+    paths:
+      - '.github/workflows/pantavion-map-a-blob-rescue-20260924.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-map-a-blob-rescue-20260924
+  cancel-in-progress: false
+
+jobs:
+  recover-map-a:
+    name: Recover authentic Map A private Blob into Supabase
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+      CANONICAL_SUPABASE_PROJECT_REF: cxhulvwkagzufbjsdwwu
+      VERCEL_CLI_VERSION: '59.5.0'
+
+    steps:
+      - name: Require authorized recovery credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=0
+          for name in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID SUPABASE_ACCESS_TOKEN SUPABASE_PROJECT_REF; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error::RECOVERY_BLOCKER=${name}_MISSING"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then exit 1; fi
+          if [ "$SUPABASE_PROJECT_REF" != "$CANONICAL_SUPABASE_PROJECT_REF" ]; then
+            echo "::error::RECOVERY_BLOCKER=SUPABASE_PROJECT_REF_MISMATCH"
+            exit 1
+          fi
+          echo "Authorized recovery credentials are configured."
+
+      - name: Checkout recovery branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Install Vercel CLI
+        run: npm install --global "vercel@$VERCEL_CLI_VERSION" --no-audit --no-fund
+
+      - name: Pull canonical Vercel production environment without logging values
+        shell: bash
+        run: |
+          set -euo pipefail
+          env_file="$RUNNER_TEMP/pantavion-vercel-production.env"
+          umask 077
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN" >/dev/null
+          vercel env pull "$env_file" --yes --environment=production --token="$VERCEL_TOKEN" >/dev/null
+          if [ ! -s "$env_file" ]; then
+            echo "::error::RECOVERY_BLOCKER=VERCEL_ENV_PULL_EMPTY"
+            exit 1
+          fi
+          echo "PANTAVION_VERCEL_ENV_FILE=$env_file" >> "$GITHUB_ENV"
+          echo "Vercel production environment retrieved securely."
+
+      - name: Require private Blob credential in pulled Vercel environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -a
+          source "$PANTAVION_VERCEL_ENV_FILE"
+          set +a
+          if [ -z "${BLOB_READ_WRITE_TOKEN:-}" ]; then
+            echo "::error::RECOVERY_BLOCKER=BLOB_READ_WRITE_TOKEN_MISSING_FROM_VERCEL_PRODUCTION_ENV"
+            exit 1
+          fi
+          echo "::add-mask::$BLOB_READ_WRITE_TOKEN"
+          printf '%s' "$BLOB_READ_WRITE_TOKEN" > "$RUNNER_TEMP/pantavion-blob-token"
+          chmod 600 "$RUNNER_TEMP/pantavion-blob-token"
+          echo "PANTAVION_BLOB_TOKEN_FILE=$RUNNER_TEMP/pantavion-blob-token" >> "$GITHUB_ENV"
+          if [ -n "${PANTAVION_WATER_NETWORK_GEOJSON_URL:-}" ]; then
+            echo "::add-mask::$PANTAVION_WATER_NETWORK_GEOJSON_URL"
+            printf '%s' "$PANTAVION_WATER_NETWORK_GEOJSON_URL" > "$RUNNER_TEMP/pantavion-water-legacy-url"
+            chmod 600 "$RUNNER_TEMP/pantavion-water-legacy-url"
+            echo "PANTAVION_WATER_LEGACY_URL_FILE=$RUNNER_TEMP/pantavion-water-legacy-url" >> "$GITHUB_ENV"
+          fi
+          echo "Private Blob credential is present."
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Resolve Supabase elevated API key without logging it
+        shell: bash
+        run: |
+          set -euo pipefail
+          key_file="$RUNNER_TEMP/pantavion-supabase-recovery-key"
+          json_file="$RUNNER_TEMP/pantavion-supabase-api-keys.json"
+          umask 077
+          supabase projects api-keys --project-ref "$SUPABASE_PROJECT_REF" --output json > "$json_file"
+          jq -r '[.[] | select((.type == "secret") or (.name == "service_role")) | .api_key][0] // empty' "$json_file" > "$key_file"
+          rm -f "$json_file"
+          key=$(cat "$key_file")
+          if [ ${#key} -lt 32 ]; then
+            echo "::error::RECOVERY_BLOCKER=SUPABASE_ELEVATED_KEY_UNAVAILABLE"
+            rm -f "$key_file"
+            exit 1
+          fi
+          echo "::add-mask::$key"
+          echo "PANTAVION_SUPABASE_KEY_FILE=$key_file" >> "$GITHUB_ENV"
+
+      - name: Copy authentic Map A Blob objects to canonical private Supabase storage
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/recover-map-a.mjs" <<'NODE'
+          import fs from "node:fs";
+          import fsp from "node:fs/promises";
+          import os from "node:os";
+          import path from "node:path";
+          import crypto from "node:crypto";
+          import { Readable } from "node:stream";
+          import { pipeline } from "node:stream/promises";
+          import { list, get } from "@vercel/blob";
+          import { createClient } from "@supabase/supabase-js";
+          import * as tus from "tus-js-client";
+
+          const projectRef = process.env.CANONICAL_SUPABASE_PROJECT_REF;
+          const bucket = "personal-media";
+          const targetRoot = "water-network-private/map-a-authentic";
+          const blobToken = fs.readFileSync(process.env.PANTAVION_BLOB_TOKEN_FILE, "utf8").trim();
+          const serviceKey = fs.readFileSync(process.env.PANTAVION_SUPABASE_KEY_FILE, "utf8").trim();
+          const supabaseUrl = `https://${projectRef}.supabase.co`;
+          const tusEndpoint = `https://${projectRef}.storage.supabase.co/storage/v1/upload/resumable`;
+          const admin = createClient(supabaseUrl, serviceKey, {
+            auth: { persistSession: false, autoRefreshToken: false },
+          });
+
+          if (!blobToken) throw new Error("RECOVERY_BLOCKER=BLOB_TOKEN_FILE_EMPTY");
+          if (!serviceKey) throw new Error("RECOVERY_BLOCKER=SUPABASE_KEY_FILE_EMPTY");
+
+          const required = new Set([
+            "water/private/processed/water-source-truth-report.json",
+            "water/private/derived/water-segment-index-manifest.json",
+            "water/private/derived/water-feature-bbox-index.json",
+            "water/private/derived/water-features.ndjson",
+          ]);
+
+          async function listPrefix(prefix) {
+            const rows = [];
+            let cursor;
+            for (let page = 0; page < 100; page += 1) {
+              const result = await list({ prefix, limit: 1000, cursor, token: blobToken });
+              rows.push(...(result.blobs || []));
+              if (!result.hasMore || !result.cursor) break;
+              cursor = result.cursor;
+            }
+            return rows;
+          }
+
+          const discovered = new Map();
+          for (const prefix of [
+            "water/private/processed/",
+            "water/private/derived/",
+            "water/private/source/",
+          ]) {
+            for (const blob of await listPrefix(prefix)) {
+              discovered.set(blob.pathname, blob);
+            }
+          }
+
+          const missingRequired = [...required].filter((p) => !discovered.has(p));
+          if (missingRequired.length) {
+            console.error("RECOVERY_BLOCKER=REQUIRED_MAP_A_BLOB_OBJECTS_MISSING");
+            for (const p of missingRequired) console.error(`MISSING_PATH=${p}`);
+            process.exit(2);
+          }
+
+          const selected = [...required]
+            .map((p) => discovered.get(p))
+            .filter(Boolean);
+
+          for (const blob of discovered.values()) {
+            if (
+              blob.pathname.startsWith("water/private/source/") &&
+              /\.(kmz|kml|geojson|json)$/i.test(blob.pathname)
+            ) {
+              selected.push(blob);
+            }
+          }
+
+          const unique = [...new Map(selected.map((b) => [b.pathname, b])).values()];
+
+          function targetPath(pathname) {
+            if (pathname.startsWith("water/private/processed/")) {
+              return `${targetRoot}/processed/${pathname.slice("water/private/processed/".length)}`;
+            }
+            if (pathname.startsWith("water/private/derived/")) {
+              return `${targetRoot}/derived/${pathname.slice("water/private/derived/".length)}`;
+            }
+            if (pathname.startsWith("water/private/source/")) {
+              return `${targetRoot}/source/${pathname.slice("water/private/source/".length)}`;
+            }
+            throw new Error(`Unexpected path: ${pathname}`);
+          }
+
+          function contentType(name) {
+            if (/\.ndjson$/i.test(name)) return "application/x-ndjson";
+            if (/\.geojson$/i.test(name)) return "application/geo+json";
+            if (/\.json$/i.test(name)) return "application/json";
+            if (/\.kmz$/i.test(name)) return "application/vnd.google-earth.kmz";
+            if (/\.kml$/i.test(name)) return "application/vnd.google-earth.kml+xml";
+            return "application/octet-stream";
+          }
+
+          async function sha256File(file) {
+            const hash = crypto.createHash("sha256");
+            await pipeline(fs.createReadStream(file), hash);
+            return hash.digest("hex");
+          }
+
+          async function streamBlobToFile(pathname, file) {
+            const result = await get(pathname, { access: "private", token: blobToken });
+            if (!result || result.statusCode !== 200 || !result.stream) {
+              throw new Error(`BLOB_READ_FAILED:${pathname}:${result?.statusCode || "unknown"}`);
+            }
+            await pipeline(Readable.fromWeb(result.stream), fs.createWriteStream(file));
+          }
+
+          async function existsTarget(objectName, expectedSize) {
+            const folder = path.posix.dirname(objectName);
+            const name = path.posix.basename(objectName);
+            const { data, error } = await admin.storage.from(bucket).list(folder, {
+              search: name,
+              limit: 20,
+            });
+            if (error) throw error;
+            const match = (data || []).find((x) => x.name === name);
+            if (!match) return false;
+            const remoteSize = Number(match.metadata?.size || 0);
+            if (remoteSize !== expectedSize) {
+              throw new Error(`TARGET_EXISTS_SIZE_MISMATCH:${objectName}:${remoteSize}:${expectedSize}`);
+            }
+            return true;
+          }
+
+          async function uploadTus(file, objectName, mime, size) {
+            const { data, error } = await admin.storage.from(bucket).createSignedUploadUrl(objectName, {
+              upsert: false,
+            });
+            if (error || !data?.token) {
+              throw new Error(`SIGNED_UPLOAD_FAILED:${objectName}:${error?.message || "missing_token"}`);
+            }
+
+            await new Promise((resolve, reject) => {
+              const upload = new tus.Upload(fs.createReadStream(file), {
+                endpoint: tusEndpoint,
+                uploadSize: size,
+                retryDelays: [0, 3000, 5000, 10000, 20000],
+                chunkSize: 6 * 1024 * 1024,
+                removeFingerprintOnSuccess: true,
+                uploadDataDuringCreation: true,
+                headers: {
+                  "x-signature": data.token,
+                  "x-upsert": "false",
+                },
+                metadata: {
+                  bucketName: bucket,
+                  objectName,
+                  contentType: mime,
+                  cacheControl: "0",
+                },
+                onError: reject,
+                onSuccess: resolve,
+              });
+              upload.start();
+            });
+          }
+
+          const manifest = {
+            marker: "pantavion_map_a_vercel_blob_recovery_20260924_v1",
+            recoveredAt: new Date().toISOString(),
+            source: "vercel-private-blob",
+            targetBucket: bucket,
+            targetRoot,
+            requiredPaths: [...required],
+            objects: [],
+          };
+
+          const tempDir = await fsp.mkdtemp(path.join(os.tmpdir(), "pantavion-map-a-"));
+
+          try {
+            for (const blob of unique) {
+              const target = targetPath(blob.pathname);
+              const localFile = path.join(tempDir, crypto.randomUUID());
+              await streamBlobToFile(blob.pathname, localFile);
+              const stat = await fsp.stat(localFile);
+              const digest = await sha256File(localFile);
+
+              if (Number(blob.size || 0) > 0 && Number(blob.size) !== stat.size) {
+                throw new Error(`SOURCE_SIZE_MISMATCH:${blob.pathname}:${blob.size}:${stat.size}`);
+              }
+
+              const already = await existsTarget(target, stat.size);
+              if (!already) {
+                await uploadTus(localFile, target, contentType(blob.pathname), stat.size);
+              }
+
+              const verified = await existsTarget(target, stat.size);
+              if (!verified) throw new Error(`TARGET_VERIFY_FAILED:${target}`);
+
+              manifest.objects.push({
+                sourcePath: blob.pathname,
+                targetPath: target,
+                sizeBytes: stat.size,
+                sha256: digest,
+                alreadyPresent: already,
+              });
+
+              console.log(`RECOVERED_OBJECT path=${blob.pathname} bytes=${stat.size} sha256=${digest} target=${target}`);
+              await fsp.rm(localFile, { force: true });
+            }
+
+            if (process.env.PANTAVION_WATER_LEGACY_URL_FILE && fs.existsSync(process.env.PANTAVION_WATER_LEGACY_URL_FILE)) {
+              const legacyUrl = fs.readFileSync(process.env.PANTAVION_WATER_LEGACY_URL_FILE, "utf8").trim();
+              if (legacyUrl) {
+                try {
+                  const localFile = path.join(tempDir, crypto.randomUUID());
+                  const result = await get(legacyUrl, { access: "private", token: blobToken });
+                  if (result?.statusCode === 200 && result.stream) {
+                    await pipeline(Readable.fromWeb(result.stream), fs.createWriteStream(localFile));
+                    const stat = await fsp.stat(localFile);
+                    const digest = await sha256File(localFile);
+                    const target = `${targetRoot}/source/legacy-production-water-network.geojson`;
+                    const already = await existsTarget(target, stat.size);
+                    if (!already) await uploadTus(localFile, target, "application/geo+json", stat.size);
+                    await existsTarget(target, stat.size);
+                    manifest.objects.push({
+                      sourcePath: "PANTAVION_WATER_NETWORK_GEOJSON_URL",
+                      targetPath: target,
+                      sizeBytes: stat.size,
+                      sha256: digest,
+                      alreadyPresent: already,
+                    });
+                    console.log(`RECOVERED_LEGACY_GEOJSON bytes=${stat.size} sha256=${digest} target=${target}`);
+                    await fsp.rm(localFile, { force: true });
+                  }
+                } catch (error) {
+                  console.log("LEGACY_GEOJSON_RECOVERY_NONFATAL=" + String(error?.message || error));
+                }
+              }
+            }
+
+            const manifestBytes = Buffer.from(JSON.stringify(manifest, null, 2));
+            const manifestPath = `${targetRoot}/recovery-manifest-20260924.json`;
+            const { error: manifestError } = await admin.storage.from(bucket).upload(
+              manifestPath,
+              manifestBytes,
+              { contentType: "application/json", cacheControl: "0", upsert: true },
+            );
+            if (manifestError) throw manifestError;
+
+            console.log(`RECOVERY_RESULT=SUCCESS objects=${manifest.objects.length}`);
+          } finally {
+            await fsp.rm(tempDir, { recursive: true, force: true });
+          }
+          NODE
+
+          BLOB_READ_WRITE_TOKEN="$(cat "$PANTAVION_BLOB_TOKEN_FILE")"
+          SUPABASE_RECOVERY_SERVICE_KEY="$(cat "$PANTAVION_SUPABASE_KEY_FILE")"
+          export BLOB_READ_WRITE_TOKEN SUPABASE_RECOVERY_SERVICE_KEY
+          echo "::add-mask::$BLOB_READ_WRITE_TOKEN"
+          echo "::add-mask::$SUPABASE_RECOVERY_SERVICE_KEY"
+          node "$RUNNER_TEMP/recover-map-a.mjs"
+
+      - name: Remove temporary local credentials
+        if: always()
+        shell: bash
+        run: |
+          rm -f "${PANTAVION_BLOB_TOKEN_FILE:-}" "${PANTAVION_SUPABASE_KEY_FILE:-}" "${PANTAVION_VERCEL_ENV_FILE:-}" "${PANTAVION_WATER_LEGACY_URL_FILE:-}" || true
+          echo "Temporary local credential files removed."
