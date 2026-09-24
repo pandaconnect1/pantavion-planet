@@ -1,7 +1,7 @@
 import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 
 import {
   decideWaterAIKernel,
@@ -150,7 +150,7 @@ function toWaterFaultMapInput(item: unknown): WaterFaultMapInput {
 }
 export async function GET(request: Request, context: RouteContext) {
   try {
-    if (!hasWaterAdminSession(request)) {
+    if (!await hasWaterAdminAuthorization(request)) {
       return NextResponse.json(
         {
           ok: false,
