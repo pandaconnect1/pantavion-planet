@@ -50,6 +50,39 @@ export default function WaterAdminAccessPage() {
     }
   }, []);
 
+  async function openAsFounder() {
+    setLoading(true);
+    setMessage("Έλεγχος founder session...");
+    setOk(false);
+
+    try {
+      const response = await fetch("/api/professional/infrastructure/water/admin/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ accessCode: "" }),
+      });
+
+      const json = (await response.json()) as SessionResponse;
+
+      if (!response.ok || !json.ok) {
+        throw new Error(json.message || json.error || "Δεν άνοιξε founder/admin session.");
+      }
+
+      setOk(true);
+      setMessage(json.message || "Το founder/admin session ενεργοποιήθηκε.");
+
+      window.setTimeout(() => {
+        window.location.href = safeRequestedAdminPath() || json.redirectTo || WATER_ADMIN_DEFAULT_PATH;
+      }, 400);
+    } catch (error) {
+      setOk(false);
+      setMessage(error instanceof Error ? error.message : "Δεν άνοιξε founder/admin session.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function submitAccess(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -123,7 +156,22 @@ export default function WaterAdminAccessPage() {
           ασφαλές httpOnly session cookie για να ανοίξει το private κέντρο Users / Approvals.
         </p>
 
-        <form onSubmit={(event) => void submitAccess(event)} className="mt-6 grid gap-4">
+        <button
+          type="button"
+          onClick={() => void openAsFounder()}
+          disabled={loading}
+          className="mt-6 w-full rounded-2xl bg-emerald-400 px-5 py-4 text-lg font-black text-emerald-950 disabled:opacity-60"
+        >
+          {loading ? "Έλεγχος..." : "Συνέχεια ως συνδεδεμένος Founder"}
+        </button>
+
+        <div className="my-5 flex items-center gap-3 text-xs font-black uppercase tracking-[0.16em] text-slate-500">
+          <span className="h-px flex-1 bg-white/10" />
+          ή legacy access code
+          <span className="h-px flex-1 bg-white/10" />
+        </div>
+
+        <form onSubmit={(event) => void submitAccess(event)} className="grid gap-4">
           <label className="grid gap-2">
             <span className="text-sm font-black text-[#f2c766]">Founder/Admin access code</span>
             <input
@@ -132,7 +180,7 @@ export default function WaterAdminAccessPage() {
               type="password"
               autoComplete="off"
               spellCheck={false}
-              placeholder="Βάλε εδώ το μυστικό που έχεις στο Vercel"
+              placeholder="Legacy founder/admin access code"
               className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white outline-none"
             />
           </label>
