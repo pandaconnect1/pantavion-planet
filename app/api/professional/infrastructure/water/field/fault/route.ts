@@ -1,7 +1,8 @@
 import { createHash } from "crypto";
 
-import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
+
+import { createClient } from "@/lib/supabase/server";
 
 import type {
   WaterFaultActorRole,
@@ -100,15 +101,19 @@ function hashToken(value: string) {
   return createHash("sha256").update(value).digest("hex");
 }
 
-function safeSegment(value: string) {
-  return value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9α-ω]+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 120) || "unknown";
+function registryFaultType(value: WaterFaultType) {
+  if (value === "broken_pipe") return "broken_pipe";
+  if (value === "leak") return "service_leak";
+  if (value === "no_water") return "no_water";
+  if (value === "pressure_problem") return "low_pressure";
+  if (value === "possible_valve") return "broken_valve";
+  return "other";
+}
+
+function registryPriority(value: WaterFaultPriority) {
+  if (value === "critical") return "critical";
+  if (value === "urgent") return "high";
+  return "normal";
 }
 
 function makeRecordNumber(now: Date) {
@@ -368,25 +373,56 @@ export async function POST(request: Request) {
       },
     };
 
-    await put(
-      `water/private/fault-dossiers/pending/${safeSegment(recordNumber)}.json`,
-      JSON.stringify(dossier, null, 2),
+    const deviceId = clean(body.deviceId, 160);
+    const tokenHash = deviceToken ? hashToken(deviceToken) : "";
+    const supabase = await createClient();
+    const registryRecord = {
+      id: `fault-${recordNumber}`,
+      createdAt,
+      updatedAt: createdAt,
+      reportedBy: clean(body.recordedByName, 180) || clean(body.contactName, 180),
+      area: areaLabel,
+      street: roadLabel,
+      number: "",
+      postal: "",
+      zone: zoneLabel,
+      faultType: registryFaultType(faultType(body.faultType)),
+      priority: registryPriority(priority(body.priority)),
+      status: "new",
+      assignedCrew: "",
+      affectedConsumers: "",
+      waterCutoff: faultType(body.faultType) === "no_water",
+      valveProblem: faultType(body.faultType) === "possible_valve",
+      materials: "",
+      notes: [description, clean(body.note, 1500), transcriptText].filter(Boolean).join("\n\n"),
+      supervisorDecision: "",
+    };
+
+    const { data: savedData, error: saveError } = await supabase.rpc(
+      "pantavion_water_fault_create",
       {
-        access: "private",
-        allowOverwrite: false,
-        contentType: "application/json",
+        p_device_id: deviceId,
+        p_token_hash: tokenHash,
+        p_fault: registryRecord,
       },
     );
 
-    await put(
-      `water/private/fault-approval-inbox/founder-admin/${safeSegment(recordNumber)}.json`,
-      JSON.stringify(dossier, null, 2),
-      {
-        access: "private",
-        allowOverwrite: false,
-        contentType: "application/json",
-      },
-    );
+    if (saveError) {
+      if (saveError.message.includes("water_access_required")) {
+        return NextResponse.json(
+          {
+            ok: false,
+            error: "water_access_required",
+            message: "Η συσκευή χρειάζεται ενεργή έγκριση για καταχώρηση βλάβης.",
+          },
+          { status: 403 },
+        );
+      }
+      throw saveError;
+    }
+
+    const savedRow = Array.isArray(savedData) ? savedData[0] : savedData;
+    if (!savedRow) throw new Error("fault_registry_save_empty");
 
     return NextResponse.json({
       ok: true,
@@ -396,13 +432,13 @@ export async function POST(request: Request) {
       aiMissingCount: aiChecks.filter((check) => !check.resolved).length,
       aiChecks,
       mapLinkStatus: dossier.location.mapLinkStatus,
-      deliveryTarget: "founder_admin_approval_inbox",
-      deliveryTargetLabel: "Founder/Admin approval inbox",
-      storedAt: `water/private/fault-dossiers/pending/${safeSegment(recordNumber)}.json`,
-      approvalInbox: `water/private/fault-approval-inbox/founder-admin/${safeSegment(recordNumber)}.json`,
+      deliveryTarget: "supabase_water_fault_registry",
+      deliveryTargetLabel: "Κεντρικό Μητρώο Βλαβών Supabase",
+      storedAt: `water_fault_records:${savedRow.id}`,
+      approvalInbox: "/professional/infrastructure/water/admin/faults",
       nextStep: "Έλεγχος από επιστάτη ή founder/admin και μετά ανάθεση σε υπεύθυνο/συνεργείο.",
       message:
-        "Η βλάβη καταχωρήθηκε ως pending approval και στάλθηκε στο Founder/Admin approval inbox. Χρειάζεται έλεγχος/έγκριση πριν γίνει επίσημος φάκελος.",
+        "Η βλάβη καταχωρήθηκε μόνιμα στο κεντρικό Μητρώο Supabase και είναι έτοιμη για έλεγχο.",
     });
   } catch (error) {
     return NextResponse.json(
