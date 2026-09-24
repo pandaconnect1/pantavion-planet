@@ -21,8 +21,8 @@ jobs:
     timeout-minutes: 45
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_ORG_ID: team_tGNSGGjcV3VNecscMvaAniGY
+      VERCEL_PROJECT_ID: prj_BxhpnjvAs1seyfBU1UYFU8nDykwh
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
       CANONICAL_SUPABASE_PROJECT_REF: cxhulvwkagzufbjsdwwu
@@ -34,7 +34,7 @@ jobs:
         run: |
           set -euo pipefail
           missing=0
-          for name in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID SUPABASE_ACCESS_TOKEN SUPABASE_PROJECT_REF; do
+          for name in VERCEL_TOKEN SUPABASE_ACCESS_TOKEN SUPABASE_PROJECT_REF; do
             if [ -z "${!name:-}" ]; then
               echo "::error::RECOVERY_BLOCKER=${name}_MISSING"
               missing=1
