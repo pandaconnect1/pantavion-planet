@@ -6,6 +6,7 @@ on:
       - water/map-a-authentic-styles-20260925
     paths:
       - 'scripts/water-rebuild-authentic-kml-styles.cjs'
+      - 'scripts/water-rebuild-authentic-full-index.cjs'
       - '.github/workflows/pantavion-map-a-authentic-style-rebuild.yml'
 
 permissions:
@@ -91,6 +92,15 @@ jobs:
           set -euo pipefail
           node scripts/water-rebuild-authentic-kml-styles.cjs | tee "$RUNNER_TEMP/map-a-style-rebuild-result.json"
 
+      - name: Rebuild full authentic Map A staging index
+        shell: bash
+        env:
+          SUPABASE_KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
+          SUPABASE_URL: https://cxhulvwkagzufbjsdwwu.supabase.co
+        run: |
+          set -euo pipefail
+          node scripts/water-rebuild-authentic-full-index.cjs | tee "$RUNNER_TEMP/map-a-full-index-result.json"
+
       - name: Remove temporary admin key
         if: always()
         shell: bash
@@ -110,4 +120,5 @@ jobs:
             echo "- Coordinates modified: **NO**"
             echo "- Layers filtered: **NO**"
             echo "- Original KML styles extracted from verified private KMZ: **YES**"
+            echo "- Full staging index exact-count gate: **PASSED**"
           } >> "$GITHUB_STEP_SUMMARY"
