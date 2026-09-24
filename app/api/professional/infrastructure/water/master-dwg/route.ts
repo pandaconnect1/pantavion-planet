@@ -2,7 +2,7 @@
 
 import { list } from "@vercel/blob";
 
-import { hasWaterAdminSession } from "@/core/security/water-admin-session";
+import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -81,7 +81,7 @@ async function approvedDeviceMatches(deviceId: string, deviceToken: string) {
 }
 
 async function assertAccess(request: Request) {
-  if (hasWaterAdminSession(request)) {
+  if (await hasWaterAdminAuthorization(request)) {
     return {
       allowed: true,
       mode: "admin-session",
