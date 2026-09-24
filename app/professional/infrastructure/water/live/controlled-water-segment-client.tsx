@@ -1098,7 +1098,7 @@ export default function ControlledWaterSegmentClient() {
         });
 
         const response = await fetch(
-          `/api/professional/infrastructure/water/segment/bbox?${params.toString()}`,
+          `/api/professional/infrastructure/water/mapserver/0/query?${params.toString()}`,
           {
             cache: "no-store",
             credentials: "include",
