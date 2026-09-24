@@ -49,6 +49,200 @@ type VaultResponse = {
   header?: string;
 };
 
+
+function KmzNetworkUploader() {
+  const [file, setFile] = useState<File | null>(null);
+  const [phase, setPhase] = useState<Phase>("idle");
+  const [progress, setProgress] = useState(0);
+  const [message, setMessage] = useState(
+    "Επίλεξε το KMZ του δικτύου ύδρευσης. Δεν χρειάζεται να ταιριάζει με τα DWG bytes.",
+  );
+
+  function chooseKmz(next: File | null) {
+    setFile(next);
+    setProgress(0);
+
+    if (!next) {
+      setPhase("idle");
+      setMessage("Επίλεξε το KMZ του δικτύου ύδρευσης.");
+      return;
+    }
+
+    if (!next.name.toLowerCase().endsWith(".kmz")) {
+      setPhase("error");
+      setMessage("Χρειάζεται αρχείο .kmz.");
+      return;
+    }
+
+    setPhase("ready");
+    setMessage(
+      `Έτοιμο για upload: ${next.name} · ${next.size.toLocaleString("en-US")} bytes.`,
+    );
+  }
+
+  async function uploadKmz() {
+    if (!file || phase !== "ready") return;
+
+    setPhase("authorizing");
+    setMessage("Δημιουργία ασφαλούς upload για το KMZ…");
+
+    try {
+      const signResponse = await fetch(
+        "/api/professional/infrastructure/water/network-kmz",
+        {
+          method: "POST",
+          credentials: "include",
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "sign",
+            fileName: file.name,
+            sizeBytes: file.size,
+          }),
+        },
+      );
+
+      const signBody = (await signResponse.json()) as VaultResponse;
+      if (!signResponse.ok || !signBody.ok) {
+        throw new Error(signBody.error || signBody.status || "kmz_upload_authorization_failed");
+      }
+      if (!signBody.bucket || !signBody.path || !signBody.token) {
+        throw new Error("kmz_upload_authorization_incomplete");
+      }
+
+      setPhase("uploading");
+      setMessage("Ανέβασμα KMZ χωρίς μετατροπή…");
+
+      await new Promise<void>((resolve, reject) => {
+        const upload = new tus.Upload(file, {
+          endpoint: TUS_ENDPOINT,
+          retryDelays: [0, 3000, 5000, 10000, 20000],
+          chunkSize: TUS_CHUNK_SIZE,
+          uploadDataDuringCreation: true,
+          removeFingerprintOnSuccess: true,
+          headers: {
+            "x-signature": signBody.token as string,
+            "x-upsert": "false",
+          },
+          metadata: {
+            bucketName: signBody.bucket as string,
+            objectName: signBody.path as string,
+            contentType: "application/vnd.google-earth.kmz",
+            cacheControl: "0",
+          },
+          onError: reject,
+          onProgress(bytesUploaded, bytesTotal) {
+            const pct =
+              bytesTotal > 0
+                ? Math.min(100, (bytesUploaded / bytesTotal) * 100)
+                : 0;
+            const rounded = Math.round(pct * 10) / 10;
+            setProgress(rounded);
+            setMessage(`Ανέβασμα KMZ… ${rounded.toFixed(1)}%`);
+          },
+          onSuccess: () => resolve(),
+        });
+
+        void upload
+          .findPreviousUploads()
+          .then((previous) => {
+            if (previous.length > 0) upload.resumeFromPreviousUpload(previous[0]);
+            upload.start();
+          })
+          .catch(reject);
+      });
+
+      setPhase("verifying");
+      setMessage("Έλεγχος ότι το KMZ αποθηκεύτηκε ολόκληρο…");
+
+      const verifyResponse = await fetch(
+        "/api/professional/infrastructure/water/network-kmz",
+        {
+          method: "POST",
+          credentials: "include",
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "verify",
+            path: signBody.path,
+            sizeBytes: file.size,
+          }),
+        },
+      );
+
+      const verifyBody = (await verifyResponse.json()) as VaultResponse;
+      if (!verifyResponse.ok || !verifyBody.ok) {
+        throw new Error(
+          verifyBody.error || verifyBody.status || "kmz_verification_failed",
+        );
+      }
+
+      setProgress(100);
+      setPhase("verified");
+      setMessage(
+        `KMZ STORED ✓ · ${verifyBody.actualSizeBytes?.toLocaleString("en-US")} bytes · SHA-256 ${verifyBody.sha256 || ""}`,
+      );
+    } catch (error) {
+      setPhase("error");
+      setMessage(error instanceof Error ? error.message : "kmz_upload_failed");
+    }
+  }
+
+  return (
+    <article className="rounded-3xl border border-cyan-400/30 bg-cyan-950/20 p-5">
+      <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">
+        Water Network Import
+      </p>
+      <h2 className="mt-2 text-2xl font-black text-white">
+        KMZ δικτύου ύδρευσης
+      </h2>
+      <p className="mt-2 text-sm font-semibold leading-6 text-slate-200">
+        Αυτό είναι ξεχωριστό από τα κλειδωμένα DWG originals. Δέχεται το KMZ όπως είναι,
+        χωρίς έλεγχο του DWG byte-size, και το κρατά ιδιωτικά για το επόμενο import στον χάρτη.
+      </p>
+
+      <input
+        className="mt-4 block w-full text-sm text-slate-200"
+        type="file"
+        accept=".kmz,application/vnd.google-earth.kmz"
+        disabled={phase === "uploading" || phase === "verifying"}
+        onChange={(event) => chooseKmz(event.target.files?.[0] || null)}
+      />
+
+      {progress > 0 ? (
+        <div className="mt-4">
+          <progress className="h-3 w-full" value={progress} max={100} />
+          <div className="mt-1 text-xs font-black text-cyan-200">
+            {progress.toFixed(1)}%
+          </div>
+        </div>
+      ) : null}
+
+      <p
+        className={
+          "mt-4 text-sm font-bold " +
+          (phase === "verified"
+            ? "text-emerald-300"
+            : phase === "error"
+              ? "text-rose-300"
+              : "text-slate-300")
+        }
+      >
+        {message}
+      </p>
+
+      <button
+        type="button"
+        onClick={() => void uploadKmz()}
+        disabled={phase !== "ready"}
+        className="mt-3 rounded-xl bg-cyan-300 px-4 py-3 text-sm font-black text-slate-950 disabled:bg-slate-700 disabled:text-slate-400"
+      >
+        Upload network KMZ
+      </button>
+    </article>
+  );
+}
+
 function SourceUploader({ source }: { source: Source }) {
   const [file, setFile] = useState<File | null>(null);
   const [phase, setPhase] = useState<Phase>("idle");
@@ -267,6 +461,7 @@ export default function AuthenticSourceVaultPage() {
         </div>
 
         <div className="mt-6 grid gap-5">
+          <KmzNetworkUploader />
           {SOURCES.map((source) => (
             <SourceUploader key={source.id} source={source} />
           ))}
