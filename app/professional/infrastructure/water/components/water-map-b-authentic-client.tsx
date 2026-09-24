@@ -70,27 +70,75 @@ function importBrowserModule(url: string) {
   return nativeImport(url);
 }
 
+function readStoredWaterDevice() {
+  if (typeof window === "undefined") {
+    return { deviceId: "", deviceToken: "" };
+  }
+
+  const deviceId =
+    window.localStorage.getItem("pantavion_water_device_id") ||
+    window.localStorage.getItem("pantavion-water-device-id") ||
+    window.localStorage.getItem("waterDeviceId") ||
+    "";
+
+  const deviceToken =
+    window.localStorage.getItem("pantavion_water_device_token") ||
+    window.localStorage.getItem("pantavion-water-device-token") ||
+    window.localStorage.getItem("waterDeviceToken") ||
+    "";
+
+  if (deviceId && deviceToken) return { deviceId, deviceToken };
+
+  for (const key of [
+    "pantavion_water_access_device",
+    "pantavion-water-access-device",
+    "waterAccessDevice",
+    "water-approved-device",
+  ]) {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) continue;
+
+    try {
+      const parsed = JSON.parse(raw);
+      const parsedDeviceId = String(parsed.deviceId || parsed.id || "");
+      const parsedDeviceToken = String(parsed.deviceToken || parsed.token || "");
+      if (parsedDeviceId && parsedDeviceToken) {
+        return { deviceId: parsedDeviceId, deviceToken: parsedDeviceToken };
+      }
+    } catch {
+      // Ignore invalid legacy values and continue fail-closed.
+    }
+  }
+
+  return { deviceId: "", deviceToken: "" };
+}
+
 async function callOwnerFunction(action: "status" | "sign" | "verify" | "download") {
   const supabase = createSupabaseClient();
   const {
     data: { session },
-    error,
   } = await supabase.auth.getSession();
-
-  if (error || !session?.access_token) {
-    throw new MapBOwnerFunctionError(401, "MAP_B_AUTH_REQUIRED");
-  }
+  const storedDevice = readStoredWaterDevice();
 
   const { url, publishableKey } = getSupabasePublicConfig();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    apikey: publishableKey,
+  };
+
+  if (session?.access_token) {
+    headers.Authorization = `Bearer ${session.access_token}`;
+  }
+
   const response = await fetch(`${url}/functions/v1/${MAP_B_FUNCTION}`, {
     method: "POST",
     cache: "no-store",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${session.access_token}`,
-      apikey: publishableKey,
-    },
-    body: JSON.stringify({ action }),
+    headers,
+    body: JSON.stringify({
+      action,
+      deviceId: storedDevice.deviceId,
+      deviceToken: storedDevice.deviceToken,
+    }),
   });
 
   const payload = (await response.json().catch(() => ({}))) as OwnerFunctionPayload;
@@ -320,9 +368,9 @@ export default function WaterMapBAuthenticClient() {
 
       {viewerState === "auth" ? (
         <div className="absolute inset-x-4 top-4 z-30 mx-auto max-w-xl rounded-2xl border border-amber-400/40 bg-black/95 p-5 text-sm text-white">
-          <p className="font-black text-amber-200">Απαιτείται ενεργή σύνδεση ιδιοκτήτη Pantavion.</p>
+          <p className="font-black text-amber-200">Απαιτείται founder σύνδεση ή ήδη εγκεκριμένη Water συσκευή.</p>
           <p className="mt-2 text-white/70">
-            Ο Map B παραμένει private και δεν εκτίθεται χωρίς authenticated founder session.
+            Ο Map B παραμένει private. Η πρόσβαση επιτρέπεται μόνο σε founder ή σε ήδη εγκεκριμένη Water συσκευή.
           </p>
         </div>
       ) : null}
