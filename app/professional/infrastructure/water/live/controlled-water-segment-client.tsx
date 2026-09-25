@@ -1300,8 +1300,10 @@ export default function ControlledWaterSegmentClient() {
       }, 900);
     }
 
+    // Load the first authentic Map A segment immediately once the approved
+    // device and Leaflet map are both ready. Pan/zoom refreshes stay debounced.
+    void loadPipes();
     map.on("moveend zoomend", scheduleAutoLoad);
-    scheduleAutoLoad();
 
     return () => {
       clearAutoLoadTimer();
