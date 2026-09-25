@@ -687,7 +687,7 @@ export default function ControlledWaterSegmentClient() {
           center: [34.681, 33.038],
           zoom: 15,
           zoomControl: true,
-          preferCanvas: true,
+          preferCanvas: false,
         });
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -1256,6 +1256,7 @@ export default function ControlledWaterSegmentClient() {
       });
 
       layer.addTo(map);
+      layer.bringToFront();
       layerRef.current = layer;
 
       const count = features.length;
