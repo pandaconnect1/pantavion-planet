@@ -1,6 +1,6 @@
 name: Water Lock Refresh Evidence
 
-on:
+'on':
   push:
     branches:
       - fix/water-lock-refresh-20260926
