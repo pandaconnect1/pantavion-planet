@@ -26,6 +26,7 @@ describe('directive continuity contract', () => {
       title: 'Always available Pantavion public shell',
       intent: 'A provider failure must not make the Pantavion public presence disappear.',
       stage: 'VERIFIED_LIVE',
+      realityState: 'VERIFIED_DONE',
       sources: [{
         kind: 'chat',
         sourceId: 'historical-directive',
@@ -33,6 +34,7 @@ describe('directive continuity contract', () => {
         immutableFingerprint: 'historical-source-fingerprint',
       }],
       artifactRefs: [],
+      notes: [],
       evidence: [{
         evidenceId: 'live-1',
         kind: 'live-check',
@@ -45,5 +47,11 @@ describe('directive continuity contract', () => {
     } satisfies PantavionDirectiveRecord;
 
     expect(isDirectiveVerifiedLive(record)).toBe(true);
+  });
+
+  it('does not allow an unverified completion claim to masquerade as VERIFIED_LIVE', () => {
+    expect(() =>
+      assertDirectiveTransition('IMPLEMENTING', 'VERIFIED_LIVE', []),
+    ).toThrow('directive_live_check_evidence_required');
   });
 });
