@@ -3,7 +3,7 @@ name: Water Lock Refresh Evidence
 'on':
   push:
     branches:
-      - fix/water-lock-refresh-20260926
+      - fix/water-lock-refresh-evidence
   workflow_dispatch:
 
 permissions:
