@@ -19,6 +19,39 @@ export const DIRECTIVE_STAGES = [
 
 export type DirectiveStage = (typeof DIRECTIVE_STAGES)[number];
 
+export const DIRECTIVE_REALITY_STATES = [
+  'OPEN',
+  'IN_PROGRESS',
+  'BLOCKED',
+  'CLAIMED_DONE_BUT_UNVERIFIED',
+  'NOT_DONE',
+  'VERIFIED_DONE',
+  'SUPERSEDED',
+] as const;
+
+export type DirectiveRealityState = (typeof DIRECTIVE_REALITY_STATES)[number];
+
+export type DirectiveNoteKind =
+  | 'requirement'
+  | 'promise'
+  | 'decision'
+  | 'note'
+  | 'blocker'
+  | 'failure'
+  | 'claim'
+  | 'correction'
+  | 'follow-up'
+  | 'verification';
+
+export interface DirectiveNote {
+  noteId: string;
+  kind: DirectiveNoteKind;
+  text: string;
+  recordedAt: string;
+  source?: DirectiveSource;
+  evidenceIds?: string[];
+}
+
 export type DirectiveSourceKind =
   | 'chat'
   | 'voice'
@@ -50,10 +83,12 @@ export interface PantavionDirectiveRecord {
   title: string;
   intent: string;
   stage: DirectiveStage;
+  realityState: DirectiveRealityState;
   sources: DirectiveSource[];
   owner?: string;
   artifactRefs: string[];
   evidence: DirectiveEvidence[];
+  notes: DirectiveNote[];
   createdAt: string;
   updatedAt: string;
   revision: number;
@@ -108,6 +143,19 @@ export function assertDirectiveRecord(record: PantavionDirectiveRecord): void {
   }
   if (record.sources.length === 0) {
     throw new Error('directive_source_provenance_required');
+  }
+  if (
+    record.realityState === 'VERIFIED_DONE' &&
+    (record.stage !== 'VERIFIED_LIVE' ||
+      !record.evidence.some((item) => item.kind === 'live-check'))
+  ) {
+    throw new Error('directive_verified_done_requires_live_evidence');
+  }
+  if (
+    record.realityState === 'CLAIMED_DONE_BUT_UNVERIFIED' &&
+    record.stage === 'VERIFIED_LIVE'
+  ) {
+    throw new Error('directive_unverified_claim_cannot_be_verified_live');
   }
   if (record.revision < 1 || !Number.isInteger(record.revision)) {
     throw new Error('directive_revision_invalid');
