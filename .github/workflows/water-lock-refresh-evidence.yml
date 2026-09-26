@@ -1,40 +1,40 @@
 name: Water Lock Refresh Evidence
 
-on:
+'on':
   push:
     branches:
       - fix/water-lock-refresh-evidence
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  calculate-protected-hashes:
+  deliberate-refresh:
+    if: github.event.head_commit.message != 'chore: refresh water network runtime lock'
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Calculate deliberate lock refresh evidence
-        shell: bash
+        with:
+          ref: fix/water-lock-refresh-20260926
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Refresh protected hashes without changing invariants
+        env:
+          PANTAVION_WATER_LOCK_REFRESH: "YES"
+          PANTAVION_WATER_LOCK_REFRESH_REASON: "Refresh integrity hashes after reviewed water admin/session, bbox segment, admin access, and controlled segment client changes; source truth and privacy invariants remain unchanged."
+        run: node scripts/refresh-water-network-runtime-lock.cjs
+      - name: Verify refreshed lock
+        run: npm run audit:water:network-lock
+      - name: Commit refreshed manifest only
         run: |
           set -euo pipefail
-          echo "water-access-authorize route sha256:"
-          sha256sum app/api/professional/infrastructure/water/access/authorize/route.ts
-          echo "water-segment-bbox route sha256:"
-          sha256sum app/api/professional/infrastructure/water/segment/bbox/route.ts
-          echo "water-admin-session route sha256:"
-          sha256sum app/api/professional/infrastructure/water/admin/session/route.ts
-          echo "privileged-request-boundary sha256:"
-          sha256sum core/security/privileged-request-boundary.ts
-          echo "water-admin-session core sha256:"
-          sha256sum core/security/water-admin-session.ts
-          echo "water-guardian-production-smoke.cjs sha256:"
-          sha256sum scripts/water-guardian-production-smoke.cjs
-          echo "water-network-runtime-lock.cjs sha256:"
-          sha256sum scripts/pantavion-water-network-runtime-lock.cjs
-          echo "water-network-runtime-lock.json sha256:"
-          sha256sum core/infrastructure/water/water-network-runtime-lock.json
+          git config user.name "pantavion-water-lock-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add core/infrastructure/water/water-network-runtime-lock.json
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: refresh water network runtime lock"
+          git push origin HEAD:fix/water-lock-refresh-20260926
