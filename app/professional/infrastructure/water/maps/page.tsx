@@ -1,9 +1,9 @@
 import WaterMapNavigation from "../water-map-navigation";
 
 export const metadata = {
-  title: "Pantavion Water Source Maps + Intelligence",
+  title: "Pantavion Water Map Workspace",
   description:
-    "Protected entry for Map A, canonical Map B, legacy Map B and C engineering intelligence.",
+    "One professional viewer for Map A, canonical Map B, legacy Map B and engineering intelligence, with mobile fullscreen switching.",
 };
 
 const sourceMaps = [
@@ -13,8 +13,8 @@ const sourceMaps = [
     status: "Operational",
     description:
       "Ο προστατευμένος λειτουργικός χάρτης ύδρευσης για καθημερινή εργασία πεδίου, approved users και segmented viewport loading.",
-    href: "/professional/infrastructure/water/live",
-    action: "Άνοιγμα Map A",
+    href: "/professional/infrastructure/water/maps/workspace?source=A",
+    action: "Άνοιγμα στο Workspace",
   },
   {
     label: "SOURCE MAP 2",
@@ -22,8 +22,8 @@ const sourceMaps = [
     status: "Canonical source",
     description:
       "Derived επαγγελματική προβολή του canonical DWG ANDREASPAP 2026. Το raw master παραμένει ιδιωτικό και δεν φορτώνεται στον browser.",
-    href: "/professional/infrastructure/water/master-b-mobile?sourceKey=canonical-2026-andreaspap",
-    action: "Άνοιγμα Canonical B",
+    href: "/professional/infrastructure/water/maps/workspace?source=B_CANONICAL",
+    action: "Άνοιγμα στο Workspace",
   },
   {
     label: "SOURCE MAP 3",
@@ -31,8 +31,8 @@ const sourceMaps = [
     status: "Legacy candidate",
     description:
       "Ξεχωριστή derived προβολή του παλαιότερου GEORGE DWG για σύγκριση. Δεν αντικαθιστά και δεν γράφει πάνω στον canonical χάρτη.",
-    href: "/professional/infrastructure/water/master-b-mobile?sourceKey=legacy-george-85m",
-    action: "Άνοιγμα Legacy B",
+    href: "/professional/infrastructure/water/maps/workspace?source=B_LEGACY",
+    action: "Άνοιγμα στο Workspace",
   },
 ] as const;
 
@@ -48,15 +48,23 @@ export default function WaterMapsPage() {
           </p>
 
           <h1 className="mt-4 text-3xl font-black tracking-tight md:text-5xl">
-            3 Source Maps
+            Ένας Viewer · 3 Source Maps
           </h1>
 
           <p className="mt-4 max-w-4xl text-sm leading-7 text-slate-300 md:text-base">
-            Οι τρεις πραγματικές πηγές μένουν ξεχωριστές και immutable: Map A,
-            canonical Map B και legacy Map B. Οι αλλαγές πεδίου, evidence και
-            approved spatial patches μπορούν να προβληθούν ως overlays χωρίς να
-            αλλοιώνεται κανένα original source.
+            Οι τρεις πραγματικές πηγές μένουν ξεχωριστές και immutable, αλλά
+            ανοίγουν μέσα στον ίδιο Pantavion Water Workspace. Στο κινητό
+            εμφανίζεται ένας source map τη φορά, με άμεση εναλλαγή και πλήρη
+            οθόνη. Τα approved overlays και evidence παραμένουν μέρος του ίδιου
+            επαγγελματικού περιβάλλοντος.
           </p>
+
+          <a
+            href="/professional/infrastructure/water/maps/workspace"
+            className="mt-6 inline-block rounded-2xl bg-[#f2c766] px-5 py-3 text-sm font-black text-[#07101e]"
+          >
+            Άνοιγμα Water Map Workspace
+          </a>
 
           <div className="mt-7 grid gap-4 md:grid-cols-3">
             {sourceMaps.map((card) => (
@@ -93,7 +101,7 @@ export default function WaterMapsPage() {
               href="/professional/infrastructure/water/maps/compare"
               className="rounded-2xl border border-[#d8b45f]/50 bg-[#d8b45f] px-4 py-3 text-sm font-black text-[#07101e]"
             >
-              Σύγκριση Canonical / Legacy Map B
+              Desktop / Admin Compare
             </a>
             <a
               href="/professional/infrastructure/water/admin/alignment"
