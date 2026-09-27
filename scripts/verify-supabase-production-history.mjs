@@ -19,10 +19,18 @@ if (new Set(versions).size !== versions.length) {
 }
 
 const md5Of = (text) => createHash('md5').update(text, 'utf8').digest('hex');
+const gitBlobShaOf = (text) => {
+  const bytes = Buffer.byteLength(text, 'utf8');
+  return createHash('sha1')
+    .update(`blob ${bytes}\0`, 'utf8')
+    .update(text, 'utf8')
+    .digest('hex');
+};
 const whitespaceNormalized = (text) => text.trim().replace(/\s+/g, ' ');
 
 for (const entry of entries) {
-  const path = `supabase/migrations/${entry.version}_${entry.name}.sql`;
+  const repositoryFile = entry.repositoryFile ?? `${entry.version}_${entry.name}.sql`;
+  const path = `supabase/migrations/${repositoryFile}`;
   let text;
   try {
     text = await readFile(path, 'utf8');
@@ -31,8 +39,22 @@ for (const entry of entries) {
     continue;
   }
 
-  const md5 = md5Of(text);
   const chars = text.length;
+
+  if (entry.gitBlobSha) {
+    const gitBlobSha = gitBlobShaOf(text);
+    if (gitBlobSha === entry.gitBlobSha && chars === entry.chars) {
+      exactMatches++;
+      continue;
+    }
+
+    failures.push(
+      `${path}: expected gitBlobSha=${entry.gitBlobSha} chars=${entry.chars}; got gitBlobSha=${gitBlobSha} chars=${chars}`,
+    );
+    continue;
+  }
+
+  const md5 = md5Of(text);
   if (md5 === entry.md5 && chars === entry.chars) {
     exactMatches++;
     continue;
