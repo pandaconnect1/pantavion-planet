@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-09-27T06:20:20.618Z",
+  "lockedAtUtc": "2026-09-27T08:40:02.797Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -24,7 +24,7 @@
     "app/api/professional/infrastructure/water/mapserver/0/query/route.ts": "3d4784ac3af414b1b143588c721fe8bee24d1c98e60b131caaa93b3ab398ae59",
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "4b792c1376b23d6c10f68d445fe0a81f24dcb0f4aeacbbe3a0162d97bf21c6aa",
     "app/professional/infrastructure/water/admin/access/page.tsx": "8ec81080f62ef3365a197ed9768159fd9870298f29e675470e02dbf70a7d5fdb",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "471dddd468227098bec94f88838a2b6c9ebf20df5a46cafb188ddf65a986e14e",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "3f91b0b188312408a133a1cf0c89e2bf4a060a21a060f226ed36376f2a84b498",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "4e4711818dd5e5c3b924677db72e6816d06221760f20cd5e10217a86a199a7eb",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
@@ -35,8 +35,8 @@
     "scripts/water-segment-reader-regression.mjs": "8b1f075c8143fbe0041bc8918b0a1717ea46e034f57c09479a5a7eb9f0206c33"
   },
   "refreshEvidence": {
-    "reason": "MapServer compatibility route added to the protected runtime; viewer-to-MapServer-to-bbox regression chain verified; source truth and privacy invariants remain unchanged.",
-    "sourceCommit": "b27d8953848c24112f4c3a64a0b7782a75d44941",
+    "reason": "Approved Map A field-change and evidence overlay added with visible-bbox, server-authorized loading; raw master, full-network browser loading and source-truth invariants remain unchanged.",
+    "sourceCommit": "4ad0f06947ceb00f6da77f5d9bead26f98b79d69",
     "protectedFileCount": 17,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
