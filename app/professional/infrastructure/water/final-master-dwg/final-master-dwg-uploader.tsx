@@ -19,6 +19,9 @@ type UploadUrlResponse = {
 };
 
 type Props = {
+  sourceKey: "canonical-2026-andreaspap" | "legacy-george-85m";
+  label: string;
+  canonical: boolean;
   expectedFileName: string;
   expectedSizeBytes: number;
   expectedSha256: string;
@@ -30,7 +33,10 @@ const MAP_B_OWNER_FUNCTION = `${SUPABASE_URL}/functions/v1/pantavion-map-b-owner
 const TUS_ENDPOINT = `https://${SUPABASE_PROJECT_ID}.storage.supabase.co/storage/v1/upload/resumable`;
 const TUS_CHUNK_SIZE = 6 * 1024 * 1024;
 
-async function callMapBOwner(action: "sign" | "verify") {
+async function callMapBOwner(
+  action: "sign" | "verify",
+  sourceKey: Props["sourceKey"],
+) {
   const supabase = createSupabaseClient();
   const {
     data: { session },
@@ -50,7 +56,7 @@ async function callMapBOwner(action: "sign" | "verify") {
       apikey: publishableKey,
       Authorization: `Bearer ${session.access_token}`,
     },
-    body: JSON.stringify({ action }),
+    body: JSON.stringify({ action, sourceKey }),
   });
 
   const body = (await response.json().catch(() => ({}))) as UploadUrlResponse & {
@@ -67,6 +73,9 @@ async function callMapBOwner(action: "sign" | "verify") {
 }
 
 export default function FinalMasterDwgUploader({
+  sourceKey,
+  label,
+  canonical,
   expectedFileName,
   expectedSizeBytes,
   expectedSha256,
@@ -119,11 +128,11 @@ export default function FinalMasterDwgUploader({
     setMessage("Creating one-time private upload authorization…");
 
     try {
-      const authBody = await callMapBOwner("sign");
+      const authBody = await callMapBOwner("sign", sourceKey);
 
       if (authBody.status === "already_present") {
         setMessage("Map B object already exists. Verifying exact binary identity…");
-        await callMapBOwner("verify");
+        await callMapBOwner("verify", sourceKey);
         setProgress(100);
         setState("done");
         setMessage("Existing Map B binary verified and registered.");
@@ -178,7 +187,7 @@ export default function FinalMasterDwgUploader({
       });
 
       setMessage("Upload complete. Performing server-side SHA-256, size and DWG-header verification…");
-      await callMapBOwner("verify");
+      await callMapBOwner("verify", sourceKey);
 
       setState("done");
       setMessage("Verified exact Map B master: private, immutable and registered.");
@@ -198,7 +207,10 @@ export default function FinalMasterDwgUploader({
         background: "rgba(13,148,136,0.08)",
       }}
     >
-      <h2 style={{ margin: 0, fontSize: 22 }}>Private master upload</h2>
+      <h2 style={{ margin: 0, fontSize: 22 }}>{label}</h2>
+      <p style={{ marginTop: 8, fontSize: 12, fontWeight: 900, color: canonical ? "#a7f3d0" : "#fde68a" }}>
+        {canonical ? "CANONICAL MAP B SOURCE" : "LEGACY CANDIDATE — DOES NOT REPLACE CANONICAL"}
+      </p>
       <p style={{ color: "#d7d7d7", lineHeight: 1.6 }}>
         Expected: {expectedFileName} · {expectedSizeMB} MB. Locked SHA-256: {expectedSha256}
       </p>
