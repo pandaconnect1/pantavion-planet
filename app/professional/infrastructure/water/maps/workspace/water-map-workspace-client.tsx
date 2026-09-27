@@ -2,20 +2,22 @@
 
 import { useEffect, useState } from "react";
 
-type SourceId = "A" | "B_CANONICAL" | "B_LEGACY" | "C_INTELLIGENCE";
+type SourceId = "A" | "B" | "C" | "ENGINEERING";
 
 const SOURCE_HREFS: Record<SourceId, string> = {
   A: "/professional/infrastructure/water/live",
-  B_CANONICAL:
-    "/professional/infrastructure/water/master-b-mobile?sourceKey=canonical-2026-andreaspap",
-  B_LEGACY:
-    "/professional/infrastructure/water/master-b-mobile?sourceKey=legacy-george-85m",
-  C_INTELLIGENCE: "/professional/infrastructure/water/c",
+  B: "/professional/infrastructure/water/b",
+  C: "/professional/infrastructure/water/c",
+  ENGINEERING: "/professional/infrastructure/water/engineering",
 };
 
 function requestedSource(): SourceId {
   const value = new URLSearchParams(window.location.search).get("source");
-  return value && value in SOURCE_HREFS ? (value as SourceId) : "A";
+
+  if (value === "B_CANONICAL" || value === "B") return "B";
+  if (value === "B_LEGACY" || value === "C_AUTHENTIC" || value === "C") return "C";
+  if (value === "C_INTELLIGENCE" || value === "ENGINEERING") return "ENGINEERING";
+  return "A";
 }
 
 export default function WaterMapWorkspaceClient() {
@@ -24,11 +26,6 @@ export default function WaterMapWorkspaceClient() {
   useEffect(() => {
     const href = SOURCE_HREFS[requestedSource()];
     setTarget(href);
-
-    // Do not embed Pantavion map pages in an iframe. Production security
-    // deliberately protects pages against framing. Navigate to the real map
-    // route so mobile browsers receive the map directly and security headers
-    // remain fail-closed.
     window.location.replace(href);
   }, []);
 
@@ -40,8 +37,8 @@ export default function WaterMapWorkspaceClient() {
         </p>
         <h1 className="mt-3 text-xl font-black">Άνοιγμα πραγματικού χάρτη…</h1>
         <p className="mt-3 text-sm leading-6 text-slate-300">
-          Ο χάρτης ανοίγει απευθείας, χωρίς iframe, ώστε να λειτουργεί σωστά
-          στο κινητό και να παραμένουν ενεργές οι προστασίες ασφαλείας.
+          A, B και C ανοίγουν ως ξεχωριστές πραγματικές map routes. Το Engineering
+          workspace παραμένει ανεξάρτητο από τους τρεις αυθεντικούς χάρτες.
         </p>
         <a
           href={target}
