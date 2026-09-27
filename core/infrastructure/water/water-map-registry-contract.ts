@@ -221,8 +221,22 @@ export function createPantavionWaterMapRegistryEntry(
 export function getPantavionWaterMapRegistryContract() {
   return {
     id: PANTAVION_WATER_MAP_REGISTRY_ID,
-    version: "1.0.0",
+    version: "1.1.0",
     status: "registry-contract-active-runtime-adapters-progressive",
+    artifactIntakePolicy: {
+      routeThroughUniversalArtifactIntake: true,
+      acceptsAnyArtifactFormat: true,
+      acceptsMobileUploads: true,
+      acceptsPhotosScansAndPdf: true,
+      acceptsUnknownFutureFormats: true,
+      unknownFormatsRejectedForLackOfRenderer: false,
+      preserveOriginalBytesBeforeConversion: true,
+      renderabilityIsSeparateFromAcceptance: true,
+      georeferencingMayBeDeferred: true,
+      preservedArtifactsMayRemainEvidenceOnly: true,
+      adapterDiscoveryAllowedAfterPreservation: true,
+      noFalseRenderableClaim: true,
+    },
     doctrine: {
       oneViewerForAllMaps: true,
       arbitraryFutureMapIdsAllowed: true,
@@ -232,6 +246,8 @@ export function getPantavionWaterMapRegistryContract() {
       rawMasterBrowserExposureAllowed: false,
       browserFullDatasetLoadAllowed: false,
       authorizationFailClosed: true,
+      noArtifactLossWhenRendererMissing: true,
+      universalArtifactIntakeBeforeLayerPromotion: true,
     },
     sourceCapabilities: SOURCE_CAPABILITIES,
     maps: pantavionWaterMapRegistryEntries,
