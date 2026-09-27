@@ -16,6 +16,12 @@ const allowForwardMigrations = process.env.ALLOW_FORWARD_MIGRATIONS === '1';
 const productionByVersion = new Map(migrations.map((m) => [m.version, m]));
 const productionHead = migrations.map((m) => m.version).sort().at(-1) ?? '00000000000000';
 const files = (await readdir('supabase/migrations')).filter((f) => /^\d{14}_.+\.sql$/.test(f)).sort();
+const repositoryFileFor = (migration) =>
+  migration.repositoryFile ?? `${migration.version}_${migration.name}.sql`;
+const canonicalProductionFiles = new Set(migrations.map(repositoryFileFor));
+if (canonicalProductionFiles.size !== migrations.length) {
+  throw new Error('Duplicate repository migration file mapping across production history.');
+}
 
 const filesByVersion = new Map();
 for (const file of files) {
@@ -33,11 +39,13 @@ if (duplicateVersions.length) {
 }
 
 const byVersion = new Map([...filesByVersion.entries()].map(([version, group]) => [version, group[0]]));
-const missingProduction = migrations.filter((m) => !byVersion.has(m.version));
+const missingProduction = migrations.filter((migration) => !files.includes(repositoryFileFor(migration)));
 
 if (missingProduction.length) {
-  console.error('Production migration versions missing from repository:');
-  for (const m of missingProduction) console.error(`- ${m.version}_${m.name}.sql`);
+  console.error('Production migration records missing their canonical repository file:');
+  for (const migration of missingProduction) {
+    console.error(`- production ${migration.version}_${migration.name}.sql -> repository ${repositoryFileFor(migration)}`);
+  }
   process.exit(1);
 }
 
@@ -63,7 +71,7 @@ function jaccard(a, b) {
 
 const productionDocs = [];
 for (const migration of migrations) {
-  const file = byVersion.get(migration.version);
+  const file = repositoryFileFor(migration);
   const text = await readFile(`supabase/migrations/${file}`, 'utf8');
   productionDocs.push({ migration, file, text, normalized: normalize(text), tokens: tokens(text) });
 }
@@ -71,7 +79,7 @@ for (const migration of migrations) {
 const localOnly = [];
 for (const file of files) {
   const version = file.slice(0, 14);
-  if (productionByVersion.has(version)) continue;
+  if (canonicalProductionFiles.has(file)) continue;
   const text = await readFile(`supabase/migrations/${file}`, 'utf8');
   const normalized = normalize(text);
   const sourceTokens = tokens(text);

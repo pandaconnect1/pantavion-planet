@@ -1,9 +1,45 @@
 {
   "source": "supabase_migrations.schema_migrations production ledger addendum",
   "projectRef": "cxhulvwkagzufbjsdwwu",
-  "capturedAtUtc": "2026-08-30T20:06:37Z",
+  "capturedAtUtc": "2026-09-27T09:52:00Z",
   "migrations": [
-    {"version":"20260830192403","name":"enable_pantavion_internal_scheduler_extensions"},
-    {"version":"20260830192828","name":"create_pantavion_internal_scheduler_redundancy"}
+    {
+      "version": "20260830192403",
+      "name": "enable_pantavion_internal_scheduler_extensions"
+    },
+    {
+      "version": "20260830192828",
+      "name": "create_pantavion_internal_scheduler_redundancy"
+    },
+    {
+      "version": "20260927072851",
+      "name": "water_map_versions_spatial_patches_evidence",
+      "repositoryFile": "20260927073000_water_map_versions_spatial_patches_evidence.sql"
+    },
+    {
+      "version": "20260927072917",
+      "name": "harden_water_spatial_patch_revision_append_only",
+      "repositoryFile": "20260927074200_harden_water_spatial_patch_revision_append_only.sql"
+    },
+    {
+      "version": "20260927074149",
+      "name": "water_field_artifact_upload_ledger",
+      "repositoryFile": "20260927075500_water_field_artifact_upload_ledger.sql"
+    },
+    {
+      "version": "20260927074817",
+      "name": "water_evidence_pin_review_audit",
+      "repositoryFile": "20260927080500_water_evidence_pin_review_audit.sql"
+    },
+    {
+      "version": "20260927084643",
+      "name": "water_map_alignment_evidence",
+      "repositoryFile": "20260927085000_water_map_alignment_evidence.sql"
+    },
+    {
+      "version": "20260927084826",
+      "name": "water_map_alignment_transform_parameters",
+      "repositoryFile": "20260927085800_water_map_alignment_transform_parameters.sql"
+    }
   ]
 }
