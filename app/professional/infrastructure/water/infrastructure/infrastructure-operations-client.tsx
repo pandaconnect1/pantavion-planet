@@ -282,18 +282,6 @@ export default function InfrastructureOperationsClient() {
         keepBuffer: 2,
       }).addTo(localMap);
 
-      localMap.on("click", (event: any) => {
-        if (!pinMode) return;
-        setPinPoint([event.latlng.lat, event.latlng.lng]);
-      });
-
-      localMap.on("moveend zoomend", () => {
-        if (reloadTimerRef.current) window.clearTimeout(reloadTimerRef.current);
-        reloadTimerRef.current = window.setTimeout(() => {
-          void reloadVisibleLayers();
-        }, 350);
-      });
-
       mapRef.current = localMap;
       setMapReady(true);
       window.setTimeout(() => localMap?.invalidateSize(), 250);
@@ -323,6 +311,25 @@ export default function InfrastructureOperationsClient() {
     void reloadVisibleLayers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [waterEnabled, activeExternalIds.join("|"), mapReady]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!mapReady || !map) return;
+
+    const onViewportChange = () => {
+      if (reloadTimerRef.current) window.clearTimeout(reloadTimerRef.current);
+      reloadTimerRef.current = window.setTimeout(() => {
+        void reloadVisibleLayers();
+      }, 350);
+    };
+
+    map.on("moveend zoomend", onViewportChange);
+    return () => {
+      map.off("moveend zoomend", onViewportChange);
+    };
+    // Rebind with the current active-layer selection.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapReady, waterEnabled, activeExternalIds.join("|")]);
 
   useEffect(() => {
     const map = mapRef.current;
