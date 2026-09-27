@@ -59,12 +59,20 @@ export default function WaterMapsPage() {
             επαγγελματικού περιβάλλοντος.
           </p>
 
-          <a
-            href="/professional/infrastructure/water/maps/workspace"
-            className="mt-6 inline-block rounded-2xl bg-[#f2c766] px-5 py-3 text-sm font-black text-[#07101e]"
-          >
-            Άνοιγμα Water Map Workspace
-          </a>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="/professional/infrastructure/water/maps/workspace"
+              className="inline-block rounded-2xl bg-[#f2c766] px-5 py-3 text-sm font-black text-[#07101e]"
+            >
+              Άνοιγμα Water Map Workspace
+            </a>
+            <a
+              href="/professional/infrastructure/water/location"
+              className="inline-block rounded-2xl border border-cyan-300/40 bg-cyan-950/30 px-5 py-3 text-sm font-black text-cyan-100"
+            >
+              GPS · Διεύθυνση · Πήγαινέ με
+            </a>
+          </div>
 
           <div className="mt-7 grid gap-4 md:grid-cols-3">
             {sourceMaps.map((card) => (
