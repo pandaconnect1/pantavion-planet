@@ -392,6 +392,12 @@ export default function WaterApprovalInboxPage() {
           >
             Αλλαγές δικτύου / φωτογραφίες
           </Link>
+          <Link
+            href="/professional/infrastructure/water/admin/alignment"
+            className="text-sm font-black text-cyan-300"
+          >
+            Map B alignment / georeferencing
+          </Link>
         </div>
 
         <p className="mt-6 text-xs font-black uppercase tracking-[0.24em] text-[#f2c766]">
