@@ -1,4 +1,4 @@
-export type PantavionWaterMapId = "A_OPERATIONAL_GEO_MAP" | "B_AUTHENTIC_MASTER_MAP" | "C_INTELLIGENT_ENGINEERING_MAP";
+export type PantavionWaterMapId = "A_OPERATIONAL_GEO_MAP" | "B_AUTHENTIC_MASTER_MAP" | "C_AUTHENTIC_MASTER_MAP";
 
 export type PantavionWaterAccessStatus =
   | "public"
@@ -123,31 +123,23 @@ export const pantavionWaterAbcMaps: PantavionWaterMapDefinition[] = [
   },
   {
     id: "C_INTELLIGENT_ENGINEERING_MAP",
-    name: "C Map — Intelligent Engineering Map",
+    name: "C Map — Authentic Master Map View",
     purpose:
-      "Intelligent engineering map combining A Map, B Master, approved field changes, photos, street ledgers, telemetry, pressure data, PRV candidates, zones, and AI/kernel analysis.",
+      "Protected Pantavion view generated from the second verified authentic DWG source. The raw Map C master remains private and separate from Map B.",
     visibleToApprovedUsers: true,
     rawSourceExposedToUsers: false,
     publicAccessAllowed: false,
     browserFullNetworkLoadAllowed: false,
     masterMutationAllowedFromUser: false,
     allowedInputs: [
-      "A operational segments",
-      "B master derived view",
-      "approved field changes",
-      "pending founder-only proposals",
-      "photos",
-      "text notes",
-      "pressure readings in bar",
-      "telemetry",
-      "fault reports",
-      "PRV candidates",
-      "zone information",
-      "street ledger",
-      "AI/kernel engineering analysis",
+      "private GEORGE DWG source manifest",
+      "versioned Map C source metadata",
+      "derived protected render layers",
+      "approved field update overlay",
+      "founder-approved activation records",
     ],
     outputBoundary:
-      "Shows engineering intelligence inside Pantavion. Measured, estimated, reported, and unknown data must be clearly separated.",
+      "Approved users see Map C as a protected Pantavion map view. They never receive the raw DWG file or a full public export.",
   },
 ];
 
@@ -202,7 +194,7 @@ export const pantavionWaterStreetLedgerPolicy = {
   visibleToApprovedUsersAfterFounderApproval: true,
 } as const;
 
-export const pantavionWaterCMapIntelligencePolicy = {
+export const pantavionWaterEngineeringIntelligencePolicy = {
   telemetryAllowed: true,
   photosAllowed: true,
   fieldReportsAllowed: true,
@@ -219,12 +211,12 @@ export const pantavionWaterCMapIntelligencePolicy = {
 export function getPantavionWaterAbcMapSystemContract() {
   return {
     id: PANTAVION_WATER_ABC_MAP_SYSTEM_ID,
-    version: "1.0.0",
+    version: "1.1.0",
     status: "contract_active_not_full_renderer_claim",
     maps: pantavionWaterAbcMaps,
     accessPolicy: pantavionWaterMapAccessPolicy,
     fieldChangeWorkflow: pantavionWaterFieldChangeWorkflow,
     streetLedgerPolicy: pantavionWaterStreetLedgerPolicy,
-    cMapIntelligencePolicy: pantavionWaterCMapIntelligencePolicy,
+    engineeringIntelligencePolicy: pantavionWaterEngineeringIntelligencePolicy,
   };
 }
