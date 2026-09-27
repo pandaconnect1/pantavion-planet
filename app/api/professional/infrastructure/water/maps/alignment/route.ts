@@ -18,23 +18,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const STATUSES = new Set<WaterMapBAlignmentStatus>([
-  "needs_review",
-  "partially_georeferenced",
-  "manually_aligned",
-  "georeferenced",
-  "field_confirmed",
-  "approximate",
-  "rejected",
-]);
-
 function clean(value: unknown, max = 2000) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
-}
-
-function finite(value: unknown) {
-  const number = Number(value);
-  return Number.isFinite(number) ? number : null;
 }
 
 function parseSourceKey(value: unknown): WaterMapBSourceKey | null {
