@@ -316,12 +316,6 @@ async function osmCandidates(query: string): Promise<SearchCandidate[]> {
 
 export async function GET(request: Request) {
   const access = await authorizeWaterMapRequest(request);
-  if (!access.ok) {
-    return NextResponse.json(
-      { ok: false, error: access.error },
-      { status: 403, headers: { "Cache-Control": "no-store" } },
-    );
-  }
 
   const url = new URL(request.url);
   const query = clean(url.searchParams.get("q"), 500);
@@ -334,7 +328,13 @@ export async function GET(request: Request) {
 
   try {
     const [pantavion, dls, osm] = await Promise.all([
-      pantavionCandidates(query, access.actorRef, access.mode === "admin-session"),
+      access.ok
+        ? pantavionCandidates(
+            query,
+            access.actorRef,
+            access.mode === "admin-session",
+          )
+        : Promise.resolve([]),
       dlsCandidates(query).catch(() => []),
       osmCandidates(query).catch(() => []),
     ]);
@@ -355,6 +355,7 @@ export async function GET(request: Request) {
         query,
         results,
         sourceOrder: ["pantavion", "dls", "osm"],
+        protectedPantavionRegistryIncluded: access.ok,
       },
       {
         headers: {
