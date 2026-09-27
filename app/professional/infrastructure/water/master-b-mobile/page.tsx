@@ -180,8 +180,8 @@ export default function MasterBMobilePage() {
   >("canonical-2026-andreaspap");
   const sourceLabel =
     sourceKey === "legacy-george-85m"
-      ? "Map B Legacy — GEORGE 85 MB"
-      : "Map B Canonical — ANDREASPAP 2026";
+      ? "Map C — GEORGE 85 MB"
+      : "Map B — ANDREASPAP 2026";
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -374,7 +374,8 @@ export default function MasterBMobilePage() {
 
           <p className="mt-3 max-w-3xl text-sm font-semibold leading-7 text-slate-300 md:text-base">
             Φορτώνει derived vector/network tiles από το επιλεγμένο επαληθευμένο DWG.
-            Δεν φορτώνει raw DWG στον browser και δεν συγχέει canonical με legacy source.
+            Δεν φορτώνει raw DWG στον browser. Τα Map B και Map C παραμένουν
+            ξεχωριστές αυθεντικές πηγές με ανεξάρτητο provenance.
           </p>
         </div>
 
@@ -393,7 +394,7 @@ export default function MasterBMobilePage() {
                 : "border-slate-600 bg-[#091426] text-slate-200"
             }`}
           >
-            Map B Canonical
+            Map B
           </a>
           <a
             href="/professional/infrastructure/water/master-b-mobile?sourceKey=legacy-george-85m"
@@ -403,13 +404,13 @@ export default function MasterBMobilePage() {
                 : "border-slate-600 bg-[#091426] text-slate-200"
             }`}
           >
-            Map B Legacy
+            Map C
           </a>
           <a
-            href="/professional/infrastructure/water/c"
-            className="rounded-xl border border-cyan-700/60 bg-cyan-950/30 px-3 py-2 text-xs font-black text-cyan-200"
+            href="/professional/infrastructure/water/engineering"
+            className="rounded-xl border border-violet-700/60 bg-violet-950/30 px-3 py-2 text-xs font-black text-violet-200"
           >
-            C Intelligence
+            Engineering
           </a>
         </div>
 
