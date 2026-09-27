@@ -3,7 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 
 import { assessWaterMapBPosition } from "@/core/water/water-map-b-position-truth";
-import { WATER_MAP_B_EXPECTED_SOURCE } from "@/core/water/water-map-b-source-identity";
+import {
+  WATER_MAP_B_SOURCE_CANDIDATES,
+  type WaterMapBSourceKey,
+} from "@/core/water/water-map-b-source-candidates";
 import { createClient as createSupabaseClient } from "@/lib/supabase/client";
 import { getSupabasePublicConfig } from "@/lib/supabase/public-config";
 
@@ -52,9 +55,6 @@ class MapBOwnerFunctionError extends Error {
   }
 }
 
-const MAP_B_FILE_NAME = WATER_MAP_B_EXPECTED_SOURCE.fileName;
-const MAP_B_SIZE_BYTES = WATER_MAP_B_EXPECTED_SOURCE.byteSize;
-const MAP_B_SHA256 = WATER_MAP_B_EXPECTED_SOURCE.sha256;
 const MAP_B_FUNCTION = "pantavion-map-b-owner-dwg";
 
 const CAD_VIEWER_MODULE_URL =
@@ -114,7 +114,10 @@ function readStoredWaterDevice() {
   return { deviceId: "", deviceToken: "" };
 }
 
-async function callOwnerFunction(action: "status" | "sign" | "verify" | "download") {
+async function callOwnerFunction(
+  action: "status" | "sign" | "verify" | "download",
+  sourceKey: WaterMapBSourceKey,
+) {
   const supabase = createSupabaseClient();
   const {
     data: { session },
@@ -137,6 +140,7 @@ async function callOwnerFunction(action: "status" | "sign" | "verify" | "downloa
     headers,
     body: JSON.stringify({
       action,
+      sourceKey,
       deviceId: storedDevice.deviceId,
       deviceToken: storedDevice.deviceToken,
     }),
@@ -164,6 +168,9 @@ async function sha256Hex(file: File) {
 
 export default function WaterMapBAuthenticClient() {
   const cadContainerRef = useRef<HTMLDivElement | null>(null);
+  const [sourceKey, setSourceKey] =
+    useState<WaterMapBSourceKey>("canonical-2026-andreaspap");
+  const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [viewerState, setViewerState] = useState<ViewerState>("checking");
   const [viewerError, setViewerError] = useState("");
@@ -201,11 +208,11 @@ export default function WaterMapBAuthenticClient() {
     if (!response.ok) throw new Error(`MAP_B_DWG_HTTP_${response.status}`);
 
     const fileContent = await response.arrayBuffer();
-    if (fileContent.byteLength !== MAP_B_SIZE_BYTES) {
+    if (fileContent.byteLength !== source.byteSize) {
       throw new Error(`MAP_B_SIZE_MISMATCH_${fileContent.byteLength}`);
     }
 
-    await manager.openDocument(MAP_B_FILE_NAME, fileContent, {
+    await manager.openDocument(source.fileName, fileContent, {
       minimumChunkSize: 1000,
       readOnly: true,
     });
@@ -218,7 +225,7 @@ export default function WaterMapBAuthenticClient() {
     try {
       setViewerState("checking");
       setViewerError("");
-      const payload = await callOwnerFunction("download");
+      const payload = await callOwnerFunction("download", sourceKey);
       if (!payload.signedUrl) throw new Error("MAP_B_SIGNED_URL_MISSING");
       await openSignedMapB(payload.signedUrl);
     } catch (error) {
@@ -241,28 +248,38 @@ export default function WaterMapBAuthenticClient() {
   }
 
   useEffect(() => {
-    void loadVerifiedMapB();
-    // Intentionally run only once when the Map B workspace mounts.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const params = new URLSearchParams(window.location.search);
+    const nextSourceKey: WaterMapBSourceKey =
+      params.get("sourceKey") === "legacy-george-85m"
+        ? "legacy-george-85m"
+        : "canonical-2026-andreaspap";
+
+    setSourceKey(nextSourceKey);
   }, []);
+
+  useEffect(() => {
+    void loadVerifiedMapB();
+    // Reload when switching between the two authentic DWG sources.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sourceKey]);
 
   async function uploadExactMapB(file: File) {
     try {
       setViewerState("uploading");
       setViewerError("");
 
-      if (file.size !== MAP_B_SIZE_BYTES) {
+      if (file.size !== source.byteSize) {
         throw new Error(`MAP_B_WRONG_SIZE_${file.size}`);
       }
 
       setUploadLabel("Έλεγχος SHA-256…");
       const sha256 = await sha256Hex(file);
-      if (sha256 !== MAP_B_SHA256) {
-        throw new Error("MAP_B_SHA256_MISMATCH");
+      if (sha256 !== source.sha256) {
+        throw new Error("source.sha256_MISMATCH");
       }
 
       setUploadLabel("Δημιουργία ασφαλούς upload…");
-      const signed = await callOwnerFunction("sign");
+      const signed = await callOwnerFunction("sign", sourceKey);
 
       if (signed.status !== "already_present") {
         if (!signed.bucket || !signed.path || !signed.token) {
@@ -281,7 +298,7 @@ export default function WaterMapBAuthenticClient() {
       }
 
       setUploadLabel("Server-side επαλήθευση DWG…");
-      await callOwnerFunction("verify");
+      await callOwnerFunction("verify", sourceKey);
 
       setUploadLabel("Άνοιγμα Map B…");
       await loadVerifiedMapB();
@@ -335,17 +352,46 @@ export default function WaterMapBAuthenticClient() {
 
   return (
     <main className="relative min-h-screen bg-black text-white">
+      <div className="absolute left-4 top-4 z-40 flex flex-wrap gap-2">
+        {(
+          [
+            ["canonical-2026-andreaspap", "Canonical DWG"],
+            ["legacy-george-85m", "Legacy DWG"],
+          ] as const
+        ).map(([key, label]) => (
+          <button
+            key={key}
+            type="button"
+            onClick={() => {
+              const url = new URL(window.location.href);
+              url.searchParams.set("sourceKey", key);
+              window.history.replaceState(null, "", url);
+              setSourceKey(key);
+            }}
+            className={`rounded-xl border px-3 py-2 text-xs font-black ${
+              sourceKey === key
+                ? "border-[#f6c85f] bg-[#f6c85f] text-black"
+                : "border-white/25 bg-black/80 text-white"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
       <div ref={cadContainerRef} className="h-[calc(100vh-72px)] min-h-[680px] w-full bg-black" />
 
       {viewerState === "checking" || viewerState === "loading" ? (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black text-sm font-black tracking-wide text-[#f6c85f]">
-          {viewerState === "checking" ? "Έλεγχος Map B…" : "Φόρτωση αυθεντικού Map B DWG…"}
+          {viewerState === "checking"
+            ? `Έλεγχος ${source.label}…`
+            : `Φόρτωση αυθεντικού ${source.label}…`}
         </div>
       ) : null}
 
       {viewerState === "missing" ? (
         <div className="absolute inset-x-4 top-4 z-30 mx-auto max-w-xl rounded-2xl border border-[#f6c85f]/40 bg-black/95 p-5 text-white shadow-2xl">
-          <p className="text-base font-black">Map B — φόρτωση αυθεντικού DWG</p>
+          <p className="text-base font-black">{source.label} — φόρτωση αυθεντικού DWG</p>
           <p className="mt-2 text-sm text-white/75">
             Επιλέγεται μόνο το ακριβές owner-confirmed αρχείο. Πριν αποθηκευτεί γίνεται έλεγχος μεγέθους και SHA-256 και μετά server-side επαλήθευση.
           </p>
@@ -354,7 +400,7 @@ export default function WaterMapBAuthenticClient() {
             onClick={() => fileInputRef.current?.click()}
             className="mt-4 rounded-xl bg-[#f6c85f] px-4 py-3 text-sm font-black text-black"
           >
-            Φόρτωση Map B
+            Φόρτωση {source.canonical ? "Canonical DWG" : "Legacy DWG"}
           </button>
         </div>
       ) : null}
