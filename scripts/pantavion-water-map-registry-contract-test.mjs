@@ -2,12 +2,16 @@ import {
   createPantavionWaterMapRegistryEntry,
   getPantavionWaterMapRegistryContract,
 } from "../core/infrastructure/water/water-map-registry-contract.ts";
+import {
+  getPantavionWaterReferenceLayerCatalog,
+} from "../core/infrastructure/water/water-reference-layer-catalog.ts";
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
 const contract = getPantavionWaterMapRegistryContract();
+const referenceCatalog = getPantavionWaterReferenceLayerCatalog();
 
 assert(contract.id === "pantavion_water_map_registry_v1", "Wrong registry contract id.");
 assert(contract.doctrine.oneViewerForAllMaps === true, "All maps must use one Pantavion viewer.");
@@ -26,6 +30,14 @@ assert(contract.artifactIntakePolicy.adapterRequiredAtIntake === false, "Adapter
 assert(contract.artifactIntakePolicy.nonRenderableArtifactsRemainFirstClassEvidence === true, "Non-renderable artifacts must remain first-class evidence.");
 assert(contract.artifactIntakePolicy.artifactMayAttachToMapWithoutRenderingItsContents === true, "Artifacts must be attachable to maps even without rendering their contents.");
 assert(contract.artifactIntakePolicy.preserveOriginalBytesBeforeConversion === true, "Original bytes must be preserved before conversion.");
+
+assert(referenceCatalog.policy.protectedWaterNetworkAlwaysAboveReferenceLayers === true, "Water network must remain above reference layers.");
+assert(referenceCatalog.policy.importedMapsAlignedByCrsOrControlPoints === true, "Imported maps must align by CRS or control points.");
+assert(referenceCatalog.policy.manualVisualOffsetIsNotCanonicalAlignment === true, "Manual visual offset cannot count as canonical alignment.");
+assert(referenceCatalog.policy.accuracyEvidenceRequiredBeforeCanonicalPromotion === true, "Alignment accuracy evidence is required before canonical promotion.");
+assert(referenceCatalog.layers.some((layer) => layer.id === "CY_DLS_CADASTRAL"), "Cyprus DLS cadastral reference layer must be registered.");
+assert(referenceCatalog.layers.some((layer) => layer.id === "CY_DLS_GENERAL_SEARCH"), "Cyprus DLS general search/roads layer must be registered.");
+assert(referenceCatalog.overlayOrder.protectedWaterNetworkZIndex > referenceCatalog.overlayOrder.referenceBackgroundMaxZIndex, "Water network z-order must be above references.");
 
 const builtInIds = contract.maps.map((entry) => entry.mapId);
 assert(builtInIds.includes("A"), "Legacy Map A must remain registered.");
@@ -152,3 +164,4 @@ console.log("- ArcGIS/WMS/WMTS/OGC and common file formats registered");
 console.log("- raw source and full-browser-dataset exposure forced off");
 console.log("- photos/PDF/scans/unknown future formats are accepted and preserved even without a renderer or adapter");
 console.log("- non-renderable artifacts can still attach to a map as first-class evidence");
+console.log("- cadastral/roads/reference layers share CRS alignment and stay below the protected water network");
