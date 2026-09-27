@@ -99,30 +99,30 @@ export const pantavionWaterAbcMaps: PantavionWaterMapDefinition[] = [
       "address search",
     ],
     outputBoundary:
-      "Shows protected operational map views inside Pantavion only. No raw CAD/DTX download and no full public export.",
+      "Shows protected operational map views inside Pantavion only. No raw CAD/DWG download and no full public export.",
   },
   {
     id: "B_AUTHENTIC_MASTER_MAP",
     name: "B Map — Authentic Master Map View",
     purpose:
-      "Protected Pantavion view generated from the authentic DTX/CAD master source from the design office. The raw master file stays in private vault.",
+      "Protected Pantavion view generated from the authentic DWG/CAD master source from the design office. The raw master file stays in private vault.",
     visibleToApprovedUsers: true,
     rawSourceExposedToUsers: false,
     publicAccessAllowed: false,
     browserFullNetworkLoadAllowed: false,
     masterMutationAllowedFromUser: false,
     allowedInputs: [
-      "private DTX/CAD source manifest",
+      "private DWG/CAD source manifest",
       "versioned master source metadata",
       "derived protected render layers",
       "approved field update overlay",
       "founder-approved activation records",
     ],
     outputBoundary:
-      "Approved users see the B master as a protected Pantavion map view. They never receive the raw DTX/CAD file or a full public export.",
+      "Approved users see the B master as a protected Pantavion map view. They never receive the raw DWG/CAD file or a full public export.",
   },
   {
-    id: "C_INTELLIGENT_ENGINEERING_MAP",
+    id: "C_AUTHENTIC_MASTER_MAP",
     name: "C Map — Authentic Master Map View",
     purpose:
       "Protected Pantavion view generated from the second verified authentic DWG source. The raw Map C master remains private and separate from Map B.",
