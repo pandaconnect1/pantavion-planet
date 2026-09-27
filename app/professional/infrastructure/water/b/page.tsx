@@ -5,9 +5,9 @@ import WaterMapBAuthenticClient from "../components/water-map-b-authentic-client
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Pantavion Water Map B — DWG GIS",
+  title: "Pantavion Water Map B — Canonical DWG",
   description:
-    "Protected Map B workspace for the owner-supplied DWG, with read-only CAD/GIS viewing and controlled upload verification.",
+    "Protected authentic Map B from the canonical ANDREASPAP DWG source.",
 };
 
 export default function WaterBMapPage() {
@@ -20,20 +20,24 @@ export default function WaterBMapPage() {
               Pantavion Water
             </p>
             <h1 className="text-lg font-black leading-tight">
-              Map B — DWG GIS
+              Map B — Canonical Authentic DWG
             </h1>
           </div>
 
           <Link
-            href="/professional/infrastructure/water"
+            href="/professional/infrastructure/water/maps"
             className="rounded-2xl border border-[#d8b45f]/35 bg-[#d8b45f]/10 px-4 py-2 text-xs font-black text-[#f3db9d]"
           >
-            Water Home
+            Water Maps
           </Link>
         </div>
       </header>
 
-      <WaterMapBAuthenticClient />
+      <WaterMapBAuthenticClient
+        initialSourceKey="canonical-2026-andreaspap"
+        allowSourceSwitch={false}
+        mapLabel="Map B"
+      />
     </main>
   );
 }
