@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 
 type Segment = [number, number, number, number, number];
+type CadPoint = [number, number, number, string, string | null];
+type CadLabel = [number, number, number, string, string];
 
 type TileIndexItem = {
   x: number;
@@ -20,6 +22,13 @@ type Bounds = {
 
 type Manifest = {
   ok: boolean;
+  sourceKey?: "canonical-2026-andreaspap" | "legacy-george-85m";
+  canonical?: boolean;
+  sourceSha256?: string | null;
+  sourceFileName?: string | null;
+  coordinateSpace?: string | null;
+  geographicAlignmentVerified?: boolean;
+  cadastralOverlayAllowed?: boolean;
   type?: string;
   source?: string;
   rawDxfIncluded?: boolean;
@@ -46,10 +55,74 @@ type TilePayload = {
   tileX?: number;
   tileY?: number;
   segmentFormat?: string[];
+  pointFormat?: string[];
+  labelFormat?: string[];
   segments?: Segment[];
+  points?: CadPoint[];
+  labels?: CadLabel[];
 };
 
 type LoadState = "idle" | "loading" | "ready" | "error";
+
+
+function readApprovedWaterDevice() {
+  if (typeof window === "undefined") {
+    return { deviceId: "", deviceToken: "" };
+  }
+
+  const deviceId =
+    window.localStorage.getItem("pantavion_water_device_id") ||
+    window.localStorage.getItem("pantavion-water-device-id") ||
+    window.localStorage.getItem("waterDeviceId") ||
+    "";
+
+  const deviceToken =
+    window.localStorage.getItem("pantavion_water_device_token") ||
+    window.localStorage.getItem("pantavion-water-device-token") ||
+    window.localStorage.getItem("waterDeviceToken") ||
+    "";
+
+  if (deviceId && deviceToken) {
+    return { deviceId, deviceToken };
+  }
+
+  for (const key of [
+    "pantavion_water_access_device",
+    "pantavion-water-access-device",
+    "waterAccessDevice",
+    "water-approved-device",
+  ]) {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) continue;
+
+    try {
+      const parsed = JSON.parse(raw);
+      const parsedDeviceId = String(parsed.deviceId || parsed.id || "");
+      const parsedDeviceToken = String(parsed.deviceToken || parsed.token || "");
+
+      if (parsedDeviceId && parsedDeviceToken) {
+        return { deviceId: parsedDeviceId, deviceToken: parsedDeviceToken };
+      }
+    } catch {
+      // Ignore malformed legacy storage and remain fail-closed.
+    }
+  }
+
+  return { deviceId: "", deviceToken: "" };
+}
+
+function waterAccessHeaders(): Record<string, string> {
+  const device = readApprovedWaterDevice();
+
+  if (!device.deviceId || !device.deviceToken) {
+    return {};
+  }
+
+  return {
+    "x-pantavion-water-device-id": device.deviceId,
+    "x-pantavion-water-device-token": device.deviceToken,
+  };
+}
 
 function formatNumber(value: number | undefined | null): string {
   if (typeof value !== "number" || !Number.isFinite(value)) {
@@ -59,8 +132,12 @@ function formatNumber(value: number | undefined | null): string {
   return new Intl.NumberFormat("el-GR").format(value);
 }
 
-function getSegmentBounds(segments: Segment[]): Bounds | null {
-  if (!segments.length) {
+function getDrawingBounds(
+  segments: Segment[],
+  points: CadPoint[],
+  labels: CadLabel[],
+): Bounds | null {
+  if (!segments.length && !points.length && !labels.length) {
     return null;
   }
 
@@ -76,6 +153,20 @@ function getSegmentBounds(segments: Segment[]): Bounds | null {
     maxY = Math.max(maxY, y1, y2);
   }
 
+  for (const [x, y] of points) {
+    minX = Math.min(minX, x);
+    minY = Math.min(minY, y);
+    maxX = Math.max(maxX, x);
+    maxY = Math.max(maxY, y);
+  }
+
+  for (const [x, y] of labels) {
+    minX = Math.min(minX, x);
+    minY = Math.min(minY, y);
+    maxX = Math.max(maxX, x);
+    maxY = Math.max(maxY, y);
+  }
+
   if (![minX, minY, maxX, maxY].every(Number.isFinite)) {
     return null;
   }
@@ -84,8 +175,27 @@ function getSegmentBounds(segments: Segment[]): Bounds | null {
 }
 
 export default function MasterBMobilePage() {
+  const [sourceKey, setSourceKey] = useState<
+    "canonical-2026-andreaspap" | "legacy-george-85m"
+  >("canonical-2026-andreaspap");
+  const sourceLabel =
+    sourceKey === "legacy-george-85m"
+      ? "Map B Legacy — GEORGE 85 MB"
+      : "Map B Canonical — ANDREASPAP 2026";
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSourceKey(
+      params.get("sourceKey") === "legacy-george-85m"
+        ? "legacy-george-85m"
+        : "canonical-2026-andreaspap",
+    );
+  }, []);
+
   const [manifest, setManifest] = useState<Manifest | null>(null);
   const [segments, setSegments] = useState<Segment[]>([]);
+  const [points, setPoints] = useState<CadPoint[]>([]);
+  const [labels, setLabels] = useState<CadLabel[]>([]);
   const [status, setStatus] = useState<LoadState>("idle");
   const [error, setError] = useState("");
   const [tileLimit, setTileLimit] = useState(48);
@@ -100,8 +210,14 @@ export default function MasterBMobilePage() {
 
       try {
         const manifestResponse = await fetch(
-          "/api/professional/infrastructure/water/master-b/derived/manifest",
-          { cache: "no-store" },
+          `/api/professional/infrastructure/water/master-b/derived/manifest?sourceKey=${encodeURIComponent(
+            sourceKey,
+          )}`,
+          {
+            cache: "no-store",
+            credentials: "include",
+            headers: waterAccessHeaders(),
+          },
         );
 
         const manifestJson = (await manifestResponse.json()) as Manifest;
@@ -121,18 +237,30 @@ export default function MasterBMobilePage() {
         const tileResponses = await Promise.all(
           selectedTiles.map(async (tile) => {
             const response = await fetch(
-              `/api/professional/infrastructure/water/master-b/derived/tile?file=${encodeURIComponent(
-                tile.file,
-              )}`,
-              { cache: "no-store" },
+              `/api/professional/infrastructure/water/master-b/derived/tile?sourceKey=${encodeURIComponent(
+                sourceKey,
+              )}&file=${encodeURIComponent(tile.file)}`,
+              {
+                cache: "no-store",
+                credentials: "include",
+                headers: waterAccessHeaders(),
+              },
             );
 
             if (!response.ok) {
-              return [] as Segment[];
+              return {
+                segments: [] as Segment[],
+                points: [] as CadPoint[],
+                labels: [] as CadLabel[],
+              };
             }
 
             const tileJson = (await response.json()) as TilePayload;
-            return tileJson.segments ?? [];
+            return {
+              segments: tileJson.segments ?? [],
+              points: tileJson.points ?? [],
+              labels: tileJson.labels ?? [],
+            };
           }),
         );
 
@@ -141,7 +269,15 @@ export default function MasterBMobilePage() {
         }
 
         setManifest(manifestJson);
-        setSegments(tileResponses.flat().slice(0, 70000));
+        setSegments(
+          tileResponses.flatMap((item) => item.segments).slice(0, 70000),
+        );
+        setPoints(
+          tileResponses.flatMap((item) => item.points).slice(0, 12000),
+        );
+        setLabels(
+          tileResponses.flatMap((item) => item.labels).slice(0, 4000),
+        );
         setStatus("ready");
       } catch (loadError) {
         if (cancelled) {
@@ -150,6 +286,8 @@ export default function MasterBMobilePage() {
 
         setManifest(null);
         setSegments([]);
+        setPoints([]);
+        setLabels([]);
         setError(loadError instanceof Error ? loadError.message : "UNKNOWN_ERROR");
         setStatus("error");
       }
@@ -160,9 +298,9 @@ export default function MasterBMobilePage() {
     return () => {
       cancelled = true;
     };
-  }, [tileLimit]);
+  }, [sourceKey, tileLimit]);
 
-  const layerNames = manifest?.layers ?? [];
+  const layerNames = useMemo(() => manifest?.layers ?? [], [manifest?.layers]);
 
   const filteredSegments = useMemo(() => {
     const query = layerQuery.trim().toUpperCase();
@@ -177,7 +315,26 @@ export default function MasterBMobilePage() {
     });
   }, [layerNames, layerQuery, segments]);
 
-  const bounds = useMemo(() => getSegmentBounds(filteredSegments), [filteredSegments]);
+  const filteredPoints = useMemo(() => {
+    const query = layerQuery.trim().toUpperCase();
+    if (!query) return points;
+    return points.filter((point) =>
+      (layerNames[point[2]] ?? "").toUpperCase().includes(query),
+    );
+  }, [layerNames, layerQuery, points]);
+
+  const filteredLabels = useMemo(() => {
+    const query = layerQuery.trim().toUpperCase();
+    if (!query) return labels;
+    return labels.filter((label) =>
+      (layerNames[label[2]] ?? "").toUpperCase().includes(query),
+    );
+  }, [labels, layerNames, layerQuery]);
+
+  const bounds = useMemo(
+    () => getDrawingBounds(filteredSegments, filteredPoints, filteredLabels),
+    [filteredLabels, filteredPoints, filteredSegments],
+  );
 
   const viewBox = useMemo(() => {
     if (!bounds) {
@@ -208,20 +365,55 @@ export default function MasterBMobilePage() {
           </a>
 
           <p className="mt-5 text-xs font-black uppercase tracking-[0.34em] text-[#f2c766]">
-            Pantavion Water · Master B Mobile
+            Pantavion Water · Derived DWG Viewer
           </p>
 
           <h1 className="mt-3 text-3xl font-black tracking-tight md:text-5xl">
-            Master B εγκεκριμένο derived δίκτυο
+            {sourceLabel}
           </h1>
 
           <p className="mt-3 max-w-3xl text-sm font-semibold leading-7 text-slate-300 md:text-base">
-            Φορτώνει derived vector/network tiles από το DXF. Δεν φορτώνει raw DXF,
-            δεν χρησιμοποιεί εικόνα και δεν αγγίζει χρήστες, Map A ή Blob.
+            Φορτώνει derived vector/network tiles από το επιλεγμένο επαληθευμένο DWG.
+            Δεν φορτώνει raw DWG στον browser και δεν συγχέει canonical με legacy source.
           </p>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-5">
+        <div className="flex flex-wrap gap-2">
+          <a
+            href="/professional/infrastructure/water/live"
+            className="rounded-xl border border-slate-600 bg-[#091426] px-3 py-2 text-xs font-black text-slate-200"
+          >
+            Map A
+          </a>
+          <a
+            href="/professional/infrastructure/water/master-b-mobile?sourceKey=canonical-2026-andreaspap"
+            className={`rounded-xl border px-3 py-2 text-xs font-black ${
+              sourceKey === "canonical-2026-andreaspap"
+                ? "border-[#f2c766] bg-[#f2c766] text-black"
+                : "border-slate-600 bg-[#091426] text-slate-200"
+            }`}
+          >
+            Map B Canonical
+          </a>
+          <a
+            href="/professional/infrastructure/water/master-b-mobile?sourceKey=legacy-george-85m"
+            className={`rounded-xl border px-3 py-2 text-xs font-black ${
+              sourceKey === "legacy-george-85m"
+                ? "border-[#f2c766] bg-[#f2c766] text-black"
+                : "border-slate-600 bg-[#091426] text-slate-200"
+            }`}
+          >
+            Map B Legacy
+          </a>
+          <a
+            href="/professional/infrastructure/water/c"
+            className="rounded-xl border border-cyan-700/60 bg-cyan-950/30 px-3 py-2 text-xs font-black text-cyan-200"
+          >
+            C Intelligence
+          </a>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-7">
           <div className="rounded-2xl border border-slate-700 bg-[#091426] p-4">
             <p className="text-xs font-black uppercase text-slate-400">Status</p>
             <p className="mt-2 text-xl font-black text-[#f2c766]">{status}</p>
@@ -247,7 +439,17 @@ export default function MasterBMobilePage() {
           </div>
 
           <div className="rounded-2xl border border-slate-700 bg-[#091426] p-4">
-            <p className="text-xs font-black uppercase text-slate-400">Raw DXF</p>
+            <p className="text-xs font-black uppercase text-slate-400">CAD points</p>
+            <p className="mt-2 text-xl font-black">{formatNumber(filteredPoints.length)}</p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-700 bg-[#091426] p-4">
+            <p className="text-xs font-black uppercase text-slate-400">Labels</p>
+            <p className="mt-2 text-xl font-black">{formatNumber(filteredLabels.length)}</p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-700 bg-[#091426] p-4">
+            <p className="text-xs font-black uppercase text-slate-400">Raw DWG</p>
             <p className="mt-2 text-xl font-black text-emerald-300">Blocked</p>
           </div>
         </div>
@@ -317,11 +519,46 @@ export default function MasterBMobilePage() {
                         strokeLinecap="round"
                       />
                     ))}
+
+                    {filteredPoints.map(([x, y, layerId, entityType, blockName], index) => (
+                      <circle
+                        key={`point-${index}-${x}-${y}`}
+                        cx={x}
+                        cy={y}
+                        r="3.2"
+                        fill="#dc2626"
+                        stroke="white"
+                        strokeWidth="1"
+                        vectorEffect="non-scaling-stroke"
+                      >
+                        <title>
+                          {`${blockName || entityType} · ${layerNames[layerId] || "Layer 0"}`}
+                        </title>
+                      </circle>
+                    ))}
                   </g>
+
+                  {bounds
+                    ? filteredLabels.slice(0, 2000).map(([x, y, layerId, text], index) => (
+                        <text
+                          key={`label-${index}-${x}-${y}`}
+                          x={x}
+                          y={bounds.minY + bounds.maxY - y}
+                          fontSize="10"
+                          fill="#111827"
+                          vectorEffect="non-scaling-stroke"
+                        >
+                          <title>{layerNames[layerId] || "Layer 0"}</title>
+                          {text}
+                        </text>
+                      ))
+                    : null}
                 </svg>
               ) : (
                 <div className="flex h-full items-center justify-center p-6 text-center text-sm font-black text-slate-700">
-                  {status === "loading" ? "Loading Master B network tiles..." : "B approved derived geometry layer is not configured/processed yet. Raw DWG/DXF remains in the private founder/admin vault. Approved users will receive only browser-safe derived LineString/MultiLineString segments after processing, access approval, and audit."}
+                  {status === "loading"
+                    ? "Loading selected Map B network tiles..."
+                    : "The selected derived geometry layer is not configured/processed yet. Raw DWG remains in the private founder/admin vault. Approved users receive only browser-safe derived geometry after processing, access approval, and audit."}
                 </div>
               )}
             </div>

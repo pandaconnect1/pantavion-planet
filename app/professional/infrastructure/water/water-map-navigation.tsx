@@ -20,18 +20,18 @@ const links = [
   },
   {
     href: "/professional/infrastructure/water/maps",
-    label: "Maps A / B / C",
-    description: "ξεχωριστοί χάρτες",
+    label: "Maps",
+    description: "πηγές / layers",
   },
   {
-    href: "/professional/infrastructure/water/live",
-    label: "Map A",
-    description: "υπάρχων live",
+    href: "/professional/infrastructure/water/maps/workspace",
+    label: "Map Workspace",
+    description: "ένας χάρτης + fullscreen",
   },
   {
-    href: "/professional/infrastructure/water/b",
-    label: "Map B",
-    description: "DWG + GIS",
+    href: "/professional/infrastructure/water/c",
+    label: "C Intelligence",
+    description: "engineering view",
   },
 ];
 

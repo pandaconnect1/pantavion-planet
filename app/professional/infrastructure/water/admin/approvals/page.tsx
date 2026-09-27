@@ -386,6 +386,18 @@ export default function WaterApprovalInboxPage() {
           >
             Βλάβες προς έγκριση
           </Link>
+          <Link
+            href="/professional/infrastructure/water/admin/changes"
+            className="text-sm font-black text-emerald-300"
+          >
+            Αλλαγές δικτύου / φωτογραφίες
+          </Link>
+          <Link
+            href="/professional/infrastructure/water/admin/alignment"
+            className="text-sm font-black text-cyan-300"
+          >
+            Map B alignment / georeferencing
+          </Link>
         </div>
 
         <p className="mt-6 text-xs font-black uppercase tracking-[0.24em] text-[#f2c766]">

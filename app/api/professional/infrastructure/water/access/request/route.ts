@@ -42,7 +42,6 @@ export async function POST(request: Request) {
     const body = (await request.json()) as WaterAccessRequestBody;
     const deviceId = clean(body.deviceId).slice(0, 120);
     const deviceToken = clean(body.deviceToken);
-    const now = new Date().toISOString();
     const title = clean(body.title) || clean(body.roleTitle);
     const emailOrPhone =
       normalizePhone(body.emailOrPhone) || normalizePhone(body.phone);

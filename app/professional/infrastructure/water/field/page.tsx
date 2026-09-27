@@ -18,8 +18,13 @@ const FIELD_ACTIONS = [
   },
   {
     href: "/professional/infrastructure/water/field/valve",
-    label: "Πιθανή βάνα",
-    description: "Καταγραφή πιθανής βάνας ή σημείου απομόνωσης.",
+    label: "Νέα / πιθανή βάνα",
+    description: "Ακριβές σημείο βάνας με GPS, στοιχεία και φωτογραφικό evidence.",
+  },
+  {
+    href: "/professional/infrastructure/water/field/network-extension",
+    label: "Επέκταση δικτύου",
+    description: "Νέο τμήμα αγωγού ως ακριβές LineString spatial patch.",
   },
   {
     href: "/professional/infrastructure/water/field/photo",

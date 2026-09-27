@@ -2,6 +2,10 @@ import { createHash } from "crypto";
 import { NextResponse } from "next/server";
 
 import { getPantavionWaterAbcMapSystemContract } from "@/core/infrastructure/water/water-abc-map-system-contract";
+import { getPantavionWaterMapRegistryContract } from "@/core/infrastructure/water/water-map-registry-contract";
+import { getPantavionWaterReferenceLayerCatalog } from "@/core/infrastructure/water/water-reference-layer-catalog";
+import { getPantavionWaterSpatialPatchContract } from "@/core/infrastructure/water/water-spatial-change-patch-contract";
+import { getPantavionWaterMapVersioningContract } from "@/core/infrastructure/water/water-map-versioning-contract";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { waterApprovedDeviceMatches } from "@/core/water/water-access-store";
 
@@ -49,7 +53,22 @@ export async function POST(request: Request) {
     return NextResponse.json({
       ok: true,
       accessMode: access.mode,
+
+      // Backward-compatible ABC contract for existing callers.
       contract: getPantavionWaterAbcMapSystemContract(),
+
+      // Canonical extensible registry for A/B/C/D/E/... and future map sources.
+      registry: getPantavionWaterMapRegistryContract(),
+
+      // External/reference layers share one alignment and overlay-order contract.
+      referenceLayers: getPantavionWaterReferenceLayerCatalog(),
+
+      // Precise field edits are represented as auditable spatial deltas.
+      spatialPatches: getPantavionWaterSpatialPatchContract(),
+
+      // Old/new map sources remain immutable, selectable and comparable.
+      versioning: getPantavionWaterMapVersioningContract(),
+
       sourcePresence: readSourcePresence(),
       runtimeBoundary: {
         rawBMasterReturned: false,

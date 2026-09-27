@@ -1,20 +1,16 @@
-﻿import { NextRequest, NextResponse } from "next/server";
-import fs from "node:fs/promises";
-import path from "node:path";
+import { NextRequest, NextResponse } from "next/server";
 
+import { authorizeWaterMapRequest } from "@/core/security/water-map-request-access";
+import {
+  WATER_MAP_B_DERIVED_STORAGE_BUCKET,
+  normalizeWaterMapBSourceKey,
+  waterMapBDerivedTilePath,
+} from "@/core/water/water-map-b-derived-storage";
+import { WATER_MAP_B_SOURCE_CANDIDATES } from "@/core/water/water-map-b-source-candidates";
+import { createAdminClient } from "@/lib/supabase/admin";
+
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-function getMasterBDerivedNetworkDir(): string | null {
-  const configured = process.env.MASTER_B_DERIVED_NETWORK_DIR?.trim();
-
-  if (!configured) {
-    return null;
-  }
-
-  return path.isAbsolute(configured)
-    ? configured
-    : path.join(process.cwd(), configured);
-}
 
 function normalizeMasterBTileFile(value: string): string | null {
   const normalized = value.trim().replaceAll("\\", "/");
@@ -40,23 +36,28 @@ function normalizeMasterBTileFile(value: string): string | null {
 }
 
 function parseTileJson(raw: string): unknown {
-  const clean = raw.replace(/\u001e/g, "");
-  return JSON.parse(clean);
+  return JSON.parse(raw.replace(/\u001e/g, ""));
 }
 
 export async function GET(request: NextRequest) {
-  const dir = getMasterBDerivedNetworkDir();
+  const access = await authorizeWaterMapRequest(request);
 
-  if (!dir) {
+  if (!access.ok) {
     return NextResponse.json(
       {
         ok: false,
-        error: "MASTER_B_DERIVED_NETWORK_DIR_NOT_CONFIGURED",
+        error: access.error,
+        rawDwgIncluded: false,
+        dataReturned: false,
       },
-      { status: 500 },
+      { status: 403, headers: { "Cache-Control": "no-store" } },
     );
   }
 
+  const sourceKey = normalizeWaterMapBSourceKey(
+    request.nextUrl.searchParams.get("sourceKey"),
+  );
+  const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
   const requestedFile = request.nextUrl.searchParams.get("file") || "";
   const tileName = normalizeMasterBTileFile(requestedFile);
 
@@ -64,36 +65,86 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         ok: false,
+        sourceKey,
         error: "INVALID_TILE_FILE",
-        requestedFile,
+        rawDwgIncluded: false,
       },
-      { status: 400 },
+      { status: 400, headers: { "Cache-Control": "no-store" } },
     );
   }
 
-  const tilePath = path.join(dir, "tiles", tileName);
+  const objectPath = waterMapBDerivedTilePath(sourceKey, tileName);
 
   try {
-    const raw = await fs.readFile(tilePath, "utf8");
-    const tile = parseTileJson(raw);
+    const admin = createAdminClient();
+    const { data, error } = await admin.storage
+      .from(WATER_MAP_B_DERIVED_STORAGE_BUCKET)
+      .download(objectPath);
 
-    return NextResponse.json(tile, {
-      headers: {
-        "Cache-Control": "no-store",
-        "X-Pantavion-Source": "master-b-derived-network-tile",
-        "X-Pantavion-Raw-DXF-Included": "false",
+    if (error || !data) {
+      return NextResponse.json(
+        {
+          ok: false,
+          sourceKey,
+          canonical: source.canonical,
+          error: "MAP_B_DERIVED_TILE_NOT_READY",
+          tile: tileName,
+          rawDwgIncluded: false,
+        },
+        { status: 404, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
+    const tile = parseTileJson(await data.text());
+    const tileSourceSha256 =
+      tile && typeof tile === "object" && "sourceSha256" in tile
+        ? String((tile as { sourceSha256?: unknown }).sourceSha256 ?? "")
+        : "";
+
+    if (tileSourceSha256 && tileSourceSha256 !== source.sha256) {
+      return NextResponse.json(
+        {
+          ok: false,
+          sourceKey,
+          error: "MAP_B_DERIVED_TILE_SOURCE_MISMATCH",
+          tile: tileName,
+          expectedSourceSha256: source.sha256,
+          actualSourceSha256: tileSourceSha256,
+          rawDwgIncluded: false,
+        },
+        { status: 409, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
+    return NextResponse.json(
+      {
+        ...(tile && typeof tile === "object" ? tile : { data: tile }),
+        sourceKey,
+        canonical: source.canonical,
+        sourceSha256: source.sha256,
+        rawDwgIncluded: false,
       },
-    });
+      {
+        headers: {
+          "Cache-Control": "private, max-age=60",
+          "X-Pantavion-Source": "map-b-supabase-derived-network-tile",
+          "X-Pantavion-Water-Map-B-Source-Key": sourceKey,
+          "X-Pantavion-Water-Access-Mode": access.mode,
+          "X-Pantavion-Raw-DWG-Included": "false",
+        },
+      },
+    );
   } catch (error) {
     return NextResponse.json(
       {
         ok: false,
-        error: "MASTER_B_TILE_READ_FAILED",
+        sourceKey,
+        error: "MAP_B_TILE_READ_FAILED",
         tile: tileName,
-        path: tilePath,
         message: error instanceof Error ? error.message : "UNKNOWN_ERROR",
+        rawDwgIncluded: false,
       },
-      { status: 500 },
+      { status: 500, headers: { "Cache-Control": "no-store" } },
     );
   }
 }

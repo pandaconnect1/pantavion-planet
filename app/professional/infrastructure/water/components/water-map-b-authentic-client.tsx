@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { assessWaterMapBPosition } from "@/core/water/water-map-b-position-truth";
+import { WATER_MAP_B_EXPECTED_SOURCE } from "@/core/water/water-map-b-source-identity";
 import { createClient as createSupabaseClient } from "@/lib/supabase/client";
 import { getSupabasePublicConfig } from "@/lib/supabase/public-config";
 
@@ -51,9 +52,9 @@ class MapBOwnerFunctionError extends Error {
   }
 }
 
-const MAP_B_FILE_NAME = "GEORGE_MAP_MASTER_B_C_FINAL (4).dwg";
-const MAP_B_SIZE_BYTES = 85703125;
-const MAP_B_SHA256 = "038b9bceda2a660296a9162723f5279e5a2d10eb18d499b087d0e8ffa393b800";
+const MAP_B_FILE_NAME = WATER_MAP_B_EXPECTED_SOURCE.fileName;
+const MAP_B_SIZE_BYTES = WATER_MAP_B_EXPECTED_SOURCE.byteSize;
+const MAP_B_SHA256 = WATER_MAP_B_EXPECTED_SOURCE.sha256;
 const MAP_B_FUNCTION = "pantavion-map-b-owner-dwg";
 
 const CAD_VIEWER_MODULE_URL =

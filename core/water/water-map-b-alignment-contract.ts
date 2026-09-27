@@ -1,4 +1,18 @@
-export const WATER_MAP_B_ALIGNMENT_CONTRACT_VERSION = "2026-08-16.v1" as const;
+import {
+  WATER_MAP_B_SOURCE_CANDIDATES,
+  type WaterMapBSourceKey,
+} from "./water-map-b-source-candidates";
+
+export const WATER_MAP_B_ALIGNMENT_CONTRACT_VERSION = "2026-09-27.v2" as const;
+
+export type WaterMapBAlignmentStatus =
+  | "needs_review"
+  | "partially_georeferenced"
+  | "manually_aligned"
+  | "georeferenced"
+  | "field_confirmed"
+  | "approximate"
+  | "rejected";
 
 export type WaterMapBControlPoint = {
   id: string;
@@ -11,6 +25,7 @@ export type WaterMapBControlPoint = {
 };
 
 export type WaterMapBAlignmentInput = {
+  sourceKey: WaterMapBSourceKey;
   sourceCrs: string | null;
   targetCrs: string;
   controlPoints: WaterMapBControlPoint[];
@@ -25,19 +40,26 @@ export type WaterMapBAlignmentDecision = {
   errors: string[];
 };
 
-const EXPECTED_SOURCE_SHA256 =
-  "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16";
+export const WATER_MAP_B_OVERLAY_ELIGIBLE_STATUSES =
+  new Set<WaterMapBAlignmentStatus>([
+    "georeferenced",
+    "field_confirmed",
+  ]);
 
 /**
- * Fail-closed gate for geographic alignment. It never mutates the original DWG.
- * Any accepted transform belongs to the GIS presentation/canonical derived layer.
+ * Fail-closed evidence validation. It never mutates the original DWG and does
+ * not invent an engineering tolerance. RMSE/max residual are recorded evidence;
+ * geographic overlay still requires an explicit authorized review decision.
  */
 export function validateWaterMapBAlignment(
   input: WaterMapBAlignmentInput,
 ): WaterMapBAlignmentDecision {
   const errors: string[] = [];
+  const source = WATER_MAP_B_SOURCE_CANDIDATES[input.sourceKey];
 
-  if (input.sourceSha256 !== EXPECTED_SOURCE_SHA256) {
+  if (!source) {
+    errors.push("unknown_map_b_source_key");
+  } else if (input.sourceSha256 !== source.sha256) {
     errors.push("unexpected_map_b_source_sha256");
   }
 
@@ -49,14 +71,43 @@ export function validateWaterMapBAlignment(
     errors.push("insufficient_control_points");
   }
 
+  const pointIds = new Set<string>();
+
   for (const point of input.controlPoints || []) {
-    if (!point.id || !point.provenance) errors.push("control_point_provenance_missing");
-    if (![point.sourceX, point.sourceY, point.longitude, point.latitude].every(Number.isFinite)) {
+    if (!point.id || !point.provenance) {
+      errors.push("control_point_provenance_missing");
+    }
+
+    if (point.id) {
+      if (pointIds.has(point.id)) errors.push("duplicate_control_point_id");
+      pointIds.add(point.id);
+    }
+
+    if (
+      ![
+        point.sourceX,
+        point.sourceY,
+        point.longitude,
+        point.latitude,
+      ].every(Number.isFinite)
+    ) {
       errors.push("invalid_control_point_coordinate");
+    }
+
+    if (
+      point.accuracyMeters !== undefined &&
+      point.accuracyMeters !== null &&
+      (!Number.isFinite(point.accuracyMeters) || point.accuracyMeters < 0)
+    ) {
+      errors.push("invalid_control_point_accuracy");
     }
   }
 
-  if (input.rmseMeters === null || !Number.isFinite(input.rmseMeters) || input.rmseMeters < 0) {
+  if (
+    input.rmseMeters === null ||
+    !Number.isFinite(input.rmseMeters) ||
+    input.rmseMeters < 0
+  ) {
     errors.push("rmse_not_verified");
   }
 
@@ -69,4 +120,18 @@ export function validateWaterMapBAlignment(
   }
 
   return { ok: errors.length === 0, errors: [...new Set(errors)] };
+}
+
+export function canEnableWaterMapBGeographicOverlay(input: {
+  status: WaterMapBAlignmentStatus;
+  evidenceValidated: boolean;
+  reviewedBy: string | null;
+  reviewedAt: string | null;
+}) {
+  return Boolean(
+    input.evidenceValidated &&
+      WATER_MAP_B_OVERLAY_ELIGIBLE_STATUSES.has(input.status) &&
+      input.reviewedBy &&
+      input.reviewedAt,
+  );
 }

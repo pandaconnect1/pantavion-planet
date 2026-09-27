@@ -1,14 +1,12 @@
-import {
-  FINAL_MASTER_DWG_FILE_NAME,
-  FINAL_MASTER_DWG_SIZE_BYTES,
-  FINAL_MASTER_DWG_SHA256,
-} from "@/core/water/final-master-dwg-source";
+import { WATER_MAP_B_SOURCE_CANDIDATES } from "@/core/water/water-map-b-source-candidates";
 import FinalMasterDwgUploader from "./final-master-dwg-uploader";
 
 export const dynamic = "force-dynamic";
 
 export default function FinalMasterDwgPage() {
-  const sizeMB = Math.round((FINAL_MASTER_DWG_SIZE_BYTES / 1024 / 1024) * 100) / 100;
+  const canonical = WATER_MAP_B_SOURCE_CANDIDATES["canonical-2026-andreaspap"];
+  const legacy = WATER_MAP_B_SOURCE_CANDIDATES["legacy-george-85m"];
+  const sizeMB = Math.round((canonical.byteSize / 1024 / 1024) * 100) / 100;
 
   return (
     <main style={{ minHeight: "100vh", background: "#05070d", color: "#f8e7b0", padding: 24 }}>
@@ -36,15 +34,29 @@ export default function FinalMasterDwgPage() {
             background: "rgba(244,200,91,0.08)",
           }}
         >
-          <div><strong>File:</strong> {FINAL_MASTER_DWG_FILE_NAME}</div>
-          <div><strong>Size:</strong> {sizeMB} MB</div>
-          <div><strong>SHA256:</strong> {FINAL_MASTER_DWG_SHA256}</div>
+          <div><strong>Canonical file:</strong> {canonical.fileName}</div>
+          <div><strong>Canonical size:</strong> {sizeMB} MB</div>
+          <div><strong>Canonical SHA256:</strong> {canonical.sha256}</div>
+          <div style={{ marginTop: 10 }}><strong>Legacy candidate:</strong> {legacy.fileName}</div>
+          <div><strong>Legacy size:</strong> {Math.round((legacy.byteSize / 1024 / 1024) * 100) / 100} MB</div>
         </div>
 
         <FinalMasterDwgUploader
-          expectedFileName={FINAL_MASTER_DWG_FILE_NAME}
-          expectedSizeBytes={FINAL_MASTER_DWG_SIZE_BYTES}
-          expectedSha256={FINAL_MASTER_DWG_SHA256}
+          sourceKey={canonical.sourceKey}
+          label={canonical.label}
+          canonical={canonical.canonical}
+          expectedFileName={canonical.fileName}
+          expectedSizeBytes={canonical.byteSize}
+          expectedSha256={canonical.sha256}
+        />
+
+        <FinalMasterDwgUploader
+          sourceKey={legacy.sourceKey}
+          label={legacy.label}
+          canonical={legacy.canonical}
+          expectedFileName={legacy.fileName}
+          expectedSizeBytes={legacy.byteSize}
+          expectedSha256={legacy.sha256}
         />
 
         <a

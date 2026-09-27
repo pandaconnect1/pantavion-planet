@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-09-23T06:03:00.000Z",
+  "lockedAtUtc": "2026-09-27T08:40:02.797Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -19,24 +19,25 @@
     ".github/CODEOWNERS": "93789477aca8ffe37c6f179ca004113c8edba37ecc159d1e67dee9f720955e52",
     ".github/workflows/pantavion-water-network-lock.yml": "cc31df78ddf31546fdcb7ce38fa521d0385c281a3375296537b2762a394d7291",
     "app/api/professional/infrastructure/water/access/authorize/route.ts": "f385d1c58e8260b09dabf1a8b580c42d21d07330d65a8a29d0871739427c72d3",
-    "app/api/professional/infrastructure/water/admin/session/route.ts": "ace584102ae5ed57500a84b3b2271ae5526fc556c69fed17e5096ec00281e7aa",
-    "app/api/professional/infrastructure/water/segment/bbox/route.ts": "53abf069744cb5f3119b100ddca3b821a1672b02ed71079b60b581eec6fc7997",
-    "app/professional/infrastructure/water/admin/access/page.tsx": "487b03889c8697149025a710aff941eefdc0bb642d95bbd118d9eb1302f9ccca",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "e1d0415c52e359ae7460be9673d997548f9a6b691d88cfa0bc79d4df53962347",
+    "app/api/professional/infrastructure/water/access/invite/claim/route.ts": "ac91b1fbf67e03330171004c1c38b0b314b76db3321b758ba71a502523de288f",
+    "app/api/professional/infrastructure/water/admin/session/route.ts": "6b09ff4220d257c946c3df5bb2cce364b7b94c5942b8873d366e11bc0103d112",
+    "app/api/professional/infrastructure/water/mapserver/0/query/route.ts": "3d4784ac3af414b1b143588c721fe8bee24d1c98e60b131caaa93b3ab398ae59",
+    "app/api/professional/infrastructure/water/segment/bbox/route.ts": "4b792c1376b23d6c10f68d445fe0a81f24dcb0f4aeacbbe3a0162d97bf21c6aa",
+    "app/professional/infrastructure/water/admin/access/page.tsx": "8ec81080f62ef3365a197ed9768159fd9870298f29e675470e02dbf70a7d5fdb",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "3f91b0b188312408a133a1cf0c89e2bf4a060a21a060f226ed36376f2a84b498",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "4e4711818dd5e5c3b924677db72e6816d06221760f20cd5e10217a86a199a7eb",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
     "core/security/privileged-request-boundary.ts": "44376bf768b225f9228f676238c33b2cab69b517963089460e9e4cabcf3bcf49",
     "core/security/water-admin-session.ts": "1f563864a0c58761404b06d682a59abdea618939abb7c905236417a6a2e3f7f1",
-    "scripts/pantavion-water-network-runtime-lock.cjs": "022b40a9b5db9fdb2e1cda8afac43a83d235909539b592f7f2f222bda6fbdd58",
+    "scripts/pantavion-water-network-runtime-lock.cjs": "0df1627215062bbb3c1e5bb91118591fd896197300cf81090d373f757fa2d5d3",
     "scripts/water-guardian-production-smoke.cjs": "fa85132fb88419f98429c9dcd6b779b313bf0345d0d1787aaa348ddc7707aa21",
-    "scripts/water-segment-reader-regression.mjs": "44bfd0d2df2cb67d6e61463af4ede2667717b1347dd69ac6e0c5901d0ca898da",
-    "app/api/professional/infrastructure/water/access/invite/claim/route.ts": "ac91b1fbf67e03330171004c1c38b0b314b76db3321b758ba71a502523de288f"
+    "scripts/water-segment-reader-regression.mjs": "8b1f075c8143fbe0041bc8918b0a1717ea46e034f57c09479a5a7eb9f0206c33"
   },
   "refreshEvidence": {
-    "reason": "Refresh the protected Water runtime lock after the approved-user Leaflet remount fix. The change only re-initializes the map when access state changes; source truth, raw master privacy, server authorization, full-network prohibition, and segmented browser delivery remain unchanged.",
-    "sourceCommit": "8d2e4e00ffcf2219565a82bfa3a8c06668eef81b",
-    "protectedFileCount": 16,
+    "reason": "Approved Map A field-change and evidence overlay added with visible-bbox, server-authorized loading; raw master, full-network browser loading and source-truth invariants remain unchanged.",
+    "sourceCommit": "4ad0f06947ceb00f6da77f5d9bead26f98b79d69",
+    "protectedFileCount": 17,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
   }

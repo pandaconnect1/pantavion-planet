@@ -3,6 +3,9 @@
 import { useMemo, useState } from "react";
 import * as tus from "tus-js-client";
 
+import { createClient as createSupabaseClient } from "@/lib/supabase/client";
+import { getSupabasePublicConfig } from "@/lib/supabase/public-config";
+
 type UploadUrlResponse = {
   ok?: boolean;
   status?: string;
@@ -16,6 +19,9 @@ type UploadUrlResponse = {
 };
 
 type Props = {
+  sourceKey: "canonical-2026-andreaspap" | "legacy-george-85m";
+  label: string;
+  canonical: boolean;
   expectedFileName: string;
   expectedSizeBytes: number;
   expectedSha256: string;
@@ -23,11 +29,53 @@ type Props = {
 
 const SUPABASE_URL = "https://cxhulvwkagzufbjsdwwu.supabase.co";
 const SUPABASE_PROJECT_ID = "cxhulvwkagzufbjsdwwu";
-const ONE_TIME_UPLOAD_BRIDGE = `${SUPABASE_URL}/functions/v1/pantavion-map-b-one-time-upload`;
+const MAP_B_OWNER_FUNCTION = `${SUPABASE_URL}/functions/v1/pantavion-map-b-owner-dwg`;
 const TUS_ENDPOINT = `https://${SUPABASE_PROJECT_ID}.storage.supabase.co/storage/v1/upload/resumable`;
 const TUS_CHUNK_SIZE = 6 * 1024 * 1024;
 
+async function callMapBOwner(
+  action: "sign" | "verify",
+  sourceKey: Props["sourceKey"],
+) {
+  const supabase = createSupabaseClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session?.access_token) {
+    throw new Error("FOUNDER_SESSION_REQUIRED");
+  }
+
+  const { publishableKey } = getSupabasePublicConfig();
+
+  const response = await fetch(MAP_B_OWNER_FUNCTION, {
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: publishableKey,
+      Authorization: `Bearer ${session.access_token}`,
+    },
+    body: JSON.stringify({ action, sourceKey }),
+  });
+
+  const body = (await response.json().catch(() => ({}))) as UploadUrlResponse & {
+    error?: string;
+    quarantined?: boolean;
+  };
+
+  if (!response.ok || !body.ok) {
+    const suffix = body.quarantined ? "_QUARANTINED" : "";
+    throw new Error(body.error || body.message || body.status || `MAP_B_OWNER_${response.status}${suffix}`);
+  }
+
+  return body;
+}
+
 export default function FinalMasterDwgUploader({
+  sourceKey,
+  label,
+  canonical,
   expectedFileName,
   expectedSizeBytes,
   expectedSha256,
@@ -80,21 +128,14 @@ export default function FinalMasterDwgUploader({
     setMessage("Creating one-time private upload authorization…");
 
     try {
-      const authResponse = await fetch(ONE_TIME_UPLOAD_BRIDGE, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: "{}",
-      });
-      const authBody = (await authResponse.json()) as UploadUrlResponse;
-
-      if (!authResponse.ok || !authBody.ok) {
-        throw new Error(authBody.message || authBody.status || "Unable to create upload authorization.");
-      }
+      const authBody = await callMapBOwner("sign", sourceKey);
 
       if (authBody.status === "already_present") {
+        setMessage("Map B object already exists. Verifying exact binary identity…");
+        await callMapBOwner("verify", sourceKey);
         setProgress(100);
         setState("done");
-        setMessage("The exact Map B master is already present in the private vault. Open Map B now.");
+        setMessage("Existing Map B binary verified and registered.");
         return;
       }
 
@@ -113,7 +154,7 @@ export default function FinalMasterDwgUploader({
           removeFingerprintOnSuccess: true,
           headers: {
             "x-signature": authBody.token as string,
-            "x-upsert": "true",
+            "x-upsert": "false",
           },
           metadata: {
             bucketName: authBody.bucket as string,
@@ -145,8 +186,11 @@ export default function FinalMasterDwgUploader({
         }).catch(reject);
       });
 
+      setMessage("Upload complete. Performing server-side SHA-256, size and DWG-header verification…");
+      await callMapBOwner("verify", sourceKey);
+
       setState("done");
-      setMessage("Private resumable upload completed. The exact Map B master is now ready for verification.");
+      setMessage("Verified exact Map B master: private, immutable and registered.");
     } catch (error) {
       setState("error");
       setMessage(error instanceof Error ? error.message : "Upload failed.");
@@ -163,7 +207,10 @@ export default function FinalMasterDwgUploader({
         background: "rgba(13,148,136,0.08)",
       }}
     >
-      <h2 style={{ margin: 0, fontSize: 22 }}>Private master upload</h2>
+      <h2 style={{ margin: 0, fontSize: 22 }}>{label}</h2>
+      <p style={{ marginTop: 8, fontSize: 12, fontWeight: 900, color: canonical ? "#a7f3d0" : "#fde68a" }}>
+        {canonical ? "CANONICAL MAP B SOURCE" : "LEGACY CANDIDATE — DOES NOT REPLACE CANONICAL"}
+      </p>
       <p style={{ color: "#d7d7d7", lineHeight: 1.6 }}>
         Expected: {expectedFileName} · {expectedSizeMB} MB. Locked SHA-256: {expectedSha256}
       </p>

@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
+import WaterFieldSpatialClient, {
+  type SpatialKind,
+} from "../water-field-spatial-client";
+
 const DEVICE_ID_KEY = "pantavion.water.field.deviceId.v1";
 const DEVICE_TOKEN_KEY = "pantavion.water.field.deviceToken.v1";
 
@@ -50,6 +54,13 @@ const ACTIONS: FieldActionConfig[] = [
     title: "Πιθανή βάνα",
     heading: "Καταχώρηση πιθανής βάνας",
     descriptionPlaceholder: "Περιέγραψε πού βρίσκεται η πιθανή βάνα και τι παρατηρήθηκε.",
+  },
+  {
+    route: "network-extension",
+    type: "network_extension",
+    title: "Επέκταση δικτύου",
+    heading: "Νέα επέκταση δικτύου",
+    descriptionPlaceholder: "Νέο τμήμα αγωγού, αρχή/τέλος, διάμετρος και υλικό.",
   },
   {
     route: "photo",
@@ -140,6 +151,34 @@ export default function WaterFieldActionPage() {
 
   if (!config) {
     return <UnknownFieldActionPage />;
+  }
+
+  const spatialKinds: SpatialKind[] = [
+    "valve",
+    "network-extension",
+    "photo",
+    "note",
+  ];
+
+  if (spatialKinds.includes(kind as SpatialKind)) {
+    return (
+      <main className="min-h-screen bg-[#06111f] px-4 py-5 text-white">
+        <section className="mx-auto w-full max-w-3xl rounded-3xl border border-[#b89445]/50 bg-[#0d1a2d] p-5 shadow-2xl">
+          <Link
+            href="/professional/infrastructure/water/field"
+            className="text-sm font-black text-[#f2c766]"
+          >
+            ← Πίσω στις εργασίες
+          </Link>
+
+          <p className="mt-6 text-xs font-black uppercase tracking-[0.22em] text-[#f2c766]">
+            PANTAVION ΥΔΡΕΥΣΗ
+          </p>
+
+          <WaterFieldSpatialClient kind={kind as SpatialKind} />
+        </section>
+      </main>
+    );
   }
 
   return <WaterFieldActionForm key={config.route} config={config} />;
