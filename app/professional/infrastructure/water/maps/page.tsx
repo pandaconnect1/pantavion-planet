@@ -133,7 +133,7 @@ export default function WaterMapsPage() {
               </a>
 
               <a
-                href="/professional/infrastructure/water/engineering"
+                href="/professional/infrastructure/water/c"
                 className="rounded-2xl border border-cyan-400/40 bg-cyan-950/30 px-4 py-3 text-sm font-black text-cyan-100"
               >
                 Map C · Authentic DWG
@@ -172,11 +172,12 @@ export default function WaterMapsPage() {
               Το engineering/intelligence workspace δεν είναι original source map.
               Συνδυάζει μόνο approved δεδομένα από αυθεντικές πηγές με υψόμετρα,
               πίεση, ζώνες, PRV, βλάβες, φωτογραφίες, spatial patches και μελλοντική
-              τηλεμετρία. Αν προστεθεί μελλοντικά Map C/D/E/F, θα απαιτεί δικό του
-              αυθεντικό source artifact ή authoritative feed πριν ονομαστεί master.
+              τηλεμετρία. Οι Map A, B και C είναι οι τρεις αυθεντικοί χάρτες.
+              Μελλοντικοί D/E/F θα απαιτούν δικό τους αυθεντικό source artifact
+              ή authoritative feed πριν ονομαστούν master.
             </p>
             <a
-              href="/professional/infrastructure/water/c"
+              href="/professional/infrastructure/water/engineering"
               className="mt-4 inline-block rounded-2xl border border-cyan-300/40 bg-cyan-200 px-4 py-3 text-sm font-black text-[#06101f]"
             >
               Άνοιγμα Engineering Workspace
@@ -184,7 +185,7 @@ export default function WaterMapsPage() {
           </section>
 
           <div className="mt-7 rounded-3xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm leading-7 text-emerald-100">
-            Τα Map B source views χρησιμοποιούν browser-safe derived geometry.
+            Τα Map B και Map C χρησιμοποιούν browser-safe derived geometry.
             Raw DWG download παραμένει founder/admin-only, δεν υπάρχει public
             master και δεν γίνεται full raw dataset load στον browser.
           </div>
