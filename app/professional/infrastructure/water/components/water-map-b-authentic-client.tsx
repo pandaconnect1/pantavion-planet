@@ -7,8 +7,6 @@ import {
   WATER_MAP_B_SOURCE_CANDIDATES,
   type WaterMapBSourceKey,
 } from "@/core/water/water-map-b-source-candidates";
-import { createClient as createSupabaseClient } from "@/lib/supabase/client";
-import { getSupabasePublicConfig } from "@/lib/supabase/public-config";
 
 type PositionState = {
   latitude: number;
@@ -71,87 +69,27 @@ function importBrowserModule(url: string) {
   return nativeImport(url);
 }
 
-function readStoredWaterDevice() {
-  if (typeof window === "undefined") {
-    return { deviceId: "", deviceToken: "" };
-  }
-
-  const deviceId =
-    window.localStorage.getItem("pantavion_water_device_id") ||
-    window.localStorage.getItem("pantavion-water-device-id") ||
-    window.localStorage.getItem("waterDeviceId") ||
-    "";
-
-  const deviceToken =
-    window.localStorage.getItem("pantavion_water_device_token") ||
-    window.localStorage.getItem("pantavion-water-device-token") ||
-    window.localStorage.getItem("waterDeviceToken") ||
-    "";
-
-  if (deviceId && deviceToken) return { deviceId, deviceToken };
-
-  for (const key of [
-    "pantavion_water_access_device",
-    "pantavion-water-access-device",
-    "waterAccessDevice",
-    "water-approved-device",
-  ]) {
-    const raw = window.localStorage.getItem(key);
-    if (!raw) continue;
-
-    try {
-      const parsed = JSON.parse(raw);
-      const parsedDeviceId = String(parsed.deviceId || parsed.id || "");
-      const parsedDeviceToken = String(parsed.deviceToken || parsed.token || "");
-      if (parsedDeviceId && parsedDeviceToken) {
-        return { deviceId: parsedDeviceId, deviceToken: parsedDeviceToken };
-      }
-    } catch {
-      // Ignore invalid legacy values and continue fail-closed.
-    }
-  }
-
-  return { deviceId: "", deviceToken: "" };
-}
-
 async function callOwnerFunction(
   action: "status" | "sign" | "verify" | "download",
   sourceKey: WaterMapBSourceKey,
 ) {
-  const supabase = createSupabaseClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  const storedDevice = readStoredWaterDevice();
-
-  const { url, publishableKey } = getSupabasePublicConfig();
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    apikey: publishableKey,
-  };
-
-  if (session?.access_token) {
-    headers.Authorization = `Bearer ${session.access_token}`;
-  }
-
-  const response = await fetch(`${url}/functions/v1/${MAP_B_FUNCTION}`, {
-    method: "POST",
-    cache: "no-store",
-    headers,
-    body: JSON.stringify({
-      action,
-      sourceKey,
-      deviceId: storedDevice.deviceId,
-      deviceToken: storedDevice.deviceToken,
-    }),
-  });
+  const response = await fetch(
+    "/api/professional/infrastructure/water/maps/map-b-owner",
+    {
+      method: "POST",
+      cache: "no-store",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, sourceKey }),
+    },
+  );
 
   const payload = (await response.json().catch(() => ({}))) as OwnerFunctionPayload;
 
   if (!response.ok) {
     throw new MapBOwnerFunctionError(
       response.status,
-      payload.error || `MAP_B_FUNCTION_HTTP_${response.status}`,
+      payload.error || `MAP_B_OWNER_HTTP_${response.status}`,
     );
   }
 
@@ -275,7 +213,7 @@ export default function WaterMapBAuthenticClient() {
       setUploadLabel("Έλεγχος SHA-256…");
       const sha256 = await sha256Hex(file);
       if (sha256 !== source.sha256) {
-        throw new Error("source.sha256_MISMATCH");
+        throw new Error("MAP_B_SHA256_MISMATCH");
       }
 
       setUploadLabel("Δημιουργία ασφαλούς upload…");
@@ -287,14 +225,26 @@ export default function WaterMapBAuthenticClient() {
         }
 
         setUploadLabel("Ανέβασμα αυθεντικού DWG…");
-        const supabase = createSupabaseClient();
-        const { error } = await supabase.storage
-          .from(signed.bucket)
-          .uploadToSignedUrl(signed.path, signed.token, file, {
-            contentType: "application/acad",
-          });
+        const uploadUrl =
+          `https://cxhulvwkagzufbjsdwwu.supabase.co/storage/v1/object/upload/sign/${encodeURIComponent(
+            signed.bucket,
+          )}/${signed.path
+            .split("/")
+            .map((part) => encodeURIComponent(part))
+            .join("/")}?token=${encodeURIComponent(signed.token)}`;
 
-        if (error) throw new Error(`MAP_B_UPLOAD_FAILED: ${error.message}`);
+        const uploadResponse = await fetch(uploadUrl, {
+          method: "PUT",
+          headers: { "Content-Type": "application/acad" },
+          body: file,
+        });
+
+        if (!uploadResponse.ok) {
+          const message = await uploadResponse.text().catch(() => "");
+          throw new Error(
+            `MAP_B_UPLOAD_FAILED_${uploadResponse.status}${message ? `_${message.slice(0, 160)}` : ""}`,
+          );
+        }
       }
 
       setUploadLabel("Server-side επαλήθευση DWG…");
@@ -414,11 +364,22 @@ export default function WaterMapBAuthenticClient() {
       ) : null}
 
       {viewerState === "auth" ? (
-        <div className="absolute inset-x-4 top-4 z-30 mx-auto max-w-xl rounded-2xl border border-amber-400/40 bg-black/95 p-5 text-sm text-white">
-          <p className="font-black text-amber-200">Απαιτείται founder σύνδεση ή ήδη εγκεκριμένη Water συσκευή.</p>
+        <div className="absolute inset-x-4 top-20 z-30 mx-auto max-w-xl rounded-2xl border border-amber-400/40 bg-black/95 p-5 text-sm text-white">
+          <p className="font-black text-amber-200">Απαιτείται Founder/Admin session.</p>
           <p className="mt-2 text-white/70">
-            Ο Map B παραμένει private. Η πρόσβαση επιτρέπεται μόνο σε founder ή σε ήδη εγκεκριμένη Water συσκευή.
+            Ο αυθεντικός DWG παραμένει private. Άνοιξε ασφαλές Water admin session και θα επιστρέψεις αυτόματα στον ίδιο χάρτη.
           </p>
+          <button
+            type="button"
+            onClick={() => {
+              const next = `${window.location.pathname}${window.location.search}`;
+              window.location.href =
+                `/professional/infrastructure/water/admin/access?next=${encodeURIComponent(next)}`;
+            }}
+            className="mt-4 rounded-xl bg-[#f6c85f] px-4 py-3 text-sm font-black text-black"
+          >
+            Founder πρόσβαση
+          </button>
         </div>
       ) : null}
 
