@@ -20,8 +20,8 @@ const links = [
   },
   {
     href: "/professional/infrastructure/water/maps",
-    label: "Maps A / B / C",
-    description: "ξεχωριστοί χάρτες",
+    label: "3 Source Maps",
+    description: "A + B canonical + B legacy",
   },
   {
     href: "/professional/infrastructure/water/live",
@@ -29,9 +29,19 @@ const links = [
     description: "υπάρχων live",
   },
   {
-    href: "/professional/infrastructure/water/b",
-    label: "Map B",
-    description: "DWG + GIS",
+    href: "/professional/infrastructure/water/master-b-mobile?sourceKey=canonical-2026-andreaspap",
+    label: "Map B Canonical",
+    description: "derived DWG",
+  },
+  {
+    href: "/professional/infrastructure/water/master-b-mobile?sourceKey=legacy-george-85m",
+    label: "Map B Legacy",
+    description: "comparison source",
+  },
+  {
+    href: "/professional/infrastructure/water/c",
+    label: "C Intelligence",
+    description: "engineering view",
   },
 ];
 
