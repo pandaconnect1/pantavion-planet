@@ -133,22 +133,13 @@ export async function PATCH(
     }
 
     const now = new Date().toISOString();
-    const metadata =
-      current.data.ai_observation &&
-      typeof current.data.ai_observation === "object"
-        ? current.data.ai_observation
-        : {};
-
     const { data, error } = await admin
       .from("water_map_evidence_pins")
       .update({
         review_state: nextState,
         reviewed_by: access.actorRef,
         reviewed_at: now,
-        ai_observation: {
-          ...metadata,
-          reviewDecisionNote: decisionNote,
-        },
+        review_note: decisionNote,
       })
       .eq("pin_id", pinId)
       .select("*")
