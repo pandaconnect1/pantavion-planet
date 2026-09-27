@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
 
 type Segment = [number, number, number, number, number];
 type CadPoint = [number, number, number, string, string | null];
@@ -176,15 +175,22 @@ function getDrawingBounds(
 }
 
 export default function MasterBMobilePage() {
-  const searchParams = useSearchParams();
-  const sourceKey =
-    searchParams.get("sourceKey") === "legacy-george-85m"
-      ? "legacy-george-85m"
-      : "canonical-2026-andreaspap";
+  const [sourceKey, setSourceKey] = useState<
+    "canonical-2026-andreaspap" | "legacy-george-85m"
+  >("canonical-2026-andreaspap");
   const sourceLabel =
     sourceKey === "legacy-george-85m"
       ? "Map B Legacy — GEORGE 85 MB"
       : "Map B Canonical — ANDREASPAP 2026";
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSourceKey(
+      params.get("sourceKey") === "legacy-george-85m"
+        ? "legacy-george-85m"
+        : "canonical-2026-andreaspap",
+    );
+  }, []);
 
   const [manifest, setManifest] = useState<Manifest | null>(null);
   const [segments, setSegments] = useState<Segment[]>([]);
