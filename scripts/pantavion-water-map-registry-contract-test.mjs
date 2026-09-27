@@ -5,6 +5,10 @@ import {
 import {
   getPantavionWaterReferenceLayerCatalog,
 } from "../core/infrastructure/water/water-reference-layer-catalog.ts";
+import {
+  assertPantavionWaterSpatialPatch,
+  getPantavionWaterSpatialPatchContract,
+} from "../core/infrastructure/water/water-spatial-change-patch-contract.ts";
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -12,6 +16,7 @@ function assert(condition, message) {
 
 const contract = getPantavionWaterMapRegistryContract();
 const referenceCatalog = getPantavionWaterReferenceLayerCatalog();
+const patchContract = getPantavionWaterSpatialPatchContract();
 
 assert(contract.id === "pantavion_water_map_registry_v1", "Wrong registry contract id.");
 assert(contract.doctrine.oneViewerForAllMaps === true, "All maps must use one Pantavion viewer.");
@@ -38,6 +43,81 @@ assert(referenceCatalog.policy.accuracyEvidenceRequiredBeforeCanonicalPromotion 
 assert(referenceCatalog.layers.some((layer) => layer.id === "CY_DLS_CADASTRAL"), "Cyprus DLS cadastral reference layer must be registered.");
 assert(referenceCatalog.layers.some((layer) => layer.id === "CY_DLS_GENERAL_SEARCH"), "Cyprus DLS general search/roads layer must be registered.");
 assert(referenceCatalog.overlayOrder.protectedWaterNetworkZIndex > referenceCatalog.overlayOrder.referenceBackgroundMaxZIndex, "Water network z-order must be above references.");
+
+assert(patchContract.doctrine.editsAreSpatialPatchesNotSilentMasterMutation === true, "Field edits must be spatial patches.");
+assert(patchContract.doctrine.pointLinePolygonSupported === true, "Point/LineString/Polygon geometry must be supported.");
+assert(patchContract.doctrine.photosPdfScansAndAnyArtifactsMayBeEvidence === true, "Any preserved artifact may attach as patch evidence.");
+assert(patchContract.doctrine.masterOfficializationRequiresAuthorizedReview === true, "Officialization must require authorized review.");
+
+const valvePatch = assertPantavionWaterSpatialPatch({
+  patchId: "PATCH-VAL-000001",
+  assetType: "valve",
+  operation: "create",
+  status: "pending_review",
+  geometry: {
+    type: "Point",
+    coordinates: [33.038, 34.681],
+    crs: { authority: "EPSG", code: "4326" },
+  },
+  location: {
+    source: "gps",
+    accuracyState: "measured",
+    accuracyMeters: 4.5,
+    streetName: "Example Road",
+    technicalAddressId: "TA-000001",
+  },
+  attributes: {
+    pantavionAssetId: "VAL-000001",
+    diameterMm: 100,
+    note: "New field valve",
+  },
+  evidenceRefs: ["evidence-photo-1"],
+  artifactRefs: ["artifact-photo-1"],
+  relatedJobIds: ["JOB-000001"],
+  relatedReportIds: [],
+  provenance: {
+    createdBy: "approved-user-1",
+    createdAt: "2026-09-27T00:00:00.000Z",
+    sourceMapId: "A",
+    immutableFingerprint: "fingerprint-1",
+  },
+  review: {
+    founderOrAuthorizedApprovalRequired: true,
+  },
+  truth: {
+    directMasterMutationAllowed: false,
+    originalMasterPreserved: true,
+    visibleBeforeApprovalToSubmitter: true,
+    visibleToOtherApprovedUsersOnlyAfterApproval: true,
+    fullHistoryRequired: true,
+    rollbackRequired: true,
+  },
+});
+
+assert(valvePatch.geometry.type === "Point", "Valve patch must retain point geometry.");
+assert(valvePatch.truth.directMasterMutationAllowed === false, "Patch cannot mutate master directly.");
+
+let blockedApproximateOfficialization = false;
+try {
+  assertPantavionWaterSpatialPatch({
+    ...valvePatch,
+    patchId: "PATCH-VAL-000002",
+    status: "officialized",
+    location: {
+      ...valvePatch.location,
+      accuracyState: "approximate",
+    },
+    review: {
+      founderOrAuthorizedApprovalRequired: true,
+      reviewedBy: "supervisor-1",
+      reviewedAt: "2026-09-27T00:10:00.000Z",
+    },
+  });
+} catch {
+  blockedApproximateOfficialization = true;
+}
+
+assert(blockedApproximateOfficialization, "Approximate/unknown location cannot silently become official.");
 
 const builtInIds = contract.maps.map((entry) => entry.mapId);
 assert(builtInIds.includes("A"), "Legacy Map A must remain registered.");
@@ -165,3 +245,4 @@ console.log("- raw source and full-browser-dataset exposure forced off");
 console.log("- photos/PDF/scans/unknown future formats are accepted and preserved even without a renderer or adapter");
 console.log("- non-renderable artifacts can still attach to a map as first-class evidence");
 console.log("- cadastral/roads/reference layers share CRS alignment and stay below the protected water network");
+console.log("- valve/pipe/network edits are precise auditable spatial patches with approval and rollback");
