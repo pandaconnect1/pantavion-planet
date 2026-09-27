@@ -4,6 +4,7 @@ export const PANTAVION_WATER_MAP_REGISTRY_ID =
   "pantavion_water_map_registry_v1" as const;
 
 export type PantavionWaterMapSourceKind =
+  | "artifact-reference"
   | "internal-vector"
   | "dwg"
   | "dxf"
@@ -27,6 +28,7 @@ export type PantavionWaterMapSourceKind =
   | "xyz-vector";
 
 export type PantavionWaterMapDeliveryMode =
+  | "evidence-reference"
   | "bbox-features"
   | "vector-tiles"
   | "raster-tiles"
@@ -88,6 +90,7 @@ export interface PantavionWaterMapSourceCapability {
 }
 
 const SOURCE_CAPABILITIES: readonly PantavionWaterMapSourceCapability[] = [
+  { kind: "artifact-reference", registrationAllowed: true, runtimeAdapterRequired: false, preferredDeliveryMode: "evidence-reference" },
   { kind: "internal-vector", registrationAllowed: true, runtimeAdapterRequired: false, preferredDeliveryMode: "bbox-features" },
   { kind: "dwg", registrationAllowed: true, runtimeAdapterRequired: true, preferredDeliveryMode: "protected-derived-render" },
   { kind: "dxf", registrationAllowed: true, runtimeAdapterRequired: true, preferredDeliveryMode: "protected-derived-render" },
@@ -235,6 +238,10 @@ export function getPantavionWaterMapRegistryContract() {
       georeferencingMayBeDeferred: true,
       preservedArtifactsMayRemainEvidenceOnly: true,
       adapterDiscoveryAllowedAfterPreservation: true,
+      rendererRequiredAtIntake: false,
+      adapterRequiredAtIntake: false,
+      nonRenderableArtifactsRemainFirstClassEvidence: true,
+      artifactMayAttachToMapWithoutRenderingItsContents: true,
       noFalseRenderableClaim: true,
     },
     doctrine: {
@@ -248,6 +255,7 @@ export function getPantavionWaterMapRegistryContract() {
       authorizationFailClosed: true,
       noArtifactLossWhenRendererMissing: true,
       universalArtifactIntakeBeforeLayerPromotion: true,
+      rendererAndAdapterAreOptionalForArtifactRetention: true,
     },
     sourceCapabilities: SOURCE_CAPABILITIES,
     maps: pantavionWaterMapRegistryEntries,
