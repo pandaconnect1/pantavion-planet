@@ -81,7 +81,6 @@ const MAX_ACTIVE_EXTERNAL_LAYERS = 3;
 const MIN_DETAIL_ZOOM = 14;
 const WATER_TILE_SPAN = 0.045;
 const MAX_WATER_TILES = 16;
-const WATER_LAYER_ID = "pantavion-water-network";
 const LIMASSOL_CENTER: [number, number] = [34.6851, 33.0442];
 
 function safeHtml(value: unknown) {
@@ -297,14 +296,11 @@ export default function InfrastructureOperationsClient() {
         mapRef.current = null;
       }
     };
-    // Intentional one-time map boot.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!mapReady) return;
     void loadCatalog();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapReady]);
 
   useEffect(() => {
