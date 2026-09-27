@@ -29,6 +29,11 @@ const links = [
     description: "ένας χάρτης + fullscreen",
   },
   {
+    href: "/professional/infrastructure/water/infrastructure",
+    label: "Utility Layers",
+    description: "δίκτυα / GPS / field check",
+  },
+  {
     href: "/professional/infrastructure/water/c",
     label: "C Intelligence",
     description: "engineering view",

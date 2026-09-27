@@ -72,6 +72,12 @@ export default function WaterMapsPage() {
             >
               GPS · Διεύθυνση · Πήγαινέ με
             </a>
+            <a
+              href="/professional/infrastructure/water/infrastructure"
+              className="inline-block rounded-2xl border border-emerald-300/40 bg-emerald-950/30 px-5 py-3 text-sm font-black text-emerald-100"
+            >
+              Utility Layers · Field Check
+            </a>
           </div>
 
           <div className="mt-7 grid gap-4 md:grid-cols-3">
