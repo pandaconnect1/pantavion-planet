@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export default function FinalMasterDwgPage() {
   const canonical = WATER_MAP_B_SOURCE_CANDIDATES["canonical-2026-andreaspap"];
-  const legacy = WATER_MAP_B_SOURCE_CANDIDATES["legacy-george-85m"];
+  const mapC = WATER_MAP_B_SOURCE_CANDIDATES["legacy-george-85m"];
   const sizeMB = Math.round((canonical.byteSize / 1024 / 1024) * 100) / 100;
 
   return (
@@ -37,26 +37,26 @@ export default function FinalMasterDwgPage() {
           <div><strong>Canonical file:</strong> {canonical.fileName}</div>
           <div><strong>Canonical size:</strong> {sizeMB} MB</div>
           <div><strong>Canonical SHA256:</strong> {canonical.sha256}</div>
-          <div style={{ marginTop: 10 }}><strong>Legacy candidate:</strong> {legacy.fileName}</div>
-          <div><strong>Legacy size:</strong> {Math.round((legacy.byteSize / 1024 / 1024) * 100) / 100} MB</div>
+          <div style={{ marginTop: 10 }}><strong>Map C authentic file:</strong> {mapC.fileName}</div>
+          <div><strong>Map C size:</strong> {Math.round((mapC.byteSize / 1024 / 1024) * 100) / 100} MB</div>
         </div>
 
         <FinalMasterDwgUploader
           sourceKey={canonical.sourceKey}
+          mapId={canonical.mapId}
           label={canonical.label}
-          canonical={canonical.canonical}
           expectedFileName={canonical.fileName}
           expectedSizeBytes={canonical.byteSize}
           expectedSha256={canonical.sha256}
         />
 
         <FinalMasterDwgUploader
-          sourceKey={legacy.sourceKey}
-          label={legacy.label}
-          canonical={legacy.canonical}
-          expectedFileName={legacy.fileName}
-          expectedSizeBytes={legacy.byteSize}
-          expectedSha256={legacy.sha256}
+          sourceKey={mapC.sourceKey}
+          mapId={mapC.mapId}
+          label={mapC.label}
+          expectedFileName={mapC.fileName}
+          expectedSizeBytes={mapC.byteSize}
+          expectedSha256={mapC.sha256}
         />
 
         <a
