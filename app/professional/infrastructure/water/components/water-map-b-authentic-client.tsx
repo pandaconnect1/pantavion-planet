@@ -54,7 +54,6 @@ class MapBOwnerFunctionError extends Error {
   }
 }
 
-const MAP_B_FUNCTION = "pantavion-map-b-owner-dwg";
 
 const CAD_VIEWER_MODULE_URL =
   "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.5/+esm";
