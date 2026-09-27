@@ -1,9 +1,6 @@
 name: Water Lock Refresh Evidence
 
 on:
-  push:
-    branches:
-      - fix/water-lock-refresh-evidence
   pull_request:
     branches:
       - main
@@ -18,6 +15,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Calculate deliberate lock refresh evidence
         shell: bash
         run: |
@@ -28,6 +31,10 @@ jobs:
           sha256sum app/api/professional/infrastructure/water/segment/bbox/route.ts
           echo "water-admin-session route sha256:"
           sha256sum app/api/professional/infrastructure/water/admin/session/route.ts
+          echo "water-admin-access page sha256:"
+          sha256sum app/professional/infrastructure/water/admin/access/page.tsx
+          echo "controlled-water-segment client sha256:"
+          sha256sum app/professional/infrastructure/water/live/controlled-water-segment-client.tsx
           echo "privileged-request-boundary sha256:"
           sha256sum core/security/privileged-request-boundary.ts
           echo "water-admin-session core sha256:"
@@ -36,5 +43,18 @@ jobs:
           sha256sum scripts/water-guardian-production-smoke.cjs
           echo "water-network-runtime-lock.cjs sha256:"
           sha256sum scripts/pantavion-water-network-runtime-lock.cjs
-          echo "water-network-runtime-lock.json sha256:"
-          sha256sum core/infrastructure/water/water-network-runtime-lock.json
+
+      - name: Generate guarded refreshed manifest in runner
+        env:
+          PANTAVION_WATER_LOCK_REFRESH: "YES"
+          PANTAVION_WATER_LOCK_REFRESH_REASON: "Reviewed admin/session, bbox segmented delivery, admin access and controlled viewer changes; source truth and privacy invariants remain unchanged."
+        run: |
+          set -euo pipefail
+          node scripts/refresh-water-network-runtime-lock.cjs
+          echo "----- REFRESHED MANIFEST -----"
+          cat core/infrastructure/water/water-network-runtime-lock.json
+          echo "----- MANIFEST DIFF -----"
+          git diff -- core/infrastructure/water/water-network-runtime-lock.json
+
+      - name: Verify refreshed manifest passes Water Lock
+        run: npm run audit:water:network-lock
