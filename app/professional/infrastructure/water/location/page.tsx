@@ -1,4 +1,4 @@
-import WaterMapNavigation from "../../water-map-navigation";
+import WaterMapNavigation from "../water-map-navigation";
 import WaterLocationNavigationClient from "./water-location-navigation-client";
 
 export const metadata = {
