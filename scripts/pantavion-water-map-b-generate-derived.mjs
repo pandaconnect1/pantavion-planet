@@ -8,19 +8,40 @@ import { fileURLToPath } from "node:url";
 import { createClient } from "@supabase/supabase-js";
 import { Dwg_File_Type, LibreDwg } from "@mlightcad/libredwg-web";
 
-const EXPECTED = {
-  fileName: "MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg",
-  byteSize: 205565159,
-  sha256: "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16",
-  dwgHeader: "AC1032",
+const SOURCES = {
+  "canonical-2026-andreaspap": {
+    sourceKey: "canonical-2026-andreaspap",
+    canonical: true,
+    fileName: "MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg",
+    byteSize: 205565159,
+    sha256: "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16",
+    dwgHeader: "AC1032",
+    storagePath:
+      "water-network-private/source-masters/map-b-original/MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg",
+  },
+  "legacy-george-85m": {
+    sourceKey: "legacy-george-85m",
+    canonical: false,
+    fileName: "GEORGE_MAP_MASTER_B_C_FINAL (4).dwg",
+    byteSize: 85703125,
+    sha256: "038b9bceda2a660296a9162723f5279e5a2d10eb18d499b087d0e8ffa393b800",
+    dwgHeader: "AC1032",
+    storagePath:
+      "water-network-private/source-masters/map-b-candidates/legacy-george-85m/GEORGE_MAP_MASTER_B_C_FINAL (4).dwg",
+  },
 };
+
+const SOURCE_KEY =
+  process.env.PANTAVION_WATER_MAP_B_SOURCE_KEY === "legacy-george-85m"
+    ? "legacy-george-85m"
+    : "canonical-2026-andreaspap";
+
+const EXPECTED = SOURCES[SOURCE_KEY];
 
 const STORAGE = {
   bucket: "personal-media",
-  sourcePath:
-    "water-network-private/source-masters/map-b-original/MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg",
-  derivedPrefix:
-    "water-network-private/derived/map-b/6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16",
+  sourcePath: EXPECTED.storagePath,
+  derivedPrefix: `water-network-private/derived/map-b/${EXPECTED.sha256}`,
 };
 
 const GENERATOR_VERSION = "pantavion-map-b-derived-v1";
@@ -858,6 +879,8 @@ async function main() {
     const manifest = {
       ok: true,
       schemaVersion: "pantavion-water-map-b-derived-manifest-v1",
+      sourceKey: SOURCE_KEY,
+      canonical: EXPECTED.canonical,
       generatorVersion: GENERATOR_VERSION,
       generatedAt: new Date().toISOString(),
       source: "MASTER_B_DWG",
@@ -927,6 +950,8 @@ async function main() {
         {
           ok: true,
           marker: "pantavion_water_map_b_derived_generator_v1",
+          sourceKey: SOURCE_KEY,
+          canonical: EXPECTED.canonical,
           outputDir,
           source: {
             fileName: EXPECTED.fileName,
