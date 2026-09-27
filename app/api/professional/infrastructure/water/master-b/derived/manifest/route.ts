@@ -1,6 +1,12 @@
-﻿import fs from "fs/promises";
-import path from "path";
 import { NextResponse } from "next/server";
+
+import { authorizeWaterMapRequest } from "@/core/security/water-map-request-access";
+import {
+  WATER_MAP_B_DERIVED_MANIFEST_PATH,
+  WATER_MAP_B_DERIVED_STORAGE_BUCKET,
+} from "@/core/water/water-map-b-derived-storage";
+import { FINAL_MASTER_DWG_SHA256 } from "@/core/water/final-master-dwg-source";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,7 +22,10 @@ type DerivedManifest = {
   ok?: boolean;
   type?: string;
   source?: string;
-  dxfPath?: string;
+  sourceSha256?: string;
+  sourceFileName?: string;
+  generatedAt?: string;
+  generatorVersion?: string;
   dxfSizeBytes?: number;
   policy?: Record<string, unknown>;
   grid?: number;
@@ -33,25 +42,6 @@ type DerivedManifest = {
   tiles?: TileIndexItem[];
 };
 
-function getDerivedNetworkDir(): string | null {
-  if (process.env.PANTAVION_MASTER_B_DERIVED_NETWORK_DIR) {
-    return process.env.PANTAVION_MASTER_B_DERIVED_NETWORK_DIR;
-  }
-
-  const userProfile = process.env.USERPROFILE;
-
-  if (!userProfile) {
-    return null;
-  }
-
-  return path.join(
-    userProfile,
-    "Desktop",
-    "Pantavion-Verify",
-    "master-b-derived-network-tiles",
-  );
-}
-
 function sanitizeManifest(manifest: DerivedManifest) {
   const sortedTiles = [...(manifest.tiles ?? [])].sort(
     (a, b) => Number(b.segmentCount ?? 0) - Number(a.segmentCount ?? 0),
@@ -61,8 +51,12 @@ function sanitizeManifest(manifest: DerivedManifest) {
     ok: Boolean(manifest.ok),
     type: manifest.type ?? "pantavion.master_b.derived_network_tiles",
     source: "MASTER_B_DERIVED_NETWORK",
-    rawDxfIncluded: false,
-    publicRawDxfAccess: false,
+    sourceSha256: manifest.sourceSha256 ?? null,
+    sourceFileName: manifest.sourceFileName ?? null,
+    generatedAt: manifest.generatedAt ?? null,
+    generatorVersion: manifest.generatorVersion ?? null,
+    rawDwgIncluded: false,
+    publicRawDwgAccess: false,
     mobileMustUseDerivedTilesOnly: true,
     dxfSizeBytes: manifest.dxfSizeBytes ?? null,
     grid: manifest.grid ?? null,
@@ -80,40 +74,75 @@ function sanitizeManifest(manifest: DerivedManifest) {
   };
 }
 
-export async function GET() {
-  const dir = getDerivedNetworkDir();
+export async function GET(request: Request) {
+  const access = await authorizeWaterMapRequest(request);
 
-  if (!dir) {
+  if (!access.ok) {
     return NextResponse.json(
       {
         ok: false,
-        error: "MASTER_B_DERIVED_NETWORK_DIR_NOT_CONFIGURED",
+        error: access.error,
+        rawDwgIncluded: false,
+        dataReturned: false,
       },
-      { status: 500 },
+      { status: 403, headers: { "Cache-Control": "no-store" } },
     );
   }
 
-  const manifestPath = path.join(dir, "manifest.json");
-
   try {
-    const raw = await fs.readFile(manifestPath, "utf8");
-    const manifest = JSON.parse(raw) as DerivedManifest;
+    const admin = createAdminClient();
+    const { data, error } = await admin.storage
+      .from(WATER_MAP_B_DERIVED_STORAGE_BUCKET)
+      .download(WATER_MAP_B_DERIVED_MANIFEST_PATH);
+
+    if (error || !data) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "MAP_B_DERIVED_MANIFEST_NOT_READY",
+          rawDwgIncluded: false,
+          dataReturned: false,
+        },
+        { status: 404, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
+    const manifest = JSON.parse(await data.text()) as DerivedManifest;
+
+    if (
+      manifest.sourceSha256 !== FINAL_MASTER_DWG_SHA256 ||
+      manifest.ok !== true
+    ) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "MAP_B_DERIVED_MANIFEST_SOURCE_MISMATCH",
+          expectedSourceSha256: FINAL_MASTER_DWG_SHA256,
+          actualSourceSha256: manifest.sourceSha256 ?? null,
+          rawDwgIncluded: false,
+          dataReturned: false,
+        },
+        { status: 409, headers: { "Cache-Control": "no-store" } },
+      );
+    }
 
     return NextResponse.json(sanitizeManifest(manifest), {
       headers: {
-        "Cache-Control": "no-store",
-        "X-Pantavion-Source": "master-b-derived-network",
-        "X-Pantavion-Raw-DXF-Included": "false",
+        "Cache-Control": "private, no-store",
+        "X-Pantavion-Source": "map-b-supabase-derived-network",
+        "X-Pantavion-Water-Access-Mode": access.mode,
+        "X-Pantavion-Raw-DWG-Included": "false",
       },
     });
   } catch (error) {
     return NextResponse.json(
       {
         ok: false,
-        error: "MASTER_B_MANIFEST_READ_FAILED",
+        error: "MAP_B_MANIFEST_READ_FAILED",
         message: error instanceof Error ? error.message : "UNKNOWN_ERROR",
+        rawDwgIncluded: false,
       },
-      { status: 500 },
+      { status: 500, headers: { "Cache-Control": "no-store" } },
     );
   }
 }
