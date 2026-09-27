@@ -1,13 +1,32 @@
-import { FINAL_MASTER_DWG_SHA256 } from "@/core/water/final-master-dwg-source";
+import {
+  WATER_MAP_B_SOURCE_CANDIDATES,
+  type WaterMapBSourceKey,
+} from "@/core/water/water-map-b-source-candidates";
 
 export const WATER_MAP_B_DERIVED_STORAGE_BUCKET = "personal-media" as const;
-export const WATER_MAP_B_DERIVED_PREFIX =
-  `water-network-private/derived/map-b/${FINAL_MASTER_DWG_SHA256}` as const;
-export const WATER_MAP_B_DERIVED_MANIFEST_PATH =
-  `${WATER_MAP_B_DERIVED_PREFIX}/manifest.json` as const;
-export const WATER_MAP_B_DERIVED_TILES_PREFIX =
-  `${WATER_MAP_B_DERIVED_PREFIX}/tiles` as const;
 
-export function waterMapBDerivedTilePath(fileName: string) {
-  return `${WATER_MAP_B_DERIVED_TILES_PREFIX}/${fileName}`;
+export function waterMapBDerivedPrefix(sourceKey: WaterMapBSourceKey) {
+  const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
+  return `water-network-private/derived/map-b/${source.sha256}`;
+}
+
+export function waterMapBDerivedManifestPath(sourceKey: WaterMapBSourceKey) {
+  return `${waterMapBDerivedPrefix(sourceKey)}/manifest.json`;
+}
+
+export function waterMapBDerivedTilesPrefix(sourceKey: WaterMapBSourceKey) {
+  return `${waterMapBDerivedPrefix(sourceKey)}/tiles`;
+}
+
+export function waterMapBDerivedTilePath(
+  sourceKey: WaterMapBSourceKey,
+  fileName: string,
+) {
+  return `${waterMapBDerivedTilesPrefix(sourceKey)}/${fileName}`;
+}
+
+export function normalizeWaterMapBSourceKey(value: unknown): WaterMapBSourceKey {
+  return value === "legacy-george-85m"
+    ? "legacy-george-85m"
+    : "canonical-2026-andreaspap";
 }
