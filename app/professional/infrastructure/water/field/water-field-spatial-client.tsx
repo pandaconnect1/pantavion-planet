@@ -5,7 +5,7 @@ import * as tus from "tus-js-client";
 
 import { pantavionWaterApprovedDeviceHeaders } from "@/core/water/water-approved-device-client";
 
-type SpatialKind = "valve" | "network-extension" | "photo" | "note";
+export type SpatialKind = "valve" | "network-extension" | "photo" | "note";
 
 type Props = {
   kind: SpatialKind;
