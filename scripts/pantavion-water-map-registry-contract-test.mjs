@@ -9,6 +9,10 @@ import {
   assertPantavionWaterSpatialPatch,
   getPantavionWaterSpatialPatchContract,
 } from "../core/infrastructure/water/water-spatial-change-patch-contract.ts";
+import {
+  assertPantavionWaterMapVersion,
+  getPantavionWaterMapVersioningContract,
+} from "../core/infrastructure/water/water-map-versioning-contract.ts";
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -17,6 +21,7 @@ function assert(condition, message) {
 const contract = getPantavionWaterMapRegistryContract();
 const referenceCatalog = getPantavionWaterReferenceLayerCatalog();
 const patchContract = getPantavionWaterSpatialPatchContract();
+const versioningContract = getPantavionWaterMapVersioningContract();
 
 assert(contract.id === "pantavion_water_map_registry_v1", "Wrong registry contract id.");
 assert(contract.doctrine.oneViewerForAllMaps === true, "All maps must use one Pantavion viewer.");
@@ -48,6 +53,13 @@ assert(patchContract.doctrine.editsAreSpatialPatchesNotSilentMasterMutation === 
 assert(patchContract.doctrine.pointLinePolygonSupported === true, "Point/LineString/Polygon geometry must be supported.");
 assert(patchContract.doctrine.photosPdfScansAndAnyArtifactsMayBeEvidence === true, "Any preserved artifact may attach as patch evidence.");
 assert(patchContract.doctrine.masterOfficializationRequiresAuthorizedReview === true, "Officialization must require authorized review.");
+
+assert(versioningContract.doctrine.neverReplaceOldMapBlindly === true, "New design maps must never replace old maps blindly.");
+assert(versioningContract.doctrine.preserveEveryOriginalVersion === true, "Every original map version must be preserved.");
+assert(versioningContract.doctrine.oldAndNewSelectable === true, "Users must be able to select old or new map versions.");
+assert(versioningContract.doctrine.oldAndNewComparable === true, "Users must be able to compare old and new versions.");
+assert(versioningContract.doctrine.localChangesCanRenderOnOldAndNewUntilReconciled === true, "Local approved changes must be able to overlay both versions until reconciliation.");
+assert(versioningContract.doctrine.unmatchedLocalChangesMustBePreserved === true, "Unmatched local changes must never disappear.");
 
 const valvePatch = assertPantavionWaterSpatialPatch({
   patchId: "PATCH-VAL-000001",
@@ -118,6 +130,36 @@ try {
 }
 
 assert(blockedApproximateOfficialization, "Approximate/unknown location cannot silently become official.");
+
+const oldMap = assertPantavionWaterMapVersion({
+  versionId: "MAP-A-V1",
+  mapId: "A",
+  versionNumber: 1,
+  label: "Old approved map",
+  status: "superseded_reference",
+  sourceRef: "private://map-a/v1",
+  sourceFingerprint: "sha256-old-map",
+  receivedAt: "2026-01-01T00:00:00.000Z",
+  receivedBy: "design-office",
+  immutableSource: true,
+  deletedAutomatically: false,
+});
+
+const newMap = assertPantavionWaterMapVersion({
+  versionId: "MAP-A-V2",
+  mapId: "A",
+  versionNumber: 2,
+  label: "New design-office map",
+  status: "candidate",
+  sourceRef: "private://map-a/v2",
+  sourceFingerprint: "sha256-new-map",
+  receivedAt: "2026-09-27T00:00:00.000Z",
+  receivedBy: "design-office",
+  immutableSource: true,
+  deletedAutomatically: false,
+});
+
+assert(oldMap.versionId !== newMap.versionId, "Old and new map versions must remain distinct immutable sources.");
 
 const builtInIds = contract.maps.map((entry) => entry.mapId);
 assert(builtInIds.includes("A"), "Legacy Map A must remain registered.");
@@ -246,3 +288,4 @@ console.log("- photos/PDF/scans/unknown future formats are accepted and preserve
 console.log("- non-renderable artifacts can still attach to a map as first-class evidence");
 console.log("- cadastral/roads/reference layers share CRS alignment and stay below the protected water network");
 console.log("- valve/pipe/network edits are precise auditable spatial patches with approval and rollback");
+console.log("- old/new design-office maps remain selectable, comparable and reconciled without losing local changes");
