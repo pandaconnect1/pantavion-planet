@@ -43,7 +43,7 @@ const EXPECTED = SOURCES[SOURCE_KEY];
 const STORAGE = {
   bucket: "personal-media",
   sourcePath: EXPECTED.storagePath,
-  derivedPrefix: `water-network-private/derived/map-b/${EXPECTED.sha256}`,
+  derivedPrefix: `water-network-private/derived/map-${EXPECTED.mapId.toLowerCase()}/${EXPECTED.sha256}`,
 };
 
 const GENERATOR_VERSION = "pantavion-map-b-derived-v1";
