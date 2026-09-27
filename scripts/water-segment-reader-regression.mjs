@@ -12,6 +12,8 @@ const PROVIDER_PATH =
   "core/infrastructure/water/controlled-water-segment-index-provider.ts";
 const ROUTE_PATH =
   "app/api/professional/infrastructure/water/segment/bbox/route.ts";
+const MAPSERVER_ROUTE_PATH =
+  "app/api/professional/infrastructure/water/mapserver/0/query/route.ts";
 const CLIENT_PATH =
   "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx";
 
@@ -197,6 +199,7 @@ function verifySingleRangeBatching() {
 function verifyRuntimeWiring() {
   const provider = fs.readFileSync(PROVIDER_PATH, "utf8");
   const route = fs.readFileSync(ROUTE_PATH, "utf8");
+  const mapServerRoute = fs.readFileSync(MAPSERVER_ROUTE_PATH, "utf8");
   const client = fs.readFileSync(CLIENT_PATH, "utf8");
 
   assert.match(provider, /from "\.\/private-water-segment-reader"/);
@@ -215,17 +218,30 @@ function verifyRuntimeWiring() {
   assert.match(route, /completeNetworkReturned: false/);
   assert.match(route, /rawMasterReturned: false/);
 
+  assert.match(
+    mapServerRoute,
+    /import \{ GET as getProtectedWaterSegment \} from "@\/app\/api\/professional\/infrastructure\/water\/segment\/bbox\/route"/,
+  );
+  assert.match(
+    mapServerRoute,
+    /"\/api\/professional\/infrastructure\/water\/segment\/bbox"/,
+  );
+  assert.match(mapServerRoute, /rawMasterIncluded: false/);
+  assert.match(mapServerRoute, /"Cache-Control": "private, no-store"/);
+  assert.match(mapServerRoute, /"X-Pantavion-Water-Raw-Master": "not-included"/);
+
   assert.match(client, /map\.on\("moveend zoomend", scheduleAutoLoad\)/);
   assert.match(client, /WATER_NO_VISIBLE_FEATURES/);
   assert.match(client, /WATER_CLIENT_LOAD/);
   assert.match(
     client,
-    /\/api\/professional\/infrastructure\/water\/segment\/bbox/,
+    /\/api\/professional\/infrastructure\/water\/mapserver\/0\/query/,
   );
 
   pass("production provider is wired range-first with selective stream fallback");
-  pass("route remains authorization-gated and fails without exposing source data");
-  pass("mobile client retains automatic loading and visible diagnostics");
+  pass("protected bbox route remains authorization-gated and fails without exposing source data");
+  pass("MapServer compatibility route delegates to the protected bbox route and excludes raw master data");
+  pass("mobile client retains automatic loading, visible diagnostics, and MapServer segmented delivery");
 }
 
 async function main() {
