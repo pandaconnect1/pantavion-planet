@@ -35,8 +35,8 @@ const links = [
   },
   {
     href: "/professional/infrastructure/water/c",
-    label: "C Intelligence",
-    description: "engineering view",
+    label: "Engineering",
+    description: "intelligence workspace",
   },
 ];
 
