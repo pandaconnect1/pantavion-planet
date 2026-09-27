@@ -57,6 +57,9 @@ jobs:
       - name: Tests if present
         run: npm test --if-present
 
+      - name: Verify Map B derived geometry generator
+        run: npm run test:water-map-b-derived-generator
+
       - name: Build
         run: npm run build
 
