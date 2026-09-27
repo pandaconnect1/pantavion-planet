@@ -3,21 +3,21 @@ import Link from "next/link";
 import WaterMapBCompareClient from "./water-map-b-compare-client";
 
 export const metadata = {
-  title: "Pantavion Water — Compare Map B Versions",
+  title: "Pantavion Water — Compare Map B / Map C",
   description:
-    "Compare canonical and legacy Map B DWG-derived views without mutating either source.",
+    "Compare protected derived manifests for authentic Map B and Map C without framing or exposing raw DWG.",
 };
 
-export default function WaterMapBComparePage() {
+export default function WaterMapComparePage() {
   return (
     <main className="min-h-screen bg-[#06101f] px-4 py-5 text-white">
-      <section className="mx-auto w-full max-w-[1800px]">
+      <section className="mx-auto w-full max-w-7xl">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <Link
             href="/professional/infrastructure/water/maps"
             className="text-sm font-black text-[#f2c766]"
           >
-            ← 3 Source Maps
+            ← Water Maps
           </Link>
 
           <Link
