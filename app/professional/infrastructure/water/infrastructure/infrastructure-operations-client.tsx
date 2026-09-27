@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { GeoJSON as LeafletGeoJSON, Map as LeafletMap } from "leaflet";
+import type {
+  GeoJSON as LeafletGeoJSON,
+  LatLng,
+  Layer as LeafletLayer,
+  LeafletMouseEvent,
+  Map as LeafletMap,
+} from "leaflet";
+import type { Feature, FeatureCollection, Geometry } from "geojson";
 
 import { pantavionWaterApprovedDeviceHeaders } from "@/core/water/water-approved-device-client";
 
@@ -35,33 +42,27 @@ type CatalogResponse = {
   };
 };
 
+type InfrastructureFeature = Feature<
+  Geometry,
+  Record<string, unknown>
+>;
+
+type InfrastructureFeatureCollection = FeatureCollection<
+  Geometry,
+  Record<string, unknown>
+>;
+
 type LayerResponse = {
   ok?: boolean;
   error?: string;
   featureCount?: number;
   truncated?: boolean;
   layer?: CatalogLayer;
-  geojson?: {
-    type: "FeatureCollection";
-    features: Array<{
-      type: "Feature";
-      geometry: unknown;
-      properties?: Record<string, unknown>;
-      id?: string | number;
-    }>;
-  };
+  geojson?: InfrastructureFeatureCollection;
 };
 
 type WaterSegmentResponse = {
-  segment?: {
-    type: "FeatureCollection";
-    features: Array<{
-      type: "Feature";
-      geometry: unknown;
-      properties?: Record<string, unknown>;
-      id?: string | number;
-    }>;
-  };
+  segment?: InfrastructureFeatureCollection;
   completeNetworkReturned?: boolean;
   rawMasterReturned?: boolean;
   browserFullNetworkLoaded?: boolean;
@@ -155,7 +156,7 @@ function propertyValue(
   return null;
 }
 
-function externalPopup(feature: any, layer: CatalogLayer) {
+function externalPopup(feature: InfrastructureFeature, layer: CatalogLayer) {
   const properties =
     feature?.properties && typeof feature.properties === "object"
       ? (feature.properties as Record<string, unknown>)
@@ -185,7 +186,7 @@ function externalPopup(feature: any, layer: CatalogLayer) {
   `;
 }
 
-function waterPopup(feature: any) {
+function waterPopup(feature: InfrastructureFeature) {
   const properties =
     feature?.properties && typeof feature.properties === "object"
       ? (feature.properties as Record<string, unknown>)
@@ -335,7 +336,7 @@ export default function InfrastructureOperationsClient() {
     const map = mapRef.current;
     if (!map) return;
 
-    const onClick = (event: any) => {
+    const onClick = (event: LeafletMouseEvent) => {
       if (!pinMode) return;
       setPinPoint([event.latlng.lat, event.latlng.lng]);
     };
@@ -407,7 +408,7 @@ export default function InfrastructureOperationsClient() {
 
     const bbox = bboxOf(map);
     const tiles = splitBbox(bbox, WATER_TILE_SPAN);
-    const features: any[] = [];
+    const features: InfrastructureFeature[] = [];
     const seen = new Set<string>();
 
     for (const tile of tiles) {
@@ -454,21 +455,24 @@ export default function InfrastructureOperationsClient() {
     const L = await import("leaflet");
     waterLayerRef.current?.remove();
     const layer = (L.default || L).geoJSON(
-      { type: "FeatureCollection", features } as any,
+      { type: "FeatureCollection", features } as InfrastructureFeatureCollection,
       {
         style: {
           weight: 4,
           opacity: waterOpacity,
           fillOpacity: Math.min(0.3, waterOpacity),
         },
-        pointToLayer: (_feature: any, latlng: any) =>
+        pointToLayer: (_feature: InfrastructureFeature, latlng: LatLng) =>
           (L.default || L).circleMarker(latlng, {
             radius: 5,
             weight: 2,
             opacity: waterOpacity,
             fillOpacity: waterOpacity,
           }),
-        onEachFeature: (feature: any, leafletLayer: any) => {
+        onEachFeature: (
+          feature: InfrastructureFeature,
+          leafletLayer: LeafletLayer,
+        ) => {
           leafletLayer.bindPopup(waterPopup(feature));
         },
       },
@@ -519,20 +523,23 @@ export default function InfrastructureOperationsClient() {
       externalLayerRefs.current.get(layerId)?.remove();
 
       const opacity = activeLayers[layerId]?.opacity ?? 0.8;
-      const layer = (L.default || L).geoJSON(json.geojson as any, {
+      const layer = (L.default || L).geoJSON(json.geojson, {
         style: {
           weight: 4,
           opacity,
           fillOpacity: Math.min(0.28, opacity * 0.45),
         },
-        pointToLayer: (_feature: any, latlng: any) =>
+        pointToLayer: (_feature: InfrastructureFeature, latlng: LatLng) =>
           (L.default || L).circleMarker(latlng, {
             radius: 6,
             weight: 2,
             opacity,
             fillOpacity: opacity,
           }),
-        onEachFeature: (feature: any, leafletLayer: any) => {
+        onEachFeature: (
+          feature: InfrastructureFeature,
+          leafletLayer: LeafletLayer,
+        ) => {
           leafletLayer.bindPopup(externalPopup(feature, json.layer!));
         },
       });
