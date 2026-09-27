@@ -213,7 +213,7 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
           ? "Φωτογραφία πεδίου"
           : "Σημείωση στον χάρτη";
 
-  function useCurrentPosition(target: "start" | "end") {
+  function captureCurrentPosition(target: "start" | "end") {
     if (!navigator.geolocation) {
       setMessage("Η συσκευή δεν δίνει geolocation.");
       return;
@@ -532,7 +532,7 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
       <button
         type="button"
         disabled={busy}
-        onClick={() => useCurrentPosition("start")}
+        onClick={() => captureCurrentPosition("start")}
         className="rounded-2xl border border-cyan-400/50 bg-cyan-950/30 px-4 py-3 font-black text-cyan-100"
       >
         📍 Χρήση θέσης κινητού
@@ -569,7 +569,7 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
           <button
             type="button"
             disabled={busy}
-            onClick={() => useCurrentPosition("end")}
+            onClick={() => captureCurrentPosition("end")}
             className="rounded-2xl border border-cyan-400/50 bg-cyan-950/30 px-4 py-3 font-black text-cyan-100"
           >
             📍 Καταγραφή τελικού σημείου με GPS
