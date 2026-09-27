@@ -5,6 +5,7 @@ import { getPantavionWaterAbcMapSystemContract } from "@/core/infrastructure/wat
 import { getPantavionWaterMapRegistryContract } from "@/core/infrastructure/water/water-map-registry-contract";
 import { getPantavionWaterReferenceLayerCatalog } from "@/core/infrastructure/water/water-reference-layer-catalog";
 import { getPantavionWaterSpatialPatchContract } from "@/core/infrastructure/water/water-spatial-change-patch-contract";
+import { getPantavionWaterMapVersioningContract } from "@/core/infrastructure/water/water-map-versioning-contract";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { waterApprovedDeviceMatches } from "@/core/water/water-access-store";
 
@@ -64,6 +65,9 @@ export async function POST(request: Request) {
 
       // Precise field edits are represented as auditable spatial deltas.
       spatialPatches: getPantavionWaterSpatialPatchContract(),
+
+      // Old/new map sources remain immutable, selectable and comparable.
+      versioning: getPantavionWaterMapVersioningContract(),
 
       sourcePresence: readSourcePresence(),
       runtimeBoundary: {
