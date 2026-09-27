@@ -444,7 +444,9 @@ export default function MasterBMobilePage() {
                 </svg>
               ) : (
                 <div className="flex h-full items-center justify-center p-6 text-center text-sm font-black text-slate-700">
-                  {status === "loading" ? "Loading selected Map B network tiles..." : "The selected derived geometry layer is not configured/processed yet. Raw DWG remains in the private founder/admin vault. Approved users receive only browser-safe derived geometry after processing."}ocessing, access approval, and audit."}
+                  {status === "loading"
+                    ? "Loading selected Map B network tiles..."
+                    : "The selected derived geometry layer is not configured/processed yet. Raw DWG remains in the private founder/admin vault. Approved users receive only browser-safe derived geometry after processing, access approval, and audit."}
                 </div>
               )}
             </div>
