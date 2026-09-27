@@ -88,6 +88,21 @@ export default function WaterMapsPage() {
             ))}
           </div>
 
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a
+              href="/professional/infrastructure/water/maps/compare"
+              className="rounded-2xl border border-[#d8b45f]/50 bg-[#d8b45f] px-4 py-3 text-sm font-black text-[#07101e]"
+            >
+              Σύγκριση Canonical / Legacy Map B
+            </a>
+            <a
+              href="/professional/infrastructure/water/admin/alignment"
+              className="rounded-2xl border border-cyan-300/40 bg-cyan-950/30 px-4 py-3 text-sm font-black text-cyan-100"
+            >
+              Alignment / Georeferencing
+            </a>
+          </div>
+
           <section className="mt-7 rounded-3xl border border-cyan-400/25 bg-cyan-400/10 p-5">
             <p className="text-xs font-black uppercase tracking-[0.25em] text-cyan-200">
               Engineering intelligence
