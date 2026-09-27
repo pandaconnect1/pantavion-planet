@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 type Segment = [number, number, number, number, number];
 
@@ -20,6 +21,13 @@ type Bounds = {
 
 type Manifest = {
   ok: boolean;
+  sourceKey?: "canonical-2026-andreaspap" | "legacy-george-85m";
+  canonical?: boolean;
+  sourceSha256?: string | null;
+  sourceFileName?: string | null;
+  coordinateSpace?: string | null;
+  geographicAlignmentVerified?: boolean;
+  cadastralOverlayAllowed?: boolean;
   type?: string;
   source?: string;
   rawDxfIncluded?: boolean;
@@ -144,6 +152,16 @@ function getSegmentBounds(segments: Segment[]): Bounds | null {
 }
 
 export default function MasterBMobilePage() {
+  const searchParams = useSearchParams();
+  const sourceKey =
+    searchParams.get("sourceKey") === "legacy-george-85m"
+      ? "legacy-george-85m"
+      : "canonical-2026-andreaspap";
+  const sourceLabel =
+    sourceKey === "legacy-george-85m"
+      ? "Map B Legacy — GEORGE 85 MB"
+      : "Map B Canonical — ANDREASPAP 2026";
+
   const [manifest, setManifest] = useState<Manifest | null>(null);
   const [segments, setSegments] = useState<Segment[]>([]);
   const [status, setStatus] = useState<LoadState>("idle");
@@ -160,7 +178,9 @@ export default function MasterBMobilePage() {
 
       try {
         const manifestResponse = await fetch(
-          "/api/professional/infrastructure/water/master-b/derived/manifest",
+          `/api/professional/infrastructure/water/master-b/derived/manifest?sourceKey=${encodeURIComponent(
+            sourceKey,
+          )}`,
           {
             cache: "no-store",
             credentials: "include",
@@ -185,9 +205,9 @@ export default function MasterBMobilePage() {
         const tileResponses = await Promise.all(
           selectedTiles.map(async (tile) => {
             const response = await fetch(
-              `/api/professional/infrastructure/water/master-b/derived/tile?file=${encodeURIComponent(
-                tile.file,
-              )}`,
+              `/api/professional/infrastructure/water/master-b/derived/tile?sourceKey=${encodeURIComponent(
+                sourceKey,
+              )}&file=${encodeURIComponent(tile.file)}`,
               {
                 cache: "no-store",
                 credentials: "include",
@@ -228,7 +248,7 @@ export default function MasterBMobilePage() {
     return () => {
       cancelled = true;
     };
-  }, [tileLimit]);
+  }, [sourceKey, tileLimit]);
 
   const layerNames = manifest?.layers ?? [];
 
@@ -276,17 +296,52 @@ export default function MasterBMobilePage() {
           </a>
 
           <p className="mt-5 text-xs font-black uppercase tracking-[0.34em] text-[#f2c766]">
-            Pantavion Water · Master B Mobile
+            Pantavion Water · Derived DWG Viewer
           </p>
 
           <h1 className="mt-3 text-3xl font-black tracking-tight md:text-5xl">
-            Master B εγκεκριμένο derived δίκτυο
+            {sourceLabel}
           </h1>
 
           <p className="mt-3 max-w-3xl text-sm font-semibold leading-7 text-slate-300 md:text-base">
-            Φορτώνει derived vector/network tiles από το DXF. Δεν φορτώνει raw DXF,
-            δεν χρησιμοποιεί εικόνα και δεν αγγίζει χρήστες, Map A ή Blob.
+            Φορτώνει derived vector/network tiles από το επιλεγμένο επαληθευμένο DWG.
+            Δεν φορτώνει raw DWG στον browser και δεν συγχέει canonical με legacy source.
           </p>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          <a
+            href="/professional/infrastructure/water/live"
+            className="rounded-xl border border-slate-600 bg-[#091426] px-3 py-2 text-xs font-black text-slate-200"
+          >
+            Map A
+          </a>
+          <a
+            href="/professional/infrastructure/water/master-b-mobile?sourceKey=canonical-2026-andreaspap"
+            className={`rounded-xl border px-3 py-2 text-xs font-black ${
+              sourceKey === "canonical-2026-andreaspap"
+                ? "border-[#f2c766] bg-[#f2c766] text-black"
+                : "border-slate-600 bg-[#091426] text-slate-200"
+            }`}
+          >
+            Map B Canonical
+          </a>
+          <a
+            href="/professional/infrastructure/water/master-b-mobile?sourceKey=legacy-george-85m"
+            className={`rounded-xl border px-3 py-2 text-xs font-black ${
+              sourceKey === "legacy-george-85m"
+                ? "border-[#f2c766] bg-[#f2c766] text-black"
+                : "border-slate-600 bg-[#091426] text-slate-200"
+            }`}
+          >
+            Map B Legacy
+          </a>
+          <a
+            href="/professional/infrastructure/water/c"
+            className="rounded-xl border border-cyan-700/60 bg-cyan-950/30 px-3 py-2 text-xs font-black text-cyan-200"
+          >
+            C Intelligence
+          </a>
         </div>
 
         <div className="grid gap-3 md:grid-cols-5">
@@ -315,7 +370,7 @@ export default function MasterBMobilePage() {
           </div>
 
           <div className="rounded-2xl border border-slate-700 bg-[#091426] p-4">
-            <p className="text-xs font-black uppercase text-slate-400">Raw DXF</p>
+            <p className="text-xs font-black uppercase text-slate-400">Raw DWG</p>
             <p className="mt-2 text-xl font-black text-emerald-300">Blocked</p>
           </div>
         </div>
@@ -389,7 +444,7 @@ export default function MasterBMobilePage() {
                 </svg>
               ) : (
                 <div className="flex h-full items-center justify-center p-6 text-center text-sm font-black text-slate-700">
-                  {status === "loading" ? "Loading Master B network tiles..." : "B approved derived geometry layer is not configured/processed yet. Raw DWG/DXF remains in the private founder/admin vault. Approved users will receive only browser-safe derived LineString/MultiLineString segments after processing, access approval, and audit."}
+                  {status === "loading" ? "Loading selected Map B network tiles..." : "The selected derived geometry layer is not configured/processed yet. Raw DWG remains in the private founder/admin vault. Approved users receive only browser-safe derived geometry after processing."}ocessing, access approval, and audit."}
                 </div>
               )}
             </div>
