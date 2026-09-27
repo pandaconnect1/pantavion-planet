@@ -7,6 +7,7 @@ import {
   WATER_MAP_B_SOURCE_CANDIDATES,
   type WaterMapBSourceKey,
 } from "@/core/water/water-map-b-source-candidates";
+import { createClient as createSupabaseClient } from "@/lib/supabase/client";
 
 type PositionState = {
   latitude: number;
@@ -225,25 +226,15 @@ export default function WaterMapBAuthenticClient() {
         }
 
         setUploadLabel("Ανέβασμα αυθεντικού DWG…");
-        const uploadUrl =
-          `https://cxhulvwkagzufbjsdwwu.supabase.co/storage/v1/object/upload/sign/${encodeURIComponent(
-            signed.bucket,
-          )}/${signed.path
-            .split("/")
-            .map((part) => encodeURIComponent(part))
-            .join("/")}?token=${encodeURIComponent(signed.token)}`;
+        const supabase = createSupabaseClient();
+        const { error } = await supabase.storage
+          .from(signed.bucket)
+          .uploadToSignedUrl(signed.path, signed.token, file, {
+            contentType: "application/acad",
+          });
 
-        const uploadResponse = await fetch(uploadUrl, {
-          method: "PUT",
-          headers: { "Content-Type": "application/acad" },
-          body: file,
-        });
-
-        if (!uploadResponse.ok) {
-          const message = await uploadResponse.text().catch(() => "");
-          throw new Error(
-            `MAP_B_UPLOAD_FAILED_${uploadResponse.status}${message ? `_${message.slice(0, 160)}` : ""}`,
-          );
+        if (error) {
+          throw new Error(`MAP_B_UPLOAD_FAILED: ${error.message}`);
         }
       }
 
