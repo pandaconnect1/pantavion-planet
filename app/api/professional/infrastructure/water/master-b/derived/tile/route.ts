@@ -3,9 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { authorizeWaterMapRequest } from "@/core/security/water-map-request-access";
 import {
   WATER_MAP_B_DERIVED_STORAGE_BUCKET,
+  normalizeWaterMapBSourceKey,
   waterMapBDerivedTilePath,
 } from "@/core/water/water-map-b-derived-storage";
-import { FINAL_MASTER_DWG_SHA256 } from "@/core/water/final-master-dwg-source";
+import { WATER_MAP_B_SOURCE_CANDIDATES } from "@/core/water/water-map-b-source-candidates";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
@@ -53,6 +54,10 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  const sourceKey = normalizeWaterMapBSourceKey(
+    request.nextUrl.searchParams.get("sourceKey"),
+  );
+  const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
   const requestedFile = request.nextUrl.searchParams.get("file") || "";
   const tileName = normalizeMasterBTileFile(requestedFile);
 
@@ -60,6 +65,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         ok: false,
+        sourceKey,
         error: "INVALID_TILE_FILE",
         rawDwgIncluded: false,
       },
@@ -67,7 +73,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const objectPath = waterMapBDerivedTilePath(tileName);
+  const objectPath = waterMapBDerivedTilePath(sourceKey, tileName);
 
   try {
     const admin = createAdminClient();
@@ -79,6 +85,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           ok: false,
+          sourceKey,
+          canonical: source.canonical,
           error: "MAP_B_DERIVED_TILE_NOT_READY",
           tile: tileName,
           rawDwgIncluded: false,
@@ -88,17 +96,39 @@ export async function GET(request: NextRequest) {
     }
 
     const tile = parseTileJson(await data.text());
+    const tileSourceSha256 =
+      tile && typeof tile === "object" && "sourceSha256" in tile
+        ? String((tile as { sourceSha256?: unknown }).sourceSha256 ?? "")
+        : "";
+
+    if (tileSourceSha256 && tileSourceSha256 !== source.sha256) {
+      return NextResponse.json(
+        {
+          ok: false,
+          sourceKey,
+          error: "MAP_B_DERIVED_TILE_SOURCE_MISMATCH",
+          tile: tileName,
+          expectedSourceSha256: source.sha256,
+          actualSourceSha256: tileSourceSha256,
+          rawDwgIncluded: false,
+        },
+        { status: 409, headers: { "Cache-Control": "no-store" } },
+      );
+    }
 
     return NextResponse.json(
       {
         ...(tile && typeof tile === "object" ? tile : { data: tile }),
-        sourceSha256: FINAL_MASTER_DWG_SHA256,
+        sourceKey,
+        canonical: source.canonical,
+        sourceSha256: source.sha256,
         rawDwgIncluded: false,
       },
       {
         headers: {
           "Cache-Control": "private, max-age=60",
           "X-Pantavion-Source": "map-b-supabase-derived-network-tile",
+          "X-Pantavion-Water-Map-B-Source-Key": sourceKey,
           "X-Pantavion-Water-Access-Mode": access.mode,
           "X-Pantavion-Raw-DWG-Included": "false",
         },
@@ -108,6 +138,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         ok: false,
+        sourceKey,
         error: "MAP_B_TILE_READ_FAILED",
         tile: tileName,
         message: error instanceof Error ? error.message : "UNKNOWN_ERROR",
