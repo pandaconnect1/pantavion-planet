@@ -4,7 +4,11 @@ const canonicalOrigin = "https://pantavion.com";
 
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
-  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors 'self'",
+  },
   { key: "X-Content-Type-Options", value: "nosniff" },
   {
     key: "Strict-Transport-Security",
