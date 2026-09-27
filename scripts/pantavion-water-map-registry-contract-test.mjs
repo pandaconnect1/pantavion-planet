@@ -13,6 +13,10 @@ import {
   assertPantavionWaterMapVersion,
   getPantavionWaterMapVersioningContract,
 } from "../core/infrastructure/water/water-map-versioning-contract.ts";
+import {
+  applyWaterMapBAffineTransform,
+  calculateWaterMapBAffineTransform,
+} from "../core/water/water-map-b-affine-alignment.ts";
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -161,6 +165,53 @@ const newMap = assertPantavionWaterMapVersion({
 
 assert(oldMap.versionId !== newMap.versionId, "Old and new map versions must remain distinct immutable sources.");
 
+const affineControlPoints = [
+  {
+    id: "cp-1",
+    sourceX: 0,
+    sourceY: 0,
+    longitude: 33,
+    latitude: 34,
+    provenance: "synthetic-test",
+  },
+  {
+    id: "cp-2",
+    sourceX: 1000,
+    sourceY: 0,
+    longitude: 33.01,
+    latitude: 34.002,
+    provenance: "synthetic-test",
+  },
+  {
+    id: "cp-3",
+    sourceX: 0,
+    sourceY: 1000,
+    longitude: 32.999,
+    latitude: 34.012,
+    provenance: "synthetic-test",
+  },
+  {
+    id: "cp-4",
+    sourceX: 1000,
+    sourceY: 1000,
+    longitude: 33.009,
+    latitude: 34.014,
+    provenance: "synthetic-test",
+  },
+];
+
+const affine = calculateWaterMapBAffineTransform(affineControlPoints);
+const affinePoint = applyWaterMapBAffineTransform(affine, 500, 500);
+
+assert(Math.abs(affine.longitude.a - 0.00001) < 1e-12, "Affine longitude X coefficient must be recovered.");
+assert(Math.abs(affine.longitude.b + 0.000001) < 1e-12, "Affine longitude Y coefficient must be recovered.");
+assert(Math.abs(affine.latitude.d - 0.000002) < 1e-12, "Affine latitude X coefficient must be recovered.");
+assert(Math.abs(affine.latitude.e - 0.000012) < 1e-12, "Affine latitude Y coefficient must be recovered.");
+assert(Math.abs(affinePoint.longitude - 33.0045) < 1e-10, "Affine longitude projection must match expected position.");
+assert(Math.abs(affinePoint.latitude - 34.007) < 1e-10, "Affine latitude projection must match expected position.");
+assert(affine.rmseMeters < 0.001, "Ideal affine control points must have near-zero RMSE.");
+assert(affine.maxResidualMeters < 0.001, "Ideal affine control points must have near-zero max residual.");
+
 const builtInIds = contract.maps.map((entry) => entry.mapId);
 assert(builtInIds.includes("A"), "Legacy Map A must remain registered.");
 assert(builtInIds.includes("B"), "Legacy Map B must remain registered.");
@@ -289,3 +340,4 @@ console.log("- non-renderable artifacts can still attach to a map as first-class
 console.log("- cadastral/roads/reference layers share CRS alignment and stay below the protected water network");
 console.log("- valve/pipe/network edits are precise auditable spatial patches with approval and rollback");
 console.log("- old/new design-office maps remain selectable, comparable and reconciled without losing local changes");
+console.log("- affine georeferencing coefficients and residual metrics are calculated from control points");
