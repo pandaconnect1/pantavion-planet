@@ -1,9 +1,61 @@
 {
   "source": "supabase_migrations.schema_migrations production ledger addendum",
   "projectRef": "cxhulvwkagzufbjsdwwu",
-  "capturedAtUtc": "2026-08-30T20:06:37Z",
+  "capturedAtUtc": "2026-09-27T09:52:00Z",
   "entries": [
-    {"version":"20260830192403","name":"enable_pantavion_internal_scheduler_extensions","md5":"bd22d43a0670825d5838f354905feac6","chars":124},
-    {"version":"20260830192828","name":"create_pantavion_internal_scheduler_redundancy","md5":"5a89328c7060d347a7546ec40391c86d","chars":4238}
+    {
+      "version": "20260830192403",
+      "name": "enable_pantavion_internal_scheduler_extensions",
+      "md5": "bd22d43a0670825d5838f354905feac6",
+      "chars": 124
+    },
+    {
+      "version": "20260830192828",
+      "name": "create_pantavion_internal_scheduler_redundancy",
+      "md5": "5a89328c7060d347a7546ec40391c86d",
+      "chars": 4238
+    },
+    {
+      "version": "20260927072851",
+      "name": "water_map_versions_spatial_patches_evidence",
+      "repositoryFile": "20260927073000_water_map_versions_spatial_patches_evidence.sql",
+      "gitBlobSha": "c097bb5214916b25b196f3542ab66c0a3724daa6",
+      "chars": 10159
+    },
+    {
+      "version": "20260927072917",
+      "name": "harden_water_spatial_patch_revision_append_only",
+      "repositoryFile": "20260927074200_harden_water_spatial_patch_revision_append_only.sql",
+      "gitBlobSha": "ce12d77f30235323cf7aa154152deceddc7b83e5",
+      "chars": 97
+    },
+    {
+      "version": "20260927074149",
+      "name": "water_field_artifact_upload_ledger",
+      "repositoryFile": "20260927075500_water_field_artifact_upload_ledger.sql",
+      "gitBlobSha": "a9a6cf56281ec1fff6640601c4bddcad87d32b8d",
+      "chars": 2574
+    },
+    {
+      "version": "20260927074817",
+      "name": "water_evidence_pin_review_audit",
+      "repositoryFile": "20260927080500_water_evidence_pin_review_audit.sql",
+      "gitBlobSha": "2efdaf95b1bc8ef13818326a4341f57388af7fee",
+      "chars": 1846
+    },
+    {
+      "version": "20260927084643",
+      "name": "water_map_alignment_evidence",
+      "repositoryFile": "20260927085000_water_map_alignment_evidence.sql",
+      "gitBlobSha": "8a3c16f69eb27cdea37e0a85c6a6cb3f228e8d17",
+      "chars": 4025
+    },
+    {
+      "version": "20260927084826",
+      "name": "water_map_alignment_transform_parameters",
+      "repositoryFile": "20260927085800_water_map_alignment_transform_parameters.sql",
+      "gitBlobSha": "4730f7a0d8d8965e59e693de135cf1b3b15ba4df",
+      "chars": 180
+    }
   ]
 }
