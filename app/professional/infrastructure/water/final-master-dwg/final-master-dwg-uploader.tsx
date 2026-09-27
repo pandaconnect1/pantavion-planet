@@ -20,8 +20,8 @@ type UploadUrlResponse = {
 
 type Props = {
   sourceKey: "canonical-2026-andreaspap" | "legacy-george-85m";
+  mapId: "B" | "C";
   label: string;
-  canonical: boolean;
   expectedFileName: string;
   expectedSizeBytes: number;
   expectedSha256: string;
@@ -74,8 +74,8 @@ async function callMapBOwner(
 
 export default function FinalMasterDwgUploader({
   sourceKey,
+  mapId,
   label,
-  canonical,
   expectedFileName,
   expectedSizeBytes,
   expectedSha256,
@@ -131,11 +131,11 @@ export default function FinalMasterDwgUploader({
       const authBody = await callMapBOwner("sign", sourceKey);
 
       if (authBody.status === "already_present") {
-        setMessage("Map B object already exists. Verifying exact binary identity…");
+        setMessage("Map source already exists. Verifying exact binary identity…");
         await callMapBOwner("verify", sourceKey);
         setProgress(100);
         setState("done");
-        setMessage("Existing Map B binary verified and registered.");
+        setMessage("Existing authentic map binary verified and registered.");
         return;
       }
 
@@ -190,7 +190,7 @@ export default function FinalMasterDwgUploader({
       await callMapBOwner("verify", sourceKey);
 
       setState("done");
-      setMessage("Verified exact Map B master: private, immutable and registered.");
+      setMessage("Verified exact authentic map master: private, immutable and registered.");
     } catch (error) {
       setState("error");
       setMessage(error instanceof Error ? error.message : "Upload failed.");
@@ -208,8 +208,8 @@ export default function FinalMasterDwgUploader({
       }}
     >
       <h2 style={{ margin: 0, fontSize: 22 }}>{label}</h2>
-      <p style={{ marginTop: 8, fontSize: 12, fontWeight: 900, color: canonical ? "#a7f3d0" : "#fde68a" }}>
-        {canonical ? "CANONICAL MAP B SOURCE" : "LEGACY CANDIDATE — DOES NOT REPLACE CANONICAL"}
+      <p style={{ marginTop: 8, fontSize: 12, fontWeight: 900, color: mapId === "B" ? "#a7f3d0" : "#bae6fd" }}>
+        AUTHENTIC MAP {mapId} SOURCE · PRIVATE MASTER
       </p>
       <p style={{ color: "#d7d7d7", lineHeight: 1.6 }}>
         Expected: {expectedFileName} · {expectedSizeMB} MB. Locked SHA-256: {expectedSha256}
