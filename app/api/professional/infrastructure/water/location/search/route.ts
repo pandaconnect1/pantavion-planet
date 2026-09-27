@@ -186,30 +186,32 @@ async function pantavionCandidates(
   const normalizedQuery = normalize(query);
   return Array.from(byId.values())
     .filter((patch) => patchSearchText(patch).includes(normalizedQuery))
-    .map((patch) => {
+    .flatMap<SearchCandidate>((patch) => {
       const point = patchPoint(patch);
-      if (!point) return null;
-      return {
-        id: `pantavion:${String(patch.patch_id)}`,
-        source: "pantavion" as const,
-        label: patchLabel(patch),
-        latitude: point.latitude,
-        longitude: point.longitude,
-        confidence:
-          patch.status === "approved_overlay" ||
-          patch.status === "officialization_candidate" ||
-          patch.status === "officialized"
-            ? ("verified" as const)
-            : ("reference" as const),
-        metadata: {
-          status: patch.status,
-          streetName: patch.street_name,
-          area: patch.area,
-          postalCode: patch.postal_code,
+      if (!point) return [];
+
+      return [
+        {
+          id: `pantavion:${String(patch.patch_id)}`,
+          source: "pantavion",
+          label: patchLabel(patch),
+          latitude: point.latitude,
+          longitude: point.longitude,
+          confidence:
+            patch.status === "approved_overlay" ||
+            patch.status === "officialization_candidate" ||
+            patch.status === "officialized"
+              ? "verified"
+              : "reference",
+          metadata: {
+            status: patch.status,
+            streetName: patch.street_name,
+            area: patch.area,
+            postalCode: patch.postal_code,
+          },
         },
-      };
+      ];
     })
-    .filter((candidate): candidate is SearchCandidate => candidate !== null)
     .slice(0, 8);
 }
 
@@ -241,9 +243,10 @@ async function dlsCandidates(query: string): Promise<SearchCandidate[]> {
   };
 
   return (json.results ?? [])
-    .map((result, index) => {
+    .flatMap<SearchCandidate>((result, index) => {
       const point = geometryPoint(result.geometry);
-      if (!point) return null;
+      if (!point) return [];
+
       const label =
         clean(result.value, 500) ||
         clean(result.attributes?.ROAD_NAME, 500) ||
@@ -251,21 +254,22 @@ async function dlsCandidates(query: string): Promise<SearchCandidate[]> {
         clean(result.layerName, 200) ||
         query;
 
-      return {
-        id: `dls:${result.layerId ?? "x"}:${index}`,
-        source: "dls" as const,
-        label,
-        latitude: point.latitude,
-        longitude: point.longitude,
-        confidence: "reference" as const,
-        metadata: {
-          layerId: result.layerId,
-          layerName: result.layerName,
-          foundFieldName: result.foundFieldName,
+      return [
+        {
+          id: `dls:${result.layerId ?? "x"}:${index}`,
+          source: "dls",
+          label,
+          latitude: point.latitude,
+          longitude: point.longitude,
+          confidence: "reference",
+          metadata: {
+            layerId: result.layerId,
+            layerName: result.layerName,
+            foundFieldName: result.foundFieldName,
+          },
         },
-      };
+      ];
     })
-    .filter((candidate): candidate is SearchCandidate => candidate !== null)
     .slice(0, 8);
 }
 
@@ -297,21 +301,23 @@ async function osmCandidates(query: string): Promise<SearchCandidate[]> {
   }>;
 
   return json
-    .map((result) => {
+    .flatMap<SearchCandidate>((result) => {
       const latitude = finite(result.lat);
       const longitude = finite(result.lon);
-      if (latitude === null || longitude === null) return null;
-      return {
-        id: `osm:${result.place_id ?? `${latitude}:${longitude}`}`,
-        source: "osm" as const,
-        label: clean(result.display_name, 800) || query,
-        latitude,
-        longitude,
-        confidence: "external" as const,
-        metadata: { type: result.type, class: result.class },
-      };
-    })
-    .filter((candidate): candidate is SearchCandidate => candidate !== null);
+      if (latitude === null || longitude === null) return [];
+
+      return [
+        {
+          id: `osm:${result.place_id ?? `${latitude}:${longitude}`}`,
+          source: "osm",
+          label: clean(result.display_name, 800) || query,
+          latitude,
+          longitude,
+          confidence: "external",
+          metadata: { type: result.type, class: result.class },
+        },
+      ];
+    });
 }
 
 export async function GET(request: Request) {
