@@ -4,15 +4,15 @@ import WaterDerivedMapClient from "../components/water-derived-map-client";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Pantavion Water C Intelligent Map",
+  title: "Pantavion Water Engineering Intelligence",
   description:
-    "Protected C intelligent water map preview with controlled engineering layers.",
+    "Protected engineering intelligence workspace built on verified source maps and approved overlays.",
 };
 
 export default function WaterCIntelligentMapPage() {
   return (
     <>
-      <WaterMapNavigation title="C Intelligent Map" />
+      <WaterMapNavigation title="Engineering Intelligence" />
       <WaterDerivedMapClient mode="c" />
     </>
   );
