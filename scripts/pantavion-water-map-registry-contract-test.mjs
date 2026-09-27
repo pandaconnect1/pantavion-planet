@@ -15,6 +15,13 @@ assert(contract.doctrine.arbitraryFutureMapIdsAllowed === true, "Registry must n
 assert(contract.doctrine.legacyAbcBackwardCompatible === true, "A/B/C compatibility must remain.");
 assert(contract.doctrine.rawMasterBrowserExposureAllowed === false, "Raw master browser exposure must remain forbidden.");
 assert(contract.doctrine.browserFullDatasetLoadAllowed === false, "Full dataset browser loading must remain forbidden.");
+assert(contract.artifactIntakePolicy.acceptsAnyArtifactFormat === true, "Universal intake must accept any artifact format.");
+assert(contract.artifactIntakePolicy.acceptsMobileUploads === true, "Mobile uploads must be accepted.");
+assert(contract.artifactIntakePolicy.acceptsPhotosScansAndPdf === true, "Photos, scans and PDFs must be accepted.");
+assert(contract.artifactIntakePolicy.acceptsUnknownFutureFormats === true, "Unknown future formats must be preserved.");
+assert(contract.artifactIntakePolicy.unknownFormatsRejectedForLackOfRenderer === false, "Missing renderer must never mean file rejection.");
+assert(contract.artifactIntakePolicy.renderabilityIsSeparateFromAcceptance === true, "Acceptance and layer renderability must remain separate.");
+assert(contract.artifactIntakePolicy.preserveOriginalBytesBeforeConversion === true, "Original bytes must be preserved before conversion.");
 
 const builtInIds = contract.maps.map((entry) => entry.mapId);
 assert(builtInIds.includes("A"), "Legacy Map A must remain registered.");
@@ -138,3 +145,4 @@ console.log("- A/B/C backward compatibility preserved");
 console.log("- D/E/future map ids supported through one registry");
 console.log("- ArcGIS/WMS/WMTS/OGC and common file formats registered");
 console.log("- raw source and full-browser-dataset exposure forced off");
+console.log("- photos/PDF/scans/unknown future formats are accepted and preserved even without a renderer");
