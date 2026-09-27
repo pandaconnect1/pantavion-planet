@@ -18,6 +18,7 @@ const REQUIRED_PROTECTED_PATHS = [
   ".github/workflows/pantavion-water-network-lock.yml",
   "app/api/professional/infrastructure/water/access/authorize/route.ts",
   "app/api/professional/infrastructure/water/admin/session/route.ts",
+  "app/api/professional/infrastructure/water/mapserver/0/query/route.ts",
   "app/api/professional/infrastructure/water/segment/bbox/route.ts",
   "app/professional/infrastructure/water/admin/access/page.tsx",
   "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx",
