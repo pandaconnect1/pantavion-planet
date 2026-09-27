@@ -40,6 +40,85 @@ type Bbox = {
   maxLat: number;
 };
 
+type ApprovedMapAPatch = {
+  patch_id: string;
+  asset_type: string;
+  operation: string;
+  status: string;
+  map_id: string;
+  source_key?: string | null;
+  geometry_type: "Point" | "LineString" | "Polygon";
+  geometry: {
+    type?: string;
+    coordinates?: unknown;
+  };
+  crs_authority?: string | null;
+  crs_code?: string | null;
+  street_name?: string | null;
+  artifact_refs?: string[] | null;
+  attributes?: Record<string, unknown> | null;
+};
+
+type ApprovedMapAEvidencePin = {
+  pin_id: string;
+  review_state: string;
+  map_id: string;
+  source_key?: string | null;
+  x: number;
+  y: number;
+  crs_authority?: string | null;
+  crs_code?: string | null;
+  street_name?: string | null;
+  note?: string | null;
+  artifact_refs?: string[] | null;
+};
+
+type ApprovedPatchResponse = {
+  ok?: boolean;
+  error?: string;
+  patches?: ApprovedMapAPatch[];
+};
+
+type ApprovedPinResponse = {
+  ok?: boolean;
+  error?: string;
+  pins?: ApprovedMapAEvidencePin[];
+};
+
+type RemovableWaterLayer = {
+  remove: () => void;
+};
+
+function coordinatePair(value: unknown): [number, number] | null {
+  if (!Array.isArray(value) || value.length < 2) return null;
+
+  const x = Number(value[0]);
+  const y = Number(value[1]);
+
+  return Number.isFinite(x) && Number.isFinite(y) ? [x, y] : null;
+}
+
+function lineCoordinates(value: unknown): Array<[number, number]> {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .map((item) => coordinatePair(item))
+    .filter((item): item is [number, number] => item !== null);
+}
+
+function polygonCoordinates(value: unknown): Array<Array<[number, number]>> {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .map((ring) => lineCoordinates(ring))
+    .filter((ring) => ring.length >= 3);
+}
+
+function fieldArtifactRequestId(reference: string) {
+  const prefix = "water-field-artifact:";
+  return reference.startsWith(prefix) ? reference.slice(prefix.length) : null;
+}
+
 const UI = {
   el: {
     title: "Δίκτυο Ύδρευσης Pantavion",
@@ -525,6 +604,8 @@ export default function ControlledWaterSegmentClient() {
   const [accessMessage, setAccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [pipeCount, setPipeCount] = useState<number | null>(null);
+  const [approvedChangeCount, setApprovedChangeCount] = useState(0);
+  const [approvedEvidenceCount, setApprovedEvidenceCount] = useState(0);
   const [mapReady, setMapReady] = useState(false);
 
   const mapEl = useRef<HTMLDivElement | null>(null);
@@ -533,6 +614,7 @@ export default function ControlledWaterSegmentClient() {
   const userMarkerRef = useRef<any>(null);
   const userAccuracyRef = useRef<any>(null);
   const searchMarkerRef = useRef<any>(null);
+  const approvedOverlayRef = useRef<RemovableWaterLayer | null>(null);
   const autoLoadTimerRef = useRef<number | null>(null);
   const loadInProgressRef = useRef(false);
 
@@ -866,7 +948,7 @@ export default function ControlledWaterSegmentClient() {
       );
 
       window.setTimeout(() => {
-        void loadPipes();
+        void refreshVisibleWaterMap();
       }, 1100);
     };
 
@@ -1079,7 +1161,7 @@ export default function ControlledWaterSegmentClient() {
         setMessage(t.searchFound);
 
         window.setTimeout(() => {
-          void loadPipes();
+          void refreshVisibleWaterMap();
         }, 1100);
 
         return;
@@ -1101,6 +1183,280 @@ export default function ControlledWaterSegmentClient() {
       setLoading(false);
     }
   }
+  async function openApprovedFieldArtifact(reference: string) {
+    const requestId = fieldArtifactRequestId(reference);
+    if (!requestId) {
+      setMessage("Το evidence reference δεν είναι έγκυρο field artifact.");
+      return;
+    }
+
+    const device = getOrCreateWaterAccessDevice();
+
+    try {
+      const response = await fetch(
+        `/api/professional/infrastructure/water/field/evidence-upload/${encodeURIComponent(
+          requestId,
+        )}`,
+        {
+          cache: "no-store",
+          credentials: "include",
+          signal: AbortSignal.timeout(8000),
+          headers: {
+            "x-pantavion-water-device-id": device.deviceId,
+            "x-pantavion-water-device-token": device.deviceToken,
+          },
+        },
+      );
+
+      const payload = (await response.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        signedUrl?: string;
+      };
+
+      if (!response.ok || !payload.ok || !payload.signedUrl) {
+        throw new Error(payload.error || "water_field_artifact_access_failed");
+      }
+
+      window.open(payload.signedUrl, "_blank", "noopener,noreferrer");
+    } catch {
+      setMessage("Δεν άνοιξε το private evidence. Δοκίμασε ξανά από εγκεκριμένη συσκευή.");
+    }
+  }
+
+  function buildApprovedOverlayPopup(options: {
+    title: string;
+    subtitle?: string | null;
+    detail?: string | null;
+    artifactRefs?: string[] | null;
+  }) {
+    const container = document.createElement("div");
+    container.style.minWidth = "220px";
+
+    const heading = document.createElement("strong");
+    heading.textContent = options.title;
+    container.appendChild(heading);
+
+    if (options.subtitle) {
+      const subtitle = document.createElement("div");
+      subtitle.textContent = options.subtitle;
+      subtitle.style.marginTop = "6px";
+      container.appendChild(subtitle);
+    }
+
+    if (options.detail) {
+      const detail = document.createElement("div");
+      detail.textContent = options.detail;
+      detail.style.marginTop = "6px";
+      container.appendChild(detail);
+    }
+
+    for (const reference of options.artifactRefs || []) {
+      if (!fieldArtifactRequestId(reference)) continue;
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = "Άνοιγμα private evidence";
+      button.style.display = "block";
+      button.style.marginTop = "10px";
+      button.style.fontWeight = "700";
+      button.addEventListener("click", () => {
+        void openApprovedFieldArtifact(reference);
+      });
+      container.appendChild(button);
+    }
+
+    return container;
+  }
+
+  async function loadApprovedMapAChanges() {
+    const map = mapRef.current;
+
+    if (!map || !accessApproved) return;
+
+    const bbox = bboxFromMap(map);
+    const device = getOrCreateWaterAccessDevice();
+    const params = new URLSearchParams({
+      mapId: "A",
+      minX: String(bbox.minLng),
+      minY: String(bbox.minLat),
+      maxX: String(bbox.maxLng),
+      maxY: String(bbox.maxLat),
+      limit: "300",
+    });
+
+    try {
+      const [patchResponse, pinResponse] = await Promise.all([
+        fetch(
+          `/api/professional/infrastructure/water/changes/patches?${params.toString()}`,
+          {
+            cache: "no-store",
+            credentials: "include",
+            signal: AbortSignal.timeout(8000),
+            headers: {
+              "x-pantavion-water-device-id": device.deviceId,
+              "x-pantavion-water-device-token": device.deviceToken,
+            },
+          },
+        ),
+        fetch(
+          `/api/professional/infrastructure/water/changes/evidence-pins?${params.toString()}`,
+          {
+            cache: "no-store",
+            credentials: "include",
+            signal: AbortSignal.timeout(8000),
+            headers: {
+              "x-pantavion-water-device-id": device.deviceId,
+              "x-pantavion-water-device-token": device.deviceToken,
+            },
+          },
+        ),
+      ]);
+
+      if (
+        patchResponse.status === 401 ||
+        patchResponse.status === 403 ||
+        pinResponse.status === 401 ||
+        pinResponse.status === 403
+      ) {
+        clearLegacyWaterDeviceApproval();
+        setAccessState("denied");
+        return;
+      }
+
+      const patchPayload =
+        (await patchResponse.json().catch(() => ({}))) as ApprovedPatchResponse;
+      const pinPayload =
+        (await pinResponse.json().catch(() => ({}))) as ApprovedPinResponse;
+
+      if (!patchResponse.ok || !patchPayload.ok) {
+        throw new Error(patchPayload.error || "water_approved_patch_load_failed");
+      }
+
+      if (!pinResponse.ok || !pinPayload.ok) {
+        throw new Error(pinPayload.error || "water_approved_pin_load_failed");
+      }
+
+      const approvedPatchStatuses = new Set([
+        "approved_overlay",
+        "officialization_candidate",
+        "officialized",
+      ]);
+
+      const patches = (patchPayload.patches || []).filter(
+        (patch) =>
+          patch.map_id === "A" &&
+          approvedPatchStatuses.has(patch.status) &&
+          patch.crs_authority === "EPSG" &&
+          patch.crs_code === "4326",
+      );
+
+      const pins = (pinPayload.pins || []).filter(
+        (pin) =>
+          pin.map_id === "A" &&
+          pin.review_state === "approved" &&
+          pin.crs_authority === "EPSG" &&
+          pin.crs_code === "4326" &&
+          Number.isFinite(pin.x) &&
+          Number.isFinite(pin.y),
+      );
+
+      const L = await ensureLeaflet();
+      const nextLayer = L.layerGroup();
+
+      for (const patch of patches) {
+        let layer = null;
+
+        if (patch.geometry_type === "Point") {
+          const point = coordinatePair(patch.geometry.coordinates);
+          if (!point) continue;
+          const [lng, lat] = point;
+          layer = L.circleMarker([lat, lng], {
+            radius: 8,
+            color: "#065f46",
+            weight: 2,
+            fillColor: "#34d399",
+            fillOpacity: 0.9,
+          });
+        } else if (patch.geometry_type === "LineString") {
+          const coordinates = lineCoordinates(patch.geometry.coordinates);
+          if (coordinates.length < 2) continue;
+          layer = L.polyline(
+            coordinates.map(([lng, lat]) => [lat, lng]),
+            {
+              color: "#10b981",
+              weight: 5,
+              opacity: 0.95,
+              dashArray: "8 5",
+            },
+          );
+        } else if (patch.geometry_type === "Polygon") {
+          const rings = polygonCoordinates(patch.geometry.coordinates);
+          if (!rings.length) continue;
+          layer = L.polygon(
+            rings.map((ring) =>
+              ring.map(([lng, lat]) => [lat, lng]),
+            ),
+            {
+              color: "#059669",
+              weight: 3,
+              fillColor: "#6ee7b7",
+              fillOpacity: 0.18,
+            },
+          );
+        }
+
+        if (!layer) continue;
+
+        layer.bindPopup(
+          buildApprovedOverlayPopup({
+            title: `Approved ${patch.asset_type}`,
+            subtitle: patch.street_name || patch.status,
+            detail: `${patch.operation} · ${patch.status}`,
+            artifactRefs: patch.artifact_refs,
+          }),
+        );
+        layer.addTo(nextLayer);
+      }
+
+      for (const pin of pins) {
+        const marker = L.circleMarker([pin.y, pin.x], {
+          radius: 7,
+          color: "#7c3aed",
+          weight: 2,
+          fillColor: "#c4b5fd",
+          fillOpacity: 0.95,
+        });
+
+        marker.bindPopup(
+          buildApprovedOverlayPopup({
+            title: "Approved field evidence",
+            subtitle: pin.street_name || "Map A evidence pin",
+            detail: pin.note || null,
+            artifactRefs: pin.artifact_refs,
+          }),
+        );
+        marker.addTo(nextLayer);
+      }
+
+      if (approvedOverlayRef.current) {
+        approvedOverlayRef.current.remove();
+      }
+
+      nextLayer.addTo(map);
+      approvedOverlayRef.current = nextLayer;
+      setApprovedChangeCount(patches.length);
+      setApprovedEvidenceCount(pins.length);
+    } catch {
+      // Keep the last successfully rendered approved overlay on transient failure.
+    }
+  }
+
+  async function refreshVisibleWaterMap() {
+    await loadPipes();
+    await loadApprovedMapAChanges();
+  }
+
   async function loadPipes() {
     const map = mapRef.current;
 
@@ -1297,13 +1653,13 @@ export default function ControlledWaterSegmentClient() {
       clearAutoLoadTimer();
 
       autoLoadTimerRef.current = window.setTimeout(() => {
-        void loadPipes();
+        void refreshVisibleWaterMap();
       }, 900);
     }
 
     // Load the first authentic Map A segment immediately once the approved
     // device and Leaflet map are both ready. Pan/zoom refreshes stay debounced.
-    void loadPipes();
+    void refreshVisibleWaterMap();
     map.on("moveend zoomend", scheduleAutoLoad);
 
     return () => {
@@ -1515,6 +1871,9 @@ export default function ControlledWaterSegmentClient() {
             <h2 className="text-xl font-black text-[#f2c766] sm:text-2xl">{t.map}</h2>
             <span className="text-sm text-slate-300">
               {pipeCount !== null ? `${t.loaded}: ${pipeCount}` : t.protected}
+              {approvedChangeCount > 0 || approvedEvidenceCount > 0
+                ? ` · approved changes ${approvedChangeCount} · evidence ${approvedEvidenceCount}`
+                : ""}
             </span>
           </div>
 
