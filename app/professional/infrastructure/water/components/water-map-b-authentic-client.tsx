@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { assessWaterMapBPosition } from "@/core/water/water-map-b-position-truth";
 import {
@@ -40,6 +40,59 @@ type OwnerFunctionPayload = {
   sha256?: string;
   expectedSizeBytes?: number;
   expectedSha256?: string;
+};
+
+type CadRuntimePoint = {
+  x?: number;
+  y?: number;
+  z?: number;
+  clone?: () => CadRuntimePoint;
+};
+
+type CadRuntimeEntity = {
+  type?: string;
+  objectId?: string;
+  layer?: string;
+  textString?: string;
+  contents?: string;
+  position?: CadRuntimePoint;
+  location?: CadRuntimePoint;
+  alignmentPoint?: CadRuntimePoint;
+  contentBasePosition?: CadRuntimePoint;
+};
+
+type CadRuntimeBlockRecord = {
+  newIterator?: () => Iterable<CadRuntimeEntity>;
+};
+
+type CadRuntimeManager = {
+  openDocument: (
+    fileName: string,
+    content: ArrayBuffer,
+    options: { minimumChunkSize: number; readOnly: boolean },
+  ) => Promise<unknown>;
+  curDocument?: {
+    database?: {
+      tables?: {
+        blockTable?: {
+          getAt?: (name: string) => CadRuntimeBlockRecord | undefined;
+        };
+      };
+    };
+  };
+  curView?: {
+    center?: CadRuntimePoint;
+    zoomToFitLayer?: (layerName: string) => boolean;
+  };
+};
+
+type DwgLabelEntry = {
+  objectId: string;
+  type: string;
+  layer: string;
+  text: string;
+  x: number | null;
+  y: number | null;
 };
 
 class MapBOwnerFunctionError extends Error {
@@ -104,8 +157,97 @@ async function sha256Hex(file: File) {
     .join("");
 }
 
+function normalizeDwgLabelText(value: unknown) {
+  if (typeof value !== "string") return "";
+
+  return value
+    .replace(/\\P/gi, " ")
+    .replace(/\\[A-Za-z][^;]{0,120};/g, " ")
+    .replace(/[{}]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 300);
+}
+
+function searchKey(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("el-GR");
+}
+
+function entityPoint(entity: CadRuntimeEntity) {
+  const candidates = [
+    entity.position,
+    entity.location,
+    entity.alignmentPoint,
+    entity.contentBasePosition,
+  ];
+
+  for (const point of candidates) {
+    if (!point) continue;
+    const x = Number(point.x);
+    const y = Number(point.y);
+    if (Number.isFinite(x) && Number.isFinite(y)) {
+      return { x, y };
+    }
+  }
+
+  return null;
+}
+
+function buildDwgLabelIndex(manager: CadRuntimeManager) {
+  const modelSpace =
+    manager.curDocument?.database?.tables?.blockTable?.getAt?.("*Model_Space");
+  const iterator = modelSpace?.newIterator?.();
+  if (!iterator) return [] as DwgLabelEntry[];
+
+  const entries: DwgLabelEntry[] = [];
+  const seen = new Set<string>();
+
+  for (const entity of iterator) {
+    const type = String(entity.type || "");
+    const typeKey = type.toLowerCase();
+    if (
+      !typeKey.includes("text") &&
+      !typeKey.includes("attribute") &&
+      !typeKey.includes("mleader")
+    ) {
+      continue;
+    }
+
+    const text = normalizeDwgLabelText(
+      entity.textString ?? entity.contents ?? "",
+    );
+    if (!text || text.length < 2) continue;
+
+    const layer = String(entity.layer || "0");
+    const point = entityPoint(entity);
+    const objectId = String(entity.objectId || "");
+    const dedupeKey =
+      [searchKey(text), searchKey(layer), point?.x ?? "", point?.y ?? ""].join("|");
+
+    if (seen.has(dedupeKey)) continue;
+    seen.add(dedupeKey);
+
+    entries.push({
+      objectId,
+      type,
+      layer,
+      text,
+      x: point?.x ?? null,
+      y: point?.y ?? null,
+    });
+
+    if (entries.length >= 50000) break;
+  }
+
+  return entries;
+}
+
 export default function WaterMapBAuthenticClient() {
   const cadContainerRef = useRef<HTMLDivElement | null>(null);
+  const cadManagerRef = useRef<CadRuntimeManager | null>(null);
   const [sourceKey, setSourceKey] =
     useState<WaterMapBSourceKey>("canonical-2026-andreaspap");
   const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
@@ -115,6 +257,26 @@ export default function WaterMapBAuthenticClient() {
   const [uploadLabel, setUploadLabel] = useState("");
   const [position, setPosition] = useState<PositionState>(null);
   const [locating, setLocating] = useState(false);
+  const [dwgLabels, setDwgLabels] = useState<DwgLabelEntry[]>([]);
+  const [labelQuery, setLabelQuery] = useState("");
+  const [selectedLabel, setSelectedLabel] = useState<DwgLabelEntry | null>(null);
+
+  const labelMatches = useMemo(() => {
+    const query = searchKey(labelQuery.trim());
+    if (!query) return [];
+
+    return dwgLabels
+      .filter((entry) => searchKey(entry.text).includes(query))
+      .sort((left, right) => {
+        const leftKey = searchKey(left.text);
+        const rightKey = searchKey(right.text);
+        const leftStarts = leftKey.startsWith(query) ? 0 : 1;
+        const rightStarts = rightKey.startsWith(query) ? 0 : 1;
+        if (leftStarts !== rightStarts) return leftStarts - rightStarts;
+        return left.text.localeCompare(right.text, "el");
+      })
+      .slice(0, 20);
+  }, [dwgLabels, labelQuery]);
 
   async function openSignedMapB(signedUrl: string) {
     if (!cadContainerRef.current) return;
@@ -125,9 +287,9 @@ export default function WaterMapBAuthenticClient() {
     if (!AcApDocManager) throw new Error("CAD_VIEWER_MODULE_NOT_AVAILABLE");
     if (!cadContainerRef.current) return;
 
-    let manager: any;
+    let manager: CadRuntimeManager;
     try {
-      manager = AcApDocManager.instance;
+      manager = AcApDocManager.instance as CadRuntimeManager;
     } catch {
       AcApDocManager.createInstance({
         container: cadContainerRef.current,
@@ -135,8 +297,9 @@ export default function WaterMapBAuthenticClient() {
         webworkerFileUrls: CAD_WORKERS,
         checkWorkersOnInit: true,
       });
-      manager = AcApDocManager.instance;
+      manager = AcApDocManager.instance as CadRuntimeManager;
     }
+    cadManagerRef.current = manager;
 
     const response = await fetch(signedUrl, {
       method: "GET",
@@ -155,6 +318,10 @@ export default function WaterMapBAuthenticClient() {
       readOnly: true,
     });
 
+    const nextLabels = buildDwgLabelIndex(manager);
+    setDwgLabels(nextLabels);
+    setLabelQuery("");
+    setSelectedLabel(null);
     setViewerState("ready");
     setViewerError("");
   }
@@ -196,6 +363,9 @@ export default function WaterMapBAuthenticClient() {
   }, []);
 
   useEffect(() => {
+    setDwgLabels([]);
+    setLabelQuery("");
+    setSelectedLabel(null);
     void loadVerifiedMapB();
     // Reload when switching between the two authentic DWG sources.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -255,6 +425,26 @@ export default function WaterMapBAuthenticClient() {
     } finally {
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
+  }
+
+  function focusDwgLabel(entry: DwgLabelEntry) {
+    const manager = cadManagerRef.current;
+    const view = manager?.curView;
+    if (!view) return;
+
+    if (entry.x !== null && entry.y !== null && view.center) {
+      const nextCenter =
+        typeof view.center.clone === "function"
+          ? view.center.clone()
+          : { ...view.center };
+      nextCenter.x = entry.x;
+      nextCenter.y = entry.y;
+      view.center = nextCenter;
+    } else if (entry.layer && typeof view.zoomToFitLayer === "function") {
+      view.zoomToFitLayer(entry.layer);
+    }
+
+    setSelectedLabel(entry);
   }
 
   function locateMe() {
@@ -320,6 +510,77 @@ export default function WaterMapBAuthenticClient() {
       </div>
 
       <div ref={cadContainerRef} className="h-[calc(100vh-72px)] min-h-[680px] w-full bg-black" />
+
+      {viewerState === "ready" ? (
+        <section className="absolute left-4 top-16 z-40 w-[min(92vw,390px)] rounded-2xl border border-cyan-300/25 bg-black/90 p-3 shadow-2xl backdrop-blur">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-cyan-200">
+                DWG label search
+              </p>
+              <p className="mt-1 text-xs text-white/65">
+                {dwgLabels.length.toLocaleString("el-GR")} TEXT/MTEXT labels στο model space
+              </p>
+            </div>
+            <a
+              href="/professional/infrastructure/water/location"
+              className="shrink-0 rounded-lg border border-white/15 px-2 py-1 text-[10px] font-black text-white/80"
+            >
+              Επίσημη οδός
+            </a>
+          </div>
+
+          <input
+            type="search"
+            value={labelQuery}
+            onChange={(event) => setLabelQuery(event.target.value)}
+            placeholder="Γράψε οδό ή label του DWG…"
+            className="mt-3 w-full rounded-xl border border-white/15 bg-[#07111f] px-3 py-2 text-sm text-white outline-none placeholder:text-white/35 focus:border-cyan-300/60"
+          />
+
+          {labelQuery.trim() ? (
+            <div className="mt-2 max-h-60 overflow-y-auto rounded-xl border border-white/10 bg-black/70">
+              {labelMatches.length ? (
+                labelMatches.map((entry, index) => (
+                  <button
+                    key={`${entry.objectId || "label"}-${index}`}
+                    type="button"
+                    onClick={() => focusDwgLabel(entry)}
+                    className="block w-full border-b border-white/10 px-3 py-2 text-left last:border-b-0 hover:bg-white/10"
+                  >
+                    <span className="block text-xs font-black text-white">
+                      {entry.text}
+                    </span>
+                    <span className="mt-1 block text-[10px] text-white/45">
+                      {entry.layer} · {entry.type}
+                      {entry.x !== null && entry.y !== null
+                        ? ` · CAD ${entry.x.toFixed(2)}, ${entry.y.toFixed(2)}`
+                        : ""}
+                    </span>
+                  </button>
+                ))
+              ) : (
+                <p className="px-3 py-3 text-xs text-white/55">
+                  Δεν βρέθηκε αντίστοιχο TEXT/MTEXT στον αυθεντικό DWG. Χρησιμοποίησε «Επίσημη οδός» για DLS/OSM αναζήτηση.
+                </p>
+              )}
+            </div>
+          ) : null}
+
+          {selectedLabel ? (
+            <div className="mt-2 rounded-xl border border-cyan-300/20 bg-cyan-300/5 px-3 py-2 text-[11px] text-cyan-50">
+              <strong>{selectedLabel.text}</strong>
+              <span className="ml-2 text-cyan-100/55">
+                {selectedLabel.layer}
+              </span>
+            </div>
+          ) : null}
+
+          <p className="mt-2 text-[10px] leading-4 text-amber-100/65">
+            Η αναζήτηση διαβάζει labels του ίδιου του DWG. Το GPS δεν τοποθετείται πάνω στον DWG μέχρι να επαληθευτεί CRS/ευθυγράμμιση.
+          </p>
+        </section>
+      ) : null}
 
       {viewerState === "checking" || viewerState === "loading" ? (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black text-sm font-black tracking-wide text-[#f6c85f]">
