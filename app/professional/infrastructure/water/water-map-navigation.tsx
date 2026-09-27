@@ -3,41 +3,13 @@
 import { useRouter } from "next/navigation";
 
 const links = [
-  {
-    href: "/professional/infrastructure/water",
-    label: "Water Home",
-    description: "κέντρο",
-  },
-  {
-    href: "/professional/infrastructure/water/access",
-    label: "Users / Access",
-    description: "αιτήσεις χρηστών",
-  },
-  {
-    href: "/professional/infrastructure/water/admin",
-    label: "Administrator",
-    description: "έγκριση / απόρριψη",
-  },
-  {
-    href: "/professional/infrastructure/water/maps",
-    label: "Maps",
-    description: "πηγές / layers",
-  },
-  {
-    href: "/professional/infrastructure/water/maps/workspace",
-    label: "Map Workspace",
-    description: "ένας χάρτης + fullscreen",
-  },
-  {
-    href: "/professional/infrastructure/water/infrastructure",
-    label: "Utility Layers",
-    description: "δίκτυα / GPS / field check",
-  },
-  {
-    href: "/professional/infrastructure/water/c",
-    label: "Engineering",
-    description: "intelligence workspace",
-  },
+  { href: "/professional/infrastructure/water", label: "Water Home", description: "κέντρο" },
+  { href: "/professional/infrastructure/water/live", label: "Map A", description: "live operational" },
+  { href: "/professional/infrastructure/water/b", label: "Map B", description: "canonical DWG" },
+  { href: "/professional/infrastructure/water/c", label: "Map C", description: "authentic DWG" },
+  { href: "/professional/infrastructure/water/maps", label: "Maps", description: "πηγές / layers" },
+  { href: "/professional/infrastructure/water/infrastructure", label: "Utility Layers", description: "δίκτυα / GPS / field" },
+  { href: "/professional/infrastructure/water/engineering", label: "Engineering", description: "intelligence workspace" },
 ];
 
 export default function WaterMapNavigation({

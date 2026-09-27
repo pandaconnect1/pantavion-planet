@@ -1,0 +1,89 @@
+name: Pantavion Water DWG Derived Worker
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/10 * * * *"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/pantavion-water-dwg-derived-worker.mjs"
+      - "scripts/pantavion-water-map-b-generate-derived.mjs"
+      - "core/water/water-map-b-source-candidates.ts"
+      - ".github/workflows/pantavion-water-dwg-derived-worker.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-water-dwg-derived-worker
+  cancel-in-progress: false
+
+jobs:
+  derive-authentic-water-maps:
+    name: Build missing protected Map B / Map C derived tiles
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+
+    steps:
+      - name: Require canonical Supabase management binding
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${SUPABASE_ACCESS_TOKEN:-}" || { echo "::error::SUPABASE_ACCESS_TOKEN missing"; exit 1; }
+          test -n "${SUPABASE_PROJECT_REF:-}" || { echo "::error::SUPABASE_PROJECT_REF missing"; exit 1; }
+          test "$SUPABASE_PROJECT_REF" = "cxhulvwkagzufbjsdwwu" || {
+            echo "::error::SUPABASE_PROJECT_REF does not match canonical Pantavion production project."
+            exit 1
+          }
+
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Resolve elevated Supabase key without logging it
+        id: supabase-key
+        shell: bash
+        run: |
+          set -euo pipefail
+          key_file="$RUNNER_TEMP/pantavion-water-derived-supabase-key"
+          json_file="$RUNNER_TEMP/pantavion-water-derived-api-keys.json"
+          umask 077
+          supabase projects api-keys --project-ref "$SUPABASE_PROJECT_REF" --output json > "$json_file"
+          jq -r '[.[] | select((.type == "secret") or (.name == "service_role")) | .api_key][0] // empty' "$json_file" > "$key_file"
+          rm -f "$json_file"
+          key=$(cat "$key_file")
+          if [ ${#key} -lt 32 ]; then
+            echo "::error::No elevated Supabase key available through authorized Management API."
+            rm -f "$key_file"
+            exit 1
+          fi
+          echo "::add-mask::$key"
+          echo "key_file=$key_file" >> "$GITHUB_OUTPUT"
+
+      - name: Generate only missing verified B/C derived data
+        shell: bash
+        env:
+          KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
+        run: |
+          set -euo pipefail
+          export SUPABASE_SECRET_KEY="$(cat "$KEY_FILE")"
+          export SUPABASE_URL="https://cxhulvwkagzufbjsdwwu.supabase.co"
+          node scripts/pantavion-water-dwg-derived-worker.mjs
+          rm -f "$KEY_FILE"

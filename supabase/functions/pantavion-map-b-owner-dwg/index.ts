@@ -13,6 +13,7 @@ const ALLOWED_ORIGINS = new Set([
 const SOURCES = {
   "canonical-2026-andreaspap": {
     sourceKey: "canonical-2026-andreaspap",
+    mapId: "B",
     canonical: true,
     fileName: "MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg",
     sizeBytes: 205565159,
@@ -21,21 +22,22 @@ const SOURCES = {
       "water-network-private/source-masters/map-b-original/MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg",
     requestId: "map-b-authentic-master-20260927-6d05c02b",
     mapRole: "map-b-authentic-master",
-    versionNumber: 2,
-    versionLabel: "Map B Canonical — ANDREASPAP 2026",
+    versionNumber: 1,
+    versionLabel: "Map B — ANDREASPAP 2026",
   },
   "legacy-george-85m": {
     sourceKey: "legacy-george-85m",
-    canonical: false,
+    mapId: "C",
+    canonical: true,
     fileName: "GEORGE_MAP_MASTER_B_C_FINAL (4).dwg",
     sizeBytes: 85703125,
     sha256: "038b9bceda2a660296a9162723f5279e5a2d10eb18d499b087d0e8ffa393b800",
     storagePath:
-      "water-network-private/source-masters/map-b-candidates/legacy-george-85m/GEORGE_MAP_MASTER_B_C_FINAL (4).dwg",
-    requestId: "map-b-legacy-george-85m-20260927-038b9bce",
-    mapRole: "map-b-legacy-candidate",
+      "water-network-private/source-masters/map-c-original/GEORGE_MAP_MASTER_B_C_FINAL (4).dwg",
+    requestId: "map-c-authentic-master-20260927-038b9bce",
+    mapRole: "map-c-authentic-master",
     versionNumber: 1,
-    versionLabel: "Map B Legacy — GEORGE 85 MB",
+    versionLabel: "Map C — GEORGE 85 MB",
   },
 } as const;
 
@@ -387,7 +389,9 @@ Deno.serve(async (req) => {
           dwgHeader: DWG_HEADER,
           mapRole: source.mapRole,
           sourceKey,
-          canonicalMapBSource: source.canonical,
+          canonicalSource: source.canonical,
+          mapId: source.mapId,
+          mapRole: source.mapRole,
           viewer: "mlightcad-libredwg",
           readOnly: true,
         },
@@ -428,7 +432,7 @@ Deno.serve(async (req) => {
 
       if (!existingVersion) {
         const versionRecord = {
-          map_id: "B",
+          map_id: source.mapId,
           source_key: sourceKey,
           version_number: source.versionNumber,
           label: source.versionLabel,
@@ -450,7 +454,9 @@ Deno.serve(async (req) => {
           metadata: {
             dwgHeader: DWG_HEADER,
             sourceKey,
-            canonicalCandidate: source.canonical,
+            canonicalSource: source.canonical,
+          mapId: source.mapId,
+          mapRole: source.mapRole,
             byteVerified: true,
             geographicAlignmentVerified: false
           }
@@ -468,9 +474,7 @@ Deno.serve(async (req) => {
 
       return json(req, {
         ok: true,
-        status: source.canonical
-          ? "verified_exact_owner_map_b"
-          : "verified_legacy_map_b_candidate",
+        status: `verified_exact_owner_map_${source.mapId.toLowerCase()}`,
         sourceKey,
         canonical: source.canonical,
         fileName: source.fileName,

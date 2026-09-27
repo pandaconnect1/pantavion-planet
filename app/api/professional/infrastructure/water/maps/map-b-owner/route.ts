@@ -70,12 +70,12 @@ async function verifyExactObject(
     .createSignedUrl(source.storagePath, 300);
 
   if (error || !data?.signedUrl) {
-    return { ok: false as const, error: "map_b_source_not_present", status: 404 };
+    return { ok: false as const, error: "water_map_source_not_present", status: 404 };
   }
 
   const response = await fetch(data.signedUrl, { cache: "no-store" });
   if (!response.ok || !response.body) {
-    return { ok: false as const, error: "map_b_source_read_failed", status: 502 };
+    return { ok: false as const, error: "water_map_source_read_failed", status: 502 };
   }
 
   const hash = createHash("sha256");
@@ -105,7 +105,7 @@ async function verifyExactObject(
 
   return {
     ok: verified,
-    error: verified ? null : "map_b_verification_mismatch",
+    error: verified ? null : "water_map_verification_mismatch",
     status: verified ? 200 : 409,
     sizeBytes,
     sha256,
@@ -204,7 +204,7 @@ export async function POST(request: Request) {
         .createSignedUploadUrl(source.storagePath, { upsert: false });
 
       if (error || !data?.token) {
-        throw new Error("map_b_signed_upload_failed");
+        throw new Error("water_map_signed_upload_failed");
       }
 
       return noStore({
@@ -229,7 +229,7 @@ export async function POST(request: Request) {
         if ("sha256" in result && result.sha256) {
           const stamp = new Date().toISOString().replace(/[:.]/g, "-");
           quarantinePath =
-            `water-network-private/quarantine/map-b/${sourceKey}/${stamp}-${result.sha256}.dwg`;
+            `water-network-private/quarantine/map-${source.mapId.toLowerCase()}/${sourceKey}/${stamp}-${result.sha256}.dwg`;
 
           const { error: moveError } = await admin.storage
             .from(BUCKET)
@@ -256,7 +256,7 @@ export async function POST(request: Request) {
       }
 
       const now = new Date().toISOString();
-      const requestId = `map-b-owner-${sourceKey}-${source.sha256.slice(0, 12)}`;
+      const requestId = `water-${source.mapId.toLowerCase()}-owner-${sourceKey}-${source.sha256.slice(0, 12)}`;
       const record = {
         request_id: requestId,
         actor_kind: "admin_session",
@@ -278,7 +278,9 @@ export async function POST(request: Request) {
         metadata: {
           dwgHeader: source.dwgHeader,
           sourceKey,
-          canonicalMapBSource: source.canonical,
+          canonicalSource: source.canonical,
+          mapId: source.mapId,
+          mapRole: source.mapRole,
           viewer: "mlightcad-libredwg",
           readOnly: true,
         },
@@ -321,10 +323,9 @@ export async function POST(request: Request) {
         const { data: insertedVersion, error: versionInsertError } = await admin
           .from("water_map_versions")
           .insert({
-            map_id: "B",
+            map_id: source.mapId,
             source_key: sourceKey,
-            version_number:
-              sourceKey === "legacy-george-85m" ? 1 : 2,
+            version_number: source.versionNumber,
             label: source.label,
             status: "candidate",
             source_ref: `supabase://${BUCKET}/${source.storagePath}`,
@@ -344,7 +345,9 @@ export async function POST(request: Request) {
             metadata: {
               dwgHeader: source.dwgHeader,
               sourceKey,
-              canonicalCandidate: source.canonical,
+              canonicalSource: source.canonical,
+              mapId: source.mapId,
+              mapRole: source.mapRole,
               byteVerified: true,
               geographicAlignmentVerified: false,
             },
@@ -358,9 +361,7 @@ export async function POST(request: Request) {
 
       return noStore({
         ok: true,
-        status: source.canonical
-          ? "verified_exact_owner_map_b"
-          : "verified_legacy_map_b_candidate",
+        status: `verified_exact_owner_map_${source.mapId.toLowerCase()}`,
         sourceKey,
         canonical: source.canonical,
         fileName: source.fileName,
@@ -387,7 +388,7 @@ export async function POST(request: Request) {
 
       if (!verified) {
         return noStore(
-          { ok: false, error: "map_b_source_not_verified", sourceKey },
+          { ok: false, error: "water_map_source_not_verified", sourceKey },
           { status: 409 },
         );
       }
@@ -398,7 +399,7 @@ export async function POST(request: Request) {
 
       if (error || !data?.signedUrl) {
         return noStore(
-          { ok: false, error: "map_b_signed_download_failed", sourceKey },
+          { ok: false, error: "water_map_signed_download_failed", sourceKey },
           { status: 404 },
         );
       }

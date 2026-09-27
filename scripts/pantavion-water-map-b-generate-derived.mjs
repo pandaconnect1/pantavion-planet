@@ -11,6 +11,7 @@ import { Dwg_File_Type, LibreDwg } from "@mlightcad/libredwg-web";
 const SOURCES = {
   "canonical-2026-andreaspap": {
     sourceKey: "canonical-2026-andreaspap",
+    mapId: "B",
     canonical: true,
     fileName: "MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg",
     byteSize: 205565159,
@@ -21,13 +22,14 @@ const SOURCES = {
   },
   "legacy-george-85m": {
     sourceKey: "legacy-george-85m",
-    canonical: false,
+    mapId: "C",
+    canonical: true,
     fileName: "GEORGE_MAP_MASTER_B_C_FINAL (4).dwg",
     byteSize: 85703125,
     sha256: "038b9bceda2a660296a9162723f5279e5a2d10eb18d499b087d0e8ffa393b800",
     dwgHeader: "AC1032",
     storagePath:
-      "water-network-private/source-masters/map-b-candidates/legacy-george-85m/GEORGE_MAP_MASTER_B_C_FINAL (4).dwg",
+      "water-network-private/source-masters/map-c-original/GEORGE_MAP_MASTER_B_C_FINAL (4).dwg",
   },
 };
 
@@ -41,7 +43,7 @@ const EXPECTED = SOURCES[SOURCE_KEY];
 const STORAGE = {
   bucket: "personal-media",
   sourcePath: EXPECTED.storagePath,
-  derivedPrefix: `water-network-private/derived/map-b/${EXPECTED.sha256}`,
+  derivedPrefix: `water-network-private/derived/map-${EXPECTED.mapId.toLowerCase()}/${EXPECTED.sha256}`,
 };
 
 const GENERATOR_VERSION = "pantavion-map-b-derived-v1";
@@ -880,10 +882,11 @@ async function main() {
       ok: true,
       schemaVersion: "pantavion-water-map-b-derived-manifest-v1",
       sourceKey: SOURCE_KEY,
+      mapId: EXPECTED.mapId,
       canonical: EXPECTED.canonical,
       generatorVersion: GENERATOR_VERSION,
       generatedAt: new Date().toISOString(),
-      source: "MASTER_B_DWG",
+      source: `MASTER_${EXPECTED.mapId}_DWG`,
       sourceFileName: EXPECTED.fileName,
       sourceSha256: verified.sha256,
       sourceSizeBytes: verified.size,
@@ -951,6 +954,7 @@ async function main() {
           ok: true,
           marker: "pantavion_water_map_b_derived_generator_v1",
           sourceKey: SOURCE_KEY,
+          mapId: EXPECTED.mapId,
           canonical: EXPECTED.canonical,
           outputDir,
           source: {

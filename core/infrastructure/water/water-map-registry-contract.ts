@@ -117,25 +117,25 @@ const SOURCE_CAPABILITIES: readonly PantavionWaterMapSourceCapability[] = [
 const LEGACY_KEY_BY_ID = {
   A_OPERATIONAL_GEO_MAP: "A",
   B_AUTHENTIC_MASTER_MAP: "B",
-  C_INTELLIGENT_ENGINEERING_MAP: "C",
+  C_AUTHENTIC_MASTER_MAP: "C",
 } as const;
 
 const LEGACY_LAYER_BY_ID = {
   A_OPERATIONAL_GEO_MAP: 0,
   B_AUTHENTIC_MASTER_MAP: 1,
-  C_INTELLIGENT_ENGINEERING_MAP: 2,
+  C_AUTHENTIC_MASTER_MAP: 2,
 } as const;
 
 const LEGACY_SOURCE_KINDS = {
   A_OPERATIONAL_GEO_MAP: ["internal-vector"],
   B_AUTHENTIC_MASTER_MAP: ["dwg", "dxf", "gpkg", "geojson"],
-  C_INTELLIGENT_ENGINEERING_MAP: ["internal-vector", "geojson"],
+  C_AUTHENTIC_MASTER_MAP: ["dwg", "dxf", "gpkg", "geojson"],
 } as const satisfies Record<string, readonly PantavionWaterMapSourceKind[]>;
 
 const LEGACY_DELIVERY_MODE = {
   A_OPERATIONAL_GEO_MAP: "bbox-features",
   B_AUTHENTIC_MASTER_MAP: "protected-derived-render",
-  C_INTELLIGENT_ENGINEERING_MAP: "bbox-features",
+  C_AUTHENTIC_MASTER_MAP: "protected-derived-render",
 } as const satisfies Record<string, PantavionWaterMapDeliveryMode>;
 
 export const pantavionWaterMapRegistryEntries: readonly PantavionWaterMapRegistryEntry[] =

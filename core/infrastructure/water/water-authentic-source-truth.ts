@@ -63,8 +63,8 @@ export const PANTAVION_AUTHENTIC_WATER_SOURCES: readonly PantavionAuthenticWater
     ],
   },
   {
-    id: "B_LEGACY",
-    label: "Legacy Authentic DWG — GEORGE 85.7 MB",
+    id: "C_AUTHENTIC",
+    label: "Map C — Authentic DWG — GEORGE 85.7 MB",
     role: "legacy_master",
     state: "byte_verified_not_ingested",
     authenticSourceRequired: true,
@@ -79,7 +79,7 @@ export const PANTAVION_AUTHENTIC_WATER_SOURCES: readonly PantavionAuthenticWater
       "Library byte verification + water_map_ingest_catalog / water_map_versions when production ingest completes",
     notes: [
       "Exact source bytes verified.",
-      "Kept separate from the canonical master.",
+      "Assigned as authentic Map C and kept separate from Map B canonical master.",
       "Not production-live until private Storage upload, verification, versioning and derived delivery complete.",
     ],
   },

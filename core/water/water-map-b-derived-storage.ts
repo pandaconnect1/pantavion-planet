@@ -7,7 +7,7 @@ export const WATER_MAP_B_DERIVED_STORAGE_BUCKET = "personal-media" as const;
 
 export function waterMapBDerivedPrefix(sourceKey: WaterMapBSourceKey) {
   const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
-  return `water-network-private/derived/map-b/${source.sha256}`;
+  return `water-network-private/derived/map-${source.mapId.toLowerCase()}/${source.sha256}`;
 }
 
 export function waterMapBDerivedManifestPath(sourceKey: WaterMapBSourceKey) {

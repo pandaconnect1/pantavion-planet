@@ -14,7 +14,7 @@ type Props = {
 type SourceChoice =
   | "map-a"
   | "map-b-canonical"
-  | "map-b-legacy";
+  | "map-c";
 
 type UploadAuthorization = {
   ok?: boolean;
@@ -66,11 +66,11 @@ function sourceTruth(choice: SourceChoice) {
     };
   }
 
-  if (choice === "map-b-legacy") {
+  if (choice === "map-c") {
     return {
-      mapId: "B",
+      mapId: "C",
       sourceKey: "legacy-george-85m",
-      label: "Map B Legacy",
+      label: "Map C",
     };
   }
 
@@ -495,7 +495,7 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
         >
           <option value="map-a">Map A — Operational</option>
           <option value="map-b-canonical">Map B — Canonical DWG</option>
-          <option value="map-b-legacy">Map B — Legacy DWG</option>
+          <option value="map-c">Map C — Authentic DWG</option>
         </select>
       </label>
 

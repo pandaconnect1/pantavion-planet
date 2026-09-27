@@ -1,19 +1,15 @@
-import WaterMapNavigation from "../water-map-navigation";
-import WaterDerivedMapClient from "../components/water-derived-map-client";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Pantavion Water Engineering Intelligence",
+  title: "Pantavion Water Map C — Authentic DWG",
   description:
-    "Protected engineering intelligence workspace built on verified source maps and approved overlays.",
+    "Protected approved-user viewer for the authentic Map C derived from the verified GEORGE DWG.",
 };
 
-export default function WaterCIntelligentMapPage() {
-  return (
-    <>
-      <WaterMapNavigation title="Engineering Intelligence" />
-      <WaterDerivedMapClient mode="c" />
-    </>
+export default function WaterCMapPage() {
+  redirect(
+    "/professional/infrastructure/water/master-b-mobile?sourceKey=legacy-george-85m",
   );
 }

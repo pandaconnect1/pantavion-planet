@@ -12,7 +12,7 @@ const requiredMarkers = [
   "PANTAVION_WATER_ABC_MAP_SYSTEM_ID",
   "A_OPERATIONAL_GEO_MAP",
   "B_AUTHENTIC_MASTER_MAP",
-  "C_INTELLIGENT_ENGINEERING_MAP",
+  "C_AUTHENTIC_MASTER_MAP",
   "approvedUserSeesAMap: true",
   "approvedUserSeesBMap: true",
   "approvedUserSeesCMap: true",

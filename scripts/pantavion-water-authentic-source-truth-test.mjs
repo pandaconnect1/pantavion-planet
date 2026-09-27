@@ -17,7 +17,7 @@ const canonical = PANTAVION_AUTHENTIC_WATER_SOURCES.find(
   (item) => item.id === "B_CANONICAL",
 );
 const legacy = PANTAVION_AUTHENTIC_WATER_SOURCES.find(
-  (item) => item.id === "B_LEGACY",
+  (item) => item.id === "C_AUTHENTIC",
 );
 
 assert.ok(a);
