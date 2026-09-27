@@ -96,6 +96,42 @@ export default function WaterMapsPage() {
             ))}
           </div>
 
+          <section className="mt-7 rounded-3xl border border-white/10 bg-black/20 p-5">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-[#d8b45f]">
+              Αυτούσια προβολή
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              Δες τους B και C ακριβώς όπως είναι
+            </h2>
+            <p className="mt-3 max-w-4xl text-sm leading-7 text-slate-300">
+              Αυτά τα κουμπιά ανοίγουν τις ίδιες τις υπάρχουσες προβολές B και C
+              χωρίς να περνούν πρώτα από το κοινό Water Map Workspace.
+            </p>
+
+            <div className="mt-4 flex flex-wrap gap-3">
+              <a
+                href="/professional/infrastructure/water/b"
+                className="rounded-2xl border border-emerald-400/40 bg-emerald-950/30 px-4 py-3 text-sm font-black text-emerald-100"
+              >
+                Map B · Authentic DWG
+              </a>
+
+              <a
+                href="/professional/infrastructure/water/master-b-mobile?sourceKey=canonical-2026-andreaspap"
+                className="rounded-2xl border border-[#d8b45f]/50 bg-[#d8b45f]/10 px-4 py-3 text-sm font-black text-[#f3db9d]"
+              >
+                Map B · Mobile Derived
+              </a>
+
+              <a
+                href="/professional/infrastructure/water/c"
+                className="rounded-2xl border border-cyan-400/40 bg-cyan-950/30 px-4 py-3 text-sm font-black text-cyan-100"
+              >
+                Map C · Intelligence
+              </a>
+            </div>
+          </section>
+
           <div className="mt-7 flex flex-wrap gap-3">
             <a
               href="/professional/infrastructure/water/maps/compare"
