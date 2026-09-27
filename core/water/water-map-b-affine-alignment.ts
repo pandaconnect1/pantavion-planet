@@ -135,6 +135,32 @@ export function applyWaterMapBAffineTransform(
   return { longitude, latitude };
 }
 
+export function invertWaterMapBAffineTransform(
+  transform: Pick<WaterMapBAffineTransform, "longitude" | "latitude">,
+  longitude: number,
+  latitude: number,
+) {
+  const { a, b, c } = transform.longitude;
+  const { d, e, f } = transform.latitude;
+  const determinant = a * e - b * d;
+
+  if (!Number.isFinite(determinant) || Math.abs(determinant) < 1e-18) {
+    throw new Error("water_map_alignment_transform_not_invertible");
+  }
+
+  const lon = longitude - c;
+  const lat = latitude - f;
+
+  const sourceX = (e * lon - b * lat) / determinant;
+  const sourceY = (-d * lon + a * lat) / determinant;
+
+  if (!Number.isFinite(sourceX) || !Number.isFinite(sourceY)) {
+    throw new Error("water_map_alignment_inverse_not_finite");
+  }
+
+  return { sourceX, sourceY };
+}
+
 export function calculateWaterMapBAffineTransform(
   controlPoints: WaterMapBControlPoint[],
 ): WaterMapBAffineTransform {
