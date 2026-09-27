@@ -15,7 +15,6 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
 const BUCKET = "personal-media";
-const DWG_HEADER = "AC1032";
 
 function noStore(body: unknown, init: ResponseInit = {}) {
   const headers = new Headers(init.headers);
