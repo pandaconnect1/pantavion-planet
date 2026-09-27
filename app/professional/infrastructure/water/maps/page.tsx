@@ -27,11 +27,11 @@ const sourceMaps = [
   },
   {
     label: "SOURCE MAP 3",
-    title: "Map B — Legacy DWG",
+    title: "Map C — Authentic DWG",
     status: "AUTHENTIC · BYTE VERIFIED · NOT LIVE YET",
     description:
-      "Το αυθεντικό legacy GEORGE 85.7 MB DWG έχει επαληθευτεί byte-for-byte και παραμένει ξεχωριστό από το canonical master. Δεν θεωρείται production-live πριν από ingest/versioning/derived delivery.",
-    href: "/professional/infrastructure/water/maps/workspace?source=B_LEGACY",
+      "Το αυθεντικό GEORGE 85.7 MB DWG έχει επαληθευτεί byte-for-byte και αποτελεί τον ξεχωριστό Map C. Δεν θεωρείται production-live πριν από private ingest, verification, versioning και derived delivery.",
+    href: "/professional/infrastructure/water/maps/workspace?source=C",
     action: "Άνοιγμα στο Workspace",
   },
 ] as const;
@@ -118,9 +118,10 @@ export default function WaterMapsPage() {
               Αυθεντικό DWG και ξεχωριστό Engineering Workspace
             </h2>
             <p className="mt-3 max-w-4xl text-sm leading-7 text-slate-300">
-              Το Map B ανοίγει μόνο όταν το ακριβές verified DWG υπάρχει στο
-              private production storage. Το Engineering Workspace είναι αναλυτική
-              επιφάνεια πάνω από εγκεκριμένα source δεδομένα και δεν είναι τρίτο master.
+              Οι Map B και Map C είναι δύο ξεχωριστοί αυθεντικοί DWG masters.
+              Ανοίγουν μόνο όταν το ακριβές verified αρχείο τους υπάρχει στο private
+              production storage. Το Engineering Workspace παραμένει ξεχωριστή
+              αναλυτική επιφάνεια και δεν αντικαθιστά κανέναν από τους τρεις χάρτες.
             </p>
 
             <div className="mt-4 flex flex-wrap gap-3">
@@ -132,15 +133,15 @@ export default function WaterMapsPage() {
               </a>
 
               <a
-                href="/professional/infrastructure/water/master-b-mobile?sourceKey=canonical-2026-andreaspap"
-                className="rounded-2xl border border-[#d8b45f]/50 bg-[#d8b45f]/10 px-4 py-3 text-sm font-black text-[#f3db9d]"
+                href="/professional/infrastructure/water/engineering"
+                className="rounded-2xl border border-cyan-400/40 bg-cyan-950/30 px-4 py-3 text-sm font-black text-cyan-100"
               >
-                Map B · Mobile Derived
+                Map C · Authentic DWG
               </a>
 
               <a
-                href="/professional/infrastructure/water/c"
-                className="rounded-2xl border border-cyan-400/40 bg-cyan-950/30 px-4 py-3 text-sm font-black text-cyan-100"
+                href="/professional/infrastructure/water/engineering"
+                className="rounded-2xl border border-violet-400/40 bg-violet-950/30 px-4 py-3 text-sm font-black text-violet-100"
               >
                 Engineering Intelligence
               </a>
