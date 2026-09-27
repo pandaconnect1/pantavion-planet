@@ -21,7 +21,7 @@ export interface PantavionWaterReferenceLayerDefinition {
   serviceUrl: string;
   layerIds?: readonly number[];
   spatialReference: {
-    authority: "EPSG";
+    authority: "EPSG" | "ESRI";
     code: string;
   };
   role: "background-reference";
@@ -84,7 +84,7 @@ export const pantavionWaterReferenceLayers: readonly PantavionWaterReferenceLaye
     serviceUrl:
       "https://eservices.dls.moi.gov.cy/arcgis/rest/services/National/General_Search/MapServer",
     layerIds: [0, 9, 10, 11, 12, 13],
-    spatialReference: { authority: "EPSG", code: "102319" },
+    spatialReference: { authority: "ESRI", code: "102319" },
     role: "background-reference",
     enabledByDefault: false,
     zIndex: 25,
