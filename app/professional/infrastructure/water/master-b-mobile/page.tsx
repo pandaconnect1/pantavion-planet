@@ -51,6 +51,66 @@ type TilePayload = {
 
 type LoadState = "idle" | "loading" | "ready" | "error";
 
+
+function readApprovedWaterDevice() {
+  if (typeof window === "undefined") {
+    return { deviceId: "", deviceToken: "" };
+  }
+
+  const deviceId =
+    window.localStorage.getItem("pantavion_water_device_id") ||
+    window.localStorage.getItem("pantavion-water-device-id") ||
+    window.localStorage.getItem("waterDeviceId") ||
+    "";
+
+  const deviceToken =
+    window.localStorage.getItem("pantavion_water_device_token") ||
+    window.localStorage.getItem("pantavion-water-device-token") ||
+    window.localStorage.getItem("waterDeviceToken") ||
+    "";
+
+  if (deviceId && deviceToken) {
+    return { deviceId, deviceToken };
+  }
+
+  for (const key of [
+    "pantavion_water_access_device",
+    "pantavion-water-access-device",
+    "waterAccessDevice",
+    "water-approved-device",
+  ]) {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) continue;
+
+    try {
+      const parsed = JSON.parse(raw);
+      const parsedDeviceId = String(parsed.deviceId || parsed.id || "");
+      const parsedDeviceToken = String(parsed.deviceToken || parsed.token || "");
+
+      if (parsedDeviceId && parsedDeviceToken) {
+        return { deviceId: parsedDeviceId, deviceToken: parsedDeviceToken };
+      }
+    } catch {
+      // Ignore malformed legacy storage and remain fail-closed.
+    }
+  }
+
+  return { deviceId: "", deviceToken: "" };
+}
+
+function waterAccessHeaders() {
+  const device = readApprovedWaterDevice();
+
+  if (!device.deviceId || !device.deviceToken) {
+    return {};
+  }
+
+  return {
+    "x-pantavion-water-device-id": device.deviceId,
+    "x-pantavion-water-device-token": device.deviceToken,
+  };
+}
+
 function formatNumber(value: number | undefined | null): string {
   if (typeof value !== "number" || !Number.isFinite(value)) {
     return "0";
@@ -101,7 +161,11 @@ export default function MasterBMobilePage() {
       try {
         const manifestResponse = await fetch(
           "/api/professional/infrastructure/water/master-b/derived/manifest",
-          { cache: "no-store" },
+          {
+            cache: "no-store",
+            credentials: "include",
+            headers: waterAccessHeaders(),
+          },
         );
 
         const manifestJson = (await manifestResponse.json()) as Manifest;
@@ -124,7 +188,11 @@ export default function MasterBMobilePage() {
               `/api/professional/infrastructure/water/master-b/derived/tile?file=${encodeURIComponent(
                 tile.file,
               )}`,
-              { cache: "no-store" },
+              {
+                cache: "no-store",
+                credentials: "include",
+                headers: waterAccessHeaders(),
+              },
             );
 
             if (!response.ok) {
