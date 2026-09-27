@@ -245,11 +245,18 @@ function buildDwgLabelIndex(manager: CadRuntimeManager) {
   return entries;
 }
 
-export default function WaterMapBAuthenticClient() {
+export default function WaterMapBAuthenticClient({
+  initialSourceKey = "canonical-2026-andreaspap",
+  allowSourceSwitch = true,
+  mapLabel,
+}: {
+  initialSourceKey?: WaterMapBSourceKey;
+  allowSourceSwitch?: boolean;
+  mapLabel?: string;
+}) {
   const cadContainerRef = useRef<HTMLDivElement | null>(null);
   const cadManagerRef = useRef<CadRuntimeManager | null>(null);
-  const [sourceKey, setSourceKey] =
-    useState<WaterMapBSourceKey>("canonical-2026-andreaspap");
+  const [sourceKey, setSourceKey] = useState<WaterMapBSourceKey>(initialSourceKey);
   const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [viewerState, setViewerState] = useState<ViewerState>("checking");
@@ -353,14 +360,19 @@ export default function WaterMapBAuthenticClient() {
   }
 
   useEffect(() => {
+    if (!allowSourceSwitch) {
+      setSourceKey(initialSourceKey);
+      return;
+    }
+
     const params = new URLSearchParams(window.location.search);
     const nextSourceKey: WaterMapBSourceKey =
       params.get("sourceKey") === "legacy-george-85m"
         ? "legacy-george-85m"
-        : "canonical-2026-andreaspap";
+        : initialSourceKey;
 
     setSourceKey(nextSourceKey);
-  }, []);
+  }, [allowSourceSwitch, initialSourceKey]);
 
   useEffect(() => {
     setDwgLabels([]);
@@ -410,7 +422,7 @@ export default function WaterMapBAuthenticClient() {
       setUploadLabel("Server-side επαλήθευση DWG…");
       await callOwnerFunction("verify", sourceKey);
 
-      setUploadLabel("Άνοιγμα Map B…");
+      setUploadLabel(`Άνοιγμα ${mapLabel || source.label}…`);
       await loadVerifiedMapB();
       setUploadLabel("");
     } catch (error) {
@@ -482,32 +494,38 @@ export default function WaterMapBAuthenticClient() {
 
   return (
     <main className="relative min-h-screen bg-black text-white">
-      <div className="absolute left-4 top-4 z-40 flex flex-wrap gap-2">
-        {(
-          [
-            ["canonical-2026-andreaspap", "Canonical DWG"],
-            ["legacy-george-85m", "Legacy DWG"],
-          ] as const
-        ).map(([key, label]) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => {
-              const url = new URL(window.location.href);
-              url.searchParams.set("sourceKey", key);
-              window.history.replaceState(null, "", url);
-              setSourceKey(key);
-            }}
-            className={`rounded-xl border px-3 py-2 text-xs font-black ${
-              sourceKey === key
-                ? "border-[#f6c85f] bg-[#f6c85f] text-black"
-                : "border-white/25 bg-black/80 text-white"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      {allowSourceSwitch ? (
+        <div className="absolute left-4 top-4 z-40 flex flex-wrap gap-2">
+          {(
+            [
+              ["canonical-2026-andreaspap", "Map B · Canonical DWG"],
+              ["legacy-george-85m", "Map C · Authentic DWG"],
+            ] as const
+          ).map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => {
+                const url = new URL(window.location.href);
+                url.searchParams.set("sourceKey", key);
+                window.history.replaceState(null, "", url);
+                setSourceKey(key);
+              }}
+              className={`rounded-xl border px-3 py-2 text-xs font-black ${
+                sourceKey === key
+                  ? "border-[#f6c85f] bg-[#f6c85f] text-black"
+                  : "border-white/25 bg-black/80 text-white"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div className="absolute left-4 top-4 z-40 rounded-xl border border-[#f6c85f]/40 bg-black/85 px-3 py-2 text-xs font-black text-[#f6c85f]">
+          {mapLabel || source.label}
+        </div>
+      )}
 
       <div ref={cadContainerRef} className="h-[calc(100vh-72px)] min-h-[680px] w-full bg-black" />
 
@@ -636,7 +654,7 @@ export default function WaterMapBAuthenticClient() {
 
       {viewerState === "error" ? (
         <div className="absolute inset-x-4 top-4 z-30 mx-auto max-w-xl rounded-2xl border border-red-400/40 bg-black/95 p-5 text-sm font-bold text-red-100">
-          <p>Ο Map B δεν άνοιξε: {viewerError}</p>
+          <p>{mapLabel || source.label} δεν άνοιξε: {viewerError}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <button
               type="button"
