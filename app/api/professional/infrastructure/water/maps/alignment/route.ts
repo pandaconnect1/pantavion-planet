@@ -3,11 +3,11 @@ import "server-only";
 import { NextResponse } from "next/server";
 
 import {
-  canEnableWaterMapBGeographicOverlay,
   validateWaterMapBAlignment,
   type WaterMapBAlignmentStatus,
   type WaterMapBControlPoint,
 } from "@/core/water/water-map-b-alignment-contract";
+import { calculateWaterMapBAffineTransform } from "@/core/water/water-map-b-affine-alignment";
 import {
   WATER_MAP_B_SOURCE_CANDIDATES,
   type WaterMapBSourceKey,
@@ -156,10 +156,25 @@ export async function POST(request: Request) {
     const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
     const sourceCrs = clean(body.sourceCrs, 160) || null;
     const targetCrs = clean(body.targetCrs, 160);
-    const transformName = clean(body.transformName, 200) || null;
+    const requestedTransformName =
+      clean(body.transformName, 200) || "affine_2d_control_points_v1";
     const controlPoints = parseControlPoints(body.controlPoints);
-    const rmseMeters = finite(body.rmseMeters);
-    const maxResidualMeters = finite(body.maxResidualMeters);
+    const calculated = calculateWaterMapBAffineTransform(controlPoints);
+    const transformName = calculated.method;
+
+    if (requestedTransformName !== transformName) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "water_map_alignment_transform_not_supported",
+          supportedTransform: transformName,
+        },
+        { status: 400, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
+    const rmseMeters = calculated.rmseMeters;
+    const maxResidualMeters = calculated.maxResidualMeters;
 
     const validation = validateWaterMapBAlignment({
       sourceKey,
@@ -205,6 +220,13 @@ export async function POST(request: Request) {
         control_points: controlPoints,
         rmse_meters: rmseMeters,
         max_residual_meters: maxResidualMeters,
+        transform_parameters: {
+          method: calculated.method,
+          longitude: calculated.longitude,
+          latitude: calculated.latitude,
+          controlPointCount: calculated.controlPointCount,
+          residuals: calculated.residuals,
+        },
         status: "needs_review",
         evidence_validated: true,
         overlay_allowed: false,
@@ -214,6 +236,7 @@ export async function POST(request: Request) {
           canonicalSource: source.canonical,
           validationContract: "2026-09-27.v2",
           noToleranceInvented: true,
+          metricsCalculatedServerSide: true,
         },
       })
       .select("*")
