@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-09-27T06:14:12.937Z",
+  "lockedAtUtc": "2026-09-27T06:20:20.618Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -21,6 +21,7 @@
     "app/api/professional/infrastructure/water/access/authorize/route.ts": "f385d1c58e8260b09dabf1a8b580c42d21d07330d65a8a29d0871739427c72d3",
     "app/api/professional/infrastructure/water/access/invite/claim/route.ts": "ac91b1fbf67e03330171004c1c38b0b314b76db3321b758ba71a502523de288f",
     "app/api/professional/infrastructure/water/admin/session/route.ts": "6b09ff4220d257c946c3df5bb2cce364b7b94c5942b8873d366e11bc0103d112",
+    "app/api/professional/infrastructure/water/mapserver/0/query/route.ts": "3d4784ac3af414b1b143588c721fe8bee24d1c98e60b131caaa93b3ab398ae59",
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "4b792c1376b23d6c10f68d445fe0a81f24dcb0f4aeacbbe3a0162d97bf21c6aa",
     "app/professional/infrastructure/water/admin/access/page.tsx": "8ec81080f62ef3365a197ed9768159fd9870298f29e675470e02dbf70a7d5fdb",
     "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "471dddd468227098bec94f88838a2b6c9ebf20df5a46cafb188ddf65a986e14e",
@@ -29,14 +30,13 @@
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
     "core/security/privileged-request-boundary.ts": "44376bf768b225f9228f676238c33b2cab69b517963089460e9e4cabcf3bcf49",
     "core/security/water-admin-session.ts": "1f563864a0c58761404b06d682a59abdea618939abb7c905236417a6a2e3f7f1",
-    "scripts/pantavion-water-network-runtime-lock.cjs": "022b40a9b5db9fdb2e1cda8afac43a83d235909539b592f7f2f222bda6fbdd58",
+    "scripts/pantavion-water-network-runtime-lock.cjs": "0df1627215062bbb3c1e5bb91118591fd896197300cf81090d373f757fa2d5d3",
     "scripts/water-guardian-production-smoke.cjs": "fa85132fb88419f98429c9dcd6b779b313bf0345d0d1787aaa348ddc7707aa21",
-    "scripts/water-segment-reader-regression.mjs": "44bfd0d2df2cb67d6e61463af4ede2667717b1347dd69ac6e0c5901d0ca898da",
-    "app/api/professional/infrastructure/water/mapserver/0/query/route.ts": "0000000000000000000000000000000000000000000000000000000000000000"
+    "scripts/water-segment-reader-regression.mjs": "8b1f075c8143fbe0041bc8918b0a1717ea46e034f57c09479a5a7eb9f0206c33"
   },
   "refreshEvidence": {
-    "reason": "Extend Water Lock to cover the MapServer compatibility route and refreshed regression chain; source truth and privacy invariants remain unchanged.",
-    "sourceCommit": "e44d64eed3263bdcc8dcbb7d7210480671964e68",
+    "reason": "MapServer compatibility route added to the protected runtime; viewer-to-MapServer-to-bbox regression chain verified; source truth and privacy invariants remain unchanged.",
+    "sourceCommit": "b27d8953848c24112f4c3a64a0b7782a75d44941",
     "protectedFileCount": 17,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
