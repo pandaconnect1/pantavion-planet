@@ -294,7 +294,7 @@ export default function MasterBMobilePage() {
     };
   }, [sourceKey, tileLimit]);
 
-  const layerNames = manifest?.layers ?? [];
+  const layerNames = useMemo(() => manifest?.layers ?? [], [manifest?.layers]);
 
   const filteredSegments = useMemo(() => {
     const query = layerQuery.trim().toUpperCase();
