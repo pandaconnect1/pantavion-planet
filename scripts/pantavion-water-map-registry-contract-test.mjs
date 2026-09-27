@@ -21,6 +21,10 @@ assert(contract.artifactIntakePolicy.acceptsPhotosScansAndPdf === true, "Photos,
 assert(contract.artifactIntakePolicy.acceptsUnknownFutureFormats === true, "Unknown future formats must be preserved.");
 assert(contract.artifactIntakePolicy.unknownFormatsRejectedForLackOfRenderer === false, "Missing renderer must never mean file rejection.");
 assert(contract.artifactIntakePolicy.renderabilityIsSeparateFromAcceptance === true, "Acceptance and layer renderability must remain separate.");
+assert(contract.artifactIntakePolicy.rendererRequiredAtIntake === false, "Renderer cannot be required to retain an artifact.");
+assert(contract.artifactIntakePolicy.adapterRequiredAtIntake === false, "Adapter cannot be required to retain an artifact.");
+assert(contract.artifactIntakePolicy.nonRenderableArtifactsRemainFirstClassEvidence === true, "Non-renderable artifacts must remain first-class evidence.");
+assert(contract.artifactIntakePolicy.artifactMayAttachToMapWithoutRenderingItsContents === true, "Artifacts must be attachable to maps even without rendering their contents.");
 assert(contract.artifactIntakePolicy.preserveOriginalBytesBeforeConversion === true, "Original bytes must be preserved before conversion.");
 
 const builtInIds = contract.maps.map((entry) => entry.mapId);
@@ -30,6 +34,7 @@ assert(builtInIds.includes("C"), "Legacy Map C must remain registered.");
 
 const capabilityKinds = new Set(contract.sourceCapabilities.map((entry) => entry.kind));
 for (const requiredKind of [
+  "artifact-reference",
   "dwg",
   "dxf",
   "gpkg",
@@ -145,4 +150,5 @@ console.log("- A/B/C backward compatibility preserved");
 console.log("- D/E/future map ids supported through one registry");
 console.log("- ArcGIS/WMS/WMTS/OGC and common file formats registered");
 console.log("- raw source and full-browser-dataset exposure forced off");
-console.log("- photos/PDF/scans/unknown future formats are accepted and preserved even without a renderer");
+console.log("- photos/PDF/scans/unknown future formats are accepted and preserved even without a renderer or adapter");
+console.log("- non-renderable artifacts can still attach to a map as first-class evidence");
