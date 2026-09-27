@@ -1,4 +1,4 @@
-import { pantavionWaterAbcMaps } from "@/core/infrastructure/water/water-abc-map-system-contract";
+import { pantavionWaterAbcMaps } from "./water-abc-map-system-contract";
 
 export const PANTAVION_WATER_MAP_REGISTRY_ID =
   "pantavion_water_map_registry_v1" as const;
