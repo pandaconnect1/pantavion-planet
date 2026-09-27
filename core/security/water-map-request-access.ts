@@ -6,7 +6,12 @@ import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authoriz
 import { migrateLegacyApprovedDeviceIfPresent } from "@/core/water/water-access-store";
 
 export type WaterMapRequestAccess =
-  | { ok: true; mode: "admin-session" | "approved-device" }
+  | {
+      ok: true;
+      mode: "admin-session" | "approved-device";
+      actorRef: string;
+      deviceId: string | null;
+    }
   | { ok: false; error: "access_not_approved" };
 
 function clean(value: unknown) {
@@ -21,7 +26,12 @@ export async function authorizeWaterMapRequest(
   request: Request,
 ): Promise<WaterMapRequestAccess> {
   if (await hasWaterAdminAuthorization(request)) {
-    return { ok: true, mode: "admin-session" };
+    return {
+      ok: true,
+      mode: "admin-session",
+      actorRef: "admin-session",
+      deviceId: null,
+    };
   }
 
   const deviceId = clean(request.headers.get("x-pantavion-water-device-id"));
@@ -37,7 +47,12 @@ export async function authorizeWaterMapRequest(
   );
 
   if (approved) {
-    return { ok: true, mode: "approved-device" };
+    return {
+      ok: true,
+      mode: "approved-device",
+      actorRef: deviceId,
+      deviceId,
+    };
   }
 
   return { ok: false, error: "access_not_approved" };
