@@ -40,10 +40,10 @@ const primary = [
     action: "Άνοιγμα Administrator",
   },
   {
-    title: "Maps A / B / C",
+    title: "Authentic Source Maps",
     label: "MAP CENTER",
     description:
-      "Ξεχωριστές προστατευμένες εμπειρίες για operational, DWG/QGIS-compatible και engineering/intelligence map workflows.",
+      "Αυθεντικές source/master πηγές με ξεχωριστό engineering intelligence workspace. Κανένα derived preview δεν βαφτίζεται master map.",
     href: "/professional/infrastructure/water/maps",
     action: "Άνοιγμα Map Center",
   },

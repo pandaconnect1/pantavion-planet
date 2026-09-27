@@ -69,11 +69,11 @@ const modeCopy = {
       "Δεν γίνεται raw DWG download, δεν φορτώνεται ολόκληρο το master στον browser και δεν αλλάζει καμία γεωμετρία χωρίς founder approval.",
   },
   c: {
-    eyebrow: "Pantavion Water C Intelligent",
-    title: "C Intelligent Map Preview",
+    eyebrow: "Pantavion Water Engineering Intelligence",
+    title: "Engineering Intelligence Workspace",
     subtitle:
-      "Πρώτη C προβολή για engineering intelligence. Δείχνει το προστατευμένο δίκτυο και οργανώνει τα επόμενα layers: υψόμετρα, πίεση, ζώνες, PRV, βλάβες, αλλαγές πεδίου, φωτογραφίες και τηλεμετρία.",
-    status: "C intelligence preview",
+      "Engineering workspace πάνω από προστατευμένες και επαληθευμένες πηγές. Οργανώνει υψόμετρα, πίεση, ζώνες, PRV, βλάβες, αλλαγές πεδίου, φωτογραφίες και τηλεμετρία χωρίς να παριστάνει ξεχωριστό αυθεντικό master map.",
+    status: "engineering workspace",
     safety:
       "Τα intelligence layers είναι ελεγχόμενα. Δεν εμφανίζονται ψεύτικα δεδομένα πίεσης ή υψομέτρων μέχρι να συνδεθούν επίσημες πηγές και να εγκριθούν.",
   },
@@ -756,13 +756,13 @@ export default function WaterDerivedMapClient({ mode }: { mode: Mode }) {
             <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.3em] text-[#d8b45f]">
-                  C Intelligent Layers
+                  Engineering Layers
                 </p>
                 <h2 className="mt-2 text-2xl font-black">
                   Intelligence workspace
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-slate-300">
-                  Τα παρακάτω layers οργανώνουν το C Map. Όσα δεν έχουν επίσημα
+                  Τα παρακάτω layers οργανώνουν το Engineering Workspace. Όσα δεν έχουν επίσημα
                   δεδομένα παραμένουν σαν controlled workspace, όχι σαν τελικό
                   engineering συμπέρασμα.
                 </p>
@@ -804,7 +804,7 @@ export default function WaterDerivedMapClient({ mode }: { mode: Mode }) {
         <section className="mt-5 overflow-hidden rounded-[2rem] border border-[#d8b45f]/30 bg-[#0a1629]">
           <div className="flex flex-col gap-1 border-b border-white/10 px-5 py-4 md:flex-row md:items-center md:justify-between">
             <h2 className="text-2xl font-black text-[#f3db9d]">
-              {mode === "b" ? "B Map View" : "C Map View"}
+              {mode === "b" ? "B Map View" : "Engineering Workspace"}
             </h2>
             <span className="text-sm font-semibold text-slate-300">
               Road base + protected network segments
