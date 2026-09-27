@@ -31,12 +31,13 @@
     "core/security/water-admin-session.ts": "1f563864a0c58761404b06d682a59abdea618939abb7c905236417a6a2e3f7f1",
     "scripts/pantavion-water-network-runtime-lock.cjs": "022b40a9b5db9fdb2e1cda8afac43a83d235909539b592f7f2f222bda6fbdd58",
     "scripts/water-guardian-production-smoke.cjs": "fa85132fb88419f98429c9dcd6b779b313bf0345d0d1787aaa348ddc7707aa21",
-    "scripts/water-segment-reader-regression.mjs": "44bfd0d2df2cb67d6e61463af4ede2667717b1347dd69ac6e0c5901d0ca898da"
+    "scripts/water-segment-reader-regression.mjs": "44bfd0d2df2cb67d6e61463af4ede2667717b1347dd69ac6e0c5901d0ca898da",
+    "app/api/professional/infrastructure/water/mapserver/0/query/route.ts": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "refreshEvidence": {
-    "reason": "Reviewed admin/session, bbox segmented delivery, admin access and controlled viewer changes; source truth and privacy invariants remain unchanged.",
-    "sourceCommit": "148d600fe8ed5c17a9775512f4b344fdc5a636ac",
-    "protectedFileCount": 16,
+    "reason": "Extend Water Lock to cover the MapServer compatibility route and refreshed regression chain; source truth and privacy invariants remain unchanged.",
+    "sourceCommit": "e44d64eed3263bdcc8dcbb7d7210480671964e68",
+    "protectedFileCount": 17,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
   }
