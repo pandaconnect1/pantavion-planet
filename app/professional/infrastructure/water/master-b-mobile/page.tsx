@@ -98,7 +98,7 @@ function readApprovedWaterDevice() {
   return { deviceId: "", deviceToken: "" };
 }
 
-function waterAccessHeaders() {
+function waterAccessHeaders(): Record<string, string> {
   const device = readApprovedWaterDevice();
 
   if (!device.deviceId || !device.deviceToken) {
