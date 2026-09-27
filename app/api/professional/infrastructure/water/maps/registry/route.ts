@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { getPantavionWaterAbcMapSystemContract } from "@/core/infrastructure/water/water-abc-map-system-contract";
 import { getPantavionWaterMapRegistryContract } from "@/core/infrastructure/water/water-map-registry-contract";
 import { getPantavionWaterReferenceLayerCatalog } from "@/core/infrastructure/water/water-reference-layer-catalog";
+import { getPantavionWaterSpatialPatchContract } from "@/core/infrastructure/water/water-spatial-change-patch-contract";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { waterApprovedDeviceMatches } from "@/core/water/water-access-store";
 
@@ -60,6 +61,9 @@ export async function POST(request: Request) {
 
       // External/reference layers share one alignment and overlay-order contract.
       referenceLayers: getPantavionWaterReferenceLayerCatalog(),
+
+      // Precise field edits are represented as auditable spatial deltas.
+      spatialPatches: getPantavionWaterSpatialPatchContract(),
 
       sourcePresence: readSourcePresence(),
       runtimeBoundary: {
