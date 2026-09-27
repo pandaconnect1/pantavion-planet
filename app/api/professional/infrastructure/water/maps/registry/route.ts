@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 import { getPantavionWaterAbcMapSystemContract } from "@/core/infrastructure/water/water-abc-map-system-contract";
 import { getPantavionWaterMapRegistryContract } from "@/core/infrastructure/water/water-map-registry-contract";
+import { getPantavionWaterReferenceLayerCatalog } from "@/core/infrastructure/water/water-reference-layer-catalog";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { waterApprovedDeviceMatches } from "@/core/water/water-access-store";
 
@@ -56,6 +57,9 @@ export async function POST(request: Request) {
 
       // Canonical extensible registry for A/B/C/D/E/... and future map sources.
       registry: getPantavionWaterMapRegistryContract(),
+
+      // External/reference layers share one alignment and overlay-order contract.
+      referenceLayers: getPantavionWaterReferenceLayerCatalog(),
 
       sourcePresence: readSourcePresence(),
       runtimeBoundary: {
