@@ -56,15 +56,6 @@ export interface PantavionArtifactEditingCapabilities {
 
 type CapabilitySeed = Omit<PantavionArtifactOperationCapability, "nonDestructive">;
 
-function cap(
-  operation: PantavionArtifactOperation,
-  state: PantavionArtifactCapabilityState,
-  adapter: string,
-  reason: string,
-): PantavionArtifactOperationCapability {
-  return { operation, state, adapter, nonDestructive: true, reason };
-}
-
 function baseline(detection: PantavionArtifactDetection): CapabilitySeed[] {
   const unsafe =
     detection.supportState === "SANDBOX_REQUIRED" ||
