@@ -3,34 +3,34 @@ import WaterMapNavigation from "../water-map-navigation";
 export const metadata = {
   title: "Pantavion Water Map Workspace",
   description:
-    "One professional viewer for Map A, canonical Map B, legacy Map B and engineering intelligence, with mobile fullscreen switching.",
+    "Authentic Water source maps with explicit live/verified/not-ingested truth, plus a separate engineering intelligence workspace.",
 };
 
 const sourceMaps = [
   {
     label: "SOURCE MAP 1",
     title: "Map A — Live Operational",
-    status: "Operational",
+    status: "AUTHENTIC · LIVE",
     description:
-      "Ο προστατευμένος λειτουργικός χάρτης ύδρευσης για καθημερινή εργασία πεδίου, approved users και segmented viewport loading.",
+      "Αυθεντικό operational δίκτυο σε production κατάσταση ready_exact. Ο browser λαμβάνει μόνο ασφαλή segmented viewport τμήματα.",
     href: "/professional/infrastructure/water/maps/workspace?source=A",
     action: "Άνοιγμα στο Workspace",
   },
   {
     label: "SOURCE MAP 2",
     title: "Map B — Canonical DWG",
-    status: "Canonical source",
+    status: "AUTHENTIC · BYTE VERIFIED · NOT LIVE YET",
     description:
-      "Derived επαγγελματική προβολή του canonical DWG ANDREASPAP 2026. Το raw master παραμένει ιδιωτικό και δεν φορτώνεται στον browser.",
+      "Το αυθεντικό canonical DWG ANDREASPAP 2026 έχει επαληθευτεί byte-for-byte (size, SHA-256, AC1032). Δεν θεωρείται production-live μέχρι να ολοκληρωθούν private Storage ingest, server verification, versioning και derived delivery.",
     href: "/professional/infrastructure/water/maps/workspace?source=B_CANONICAL",
     action: "Άνοιγμα στο Workspace",
   },
   {
     label: "SOURCE MAP 3",
     title: "Map B — Legacy DWG",
-    status: "Legacy candidate",
+    status: "AUTHENTIC · BYTE VERIFIED · NOT LIVE YET",
     description:
-      "Ξεχωριστή derived προβολή του παλαιότερου GEORGE DWG για σύγκριση. Δεν αντικαθιστά και δεν γράφει πάνω στον canonical χάρτη.",
+      "Το αυθεντικό legacy GEORGE 85.7 MB DWG έχει επαληθευτεί byte-for-byte και παραμένει ξεχωριστό από το canonical master. Δεν θεωρείται production-live πριν από ingest/versioning/derived delivery.",
     href: "/professional/infrastructure/water/maps/workspace?source=B_LEGACY",
     action: "Άνοιγμα στο Workspace",
   },
@@ -48,15 +48,15 @@ export default function WaterMapsPage() {
           </p>
 
           <h1 className="mt-4 text-3xl font-black tracking-tight md:text-5xl">
-            Ένας Viewer · 3 Source Maps
+            Αυθεντικές Πηγές · Καθαρό Runtime Truth
           </h1>
 
           <p className="mt-4 max-w-4xl text-sm leading-7 text-slate-300 md:text-base">
-            Οι τρεις πραγματικές πηγές μένουν ξεχωριστές και immutable, αλλά
-            ανοίγουν μέσα στον ίδιο Pantavion Water Workspace. Στο κινητό
-            εμφανίζεται ένας source map τη φορά, με άμεση εναλλαγή και πλήρη
-            οθόνη. Τα approved overlays και evidence παραμένουν μέρος του ίδιου
-            επαγγελματικού περιβάλλοντος.
+            Κάθε χάρτης που ονομάζουμε source/master πρέπει να έχει αυθεντικό
+            αρχείο ή authoritative provider feed και επαληθευμένη ταυτότητα.
+            Το Map A είναι live. Τα δύο αυθεντικά DWG έχουν byte-level verification,
+            αλλά μέχρι να ολοκληρωθεί το production ingest δεν παρουσιάζονται ως live.
+            Derived/intelligence workspaces εμφανίζονται ξεχωριστά και δεν βαφτίζονται master maps.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
@@ -115,11 +115,12 @@ export default function WaterMapsPage() {
               Αυτούσια προβολή
             </p>
             <h2 className="mt-2 text-2xl font-black">
-              Δες τους B και C ακριβώς όπως είναι
+              Αυθεντικό DWG και ξεχωριστό Engineering Workspace
             </h2>
             <p className="mt-3 max-w-4xl text-sm leading-7 text-slate-300">
-              Αυτά τα κουμπιά ανοίγουν τις ίδιες τις υπάρχουσες προβολές B και C
-              χωρίς να περνούν πρώτα από το κοινό Water Map Workspace.
+              Το Map B ανοίγει μόνο όταν το ακριβές verified DWG υπάρχει στο
+              private production storage. Το Engineering Workspace είναι αναλυτική
+              επιφάνεια πάνω από εγκεκριμένα source δεδομένα και δεν είναι τρίτο master.
             </p>
 
             <div className="mt-4 flex flex-wrap gap-3">
@@ -141,7 +142,7 @@ export default function WaterMapsPage() {
                 href="/professional/infrastructure/water/c"
                 className="rounded-2xl border border-cyan-400/40 bg-cyan-950/30 px-4 py-3 text-sm font-black text-cyan-100"
               >
-                Map C · Intelligence
+                Engineering Intelligence
               </a>
             </div>
           </section>
@@ -165,18 +166,19 @@ export default function WaterMapsPage() {
             <p className="text-xs font-black uppercase tracking-[0.25em] text-cyan-200">
               Engineering intelligence
             </p>
-            <h2 className="mt-2 text-2xl font-black">C Intelligent Map</h2>
+            <h2 className="mt-2 text-2xl font-black">Engineering Intelligence Workspace</h2>
             <p className="mt-3 max-w-4xl text-sm leading-7 text-cyan-50/80">
-              Το C δεν είναι τέταρτο original source. Είναι engineering/intelligence
-              view που συνδυάζει approved δεδομένα από τους source maps με
-              υψόμετρα, πίεση, ζώνες, PRV, βλάβες, φωτογραφίες, spatial patches και
-              μελλοντική τηλεμετρία.
+              Το engineering/intelligence workspace δεν είναι original source map.
+              Συνδυάζει μόνο approved δεδομένα από αυθεντικές πηγές με υψόμετρα,
+              πίεση, ζώνες, PRV, βλάβες, φωτογραφίες, spatial patches και μελλοντική
+              τηλεμετρία. Αν προστεθεί μελλοντικά Map C/D/E/F, θα απαιτεί δικό του
+              αυθεντικό source artifact ή authoritative feed πριν ονομαστεί master.
             </p>
             <a
               href="/professional/infrastructure/water/c"
               className="mt-4 inline-block rounded-2xl border border-cyan-300/40 bg-cyan-200 px-4 py-3 text-sm font-black text-[#06101f]"
             >
-              Άνοιγμα C Intelligence
+              Άνοιγμα Engineering Workspace
             </a>
           </section>
 
