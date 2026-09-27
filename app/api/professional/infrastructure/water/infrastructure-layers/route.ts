@@ -128,7 +128,7 @@ export async function GET(request: Request) {
         "user-agent": "Pantavion-Infrastructure-GIS/1.0",
       },
       signal: AbortSignal.timeout(10000),
-      cache: "no-store",
+      next: { revalidate: 30 },
     });
 
     if (!response.ok) {
