@@ -1,13 +1,13 @@
-import ControlledWaterSegmentClient from "./controlled-water-segment-client";
+import WaterLiveGisClient from "../maps/live-gis/water-live-gis-client";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Pantavion Water Network",
+  title: "Pantavion Water Network — Live GIS",
   description:
-    "Protected Pantavion water network map with controlled private pipe segments, mobile location marker, and authorized access.",
+    "Protected provider-neutral MapLibre water network runtime with live viewport loading, GPS and controlled access.",
 };
 
 export default function WaterLivePage() {
-  return <ControlledWaterSegmentClient />;
+  return <WaterLiveGisClient initialMap="A" />;
 }
