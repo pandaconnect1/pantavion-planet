@@ -10,6 +10,7 @@ import {
 } from "@/core/infrastructure/water/controlled-water-segment-index-provider";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { migrateLegacyApprovedDeviceIfPresent } from "@/core/water/water-access-store";
+import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -98,6 +99,43 @@ export async function GET(request: Request) {
     const deviceToken = clean(request.headers.get("x-pantavion-water-device-token"));
 
     if (deviceId && deviceToken) {
+      // Primary production path: narrowly scoped SECURITY DEFINER RPC.
+      // It validates the exact approved device + token hash and returns only
+      // the requested viewport segment. No service-role secret is required.
+      try {
+        const supabase = await createClient();
+        const { data: rpcData, error: rpcError } = await supabase.rpc(
+          "pantavion_water_map_a_segment_v2",
+          {
+            p_device_id: deviceId,
+            p_token_hash: hashToken(deviceToken),
+            p_min_lng: bbox.minLng,
+            p_min_lat: bbox.minLat,
+            p_max_lng: bbox.maxLng,
+            p_max_lat: bbox.maxLat,
+            p_max_features: maxFeatures,
+          },
+        );
+
+        if (!rpcError && rpcData) {
+          const payload = rpcData as Record<string, unknown>;
+          const denied = payload.error === "access_not_approved";
+
+          return NextResponse.json(payload, {
+            status: denied ? 403 : 200,
+            headers: {
+              "Cache-Control": "no-store",
+              "X-Pantavion-Water-Segment": "supabase-rpc-index-v2",
+              "X-Pantavion-Water-Access-Mode": access.mode,
+              "X-Pantavion-Data-Returned": denied ? "false" : "segment-only",
+            },
+          });
+        }
+      } catch {
+        // Fall through to the existing Edge Function/private-index continuity
+        // paths. Production remains fail-closed if every backend is unavailable.
+      }
+
       const directUrl = new URL(
         "https://cxhulvwkagzufbjsdwwu.supabase.co/functions/v1/pantavion-map-a-live-segment",
       );
