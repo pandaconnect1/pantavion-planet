@@ -79,9 +79,21 @@ export function getS3CompatibleStorageConfig(): StorageConfig {
     throw new Error("PANTAVION_OBJECT_STORAGE_NOT_CONFIGURED");
   }
 
+  const explicitPathStyle = clean(
+    process.env.PANTAVION_OBJECT_STORAGE_FORCE_PATH_STYLE,
+  ).toLowerCase();
+  const endpointHost = new URL(endpoint).hostname.toLowerCase();
+
   const forcePathStyle =
-    provider !== "aws-s3" ||
-    clean(process.env.PANTAVION_OBJECT_STORAGE_FORCE_PATH_STYLE).toLowerCase() === "true";
+    explicitPathStyle === "true"
+      ? true
+      : explicitPathStyle === "false"
+        ? false
+        : provider === "aws-s3"
+          ? false
+          : endpointHost === "storageapi.dev" || endpointHost.endsWith(".storageapi.dev")
+            ? false
+            : true;
 
   return {
     provider,
