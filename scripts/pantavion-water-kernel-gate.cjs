@@ -14,6 +14,8 @@ const requiredFiles = [
   "docs/requirements/pantavion-water-data-serving-strategy.md",
   "docs/requirements/pantavion-water-serving-architecture-decision.md",
   "core/infrastructure/water/water-serving-contract.ts",
+  "core/infrastructure/water/water-sovereign-gis-contract.ts",
+  "app/api/professional/infrastructure/water/sovereignty/status/route.ts",
   "core/infrastructure/water/controlled-water-access.ts",
   "core/infrastructure/water/water-access-control-readiness.ts",
   "core/infrastructure/water/water-authorized-person-store.ts",
@@ -60,6 +62,8 @@ const dataServingStrategyRelativePath = "docs/requirements/pantavion-water-data-
 const servingArchitectureDecisionRelativePath = "docs/requirements/pantavion-water-serving-architecture-decision.md";
 const servingContractRelativePath = "core/infrastructure/water/water-serving-contract.ts";
 const controlledServingScaffoldRelativePath = "core/infrastructure/water/controlled-water-serving-scaffold.ts";
+const sovereignGisContractRelativePath = "core/infrastructure/water/water-sovereign-gis-contract.ts";
+const sovereigntyStatusRouteRelativePath = "app/api/professional/infrastructure/water/sovereignty/status/route.ts";
 
 const requiredLawMarkers = [
   "NO_DATA_LOSS",
@@ -104,19 +108,16 @@ const dataServingRequiredMarkers = [
 ];
 
 const servingArchitectureRequiredMarkers = [
-  "controlled hybrid spatial-serving architecture",
-  "The browser must never load the full raw water network directly",
-  "Protected full master source",
-  "Private processing pipeline",
-  "Private spatial index",
-  "Controlled serving API",
-  "Renderer receives only permitted bbox/tile data",
-  "PostGIS or equivalent spatial database",
-  "protected bbox API",
-  "protected vector tile service",
-  "role/access filtering",
-  "audit logging",
-  "renderer: later, after serving and access controls are ready",
+  "Pantavion owns the canonical GIS truth",
+  "External infrastructure providers are execution adapters only",
+  "No storage provider, tile provider, conversion provider, database provider, or hosting provider may become source truth",
+  "at least two independently verified replicas",
+  "The browser talks to Pantavion-controlled APIs only",
+  "self-hosted object storage",
+  "self-hosted tile service",
+  "Replacing R2, MapTiler, Railway, Supabase, Render",
+  "provider removal does not change map identity",
+  "no raw master is publicly exposed",
 ];
 
 const servingContractRequiredMarkers = [
@@ -203,7 +204,7 @@ function enforceMarkers(title, relativePath, markers) {
   }
 }
 
-console.log("=== Pantavion Water Kernel Gate v20 ===");
+console.log("=== Pantavion Water Kernel Gate v21 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -270,6 +271,24 @@ enforceMarkers("=== Data Serving Strategy Enforcement v8 ===", dataServingStrate
 enforceMarkers("=== Serving Architecture Decision Enforcement v8 ===", servingArchitectureDecisionRelativePath, servingArchitectureRequiredMarkers);
 enforceMarkers("=== Serving Contract Enforcement v8 ===", servingContractRelativePath, servingContractRequiredMarkers);
 enforceMarkers("=== Controlled Serving Scaffold Enforcement v8 ===", controlledServingScaffoldRelativePath, controlledServingRequiredMarkers);
+
+enforceMarkers("=== Sovereign GIS Contract Enforcement v21 ===", sovereignGisContractRelativePath, [
+  "water-sovereign-gis-v1",
+  "canonicalAuthority: \"pantavion\"",
+  "rawMasterMinimumVerifiedReplicas: 2",
+  "mapLibreTalksToPantavionBoundaryOnly: true",
+  "providerFailureMustNotEraseCanonicalIdentity: true",
+  "selfHostedReplacementMustRemainPossible: true",
+  "noSingleProviderMayBecomeSourceTruth: true",
+]);
+
+enforceMarkers("=== Sovereignty Status Route Enforcement v21 ===", sovereigntyStatusRouteRelativePath, [
+  "getPantavionWaterSovereignGisContract",
+  "getPantavionWaterObjectStorageSafeStatus",
+  "authorizeWaterMapIngestActor",
+  "Cache-Control",
+  "private, no-store",
+]);
 
 
 
