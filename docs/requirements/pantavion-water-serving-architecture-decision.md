@@ -1,193 +1,182 @@
-﻿# Pantavion Water Module — Serving Architecture Decision v1
+# Pantavion Water Module — Sovereign Serving Architecture Decision v2
 
 ## Purpose
 
-This document locks the selected architecture direction for serving the Pantavion Water network after the Full Master Strategy and Data Serving Strategy.
+Pantavion owns the canonical GIS truth. External infrastructure providers are execution adapters only.
 
-This document does not modify the water network.
-It does not convert the KMZ.
-It does not create tiles.
-It does not activate a production renderer.
+This decision protects the Water system from provider lock-in, accidental loss, and architecture drift while keeping current cloud services usable when they add value.
 
-## Decision Summary
+## Non-Negotiable Ownership
 
-Pantavion Water will use a controlled hybrid spatial-serving architecture.
+Pantavion owns:
 
-The full master source remains protected and complete.
+- canonical map identity
+- original source hash and byte size
+- immutable-master manifest
+- map registry
+- access policy
+- conversion lineage
+- derived-artifact lineage
+- audit trail
+- provider-replica inventory
+- recovery and migration rules
 
-The browser must never load the full raw water network directly.
+No storage provider, tile provider, conversion provider, database provider, or hosting provider may become source truth.
 
-The client receives only authorized spatial slices for the current area and zoom.
+## Original Master Policy
 
-## Selected Direction
+The authentic A/B/C master files remain unchanged.
 
-The selected architecture direction is:
+For every raw master Pantavion records:
 
-1. Protected full master source
-2. Private processing pipeline
-3. Private spatial index
-4. Controlled serving API
-5. Renderer receives only permitted bbox/tile data
-6. Access and export are audited
-7. Founder/admin approval required before production activation
+- stable artifact id
+- map id
+- original format
+- SHA-256
+- exact byte size
+- immutable flag
+- creation/ingest timestamp
+- verified replica locations
 
-## Full Master Layer
+A raw master is not considered resilient until there are at least two independently verified replicas.
 
-The master source remains the full protected reference network.
+A provider copy is a replica, never the canonical identity.
 
-The master layer must preserve:
+## Provider Adapter Model
 
-- all source features
-- all geometry
-- all folders/layers
-- all available styles and colors
-- all source metadata where technically available
-- source checksum/version records
+Supported execution adapters may include:
 
-The master source must not be replaced by:
+- Pantavion self-hosted object storage
+- Cloudflare R2
+- AWS S3
+- any compatible private S3 implementation
+- MapTiler Cloud for derived tile publication
+- a Pantavion self-hosted tile service
 
-- mobile preview
-- 5000-feature file
-- sampled data
-- reduced GeoJSON
-- guessed classifications
-- public export
+Provider-specific ids, URLs, object keys, credentials, bucket names, and account ids stay server-side.
 
-## Storage Direction
+The browser must not depend on provider-specific object identity.
 
-The master source must be stored in controlled infrastructure storage.
+## Self-Hosted Exit Path
 
-Allowed future storage options include:
+Pantavion must always preserve a path to operate without third-party GIS infrastructure.
 
-- private object storage
-- protected cloud bucket
-- private server storage
-- controlled database storage
-- equivalent restricted storage
+The self-hosted target may use:
 
-The final provider is not locked in this document.
-
-Provider selection requires founder/admin approval.
-
-## Processing Direction
-
-Processing must happen outside the browser.
-
-The processing pipeline may create derived serving artifacts only if the master source remains intact.
-
-Allowed derived artifacts include:
-
-- spatial index
-- bbox-ready database table
-- vector tile cache
-- MBTiles
-- PMTiles for controlled/non-public use
-- MVT tiles
-- equivalent spatial-serving artifact
-
-Derived artifacts are serving artifacts, not source truth.
-
-## Recommended Production Direction
-
-For production-scale controlled infrastructure data, the recommended long-term direction is:
-
+- S3-compatible object storage such as MinIO or equivalent
 - PostGIS or equivalent spatial database
-- protected bbox API
-- protected vector tile service
-- role/access filtering
-- audit logging
-- no raw public export
+- protected MVT/PMTiles/MBTiles serving
+- Pantavion-owned conversion workers
+- MapLibre as the renderer
 
-This is the preferred controlled production path because it allows permission-aware serving without exposing the entire raw network file.
+Replacing R2, MapTiler, Railway, Supabase, Render, or any other provider must not require a change to canonical map identity or a rewrite of the user-facing viewer.
 
-## Prototype / Diagnostic Direction
+## Processing and Lineage
 
-For non-final diagnostic or internal prototype use only, Pantavion may evaluate:
+Processing happens outside the browser.
 
-- MBTiles
-- PMTiles
-- local vector tile output
-- bbox GeoJSON response
+Derived GIS artifacts must record:
 
-These are not final truth.
+- source artifact id
+- source SHA-256
+- processing pipeline id
+- pipeline version
+- optional deterministic parameters hash
+- output SHA-256 and byte size
 
-They must not be exposed publicly unless founder/admin approval and access controls exist.
+Derived artifacts are reproducible serving products, never source truth.
 
-## Renderer Boundary
+## Production Serving Boundary
 
-The renderer is downstream only.
+The browser talks to Pantavion-controlled APIs only.
 
-The renderer must not define source truth.
+The browser may receive:
 
-The renderer must not force data reduction.
+- authorized bbox features
+- protected vector tiles
+- authorized raster tiles
+- protected PMTiles/MVT ranges through a Pantavion boundary
 
-The renderer must not load the full raw network.
+The browser may never receive:
 
-The renderer must request only the authorized spatial area needed for the current viewport.
+- raw DWG master
+- raw KMZ master
+- full unfiltered network export
+- provider credentials
+- provider-specific private object URLs as canonical application state
 
-## Access Model
+## Basemap Policy
 
-Water network access is controlled infrastructure access.
+Reference backgrounds are independent from authentic network geometry.
 
-Authorized person record remains simple:
+Current intended display:
 
-- first name
-- last name
-- title
-- access level
-- status
+- Map A: authentic A master, unchanged
+- Map B: authentic B master over road-network background
+- Map C: authentic C master over elevation/topographic background
 
-Status values:
+Changing a basemap must never modify the authentic master.
 
-- active
-- inactive
-- revoked
+## Replication and Recovery
 
-The serving layer must reject inactive or revoked access.
+For every critical master:
 
-## Export Control
+1. ingest and hash locally
+2. record canonical manifest in Pantavion
+3. store primary private replica
+4. store independent backup replica
+5. verify exact byte size and SHA-256 on each replica
+6. test restore
+7. only then mark resilient
 
-Raw KMZ, KML, full GeoJSON, full database dump, full tile archive, or complete network export is not allowed without founder/admin approval.
+ZERO DELETE applies until independent verified recovery exists.
 
-Export actions must be logged.
+Provider cleanup must never delete the canonical Pantavion manifest or the last verified replica.
 
-## Architecture Order
+## Third-Party Role
 
-Implementation order is:
+Cloud providers may accelerate Pantavion but must not own Pantavion.
 
-1. Protect full master source.
-2. Confirm full-master preservation pipeline.
-3. Select storage provider.
-4. Build private processing pipeline.
-5. Build spatial index or tile artifact.
-6. Build controlled API.
-7. Add access enforcement.
-8. Add audit logging.
-9. Only then connect renderer.
+Examples:
 
-## Current Decision
+- R2 may store a private replica
+- MapTiler may publish derived tiles
+- a hosted PostgreSQL service may execute spatial queries
+- a CDN may cache authorized tiles
 
-Pantavion will not proceed with renderer-first development.
+Every one of these must have a documented replacement path.
 
-Pantavion will first prepare controlled data serving with full-master preservation.
+## Runtime Enforcement
 
-The best current path is:
+Pantavion exposes a protected sovereignty status API.
 
-- production target: PostGIS / protected bbox API / protected vector tile service
-- internal diagnostic option: MBTiles or PMTiles only as derived non-final serving artifact
-- renderer: later, after serving and access controls are ready
+The runtime contract must report, without exposing secrets:
+
+- current storage adapter type
+- whether object storage is configured
+- canonical authority
+- provider-neutrality guarantees
+- self-hosted support
+- minimum replica policy
+- browser raw-master prohibition
 
 ## Acceptance Criteria
 
-Before production renderer work continues:
+The GIS architecture is sovereign-ready only when:
 
-1. Water Kernel Constitution exists.
-2. Data Truth Report exists.
-3. Full Master Strategy exists.
-4. Data Serving Strategy exists.
-5. Serving Architecture Decision exists.
-6. Water Kernel Gate enforces required strategy documents.
-7. No full raw network is loaded into the browser.
-8. No mobile/preview/sample/subset file is treated as production truth.
-9. No public raw geodata export exists.
-10. Founder/admin approval exists before production serving activation.
+1. canonical manifest exists in Pantavion
+2. raw master SHA-256 is verified
+3. at least two verified master replicas exist
+4. derived lineage is recorded
+5. provider implementations are behind Pantavion adapters
+6. MapLibre/client is provider-neutral
+7. backup restore is tested
+8. self-hosted exit path is defined and tested
+9. no raw master is publicly exposed
+10. provider removal does not change map identity or require viewer rewrite
+
+## Final Rule
+
+Pantavion is the system.
+
+R2, MapTiler, Supabase, Railway, Render, Floot, AWS, or any future provider are replaceable infrastructure components beneath Pantavion.
