@@ -38,6 +38,37 @@ type AuthorizeResponse = {
   reviewState?: string;
 };
 
+type ObjectStorageStatusResponse = {
+  ok?: boolean;
+  storage?: {
+    configured?: boolean;
+    provider?: string;
+  };
+};
+
+type MultipartCreateResponse = {
+  ok?: boolean;
+  error?: string;
+  key?: string;
+  uploadId?: string;
+  recommendedPartSizeBytes?: number;
+};
+
+type MultipartPartResponse = {
+  ok?: boolean;
+  error?: string;
+  uploadUrl?: string;
+  partNumber?: number;
+};
+
+type MultipartCompleteResponse = {
+  ok?: boolean;
+  error?: string;
+  status?: string;
+  key?: string;
+  partCount?: number;
+};
+
 type CompleteResponse = {
   ok?: boolean;
   status?: string;
@@ -198,19 +229,149 @@ export default function WaterUniversalMapUploader() {
       return;
     }
 
-    if (next.size > PANTAVION_ARTIFACT_UPLOAD_MAX_BYTES) {
-      setPhase("blocked");
-      setMessage(
-        "Το σημερινό verified private ceiling είναι " +
-          bytesLabel(PANTAVION_ARTIFACT_UPLOAD_MAX_BYTES) +
-          ". Το αρχείο δεν στάλθηκε.",
-      );
-      return;
-    }
-
     setPhase("ready");
     setMessage(
-      "Έτοιμο για private resumable upload. Δεν εφαρμόζεται format filter — άγνωστα/future formats διατηρούνται αυτούσια.",
+      next.size > PANTAVION_ARTIFACT_UPLOAD_MAX_BYTES
+        ? "Μεγάλο αρχείο: θα χρησιμοποιηθεί το νέο direct multipart object-storage lane όταν είναι configured."
+        : "Έτοιμο για private resumable upload. Το νέο object-storage lane προτιμάται όταν είναι configured.",
+    );
+  }
+
+  async function objectStorageConfigured() {
+    try {
+      const response = await fetch(
+        "/api/professional/infrastructure/water/storage/status",
+        {
+          method: "GET",
+          credentials: "include",
+          cache: "no-store",
+          headers: accessHeaders(),
+        },
+      );
+      const payload = (await response.json()) as ObjectStorageStatusResponse;
+      return Boolean(response.ok && payload.ok && payload.storage?.configured);
+    } catch {
+      return false;
+    }
+  }
+
+  async function uploadViaMultipart(fileToUpload: File) {
+    setPhase("authorizing");
+    setProgress(0);
+    setMessage("Δημιουργία private multipart upload…");
+
+    const createdResponse = await fetch(
+      "/api/professional/infrastructure/water/storage/multipart/create",
+      {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: accessHeaders(),
+        body: JSON.stringify({
+          fileName: fileToUpload.name,
+          fileSize: fileToUpload.size,
+        }),
+      },
+    );
+    const created = (await createdResponse.json()) as MultipartCreateResponse;
+
+    if (
+      !createdResponse.ok ||
+      !created.ok ||
+      !created.key ||
+      !created.uploadId
+    ) {
+      throw new Error(created.error || "multipart_create_failed");
+    }
+
+    const partSize = Math.max(
+      5 * 1024 * 1024,
+      created.recommendedPartSizeBytes || 64 * 1024 * 1024,
+    );
+    const totalParts = Math.ceil(fileToUpload.size / partSize);
+    const completedParts: Array<{ partNumber: number; etag: string }> = [];
+
+    setPhase("uploading");
+    setMessage(
+      `Direct multipart upload · ${totalParts} parts · χωρίς proxy του Render`,
+    );
+
+    for (let partNumber = 1; partNumber <= totalParts; partNumber += 1) {
+      const signedResponse = await fetch(
+        "/api/professional/infrastructure/water/storage/multipart/part",
+        {
+          method: "POST",
+          credentials: "include",
+          cache: "no-store",
+          headers: accessHeaders(),
+          body: JSON.stringify({
+            key: created.key,
+            uploadId: created.uploadId,
+            partNumber,
+          }),
+        },
+      );
+      const signed = (await signedResponse.json()) as MultipartPartResponse;
+
+      if (!signedResponse.ok || !signed.ok || !signed.uploadUrl) {
+        throw new Error(signed.error || "multipart_part_sign_failed");
+      }
+
+      const start = (partNumber - 1) * partSize;
+      const end = Math.min(fileToUpload.size, start + partSize);
+      const body = fileToUpload.slice(start, end);
+      const uploadResponse = await fetch(signed.uploadUrl, {
+        method: "PUT",
+        body,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error(`multipart_part_upload_failed_${partNumber}`);
+      }
+
+      const etag = uploadResponse.headers.get("etag") || "";
+      if (!etag) {
+        throw new Error(
+          "multipart_etag_not_exposed_configure_object_storage_cors",
+        );
+      }
+
+      completedParts.push({ partNumber, etag });
+      setProgress(
+        Math.round(
+          (Math.min(fileToUpload.size, end) / fileToUpload.size) * 1000,
+        ) / 10,
+      );
+    }
+
+    setPhase("verifying");
+    setMessage("Ολοκλήρωση multipart object και private commit…");
+
+    const completeResponse = await fetch(
+      "/api/professional/infrastructure/water/storage/multipart/complete",
+      {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: accessHeaders(),
+        body: JSON.stringify({
+          key: created.key,
+          uploadId: created.uploadId,
+          parts: completedParts,
+        }),
+      },
+    );
+    const completed =
+      (await completeResponse.json()) as MultipartCompleteResponse;
+
+    if (!completeResponse.ok || !completed.ok) {
+      throw new Error(completed.error || "multipart_complete_failed");
+    }
+
+    setProgress(100);
+    setPhase("done");
+    setMessage(
+      `Private object stored successfully · ${completed.partCount || completedParts.length} parts · processing adapter next`,
     );
   }
 
@@ -222,6 +383,19 @@ export default function WaterUniversalMapUploader() {
     setMessage("Έλεγχος Water access + πραγματική ταξινόμηση format…");
 
     try {
+      const useObjectStorage = await objectStorageConfigured();
+
+      if (useObjectStorage) {
+        await uploadViaMultipart(file);
+        return;
+      }
+
+      if (file.size > PANTAVION_ARTIFACT_UPLOAD_MAX_BYTES) {
+        throw new Error(
+          "object_storage_not_configured_large_file_cannot_use_legacy_lane",
+        );
+      }
+
       const firstBytesBase64 = await sampleBase64(file);
       const authorizationResponse = await fetch(
         "/api/professional/infrastructure/water/maps/intake/authorize",
