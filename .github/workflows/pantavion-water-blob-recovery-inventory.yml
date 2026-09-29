@@ -1,0 +1,141 @@
+name: Pantavion Water Blob Recovery Inventory
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pantavion-water-blob-recovery-inventory.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-water-blob-recovery-inventory
+  cancel-in-progress: false
+
+jobs:
+  inventory:
+    name: Inventory private Water DWG blobs
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_CLI_VERSION: '59.5.0'
+
+    steps:
+      - name: Require authorized Vercel credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=0
+          for name in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error::$name is not configured."
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then exit 1; fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies and Vercel CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund
+          npm install --global "vercel@$VERCEL_CLI_VERSION" --no-audit --no-fund
+
+      - name: Pull production environment and inventory Water blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          env_file="$RUNNER_TEMP/pantavion-vercel-production.env"
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN" >/dev/null
+          vercel env pull "$env_file" --environment=production --token="$VERCEL_TOKEN" >/dev/null
+
+          blob_token=$(node - "$env_file" <<'NODE'
+          const fs = require("fs");
+          const file = process.argv[2];
+          const text = fs.readFileSync(file, "utf8");
+          const lines = text.split(/\r?\n/);
+          for (const name of ["BLOB_READ_WRITE_TOKEN","PANTAVION_BLOB_READ_WRITE_TOKEN"]) {
+            const line = lines.find((x) => x.startsWith(name + "="));
+            if (!line) continue;
+            let value = line.slice(name.length + 1).trim();
+            if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+              value = value.slice(1, -1);
+            }
+            if (value) { process.stdout.write(value); process.exit(0); }
+          }
+          process.exit(2);
+          NODE
+          )
+
+          if [ -z "$blob_token" ]; then
+            echo "::error::No private Blob token was present in the pulled production environment."
+            rm -f "$env_file"
+            exit 1
+          fi
+
+          echo "::add-mask::$blob_token"
+          export BLOB_READ_WRITE_TOKEN="$blob_token"
+          rm -f "$env_file"
+
+          node --input-type=module <<'NODE'
+          import { list } from "@vercel/blob";
+
+          const token = process.env.BLOB_READ_WRITE_TOKEN;
+          const prefixes = [
+            "pantavion/water/",
+            "water/",
+          ];
+          const seen = new Map();
+
+          for (const prefix of prefixes) {
+            let cursor;
+            for (let page = 0; page < 50; page++) {
+              const result = await list({
+                token,
+                prefix,
+                limit: 1000,
+                ...(cursor ? { cursor } : {}),
+              });
+
+              for (const blob of result.blobs || []) {
+                const pathname = String(blob.pathname || "");
+                const lower = pathname.toLowerCase();
+                if (
+                  lower.endsWith(".dwg") ||
+                  lower.endsWith(".kmz") ||
+                  lower.includes("andreaspap") ||
+                  lower.includes("george") ||
+                  lower.includes("map-b") ||
+                  lower.includes("map-c")
+                ) {
+                  seen.set(pathname, {
+                    pathname,
+                    size: Number(blob.size || 0),
+                    uploadedAt: blob.uploadedAt || null,
+                    contentType: blob.contentType || null,
+                  });
+                }
+              }
+
+              if (!result.hasMore || !result.cursor) break;
+              cursor = result.cursor;
+            }
+          }
+
+          const rows = [...seen.values()].sort((a,b) => a.pathname.localeCompare(b.pathname));
+          console.log("PANTAVION_WATER_PRIVATE_BLOB_INVENTORY_BEGIN");
+          console.log(JSON.stringify({ count: rows.length, rows }, null, 2));
+          console.log("PANTAVION_WATER_PRIVATE_BLOB_INVENTORY_END");
+          NODE
