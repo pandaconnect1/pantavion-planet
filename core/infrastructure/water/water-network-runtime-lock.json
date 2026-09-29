@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-09-27T13:39:44.256Z",
+  "lockedAtUtc": "2026-09-29T08:07:00.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -22,7 +22,7 @@
     "app/api/professional/infrastructure/water/access/invite/claim/route.ts": "ac91b1fbf67e03330171004c1c38b0b314b76db3321b758ba71a502523de288f",
     "app/api/professional/infrastructure/water/admin/session/route.ts": "6b09ff4220d257c946c3df5bb2cce364b7b94c5942b8873d366e11bc0103d112",
     "app/api/professional/infrastructure/water/mapserver/0/query/route.ts": "3d4784ac3af414b1b143588c721fe8bee24d1c98e60b131caaa93b3ab398ae59",
-    "app/api/professional/infrastructure/water/segment/bbox/route.ts": "4b792c1376b23d6c10f68d445fe0a81f24dcb0f4aeacbbe3a0162d97bf21c6aa",
+    "app/api/professional/infrastructure/water/segment/bbox/route.ts": "84c67c118266b0326c1db4d5ea79c0c9179d0b3498a96760d7b2ed4095820055",
     "app/professional/infrastructure/water/admin/access/page.tsx": "f839879a1184951d1540e22904730319b24a8612de6cecb1de29a0304d56829d",
     "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "3f91b0b188312408a133a1cf0c89e2bf4a060a21a060f226ed36376f2a84b498",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
@@ -35,8 +35,8 @@
     "scripts/water-segment-reader-regression.mjs": "8b1f075c8143fbe0041bc8918b0a1717ea46e034f57c09479a5a7eb9f0206c33"
   },
   "refreshEvidence": {
-    "reason": "Reviewed admin/session, bbox segmented delivery, admin access and controlled viewer changes; source truth and privacy invariants remain unchanged.",
-    "sourceCommit": "bcbb91aecf97cfac894a354885c1fa8f2bab28ed",
+    "reason": "Reviewed scoped Map A viewport RPC wiring. Approved-device validation, private source, segmented delivery, no raw master exposure, and fail-closed fallbacks remain unchanged.",
+    "sourceCommit": "1b4b0df2-production-route-rpc",
     "protectedFileCount": 17,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
