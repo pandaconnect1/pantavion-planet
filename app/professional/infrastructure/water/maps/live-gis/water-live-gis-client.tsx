@@ -116,12 +116,30 @@ export default function WaterLiveGisClient({
               tileSize: 256,
               attribution: "© OpenStreetMap contributors",
             },
+            topo: {
+              type: "raster",
+              tiles: ["https://tile.opentopomap.org/{z}/{x}/{y}.png"],
+              tileSize: 256,
+              maxzoom: 17,
+              attribution: "© OpenStreetMap contributors · SRTM · OpenTopoMap",
+            },
           },
           layers: [
             {
               id: "osm",
               type: "raster",
               source: "osm",
+              layout: {
+                visibility: initialMap === "C" ? "none" : "visible",
+              },
+            },
+            {
+              id: "topo",
+              type: "raster",
+              source: "topo",
+              layout: {
+                visibility: initialMap === "C" ? "visible" : "none",
+              },
             },
           ],
         },
@@ -153,6 +171,17 @@ export default function WaterLiveGisClient({
   function selectMap(mapId: MapId) {
     setActiveMap(mapId);
     setStatus(mapStatus(mapId));
+
+    const map = mapRef.current;
+    if (!map) return;
+
+    const topoVisible = mapId === "C";
+    if (map.getLayer("osm")) {
+      map.setLayoutProperty("osm", "visibility", topoVisible ? "none" : "visible");
+    }
+    if (map.getLayer("topo")) {
+      map.setLayoutProperty("topo", "visibility", topoVisible ? "visible" : "none");
+    }
   }
 
   function locateMe() {
@@ -247,6 +276,10 @@ export default function WaterLiveGisClient({
         <div className="mb-2 flex flex-wrap items-center gap-2 text-[11px] font-bold text-slate-300">
           <span className="rounded-full border border-emerald-400/30 px-3 py-2">
             Engine: {ready ? "MapLibre ready" : "starting"}
+          </span>
+
+          <span className="rounded-full border border-white/15 px-3 py-2">
+            Background: {activeMap === "C" ? "Υψομετρία / Topographic" : activeMap === "B" ? "Οδικό δίκτυο" : "Οδικό δίκτυο"}
           </span>
 
           <span className="rounded-full border border-white/15 px-3 py-2">
