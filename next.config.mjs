@@ -2,6 +2,28 @@
 
 const canonicalOrigin = "https://pantavion.com";
 
+const objectStorageProvider = (process.env.PANTAVION_OBJECT_STORAGE_PROVIDER || "").trim();
+const objectStorageEndpointConfigured = Boolean((process.env.PANTAVION_OBJECT_STORAGE_ENDPOINT || "").trim());
+const objectStorageBucketConfigured = Boolean((process.env.PANTAVION_OBJECT_STORAGE_BUCKET || "").trim());
+const objectStorageCredentialsConfigured = Boolean(
+  (process.env.PANTAVION_OBJECT_STORAGE_ACCESS_KEY_ID || "").trim() &&
+  (process.env.PANTAVION_OBJECT_STORAGE_SECRET_ACCESS_KEY || "").trim(),
+);
+
+console.log(
+  JSON.stringify({
+    marker: "pantavion_object_storage_build_status_v1",
+    providerConfigured: Boolean(objectStorageProvider),
+    endpointConfigured: objectStorageEndpointConfigured,
+    bucketConfigured: objectStorageBucketConfigured,
+    credentialsConfigured: objectStorageCredentialsConfigured,
+    configured:
+      objectStorageEndpointConfigured &&
+      objectStorageBucketConfigured &&
+      objectStorageCredentialsConfigured,
+  }),
+);
+
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
