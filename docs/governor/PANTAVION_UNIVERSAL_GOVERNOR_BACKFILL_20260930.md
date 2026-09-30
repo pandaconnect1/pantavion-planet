@@ -16,7 +16,7 @@ It is **not** a public Pantavion feature and it is **not** permission to delete,
 6. ZERO DELETE until independent verified recovery exists.
 7. Pantavion owns canonical identity/data/lineage; providers are replaceable adapters.
 8. Supabase is transition/legacy evidence while replacement is built. New strategic lock-in is prohibited.
-9. Vercel is **not** globally blocked; its exact role must be proven before any change.
+9. **Vercel is BLOCKED by Founder directive.** It must remain outside the active Pantavion recovery/builder/verifier/deployment critical path unless the Founder explicitly re-enables it later.
 10. The Founder Agenda/Governor is private control-plane state, not a user-facing Pantavion module.
 
 ## What is already recovered
@@ -79,7 +79,7 @@ Therefore the secure founder/admin path cannot be considered repaired merely bec
 Do not rebuild/reprocess/realign the authentic Map A when the fault is auth, routing or serving.
 
 ### HARD STOP — Provider churn
-Do not change Vercel/Railway/Supabase/another provider without proving the failing layer first.
+Do not re-enable or route active Pantavion execution through **Vercel**. Vercel is Founder-blocked. For Railway/Supabase/other providers, prove the failing layer before changing them.
 
 ### HARD STOP — False completion
 Do not call something complete because it is coded, tested, merged, deployed or visually present. Use the exact lifecycle evidence.
@@ -98,7 +98,7 @@ Coded/tested is not delivered. Continue through merge/deploy/live verification w
 4. Map B and C private ingest + verification + derived delivery.
 5. Supabase strategic exit through provider-neutral Pantavion contracts.
 6. Full 82,413 recovery reconciliation against current canonical implementation.
-7. Exact production revision/domain verification.
+7. Exact **non-Vercel** production revision/domain verification.
 
 ## Chat-history coverage
 
