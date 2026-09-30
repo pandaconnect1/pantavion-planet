@@ -113,10 +113,12 @@ Declared founder email: `info.pandaconnect@gmail.com`.
 Passwords, MFA codes and secret keys must never be written into this ledger.
 
 
-## Execution location
+## Roles and execution
 
-- **Operational work executes inside Pantavion.**
-- **ChatGPT is the Founder command, supervision and notification interface.**
-- Founder directives are given here; the private Governor carries them into Pantavion execution.
-- Status, mistakes, omissions, blockers and evidence are reported back here.
+- **Founder:** gives directives here in ChatGPT and retains final authority.
+- **ChatGPT:** is the executor. It performs the work on Pantavion.
+- **Pantavion:** is the Governor / watchdog. It supervises the executor; it is not the executor.
+- The Governor compares every action with the latest Founder directive, prior mistakes, hard-stop rules and evidence.
+- If ChatGPT diverges, repeats a known mistake, skips a step or claims completion without evidence, the Governor must flag the violation, block/redirect the wrong path where possible, and identify the corrective next action.
+- Work continues until **VERIFIED_DONE** or an explicit Founder cancellation.
 - Slack is not part of this control loop.
