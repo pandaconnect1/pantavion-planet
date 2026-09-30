@@ -25,7 +25,8 @@
     "vercelPolicy": "BLOCKED. Vercel must not be used in the active Pantavion recovery/builder/verifier/deployment critical path unless the Founder explicitly re-enables it later.",
     "agendaVisibility": "Founder execution agenda is private control-plane data and must not be exposed as a normal Pantavion user surface.",
     "executionLocationPolicy": "Execution is performed by ChatGPT on the Pantavion system/code/runtime. Pantavion itself is the Governor/watchdog that supervises the executor.",
-    "executionRolePolicy": "Pantavion is the Governor/watchdog. ChatGPT is the executor acting on Pantavion. The Founder gives directives here. Pantavion does not replace the executor; it supervises, checks divergence, records evidence, and reports violations."
+    "executionRolePolicy": "Pantavion is the Governor/watchdog. ChatGPT is the executor acting on Pantavion. The Founder gives directives here. Pantavion does not replace the executor; it supervises, checks divergence, records evidence, and reports violations.",
+    "vercelProjectVmxxPolicy": "pantavion-planet-vmxx is founder-blocked. Do not re-enable, deploy from, alias, or route production traffic through it without a later explicit Founder directive."
   },
   "sourceCoverage": [
     {
@@ -140,6 +141,17 @@
         "mergeCommit": "988b43fca27fd7c0d3220eaead2ceb09ccc3f1d5",
         "checks": "all observed PR head checks succeeded before merge"
       }
+    },
+    {
+      "id": "pantavion_public_home_reachable_20260930T1354Z",
+      "domain": "production",
+      "state": "VERIFIED_DONE",
+      "claim": "https://pantavion.com returned the Pantavion public homepage during live verification.",
+      "evidence": {
+        "checkedAt": "2026-09-30T13:54:00Z",
+        "visibleHeading": "Here We Are One. For All Humanity."
+      },
+      "caution": "This proves public homepage reachability only. It does not prove that blocking pantavion-planet-vmxx was the sole cause of recovery."
     }
   ],
   "repeatedFailurePatterns": [
@@ -178,6 +190,12 @@
       "severity": "HARD_STOP",
       "rule": "If an action repeats a prior failed loop without new evidence, stop before mutation.",
       "correctiveAction": "Return to the latest verified checkpoint and choose a new evidence-based route."
+    },
+    {
+      "id": "reenable_vmxx_without_evidence",
+      "severity": "HARD_STOP",
+      "rule": "Do not re-enable pantavion-planet-vmxx after the Founder blocked it and the public homepage became reachable.",
+      "correctiveAction": "Keep vmxx blocked and diagnose aliases/domains/deploy routing before touching project state."
     }
   ],
   "activeExecutionQueue": [
