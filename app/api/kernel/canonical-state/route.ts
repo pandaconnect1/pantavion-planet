@@ -136,7 +136,7 @@ export async function POST(request: Request) {
             ? sourceRef
             : "chatgpt://founder-command",
       });
-      const materialization = await materializePantavionFounderExecutionIntents(1);
+      const materialization = await materializePantavionFounderExecutionIntents(1, { intentId: captured.intentId });
 
       return noStore(
         NextResponse.json({
