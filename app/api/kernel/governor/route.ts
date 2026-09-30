@@ -150,6 +150,7 @@ function parseExecutionInput(
 }
 
 export async function GET(request: Request) {
+  const bridgeAllowed = isPantavionGovernorBridgeRequestAllowed(request);
   if (!(bridgeAllowed || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
 
   return noStore(
@@ -194,7 +195,7 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!(isPantavionGovernorBridgeRequestAllowed(request) || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
+  if (!(bridgeAllowed || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
 
   const body = await request.json().catch(() => null);
   const execution = parseExecutionInput(body);
