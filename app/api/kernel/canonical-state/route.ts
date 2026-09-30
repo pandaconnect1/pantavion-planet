@@ -5,6 +5,7 @@ import {
   isPantavionKernelFounderRequestAllowed,
 } from "@/core/kernel/kernel-access-guard";
 import {
+  capturePantavionFounderAgendaDirective,
   listPantavionFounderCanonicalStates,
   listPantavionFounderExecutionIntents,
   materializePantavionFounderExecutionIntents,
@@ -96,6 +97,62 @@ export async function POST(request: Request) {
   }
 
   const action = typeof body?.action === "string" ? body.action.trim() : "";
+  if (action === "capture") {
+    const founderIntent =
+      typeof body?.founderIntent === "string" ? body.founderIntent.trim() : "";
+    const title = typeof body?.title === "string" ? body.title.trim() : undefined;
+    const target =
+      typeof body?.target === "string" ? body.target.trim() : undefined;
+
+    if (!founderIntent || founderIntent.length > 12_000) {
+      return noStore(
+        NextResponse.json(
+          {
+            ok: false,
+            marker: "pantavion_founder_agenda_capture_validation_failed_v1",
+            status: "invalid_request",
+          },
+          { status: 400 },
+        ),
+      );
+    }
+
+    try {
+      const captured = await capturePantavionFounderAgendaDirective({
+        founderIntent,
+        ...(title ? { title } : {}),
+        ...(target
+          ? { target: target as Parameters<typeof capturePantavionFounderAgendaDirective>[0]["target"] }
+          : {}),
+        sourceRef: "pantavion://owner/control/agenda",
+      });
+      const materialization = await materializePantavionFounderExecutionIntents(1);
+
+      return noStore(
+        NextResponse.json({
+          ok: materialization.status !== "blocked",
+          marker: "pantavion_founder_agenda_capture_v1",
+          visibility: "founder_internal_only",
+          captured,
+          materialization,
+          checkedAt: new Date().toISOString(),
+        }),
+      );
+    } catch (error) {
+      return noStore(
+        NextResponse.json(
+          {
+            ok: false,
+            marker: "pantavion_founder_agenda_capture_failed_v1",
+            status: "blocked",
+            error: error instanceof Error ? error.message : "unknown_error",
+          },
+          { status: 503 },
+        ),
+      );
+    }
+  }
+
   if (action !== "materialize") {
     return noStore(
       NextResponse.json(
