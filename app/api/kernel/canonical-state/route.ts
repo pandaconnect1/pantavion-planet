@@ -103,6 +103,8 @@ export async function POST(request: Request) {
     const title = typeof body?.title === "string" ? body.title.trim() : undefined;
     const target =
       typeof body?.target === "string" ? body.target.trim() : undefined;
+    const sourceRef =
+      typeof body?.sourceRef === "string" ? body.sourceRef.trim().slice(0, 1000) : "";
 
     if (!founderIntent || founderIntent.length > 12_000) {
       return noStore(
@@ -124,7 +126,11 @@ export async function POST(request: Request) {
         ...(target
           ? { target: target as Parameters<typeof capturePantavionFounderAgendaDirective>[0]["target"] }
           : {}),
-        sourceRef: "pantavion://owner/control/agenda",
+        sourceRef:
+          sourceRef.startsWith("chatgpt://") ||
+          sourceRef.startsWith("pantavion://internal/")
+            ? sourceRef
+            : "chatgpt://founder-command",
       });
       const materialization = await materializePantavionFounderExecutionIntents(1);
 
