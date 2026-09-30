@@ -728,14 +728,47 @@ export default function ControlledWaterSegmentClient() {
           return;
         }
 
+        if (
+          !cancelled &&
+          (response.status === 401 ||
+            response.status === 403 ||
+            json.error === "access_not_approved")
+        ) {
+          try {
+            const claimResponse = await fetch(
+              "/api/professional/infrastructure/water/access/admin/claim-device",
+              {
+                method: "POST",
+                cache: "no-store",
+                credentials: "include",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({
+                  deviceId: device.deviceId,
+                  deviceToken: device.deviceToken,
+                }),
+              },
+            );
+
+            const claimJson = (await claimResponse.json().catch(() => ({}))) as {
+              ok?: boolean;
+              approved?: boolean;
+            };
+
+            if (!cancelled && claimResponse.ok && claimJson.ok && claimJson.approved) {
+              setAccessMessage("Η founder/admin συσκευή αναγνωρίστηκε και εγκρίθηκε.");
+              setAccessState("approved");
+              return;
+            }
+          } catch {
+            // Fall through to normal denied state. No public auto-approval.
+          }
+
+          if (!cancelled) setAccessState("denied");
+          return;
+        }
+
         if (!cancelled) {
-          setAccessState(
-            response.status === 401 ||
-              response.status === 403 ||
-              json.error === "access_not_approved"
-              ? "denied"
-              : "error",
-          );
+          setAccessState("error");
         }
       } catch {
         if (!cancelled) {
