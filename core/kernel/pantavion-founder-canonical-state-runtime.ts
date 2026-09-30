@@ -363,6 +363,7 @@ export async function listPantavionFounderExecutionIntents(limit = 100) {
  */
 export async function materializePantavionFounderExecutionIntents(
   limit = 20,
+  options: { intentId?: string } = {},
 ): Promise<PantavionCanonicalIntentMaterializationReport> {
   const admin = createAdminClient();
   const checkedAt = new Date().toISOString();
@@ -395,12 +396,19 @@ export async function materializePantavionFounderExecutionIntents(
     };
   }
 
-  const { data, error } = await admin
+  let pendingQuery = admin
     .from("pantavion_founder_execution_intents")
     .select("intent_id,canonical_state_id,idempotency_key,title,founder_intent,target,capabilities,target_files,approval_scope,workload,status,work_order_execution_id,last_error,materialized_at,created_at,updated_at")
     .eq("status", "pending_materialization")
     .order("created_at", { ascending: true })
     .limit(bounded);
+
+  const requestedIntentId = options.intentId?.trim();
+  if (requestedIntentId) {
+    pendingQuery = pendingQuery.eq("intent_id", requestedIntentId);
+  }
+
+  const { data, error } = await pendingQuery;
 
   if (error) {
     return {
