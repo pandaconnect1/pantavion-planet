@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   createPantavionKernelAccessDeniedReport,
+  isPantavionGovernorBridgeRequestAllowed,
   isPantavionKernelFounderRequestAllowed,
 } from "@/core/kernel/kernel-access-guard";
 import {
@@ -149,7 +150,7 @@ function parseExecutionInput(
 }
 
 export async function GET(request: Request) {
-  if (!(await isPantavionKernelFounderRequestAllowed(request))) return denied();
+  if (!(isPantavionGovernorBridgeRequestAllowed(request) || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
 
   return noStore(
     NextResponse.json({
@@ -190,7 +191,7 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!(await isPantavionKernelFounderRequestAllowed(request))) return denied();
+  if (!(isPantavionGovernorBridgeRequestAllowed(request) || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
 
   const body = await request.json().catch(() => null);
   const execution = parseExecutionInput(body);
