@@ -111,3 +111,12 @@ When a ChatGPT export becomes available, it is ingested as another immutable evi
 Declared founder email: `info.pandaconnect@gmail.com`.
 
 Passwords, MFA codes and secret keys must never be written into this ledger.
+
+
+## Execution location
+
+- **Operational work executes inside Pantavion.**
+- **ChatGPT is the Founder command, supervision and notification interface.**
+- Founder directives are given here; the private Governor carries them into Pantavion execution.
+- Status, mistakes, omissions, blockers and evidence are reported back here.
+- Slack is not part of this control loop.
