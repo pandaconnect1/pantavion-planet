@@ -1,0 +1,267 @@
+{
+  "id": "pantavion_universal_governor_backfill_20260930_v1",
+  "generatedAt": "2026-09-30T13:30:00Z",
+  "purpose": "Cross-thread, recovery, repository, runtime and provider-truth seed for the Pantavion execution governor. It is a control index, not a replacement for source evidence.",
+  "governingRules": {
+    "latestFounderDirectiveWins": true,
+    "noDirectiveMayRemainOpen": true,
+    "allowedNonTerminalStates": [
+      "IN_PROGRESS",
+      "BLOCKED",
+      "WAITING_FOUNDER"
+    ],
+    "terminalStates": [
+      "VERIFIED_DONE",
+      "CANCELLED_BY_FOUNDER"
+    ],
+    "noDoneWithoutEvidence": true,
+    "repeatedMistakeTriggersHardStop": true,
+    "divergenceTriggersReturnToLastVerifiedStep": true,
+    "zeroDeleteUntilIndependentVerifiedRecovery": true,
+    "neverExposeSecrets": true,
+    "mapAOriginalMustNotBeModified": true,
+    "providerSovereignty": "Pantavion owns canonical identity/data/lineage; providers are replaceable adapters.",
+    "supabasePolicy": "Treat current Supabase as a legacy/transition source while replacement is built; do not create new strategic lock-in.",
+    "vercelPolicy": "BLOCKED. Vercel must not be used in the active Pantavion recovery/builder/verifier/deployment critical path unless the Founder explicitly re-enables it later.",
+    "agendaVisibility": "Founder execution agenda is private control-plane data and must not be exposed as a normal Pantavion user surface.",
+    "executionLocationPolicy": "Execution is performed by ChatGPT on the Pantavion system/code/runtime. Pantavion itself is the Governor/watchdog that supervises the executor.",
+    "executionRolePolicy": "Pantavion is the Governor/watchdog. ChatGPT is the executor acting on Pantavion. The Founder gives directives here. Pantavion does not replace the executor; it supervises, checks divergence, records evidence, and reports violations.",
+    "vercelProjectVmxxPolicy": "pantavion-planet-vmxx is founder-blocked. Do not re-enable, deploy from, alias, or route production traffic through it without a later explicit Founder directive."
+  },
+  "sourceCoverage": [
+    {
+      "source": "chatgpt_cross_thread_context",
+      "state": "IN_PROGRESS",
+      "coverage": "Relevant prior Pantavion conversations retrieved through cross-thread personal context.",
+      "limitations": [
+        "No full ChatGPT export/conversations.json was found in current conversation files or Library, so line-by-line exhaustive historical coverage is not yet proven."
+      ],
+      "nextAction": "Continue targeted cross-thread retrieval and ingest any future ChatGPT export without waiting for a new project reset."
+    },
+    {
+      "source": "github_canonical_repo",
+      "repository": "pandaconnect1/pantavion-planet",
+      "state": "IN_PROGRESS",
+      "coverage": "Current main, recovery artifacts, deep-analysis manifests, runtime reports, history-bearing branches and execution evidence."
+    },
+    {
+      "source": "recovery_corpus",
+      "state": "IN_PROGRESS",
+      "canonicalRoot": "data/recovery/imported-pr248/canonical-ledger/corpus",
+      "sourceRecords": 82413,
+      "numberedBatches": 55,
+      "classifiedCandidates": 31779,
+      "recursivePreservedArtifacts": 50279,
+      "governedHold": 355,
+      "workUnitsMaterialized": 82413,
+      "sourceFingerprint": "99ff942f154e3dac6298488923e15436c9ebf652b64bc14bcfb72efc82b22d2d",
+      "controlRule": "Reference the canonical corpus and its fingerprints; do not duplicate or delete raw recovery truth."
+    },
+    {
+      "source": "founder_vision_ingestion",
+      "state": "IN_PROGRESS",
+      "scannedFiles": 696,
+      "findings": 13801,
+      "generatedAt": "2026-05-24T11:34:50.107Z"
+    },
+    {
+      "source": "unfinished_plan_ingestion",
+      "state": "IN_PROGRESS",
+      "scannedFiles": 702,
+      "findings": 11360,
+      "generatedAt": "2026-05-24T11:26:51.477Z"
+    },
+    {
+      "source": "current_supabase_legacy_state",
+      "projectRef": "cxhulvwkagzufbjsdwwu",
+      "state": "IN_PROGRESS",
+      "role": "legacy/transition evidence source, not long-term canonical dependency",
+      "observedCounts": {
+        "auth_users": 0,
+        "founder_roles": 0,
+        "durable_executions": 33928,
+        "durable_checkpoints": 69476,
+        "recovery_catalog": 82413,
+        "vercel_recovery_catalog": 5569,
+        "water_access_requests": 2,
+        "water_approved_devices": 14,
+        "water_map_a_live_features": 84575,
+        "water_map_a_live_features_full": 122857,
+        "water_map_ingest_catalog": 0,
+        "water_map_versions": 0
+      }
+    }
+  ],
+  "verifiedTruth": [
+    {
+      "id": "water_map_a_source",
+      "domain": "water",
+      "state": "VERIFIED_DONE",
+      "claim": "Authentic Map A source is ingested in the current legacy data store without geometry/coordinate modification.",
+      "evidence": {
+        "status": "ready_exact",
+        "sourceSizeBytes": 10854140,
+        "placemarks": 122857,
+        "lineStrings": 125398,
+        "coordinatePoints": 528063,
+        "badCoordinates": 0,
+        "geometryModified": false,
+        "coordinatesModified": false,
+        "sourceSha256": "ccac8b6e5034aec6e8c3c4eb9b2638c4460027ae01fc974467e6692a47e72121"
+      },
+      "caution": "This verifies source/data state, not current end-user pipe visibility on pantavion.com."
+    },
+    {
+      "id": "water_map_b_source",
+      "domain": "water",
+      "state": "IN_PROGRESS",
+      "claim": "Authentic Map B DWG bytes are verified but production ingest/derived delivery is not complete.",
+      "fileName": "MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg",
+      "byteSize": 205565159,
+      "sha256": "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16",
+      "dwgHeader": "AC1032"
+    },
+    {
+      "id": "water_map_c_source",
+      "domain": "water",
+      "state": "IN_PROGRESS",
+      "claim": "Authentic Map C DWG bytes are verified but production ingest/derived delivery is not complete.",
+      "fileName": "GEORGE_MAP_MASTER_B_C_FINAL (4).dwg",
+      "byteSize": 85703125,
+      "sha256": "038b9bceda2a660296a9162723f5279e5a2d10eb18d499b087d0e8ffa393b800",
+      "dwgHeader": "AC1032"
+    },
+    {
+      "id": "founder_agenda_visibility_fix",
+      "domain": "governor",
+      "state": "VERIFIED_DONE",
+      "claim": "Visible Founder Agenda entry point was removed and the user-facing route was hidden.",
+      "evidence": {
+        "pullRequest": 536,
+        "mergeCommit": "988b43fca27fd7c0d3220eaead2ceb09ccc3f1d5",
+        "checks": "all observed PR head checks succeeded before merge"
+      }
+    },
+    {
+      "id": "pantavion_public_home_reachable_20260930T1354Z",
+      "domain": "production",
+      "state": "VERIFIED_DONE",
+      "claim": "https://pantavion.com returned the Pantavion public homepage during live verification.",
+      "evidence": {
+        "checkedAt": "2026-09-30T13:54:00Z",
+        "visibleHeading": "Here We Are One. For All Humanity."
+      },
+      "caution": "This proves public homepage reachability only. It does not prove that blocking pantavion-planet-vmxx was the sole cause of recovery."
+    }
+  ],
+  "repeatedFailurePatterns": [
+    {
+      "id": "repeat_map_a_rework",
+      "severity": "HARD_STOP",
+      "rule": "Do not rebuild, reprocess, recolor, realign or otherwise modify the authentic Map A when the issue is access/routing/serving.",
+      "correctiveAction": "Verify serving path, authorization, exact runtime and data connection first."
+    },
+    {
+      "id": "provider_churn_without_root_cause",
+      "severity": "HARD_STOP",
+      "rule": "Do not re-enable or route active Pantavion execution through Vercel. Vercel is founder-blocked. Do not switch other providers merely because a symptom appears.",
+      "correctiveAction": "Keep Vercel out of the active critical path and prove the failing layer before changing any other provider."
+    },
+    {
+      "id": "claim_done_without_live_evidence",
+      "severity": "HARD_STOP",
+      "rule": "No DONE, LIVE, SUCCESS or VERIFIED_LIVE label without matching production evidence.",
+      "correctiveAction": "Downgrade to IN_PROGRESS/BLOCKED and record exact missing evidence."
+    },
+    {
+      "id": "leave_work_in_pr_or_tested_state",
+      "severity": "VIOLATION",
+      "rule": "A coded/tested PR is not delivery.",
+      "correctiveAction": "Continue through merge, deploy and live verification when authorized."
+    },
+    {
+      "id": "agenda_exposed_to_users",
+      "severity": "VIOLATION",
+      "rule": "The execution governor/agenda is a private founder/assistant control plane, not a normal user-facing Pantavion module.",
+      "correctiveAction": "Keep control state private and expose only founder-approved operational summaries."
+    },
+    {
+      "id": "circular_rework",
+      "severity": "HARD_STOP",
+      "rule": "If an action repeats a prior failed loop without new evidence, stop before mutation.",
+      "correctiveAction": "Return to the latest verified checkpoint and choose a new evidence-based route."
+    },
+    {
+      "id": "reenable_vmxx_without_evidence",
+      "severity": "HARD_STOP",
+      "rule": "Do not re-enable pantavion-planet-vmxx after the Founder blocked it and the public homepage became reachable.",
+      "correctiveAction": "Keep vmxx blocked and diagnose aliases/domains/deploy routing before touching project state."
+    }
+  ],
+  "activeExecutionQueue": [
+    {
+      "priority": 1,
+      "id": "governor_universal_backfill",
+      "state": "IN_PROGRESS",
+      "objective": "Unify cross-thread directives, recovery corpus, GitHub evidence and runtime/provider truth into one private execution governor.",
+      "completionGate": "Machine-readable governor index merged; future actions consult it before mutation; historical coverage gap is explicitly tracked until full chat export is ingested."
+    },
+    {
+      "priority": 2,
+      "id": "water_founder_access",
+      "state": "BLOCKED",
+      "objective": "Restore secure founder/admin access to protected Water data without weakening normal-user controls.",
+      "blocker": "Current legacy Supabase project reports 0 auth users and 0 active founder roles, while approved-device records exist.",
+      "nextAction": "Move identity/control authority toward provider-neutral Pantavion Auth and preserve/reconcile existing device approvals."
+    },
+    {
+      "priority": 3,
+      "id": "water_map_a_end_user_visibility",
+      "state": "IN_PROGRESS",
+      "objective": "Make the already-ingested authentic Map A network visible to the authorized founder/user flow.",
+      "constraint": "Do not modify Map A source geometry.",
+      "nextAction": "Verify exact production runtime, authorization result and pipe-query serving path."
+    },
+    {
+      "priority": 4,
+      "id": "water_maps_b_c_delivery",
+      "state": "IN_PROGRESS",
+      "objective": "Ingest and serve authentic Maps B and C from verified source bytes with immutable lineage.",
+      "currentTruth": "Both sources are byte-verified; legacy water_map_ingest_catalog and water_map_versions currently contain 0 rows.",
+      "nextAction": "Private storage ingest -> server verification -> version/lineage -> derived delivery -> authorized live verify."
+    },
+    {
+      "priority": 5,
+      "id": "supabase_exit",
+      "state": "IN_PROGRESS",
+      "objective": "Replace strategic Supabase dependencies with provider-neutral Pantavion-owned contracts and portable PostgreSQL/PostGIS/Auth implementations.",
+      "constraint": "Use current Supabase only as a transition/evidence source until migration is verified; zero destructive cutover."
+    },
+    {
+      "priority": 6,
+      "id": "recovery_82413_reconciliation",
+      "state": "IN_PROGRESS",
+      "objective": "Reconcile all 82,413 preserved recovery records against current canonical implementation and execution truth.",
+      "constraint": "ZERO DELETE; preserved recursive artifacts and governed holds never gain execution authority merely by existence."
+    },
+    {
+      "priority": 7,
+      "id": "production_exact_revision",
+      "state": "IN_PROGRESS",
+      "objective": "Prove the active non-Vercel production runtime serves the intended current application revision and all critical routes before any VERIFIED_LIVE claim."
+    }
+  ],
+  "founderIdentity": {
+    "email": "info.pandaconnect@gmail.com",
+    "status": "declared_founder_identity",
+    "securityRule": "Never store or request passwords, MFA codes or secret keys in the governor ledger."
+  },
+  "nextGovernorCycle": [
+    "Founder gives directive in ChatGPT.",
+    "ChatGPT executes the directive on Pantavion.",
+    "Pantavion Governor compares each action against the latest Founder directive, prior failures, hard-stop rules and evidence.",
+    "If ChatGPT diverges, repeats a known mistake, skips work or claims completion without evidence, Pantavion Governor flags/stops the deviation and identifies the corrective next step.",
+    "ChatGPT continues execution until verified completion.",
+    "Pantavion Governor reports mistakes, omissions, blockers and evidence back to the Founder through ChatGPT."
+  ]
+}
