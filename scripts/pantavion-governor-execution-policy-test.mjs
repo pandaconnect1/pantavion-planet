@@ -21,6 +21,14 @@ assert(
   "Evidence-free investigation may proceed, but completion must not be implied.",
 );
 assert(
+  allowed.governorState === "IN_PROGRESS",
+  "Admitted unfinished work must immediately enter IN_PROGRESS.",
+);
+assert(
+  typeof allowed.actionFingerprint === "string" && allowed.actionFingerprint.length === 64,
+  "Every proposed action must receive a deterministic SHA-256 fingerprint.",
+);
+assert(
   allowed.modePlan.some((item) => item.mode === "research" && item.applied),
   "Research mode must be active.",
 );
@@ -136,6 +144,28 @@ const viralPublic = evaluatePantavionGovernorGuard({
 assert(
   viralPublic.modePlan.find((item) => item.mode === "viral")?.applied === true,
   "Viral mode may apply to public communication tasks.",
+);
+
+
+const waitingFounder = evaluatePantavionGovernorGuard({
+  ...base,
+  requiresFounderDecision: true,
+  founderDecisionPrompt: "Approve the irreversible scope change?",
+  evidence: [{ kind: "analysis", reference: "decision-context", verified: true }],
+});
+assert(
+  waitingFounder.governorState === "WAITING_FOUNDER",
+  "A genuine Founder decision gate must enter WAITING_FOUNDER.",
+);
+
+const cancelled = evaluatePantavionGovernorGuard({
+  ...base,
+  cancelledByFounder: true,
+  evidence: [{ kind: "founder-directive", reference: "cancel", verified: true }],
+});
+assert(
+  cancelled.governorState === "CANCELLED_BY_FOUNDER",
+  "Explicit Founder cancellation must be terminal.",
 );
 
 const supabaseWarning = evaluatePantavionGovernorGuard({
