@@ -204,7 +204,7 @@ function enforceMarkers(title, relativePath, markers) {
   }
 }
 
-console.log("=== Pantavion Water Kernel Gate v21 ===");
+console.log("=== Pantavion Water Kernel Gate v22 ===");
 
 for (const file of requiredFiles) {
   if (exists(file)) {
@@ -509,15 +509,16 @@ if (exists(servingReadinessRouteRelativePath)) {
   const servingReadinessRoute = read(servingReadinessRouteRelativePath);
 
   const servingReadinessRouteRequiredMarkers = [
-    "water-serving-readiness-route-v1",
-    "productionServingStatus: \"blocked\"",
-    "rendererStatus: \"blocked\"",
+    "water-serving-readiness-route-v2",
+    "productionServingStatus: \"protected-operational\"",
+    "rendererStatus: \"authorized-users-only\"",
+    "servingRoute: \"/api/professional/infrastructure/water/segment/bbox\"",
+    "founder-admin-session-or-approved-device",
+    "adminEditFlow",
     "mayReturnRawMaster: false",
     "mayReturnCompleteNetwork: false",
-    "No water network data is returned by this route.",
-    "Founder/admin approval is required before production activation",
-    "PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.spatialServingReady",
-    "PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS.accessControlReady"
+    "browserFullNetworkAllowed: false",
+    "rawMasterPublicExposureAllowed: false"
   ];
 
   for (const marker of servingReadinessRouteRequiredMarkers) {
@@ -525,6 +526,15 @@ if (exists(servingReadinessRouteRelativePath)) {
       pass("Serving Readiness Route marker present: " + marker);
     } else {
       fail("Serving Readiness Route marker missing: " + marker);
+    }
+  }
+
+  for (const forbidden of [
+    'productionServingStatus: "blocked"',
+    'rendererStatus: "blocked"',
+  ]) {
+    if (servingReadinessRoute.includes(forbidden)) {
+      fail("Serving Readiness Route still hard-codes operational shutdown: " + forbidden);
     }
   }
 }
@@ -536,22 +546,11 @@ if (exists(servingBboxRouteRelativePath)) {
   const servingBboxRoute = read(servingBboxRouteRelativePath);
 
   const servingBboxRouteRequiredMarkers = [
-    "water-serving-bbox-route-v1",
-    "productionServingStatus: \"blocked\"",
-    "rendererStatus: \"blocked\"",
-    "dataReturned: false",
-    "mayReturnRawMaster: false",
-    "mayReturnCompleteNetwork: false",
-    "No water network data is returned by this bbox route.",
-    "Founder/admin approval is required before production activation",
-    "PANTAVION_WATER_BLOCKED_SPATIAL_SERVING_READINESS.spatialServingReady",
-    "PANTAVION_WATER_BLOCKED_ACCESS_CONTROL_READINESS.accessControlReady",
-    "founderApprovedProductionActivation:",
-    "productionActivationAllowed",
-    "productionAccessAllowed",
-    "requestedViewport",
-    "missingParameters",
-    "bbox-api"
+    "water-serving-bbox-route-v2",
+    "getProtectedWaterSegment",
+    "@/app/api/professional/infrastructure/water/segment/bbox/route",
+    "protected-operational",
+    "return response"
   ];
 
   for (const marker of servingBboxRouteRequiredMarkers) {
@@ -559,6 +558,16 @@ if (exists(servingBboxRouteRelativePath)) {
       pass("Serving BBOX Route marker present: " + marker);
     } else {
       fail("Serving BBOX Route marker missing: " + marker);
+    }
+  }
+
+  for (const forbidden of [
+    "status: 423",
+    'productionServingStatus: "blocked"',
+    'rendererStatus: "blocked"',
+  ]) {
+    if (servingBboxRoute.includes(forbidden)) {
+      fail("Serving BBOX Route still hard-codes operational shutdown: " + forbidden);
     }
   }
 }
