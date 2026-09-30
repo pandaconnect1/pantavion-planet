@@ -8,7 +8,10 @@ import {
   assertPantavionWaterPatchGeometry,
   type PantavionWaterPatchGeometry,
 } from "@/core/infrastructure/water/water-spatial-change-patch-contract";
-import {\n  insertWaterSpatialPatchViaBridge,\n  listWaterSpatialPatchesViaBridge,\n} from "@/core/water/water-db-bridge";
+import {
+  insertWaterSpatialPatchViaBridge,
+  listWaterSpatialPatchesViaBridge,
+} from "@/core/water/water-db-bridge";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
