@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 import type { PantavionIntake } from "../../types/pantavion";
 
 export type PantavionExecutionMode =
@@ -34,6 +36,9 @@ export interface PantavionGovernorExecutionInput {
   proposedActionFingerprint?: string;
   newEvidenceFingerprint?: string;
   publicContentTask?: boolean;
+  requiresFounderDecision?: boolean;
+  founderDecisionPrompt?: string;
+  cancelledByFounder?: boolean;
   explicitFounderOverrides?: {
     reenableVercel?: boolean;
     modifyMapAOriginal?: boolean;
@@ -46,8 +51,17 @@ export interface PantavionGovernorModePlan {
   requirements: string[];
 }
 
+export type PantavionGovernorState =
+  | "IN_PROGRESS"
+  | "BLOCKED"
+  | "WAITING_FOUNDER"
+  | "VERIFIED_DONE"
+  | "CANCELLED_BY_FOUNDER";
+
 export interface PantavionGovernorGuardResult {
   decision: PantavionGovernorDecision;
+  governorState: PantavionGovernorState;
+  actionFingerprint: string;
   blockers: string[];
   warnings: string[];
   requiredNextActions: string[];
@@ -92,6 +106,25 @@ function normalized(value: string | undefined) {
 
 function unique<T>(values: T[]) {
   return Array.from(new Set(values));
+}
+
+export function createPantavionActionFingerprint(
+  input: Pick<
+    PantavionGovernorExecutionInput,
+    "proposedAction" | "targetProvider" | "targetResource" | "mutationIntent"
+  >,
+) {
+  return createHash("sha256")
+    .update(
+      JSON.stringify({
+        proposedAction: input.proposedAction.trim().replace(/\s+/g, " "),
+        targetProvider: normalized(input.targetProvider),
+        targetResource: normalized(input.targetResource),
+        mutationIntent: input.mutationIntent || "read",
+      }),
+      "utf8",
+    )
+    .digest("hex");
 }
 
 function evidenceIsVerified(evidence: PantavionExecutionEvidence[] | undefined) {
@@ -196,6 +229,8 @@ export function evaluatePantavionGovernorGuard(
   const warnings: string[] = [];
   const requiredNextActions: string[] = [];
   const contract = buildPantavionExecutionContract(input);
+  const actionFingerprint =
+    input.proposedActionFingerprint || createPantavionActionFingerprint(input);
 
   if (!contract.founderDirective) {
     blockers.push("missing_founder_directive");
@@ -247,13 +282,9 @@ export function evaluatePantavionGovernorGuard(
     );
   }
 
-  const repeatedAction =
-    Boolean(input.proposedActionFingerprint) &&
-    Boolean(
-      input.priorFailedActionFingerprints?.includes(
-        input.proposedActionFingerprint as string,
-      ),
-    );
+  const repeatedAction = Boolean(
+    input.priorFailedActionFingerprints?.includes(actionFingerprint),
+  );
 
   if (repeatedAction && !input.newEvidenceFingerprint) {
     blockers.push("repeated_failed_action_without_new_evidence");
@@ -283,6 +314,10 @@ export function evaluatePantavionGovernorGuard(
     warnings.push("execution_allowed_but_completion_not_yet_verified");
   }
 
+  if (input.requiresFounderDecision && !input.founderDecisionPrompt?.trim()) {
+    blockers.push("founder_decision_prompt_required");
+  }
+
   const decision: PantavionGovernorDecision =
     blockers.length > 0
       ? "HARD_STOP"
@@ -290,8 +325,20 @@ export function evaluatePantavionGovernorGuard(
         ? "ALLOW_WITH_WARNINGS"
         : "ALLOW";
 
+  const governorState: PantavionGovernorState = input.cancelledByFounder
+    ? "CANCELLED_BY_FOUNDER"
+    : blockers.length > 0
+      ? "BLOCKED"
+      : input.requiresFounderDecision
+        ? "WAITING_FOUNDER"
+        : input.completionClaim && evidenceIsVerified(input.evidence)
+          ? "VERIFIED_DONE"
+          : "IN_PROGRESS";
+
   return {
     decision,
+    governorState,
+    actionFingerprint,
     blockers: unique(blockers),
     warnings: unique(warnings),
     requiredNextActions: unique(requiredNextActions),
@@ -395,6 +442,12 @@ export function executionInputFromPantavionIntake(
         ? metadata.newEvidenceFingerprint
         : undefined,
     publicContentTask: metadata.publicContentTask === true,
+    requiresFounderDecision: metadata.requiresFounderDecision === true,
+    founderDecisionPrompt:
+      typeof metadata.founderDecisionPrompt === "string"
+        ? metadata.founderDecisionPrompt
+        : undefined,
+    cancelledByFounder: metadata.cancelledByFounder === true,
     explicitFounderOverrides: {
       reenableVercel: metadata.founderOverrideReenableVercel === true,
       modifyMapAOriginal: metadata.founderOverrideModifyMapAOriginal === true,
