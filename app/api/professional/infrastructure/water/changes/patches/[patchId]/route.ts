@@ -3,7 +3,10 @@ import "server-only";
 import { NextResponse } from "next/server";
 
 import { authorizeWaterMapRequest } from "@/core/security/water-map-request-access";
-import {\n  getWaterSpatialPatchViaBridge,\n  reviewWaterSpatialPatchViaBridge,\n} from "@/core/water/water-db-bridge";
+import {
+  getWaterSpatialPatchViaBridge,
+  reviewWaterSpatialPatchViaBridge,
+} from "@/core/water/water-db-bridge";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
