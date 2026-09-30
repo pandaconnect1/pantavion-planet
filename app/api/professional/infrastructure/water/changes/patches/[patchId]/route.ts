@@ -3,7 +3,7 @@ import "server-only";
 import { NextResponse } from "next/server";
 
 import { authorizeWaterMapRequest } from "@/core/security/water-map-request-access";
-import { createAdminClient } from "@/lib/supabase/admin";
+import {\n  getWaterSpatialPatchViaBridge,\n  reviewWaterSpatialPatchViaBridge,\n} from "@/core/water/water-db-bridge";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -51,26 +51,18 @@ export async function GET(
   }
 
   const { patchId } = await context.params;
-  const admin = createAdminClient();
-  const { data, error } = await admin
-    .from("water_spatial_patches")
-    .select("*")
-    .eq("patch_id", patchId)
-    .maybeSingle();
 
-  if (error) {
-    return NextResponse.json(
-      { ok: false, error: error.message },
-      { status: 500, headers: { "Cache-Control": "no-store" } },
-    );
-  }
+  try {
+    const result = await getWaterSpatialPatchViaBridge(patchId);
 
-  if (!data) {
-    return NextResponse.json(
-      { ok: false, error: "water_patch_not_found" },
-      { status: 404, headers: { "Cache-Control": "no-store" } },
-    );
-  }
+    if (!result.ok || !result.patch) {
+      return NextResponse.json(
+        { ok: false, error: result.error || "water_patch_not_found" },
+        { status: 404, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
+    const data = result.patch;
 
   const visible =
     access.mode === "admin-session" ||
@@ -86,10 +78,16 @@ export async function GET(
     );
   }
 
-  return NextResponse.json(
-    { ok: true, patch: data },
-    { headers: { "Cache-Control": "private, no-store" } },
-  );
+    return NextResponse.json(
+      { ok: true, patch: data },
+      { headers: { "Cache-Control": "private, no-store" } },
+    );
+  } catch {
+    return NextResponse.json(
+      { ok: false, error: "water_patch_read_failed" },
+      { status: 500, headers: { "Cache-Control": "no-store" } },
+    );
+  }
 }
 
 export async function PATCH(
@@ -115,62 +113,29 @@ export async function PATCH(
       throw new Error("water_patch_review_status_invalid");
     }
 
-    const admin = createAdminClient();
-    const current = await admin
-      .from("water_spatial_patches")
-      .select("*")
-      .eq("patch_id", patchId)
-      .maybeSingle();
+    const result = await reviewWaterSpatialPatchViaBridge({
+      patchId,
+      nextStatus,
+      decisionNote,
+      reviewedBy: access.actorRef,
+    });
 
-    if (current.error) throw current.error;
-    if (!current.data) {
-      return NextResponse.json(
-        { ok: false, error: "water_patch_not_found" },
-        { status: 404, headers: { "Cache-Control": "no-store" } },
-      );
+    if (!result.ok) {
+      const status = result.error === "water_patch_not_found"
+        ? 404
+        : result.error === "water_patch_transition_not_allowed"
+          ? 409
+          : 400;
+
+      return NextResponse.json(result, {
+        status,
+        headers: { "Cache-Control": "no-store" },
+      });
     }
 
-    if (current.data.status === nextStatus) {
-      return NextResponse.json(
-        { ok: true, unchanged: true, patch: current.data },
-        { headers: { "Cache-Control": "no-store" } },
-      );
-    }
-
-    const allowed = TRANSITIONS[current.data.status]?.has(nextStatus) ?? false;
-    if (!allowed) {
-      return NextResponse.json(
-        {
-          ok: false,
-          error: "water_patch_transition_not_allowed",
-          currentStatus: current.data.status,
-          requestedStatus: nextStatus,
-        },
-        { status: 409, headers: { "Cache-Control": "no-store" } },
-      );
-    }
-
-    const now = new Date().toISOString();
-    const update = {
-      status: nextStatus,
-      reviewed_by: access.actorRef,
-      reviewed_at: now,
-      decision_note: decisionNote,
-    };
-
-    const { data, error } = await admin
-      .from("water_spatial_patches")
-      .update(update)
-      .eq("patch_id", patchId)
-      .select("*")
-      .single();
-
-    if (error) throw error;
-
-    return NextResponse.json(
-      { ok: true, unchanged: false, patch: data },
-      { headers: { "Cache-Control": "no-store" } },
-    );
+    return NextResponse.json(result, {
+      headers: { "Cache-Control": "no-store" },
+    });
   } catch (error) {
     return NextResponse.json(
       {
