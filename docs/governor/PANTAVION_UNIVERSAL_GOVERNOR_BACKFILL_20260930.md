@@ -122,3 +122,16 @@ Passwords, MFA codes and secret keys must never be written into this ledger.
 - If ChatGPT diverges, repeats a known mistake, skips a step or claims completion without evidence, the Governor must flag the violation, block/redirect the wrong path where possible, and identify the corrective next action.
 - Work continues until **VERIFIED_DONE** or an explicit Founder cancellation.
 - Slack is not part of this control loop.
+
+
+## Execution modes
+
+The Governor now has deterministic execution modes rather than informal labels:
+
+- **Prompt Engineer** — converts the exact Founder directive into a locked objective, constraints and an evidence-based completion gate without changing intent.
+- **Research** — requires source/runtime evidence and records unresolved evidence gaps before technical direction changes.
+- **Expert** — applies domain-specific root-cause reasoning and verification before protected technical mutation.
+- **Strategy** — selects the shortest evidence-backed route, prevents circular work and returns execution to the last verified checkpoint after a failed loop.
+- **Viral** — applies only to public communication. It is explicitly excluded from technical, security, infrastructure and production decision logic.
+
+The runtime guard performs a pre-execution comparison of Founder directive → objective → proposed action → prior failed action fingerprints → provider/resource policy → evidence. It returns **HARD_STOP** for Vercel reactivation without explicit Founder override, Map A source mutation, repeated failed actions without new evidence, or completion claims without verification evidence.
