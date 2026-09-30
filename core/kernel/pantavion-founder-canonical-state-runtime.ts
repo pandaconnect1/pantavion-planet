@@ -1,5 +1,7 @@
 import "server-only";
 
+import { createHash, randomUUID } from "node:crypto";
+
 import { createAdminClient } from "@/lib/supabase/admin";
 import {
   persistPantavionFounderWorkOrder,
@@ -228,6 +230,117 @@ export async function listPantavionFounderCanonicalStates(limit = 10) {
 
   if (error) throw error;
   return ((data ?? []) as CanonicalStateRow[]).map(mapCanonicalState);
+}
+
+export interface PantavionFounderAgendaDirectiveInput {
+  title?: string;
+  founderIntent: string;
+  target?: PantavionAutonomousBuildTarget;
+  capabilities?: PantavionAutonomousBuilderCapability[];
+  targetFiles?: string[];
+  approvalScope?: PantavionFounderApprovalScope;
+  sourceRef?: string;
+}
+
+export async function capturePantavionFounderAgendaDirective(
+  input: PantavionFounderAgendaDirectiveInput,
+): Promise<PantavionFounderExecutionIntentRecord> {
+  const founderIntent = input.founderIntent.trim().slice(0, 12_000);
+  if (!founderIntent) throw new Error("founder_agenda_directive_required");
+
+  const target = input.target ?? "pantavion_internal";
+  if (!TARGETS.has(target)) throw new Error("founder_agenda_target_invalid");
+
+  const capabilities = input.capabilities?.length
+    ? input.capabilities
+    : ["repo_truth", "internal_feature_build", "verification"];
+  if (!capabilities.every((value) => CAPABILITIES.has(value))) {
+    throw new Error("founder_agenda_capability_invalid");
+  }
+
+  const approvalScope = input.approvalScope ?? "scoped_draft_patch";
+  if (!APPROVAL_SCOPES.has(approvalScope)) {
+    throw new Error("founder_agenda_approval_scope_invalid");
+  }
+
+  const title =
+    input.title?.trim().slice(0, 240) ||
+    founderIntent.replace(/\s+/g, " ").slice(0, 120);
+  const targetFiles = (input.targetFiles ?? [])
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .slice(0, 100);
+  const now = new Date().toISOString();
+  const stateId = `agenda-${randomUUID()}`;
+  const intentId = `agenda-intent-${randomUUID()}`;
+  const idempotencyKey = `agenda:${stateId}`;
+  const contentSha256 = createHash("sha256").update(founderIntent).digest("hex");
+  const admin = createAdminClient();
+
+  const { error: stateError } = await admin
+    .from("pantavion_founder_canonical_states")
+    .insert({
+      state_id: stateId,
+      state_kind: `agenda_directive:${stateId}`,
+      title,
+      content: founderIntent,
+      content_sha256: contentSha256,
+      source_ref: input.sourceRef?.trim().slice(0, 1000) || "pantavion://owner/control/agenda",
+      truth_state: "canonical_internal",
+      status: "active",
+      metadata: {
+        source: "founder_agenda",
+        captureMode: "founder_authenticated",
+        immutableIntentHash: contentSha256,
+      },
+      created_at: now,
+      updated_at: now,
+    });
+
+  if (stateError) {
+    throw new Error(`founder_agenda_state_insert_failed:${stateError.message}`);
+  }
+
+  const row = {
+    intent_id: intentId,
+    canonical_state_id: stateId,
+    idempotency_key: idempotencyKey,
+    title,
+    founder_intent: founderIntent,
+    target,
+    capabilities,
+    target_files: targetFiles,
+    approval_scope: approvalScope,
+    workload: {
+      kind: "single_work_order",
+      unitCount: 1,
+      intakeReference: `founder-agenda:${stateId}`,
+    },
+    status: "pending_materialization",
+    work_order_execution_id: null,
+    last_error: null,
+    materialized_at: null,
+    created_at: now,
+    updated_at: now,
+  } satisfies ExecutionIntentRow;
+
+  const { data, error: intentError } = await admin
+    .from("pantavion_founder_execution_intents")
+    .insert(row)
+    .select("intent_id,canonical_state_id,idempotency_key,title,founder_intent,target,capabilities,target_files,approval_scope,workload,status,work_order_execution_id,last_error,materialized_at,created_at,updated_at")
+    .single();
+
+  if (intentError || !data) {
+    await admin
+      .from("pantavion_founder_canonical_states")
+      .delete()
+      .eq("state_id", stateId);
+    throw new Error(
+      `founder_agenda_intent_insert_failed:${intentError?.message || "no_data"}`,
+    );
+  }
+
+  return mapExecutionIntent(data as ExecutionIntentRow);
 }
 
 export async function listPantavionFounderExecutionIntents(limit = 100) {
