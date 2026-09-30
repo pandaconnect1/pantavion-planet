@@ -91,3 +91,19 @@ export async function reviewWaterSpatialPatchViaBridge(input: {
     p_reviewed_by: input.reviewedBy,
   });
 }
+
+
+export async function approveWaterDeviceViaBridge(input: {
+  deviceId: string;
+  tokenHash: string;
+  approvedBy: string;
+}) {
+  return callBridge<{ ok?: boolean; approved?: boolean; error?: string; deviceId?: string }>(
+    "pantavion_water_bridge_approve_device_v1",
+    {
+      p_device_id: input.deviceId,
+      p_token_hash: input.tokenHash,
+      p_approved_by: input.approvedBy,
+    },
+  );
+}
