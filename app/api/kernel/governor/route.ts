@@ -150,7 +150,7 @@ function parseExecutionInput(
 }
 
 export async function GET(request: Request) {
-  if (!(isPantavionGovernorBridgeRequestAllowed(request) || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
+  if (!(bridgeAllowed || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
 
   return noStore(
     NextResponse.json({
@@ -176,7 +176,10 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const boundary = evaluatePrivilegedRequestBoundary(request);
+  const bridgeAllowed = isPantavionGovernorBridgeRequestAllowed(request);
+  const boundary = bridgeAllowed
+    ? { allowed: true as const, reason: "ok" as const }
+    : evaluatePrivilegedRequestBoundary(request);
   if (!boundary.allowed) {
     return noStore(
       NextResponse.json(
