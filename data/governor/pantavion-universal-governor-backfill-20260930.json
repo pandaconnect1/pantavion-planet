@@ -24,7 +24,8 @@
     "supabasePolicy": "Treat current Supabase as a legacy/transition source while replacement is built; do not create new strategic lock-in.",
     "vercelPolicy": "BLOCKED. Vercel must not be used in the active Pantavion recovery/builder/verifier/deployment critical path unless the Founder explicitly re-enables it later.",
     "agendaVisibility": "Founder execution agenda is private control-plane data and must not be exposed as a normal Pantavion user surface.",
-    "executionLocationPolicy": "Operational work executes inside Pantavion-owned runtime/control plane. ChatGPT is the Founder command, supervision and notification interface; Slack is not used."
+    "executionLocationPolicy": "Execution is performed by ChatGPT on the Pantavion system/code/runtime. Pantavion itself is the Governor/watchdog that supervises the executor.",
+    "executionRolePolicy": "Pantavion is the Governor/watchdog. ChatGPT is the executor acting on Pantavion. The Founder gives directives here. Pantavion does not replace the executor; it supervises, checks divergence, records evidence, and reports violations."
   },
   "sourceCoverage": [
     {
@@ -238,11 +239,11 @@
     "securityRule": "Never store or request passwords, MFA codes or secret keys in the governor ledger."
   },
   "nextGovernorCycle": [
-    "Receive Founder directives in ChatGPT.",
-    "Persist/compare them against the private Pantavion Governor ledger.",
-    "Execute operational work inside the Pantavion runtime/control plane.",
-    "Before mutation, compare the action against repeatedFailurePatterns and the latest Founder directive.",
-    "Record evidence/status in the Pantavion control plane.",
-    "Report deviations, repeated mistakes, blockers and verified completion back to the Founder in ChatGPT."
+    "Founder gives directive in ChatGPT.",
+    "ChatGPT executes the directive on Pantavion.",
+    "Pantavion Governor compares each action against the latest Founder directive, prior failures, hard-stop rules and evidence.",
+    "If ChatGPT diverges, repeats a known mistake, skips work or claims completion without evidence, Pantavion Governor flags/stops the deviation and identifies the corrective next step.",
+    "ChatGPT continues execution until verified completion.",
+    "Pantavion Governor reports mistakes, omissions, blockers and evidence back to the Founder through ChatGPT."
   ]
 }
