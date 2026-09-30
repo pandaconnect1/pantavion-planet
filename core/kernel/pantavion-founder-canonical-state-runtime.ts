@@ -251,7 +251,7 @@ export async function capturePantavionFounderAgendaDirective(
   const target = input.target ?? "pantavion_internal";
   if (!TARGETS.has(target)) throw new Error("founder_agenda_target_invalid");
 
-  const capabilities = input.capabilities?.length
+  const capabilities: PantavionAutonomousBuilderCapability[] = input.capabilities?.length
     ? input.capabilities
     : ["repo_truth", "internal_feature_build", "verification"];
   if (!capabilities.every((value) => CAPABILITIES.has(value))) {
