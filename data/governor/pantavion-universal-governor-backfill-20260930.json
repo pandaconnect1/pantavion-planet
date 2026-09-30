@@ -1,6 +1,6 @@
 {
   "id": "pantavion_universal_governor_backfill_20260930_v1",
-  "generatedAt": "2026-09-30T13:30:00Z",
+  "generatedAt": "2026-09-30T18:12:00Z",
   "purpose": "Cross-thread, recovery, repository, runtime and provider-truth seed for the Pantavion execution governor. It is a control index, not a replacement for source evidence.",
   "governingRules": {
     "latestFounderDirectiveWins": true,
@@ -26,7 +26,19 @@
     "agendaVisibility": "Founder execution agenda is private control-plane data and must not be exposed as a normal Pantavion user surface.",
     "executionLocationPolicy": "Execution is performed by ChatGPT on the Pantavion system/code/runtime. Pantavion itself is the Governor/watchdog that supervises the executor.",
     "executionRolePolicy": "Pantavion is the Governor/watchdog. ChatGPT is the executor acting on Pantavion. The Founder gives directives here. Pantavion does not replace the executor; it supervises, checks divergence, records evidence, and reports violations.",
-    "vercelProjectVmxxPolicy": "pantavion-planet-vmxx is founder-blocked. Do not re-enable, deploy from, alias, or route production traffic through it without a later explicit Founder directive."
+    "vercelProjectVmxxPolicy": "pantavion-planet-vmxx is founder-blocked. Do not re-enable, deploy from, alias, or route production traffic through it without a later explicit Founder directive.",
+    "preActionPantavionGovernorRequired": true,
+    "latestFounderDirectiveIsHighestOperationalAuthority": true,
+    "privateDoesNotMeanDisabled": true,
+    "adminMustRetainOperationalEditAccess": true,
+    "executorMustConsultGovernorBeforeProviderMutation": true,
+    "conflictResolutionOrder": [
+      "latest_explicit_founder_directive",
+      "founder_locked_canonical_rule",
+      "verified_current_runtime_truth",
+      "verified_repository_truth",
+      "historical_plan_or_agent_assumption"
+    ]
   },
   "sourceCoverage": [
     {
@@ -196,6 +208,18 @@
       "severity": "HARD_STOP",
       "rule": "Do not re-enable pantavion-planet-vmxx after the Founder blocked it and the public homepage became reachable.",
       "correctiveAction": "Keep vmxx blocked and diagnose aliases/domains/deploy routing before touching project state."
+    },
+    {
+      "id": "security_gate_disables_authorized_operation",
+      "severity": "HARD_STOP",
+      "rule": "Do not treat a private/protected Water requirement as permission to disable authorized founder/admin viewing, editing, approval or production serving.",
+      "correctiveAction": "Preserve private raw masters and unauthorized-user denial while restoring authorized operational access and edit/review flows."
+    },
+    {
+      "id": "executor_bypasses_pantavion_preaction_governor",
+      "severity": "HARD_STOP",
+      "rule": "Do not mutate providers, production, maps, security policy or repository state before consulting the Pantavion pre-action governor.",
+      "correctiveAction": "Run conflict check against active Founder directives and verified evidence first; if conflict exists, Founder directive wins."
     }
   ],
   "activeExecutionQueue": [
@@ -263,5 +287,66 @@
     "If ChatGPT diverges, repeats a known mistake, skips work or claims completion without evidence, Pantavion Governor flags/stops the deviation and identifies the corrective next step.",
     "ChatGPT continues execution until verified completion.",
     "Pantavion Governor reports mistakes, omissions, blockers and evidence back to the Founder through ChatGPT."
-  ]
+  ],
+  "latestFounderDirectives": [
+    {
+      "id": "all_actions_through_pantavion_first",
+      "issuedAt": "2026-09-30T18:09:52Z",
+      "priority": 1,
+      "state": "ACTIVE",
+      "directive": "All conversations, excavations, commands, decisions and proposed executor actions must first enter Pantavion, be classified and compared against prior founder directives before execution.",
+      "requiredDecision": [
+        "GO",
+        "CONFLICT",
+        "STOP",
+        "OVERRIDE_BY_FOUNDER"
+      ],
+      "enforcement": "If a proposed action conflicts with the latest explicit Founder directive, the proposed action must not execute; the Founder directive wins."
+    },
+    {
+      "id": "water_private_but_operational",
+      "issuedAt": "2026-09-30T18:05:39Z",
+      "priority": 2,
+      "state": "ACTIVE",
+      "directive": "Water Maps A/B/C are private/protected, not publicly exposed, but must remain operational for authorized users and editable/reviewable by founder/admin.",
+      "enforcement": "Security may block unauthorized public/raw-master access, but must not disable founder/admin operational viewing, editing, approval or verified production serving."
+    },
+    {
+      "id": "verify_target",
+      "issuedAt": "2026-09-30T17:29:57Z",
+      "priority": 3,
+      "state": "ACTIVE",
+      "directive": "Primary target is VERIFIED pantavion.com and VERIFIED live Map A/B/C; use the appropriate tools/applications needed for excavation, classification, implementation and verification."
+    }
+  ],
+  "preActionGate": {
+    "required": true,
+    "appliesTo": [
+      "github_mutation",
+      "railway_mutation",
+      "vercel_mutation",
+      "dns_change",
+      "water_map_change",
+      "deployment",
+      "provider_switch",
+      "data_migration",
+      "security_policy_change"
+    ],
+    "inputRequired": [
+      "proposedAction",
+      "reason",
+      "target",
+      "expectedOutcome",
+      "relevantFounderDirectiveIds",
+      "evidence"
+    ],
+    "decisions": {
+      "GO": "No conflict with latest Founder directive and sufficient evidence exists.",
+      "CONFLICT": "Action conflicts with one or more active Founder directives; do not execute.",
+      "STOP": "Evidence is insufficient, action repeats a known failed loop, or risks destructive/provider-churn behavior.",
+      "OVERRIDE_BY_FOUNDER": "Latest explicit Founder directive supersedes an older plan, gate, agent assumption or historical rule."
+    },
+    "executionRule": "No covered mutation may execute until the governor decision is GO or OVERRIDE_BY_FOUNDER.",
+    "completionRule": "Execution is not complete until evidence is recorded and live verification succeeds where applicable."
+  }
 }
