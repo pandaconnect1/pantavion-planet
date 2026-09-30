@@ -151,6 +151,12 @@ function parseExecution(
         ? body.newEvidenceFingerprint.slice(0, 512)
         : undefined,
     publicContentTask: body.publicContentTask === true,
+    requiresFounderDecision: body.requiresFounderDecision === true,
+    founderDecisionPrompt:
+      typeof body.founderDecisionPrompt === "string"
+        ? body.founderDecisionPrompt.slice(0, 2000)
+        : undefined,
+    cancelledByFounder: body.cancelledByFounder === true,
     explicitFounderOverrides: {
       reenableVercel: overrides?.reenableVercel === true,
       modifyMapAOriginal: overrides?.modifyMapAOriginal === true,
@@ -259,7 +265,7 @@ export async function POST(request: Request) {
     const governorState =
       materialization.status === "blocked" || materialization.blocked > 0
         ? "BLOCKED"
-        : "IN_PROGRESS";
+        : evaluation.governorState;
 
     return noStore(
       NextResponse.json(
