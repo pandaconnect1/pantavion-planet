@@ -22,7 +22,7 @@
     "mapAOriginalMustNotBeModified": true,
     "providerSovereignty": "Pantavion owns canonical identity/data/lineage; providers are replaceable adapters.",
     "supabasePolicy": "Treat current Supabase as a legacy/transition source while replacement is built; do not create new strategic lock-in.",
-    "vercelPolicy": "Vercel is not globally blocked. Do not remove or disable it by assumption; verify its exact role before change.",
+    "vercelPolicy": "BLOCKED. Vercel must not be used in the active Pantavion recovery/builder/verifier/deployment critical path unless the Founder explicitly re-enables it later.",
     "agendaVisibility": "Founder execution agenda is private control-plane data and must not be exposed as a normal Pantavion user surface."
   },
   "sourceCoverage": [
@@ -150,8 +150,8 @@
     {
       "id": "provider_churn_without_root_cause",
       "severity": "HARD_STOP",
-      "rule": "Do not switch Vercel/Railway/Supabase/other providers merely because a symptom appears.",
-      "correctiveAction": "Prove the failing layer first, preserve all recoverable data, then replace only the proven dependency."
+      "rule": "Do not re-enable or route active Pantavion execution through Vercel. Vercel is founder-blocked. Do not switch other providers merely because a symptom appears.",
+      "correctiveAction": "Keep Vercel out of the active critical path and prove the failing layer before changing any other provider."
     },
     {
       "id": "claim_done_without_live_evidence",
@@ -228,7 +228,7 @@
       "priority": 7,
       "id": "production_exact_revision",
       "state": "IN_PROGRESS",
-      "objective": "Prove pantavion.com serves the intended current application revision and all critical routes before any VERIFIED_LIVE claim."
+      "objective": "Prove the active non-Vercel production runtime serves the intended current application revision and all critical routes before any VERIFIED_LIVE claim."
     }
   ],
   "founderIdentity": {
