@@ -83,12 +83,15 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const mutationBoundary = evaluatePrivilegedRequestBoundary(request);
+  const bridgeAllowed = isPantavionGovernorBridgeRequestAllowed(request);
+  const mutationBoundary = bridgeAllowed
+    ? { allowed: true as const, reason: "ok" as const }
+    : evaluatePrivilegedRequestBoundary(request);
   if (!mutationBoundary.allowed) {
     return invalidMutationBoundary(mutationBoundary.reason);
   }
 
-  if (!(isPantavionGovernorBridgeRequestAllowed(request) || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
+  if (!(bridgeAllowed || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
 
   let body: Record<string, unknown> | null = null;
   try {
