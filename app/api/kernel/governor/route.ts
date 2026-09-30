@@ -142,6 +142,12 @@ function parseExecutionInput(
         ? body.newEvidenceFingerprint.slice(0, 512)
         : undefined,
     publicContentTask: body.publicContentTask === true,
+    requiresFounderDecision: body.requiresFounderDecision === true,
+    founderDecisionPrompt:
+      typeof body.founderDecisionPrompt === "string"
+        ? body.founderDecisionPrompt.slice(0, 2000)
+        : undefined,
+    cancelledByFounder: body.cancelledByFounder === true,
     explicitFounderOverrides: {
       reenableVercel: override?.reenableVercel === true,
       modifyMapAOriginal: override?.modifyMapAOriginal === true,
