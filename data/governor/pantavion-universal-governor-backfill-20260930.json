@@ -1,6 +1,6 @@
 {
   "id": "pantavion_universal_governor_backfill_20260930_v1",
-  "generatedAt": "2026-09-30T18:12:00Z",
+  "generatedAt": "2026-09-30T20:20:00Z",
   "purpose": "Cross-thread, recovery, repository, runtime and provider-truth seed for the Pantavion execution governor. It is a control index, not a replacement for source evidence.",
   "governingRules": {
     "latestFounderDirectiveWins": true,
@@ -164,6 +164,24 @@
         "visibleHeading": "Here We Are One. For All Humanity."
       },
       "caution": "This proves public homepage reachability only. It does not prove that blocking pantavion-planet-vmxx was the sole cause of recovery."
+    },
+    {
+      "id": "water_bc_missing_runtime_source_20260930",
+      "domain": "water",
+      "state": "VERIFIED_DONE",
+      "claim": "Production currently contains no usable Map B/C source-master or derived runtime artifacts; B/C must not be presented as live until exact source bytes are recovered and processed.",
+      "evidence": {
+        "supabaseProject": "cxhulvwkagzufbjsdwwu",
+        "ingestRecords": 0,
+        "versionRecords": 0,
+        "mapBManifests": 0,
+        "mapCManifests": 0,
+        "mapBTiles": 0,
+        "mapCTiles": 0,
+        "privateSourceObjectsFound": [
+          "map-a-original only"
+        ]
+      }
     }
   ],
   "repeatedFailurePatterns": [
@@ -244,15 +262,17 @@
       "state": "IN_PROGRESS",
       "objective": "Make the already-ingested authentic Map A network visible to the authorized founder/user flow.",
       "constraint": "Do not modify Map A source geometry.",
-      "nextAction": "Verify exact production runtime, authorization result and pipe-query serving path."
+      "nextAction": "Verify approved-device/admin authorization and actual segment response on production; then verify edit/review flow and record evidence.",
+      "currentTruth": "Production Railway project amiable-recreation owns pantavion.com. Commit 74497c997230ed5cf0a8b94f2aed3a01393cc728 deployed SUCCESS. Protected /serving/bbox now delegates to /segment/bbox; full/raw /network remains blocked."
     },
     {
       "priority": 4,
       "id": "water_maps_b_c_delivery",
-      "state": "IN_PROGRESS",
+      "state": "BLOCKED",
       "objective": "Ingest and serve authentic Maps B and C from verified source bytes with immutable lineage.",
-      "currentTruth": "Both sources are byte-verified; legacy water_map_ingest_catalog and water_map_versions currently contain 0 rows.",
-      "nextAction": "Private storage ingest -> server verification -> version/lineage -> derived delivery -> authorized live verify."
+      "currentTruth": "Map B expected source: 205565159 bytes SHA-256 6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16. Map C expected source: 85703125 bytes SHA-256 038b9bceda2a660296a9162723f5279e5a2d10eb18d499b087d0e8ffa393b800. Production serving cannot be truthfully completed until exact bytes are recovered.",
+      "nextAction": "Recover exact B/C DWG bytes from an existing authorized source; verify size/hash; upload privately; materialize ingest/version records; generate derived tiles; authorized live verify. Do not substitute Map A or screenshots.",
+      "blocker": "Verified production Supabase has 0 B/C ingest records, 0 versions, 0 derived manifests, 0 derived tiles, and no B/C source-master objects. Library search found documentation/screenshots but not the actual DWG byte files."
     },
     {
       "priority": 5,
