@@ -98,6 +98,10 @@ assert(
   !verifiedDone.blockers.includes("completion_claim_without_verified_evidence"),
   "Verified evidence must satisfy the completion evidence gate.",
 );
+assert(
+  verifiedDone.governorState === "VERIFIED_DONE",
+  "Verified completion must enter VERIFIED_DONE.",
+);
 
 const repeatBlocked = evaluatePantavionGovernorGuard({
   ...base,
