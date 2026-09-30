@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   createPantavionKernelAccessDeniedReport,
+  isPantavionGovernorBridgeRequestAllowed,
   isPantavionKernelFounderRequestAllowed,
 } from "@/core/kernel/kernel-access-guard";
 import {
@@ -49,7 +50,7 @@ function asRecord(value: unknown): Record<string, unknown> | null {
 }
 
 export async function GET(request: Request) {
-  if (!(await isPantavionKernelFounderRequestAllowed(request))) return denied();
+  if (!(isPantavionGovernorBridgeRequestAllowed(request) || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
 
   try {
     const [states, executionIntents] = await Promise.all([
@@ -87,7 +88,7 @@ export async function POST(request: Request) {
     return invalidMutationBoundary(mutationBoundary.reason);
   }
 
-  if (!(await isPantavionKernelFounderRequestAllowed(request))) return denied();
+  if (!(isPantavionGovernorBridgeRequestAllowed(request) || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
 
   let body: Record<string, unknown> | null = null;
   try {
