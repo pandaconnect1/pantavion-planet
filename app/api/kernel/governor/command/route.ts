@@ -261,7 +261,7 @@ export async function POST(request: Request) {
       sourceRef,
     });
 
-    const materialization = await materializePantavionFounderExecutionIntents(1);
+    const materialization = await materializePantavionFounderExecutionIntents(1, { intentId: captured.intentId });
     const governorState =
       materialization.status === "blocked" || materialization.blocked > 0
         ? "BLOCKED"
