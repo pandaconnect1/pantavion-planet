@@ -8,7 +8,7 @@ import {
   assertPantavionWaterPatchGeometry,
   type PantavionWaterPatchGeometry,
 } from "@/core/infrastructure/water/water-spatial-change-patch-contract";
-import { createAdminClient } from "@/lib/supabase/admin";
+import {\n  insertWaterSpatialPatchViaBridge,\n  listWaterSpatialPatchesViaBridge,\n} from "@/core/water/water-db-bridge";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -198,152 +198,29 @@ export async function POST(request: Request) {
       attributes,
     });
 
-    const admin = createAdminClient();
-    const record = {
-      asset_type: assetType,
-      operation,
-      status: "pending_review",
-      map_id: mapId,
-      source_key: sourceKey,
-      source_map_version_id: clean(body.sourceMapVersionId, 100) || null,
-      geometry_type: geometry.type,
-      geometry,
-      crs_authority: geometry.crs.authority,
-      crs_code: geometry.crs.code,
-      bbox_min_x: bbox.minX,
-      bbox_min_y: bbox.minY,
-      bbox_max_x: bbox.maxX,
-      bbox_max_y: bbox.maxY,
-      location_source: locationSource,
-      accuracy_state: accuracyState,
-      accuracy_meters: accuracyMeters,
-      street_name: clean(location.streetName, 500) || null,
-      area: clean(location.area, 500) || null,
-      postal_code: clean(location.postalCode, 80) || null,
-      parcel_reference: clean(location.parcelReference, 200) || null,
-      technical_address_id: clean(location.technicalAddressId, 200) || null,
-      snapped_asset_id: clean(location.snappedAssetId, 200) || null,
-      attributes,
-      evidence_refs: stringArray(body.evidenceRefs),
-      artifact_refs: stringArray(body.artifactRefs),
-      related_job_ids: stringArray(body.relatedJobIds),
-      related_report_ids: stringArray(body.relatedReportIds),
-      created_by: access.actorRef,
-      source_device_id: access.deviceId,
-      source_network_version: clean(body.sourceNetworkVersion, 200) || null,
-      immutable_fingerprint: fingerprint,
-      supersedes_patch_id: clean(body.supersedesPatchId, 100) || null,
-      metadata: {
-        clientMutationId,
-        accessMode: access.mode,
-        submittedAt: new Date().toISOString(),
-      },
-    };
+    const result = await listWaterSpatialPatchesViaBridge({
+      mapId,
+      sourceKey,
+      actorRef: access.actorRef,
+      mine,
+      admin: access.mode === "admin-session",
+      limit,
+      minX: hasBbox ? minX : null,
+      minY: hasBbox ? minY : null,
+      maxX: hasBbox ? maxX : null,
+      maxY: hasBbox ? maxY : null,
+    });
 
-    const { data, error } = await admin
-      .from("water_spatial_patches")
-      .insert(record)
-      .select("*")
-      .single();
-
-    if (error) {
-      if (error.code === "23505") {
-        const existing = await admin
-          .from("water_spatial_patches")
-          .select("*")
-          .eq("immutable_fingerprint", fingerprint)
-          .maybeSingle();
-
-        if (!existing.error && existing.data) {
-          return NextResponse.json(
-            { ok: true, deduplicated: true, patch: existing.data },
-            { headers: { "Cache-Control": "no-store" } },
-          );
-        }
-      }
-      throw error;
+    if (!result.ok) {
+      throw new Error("water_spatial_patch_read_failed");
     }
-
-    return NextResponse.json(
-      { ok: true, deduplicated: false, patch: data },
-      { status: 201, headers: { "Cache-Control": "no-store" } },
-    );
-  } catch (error) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error:
-          error instanceof Error ? error.message : "water_spatial_patch_create_failed",
-      },
-      { status: 400, headers: { "Cache-Control": "no-store" } },
-    );
-  }
-}
-
-export async function GET(request: Request) {
-  const access = await authorizeWaterMapRequest(request);
-
-  if (!access.ok) {
-    return NextResponse.json(
-      { ok: false, error: access.error },
-      { status: 403, headers: { "Cache-Control": "no-store" } },
-    );
-  }
-
-  try {
-    const url = new URL(request.url);
-    const mapId = clean(url.searchParams.get("mapId"), 100);
-    const sourceKey = clean(url.searchParams.get("sourceKey"), 160);
-    const mine = url.searchParams.get("mine") === "1";
-    const limit = Math.min(
-      Math.max(Number(url.searchParams.get("limit") || 200), 1),
-      500,
-    );
-
-    const minX = finiteNumber(url.searchParams.get("minX"));
-    const minY = finiteNumber(url.searchParams.get("minY"));
-    const maxX = finiteNumber(url.searchParams.get("maxX"));
-    const maxY = finiteNumber(url.searchParams.get("maxY"));
-    const hasBbox =
-      minX !== null && minY !== null && maxX !== null && maxY !== null;
-
-    const admin = createAdminClient();
-    let query = admin
-      .from("water_spatial_patches")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(limit);
-
-    if (mapId) query = query.eq("map_id", mapId);
-    if (sourceKey) query = query.eq("source_key", sourceKey);
-
-    if (mine) {
-      query = query.eq("created_by", access.actorRef);
-    } else if (access.mode !== "admin-session") {
-      query = query.in("status", [
-        "approved_overlay",
-        "officialization_candidate",
-        "officialized",
-      ]);
-    }
-
-    if (hasBbox) {
-      query = query
-        .lte("bbox_min_x", maxX)
-        .gte("bbox_max_x", minX)
-        .lte("bbox_min_y", maxY)
-        .gte("bbox_max_y", minY);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
 
     return NextResponse.json(
       {
         ok: true,
         accessMode: access.mode,
         mine,
-        patches: data ?? [],
+        patches: result.patches ?? [],
       },
       { headers: { "Cache-Control": "private, no-store" } },
     );
