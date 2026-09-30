@@ -1,11 +1,41 @@
 import "server-only";
 
+import { timingSafeEqual } from "node:crypto";
+
 import { requireFounderIdentity } from "@/lib/owner-control/decision-queue";
 import { createClient } from "@/lib/supabase/server";
 
 export const PANTAVION_KERNEL_ACCESS_QUERY = "kernelToken";
 export const PANTAVION_KERNEL_FOUNDER_QUERY = "founderToken";
 export const PANTAVION_KERNEL_SESSION_COOKIE = "pantavion_kernel_founder_session";
+
+
+function safeTokenEqual(left: string, right: string): boolean {
+  const leftBytes = Buffer.from(left);
+  const rightBytes = Buffer.from(right);
+  if (leftBytes.length !== rightBytes.length) return false;
+  return timingSafeEqual(leftBytes, rightBytes);
+}
+
+/**
+ * Dedicated machine boundary for the Founder ChatGPT -> Pantavion Governor
+ * bridge. This token is server-only and deliberately does not grant arbitrary
+ * browser founder identity. Routes must opt in explicitly to this boundary.
+ */
+export function isPantavionGovernorBridgeRequestAllowed(request: Request): boolean {
+  const requiredToken = process.env.PANTAVION_GOVERNOR_BRIDGE_TOKEN?.trim() || "";
+  if (requiredToken.length < 32) return false;
+
+  const authorization = request.headers.get("authorization") || "";
+  const bearer = authorization.startsWith("Bearer ")
+    ? authorization.slice("Bearer ".length).trim()
+    : "";
+  const headerToken =
+    request.headers.get("x-pantavion-governor-token")?.trim() || "";
+  const supplied = bearer || headerToken;
+
+  return supplied.length > 0 && safeTokenEqual(supplied, requiredToken);
+}
 
 export interface PantavionKernelAccessDeniedReport {
   ok: false;

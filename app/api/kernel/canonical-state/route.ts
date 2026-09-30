@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   createPantavionKernelAccessDeniedReport,
+  isPantavionGovernorBridgeRequestAllowed,
   isPantavionKernelFounderRequestAllowed,
 } from "@/core/kernel/kernel-access-guard";
 import {
@@ -49,7 +50,7 @@ function asRecord(value: unknown): Record<string, unknown> | null {
 }
 
 export async function GET(request: Request) {
-  if (!(await isPantavionKernelFounderRequestAllowed(request))) return denied();
+  if (!(isPantavionGovernorBridgeRequestAllowed(request) || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
 
   try {
     const [states, executionIntents] = await Promise.all([
@@ -82,12 +83,15 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const mutationBoundary = evaluatePrivilegedRequestBoundary(request);
+  const bridgeAllowed = isPantavionGovernorBridgeRequestAllowed(request);
+  const mutationBoundary = bridgeAllowed
+    ? { allowed: true as const, reason: "ok" as const }
+    : evaluatePrivilegedRequestBoundary(request);
   if (!mutationBoundary.allowed) {
     return invalidMutationBoundary(mutationBoundary.reason);
   }
 
-  if (!(await isPantavionKernelFounderRequestAllowed(request))) return denied();
+  if (!(bridgeAllowed || (await isPantavionKernelFounderRequestAllowed(request)))) return denied();
 
   let body: Record<string, unknown> | null = null;
   try {
@@ -103,6 +107,8 @@ export async function POST(request: Request) {
     const title = typeof body?.title === "string" ? body.title.trim() : undefined;
     const target =
       typeof body?.target === "string" ? body.target.trim() : undefined;
+    const sourceRef =
+      typeof body?.sourceRef === "string" ? body.sourceRef.trim().slice(0, 1000) : "";
 
     if (!founderIntent || founderIntent.length > 12_000) {
       return noStore(
@@ -124,9 +130,13 @@ export async function POST(request: Request) {
         ...(target
           ? { target: target as Parameters<typeof capturePantavionFounderAgendaDirective>[0]["target"] }
           : {}),
-        sourceRef: "pantavion://owner/control/agenda",
+        sourceRef:
+          sourceRef.startsWith("chatgpt://") ||
+          sourceRef.startsWith("pantavion://internal/")
+            ? sourceRef
+            : "chatgpt://founder-command",
       });
-      const materialization = await materializePantavionFounderExecutionIntents(1);
+      const materialization = await materializePantavionFounderExecutionIntents(1, { intentId: captured.intentId });
 
       return noStore(
         NextResponse.json({

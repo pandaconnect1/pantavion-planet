@@ -26,7 +26,8 @@
     "agendaVisibility": "Founder execution agenda is private control-plane data and must not be exposed as a normal Pantavion user surface.",
     "executionLocationPolicy": "Execution is performed by ChatGPT on the Pantavion system/code/runtime. Pantavion itself is the Governor/watchdog that supervises the executor.",
     "executionRolePolicy": "Pantavion is the Governor/watchdog. ChatGPT is the executor acting on Pantavion. The Founder gives directives here. Pantavion does not replace the executor; it supervises, checks divergence, records evidence, and reports violations.",
-    "vercelProjectVmxxPolicy": "pantavion-planet-vmxx is founder-blocked. Do not re-enable, deploy from, alias, or route production traffic through it without a later explicit Founder directive."
+    "vercelProjectVmxxPolicy": "pantavion-planet-vmxx is founder-blocked. Do not re-enable, deploy from, alias, or route production traffic through it without a later explicit Founder directive.",
+    "preExecutionGovernorGate": "Before a governed Pantavion action, evaluate the Founder directive, locked objective, proposed action, provider/resource target, prior failed fingerprints, and completion evidence. HARD STOP on prohibited/repeated/unsupported actions."
   },
   "sourceCoverage": [
     {
@@ -152,6 +153,20 @@
         "visibleHeading": "Here We Are One. For All Humanity."
       },
       "caution": "This proves public homepage reachability only. It does not prove that blocking pantavion-planet-vmxx was the sole cause of recovery."
+    },
+    {
+      "id": "governor_execution_modes_runtime_20260930",
+      "domain": "governor",
+      "state": "IN_PROGRESS",
+      "claim": "Research, Expert, Prompt Engineer, Strategy and public-only Viral modes are implemented as deterministic Pantavion execution-governor policy and wired into the kernel-governor runtime plus founder-only API.",
+      "evidence": {
+        "branch": "feature/governor-execution-modes-20260930",
+        "core": "core/kernel/pantavion-execution-governor.ts",
+        "runtime": "services/kernel-governor/index.ts",
+        "api": "app/api/kernel/governor/route.ts",
+        "contractTest": "scripts/pantavion-governor-execution-policy-test.mjs"
+      },
+      "caution": "Remains IN_PROGRESS until CI passes, merge completes, Railway deploy succeeds and live route/runtime verification is performed."
     }
   ],
   "repeatedFailurePatterns": [
@@ -263,5 +278,33 @@
     "If ChatGPT diverges, repeats a known mistake, skips work or claims completion without evidence, Pantavion Governor flags/stops the deviation and identifies the corrective next step.",
     "ChatGPT continues execution until verified completion.",
     "Pantavion Governor reports mistakes, omissions, blockers and evidence back to the Founder through ChatGPT."
-  ]
+  ],
+  "executionModes": {
+    "promptEngineer": {
+      "id": "prompt-engineer",
+      "purpose": "Convert Founder directives into exact execution contracts without changing intent.",
+      "mandatoryForExecutionPlanning": true
+    },
+    "research": {
+      "id": "research",
+      "purpose": "Gather and reconcile evidence before changing technical direction.",
+      "mandatoryForUnknownOrContestedState": true
+    },
+    "expert": {
+      "id": "expert",
+      "purpose": "Apply domain-specific technical reasoning and root-cause diagnosis.",
+      "mandatoryForTechnicalMutation": true
+    },
+    "strategy": {
+      "id": "strategy",
+      "purpose": "Choose the shortest evidence-backed path to the Founder objective and avoid circular work.",
+      "mandatoryForMultiStepExecution": true
+    },
+    "viral": {
+      "id": "viral",
+      "purpose": "Optimize public communication for clarity/reach without weakening truth.",
+      "publicContentOnly": true,
+      "excludedFromTechnicalDecisions": true
+    }
+  }
 }
