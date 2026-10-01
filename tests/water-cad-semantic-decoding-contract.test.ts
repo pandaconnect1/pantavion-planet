@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import {
   decodeWaterPipeSemantic,
   PANTAVION_WATER_CAD_SEMANTIC_POLICY,
-} from "../core/infrastructure/water/water-cad-semantic-decoding-contract";
+} from "../core/infrastructure/water/water-cad-semantic-decoding-contract.ts";
 
 assert.equal(PANTAVION_WATER_CAD_SEMANTIC_POLICY.authenticCadMayBeModified,false);
 assert.equal(PANTAVION_WATER_CAD_SEMANTIC_POLICY.colourAloneMayNotBecomeHydraulicFactWithoutVerifiedLegend,true);
