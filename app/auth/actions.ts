@@ -129,7 +129,7 @@ export async function signIn(formData: FormData) {
       maxAge: PANTAVION_FOUNDER_SESSION_TTL_SECONDS,
     });
 
-    redirect(nextPath);
+    redirect(nextPath === "/profile" ? "/professional/infrastructure/water/admin" : nextPath);
   }
 
   const email = identity;
