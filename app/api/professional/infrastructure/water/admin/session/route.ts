@@ -73,7 +73,7 @@ export async function POST(request: Request) {
           {
             ok: false,
             error: "founder_sign_in_required",
-            message: "Συνδέσου ως ενεργός founder με AAL2 ή χρησιμοποίησε ρυθμισμένο founder/admin access code.",
+            message: "Απαιτείται ασφαλής ταυτοποίηση Founder/Admin από το Pantavion.",
           },
           { status: 401, headers: { "Cache-Control": "no-store" } },
         );
