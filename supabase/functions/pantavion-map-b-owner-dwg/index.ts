@@ -19,7 +19,7 @@ const SOURCES = {
     sizeBytes: 205565159,
     sha256: "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16",
     storagePath:
-      "water-network-private/source-masters/map-b-original/MASTER 2025_Μ_15.1.2026_ANDREASPAP-01-02-014.dwg",
+      "water-network-private/source-masters/map-b-original/6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16.dwg",
     requestId: "map-b-authentic-master-20260927-6d05c02b",
     mapRole: "map-b-authentic-master",
     versionNumber: 1,
@@ -33,7 +33,7 @@ const SOURCES = {
     sizeBytes: 85703125,
     sha256: "038b9bceda2a660296a9162723f5279e5a2d10eb18d499b087d0e8ffa393b800",
     storagePath:
-      "water-network-private/source-masters/map-c-original/GEORGE_MAP_MASTER_B_C_FINAL (4).dwg",
+      "water-network-private/source-masters/map-c-original/038b9bceda2a660296a9162723f5279e5a2d10eb18d499b087d0e8ffa393b800.dwg",
     requestId: "map-c-authentic-master-20260927-038b9bce",
     mapRole: "map-c-authentic-master",
     versionNumber: 1,
