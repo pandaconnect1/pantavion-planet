@@ -330,6 +330,67 @@ export function presignUploadPart(input: {
   };
 }
 
+
+function presignObjectRequest(input: {
+  method: "GET" | "PUT" | "HEAD";
+  key: string;
+  expiresSeconds?: number;
+}) {
+  const config = getS3CompatibleStorageConfig();
+  const amzDate = amzTimestamp();
+  const stamp = dateStamp(amzDate);
+  const expires = Math.max(60, Math.min(input.expiresSeconds || 900, 3600));
+  const parts = objectUrlParts(config, input.key);
+  const scope = `${stamp}/${config.region}/s3/aws4_request`;
+
+  const entries: Array<[string, string]> = [
+    ["X-Amz-Algorithm", "AWS4-HMAC-SHA256"],
+    ["X-Amz-Credential", `${config.accessKeyId}/${scope}`],
+    ["X-Amz-Date", amzDate],
+    ["X-Amz-Expires", String(expires)],
+    ["X-Amz-SignedHeaders", "host"],
+  ];
+
+  const queryWithoutSignature = canonicalQuery(entries);
+  const canonicalRequest = [
+    input.method,
+    parts.canonicalUri,
+    queryWithoutSignature,
+    `host:${parts.host}\n`,
+    "host",
+    "UNSIGNED-PAYLOAD",
+  ].join("\n");
+  const stringToSign = [
+    "AWS4-HMAC-SHA256",
+    amzDate,
+    scope,
+    sha256Hex(canonicalRequest),
+  ].join("\n");
+  const signature = createHmac(
+    "sha256",
+    signingKey(config.secretAccessKey, stamp, config.region),
+  )
+    .update(stringToSign)
+    .digest("hex");
+
+  return {
+    url: `${parts.origin}${parts.canonicalUri}?${queryWithoutSignature}&X-Amz-Signature=${signature}`,
+    expiresSeconds: expires,
+  };
+}
+
+export function presignObjectUpload(key: string, expiresSeconds = 900) {
+  return presignObjectRequest({ method: "PUT", key, expiresSeconds });
+}
+
+export function presignObjectDownload(key: string, expiresSeconds = 300) {
+  return presignObjectRequest({ method: "GET", key, expiresSeconds });
+}
+
+export function presignObjectHead(key: string, expiresSeconds = 300) {
+  return presignObjectRequest({ method: "HEAD", key, expiresSeconds });
+}
+
 export async function completeMultipartUpload(input: {
   key: string;
   uploadId: string;
