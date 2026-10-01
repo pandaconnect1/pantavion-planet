@@ -10,6 +10,8 @@ export type PantavionWaterReferenceLayerKind =
   | "administrative-boundaries"
   | "orthophoto"
   | "terrain"
+  | "elevation-dem"
+  | "hillshade"
   | "custom-reference";
 
 export interface PantavionWaterReferenceLayerDefinition {
@@ -123,6 +125,9 @@ export function getPantavionWaterReferenceLayerCatalog() {
       sourceGeometryNeverSilentlyMutated: true,
       accuracyEvidenceRequiredBeforeCanonicalPromotion: true,
       externalProviderFailureMustNotRemovePantavionWaterData: true,
+      backgroundLayersNeverMutateAuthenticWaterNetwork: true,
+      elevationAndTerrainAreReferenceContextOnly: true,
+      telemetryIsOperationalOverlayNotBackgroundTruth: true,
     },
     overlayOrder: pantavionWaterOverlayOrder,
     layers: pantavionWaterReferenceLayers,
