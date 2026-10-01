@@ -1,7 +1,7 @@
 import {
   type WaterHydraulicModel,
   validateWaterHydraulicModel,
-} from "./water-hydraulic-model-contract";
+} from "./water-hydraulic-model-contract.ts";
 
 export type WaterEpanetCurveDefinition = {
   curveRef:string;
