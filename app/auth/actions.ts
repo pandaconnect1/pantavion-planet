@@ -5,13 +5,16 @@ import { cookies } from "next/headers";
 import { createClient } from "../../lib/supabase/server";
 import {
   createPantavionFounderSessionValue,
-  getPantavionFounderAccessCode,
   getPantavionFounderSessionSecret,
   PANTAVION_FOUNDER_SESSION_COOKIE,
   PANTAVION_FOUNDER_SESSION_TTL_SECONDS,
-  safeFounderSecretEqual,
 } from "@/core/security/pantavion-founder-session";
-import { WATER_ADMIN_SESSION_COOKIE } from "@/core/security/water-admin-session";
+import {
+  createWaterAdminSessionValue,
+  getWaterAdminSessionSecret,
+  WATER_ADMIN_SESSION_COOKIE,
+  WATER_ADMIN_SESSION_TTL_SECONDS,
+} from "@/core/security/water-admin-session";
 
 const CONSENT_VERSION = "2026-08-22";
 
@@ -103,47 +106,76 @@ export async function signUp(formData: FormData) {
 }
 
 export async function signIn(formData: FormData) {
-  const identity = getString(formData, "email").toLowerCase();
+  const email = getString(formData, "email").toLowerCase();
   const password = getString(formData, "password");
   const nextPath = safeNextPath(getString(formData, "next"));
 
-  if (identity === "founder") {
-    const expectedAccessCode = getPantavionFounderAccessCode();
-    const sessionSecret = getPantavionFounderSessionSecret();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !password) {
+    redirect(`/auth/login?error=invalid_credentials&next=${encodeURIComponent(nextPath)}`);
+  }
 
-    if (!expectedAccessCode || !sessionSecret) {
-      redirect(`/auth/login?error=founder_access_not_configured&next=${encodeURIComponent(nextPath)}`);
-    }
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (!password || !safeFounderSecretEqual(password, expectedAccessCode)) {
-      redirect(`/auth/login?error=invalid_credentials&next=${encodeURIComponent(nextPath)}`);
+  if (error) {
+    redirect(`/auth/login?error=invalid_credentials&next=${encodeURIComponent(nextPath)}`);
+  }
+
+  const userId = data.user?.id;
+  if (!userId) {
+    redirect(`/auth/login?error=authentication_failed&next=${encodeURIComponent(nextPath)}`);
+  }
+
+  if (!data.user.email_confirmed_at) {
+    redirect("/auth/check-email");
+  }
+
+  let isFounder = false;
+  try {
+    const { data: founderStatus, error: founderError } = await supabase.rpc(
+      "pantavion_is_active_founder",
+    );
+    isFounder = !founderError && founderStatus === true;
+  } catch {
+    isFounder = false;
+  }
+
+  if (isFounder) {
+    const founderSecret = getPantavionFounderSessionSecret();
+    const waterAdminSecret = getWaterAdminSessionSecret();
+
+    if (!founderSecret || !waterAdminSecret) {
+      await supabase.auth.signOut();
+      redirect(
+        `/auth/login?error=founder_session_not_configured&next=${encodeURIComponent(nextPath)}`,
+      );
     }
 
     const cookieStore = await cookies();
     cookieStore.set({
       name: PANTAVION_FOUNDER_SESSION_COOKIE,
-      value: createPantavionFounderSessionValue(sessionSecret),
+      value: createPantavionFounderSessionValue(founderSecret),
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
       maxAge: PANTAVION_FOUNDER_SESSION_TTL_SECONDS,
     });
+    cookieStore.set({
+      name: WATER_ADMIN_SESSION_COOKIE,
+      value: createWaterAdminSessionValue(waterAdminSecret),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: WATER_ADMIN_SESSION_TTL_SECONDS,
+    });
 
-    redirect(nextPath === "/profile" ? "/professional/infrastructure/water/admin" : nextPath);
-  }
-
-  const email = identity;
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-  if (error) {
-    redirect(`/auth/login?error=${encodeURIComponent(error.message)}&next=${encodeURIComponent(nextPath)}`);
-  }
-
-  const userId = data.user?.id;
-  if (!userId) {
-    redirect(`/auth/login?error=authentication_failed&next=${encodeURIComponent(nextPath)}`);
+    redirect(
+      nextPath === "/profile"
+        ? "/professional/infrastructure/water/admin"
+        : nextPath,
+    );
   }
 
   const { data: registration } = await supabase
