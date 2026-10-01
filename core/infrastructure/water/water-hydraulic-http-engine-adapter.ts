@@ -6,6 +6,8 @@ import type {
 
 type FetchLike = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 
+type UnknownRecord = Record<string, unknown>;
+
 export type WaterHydraulicHttpAdapterOptions = {
   endpoint:string;
   token:string;
@@ -28,6 +30,21 @@ function normalizeEndpoint(value:string){
 
 function asFiniteNumberOrNull(value:unknown){
   return typeof value==="number" && Number.isFinite(value) ? value : null;
+}
+
+function asRecord(value:unknown):UnknownRecord|null{
+  if(value===null || typeof value!=="object" || Array.isArray(value)) return null;
+  return value as UnknownRecord;
+}
+
+function asArray(value:unknown):unknown[]{
+  return Array.isArray(value) ? value : [];
+}
+
+function requiredString(record:UnknownRecord,key:string,errorCode:string){
+  const value=record[key];
+  if(typeof value!=="string" || !value) throw new Error(errorCode);
+  return value;
 }
 
 export function createWaterHydraulicHttpEngineAdapter(
@@ -66,44 +83,69 @@ export function createWaterHydraulicHttpEngineAdapter(
           signal:controller.signal,
         });
 
-        let payload:any=null;
-        try{ payload=await response.json(); }catch{}
+        let payload:unknown=null;
+        try{
+          payload=await response.json();
+        }catch{
+          payload=null;
+        }
+        const record=asRecord(payload);
+
         if(!response.ok){
-          const code=typeof payload?.error==="string" ? payload.error : "worker_http_"+response.status;
+          const errorValue=record?.["error"];
+          const code=typeof errorValue==="string"
+            ? errorValue
+            : "worker_http_"+response.status;
           throw new Error("water_worker_failed:"+code);
         }
 
-        if(payload?.ok!==true) throw new Error("water_worker_response_not_ok");
-        if(payload?.jobId!==input.jobId) throw new Error("water_worker_job_identity_mismatch");
-        if(payload?.networkRevisionId!==input.networkRevisionId) throw new Error("water_worker_revision_identity_mismatch");
-        if(payload?.engine!==options.engine) throw new Error("water_worker_engine_identity_mismatch");
-        if(!Array.isArray(payload?.nodes) || !Array.isArray(payload?.links)){
+        if(!record || record["ok"]!==true) throw new Error("water_worker_response_not_ok");
+        if(record["jobId"]!==input.jobId) throw new Error("water_worker_job_identity_mismatch");
+        if(record["networkRevisionId"]!==input.networkRevisionId) throw new Error("water_worker_revision_identity_mismatch");
+        if(record["engine"]!==options.engine) throw new Error("water_worker_engine_identity_mismatch");
+
+        const nodeRows=asArray(record["nodes"]);
+        const linkRows=asArray(record["links"]);
+        if(!Array.isArray(record["nodes"]) || !Array.isArray(record["links"])){
           throw new Error("water_worker_result_shape_invalid");
         }
 
+        const nodes=nodeRows.map((value)=>{
+          const node=asRecord(value);
+          if(!node) throw new Error("water_worker_node_shape_invalid");
+          return {
+            nodeId:requiredString(node,"nodeId","water_worker_node_id_invalid"),
+            pressureHeadM:asFiniteNumberOrNull(node["pressureHeadM"]),
+            hydraulicHeadM:asFiniteNumberOrNull(node["hydraulicHeadM"]),
+            demandLps:asFiniteNumberOrNull(node["demandLps"]),
+          };
+        });
+
+        const links=linkRows.map((value)=>{
+          const link=asRecord(value);
+          if(!link) throw new Error("water_worker_link_shape_invalid");
+          const status=link["status"];
+          return {
+            featureId:requiredString(link,"featureId","water_worker_feature_id_invalid"),
+            flowLps:asFiniteNumberOrNull(link["flowLps"]),
+            velocityMps:asFiniteNumberOrNull(link["velocityMps"]),
+            headlossM:asFiniteNumberOrNull(link["headlossM"]),
+            status:status==null ? undefined : String(status),
+          };
+        });
+
+        const rawArtifactRef=record["rawArtifactRef"];
+
         return {
           engine:options.engine,
-          engineVersion:String(payload.engineVersion ?? "unknown"),
-          simulationStartedAt:String(payload.simulationStartedAt ?? ""),
-          simulationFinishedAt:String(payload.simulationFinishedAt ?? ""),
-          nodes:payload.nodes.map((n:any)=>({
-            nodeId:String(n.nodeId),
-            pressureHeadM:asFiniteNumberOrNull(n.pressureHeadM),
-            hydraulicHeadM:asFiniteNumberOrNull(n.hydraulicHeadM),
-            demandLps:asFiniteNumberOrNull(n.demandLps),
-          })),
-          links:payload.links.map((l:any)=>({
-            featureId:String(l.featureId),
-            flowLps:asFiniteNumberOrNull(l.flowLps),
-            velocityMps:asFiniteNumberOrNull(l.velocityMps),
-            headlossM:asFiniteNumberOrNull(l.headlossM),
-            status:l.status==null ? undefined : String(l.status),
-          })),
-          warnings:Array.isArray(payload.warnings)
-            ? payload.warnings.map((w:any)=>String(w))
-            : [],
-          rawArtifactRef:typeof payload.rawArtifactRef==="string"
-            ? payload.rawArtifactRef
+          engineVersion:String(record["engineVersion"] ?? "unknown"),
+          simulationStartedAt:String(record["simulationStartedAt"] ?? ""),
+          simulationFinishedAt:String(record["simulationFinishedAt"] ?? ""),
+          nodes,
+          links,
+          warnings:asArray(record["warnings"]).map((warning)=>String(warning)),
+          rawArtifactRef:typeof rawArtifactRef==="string"
+            ? rawArtifactRef
             : undefined,
         };
       }finally{
