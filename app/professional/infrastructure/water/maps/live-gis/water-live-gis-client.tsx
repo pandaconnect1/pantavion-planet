@@ -79,6 +79,28 @@ function geolocationErrorMessage(error: GeolocationPositionError) {
   return "GPS: άγνωστο σφάλμα.";
 }
 
+function readDeviceClaim() {
+  if (typeof window === "undefined") {
+    return { deviceId: "", deviceToken: "" };
+  }
+
+  const deviceId =
+    window.localStorage.getItem("pantavion_water_device_id") ||
+    window.localStorage.getItem("pantavion-water-device-id") ||
+    window.localStorage.getItem("pantavion:water:device-id:v1") ||
+    window.localStorage.getItem("waterDeviceId") ||
+    "";
+
+  const deviceToken =
+    window.localStorage.getItem("pantavion_water_device_token") ||
+    window.localStorage.getItem("pantavion-water-device-token") ||
+    window.localStorage.getItem("pantavion:water:device-token:v1") ||
+    window.localStorage.getItem("waterDeviceToken") ||
+    "";
+
+  return { deviceId, deviceToken };
+}
+
 export default function WaterLiveGisClient({
   initialMap = "A",
 }: {
@@ -93,6 +115,9 @@ export default function WaterLiveGisClient({
   const [status, setStatus] = useState(mapStatus(initialMap));
   const [ready, setReady] = useState(false);
   const [gpsStatus, setGpsStatus] = useState("GPS: δεν ζητήθηκε ακόμη");
+  const [networkStatus, setNetworkStatus] = useState(
+    "Δίκτυο A: αναμονή PostGIS/MVT",
+  );
 
   useEffect(() => {
     let disposed = false;
@@ -107,6 +132,24 @@ export default function WaterLiveGisClient({
         zoom: 14,
         maxZoom: 22,
         attributionControl: true,
+        transformRequest: (url: string) => {
+          if (
+            url.includes(
+              "/api/professional/infrastructure/water/tiles/mvt",
+            )
+          ) {
+            const claim = readDeviceClaim();
+            return {
+              url,
+              headers: {
+                "x-pantavion-water-device-id": claim.deviceId,
+                "x-pantavion-water-device-token": claim.deviceToken,
+              },
+            };
+          }
+
+          return { url };
+        },
         style: {
           version: 8,
           sources: {
@@ -122,6 +165,14 @@ export default function WaterLiveGisClient({
               tileSize: 256,
               maxzoom: 17,
               attribution: "© OpenStreetMap contributors · SRTM · OpenTopoMap",
+            },
+            waterNetwork: {
+              type: "vector",
+              tiles: [
+                `${window.location.origin}/api/professional/infrastructure/water/tiles/mvt?mapId=A&z={z}&x={x}&y={y}`,
+              ],
+              minzoom: 12,
+              maxzoom: 22,
             },
           },
           layers: [
@@ -141,11 +192,59 @@ export default function WaterLiveGisClient({
                 visibility: initialMap === "C" ? "visible" : "none",
               },
             },
+            {
+              id: "water-pipes",
+              type: "line",
+              source: "waterNetwork",
+              "source-layer": "water",
+              minzoom: 12,
+              layout: {
+                visibility: initialMap === "A" ? "visible" : "none",
+                "line-cap": "round",
+                "line-join": "round",
+              },
+              paint: {
+                "line-color": [
+                  "case",
+                  ["==", ["get", "object_class"], "pipe"],
+                  "#22d3ee",
+                  "#f2c766",
+                ],
+                "line-width": [
+                  "interpolate",
+                  ["linear"],
+                  ["zoom"],
+                  12,
+                  0.7,
+                  16,
+                  2.2,
+                  20,
+                  5.5,
+                ],
+                "line-opacity": 0.92,
+              },
+            },
           ],
         },
       });
 
       map.addControl(new maplibregl.NavigationControl(), "top-right");
+
+      map.on("sourcedata", (event: any) => {
+        if (disposed) return;
+        if (event?.sourceId === "waterNetwork" && event?.isSourceLoaded) {
+          setNetworkStatus("Δίκτυο A: PostGIS/MVT ενεργό");
+        }
+      });
+
+      map.on("error", (event: any) => {
+        if (disposed) return;
+        const sourceId = event?.sourceId || event?.source?.id || "";
+        if (sourceId === "waterNetwork") {
+          setNetworkStatus("Δίκτυο A: MVT προσωρινά μη διαθέσιμο");
+        }
+      });
+
       map.on("load", () => {
         if (disposed) return;
         mapRef.current = map;
@@ -181,6 +280,13 @@ export default function WaterLiveGisClient({
     }
     if (map.getLayer("topo")) {
       map.setLayoutProperty("topo", "visibility", topoVisible ? "visible" : "none");
+    }
+    if (map.getLayer("water-pipes")) {
+      map.setLayoutProperty(
+        "water-pipes",
+        "visibility",
+        mapId === "A" ? "visible" : "none",
+      );
     }
   }
 
@@ -284,6 +390,10 @@ export default function WaterLiveGisClient({
 
           <span className="rounded-full border border-white/15 px-3 py-2">
             {gpsStatus}
+          </span>
+
+          <span className="rounded-full border border-cyan-400/30 px-3 py-2 text-cyan-100">
+            {networkStatus}
           </span>
 
           <button
