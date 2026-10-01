@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { calculatePantavionAuthenticMapAlignment, assertPantavionAuthenticAlignmentSafe } from "../core/water/water-authentic-map-alignment";
+import { calculatePantavionAuthenticMapAlignment, assertPantavionAuthenticAlignmentSafe } from "../core/water/water-authentic-map-alignment.ts";
 
 for (const mapId of ["A","B","C"] as const) {
   const points=[
