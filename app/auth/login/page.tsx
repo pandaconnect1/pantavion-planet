@@ -32,7 +32,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
           ) : null}
           {error ? (
             <div className="mb-4 rounded-2xl border border-rose-300/20 bg-rose-300/10 p-4 text-sm leading-6 text-rose-100">
-              Η σύνδεση απέτυχε. Για κανονικό λογαριασμό έλεγξε email/κωδικό. Για Founder χρησιμοποίησε «Founder» και τον ασφαλή κωδικό Founder του Pantavion.
+              Η σύνδεση απέτυχε. Έλεγξε το email και τον κωδικό σου ή χρησιμοποίησε «Αλλαγή / ξέχασα κωδικό» για να λάβεις ασφαλές link στο email σου.
             </div>
           ) : null}
           <LoginClient nextPath={nextPath} />
