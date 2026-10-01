@@ -1,5 +1,11 @@
 import "server-only";
 
+import { cookies } from "next/headers";
+import {
+  hasPantavionFounderSession,
+  PANTAVION_FOUNDER_SESSION_COOKIE,
+  validatePantavionFounderSessionValue,
+} from "@/core/security/pantavion-founder-session";
 import { requireFounderIdentity } from "@/lib/owner-control/decision-queue";
 import { createClient } from "@/lib/supabase/server";
 
@@ -65,6 +71,15 @@ export async function isPantavionKernelFounderIdentityAllowed(): Promise<boolean
   if (process.env.NODE_ENV !== "production") return true;
 
   try {
+    const cookieStore = await cookies();
+    const founderSession =
+      cookieStore.get(PANTAVION_FOUNDER_SESSION_COOKIE)?.value ?? "";
+    if (validatePantavionFounderSessionValue(founderSession)) return true;
+  } catch {
+    // Continue to the legacy identity adapter during migration.
+  }
+
+  try {
     const supabase = await createClient();
     const { data: auth } = await supabase.auth.getUser();
     if (!auth.user) return false;
@@ -82,6 +97,7 @@ export async function isPantavionKernelFounderRequestAllowed(
   request: Request,
 ): Promise<boolean> {
   if (!isPantavionKernelRequestAllowed(request)) return false;
+  if (hasPantavionFounderSession(request)) return true;
   return isPantavionKernelFounderIdentityAllowed();
 }
 
