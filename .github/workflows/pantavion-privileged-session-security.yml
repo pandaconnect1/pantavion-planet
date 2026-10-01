@@ -20,6 +20,7 @@ on:
   push:
     paths:
       - "core/security/water-admin-session.ts"
+      - "core/security/pantavion-founder-session.ts"
       - "core/security/privileged-request-boundary.ts"
       - "core/kernel/kernel-privileged-mutation-boundary.ts"
       - "app/api/kernel/**/route.ts"
