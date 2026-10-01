@@ -99,6 +99,8 @@ function readPantavionFounderSessionSecret() {
 function readWaterAdminSessionSecret() {
   return (
     process.env.PANTAVION_WATER_ADMIN_SESSION_SECRET ||
+    process.env.PANTAVION_FOUNDER_SESSION_SECRET ||
+    process.env.PANTAVION_ADMIN_SESSION_SECRET ||
     process.env.PANTAVION_WATER_ADMIN_ACCESS_CODE ||
     process.env.PANTAVION_WATER_FOUNDER_ACCESS_CODE ||
     process.env.PANTAVION_ADMIN_ACCESS_CODE ||
