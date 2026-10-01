@@ -15,6 +15,7 @@ const WATER_ADMIN_ACCESS_PATH = `${WATER_ADMIN_PATH}/access`;
 const WATER_ADMIN_DEFAULT_PATH = `${WATER_ADMIN_PATH}/control`;
 const WATER_LIVE_PATH = "/professional/infrastructure/water/live";
 const WATER_MAP_B_PATH = "/professional/infrastructure/water/b";
+const WATER_MAP_C_PATH = "/professional/infrastructure/water/c";
 
 function safeRequestedAdminPath() {
   const requestedPath = new URLSearchParams(window.location.search).get("next") || "";
@@ -22,7 +23,9 @@ function safeRequestedAdminPath() {
   if (
     requestedPath === WATER_LIVE_PATH ||
     requestedPath === WATER_MAP_B_PATH ||
-    requestedPath.startsWith(`${WATER_MAP_B_PATH}?`)
+    requestedPath.startsWith(`${WATER_MAP_B_PATH}?`) ||
+    requestedPath === WATER_MAP_C_PATH ||
+    requestedPath.startsWith(`${WATER_MAP_C_PATH}?`)
   ) {
     return requestedPath;
   }
