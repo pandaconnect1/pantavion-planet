@@ -3,6 +3,7 @@ import { createHash } from "crypto";
 import { NextResponse } from "next/server";
 
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
+import { getWaterDeviceClaimFromRequest } from "@/core/security/water-device-session";
 import {
   createAdminClient,
   hasSupabaseAdminCredential,
@@ -81,10 +82,13 @@ export async function GET(request: Request) {
   }
 
   const adminAuthorized = await hasWaterAdminAuthorization(request);
-  const deviceId = clean(request.headers.get("x-pantavion-water-device-id"));
-  const deviceToken = clean(
-    request.headers.get("x-pantavion-water-device-token"),
-  );
+  const cookieClaim = getWaterDeviceClaimFromRequest(request);
+  const deviceId =
+    clean(request.headers.get("x-pantavion-water-device-id")) ||
+    cookieClaim.deviceId;
+  const deviceToken =
+    clean(request.headers.get("x-pantavion-water-device-token")) ||
+    cookieClaim.deviceToken;
   const tokenHash = deviceToken ? hashToken(deviceToken) : "";
 
   // Founder/admin can use the internal primitive when a server credential is
