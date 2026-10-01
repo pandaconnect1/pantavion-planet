@@ -8,7 +8,7 @@ import {
   WATER_MAP_B_SOURCE_CANDIDATES,
   type WaterMapBSourceKey,
 } from "@/core/water/water-map-b-source-candidates";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient, hasSupabaseAdminCredential } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -27,6 +27,43 @@ function resolveSourceKey(value: unknown): WaterMapBSourceKey {
   return value === "legacy-george-85m"
     ? "legacy-george-85m"
     : "canonical-2026-andreaspap";
+}
+
+async function callPantavionObjectSigner(
+  action: "status" | "head" | "sign-download",
+  sourceKey: WaterMapBSourceKey,
+) {
+  const url = (process.env.PANTAVION_WATER_STORAGE_SIGNER_URL || "").trim();
+  const secret = (process.env.PANTAVION_WATER_TRANSFER_SECRET || "").trim();
+
+  if (!url || !secret) {
+    throw new Error("pantavion_water_object_signer_not_configured");
+  }
+
+  const response = await fetch(url, {
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      "content-type": "application/json",
+      "x-pantavion-transfer-secret": secret,
+    },
+    body: JSON.stringify({ action, sourceKey }),
+  });
+
+  const payload = (await response.json().catch(() => ({}))) as {
+    ok?: boolean;
+    present?: boolean;
+    sizeMatches?: boolean;
+    signedUrl?: string;
+    contentLength?: number;
+    error?: string;
+  };
+
+  if (!response.ok || !payload.ok) {
+    throw new Error(payload.error || `pantavion_water_object_signer_http_${response.status}`);
+  }
+
+  return payload;
 }
 
 function privilegedBoundaryDenied(request: Request) {
@@ -136,6 +173,65 @@ export async function POST(request: Request) {
     const action = typeof body.action === "string" ? body.action : "status";
     const sourceKey = resolveSourceKey(body.sourceKey);
     const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
+
+    if (!hasSupabaseAdminCredential() && action === "status") {
+      const objectState = await callPantavionObjectSigner("head", sourceKey);
+      const verified = Boolean(objectState.present && objectState.sizeMatches);
+
+      return noStore({
+        ok: true,
+        status: verified ? "verified" : "missing_or_unverified",
+        sourceKey,
+        canonical: source.canonical,
+        verified,
+        fileName: source.fileName,
+        sizeBytes: source.byteSize,
+        sha256: source.sha256,
+        storageProvider: "pantavion-private-object-storage",
+      });
+    }
+
+    if (!hasSupabaseAdminCredential() && action === "download") {
+      const objectState = await callPantavionObjectSigner("head", sourceKey);
+      if (!objectState.present || !objectState.sizeMatches) {
+        return noStore(
+          { ok: false, error: "water_map_source_not_verified", sourceKey },
+          { status: 409 },
+        );
+      }
+
+      const signed = await callPantavionObjectSigner("sign-download", sourceKey);
+      if (!signed.signedUrl) {
+        return noStore(
+          { ok: false, error: "water_map_signed_download_failed", sourceKey },
+          { status: 502 },
+        );
+      }
+
+      return noStore({
+        ok: true,
+        status: "ready",
+        sourceKey,
+        canonical: source.canonical,
+        signedUrl: signed.signedUrl,
+        fileName: source.fileName,
+        sizeBytes: source.byteSize,
+        sha256: source.sha256,
+        storageProvider: "pantavion-private-object-storage",
+      });
+    }
+
+    if (!hasSupabaseAdminCredential()) {
+      return noStore(
+        {
+          ok: false,
+          error: "water_map_legacy_supabase_admin_unavailable",
+          sourceKey,
+        },
+        { status: 503 },
+      );
+    }
+
     const admin = createAdminClient();
 
     if (action === "status") {
