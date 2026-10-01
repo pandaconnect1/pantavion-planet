@@ -12,7 +12,7 @@ type SessionResponse = {
 
 const WATER_ADMIN_PATH = "/professional/infrastructure/water/admin";
 const WATER_ADMIN_ACCESS_PATH = `${WATER_ADMIN_PATH}/access`;
-const WATER_ADMIN_DEFAULT_PATH = `${WATER_ADMIN_PATH}/approvals`;
+const WATER_ADMIN_DEFAULT_PATH = `${WATER_ADMIN_PATH}/control`;
 const WATER_LIVE_PATH = "/professional/infrastructure/water/live";
 const WATER_MAP_B_PATH = "/professional/infrastructure/water/b";
 
