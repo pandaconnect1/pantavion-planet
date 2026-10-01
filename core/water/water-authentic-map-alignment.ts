@@ -2,7 +2,7 @@ import {
   calculatePantavionMapASimilarityTransform,
   type PantavionRigidControlPoint,
   type PantavionSimilarityTransform,
-} from "./water-map-a-similarity-alignment";
+} from "./water-map-a-similarity-alignment.ts";
 
 export type PantavionAuthenticWaterMapId = "A" | "B" | "C";
 
