@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import {
   decodePipeFromAuthenticMap,
   extractPipeDiameterFromAuthenticText,
-} from "../core/infrastructure/water/water-authentic-map-semantic-reader";
+} from "../core/infrastructure/water/water-authentic-map-semantic-reader.ts";
 
 assert.equal(extractPipeDiameterFromAuthenticText(["PIPE PHI200 DI".replace("PHI","Φ")]),200);
 assert.equal(extractPipeDiameterFromAuthenticText(["DN110 PE"]),110);
