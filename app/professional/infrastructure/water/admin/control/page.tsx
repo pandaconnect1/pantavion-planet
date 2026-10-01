@@ -88,6 +88,9 @@ export default function FounderWaterControlPage() {
         <FounderControlRuntime />
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <Link href="/founder/account-setup" className="rounded-2xl border border-cyan-400/40 bg-[#0d1a2d] p-5 font-black text-cyan-100">
+            Founder email + password setup →
+          </Link>
           <Link href="/professional/infrastructure/water/admin/approvals" className="rounded-2xl border border-[#f2c766]/40 bg-[#0d1a2d] p-5 font-black text-[#f2c766]">
             Users / Approvals →
           </Link>
