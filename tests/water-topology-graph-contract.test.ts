@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { PANTAVION_WATER_TOPOLOGY_POLICY } from "../core/infrastructure/water/water-topology-graph-contract";
+import { PANTAVION_WATER_TOPOLOGY_POLICY } from "../core/infrastructure/water/water-topology-graph-contract.ts";
 
 assert.equal(PANTAVION_WATER_TOPOLOGY_POLICY.sourceNetworkImmutable,true);
 assert.equal(PANTAVION_WATER_TOPOLOGY_POLICY.automaticGeometrySnappingAllowed,false);
