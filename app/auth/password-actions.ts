@@ -8,7 +8,7 @@ function getString(formData: FormData, key: string): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function safeNextPath(value: string, fallback = "/admin/pantavion/recovery"): string {
+function safeNextPath(value: string, fallback = "/professional/infrastructure/water/admin/control"): string {
   if (!value || !value.startsWith("/") || value.startsWith("//")) return fallback;
   return value;
 }
