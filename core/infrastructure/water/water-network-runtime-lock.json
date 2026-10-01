@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-01T09:33:00.000Z",
+  "lockedAtUtc": "2026-10-01T09:36:00.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -32,12 +32,13 @@
     "core/security/water-admin-session.ts": "1f563864a0c58761404b06d682a59abdea618939abb7c905236417a6a2e3f7f1",
     "scripts/pantavion-water-network-runtime-lock.cjs": "0df1627215062bbb3c1e5bb91118591fd896197300cf81090d373f757fa2d5d3",
     "scripts/water-guardian-production-smoke.cjs": "fa85132fb88419f98429c9dcd6b779b313bf0345d0d1787aaa348ddc7707aa21",
-    "scripts/water-segment-reader-regression.mjs": "8b1f075c8143fbe0041bc8918b0a1717ea46e034f57c09479a5a7eb9f0206c33"
+    "scripts/water-segment-reader-regression.mjs": "8b1f075c8143fbe0041bc8918b0a1717ea46e034f57c09479a5a7eb9f0206c33",
+    "app/api/professional/infrastructure/water/tiles/mvt/route.ts": "a9e29eeca9a783b3f0dfc0685bfe48fc2e5726ff9d2f533bb0da99eee96a400c"
   },
   "refreshEvidence": {
-    "reason": "Reviewed Railway-safe PostGIS bbox path with database-side approved-device validation. Source truth and privacy invariants remain unchanged; raw/full master remains blocked.",
-    "sourceCommit": "b00d21ae2cffa6a86615dcb0d73e10d48e0646f5",
-    "protectedFileCount": 17,
+    "reason": "Locked the new protected PostGIS MVT API in addition to the reviewed device-authorized bbox path. Source truth and privacy invariants remain unchanged; raw/full master remains blocked.",
+    "sourceCommit": "371cd52aae77d450574a8e043559eb931ef48037",
+    "protectedFileCount": 18,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
   }
