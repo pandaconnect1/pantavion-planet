@@ -95,7 +95,7 @@ export async function POST(request: Request) {
       {
         ok: true,
         message: "Το founder/admin session ενεργοποιήθηκε με περιορισμένη διάρκεια.",
-        redirectTo: "/professional/infrastructure/water/admin/approvals",
+        redirectTo: "/professional/infrastructure/water/admin/control",
         session: {
           version: WATER_ADMIN_SESSION_VERSION,
           expiresInSeconds: WATER_ADMIN_SESSION_TTL_SECONDS,
