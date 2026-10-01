@@ -42,15 +42,15 @@ export default function LoginClient({ nextPath }: { nextPath: string }) {
       <div className="space-y-5">
         <div>
           <label className="mb-2 block text-sm font-bold text-slate-200" htmlFor="email">
-            Email
+            Email ή Founder
           </label>
           <input
             className="min-h-12 w-full rounded-2xl border border-white/15 bg-slate-900/90 px-4 py-3 text-base text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70 focus:ring-2 focus:ring-cyan-300/20"
             id="email"
             name="email"
-            type="email"
-            autoComplete="email"
-            inputMode="email"
+            type="text"
+            autoComplete="username"
+            autoCapitalize="none"
             required
           />
         </div>
@@ -86,7 +86,7 @@ export default function LoginClient({ nextPath }: { nextPath: string }) {
       </div>
 
       <p className="mt-5 text-center text-xs leading-5 text-slate-500">
-        Η σύνδεση προστατεύεται από Supabase authentication και το founder control απαιτεί επιπλέον επαλήθευση ασφαλείας.
+        Η σύνδεση Founder ελέγχεται από το Pantavion με ασφαλή, περιορισμένης διάρκειας συνεδρία.
       </p>
     </form>
   );
