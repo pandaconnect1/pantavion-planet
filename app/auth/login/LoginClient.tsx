@@ -49,6 +49,7 @@ export default function LoginClient({ nextPath }: { nextPath: string }) {
             id="email"
             name="email"
             type="text"
+            inputMode="email"
             autoComplete="username"
             autoCapitalize="none"
             required
