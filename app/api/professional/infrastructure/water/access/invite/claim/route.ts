@@ -2,6 +2,11 @@ import { createHash } from "crypto";
 
 import { NextResponse } from "next/server";
 
+import {
+  WATER_DEVICE_COOKIE_MAX_AGE_SECONDS,
+  WATER_DEVICE_ID_COOKIE,
+  WATER_DEVICE_TOKEN_COOKIE,
+} from "@/core/security/water-device-session";
 import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
@@ -83,7 +88,7 @@ export async function POST(request: Request) {
       );
     }
 
-    return noStoreJson({
+    const response = noStoreJson({
       ok: true,
       approved: true,
       accessMode: "one-time-sms-device-bound",
@@ -91,6 +96,23 @@ export async function POST(request: Request) {
       recipientLabel: result.recipient_label,
       claimStatus: result.claim_status,
     });
+
+    for (const [name, value] of [
+      [WATER_DEVICE_ID_COOKIE, deviceId],
+      [WATER_DEVICE_TOKEN_COOKIE, deviceToken],
+    ] as const) {
+      response.cookies.set({
+        name,
+        value,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+        maxAge: WATER_DEVICE_COOKIE_MAX_AGE_SECONDS,
+      });
+    }
+
+    return response;
   } catch {
     return noStoreJson(
       { ok: false, error: "invite_claim_unavailable" },
