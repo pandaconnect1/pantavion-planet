@@ -10,6 +10,10 @@ import {
 } from "@/core/infrastructure/water/controlled-water-segment-index-provider";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { migrateLegacyApprovedDeviceIfPresent } from "@/core/water/water-access-store";
+import {
+  createAdminClient,
+  hasSupabaseAdminCredential,
+} from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
@@ -97,6 +101,40 @@ export async function GET(request: Request) {
 
     const deviceId = clean(request.headers.get("x-pantavion-water-device-id"));
     const deviceToken = clean(request.headers.get("x-pantavion-water-device-token"));
+
+    // Primary GIS production path: server-authorized PostGIS Feature API.
+    // The browser never receives the raw/full master and never sees provider credentials.
+    if (hasSupabaseAdminCredential()) {
+      try {
+        const admin = createAdminClient();
+        const { data: postgisData, error: postgisError } = await admin.rpc(
+          "pantavion_water_features_bbox_internal_v1",
+          {
+            p_map_id: "A",
+            p_min_lng: bbox.minLng,
+            p_min_lat: bbox.minLat,
+            p_max_lng: bbox.maxLng,
+            p_max_lat: bbox.maxLat,
+            p_max_features: maxFeatures,
+          },
+        );
+
+        if (!postgisError && postgisData) {
+          return NextResponse.json(postgisData, {
+            status: 200,
+            headers: {
+              "Cache-Control": "private, max-age=30, stale-while-revalidate=30",
+              "X-Pantavion-Water-Segment": "postgis-feature-api-v1",
+              "X-Pantavion-Water-Access-Mode": access.mode,
+              "X-Pantavion-Data-Returned": "segment-only",
+              "X-Pantavion-Raw-Master": "not-included",
+            },
+          });
+        }
+      } catch {
+        // Keep the established protected fallbacks for continuity.
+      }
+    }
 
     if (deviceId && deviceToken) {
       // Primary production path: narrowly scoped SECURITY DEFINER RPC.
