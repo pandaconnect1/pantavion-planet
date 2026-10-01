@@ -1,5 +1,3 @@
-import "server-only";
-
 import { createHmac, randomBytes, timingSafeEqual } from "crypto";
 
 export const PANTAVION_FOUNDER_SESSION_COOKIE = "pantavion_founder_session";
