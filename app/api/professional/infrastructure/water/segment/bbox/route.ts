@@ -41,6 +41,11 @@ function hashToken(value: string) {
   return createHash("sha256").update(value).digest("hex");
 }
 
+function waterAdminRpcSecretHash() {
+  const secret = process.env.PANTAVION_WATER_ADMIN_RPC_SECRET?.trim() || "";
+  return secret ? createHash("sha256").update(secret).digest("hex") : "";
+}
+
 async function authorizeWaterSegmentRequest(request: Request): Promise<WaterSegmentAccessDecision> {
   const cookieClaim = getWaterDeviceClaimFromRequest(request);
   const deviceId =
@@ -140,6 +145,41 @@ export async function GET(request: Request) {
         }
       } catch {
         // Keep the established protected fallbacks for continuity.
+      }
+    }
+
+    if (access.mode === "admin-session") {
+      const secretHash = waterAdminRpcSecretHash();
+
+      if (secretHash) {
+        try {
+          const supabase = await createClient();
+          const { data: postgisAdminData, error: postgisAdminError } =
+            await supabase.rpc("pantavion_water_features_bbox_admin_v1", {
+              p_secret_hash: secretHash,
+              p_map_id: "A",
+              p_min_lng: bbox.minLng,
+              p_min_lat: bbox.minLat,
+              p_max_lng: bbox.maxLng,
+              p_max_lat: bbox.maxLat,
+              p_max_features: maxFeatures,
+            });
+
+          if (!postgisAdminError && postgisAdminData) {
+            return NextResponse.json(postgisAdminData, {
+              status: 200,
+              headers: {
+                "Cache-Control": "private, max-age=30, stale-while-revalidate=30",
+                "X-Pantavion-Water-Segment": "postgis-feature-api-admin-v1",
+                "X-Pantavion-Water-Access-Mode": access.mode,
+                "X-Pantavion-Data-Returned": "segment-only",
+                "X-Pantavion-Raw-Master": "not-included",
+              },
+            });
+          }
+        } catch {
+          // Continue to established fallbacks; remain fail-closed.
+        }
       }
     }
 
