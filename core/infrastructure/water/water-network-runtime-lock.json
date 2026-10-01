@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-01T09:28:00.000Z",
+  "lockedAtUtc": "2026-10-01T09:33:00.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -22,7 +22,7 @@
     "app/api/professional/infrastructure/water/access/invite/claim/route.ts": "ac91b1fbf67e03330171004c1c38b0b314b76db3321b758ba71a502523de288f",
     "app/api/professional/infrastructure/water/admin/session/route.ts": "39c3737506e0caaddf7cdc5cd48d836aee06252ad1cbdfda90da32eefb331d67",
     "app/api/professional/infrastructure/water/mapserver/0/query/route.ts": "3d4784ac3af414b1b143588c721fe8bee24d1c98e60b131caaa93b3ab398ae59",
-    "app/api/professional/infrastructure/water/segment/bbox/route.ts": "0fc00894ffe30bab52b7c5dd053f565bbe1396ae73577e3fcf89f1e5939bf834",
+    "app/api/professional/infrastructure/water/segment/bbox/route.ts": "4887f10d90c95e07e4730c02cef31c10b50c6da3c77688ba24add79465c8213b",
     "app/professional/infrastructure/water/admin/access/page.tsx": "f839879a1184951d1540e22904730319b24a8612de6cecb1de29a0304d56829d",
     "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "ad3d35d8a9573bdd60fd41594de4173916e509f2085395c62f4a699302cd0eaf",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
@@ -35,8 +35,8 @@
     "scripts/water-segment-reader-regression.mjs": "8b1f075c8143fbe0041bc8918b0a1717ea46e034f57c09479a5a7eb9f0206c33"
   },
   "refreshEvidence": {
-    "reason": "Reviewed PostGIS-first protected bbox serving. Existing authorization remains mandatory; raw/full master remains blocked; established protected fallbacks remain intact.",
-    "sourceCommit": "233a48863771c1bb7d6fd46ec63bddb824e499b0",
+    "reason": "Reviewed Railway-safe PostGIS bbox path with database-side approved-device validation. Source truth and privacy invariants remain unchanged; raw/full master remains blocked.",
+    "sourceCommit": "b00d21ae2cffa6a86615dcb0d73e10d48e0646f5",
     "protectedFileCount": 17,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
