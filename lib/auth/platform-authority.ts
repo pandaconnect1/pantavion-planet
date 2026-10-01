@@ -1,3 +1,8 @@
+import { cookies } from "next/headers";
+import {
+  PANTAVION_FOUNDER_SESSION_COOKIE,
+  validatePantavionFounderSessionValue,
+} from "@/core/security/pantavion-founder-session";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export type PlatformRole =
@@ -10,10 +15,31 @@ export type PlatformRole =
   | "institutional_operator";
 
 export async function hasPlatformAuthority(
-  userId: string,
+  userId: string | null | undefined,
   allowedRoles: PlatformRole[],
   scope = "global",
 ) {
+  if (allowedRoles.includes("founder")) {
+    try {
+      const cookieStore = await cookies();
+      const founderSession =
+        cookieStore.get(PANTAVION_FOUNDER_SESSION_COOKIE)?.value ?? "";
+      if (validatePantavionFounderSessionValue(founderSession)) {
+        return {
+          allowed: true as const,
+          role: "founder" as PlatformRole,
+          source: "pantavion_founder_session" as const,
+        };
+      }
+    } catch {
+      // Continue to migration adapters.
+    }
+  }
+
+  if (!userId) {
+    return { allowed: false as const, reason: "authentication_required" };
+  }
+
   const founderUserId = process.env.PANTAVION_FOUNDER_USER_ID?.trim();
   if (founderUserId && founderUserId === userId && allowedRoles.includes("founder")) {
     return { allowed: true as const, role: "founder" as PlatformRole, source: "founder_env" as const };

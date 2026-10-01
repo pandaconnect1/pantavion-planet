@@ -8,11 +8,15 @@ import {
   createPantavionKernelAccessDeniedReport,
   isPantavionKernelFounderRequestAllowed,
 } from "@/core/kernel/kernel-access-guard";
+import { enforcePantavionKernelPrivilegedMutationBoundary } from "@/core/kernel/kernel-privileged-mutation-boundary";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  const boundaryResponse = enforcePantavionKernelPrivilegedMutationBoundary(request);
+  if (boundaryResponse) return boundaryResponse;
+
   if (!(await isPantavionKernelFounderRequestAllowed(request))) {
     return NextResponse.json(createPantavionKernelAccessDeniedReport(), {
       status: 404,

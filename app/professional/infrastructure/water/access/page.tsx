@@ -1,6 +1,10 @@
 import { cookies } from "next/headers";
 
 import {
+  PANTAVION_FOUNDER_SESSION_COOKIE,
+  validatePantavionFounderSessionValue,
+} from "@/core/security/pantavion-founder-session";
+import {
   isWaterAdminSessionValue,
   WATER_ADMIN_SESSION_COOKIE,
 } from "@/core/security/water-admin-session";
@@ -16,9 +20,14 @@ export const metadata = {
 
 export default async function WaterUsersAccessPage() {
   const cookieStore = await cookies();
-  const isAdmin = isWaterAdminSessionValue(
-    cookieStore.get(WATER_ADMIN_SESSION_COOKIE)?.value || "",
+  const isFounder = validatePantavionFounderSessionValue(
+    cookieStore.get(PANTAVION_FOUNDER_SESSION_COOKIE)?.value || "",
   );
+  const isAdmin =
+    isFounder ||
+    isWaterAdminSessionValue(
+      cookieStore.get(WATER_ADMIN_SESSION_COOKIE)?.value || "",
+    );
 
   return (
     <>

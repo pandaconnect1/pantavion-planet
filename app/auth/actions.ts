@@ -1,7 +1,17 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { createClient } from "../../lib/supabase/server";
+import {
+  createPantavionFounderSessionValue,
+  getPantavionFounderAccessCode,
+  getPantavionFounderSessionSecret,
+  PANTAVION_FOUNDER_SESSION_COOKIE,
+  PANTAVION_FOUNDER_SESSION_TTL_SECONDS,
+  safeFounderSecretEqual,
+} from "@/core/security/pantavion-founder-session";
+import { WATER_ADMIN_SESSION_COOKIE } from "@/core/security/water-admin-session";
 
 const CONSENT_VERSION = "2026-08-22";
 
@@ -93,9 +103,37 @@ export async function signUp(formData: FormData) {
 }
 
 export async function signIn(formData: FormData) {
-  const email = getString(formData, "email").toLowerCase();
+  const identity = getString(formData, "email").toLowerCase();
   const password = getString(formData, "password");
   const nextPath = safeNextPath(getString(formData, "next"));
+
+  if (identity === "founder") {
+    const expectedAccessCode = getPantavionFounderAccessCode();
+    const sessionSecret = getPantavionFounderSessionSecret();
+
+    if (!expectedAccessCode || !sessionSecret) {
+      redirect(`/auth/login?error=founder_access_not_configured&next=${encodeURIComponent(nextPath)}`);
+    }
+
+    if (!password || !safeFounderSecretEqual(password, expectedAccessCode)) {
+      redirect(`/auth/login?error=invalid_credentials&next=${encodeURIComponent(nextPath)}`);
+    }
+
+    const cookieStore = await cookies();
+    cookieStore.set({
+      name: PANTAVION_FOUNDER_SESSION_COOKIE,
+      value: createPantavionFounderSessionValue(sessionSecret),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: PANTAVION_FOUNDER_SESSION_TTL_SECONDS,
+    });
+
+    redirect(nextPath === "/profile" ? "/professional/infrastructure/water/admin" : nextPath);
+  }
+
+  const email = identity;
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
@@ -186,6 +224,26 @@ export async function completeRegistrationProfile(formData: FormData) {
 }
 
 export async function signOut() {
+  const cookieStore = await cookies();
+  cookieStore.set({
+    name: PANTAVION_FOUNDER_SESSION_COOKIE,
+    value: "",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: "/",
+    maxAge: 0,
+  });
+  cookieStore.set({
+    name: WATER_ADMIN_SESSION_COOKIE,
+    value: "",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: "/",
+    maxAge: 0,
+  });
+
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/");

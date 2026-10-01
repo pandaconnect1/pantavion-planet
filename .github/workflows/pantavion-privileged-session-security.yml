@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "core/security/water-admin-session.ts"
+      - "core/security/pantavion-founder-session.ts"
       - "core/security/privileged-request-boundary.ts"
       - "core/kernel/kernel-privileged-mutation-boundary.ts"
       - "app/api/kernel/**/route.ts"
@@ -13,11 +14,13 @@ on:
       - "core/infrastructure/water/water-network-runtime-lock.json"
       - "next.config.mjs"
       - "scripts/pantavion-privileged-session-security-test.mjs"
+      - "scripts/pantavion-founder-session-security-test.mjs"
       - "scripts/pantavion-privileged-request-boundary-test.mjs"
       - ".github/workflows/pantavion-privileged-session-security.yml"
   push:
     paths:
       - "core/security/water-admin-session.ts"
+      - "core/security/pantavion-founder-session.ts"
       - "core/security/privileged-request-boundary.ts"
       - "core/kernel/kernel-privileged-mutation-boundary.ts"
       - "app/api/kernel/**/route.ts"
@@ -48,6 +51,9 @@ jobs:
 
       - name: Verify privileged session security contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-privileged-session-security-test.mjs
+
+      - name: Verify Pantavion Founder session security contract
+        run: node --no-warnings --experimental-strip-types scripts/pantavion-founder-session-security-test.mjs
 
       - name: Verify privileged mutation boundary contract
         run: node --no-warnings --experimental-strip-types scripts/pantavion-privileged-request-boundary-test.mjs
