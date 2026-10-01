@@ -42,7 +42,7 @@ export default function LoginClient({ nextPath }: { nextPath: string }) {
       <div className="space-y-5">
         <div>
           <label className="mb-2 block text-sm font-bold text-slate-200" htmlFor="email">
-            Email ή Founder
+            Email
           </label>
           <input
             className="min-h-12 w-full rounded-2xl border border-white/15 bg-slate-900/90 px-4 py-3 text-base text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70 focus:ring-2 focus:ring-cyan-300/20"
@@ -62,7 +62,7 @@ export default function LoginClient({ nextPath }: { nextPath: string }) {
               Κωδικός πρόσβασης
             </label>
             <Link className="text-xs font-bold text-cyan-200 hover:text-cyan-100" href={forgotHref}>
-              Ξέχασα τον κωδικό
+              Αλλαγή / ξέχασα κωδικό
             </Link>
           </div>
           <input
@@ -87,7 +87,7 @@ export default function LoginClient({ nextPath }: { nextPath: string }) {
       </div>
 
       <p className="mt-5 text-center text-xs leading-5 text-slate-500">
-        Η σύνδεση Founder ελέγχεται από το Pantavion με ασφαλή, περιορισμένης διάρκειας συνεδρία.
+        Η είσοδος γίνεται με email και κωδικό. Η αλλαγή κωδικού απαιτεί ασφαλές link που αποστέλλεται στο email του λογαριασμού.
       </p>
     </form>
   );
