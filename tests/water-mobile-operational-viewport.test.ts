@@ -5,7 +5,7 @@ import {
   moveWaterViewportManually,
   updateWaterGps,
   returnWaterViewportToGps,
-} from "../core/infrastructure/water/water-mobile-operational-viewport";
+} from "../core/infrastructure/water/water-mobile-operational-viewport.ts";
 
 const gps={latitude:34.68,longitude:33.04};
 let s=createGpsCenteredWaterViewport(gps);
