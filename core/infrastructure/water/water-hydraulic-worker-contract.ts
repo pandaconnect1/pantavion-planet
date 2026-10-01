@@ -1,11 +1,11 @@
 import {
   type WaterHydraulicModel,
   validateWaterHydraulicModel,
-} from "./water-hydraulic-model-contract";
+} from "./water-hydraulic-model-contract.ts";
 import {
   exportWaterHydraulicModelToEpanetInp,
   type WaterEpanetCurveDefinition,
-} from "./water-epanet-model-export";
+} from "./water-epanet-model-export.ts";
 
 export type WaterHydraulicEngineId = "EPANET_2_2" | "WNTR";
 
