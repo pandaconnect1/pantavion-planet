@@ -194,6 +194,62 @@ export const pantavionWaterStreetLedgerPolicy = {
   visibleToApprovedUsersAfterFounderApproval: true,
 } as const;
 
+export const pantavionWaterLayerSeparationPolicy = {
+  authenticNetworkLayer: {
+    role: "authoritative-network",
+    immutable: true,
+    readOnlyInOperationalMaps: true,
+    geometryMutationAllowed: false,
+    attributeMutationAllowed: false,
+    sourceReplacementAllowed: false,
+  },
+  backgroundReferenceLayers: {
+    independentFromNetwork: true,
+    allowedKinds: [
+      "DLS cadastral/reference",
+      "road network",
+      "parcels",
+      "topography",
+      "contours",
+      "terrain",
+      "elevation/DEM",
+      "hillshade",
+      "orthophoto",
+      "geology where licensed/verified",
+    ],
+    mayMutateNetwork: false,
+  },
+  operationalOverlays: {
+    independentFromNetwork: true,
+    allowedKinds: [
+      "GPS/current position",
+      "telemetry",
+      "SCADA/pressure/flow",
+      "faults",
+      "repairs",
+      "work orders",
+      "field observations",
+      "photos/evidence",
+      "temporary operational annotations",
+    ],
+    mayMutateNetwork: false,
+  },
+  engineeringScenarioMap: {
+    separateMapRequired: true,
+    authenticNetworkUsedAsReadOnlyBase: true,
+    scenarioChangesStoredSeparately: true,
+    maySimulateValveClosures: true,
+    maySimulatePipeChanges: true,
+    maySimulateNewConnections: true,
+    maySimulatePressureZones: true,
+    maySimulatePumpsAndTanks: true,
+    mayRunHydraulicAnalysis: true,
+    mayCombineTerrainTelemetryDemandAndNetworkTools: true,
+    automaticPromotionToAuthenticNetworkAllowed: false,
+    founderExplicitDirectiveRequiredForAnyCanonicalNetworkRevision: true,
+  },
+} as const;
+
 export const pantavionWaterEngineeringIntelligencePolicy = {
   telemetryAllowed: true,
   photosAllowed: true,
@@ -218,5 +274,6 @@ export function getPantavionWaterAbcMapSystemContract() {
     fieldChangeWorkflow: pantavionWaterFieldChangeWorkflow,
     streetLedgerPolicy: pantavionWaterStreetLedgerPolicy,
     engineeringIntelligencePolicy: pantavionWaterEngineeringIntelligencePolicy,
+    layerSeparationPolicy: pantavionWaterLayerSeparationPolicy,
   };
 }
