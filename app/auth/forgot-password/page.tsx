@@ -13,7 +13,7 @@ function firstParam(value: string | string[] | undefined): string | null {
 
 function safeNextPath(value: string | null): string {
   if (!value || !value.startsWith("/") || value.startsWith("//")) {
-    return "/admin/pantavion/recovery";
+    return "/professional/infrastructure/water/admin/control";
   }
   return value;
 }
