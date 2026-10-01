@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 ﻿export default function Page() {
   return (
     <main style={{
@@ -54,14 +56,14 @@
           Foundation
         </div>
         <div style={{ marginTop: "48px" }}>
-          <a href="/" style={{
+          <Link href="/" style={{
             color: "#9fb6df",
             fontSize: "14px",
             textDecoration: "none",
             letterSpacing: "0.1em"
           }}>
             ← Back to Pantavion
-          </a>
+          </Link>
         </div>
       </section>
     </main>
