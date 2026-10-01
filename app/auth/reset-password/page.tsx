@@ -12,7 +12,7 @@ function firstParam(value: string | string[] | undefined): string | null {
 
 function safeNextPath(value: string | null): string {
   if (!value || !value.startsWith("/") || value.startsWith("//")) {
-    return "/admin/pantavion/recovery";
+    return "/professional/infrastructure/water/admin/control";
   }
   return value;
 }
@@ -31,7 +31,7 @@ export default async function ResetPasswordPage({ searchParams }: { searchParams
           </span>
           <h1 className="mt-4 text-2xl font-black tracking-tight sm:text-3xl">Όρισε νέο κωδικό πρόσβασης</h1>
           <p className="mt-2 text-sm leading-6 text-slate-300">
-            Χρησιμοποίησε τουλάχιστον 12 χαρακτήρες. Μετά την αλλαγή θα συνδεθείς ξανά και θα συνεχίσεις προς το Founder Recovery Control Room.
+            Χρησιμοποίησε τουλάχιστον 12 χαρακτήρες. Μετά την αλλαγή θα συνδεθείς ξανά με email + νέο κωδικό και θα συνεχίσεις στο Founder / Water Admin Control Center.
           </p>
 
           {error ? (
