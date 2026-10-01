@@ -1,6 +1,13 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import {
+  PANTAVION_FOUNDER_SESSION_COOKIE,
+} from "@/core/security/pantavion-founder-session";
+import {
+  WATER_ADMIN_SESSION_COOKIE,
+} from "@/core/security/water-admin-session";
 import { createClient } from "@/lib/supabase/server";
 
 function getString(formData: FormData, key: string): string {
@@ -71,5 +78,22 @@ export async function updateRecoveredPassword(formData: FormData) {
   }
 
   await supabase.auth.signOut();
+
+  const cookieStore = await cookies();
+  for (const name of [
+    PANTAVION_FOUNDER_SESSION_COOKIE,
+    WATER_ADMIN_SESSION_COOKIE,
+  ]) {
+    cookieStore.set({
+      name,
+      value: "",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 0,
+    });
+  }
+
   redirect(`/auth/login?reset=success&next=${encodeURIComponent(nextPath)}`);
 }
