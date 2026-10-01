@@ -22,7 +22,6 @@ const WATER_MOBILE_FOUNDER_PATH = '/professional/infrastructure/water/mobile-fou
 const WATER_FOUNDER_AUTH_ENTRY_PATHS = new Set([
   WATER_ADMIN_PREFIX,
   WATER_ADMIN_ACCESS_PATH,
-  `${WATER_ADMIN_PREFIX}/approvals`,
 ]);
 const PANTAVION_FOUNDER_SESSION_COOKIE = 'pantavion_founder_session';
 const PANTAVION_FOUNDER_SESSION_VERSION = 'v1';
