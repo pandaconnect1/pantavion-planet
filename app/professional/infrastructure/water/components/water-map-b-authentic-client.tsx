@@ -610,16 +610,16 @@ export default function WaterMapBAuthenticClient({
 
       {viewerState === "missing" ? (
         <div className="absolute inset-x-4 top-4 z-30 mx-auto max-w-xl rounded-2xl border border-[#f6c85f]/40 bg-black/95 p-5 text-white shadow-2xl">
-          <p className="text-base font-black">{source.label} — φόρτωση αυθεντικού DWG</p>
+          <p className="text-base font-black">{source.label} — canonical master υπάρχει στο Pantavion</p>
           <p className="mt-2 text-sm text-white/75">
-            Επιλέγεται μόνο το ακριβές owner-confirmed αρχείο. Πριν αποθηκευτεί γίνεται έλεγχος μεγέθους και SHA-256 και μετά server-side επαλήθευση.
+            Δεν απαιτείται νέο upload από τον Founder. Ο αυθεντικός DWG παραμένει immutable και ο χάρτης ανοίγει μόνο από verified GIS/PostGIS derived layer.
           </p>
           <button
             type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="mt-4 rounded-xl bg-[#f6c85f] px-4 py-3 text-sm font-black text-black"
+            onClick={() => void loadVerifiedMapB()}
+            className="mt-4 rounded-xl border border-white/30 px-4 py-3 text-sm font-black text-white"
           >
-            Φόρτωση {source.canonical ? "Canonical DWG" : "Legacy DWG"}
+            Επανέλεγχος GIS layer
           </button>
         </div>
       ) : null}
@@ -663,13 +663,9 @@ export default function WaterMapBAuthenticClient({
             >
               Ξανά έλεγχος
             </button>
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="rounded-lg bg-[#f6c85f] px-3 py-2 text-black"
-            >
-              Φόρτωση σωστού DWG
-            </button>
+            <span className="rounded-lg border border-[#f6c85f]/40 bg-[#f6c85f]/10 px-3 py-2 text-[#f6c85f]">
+              Το canonical DWG υπάρχει ήδη στο Pantavion — δεν απαιτείται νέο upload
+            </span>
           </div>
         </div>
       ) : null}
