@@ -1930,7 +1930,15 @@ export default function ControlledWaterSegmentClient() {
             </div>
 
             {accessState !== "checking" ? (
-              <div className="mt-4">
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {accessState === "denied" ? (
+                  <a
+                    href="/professional/infrastructure/water/admin/access?next=%2Fprofessional%2Finfrastructure%2Fwater%2Flive"
+                    className="flex w-full items-center justify-center rounded-2xl border border-emerald-400/60 bg-emerald-400/15 px-5 py-4 text-center text-base font-black text-emerald-100"
+                  >
+                    {t.adminLogin}
+                  </a>
+                ) : null}
                 <button
                   type="button"
                   onClick={() => setAccessCheckVersion((value) => value + 1)}
