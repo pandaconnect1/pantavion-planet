@@ -24,6 +24,10 @@ const WATER_FOUNDER_AUTH_ENTRY_PATHS = new Set([
   WATER_ADMIN_ACCESS_PATH,
   `${WATER_ADMIN_PREFIX}/approvals`,
 ]);
+const PANTAVION_FOUNDER_SESSION_COOKIE = 'pantavion_founder_session';
+const PANTAVION_FOUNDER_SESSION_VERSION = 'v1';
+const PANTAVION_FOUNDER_SESSION_TTL_SECONDS = 60 * 60 * 2;
+const PANTAVION_FOUNDER_SESSION_CONTEXT = 'pantavion-founder-session-v1';
 const WATER_ADMIN_SESSION_COOKIE = 'pantavion_water_admin_session';
 const WATER_ADMIN_SESSION_VERSION = 'v2';
 const WATER_ADMIN_SESSION_TTL_SECONDS = 60 * 60 * 2;
@@ -84,6 +88,15 @@ function normalizeLocale(value: string | undefined): PantavionLocale {
   return 'el';
 }
 
+function readPantavionFounderSessionSecret() {
+  return (
+    process.env.PANTAVION_FOUNDER_SESSION_SECRET ||
+    process.env.PANTAVION_ADMIN_SESSION_SECRET ||
+    process.env.PANTAVION_WATER_ADMIN_SESSION_SECRET ||
+    ''
+  ).trim();
+}
+
 function readWaterAdminSessionSecret() {
   return (
     process.env.PANTAVION_WATER_ADMIN_SESSION_SECRET ||
@@ -105,9 +118,12 @@ function decodeBase64Url(value: string) {
   }
 }
 
-async function verifyWaterAdminSessionValue(
+async function verifyPrivilegedSessionValue(
   suppliedSession: string,
   secret: string,
+  expectedVersion: string,
+  context: string,
+  ttlSeconds: number,
   nowMs = Date.now(),
 ) {
   if (!suppliedSession || !secret) return false;
@@ -116,7 +132,7 @@ async function verifyWaterAdminSessionValue(
   if (parts.length !== 5) return false;
 
   const [version, issuedRaw, expiresRaw, nonce, signatureRaw] = parts;
-  if (version !== WATER_ADMIN_SESSION_VERSION) return false;
+  if (version !== expectedVersion) return false;
 
   const issuedAt = Number(issuedRaw);
   const expiresAt = Number(expiresRaw);
@@ -127,7 +143,7 @@ async function verifyWaterAdminSessionValue(
   }
   if (issuedAt > nowSeconds + WATER_ADMIN_CLOCK_SKEW_SECONDS) return false;
   if (expiresAt <= nowSeconds) return false;
-  if (expiresAt - issuedAt > WATER_ADMIN_SESSION_TTL_SECONDS) return false;
+  if (expiresAt - issuedAt > ttlSeconds) return false;
   if (!/^[A-Za-z0-9_-]{20,64}$/.test(nonce)) return false;
 
   const signature = decodeBase64Url(signatureRaw);
@@ -146,7 +162,37 @@ async function verifyWaterAdminSessionValue(
     'HMAC',
     key,
     signature,
-    new TextEncoder().encode(`${WATER_ADMIN_SESSION_CONTEXT}:${payload}`),
+    new TextEncoder().encode(`${context}:${payload}`),
+  );
+}
+
+async function verifyPantavionFounderSessionValue(
+  suppliedSession: string,
+  secret: string,
+  nowMs = Date.now(),
+) {
+  return verifyPrivilegedSessionValue(
+    suppliedSession,
+    secret,
+    PANTAVION_FOUNDER_SESSION_VERSION,
+    PANTAVION_FOUNDER_SESSION_CONTEXT,
+    PANTAVION_FOUNDER_SESSION_TTL_SECONDS,
+    nowMs,
+  );
+}
+
+async function verifyWaterAdminSessionValue(
+  suppliedSession: string,
+  secret: string,
+  nowMs = Date.now(),
+) {
+  return verifyPrivilegedSessionValue(
+    suppliedSession,
+    secret,
+    WATER_ADMIN_SESSION_VERSION,
+    WATER_ADMIN_SESSION_CONTEXT,
+    WATER_ADMIN_SESSION_TTL_SECONDS,
+    nowMs,
   );
 }
 
@@ -167,6 +213,13 @@ export async function middleware(request: NextRequest) {
   if (canonicalRedirect) return canonicalRedirect;
 
   const path = request.nextUrl.pathname;
+  const founderSession = request.cookies.get(PANTAVION_FOUNDER_SESSION_COOKIE)?.value || '';
+  const founderAuthorized = founderSession
+    ? await verifyPantavionFounderSessionValue(
+        founderSession,
+        readPantavionFounderSessionSecret(),
+      )
+    : false;
 
   if (path === WATER_MOBILE_FOUNDER_PATH) {
     const redirectUrl = request.nextUrl.clone();
@@ -185,7 +238,7 @@ export async function middleware(request: NextRequest) {
   if (isProtectedWaterAdminPath) {
     const secret = readWaterAdminSessionSecret();
     const suppliedSession = request.cookies.get(WATER_ADMIN_SESSION_COOKIE)?.value || '';
-    const authorized = await verifyWaterAdminSessionValue(suppliedSession, secret);
+    const authorized = founderAuthorized || await verifyWaterAdminSessionValue(suppliedSession, secret);
 
     if (!authorized) {
       return waterAdminAccessRedirect(request);
@@ -193,6 +246,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (path.startsWith('/profile') || path.startsWith('/dashboard')) {
+    if (founderAuthorized) return NextResponse.next();
     return updateSession(request);
   }
 
@@ -233,7 +287,9 @@ export async function middleware(request: NextRequest) {
 
   const activeRole =
     process.env.NODE_ENV === 'production'
-      ? 'guest'
+      ? founderAuthorized
+        ? 'founder'
+        : 'guest'
       : normalizeRole(request.cookies.get('pantavion_role')?.value);
 
   const rule = ROUTE_RULES.find((item) => path === item.prefix || path.startsWith(`${item.prefix}/`));
