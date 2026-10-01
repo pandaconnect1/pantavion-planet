@@ -2,6 +2,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import {
+  waterAuthenticLineColorExpression,
+  waterAuthenticLineOpacityExpression,
+} from "@/core/infrastructure/water/water-authentic-style-rendering";
 
 declare global {
   interface Window {
@@ -64,7 +68,7 @@ async function ensureMapLibre() {
 
 function mapStatus(mapId: MapId) {
   if (mapId === "A") {
-    return "MAP A · POSTGIS / PROTECTED MVT · web derivative από το αυθεντικό master.";
+    return "MAP A · POSTGIS / PROTECTED MVT · αυθεντική γεωμετρία και source χρώματα.";
   }
   if (mapId === "B") {
     return "MAP B · AUTHENTIC SOURCE NOT CONNECTED TO GIS YET.";
@@ -204,12 +208,7 @@ export default function WaterLiveGisClient({
                 "line-join": "round",
               },
               paint: {
-                "line-color": [
-                  "case",
-                  ["==", ["get", "object_class"], "pipe"],
-                  "#22d3ee",
-                  "#f2c766",
-                ],
+                "line-color": waterAuthenticLineColorExpression(),
                 "line-width": [
                   "interpolate",
                   ["linear"],
@@ -221,7 +220,7 @@ export default function WaterLiveGisClient({
                   20,
                   5.5,
                 ],
-                "line-opacity": 0.92,
+                "line-opacity": waterAuthenticLineOpacityExpression(),
               },
             },
           ],
@@ -233,7 +232,7 @@ export default function WaterLiveGisClient({
       map.on("sourcedata", (event: any) => {
         if (disposed) return;
         if (event?.sourceId === "waterNetwork" && event?.isSourceLoaded) {
-          setNetworkStatus("Δίκτυο A: PostGIS/MVT ενεργό");
+          setNetworkStatus("Δίκτυο A: PostGIS/MVT ενεργό · αυθεντικά source χρώματα");
         }
       });
 
