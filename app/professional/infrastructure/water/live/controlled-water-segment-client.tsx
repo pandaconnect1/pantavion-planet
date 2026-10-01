@@ -40,6 +40,14 @@ type Bbox = {
   maxLat: number;
 };
 
+type NetworkXyzTile = {
+  key: string;
+  z: number;
+  x: number;
+  y: number;
+  bbox: Bbox;
+};
+
 type ApprovedMapAPatch = {
   patch_id: string;
   asset_type: string;
@@ -244,6 +252,10 @@ const MAX_FEATURES_PER_TILE = 1200;
 const MAX_RECURSIVE_TILE_DEPTH = 6;
 const MAX_SEGMENT_REQUESTS = 128;
 const MIN_RECURSIVE_TILE_SPAN_DEGREES = 0.00025;
+const MAX_VISIBLE_NETWORK_TILES = 24;
+const MAX_NETWORK_TILE_CACHE = 160;
+const MIN_NETWORK_TILE_ZOOM = 12;
+const MAX_NETWORK_TILE_ZOOM = 19;
 
 const LEGACY_WATER_DEVICE_APPROVAL_KEY = "pantavion:water:approved-until:v4";
 function clearLegacyWaterDeviceApproval() {
@@ -456,6 +468,70 @@ function splitVisibleBboxIntoSafeTiles(bbox: Bbox) {
   return tiles;
 }
 
+function clampMercatorLat(lat: number) {
+  return Math.max(-85.05112878, Math.min(85.05112878, lat));
+}
+
+function lngToTileX(lng: number, z: number) {
+  const n = 2 ** z;
+  return Math.floor(((lng + 180) / 360) * n);
+}
+
+function latToTileY(lat: number, z: number) {
+  const n = 2 ** z;
+  const rad = (clampMercatorLat(lat) * Math.PI) / 180;
+  return Math.floor(
+    ((1 - Math.asinh(Math.tan(rad)) / Math.PI) / 2) * n,
+  );
+}
+
+function tileXToLng(x: number, z: number) {
+  return (x / 2 ** z) * 360 - 180;
+}
+
+function tileYToLat(y: number, z: number) {
+  const n = Math.PI - (2 * Math.PI * y) / 2 ** z;
+  return (180 / Math.PI) * Math.atan(Math.sinh(n));
+}
+
+function visibleNetworkXyzTiles(map: any): NetworkXyzTile[] {
+  const bounds = map.getBounds();
+  const z = Math.max(
+    MIN_NETWORK_TILE_ZOOM,
+    Math.min(MAX_NETWORK_TILE_ZOOM, Math.round(map.getZoom())),
+  );
+  const n = 2 ** z;
+  const minX = Math.max(0, Math.min(n - 1, lngToTileX(bounds.getWest(), z)));
+  const maxX = Math.max(0, Math.min(n - 1, lngToTileX(bounds.getEast(), z)));
+  const minY = Math.max(0, Math.min(n - 1, latToTileY(bounds.getNorth(), z)));
+  const maxY = Math.max(0, Math.min(n - 1, latToTileY(bounds.getSouth(), z)));
+
+  const tiles: NetworkXyzTile[] = [];
+
+  for (let y = minY; y <= maxY; y += 1) {
+    for (let x = minX; x <= maxX; x += 1) {
+      tiles.push({
+        key: `${z}/${x}/${y}`,
+        z,
+        x,
+        y,
+        bbox: {
+          minLng: tileXToLng(x, z),
+          minLat: tileYToLat(y + 1, z),
+          maxLng: tileXToLng(x + 1, z),
+          maxLat: tileYToLat(y, z),
+        },
+      });
+    }
+  }
+
+  if (tiles.length > MAX_VISIBLE_NETWORK_TILES) {
+    throw new Error("VISIBLE_AREA_TOO_LARGE");
+  }
+
+  return tiles;
+}
+
 function splitBboxIntoQuadrants(bbox: Bbox) {
   const midLng = (bbox.minLng + bbox.maxLng) / 2;
   const midLat = (bbox.minLat + bbox.maxLat) / 2;
@@ -622,6 +698,9 @@ export default function ControlledWaterSegmentClient() {
   const mapEl = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
   const layerRef = useRef<any>(null);
+  const networkTileCacheRef = useRef<
+    Map<string, { layer: any; featureCount: number; lastUsedAt: number }>
+  >(new Map());
   const userMarkerRef = useRef<any>(null);
   const userAccuracyRef = useRef<any>(null);
   const searchMarkerRef = useRef<any>(null);
@@ -834,6 +913,12 @@ export default function ControlledWaterSegmentClient() {
       setMapReady(false);
 
       if (mapRef.current) {
+        for (const cached of networkTileCacheRef.current.values()) {
+          try {
+            cached.layer.remove();
+          } catch {}
+        }
+        networkTileCacheRef.current.clear();
         mapRef.current.remove();
         mapRef.current = null;
       }
@@ -1524,9 +1609,7 @@ export default function ControlledWaterSegmentClient() {
     setMessage(t.loading);
 
     try {
-      const visibleBbox = bboxFromMap(map);
-      const tiles = splitVisibleBboxIntoSafeTiles(visibleBbox);
-      const allFeatures: any[] = [];
+      const tiles = visibleNetworkXyzTiles(map);
       const device = getOrCreateWaterAccessDevice();
       let segmentRequestCount = 0;
       let accessRevoked = false;
@@ -1615,59 +1698,94 @@ export default function ControlledWaterSegmentClient() {
         return features;
       }
 
-      for (const tile of tiles) {
-        allFeatures.push(...(await fetchExactVisibleTile(tile, 0)));
+      const L = await ensureLeaflet();
+      const visibleKeys = new Set(tiles.map((tile) => tile.key));
+      let visibleFeatureCount = 0;
 
+      for (const tile of tiles) {
+        const cached = networkTileCacheRef.current.get(tile.key);
+
+        if (cached) {
+          cached.lastUsedAt = Date.now();
+          if (!map.hasLayer(cached.layer)) cached.layer.addTo(map);
+          cached.layer.bringToFront?.();
+          visibleFeatureCount += cached.featureCount;
+          continue;
+        }
+
+        const rawFeatures = await fetchExactVisibleTile(tile.bbox, 0);
         if (accessRevoked) return;
+
+        const deduped = new Map<string, any>();
+        rawFeatures.forEach((feature, index) => {
+          deduped.set(
+            featureKey(feature, `${tile.key}-fallback-${index}`),
+            feature,
+          );
+        });
+        const features = Array.from(deduped.values());
+
+        const layer = L.geoJSON(
+          {
+            type: "FeatureCollection",
+            features,
+          },
+          {
+            style: (feature: any) => getPipeStyle(feature),
+            pointToLayer: (feature: any, latlng: any) => {
+              const style = getPipeStyle(feature);
+
+              return L.circleMarker(latlng, {
+                radius: Math.max(3, style.weight),
+                color: style.color,
+                fillColor: style.color,
+                fillOpacity: style.opacity,
+                opacity: style.opacity,
+                weight: style.weight,
+              });
+            },
+          },
+        );
+
+        layer.addTo(map);
+        layer.bringToFront?.();
+        networkTileCacheRef.current.set(tile.key, {
+          layer,
+          featureCount: features.length,
+          lastUsedAt: Date.now(),
+        });
+        visibleFeatureCount += features.length;
       }
 
-      const deduped = new Map<string, any>();
+      for (const [key, cached] of networkTileCacheRef.current.entries()) {
+        if (!visibleKeys.has(key) && map.hasLayer(cached.layer)) {
+          map.removeLayer(cached.layer);
+        }
+      }
 
-      allFeatures.forEach((feature, index) => {
-        deduped.set(featureKey(feature, `fallback-${index}`), feature);
-      });
+      if (networkTileCacheRef.current.size > MAX_NETWORK_TILE_CACHE) {
+        const removable = Array.from(networkTileCacheRef.current.entries())
+          .filter(([key]) => !visibleKeys.has(key))
+          .sort((a, b) => a[1].lastUsedAt - b[1].lastUsedAt);
 
-      const features = Array.from(deduped.values());
+        while (
+          networkTileCacheRef.current.size > MAX_NETWORK_TILE_CACHE &&
+          removable.length > 0
+        ) {
+          const [key, cached] = removable.shift()!;
+          if (map.hasLayer(cached.layer)) map.removeLayer(cached.layer);
+          networkTileCacheRef.current.delete(key);
+        }
+      }
 
-      if (features.length <= 0) {
+      if (visibleFeatureCount <= 0) {
         throw new Error("WATER_NO_VISIBLE_FEATURES");
       }
 
-      const L = await ensureLeaflet();
-
-      if (layerRef.current) {
-        layerRef.current.remove();
-        layerRef.current = null;
-      }
-
-      const collection = {
-        type: "FeatureCollection",
-        features,
-      };
-
-      const layer = L.geoJSON(collection, {
-        style: (feature: any) => getPipeStyle(feature),
-        pointToLayer: (feature: any, latlng: any) => {
-          const style = getPipeStyle(feature);
-
-          return L.circleMarker(latlng, {
-            radius: Math.max(3, style.weight),
-            color: style.color,
-            fillColor: style.color,
-            fillOpacity: style.opacity,
-            opacity: style.opacity,
-            weight: style.weight,
-          });
-        },
-      });
-
-      layer.addTo(map);
-      layer.bringToFront();
-      layerRef.current = layer;
-
-      const count = features.length;
-      setPipeCount(count);
-      setMessage(`${t.loaded}: ${count} (${segmentRequestCount} ${t.chunks})`);
+      setPipeCount(visibleFeatureCount);
+      setMessage(
+        `${t.loaded}: ${visibleFeatureCount} · ${tiles.length} cached GIS tiles · ${segmentRequestCount} νέα requests`,
+      );
     } catch (error) {
       setPipeCount(null);
 
