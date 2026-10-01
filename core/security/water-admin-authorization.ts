@@ -1,17 +1,15 @@
 import "server-only";
 
+import { hasPantavionFounderSession } from "@/core/security/pantavion-founder-session";
 import { hasWaterAdminSession } from "@/core/security/water-admin-session";
 
 /**
  * Water privileged authorization is owned by Pantavion.
  *
- * A caller is privileged only after Pantavion has established a short-lived,
- * signed, httpOnly Founder/Admin session. Provider identity systems must not
- * decide Pantavion Founder authority.
- *
- * Normal users remain fail-closed and require their separately approved
- * Water access path.
+ * A valid global Pantavion Founder session has full Water authority.
+ * The existing Water Admin session remains accepted during migration.
+ * Normal users remain fail-closed and use their separately approved path.
  */
 export async function hasWaterAdminAuthorization(request: Request) {
-  return hasWaterAdminSession(request);
+  return hasPantavionFounderSession(request) || hasWaterAdminSession(request);
 }
