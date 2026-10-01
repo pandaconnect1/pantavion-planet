@@ -1,6 +1,8 @@
+import { createHash } from "crypto";
+
 import { list } from "@vercel/blob";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient, hasSupabaseAdminCredential } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 export type WaterAccessRequestRecord = {
@@ -47,6 +49,40 @@ function admin() {
   return createAdminClient();
 }
 
+function waterAdminRpcSecretHash() {
+  const secret = process.env.PANTAVION_WATER_ADMIN_RPC_SECRET?.trim() || "";
+  return secret ? createHash("sha256").update(secret).digest("hex") : "";
+}
+
+async function readWaterAdminSnapshotViaRpc(
+  requestLimit = 200,
+  deviceLimit = 1000,
+) {
+  const secretHash = waterAdminRpcSecretHash();
+  if (!secretHash) {
+    throw new Error("PANTAVION_WATER_ADMIN_RPC_SECRET_MISSING");
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("pantavion_water_admin_snapshot_v1", {
+    p_secret_hash: secretHash,
+    p_request_limit: requestLimit,
+    p_device_limit: deviceLimit,
+  });
+
+  if (error) throw error;
+
+  const payload = (data || {}) as {
+    requests?: WaterAccessRequestRecord[];
+    devices?: WaterApprovedDeviceRecord[];
+  };
+
+  return {
+    requests: Array.isArray(payload.requests) ? payload.requests : [],
+    devices: Array.isArray(payload.devices) ? payload.devices : [],
+  };
+}
+
 export async function getWaterAccessRequest(id: string) {
   const { data, error } = await admin()
     .from("water_access_requests")
@@ -83,6 +119,11 @@ export async function upsertWaterAccessRequest(
 }
 
 export async function listWaterAccessRequests(limit = 200) {
+  if (!hasSupabaseAdminCredential()) {
+    const snapshot = await readWaterAdminSnapshotViaRpc(limit, 1);
+    return snapshot.requests;
+  }
+
   const { data, error } = await admin()
     .from("water_access_requests")
     .select("*")
@@ -126,6 +167,11 @@ export async function upsertWaterApprovedDevice(record: WaterApprovedDeviceRecor
 }
 
 export async function listWaterApprovedDevices(limit = 1000) {
+  if (!hasSupabaseAdminCredential()) {
+    const snapshot = await readWaterAdminSnapshotViaRpc(1, limit);
+    return snapshot.devices;
+  }
+
   const { data, error } = await admin()
     .from("water_approved_devices")
     .select("*")
