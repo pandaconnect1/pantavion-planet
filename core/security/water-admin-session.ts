@@ -36,6 +36,8 @@ export function hasDedicatedWaterAdminSessionSecret() {
 export function getWaterAdminSessionSecret() {
   return (
     clean(process.env.PANTAVION_WATER_ADMIN_SESSION_SECRET) ||
+    clean(process.env.PANTAVION_FOUNDER_SESSION_SECRET) ||
+    clean(process.env.PANTAVION_ADMIN_SESSION_SECRET) ||
     firstConfiguredEnvironmentValue(LEGACY_ACCESS_CODE_ENV_KEYS)
   );
 }
