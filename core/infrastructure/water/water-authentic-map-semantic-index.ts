@@ -1,6 +1,6 @@
 import type {
   WaterAuthenticMapFeatureKind,
-} from "./water-authentic-map-semantic-reader";
+} from "./water-authentic-map-semantic-reader.ts";
 
 export type WaterAuthenticMapRawEntity = {
   entityRef:string;
