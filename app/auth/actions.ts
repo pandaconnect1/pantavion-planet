@@ -11,6 +11,7 @@ import {
   PANTAVION_FOUNDER_SESSION_TTL_SECONDS,
   safeFounderSecretEqual,
 } from "@/core/security/pantavion-founder-session";
+import { WATER_ADMIN_SESSION_COOKIE } from "@/core/security/water-admin-session";
 
 const CONSENT_VERSION = "2026-08-22";
 
@@ -226,6 +227,15 @@ export async function signOut() {
   const cookieStore = await cookies();
   cookieStore.set({
     name: PANTAVION_FOUNDER_SESSION_COOKIE,
+    value: "",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: "/",
+    maxAge: 0,
+  });
+  cookieStore.set({
+    name: WATER_ADMIN_SESSION_COOKIE,
     value: "",
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
