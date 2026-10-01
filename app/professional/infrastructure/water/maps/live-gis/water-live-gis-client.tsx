@@ -64,7 +64,7 @@ async function ensureMapLibre() {
 
 function mapStatus(mapId: MapId) {
   if (mapId === "A") {
-    return "MAP A · SOURCE UNDER VERIFICATION · το προηγούμενο candidate layer απενεργοποιήθηκε.";
+    return "MAP A · POSTGIS / PROTECTED MVT · web derivative από το αυθεντικό master.";
   }
   if (mapId === "B") {
     return "MAP B · AUTHENTIC SOURCE NOT CONNECTED TO GIS YET.";
