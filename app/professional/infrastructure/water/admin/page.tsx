@@ -16,6 +16,9 @@ export default async function WaterAdminPage() {
     redirect("/professional/infrastructure/water/admin/approvals");
   }
 
+  // Founder bootstrap must not depend on password-recovery email.
+  // The dedicated access page establishes the signed, short-lived httpOnly
+  // water admin session using the configured server-side Founder/Admin path.
   const next = encodeURIComponent("/professional/infrastructure/water/admin/approvals");
-  redirect(`/owner/safety/verify?next=${next}`);
+  redirect(`/professional/infrastructure/water/admin/access?next=${next}`);
 }
