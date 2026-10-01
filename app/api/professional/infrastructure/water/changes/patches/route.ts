@@ -141,7 +141,6 @@ function mutationFingerprint(input: {
 
 export async function POST(request: Request) {
   const access = await authorizeWaterMapRequest(request);
-
   if (!access.ok) {
     return NextResponse.json(
       { ok: false, error: access.error },
@@ -151,7 +150,6 @@ export async function POST(request: Request) {
 
   try {
     const body = (await request.json()) as Record<string, unknown>;
-
     const clientMutationId = clean(body.clientMutationId, 200);
     const mapId = clean(body.mapId, 100);
     const sourceKey = clean(body.sourceKey, 160) || null;
@@ -167,42 +165,103 @@ export async function POST(request: Request) {
 
     const locationSource = clean(location.source, 80);
     const accuracyState = clean(location.accuracyState, 80);
-    if (!LOCATION_SOURCES.has(locationSource)) {
-      throw new Error("location_source_invalid");
-    }
-    if (!ACCURACY_STATES.has(accuracyState)) {
-      throw new Error("accuracy_state_invalid");
-    }
+    if (!LOCATION_SOURCES.has(locationSource)) throw new Error("location_source_invalid");
+    if (!ACCURACY_STATES.has(accuracyState)) throw new Error("accuracy_state_invalid");
 
     const accuracyMeters =
       location.accuracyMeters === undefined || location.accuracyMeters === null
         ? null
         : finiteNumber(location.accuracyMeters);
-    if (
-      location.accuracyMeters !== undefined &&
-      location.accuracyMeters !== null &&
-      (accuracyMeters === null || accuracyMeters < 0)
-    ) {
+    if (location.accuracyMeters !== undefined && location.accuracyMeters !== null &&
+        (accuracyMeters === null || accuracyMeters < 0)) {
       throw new Error("accuracy_meters_invalid");
     }
 
     const geometry = body.geometry as PantavionWaterPatchGeometry;
     assertPantavionWaterPatchGeometry(geometry);
     const bbox = geometryBounds(geometry);
-
     const fingerprint = mutationFingerprint({
-      actorRef: access.actorRef,
-      clientMutationId,
-      mapId,
-      sourceKey,
-      assetType,
-      operation,
-      geometry,
-      attributes,
+      actorRef: access.actorRef, clientMutationId, mapId, sourceKey,
+      assetType, operation, geometry, attributes,
     });
 
+    const record = {
+      asset_type: assetType,
+      operation,
+      status: "pending_review",
+      map_id: mapId,
+      source_key: sourceKey,
+      geometry_type: geometry.type,
+      geometry,
+      crs_authority: geometry.crs.authority,
+      crs_code: geometry.crs.code,
+      bbox_min_x: bbox.minX,
+      bbox_min_y: bbox.minY,
+      bbox_max_x: bbox.maxX,
+      bbox_max_y: bbox.maxY,
+      location_source: locationSource,
+      accuracy_state: accuracyState,
+      accuracy_meters: accuracyMeters,
+      street_name: clean(location.streetName, 500) || null,
+      area: clean(location.area, 500) || null,
+      postal_code: clean(location.postalCode, 80) || null,
+      parcel_reference: clean(location.parcelReference, 200) || null,
+      technical_address_id: clean(location.technicalAddressId, 200) || null,
+      snapped_asset_id: clean(location.snappedAssetId, 200) || null,
+      attributes,
+      evidence_refs: stringArray(body.evidenceRefs),
+      artifact_refs: stringArray(body.artifactRefs),
+      related_job_ids: stringArray(body.relatedJobIds),
+      related_report_ids: stringArray(body.relatedReportIds),
+      created_by: access.actorRef,
+      source_device_id: clean(body.sourceDeviceId, 300) || null,
+      source_network_version: clean(body.sourceNetworkVersion, 200) || null,
+      immutable_fingerprint: fingerprint,
+      metadata: { clientMutationId },
+    };
+
+    const result = await insertWaterSpatialPatchViaBridge(record);
+    if (!result.ok) throw new Error(result.error || "water_spatial_patch_insert_failed");
+
+    return NextResponse.json(
+      { ok: true, accessMode: access.mode, pendingReview: true, ...result },
+      { status: result.deduplicated ? 200 : 201, headers: { "Cache-Control": "private, no-store" } },
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { ok: false, error: error instanceof Error ? error.message : "water_spatial_patch_insert_failed" },
+      { status: 400, headers: { "Cache-Control": "no-store" } },
+    );
+  }
+}
+
+export async function GET(request: Request) {
+  const access = await authorizeWaterMapRequest(request);
+  if (!access.ok) {
+    return NextResponse.json(
+      { ok: false, error: access.error },
+      { status: 403, headers: { "Cache-Control": "no-store" } },
+    );
+  }
+
+  try {
+    const url = new URL(request.url);
+    const mapId = clean(url.searchParams.get("mapId"), 100);
+    const sourceKey = clean(url.searchParams.get("sourceKey"), 160) || undefined;
+    const mine = url.searchParams.get("mine") === "1";
+    const limit = Math.min(1000, Math.max(1, Number(url.searchParams.get("limit") || 200)));
+
+    const values = ["minX", "minY", "maxX", "maxY"].map((key) => {
+      const raw = url.searchParams.get(key);
+      return raw === null || raw === "" ? null : finiteNumber(raw);
+    });
+    const [minX, minY, maxX, maxY] = values;
+    const anyBbox = values.some((value) => value !== null);
+    const hasBbox = values.every((value) => value !== null);
+    if (anyBbox && !hasBbox) throw new Error("water_patch_bbox_incomplete");
+
     const result = await listWaterSpatialPatchesViaBridge({
-      mapId,
+      mapId: mapId || undefined,
       sourceKey,
       actorRef: access.actorRef,
       mine,
@@ -214,27 +273,16 @@ export async function POST(request: Request) {
       maxY: hasBbox ? maxY : null,
     });
 
-    if (!result.ok) {
-      throw new Error("water_spatial_patch_read_failed");
-    }
+    if (!result.ok) throw new Error("water_spatial_patch_read_failed");
 
     return NextResponse.json(
-      {
-        ok: true,
-        accessMode: access.mode,
-        mine,
-        patches: result.patches ?? [],
-      },
+      { ok: true, accessMode: access.mode, mine, patches: result.patches ?? [] },
       { headers: { "Cache-Control": "private, no-store" } },
     );
   } catch (error) {
     return NextResponse.json(
-      {
-        ok: false,
-        error:
-          error instanceof Error ? error.message : "water_spatial_patch_read_failed",
-      },
-      { status: 500, headers: { "Cache-Control": "no-store" } },
+      { ok: false, error: error instanceof Error ? error.message : "water_spatial_patch_read_failed" },
+      { status: 400, headers: { "Cache-Control": "no-store" } },
     );
   }
 }
