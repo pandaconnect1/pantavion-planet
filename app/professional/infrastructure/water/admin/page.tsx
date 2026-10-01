@@ -20,12 +20,12 @@ export default async function WaterAdminPage() {
   );
 
   if (isFounder || isAdmin) {
-    redirect("/professional/infrastructure/water/admin/approvals");
+    redirect("/professional/infrastructure/water/admin/control");
   }
 
   // Founder bootstrap must not depend on password-recovery email.
   // The dedicated access page establishes the signed, short-lived httpOnly
   // water admin session using the configured server-side Founder/Admin path.
-  const next = encodeURIComponent("/professional/infrastructure/water/admin/approvals");
+  const next = encodeURIComponent("/professional/infrastructure/water/admin/control");
   redirect(`/professional/infrastructure/water/admin/access?next=${next}`);
 }
