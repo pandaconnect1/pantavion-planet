@@ -6,7 +6,7 @@ Date: 2026-10-01
 ## Canonical flow
 
 ```
-immutable Map A / DWG master
+immutable Map A / B / C / future source master
   -> Pantavion GIS ingest
   -> deterministic preprocessing
   -> PostGIS
@@ -30,11 +30,14 @@ The ingestion boundary accepts these source families:
 
 A source upload never becomes browser-serving truth directly.
 
-## Map A invariant
+## Immutable-master invariant
 
-The canonical Map A binary is immutable. Its current Pantavion identity remains the existing
-`core/water/legacy-map-bc-source.ts` identity. Preprocessing MUST create derived artifacts;
-it MUST NOT rewrite, rename as a substitute for identity, simplify, or mutate the source bytes.
+Every canonical source — Map A, Map B, Map C and every future accepted upload — is immutable.
+Preprocessing MUST create derived artifacts; it MUST NOT rewrite, rename as a substitute for
+identity, simplify, or mutate the source bytes.
+
+A/B/C share the same downstream architecture. No map gets a special browser-only pipeline:
+master -> importer -> PostGIS -> Feature API / MVT -> Pantavion Map Viewer.
 
 Every derived artifact records:
 
@@ -58,9 +61,12 @@ Minimum operational classes:
 
 - pipes
 - valves
+- hydrants
+- meters
 - devices
 - junctions
-- zones
+- reservoirs / tanks where present
+- pressure / operational zones
 - labels
 - reference features
 
@@ -90,13 +96,20 @@ The operational graph preserves:
 - junction/device relationships
 - zone membership
 - traceable topology
+- isolation / upstream / downstream analysis
 - source provenance
+
+Pantavion implements Utility-Network semantics independently of any single vendor. ArcGIS
+Utility Network may be used as an optional adapter where valuable, but it is not canonical
+truth and is not required for Pantavion operation.
 
 Topology/trace results are operational derived data and never alter the master CAD source.
 
 ## Basemap/reference policy
 
 DLS/cadastral/topographic services may be used only through authorized/official access.
+Where an official DLS API/reference service is available and permitted, Pantavion consumes it
+as a reference/basemap layer rather than copying it into Pantavion source truth.
 Reference/basemap data remains independent from Pantavion water-network geometry.
 
 ## Provider neutrality
@@ -110,7 +123,7 @@ The viewer talks to Pantavion-controlled endpoints.
 
 No LIVE/DONE/SUCCESS state is valid until all of these are evidenced in production:
 
-1. Map A master hash/size identity verified.
+1. Canonical master hash/size identity verified for the requested map/source.
 2. Derived GIS lineage verified.
 3. PostGIS import completed with entity/layer counts.
 4. Spatial indexes present.
