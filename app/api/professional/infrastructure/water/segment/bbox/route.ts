@@ -8,6 +8,7 @@ import {
   parseWaterSegmentBbox,
   parseWaterSegmentLimit,
 } from "@/core/infrastructure/water/controlled-water-segment-index-provider";
+import { getWaterDeviceClaimFromRequest } from "@/core/security/water-device-session";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { migrateLegacyApprovedDeviceIfPresent } from "@/core/water/water-access-store";
 import {
@@ -41,8 +42,11 @@ function hashToken(value: string) {
 }
 
 async function authorizeWaterSegmentRequest(request: Request): Promise<WaterSegmentAccessDecision> {
-  const deviceId = clean(request.headers.get("x-pantavion-water-device-id"));
-  const deviceToken = clean(request.headers.get("x-pantavion-water-device-token"));
+  const cookieClaim = getWaterDeviceClaimFromRequest(request);
+  const deviceId =
+    clean(request.headers.get("x-pantavion-water-device-id")) || cookieClaim.deviceId;
+  const deviceToken =
+    clean(request.headers.get("x-pantavion-water-device-token")) || cookieClaim.deviceToken;
 
   if (await hasWaterAdminAuthorization(request)) {
     return {
@@ -99,8 +103,11 @@ export async function GET(request: Request) {
     const bbox = parseWaterSegmentBbox(url.searchParams);
     const maxFeatures = parseWaterSegmentLimit(url.searchParams);
 
-    const deviceId = clean(request.headers.get("x-pantavion-water-device-id"));
-    const deviceToken = clean(request.headers.get("x-pantavion-water-device-token"));
+    const cookieClaim = getWaterDeviceClaimFromRequest(request);
+    const deviceId =
+      clean(request.headers.get("x-pantavion-water-device-id")) || cookieClaim.deviceId;
+    const deviceToken =
+      clean(request.headers.get("x-pantavion-water-device-token")) || cookieClaim.deviceToken;
 
     // Primary GIS production path: server-authorized PostGIS Feature API.
     // The browser never receives the raw/full master and never sees provider credentials.
