@@ -46,8 +46,8 @@ export interface PantavionWaterServingReadinessResult {
 export const PANTAVION_WATER_SERVING_ARCHITECTURE = {
   version: PANTAVION_WATER_SERVING_CONTRACT_VERSION,
   decision: "controlled-hybrid-spatial-serving",
-  productionTarget: ["postgis", "bbox-api", "vector-tiles", "protected-tile-service"],
-  diagnosticOnly: ["pmtiles", "mbtiles", "mvt"],
+  productionTarget: ["postgis", "bbox-api", "vector-tiles", "mvt", "protected-tile-service"],
+  diagnosticOnly: ["pmtiles", "mbtiles"],
   layers: [
     "protected-full-master-source",
     "private-processing-pipeline",
