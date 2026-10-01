@@ -79,6 +79,12 @@ export default function LoginClient({ nextPath }: { nextPath: string }) {
       <div className="mt-7 space-y-3">
         <SubmitButton />
         <Link
+          className="flex min-h-12 w-full items-center justify-center rounded-2xl border border-cyan-300/25 px-4 py-3 text-center text-sm font-black text-cyan-100 transition hover:border-cyan-300/50 hover:bg-cyan-300/5"
+          href="/founder/activate"
+        >
+          Πρώτη ενεργοποίηση Founder email
+        </Link>
+        <Link
           className="flex min-h-12 w-full items-center justify-center rounded-2xl border border-white/15 px-4 py-3 text-center text-sm font-bold text-slate-200 transition hover:border-white/30 hover:bg-white/5"
           href="/auth/register"
         >
