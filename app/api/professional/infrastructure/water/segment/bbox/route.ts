@@ -10,6 +10,10 @@ import {
 } from "@/core/infrastructure/water/controlled-water-segment-index-provider";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { migrateLegacyApprovedDeviceIfPresent } from "@/core/water/water-access-store";
+import {
+  createAdminClient,
+  hasSupabaseAdminCredential,
+} from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
@@ -98,10 +102,82 @@ export async function GET(request: Request) {
     const deviceId = clean(request.headers.get("x-pantavion-water-device-id"));
     const deviceToken = clean(request.headers.get("x-pantavion-water-device-token"));
 
+    // Primary GIS production path: server-authorized PostGIS Feature API.
+    // The browser never receives the raw/full master and never sees provider credentials.
+    if (hasSupabaseAdminCredential()) {
+      try {
+        const admin = createAdminClient();
+        const { data: postgisData, error: postgisError } = await admin.rpc(
+          "pantavion_water_features_bbox_internal_v1",
+          {
+            p_map_id: "A",
+            p_min_lng: bbox.minLng,
+            p_min_lat: bbox.minLat,
+            p_max_lng: bbox.maxLng,
+            p_max_lat: bbox.maxLat,
+            p_max_features: maxFeatures,
+          },
+        );
+
+        if (!postgisError && postgisData) {
+          return NextResponse.json(postgisData, {
+            status: 200,
+            headers: {
+              "Cache-Control": "private, max-age=30, stale-while-revalidate=30",
+              "X-Pantavion-Water-Segment": "postgis-feature-api-v1",
+              "X-Pantavion-Water-Access-Mode": access.mode,
+              "X-Pantavion-Data-Returned": "segment-only",
+              "X-Pantavion-Raw-Master": "not-included",
+            },
+          });
+        }
+      } catch {
+        // Keep the established protected fallbacks for continuity.
+      }
+    }
+
     if (deviceId && deviceToken) {
-      // Primary production path: narrowly scoped SECURITY DEFINER RPC.
-      // It validates the exact approved device + token hash and returns only
-      // the requested viewport segment. No service-role secret is required.
+      // Railway-safe PostGIS path: the exact approved device + token hash is
+      // revalidated inside Postgres before the private spatial primitive runs.
+      try {
+        const supabase = await createClient();
+        const { data: postgisDeviceData, error: postgisDeviceError } =
+          await supabase.rpc("pantavion_water_features_bbox_device_v1", {
+            p_device_id: deviceId,
+            p_token_hash: hashToken(deviceToken),
+            p_map_id: "A",
+            p_min_lng: bbox.minLng,
+            p_min_lat: bbox.minLat,
+            p_max_lng: bbox.maxLng,
+            p_max_lat: bbox.maxLat,
+            p_max_features: maxFeatures,
+          });
+
+        if (!postgisDeviceError && postgisDeviceData) {
+          const payload = postgisDeviceData as Record<string, unknown>;
+          const denied = payload.error === "access_not_approved";
+
+          return NextResponse.json(payload, {
+            status: denied ? 403 : 200,
+            headers: {
+              "Cache-Control": denied
+                ? "no-store"
+                : "private, max-age=30, stale-while-revalidate=30",
+              "X-Pantavion-Water-Segment": denied
+                ? "postgis-device-access-denied"
+                : "postgis-feature-api-device-v1",
+              "X-Pantavion-Water-Access-Mode": access.mode,
+              "X-Pantavion-Data-Returned": denied ? "false" : "segment-only",
+              "X-Pantavion-Raw-Master": "not-included",
+            },
+          });
+        }
+      } catch {
+        // Continue to the established scoped segment RPC below.
+      }
+
+      // Established continuity path. It also validates the exact approved
+      // device and returns only the requested viewport segment.
       try {
         const supabase = await createClient();
         const { data: rpcData, error: rpcError } = await supabase.rpc(
