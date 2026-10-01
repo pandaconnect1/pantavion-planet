@@ -64,6 +64,12 @@ export interface PantavionWaterSovereigntyReadinessInput {
   clientProviderNeutral: boolean;
   backupRestoreTested: boolean;
   selfHostedExitPathDefined: boolean;
+  fullApplicationRecoveryPackStored: boolean;
+  databaseSchemaRecoveryStored: boolean;
+  gisRecoveryStored: boolean;
+  secondaryRuntimeReady: boolean;
+  automaticFailoverTested: boolean;
+  providerOutageDrillPassed: boolean;
 }
 
 export function validatePantavionWaterCanonicalArtifactManifest(
@@ -119,6 +125,24 @@ export function evaluatePantavionWaterSovereigntyReadiness(
   if (!input.selfHostedExitPathDefined) {
     blockers.push("Self-hosted exit path is not defined.");
   }
+  if (!input.fullApplicationRecoveryPackStored) {
+    blockers.push("Full Pantavion application recovery pack is not stored.");
+  }
+  if (!input.databaseSchemaRecoveryStored) {
+    blockers.push("Database schema/migration recovery set is not stored.");
+  }
+  if (!input.gisRecoveryStored) {
+    blockers.push("GIS source/derived recovery set is not stored.");
+  }
+  if (!input.secondaryRuntimeReady) {
+    blockers.push("Independent secondary runtime is not ready.");
+  }
+  if (!input.automaticFailoverTested) {
+    blockers.push("Automatic failover has not been tested.");
+  }
+  if (!input.providerOutageDrillPassed) {
+    blockers.push("Provider outage drill has not passed.");
+  }
 
   return {
     version: PANTAVION_WATER_SOVEREIGN_GIS_VERSION,
@@ -137,6 +161,10 @@ export function evaluatePantavionWaterSovereigntyReadiness(
       selfHostedReplacementMustRemainPossible: true,
       thirdPartyRemovalMustNotRequireViewerRewrite: true,
       noSingleProviderMayBecomeSourceTruth: true,
+      fullApplicationRecoveryPackRequired: true,
+      independentSecondaryRuntimeRequired: true,
+      automaticFailoverTestRequired: true,
+      providerOutageDrillRequired: true,
     },
   };
 }
