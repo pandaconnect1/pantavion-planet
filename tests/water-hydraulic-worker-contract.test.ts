@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { runWaterHydraulicWorker } from "../core/infrastructure/water/water-hydraulic-worker-contract";
-import type { WaterHydraulicModel } from "../core/infrastructure/water/water-hydraulic-model-contract";
+import { runWaterHydraulicWorker } from "../core/infrastructure/water/water-hydraulic-worker-contract.ts";
+import type { WaterHydraulicModel } from "../core/infrastructure/water/water-hydraulic-model-contract.ts";
 
 const model:WaterHydraulicModel={
   schemaVersion:"pantavion-water-hydraulic-model.v1",
