@@ -6,6 +6,7 @@ import { getPantavionWaterMapRegistryContract } from "@/core/infrastructure/wate
 import { getPantavionWaterReferenceLayerCatalog } from "@/core/infrastructure/water/water-reference-layer-catalog";
 import { getPantavionWaterSpatialPatchContract } from "@/core/infrastructure/water/water-spatial-change-patch-contract";
 import { getPantavionWaterMapVersioningContract } from "@/core/infrastructure/water/water-map-versioning-contract";
+import { getPantavionWaterCanonicalSyncContract } from "@/core/infrastructure/water/water-canonical-sync-library-contract";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { waterApprovedDeviceMatches } from "@/core/water/water-access-store";
 
@@ -68,6 +69,9 @@ export async function POST(request: Request) {
 
       // Old/new map sources remain immutable, selectable and comparable.
       versioning: getPantavionWaterMapVersioningContract(),
+
+      // Founder-approved single canonical network, B/C/D views, library and hydraulic truth rules.
+      canonicalSync: getPantavionWaterCanonicalSyncContract(),
 
       sourcePresence: readSourcePresence(),
       runtimeBoundary: {
