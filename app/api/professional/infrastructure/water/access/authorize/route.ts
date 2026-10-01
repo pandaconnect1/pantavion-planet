@@ -2,6 +2,7 @@ import { createHash } from "crypto";
 
 import { NextResponse } from "next/server";
 
+import { getWaterDeviceClaimFromRequest } from "@/core/security/water-device-session";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { createClient } from "@/lib/supabase/server";
 
@@ -50,8 +51,9 @@ export async function POST(request: Request) {
   }
 
   const isAdminSession = await hasWaterAdminAuthorization(request);
-  const deviceId = clean(body.deviceId);
-  const deviceToken = clean(body.deviceToken);
+  const cookieClaim = getWaterDeviceClaimFromRequest(request);
+  const deviceId = clean(body.deviceId) || cookieClaim.deviceId;
+  const deviceToken = clean(body.deviceToken) || cookieClaim.deviceToken;
 
   if (isAdminSession) {
     return noStoreJson({
