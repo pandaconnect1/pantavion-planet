@@ -37,29 +37,55 @@ export type WaterHydraulicTank = {
   evidence:WaterHydraulicEvidenceRef[];
 };
 
+export type WaterPipeRoughness =
+  | { model:"DARCY_WEISBACH"; value:number | null; unit:"mm" }
+  | { model:"HAZEN_WILLIAMS"; value:number | null; unit:"dimensionless" };
+
 export type WaterHydraulicPipe = {
   featureId:string;
   fromNodeId:string;
   toNodeId:string;
   lengthM:number | null;
   diameterMm:number | null;
-  roughnessModel:"DARCY_WEISBACH" | "HAZEN_WILLIAMS";
-  roughnessValue:number | null;
+  roughness:WaterPipeRoughness;
   minorLossCoefficient:number;
   initialStatus:"OPEN" | "CLOSED";
   evidence:WaterHydraulicEvidenceRef[];
 };
 
-export type WaterHydraulicValve = {
+type WaterHydraulicValveBase = {
   featureId:string;
   fromNodeId:string;
   toNodeId:string;
-  valveType:"PRV"|"PSV"|"PBV"|"FCV"|"TCV"|"GPV"|"ISOLATION";
   diameterMm:number | null;
-  setting:number | null;
-  initialStatus:"OPEN"|"CLOSED"|"ACTIVE";
   evidence:WaterHydraulicEvidenceRef[];
 };
+
+export type WaterHydraulicValve =
+  | (WaterHydraulicValveBase & {
+      valveType:"PRV"|"PSV"|"PBV";
+      setting:{value:number | null;unit:"m"};
+      initialStatus:"OPEN"|"CLOSED"|"ACTIVE";
+    })
+  | (WaterHydraulicValveBase & {
+      valveType:"FCV";
+      setting:{value:number | null;unit:"L/s"};
+      initialStatus:"OPEN"|"CLOSED"|"ACTIVE";
+    })
+  | (WaterHydraulicValveBase & {
+      valveType:"TCV";
+      setting:{value:number | null;unit:"dimensionless"};
+      initialStatus:"OPEN"|"CLOSED"|"ACTIVE";
+    })
+  | (WaterHydraulicValveBase & {
+      valveType:"GPV";
+      curveRef:string | null;
+      initialStatus:"OPEN"|"CLOSED"|"ACTIVE";
+    })
+  | (WaterHydraulicValveBase & {
+      valveType:"ISOLATION";
+      initialStatus:"OPEN"|"CLOSED";
+    });
 
 export type WaterHydraulicPump = {
   featureId:string;
@@ -108,10 +134,12 @@ export function validateWaterHydraulicModel(model:WaterHydraulicModel){
     if(j.elevationM===null) issues.push({code:"JUNCTION_ELEVATION_MISSING",severity:"BLOCKER",objectRef:j.nodeId,field:"elevationM",message:"Junction elevation is required for authoritative pressure calculation."});
     if(j.baseDemandLps===null) issues.push({code:"JUNCTION_DEMAND_MISSING",severity:"BLOCKER",objectRef:j.nodeId,field:"baseDemandLps",message:"Demand is required for authoritative hydraulic calculation."});
   }
+
   for(const r of model.reservoirs){
     nodes.add(r.nodeId);
     if(r.hydraulicHeadM===null) issues.push({code:"RESERVOIR_HEAD_MISSING",severity:"BLOCKER",objectRef:r.nodeId,field:"hydraulicHeadM",message:"Reservoir/source head is required."});
   }
+
   for(const t of model.tanks){
     nodes.add(t.nodeId);
     for(const [field,value] of Object.entries({
@@ -134,12 +162,20 @@ export function validateWaterHydraulicModel(model:WaterHydraulicModel){
     checkLink(p.featureId,p.fromNodeId,p.toNodeId);
     if(p.lengthM===null || p.lengthM<=0) issues.push({code:"PIPE_LENGTH_MISSING",severity:"BLOCKER",objectRef:p.featureId,field:"lengthM",message:"Pipe length is required."});
     if(p.diameterMm===null || p.diameterMm<=0) issues.push({code:"PIPE_DIAMETER_MISSING",severity:"BLOCKER",objectRef:p.featureId,field:"diameterMm",message:"Pipe diameter is required."});
-    if(p.roughnessValue===null || p.roughnessValue<=0) issues.push({code:"PIPE_ROUGHNESS_MISSING",severity:"BLOCKER",objectRef:p.featureId,field:"roughnessValue",message:"Pipe roughness/resistance parameter is required."});
+    if(p.roughness.value===null || p.roughness.value<=0) issues.push({code:"PIPE_ROUGHNESS_MISSING",severity:"BLOCKER",objectRef:p.featureId,field:"roughness",message:"Pipe roughness/resistance parameter is required."});
   }
+
   for(const v of model.valves){
     checkLink(v.featureId,v.fromNodeId,v.toNodeId);
     if(v.diameterMm===null || v.diameterMm<=0) issues.push({code:"VALVE_DIAMETER_MISSING",severity:"BLOCKER",objectRef:v.featureId,field:"diameterMm",message:"Valve diameter is required."});
+    if("setting" in v && (v.setting.value===null || !Number.isFinite(v.setting.value))) {
+      issues.push({code:"VALVE_SETTING_MISSING",severity:"BLOCKER",objectRef:v.featureId,field:"setting",message:"Valve operating setting is required."});
+    }
+    if(v.valveType==="GPV" && !v.curveRef) {
+      issues.push({code:"GPV_CURVE_MISSING",severity:"BLOCKER",objectRef:v.featureId,field:"curveRef",message:"GPV headloss curve reference is required."});
+    }
   }
+
   for(const p of model.pumps){
     checkLink(p.featureId,p.fromNodeId,p.toNodeId);
     if(!p.curveRef) issues.push({code:"PUMP_CURVE_MISSING",severity:"BLOCKER",objectRef:p.featureId,field:"curveRef",message:"Pump curve or equivalent operating definition is required."});
@@ -164,4 +200,6 @@ export const PANTAVION_WATER_HYDRAULIC_MODEL_POLICY = {
   missingDataMayNotBeSilentlyInvented:true,
   sourceRevisionMustBePinned:true,
   canonicalUnits:"SI",
+  darcyWeisbachRoughnessUnit:"mm",
+  hazenWilliamsRoughnessUnit:"dimensionless",
 } as const;
