@@ -37,6 +37,15 @@ function safeNextPath(value: string, fallback = "/profile") {
   return value;
 }
 
+function siteUrl() {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (configured) return configured.replace(/\/+$/, "");
+  return process.env.NODE_ENV === "production"
+    ? "https://pantavion.com"
+    : "http://localhost:3000";
+}
+
+
 export async function signUp(formData: FormData) {
   const firstName = getString(formData, "firstName");
   const lastName = getString(formData, "lastName");
@@ -79,8 +88,7 @@ export async function signUp(formData: FormData) {
     redirect("/auth/register?error=registration_closed");
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const callback = `${siteUrl}/auth/callback?next=${encodeURIComponent("/auth/complete-profile")}`;
+  const callback = `${siteUrl()}/auth/callback?next=${encodeURIComponent("/auth/complete-profile")}`;
 
   const { error } = await supabase.auth.signUp({
     email,
