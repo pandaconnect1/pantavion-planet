@@ -66,15 +66,16 @@ export async function GET(
     }
 
     const data = result.patch;
+    const patchStatus = clean(data.status, 80);
 
-  const visible =
+    const visible =
     access.mode === "admin-session" ||
     data.created_by === access.actorRef ||
     ["approved_overlay", "officialization_candidate", "officialized"].includes(
-      data.status,
-    );
+        patchStatus,
+      );
 
-  if (!visible) {
+    if (!visible) {
     return NextResponse.json(
       { ok: false, error: "water_patch_not_visible" },
       { status: 403, headers: { "Cache-Control": "no-store" } },
