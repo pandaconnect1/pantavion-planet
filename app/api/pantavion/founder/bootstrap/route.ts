@@ -8,6 +8,12 @@ import {
   PANTAVION_FOUNDER_SESSION_COOKIE,
   PANTAVION_FOUNDER_SESSION_TTL_SECONDS,
 } from "@/core/security/pantavion-founder-session";
+import {
+  createWaterAdminSessionValue,
+  getWaterAdminSessionSecret,
+  WATER_ADMIN_SESSION_COOKIE,
+  WATER_ADMIN_SESSION_TTL_SECONDS,
+} from "@/core/security/water-admin-session";
 import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
@@ -37,8 +43,9 @@ function json(body: unknown, status = 200) {
 
 export async function POST(request: Request) {
   const secret = getPantavionFounderSessionSecret();
+  const waterAdminSecret = getWaterAdminSessionSecret();
 
-  if (!secret) {
+  if (!secret || !waterAdminSecret) {
     return json(
       {
         ok: false,
@@ -95,6 +102,16 @@ export async function POST(request: Request) {
       sameSite: "strict",
       path: "/",
       maxAge: PANTAVION_FOUNDER_SESSION_TTL_SECONDS,
+    });
+
+    response.cookies.set({
+      name: WATER_ADMIN_SESSION_COOKIE,
+      value: createWaterAdminSessionValue(waterAdminSecret),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: WATER_ADMIN_SESSION_TTL_SECONDS,
     });
 
     return response;
