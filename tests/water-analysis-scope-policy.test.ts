@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import {
   chooseWaterEngineeringAnalysisScope,
   PANTAVION_WATER_ANALYSIS_SCOPE_POLICY,
-} from "../core/infrastructure/water/water-analysis-scope-policy";
+} from "../core/infrastructure/water/water-analysis-scope-policy.ts";
 
 assert.equal(PANTAVION_WATER_ANALYSIS_SCOPE_POLICY.fieldView.defaultRadiusMeters,2000);
 assert.equal(PANTAVION_WATER_ANALYSIS_SCOPE_POLICY.fieldView.clientMayReceiveWholeNetwork,false);
