@@ -51,7 +51,7 @@ export async function GET(request: Request) {
   const y = parseInteger(url.searchParams.get("y"));
 
   if (
-    mapId !== "A" ||
+    !["A", "B", "C"].includes(mapId) ||
     z === null ||
     x === null ||
     y === null ||
