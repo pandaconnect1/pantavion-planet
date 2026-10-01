@@ -368,33 +368,44 @@ function ensureLeaflet() {
 }
 
 function getPipeStyle(feature: any) {
-  const raw = feature?.properties?.kmlLineStyle;
+  const properties = feature?.properties;
+  const raw = properties?.kmlLineStyle;
 
-  if (!raw || typeof raw !== "object") {
-    return { color: "#202020", weight: 2, opacity: 1 };
+  const sourceColor =
+    typeof properties?.sourceColorCss === "string"
+      ? properties.sourceColorCss
+      : raw && typeof raw === "object" && typeof raw.color === "string"
+        ? raw.color
+        : null;
+
+  const sourceWidth =
+    typeof properties?.sourceLineWidth === "number"
+      ? properties.sourceLineWidth
+      : raw && typeof raw === "object" && typeof raw.weight === "number"
+        ? raw.weight
+        : raw && typeof raw === "object" && typeof raw.width === "number"
+          ? raw.width
+          : null;
+
+  const sourceOpacity =
+    typeof properties?.sourceOpacity === "number"
+      ? properties.sourceOpacity
+      : raw && typeof raw === "object" && typeof raw.opacity === "number"
+        ? raw.opacity
+        : null;
+
+  if (!sourceColor) {
+    return {
+      color: "transparent",
+      weight: 0,
+      opacity: 0,
+    };
   }
 
-  const style = raw as {
-    color?: unknown;
-    weight?: unknown;
-    width?: unknown;
-    opacity?: unknown;
-  };
-
-  const weight =
-    typeof style.weight === "number"
-      ? style.weight
-      : typeof style.width === "number"
-        ? style.width
-        : 2;
-
   return {
-    color: typeof style.color === "string" ? style.color : "#202020",
-    weight: Math.max(1, Math.min(10, weight)),
-    opacity:
-      typeof style.opacity === "number"
-        ? Math.max(0.05, Math.min(1, style.opacity))
-        : 1,
+    color: sourceColor,
+    weight: Math.max(1, Math.min(10, sourceWidth ?? 2)),
+    opacity: Math.max(0.05, Math.min(1, sourceOpacity ?? 1)),
   };
 }
 
