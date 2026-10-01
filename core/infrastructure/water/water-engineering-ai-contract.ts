@@ -97,10 +97,14 @@ export type WaterEngineeringAnswer = {
 export const PANTAVION_WATER_ENGINEERING_AI = {
   purpose:"evidence_based_water_utility_engineering_search_analysis_and_recommendation",
   authenticNetworkWriteAllowed:false,
+  authenticNetworkReadOnlyBase:true,
   simulationLayerRequired:true,
+  separateEngineeringScenarioMapRequired:true,
+  scenarioChangesMayNeverOverwriteAuthenticNetwork:true,
+  canonicalNetworkRevisionRequiresExplicitFounderDirective:true,
   telemetryStandards:["OGC_SENSORTHINGS_API"],
   hydraulicEngines:["EPANET_2_2","WNTR"],
   geospatialAuthorities:["CYPRUS_DLS","COPERNICUS_DEM_WHERE_LICENSE_AND_RESOLUTION_FIT"],
   coreRule:
-    "No engineering conclusion may be presented as established when required network, elevation, demand or telemetry evidence is missing.",
+    "No engineering conclusion may be presented as established when required network, elevation, demand or telemetry evidence is missing. All proposed network changes live only in the separate Engineering Scenario Map unless the Founder explicitly authorizes a new canonical revision.",
 } as const;
