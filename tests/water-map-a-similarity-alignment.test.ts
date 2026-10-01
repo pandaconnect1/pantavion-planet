@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { calculatePantavionMapASimilarityTransform, applyPantavionMapASimilarityTransform } from "../core/water/water-map-a-similarity-alignment";
+import { calculatePantavionMapASimilarityTransform, applyPantavionMapASimilarityTransform } from "../core/water/water-map-a-similarity-alignment.ts";
 
 const scale=1.25, theta=0.2, a=scale*Math.cos(theta), b=scale*Math.sin(theta), tx=12345, ty=67890;
 const src=[[0,0],[100,0],[0,100],[120,80]];
