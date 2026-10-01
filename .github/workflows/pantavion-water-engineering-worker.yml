@@ -1,0 +1,50 @@
+name: Pantavion Water Engineering Worker
+
+on:
+  push:
+    branches:
+      - feature/water-gis-postgis-mvt-20261001
+    paths:
+      - "services/water-engineering-worker/**"
+      - "core/infrastructure/water/water-hydraulic-**"
+      - "tests/water-hydraulic-**"
+      - ".github/workflows/pantavion-water-engineering-worker.yml"
+  pull_request:
+    paths:
+      - "services/water-engineering-worker/**"
+      - "core/infrastructure/water/water-hydraulic-**"
+      - "tests/water-hydraulic-**"
+      - ".github/workflows/pantavion-water-engineering-worker.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  solver-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: services/water-engineering-worker/requirements.txt
+
+      - name: Install WNTR
+        run: python -m pip install -r services/water-engineering-worker/requirements.txt
+
+      - name: Compile worker
+        run: python -m py_compile services/water-engineering-worker/worker.py
+
+      - name: Run real EPANET and WNTR smoke simulations
+        working-directory: services/water-engineering-worker
+        env:
+          PANTAVION_ALLOW_LOCAL_WATER_WORKER: "true"
+        run: python smoke_test.py
+
+      - name: Build isolated worker image
+        run: docker build -f services/water-engineering-worker/Dockerfile -t pantavion-water-engineering-worker:ci .
