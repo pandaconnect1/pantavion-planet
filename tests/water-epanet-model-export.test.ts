@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { exportWaterHydraulicModelToEpanetInp } from "../core/infrastructure/water/water-epanet-model-export";
-import type { WaterHydraulicModel } from "../core/infrastructure/water/water-hydraulic-model-contract";
+import { exportWaterHydraulicModelToEpanetInp } from "../core/infrastructure/water/water-epanet-model-export.ts";
+import type { WaterHydraulicModel } from "../core/infrastructure/water/water-hydraulic-model-contract.ts";
 
 const base:WaterHydraulicModel={
   schemaVersion:"pantavion-water-hydraulic-model.v1",
