@@ -628,6 +628,7 @@ export default function ControlledWaterSegmentClient() {
   const approvedOverlayRef = useRef<RemovableWaterLayer | null>(null);
   const autoLoadTimerRef = useRef<number | null>(null);
   const loadInProgressRef = useRef(false);
+  const reloadQueuedRef = useRef(false);
 
   const t = UI[getPantavionUiLanguage(lang)];
   const accessApproved = accessState === "approved";
@@ -1504,7 +1505,12 @@ export default function ControlledWaterSegmentClient() {
   async function loadPipes() {
     const map = mapRef.current;
 
-    if (!map || loadInProgressRef.current) return;
+    if (!map) return;
+
+    if (loadInProgressRef.current) {
+      reloadQueuedRef.current = true;
+      return;
+    }
 
     if (!accessApproved) {
       setMessage(
@@ -1678,6 +1684,13 @@ export default function ControlledWaterSegmentClient() {
     } finally {
       loadInProgressRef.current = false;
       setLoading(false);
+
+      if (reloadQueuedRef.current) {
+        reloadQueuedRef.current = false;
+        window.setTimeout(() => {
+          void refreshVisibleWaterMap();
+        }, 0);
+      }
     }
   }
 
@@ -1698,7 +1711,7 @@ export default function ControlledWaterSegmentClient() {
 
       autoLoadTimerRef.current = window.setTimeout(() => {
         void refreshVisibleWaterMap();
-      }, 900);
+      }, 250);
     }
 
     // Load the first authentic Map A segment immediately once the approved
