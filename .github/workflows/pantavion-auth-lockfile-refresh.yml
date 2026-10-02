@@ -1,0 +1,43 @@
+name: Pantavion Auth Lockfile Refresh
+
+on:
+  push:
+    branches:
+      - feature/pantavion-owned-auth
+    paths:
+      - package.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-lockfile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/pantavion-owned-auth
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Refresh package lock only
+        run: npm install --package-lock-only --ignore-scripts
+
+      - name: Commit lockfile if changed
+        shell: bash
+        run: |
+          if git diff --quiet -- package-lock.json; then
+            echo "package-lock.json already current"
+            exit 0
+          fi
+          git config user.name "pantavion-auth-migration"
+          git config user.email "info.pandaconnect@gmail.com"
+          git add package-lock.json
+          git commit -m "chore(auth): refresh Better Auth lockfile"
+          git push origin HEAD:feature/pantavion-owned-auth
