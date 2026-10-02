@@ -15,12 +15,35 @@ import {
 import { createClient } from "@/lib/supabase/server";
 
 const FOUNDER_EMAIL = "info.pandaconnect@gmail.com";
+const CANONICAL_PRODUCTION_ORIGIN = "https://pantavion.com";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-function activationRedirect(request: Request, error: string) {
-  const url = new URL("/founder/activate", request.url);
+function publicOrigin() {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "";
+
+  if (process.env.NODE_ENV === "production") {
+    try {
+      const url = new URL(configured);
+      if (
+        url.protocol === "https:" &&
+        (url.hostname === "pantavion.com" || url.hostname === "www.pantavion.com")
+      ) {
+        return CANONICAL_PRODUCTION_ORIGIN;
+      }
+    } catch {
+      // Ignore malformed/internal runtime URLs and use the canonical public origin.
+    }
+
+    return CANONICAL_PRODUCTION_ORIGIN;
+  }
+
+  return configured.replace(/\/+$/, "") || "http://localhost:3000";
+}
+
+function activationRedirect(error: string) {
+  const url = new URL("/founder/activate", publicOrigin());
   url.searchParams.set("error", error);
   return NextResponse.redirect(url);
 }
@@ -38,7 +61,7 @@ export async function GET(request: Request) {
     !user.email_confirmed_at ||
     (user.email || "").trim().toLowerCase() !== FOUNDER_EMAIL
   ) {
-    return activationRedirect(request, "claim_failed");
+    return activationRedirect("claim_failed");
   }
 
   const { data, error } = await supabase.rpc(
@@ -49,7 +72,6 @@ export async function GET(request: Request) {
 
   if (error || !result?.ok) {
     return activationRedirect(
-      request,
       String(result?.claim_status || "claim_failed"),
     );
   }
@@ -58,11 +80,11 @@ export async function GET(request: Request) {
   const waterAdminSecret = getWaterAdminSessionSecret();
 
   if (!founderSecret || !waterAdminSecret) {
-    return activationRedirect(request, "founder_session_not_configured");
+    return activationRedirect("founder_session_not_configured");
   }
 
   const nextPath = "/professional/infrastructure/water/admin/control";
-  const resetUrl = new URL("/auth/reset-password", request.url);
+  const resetUrl = new URL("/auth/reset-password", publicOrigin());
   resetUrl.searchParams.set("next", nextPath);
 
   const response = NextResponse.redirect(resetUrl);
