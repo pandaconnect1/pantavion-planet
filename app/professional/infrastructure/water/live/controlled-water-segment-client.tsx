@@ -694,6 +694,11 @@ export default function ControlledWaterSegmentClient() {
   const [approvedChangeCount, setApprovedChangeCount] = useState(0);
   const [approvedEvidenceCount, setApprovedEvidenceCount] = useState(0);
   const [mapReady, setMapReady] = useState(false);
+  const [addressCandidates, setAddressCandidates] = useState<Array<{
+    candidateId: string;
+    displayName: string;
+    coordinates: { lat: number; lng: number };
+  }>>([]);
 
   const mapEl = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
@@ -903,6 +908,9 @@ export default function ControlledWaterSegmentClient() {
         }).addTo(map);
 
         mapRef.current = map;
+        map.on("click", (event: { latlng: { lat: number; lng: number } }) => {
+          void selectMapPoint(event);
+        });
         setMapReady(true);
         window.setTimeout(() => map.invalidateSize(), 300);
         window.setTimeout(() => map.invalidateSize(), 900);
@@ -1038,6 +1046,30 @@ export default function ControlledWaterSegmentClient() {
     map.setView([lat, lng], Math.max(map.getZoom(), 18), {
       animate: true,
     });
+  }
+
+  async function selectMapPoint(event: { latlng: { lat: number; lng: number } }) {
+    const map = mapRef.current;
+    const { lat, lng } = event.latlng;
+    if (!map || !Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+    try {
+      await placeCircleMarker({
+        lat,
+        lng,
+        kind: "search",
+        title: lang === "el" ? "Επιλεγμένο σημείο" : "Selected point",
+      });
+      // Keep GPS separate: a manual selection moves only the search marker.
+      if (mapRef.current !== map) return;
+      moveMapToPoint(lat, lng);
+      setMessage(t.searchFound);
+      window.setTimeout(() => {
+        if (mapRef.current === map) void refreshVisibleWaterMap();
+      }, 1100);
+    } catch {
+      setMessage(t.failed);
+    }
   }
 
   async function locateMe() {
@@ -1237,83 +1269,48 @@ export default function ControlledWaterSegmentClient() {
   async function searchAddressMarker() {
     const map = mapRef.current;
     const queries = buildSearchQueries();
-
     if (!map || queries.length === 0) {
-      setMessage(t.searchNotFound);
+      setMessage(t.searchEmpty);
       return;
     }
-
     setLoading(true);
+    setAddressCandidates([]);
     setMessage(t.loading);
-
     try {
-      const pendingMatches = readPendingLocalAddressMatches(queries[0] || "");
-
-      for (const query of queries) {
-        const params = new URLSearchParams({
-          q: query,
-          format: "json",
-          limit: "1",
-          addressdetails: "1",
-          countrycodes: "cy",
-        });
-
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?${params.toString()}`,
-          {
-            headers: {
-              accept: "application/json",
-            },
-          },
-        );
-
-        if (!response.ok) continue;
-
-        const results = (await response.json()) as Array<{
-          lat?: string;
-          lon?: string;
-          display_name?: string;
-        }>;
-
-        const result = results[0];
-        const lat = Number(result?.lat);
-        const lng = Number(result?.lon);
-
-        if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
-
-        await placeCircleMarker({
-          lat,
-          lng,
-          kind: "search",
-          title: result?.display_name || query,
-        });
-
-        moveMapToPoint(lat, lng);
-        setMessage(t.searchFound);
-
-        window.setTimeout(() => {
-          void refreshVisibleWaterMap();
-        }, 1100);
-
-        return;
-      }
-
-      if (pendingMatches.length > 0) {
-        setMessage(
-          `ρέθηκε προσωρινή καταχώρηση στη συσκευή: ${pendingMatches[0]}. εν έχει ακόμη γεωγραφικές συντεταγμένες ή έγκριση.`,
-        );
-        return;
-      }
-
-      setMessage(
-        "εν βρέθηκε η διεύθυνση. οκίμασε οδό + περιοχή, Greeklish, χωρίς αριθμό ή πρόσθεσέ την ως νέο σημείο για έγκριση.",
+      const params = new URLSearchParams({
+        street, houseNumber: number, area, postalCode: postal,
+      });
+      const response = await fetch(
+        `/api/professional/infrastructure/water/address/search?${params.toString()}`,
+        { cache: "no-store", signal: AbortSignal.timeout(12000) },
       );
+      if (!response.ok) throw new Error("address_search_failed");
+      const result = await response.json();
+      if (mapRef.current !== map) return;
+      const candidates = (result.candidates || []).filter(
+        (item: { coordinates?: { lat?: number; lng?: number } }) =>
+          Number.isFinite(item.coordinates?.lat) && Number.isFinite(item.coordinates?.lng),
+      );
+      if (candidates.length === 1) {
+        await selectMapPoint({ latlng: candidates[0].coordinates });
+        return;
+      }
+      if (candidates.length > 1) {
+        setAddressCandidates(candidates);
+        setMessage(lang === "el" ? "Επίλεξε τη σωστή διεύθυνση από τα αποτελέσματα." : "Select the correct address from the results.");
+        return;
+      }
+      const pendingMatches = readPendingLocalAddressMatches(queries[0] || "");
+      setMessage(pendingMatches.length > 0
+        ? `Προσωρινή καταχώρηση χωρίς εγκεκριμένες συντεταγμένες: ${pendingMatches[0]}`
+        : t.searchNotFound);
     } catch {
-      setMessage(t.searchNotFound);
+      setMessage(lang === "el" ? "Η αναζήτηση δεν ολοκληρώθηκε. Δοκίμασε ξανά ή επίλεξε σημείο στον χάρτη." : "Search could not complete. Try again or select a point on the map.");
     } finally {
       setLoading(false);
     }
   }
+
   async function openApprovedFieldArtifact(reference: string) {
     const requestId = fieldArtifactRequestId(reference);
     if (!requestId) {
@@ -1924,6 +1921,21 @@ export default function ControlledWaterSegmentClient() {
         <div className="mt-4 rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-sm text-slate-200">
           {message}
         </div>
+          {addressCandidates.length > 0 ? (
+            <div className="mt-3 grid gap-2">
+              {addressCandidates.map((candidate) => (
+                <button key={candidate.candidateId} type="button"
+                  onClick={() => {
+                    setAddressCandidates([]);
+                    void selectMapPoint({ latlng: candidate.coordinates });
+                  }}
+                  className="rounded-xl border border-sky-400/40 px-4 py-3 text-left text-sm text-sky-100">
+                  {candidate.displayName}
+                </button>
+              ))}
+            </div>
+          ) : null}
+
 
         <div className="mt-4 overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
           <div className="border-b border-slate-700 px-4 py-3 text-sm font-black text-[#f2c766]">
@@ -2088,6 +2100,21 @@ export default function ControlledWaterSegmentClient() {
           <div className="mt-4 rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-sm text-slate-200">
             {message}
           </div>
+          {addressCandidates.length > 0 ? (
+            <div className="mt-3 grid gap-2">
+              {addressCandidates.map((candidate) => (
+                <button key={candidate.candidateId} type="button"
+                  onClick={() => {
+                    setAddressCandidates([]);
+                    void selectMapPoint({ latlng: candidate.coordinates });
+                  }}
+                  className="rounded-xl border border-sky-400/40 px-4 py-3 text-left text-sm text-sky-100">
+                  {candidate.displayName}
+                </button>
+              ))}
+            </div>
+          ) : null}
+
         </section>
 
         
