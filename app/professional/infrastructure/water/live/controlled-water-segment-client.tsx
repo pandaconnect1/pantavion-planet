@@ -246,8 +246,6 @@ const UI = {
   },
 };
 
-const VIEWPORT_TILE_SPAN_DEGREES = 0.055;
-const MAX_VIEWPORT_TILES = 16;
 const MAX_FEATURES_PER_TILE = 1200;
 const MAX_RECURSIVE_TILE_DEPTH = 6;
 const MAX_SEGMENT_REQUESTS = 128;
@@ -379,7 +377,19 @@ function ensureLeaflet() {
   return leafletPromise;
 }
 
-function getPipeStyle(feature: any) {
+function getPipeStyle(feature: {
+  properties?: {
+    sourceColorCss?: unknown;
+    sourceLineWidth?: unknown;
+    sourceOpacity?: unknown;
+    kmlLineStyle?: {
+      color?: unknown;
+      weight?: unknown;
+      width?: unknown;
+      opacity?: unknown;
+    } | null;
+  };
+} | null | undefined) {
   const properties = feature?.properties;
   const raw = properties?.kmlLineStyle;
 
@@ -439,33 +449,6 @@ function bboxParams(bbox: Bbox) {
     maxLng: bbox.maxLng.toFixed(6),
     maxLat: bbox.maxLat.toFixed(6),
   };
-}
-
-function splitVisibleBboxIntoSafeTiles(bbox: Bbox) {
-  const lngSpan = bbox.maxLng - bbox.minLng;
-  const latSpan = bbox.maxLat - bbox.minLat;
-
-  const lngSteps = Math.max(1, Math.ceil(lngSpan / VIEWPORT_TILE_SPAN_DEGREES));
-  const latSteps = Math.max(1, Math.ceil(latSpan / VIEWPORT_TILE_SPAN_DEGREES));
-
-  if (lngSteps * latSteps > MAX_VIEWPORT_TILES) {
-    throw new Error("VISIBLE_AREA_TOO_LARGE");
-  }
-
-  const tiles: Bbox[] = [];
-
-  for (let y = 0; y < latSteps; y += 1) {
-    for (let x = 0; x < lngSteps; x += 1) {
-      const minLng = bbox.minLng + (lngSpan * x) / lngSteps;
-      const maxLng = bbox.minLng + (lngSpan * (x + 1)) / lngSteps;
-      const minLat = bbox.minLat + (latSpan * y) / latSteps;
-      const maxLat = bbox.minLat + (latSpan * (y + 1)) / latSteps;
-
-      tiles.push({ minLng, minLat, maxLng, maxLat });
-    }
-  }
-
-  return tiles;
 }
 
 function clampMercatorLat(lat: number) {
@@ -564,7 +547,10 @@ function splitBboxIntoQuadrants(bbox: Bbox) {
   ];
 }
 
-function featureKey(feature: any, fallback: string) {
+function featureKey(feature: {
+  id?: unknown;
+  properties?: { placemarkIndex?: unknown; featureIndex?: unknown; name?: unknown };
+} | null | undefined, fallback: string) {
   const id =
     feature?.id ??
     feature?.properties?.placemarkIndex ??
@@ -702,7 +688,6 @@ export default function ControlledWaterSegmentClient() {
 
   const mapEl = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
-  const layerRef = useRef<any>(null);
   const networkTileCacheRef = useRef<
     Map<string, { layer: any; featureCount: number; lastUsedAt: number }>
   >(new Map());
