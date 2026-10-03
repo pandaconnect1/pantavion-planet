@@ -47,7 +47,10 @@ export class PostgisWaterTopologyProvider implements WaterTopologyProvider {
       visitedFeatureIds: [...visitedFeatureIds].sort(),
       reachedReservoirOrTankIds: [],
       unresolvedConnectivityRefs: [],
-      complete: true,
+      // A successful connectivity query does not prove that the revision's
+      // topology is complete. Keep this fail-closed until revision-level
+      // topology validation proves coverage and seed semantics.
+      complete: false,
     };
   }
 
