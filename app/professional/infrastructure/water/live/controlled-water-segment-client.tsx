@@ -894,7 +894,7 @@ export default function ControlledWaterSegmentClient() {
           center: [34.681, 33.038],
           zoom: 15,
           zoomControl: true,
-          preferCanvas: false,
+          preferCanvas: true,
         });
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -1713,7 +1713,7 @@ export default function ControlledWaterSegmentClient() {
       const visibleKeys = new Set(tiles.map((tile) => tile.key));
       let visibleFeatureCount = 0;
 
-      for (const tile of tiles) {
+      async function loadTile(tile: NetworkXyzTile) {
         controller.signal.throwIfAborted();
         const cached = networkTileCacheRef.current.get(tile.key);
 
@@ -1722,7 +1722,7 @@ export default function ControlledWaterSegmentClient() {
           if (!map.hasLayer(cached.layer)) cached.layer.addTo(map);
           cached.layer.bringToFront?.();
           visibleFeatureCount += cached.featureCount;
-          continue;
+          return;
         }
 
         const rawFeatures = await fetchExactVisibleTile(tile.bbox, 0);
@@ -1769,6 +1769,24 @@ export default function ControlledWaterSegmentClient() {
         });
         visibleFeatureCount += features.length;
       }
+
+
+      // Keep mobile/server load bounded while avoiding one round trip per tile.
+      let nextTile = 0;
+      async function loadTileWorker() {
+        while (nextTile < tiles.length && !accessRevoked) {
+          controller.signal.throwIfAborted();
+          const tile = tiles[nextTile++];
+          await loadTile(tile);
+        }
+      }
+      const results = await Promise.allSettled(
+        Array.from({ length: Math.min(3, tiles.length) }, () => loadTileWorker()),
+      );
+      const failure = results.find((result) => result.status === "rejected");
+      if (failure?.status === "rejected") throw failure.reason;
+      if (accessRevoked) return;
+      controller.signal.throwIfAborted();
 
       for (const [key, cached] of networkTileCacheRef.current.entries()) {
         if (!visibleKeys.has(key) && map.hasLayer(cached.layer)) {
