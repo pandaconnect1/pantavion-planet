@@ -61,7 +61,7 @@ export function validateWaterValveFieldConfirmation(
     throw new Error("water_valve_action_state_mismatch");
   }
   if (confirmation.position) {
-    const { latitude, longitude, accuracyMeters } = confirmation.position;
+    const { latitude, longitude, accuracyMeters, capturedAt } = confirmation.position;
     if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90) {
       throw new Error("water_valve_position_invalid");
     }
@@ -70,6 +70,9 @@ export function validateWaterValveFieldConfirmation(
     }
     if (accuracyMeters !== null && (!Number.isFinite(accuracyMeters) || accuracyMeters < 0)) {
       throw new Error("water_valve_position_accuracy_invalid");
+    }
+    if (!capturedAt.trim() || Number.isNaN(Date.parse(capturedAt))) {
+      throw new Error("water_valve_position_time_invalid");
     }
   }
 }
