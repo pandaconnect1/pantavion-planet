@@ -5,9 +5,21 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 
 CREATE SCHEMA IF NOT EXISTS pantavion_water;
 
+CREATE TABLE IF NOT EXISTS pantavion_water.map_registry (
+  map_id text PRIMARY KEY CHECK (length(trim(map_id)) > 0),
+  display_name text NOT NULL CHECK (length(trim(display_name)) > 0),
+  source_kind text NOT NULL DEFAULT 'AUTHENTIC_MASTER',
+  active boolean NOT NULL DEFAULT true,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+INSERT INTO pantavion_water.map_registry(map_id,display_name)
+VALUES ('A','Map A'),('B','Map B'),('C','Map C'),('D','Map D'),('E','Map E')
+ON CONFLICT (map_id) DO NOTHING;
+
 CREATE TABLE IF NOT EXISTS pantavion_water.network_feature (
   feature_id uuid PRIMARY KEY,
-  map_id text NOT NULL CHECK (map_id IN ('A','B','C')),
+  map_id text NOT NULL REFERENCES pantavion_water.map_registry(map_id),
   feature_type text NOT NULL CHECK (feature_type IN ('pipe','valve','junction','device','zone','label','reference')),
   source_sha256 text NOT NULL CHECK (length(source_sha256)=64),
   source_entity_ref text,
