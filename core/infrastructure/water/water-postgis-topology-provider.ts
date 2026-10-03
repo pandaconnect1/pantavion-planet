@@ -45,9 +45,8 @@ export class PostgisWaterTopologyProvider implements WaterTopologyProvider {
       networkRevisionId: request.networkRevisionId,
       visitedNodeIds: [...visitedNodeIds].sort(),
       visitedFeatureIds: [...visitedFeatureIds].sort(),
-      reachedReservoirNodeIds: [],
-      reachedTankNodeIds: [],
-      unresolvedFeatureRefs: [],
+      reachedReservoirOrTankIds: [],
+      unresolvedConnectivityRefs: [],
       complete: true,
     };
   }
