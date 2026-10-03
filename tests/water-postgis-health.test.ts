@@ -1,5 +1,16 @@
 import assert from "node:assert/strict";
 import { checkWaterPostgisHealth } from "../core/infrastructure/water/water-postgis-health";
+import type { WaterSqlExecutor } from "../core/infrastructure/water/water-postgis-topology-provider";
+
+function healthExecutor(schemaAvailable: boolean, topologyAvailable: boolean): WaterSqlExecutor {
+  return {
+    async query<Row extends Record<string, unknown>>() {
+      return {
+        rows: [{ schema_available: schemaAvailable, topology_available: topologyAvailable } as unknown as Row],
+      };
+    },
+  };
+}
 
 async function run() {
   assert.deepEqual(await checkWaterPostgisHealth(null), {
@@ -10,35 +21,24 @@ async function run() {
     reason: "water_postgis_executor_unavailable",
   });
 
-  const ready = await checkWaterPostgisHealth({
-    async query() {
-      return { rows: [{ schema_available: true, topology_available: true }] };
-    },
-  });
+  const ready = await checkWaterPostgisHealth(healthExecutor(true, true));
   assert.equal(ready.ok, true);
   assert.equal(ready.status, "READY");
 
-  const schemaMissing = await checkWaterPostgisHealth({
-    async query() {
-      return { rows: [{ schema_available: false, topology_available: false }] };
-    },
-  });
+  const schemaMissing = await checkWaterPostgisHealth(healthExecutor(false, false));
   assert.equal(schemaMissing.ok, false);
   assert.equal(schemaMissing.status, "SCHEMA_MISSING");
 
-  const topologyMissing = await checkWaterPostgisHealth({
-    async query() {
-      return { rows: [{ schema_available: true, topology_available: false }] };
-    },
-  });
+  const topologyMissing = await checkWaterPostgisHealth(healthExecutor(true, false));
   assert.equal(topologyMissing.ok, false);
   assert.equal(topologyMissing.status, "TOPOLOGY_MISSING");
 
-  const failed = await checkWaterPostgisHealth({
-    async query() {
+  const failingExecutor: WaterSqlExecutor = {
+    async query<Row extends Record<string, unknown>>() {
       throw new Error("database unavailable");
     },
-  });
+  };
+  const failed = await checkWaterPostgisHealth(failingExecutor);
   assert.equal(failed.ok, false);
   assert.equal(failed.status, "UNAVAILABLE");
 
