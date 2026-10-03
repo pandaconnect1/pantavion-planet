@@ -3,15 +3,22 @@ import type { WaterTraceResult } from "./water-topology-graph-contract";
 export type WaterIsolationSimulationRequest = {
   networkRevisionId: string;
   faultFeatureId: string;
+  /** Supply-side/source nodes used as physical-connectivity seeds. */
   startNodeIds: string[];
   closedValveFeatureIds: string[];
 };
 
 export type WaterIsolationSimulationResult = {
   mode: "SIMULATION";
+  semantics: "PHYSICAL_CONNECTIVITY_ONLY";
+  hydraulicImpactConfirmed: false;
   networkRevisionId: string;
   faultFeatureId: string;
   closedValveFeatureIds: string[];
+  /**
+   * Features physically disconnected from the supplied start-node set after
+   * blocking the proposed valve features. This is not a hydraulic-flow result.
+   */
   isolatedFeatureIds: string[];
   visitedNodeIds: string[];
   reachedReservoirOrTankIds: string[];
@@ -38,6 +45,8 @@ export function buildIsolationSimulationResult(
 
   return {
     mode: "SIMULATION",
+    semantics: "PHYSICAL_CONNECTIVITY_ONLY",
+    hydraulicImpactConfirmed: false,
     networkRevisionId: request.networkRevisionId,
     faultFeatureId: request.faultFeatureId,
     closedValveFeatureIds: [...blocked].sort(),
