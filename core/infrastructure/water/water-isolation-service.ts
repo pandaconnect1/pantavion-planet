@@ -23,5 +23,12 @@ export async function simulateWaterIsolation(
     provider.listRevisionFeatureIds(request.networkRevisionId),
   ]);
 
+  // Isolation is safety-relevant operational guidance. Never calculate an
+  // isolated area from topology that the provider has not proven complete.
+  if (!trace.complete) throw new Error("water_topology_trace_incomplete");
+  if (trace.unresolvedConnectivityRefs.length > 0) {
+    throw new Error("water_topology_connectivity_unresolved");
+  }
+
   return buildIsolationSimulationResult(request, trace, allRevisionFeatureIds);
 }
