@@ -707,6 +707,7 @@ export default function ControlledWaterSegmentClient() {
   const approvedOverlayRef = useRef<RemovableWaterLayer | null>(null);
   const autoLoadTimerRef = useRef<number | null>(null);
   const loadInProgressRef = useRef(false);
+  const networkLoadAbortRef = useRef<AbortController | null>(null);
   const reloadQueuedRef = useRef(false);
 
   const t = UI[getPantavionUiLanguage(lang)];
@@ -1604,6 +1605,13 @@ export default function ControlledWaterSegmentClient() {
       return;
     }
 
+    const controller = new AbortController();
+    networkLoadAbortRef.current = controller;
+    let timedOut = false;
+    const loadTimeout = window.setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, 30000);
     loadInProgressRef.current = true;
     setLoading(true);
     setMessage(t.loading);
@@ -1615,6 +1623,7 @@ export default function ControlledWaterSegmentClient() {
       let accessRevoked = false;
 
       async function fetchExactVisibleTile(tile: Bbox, depth: number): Promise<any[]> {
+        controller.signal.throwIfAborted();
         segmentRequestCount += 1;
 
         if (segmentRequestCount > MAX_SEGMENT_REQUESTS) {
@@ -1635,6 +1644,7 @@ export default function ControlledWaterSegmentClient() {
           {
             cache: "no-store",
             credentials: "include",
+            signal: controller.signal,
             headers: {
               "x-pantavion-water-device-id": device.deviceId,
               "x-pantavion-water-device-token": device.deviceToken,
@@ -1643,6 +1653,7 @@ export default function ControlledWaterSegmentClient() {
         );
 
         const json = (await response.json()) as SegmentResponse;
+        controller.signal.throwIfAborted();
 
         if (
           response.status === 401 ||
@@ -1703,6 +1714,7 @@ export default function ControlledWaterSegmentClient() {
       let visibleFeatureCount = 0;
 
       for (const tile of tiles) {
+        controller.signal.throwIfAborted();
         const cached = networkTileCacheRef.current.get(tile.key);
 
         if (cached) {
@@ -1715,6 +1727,7 @@ export default function ControlledWaterSegmentClient() {
 
         const rawFeatures = await fetchExactVisibleTile(tile.bbox, 0);
         if (accessRevoked) return;
+        controller.signal.throwIfAborted();
 
         const deduped = new Map<string, any>();
         rawFeatures.forEach((feature, index) => {
@@ -1787,12 +1800,15 @@ export default function ControlledWaterSegmentClient() {
         `${t.loaded}: ${visibleFeatureCount} · ${tiles.length} cached GIS tiles · ${segmentRequestCount} νέα requests`,
       );
     } catch (error) {
+      // A pan/zoom cancellation is superseded by the next viewport request.
+      if (controller.signal.aborted && !timedOut) return;
       setPipeCount(null);
 
       if (error instanceof Error && error.message === "VISIBLE_AREA_TOO_LARGE") {
         setMessage(t.visibleTooLarge);
       } else {
         const diagnosticCode =
+          timedOut ? "WATER_LOAD_TIMEOUT" :
           error instanceof Error && /^WATER_[A-Z0-9_]+$/.test(error.message)
             ? error.message
             : "WATER_CLIENT_LOAD";
@@ -1800,6 +1816,10 @@ export default function ControlledWaterSegmentClient() {
         setMessage(`${t.failed} ${t.diagnostic}: ${diagnosticCode}.`);
       }
     } finally {
+      window.clearTimeout(loadTimeout);
+      if (networkLoadAbortRef.current === controller) {
+        networkLoadAbortRef.current = null;
+      }
       loadInProgressRef.current = false;
       setLoading(false);
 
@@ -1826,6 +1846,9 @@ export default function ControlledWaterSegmentClient() {
 
     function scheduleAutoLoad() {
       clearAutoLoadTimer();
+      // Do not make the current viewport wait for obsolete network requests.
+      reloadQueuedRef.current = false;
+      networkLoadAbortRef.current?.abort();
 
       autoLoadTimerRef.current = window.setTimeout(() => {
         void refreshVisibleWaterMap();
@@ -1839,6 +1862,8 @@ export default function ControlledWaterSegmentClient() {
 
     return () => {
       clearAutoLoadTimer();
+      reloadQueuedRef.current = false;
+      networkLoadAbortRef.current?.abort();
       map.off("moveend zoomend", scheduleAutoLoad);
     };
   }, [accessApproved, mapReady, lang, street, number, area, postal]);
