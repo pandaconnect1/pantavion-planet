@@ -19,8 +19,7 @@ CREATE TABLE IF NOT EXISTS pantavion_water.valve_field_confirmation (
   position_accuracy_m double precision
     CHECK (position_accuracy_m IS NULL OR position_accuracy_m >= 0),
   position_captured_at timestamptz,
-  fault_feature_id uuid
-    REFERENCES pantavion_water.network_feature(feature_id),
+  fault_ref text,
   work_order_id text,
   evidence_refs jsonb NOT NULL DEFAULT '[]'::jsonb,
   note text,
@@ -45,8 +44,8 @@ CREATE INDEX IF NOT EXISTS water_valve_field_confirmation_lookup_idx
   );
 
 CREATE INDEX IF NOT EXISTS water_valve_field_confirmation_fault_idx
-  ON pantavion_water.valve_field_confirmation(fault_feature_id)
-  WHERE fault_feature_id IS NOT NULL;
+  ON pantavion_water.valve_field_confirmation(fault_ref)
+  WHERE fault_ref IS NOT NULL;
 
 CREATE INDEX IF NOT EXISTS water_valve_field_confirmation_position_gix
   ON pantavion_water.valve_field_confirmation USING gist(position);
