@@ -714,9 +714,15 @@ export default function ControlledWaterSegmentClient() {
   const loadInProgressRef = useRef(false);
   const networkLoadAbortRef = useRef<AbortController | null>(null);
   const reloadQueuedRef = useRef(false);
+  const scheduleViewportReloadRef = useRef<(() => void) | null>(null);
+  const selectMapPointRef = useRef(selectMapPoint);
 
   const t = UI[getPantavionUiLanguage(lang)];
   const accessApproved = accessState === "approved";
+
+  useEffect(() => {
+    selectMapPointRef.current = selectMapPoint;
+  });
 
   useEffect(() => {
     let cancelled = false;
@@ -909,7 +915,7 @@ export default function ControlledWaterSegmentClient() {
 
         mapRef.current = map;
         map.on("click", (event: { latlng: { lat: number; lng: number } }) => {
-          void selectMapPoint(event);
+          void selectMapPointRef.current(event);
         });
         setMapReady(true);
         window.setTimeout(() => map.invalidateSize(), 300);
@@ -1044,7 +1050,7 @@ export default function ControlledWaterSegmentClient() {
     if (!map) return;
 
     map.setView([lat, lng], Math.max(map.getZoom(), 18), {
-      animate: true,
+      animate: false,
     });
   }
 
@@ -1064,9 +1070,9 @@ export default function ControlledWaterSegmentClient() {
       if (mapRef.current !== map) return;
       moveMapToPoint(lat, lng);
       setMessage(t.searchFound);
-      window.setTimeout(() => {
-        if (mapRef.current === map) void refreshVisibleWaterMap();
-      }, 1100);
+      // Use the same cancellation/debounce path as pan and zoom, including
+      // selecting the current center where Leaflet may emit no move event.
+      scheduleViewportReloadRef.current?.();
     } catch {
       setMessage(t.failed);
     }
@@ -1110,9 +1116,7 @@ export default function ControlledWaterSegmentClient() {
           : t.located,
       );
 
-      window.setTimeout(() => {
-        void refreshVisibleWaterMap();
-      }, 1100);
+      scheduleViewportReloadRef.current?.();
     };
 
     const finalFailure = (error: GeolocationPositionError) => {
@@ -1282,7 +1286,7 @@ export default function ControlledWaterSegmentClient() {
       });
       const response = await fetch(
         `/api/professional/infrastructure/water/address/search?${params.toString()}`,
-        { cache: "no-store", signal: AbortSignal.timeout(12000) },
+        { cache: "no-store", signal: AbortSignal.timeout(20000) },
       );
       if (!response.ok) throw new Error("address_search_failed");
       const result = await response.json();
@@ -1873,12 +1877,16 @@ export default function ControlledWaterSegmentClient() {
     // Load the first authentic Map A segment immediately once the approved
     // device and Leaflet map are both ready. Pan/zoom refreshes stay debounced.
     void refreshVisibleWaterMap();
+    scheduleViewportReloadRef.current = scheduleAutoLoad;
     map.on("moveend zoomend", scheduleAutoLoad);
 
     return () => {
       clearAutoLoadTimer();
       reloadQueuedRef.current = false;
       networkLoadAbortRef.current?.abort();
+      if (scheduleViewportReloadRef.current === scheduleAutoLoad) {
+        scheduleViewportReloadRef.current = null;
+      }
       map.off("moveend zoomend", scheduleAutoLoad);
     };
   }, [accessApproved, mapReady, lang, street, number, area, postal]);

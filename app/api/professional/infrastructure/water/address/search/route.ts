@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { waterAddressSearchQueries } from "@/core/infrastructure/water/water-address-search-query";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,9 +27,8 @@ export async function GET(request: Request) {
   const area = value(url.searchParams, "area");
   const postalCode = value(url.searchParams, "postalCode");
 
-  const query = [houseNumber, street, area, postalCode, "Cyprus"]
-    .filter(Boolean)
-    .join(", ");
+  const queries = waterAddressSearchQueries({ street, houseNumber, area, postalCode });
+  let query = queries[0];
 
   if (!street && !area && !postalCode) {
     return NextResponse.json(
@@ -48,30 +48,45 @@ export async function GET(request: Request) {
   providerUrl.searchParams.set("addressdetails", "1");
   providerUrl.searchParams.set("limit", "8");
   providerUrl.searchParams.set("countrycodes", "cy");
-  providerUrl.searchParams.set("q", query);
-
-  const response = await fetch(providerUrl, {
-    headers: {
-      "User-Agent": "PantavionWaterModule/1.0 founder-controlled-local-development",
-      "Accept-Language": "el,en",
-    },
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
+  let results: NominatimResult[] = [];
+  try {
+    for (const [index, candidateQuery] of queries.entries()) {
+      // Bound the fallback to one alternative and avoid back-to-back
+      // provider requests when an English/Greeklish spelling was not indexed.
+      if (index > 0) await new Promise((resolve) => setTimeout(resolve, 1100));
+      query = candidateQuery;
+      providerUrl.searchParams.set("q", query);
+      const response = await fetch(providerUrl, {
+        headers: {
+          "User-Agent": "PantavionWaterModule/1.0 (https://pantavion.com)",
+          "Accept-Language": "el,en",
+        },
+        cache: "no-store",
+        signal: AbortSignal.timeout(8000),
+      });
+      if (!response.ok) throw new Error("address_provider_unavailable");
+      const body: unknown = await response.json();
+      if (!Array.isArray(body)) throw new Error("invalid_address_response");
+      results = (body as NominatimResult[]).filter((item) =>
+        item && typeof item.lat === "string" && item.lat.trim() !== "" &&
+        typeof item.lon === "string" && item.lon.trim() !== "" &&
+        Number.isFinite(Number(item.lat)) && Math.abs(Number(item.lat)) <= 90 &&
+        Number.isFinite(Number(item.lon)) && Math.abs(Number(item.lon)) <= 180,
+      );
+      if (results.length > 0) break;
+    }
+  } catch {
     return NextResponse.json(
       {
         status: "provider_error",
         candidates: [],
         selectedCandidateIdRequired: true,
         mayAutoPickAmbiguousAddress: false,
-        message: `Address provider error ${response.status}`,
+        message: "Η υπηρεσία διευθύνσεων δεν ανταποκρίθηκε. Δοκίμασε ξανά ή επίλεξε σημείο στον χάρτη.",
       },
       { status: 502 },
     );
   }
-
-  const results = (await response.json()) as NominatimResult[];
 
   const candidates = results.map((item, index) => {
     const lat = Number(item.lat);
