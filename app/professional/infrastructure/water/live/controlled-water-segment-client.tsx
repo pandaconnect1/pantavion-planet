@@ -669,7 +669,8 @@ export default function ControlledWaterSegmentClient() {
   const [organization, setOrganization] = useState("");
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [reason, setReason] = useState("");
-  const [street, setStreet] = useState("");\n  const [unifiedQuery, setUnifiedQuery] = useState("");
+  const [street, setStreet] = useState("");
+  const [unifiedQuery, setUnifiedQuery] = useState("");
   const [number, setNumber] = useState("");
   const [area, setArea] = useState("Λεμεσός");
   const [postal, setPostal] = useState("");
@@ -679,7 +680,8 @@ export default function ControlledWaterSegmentClient() {
   const [pipeCount, setPipeCount] = useState<number | null>(null);
   const [approvedChangeCount, setApprovedChangeCount] = useState(0);
   const [approvedEvidenceCount, setApprovedEvidenceCount] = useState(0);
-  const [mapReady, setMapReady] = useState(false);\n  const [selectedTarget, setSelectedTarget] = useState<{ lat: number; lng: number } | null>(null);
+  const [mapReady, setMapReady] = useState(false);
+  const [selectedTarget, setSelectedTarget] = useState<{ lat: number; lng: number } | null>(null);
   const [addressCandidates, setAddressCandidates] = useState<Array<{
     candidateId: string;
     displayName: string;
