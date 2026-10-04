@@ -14,7 +14,7 @@ try {
   }) as typeof fetch;
 
   const { GET } = await import(
-    "../app/api/professional/infrastructure/water/basemap/dls/route"
+    "../app/api/professional/infrastructure/water/basemap/dls/route.ts"
   );
 
   const response = await GET(
