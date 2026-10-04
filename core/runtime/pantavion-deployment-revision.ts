@@ -1,4 +1,5 @@
 export type PantavionRuntimeProvider =
+  | "render"
   | "railway"
   | "vercel"
   | "github"
@@ -19,9 +20,23 @@ function clean(value: string | undefined) {
 }
 
 export function getPantavionDeploymentRevision(): PantavionDeploymentRevision {
+  const renderRevision = clean(process.env.RENDER_GIT_COMMIT);
   const railwayRevision = clean(process.env.RAILWAY_GIT_COMMIT_SHA);
   const vercelRevision = clean(process.env.VERCEL_GIT_COMMIT_SHA);
   const githubRevision = clean(process.env.GITHUB_SHA);
+
+  if (renderRevision) {
+    return {
+      marker: "pantavion_deployment_revision_v1",
+      revision: renderRevision,
+      provider: "render",
+      deploymentId:
+        clean(process.env.RENDER_SERVICE_ID) ??
+        clean(process.env.RENDER_INSTANCE_ID),
+      branch: clean(process.env.RENDER_GIT_BRANCH),
+      environment: clean(process.env.NODE_ENV) ?? "production",
+    };
+  }
 
   if (railwayRevision) {
     return {
