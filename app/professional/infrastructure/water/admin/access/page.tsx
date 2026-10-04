@@ -73,6 +73,15 @@ export default function WaterAdminAccessPage() {
 
       const json = (await response.json()) as SessionResponse;
 
+      if (
+        response.status === 401 &&
+        json.error === "founder_sign_in_required"
+      ) {
+        const nextPath = safeRequestedAdminPath() || WATER_ADMIN_DEFAULT_PATH;
+        window.location.href = `/auth/login?next=${encodeURIComponent(nextPath)}`;
+        return;
+      }
+
       if (!response.ok || !json.ok) {
         throw new Error(json.message || json.error || "Δεν άνοιξε founder/admin session.");
       }
