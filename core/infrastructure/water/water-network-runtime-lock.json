@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-04T17:00:23.151Z",
+  "lockedAtUtc": "2026-10-04T17:06:22.031Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -33,12 +33,12 @@
     "core/security/water-admin-session.ts": "df9e9d7cbd5edfa2659068d817d60e03886e0e761ff6657ab7cb8e9b9417d2f3",
     "scripts/pantavion-water-network-runtime-lock.cjs": "0df1627215062bbb3c1e5bb91118591fd896197300cf81090d373f757fa2d5d3",
     "scripts/water-guardian-production-smoke.cjs": "2109e96821887077bc3854083d19c0f6cf7d2a464d8876458672ccb97c0667e0",
-    "scripts/water-segment-reader-regression.mjs": "119e1ff2634d7ef076da4e960ef3d000218abf32e6e457e3dd499d49bffdc979",
+    "scripts/water-segment-reader-regression.mjs": "ff30e0ae29701a583f33aafccb0b2aca69d5eab73de624fd2e36bbd8ee422f65",
     "app/api/professional/infrastructure/water/basemap/dls/route.ts": "bf0345a807b51b4b0bcbcb7a3097e4c20453f484317f479858cecdf3ca6fb2f4"
   },
   "refreshEvidence": {
-    "reason": "Founder-directed basemap-only change. Replaced only the visual Map A background while preserving authentic Water geometry, protected segmented delivery, authorization, source styles, tile cache behavior and private-source invariants.",
-    "sourceCommit": "72258876ba0e3abbaa9aa3a553d2d81ca1ea8476",
+    "reason": "Founder-directed basemap-only change. Regression gate updated only to accept the new basemap contract; authentic Water source truth, geometry, segmented delivery, authorization and privacy invariants remain unchanged.",
+    "sourceCommit": "5bf81b2726f267def83a5379cc1e2000009f3e65",
     "protectedFileCount": 19,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
