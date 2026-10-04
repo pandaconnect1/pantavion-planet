@@ -5,6 +5,8 @@ export const dynamic = "force-dynamic";
 
 const DLS_CADASTRAL_EXPORT =
   "https://eservices.dls.moi.gov.cy/arcgis/rest/services/National/CadastralMap_GR/MapServer/export";
+const DLS_TOPOGRAPHY_EXPORT =
+  "https://eservices.dls.moi.gov.cy/arcgis/rest/services/National/Topography_GR/MapServer/export";
 const WEB_MERCATOR_HALF_WORLD = 20037508.342789244;
 const TILE_SIZE = 256;
 const MIN_ZOOM = 8;
@@ -32,6 +34,7 @@ export async function GET(request: Request) {
   const z = parseTileInteger(url.searchParams.get("z"));
   const x = parseTileInteger(url.searchParams.get("x"));
   const y = parseTileInteger(url.searchParams.get("y"));
+  const mode = url.searchParams.get("mode") === "roads" ? "roads" : "cadastral";
 
   if (z === null || x === null || y === null || z < MIN_ZOOM || z > MAX_ZOOM) {
     return NextResponse.json(
@@ -49,20 +52,28 @@ export async function GET(request: Request) {
   }
 
   const bounds = tileBounds3857(z, x, y);
-  const upstream = new URL(DLS_CADASTRAL_EXPORT);
+  const upstream = new URL(
+    mode === "roads" ? DLS_TOPOGRAPHY_EXPORT : DLS_CADASTRAL_EXPORT,
+  );
   upstream.searchParams.set(
     "bbox",
     [bounds.minX, bounds.minY, bounds.maxX, bounds.maxY].join(","),
   );
   upstream.searchParams.set("bboxSR", "3857");
   upstream.searchParams.set("imageSR", "3857");
-  // Retina-size transparent export: only parcels (0) and buildings (28).
-  // Roads and labels stay on the clear operational street map beneath.
+  // Retina-size transparent exports. Cadastral mode shows the detailed
+  // official plan information used by field crews: parcel boundaries and
+  // parcel numbers (0), locality/toponyms (19), topographic points/lines/areas
+  // (21/22/23) and surveyed buildings (28). Roads mode adds official area/
+  // service labels and the primary/secondary/local road network (4/7/13/14/15).
   upstream.searchParams.set("size", `${TILE_SIZE * 2},${TILE_SIZE * 2}`);
   upstream.searchParams.set("dpi", "192");
   upstream.searchParams.set("format", "png32");
   upstream.searchParams.set("transparent", "true");
-  upstream.searchParams.set("layers", "show:0,28");
+  upstream.searchParams.set(
+    "layers",
+    mode === "roads" ? "show:4,7,13,14,15" : "show:0,19,21,22,23,28",
+  );
   upstream.searchParams.set("f", "image");
 
   try {
@@ -92,7 +103,10 @@ export async function GET(request: Request) {
       headers: {
         "Content-Type": contentType,
         "Cache-Control": "public, max-age=900, s-maxage=86400, stale-while-revalidate=604800",
-        "X-Pantavion-Basemap": "cyprus-dls-topography-proxy-v1",
+        "X-Pantavion-Basemap":
+          mode === "roads"
+            ? "cyprus-dls-road-labels-v1"
+            : "cyprus-dls-detailed-cadastral-v2",
       },
     });
   } catch {
