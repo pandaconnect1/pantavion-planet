@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { WATER_MATERIAL_SAMPLE_CATALOG } from "@/core/water/water-material-catalog";
 import {
   PANTAVION_LANGUAGE_CATALOG,
   getPantavionUiLanguage,
@@ -561,104 +562,6 @@ function featureKey(feature: {
 }
 
 
-function WaterLiveMapIntelligenceSelector() {
-  const προβολήs = [
-    {
-      key: "operational_map",
-      label: "Λειτουργικός",
-      title: "Λειτουργικός χάρτης",
-      detail: "Ασφαλές live layer για καθημερινή προβολή, βλάβες, αγωγούς και εργασίες πεδίου.",
-    },
-    {
-      key: "master_map",
-      label: "Καθαρός Master",
-      title: "Master δίκτυο",
-      detail: "Προστατευμένη προβολή πλήρους δικτύου. Απαιτεί founder/admin ή εγκεκριμένη πρόσβαση.",
-    },
-    {
-      key: "terrain_elevation_map",
-      label: "Υψόμετρα",
-      title: "Υψόμετρα / μορφολογία",
-      detail: "Βάση για υψομετρικές διαφορές, χαμηλές/υψηλές πιέσεις και τεχνικό έλεγχο.",
-    },
-    {
-      key: "pressure_risk_map",
-      label: "Ρίσκο πίεσης",
-      title: "Ρίσκο πίεσης",
-      detail: "Ενδείξεις για αδύνατες πιέσεις, υπερπιέσεις, ζώνες ρίσκου και ανάγκη μετρήσεων.",
-    },
-    {
-      key: "demand_growth_map",
-      label: "Ανάπτυξη / ζήτηση",
-      title: "Ανάπτυξη / ζήτηση",
-      detail: "Πολυκατοικίες, νέες αναπτύξεις, πληθυσμιακή αύξηση και παλιό δίκτυο με νέα φορτία.",
-    },
-    {
-      key: "prv_candidate_map",
-      label: "Υποψήφια PRV",
-      title: "PRV candidates",
-      detail: "Πιθανές περιοχές για pressure reducing valve ή engineering reπροβολή πριν από έργο.",
-    },
-  ] as const;
-
-  return (
-    <section className="mt-5 rounded-3xl border border-[#f2c766]/40 bg-[#07111f]/95 p-5 shadow-2xl">
-      <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.28em] text-[#f2c766]">
-            Pantavion Ύδρευση AI / Kernel
-          </p>
-          <h2 className="mt-2 text-2xl font-black text-white">
-            Έξυπνες προβολές χάρτη
-          </h2>
-          <p className="mt-2 max-w-5xl text-sm font-semibold leading-6 text-slate-300">
-            Επίλεξε live operational χάρτη, master, terrain, pressure risk,
-            demand growth ή PRV candidates. Το AI αναλύει και εισηγείται·
-            καμία master ή υδραυλική αλλαγή δεν γίνεται χωρίς ανθρώπινη έγκριση,
-            audit και rollback.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-[#f2c766]/30 bg-[#f2c766]/10 px-4 py-3 text-xs font-black uppercase tracking-[0.2em] text-[#f2c766]">
-          Ζωντανή νοημοσύνη χάρτη
-        </div>
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {προβολήs.map((προβολή) => (
-          <a
-            key={προβολή.key}
-            href={`/professional/infrastructure/water/live?προβολή=${προβολή.key}`}
-            className="group rounded-2xl border border-slate-700 bg-[#0d1a2d] p-4 transition hover:border-[#f2c766]/70 hover:bg-[#10213a]"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-sm font-black text-white">{προβολή.label}</p>
-              <span className="rounded-full border border-[#f2c766]/30 px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#f2c766]">
-                προβολή
-              </span>
-            </div>
-            <p className="mt-2 text-sm font-bold text-[#f2c766]">{προβολή.title}</p>
-            <p className="mt-2 text-xs font-semibold leading-5 text-slate-300">
-              {προβολή.detail}
-            </p>
-          </a>
-        ))}
-      </div>
-
-      <div className="mt-4 rounded-2xl border border-slate-700 bg-black/25 p-4">
-        <p className="text-sm font-black text-white">
-          AI / Kernel κανόνας ασφαλείας
-        </p>
-        <p className="mt-2 text-xs font-semibold leading-5 text-slate-300">
-          Τα layers υψομέτρων, πίεσης, ζήτησης και PRV είναι τεχνικά ευαίσθητα.
-          Το Pantavion μπορεί να προτείνει PRV, μετρήσεις πίεσης, weak points,
-          νέες ζώνες ή αλλαγές δικτύου, αλλά η τελική απόφαση ανήκει σε
-          founder/admin, μηχανικό ή εξουσιοδοτημένο υπεύθυνο.
-        </p>
-      </div>
-    </section>
-  );
-}
 export default function ControlledWaterSegmentClient() {
   const [lang, setLang] = useState<Lang>(getInitialLang);
   const [accessState, setAccessState] = useState<AccessState>("checking");
@@ -670,6 +573,7 @@ export default function ControlledWaterSegmentClient() {
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [reason, setReason] = useState("");
   const [street, setStreet] = useState("");
+  const [unifiedQuery, setUnifiedQuery] = useState("");
   const [number, setNumber] = useState("");
   const [area, setArea] = useState("Λεμεσός");
   const [postal, setPostal] = useState("");
@@ -680,6 +584,18 @@ export default function ControlledWaterSegmentClient() {
   const [approvedChangeCount, setApprovedChangeCount] = useState(0);
   const [approvedEvidenceCount, setApprovedEvidenceCount] = useState(0);
   const [mapReady, setMapReady] = useState(false);
+  const [workPanelOpen, setWorkPanelOpen] = useState(false);
+  const [workStage, setWorkStage] = useState("FAULT");
+  const [workOrderId, setWorkOrderId] = useState("");
+  const [workNotes, setWorkNotes] = useState("");
+  const [excavationLength, setExcavationLength] = useState("");
+  const [excavationWidth, setExcavationWidth] = useState("");
+  const [excavationDepth, setExcavationDepth] = useState("");
+  const [workMaterial, setWorkMaterial] = useState("");
+  const [workMaterialQty, setWorkMaterialQty] = useState("");
+  const [workHours, setWorkHours] = useState("");
+  const [workEvidence, setWorkEvidence] = useState("");
+  const [selectedTarget, setSelectedTarget] = useState<{ lat: number; lng: number } | null>(null);
   const [addressCandidates, setAddressCandidates] = useState<Array<{
     candidateId: string;
     displayName: string;
@@ -1054,6 +970,7 @@ export default function ControlledWaterSegmentClient() {
       // Keep GPS separate: a manual selection moves only the search marker.
       if (mapRef.current !== map) return;
       moveMapToPoint(lat, lng);
+      setSelectedTarget({ lat, lng });
       setMessage(t.searchFound);
       // Use the same cancellation/debounce path as pan and zoom, including
       // selecting the current center where Leaflet may emit no move event.
@@ -1061,6 +978,22 @@ export default function ControlledWaterSegmentClient() {
     } catch {
       setMessage(t.failed);
     }
+  }
+
+  function navigateToSelectedTarget() {
+    if (!selectedTarget || typeof window === "undefined") {
+      setMessage(lang === "el" ? "Επίλεξε πρώτα διεύθυνση, βλάβη, βάνα, αγωγό ή σημείο στον χάρτη." : "Select an address, fault, valve, pipe or map point first.");
+      return;
+    }
+
+    const destination = `${selectedTarget.lat.toFixed(6)},${selectedTarget.lng.toFixed(6)}`;
+    // Hand off road guidance to the device's mapping service. Pantavion keeps
+    // field/asset accuracy separate from consumer road-navigation accuracy.
+    window.open(
+      `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving`,
+      "_blank",
+      "noopener,noreferrer",
+    );
   }
 
   async function locateMe() {
@@ -1255,9 +1188,67 @@ export default function ControlledWaterSegmentClient() {
     );
   }
 
-  async function searchAddressMarker() {
+  async function searchUnifiedPlace() {
     const map = mapRef.current;
-    const queries = buildSearchQueries();
+    const query = unifiedQuery.trim();
+    if (!map || query.length < 2) {
+      setMessage(lang === "el" ? "Γράψε τουλάχιστον 2 χαρακτήρες." : "Enter at least 2 characters.");
+      return;
+    }
+
+    setLoading(true);
+    setAddressCandidates([]);
+    setMessage(t.loading);
+    try {
+      const response = await fetch(
+        `/api/professional/infrastructure/water/places/search?q=${encodeURIComponent(query)}`,
+        { cache: "no-store", signal: AbortSignal.timeout(10000) },
+      );
+      const payload = await response.json().catch(() => ({})) as {
+        results?: Array<{
+          resultId: string;
+          displayName: string;
+          secondaryLabel?: string | null;
+          coordinates?: { lat: number; lng: number } | null;
+        }>;
+      };
+
+      const candidates = (payload.results ?? [])
+        .filter((item) => Number.isFinite(item.coordinates?.lat) && Number.isFinite(item.coordinates?.lng))
+        .map((item) => ({
+          candidateId: item.resultId,
+          displayName: item.secondaryLabel
+            ? `${item.displayName} — ${item.secondaryLabel}`
+            : item.displayName,
+          coordinates: item.coordinates as { lat: number; lng: number },
+        }));
+
+      if (response.ok && candidates.length === 1) {
+        await selectMapPoint({ latlng: candidates[0].coordinates });
+        return;
+      }
+      if (response.ok && candidates.length > 1) {
+        setAddressCandidates(candidates);
+        setMessage(lang === "el" ? "Επίλεξε το σωστό αποτέλεσμα." : "Select the correct result.");
+        return;
+      }
+
+      // Until the primary provider is configured, preserve the proven address
+      // search path rather than leaving field users with a dead control.
+      setStreet(query);
+      await searchAddressMarker(query);
+    } catch {
+      setStreet(query);
+      await searchAddressMarker(query);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function searchAddressMarker(queryOverride?: string) {
+    const map = mapRef.current;
+    const override = queryOverride?.trim() || "";
+    const queries = override ? [override] : buildSearchQueries();
     if (!map || queries.length === 0) {
       setMessage(t.searchEmpty);
       return;
@@ -1266,9 +1257,9 @@ export default function ControlledWaterSegmentClient() {
     setAddressCandidates([]);
     setMessage(t.loading);
     try {
-      const params = new URLSearchParams({
-        street, houseNumber: number, area, postalCode: postal,
-      });
+      const params = override
+        ? new URLSearchParams({ street: override, houseNumber: "", area: "", postalCode: "" })
+        : new URLSearchParams({ street, houseNumber: number, area, postalCode: postal });
       const response = await fetch(
         `/api/professional/infrastructure/water/address/search?${params.toString()}`,
         { cache: "no-store", signal: AbortSignal.timeout(20000) },
@@ -1895,6 +1886,26 @@ export default function ControlledWaterSegmentClient() {
           </div>
         </div>
 
+        <div className="mt-4 flex gap-2">
+          <input
+            value={unifiedQuery}
+            onChange={(event) => setUnifiedQuery(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") void searchUnifiedPlace();
+            }}
+            placeholder={lang === "el" ? "Οδός, αριθμός, ξενοδοχείο, επιχείρηση ή τοπωνύμιο" : "Street, number, hotel, business or place"}
+            className="min-w-0 flex-1 rounded-2xl border border-sky-400/50 bg-[#07111f] px-4 py-3 text-white outline-none"
+          />
+          <button
+            type="button"
+            onClick={() => void searchUnifiedPlace()}
+            disabled={loading}
+            className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-4 py-3 text-sm font-black text-sky-100 disabled:opacity-60"
+          >
+            {lang === "el" ? "Βρες" : "Find"}
+          </button>
+        </div>
+
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <input value={street} onChange={(event) => setStreet(event.target.value)} placeholder={t.street} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
           <input value={number} onChange={(event) => setNumber(event.target.value)} placeholder={t.number} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
@@ -2076,7 +2087,7 @@ export default function ControlledWaterSegmentClient() {
             <input value={postal} onChange={(event) => setPostal(event.target.value)} placeholder={t.postal} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
           </div>
 
-          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <div className="mt-4 grid gap-3 sm:grid-cols-4">
             <button type="button" onClick={() => void locateMe()} disabled={loading} className="rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-3 text-sm font-black text-[#f8e6ad] disabled:opacity-60">
               {t.locate}
             </button>
@@ -2085,10 +2096,43 @@ export default function ControlledWaterSegmentClient() {
               {t.search}
             </button>
 
-            <button type="button" onClick={() => void loadPipes()} disabled={loading} className="rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60">
-              {loading ? t.loading : t.load}
+            <button type="button" onClick={navigateToSelectedTarget} disabled={!selectedTarget} className="rounded-2xl border border-violet-400/60 bg-violet-400/15 px-5 py-3 text-sm font-black text-violet-100 disabled:opacity-40">
+              {lang === "el" ? "Πήγαινέ με" : "Navigate"}
+            </button>
+
+            <button type="button" onClick={() => setWorkPanelOpen((value) => !value)} className="rounded-2xl border border-amber-400/60 bg-amber-400/15 px-5 py-3 text-sm font-black text-amber-100">
+              {lang === "el" ? "Εργασία" : "Work"}
             </button>
           </div>
+
+          {workPanelOpen ? (
+            <div className="mt-4 rounded-2xl border border-amber-400/40 bg-[#07111f] p-4">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <input value={workOrderId} onChange={(e) => setWorkOrderId(e.target.value)} placeholder={lang === "el" ? "Αρ. εργασίας / βλάβης" : "Work / fault reference"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <select value={workStage} onChange={(e) => setWorkStage(e.target.value)} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white">
+                  <option value="FAULT">Βλάβη</option><option value="LOCATE">Εντοπισμός</option><option value="SITE_SAFETY">Ασφάλεια</option><option value="EXCAVATION">Εκσκαφή</option><option value="NETWORK_REPAIR">Επισκευή</option><option value="TEST">Δοκιμή</option><option value="BACKFILL">Επίχωση</option><option value="SURFACE_RESTORATION">Αποκατάσταση</option><option value="CLOSURE">Κλείσιμο</option>
+                </select>
+                <input inputMode="decimal" value={excavationLength} onChange={(e) => setExcavationLength(e.target.value)} placeholder="Μήκος εκσκαφής m" className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input inputMode="decimal" value={excavationWidth} onChange={(e) => setExcavationWidth(e.target.value)} placeholder="Πλάτος m" className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input inputMode="decimal" value={excavationDepth} onChange={(e) => setExcavationDepth(e.target.value)} placeholder="Βάθος m" className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <div className="rounded-xl border border-slate-700 px-3 py-3 text-sm text-slate-200">
+                  Όγκος: {(() => { const l=Number(excavationLength),w=Number(excavationWidth),d=Number(excavationDepth); return [l,w,d].every(Number.isFinite) && l>=0 && w>=0 && d>=0 ? (l*w*d).toFixed(3) : "—"; })()} m³
+                </div>
+                <select value={workMaterial} onChange={(e) => setWorkMaterial(e.target.value)} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white">
+                  <option value="">{lang === "el" ? "Επίλεξε υλικό / εξάρτημα" : "Select material / fitting"}</option>
+                  {WATER_MATERIAL_SAMPLE_CATALOG.map((item) => (
+                    <option key={item.id} value={item.id}>{item.serviceLabel}</option>
+                  ))}
+                  <option value="OTHER">{lang === "el" ? "Άλλο — για έλεγχο/προσθήκη" : "Other — review/add"}</option>
+                </select>
+                <input inputMode="decimal" value={workMaterialQty} onChange={(e) => setWorkMaterialQty(e.target.value)} placeholder={lang === "el" ? "Ποσότητα" : "Quantity"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input inputMode="decimal" value={workHours} onChange={(e) => setWorkHours(e.target.value)} placeholder={lang === "el" ? "Εργατοώρες" : "Labour hours"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input value={workEvidence} onChange={(e) => setWorkEvidence(e.target.value)} placeholder={lang === "el" ? "Photo / evidence reference" : "Photo / evidence reference"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <textarea value={workNotes} onChange={(e) => setWorkNotes(e.target.value)} placeholder={lang === "el" ? "Σημειώσεις / τι έγινε στο πεδίο" : "Field notes"} className="min-h-[90px] rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white sm:col-span-2" />
+              </div>
+              <p className="mt-3 text-xs text-amber-100">Draft πεδίου — δεν αλλάζει το επίσημο δίκτυο χωρίς review/approval.</p>
+            </div>
+          ) : null}
 
           <div className="mt-4 rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-sm text-slate-200">
             {message}
@@ -2110,9 +2154,8 @@ export default function ControlledWaterSegmentClient() {
 
         </section>
 
-        
-      <WaterLiveMapIntelligenceSelector />
-<section className="overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
+
+        <section className="overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
           <div className="flex flex-col gap-1 border-b border-slate-700 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-4">
             <h2 className="text-xl font-black text-[#f2c766] sm:text-2xl">{t.map}</h2>
             <span className="text-sm text-slate-300">

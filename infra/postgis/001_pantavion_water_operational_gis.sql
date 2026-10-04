@@ -5,9 +5,32 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 
 CREATE SCHEMA IF NOT EXISTS pantavion_water;
 
+CREATE TABLE IF NOT EXISTS pantavion_water.network_revision (
+  revision_id text PRIMARY KEY CHECK (length(trim(revision_id)) > 0),
+  source_sha256 text NOT NULL CHECK (length(source_sha256)=64),
+  status text NOT NULL DEFAULT 'VERIFIED' CHECK (status IN ('IMPORTED','REVIEWED','VERIFIED','PUBLISHED','SUPERSEDED')),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  created_by text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS pantavion_water.workspace_registry (
+  workspace_id text PRIMARY KEY CHECK (workspace_id IN ('A','B','C','D','E')),
+  display_name text NOT NULL,
+  purpose text NOT NULL,
+  active boolean NOT NULL DEFAULT true
+);
+
+INSERT INTO pantavion_water.workspace_registry(workspace_id,display_name,purpose) VALUES
+('A','Field Operations','Field work, faults, evidence and work orders'),
+('B','Authentic Engineering Network','Verified engineering view of the canonical network'),
+('C','Supervision and Approval','Review and approval workspace'),
+('D','Engineering Intelligence','Hydraulic and engineering analysis workspace'),
+('E','Historical Maps and Integration','Historical/source artifact comparison workspace')
+ON CONFLICT (workspace_id) DO NOTHING;
+
 CREATE TABLE IF NOT EXISTS pantavion_water.network_feature (
   feature_id uuid PRIMARY KEY,
-  map_id text NOT NULL CHECK (map_id IN ('A','B','C')),
+  revision_id text NOT NULL REFERENCES pantavion_water.network_revision(revision_id),
   feature_type text NOT NULL CHECK (feature_type IN ('pipe','valve','junction','device','zone','label','reference')),
   source_sha256 text NOT NULL CHECK (length(source_sha256)=64),
   source_entity_ref text,
@@ -21,8 +44,8 @@ CREATE TABLE IF NOT EXISTS pantavion_water.network_feature (
 
 CREATE INDEX IF NOT EXISTS water_network_feature_geom_gix
   ON pantavion_water.network_feature USING gist (geom);
-CREATE INDEX IF NOT EXISTS water_network_feature_map_type_idx
-  ON pantavion_water.network_feature (map_id,feature_type);
+CREATE INDEX IF NOT EXISTS water_network_feature_revision_type_idx
+  ON pantavion_water.network_feature (revision_id,feature_type);
 
 CREATE TABLE IF NOT EXISTS pantavion_water.feature_audit (
   audit_id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
