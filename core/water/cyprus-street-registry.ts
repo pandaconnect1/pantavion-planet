@@ -42,9 +42,25 @@ export function normalizeStreetName(value: string) {
 
 export function streetDeduplicationKey(street: Pick<CyprusStreetRecord, "streetRegistryId" | "district" | "municipalityOrCommunity" | "areaOrParish" | "zoneOrSection" | "postalCodes" | "geometryIdentity" | "nameEl" | "nameEn">) {
   const name = normalizeStreetName(street.nameEl || street.nameEn || "");
+  const spatialIdentity =
+    street.geometryIdentity?.trim() ||
+    [
+      street.areaOrParish ? normalizeStreetName(street.areaOrParish) : "",
+      street.zoneOrSection ? normalizeStreetName(street.zoneOrSection) : "",
+      [...street.postalCodes].sort().join(","),
+    ].join(":");
+
+  // Same street names are common in Cyprus. Never merge records on name +
+  // municipality alone. When no shared spatial identity exists, keep the
+  // source record distinct until a later verified reconciliation.
+  const safeIdentity = spatialIdentity.replace(/[: ,]/g, "")
+    ? spatialIdentity
+    : `record:${street.streetRegistryId}`;
+
   return [
     normalizeStreetName(street.district),
     normalizeStreetName(street.municipalityOrCommunity),
+    safeIdentity,
     name,
   ].join("|");
 }
