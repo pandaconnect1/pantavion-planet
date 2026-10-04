@@ -466,6 +466,9 @@ export default function ControlledWaterSegmentClient() {
   const searchMarkerRef = useRef<any>(null);
   const autoLoadTimerRef = useRef<number | null>(null);
   const loadInProgressRef = useRef(false);
+  const networkLoadAbortRef = useRef<AbortController | null>(null);
+  const reloadQueuedRef = useRef(false);
+  const viewportGenerationRef = useRef(0);
 
   const t = UI[getPantavionUiLanguage(lang)];
   const accessApproved = accessState === "approved";
@@ -889,8 +892,17 @@ export default function ControlledWaterSegmentClient() {
   async function loadPipes() {
     const map = mapRef.current;
 
-    if (!map || loadInProgressRef.current) return;
+    if (!map) return;
 
+    if (loadInProgressRef.current) {
+      reloadQueuedRef.current = true;
+      networkLoadAbortRef.current?.abort();
+      return;
+    }
+
+    const viewportGeneration = ++viewportGenerationRef.current;
+    const controller = new AbortController();
+    networkLoadAbortRef.current = controller;
     loadInProgressRef.current = true;
     setLoading(true);
     setMessage(t.loading);
@@ -916,6 +928,7 @@ export default function ControlledWaterSegmentClient() {
           {
             cache: "no-store",
             credentials: "include",
+            signal: controller.signal,
             headers: {
               "x-pantavion-water-device-id": device.deviceId,
               "x-pantavion-water-device-token": device.deviceToken,
@@ -924,6 +937,8 @@ export default function ControlledWaterSegmentClient() {
         );
 
         const json = (await response.json()) as SegmentResponse;
+        controller.signal.throwIfAborted();
+        if (viewportGeneration !== viewportGenerationRef.current) return;
 
         if (
           response.status === 401 ||
@@ -968,6 +983,8 @@ export default function ControlledWaterSegmentClient() {
       }
 
       const L = await ensureLeaflet();
+      controller.signal.throwIfAborted();
+      if (viewportGeneration !== viewportGenerationRef.current) return;
 
       if (layerRef.current) {
         layerRef.current.remove();
@@ -1002,6 +1019,7 @@ export default function ControlledWaterSegmentClient() {
       setPipeCount(count);
       setMessage(`${t.loaded}: ${count} (${tiles.length} ${t.chunks})`);
     } catch (error) {
+      if (controller.signal.aborted) return;
       setPipeCount(null);
 
       if (error instanceof Error && error.message === "VISIBLE_AREA_TOO_LARGE") {
@@ -1015,8 +1033,13 @@ export default function ControlledWaterSegmentClient() {
         setMessage(`${t.failed} ${t.diagnostic}: ${diagnosticCode}.`);
       }
     } finally {
+      if (networkLoadAbortRef.current === controller) networkLoadAbortRef.current = null;
       loadInProgressRef.current = false;
       setLoading(false);
+      if (reloadQueuedRef.current) {
+        reloadQueuedRef.current = false;
+        window.setTimeout(() => void loadPipes(), 0);
+      }
     }
   }
 
@@ -1034,10 +1057,13 @@ export default function ControlledWaterSegmentClient() {
 
     function scheduleAutoLoad() {
       clearAutoLoadTimer();
+      viewportGenerationRef.current += 1;
+      reloadQueuedRef.current = true;
+      networkLoadAbortRef.current?.abort();
 
       autoLoadTimerRef.current = window.setTimeout(() => {
         void loadPipes();
-      }, 900);
+      }, 250);
     }
 
     map.on("moveend zoomend", scheduleAutoLoad);
