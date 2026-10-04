@@ -66,8 +66,7 @@ jobs:
   production_schema:
     name: Apply Production Supabase Migrations
     needs: validate
-    # Vercel/AWS deployment is deliberately disabled while Render is the production path.
-    if: ${{ false }}
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.production_approval == 'PROMOTE_PANTAVION_PRODUCTION' }}
     runs-on: ubuntu-latest
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
@@ -198,7 +197,8 @@ jobs:
     needs:
       - validate
       - production_schema
-    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.production_approval == 'PROMOTE_PANTAVION_PRODUCTION' }}
+    # Disabled: Render is the canonical production runtime. Keep historical job code only as non-executing recovery evidence.
+    if: ${{ false }}
     runs-on: ubuntu-latest
 
     env:
