@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { WATER_MATERIAL_SAMPLE_CATALOG } from "@/core/water/water-material-catalog";
 import {
   PANTAVION_LANGUAGE_CATALOG,
   getPantavionUiLanguage,
@@ -23,6 +24,7 @@ type SegmentResponse = {
     features: any[];
   };
   segmentCount?: number;
+  segmentTruncated?: boolean;
   pipeSegmentCount?: number;
   completeNetworkReturned?: boolean;
   rawMasterReturned?: boolean;
@@ -38,6 +40,93 @@ type Bbox = {
   maxLng: number;
   maxLat: number;
 };
+
+type NetworkXyzTile = {
+  key: string;
+  z: number;
+  x: number;
+  y: number;
+  bbox: Bbox;
+};
+
+type ApprovedMapAPatch = {
+  patch_id: string;
+  asset_type: string;
+  operation: string;
+  status: string;
+  map_id: string;
+  source_key?: string | null;
+  geometry_type: "Point" | "LineString" | "Polygon";
+  geometry: {
+    type?: string;
+    coordinates?: unknown;
+  };
+  crs_authority?: string | null;
+  crs_code?: string | null;
+  street_name?: string | null;
+  artifact_refs?: string[] | null;
+  attributes?: Record<string, unknown> | null;
+};
+
+type ApprovedMapAEvidencePin = {
+  pin_id: string;
+  review_state: string;
+  map_id: string;
+  source_key?: string | null;
+  x: number;
+  y: number;
+  crs_authority?: string | null;
+  crs_code?: string | null;
+  street_name?: string | null;
+  note?: string | null;
+  artifact_refs?: string[] | null;
+};
+
+type ApprovedPatchResponse = {
+  ok?: boolean;
+  error?: string;
+  patches?: ApprovedMapAPatch[];
+};
+
+type ApprovedPinResponse = {
+  ok?: boolean;
+  error?: string;
+  pins?: ApprovedMapAEvidencePin[];
+};
+
+type RemovableWaterLayer = {
+  remove: () => void;
+};
+
+function coordinatePair(value: unknown): [number, number] | null {
+  if (!Array.isArray(value) || value.length < 2) return null;
+
+  const x = Number(value[0]);
+  const y = Number(value[1]);
+
+  return Number.isFinite(x) && Number.isFinite(y) ? [x, y] : null;
+}
+
+function lineCoordinates(value: unknown): Array<[number, number]> {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .map((item) => coordinatePair(item))
+    .filter((item): item is [number, number] => item !== null);
+}
+
+function polygonCoordinates(value: unknown): Array<Array<[number, number]>> {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .map((ring) => lineCoordinates(ring))
+    .filter((ring) => ring.length >= 3);
+}
+
+function fieldArtifactRequestId(reference: string) {
+  const prefix = "water-field-artifact:";
+  return reference.startsWith(prefix) ? reference.slice(prefix.length) : null;
+}
 
 const UI = {
   el: {
@@ -81,7 +170,7 @@ const UI = {
     accessApproved: "Η πρόσβαση εγκρίθηκε.",
     accessChecking: "Γίνεται ασφαλής έλεγχος πρόσβασης από τον server...",
     accessRequired:
-      "Η ασφαλής έγκριση δεν είναι ενεργή ή το Administrator session έληξε. Οι σωληνώσεις και ο χάρτης παραμένουν ασφαλείς.",
+      "Η συσκευή δεν αναγνωρίστηκε ακόμη ως εγκεκριμένη. Αν είσαι ήδη εγκεκριμένος χρήστης, πάτησε Επανέλεγχος πρόσβασης. Δεν χρειάζεται νέο αίτημα εκτός αν η συσκευή σου έχει αλλάξει.",
     accessCheckFailed:
       "Ο έλεγχος πρόσβασης δεν ολοκληρώθηκε λόγω προσωρινού τεχνικού προβλήματος. Οι σωληνώσεις δεν έχουν χαθεί.",
     adminLogin: "Είσοδος Administrator",
@@ -139,7 +228,7 @@ const UI = {
     accessApproved: "Access approved.",
     accessChecking: "Securely checking access with the server...",
     accessRequired:
-      "Secure approval is not active or the Administrator session has expired. The pipes and map remain protected.",
+      "This device is not yet recognized as approved. If you were already approved, tap Check access again. Do not submit a new request unless your device has changed.",
     accessCheckFailed:
       "The access check could not complete because of a temporary technical problem. The pipes have not been lost.",
     adminLogin: "Administrator sign-in",
@@ -158,14 +247,17 @@ const UI = {
   },
 };
 
-const VIEWPORT_TILE_SPAN_DEGREES = 0.055;
-const MAX_VIEWPORT_TILES = 16;
 const MAX_FEATURES_PER_TILE = 1200;
+const MAX_RECURSIVE_TILE_DEPTH = 6;
+const MAX_SEGMENT_REQUESTS = 128;
+const MIN_RECURSIVE_TILE_SPAN_DEGREES = 0.00025;
+const MAX_VISIBLE_NETWORK_TILES = 24;
+const MAX_NETWORK_TILE_CACHE = 160;
+const MIN_NETWORK_TILE_ZOOM = 13;
+const TARGET_POINT_MIN_ZOOM = 16;
+const MAX_NETWORK_TILE_ZOOM = 19;
 
 const LEGACY_WATER_DEVICE_APPROVAL_KEY = "pantavion:water:approved-until:v4";
-const WATER_ADMIN_RELOGIN_URL =
-  "/professional/infrastructure/water/admin/access?next=%2Fprofessional%2Finfrastructure%2Fwater%2Flive";
-
 function clearLegacyWaterDeviceApproval() {
   if (typeof window === "undefined") return;
   window.localStorage.removeItem(LEGACY_WATER_DEVICE_APPROVAL_KEY);
@@ -196,8 +288,44 @@ function getOrCreateWaterAccessDevice() {
     };
   }
 
+  const legacyDeviceIdKeys = [
+    "pantavion_water_device_id",
+    "pantavion-water-device-id",
+    "waterDeviceId",
+  ];
+  const legacyDeviceTokenKeys = [
+    "pantavion_water_device_token",
+    "pantavion-water-device-token",
+    "waterDeviceToken",
+  ];
+
   let deviceId = window.localStorage.getItem(PANTAVION_WATER_DEVICE_ID_KEY) || "";
   let deviceToken = window.localStorage.getItem(PANTAVION_WATER_DEVICE_TOKEN_KEY) || "";
+
+  // Preserve the exact identity of devices that were already approved before
+  // the Railway/Supabase migration. Do not generate a new identity until all
+  // known legacy keys have been checked.
+  if (!deviceId) {
+    for (const key of legacyDeviceIdKeys) {
+      const value = window.localStorage.getItem(key) || "";
+      if (value) {
+        deviceId = value;
+        window.localStorage.setItem(PANTAVION_WATER_DEVICE_ID_KEY, value);
+        break;
+      }
+    }
+  }
+
+  if (!deviceToken) {
+    for (const key of legacyDeviceTokenKeys) {
+      const value = window.localStorage.getItem(key) || "";
+      if (value) {
+        deviceToken = value;
+        window.localStorage.setItem(PANTAVION_WATER_DEVICE_TOKEN_KEY, value);
+        break;
+      }
+    }
+  }
 
   if (!deviceId) {
     deviceId = `water-device-${Date.now().toString(36)}-${randomWaterDeviceSecret()}`;
@@ -251,34 +379,60 @@ function ensureLeaflet() {
   return leafletPromise;
 }
 
-function getPipeStyle(feature: any) {
-  const raw = feature?.properties?.kmlLineStyle;
+function getPipeStyle(feature: {
+  properties?: {
+    sourceColorCss?: unknown;
+    sourceLineWidth?: unknown;
+    sourceOpacity?: unknown;
+    kmlLineStyle?: {
+      color?: unknown;
+      weight?: unknown;
+      width?: unknown;
+      opacity?: unknown;
+    } | null;
+  };
+} | null | undefined) {
+  const properties = feature?.properties;
+  const raw = properties?.kmlLineStyle;
 
-  if (!raw || typeof raw !== "object") {
-    return { color: "#202020", weight: 2, opacity: 1 };
+  const sourceColor =
+    typeof properties?.sourceColorCss === "string"
+      ? properties.sourceColorCss
+      : raw && typeof raw === "object" && typeof raw.color === "string"
+        ? raw.color
+        : null;
+
+  const sourceWidth =
+    typeof properties?.sourceLineWidth === "number"
+      ? properties.sourceLineWidth
+      : raw && typeof raw === "object" && typeof raw.weight === "number"
+        ? raw.weight
+        : raw && typeof raw === "object" && typeof raw.width === "number"
+          ? raw.width
+          : null;
+
+  const sourceOpacity =
+    typeof properties?.sourceOpacity === "number"
+      ? properties.sourceOpacity
+      : raw && typeof raw === "object" && typeof raw.opacity === "number"
+        ? raw.opacity
+        : null;
+
+  if (!sourceColor) {
+    return {
+      color: "transparent",
+      weight: 0,
+      opacity: 0,
+    };
   }
 
-  const style = raw as {
-    color?: unknown;
-    weight?: unknown;
-    width?: unknown;
-    opacity?: unknown;
-  };
-
-  const weight =
-    typeof style.weight === "number"
-      ? style.weight
-      : typeof style.width === "number"
-        ? style.width
-        : 2;
-
   return {
-    color: typeof style.color === "string" ? style.color : "#202020",
-    weight: Math.max(1, Math.min(10, weight)),
-    opacity:
-      typeof style.opacity === "number"
-        ? Math.max(0.05, Math.min(1, style.opacity))
-        : 1,
+    color: sourceColor,
+    // Preserve the authentic source line weight on screen. Only prevent a
+    // sub-pixel line from disappearing completely; do not artificially thicken
+    // the Water network.
+    weight: Math.max(1, Math.min(6, sourceWidth ?? 1)),
+    opacity: Math.max(0.05, Math.min(1, sourceOpacity ?? 1)),
   };
 }
 
@@ -302,34 +456,106 @@ function bboxParams(bbox: Bbox) {
   };
 }
 
-function splitVisibleBboxIntoSafeTiles(bbox: Bbox) {
-  const lngSpan = bbox.maxLng - bbox.minLng;
-  const latSpan = bbox.maxLat - bbox.minLat;
+function clampMercatorLat(lat: number) {
+  return Math.max(-85.05112878, Math.min(85.05112878, lat));
+}
 
-  const lngSteps = Math.max(1, Math.ceil(lngSpan / VIEWPORT_TILE_SPAN_DEGREES));
-  const latSteps = Math.max(1, Math.ceil(latSpan / VIEWPORT_TILE_SPAN_DEGREES));
+function lngToTileX(lng: number, z: number) {
+  const n = 2 ** z;
+  return Math.floor(((lng + 180) / 360) * n);
+}
 
-  if (lngSteps * latSteps > MAX_VIEWPORT_TILES) {
-    throw new Error("VISIBLE_AREA_TOO_LARGE");
+function latToTileY(lat: number, z: number) {
+  const n = 2 ** z;
+  const rad = (clampMercatorLat(lat) * Math.PI) / 180;
+  return Math.floor(
+    ((1 - Math.asinh(Math.tan(rad)) / Math.PI) / 2) * n,
+  );
+}
+
+function tileXToLng(x: number, z: number) {
+  return (x / 2 ** z) * 360 - 180;
+}
+
+function tileYToLat(y: number, z: number) {
+  const n = Math.PI - (2 * Math.PI * y) / 2 ** z;
+  return (180 / Math.PI) * Math.atan(Math.sinh(n));
+}
+
+function visibleNetworkXyzTiles(map: any): NetworkXyzTile[] {
+  const bounds = map.getBounds();
+  const z = Math.max(
+    MIN_NETWORK_TILE_ZOOM,
+    Math.min(MAX_NETWORK_TILE_ZOOM, Math.round(map.getZoom())),
+  );
+  const n = 2 ** z;
+  const minX = Math.max(0, Math.min(n - 1, lngToTileX(bounds.getWest(), z)));
+  const maxX = Math.max(0, Math.min(n - 1, lngToTileX(bounds.getEast(), z)));
+  const minY = Math.max(0, Math.min(n - 1, latToTileY(bounds.getNorth(), z)));
+  const maxY = Math.max(0, Math.min(n - 1, latToTileY(bounds.getSouth(), z)));
+
+  const tiles: NetworkXyzTile[] = [];
+
+  for (let y = minY; y <= maxY; y += 1) {
+    for (let x = minX; x <= maxX; x += 1) {
+      tiles.push({
+        key: `${z}/${x}/${y}`,
+        z,
+        x,
+        y,
+        bbox: {
+          minLng: tileXToLng(x, z),
+          minLat: tileYToLat(y + 1, z),
+          maxLng: tileXToLng(x + 1, z),
+          maxLat: tileYToLat(y, z),
+        },
+      });
+    }
   }
 
-  const tiles: Bbox[] = [];
-
-  for (let y = 0; y < latSteps; y += 1) {
-    for (let x = 0; x < lngSteps; x += 1) {
-      const minLng = bbox.minLng + (lngSpan * x) / lngSteps;
-      const maxLng = bbox.minLng + (lngSpan * (x + 1)) / lngSteps;
-      const minLat = bbox.minLat + (latSpan * y) / latSteps;
-      const maxLat = bbox.minLat + (latSpan * (y + 1)) / latSteps;
-
-      tiles.push({ minLng, minLat, maxLng, maxLat });
-    }
+  if (tiles.length > MAX_VISIBLE_NETWORK_TILES) {
+    throw new Error("VISIBLE_AREA_TOO_LARGE");
   }
 
   return tiles;
 }
 
-function featureKey(feature: any, fallback: string) {
+function splitBboxIntoQuadrants(bbox: Bbox) {
+  const midLng = (bbox.minLng + bbox.maxLng) / 2;
+  const midLat = (bbox.minLat + bbox.maxLat) / 2;
+
+  return [
+    {
+      minLng: bbox.minLng,
+      minLat: bbox.minLat,
+      maxLng: midLng,
+      maxLat: midLat,
+    },
+    {
+      minLng: midLng,
+      minLat: bbox.minLat,
+      maxLng: bbox.maxLng,
+      maxLat: midLat,
+    },
+    {
+      minLng: bbox.minLng,
+      minLat: midLat,
+      maxLng: midLng,
+      maxLat: bbox.maxLat,
+    },
+    {
+      minLng: midLng,
+      minLat: midLat,
+      maxLng: bbox.maxLng,
+      maxLat: bbox.maxLat,
+    },
+  ];
+}
+
+function featureKey(feature: {
+  id?: unknown;
+  properties?: { placemarkIndex?: unknown; featureIndex?: unknown; name?: unknown };
+} | null | undefined, fallback: string) {
   const id =
     feature?.id ??
     feature?.properties?.placemarkIndex ??
@@ -340,104 +566,6 @@ function featureKey(feature: any, fallback: string) {
 }
 
 
-function WaterLiveMapIntelligenceSelector() {
-  const προβολήs = [
-    {
-      key: "operational_map",
-      label: "Λειτουργικός",
-      title: "Λειτουργικός χάρτης",
-      detail: "Ασφαλές live layer για καθημερινή προβολή, βλάβες, αγωγούς και εργασίες πεδίου.",
-    },
-    {
-      key: "master_map",
-      label: "Καθαρός Master",
-      title: "Master δίκτυο",
-      detail: "Προστατευμένη προβολή πλήρους δικτύου. Απαιτεί founder/admin ή εγκεκριμένη πρόσβαση.",
-    },
-    {
-      key: "terrain_elevation_map",
-      label: "Υψόμετρα",
-      title: "Υψόμετρα / μορφολογία",
-      detail: "Βάση για υψομετρικές διαφορές, χαμηλές/υψηλές πιέσεις και τεχνικό έλεγχο.",
-    },
-    {
-      key: "pressure_risk_map",
-      label: "Ρίσκο πίεσης",
-      title: "Ρίσκο πίεσης",
-      detail: "Ενδείξεις για αδύνατες πιέσεις, υπερπιέσεις, ζώνες ρίσκου και ανάγκη μετρήσεων.",
-    },
-    {
-      key: "demand_growth_map",
-      label: "Ανάπτυξη / ζήτηση",
-      title: "Ανάπτυξη / ζήτηση",
-      detail: "Πολυκατοικίες, νέες αναπτύξεις, πληθυσμιακή αύξηση και παλιό δίκτυο με νέα φορτία.",
-    },
-    {
-      key: "prv_candidate_map",
-      label: "Υποψήφια PRV",
-      title: "PRV candidates",
-      detail: "Πιθανές περιοχές για pressure reducing valve ή engineering reπροβολή πριν από έργο.",
-    },
-  ] as const;
-
-  return (
-    <section className="mt-5 rounded-3xl border border-[#f2c766]/40 bg-[#07111f]/95 p-5 shadow-2xl">
-      <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.28em] text-[#f2c766]">
-            Pantavion Ύδρευση AI / Kernel
-          </p>
-          <h2 className="mt-2 text-2xl font-black text-white">
-            Έξυπνες προβολές χάρτη
-          </h2>
-          <p className="mt-2 max-w-5xl text-sm font-semibold leading-6 text-slate-300">
-            Επίλεξε live operational χάρτη, master, terrain, pressure risk,
-            demand growth ή PRV candidates. Το AI αναλύει και εισηγείται·
-            καμία master ή υδραυλική αλλαγή δεν γίνεται χωρίς ανθρώπινη έγκριση,
-            audit και rollback.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-[#f2c766]/30 bg-[#f2c766]/10 px-4 py-3 text-xs font-black uppercase tracking-[0.2em] text-[#f2c766]">
-          Ζωντανή νοημοσύνη χάρτη
-        </div>
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {προβολήs.map((προβολή) => (
-          <a
-            key={προβολή.key}
-            href={`/professional/infrastructure/water/live?προβολή=${προβολή.key}`}
-            className="group rounded-2xl border border-slate-700 bg-[#0d1a2d] p-4 transition hover:border-[#f2c766]/70 hover:bg-[#10213a]"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-sm font-black text-white">{προβολή.label}</p>
-              <span className="rounded-full border border-[#f2c766]/30 px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#f2c766]">
-                προβολή
-              </span>
-            </div>
-            <p className="mt-2 text-sm font-bold text-[#f2c766]">{προβολή.title}</p>
-            <p className="mt-2 text-xs font-semibold leading-5 text-slate-300">
-              {προβολή.detail}
-            </p>
-          </a>
-        ))}
-      </div>
-
-      <div className="mt-4 rounded-2xl border border-slate-700 bg-black/25 p-4">
-        <p className="text-sm font-black text-white">
-          AI / Kernel κανόνας ασφαλείας
-        </p>
-        <p className="mt-2 text-xs font-semibold leading-5 text-slate-300">
-          Τα layers υψομέτρων, πίεσης, ζήτησης και PRV είναι τεχνικά ευαίσθητα.
-          Το Pantavion μπορεί να προτείνει PRV, μετρήσεις πίεσης, weak points,
-          νέες ζώνες ή αλλαγές δικτύου, αλλά η τελική απόφαση ανήκει σε
-          founder/admin, μηχανικό ή εξουσιοδοτημένο υπεύθυνο.
-        </p>
-      </div>
-    </section>
-  );
-}
 export default function ControlledWaterSegmentClient() {
   const [lang, setLang] = useState<Lang>(getInitialLang);
   const [accessState, setAccessState] = useState<AccessState>("checking");
@@ -449,6 +577,7 @@ export default function ControlledWaterSegmentClient() {
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [reason, setReason] = useState("");
   const [street, setStreet] = useState("");
+  const [unifiedQuery, setUnifiedQuery] = useState("");
   const [number, setNumber] = useState("");
   const [area, setArea] = useState("Λεμεσός");
   const [postal, setPostal] = useState("");
@@ -456,19 +585,51 @@ export default function ControlledWaterSegmentClient() {
   const [accessMessage, setAccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [pipeCount, setPipeCount] = useState<number | null>(null);
+  const [approvedChangeCount, setApprovedChangeCount] = useState(0);
+  const [approvedEvidenceCount, setApprovedEvidenceCount] = useState(0);
   const [mapReady, setMapReady] = useState(false);
+  const [basemapState, setBasemapState] = useState<"loading" | "dls" | "fallback">("loading");
+  const [workPanelOpen, setWorkPanelOpen] = useState(false);
+  const [workStage, setWorkStage] = useState("FAULT");
+  const [workOrderId, setWorkOrderId] = useState("");
+  const [workNotes, setWorkNotes] = useState("");
+  const [excavationLength, setExcavationLength] = useState("");
+  const [excavationWidth, setExcavationWidth] = useState("");
+  const [excavationDepth, setExcavationDepth] = useState("");
+  const [workMaterial, setWorkMaterial] = useState("");
+  const [workMaterialQty, setWorkMaterialQty] = useState("");
+  const [workHours, setWorkHours] = useState("");
+  const [workEvidence, setWorkEvidence] = useState("");
+  const [selectedTarget, setSelectedTarget] = useState<{ lat: number; lng: number } | null>(null);
+  const [addressCandidates, setAddressCandidates] = useState<Array<{
+    candidateId: string;
+    displayName: string;
+    coordinates: { lat: number; lng: number };
+  }>>([]);
 
   const mapEl = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
-  const layerRef = useRef<any>(null);
+  const networkTileCacheRef = useRef<
+    Map<string, { layer: any; featureCount: number; lastUsedAt: number }>
+  >(new Map());
   const userMarkerRef = useRef<any>(null);
   const userAccuracyRef = useRef<any>(null);
   const searchMarkerRef = useRef<any>(null);
+  const approvedOverlayRef = useRef<RemovableWaterLayer | null>(null);
   const autoLoadTimerRef = useRef<number | null>(null);
   const loadInProgressRef = useRef(false);
+  const networkLoadAbortRef = useRef<AbortController | null>(null);
+  const reloadQueuedRef = useRef(false);
+  const scheduleViewportReloadRef = useRef<(() => void) | null>(null);
+  const refreshVisibleWaterMapRef = useRef<() => Promise<void>>(async () => {});
+  const selectMapPointRef = useRef(selectMapPoint);
 
   const t = UI[getPantavionUiLanguage(lang)];
   const accessApproved = accessState === "approved";
+
+  useEffect(() => {
+    selectMapPointRef.current = selectMapPoint;
+  });
 
   useEffect(() => {
     let cancelled = false;
@@ -480,11 +641,84 @@ export default function ControlledWaterSegmentClient() {
 
       const device = getOrCreateWaterAccessDevice();
 
+      const fragment = typeof window !== "undefined" ? window.location.hash.replace(/^#/, "") : "";
+      const inviteToken = new URLSearchParams(fragment).get("invite")?.trim() || "";
+
+      if (inviteToken) {
+        try {
+          const inviteResponse = await fetch(
+            "/api/professional/infrastructure/water/access/invite/claim",
+            {
+              method: "POST",
+              cache: "no-store",
+              credentials: "include",
+              signal: AbortSignal.timeout(8000),
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify({
+                inviteToken,
+                deviceId: device.deviceId,
+                deviceToken: device.deviceToken,
+              }),
+            },
+          );
+
+          const inviteJson = (await inviteResponse.json().catch(() => ({}))) as {
+            ok?: boolean;
+            error?: string;
+            recipientLabel?: string;
+          };
+
+          if (!cancelled && inviteResponse.ok && inviteJson.ok) {
+            window.history.replaceState(
+              {},
+              document.title,
+              `${window.location.pathname}${window.location.search}`,
+            );
+            setAccessMessage(
+              inviteJson.recipientLabel
+                ? `Η πρόσβαση ενεργοποιήθηκε για ${inviteJson.recipientLabel} και κλειδώθηκε σε αυτή τη συσκευή.`
+                : "Η πρόσβαση ενεργοποιήθηκε και κλειδώθηκε σε αυτή τη συσκευή.",
+            );
+            setAccessState("approved");
+            return;
+          }
+
+          if (
+            !cancelled &&
+            (inviteJson.error === "already_claimed_other_device" ||
+              inviteJson.error === "revoked" ||
+              inviteJson.error === "expired")
+          ) {
+            window.history.replaceState(
+              {},
+              document.title,
+              `${window.location.pathname}${window.location.search}`,
+            );
+            setAccessMessage(
+              inviteJson.error === "already_claimed_other_device"
+                ? "Αυτό το SMS link έχει ήδη κλειδωθεί σε άλλη συσκευή και δεν μπορεί να χρησιμοποιηθεί εδώ."
+                : "Αυτό το SMS link δεν είναι πλέον ενεργό.",
+            );
+            setAccessState("denied");
+            return;
+          }
+        } catch {
+          if (!cancelled) {
+            setAccessMessage(
+              "Δεν ολοκληρώθηκε προσωρινά η ενεργοποίηση του SMS link. Δοκίμασε ξανά από την ίδια συσκευή.",
+            );
+          }
+        }
+      }
+
       try {
         const response = await fetch("/api/professional/infrastructure/water/access/authorize", {
           method: "POST",
           cache: "no-store",
           credentials: "include",
+          signal: AbortSignal.timeout(8000),
           headers: {
             "content-type": "application/json",
           },
@@ -504,14 +738,47 @@ export default function ControlledWaterSegmentClient() {
           return;
         }
 
+        if (
+          !cancelled &&
+          (response.status === 401 ||
+            response.status === 403 ||
+            json.error === "access_not_approved")
+        ) {
+          try {
+            const claimResponse = await fetch(
+              "/api/professional/infrastructure/water/access/admin/claim-device",
+              {
+                method: "POST",
+                cache: "no-store",
+                credentials: "include",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({
+                  deviceId: device.deviceId,
+                  deviceToken: device.deviceToken,
+                }),
+              },
+            );
+
+            const claimJson = (await claimResponse.json().catch(() => ({}))) as {
+              ok?: boolean;
+              approved?: boolean;
+            };
+
+            if (!cancelled && claimResponse.ok && claimJson.ok && claimJson.approved) {
+              setAccessMessage("Η founder/admin συσκευή αναγνωρίστηκε και εγκρίθηκε.");
+              setAccessState("approved");
+              return;
+            }
+          } catch {
+            // Fall through to normal denied state. No public auto-approval.
+          }
+
+          if (!cancelled) setAccessState("denied");
+          return;
+        }
+
         if (!cancelled) {
-          setAccessState(
-            response.status === 401 ||
-              response.status === 403 ||
-              json.error === "access_not_approved"
-              ? "denied"
-              : "error",
-          );
+          setAccessState("error");
         }
       } catch {
         if (!cancelled) {
@@ -535,9 +802,8 @@ export default function ControlledWaterSegmentClient() {
   }, [lang, pipeCount]);
 
   useEffect(() => {
-    if (!accessApproved) return;
-
     let cancelled = false;
+    const tileCache = networkTileCacheRef.current;
 
     ensureLeaflet()
       .then((L) => {
@@ -550,12 +816,93 @@ export default function ControlledWaterSegmentClient() {
           preferCanvas: true,
         });
 
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        const waterNetworkPane = map.createPane("pantavion-water-network");
+        waterNetworkPane.style.zIndex = "450";
+        waterNetworkPane.style.pointerEvents = "none";
+
+        const emergencyRoadFallback = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 20,
           attribution: "&copy; OpenStreetMap contributors",
-        }).addTo(map);
+        });
+
+        // Detailed field map: the official DLS cadastral plan is the PRIMARY
+        // map. The simple road map is emergency fallback only and is not shown
+        // while DLS detail is available.
+        const dlsCadastreOverlay = L.tileLayer(
+          "/api/professional/infrastructure/water/basemap/dls?mode=cadastral&z={z}&x={x}&y={y}",
+          {
+            maxZoom: 20,
+            opacity: 1,
+            attribution: "© Τμήμα Κτηματολογίου και Χωρομετρίας Κύπρου (DLS)",
+          },
+        );
+        const dlsRoadLabelsOverlay = L.tileLayer(
+          "/api/professional/infrastructure/water/basemap/dls?mode=roads&z={z}&x={x}&y={y}",
+          {
+            maxZoom: 20,
+            opacity: 0.96,
+            attribution: "© Τμήμα Κτηματολογίου και Χωρομετρίας Κύπρου (DLS)",
+          },
+        );
+
+        let cadastralDisabled = false;
+        let roadsDisabled = false;
+        let cadastralFailures = 0;
+        let roadsFailures = 0;
+        let dlsTileSuccesses = 0;
+        setBasemapState("loading");
+
+        const markDlsReady = () => {
+          dlsTileSuccesses += 1;
+          if (!cancelled) setBasemapState("dls");
+        };
+
+        dlsCadastreOverlay.on("tileload", markDlsReady);
+        dlsRoadLabelsOverlay.on("tileload", markDlsReady);
+
+        dlsCadastreOverlay.on("tileerror", () => {
+          cadastralFailures += 1;
+          if (
+            cadastralDisabled ||
+            cancelled ||
+            dlsTileSuccesses > 0 ||
+            cadastralFailures < 4
+          ) {
+            return;
+          }
+          cadastralDisabled = true;
+          if (map.hasLayer(dlsCadastreOverlay)) map.removeLayer(dlsCadastreOverlay);
+          if (roadsDisabled) {
+            emergencyRoadFallback.addTo(map);
+            setBasemapState("fallback");
+          }
+        });
+
+        dlsRoadLabelsOverlay.on("tileerror", () => {
+          roadsFailures += 1;
+          if (
+            roadsDisabled ||
+            cancelled ||
+            dlsTileSuccesses > 0 ||
+            roadsFailures < 4
+          ) {
+            return;
+          }
+          roadsDisabled = true;
+          if (map.hasLayer(dlsRoadLabelsOverlay)) map.removeLayer(dlsRoadLabelsOverlay);
+          if (cadastralDisabled) {
+            emergencyRoadFallback.addTo(map);
+            setBasemapState("fallback");
+          }
+        });
+
+        dlsCadastreOverlay.addTo(map);
+        dlsRoadLabelsOverlay.addTo(map);
 
         mapRef.current = map;
+        map.on("click", (event: { latlng: { lat: number; lng: number } }) => {
+          void selectMapPointRef.current(event);
+        });
         setMapReady(true);
         window.setTimeout(() => map.invalidateSize(), 300);
         window.setTimeout(() => map.invalidateSize(), 900);
@@ -567,11 +914,17 @@ export default function ControlledWaterSegmentClient() {
       setMapReady(false);
 
       if (mapRef.current) {
+        for (const cached of tileCache.values()) {
+          try {
+            cached.layer.remove();
+          } catch {}
+        }
+        tileCache.clear();
         mapRef.current.remove();
         mapRef.current = null;
       }
     };
-  }, [accessApproved, lang]);
+  }, [lang, accessApproved]);
 
   async function submitAccessRequest() {
     if (!firstName.trim() || !lastName.trim() || !roleTitle.trim() || !emailOrPhone.trim()) {
@@ -638,14 +991,26 @@ export default function ControlledWaterSegmentClient() {
     const markerColor = options.kind === "user" ? "#f2c766" : "#ef4444";
 
     markerRef.current = L.circleMarker([options.lat, options.lng], {
-      radius: 9,
-      color: "#07111f",
-      weight: 3,
+      radius: options.kind === "user" ? 15 : 9,
+      color: options.kind === "user" ? "#ffffff" : "#07111f",
+      weight: options.kind === "user" ? 5 : 3,
       fillColor: markerColor,
-      fillOpacity: 0.95,
+      fillOpacity: 1,
     })
       .addTo(map)
-      .bindPopup(options.title);
+      .bindPopup(options.kind === "user" ? "Η θέση μου" : options.title);
+
+    if (options.kind === "user") {
+      markerRef.current
+        .bindTooltip("Η θέση μου", {
+          permanent: true,
+          direction: "top",
+          offset: [0, -14],
+          opacity: 0.95,
+        })
+        .openTooltip()
+        .bringToFront();
+    }
 
     if (options.kind === "user") {
       if (userAccuracyRef.current) {
@@ -670,9 +1035,61 @@ export default function ControlledWaterSegmentClient() {
 
     if (!map) return;
 
-    map.setView([lat, lng], Math.max(map.getZoom(), 18), {
-      animate: true,
+    map.setView([lat, lng], Math.max(map.getZoom(), TARGET_POINT_MIN_ZOOM), {
+      animate: false,
     });
+  }
+
+  function refreshCurrentViewportNow() {
+    // Field actions must not depend on the debounced move/zoom listener being
+    // installed. Cancel stale work and force the protected current viewport
+    // to load immediately; an in-flight request will queue exactly one retry.
+    reloadQueuedRef.current = false;
+    networkLoadAbortRef.current?.abort();
+    window.setTimeout(() => {
+      void refreshVisibleWaterMapRef.current();
+    }, 0);
+  }
+
+  async function selectMapPoint(event: { latlng: { lat: number; lng: number } }) {
+    const map = mapRef.current;
+    const { lat, lng } = event.latlng;
+    if (!map || !Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+    try {
+      await placeCircleMarker({
+        lat,
+        lng,
+        kind: "search",
+        title: lang === "el" ? "Επιλεγμένο σημείο" : "Selected point",
+      });
+      // Keep GPS separate: a manual selection moves only the search marker.
+      if (mapRef.current !== map) return;
+      moveMapToPoint(lat, lng);
+      setSelectedTarget({ lat, lng });
+      setMessage(t.searchFound);
+      // A selected field point must always trigger the real network, even if
+      // Leaflet emits no move event or the debounced listener is not ready.
+      refreshCurrentViewportNow();
+    } catch {
+      setMessage(t.failed);
+    }
+  }
+
+  function navigateToSelectedTarget() {
+    if (!selectedTarget || typeof window === "undefined") {
+      setMessage(lang === "el" ? "Επίλεξε πρώτα διεύθυνση, βλάβη, βάνα, αγωγό ή σημείο στον χάρτη." : "Select an address, fault, valve, pipe or map point first.");
+      return;
+    }
+
+    const destination = `${selectedTarget.lat.toFixed(6)},${selectedTarget.lng.toFixed(6)}`;
+    // Hand off road guidance to the device's mapping service. Pantavion keeps
+    // field/asset accuracy separate from consumer road-navigation accuracy.
+    window.open(
+      `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving`,
+      "_blank",
+      "noopener,noreferrer",
+    );
   }
 
   async function locateMe() {
@@ -681,36 +1098,98 @@ export default function ControlledWaterSegmentClient() {
       return;
     }
 
+    if (!mapRef.current) {
+      setMessage("Ο χάρτης φορτώνει. Πάτησε ξανά «Το σημείο μου» σε ένα δευτερόλεπτο.");
+      return;
+    }
+
     setMessage(t.locating);
 
+    let settled = false;
+
+    const acceptPosition = (position: GeolocationPosition) => {
+      if (settled) return;
+      settled = true;
+
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      const accuracy = position.coords.accuracy;
+
+      void placeCircleMarker({
+        lat,
+        lng,
+        accuracy,
+        kind: "user",
+        title: t.locate,
+      });
+
+      moveMapToPoint(lat, lng);
+      setMessage(
+        Number.isFinite(accuracy)
+          ? `${t.located} Ακρίβεια περίπου ${Math.round(accuracy)} m.`
+          : t.located,
+      );
+
+      // GPS is an explicit field action: load the protected viewport directly.
+      refreshCurrentViewportNow();
+    };
+
+    const finalFailure = (error: GeolocationPositionError) => {
+      if (settled) return;
+      settled = true;
+
+      if (error.code === error.PERMISSION_DENIED) {
+        setMessage(
+          "Το iPhone δεν έδωσε άδεια τοποθεσίας. Ρυθμίσεις → Απόρρητο και ασφάλεια → Υπηρεσίες τοποθεσίας → Safari Websites → Κατά τη χρήση και ενεργοποίησε Ακριβής τοποθεσία.",
+        );
+        return;
+      }
+
+      if (error.code === error.POSITION_UNAVAILABLE) {
+        setMessage(
+          "Το iPhone δεν έδωσε διαθέσιμο στίγμα. Έλεγξε ότι οι Υπηρεσίες τοποθεσίας είναι ενεργές και δοκίμασε ξανά σε ανοικτό χώρο.",
+        );
+        return;
+      }
+
+      setMessage(
+        "Το iPhone δεν πρόλαβε να δώσει στίγμα. Πάτησε ξανά «Το σημείο μου».",
+      );
+    };
+
+    const fallbackToBalancedAccuracy = () => {
+      if (settled) return;
+
+      window.navigator.geolocation.getCurrentPosition(
+        acceptPosition,
+        finalFailure,
+        {
+          enableHighAccuracy: false,
+          timeout: 15000,
+          maximumAge: 60000,
+        },
+      );
+    };
+
     window.navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        const accuracy = position.coords.accuracy;
+      acceptPosition,
+      (error) => {
+        if (settled) return;
 
-        void placeCircleMarker({
-          lat,
-          lng,
-          accuracy,
-          kind: "user",
-          title: t.locate,
-        });
+        if (error.code === error.PERMISSION_DENIED) {
+          finalFailure(error);
+          return;
+        }
 
-        moveMapToPoint(lat, lng);
-        setMessage(t.located);
-
-        window.setTimeout(() => {
-          void loadPipes();
-        }, 1100);
-      },
-      () => {
-        setMessage(t.locationUnavailable);
+        // iOS/Safari can time out while forcing GPS even though a usable
+        // Wi-Fi/cell-assisted position is available. Retry once without the
+        // high-accuracy requirement so field crews still get an immediate pin.
+        fallbackToBalancedAccuracy();
       },
       {
         enableHighAccuracy: true,
-        timeout: 12000,
-        maximumAge: 30000,
+        timeout: 10000,
+        maximumAge: 0,
       },
     );
   }
@@ -806,102 +1285,471 @@ export default function ControlledWaterSegmentClient() {
     );
   }
 
-  async function searchAddressMarker() {
+  async function searchUnifiedPlace() {
     const map = mapRef.current;
-    const queries = buildSearchQueries();
-
-    if (!map || queries.length === 0) {
-      setMessage(t.searchNotFound);
+    const query = unifiedQuery.trim();
+    if (!map || query.length < 2) {
+      setMessage(lang === "el" ? "Γράψε τουλάχιστον 2 χαρακτήρες." : "Enter at least 2 characters.");
       return;
     }
 
     setLoading(true);
+    setAddressCandidates([]);
     setMessage(t.loading);
-
     try {
-      const pendingMatches = readPendingLocalAddressMatches(queries[0] || "");
-
-      for (const query of queries) {
-        const params = new URLSearchParams({
-          q: query,
-          format: "json",
-          limit: "1",
-          addressdetails: "1",
-          countrycodes: "cy",
-        });
-
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?${params.toString()}`,
-          {
-            headers: {
-              accept: "application/json",
-            },
-          },
-        );
-
-        if (!response.ok) continue;
-
-        const results = (await response.json()) as Array<{
-          lat?: string;
-          lon?: string;
-          display_name?: string;
-        }>;
-
-        const result = results[0];
-        const lat = Number(result?.lat);
-        const lng = Number(result?.lon);
-
-        if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
-
-        await placeCircleMarker({
-          lat,
-          lng,
-          kind: "search",
-          title: result?.display_name || query,
-        });
-
-        moveMapToPoint(lat, lng);
-        setMessage(t.searchFound);
-
-        window.setTimeout(() => {
-          void loadPipes();
-        }, 1100);
-
-        return;
-      }
-
-      if (pendingMatches.length > 0) {
-        setMessage(
-          `ρέθηκε προσωρινή καταχώρηση στη συσκευή: ${pendingMatches[0]}. εν έχει ακόμη γεωγραφικές συντεταγμένες ή έγκριση.`,
-        );
-        return;
-      }
-
-      setMessage(
-        "εν βρέθηκε η διεύθυνση. οκίμασε οδό + περιοχή, Greeklish, χωρίς αριθμό ή πρόσθεσέ την ως νέο σημείο για έγκριση.",
+      const response = await fetch(
+        `/api/professional/infrastructure/water/places/search?q=${encodeURIComponent(query)}`,
+        { cache: "no-store", signal: AbortSignal.timeout(10000) },
       );
+      const payload = await response.json().catch(() => ({})) as {
+        results?: Array<{
+          resultId: string;
+          displayName: string;
+          secondaryLabel?: string | null;
+          coordinates?: { lat: number; lng: number } | null;
+        }>;
+      };
+
+      const candidates = (payload.results ?? [])
+        .filter((item) => Number.isFinite(item.coordinates?.lat) && Number.isFinite(item.coordinates?.lng))
+        .map((item) => ({
+          candidateId: item.resultId,
+          displayName: item.secondaryLabel
+            ? `${item.displayName} — ${item.secondaryLabel}`
+            : item.displayName,
+          coordinates: item.coordinates as { lat: number; lng: number },
+        }));
+
+      if (response.ok && candidates.length === 1) {
+        await selectMapPoint({ latlng: candidates[0].coordinates });
+        return;
+      }
+      if (response.ok && candidates.length > 1) {
+        setAddressCandidates(candidates);
+        setMessage(lang === "el" ? "Επίλεξε το σωστό αποτέλεσμα." : "Select the correct result.");
+        return;
+      }
+
+      // Until the primary provider is configured, preserve the proven address
+      // search path rather than leaving field users with a dead control.
+      setStreet(query);
+      await searchAddressMarker(query);
     } catch {
-      setMessage(t.searchNotFound);
+      setStreet(query);
+      await searchAddressMarker(query);
     } finally {
       setLoading(false);
     }
   }
+
+  async function searchAddressMarker(queryOverride?: string) {
+    const map = mapRef.current;
+    const override = queryOverride?.trim() || "";
+    const queries = override ? [override] : buildSearchQueries();
+    if (!map || queries.length === 0) {
+      setMessage(t.searchEmpty);
+      return;
+    }
+    setLoading(true);
+    setAddressCandidates([]);
+    setMessage(t.loading);
+    try {
+      // Approved field users search the Cyprus official road registry first.
+      // queryOverride is used only by the unified-search fallback, so skip this
+      // block there to avoid repeating the same provider request.
+      if (!override && street.trim()) {
+        const officialQuery = [street.trim(), number.trim(), area.trim(), postal.trim()]
+          .filter(Boolean)
+          .join(", ");
+        const officialResponse = await fetch(
+          `/api/professional/infrastructure/water/places/search?q=${encodeURIComponent(officialQuery)}`,
+          { cache: "no-store", signal: AbortSignal.timeout(10000) },
+        );
+        const officialPayload = await officialResponse.json().catch(() => ({})) as {
+          results?: Array<{
+            resultId: string;
+            displayName: string;
+            secondaryLabel?: string | null;
+            coordinates?: { lat: number; lng: number } | null;
+          }>;
+        };
+        const officialCandidates = (officialPayload.results ?? [])
+          .filter((item) => Number.isFinite(item.coordinates?.lat) && Number.isFinite(item.coordinates?.lng))
+          .map((item) => ({
+            candidateId: item.resultId,
+            displayName: item.secondaryLabel
+              ? `${item.displayName} — ${item.secondaryLabel}`
+              : item.displayName,
+            coordinates: item.coordinates as { lat: number; lng: number },
+          }));
+
+        if (officialResponse.ok && officialCandidates.length === 1) {
+          await selectMapPoint({ latlng: officialCandidates[0].coordinates });
+          return;
+        }
+        if (officialResponse.ok && officialCandidates.length > 1) {
+          setAddressCandidates(officialCandidates);
+          setMessage(
+            lang === "el"
+              ? "Επίλεξε την οδό από το επίσημο οδικό δίκτυο Κτηματολογίου."
+              : "Select the street from the official Cyprus DLS road network.",
+          );
+          return;
+        }
+      }
+
+      const params = override
+        ? new URLSearchParams({ street: override, houseNumber: "", area: "", postalCode: "" })
+        : new URLSearchParams({ street, houseNumber: number, area, postalCode: postal });
+      const response = await fetch(
+        `/api/professional/infrastructure/water/address/search?${params.toString()}`,
+        { cache: "no-store", signal: AbortSignal.timeout(20000) },
+      );
+      if (!response.ok) throw new Error("address_search_failed");
+      const result = await response.json();
+      if (mapRef.current !== map) return;
+      const candidates = (result.candidates || []).filter(
+        (item: { coordinates?: { lat?: number; lng?: number } }) =>
+          Number.isFinite(item.coordinates?.lat) && Number.isFinite(item.coordinates?.lng),
+      );
+      if (candidates.length === 1) {
+        await selectMapPoint({ latlng: candidates[0].coordinates });
+        return;
+      }
+      if (candidates.length > 1) {
+        setAddressCandidates(candidates);
+        setMessage(lang === "el" ? "Επίλεξε τη σωστή διεύθυνση από τα αποτελέσματα." : "Select the correct address from the results.");
+        return;
+      }
+      const pendingMatches = readPendingLocalAddressMatches(queries[0] || "");
+      setMessage(pendingMatches.length > 0
+        ? `Προσωρινή καταχώρηση χωρίς εγκεκριμένες συντεταγμένες: ${pendingMatches[0]}`
+        : t.searchNotFound);
+    } catch {
+      setMessage(lang === "el" ? "Η αναζήτηση δεν ολοκληρώθηκε. Δοκίμασε ξανά ή επίλεξε σημείο στον χάρτη." : "Search could not complete. Try again or select a point on the map.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function openApprovedFieldArtifact(reference: string) {
+    const requestId = fieldArtifactRequestId(reference);
+    if (!requestId) {
+      setMessage("Το evidence reference δεν είναι έγκυρο field artifact.");
+      return;
+    }
+
+    const device = getOrCreateWaterAccessDevice();
+
+    try {
+      const response = await fetch(
+        `/api/professional/infrastructure/water/field/evidence-upload/${encodeURIComponent(
+          requestId,
+        )}`,
+        {
+          cache: "no-store",
+          credentials: "include",
+          signal: AbortSignal.timeout(8000),
+          headers: {
+            "x-pantavion-water-device-id": device.deviceId,
+            "x-pantavion-water-device-token": device.deviceToken,
+          },
+        },
+      );
+
+      const payload = (await response.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        signedUrl?: string;
+      };
+
+      if (!response.ok || !payload.ok || !payload.signedUrl) {
+        throw new Error(payload.error || "water_field_artifact_access_failed");
+      }
+
+      window.open(payload.signedUrl, "_blank", "noopener,noreferrer");
+    } catch {
+      setMessage("Δεν άνοιξε το private evidence. Δοκίμασε ξανά από εγκεκριμένη συσκευή.");
+    }
+  }
+
+  function buildApprovedOverlayPopup(options: {
+    title: string;
+    subtitle?: string | null;
+    detail?: string | null;
+    artifactRefs?: string[] | null;
+  }) {
+    const container = document.createElement("div");
+    container.style.minWidth = "220px";
+
+    const heading = document.createElement("strong");
+    heading.textContent = options.title;
+    container.appendChild(heading);
+
+    if (options.subtitle) {
+      const subtitle = document.createElement("div");
+      subtitle.textContent = options.subtitle;
+      subtitle.style.marginTop = "6px";
+      container.appendChild(subtitle);
+    }
+
+    if (options.detail) {
+      const detail = document.createElement("div");
+      detail.textContent = options.detail;
+      detail.style.marginTop = "6px";
+      container.appendChild(detail);
+    }
+
+    for (const reference of options.artifactRefs || []) {
+      if (!fieldArtifactRequestId(reference)) continue;
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = "Άνοιγμα private evidence";
+      button.style.display = "block";
+      button.style.marginTop = "10px";
+      button.style.fontWeight = "700";
+      button.addEventListener("click", () => {
+        void openApprovedFieldArtifact(reference);
+      });
+      container.appendChild(button);
+    }
+
+    return container;
+  }
+
+  async function loadApprovedMapAChanges() {
+    const map = mapRef.current;
+
+    if (!map || !accessApproved) return;
+
+    const bbox = bboxFromMap(map);
+    const device = getOrCreateWaterAccessDevice();
+    const params = new URLSearchParams({
+      mapId: "A",
+      minX: String(bbox.minLng),
+      minY: String(bbox.minLat),
+      maxX: String(bbox.maxLng),
+      maxY: String(bbox.maxLat),
+      limit: "300",
+    });
+
+    try {
+      const [patchResponse, pinResponse] = await Promise.all([
+        fetch(
+          `/api/professional/infrastructure/water/changes/patches?${params.toString()}`,
+          {
+            cache: "no-store",
+            credentials: "include",
+            signal: AbortSignal.timeout(8000),
+            headers: {
+              "x-pantavion-water-device-id": device.deviceId,
+              "x-pantavion-water-device-token": device.deviceToken,
+            },
+          },
+        ),
+        fetch(
+          `/api/professional/infrastructure/water/changes/evidence-pins?${params.toString()}`,
+          {
+            cache: "no-store",
+            credentials: "include",
+            signal: AbortSignal.timeout(8000),
+            headers: {
+              "x-pantavion-water-device-id": device.deviceId,
+              "x-pantavion-water-device-token": device.deviceToken,
+            },
+          },
+        ),
+      ]);
+
+      if (
+        patchResponse.status === 401 ||
+        patchResponse.status === 403 ||
+        pinResponse.status === 401 ||
+        pinResponse.status === 403
+      ) {
+        clearLegacyWaterDeviceApproval();
+        setAccessState("denied");
+        return;
+      }
+
+      const patchPayload =
+        (await patchResponse.json().catch(() => ({}))) as ApprovedPatchResponse;
+      const pinPayload =
+        (await pinResponse.json().catch(() => ({}))) as ApprovedPinResponse;
+
+      if (!patchResponse.ok || !patchPayload.ok) {
+        throw new Error(patchPayload.error || "water_approved_patch_load_failed");
+      }
+
+      if (!pinResponse.ok || !pinPayload.ok) {
+        throw new Error(pinPayload.error || "water_approved_pin_load_failed");
+      }
+
+      const approvedPatchStatuses = new Set([
+        "approved_overlay",
+        "officialization_candidate",
+        "officialized",
+      ]);
+
+      const patches = (patchPayload.patches || []).filter(
+        (patch) =>
+          patch.map_id === "A" &&
+          approvedPatchStatuses.has(patch.status) &&
+          patch.crs_authority === "EPSG" &&
+          patch.crs_code === "4326",
+      );
+
+      const pins = (pinPayload.pins || []).filter(
+        (pin) =>
+          pin.map_id === "A" &&
+          pin.review_state === "approved" &&
+          pin.crs_authority === "EPSG" &&
+          pin.crs_code === "4326" &&
+          Number.isFinite(pin.x) &&
+          Number.isFinite(pin.y),
+      );
+
+      const L = await ensureLeaflet();
+      const nextLayer = L.layerGroup();
+
+      for (const patch of patches) {
+        let layer = null;
+
+        if (patch.geometry_type === "Point") {
+          const point = coordinatePair(patch.geometry.coordinates);
+          if (!point) continue;
+          const [lng, lat] = point;
+          layer = L.circleMarker([lat, lng], {
+            radius: 8,
+            color: "#065f46",
+            weight: 2,
+            fillColor: "#34d399",
+            fillOpacity: 0.9,
+          });
+        } else if (patch.geometry_type === "LineString") {
+          const coordinates = lineCoordinates(patch.geometry.coordinates);
+          if (coordinates.length < 2) continue;
+          layer = L.polyline(
+            coordinates.map(([lng, lat]) => [lat, lng]),
+            {
+              color: "#10b981",
+              weight: 5,
+              opacity: 0.95,
+              dashArray: "8 5",
+            },
+          );
+        } else if (patch.geometry_type === "Polygon") {
+          const rings = polygonCoordinates(patch.geometry.coordinates);
+          if (!rings.length) continue;
+          layer = L.polygon(
+            rings.map((ring) =>
+              ring.map(([lng, lat]) => [lat, lng]),
+            ),
+            {
+              color: "#059669",
+              weight: 3,
+              fillColor: "#6ee7b7",
+              fillOpacity: 0.18,
+            },
+          );
+        }
+
+        if (!layer) continue;
+
+        layer.bindPopup(
+          buildApprovedOverlayPopup({
+            title: `Approved ${patch.asset_type}`,
+            subtitle: patch.street_name || patch.status,
+            detail: `${patch.operation} · ${patch.status}`,
+            artifactRefs: patch.artifact_refs,
+          }),
+        );
+        layer.addTo(nextLayer);
+      }
+
+      for (const pin of pins) {
+        const marker = L.circleMarker([pin.y, pin.x], {
+          radius: 7,
+          color: "#7c3aed",
+          weight: 2,
+          fillColor: "#c4b5fd",
+          fillOpacity: 0.95,
+        });
+
+        marker.bindPopup(
+          buildApprovedOverlayPopup({
+            title: "Approved field evidence",
+            subtitle: pin.street_name || "Map A evidence pin",
+            detail: pin.note || null,
+            artifactRefs: pin.artifact_refs,
+          }),
+        );
+        marker.addTo(nextLayer);
+      }
+
+      if (approvedOverlayRef.current) {
+        approvedOverlayRef.current.remove();
+      }
+
+      nextLayer.addTo(map);
+      approvedOverlayRef.current = nextLayer;
+      setApprovedChangeCount(patches.length);
+      setApprovedEvidenceCount(pins.length);
+    } catch {
+      // Keep the last successfully rendered approved overlay on transient failure.
+    }
+  }
+
+  async function refreshVisibleWaterMap() {
+    await loadPipes();
+    await loadApprovedMapAChanges();
+  }
+
+  refreshVisibleWaterMapRef.current = refreshVisibleWaterMap;
+
   async function loadPipes() {
     const map = mapRef.current;
 
-    if (!map || loadInProgressRef.current) return;
+    if (!map) return;
 
+    if (loadInProgressRef.current) {
+      reloadQueuedRef.current = true;
+      return;
+    }
+
+    if (!accessApproved) {
+      setMessage(
+        "Ο χάρτης δρόμων, η αναζήτηση και το στίγμα είναι διαθέσιμα άμεσα. Τα προστατευμένα δεδομένα αγωγών εμφανίζονται μόνο σε εγκεκριμένες συσκευές.",
+      );
+      return;
+    }
+
+    const controller = new AbortController();
+    networkLoadAbortRef.current = controller;
+    let timedOut = false;
+    const loadTimeout = window.setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, 30000);
     loadInProgressRef.current = true;
     setLoading(true);
     setMessage(t.loading);
 
     try {
-      const visibleBbox = bboxFromMap(map);
-      const tiles = splitVisibleBboxIntoSafeTiles(visibleBbox);
-      const allFeatures: any[] = [];
+      const tiles = visibleNetworkXyzTiles(map);
       const device = getOrCreateWaterAccessDevice();
+      let segmentRequestCount = 0;
+      let accessRevoked = false;
 
-      for (const tile of tiles) {
+      async function fetchExactVisibleTile(tile: Bbox, depth: number): Promise<any[]> {
+        controller.signal.throwIfAborted();
+        segmentRequestCount += 1;
+
+        if (segmentRequestCount > MAX_SEGMENT_REQUESTS) {
+          throw new Error("WATER_SEGMENT_REQUEST_LIMIT");
+        }
+
         const params = new URLSearchParams({
           ...bboxParams(tile),
           maxFeatures: String(MAX_FEATURES_PER_TILE),
@@ -912,10 +1760,11 @@ export default function ControlledWaterSegmentClient() {
         });
 
         const response = await fetch(
-          `/api/professional/infrastructure/water/segment/bbox?${params.toString()}`,
+          `/api/professional/infrastructure/water/mapserver/0/query?${params.toString()}`,
           {
             cache: "no-store",
             credentials: "include",
+            signal: controller.signal,
             headers: {
               "x-pantavion-water-device-id": device.deviceId,
               "x-pantavion-water-device-token": device.deviceToken,
@@ -924,6 +1773,7 @@ export default function ControlledWaterSegmentClient() {
         );
 
         const json = (await response.json()) as SegmentResponse;
+        controller.signal.throwIfAborted();
 
         if (
           response.status === 401 ||
@@ -933,7 +1783,8 @@ export default function ControlledWaterSegmentClient() {
           clearLegacyWaterDeviceApproval();
           setAccessMessage("");
           setAccessState("denied");
-          return;
+          accessRevoked = true;
+          return [];
         }
 
         if (
@@ -950,64 +1801,162 @@ export default function ControlledWaterSegmentClient() {
           );
         }
 
-        if (json.segment?.features?.length) {
-          allFeatures.push(...json.segment.features);
+        const features = json.segment?.features || [];
+
+        if (
+          json.segmentTruncated !== true &&
+          typeof json.segmentCount === "number" &&
+          Number.isFinite(json.segmentCount) &&
+          json.segmentCount !== features.length
+        ) {
+          throw new Error("WATER_SEGMENT_COUNT_MISMATCH");
         }
-      }
 
-      const deduped = new Map<string, any>();
+        if (json.segmentTruncated === true) {
+          const lngSpan = tile.maxLng - tile.minLng;
+          const latSpan = tile.maxLat - tile.minLat;
 
-      allFeatures.forEach((feature, index) => {
-        deduped.set(featureKey(feature, `fallback-${index}`), feature);
-      });
+          if (
+            depth >= MAX_RECURSIVE_TILE_DEPTH ||
+            lngSpan <= MIN_RECURSIVE_TILE_SPAN_DEGREES ||
+            latSpan <= MIN_RECURSIVE_TILE_SPAN_DEGREES
+          ) {
+            throw new Error("WATER_SEGMENT_TRUNCATED");
+          }
 
-      const features = Array.from(deduped.values());
+          const childFeatures: any[] = [];
 
-      if (features.length <= 0) {
-        throw new Error("WATER_NO_VISIBLE_FEATURES");
+          for (const childTile of splitBboxIntoQuadrants(tile)) {
+            childFeatures.push(...(await fetchExactVisibleTile(childTile, depth + 1)));
+
+            if (accessRevoked) return [];
+          }
+
+          return childFeatures;
+        }
+
+        return features;
       }
 
       const L = await ensureLeaflet();
+      const visibleKeys = new Set(tiles.map((tile) => tile.key));
+      let visibleFeatureCount = 0;
 
-      if (layerRef.current) {
-        layerRef.current.remove();
-        layerRef.current = null;
+      async function loadTile(tile: NetworkXyzTile) {
+        controller.signal.throwIfAborted();
+        const cached = networkTileCacheRef.current.get(tile.key);
+
+        if (cached) {
+          cached.lastUsedAt = Date.now();
+          if (!map.hasLayer(cached.layer)) cached.layer.addTo(map);
+          cached.layer.bringToFront?.();
+          visibleFeatureCount += cached.featureCount;
+          return;
+        }
+
+        const rawFeatures = await fetchExactVisibleTile(tile.bbox, 0);
+        if (accessRevoked) return;
+        controller.signal.throwIfAborted();
+
+        const deduped = new Map<string, any>();
+        rawFeatures.forEach((feature, index) => {
+          deduped.set(
+            featureKey(feature, `${tile.key}-fallback-${index}`),
+            feature,
+          );
+        });
+        const features = Array.from(deduped.values());
+
+        const layer = L.geoJSON(
+          {
+            type: "FeatureCollection",
+            features,
+          },
+          {
+            pane: "pantavion-water-network",
+            style: (feature: any) => getPipeStyle(feature),
+            pointToLayer: (feature: any, latlng: any) => {
+              const style = getPipeStyle(feature);
+
+              return L.circleMarker(latlng, {
+                radius: Math.max(2, Math.min(5, style.weight * 1.25)),
+                color: style.color,
+                fillColor: style.color,
+                fillOpacity: style.opacity,
+                opacity: style.opacity,
+                weight: style.weight,
+              });
+            },
+          },
+        );
+
+        layer.addTo(map);
+        layer.bringToFront?.();
+        networkTileCacheRef.current.set(tile.key, {
+          layer,
+          featureCount: features.length,
+          lastUsedAt: Date.now(),
+        });
+        visibleFeatureCount += features.length;
       }
 
-      const collection = {
-        type: "FeatureCollection",
-        features,
-      };
 
-      const layer = L.geoJSON(collection, {
-        style: (feature: any) => getPipeStyle(feature),
-        pointToLayer: (feature: any, latlng: any) => {
-          const style = getPipeStyle(feature);
+      // Keep mobile/server load bounded while avoiding one round trip per tile.
+      let nextTile = 0;
+      async function loadTileWorker() {
+        while (nextTile < tiles.length && !accessRevoked) {
+          controller.signal.throwIfAborted();
+          const tile = tiles[nextTile++];
+          await loadTile(tile);
+        }
+      }
+      const results = await Promise.allSettled(
+        Array.from({ length: Math.min(3, tiles.length) }, () => loadTileWorker()),
+      );
+      const failure = results.find((result) => result.status === "rejected");
+      if (failure?.status === "rejected") throw failure.reason;
+      if (accessRevoked) return;
+      controller.signal.throwIfAborted();
 
-          return L.circleMarker(latlng, {
-            radius: Math.max(3, style.weight),
-            color: style.color,
-            fillColor: style.color,
-            fillOpacity: style.opacity,
-            opacity: style.opacity,
-            weight: style.weight,
-          });
-        },
-      });
+      for (const [key, cached] of networkTileCacheRef.current.entries()) {
+        if (!visibleKeys.has(key) && map.hasLayer(cached.layer)) {
+          map.removeLayer(cached.layer);
+        }
+      }
 
-      layer.addTo(map);
-      layerRef.current = layer;
+      if (networkTileCacheRef.current.size > MAX_NETWORK_TILE_CACHE) {
+        const removable = Array.from(networkTileCacheRef.current.entries())
+          .filter(([key]) => !visibleKeys.has(key))
+          .sort((a, b) => a[1].lastUsedAt - b[1].lastUsedAt);
 
-      const count = features.length;
-      setPipeCount(count);
-      setMessage(`${t.loaded}: ${count} (${tiles.length} ${t.chunks})`);
+        while (
+          networkTileCacheRef.current.size > MAX_NETWORK_TILE_CACHE &&
+          removable.length > 0
+        ) {
+          const [key, cached] = removable.shift()!;
+          if (map.hasLayer(cached.layer)) map.removeLayer(cached.layer);
+          networkTileCacheRef.current.delete(key);
+        }
+      }
+
+      if (visibleFeatureCount <= 0) {
+        throw new Error("WATER_NO_VISIBLE_FEATURES");
+      }
+
+      setPipeCount(visibleFeatureCount);
+      setMessage(
+        `${t.loaded}: ${visibleFeatureCount} · ${tiles.length} cached GIS tiles · ${segmentRequestCount} νέα requests`,
+      );
     } catch (error) {
+      // A pan/zoom cancellation is superseded by the next viewport request.
+      if (controller.signal.aborted && !timedOut) return;
       setPipeCount(null);
 
       if (error instanceof Error && error.message === "VISIBLE_AREA_TOO_LARGE") {
         setMessage(t.visibleTooLarge);
       } else {
         const diagnosticCode =
+          timedOut ? "WATER_LOAD_TIMEOUT" :
           error instanceof Error && /^WATER_[A-Z0-9_]+$/.test(error.message)
             ? error.message
             : "WATER_CLIENT_LOAD";
@@ -1015,15 +1964,26 @@ export default function ControlledWaterSegmentClient() {
         setMessage(`${t.failed} ${t.diagnostic}: ${diagnosticCode}.`);
       }
     } finally {
+      window.clearTimeout(loadTimeout);
+      if (networkLoadAbortRef.current === controller) {
+        networkLoadAbortRef.current = null;
+      }
       loadInProgressRef.current = false;
       setLoading(false);
+
+      if (reloadQueuedRef.current) {
+        reloadQueuedRef.current = false;
+        window.setTimeout(() => {
+          void refreshVisibleWaterMap();
+        }, 0);
+      }
     }
   }
 
   useEffect(() => {
     const map = mapRef.current;
 
-    if (!mapReady || !map) return;
+    if (!accessApproved || !mapReady || !map) return;
 
     function clearAutoLoadTimer() {
       if (autoLoadTimerRef.current) {
@@ -1034,25 +1994,114 @@ export default function ControlledWaterSegmentClient() {
 
     function scheduleAutoLoad() {
       clearAutoLoadTimer();
+      // Do not make the current viewport wait for obsolete network requests.
+      reloadQueuedRef.current = false;
+      networkLoadAbortRef.current?.abort();
 
       autoLoadTimerRef.current = window.setTimeout(() => {
-        void loadPipes();
-      }, 900);
+        void refreshVisibleWaterMapRef.current();
+      }, 250);
     }
 
+    // Load the first authentic Map A segment immediately once the approved
+    // device and Leaflet map are both ready. Pan/zoom refreshes stay debounced.
+    void refreshVisibleWaterMapRef.current();
+    scheduleViewportReloadRef.current = scheduleAutoLoad;
     map.on("moveend zoomend", scheduleAutoLoad);
-    scheduleAutoLoad();
 
     return () => {
       clearAutoLoadTimer();
+      reloadQueuedRef.current = false;
+      networkLoadAbortRef.current?.abort();
+      if (scheduleViewportReloadRef.current === scheduleAutoLoad) {
+        scheduleViewportReloadRef.current = null;
+      }
       map.off("moveend zoomend", scheduleAutoLoad);
     };
-  }, [mapReady, lang, street, number, area, postal]);
+  }, [accessApproved, mapReady, lang, street, number, area, postal]);
 
   if (!accessApproved) {
     return (
       <main className="min-h-screen bg-[#06111f] px-4 py-6 text-white">
-        <section className="mx-auto flex min-h-[80vh] w-full max-w-5xl items-center">
+      <section className="mx-auto mb-4 w-full max-w-5xl rounded-3xl border border-sky-400/30 bg-[#0d1a2d] p-4 shadow-2xl sm:p-5">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-sky-300">
+              ΑΜΕΣΟΣ ΧΑΡΤΗΣ ΠΕΔΙΟΥ
+            </p>
+            <h1 className="mt-2 text-2xl font-black text-white sm:text-3xl">
+              Δρόμοι, αναζήτηση και στίγμα χωρίς αναμονή
+            </h1>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Ο βασικός χάρτης ανοίγει αμέσως για όλους. Οι αγωγοί και τα λοιπά
+              προστατευμένα δεδομένα δικτύου παραμένουν κλειδωμένα μέχρι την έγκριση.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 flex gap-2">
+          <input
+            value={unifiedQuery}
+            onChange={(event) => setUnifiedQuery(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") void searchUnifiedPlace();
+            }}
+            placeholder={lang === "el" ? "Οδός, αριθμός, ξενοδοχείο, επιχείρηση ή τοπωνύμιο" : "Street, number, hotel, business or place"}
+            className="min-w-0 flex-1 rounded-2xl border border-sky-400/50 bg-[#07111f] px-4 py-3 text-white outline-none"
+          />
+          <button
+            type="button"
+            onClick={() => void searchUnifiedPlace()}
+            disabled={loading}
+            className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-4 py-3 text-sm font-black text-sky-100 disabled:opacity-60"
+          >
+            {lang === "el" ? "Βρες" : "Find"}
+          </button>
+        </div>
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <input value={street} onChange={(event) => setStreet(event.target.value)} placeholder={t.street} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+          <input value={number} onChange={(event) => setNumber(event.target.value)} placeholder={t.number} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+          <input value={area} onChange={(event) => setArea(event.target.value)} placeholder={t.area} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+          <input value={postal} onChange={(event) => setPostal(event.target.value)} placeholder={t.postal} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+        </div>
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <button type="button" onClick={() => void locateMe()} disabled={loading} className="rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-3 text-sm font-black text-[#f8e6ad] disabled:opacity-60">
+            {t.locate}
+          </button>
+          <button type="button" onClick={() => void searchAddressMarker()} disabled={loading} className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-3 text-sm font-black text-sky-100 disabled:opacity-60">
+            {t.search}
+          </button>
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-sm text-slate-200">
+          {message}
+        </div>
+          {addressCandidates.length > 0 ? (
+            <div className="mt-3 grid gap-2">
+              {addressCandidates.map((candidate) => (
+                <button key={candidate.candidateId} type="button"
+                  onClick={() => {
+                    setAddressCandidates([]);
+                    void selectMapPoint({ latlng: candidate.coordinates });
+                  }}
+                  className="rounded-xl border border-sky-400/40 px-4 py-3 text-left text-sm text-sky-100">
+                  {candidate.displayName}
+                </button>
+              ))}
+            </div>
+          ) : null}
+
+
+        <div className="mt-4 overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
+          <div className="border-b border-slate-700 px-4 py-3 text-sm font-black text-[#f2c766]">
+            Δημόσιος επιχειρησιακός χάρτης — χωρίς στοιχεία αγωγών
+          </div>
+          <div ref={mapEl} className="h-[58vh] min-h-[360px] w-full bg-slate-200 sm:min-h-[480px]" />
+        </div>
+      </section>
+        <section className="mx-auto flex w-full max-w-5xl items-center">
           <div className="w-full rounded-3xl border border-[#b89445]/50 bg-[#0d1a2d] p-5 shadow-2xl sm:p-6">
             <div className="mb-5 flex justify-end">
               <label className="flex min-w-[180px] flex-col gap-2 text-sm font-bold text-[#f2c766]">
@@ -1094,16 +2143,18 @@ export default function ControlledWaterSegmentClient() {
 
             {accessState !== "checking" ? (
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <a
-                  href={WATER_ADMIN_RELOGIN_URL}
-                  className="rounded-2xl bg-[#f2c766] px-5 py-4 text-center text-base font-black text-black"
-                >
-                  {t.adminLogin}
-                </a>
+                {accessState === "denied" ? (
+                  <a
+                    href="/auth/login?next=%2Fprofessional%2Finfrastructure%2Fwater%2Flive"
+                    className="flex w-full items-center justify-center rounded-2xl border border-emerald-400/60 bg-emerald-400/15 px-5 py-4 text-center text-base font-black text-emerald-100"
+                  >
+                    {t.adminLogin}
+                  </a>
+                ) : null}
                 <button
                   type="button"
                   onClick={() => setAccessCheckVersion((value) => value + 1)}
-                  className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-4 text-base font-black text-sky-100"
+                  className="w-full rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-4 text-base font-black text-sky-100"
                 >
                   {t.retryAccess}
                 </button>
@@ -1189,7 +2240,7 @@ export default function ControlledWaterSegmentClient() {
             <input value={postal} onChange={(event) => setPostal(event.target.value)} placeholder={t.postal} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
           </div>
 
-          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             <button type="button" onClick={() => void locateMe()} disabled={loading} className="rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-3 text-sm font-black text-[#f8e6ad] disabled:opacity-60">
               {t.locate}
             </button>
@@ -1198,23 +2249,91 @@ export default function ControlledWaterSegmentClient() {
               {t.search}
             </button>
 
-            <button type="button" onClick={() => void loadPipes()} disabled={loading} className="rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60">
-              {loading ? t.loading : t.load}
+            <button type="button" onClick={navigateToSelectedTarget} disabled={!selectedTarget} className="rounded-2xl border border-violet-400/60 bg-violet-400/15 px-5 py-3 text-sm font-black text-violet-100 disabled:opacity-40">
+              {lang === "el" ? "Πήγαινέ με" : "Navigate"}
+            </button>
+
+            <button type="button" onClick={refreshCurrentViewportNow} disabled={loading} className="rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60">
+              {loading ? t.loading : lang === "el" ? "Φόρτωση δικτύου" : "Load network"}
+            </button>
+
+            <button type="button" onClick={() => setWorkPanelOpen((value) => !value)} className="rounded-2xl border border-amber-400/60 bg-amber-400/15 px-5 py-3 text-sm font-black text-amber-100">
+              {lang === "el" ? "Εργασία" : "Work"}
             </button>
           </div>
 
+          {workPanelOpen ? (
+            <div className="mt-4 rounded-2xl border border-amber-400/40 bg-[#07111f] p-4">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <input value={workOrderId} onChange={(e) => setWorkOrderId(e.target.value)} placeholder={lang === "el" ? "Αρ. εργασίας / βλάβης" : "Work / fault reference"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <select value={workStage} onChange={(e) => setWorkStage(e.target.value)} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white">
+                  <option value="FAULT">Βλάβη</option><option value="LOCATE">Εντοπισμός</option><option value="SITE_SAFETY">Ασφάλεια</option><option value="EXCAVATION">Εκσκαφή</option><option value="NETWORK_REPAIR">Επισκευή</option><option value="TEST">Δοκιμή</option><option value="BACKFILL">Επίχωση</option><option value="SURFACE_RESTORATION">Αποκατάσταση</option><option value="CLOSURE">Κλείσιμο</option>
+                </select>
+                <input inputMode="decimal" value={excavationLength} onChange={(e) => setExcavationLength(e.target.value)} placeholder="Μήκος εκσκαφής m" className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input inputMode="decimal" value={excavationWidth} onChange={(e) => setExcavationWidth(e.target.value)} placeholder="Πλάτος m" className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input inputMode="decimal" value={excavationDepth} onChange={(e) => setExcavationDepth(e.target.value)} placeholder="Βάθος m" className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <div className="rounded-xl border border-slate-700 px-3 py-3 text-sm text-slate-200">
+                  Όγκος: {(() => { const l=Number(excavationLength),w=Number(excavationWidth),d=Number(excavationDepth); return [l,w,d].every(Number.isFinite) && l>=0 && w>=0 && d>=0 ? (l*w*d).toFixed(3) : "—"; })()} m³
+                </div>
+                <select value={workMaterial} onChange={(e) => setWorkMaterial(e.target.value)} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white">
+                  <option value="">{lang === "el" ? "Επίλεξε υλικό / εξάρτημα" : "Select material / fitting"}</option>
+                  {WATER_MATERIAL_SAMPLE_CATALOG.map((item) => (
+                    <option key={item.id} value={item.id}>{item.serviceLabel}</option>
+                  ))}
+                  <option value="OTHER">{lang === "el" ? "Άλλο — για έλεγχο/προσθήκη" : "Other — review/add"}</option>
+                </select>
+                <input inputMode="decimal" value={workMaterialQty} onChange={(e) => setWorkMaterialQty(e.target.value)} placeholder={lang === "el" ? "Ποσότητα" : "Quantity"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input inputMode="decimal" value={workHours} onChange={(e) => setWorkHours(e.target.value)} placeholder={lang === "el" ? "Εργατοώρες" : "Labour hours"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input value={workEvidence} onChange={(e) => setWorkEvidence(e.target.value)} placeholder={lang === "el" ? "Photo / evidence reference" : "Photo / evidence reference"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <textarea value={workNotes} onChange={(e) => setWorkNotes(e.target.value)} placeholder={lang === "el" ? "Σημειώσεις / τι έγινε στο πεδίο" : "Field notes"} className="min-h-[90px] rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white sm:col-span-2" />
+              </div>
+              <p className="mt-3 text-xs text-amber-100">Draft πεδίου — δεν αλλάζει το επίσημο δίκτυο χωρίς review/approval.</p>
+            </div>
+          ) : null}
+
           <div className="mt-4 rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-sm text-slate-200">
             {message}
+            <div className="mt-2 font-black text-emerald-200">
+              {pipeCount === null
+                ? (loading
+                    ? (lang === "el" ? "Δίκτυο A: φόρτωση..." : "Network A: loading...")
+                    : (lang === "el" ? "Δίκτυο A: αναμονή φόρτωσης" : "Network A: waiting to load"))
+                : (lang === "el"
+                    ? `Δίκτυο A ενεργό: ${pipeCount} στοιχεία στην ορατή περιοχή`
+                    : `Network A active: ${pipeCount} visible features`)}
+            </div>
           </div>
+          {addressCandidates.length > 0 ? (
+            <div className="mt-3 grid gap-2">
+              {addressCandidates.map((candidate) => (
+                <button key={candidate.candidateId} type="button"
+                  onClick={() => {
+                    setAddressCandidates([]);
+                    void selectMapPoint({ latlng: candidate.coordinates });
+                  }}
+                  className="rounded-xl border border-sky-400/40 px-4 py-3 text-left text-sm text-sky-100">
+                  {candidate.displayName}
+                </button>
+              ))}
+            </div>
+          ) : null}
+
         </section>
 
-        
-      <WaterLiveMapIntelligenceSelector />
-<section className="overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
+
+        <section className="overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
           <div className="flex flex-col gap-1 border-b border-slate-700 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-4">
             <h2 className="text-xl font-black text-[#f2c766] sm:text-2xl">{t.map}</h2>
             <span className="text-sm text-slate-300">
               {pipeCount !== null ? `${t.loaded}: ${pipeCount}` : t.protected}
+              {basemapState === "dls"
+                ? ` · ${lang === "el" ? "Υπόβαθρο: επίσημος λεπτομερής χάρτης DLS" : "Basemap: official detailed DLS map"}`
+                : basemapState === "fallback"
+                  ? ` · ${lang === "el" ? "Υπόβαθρο: προσωρινό οδικό (DLS μη διαθέσιμο)" : "Basemap: temporary roads (DLS unavailable)"}`
+                  : ` · ${lang === "el" ? "Υπόβαθρο: φόρτωση πλήρους λεπτομέρειας" : "Basemap: loading full detail"}`}
+              {approvedChangeCount > 0 || approvedEvidenceCount > 0
+                ? ` · approved changes ${approvedChangeCount} · evidence ${approvedEvidenceCount}`
+                : ""}
             </span>
           </div>
 
