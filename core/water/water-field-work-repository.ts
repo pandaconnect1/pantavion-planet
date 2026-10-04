@@ -6,10 +6,10 @@ export type WaterFieldWorkSaveResult = {
   provider: "PANTAVION_POSTGRES" | "LEGACY_ADAPTER" | "NONE";
 };
 
-export interface WaterFieldWorkRepository {
+export type WaterFieldWorkWriteContext = {\n  actorRef: string;\n};\n\nexport interface WaterFieldWorkRepository {
   readonly provider: WaterFieldWorkSaveResult["provider"];
   readonly ready: boolean;
-  save(record: WaterFieldWorkRecord): Promise<WaterFieldWorkSaveResult>;
+  save(record: WaterFieldWorkRecord, context: WaterFieldWorkWriteContext): Promise<WaterFieldWorkSaveResult>;
 }
 
 /**
