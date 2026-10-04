@@ -60,6 +60,6 @@ jobs:
       - name: Wait for and verify the exact provider-neutral pantavion.com revision
         env:
           PANTAVION_EXPECTED_GITHUB_SHA: ${{ github.sha }}
-          PANTAVION_PRODUCTION_BASE_URL: https://www.pantavion.com
+          PANTAVION_PRODUCTION_BASE_URL: https://pantavion.com
           PANTAVION_CANONICAL_APEX_URL: https://pantavion.com
         run: node scripts/water-guardian-production-smoke.cjs

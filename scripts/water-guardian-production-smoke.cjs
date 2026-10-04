@@ -2,7 +2,7 @@
 
 const { setTimeout: delay } = require("node:timers/promises");
 
-const DEFAULT_BASE_URL = "https://www.pantavion.com";
+const DEFAULT_BASE_URL = "https://pantavion.com";
 const DEFAULT_APEX_URL = "https://pantavion.com";
 const DEFAULT_DEPLOY_WAIT_MS = 8 * 60 * 1000;
 const DEFAULT_ALIAS_WAIT_MS = 2 * 60 * 1000;
@@ -155,8 +155,11 @@ async function verifyWaterClientBundle(html) {
       if (response.status !== 200) continue;
       const source = await response.text();
 
+      const usesProtectedSegmentRoute =
+        source.includes("/api/professional/infrastructure/water/mapserver/0/query") ||
+        source.includes("/api/professional/infrastructure/water/segment/bbox");
       const isWaterClient =
-        source.includes("/api/professional/infrastructure/water/segment/bbox") &&
+        usesProtectedSegmentRoute &&
         source.includes("WATER_CLIENT_LOAD") &&
         source.includes("WATER_NO_VISIBLE_FEATURES");
 
