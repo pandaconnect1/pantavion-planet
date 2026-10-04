@@ -4,7 +4,7 @@
 CREATE SCHEMA IF NOT EXISTS pantavion_water;
 
 CREATE TABLE IF NOT EXISTS pantavion_water.field_work_event (
-  event_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_id uuid PRIMARY KEY,
   work_order_id text NOT NULL CHECK (length(trim(work_order_id)) > 0),
   stage text NOT NULL CHECK (stage IN (
     'FAULT','LOCATE','SITE_SAFETY','EXCAVATION','NETWORK_REPAIR',
