@@ -820,21 +820,19 @@ export default function ControlledWaterSegmentClient() {
         waterNetworkPane.style.zIndex = "450";
         waterNetworkPane.style.pointerEvents = "none";
 
-        const roadBasemap = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        const emergencyRoadFallback = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 20,
-          opacity: 0.78,
           attribution: "&copy; OpenStreetMap contributors",
         });
-        roadBasemap.addTo(map);
 
-        // Detailed field map: keep a readable street/POI base, then add the
-        // official DLS cadastral detail (parcels, parcel numbers, buildings and
-        // topographic features) plus a separate official DLS road-label layer.
+        // Detailed field map: the official DLS cadastral plan is the PRIMARY
+        // map. The simple road map is emergency fallback only and is not shown
+        // while DLS detail is available.
         const dlsCadastreOverlay = L.tileLayer(
           "/api/professional/infrastructure/water/basemap/dls?mode=cadastral&z={z}&x={x}&y={y}",
           {
             maxZoom: 20,
-            opacity: 0.72,
+            opacity: 1,
             attribution: "© Τμήμα Κτηματολογίου και Χωρομετρίας Κύπρου (DLS)",
           },
         );
@@ -874,7 +872,10 @@ export default function ControlledWaterSegmentClient() {
           }
           cadastralDisabled = true;
           if (map.hasLayer(dlsCadastreOverlay)) map.removeLayer(dlsCadastreOverlay);
-          if (roadsDisabled) setBasemapState("fallback");
+          if (roadsDisabled) {
+            emergencyRoadFallback.addTo(map);
+            setBasemapState("fallback");
+          }
         });
 
         dlsRoadLabelsOverlay.on("tileerror", () => {
@@ -889,7 +890,10 @@ export default function ControlledWaterSegmentClient() {
           }
           roadsDisabled = true;
           if (map.hasLayer(dlsRoadLabelsOverlay)) map.removeLayer(dlsRoadLabelsOverlay);
-          if (cadastralDisabled) setBasemapState("fallback");
+          if (cadastralDisabled) {
+            emergencyRoadFallback.addTo(map);
+            setBasemapState("fallback");
+          }
         });
 
         dlsCadastreOverlay.addTo(map);
@@ -2323,7 +2327,7 @@ export default function ControlledWaterSegmentClient() {
             <span className="text-sm text-slate-300">
               {pipeCount !== null ? `${t.loaded}: ${pipeCount}` : t.protected}
               {basemapState === "dls"
-                ? ` · ${lang === "el" ? "Υπόβαθρο: κτίρια · τεμάχια · αριθμοί · οδοί · ονομασίες" : "Basemap: buildings · parcels · numbers · roads · labels"}`
+                ? ` · ${lang === "el" ? "Υπόβαθρο: επίσημος λεπτομερής χάρτης DLS" : "Basemap: official detailed DLS map"}`
                 : basemapState === "fallback"
                   ? ` · ${lang === "el" ? "Υπόβαθρο: προσωρινό οδικό (DLS μη διαθέσιμο)" : "Basemap: temporary roads (DLS unavailable)"}`
                   : ` · ${lang === "el" ? "Υπόβαθρο: φόρτωση πλήρους λεπτομέρειας" : "Basemap: loading full detail"}`}
