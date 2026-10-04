@@ -834,15 +834,16 @@ export default function ControlledWaterSegmentClient() {
           attribution: "&copy; OpenStreetMap contributors",
         });
 
-        // BASEMAP ONLY: use a clean, neutral city map beneath the protected Water pane.
+        // BASEMAP ONLY: use a no-key detailed street map beneath the protected Water pane.
+        // The previous CARTO endpoint rendered "API KEY REQUIRED" tiles in production.
         // No Water geometry, source style, authorization, segment loading or cache logic changes here.
         const detailedRoadBasemap = L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+          "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
           {
             pane: "tilePane",
+            maxNativeZoom: 19,
             maxZoom: 20,
-            subdomains: "abcd",
-            attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+            attribution: "&copy; OpenStreetMap contributors",
           },
         );
 
