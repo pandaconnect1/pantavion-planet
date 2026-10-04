@@ -237,13 +237,15 @@ function verifyRuntimeWiring() {
     "GPS and manual map-point selection must both force the current network viewport to reload",
   );
   assert.match(client, /Φόρτωση δικτύου/);
-  // Basemap may evolve independently, but the protected Water runtime wiring
-  // above must remain intact. Current Map A uses a detailed vector background
-  // with a safe raster fallback and does not route the network through it.
-  assert.match(client, /function ensurePantavionVectorBasemap\(\)/);
-  assert.match(client, /maplibre-gl@5\.12\.0\/dist\/maplibre-gl\.js/);
-  assert.match(client, /@maplibre\/maplibre-gl-leaflet@0\.1\.4\/dist\/leaflet-maplibre-gl\.js/);
-  assert.match(client, /https:\/\/tiles\.openfreemap\.org\/styles\/liberty/);
+  // Basemap stays isolated beneath the protected Water pane. Keep Map A on
+  // Leaflet-only raster rendering until Water pan/zoom loading is verified live.
+  assert.match(client, /const detailedRoadBasemap = L\.tileLayer\(/);
+  assert.match(
+    client,
+    /server\.arcgisonline\.com\/ArcGIS\/rest\/services\/World_Street_Map\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/,
+  );
+  assert.doesNotMatch(client, /maplibre-gl-leaflet/);
+  assert.match(client, /detailedRoadBasemap\.on\("tileerror"/);
   assert.match(client, /setBasemapState\("pantavion"\)/);
   assert.match(client, /setBasemapState\("fallback"\)/);
   assert.doesNotMatch(
@@ -253,7 +255,7 @@ function verifyRuntimeWiring() {
   );
   assert.match(client, /WATER_SEGMENT_COUNT_MISMATCH/);
   assert.match(client, /const emergencyRoadFallback = L\.tileLayer/);
-  assert.match(client, /Υπόβαθρο: Pantavion λεπτομερής vector χάρτης/);
+  assert.match(client, /Υπόβαθρο: λεπτομερής οδικός χάρτης/);
   assert.doesNotMatch(client, /roadBasemap\.addTo\(map\)/);
   assert.match(client, /Approved field users search the Cyprus official road registry first/);
   assert.match(client, /Επίλεξε την οδό από το επίσημο οδικό δίκτυο Κτηματολογίου/);
