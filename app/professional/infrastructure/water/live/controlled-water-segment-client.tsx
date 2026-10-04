@@ -1302,6 +1302,50 @@ export default function ControlledWaterSegmentClient() {
     setAddressCandidates([]);
     setMessage(t.loading);
     try {
+      // Approved field users search the Cyprus official road registry first.
+      // queryOverride is used only by the unified-search fallback, so skip this
+      // block there to avoid repeating the same provider request.
+      if (!override && street.trim()) {
+        const officialQuery = [street.trim(), number.trim(), area.trim(), postal.trim()]
+          .filter(Boolean)
+          .join(", ");
+        const officialResponse = await fetch(
+          `/api/professional/infrastructure/water/places/search?q=${encodeURIComponent(officialQuery)}`,
+          { cache: "no-store", signal: AbortSignal.timeout(10000) },
+        );
+        const officialPayload = await officialResponse.json().catch(() => ({})) as {
+          results?: Array<{
+            resultId: string;
+            displayName: string;
+            secondaryLabel?: string | null;
+            coordinates?: { lat: number; lng: number } | null;
+          }>;
+        };
+        const officialCandidates = (officialPayload.results ?? [])
+          .filter((item) => Number.isFinite(item.coordinates?.lat) && Number.isFinite(item.coordinates?.lng))
+          .map((item) => ({
+            candidateId: item.resultId,
+            displayName: item.secondaryLabel
+              ? `${item.displayName} — ${item.secondaryLabel}`
+              : item.displayName,
+            coordinates: item.coordinates as { lat: number; lng: number },
+          }));
+
+        if (officialResponse.ok && officialCandidates.length === 1) {
+          await selectMapPoint({ latlng: officialCandidates[0].coordinates });
+          return;
+        }
+        if (officialResponse.ok && officialCandidates.length > 1) {
+          setAddressCandidates(officialCandidates);
+          setMessage(
+            lang === "el"
+              ? "Επίλεξε την οδό από το επίσημο οδικό δίκτυο Κτηματολογίου."
+              : "Select the street from the official Cyprus DLS road network.",
+          );
+          return;
+        }
+      }
+
       const params = override
         ? new URLSearchParams({ street: override, houseNumber: "", area: "", postalCode: "" })
         : new URLSearchParams({ street, houseNumber: number, area, postalCode: postal });
