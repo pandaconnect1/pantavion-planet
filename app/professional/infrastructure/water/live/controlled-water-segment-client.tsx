@@ -1108,13 +1108,12 @@ export default function ControlledWaterSegmentClient() {
     }
 
     const destination = `${selectedTarget.lat.toFixed(6)},${selectedTarget.lng.toFixed(6)}`;
-    // Hand off road guidance to the device's mapping service. Pantavion keeps
-    // field/asset accuracy separate from consumer road-navigation accuracy.
-    window.open(
-      `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving`,
-      "_blank",
-      "noopener,noreferrer",
-    );
+    // Mobile-safe handoff: same-tab navigation is not blocked as a popup by
+    // Android/WebView browsers. Google Maps can intercept this URL and start
+    // driving guidance from the device's current location.
+    const navigationUrl =
+      `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving&dir_action=navigate`;
+    window.location.assign(navigationUrl);
   }
 
   async function locateMe() {
