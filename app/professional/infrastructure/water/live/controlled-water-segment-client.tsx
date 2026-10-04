@@ -820,51 +820,84 @@ export default function ControlledWaterSegmentClient() {
         waterNetworkPane.style.zIndex = "450";
         waterNetworkPane.style.pointerEvents = "none";
 
-        const roadBasemap = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        const emergencyRoadFallback = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 20,
           attribution: "&copy; OpenStreetMap contributors",
         });
-        roadBasemap.addTo(map);
 
-        // Keep the clear street map as the operational base and add only the
-        // official DLS cadastral parcel/building reference above it. This avoids
-        // the oversized labels and clutter of the full DLS topographic raster.
+        // Detailed field map: the official DLS cadastral plan is the PRIMARY
+        // map. The simple road map is emergency fallback only and is not shown
+        // while DLS detail is available.
         const dlsCadastreOverlay = L.tileLayer(
-          "/api/professional/infrastructure/water/basemap/dls?z={z}&x={x}&y={y}",
+          "/api/professional/infrastructure/water/basemap/dls?mode=cadastral&z={z}&x={x}&y={y}",
           {
             maxZoom: 20,
-            opacity: 0.42,
+            opacity: 1,
+            attribution: "© Τμήμα Κτηματολογίου και Χωρομετρίας Κύπρου (DLS)",
+          },
+        );
+        const dlsRoadLabelsOverlay = L.tileLayer(
+          "/api/professional/infrastructure/water/basemap/dls?mode=roads&z={z}&x={x}&y={y}",
+          {
+            maxZoom: 20,
+            opacity: 0.96,
             attribution: "© Τμήμα Κτηματολογίου και Χωρομετρίας Κύπρου (DLS)",
           },
         );
 
-        let dlsOverlayDisabled = false;
-        let dlsTileFailures = 0;
+        let cadastralDisabled = false;
+        let roadsDisabled = false;
+        let cadastralFailures = 0;
+        let roadsFailures = 0;
         let dlsTileSuccesses = 0;
         setBasemapState("loading");
 
-        dlsCadastreOverlay.on("tileload", () => {
+        const markDlsReady = () => {
           dlsTileSuccesses += 1;
           if (!cancelled) setBasemapState("dls");
-        });
+        };
+
+        dlsCadastreOverlay.on("tileload", markDlsReady);
+        dlsRoadLabelsOverlay.on("tileload", markDlsReady);
 
         dlsCadastreOverlay.on("tileerror", () => {
-          dlsTileFailures += 1;
+          cadastralFailures += 1;
           if (
-            dlsOverlayDisabled ||
+            cadastralDisabled ||
             cancelled ||
             dlsTileSuccesses > 0 ||
-            dlsTileFailures < 4
+            cadastralFailures < 4
           ) {
             return;
           }
-
-          dlsOverlayDisabled = true;
+          cadastralDisabled = true;
           if (map.hasLayer(dlsCadastreOverlay)) map.removeLayer(dlsCadastreOverlay);
-          setBasemapState("fallback");
+          if (roadsDisabled) {
+            emergencyRoadFallback.addTo(map);
+            setBasemapState("fallback");
+          }
+        });
+
+        dlsRoadLabelsOverlay.on("tileerror", () => {
+          roadsFailures += 1;
+          if (
+            roadsDisabled ||
+            cancelled ||
+            dlsTileSuccesses > 0 ||
+            roadsFailures < 4
+          ) {
+            return;
+          }
+          roadsDisabled = true;
+          if (map.hasLayer(dlsRoadLabelsOverlay)) map.removeLayer(dlsRoadLabelsOverlay);
+          if (cadastralDisabled) {
+            emergencyRoadFallback.addTo(map);
+            setBasemapState("fallback");
+          }
         });
 
         dlsCadastreOverlay.addTo(map);
+        dlsRoadLabelsOverlay.addTo(map);
 
         mapRef.current = map;
         map.on("click", (event: { latlng: { lat: number; lng: number } }) => {
@@ -2294,10 +2327,10 @@ export default function ControlledWaterSegmentClient() {
             <span className="text-sm text-slate-300">
               {pipeCount !== null ? `${t.loaded}: ${pipeCount}` : t.protected}
               {basemapState === "dls"
-                ? ` · ${lang === "el" ? "Υπόβαθρο: Οδικός + Κτηματολόγιο" : "Basemap: roads + Cyprus DLS"}`
+                ? ` · ${lang === "el" ? "Υπόβαθρο: επίσημος λεπτομερής χάρτης DLS" : "Basemap: official detailed DLS map"}`
                 : basemapState === "fallback"
-                  ? ` · ${lang === "el" ? "Υπόβαθρο: καθαρός οδικός (DLS μη διαθέσιμο)" : "Basemap: clear roads (DLS unavailable)"}`
-                  : ` · ${lang === "el" ? "Υπόβαθρο: φόρτωση Κτηματολογίου" : "Basemap: loading DLS overlay"}`}
+                  ? ` · ${lang === "el" ? "Υπόβαθρο: προσωρινό οδικό (DLS μη διαθέσιμο)" : "Basemap: temporary roads (DLS unavailable)"}`
+                  : ` · ${lang === "el" ? "Υπόβαθρο: φόρτωση πλήρους λεπτομέρειας" : "Basemap: loading full detail"}`}
               {approvedChangeCount > 0 || approvedEvidenceCount > 0
                 ? ` · approved changes ${approvedChangeCount} · evidence ${approvedEvidenceCount}`
                 : ""}
