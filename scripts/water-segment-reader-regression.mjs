@@ -237,20 +237,20 @@ function verifyRuntimeWiring() {
     "GPS and manual map-point selection must both force the current network viewport to reload",
   );
   assert.match(client, /Φόρτωση δικτύου/);
-  assert.match(client, /const dlsCadastreOverlay = L\.tileLayer\(/);
-  assert.match(
-    client,
-    /\/api\/professional\/infrastructure\/water\/basemap\/dls\?mode=cadastral&z=\{z\}&x=\{x\}&y=\{y\}/,
-  );
-  assert.match(
-    client,
-    /\/api\/professional\/infrastructure\/water\/basemap\/dls\?mode=roads&z=\{z\}&x=\{x\}&y=\{y\}/,
-  );
-  assert.match(client, /Τμήμα Κτηματολογίου και Χωρομετρίας Κύπρου \(DLS\)/);
-  assert.match(client, /cadastralFailures < 4/);
-  assert.match(client, /roadsFailures < 4/);
-  assert.match(client, /setBasemapState\("dls"\)/);
+  // Basemap may evolve independently, but the protected Water runtime wiring
+  // above must remain intact. Current Map A uses a detailed vector background
+  // with a safe raster fallback and does not route the network through it.
+  assert.match(client, /function ensurePantavionVectorBasemap\(\)/);
+  assert.match(client, /maplibre-gl@5\.12\.0\/dist\/maplibre-gl\.js/);
+  assert.match(client, /@maplibre\/maplibre-gl-leaflet@0\.1\.4\/dist\/leaflet-maplibre-gl\.js/);
+  assert.match(client, /https:\/\/tiles\.openfreemap\.org\/styles\/liberty/);
+  assert.match(client, /setBasemapState\("pantavion"\)/);
   assert.match(client, /setBasemapState\("fallback"\)/);
+  assert.doesNotMatch(
+    client,
+    /\/api\/professional\/infrastructure\/water\/basemap\/dls\?mode=/,
+    "Map A basemap change must not silently route through the rejected DLS background",
+  );
   assert.match(client, /WATER_SEGMENT_COUNT_MISMATCH/);
   assert.match(client, /const emergencyRoadFallback = L\.tileLayer/);
   assert.match(client, /const dlsRoadLabelsOverlay = L\.tileLayer/);
