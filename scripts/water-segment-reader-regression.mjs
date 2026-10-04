@@ -237,6 +237,10 @@ function verifyRuntimeWiring() {
     "GPS and manual map-point selection must both force the current network viewport to reload",
   );
   assert.match(client, /Φόρτωση δικτύου/);
+  assert.match(client, /const dlsBasemap = L\.tileLayer\.wms/);
+  assert.match(client, /National\/Topography_GR\/MapServer\/WMSServer/);
+  assert.match(client, /Τμήμα Κτηματολογίου και Χωρομετρίας Κύπρου \(DLS\)/);
+  assert.match(client, /const osmFallback = L\.tileLayer/);
   assert.match(client, /WATER_NO_VISIBLE_FEATURES/);
   assert.match(client, /WATER_CLIENT_LOAD/);
   assert.match(
