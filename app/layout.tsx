@@ -2,10 +2,9 @@ import PantavionGlobalLanguageSelector from "./pantavion-global-language-selecto
 import PantavionGlobalUiTranslationRuntime from "@/components/pantavion/PantavionGlobalUiTranslationRuntime";
 import "leaflet/dist/leaflet.css";
 import type { Metadata, Viewport } from "next";
-import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
-const siteUrl = "https://www.pantavion.com";
+const siteUrl = "https://pantavion.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -75,7 +74,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <PantavionGlobalUiTranslationRuntime />
         <PantavionGlobalLanguageSelector />
         {children}
-        <Analytics />
       </body>
     </html>
   );
