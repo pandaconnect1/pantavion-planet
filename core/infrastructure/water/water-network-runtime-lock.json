@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-04T22:10:30.000Z",
+  "lockedAtUtc": "2026-10-04T22:13:30.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -25,7 +25,7 @@
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "3b561ad7565cee62412579002cfb1700500900557a10e029b88fa401ae37756a",
     "app/api/professional/infrastructure/water/tiles/mvt/route.ts": "34bea14126f4bcd6c069818d4f0f65599b97f7701ed238f180a0404d541304de",
     "app/professional/infrastructure/water/admin/access/page.tsx": "627e1e1f45a2bdb465acddd8053ffc47306be7adbeb7a3d0489b11cb036dc28b",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "495356ad100c1ac9f5cb51e036e12a31250ea0461dc6a912073c0d0480b8a142",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "1006a49cdb994c341ba194b98494d6a97f5bab39a92f9735863248669db0d33c",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "828652b8565772b63b8d365fff41542b815dfc25d6cb2ca07912e488a64beff8",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
@@ -33,11 +33,11 @@
     "core/security/water-admin-session.ts": "df9e9d7cbd5edfa2659068d817d60e03886e0e761ff6657ab7cb8e9b9417d2f3",
     "scripts/pantavion-water-network-runtime-lock.cjs": "0df1627215062bbb3c1e5bb91118591fd896197300cf81090d373f757fa2d5d3",
     "scripts/water-guardian-production-smoke.cjs": "2109e96821887077bc3854083d19c0f6cf7d2a464d8876458672ccb97c0667e0",
-    "scripts/water-segment-reader-regression.mjs": "98d2b88235efbcacd70be484309d71989c443799431d6cb6eb903595956a0122",
+    "scripts/water-segment-reader-regression.mjs": "001ec02d01a74958f5ab1e6982642b8a84f7eedfc04c1b2214d6de4454c8c15d",
     "app/api/professional/infrastructure/water/basemap/dls/route.ts": "bf0345a807b51b4b0bcbcb7a3097e4c20453f484317f479858cecdf3ca6fb2f4"
   },
   "refreshEvidence": {
-    "reason": "Founder-reported mobile Navigate button failure. Replace popup-based Google Maps handoff with same-tab mobile-safe navigation URL including dir_action=navigate. No Water geometry, source styling, segmented delivery, basemap, authorization, cache or privacy invariant changes.",
+    "reason": "Founder-reported Map A street-search failure plus mobile Navigate failure. Search now has independent loading state, typing no longer triggers protected-network reloads, Enter submits street search, Greek fallback spelling is corrected, and Navigate uses same-tab mobile handoff. No basemap, Water geometry, source styling, segmented delivery, authorization, cache or privacy invariant changes.",
     "sourceCommit": "54fc855dc14ee897463787eb1429d6d0a50e78a3",
     "protectedFileCount": 19,
     "invariantMutationAllowed": false,
