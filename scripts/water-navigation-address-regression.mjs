@@ -60,6 +60,11 @@ assert.match(
   /Φόρτωσε \/ ανανέωσε δίκτυο/,
   "approved users must have an explicit network load/refresh control",
 );
+assert.match(
+  client,
+  /VISIBLE_AREA_TOO_LARGE[\s\S]*Math\.floor\(zoom\) \+ 1[\s\S]*map\.setView\(map\.getCenter\(\), nextZoom, \{ animate: false \}\)/,
+  "oversized approved viewports must auto-focus and retry instead of stopping before the network API request",
+);
 assert.equal(view.options.animate, false, "new viewport is settled before reloading");
 assert.equal(marker.kind, "search", "manual selection preserves GPS marker");
 assert.equal(timers.size, 1, "move event plus manual selection produce one pending reload");
