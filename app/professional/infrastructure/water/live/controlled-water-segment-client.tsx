@@ -1842,6 +1842,20 @@ export default function ControlledWaterSegmentClient() {
       setPipeCount(null);
 
       if (error instanceof Error && error.message === "VISIBLE_AREA_TOO_LARGE") {
+        const zoom = Number(map.getZoom());
+        if (Number.isFinite(zoom) && zoom < MAX_NETWORK_TILE_ZOOM) {
+          const nextZoom = Math.min(
+            MAX_NETWORK_TILE_ZOOM,
+            Math.max(MIN_NETWORK_TILE_ZOOM, Math.floor(zoom) + 1),
+          );
+          setMessage(
+            lang === "el"
+              ? "Η ορατή περιοχή είναι πολύ μεγάλη για ασφαλή φόρτωση. Εστιάζω αυτόματα λίγο πιο κοντά και συνεχίζω."
+              : "The visible area is too large for a safe load. Focusing slightly closer and continuing automatically.",
+          );
+          map.setView(map.getCenter(), nextZoom, { animate: false });
+          return;
+        }
         setMessage(t.visibleTooLarge);
       } else {
         const diagnosticCode =
