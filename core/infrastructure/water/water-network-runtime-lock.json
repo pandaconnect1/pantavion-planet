@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-04T10:50:49.909Z",
+  "lockedAtUtc": "2026-10-04T11:16:30.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -25,7 +25,7 @@
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "bc94c96a66478412878747bc3f0c8ca428ba75de87799cb6c0128f2e93637b80",
     "app/api/professional/infrastructure/water/tiles/mvt/route.ts": "34bea14126f4bcd6c069818d4f0f65599b97f7701ed238f180a0404d541304de",
     "app/professional/infrastructure/water/admin/access/page.tsx": "114a41ba924010da56c145355520cecde41c4fb914c853949c03437805fd4e24",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "188812a06f089a937a21040da8df28b7b1b033f19e26820d81de72ed56a0404e",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "40cbc5ca59eaba9cb18ffcdea49c209dd82cf8dc1992c0a3e5190fb949b41908",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "828652b8565772b63b8d365fff41542b815dfc25d6cb2ca07912e488a64beff8",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
@@ -36,8 +36,8 @@
     "scripts/water-segment-reader-regression.mjs": "8b1f075c8143fbe0041bc8918b0a1717ea46e034f57c09479a5a7eb9f0206c33"
   },
   "refreshEvidence": {
-    "reason": "Founder-authorized Map A lifecycle correction: stable tile-cache cleanup and current pan/zoom refresh callback. Authentic source truth, segmented delivery, authorization, and raw-master invariants remain unchanged.",
-    "sourceCommit": "e7fcb1891224cba9846e22d51e27ed212f4c0685",
+    "reason": "Founder-recognized Map A network-load recovery: add explicit load/refresh control and auto-scope wide approved viewports to the bbox-safe network zoom so the protected MapServer request is actually reached. Authentic source truth, geometry, authorization, segmented delivery, and raw-master invariants remain unchanged.",
+    "sourceCommit": "d614c84bd854b533af814ab2c72b696da549ae88",
     "protectedFileCount": 18,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
