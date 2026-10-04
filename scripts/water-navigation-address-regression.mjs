@@ -50,6 +50,16 @@ assert.equal(context.reloadQueuedRef.current, false);
 assert.deepEqual(Array.from(view.point), [34.725, 33.137]);
 assert.equal(view.zoom, 16, "selected targets retain operational context instead of forcing zoom 18");
 assert.match(client, /const MIN_NETWORK_TILE_ZOOM = 13;/, "minimum network tile zoom must stay within the server bbox ceiling");
+assert.match(
+  client,
+  /currentZoom < MIN_NETWORK_TILE_ZOOM[\s\S]*map\.setView\(map\.getCenter\(\), MIN_NETWORK_TILE_ZOOM, \{ animate: false \}\)/,
+  "approved wide view auto-scopes to a bbox-safe operational zoom instead of silently skipping the network request",
+);
+assert.match(
+  client,
+  /Φόρτωσε \/ ανανέωσε δίκτυο/,
+  "approved users must have an explicit network load/refresh control",
+);
 assert.equal(view.options.animate, false, "new viewport is settled before reloading");
 assert.equal(marker.kind, "search", "manual selection preserves GPS marker");
 assert.equal(timers.size, 1, "move event plus manual selection produce one pending reload");
