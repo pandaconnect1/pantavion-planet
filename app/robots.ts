@@ -16,6 +16,6 @@ export default function robots(): MetadataRoute.Robots {
         "/professional/infrastructure/water/master/",
       ],
     },
-    sitemap: "https://www.pantavion.com/sitemap.xml",
+    sitemap: "https://pantavion.com/sitemap.xml",
   };
 }
