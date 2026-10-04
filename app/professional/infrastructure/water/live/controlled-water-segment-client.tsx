@@ -550,9 +550,19 @@ export default function ControlledWaterSegmentClient() {
           preferCanvas: true,
         });
 
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        // Basemap only: prefer the licensed high-detail 2GIS city map when a key is configured.
+        // The protected KMZ water-network layer and its loading/styling logic remain untouched.
+        const twoGisKey = process.env.NEXT_PUBLIC_2GIS_MAP_KEY?.trim();
+        const basemapUrl = twoGisKey
+          ? `https://tile0.maps.2gis.com/v2/tiles/online_hd/{z}/{x}/{y}.png?key=${encodeURIComponent(twoGisKey)}`
+          : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+
+        L.tileLayer(basemapUrl, {
           maxZoom: 20,
-          attribution: "&copy; OpenStreetMap contributors",
+          maxNativeZoom: twoGisKey ? 19 : 19,
+          attribution: twoGisKey
+            ? "&copy; 2GIS"
+            : "&copy; OpenStreetMap contributors",
         }).addTo(map);
 
         mapRef.current = map;
