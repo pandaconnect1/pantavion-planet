@@ -617,6 +617,7 @@ export default function ControlledWaterSegmentClient() {
   const networkLoadAbortRef = useRef<AbortController | null>(null);
   const reloadQueuedRef = useRef(false);
   const scheduleViewportReloadRef = useRef<(() => void) | null>(null);
+  const refreshVisibleWaterMapRef = useRef<() => Promise<void>>(async () => {});
   const selectMapPointRef = useRef(selectMapPoint);
 
   const t = UI[getPantavionUiLanguage(lang)];
@@ -798,6 +799,7 @@ export default function ControlledWaterSegmentClient() {
 
   useEffect(() => {
     let cancelled = false;
+    const tileCache = networkTileCacheRef.current;
 
     ensureLeaflet()
       .then((L) => {
@@ -830,12 +832,12 @@ export default function ControlledWaterSegmentClient() {
       setMapReady(false);
 
       if (mapRef.current) {
-        for (const cached of networkTileCacheRef.current.values()) {
+        for (const cached of tileCache.values()) {
           try {
             cached.layer.remove();
           } catch {}
         }
-        networkTileCacheRef.current.clear();
+        tileCache.clear();
         mapRef.current.remove();
         mapRef.current = null;
       }
@@ -1566,6 +1568,8 @@ export default function ControlledWaterSegmentClient() {
     await loadApprovedMapAChanges();
   }
 
+  refreshVisibleWaterMapRef.current = refreshVisibleWaterMap;
+
   async function loadPipes() {
     const map = mapRef.current;
 
@@ -1847,13 +1851,13 @@ export default function ControlledWaterSegmentClient() {
       networkLoadAbortRef.current?.abort();
 
       autoLoadTimerRef.current = window.setTimeout(() => {
-        void refreshVisibleWaterMap();
+        void refreshVisibleWaterMapRef.current();
       }, 250);
     }
 
     // Load the first authentic Map A segment immediately once the approved
     // device and Leaflet map are both ready. Pan/zoom refreshes stay debounced.
-    void refreshVisibleWaterMap();
+    void refreshVisibleWaterMapRef.current();
     scheduleViewportReloadRef.current = scheduleAutoLoad;
     map.on("moveend zoomend", scheduleAutoLoad);
 
