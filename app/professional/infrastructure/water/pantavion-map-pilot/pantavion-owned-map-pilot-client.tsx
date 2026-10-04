@@ -147,8 +147,9 @@ function ensureMapLibre() {
       return;
     }
 
-    if ((window as unknown as { maplibregl?: MapLibreApi }).maplibregl) {
-      resolve((window as unknown as { maplibregl?: MapLibreApi }).maplibregl);
+    const existingMapLibre = (window as unknown as { maplibregl?: MapLibreApi }).maplibregl;
+    if (existingMapLibre) {
+      resolve(existingMapLibre);
       return;
     }
 
@@ -165,7 +166,8 @@ function ensureMapLibre() {
       existing.addEventListener(
         "load",
         () => {
-          if ((window as unknown as { maplibregl?: MapLibreApi }).maplibregl) resolve((window as unknown as { maplibregl?: MapLibreApi }).maplibregl);
+          const loadedMapLibre = (window as unknown as { maplibregl?: MapLibreApi }).maplibregl;
+          if (loadedMapLibre) resolve(loadedMapLibre);
           else reject(new Error("maplibre_missing_after_load"));
         },
         { once: true },
@@ -182,7 +184,8 @@ function ensureMapLibre() {
     script.defer = true;
     script.setAttribute("data-pantavion-maplibre-js", "true");
     script.onload = () => {
-      if ((window as unknown as { maplibregl?: MapLibreApi }).maplibregl) resolve((window as unknown as { maplibregl?: MapLibreApi }).maplibregl);
+      const loadedMapLibre = (window as unknown as { maplibregl?: MapLibreApi }).maplibregl;
+      if (loadedMapLibre) resolve(loadedMapLibre);
       else reject(new Error("maplibre_missing_after_load"));
     };
     script.onerror = () => reject(new Error("maplibre_script_failed"));
