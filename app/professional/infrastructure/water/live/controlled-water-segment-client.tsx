@@ -958,6 +958,17 @@ export default function ControlledWaterSegmentClient() {
     });
   }
 
+  function refreshCurrentViewportNow() {
+    // Field actions must not depend on the debounced move/zoom listener being
+    // installed. Cancel stale work and force the protected current viewport
+    // to load immediately; an in-flight request will queue exactly one retry.
+    reloadQueuedRef.current = false;
+    networkLoadAbortRef.current?.abort();
+    window.setTimeout(() => {
+      void refreshVisibleWaterMapRef.current();
+    }, 0);
+  }
+
   async function selectMapPoint(event: { latlng: { lat: number; lng: number } }) {
     const map = mapRef.current;
     const { lat, lng } = event.latlng;
@@ -975,9 +986,9 @@ export default function ControlledWaterSegmentClient() {
       moveMapToPoint(lat, lng);
       setSelectedTarget({ lat, lng });
       setMessage(t.searchFound);
-      // Use the same cancellation/debounce path as pan and zoom, including
-      // selecting the current center where Leaflet may emit no move event.
-      scheduleViewportReloadRef.current?.();
+      // A selected field point must always trigger the real network, even if
+      // Leaflet emits no move event or the debounced listener is not ready.
+      refreshCurrentViewportNow();
     } catch {
       setMessage(t.failed);
     }
@@ -1037,7 +1048,8 @@ export default function ControlledWaterSegmentClient() {
           : t.located,
       );
 
-      scheduleViewportReloadRef.current?.();
+      // GPS is an explicit field action: load the protected viewport directly.
+      refreshCurrentViewportNow();
     };
 
     const finalFailure = (error: GeolocationPositionError) => {
@@ -2092,7 +2104,7 @@ export default function ControlledWaterSegmentClient() {
             <input value={postal} onChange={(event) => setPostal(event.target.value)} placeholder={t.postal} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
           </div>
 
-          <div className="mt-4 grid gap-3 sm:grid-cols-4">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             <button type="button" onClick={() => void locateMe()} disabled={loading} className="rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-3 text-sm font-black text-[#f8e6ad] disabled:opacity-60">
               {t.locate}
             </button>
@@ -2103,6 +2115,10 @@ export default function ControlledWaterSegmentClient() {
 
             <button type="button" onClick={navigateToSelectedTarget} disabled={!selectedTarget} className="rounded-2xl border border-violet-400/60 bg-violet-400/15 px-5 py-3 text-sm font-black text-violet-100 disabled:opacity-40">
               {lang === "el" ? "Πήγαινέ με" : "Navigate"}
+            </button>
+
+            <button type="button" onClick={refreshCurrentViewportNow} disabled={loading} className="rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60">
+              {loading ? t.loading : lang === "el" ? "Φόρτωση δικτύου" : "Load network"}
             </button>
 
             <button type="button" onClick={() => setWorkPanelOpen((value) => !value)} className="rounded-2xl border border-amber-400/60 bg-amber-400/15 px-5 py-3 text-sm font-black text-amber-100">
