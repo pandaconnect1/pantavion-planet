@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-04T19:14:00.000Z",
+  "lockedAtUtc": "2026-10-04T20:46:00.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -25,7 +25,7 @@
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "3b561ad7565cee62412579002cfb1700500900557a10e029b88fa401ae37756a",
     "app/api/professional/infrastructure/water/tiles/mvt/route.ts": "34bea14126f4bcd6c069818d4f0f65599b97f7701ed238f180a0404d541304de",
     "app/professional/infrastructure/water/admin/access/page.tsx": "627e1e1f45a2bdb465acddd8053ffc47306be7adbeb7a3d0489b11cb036dc28b",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "9e26a7c31abb4226b8299db0e88572226b9d8c96c60012fd4478ccbf05a6c667",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "5d252fcc57ed6c3bec5055a3b91ae85cba45162e6fc4f493ed53adfeec6814b7",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "828652b8565772b63b8d365fff41542b815dfc25d6cb2ca07912e488a64beff8",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
@@ -37,8 +37,8 @@
     "app/api/professional/infrastructure/water/basemap/dls/route.ts": "bf0345a807b51b4b0bcbcb7a3097e4c20453f484317f479858cecdf3ca6fb2f4"
   },
   "refreshEvidence": {
-    "reason": "Founder-directed basemap-only enhancement for Map A. Prefer licensed 2GIS HD city/road/building/address presentation when configured, retain Esri World Street Map and OSM fallbacks, and leave authentic KMZ-derived Water source truth, geometry, styles, segmented delivery, cache, authorization and privacy invariants unchanged.",
-    "sourceCommit": "d55847af3d8eb9a7f6c0fd534b7de7331a9df2d4",
+    "reason": "Founder-directed basemap-only visual replacement. Replace the yellow Esri/2GIS-dependent background with a clean neutral CARTO Voyager street basemap while preserving authentic KMZ-derived Water source truth, geometry, source styling, segmented delivery, authorization, cache and privacy invariants unchanged.",
+    "sourceCommit": "5990d75946869748e8e8561734bcf942d4cd0ec4",
     "protectedFileCount": 19,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
