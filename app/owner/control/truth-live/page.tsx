@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 
 import { requireFounderIdentity } from "@/lib/owner-control/decision-queue";
 import { createClient } from "@/lib/supabase/server";
+import { getPantavionDeploymentRevision } from "@/core/runtime/pantavion-deployment-revision";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -17,7 +18,7 @@ type ProbeResult = {
 async function runProductionAgeProbe(): Promise<ProbeResult> {
   const checkedAt = new Date().toISOString();
   try {
-    const response = await fetch("https://www.pantavion.com/api/age-assurance/verify", {
+    const response = await fetch("https://pantavion.com/api/age-assurance/verify", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -102,10 +103,14 @@ export default async function FounderLiveTruthPage() {
   }
 
   const probe = await runProductionAgeProbe();
+  const runtimeRevision = getPantavionDeploymentRevision();
   const deployment = {
-    environment: process.env.VERCEL_ENV ?? "unknown",
-    commit: process.env.VERCEL_GIT_COMMIT_SHA ?? "unknown",
-    url: process.env.VERCEL_URL ?? "unknown",
+    environment: runtimeRevision.environment ?? "unknown",
+    commit: runtimeRevision.revision ?? "unknown",
+    url: runtimeRevision.provider === "render"
+      ? "https://pantavion.com"
+      : runtimeRevision.deploymentId ?? "unknown",
+    provider: runtimeRevision.provider,
   };
 
   return (
@@ -128,7 +133,7 @@ export default async function FounderLiveTruthPage() {
 
         <section className="grid gap-4 md:grid-cols-3">
           <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
-            <div className="text-xs uppercase tracking-wider text-slate-500">Runtime environment</div>
+            <div className="text-xs uppercase tracking-wider text-slate-500">Runtime environment · {deployment.provider}</div>
             <div className="mt-2 font-mono text-sm text-cyan-200">{deployment.environment}</div>
           </article>
           <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">

@@ -1,5 +1,6 @@
 import { getVercelOidcToken } from "@vercel/oidc";
 import { NextResponse } from "next/server";
+import { getPantavionDeploymentRevision } from "@/core/runtime/pantavion-deployment-revision";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,7 +19,7 @@ function json(body: unknown, status: number) {
 }
 
 export async function GET() {
-  const revision = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? null;
+  const revision = getPantavionDeploymentRevision().revision;
 
   try {
     const token = await getVercelOidcToken();

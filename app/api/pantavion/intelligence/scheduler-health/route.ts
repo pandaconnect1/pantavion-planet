@@ -5,6 +5,7 @@ import {
   PantavionSupabaseAdminConfigurationError,
 } from "@/lib/supabase/admin";
 import { getPantavionSchedulerBridgeSnapshot } from "@/lib/supabase/oidc-scheduler-bridge";
+import { getPantavionDeploymentRevision } from "@/core/runtime/pantavion-deployment-revision";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -75,7 +76,7 @@ async function secretlessBridgeHealth(revision: string | null) {
 }
 
 export async function GET() {
-  const revision = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? null;
+  const revision = getPantavionDeploymentRevision().revision;
 
   if (!hasSupabaseAdminCredential()) {
     return secretlessBridgeHealth(revision);

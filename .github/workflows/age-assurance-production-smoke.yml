@@ -19,7 +19,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          URL="https://www.pantavion.com/api/age-assurance/verify"
+          URL="https://pantavion.com/api/age-assurance/verify"
           BODY='{"method":"CAMERA_LIVENESS","estimatedAge":19,"livenessPassed":false,"jurisdiction":"CY"}'
 
           echo "POST $URL"
