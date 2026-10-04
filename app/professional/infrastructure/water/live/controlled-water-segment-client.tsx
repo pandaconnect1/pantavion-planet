@@ -2110,9 +2110,8 @@ export default function ControlledWaterSegmentClient() {
 
         </section>
 
-        
-      <WaterLiveMapIntelligenceSelector />
-<section className="overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
+
+        <section className="overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
           <div className="flex flex-col gap-1 border-b border-slate-700 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-4">
             <h2 className="text-xl font-black text-[#f2c766] sm:text-2xl">{t.map}</h2>
             <span className="text-sm text-slate-300">
