@@ -9,6 +9,10 @@ const adminAccess = await readFile(
   new URL("../app/professional/infrastructure/water/admin/access/page.tsx", import.meta.url),
   "utf8",
 );
+const segmentRoute = await readFile(
+  new URL("../app/api/professional/infrastructure/water/segment/bbox/route.ts", import.meta.url),
+  "utf8",
+);
 
 assert.match(
   live,
@@ -29,6 +33,18 @@ assert.match(
   adminAccess,
   /window\.location\.href = `\/auth\/login\?next=\$\{encodeURIComponent\(nextPath\)\}`/,
   "missing founder auth must recover through same-origin canonical login",
+);
+
+
+assert.match(
+  segmentRoute,
+  /access\.mode === "approved-device" && deviceId && deviceToken/,
+  "Founder/Admin segment requests must not fall through to device-only authorization",
+);
+assert.doesNotMatch(
+  segmentRoute,
+  /if \(deviceId && deviceToken\) \{/,
+  "A valid Founder/Admin segment request must not be denied by an unapproved browser device",
 );
 
 console.log("water founder login routing regression: PASS");
