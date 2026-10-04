@@ -253,7 +253,8 @@ const MAX_SEGMENT_REQUESTS = 128;
 const MIN_RECURSIVE_TILE_SPAN_DEGREES = 0.00025;
 const MAX_VISIBLE_NETWORK_TILES = 24;
 const MAX_NETWORK_TILE_CACHE = 160;
-const MIN_NETWORK_TILE_ZOOM = 12;
+const MIN_NETWORK_TILE_ZOOM = 13;
+const TARGET_POINT_MIN_ZOOM = 16;
 const MAX_NETWORK_TILE_ZOOM = 19;
 
 const LEGACY_WATER_DEVICE_APPROVAL_KEY = "pantavion:water:approved-until:v4";
@@ -950,7 +951,7 @@ export default function ControlledWaterSegmentClient() {
 
     if (!map) return;
 
-    map.setView([lat, lng], Math.max(map.getZoom(), 18), {
+    map.setView([lat, lng], Math.max(map.getZoom(), TARGET_POINT_MIN_ZOOM), {
       animate: false,
     });
   }
