@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-04T14:33:00.000Z",
+  "lockedAtUtc": "2026-10-04T17:06:22.031Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -25,7 +25,7 @@
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "3b561ad7565cee62412579002cfb1700500900557a10e029b88fa401ae37756a",
     "app/api/professional/infrastructure/water/tiles/mvt/route.ts": "34bea14126f4bcd6c069818d4f0f65599b97f7701ed238f180a0404d541304de",
     "app/professional/infrastructure/water/admin/access/page.tsx": "627e1e1f45a2bdb465acddd8053ffc47306be7adbeb7a3d0489b11cb036dc28b",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "a3f8e0a5cf56d5128d6cf8173a40be56edd55ee006a5277d6d811b38fdd58603",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "709f2368b68b25c4e005db7d1e2e3a99563bdbef671fafa218daf25b7786417e",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "828652b8565772b63b8d365fff41542b815dfc25d6cb2ca07912e488a64beff8",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
@@ -33,12 +33,12 @@
     "core/security/water-admin-session.ts": "df9e9d7cbd5edfa2659068d817d60e03886e0e761ff6657ab7cb8e9b9417d2f3",
     "scripts/pantavion-water-network-runtime-lock.cjs": "0df1627215062bbb3c1e5bb91118591fd896197300cf81090d373f757fa2d5d3",
     "scripts/water-guardian-production-smoke.cjs": "2109e96821887077bc3854083d19c0f6cf7d2a464d8876458672ccb97c0667e0",
-    "scripts/water-segment-reader-regression.mjs": "119e1ff2634d7ef076da4e960ef3d000218abf32e6e457e3dd499d49bffdc979",
+    "scripts/water-segment-reader-regression.mjs": "ff30e0ae29701a583f33aafccb0b2aca69d5eab73de624fd2e36bbd8ee422f65",
     "app/api/professional/infrastructure/water/basemap/dls/route.ts": "bf0345a807b51b4b0bcbcb7a3097e4c20453f484317f479858cecdf3ca6fb2f4"
   },
   "refreshEvidence": {
-    "reason": "Founder explicitly rejected a simple road map. The default Map A basemap is now official detailed DLS cadastral data with parcels/parcel numbers, buildings, topographic features and official road/area/service labels. OpenStreetMap is emergency fallback only. Authentic Water geometry and access protections are unchanged.",
-    "sourceCommit": "e81f1536adf2d3c4c1bc80088408d1d9929414f7",
+    "reason": "Founder-directed basemap-only change. Regression gate updated only to accept the new basemap contract; authentic Water source truth, geometry, segmented delivery, authorization and privacy invariants remain unchanged.",
+    "sourceCommit": "5bf81b2726f267def83a5379cc1e2000009f3e65",
     "protectedFileCount": 19,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
