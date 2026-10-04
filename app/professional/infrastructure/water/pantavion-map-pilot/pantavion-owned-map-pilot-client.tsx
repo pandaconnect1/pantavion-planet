@@ -2,17 +2,23 @@
 
 import { useEffect, useRef, useState } from "react";
 
-declare global {
-  interface Window {
-    maplibregl?: any;
-  }
-}
+type JsonProperties = Record<string, unknown>;
+
+type GeoJsonFeature = {
+  id?: string | number;
+  type?: string;
+  geometry?: unknown;
+  properties?: JsonProperties;
+  [key: string]: unknown;
+};
+
+type FeatureCollection = {
+  type: "FeatureCollection";
+  features: GeoJsonFeature[];
+};
 
 type SegmentResponse = {
-  segment?: {
-    type: "FeatureCollection";
-    features: any[];
-  };
+  segment?: FeatureCollection;
   segmentCount?: number;
   segmentTruncated?: boolean;
   completeNetworkReturned?: boolean;
@@ -26,6 +32,61 @@ type DeviceIdentity = {
   deviceId: string;
   deviceToken: string;
 };
+
+type MapLibreBounds = {
+  getWest(): number;
+  getSouth(): number;
+  getEast(): number;
+  getNorth(): number;
+};
+
+type MapLibreGeoJsonSource = {
+  setData(data: FeatureCollection): void;
+};
+
+type MapLibreMap = {
+  addControl(control: unknown, position?: string): void;
+  on(event: string, handler: () => void): void;
+  getSource(id: string): MapLibreGeoJsonSource | undefined;
+  addSource(id: string, source: unknown): void;
+  getLayer(id: string): unknown;
+  addLayer(layer: unknown): void;
+  getZoom(): number;
+  getBounds(): MapLibreBounds;
+  easeTo(options: {
+    center: [number, number];
+    zoom: number;
+    duration?: number;
+  }): void;
+  remove(): void;
+};
+
+type MapLibreMarker = {
+  setLngLat(coordinates: [number, number]): MapLibreMarker;
+  addTo(map: MapLibreMap): MapLibreMarker;
+  remove(): void;
+};
+
+type MapLibreApi = {
+  Map: new (options: {
+    container: HTMLElement;
+    style: string;
+    center: [number, number];
+    zoom: number;
+    pitch: number;
+    bearing: number;
+    attributionControl: boolean;
+    cooperativeGestures: boolean;
+  }) => MapLibreMap;
+  NavigationControl: new () => unknown;
+  Marker: new (options: { element: HTMLElement }) => MapLibreMarker;
+};
+
+declare global {
+  interface Window {
+    maplibregl?: MapLibreApi;
+  }
+}
 
 const LIMASSOL_CENTER: [number, number] = [33.0442, 34.6851];
 const MAX_FEATURES = 1200;
@@ -45,6 +106,12 @@ const DEVICE_TOKEN_KEYS = [
   "pantavionWaterAccessDeviceToken",
   "waterAccessDeviceToken",
 ];
+
+function asRecord(value: unknown): JsonProperties | null {
+  return value !== null && typeof value === "object"
+    ? (value as JsonProperties)
+    : null;
+}
 
 function randomSecret() {
   if (typeof window !== "undefined" && window.crypto?.getRandomValues) {
@@ -80,7 +147,7 @@ function getOrCreateDevice(): DeviceIdentity {
 }
 
 function ensureMapLibre() {
-  return new Promise<any>((resolve, reject) => {
+  return new Promise<MapLibreApi>((resolve, reject) => {
     if (typeof window === "undefined") {
       reject(new Error("window_unavailable"));
       return;
@@ -101,7 +168,14 @@ function ensureMapLibre() {
 
     const existing = document.querySelector("script[data-pantavion-maplibre-js]");
     if (existing) {
-      existing.addEventListener("load", () => resolve(window.maplibregl), { once: true });
+      existing.addEventListener(
+        "load",
+        () => {
+          if (window.maplibregl) resolve(window.maplibregl);
+          else reject(new Error("maplibre_missing_after_load"));
+        },
+        { once: true },
+      );
       existing.addEventListener("error", () => reject(new Error("maplibre_script_failed")), {
         once: true,
       });
@@ -113,50 +187,56 @@ function ensureMapLibre() {
     script.async = true;
     script.defer = true;
     script.setAttribute("data-pantavion-maplibre-js", "true");
-    script.onload = () => resolve(window.maplibregl);
+    script.onload = () => {
+      if (window.maplibregl) resolve(window.maplibregl);
+      else reject(new Error("maplibre_missing_after_load"));
+    };
     script.onerror = () => reject(new Error("maplibre_script_failed"));
     document.head.appendChild(script);
   });
 }
 
-function authenticColorExpression() {
-  return [
-    "coalesce",
-    ["get", "pantavionColor"],
-    "#00b7ff",
-  ];
+function authenticColorExpression(): unknown[] {
+  return ["coalesce", ["get", "pantavionColor"], "#00b7ff"];
 }
 
-function authenticWidthExpression() {
-  return [
-    "coalesce",
-    ["get", "pantavionWidth"],
-    1,
-  ];
+function authenticWidthExpression(): unknown[] {
+  return ["coalesce", ["get", "pantavionWidth"], 1];
 }
 
-function normalizeFeatures(features: any[]) {
+function normalizeFeatures(features: GeoJsonFeature[]): GeoJsonFeature[] {
   return features.map((feature, index) => {
-    const style = feature?.properties?.kmlLineStyle;
+    const properties = asRecord(feature.properties) ?? {};
+    const style = asRecord(properties.kmlLineStyle);
+
     const color =
-      style && typeof style === "object" && typeof style.color === "string"
+      style && typeof style.color === "string"
         ? style.color
         : "#00b7ff";
-    const rawWidth =
-      style && typeof style === "object"
-        ? Number(style.weight ?? style.width ?? 1)
-        : 1;
+
+    const rawWidth = style
+      ? Number(style.weight ?? style.width ?? 1)
+      : 1;
+
     const width = Math.max(1, Math.min(6, Number.isFinite(rawWidth) ? rawWidth : 1));
+
+    const featureId =
+      feature.id ??
+      (typeof properties.placemarkIndex === "string" ||
+      typeof properties.placemarkIndex === "number"
+        ? properties.placemarkIndex
+        : undefined) ??
+      (typeof properties.featureIndex === "string" ||
+      typeof properties.featureIndex === "number"
+        ? properties.featureIndex
+        : undefined) ??
+      `water-${index}`;
 
     return {
       ...feature,
-      id:
-        feature?.id ??
-        feature?.properties?.placemarkIndex ??
-        feature?.properties?.featureIndex ??
-        `water-${index}`,
+      id: featureId,
       properties: {
-        ...(feature?.properties ?? {}),
+        ...properties,
         pantavionColor: color,
         pantavionWidth: width,
       },
@@ -170,9 +250,9 @@ export default function PantavionOwnedMapPilotClient({
   styleUrl: string;
 }) {
   const mapEl = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<any>(null);
+  const mapRef = useRef<MapLibreMap | null>(null);
   const loadingRef = useRef(false);
-  const locationMarkerRef = useRef<any>(null);
+  const locationMarkerRef = useRef<MapLibreMarker | null>(null);
   const debounceRef = useRef<number | null>(null);
 
   const [message, setMessage] = useState("Εκκίνηση Pantavion Map Engine...");
@@ -277,18 +357,18 @@ export default function PantavionOwnedMapPilotClient({
       }
 
       try {
-        locationMarkerRef.current?.remove?.();
+        locationMarkerRef.current?.remove();
       } catch {}
       locationMarkerRef.current = null;
 
       try {
-        mapRef.current?.remove?.();
+        mapRef.current?.remove();
       } catch {}
       mapRef.current = null;
     };
   }, [styleUrl]);
 
-  async function loadVisibleWater(map = mapRef.current) {
+  async function loadVisibleWater(map: MapLibreMap | null = mapRef.current) {
     if (!map || loadingRef.current || map.getZoom() < 14) return;
 
     loadingRef.current = true;
@@ -330,7 +410,7 @@ export default function PantavionOwnedMapPilotClient({
       const features = normalizeFeatures(json.segment?.features ?? []);
       const source = map.getSource("pantavion-water");
 
-      if (source?.setData) {
+      if (source) {
         source.setData({
           type: "FeatureCollection",
           features,
@@ -370,7 +450,7 @@ export default function PantavionOwnedMapPilotClient({
         const lat = position.coords.latitude;
 
         try {
-          locationMarkerRef.current?.remove?.();
+          locationMarkerRef.current?.remove();
         } catch {}
 
         const markerEl = document.createElement("div");
