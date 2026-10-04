@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-04T06:35:00.000Z",
+  "lockedAtUtc": "2026-10-04T09:11:22.775Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -27,7 +27,7 @@
     "app/professional/infrastructure/water/admin/access/page.tsx": "114a41ba924010da56c145355520cecde41c4fb914c853949c03437805fd4e24",
     "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "d399716b4ef2f610c6404996d94d12d0e48e1327d91f476c79a517b2f3418c38",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
-    "core/infrastructure/water/controlled-water-segment-index-provider.ts": "4e4711818dd5e5c3b924677db72e6816d06221760f20cd5e10217a86a199a7eb",
+    "core/infrastructure/water/controlled-water-segment-index-provider.ts": "828652b8565772b63b8d365fff41542b815dfc25d6cb2ca07912e488a64beff8",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
     "core/security/privileged-request-boundary.ts": "44376bf768b225f9228f676238c33b2cab69b517963089460e9e4cabcf3bcf49",
     "core/security/water-admin-session.ts": "df9e9d7cbd5edfa2659068d817d60e03886e0e761ff6657ab7cb8e9b9417d2f3",
@@ -36,8 +36,8 @@
     "scripts/water-segment-reader-regression.mjs": "8b1f075c8143fbe0041bc8918b0a1717ea46e034f57c09479a5a7eb9f0206c33"
   },
   "refreshEvidence": {
-    "reason": "Founder-authorized deliberate refresh after verified Map A pan/zoom reload, multilingual/provider search, selected-target navigation, structured field-work panel and material catalog integration. CI/deploy spine, Guardian, runtime services, social, translation and excavation passed before refresh. Only the protected Map A viewer hash is refreshed; source truth, authorization, private-source and segmented-delivery invariants remain unchanged.",
-    "sourceCommit": "160a2425144f14674910696341b1afdff902f18e",
+    "reason": "Reviewed Pantavion object-storage private segment source change; source truth, authorization, private-source and segmented-delivery invariants remain unchanged.",
+    "sourceCommit": "d84fd1235ec7e335e8ac96395b1cccc049098562",
     "protectedFileCount": 18,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false

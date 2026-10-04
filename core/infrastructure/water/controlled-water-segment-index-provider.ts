@@ -1,5 +1,7 @@
-﻿import { get, head, type HeadBlobResult } from "@vercel/blob";
+﻿import { get, head } from "@vercel/blob";
 import { promises as fs } from "fs";
+import { getPantavionWaterObjectStorageSafeStatus } from "./water-object-storage-contract";
+import { headPrivateObject, readPrivateObject } from "./s3-compatible-object-storage";
 import path from "path";
 
 import {
@@ -84,7 +86,7 @@ const STREAM_FALLBACK_TIMEOUT_MS = 45_000;
 let cachedIndex: IndexRecord[] | null = null;
 let cachedVerified = false;
 let cachedManifest: WaterIndexManifest | null = null;
-let cachedNdjsonMetadata: HeadBlobResult | null = null;
+let cachedNdjsonMetadata: { size: number; url?: string } | null = null;
 const cachedFeatures = new Map<string, unknown>();
 
 function waterSegmentError(code: string, message: string) {
@@ -104,6 +106,10 @@ export function getWaterSegmentDiagnosticCode(error: unknown) {
   if (message.includes("bbox") || message.includes("περιοχή")) return "WATER_BBOX";
 
   return "WATER_SEGMENT_UNKNOWN";
+}
+
+function shouldUsePantavionObjectStorage() {
+  return getPantavionWaterObjectStorageSafeStatus().configured;
 }
 
 function shouldUseProductionBlobSource() {
@@ -171,6 +177,11 @@ async function readPrivateBlobBuffer(pathname: string) {
 }
 
 async function readTextSource(localPath: string, blobPath: string) {
+  if (shouldUsePantavionObjectStorage()) {
+    const response = await readPrivateObject({ key: blobPath });
+    return response.text();
+  }
+
   if (shouldUseProductionBlobSource()) {
     return (await readPrivateBlobBuffer(blobPath)).toString("utf8");
   }
@@ -360,18 +371,15 @@ async function readIndex() {
 
 async function getNdjsonMetadata() {
   if (!cachedNdjsonMetadata) {
-    cachedNdjsonMetadata = await head(BLOB_PATHS.ndjson, {
-      token: getPrivateBlobToken(),
-    });
+    cachedNdjsonMetadata = shouldUsePantavionObjectStorage()
+      ? await headPrivateObject(BLOB_PATHS.ndjson)
+      : await head(BLOB_PATHS.ndjson, { token: getPrivateBlobToken() });
   }
 
-  if (
-    cachedNdjsonMetadata.size <= 0 ||
-    !cachedNdjsonMetadata.url.startsWith("https://")
-  ) {
+  if (cachedNdjsonMetadata.size <= 0) {
     throw waterSegmentError(
-      "WATER_BLOB_METADATA",
-      "Private water NDJSON blob metadata is invalid.",
+      "WATER_PRIVATE_METADATA",
+      "Private water NDJSON metadata is invalid.",
     );
   }
 
@@ -456,32 +464,41 @@ function cacheFeature(record: IndexRecord, feature: unknown) {
 
 async function fetchPrivateRange(
   batch: PrivateWaterRangeBatch,
-  metadata: HeadBlobResult,
+  metadata: { size: number; url?: string },
 ) {
-  const result = await get(BLOB_PATHS.ndjson, {
-    access: "private",
-    token: getPrivateBlobToken(),
-    headers: {
-      Range: `bytes=${batch.start}-${batch.end}`,
-    },
-    abortSignal: AbortSignal.timeout(RANGE_READ_TIMEOUT_MS),
-  });
-
-  if (!result || result.statusCode !== 200 || !result.stream) {
-    throw waterSegmentError(
-      "WATER_RANGE_READ",
-      "Private water blob range read failed.",
-    );
-  }
-
-  assertContentRange(
-    result.headers.get("content-range"),
-    batch.start,
-    batch.end,
-    metadata.size,
-  );
-
-  const buffer = await streamToBuffer(result.stream);
+  const buffer = shouldUsePantavionObjectStorage()
+    ? await (async () => {
+        const response = await readPrivateObject({
+          key: BLOB_PATHS.ndjson,
+          range: { start: batch.start, end: batch.end },
+          timeoutMs: RANGE_READ_TIMEOUT_MS,
+        });
+        assertContentRange(
+          response.headers.get("content-range"),
+          batch.start,
+          batch.end,
+          metadata.size,
+        );
+        return Buffer.from(await response.arrayBuffer());
+      })()
+    : await (async () => {
+        const result = await get(BLOB_PATHS.ndjson, {
+          access: "private",
+          token: getPrivateBlobToken(),
+          headers: { Range: `bytes=${batch.start}-${batch.end}` },
+          abortSignal: AbortSignal.timeout(RANGE_READ_TIMEOUT_MS),
+        });
+        if (!result || result.statusCode !== 200 || !result.stream) {
+          throw waterSegmentError("WATER_RANGE_READ", "Private water blob range read failed.");
+        }
+        assertContentRange(
+          result.headers.get("content-range"),
+          batch.start,
+          batch.end,
+          metadata.size,
+        );
+        return streamToBuffer(result.stream);
+      })();
   const expectedBytes = batch.end - batch.start + 1;
 
   if (buffer.byteLength !== expectedBytes) {
@@ -575,13 +592,18 @@ async function readPrivateFeaturesByStream(records: IndexRecord[]) {
 
   if (missingRecords.length === 0) return output;
 
-  const result = await get(BLOB_PATHS.ndjson, {
-    access: "private",
-    token: getPrivateBlobToken(),
-    abortSignal: AbortSignal.timeout(STREAM_FALLBACK_TIMEOUT_MS),
-  });
+  const stream = shouldUsePantavionObjectStorage()
+    ? (await readPrivateObject({
+        key: BLOB_PATHS.ndjson,
+        timeoutMs: STREAM_FALLBACK_TIMEOUT_MS,
+      })).body
+    : (await get(BLOB_PATHS.ndjson, {
+        access: "private",
+        token: getPrivateBlobToken(),
+        abortSignal: AbortSignal.timeout(STREAM_FALLBACK_TIMEOUT_MS),
+      }))?.stream;
 
-  if (!result || result.statusCode !== 200 || !result.stream) {
+  if (!stream) {
     throw waterSegmentError(
       "WATER_STREAM_READ",
       "Private water stream fallback could not open the NDJSON source.",
@@ -589,7 +611,7 @@ async function readPrivateFeaturesByStream(records: IndexRecord[]) {
   }
 
   const features = await extractPrivateWaterFeaturesFromStream(
-    result.stream,
+    stream,
     missingRecords,
     metadata.size,
   );
@@ -603,7 +625,7 @@ async function readPrivateFeaturesByStream(records: IndexRecord[]) {
 }
 
 async function readFeatures(records: IndexRecord[]) {
-  if (shouldUseProductionBlobSource()) {
+  if (shouldUsePantavionObjectStorage() || shouldUseProductionBlobSource()) {
     try {
       return await readPrivateFeaturesByRange(records);
     } catch (rangeError) {
@@ -652,9 +674,11 @@ export async function getControlledWaterSegmentFromPrivateIndex(
   const selected = matches.slice(0, maxFeatures);
   const features = await readFeatures(selected);
 
-  const sourceMode = shouldUseProductionBlobSource()
-    ? "verified_private_blob_index_from_authentic_kmz"
-    : "verified_private_index_from_authentic_kmz";
+  const sourceMode = shouldUsePantavionObjectStorage()
+    ? "verified_pantavion_object_storage_index_from_authentic_kmz"
+    : shouldUseProductionBlobSource()
+      ? "verified_private_blob_index_from_authentic_kmz"
+      : "verified_private_index_from_authentic_kmz";
 
   return {
     marker: "pantavion_verified_private_water_segment_v1",
