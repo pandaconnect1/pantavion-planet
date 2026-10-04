@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-04T11:06:00.000Z",
+  "lockedAtUtc": "2026-10-04T11:42:00.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -22,7 +22,7 @@
     "app/api/professional/infrastructure/water/access/invite/claim/route.ts": "cbdedb6771e0155fbb55b772e8e9e30fb9029060cdb1861d25e25a1dbdc8b16b",
     "app/api/professional/infrastructure/water/admin/session/route.ts": "62ee109cfc6854bd472fa7e7cb6c56b237f2bfa9d4eb2455a562b686fd09f2ab",
     "app/api/professional/infrastructure/water/mapserver/0/query/route.ts": "3d4784ac3af414b1b143588c721fe8bee24d1c98e60b131caaa93b3ab398ae59",
-    "app/api/professional/infrastructure/water/segment/bbox/route.ts": "bc94c96a66478412878747bc3f0c8ca428ba75de87799cb6c0128f2e93637b80",
+    "app/api/professional/infrastructure/water/segment/bbox/route.ts": "3b561ad7565cee62412579002cfb1700500900557a10e029b88fa401ae37756a",
     "app/api/professional/infrastructure/water/tiles/mvt/route.ts": "34bea14126f4bcd6c069818d4f0f65599b97f7701ed238f180a0404d541304de",
     "app/professional/infrastructure/water/admin/access/page.tsx": "627e1e1f45a2bdb465acddd8053ffc47306be7adbeb7a3d0489b11cb036dc28b",
     "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "e22b05152e39d10b22b0b724ef6b373fbfe2fa1a2c7d8713b29a5ed6bb2ab8de",
@@ -36,8 +36,8 @@
     "scripts/water-segment-reader-regression.mjs": "8b1f075c8143fbe0041bc8918b0a1717ea46e034f57c09479a5a7eb9f0206c33"
   },
   "refreshEvidence": {
-    "reason": "Founder recognition recovery: route unrecognized Founder/Admin browsers through canonical Pantavion login and recover missing authenticated founder session without weakening normal-user access. Authentic Water source truth, geometry, segmented delivery, and raw-master invariants remain unchanged.",
-    "sourceCommit": "d614c84bd854b533af814ab2c72b696da549ae88",
+    "reason": "Founder live-network correction: once a request is already authorized as Founder/Admin, it must not fall through the approved-device RPC and be denied by the browser device token. Authentic Water geometry, source truth, segmented delivery, and raw-master protections remain unchanged.",
+    "sourceCommit": "4658bd39c822b74238f14a5c68856854ce20119b",
     "protectedFileCount": 18,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false

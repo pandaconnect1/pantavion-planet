@@ -183,7 +183,7 @@ export async function GET(request: Request) {
       }
     }
 
-    if (deviceId && deviceToken) {
+    if (access.mode === "approved-device" && deviceId && deviceToken) {
       // Railway-safe PostGIS path: the exact approved device + token hash is
       // revalidated inside Postgres before the private spatial primitive runs.
       try {
