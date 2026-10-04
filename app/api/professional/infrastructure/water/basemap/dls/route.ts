@@ -69,7 +69,7 @@ export async function GET(request: Request) {
   upstream.searchParams.set("size", `${TILE_SIZE * 2},${TILE_SIZE * 2}`);
   upstream.searchParams.set("dpi", "192");
   upstream.searchParams.set("format", "png32");
-  upstream.searchParams.set("transparent", "true");
+  upstream.searchParams.set("transparent", mode === "roads" ? "true" : "false");
   upstream.searchParams.set(
     "layers",
     mode === "roads" ? "show:4,7,13,14,15" : "show:0,19,21,22,23,28",
