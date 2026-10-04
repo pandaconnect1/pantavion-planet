@@ -1,4 +1,5 @@
 import ControlledWaterSegmentClient from "./controlled-water-segment-client";
+import WaterUserRequestsPanel from "./water-user-requests-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -9,5 +10,10 @@ export const metadata = {
 };
 
 export default function WaterLivePage() {
-  return <ControlledWaterSegmentClient />;
+  return (
+    <>
+      <ControlledWaterSegmentClient />
+      <WaterUserRequestsPanel />
+    </>
+  );
 }
