@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { WATER_MATERIAL_SAMPLE_CATALOG } from "@/core/water/water-material-catalog";
 import {
   PANTAVION_LANGUAGE_CATALOG,
   getPantavionUiLanguage,
@@ -2117,7 +2118,13 @@ export default function ControlledWaterSegmentClient() {
                 <div className="rounded-xl border border-slate-700 px-3 py-3 text-sm text-slate-200">
                   Όγκος: {(() => { const l=Number(excavationLength),w=Number(excavationWidth),d=Number(excavationDepth); return [l,w,d].every(Number.isFinite) && l>=0 && w>=0 && d>=0 ? (l*w*d).toFixed(3) : "—"; })()} m³
                 </div>
-                <input value={workMaterial} onChange={(e) => setWorkMaterial(e.target.value)} placeholder={lang === "el" ? "Υλικό / εξάρτημα" : "Material / fitting"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <select value={workMaterial} onChange={(e) => setWorkMaterial(e.target.value)} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white">
+                  <option value="">{lang === "el" ? "Επίλεξε υλικό / εξάρτημα" : "Select material / fitting"}</option>
+                  {WATER_MATERIAL_SAMPLE_CATALOG.map((item) => (
+                    <option key={item.id} value={item.id}>{item.serviceLabel}</option>
+                  ))}
+                  <option value="OTHER">{lang === "el" ? "Άλλο — για έλεγχο/προσθήκη" : "Other — review/add"}</option>
+                </select>
                 <input inputMode="decimal" value={workMaterialQty} onChange={(e) => setWorkMaterialQty(e.target.value)} placeholder={lang === "el" ? "Ποσότητα" : "Quantity"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
                 <input inputMode="decimal" value={workHours} onChange={(e) => setWorkHours(e.target.value)} placeholder={lang === "el" ? "Εργατοώρες" : "Labour hours"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
                 <input value={workEvidence} onChange={(e) => setWorkEvidence(e.target.value)} placeholder={lang === "el" ? "Photo / evidence reference" : "Photo / evidence reference"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
