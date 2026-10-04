@@ -231,6 +231,12 @@ function verifyRuntimeWiring() {
   assert.match(mapServerRoute, /"X-Pantavion-Water-Raw-Master": "not-included"/);
 
   assert.match(client, /map\.on\("moveend zoomend", scheduleAutoLoad\)/);
+  assert.match(client, /function refreshCurrentViewportNow\(\)/);
+  assert.ok(
+    (client.match(/refreshCurrentViewportNow\(\);/g) || []).length >= 2,
+    "GPS and manual map-point selection must both force the current network viewport to reload",
+  );
+  assert.match(client, /Φόρτωση δικτύου/);
   assert.match(client, /WATER_NO_VISIBLE_FEATURES/);
   assert.match(client, /WATER_CLIENT_LOAD/);
   assert.match(
