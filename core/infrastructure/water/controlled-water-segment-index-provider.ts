@@ -1,4 +1,4 @@
-﻿import { get, head, type HeadBlobResult } from "@vercel/blob";
+﻿import { get, head } from "@vercel/blob";
 import { promises as fs } from "fs";
 import { getPantavionWaterObjectStorageSafeStatus } from "./water-object-storage-contract";
 import { headPrivateObject, readPrivateObject } from "./s3-compatible-object-storage";
@@ -592,13 +592,18 @@ async function readPrivateFeaturesByStream(records: IndexRecord[]) {
 
   if (missingRecords.length === 0) return output;
 
-  const result = await get(BLOB_PATHS.ndjson, {
-    access: "private",
-    token: getPrivateBlobToken(),
-    abortSignal: AbortSignal.timeout(STREAM_FALLBACK_TIMEOUT_MS),
-  });
+  const stream = shouldUsePantavionObjectStorage()
+    ? (await readPrivateObject({
+        key: BLOB_PATHS.ndjson,
+        timeoutMs: STREAM_FALLBACK_TIMEOUT_MS,
+      })).body
+    : (await get(BLOB_PATHS.ndjson, {
+        access: "private",
+        token: getPrivateBlobToken(),
+        abortSignal: AbortSignal.timeout(STREAM_FALLBACK_TIMEOUT_MS),
+      }))?.stream;
 
-  if (!result || result.statusCode !== 200 || !result.stream) {
+  if (!stream) {
     throw waterSegmentError(
       "WATER_STREAM_READ",
       "Private water stream fallback could not open the NDJSON source.",
@@ -606,7 +611,7 @@ async function readPrivateFeaturesByStream(records: IndexRecord[]) {
   }
 
   const features = await extractPrivateWaterFeaturesFromStream(
-    result.stream,
+    stream,
     missingRecords,
     metadata.size,
   );
