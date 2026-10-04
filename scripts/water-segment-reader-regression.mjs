@@ -237,6 +237,13 @@ function verifyRuntimeWiring() {
     "GPS and manual map-point selection must both force the current network viewport to reload",
   );
   assert.match(client, /Φόρτωση δικτύου/);
+  assert.match(client, /dir_action=navigate/);
+  assert.match(client, /window\.location\.assign\(navigationUrl\)/);
+  assert.doesNotMatch(
+    client,
+    /window\.open\(\s*\`https:\/\/www\.google\.com\/maps\/dir/,
+    "Navigate must not rely on a popup that mobile browsers can block",
+  );
   // Basemap stays isolated beneath the protected Water pane. Keep Map A on
   // Leaflet-only rendering and expose real field-map choices without touching Water.
   assert.match(client, /NEXT_PUBLIC_2GIS_MAP_KEY/);
