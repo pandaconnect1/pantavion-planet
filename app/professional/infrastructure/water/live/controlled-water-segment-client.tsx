@@ -379,112 +379,6 @@ function ensureLeaflet() {
   return leafletPromise;
 }
 
-type PantavionVectorLeafletLayer = {
-  addTo: (map: unknown) => PantavionVectorLeafletLayer;
-  getMaplibreMap?: () => {
-    once?: (eventName: string, handler: () => void) => void;
-    on?: (eventName: string, handler: () => void) => void;
-  };
-};
-
-type PantavionVectorLeafletAdapter = {
-  maplibreGL: (options: { style: string }) => PantavionVectorLeafletLayer;
-};
-
-let pantavionVectorBasemapPromise: Promise<PantavionVectorLeafletAdapter> | null = null;
-
-function ensureExternalStylesheet(href: string, marker: string) {
-  if (typeof document === "undefined" || document.querySelector(`link[${marker}]`)) return;
-
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = href;
-  link.setAttribute(marker, "true");
-  document.head.appendChild(link);
-}
-
-function loadExternalScript(src: string, marker: string) {
-  return new Promise<void>((resolve, reject) => {
-    if (typeof document === "undefined") {
-      reject(new Error("document unavailable"));
-      return;
-    }
-
-    const existing = document.querySelector(`script[${marker}]`);
-    if (existing) {
-      if (existing.getAttribute("data-loaded") === "true") {
-        resolve();
-        return;
-      }
-      existing.addEventListener("load", () => resolve(), { once: true });
-      existing.addEventListener("error", () => reject(new Error("script load failed")), {
-        once: true,
-      });
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = src;
-    script.async = true;
-    script.setAttribute(marker, "true");
-    script.addEventListener(
-      "load",
-      () => {
-        script.setAttribute("data-loaded", "true");
-        resolve();
-      },
-      { once: true },
-    );
-    script.addEventListener("error", () => reject(new Error("script load failed")), {
-      once: true,
-    });
-    document.head.appendChild(script);
-  });
-}
-
-function ensurePantavionVectorBasemap() {
-  if (typeof window === "undefined") {
-    return Promise.reject(new Error("window unavailable"));
-  }
-
-  const runtimeWindow = window as unknown as {
-    MaplibreGLLeaflet?: PantavionVectorLeafletAdapter;
-  };
-
-  if (runtimeWindow.MaplibreGLLeaflet?.maplibreGL) {
-    return Promise.resolve(runtimeWindow.MaplibreGLLeaflet);
-  }
-
-  if (!pantavionVectorBasemapPromise) {
-    pantavionVectorBasemapPromise = (async () => {
-      ensureExternalStylesheet(
-        "https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.css",
-        "data-pantavion-maplibre-css",
-      );
-      await loadExternalScript(
-        "https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.js",
-        "data-pantavion-maplibre-js",
-      );
-      await loadExternalScript(
-        "https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.4/dist/leaflet-maplibre-gl.js",
-        "data-pantavion-maplibre-leaflet-js",
-      );
-
-      const adapter = runtimeWindow.MaplibreGLLeaflet;
-      if (!adapter?.maplibreGL) {
-        throw new Error("Pantavion vector basemap adapter unavailable");
-      }
-
-      return adapter;
-    })().catch((error) => {
-      pantavionVectorBasemapPromise = null;
-      throw error;
-    });
-  }
-
-  return pantavionVectorBasemapPromise;
-}
-
 function getPipeStyle(feature: {
   properties?: {
     sourceColorCss?: unknown;
@@ -930,51 +824,46 @@ export default function ControlledWaterSegmentClient() {
         // Keep the authentic Water network renderer, authorization, tile cache,
         // segment API, geometry and styles untouched. Only replace the visual
         // background beneath the dedicated Water pane.
+        // BASEMAP-ONLY STABILIZATION:
+        // Keep the proven Leaflet-only runtime so the visual basemap cannot
+        // compete with or interfere with protected Water viewport loading.
+        // The Water pane, segmented API, geometry, source styles and cache stay untouched.
         const emergencyRoadFallback = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          pane: "tilePane",
           maxZoom: 20,
           attribution: "&copy; OpenStreetMap contributors",
-        }).addTo(map);
+        });
 
+        const detailedRoadBasemap = L.tileLayer(
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+          {
+            pane: "tilePane",
+            maxZoom: 20,
+            attribution: "Tiles &copy; Esri",
+          },
+        );
+
+        let detailedBasemapFailures = 0;
         setBasemapState("loading");
 
-        void ensurePantavionVectorBasemap()
-          .then((adapter) => {
-            if (cancelled) return;
+        detailedRoadBasemap.on("tileload", () => {
+          if (!cancelled) setBasemapState("pantavion");
+        });
 
-            const detailedBasemap = adapter.maplibreGL({
-              style: "https://tiles.openfreemap.org/styles/liberty",
-            });
-            detailedBasemap.addTo(map);
+        detailedRoadBasemap.on("tileerror", () => {
+          detailedBasemapFailures += 1;
+          if (cancelled || detailedBasemapFailures < 4) return;
 
-            const vectorMap = detailedBasemap.getMaplibreMap?.();
-            const markDetailedBasemapReady = () => {
-              if (cancelled) return;
-              if (map.hasLayer(emergencyRoadFallback)) {
-                map.removeLayer(emergencyRoadFallback);
-              }
-              map.attributionControl?.addAttribution?.(
-                "&copy; OpenStreetMap contributors · OpenFreeMap",
-              );
-              setBasemapState("pantavion");
-            };
+          if (map.hasLayer(detailedRoadBasemap)) {
+            map.removeLayer(detailedRoadBasemap);
+          }
+          if (!map.hasLayer(emergencyRoadFallback)) {
+            emergencyRoadFallback.addTo(map);
+          }
+          setBasemapState("fallback");
+        });
 
-            if (vectorMap?.once) {
-              vectorMap.once("load", markDetailedBasemapReady);
-            } else {
-              markDetailedBasemapReady();
-            }
-
-            vectorMap?.on?.("error", () => {
-              if (cancelled) return;
-              if (!map.hasLayer(emergencyRoadFallback)) {
-                emergencyRoadFallback.addTo(map);
-              }
-              setBasemapState("fallback");
-            });
-          })
-          .catch(() => {
-            if (!cancelled) setBasemapState("fallback");
-          });
+        detailedRoadBasemap.addTo(map);
 
         mapRef.current = map;
         map.on("click", (event: { latlng: { lat: number; lng: number } }) => {
@@ -2404,10 +2293,10 @@ export default function ControlledWaterSegmentClient() {
             <span className="text-sm text-slate-300">
               {pipeCount !== null ? `${t.loaded}: ${pipeCount}` : t.protected}
               {basemapState === "pantavion"
-                ? ` · ${lang === "el" ? "Υπόβαθρο: Pantavion λεπτομερής vector χάρτης" : "Basemap: Pantavion detailed vector map"}`
+                ? ` · ${lang === "el" ? "Υπόβαθρο: λεπτομερής οδικός χάρτης" : "Basemap: detailed street map"}`
                 : basemapState === "fallback"
                   ? ` · ${lang === "el" ? "Υπόβαθρο: ασφαλές προσωρινό οδικό" : "Basemap: safe temporary road map"}`
-                  : ` · ${lang === "el" ? "Υπόβαθρο: φόρτωση Pantavion vector χάρτη" : "Basemap: loading Pantavion vector map"}`}
+                  : ` · ${lang === "el" ? "Υπόβαθρο: φόρτωση λεπτομερούς οδικού χάρτη" : "Basemap: loading detailed street map"}`}
               {approvedChangeCount > 0 || approvedEvidenceCount > 0
                 ? ` · approved changes ${approvedChangeCount} · evidence ${approvedEvidenceCount}`
                 : ""}
