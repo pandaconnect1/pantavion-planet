@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { WATER_FIELD_WORK_LIFECYCLE, type WaterFieldWorkRecord } from "@/core/water/water-field-work-record";
 import { WATER_MATERIAL_SAMPLE_CATALOG } from "@/core/water/water-material-catalog";
 import { UnconfiguredWaterFieldWorkRepository } from "@/core/water/water-field-work-repository";
+import { authorizeWaterMapRequest } from "@/core/security/water-map-request-access";
 
 const repository = new UnconfiguredWaterFieldWorkRepository();
 
@@ -11,6 +12,11 @@ function finiteNonNegative(value: unknown) {
 }
 
 export async function POST(request: Request) {
+  const access = await authorizeWaterMapRequest(request);
+  if (!access.ok) {
+    return NextResponse.json({ ok:false, error:"access_not_approved" }, { status:401 });
+  }
+
   const body = await request.json().catch(() => null) as Partial<WaterFieldWorkRecord> | null;
   if (!body?.workOrderId?.trim() || !body.stage || !WATER_FIELD_WORK_LIFECYCLE.includes(body.stage)) {
     return NextResponse.json({ ok:false, error:"invalid_field_work_record" }, { status:400 });
@@ -64,5 +70,10 @@ export async function POST(request: Request) {
   }
 
   const saved = await repository.save(record);
-  return NextResponse.json({ ok:true, saved, canonicalNetworkMutated:false }, { status:201 });
+  return NextResponse.json({
+    ok:true,
+    saved,
+    actorRef:access.actorRef,
+    canonicalNetworkMutated:false,
+  }, { status:201 });
 }
