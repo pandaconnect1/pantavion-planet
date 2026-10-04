@@ -590,6 +590,10 @@ export default function ControlledWaterSegmentClient() {
   const [excavationLength, setExcavationLength] = useState("");
   const [excavationWidth, setExcavationWidth] = useState("");
   const [excavationDepth, setExcavationDepth] = useState("");
+  const [workMaterial, setWorkMaterial] = useState("");
+  const [workMaterialQty, setWorkMaterialQty] = useState("");
+  const [workHours, setWorkHours] = useState("");
+  const [workEvidence, setWorkEvidence] = useState("");
   const [selectedTarget, setSelectedTarget] = useState<{ lat: number; lng: number } | null>(null);
   const [addressCandidates, setAddressCandidates] = useState<Array<{
     candidateId: string;
@@ -2113,6 +2117,10 @@ export default function ControlledWaterSegmentClient() {
                 <div className="rounded-xl border border-slate-700 px-3 py-3 text-sm text-slate-200">
                   Όγκος: {(() => { const l=Number(excavationLength),w=Number(excavationWidth),d=Number(excavationDepth); return [l,w,d].every(Number.isFinite) && l>=0 && w>=0 && d>=0 ? (l*w*d).toFixed(3) : "—"; })()} m³
                 </div>
+                <input value={workMaterial} onChange={(e) => setWorkMaterial(e.target.value)} placeholder={lang === "el" ? "Υλικό / εξάρτημα" : "Material / fitting"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input inputMode="decimal" value={workMaterialQty} onChange={(e) => setWorkMaterialQty(e.target.value)} placeholder={lang === "el" ? "Ποσότητα" : "Quantity"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input inputMode="decimal" value={workHours} onChange={(e) => setWorkHours(e.target.value)} placeholder={lang === "el" ? "Εργατοώρες" : "Labour hours"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input value={workEvidence} onChange={(e) => setWorkEvidence(e.target.value)} placeholder={lang === "el" ? "Photo / evidence reference" : "Photo / evidence reference"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
                 <textarea value={workNotes} onChange={(e) => setWorkNotes(e.target.value)} placeholder={lang === "el" ? "Σημειώσεις / τι έγινε στο πεδίο" : "Field notes"} className="min-h-[90px] rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white sm:col-span-2" />
               </div>
               <p className="mt-3 text-xs text-amber-100">Draft πεδίου — δεν αλλάζει το επίσημο δίκτυο χωρίς review/approval.</p>
