@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-04T12:08:00.000Z",
+  "lockedAtUtc": "2026-10-04T12:11:00.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -33,10 +33,10 @@
     "core/security/water-admin-session.ts": "df9e9d7cbd5edfa2659068d817d60e03886e0e761ff6657ab7cb8e9b9417d2f3",
     "scripts/pantavion-water-network-runtime-lock.cjs": "0df1627215062bbb3c1e5bb91118591fd896197300cf81090d373f757fa2d5d3",
     "scripts/water-guardian-production-smoke.cjs": "2109e96821887077bc3854083d19c0f6cf7d2a464d8876458672ccb97c0667e0",
-    "scripts/water-segment-reader-regression.mjs": "8b1f075c8143fbe0041bc8918b0a1717ea46e034f57c09479a5a7eb9f0206c33"
+    "scripts/water-segment-reader-regression.mjs": "f2e6ba89970764e400658689d237d91ac06d9c96897a50593ff845106a68bb07"
   },
   "refreshEvidence": {
-    "reason": "Restore deterministic Map A network refresh after the 2026-10-03 known-good viewer: GPS and manual point selection now force the protected current viewport to load immediately, and the manual network-load fallback is restored. Authentic Water geometry, source truth, authorization, segmented delivery, and raw-master protections remain unchanged.",
+    "reason": "Restore deterministic Map A network refresh after the known-good 2026-10-03 viewer. GPS and manual selection force the protected viewport to load, a manual network-load fallback is restored, and the regression gate itself is deliberately locked. No Water geometry/source/auth/raw-master invariant changes.",
     "sourceCommit": "e69441d55a0c24c89b08620ee20ba2607ea5257b",
     "protectedFileCount": 18,
     "invariantMutationAllowed": false,
