@@ -8,10 +8,16 @@ export type TomTomPlacesSearchConfig = {
 type TomTomDiscoverResult = {
   id?: string;
   type?: string;
-  name?: string;
-  displayName?: string;
+  title?: string;
+  subtitles?: string[];
   position?: { lat?: number; lon?: number };
-  address?: { freeformAddress?: string };
+  address?: {
+    street?: string;
+    houseNumber?: string;
+    municipality?: string;
+    municipalitySubdivision?: string;
+    postalCode?: string;
+  };
 };
 
 type TomTomDiscoverResponse = {
@@ -33,13 +39,15 @@ export class TomTomPlacesSearchAdapter {
           "Content-Type": "application/json",
           "TomTom-Api-Key": this.config.apiKey,
           "TomTom-Api-Version": "3",
-          Attributes: "results(id,type,name,displayName,position,address)",
+          Attributes: "results(id,type,title,subtitles,position,address)",
         },
         body: JSON.stringify({
           query: cleanQuery,
-          countryCodes: ["CY"],
-          language: "el-GR",
-          limit: 20,
+          maxResults: 20,
+          filters: {
+            countryCodesIso2: ["CY"],
+            types: ["poi", "address", "street", "intersection", "area"],
+          },
         }),
         cache: "no-store",
         signal: AbortSignal.timeout(8000),
@@ -52,14 +60,23 @@ export class TomTomPlacesSearchAdapter {
     return (body.results ?? []).flatMap((item, index) => {
       const lat = item.position?.lat;
       const lng = item.position?.lon;
-      const displayName = item.displayName || item.name;
+      const displayName = item.title;
       if (!displayName) return [];
 
       return [{
         resultId: `tomtom:${item.id ?? index}`,
         kind: classifyKind(item.type),
         displayName,
-        secondaryLabel: item.address?.freeformAddress ?? null,
+        secondaryLabel:
+          item.subtitles?.filter(Boolean).join(" · ") ||
+          [
+            item.address?.street,
+            item.address?.houseNumber,
+            item.address?.municipalitySubdivision,
+            item.address?.municipality,
+            item.address?.postalCode,
+          ].filter(Boolean).join(", ") ||
+          null,
         coordinates:
           Number.isFinite(lat) && Number.isFinite(lng)
             ? { lat: lat as number, lng: lng as number }
