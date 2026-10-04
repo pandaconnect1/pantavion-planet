@@ -23,7 +23,7 @@ export type CyprusStreetRecord = {
   municipalityOrCommunity: string;
   areaOrParish: string | null;
   zoneOrSection: string | null;
-  postalCodes: string[];
+  postalCodes: string[];\n  geometryIdentity?: string | null;
   sourceReferences: Array<{ source: CyprusStreetSource; sourceId: string; observedAt: string }>;
   status: CyprusStreetStatus;
 };
@@ -39,7 +39,7 @@ export function normalizeStreetName(value: string) {
     .replace(/\s+/g, " ");
 }
 
-export function streetDeduplicationKey(street: Pick<CyprusStreetRecord, "district" | "municipalityOrCommunity" | "nameEl" | "nameEn">) {
+export function streetDeduplicationKey(street: Pick<CyprusStreetRecord, "streetRegistryId" | "district" | "municipalityOrCommunity" | "areaOrParish" | "zoneOrSection" | "postalCodes" | "geometryIdentity" | "nameEl" | "nameEn">) {
   const name = normalizeStreetName(street.nameEl || street.nameEn || "");
   return [
     normalizeStreetName(street.district),
@@ -52,7 +52,7 @@ export function mergeStreetEvidence(records: CyprusStreetRecord[]) {
   const byKey = new Map<string, CyprusStreetRecord[]>();
   for (const record of records) {
     const key = streetDeduplicationKey(record);
-    if (!key.endsWith("|")) byKey.set(key, [...(byKey.get(key) ?? []), record]);
+    if (normalizeStreetName(record.nameEl || record.nameEn || "")) byKey.set(key, [...(byKey.get(key) ?? []), record]);
   }
 
   return [...byKey.values()].map((group) => {
