@@ -812,10 +812,40 @@ export default function ControlledWaterSegmentClient() {
           preferCanvas: true,
         });
 
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        const osmFallback = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 20,
           attribution: "&copy; OpenStreetMap contributors",
-        }).addTo(map);
+        });
+
+        // Primary operational basemap: official Cyprus DLS topography/road
+        // network. It carries the road network and Greek labels directly from
+        // the Department of Lands and Surveys instead of the old generic OSM
+        // basemap. OSM is retained only as an automatic availability fallback.
+        const dlsBasemap = L.tileLayer.wms(
+          "https://eservices.dls.moi.gov.cy/arcgis/services/National/Topography_GR/MapServer/WMSServer",
+          {
+            layers: "0,1,2,3,4,5,6,7,8,9,10,11,13,14,15,18,19,20,21,22,23,24,25,26",
+            format: "image/png",
+            transparent: false,
+            version: "1.1.1",
+            maxZoom: 20,
+            attribution: "Τμήμα Κτηματολογίου και Χωρομετρίας Κύπρου (DLS)",
+          },
+        );
+
+        let dlsFallbackActivated = false;
+        dlsBasemap.on("tileerror", () => {
+          if (dlsFallbackActivated || cancelled) return;
+          dlsFallbackActivated = true;
+          if (map.hasLayer(dlsBasemap)) map.removeLayer(dlsBasemap);
+          osmFallback.addTo(map);
+          setMessage(
+            lang === "el"
+              ? "Ο επίσημος χάρτης Κτηματολογίου δεν ανταποκρίθηκε προσωρινά. Εμφανίζεται εφεδρικός οδικός χάρτης."
+              : "The official Cyprus DLS basemap is temporarily unavailable. Showing the fallback road map.",
+          );
+        });
+        dlsBasemap.addTo(map);
 
         mapRef.current = map;
         map.on("click", (event: { latlng: { lat: number; lng: number } }) => {
@@ -1272,6 +1302,50 @@ export default function ControlledWaterSegmentClient() {
     setAddressCandidates([]);
     setMessage(t.loading);
     try {
+      // Approved field users search the Cyprus official road registry first.
+      // queryOverride is used only by the unified-search fallback, so skip this
+      // block there to avoid repeating the same provider request.
+      if (!override && street.trim()) {
+        const officialQuery = [street.trim(), number.trim(), area.trim(), postal.trim()]
+          .filter(Boolean)
+          .join(", ");
+        const officialResponse = await fetch(
+          `/api/professional/infrastructure/water/places/search?q=${encodeURIComponent(officialQuery)}`,
+          { cache: "no-store", signal: AbortSignal.timeout(10000) },
+        );
+        const officialPayload = await officialResponse.json().catch(() => ({})) as {
+          results?: Array<{
+            resultId: string;
+            displayName: string;
+            secondaryLabel?: string | null;
+            coordinates?: { lat: number; lng: number } | null;
+          }>;
+        };
+        const officialCandidates = (officialPayload.results ?? [])
+          .filter((item) => Number.isFinite(item.coordinates?.lat) && Number.isFinite(item.coordinates?.lng))
+          .map((item) => ({
+            candidateId: item.resultId,
+            displayName: item.secondaryLabel
+              ? `${item.displayName} — ${item.secondaryLabel}`
+              : item.displayName,
+            coordinates: item.coordinates as { lat: number; lng: number },
+          }));
+
+        if (officialResponse.ok && officialCandidates.length === 1) {
+          await selectMapPoint({ latlng: officialCandidates[0].coordinates });
+          return;
+        }
+        if (officialResponse.ok && officialCandidates.length > 1) {
+          setAddressCandidates(officialCandidates);
+          setMessage(
+            lang === "el"
+              ? "Επίλεξε την οδό από το επίσημο οδικό δίκτυο Κτηματολογίου."
+              : "Select the street from the official Cyprus DLS road network.",
+          );
+          return;
+        }
+      }
+
       const params = override
         ? new URLSearchParams({ street: override, houseNumber: "", area: "", postalCode: "" })
         : new URLSearchParams({ street, houseNumber: number, area, postalCode: postal });

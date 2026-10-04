@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-04T12:11:00.000Z",
+  "lockedAtUtc": "2026-10-04T12:34:00.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -25,7 +25,7 @@
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "3b561ad7565cee62412579002cfb1700500900557a10e029b88fa401ae37756a",
     "app/api/professional/infrastructure/water/tiles/mvt/route.ts": "34bea14126f4bcd6c069818d4f0f65599b97f7701ed238f180a0404d541304de",
     "app/professional/infrastructure/water/admin/access/page.tsx": "627e1e1f45a2bdb465acddd8053ffc47306be7adbeb7a3d0489b11cb036dc28b",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "9f7ef7ce7e73df7e740a85ffb8c14c38b59f09289fda394e7d0782c7817f7c48",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "c0a2a155776a5a8d594b9cfaa8fb06a88a459a99a750ead8934cb35379c7c68a",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "828652b8565772b63b8d365fff41542b815dfc25d6cb2ca07912e488a64beff8",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
@@ -33,11 +33,11 @@
     "core/security/water-admin-session.ts": "df9e9d7cbd5edfa2659068d817d60e03886e0e761ff6657ab7cb8e9b9417d2f3",
     "scripts/pantavion-water-network-runtime-lock.cjs": "0df1627215062bbb3c1e5bb91118591fd896197300cf81090d373f757fa2d5d3",
     "scripts/water-guardian-production-smoke.cjs": "2109e96821887077bc3854083d19c0f6cf7d2a464d8876458672ccb97c0667e0",
-    "scripts/water-segment-reader-regression.mjs": "f2e6ba89970764e400658689d237d91ac06d9c96897a50593ff845106a68bb07"
+    "scripts/water-segment-reader-regression.mjs": "ac09e2afad212663ccb2bb41694d018743c746dd0cb5bd85372b4a2c4abd5ca9"
   },
   "refreshEvidence": {
-    "reason": "Restore deterministic Map A network refresh after the known-good 2026-10-03 viewer. GPS and manual selection force the protected viewport to load, a manual network-load fallback is restored, and the regression gate itself is deliberately locked. No Water geometry/source/auth/raw-master invariant changes.",
-    "sourceCommit": "e69441d55a0c24c89b08620ee20ba2607ea5257b",
+    "reason": "Map A field recovery: official Cyprus DLS topographic basemap plus Cyprus-official road-name discovery wired into the approved user street-search path. OSM remains availability fallback only. Authentic Water geometry, founder authorization, segmented delivery and raw-master protections remain unchanged.",
+    "sourceCommit": "1924b355b56e7551efcf5a5424e26e87dfaa9c6c",
     "protectedFileCount": 18,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false

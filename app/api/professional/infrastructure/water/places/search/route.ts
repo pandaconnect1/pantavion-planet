@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { TomTomPlacesSearchAdapter } from "@/core/water/tomtom-places-search-adapter";
 import { GooglePlacesSearchAdapter } from "@/core/water/google-places-search-adapter";
+import { CyprusDlsRoadSearchAdapter } from "@/core/water/cyprus-dls-road-search-adapter";
 import {
   searchWaterPlaces,
   type WaterPlaceSearchProvider,
@@ -21,6 +22,16 @@ export async function GET(request: Request) {
   }
 
   const providers: WaterPlaceSearchProvider[] = [];
+  const dlsRoadSearchUrl = process.env.CYPRUS_DLS_ROAD_SEARCH_URL?.trim();
+  const dls = new CyprusDlsRoadSearchAdapter({
+    baseUrl: dlsRoadSearchUrl || undefined,
+  });
+  providers.push({
+    id: "CYPRUS_OFFICIAL",
+    enabled: true,
+    search: (value) => dls.search(value),
+  });
+
   const tomTomApiKey = process.env.TOMTOM_API_KEY?.trim();
   const googleApiKey = process.env.GOOGLE_MAPS_API_KEY?.trim();
 
@@ -36,19 +47,6 @@ export async function GET(request: Request) {
       enabled: true,
       search: (value) => tomtom.discover(value),
     });
-  }
-
-  if (providers.length === 0) {
-    return NextResponse.json(
-      {
-        status: "provider_not_configured",
-        results: [],
-        failedProviders: [],
-        fallback: "/api/professional/infrastructure/water/address/search",
-        message: "Δεν υπάρχει ακόμη ενεργοποιημένος εξωτερικός provider. Διατηρείται η ελεγχόμενη fallback αναζήτηση.",
-      },
-      { status: 503, headers: { "Cache-Control": "no-store" } },
-    );
   }
 
   const outcome = await searchWaterPlaces(query, providers);
@@ -69,7 +67,7 @@ export async function GET(request: Request) {
   return NextResponse.json(
     {
       status: outcome.failedProviders.length ? "degraded" : "ready",
-      providerStrategy: "POLICY_BASED_MULTI_PROVIDER",
+      providerStrategy: "CYPRUS_OFFICIAL_FIRST_WITH_POLICY_BASED_FAILOVER",
       results: outcome.results,
       failedProviders: outcome.failedProviders,
     },
