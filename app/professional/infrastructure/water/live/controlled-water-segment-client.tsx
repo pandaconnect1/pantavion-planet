@@ -584,6 +584,7 @@ export default function ControlledWaterSegmentClient() {
   const [message, setMessage] = useState(UI.el.ready);
   const [accessMessage, setAccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [pipeCount, setPipeCount] = useState<number | null>(null);
   const [approvedChangeCount, setApprovedChangeCount] = useState(0);
   const [approvedEvidenceCount, setApprovedEvidenceCount] = useState(0);
@@ -1108,13 +1109,12 @@ export default function ControlledWaterSegmentClient() {
     }
 
     const destination = `${selectedTarget.lat.toFixed(6)},${selectedTarget.lng.toFixed(6)}`;
-    // Hand off road guidance to the device's mapping service. Pantavion keeps
-    // field/asset accuracy separate from consumer road-navigation accuracy.
-    window.open(
-      `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving`,
-      "_blank",
-      "noopener,noreferrer",
-    );
+    // Mobile-safe handoff: same-tab navigation is not blocked as a popup by
+    // Android/WebView browsers. Google Maps can intercept this URL and start
+    // driving guidance from the device's current location.
+    const navigationUrl =
+      `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving&dir_action=navigate`;
+    window.location.assign(navigationUrl);
   }
 
   async function locateMe() {
@@ -1287,7 +1287,7 @@ export default function ControlledWaterSegmentClient() {
           `${raw}, Cyprus`,
           `${raw}, Limassol, Cyprus`,
           `${greeklish}, Cyprus`,
-          `${greeklish}, εμεσός, ύπρος`,
+          `${greeklish}, Λεμεσός, Κύπρος`,
           `${normalized}, Cyprus`,
           withoutNumber ? `${withoutNumber}, Cyprus` : "",
           areaOnly ? `${areaOnly}, Cyprus` : "",
@@ -1318,7 +1318,7 @@ export default function ControlledWaterSegmentClient() {
       return;
     }
 
-    setLoading(true);
+    setSearchLoading(true);
     setAddressCandidates([]);
     setMessage(t.loading);
     try {
@@ -1363,7 +1363,7 @@ export default function ControlledWaterSegmentClient() {
       setStreet(query);
       await searchAddressMarker(query);
     } finally {
-      setLoading(false);
+      setSearchLoading(false);
     }
   }
 
@@ -1375,7 +1375,7 @@ export default function ControlledWaterSegmentClient() {
       setMessage(t.searchEmpty);
       return;
     }
-    setLoading(true);
+    setSearchLoading(true);
     setAddressCandidates([]);
     setMessage(t.loading);
     try {
@@ -1453,7 +1453,7 @@ export default function ControlledWaterSegmentClient() {
     } catch {
       setMessage(lang === "el" ? "Η αναζήτηση δεν ολοκληρώθηκε. Δοκίμασε ξανά ή επίλεξε σημείο στον χάρτη." : "Search could not complete. Try again or select a point on the map.");
     } finally {
-      setLoading(false);
+      setSearchLoading(false);
     }
   }
 
@@ -2043,7 +2043,7 @@ export default function ControlledWaterSegmentClient() {
       }
       map.off("moveend zoomend", scheduleAutoLoad);
     };
-  }, [accessApproved, mapReady, lang, street, number, area, postal]);
+  }, [accessApproved, mapReady]);
 
   if (!accessApproved) {
     return (
@@ -2077,15 +2077,15 @@ export default function ControlledWaterSegmentClient() {
           <button
             type="button"
             onClick={() => void searchUnifiedPlace()}
-            disabled={loading}
+            disabled={searchLoading}
             className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-4 py-3 text-sm font-black text-sky-100 disabled:opacity-60"
           >
-            {lang === "el" ? "Βρες" : "Find"}
+            {searchLoading ? t.loading : lang === "el" ? "Βρες" : "Find"}
           </button>
         </div>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <input value={street} onChange={(event) => setStreet(event.target.value)} placeholder={t.street} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+          <input value={street} onChange={(event) => setStreet(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") void searchAddressMarker(); }} placeholder={t.street} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
           <input value={number} onChange={(event) => setNumber(event.target.value)} placeholder={t.number} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
           <input value={area} onChange={(event) => setArea(event.target.value)} placeholder={t.area} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
           <input value={postal} onChange={(event) => setPostal(event.target.value)} placeholder={t.postal} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
@@ -2095,8 +2095,8 @@ export default function ControlledWaterSegmentClient() {
           <button type="button" onClick={() => void locateMe()} disabled={loading} className="rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-3 text-sm font-black text-[#f8e6ad] disabled:opacity-60">
             {t.locate}
           </button>
-          <button type="button" onClick={() => void searchAddressMarker()} disabled={loading} className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-3 text-sm font-black text-sky-100 disabled:opacity-60">
-            {t.search}
+          <button type="button" onClick={() => void searchAddressMarker()} disabled={searchLoading} className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-3 text-sm font-black text-sky-100 disabled:opacity-60">
+            {searchLoading ? t.loading : t.search}
           </button>
         </div>
 
@@ -2259,7 +2259,7 @@ export default function ControlledWaterSegmentClient() {
 
         <section className="rounded-3xl border border-slate-700 bg-[#0d1a2d] p-3 sm:p-4">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <input value={street} onChange={(event) => setStreet(event.target.value)} placeholder={t.street} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
+            <input value={street} onChange={(event) => setStreet(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") void searchAddressMarker(); }} placeholder={t.street} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
             <input value={number} onChange={(event) => setNumber(event.target.value)} placeholder={t.number} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
             <input value={area} onChange={(event) => setArea(event.target.value)} placeholder={t.area} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
             <input value={postal} onChange={(event) => setPostal(event.target.value)} placeholder={t.postal} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
@@ -2270,7 +2270,7 @@ export default function ControlledWaterSegmentClient() {
               {t.locate}
             </button>
 
-            <button type="button" onClick={() => void searchAddressMarker()} disabled={loading} className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-3 text-sm font-black text-sky-100 disabled:opacity-60">
+            <button type="button" onClick={() => void searchAddressMarker()} disabled={searchLoading} className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-3 text-sm font-black text-sky-100 disabled:opacity-60">
               {t.search}
             </button>
 
