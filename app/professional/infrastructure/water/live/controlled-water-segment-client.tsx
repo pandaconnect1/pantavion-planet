@@ -679,7 +679,7 @@ export default function ControlledWaterSegmentClient() {
   const [pipeCount, setPipeCount] = useState<number | null>(null);
   const [approvedChangeCount, setApprovedChangeCount] = useState(0);
   const [approvedEvidenceCount, setApprovedEvidenceCount] = useState(0);
-  const [mapReady, setMapReady] = useState(false);
+  const [mapReady, setMapReady] = useState(false);\n  const [selectedTarget, setSelectedTarget] = useState<{ lat: number; lng: number } | null>(null);
   const [addressCandidates, setAddressCandidates] = useState<Array<{
     candidateId: string;
     displayName: string;
@@ -1061,6 +1061,22 @@ export default function ControlledWaterSegmentClient() {
     } catch {
       setMessage(t.failed);
     }
+  }
+
+  function navigateToSelectedTarget() {
+    if (!selectedTarget || typeof window === "undefined") {
+      setMessage(lang === "el" ? "Επίλεξε πρώτα διεύθυνση, βλάβη, βάνα, αγωγό ή σημείο στον χάρτη." : "Select an address, fault, valve, pipe or map point first.");
+      return;
+    }
+
+    const destination = `${selectedTarget.lat.toFixed(6)},${selectedTarget.lng.toFixed(6)}`;
+    // Hand off road guidance to the device's mapping service. Pantavion keeps
+    // field/asset accuracy separate from consumer road-navigation accuracy.
+    window.open(
+      `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving`,
+      "_blank",
+      "noopener,noreferrer",
+    );
   }
 
   async function locateMe() {
@@ -2076,13 +2092,17 @@ export default function ControlledWaterSegmentClient() {
             <input value={postal} onChange={(event) => setPostal(event.target.value)} placeholder={t.postal} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
           </div>
 
-          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <div className="mt-4 grid gap-3 sm:grid-cols-4">
             <button type="button" onClick={() => void locateMe()} disabled={loading} className="rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-3 text-sm font-black text-[#f8e6ad] disabled:opacity-60">
               {t.locate}
             </button>
 
             <button type="button" onClick={() => void searchAddressMarker()} disabled={loading} className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-3 text-sm font-black text-sky-100 disabled:opacity-60">
               {t.search}
+            </button>
+
+            <button type="button" onClick={navigateToSelectedTarget} disabled={!selectedTarget} className="rounded-2xl border border-violet-400/60 bg-violet-400/15 px-5 py-3 text-sm font-black text-violet-100 disabled:opacity-40">
+              {lang === "el" ? "Πήγαινέ με" : "Navigate"}
             </button>
 
             <button type="button" onClick={() => void loadPipes()} disabled={loading} className="rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60">
