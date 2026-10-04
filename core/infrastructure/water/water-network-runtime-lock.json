@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-07-24T06:59:27.000Z",
+  "lockedAtUtc": "2026-10-04T19:07:22.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -21,7 +21,7 @@
     "app/api/professional/infrastructure/water/access/authorize/route.ts": "4097cb65785acf8872321b51215e16a833a35dd5a783652165198163f9b76ccf",
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "c69efd2dfefaf2ff51d561c29f324853eedce77cd9a695db21e4309893b074d9",
     "app/professional/infrastructure/water/admin/access/page.tsx": "487b03889c8697149025a710aff941eefdc0bb642d95bbd118d9eb1302f9ccca",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "5ac501b740d92f4fd678a1f093d1fe0ae1436b8ba60c2b8146c7cd9587111dc9",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "6fc4ad89f49116441c7dc7dc0ee0d2a6c0d0b537cc4d61075d449096d65eba53",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "3601e223ccd04e00f407ad91e5e409732342f493c2842ce6098fad141334df7a",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
