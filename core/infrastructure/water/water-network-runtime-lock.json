@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-04T14:24:00.000Z",
+  "lockedAtUtc": "2026-10-04T14:29:00.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -33,11 +33,11 @@
     "core/security/water-admin-session.ts": "df9e9d7cbd5edfa2659068d817d60e03886e0e761ff6657ab7cb8e9b9417d2f3",
     "scripts/pantavion-water-network-runtime-lock.cjs": "0df1627215062bbb3c1e5bb91118591fd896197300cf81090d373f757fa2d5d3",
     "scripts/water-guardian-production-smoke.cjs": "2109e96821887077bc3854083d19c0f6cf7d2a464d8876458672ccb97c0667e0",
-    "scripts/water-segment-reader-regression.mjs": "f31f408c7eff73533a26ad19c3b12e335d66e9c68d21e6afb3dfd8039ed06d53",
+    "scripts/water-segment-reader-regression.mjs": "9ecd5f0befd9071cbb913da2c1c0a6784dae16d283570d99aca71c37893fe660",
     "app/api/professional/infrastructure/water/basemap/dls/route.ts": "60dd06320ac9c317b41b2ebaee5d57904a40ae8f19aa2c8fd4c31bdb1898e931"
   },
   "refreshEvidence": {
-    "reason": "Founder rejected a simple road-only field map. Map A must show operational detail: readable streets/POIs plus official DLS parcels and parcel numbers, buildings, topographic features, and official DLS road/area/service labels beneath the authentic Water network. No Water geometry, source truth, authorization, segmented delivery, or raw-master invariant changed.",
+    "reason": "Founder rejected a simple road-only map; regression gate updated to require both detailed DLS cadastral and official DLS road-label overlays while preserving authentic Water geometry and access invariants.",
     "sourceCommit": "e81f1536adf2d3c4c1bc80088408d1d9929414f7",
     "protectedFileCount": 19,
     "invariantMutationAllowed": false,
