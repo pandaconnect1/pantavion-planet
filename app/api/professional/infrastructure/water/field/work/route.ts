@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok:false, error:"access_not_approved" }, { status:401 });
   }
 
-  const body = await request.json().catch(() => null) as Partial<WaterFieldWorkRecord> | null;
+  if (access.mode !== "admin-session") {\n    return NextResponse.json({ ok:false, error:"field_work_write_not_authorized" }, { status:403 });\n  }\n\n  const body = await request.json().catch(() => null) as Partial<WaterFieldWorkRecord> | null;
   if (!body?.workOrderId?.trim() || !body.stage || !WATER_FIELD_WORK_LIFECYCLE.includes(body.stage)) {
     return NextResponse.json({ ok:false, error:"invalid_field_work_record" }, { status:400 });
   }
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
     }, { status:503 });
   }
 
-  const saved = await repository.save(record);
+  const saved = await repository.save(record, { actorRef: access.actorRef });
   return NextResponse.json({
     ok:true,
     saved,
