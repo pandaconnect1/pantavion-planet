@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-03T13:04:00.000Z",
+  "lockedAtUtc": "2026-10-04T05:42:00.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -25,7 +25,7 @@
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "bc94c96a66478412878747bc3f0c8ca428ba75de87799cb6c0128f2e93637b80",
     "app/api/professional/infrastructure/water/tiles/mvt/route.ts": "34bea14126f4bcd6c069818d4f0f65599b97f7701ed238f180a0404d541304de",
     "app/professional/infrastructure/water/admin/access/page.tsx": "114a41ba924010da56c145355520cecde41c4fb914c853949c03437805fd4e24",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "571d3824e64a5092339aa98c73875063ffa8cf6c8f73513c5d0210c55d691b52",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "0e2a427e07e009359c98608cb251d36edf1aec27b4c00503f23ad600b514f187",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "4e4711818dd5e5c3b924677db72e6816d06221760f20cd5e10217a86a199a7eb",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
@@ -36,8 +36,8 @@
     "scripts/water-segment-reader-regression.mjs": "8b1f075c8143fbe0041bc8918b0a1717ea46e034f57c09479a5a7eb9f0206c33"
   },
   "refreshEvidence": {
-    "reason": "Founder-requested manual viewport reload and address search fixes. Reviewed changes in 0465222 and ab45d69; targeted navigation/address regression passed. Only viewer code hash is refreshed; the other 17 protected file hashes, source truth, pipe styling logic, authorization and segmented delivery invariants are preserved.",
-    "sourceCommit": "ab45d69912171dcae31774033d1eb2946cfaf417",
+    "reason": "Founder-authorized deliberate refresh after Map A viewport reload, multilingual/unified place search, selected-target navigation, and obsolete UI warning cleanup. Validate Build, guard, runtime-services, social-chat-contract, excavation and 82,413-unit materialization passed before refresh. Only the protected Map A viewer hash is refreshed; source truth, authorization, private-source and segmented-delivery invariants remain unchanged.",
+    "sourceCommit": "4841f02040e48d296caf6641335fc2179db9336b",
     "protectedFileCount": 18,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
