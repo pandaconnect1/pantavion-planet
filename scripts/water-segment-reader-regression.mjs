@@ -247,7 +247,8 @@ function verifyRuntimeWiring() {
     /\/api\/professional\/infrastructure\/water\/basemap\/dls\?mode=roads&z=\{z\}&x=\{x\}&y=\{y\}/,
   );
   assert.match(client, /Τμήμα Κτηματολογίου και Χωρομετρίας Κύπρου \(DLS\)/);
-  assert.match(client, /dlsTileFailures < 4/);
+  assert.match(client, /cadastralFailures < 4/);
+  assert.match(client, /roadsFailures < 4/);
   assert.match(client, /setBasemapState\("dls"\)/);
   assert.match(client, /setBasemapState\("fallback"\)/);
   assert.match(client, /WATER_SEGMENT_COUNT_MISMATCH/);
