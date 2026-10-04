@@ -29,7 +29,7 @@ try {
   );
   assert.match(upstreamUrls[0], /National\/CadastralMap_GR\/MapServer\/export/);
   assert.match(upstreamUrls[0], /layers=show%3A0%2C19%2C21%2C22%2C23%2C28/);
-  assert.match(upstreamUrls[0], /transparent=true/);
+  assert.match(upstreamUrls[0], /transparent=false/);
   assert.match(upstreamUrls[0], /size=512%2C512/);
   assert.match(upstreamUrls[0], /dpi=192/);
 
