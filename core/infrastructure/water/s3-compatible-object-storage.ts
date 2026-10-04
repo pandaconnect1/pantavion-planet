@@ -391,6 +391,51 @@ export function presignObjectHead(key: string, expiresSeconds = 300) {
   return presignObjectRequest({ method: "HEAD", key, expiresSeconds });
 }
 
+export async function readPrivateObject(input: {
+  key: string;
+  range?: { start: number; end: number };
+  timeoutMs?: number;
+}) {
+  const signed = presignObjectDownload(input.key, 60);
+  const headers: Record<string, string> = {};
+  if (input.range) {
+    headers.Range = `bytes=${input.range.start}-${input.range.end}`;
+  }
+
+  const response = await fetch(signed.url, {
+    method: "GET",
+    headers,
+    cache: "no-store",
+    signal: AbortSignal.timeout(input.timeoutMs || 8_000),
+  });
+
+  if (!response.ok) {
+    throw new Error(`OBJECT_STORAGE_READ_HTTP_${response.status}`);
+  }
+
+  return response;
+}
+
+export async function headPrivateObject(key: string, timeoutMs = 8_000) {
+  const signed = presignObjectHead(key, 60);
+  const response = await fetch(signed.url, {
+    method: "HEAD",
+    cache: "no-store",
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+
+  if (!response.ok) {
+    throw new Error(`OBJECT_STORAGE_HEAD_HTTP_${response.status}`);
+  }
+
+  const contentLength = Number(response.headers.get("content-length"));
+  if (!Number.isFinite(contentLength) || contentLength <= 0) {
+    throw new Error("OBJECT_STORAGE_HEAD_INVALID_LENGTH");
+  }
+
+  return { size: contentLength };
+}
+
 export async function completeMultipartUpload(input: {
   key: string;
   uploadId: string;
