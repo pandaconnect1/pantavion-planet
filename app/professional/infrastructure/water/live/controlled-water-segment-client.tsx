@@ -847,16 +847,15 @@ export default function ControlledWaterSegmentClient() {
         // presentation requested for field operations. The protected Water pane and
         // every KMZ-derived network path remain completely unchanged.
         const twoGisKey = process.env.NEXT_PUBLIC_2GIS_MAP_KEY?.trim();
-        const detailedRoadBasemap = twoGisKey
-          ? L.tileLayer(
-              `https://tile0.maps.2gis.com/v2/tiles/online_hd/{z}/{x}/{y}.png?key=${encodeURIComponent(twoGisKey)}`,
-              {
-                pane: "tilePane",
-                maxZoom: 20,
-                attribution: "&copy; 2GIS",
-              },
-            )
-          : esriRoadFallback;
+        const detailedRoadBasemapUrl = twoGisKey
+          ? `https://tile0.maps.2gis.com/v2/tiles/online_hd/{z}/{x}/{y}.png?key=${encodeURIComponent(twoGisKey)}`
+          : "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}";
+
+        const detailedRoadBasemap = L.tileLayer(detailedRoadBasemapUrl, {
+          pane: "tilePane",
+          maxZoom: 20,
+          attribution: twoGisKey ? "&copy; 2GIS" : "Tiles &copy; Esri",
+        });
 
         let detailedBasemapFailures = 0;
         let esriFallbackFailures = 0;
