@@ -242,7 +242,7 @@ function verifyRuntimeWiring() {
   assert.match(client, /const detailedRoadBasemap = L\.tileLayer\(/);
   assert.match(
     client,
-    /basemaps\.cartocdn\.com\/rastertiles\/voyager\/\{z\}\/\{x\}\/\{y\}\{r\}\.png/,
+    /tile\.openstreetmap\.org\/\{z\}\/\{x\}\/\{y\}\.png/,
   );
   assert.doesNotMatch(client, /maplibre-gl-leaflet/);
   assert.match(client, /detailedRoadBasemap\.on\("tileerror"/);
