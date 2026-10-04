@@ -16,7 +16,7 @@ FOR EACH ROW EXECUTE FUNCTION pantavion_water.forbid_authentic_network_mutation(
 CREATE TABLE IF NOT EXISTS pantavion_water.hydraulic_scenario (
   scenario_id uuid PRIMARY KEY,
   name text NOT NULL,
-  base_map_id text NOT NULL REFERENCES pantavion_water.map_registry(map_id),
+  base_revision_id text NOT NULL REFERENCES pantavion_water.network_revision(revision_id),
   base_source_sha256 text NOT NULL CHECK (length(base_source_sha256)=64),
   created_by text NOT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
