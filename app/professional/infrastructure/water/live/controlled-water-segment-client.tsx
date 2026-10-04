@@ -726,6 +726,7 @@ export default function ControlledWaterSegmentClient() {
   const loadInProgressRef = useRef(false);
   const networkLoadAbortRef = useRef<AbortController | null>(null);
   const reloadQueuedRef = useRef(false);
+  const viewportGenerationRef = useRef(0);
   const scheduleViewportReloadRef = useRef<(() => void) | null>(null);
   const refreshVisibleWaterMapRef = useRef<() => Promise<void>>(async () => {});
   const selectMapPointRef = useRef(selectMapPoint);
@@ -1790,6 +1791,9 @@ export default function ControlledWaterSegmentClient() {
 
     if (!map) return;
 
+    // Only the newest viewport generation may publish network layers.
+    const viewportGeneration = ++viewportGenerationRef.current;
+
     if (loadInProgressRef.current) {
       reloadQueuedRef.current = true;
       return;
@@ -1916,6 +1920,7 @@ export default function ControlledWaterSegmentClient() {
       }
 
       const L = await ensureLeaflet();
+      if (viewportGeneration !== viewportGenerationRef.current) return;
       const visibleKeys = new Set(tiles.map((tile) => tile.key));
       let visibleFeatureCount = 0;
 
@@ -1934,6 +1939,7 @@ export default function ControlledWaterSegmentClient() {
         const rawFeatures = await fetchExactVisibleTile(tile.bbox, 0);
         if (accessRevoked) return;
         controller.signal.throwIfAborted();
+        if (viewportGeneration !== viewportGenerationRef.current) return;
 
         const deduped = new Map<string, any>();
         rawFeatures.forEach((feature, index) => {
@@ -1994,6 +2000,7 @@ export default function ControlledWaterSegmentClient() {
       if (failure?.status === "rejected") throw failure.reason;
       if (accessRevoked) return;
       controller.signal.throwIfAborted();
+      if (viewportGeneration !== viewportGenerationRef.current) return;
 
       for (const [key, cached] of networkTileCacheRef.current.entries()) {
         if (!visibleKeys.has(key) && map.hasLayer(cached.layer)) {
@@ -2071,7 +2078,8 @@ export default function ControlledWaterSegmentClient() {
 
     function scheduleAutoLoad() {
       clearAutoLoadTimer();
-      // Do not make the current viewport wait for obsolete network requests.
+      // Invalidate the previous viewport before abort settles.
+      viewportGenerationRef.current += 1;
       reloadQueuedRef.current = false;
       networkLoadAbortRef.current?.abort();
 
