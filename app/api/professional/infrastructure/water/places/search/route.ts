@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { TomTomPlacesSearchAdapter } from "@/core/water/tomtom-places-search-adapter";
+import { GooglePlacesSearchAdapter } from "@/core/water/google-places-search-adapter";
 import {
   searchWaterPlaces,
   type WaterPlaceSearchProvider,
@@ -21,6 +22,12 @@ export async function GET(request: Request) {
 
   const providers: WaterPlaceSearchProvider[] = [];
   const tomTomApiKey = process.env.TOMTOM_API_KEY?.trim();
+  const googleApiKey = process.env.GOOGLE_MAPS_API_KEY?.trim();
+
+  if (googleApiKey) {
+    const google = new GooglePlacesSearchAdapter({ apiKey: googleApiKey });
+    providers.push({ id: "GOOGLE_MAPS", enabled: true, search: (value) => google.search(value) });
+  }
 
   if (tomTomApiKey) {
     const tomtom = new TomTomPlacesSearchAdapter({ apiKey: tomTomApiKey });
@@ -30,10 +37,6 @@ export async function GET(request: Request) {
       search: (value) => tomtom.discover(value),
     });
   }
-
-  // Google Maps/Places is intentionally not activated until its server-side
-  // adapter and current EEA licence/retention requirements are verified.
-  // Additional providers plug into this array without changing the API shape.
 
   if (providers.length === 0) {
     return NextResponse.json(
