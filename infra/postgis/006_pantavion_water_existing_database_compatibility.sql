@@ -44,19 +44,9 @@ BEGIN
     ALTER TABLE pantavion_water.network_feature
       ADD COLUMN IF NOT EXISTS revision_id text;
 
-    -- Never infer A/B/C/D/E => revision. Only migrate rows with explicit,
-    -- reviewed compatibility evidence.
-    IF EXISTS (
-      SELECT 1 FROM information_schema.columns
-      WHERE table_schema='pantavion_water'
-        AND table_name='network_feature'
-        AND column_name='map_id'
-    ) THEN
-      UPDATE pantavion_water.network_feature nf
-      SET revision_id=m.revision_id
-      FROM pantavion_water.legacy_map_revision_mapping m
-      WHERE nf.revision_id IS NULL AND nf.map_id=m.legacy_map_id;
-    END IF;
+    -- Authentic network rows are immutable. Never backfill revision_id with
+    -- UPDATE here: compatibility is represented by the reviewed mapping table
+    -- and resolved at read/migration boundaries instead.
 
     IF NOT EXISTS (
       SELECT 1 FROM pg_constraint
