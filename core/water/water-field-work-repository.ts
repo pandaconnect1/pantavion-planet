@@ -20,7 +20,8 @@ export class UnconfiguredWaterFieldWorkRepository implements WaterFieldWorkRepos
   readonly provider = "NONE" as const;
   readonly ready = false;
 
-  async save(_record: WaterFieldWorkRecord): Promise<WaterFieldWorkSaveResult> {
+  async save(record: WaterFieldWorkRecord): Promise<WaterFieldWorkSaveResult> {
+    void record;
     throw new Error("water_field_work_repository_not_configured");
   }
 }
