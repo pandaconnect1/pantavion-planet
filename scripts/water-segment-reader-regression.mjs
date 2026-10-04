@@ -238,12 +238,25 @@ function verifyRuntimeWiring() {
   );
   assert.match(client, /Φόρτωση δικτύου/);
   // Basemap stays isolated beneath the protected Water pane. Keep Map A on
-  // Leaflet-only raster rendering until Water pan/zoom loading is verified live.
-  assert.match(client, /const detailedRoadBasemap = L\.tileLayer\(/);
+  // Leaflet-only rendering and expose real field-map choices without touching Water.
+  assert.match(client, /NEXT_PUBLIC_2GIS_MAP_KEY/);
   assert.match(
     client,
-    /basemaps\.cartocdn\.com\/rastertiles\/voyager\/\{z\}\/\{x\}\/\{y\}\{r\}\.png/,
+    /tile0\.maps\.2gis\.com\/v2\/tiles\/online_hd\/\{z\}\/\{x\}\/\{y\}\.png\?key=/,
   );
+  assert.match(client, /tile\.openstreetmap\.org\/\{z\}\/\{x\}\/\{y\}\.png/);
+  assert.match(
+    client,
+    /World_Imagery\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/,
+  );
+  assert.match(
+    client,
+    /World_Boundaries_and_Places\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/,
+  );
+  assert.match(client, /L\.control\.layers\(/);
+  assert.match(client, /Normal: detailedRoadBasemap/);
+  assert.match(client, /Hybrid: hybridBasemap/);
+  assert.match(client, /Satellite: satelliteBasemap/);
   assert.doesNotMatch(client, /maplibre-gl-leaflet/);
   assert.match(client, /detailedRoadBasemap\.on\("tileerror"/);
   assert.match(client, /setBasemapState\("pantavion"\)/);
