@@ -1568,6 +1568,32 @@ export default function ControlledWaterSegmentClient() {
     await loadApprovedMapAChanges();
   }
 
+  async function requestVisibleNetworkLoad() {
+    const map = mapRef.current;
+
+    if (!map) {
+      setMessage(lang === "el" ? "Ο χάρτης δεν είναι ακόμη έτοιμος." : "The map is not ready yet.");
+      return;
+    }
+
+    const zoom = Number(map.getZoom());
+
+    if (Number.isFinite(zoom) && zoom < MIN_NETWORK_TILE_ZOOM) {
+      setMessage(
+        lang === "el"
+          ? "Εστιάζω αυτόματα στην τρέχουσα περιοχή για να φορτώσω το πραγματικό δίκτυο."
+          : "Automatically focusing the current area so the real network can load.",
+      );
+      map.setView(map.getCenter(), MIN_NETWORK_TILE_ZOOM, { animate: false });
+      window.setTimeout(() => {
+        void refreshVisibleWaterMapRef.current();
+      }, 300);
+      return;
+    }
+
+    await refreshVisibleWaterMapRef.current();
+  }
+
   refreshVisibleWaterMapRef.current = refreshVisibleWaterMap;
 
   async function loadPipes() {
@@ -1584,6 +1610,17 @@ export default function ControlledWaterSegmentClient() {
       setMessage(
         "Ο χάρτης δρόμων, η αναζήτηση και το στίγμα είναι διαθέσιμα άμεσα. Τα προστατευμένα δεδομένα αγωγών εμφανίζονται μόνο σε εγκεκριμένες συσκευές.",
       );
+      return;
+    }
+
+    const currentZoom = Number(map.getZoom());
+    if (Number.isFinite(currentZoom) && currentZoom < MIN_NETWORK_TILE_ZOOM) {
+      setMessage(
+        lang === "el"
+          ? "Εστιάζω αυτόματα στην τρέχουσα περιοχή για να φορτώσω το πραγματικό δίκτυο."
+          : "Automatically focusing the current area so the real network can load.",
+      );
+      map.setView(map.getCenter(), MIN_NETWORK_TILE_ZOOM, { animate: false });
       return;
     }
 
@@ -1805,6 +1842,20 @@ export default function ControlledWaterSegmentClient() {
       setPipeCount(null);
 
       if (error instanceof Error && error.message === "VISIBLE_AREA_TOO_LARGE") {
+        const zoom = Number(map.getZoom());
+        if (Number.isFinite(zoom) && zoom < MAX_NETWORK_TILE_ZOOM) {
+          const nextZoom = Math.min(
+            MAX_NETWORK_TILE_ZOOM,
+            Math.max(MIN_NETWORK_TILE_ZOOM, Math.floor(zoom) + 1),
+          );
+          setMessage(
+            lang === "el"
+              ? "Η ορατή περιοχή είναι πολύ μεγάλη για ασφαλή φόρτωση. Εστιάζω αυτόματα λίγο πιο κοντά και συνεχίζω."
+              : "The visible area is too large for a safe load. Focusing slightly closer and continuing automatically.",
+          );
+          map.setView(map.getCenter(), nextZoom, { animate: false });
+          return;
+        }
         setMessage(t.visibleTooLarge);
       } else {
         const diagnosticCode =
@@ -2092,7 +2143,13 @@ export default function ControlledWaterSegmentClient() {
             <input value={postal} onChange={(event) => setPostal(event.target.value)} placeholder={t.postal} className="rounded-2xl border border-slate-500 bg-[#07111f] px-4 py-3 text-white outline-none" />
           </div>
 
-          <div className="mt-4 grid gap-3 sm:grid-cols-4">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            <button type="button" onClick={() => void requestVisibleNetworkLoad()} disabled={loading} className="rounded-2xl border border-emerald-400/70 bg-emerald-400/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60">
+              {loading
+                ? (lang === "el" ? "Φόρτωση δικτύου..." : "Loading network...")
+                : (lang === "el" ? "Φόρτωσε / ανανέωσε δίκτυο" : "Load / refresh network")}
+            </button>
+
             <button type="button" onClick={() => void locateMe()} disabled={loading} className="rounded-2xl border border-[#f2c766]/70 bg-[#f2c766]/15 px-5 py-3 text-sm font-black text-[#f8e6ad] disabled:opacity-60">
               {t.locate}
             </button>
