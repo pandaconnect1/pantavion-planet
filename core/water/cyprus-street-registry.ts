@@ -23,7 +23,8 @@ export type CyprusStreetRecord = {
   municipalityOrCommunity: string;
   areaOrParish: string | null;
   zoneOrSection: string | null;
-  postalCodes: string[];\n  geometryIdentity?: string | null;
+  postalCodes: string[];
+  geometryIdentity?: string | null;
   sourceReferences: Array<{ source: CyprusStreetSource; sourceId: string; observedAt: string }>;
   status: CyprusStreetStatus;
 };
