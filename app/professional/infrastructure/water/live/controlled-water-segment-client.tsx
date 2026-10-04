@@ -669,7 +669,7 @@ export default function ControlledWaterSegmentClient() {
   const [organization, setOrganization] = useState("");
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [reason, setReason] = useState("");
-  const [street, setStreet] = useState("");
+  const [street, setStreet] = useState("");\n  const [unifiedQuery, setUnifiedQuery] = useState("");
   const [number, setNumber] = useState("");
   const [area, setArea] = useState("Λεμεσός");
   const [postal, setPostal] = useState("");
@@ -1269,6 +1269,67 @@ export default function ControlledWaterSegmentClient() {
     return pending.filter((item) =>
       normalizeSearchText(item).includes(normalizedQuery),
     );
+  }
+
+  async function searchUnifiedPlace() {
+    const map = mapRef.current;
+    const query = unifiedQuery.trim();
+    if (!map || query.length < 2) {
+      setMessage(lang === "el" ? "Γράψε τουλάχιστον 2 χαρακτήρες." : "Enter at least 2 characters.");
+      return;
+    }
+
+    setLoading(true);
+    setAddressCandidates([]);
+    setMessage(t.loading);
+    try {
+      const response = await fetch(
+        `/api/professional/infrastructure/water/places/search?q=${encodeURIComponent(query)}`,
+        { cache: "no-store", signal: AbortSignal.timeout(10000) },
+      );
+      const payload = await response.json().catch(() => ({})) as {
+        results?: Array<{
+          resultId: string;
+          displayName: string;
+          secondaryLabel?: string | null;
+          coordinates?: { lat: number; lng: number } | null;
+        }>;
+      };
+
+      const candidates = (payload.results ?? [])
+        .filter((item) => Number.isFinite(item.coordinates?.lat) && Number.isFinite(item.coordinates?.lng))
+        .map((item) => ({
+          candidateId: item.resultId,
+          displayName: item.secondaryLabel
+            ? `${item.displayName} — ${item.secondaryLabel}`
+            : item.displayName,
+          coordinates: item.coordinates as { lat: number; lng: number },
+        }));
+
+      if (response.ok && candidates.length === 1) {
+        await selectMapPoint({ latlng: candidates[0].coordinates });
+        return;
+      }
+      if (response.ok && candidates.length > 1) {
+        setAddressCandidates(candidates);
+        setMessage(lang === "el" ? "Επίλεξε το σωστό αποτέλεσμα." : "Select the correct result.");
+        return;
+      }
+
+      // Until the primary provider is configured, preserve the proven address
+      // search path rather than leaving field users with a dead control.
+      setStreet(query);
+      setMessage(lang === "el"
+        ? "Η κύρια αναζήτηση δεν είναι ακόμη διαθέσιμη. Πάτησε «Αναζήτηση διεύθυνσης» για fallback."
+        : "Primary search is not available yet. Use address search fallback.");
+    } catch {
+      setStreet(query);
+      setMessage(lang === "el"
+        ? "Η κύρια αναζήτηση δεν ανταποκρίθηκε. Η υπάρχουσα αναζήτηση διεύθυνσης παραμένει διαθέσιμη."
+        : "Primary search did not respond. Address search remains available.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function searchAddressMarker() {
@@ -1909,6 +1970,26 @@ export default function ControlledWaterSegmentClient() {
               προστατευμένα δεδομένα δικτύου παραμένουν κλειδωμένα μέχρι την έγκριση.
             </p>
           </div>
+        </div>
+
+        <div className="mt-4 flex gap-2">
+          <input
+            value={unifiedQuery}
+            onChange={(event) => setUnifiedQuery(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") void searchUnifiedPlace();
+            }}
+            placeholder={lang === "el" ? "Οδός, αριθμός, ξενοδοχείο, επιχείρηση ή τοπωνύμιο" : "Street, number, hotel, business or place"}
+            className="min-w-0 flex-1 rounded-2xl border border-sky-400/50 bg-[#07111f] px-4 py-3 text-white outline-none"
+          />
+          <button
+            type="button"
+            onClick={() => void searchUnifiedPlace()}
+            disabled={loading}
+            className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-4 py-3 text-sm font-black text-sky-100 disabled:opacity-60"
+          >
+            {lang === "el" ? "Βρες" : "Find"}
+          </button>
         </div>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
