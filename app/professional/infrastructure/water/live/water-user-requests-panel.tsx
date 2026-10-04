@@ -57,6 +57,64 @@ export default function WaterUserRequestsPanel() {
   const [requestId, setRequestId] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [accessFirstName, setAccessFirstName] = useState("");
+  const [accessLastName, setAccessLastName] = useState("");
+  const [accessRoleTitle, setAccessRoleTitle] = useState("");
+  const [accessOrganization, setAccessOrganization] = useState("");
+  const [accessContact, setAccessContact] = useState("");
+  const [accessMaps, setAccessMaps] = useState("Map A");
+  const [accessReason, setAccessReason] = useState("");
+  const [accessMessage, setAccessMessage] = useState("");
+  const [accessRequestId, setAccessRequestId] = useState("");
+  const [accessLoading, setAccessLoading] = useState(false);
+
+  async function submitMapAccessRequest(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setAccessLoading(true);
+    setAccessMessage("");
+    setAccessRequestId("");
+
+    try {
+      const { deviceId, deviceToken } = getOrCreateDeviceClaim();
+      const response = await fetch("/api/professional/infrastructure/water/access/request", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          firstName: accessFirstName,
+          lastName: accessLastName,
+          roleTitle: accessRoleTitle,
+          organization: accessOrganization,
+          emailOrPhone: accessContact,
+          reason: [
+            `Αίτηση πρόσβασης ως χρήστης στους χάρτες: ${accessMaps}.`,
+            accessReason,
+          ].filter(Boolean).join(" "),
+          deviceId,
+          deviceToken,
+          deviceLabel: "Pantavion Water Map Access Request",
+        }),
+      });
+
+      const json = (await response.json()) as {
+        ok?: boolean;
+        requestId?: string;
+        error?: string;
+      };
+
+      if (!response.ok || !json.ok) {
+        throw new Error(json.error || "access_request_failed");
+      }
+
+      setAccessRequestId(json.requestId || "");
+      setAccessMessage("Η αίτηση πρόσβασης στάλθηκε για έγκριση Founder/Admin.");
+    } catch {
+      setAccessMessage("Η αίτηση πρόσβασης δεν στάλθηκε. Έλεγξε τα υποχρεωτικά στοιχεία.");
+    } finally {
+      setAccessLoading(false);
+    }
+  }
+
   async function submitRequest(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
@@ -126,7 +184,68 @@ export default function WaterUserRequestsPanel() {
           δρομολογείται στον αρμόδιο και παραμένει ορατή στο Founder/Admin για έλεγχο.
         </p>
 
-        <form onSubmit={(event) => void submitRequest(event)} className="mt-6 grid gap-4">
+        <div className="mt-6 rounded-3xl border border-emerald-400/35 bg-emerald-400/5 p-4 sm:p-5">
+          <h3 className="text-xl font-black text-emerald-200">Αίτηση πρόσβασης στους χάρτες</h3>
+          <p className="mt-2 text-sm font-semibold leading-6 text-slate-300">
+            Για νέο χρήστη που θέλει να ανοίγει τους προστατευμένους χάρτες. Η πρόσβαση δίνεται μόνο μετά από έγκριση Founder/Admin και συνδέεται με τη συγκεκριμένη συσκευή.
+          </p>
+
+          <form onSubmit={(event) => void submitMapAccessRequest(event)} className="mt-4 grid gap-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <label className="grid gap-2">
+                <span className="text-sm font-black text-emerald-200">Όνομα</span>
+                <input required value={accessFirstName} onChange={(event) => setAccessFirstName(event.target.value)} className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white" />
+              </label>
+              <label className="grid gap-2">
+                <span className="text-sm font-black text-emerald-200">Επίθετο</span>
+                <input required value={accessLastName} onChange={(event) => setAccessLastName(event.target.value)} className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white" />
+              </label>
+              <label className="grid gap-2">
+                <span className="text-sm font-black text-emerald-200">Ρόλος / Θέση</span>
+                <input required value={accessRoleTitle} onChange={(event) => setAccessRoleTitle(event.target.value)} placeholder="π.χ. Εργάτης, Τεχνικός, Επιστάτης" className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white" />
+              </label>
+              <label className="grid gap-2">
+                <span className="text-sm font-black text-emerald-200">Οργανισμός / Εταιρεία</span>
+                <input value={accessOrganization} onChange={(event) => setAccessOrganization(event.target.value)} className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white" />
+              </label>
+              <label className="grid gap-2">
+                <span className="text-sm font-black text-emerald-200">Τηλέφωνο ή email</span>
+                <input required value={accessContact} onChange={(event) => setAccessContact(event.target.value)} className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white" />
+              </label>
+              <label className="grid gap-2">
+                <span className="text-sm font-black text-emerald-200">Χάρτες που ζητά</span>
+                <select value={accessMaps} onChange={(event) => setAccessMaps(event.target.value)} className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white">
+                  <option value="Map A">Map A — Εργασίες πεδίου</option>
+                  <option value="Map B">Map B — Τεχνικός / master reference</option>
+                  <option value="Map C">Map C — Μηχανικός / ανάλυση</option>
+                  <option value="Map A, Map B και Map C">Map A + B + C</option>
+                </select>
+              </label>
+            </div>
+
+            <label className="grid gap-2">
+              <span className="text-sm font-black text-emerald-200">Λόγος πρόσβασης</span>
+              <textarea rows={3} value={accessReason} onChange={(event) => setAccessReason(event.target.value)} placeholder="Γιατί χρειάζεται πρόσβαση στους χάρτες" className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white" />
+            </label>
+
+            <button type="submit" disabled={accessLoading} className="rounded-2xl bg-emerald-300 px-5 py-4 text-lg font-black text-black disabled:opacity-60">
+              {accessLoading ? "Αποστολή..." : "Υποβολή αίτησης πρόσβασης"}
+            </button>
+
+            {accessMessage ? (
+              <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-4 text-sm font-black text-emerald-100">
+                {accessMessage}
+                {accessRequestId ? <div className="mt-1 text-xs text-slate-300">Request ID: {accessRequestId}</div> : null}
+              </div>
+            ) : null}
+          </form>
+        </div>
+
+        <div className="mt-7 border-t border-slate-700 pt-6">
+          <h3 className="text-xl font-black text-[#f2c766]">Άλλες αιτήσεις χρήστη</h3>
+        </div>
+
+        <form onSubmit={(event) => void submitRequest(event)} className="mt-4 grid gap-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <label className="grid gap-2">
               <span className="text-sm font-black text-[#f2c766]">Είδος αίτησης</span>
