@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const DLS_TOPOGRAPHY_EXPORT =
-  "https://eservices.dls.moi.gov.cy/arcgis/rest/services/National/Topography_GR/MapServer/export";
+const DLS_CADASTRAL_EXPORT =
+  "https://eservices.dls.moi.gov.cy/arcgis/rest/services/National/CadastralMap_GR/MapServer/export";
 const WEB_MERCATOR_HALF_WORLD = 20037508.342789244;
 const TILE_SIZE = 256;
 const MIN_ZOOM = 8;
@@ -49,17 +49,20 @@ export async function GET(request: Request) {
   }
 
   const bounds = tileBounds3857(z, x, y);
-  const upstream = new URL(DLS_TOPOGRAPHY_EXPORT);
+  const upstream = new URL(DLS_CADASTRAL_EXPORT);
   upstream.searchParams.set(
     "bbox",
     [bounds.minX, bounds.minY, bounds.maxX, bounds.maxY].join(","),
   );
   upstream.searchParams.set("bboxSR", "3857");
   upstream.searchParams.set("imageSR", "3857");
-  upstream.searchParams.set("size", `${TILE_SIZE},${TILE_SIZE}`);
-  upstream.searchParams.set("dpi", "96");
+  // Retina-size transparent export: only parcels (0) and buildings (28).
+  // Roads and labels stay on the clear operational street map beneath.
+  upstream.searchParams.set("size", `${TILE_SIZE * 2},${TILE_SIZE * 2}`);
+  upstream.searchParams.set("dpi", "192");
   upstream.searchParams.set("format", "png32");
-  upstream.searchParams.set("transparent", "false");
+  upstream.searchParams.set("transparent", "true");
+  upstream.searchParams.set("layers", "show:0,28");
   upstream.searchParams.set("f", "image");
 
   try {

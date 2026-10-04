@@ -24,11 +24,14 @@ try {
   );
 
   assert.equal(response.status, 200);
-  assert.equal(response.headers.get("x-pantavion-basemap"), "cyprus-dls-topography-proxy-v1");
-  assert.match(upstreamUrl, /National\/Topography_GR\/MapServer\/export/);
+  assert.equal(response.headers.get("x-pantavion-basemap"), "cyprus-dls-cadastral-overlay-v1");
+  assert.match(upstreamUrl, /National\/CadastralMap_GR\/MapServer\/export/);
   assert.match(upstreamUrl, /bboxSR=3857/);
   assert.match(upstreamUrl, /imageSR=3857/);
-  assert.match(upstreamUrl, /size=256%2C256/);
+  assert.match(upstreamUrl, /size=512%2C512/);
+  assert.match(upstreamUrl, /layers=show%3A0%2C28/);
+  assert.match(upstreamUrl, /transparent=true/);
+  assert.match(upstreamUrl, /dpi=192/);
   assert.match(upstreamUrl, /f=image/);
 
   const invalid = await GET(

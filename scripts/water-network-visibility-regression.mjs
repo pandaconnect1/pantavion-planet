@@ -23,8 +23,8 @@ assert.match(
 );
 assert.match(
   client,
-  /weight: Math\.max\(3, Math\.min\(10, sourceWidth \?\? 2\)\)/,
-  "One-pixel source lines must remain operationally visible on high-DPI phones",
+  /weight: Math\.max\(1, Math\.min\(6, sourceWidth \?\? 1\)\)/,
+  "Map A must preserve near-authentic source line widths without artificial thickening",
 );
 assert.match(
   client,
