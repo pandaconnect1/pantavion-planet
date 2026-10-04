@@ -58,7 +58,7 @@ function searchVariants(query: string) {
 
   return Array.from(
     new Set(
-      [clean, firstCommaPart, withoutHouseNumbers, withoutCommonLocationSuffix]
+      [withoutCommonLocationSuffix, withoutHouseNumbers, firstCommaPart, clean]
         .map((value) => value.trim())
         .filter((value) => value.length >= 2),
     ),
