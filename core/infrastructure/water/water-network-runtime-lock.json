@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-04T20:46:00.000Z",
+  "lockedAtUtc": "2026-10-04T20:50:00.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -33,12 +33,12 @@
     "core/security/water-admin-session.ts": "df9e9d7cbd5edfa2659068d817d60e03886e0e761ff6657ab7cb8e9b9417d2f3",
     "scripts/pantavion-water-network-runtime-lock.cjs": "0df1627215062bbb3c1e5bb91118591fd896197300cf81090d373f757fa2d5d3",
     "scripts/water-guardian-production-smoke.cjs": "2109e96821887077bc3854083d19c0f6cf7d2a464d8876458672ccb97c0667e0",
-    "scripts/water-segment-reader-regression.mjs": "875b5c4dab72881ce935bc03994b5dafc73ae17c634f01f06deeb9f7db291e01",
+    "scripts/water-segment-reader-regression.mjs": "ad74675021ed79fcfeddb26f80634419a42ee110088742d08abd06c9a4455e70",
     "app/api/professional/infrastructure/water/basemap/dls/route.ts": "bf0345a807b51b4b0bcbcb7a3097e4c20453f484317f479858cecdf3ca6fb2f4"
   },
   "refreshEvidence": {
-    "reason": "Founder-directed basemap-only visual replacement. Replace the yellow Esri/2GIS-dependent background with a clean neutral CARTO Voyager street basemap while preserving authentic KMZ-derived Water source truth, geometry, source styling, segmented delivery, authorization, cache and privacy invariants unchanged.",
-    "sourceCommit": "5990d75946869748e8e8561734bcf942d4cd0ec4",
+    "reason": "Founder-directed basemap-only visual replacement. Regression gate now validates CARTO Voyager instead of the removed yellow Esri basemap. Authentic KMZ-derived Water source truth, geometry, source styling, segmented delivery, authorization, cache and privacy invariants remain unchanged.",
+    "sourceCommit": "847b35c6ba2c71df32b67f642762aa527a77810b",
     "protectedFileCount": 19,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
