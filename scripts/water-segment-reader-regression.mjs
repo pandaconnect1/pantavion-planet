@@ -253,8 +253,7 @@ function verifyRuntimeWiring() {
   );
   assert.match(client, /WATER_SEGMENT_COUNT_MISMATCH/);
   assert.match(client, /const emergencyRoadFallback = L\.tileLayer/);
-  assert.match(client, /const dlsRoadLabelsOverlay = L\.tileLayer/);
-  assert.match(client, /Υπόβαθρο: επίσημος λεπτομερής χάρτης DLS/);
+  assert.match(client, /Υπόβαθρο: Pantavion λεπτομερής vector χάρτης/);
   assert.doesNotMatch(client, /roadBasemap\.addTo\(map\)/);
   assert.match(client, /Approved field users search the Cyprus official road registry first/);
   assert.match(client, /Επίλεξε την οδό από το επίσημο οδικό δίκτυο Κτηματολογίου/);
