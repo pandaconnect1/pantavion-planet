@@ -239,6 +239,12 @@ function verifyRuntimeWiring() {
   assert.match(client, /Φόρτωση δικτύου/);
   assert.match(client, /dir_action=navigate/);
   assert.match(client, /window\.location\.assign\(navigationUrl\)/);
+  assert.match(client, /const \[searchLoading, setSearchLoading\] = useState\(false\)/);
+  assert.match(client, /setSearchLoading\(true\)/);
+  assert.match(client, /setSearchLoading\(false\)/);
+  assert.match(client, /\}, \[accessApproved, mapReady\]\);/);
+  assert.match(client, /event\.key === "Enter"\) void searchAddressMarker\(\)/);
+  assert.match(client, /Λεμεσός, Κύπρος/);
   assert.doesNotMatch(
     client,
     /window\.open\(\s*\`https:\/\/www\.google\.com\/maps\/dir/,
