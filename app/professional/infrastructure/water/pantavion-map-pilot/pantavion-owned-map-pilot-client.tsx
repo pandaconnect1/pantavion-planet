@@ -82,12 +82,6 @@ type MapLibreApi = {
   Marker: new (options: { element: HTMLElement }) => MapLibreMarker;
 };
 
-declare global {
-  interface Window {
-    maplibregl?: MapLibreApi;
-  }
-}
-
 const LIMASSOL_CENTER: [number, number] = [33.0442, 34.6851];
 const MAX_FEATURES = 1200;
 
@@ -153,8 +147,8 @@ function ensureMapLibre() {
       return;
     }
 
-    if (window.maplibregl) {
-      resolve(window.maplibregl);
+    if ((window as unknown as { maplibregl?: MapLibreApi }).maplibregl) {
+      resolve((window as unknown as { maplibregl?: MapLibreApi }).maplibregl);
       return;
     }
 
@@ -171,7 +165,7 @@ function ensureMapLibre() {
       existing.addEventListener(
         "load",
         () => {
-          if (window.maplibregl) resolve(window.maplibregl);
+          if ((window as unknown as { maplibregl?: MapLibreApi }).maplibregl) resolve((window as unknown as { maplibregl?: MapLibreApi }).maplibregl);
           else reject(new Error("maplibre_missing_after_load"));
         },
         { once: true },
@@ -188,7 +182,7 @@ function ensureMapLibre() {
     script.defer = true;
     script.setAttribute("data-pantavion-maplibre-js", "true");
     script.onload = () => {
-      if (window.maplibregl) resolve(window.maplibregl);
+      if ((window as unknown as { maplibregl?: MapLibreApi }).maplibregl) resolve((window as unknown as { maplibregl?: MapLibreApi }).maplibregl);
       else reject(new Error("maplibre_missing_after_load"));
     };
     script.onerror = () => reject(new Error("maplibre_script_failed"));
