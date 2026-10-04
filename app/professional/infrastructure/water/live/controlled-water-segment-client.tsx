@@ -583,6 +583,13 @@ export default function ControlledWaterSegmentClient() {
   const [approvedChangeCount, setApprovedChangeCount] = useState(0);
   const [approvedEvidenceCount, setApprovedEvidenceCount] = useState(0);
   const [mapReady, setMapReady] = useState(false);
+  const [workPanelOpen, setWorkPanelOpen] = useState(false);
+  const [workStage, setWorkStage] = useState("FAULT");
+  const [workOrderId, setWorkOrderId] = useState("");
+  const [workNotes, setWorkNotes] = useState("");
+  const [excavationLength, setExcavationLength] = useState("");
+  const [excavationWidth, setExcavationWidth] = useState("");
+  const [excavationDepth, setExcavationDepth] = useState("");
   const [selectedTarget, setSelectedTarget] = useState<{ lat: number; lng: number } | null>(null);
   const [addressCandidates, setAddressCandidates] = useState<Array<{
     candidateId: string;
@@ -2088,10 +2095,29 @@ export default function ControlledWaterSegmentClient() {
               {lang === "el" ? "Πήγαινέ με" : "Navigate"}
             </button>
 
-            <button type="button" onClick={() => void loadPipes()} disabled={loading} className="rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60">
-              {loading ? t.loading : t.load}
+            <button type="button" onClick={() => setWorkPanelOpen((value) => !value)} className="rounded-2xl border border-amber-400/60 bg-amber-400/15 px-5 py-3 text-sm font-black text-amber-100">
+              {lang === "el" ? "Εργασία" : "Work"}
             </button>
           </div>
+
+          {workPanelOpen ? (
+            <div className="mt-4 rounded-2xl border border-amber-400/40 bg-[#07111f] p-4">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <input value={workOrderId} onChange={(e) => setWorkOrderId(e.target.value)} placeholder={lang === "el" ? "Αρ. εργασίας / βλάβης" : "Work / fault reference"} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <select value={workStage} onChange={(e) => setWorkStage(e.target.value)} className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white">
+                  <option value="FAULT">Βλάβη</option><option value="LOCATE">Εντοπισμός</option><option value="SITE_SAFETY">Ασφάλεια</option><option value="EXCAVATION">Εκσκαφή</option><option value="NETWORK_REPAIR">Επισκευή</option><option value="TEST">Δοκιμή</option><option value="BACKFILL">Επίχωση</option><option value="SURFACE_RESTORATION">Αποκατάσταση</option><option value="CLOSURE">Κλείσιμο</option>
+                </select>
+                <input inputMode="decimal" value={excavationLength} onChange={(e) => setExcavationLength(e.target.value)} placeholder="Μήκος εκσκαφής m" className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input inputMode="decimal" value={excavationWidth} onChange={(e) => setExcavationWidth(e.target.value)} placeholder="Πλάτος m" className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <input inputMode="decimal" value={excavationDepth} onChange={(e) => setExcavationDepth(e.target.value)} placeholder="Βάθος m" className="rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white" />
+                <div className="rounded-xl border border-slate-700 px-3 py-3 text-sm text-slate-200">
+                  Όγκος: {(() => { const l=Number(excavationLength),w=Number(excavationWidth),d=Number(excavationDepth); return [l,w,d].every(Number.isFinite) && l>=0 && w>=0 && d>=0 ? (l*w*d).toFixed(3) : "—"; })()} m³
+                </div>
+                <textarea value={workNotes} onChange={(e) => setWorkNotes(e.target.value)} placeholder={lang === "el" ? "Σημειώσεις / τι έγινε στο πεδίο" : "Field notes"} className="min-h-[90px] rounded-xl border border-slate-600 bg-[#0d1a2d] px-3 py-3 text-white sm:col-span-2" />
+              </div>
+              <p className="mt-3 text-xs text-amber-100">Draft πεδίου — δεν αλλάζει το επίσημο δίκτυο χωρίς review/approval.</p>
+            </div>
+          ) : null}
 
           <div className="mt-4 rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-sm text-slate-200">
             {message}
