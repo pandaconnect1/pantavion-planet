@@ -17,7 +17,7 @@ export type WaterReferenceMapProviderId =
 
 export type WaterReferenceMapProvider = {
   id: WaterReferenceMapProviderId;
-  capabilities: WaterReferenceMapCapability[];
+  capabilities: readonly WaterReferenceMapCapability[];
   enabled: boolean;
   priority: number;
   termsVerified: boolean;
