@@ -428,9 +428,10 @@ function getPipeStyle(feature: {
 
   return {
     color: sourceColor,
-    // Preserve the authentic source width in data; scale only the on-screen
-    // operational stroke so 1 px KMZ lines remain visible on high-DPI phones.
-    weight: Math.max(3, Math.min(10, sourceWidth ?? 2)),
+    // Preserve the authentic source line weight on screen. Only prevent a
+    // sub-pixel line from disappearing completely; do not artificially thicken
+    // the Water network.
+    weight: Math.max(1, Math.min(6, sourceWidth ?? 1)),
     opacity: Math.max(0.05, Math.min(1, sourceOpacity ?? 1)),
   };
 }
@@ -819,36 +820,38 @@ export default function ControlledWaterSegmentClient() {
         waterNetworkPane.style.zIndex = "450";
         waterNetworkPane.style.pointerEvents = "none";
 
-        const osmFallback = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        const roadBasemap = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 20,
           attribution: "&copy; OpenStreetMap contributors",
         });
+        roadBasemap.addTo(map);
 
-        // Pantavion requests the official DLS ArcGIS Export Map server-side.
-        // This avoids browser-side WMS/CORS incompatibilities while preserving
-        // the official Cyprus topographic/road basemap as the primary layer.
-        const dlsBasemap = L.tileLayer(
+        // Keep the clear street map as the operational base and add only the
+        // official DLS cadastral parcel/building reference above it. This avoids
+        // the oversized labels and clutter of the full DLS topographic raster.
+        const dlsCadastreOverlay = L.tileLayer(
           "/api/professional/infrastructure/water/basemap/dls?z={z}&x={x}&y={y}",
           {
             maxZoom: 20,
+            opacity: 0.42,
             attribution: "© Τμήμα Κτηματολογίου και Χωρομετρίας Κύπρου (DLS)",
           },
         );
 
-        let dlsFallbackActivated = false;
+        let dlsOverlayDisabled = false;
         let dlsTileFailures = 0;
         let dlsTileSuccesses = 0;
         setBasemapState("loading");
 
-        dlsBasemap.on("tileload", () => {
+        dlsCadastreOverlay.on("tileload", () => {
           dlsTileSuccesses += 1;
           if (!cancelled) setBasemapState("dls");
         });
 
-        dlsBasemap.on("tileerror", () => {
+        dlsCadastreOverlay.on("tileerror", () => {
           dlsTileFailures += 1;
           if (
-            dlsFallbackActivated ||
+            dlsOverlayDisabled ||
             cancelled ||
             dlsTileSuccesses > 0 ||
             dlsTileFailures < 4
@@ -856,13 +859,12 @@ export default function ControlledWaterSegmentClient() {
             return;
           }
 
-          dlsFallbackActivated = true;
-          if (map.hasLayer(dlsBasemap)) map.removeLayer(dlsBasemap);
-          osmFallback.addTo(map);
+          dlsOverlayDisabled = true;
+          if (map.hasLayer(dlsCadastreOverlay)) map.removeLayer(dlsCadastreOverlay);
           setBasemapState("fallback");
         });
 
-        dlsBasemap.addTo(map);
+        dlsCadastreOverlay.addTo(map);
 
         mapRef.current = map;
         map.on("click", (event: { latlng: { lat: number; lng: number } }) => {
@@ -1844,7 +1846,7 @@ export default function ControlledWaterSegmentClient() {
               const style = getPipeStyle(feature);
 
               return L.circleMarker(latlng, {
-                radius: Math.max(3, style.weight),
+                radius: Math.max(2, Math.min(5, style.weight * 1.25)),
                 color: style.color,
                 fillColor: style.color,
                 fillOpacity: style.opacity,
@@ -2292,10 +2294,10 @@ export default function ControlledWaterSegmentClient() {
             <span className="text-sm text-slate-300">
               {pipeCount !== null ? `${t.loaded}: ${pipeCount}` : t.protected}
               {basemapState === "dls"
-                ? ` · ${lang === "el" ? "Υπόβαθρο: Κτηματολόγιο" : "Basemap: Cyprus DLS"}`
+                ? ` · ${lang === "el" ? "Υπόβαθρο: Οδικός + Κτηματολόγιο" : "Basemap: roads + Cyprus DLS"}`
                 : basemapState === "fallback"
-                  ? ` · ${lang === "el" ? "Υπόβαθρο: εφεδρικό OSM" : "Basemap: OSM fallback"}`
-                  : ` · ${lang === "el" ? "Υπόβαθρο: φόρτωση" : "Basemap: loading"}`}
+                  ? ` · ${lang === "el" ? "Υπόβαθρο: καθαρός οδικός (DLS μη διαθέσιμο)" : "Basemap: clear roads (DLS unavailable)"}`
+                  : ` · ${lang === "el" ? "Υπόβαθρο: φόρτωση Κτηματολογίου" : "Basemap: loading DLS overlay"}`}
               {approvedChangeCount > 0 || approvedEvidenceCount > 0
                 ? ` · approved changes ${approvedChangeCount} · evidence ${approvedEvidenceCount}`
                 : ""}
