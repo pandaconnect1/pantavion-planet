@@ -6,10 +6,17 @@ export type WaterFieldWorkSaveResult = {
   provider: "PANTAVION_POSTGRES" | "LEGACY_ADAPTER" | "NONE";
 };
 
-export type WaterFieldWorkWriteContext = {\n  actorRef: string;\n};\n\nexport interface WaterFieldWorkRepository {
+export type WaterFieldWorkWriteContext = {
+  actorRef: string;
+};
+
+export interface WaterFieldWorkRepository {
   readonly provider: WaterFieldWorkSaveResult["provider"];
   readonly ready: boolean;
-  save(record: WaterFieldWorkRecord, context: WaterFieldWorkWriteContext): Promise<WaterFieldWorkSaveResult>;
+  save(
+    record: WaterFieldWorkRecord,
+    context: WaterFieldWorkWriteContext,
+  ): Promise<WaterFieldWorkSaveResult>;
 }
 
 /**
@@ -20,8 +27,12 @@ export class UnconfiguredWaterFieldWorkRepository implements WaterFieldWorkRepos
   readonly provider = "NONE" as const;
   readonly ready = false;
 
-  async save(record: WaterFieldWorkRecord): Promise<WaterFieldWorkSaveResult> {
+  async save(
+    record: WaterFieldWorkRecord,
+    context: WaterFieldWorkWriteContext,
+  ): Promise<WaterFieldWorkSaveResult> {
     void record;
+    void context;
     throw new Error("water_field_work_repository_not_configured");
   }
 }
