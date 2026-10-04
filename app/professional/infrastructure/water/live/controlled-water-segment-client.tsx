@@ -834,48 +834,23 @@ export default function ControlledWaterSegmentClient() {
           attribution: "&copy; OpenStreetMap contributors",
         });
 
-        const esriRoadFallback = L.tileLayer(
-          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+        // BASEMAP ONLY: use a clean, neutral city map beneath the protected Water pane.
+        // No Water geometry, source style, authorization, segment loading or cache logic changes here.
+        const detailedRoadBasemap = L.tileLayer(
+          "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
           {
             pane: "tilePane",
             maxZoom: 20,
-            attribution: "Tiles &copy; Esri",
+            subdomains: "abcd",
+            attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
           },
         );
 
-        // Detailed city basemap only. 2GIS HD provides the richer road/building/address
-        // presentation requested for field operations. The protected Water pane and
-        // every KMZ-derived network path remain completely unchanged.
-        const twoGisKey = process.env.NEXT_PUBLIC_2GIS_MAP_KEY?.trim();
-        const detailedRoadBasemapUrl = twoGisKey
-          ? `https://tile0.maps.2gis.com/v2/tiles/online_hd/{z}/{x}/{y}.png?key=${encodeURIComponent(twoGisKey)}`
-          : "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}";
-
-        const detailedRoadBasemap = L.tileLayer(detailedRoadBasemapUrl, {
-          pane: "tilePane",
-          maxZoom: 20,
-          attribution: twoGisKey ? "&copy; 2GIS" : "Tiles &copy; Esri",
-        });
-
         let detailedBasemapFailures = 0;
-        let esriFallbackFailures = 0;
         setBasemapState("loading");
 
         detailedRoadBasemap.on("tileload", () => {
           if (!cancelled) setBasemapState("pantavion");
-        });
-
-        esriRoadFallback.on("tileerror", () => {
-          esriFallbackFailures += 1;
-          if (cancelled || esriFallbackFailures < 4) return;
-
-          if (map.hasLayer(esriRoadFallback)) {
-            map.removeLayer(esriRoadFallback);
-          }
-          if (!map.hasLayer(emergencyRoadFallback)) {
-            emergencyRoadFallback.addTo(map);
-          }
-          setBasemapState("fallback");
         });
 
         detailedRoadBasemap.on("tileerror", () => {
@@ -885,15 +860,9 @@ export default function ControlledWaterSegmentClient() {
           if (map.hasLayer(detailedRoadBasemap)) {
             map.removeLayer(detailedRoadBasemap);
           }
-
-          if (twoGisKey) {
-            if (!map.hasLayer(esriRoadFallback)) {
-              esriRoadFallback.addTo(map);
-            }
-          } else if (!map.hasLayer(emergencyRoadFallback)) {
+          if (!map.hasLayer(emergencyRoadFallback)) {
             emergencyRoadFallback.addTo(map);
           }
-
           setBasemapState("fallback");
         });
 
