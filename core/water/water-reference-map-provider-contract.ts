@@ -37,7 +37,7 @@ export const WATER_REFERENCE_MAP_RULES = {
   ],
 } as const;
 
-export const WATER_REFERENCE_PROVIDER_CANDIDATES: WaterReferenceMapProvider[] = [
+export const WATER_REFERENCE_PROVIDER_CANDIDATES: readonly WaterReferenceMapProvider[] = [
   {
     id: "TOMTOM_ORBIS",
     capabilities: [
