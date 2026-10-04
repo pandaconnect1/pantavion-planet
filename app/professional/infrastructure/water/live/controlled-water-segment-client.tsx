@@ -428,7 +428,9 @@ function getPipeStyle(feature: {
 
   return {
     color: sourceColor,
-    weight: Math.max(1, Math.min(10, sourceWidth ?? 2)),
+    // Preserve the authentic source width in data; scale only the on-screen
+    // operational stroke so 1 px KMZ lines remain visible on high-DPI phones.
+    weight: Math.max(3, Math.min(10, sourceWidth ?? 2)),
     opacity: Math.max(0.05, Math.min(1, sourceOpacity ?? 1)),
   };
 }
@@ -811,6 +813,10 @@ export default function ControlledWaterSegmentClient() {
           zoomControl: true,
           preferCanvas: true,
         });
+
+        const waterNetworkPane = map.createPane("pantavion-water-network");
+        waterNetworkPane.style.zIndex = "450";
+        waterNetworkPane.style.pointerEvents = "none";
 
         const osmFallback = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 20,
@@ -1812,6 +1818,7 @@ export default function ControlledWaterSegmentClient() {
             features,
           },
           {
+            pane: "pantavion-water-network",
             style: (feature: any) => getPipeStyle(feature),
             pointToLayer: (feature: any, latlng: any) => {
               const style = getPipeStyle(feature);
@@ -2231,6 +2238,15 @@ export default function ControlledWaterSegmentClient() {
 
           <div className="mt-4 rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-sm text-slate-200">
             {message}
+            <div className="mt-2 font-black text-emerald-200">
+              {pipeCount === null
+                ? (loading
+                    ? (lang === "el" ? "Δίκτυο A: φόρτωση..." : "Network A: loading...")
+                    : (lang === "el" ? "Δίκτυο A: αναμονή φόρτωσης" : "Network A: waiting to load"))
+                : (lang === "el"
+                    ? `Δίκτυο A ενεργό: ${pipeCount} στοιχεία στην ορατή περιοχή`
+                    : `Network A active: ${pipeCount} visible features`)}
+            </div>
           </div>
           {addressCandidates.length > 0 ? (
             <div className="mt-3 grid gap-2">
