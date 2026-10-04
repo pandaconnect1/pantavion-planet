@@ -834,17 +834,73 @@ export default function ControlledWaterSegmentClient() {
           attribution: "&copy; OpenStreetMap contributors",
         });
 
-        // BASEMAP ONLY: use a clean, neutral city map beneath the protected Water pane.
-        // No Water geometry, source style, authorization, segment loading or cache logic changes here.
-        const detailedRoadBasemap = L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+        // BASEMAP ONLY: real operational map choices matching the approved field-map
+        // reference (Normal / Hybrid / Satellite). The protected Water pane, geometry,
+        // source styling, authorization, segmented loading and cache stay untouched.
+        //
+        // Prefer licensed 2GIS HD when its browser-safe API key is configured. 2GIS
+        // officially supports this raster endpoint for third-party map libraries.
+        // Without that key, Normal remains a detailed OSM street/building/POI map.
+        const twoGisKey = process.env.NEXT_PUBLIC_2GIS_MAP_KEY?.trim() || "";
+        const detailedRoadBasemap = twoGisKey
+          ? L.tileLayer(
+              `https://tile0.maps.2gis.com/v2/tiles/online_hd/{z}/{x}/{y}.png?key=${encodeURIComponent(twoGisKey)}`,
+              {
+                pane: "tilePane",
+                maxZoom: 20,
+                attribution: "&copy; 2GIS",
+              },
+            )
+          : L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+              pane: "tilePane",
+              maxZoom: 20,
+              attribution: "&copy; OpenStreetMap contributors",
+            });
+
+        const satelliteBasemap = L.tileLayer(
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
           {
             pane: "tilePane",
             maxZoom: 20,
-            subdomains: "abcd",
-            attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+            attribution: "Tiles &copy; Esri",
           },
         );
+
+        const hybridImageryBasemap = L.tileLayer(
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          {
+            pane: "tilePane",
+            maxZoom: 20,
+            attribution: "Tiles &copy; Esri",
+          },
+        );
+
+        const hybridLabelsBasemap = L.tileLayer(
+          "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+          {
+            pane: "overlayPane",
+            maxZoom: 20,
+            attribution: "Labels &copy; Esri",
+          },
+        );
+
+        const hybridBasemap = L.layerGroup([
+          hybridImageryBasemap,
+          hybridLabelsBasemap,
+        ]);
+
+        L.control.layers(
+          {
+            Normal: detailedRoadBasemap,
+            Hybrid: hybridBasemap,
+            Satellite: satelliteBasemap,
+          },
+          undefined,
+          {
+            position: "topright",
+            collapsed: true,
+          },
+        ).addTo(map);
 
         let detailedBasemapFailures = 0;
         setBasemapState("loading");
