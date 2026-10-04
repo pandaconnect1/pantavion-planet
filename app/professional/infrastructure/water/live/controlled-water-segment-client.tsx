@@ -583,7 +583,7 @@ export default function ControlledWaterSegmentClient() {
   const [approvedChangeCount, setApprovedChangeCount] = useState(0);
   const [approvedEvidenceCount, setApprovedEvidenceCount] = useState(0);
   const [mapReady, setMapReady] = useState(false);
-  const [selectedTarget] = useState<{ lat: number; lng: number } | null>(null);
+  const [selectedTarget, setSelectedTarget] = useState<{ lat: number; lng: number } | null>(null);
   const [addressCandidates, setAddressCandidates] = useState<Array<{
     candidateId: string;
     displayName: string;
@@ -958,6 +958,7 @@ export default function ControlledWaterSegmentClient() {
       // Keep GPS separate: a manual selection moves only the search marker.
       if (mapRef.current !== map) return;
       moveMapToPoint(lat, lng);
+      setSelectedTarget({ lat, lng });
       setMessage(t.searchFound);
       // Use the same cancellation/debounce path as pan and zoom, including
       // selecting the current center where Leaflet may emit no move event.
@@ -1223,22 +1224,19 @@ export default function ControlledWaterSegmentClient() {
       // Until the primary provider is configured, preserve the proven address
       // search path rather than leaving field users with a dead control.
       setStreet(query);
-      setMessage(lang === "el"
-        ? "Η κύρια αναζήτηση δεν είναι ακόμη διαθέσιμη. Πάτησε «Αναζήτηση διεύθυνσης» για fallback."
-        : "Primary search is not available yet. Use address search fallback.");
+      await searchAddressMarker(query);
     } catch {
       setStreet(query);
-      setMessage(lang === "el"
-        ? "Η κύρια αναζήτηση δεν ανταποκρίθηκε. Η υπάρχουσα αναζήτηση διεύθυνσης παραμένει διαθέσιμη."
-        : "Primary search did not respond. Address search remains available.");
+      await searchAddressMarker(query);
     } finally {
       setLoading(false);
     }
   }
 
-  async function searchAddressMarker() {
+  async function searchAddressMarker(queryOverride?: string) {
     const map = mapRef.current;
-    const queries = buildSearchQueries();
+    const override = queryOverride?.trim() || "";
+    const queries = override ? [override] : buildSearchQueries();
     if (!map || queries.length === 0) {
       setMessage(t.searchEmpty);
       return;
@@ -1247,9 +1245,9 @@ export default function ControlledWaterSegmentClient() {
     setAddressCandidates([]);
     setMessage(t.loading);
     try {
-      const params = new URLSearchParams({
-        street, houseNumber: number, area, postalCode: postal,
-      });
+      const params = override
+        ? new URLSearchParams({ street: override, houseNumber: "", area: "", postalCode: "" })
+        : new URLSearchParams({ street, houseNumber: number, area, postalCode: postal });
       const response = await fetch(
         `/api/professional/infrastructure/water/address/search?${params.toString()}`,
         { cache: "no-store", signal: AbortSignal.timeout(20000) },
