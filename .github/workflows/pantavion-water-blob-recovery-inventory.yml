@@ -1,6 +1,7 @@
 name: Pantavion Water Blob Recovery Inventory
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
@@ -78,64 +79,3 @@ jobs:
           process.exit(2);
           NODE
           )
-
-          if [ -z "$blob_token" ]; then
-            echo "::error::No private Blob token was present in the pulled production environment."
-            rm -f "$env_file"
-            exit 1
-          fi
-
-          echo "::add-mask::$blob_token"
-          export BLOB_READ_WRITE_TOKEN="$blob_token"
-          rm -f "$env_file"
-
-          node --input-type=module <<'NODE'
-          import { list } from "@vercel/blob";
-
-          const token = process.env.BLOB_READ_WRITE_TOKEN;
-          const prefixes = [
-            "pantavion/water/",
-            "water/",
-          ];
-          const seen = new Map();
-
-          for (const prefix of prefixes) {
-            let cursor;
-            for (let page = 0; page < 50; page++) {
-              const result = await list({
-                token,
-                prefix,
-                limit: 1000,
-                ...(cursor ? { cursor } : {}),
-              });
-
-              for (const blob of result.blobs || []) {
-                const pathname = String(blob.pathname || "");
-                const lower = pathname.toLowerCase();
-                if (
-                  lower.endsWith(".dwg") ||
-                  lower.endsWith(".kmz") ||
-                  lower.includes("andreaspap") ||
-                  lower.includes("george") ||
-                  lower.includes("map-b") ||
-                  lower.includes("map-c")
-                ) {
-                  seen.set(pathname, {
-                    pathname,
-                    size: Number(blob.size || 0),
-                    uploadedAt: blob.uploadedAt || null,
-                    contentType: blob.contentType || null,
-                  });
-                }
-              }
-
-              if (!result.hasMore || !result.cursor) break;
-              cursor = result.cursor;
-            }
-          }
-
-          const rows = [...seen.values()].sort((a,b) => a.pathname.localeCompare(b.pathname));
-          console.log("PANTAVION_WATER_PRIVATE_BLOB_INVENTORY_BEGIN");
-          console.log(JSON.stringify({ count: rows.length, rows }, null, 2));
-          console.log("PANTAVION_WATER_PRIVATE_BLOB_INVENTORY_END");
-          NODE
