@@ -37,16 +37,24 @@ function sourceObjectKey(sourceKey: WaterMapBSourceKey) {
   return `water/canonical/map-${source.mapId.toLowerCase()}/${source.sha256}.dwg`;
 }
 
-function transferAuthorized(request: Request) {
-  const expected = (process.env.PANTAVION_WATER_TRANSFER_SECRET || "").trim();
-  const actual = (request.headers.get("x-pantavion-transfer-secret") || "").trim();
-
+function safeSecretMatch(expected: string, actual: string) {
   if (!expected || !actual) return false;
-
   const left = Buffer.from(expected);
   const right = Buffer.from(actual);
-
   return left.length === right.length && timingSafeEqual(left, right);
+}
+
+function transferAuthorized(request: Request) {
+  const primary = (process.env.PANTAVION_WATER_TRANSFER_SECRET || "").trim();
+  const libraryImport = (
+    process.env.PANTAVION_WATER_LIBRARY_IMPORT_SECRET || ""
+  ).trim();
+  const actual = (request.headers.get("x-pantavion-transfer-secret") || "").trim();
+
+  return (
+    safeSecretMatch(primary, actual) ||
+    safeSecretMatch(libraryImport, actual)
+  );
 }
 
 async function verifyObject(sourceKey: WaterMapBSourceKey) {
