@@ -58,8 +58,11 @@ async function callPantavionObjectSigner(
     ok?: boolean;
     present?: boolean;
     sizeMatches?: boolean;
+    verified?: boolean;
+    markerPresent?: boolean;
     signedUrl?: string;
     contentLength?: number;
+    etag?: string | null;
     error?: string;
   };
 
@@ -76,30 +79,87 @@ function canonicalPrivateObjectKey(
   return `water/canonical/map-${source.mapId.toLowerCase()}/${source.sha256}.dwg`;
 }
 
+function canonicalPrivateVerificationKey(
+  source: (typeof WATER_MAP_B_SOURCE_CANDIDATES)[WaterMapBSourceKey],
+) {
+  return `${canonicalPrivateObjectKey(source)}.verified.json`;
+}
+
 async function directPrivateObjectState(
   source: (typeof WATER_MAP_B_SOURCE_CANDIDATES)[WaterMapBSourceKey],
 ) {
   try {
-    const signed = presignObjectHead(canonicalPrivateObjectKey(source), 120);
-    const response = await fetch(signed.url, {
+    const rawSigned = presignObjectHead(canonicalPrivateObjectKey(source), 120);
+    const rawResponse = await fetch(rawSigned.url, {
       method: "HEAD",
       cache: "no-store",
       signal: AbortSignal.timeout(8000),
     });
-    const contentLength = Number(response.headers.get("content-length") || 0);
+    const contentLength = Number(rawResponse.headers.get("content-length") || 0);
+    const etag = rawResponse.headers.get("etag");
+
+    if (!rawResponse.ok) {
+      return {
+        configured: true as const,
+        present: false,
+        sizeMatches: false,
+        markerPresent: false,
+        verified: false,
+        contentLength,
+        etag,
+      };
+    }
+
+    const markerSigned = presignObjectDownload(
+      canonicalPrivateVerificationKey(source),
+      120,
+    );
+    const markerResponse = await fetch(markerSigned.url, {
+      method: "GET",
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000),
+    });
+    const marker = markerResponse.ok
+      ? ((await markerResponse.json().catch(() => null)) as {
+          marker?: string;
+          sourceKey?: string;
+          sha256?: string;
+          sizeBytes?: number;
+          header?: string;
+          etag?: string | null;
+        } | null)
+      : null;
+
+    const sizeMatches = contentLength === source.byteSize;
+    const markerPresent =
+      marker?.marker === "pantavion_water_canonical_object_verification_v1";
+    const verified = Boolean(
+      sizeMatches &&
+        markerPresent &&
+        marker?.sha256 === source.sha256 &&
+        Number(marker?.sizeBytes) === source.byteSize &&
+        marker?.header === source.dwgHeader &&
+        marker?.etag === etag,
+    );
 
     return {
       configured: true as const,
-      present: response.ok,
-      sizeMatches: response.ok && contentLength === source.byteSize,
+      present: true,
+      sizeMatches,
+      markerPresent,
+      verified,
       contentLength,
+      etag,
     };
   } catch {
     return {
       configured: false as const,
       present: false,
       sizeMatches: false,
+      markerPresent: false,
+      verified: false,
       contentLength: 0,
+      etag: null,
     };
   }
 }
@@ -108,7 +168,7 @@ async function directPrivateObjectDownload(
   source: (typeof WATER_MAP_B_SOURCE_CANDIDATES)[WaterMapBSourceKey],
 ) {
   const state = await directPrivateObjectState(source);
-  if (!state.present || !state.sizeMatches) return null;
+  if (!state.verified) return null;
 
   return {
     signedUrl: presignObjectDownload(
@@ -228,8 +288,8 @@ export async function POST(request: Request) {
     const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
 
     if (!hasSupabaseAdminCredential() && action === "status") {
-      const objectState = await callPantavionObjectSigner("head", sourceKey);
-      const verified = Boolean(objectState.present && objectState.sizeMatches);
+      const objectState = await callPantavionObjectSigner("status", sourceKey);
+      const verified = objectState.verified === true;
 
       return noStore({
         ok: true,
@@ -245,8 +305,8 @@ export async function POST(request: Request) {
     }
 
     if (!hasSupabaseAdminCredential() && action === "download") {
-      const objectState = await callPantavionObjectSigner("head", sourceKey);
-      if (!objectState.present || !objectState.sizeMatches) {
+      const objectState = await callPantavionObjectSigner("status", sourceKey);
+      if (objectState.verified !== true) {
         return noStore(
           { ok: false, error: "water_map_source_not_verified", sourceKey },
           { status: 409 },
@@ -308,7 +368,7 @@ export async function POST(request: Request) {
 
       if (!verified) {
         const privateState = await directPrivateObjectState(source);
-        if (privateState.present && privateState.sizeMatches) {
+        if (privateState.verified) {
           return noStore({
             ok: true,
             status: "verified",
