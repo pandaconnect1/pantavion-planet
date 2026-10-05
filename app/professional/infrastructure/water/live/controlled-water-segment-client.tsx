@@ -570,6 +570,7 @@ export default function ControlledWaterSegmentClient() {
   const [lang, setLang] = useState<Lang>(getInitialLang);
   const [accessState, setAccessState] = useState<AccessState>("checking");
   const [accessCheckVersion, setAccessCheckVersion] = useState(0);
+  const [accessRequestPending, setAccessRequestPending] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [roleTitle, setRoleTitle] = useState("");
@@ -735,6 +736,8 @@ export default function ControlledWaterSegmentClient() {
         };
 
         if (!cancelled && response.ok && json.ok) {
+          setAccessRequestPending(false);
+          setAccessMessage(t.accessApproved);
           setAccessState("approved");
           return;
         }
@@ -766,6 +769,7 @@ export default function ControlledWaterSegmentClient() {
             };
 
             if (!cancelled && claimResponse.ok && claimJson.ok && claimJson.approved) {
+              setAccessRequestPending(false);
               setAccessMessage("Η founder/admin συσκευή αναγνωρίστηκε και εγκρίθηκε.");
               setAccessState("approved");
               return;
@@ -794,6 +798,26 @@ export default function ControlledWaterSegmentClient() {
       cancelled = true;
     };
   }, [accessCheckVersion]);
+
+  useEffect(() => {
+    if (!accessRequestPending || accessState === "approved") return;
+
+    const recheck = () => {
+      if (document.visibilityState === "visible") {
+        setAccessCheckVersion((value) => value + 1);
+      }
+    };
+
+    const interval = window.setInterval(recheck, 4000);
+    window.addEventListener("focus", recheck);
+    document.addEventListener("visibilitychange", recheck);
+
+    return () => {
+      window.clearInterval(interval);
+      window.removeEventListener("focus", recheck);
+      document.removeEventListener("visibilitychange", recheck);
+    };
+  }, [accessRequestPending, accessState]);
 
   useEffect(() => {
     window.localStorage.setItem("pantavion-language", lang);
@@ -987,7 +1011,9 @@ export default function ControlledWaterSegmentClient() {
       }
 
       const json = (await response.json()) as { requestId?: string };
-      setAccessMessage(`${t.requestSent} Request ID: ${json.requestId || "pending"}. Μείνε στην ίδια συσκευή μέχρι να εγκριθεί.`);
+      setAccessRequestPending(true);
+      setAccessMessage(`${t.requestSent} Request ID: ${json.requestId || "pending"}. Η σελίδα θα ελέγξει αυτόματα την έγκριση.`);
+      setAccessCheckVersion((value) => value + 1);
     } catch {
       setAccessMessage(t.requestFailed);
     } finally {
