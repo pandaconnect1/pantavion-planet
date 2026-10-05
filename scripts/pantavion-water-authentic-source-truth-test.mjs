@@ -126,4 +126,35 @@ assert.doesNotMatch(
   "Private B/C objects must never be trusted from presence and size alone.",
 );
 
+
+const mapBPage = fs.readFileSync(
+  new URL("../app/professional/infrastructure/water/b/page.tsx", import.meta.url),
+  "utf8",
+);
+const mapCPage = fs.readFileSync(
+  new URL("../app/professional/infrastructure/water/c/page.tsx", import.meta.url),
+  "utf8",
+);
+
+assert.match(
+  mapBPage,
+  /master-b-mobile\?sourceKey=canonical-2026-andreaspap/,
+  "Map B route must use the protected derived viewer.",
+);
+assert.match(
+  mapCPage,
+  /master-b-mobile\?sourceKey=legacy-george-85m/,
+  "Map C route must use the protected derived viewer.",
+);
+assert.doesNotMatch(
+  mapBPage,
+  /WaterMapBAuthenticClient/,
+  "Map B default route must not download the raw DWG viewer.",
+);
+assert.doesNotMatch(
+  mapCPage,
+  /WaterMapBAuthenticClient/,
+  "Map C default route must not download the raw DWG viewer.",
+);
+
 console.log("Pantavion Water authentic source truth PASSED.");
