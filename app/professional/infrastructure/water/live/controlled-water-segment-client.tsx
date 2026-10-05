@@ -800,7 +800,7 @@ export default function ControlledWaterSegmentClient() {
   }, [accessCheckVersion]);
 
   useEffect(() => {
-    if (!accessRequestPending || accessState === "approved") return;
+    if (accessState === "approved") return;
 
     const recheck = () => {
       if (document.visibilityState === "visible") {
@@ -808,7 +808,10 @@ export default function ControlledWaterSegmentClient() {
       }
     };
 
-    const interval = window.setInterval(recheck, 4000);
+    const interval = window.setInterval(
+      recheck,
+      accessRequestPending ? 4000 : 10000,
+    );
     window.addEventListener("focus", recheck);
     document.addEventListener("visibilitychange", recheck);
 
