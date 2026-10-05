@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
 
 import {
   PANTAVION_AUTHENTIC_WATER_SOURCES,
@@ -64,5 +65,96 @@ for (const source of PANTAVION_AUTHENTIC_WATER_SOURCES) {
   assert.equal(source.immutableOriginalRequired, true);
   assert.equal(source.rawBrowserExposureAllowed, false);
 }
+
+
+const objectTransferRoute = fs.readFileSync(
+  new URL("../app/api/internal/water/object-transfer/route.ts", import.meta.url),
+  "utf8",
+);
+const ownerRoute = fs.readFileSync(
+  new URL(
+    "../app/api/professional/infrastructure/water/maps/map-b-owner/route.ts",
+    import.meta.url,
+  ),
+  "utf8",
+);
+
+assert.match(
+  objectTransferRoute,
+  /pantavion_water_canonical_object_verification_v1/,
+  "B/C canonical objects must persist an exact verification marker.",
+);
+assert.match(
+  objectTransferRoute,
+  /canonical_object_already_present/,
+  "Canonical B/C object keys must remain immutable once present.",
+);
+assert.match(
+  objectTransferRoute,
+  /authorization === "library_import"[\s\S]*?\["sign-upload", "head", "status", "verify"\]/,
+  "Temporary Library import authorization must be restricted to ingest/verification actions.",
+);
+assert.doesNotMatch(
+  objectTransferRoute,
+  /authorization === "library_import"[\s\S]*?\["sign-upload", "sign-download"/,
+  "Temporary Library import authorization must never gain raw download capability.",
+);
+
+assert.match(
+  ownerRoute,
+  /callPantavionObjectSigner\("status", sourceKey\)/,
+  "Owner route must use verified object status instead of size-only HEAD truth.",
+);
+assert.match(
+  ownerRoute,
+  /marker\?\.sha256 === source\.sha256/,
+  "Private B/C fallback must bind verification to the expected SHA-256.",
+);
+assert.match(
+  ownerRoute,
+  /marker\?\.header === source\.dwgHeader/,
+  "Private B/C fallback must bind verification to the expected DWG header.",
+);
+assert.match(
+  ownerRoute,
+  /marker\?\.etag === etag/,
+  "Private B/C fallback must reject an object changed after exact verification.",
+);
+assert.doesNotMatch(
+  ownerRoute,
+  /privateState\.present\s*&&\s*privateState\.sizeMatches/,
+  "Private B/C objects must never be trusted from presence and size alone.",
+);
+
+
+const mapBPage = fs.readFileSync(
+  new URL("../app/professional/infrastructure/water/b/page.tsx", import.meta.url),
+  "utf8",
+);
+const mapCPage = fs.readFileSync(
+  new URL("../app/professional/infrastructure/water/c/page.tsx", import.meta.url),
+  "utf8",
+);
+
+assert.match(
+  mapBPage,
+  /master-b-mobile\?sourceKey=canonical-2026-andreaspap/,
+  "Map B route must use the protected derived viewer.",
+);
+assert.match(
+  mapCPage,
+  /master-b-mobile\?sourceKey=legacy-george-85m/,
+  "Map C route must use the protected derived viewer.",
+);
+assert.doesNotMatch(
+  mapBPage,
+  /WaterMapBAuthenticClient/,
+  "Map B default route must not download the raw DWG viewer.",
+);
+assert.doesNotMatch(
+  mapCPage,
+  /WaterMapBAuthenticClient/,
+  "Map C default route must not download the raw DWG viewer.",
+);
 
 console.log("Pantavion Water authentic source truth PASSED.");
