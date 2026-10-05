@@ -37,6 +37,22 @@ function sourceObjectKey(sourceKey: WaterMapBSourceKey) {
   return `water/canonical/map-${source.mapId.toLowerCase()}/${source.sha256}.dwg`;
 }
 
+function verificationObjectKey(sourceKey: WaterMapBSourceKey) {
+  return `${sourceObjectKey(sourceKey)}.verified.json`;
+}
+
+type TransferAuthorization = "primary" | "library_import" | null;
+
+type VerificationMarker = {
+  marker: "pantavion_water_canonical_object_verification_v1";
+  sourceKey: WaterMapBSourceKey;
+  sha256: string;
+  sizeBytes: number;
+  header: string;
+  etag: string | null;
+  verifiedAt: string;
+};
+
 function safeSecretMatch(expected: string, actual: string) {
   if (!expected || !actual) return false;
   const left = Buffer.from(expected);
@@ -44,17 +60,105 @@ function safeSecretMatch(expected: string, actual: string) {
   return left.length === right.length && timingSafeEqual(left, right);
 }
 
-function transferAuthorized(request: Request) {
+function transferAuthorization(request: Request): TransferAuthorization {
   const primary = (process.env.PANTAVION_WATER_TRANSFER_SECRET || "").trim();
   const libraryImport = (
     process.env.PANTAVION_WATER_LIBRARY_IMPORT_SECRET || ""
   ).trim();
   const actual = (request.headers.get("x-pantavion-transfer-secret") || "").trim();
 
-  return (
-    safeSecretMatch(primary, actual) ||
-    safeSecretMatch(libraryImport, actual)
+  if (safeSecretMatch(primary, actual)) return "primary";
+  if (safeSecretMatch(libraryImport, actual)) return "library_import";
+  return null;
+}
+
+async function headObject(sourceKey: WaterMapBSourceKey) {
+  const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
+  const key = sourceObjectKey(sourceKey);
+  const signed = presignObjectHead(key, 300);
+  const response = await fetch(signed.url, {
+    method: "HEAD",
+    cache: "no-store",
+  });
+  const contentLength = Number(response.headers.get("content-length") || 0);
+
+  return {
+    key,
+    present: response.ok,
+    httpStatus: response.status,
+    contentLength,
+    sizeMatches: response.ok && contentLength === source.byteSize,
+    etag: response.headers.get("etag"),
+  };
+}
+
+async function readVerificationMarker(
+  sourceKey: WaterMapBSourceKey,
+): Promise<VerificationMarker | null> {
+  const signed = presignObjectDownload(verificationObjectKey(sourceKey), 120);
+  const response = await fetch(signed.url, {
+    method: "GET",
+    cache: "no-store",
+  });
+
+  if (!response.ok) return null;
+
+  const marker = (await response.json().catch(() => null)) as VerificationMarker | null;
+  return marker?.marker === "pantavion_water_canonical_object_verification_v1"
+    ? marker
+    : null;
+}
+
+async function writeVerificationMarker(
+  sourceKey: WaterMapBSourceKey,
+  result: {
+    sha256: string;
+    sizeBytes: number;
+    header: string;
+    etag: string | null;
+  },
+) {
+  const marker: VerificationMarker = {
+    marker: "pantavion_water_canonical_object_verification_v1",
+    sourceKey,
+    sha256: result.sha256,
+    sizeBytes: result.sizeBytes,
+    header: result.header,
+    etag: result.etag,
+    verifiedAt: new Date().toISOString(),
+  };
+
+  const signed = presignObjectUpload(verificationObjectKey(sourceKey), 300);
+  const response = await fetch(signed.url, {
+    method: "PUT",
+    cache: "no-store",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(marker),
+  });
+
+  if (!response.ok) {
+    throw new Error(`water_object_verification_marker_write_failed_${response.status}`);
+  }
+
+  return marker;
+}
+
+async function verifiedObjectState(sourceKey: WaterMapBSourceKey) {
+  const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
+  const raw = await headObject(sourceKey);
+  const marker = raw.present ? await readVerificationMarker(sourceKey) : null;
+  const verified = Boolean(
+    raw.present &&
+      raw.sizeMatches &&
+      marker &&
+      marker.sourceKey === sourceKey &&
+      marker.sha256 === source.sha256 &&
+      marker.sizeBytes === source.byteSize &&
+      marker.header === source.dwgHeader &&
+      marker.etag === raw.etag,
   );
+
+  return { ...raw, markerPresent: Boolean(marker), verified };
 }
 
 async function verifyObject(sourceKey: WaterMapBSourceKey) {
@@ -107,11 +211,13 @@ async function verifyObject(sourceKey: WaterMapBSourceKey) {
     sizeBytes,
     sha256,
     header: dwgHeader,
+    etag: response.headers.get("etag"),
   };
 }
 
 export async function POST(request: Request) {
-  if (!transferAuthorized(request)) {
+  const authorization = transferAuthorization(request);
+  if (!authorization) {
     return noStore({ ok: false, error: "unauthorized" }, 403);
   }
 
@@ -124,8 +230,29 @@ export async function POST(request: Request) {
   const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
   const key = sourceObjectKey(sourceKey);
 
+  if (
+    authorization === "library_import" &&
+    !["sign-upload", "head", "status", "verify"].includes(action)
+  ) {
+    return noStore({ ok: false, error: "library_import_action_denied" }, 403);
+  }
+
   try {
     if (action === "sign-upload") {
+      const existing = await headObject(sourceKey);
+      if (existing.present) {
+        return noStore(
+          {
+            ok: false,
+            error: "canonical_object_already_present",
+            sourceKey,
+            key,
+            immutable: true,
+          },
+          409,
+        );
+      }
+
       const signed = presignObjectUpload(key, 1800);
       return noStore({
         ok: true,
@@ -156,37 +283,47 @@ export async function POST(request: Request) {
       });
     }
 
-    if (action === "head" || action === "status") {
-      const signed = presignObjectHead(key, 300);
-      const response = await fetch(signed.url, {
-        method: "HEAD",
-        cache: "no-store",
-      });
-
-      const contentLength = Number(response.headers.get("content-length") || 0);
-
+    if (action === "head") {
+      const state = await headObject(sourceKey);
       return noStore({
         ok: true,
         action,
         sourceKey,
-        key,
-        present: response.ok,
-        httpStatus: response.status,
-        contentLength,
         expectedSizeBytes: source.byteSize,
-        sizeMatches: response.ok && contentLength === source.byteSize,
-        etag: response.headers.get("etag"),
+        ...state,
+      });
+    }
+
+    if (action === "status") {
+      const state = await verifiedObjectState(sourceKey);
+      return noStore({
+        ok: true,
+        action,
+        sourceKey,
+        expectedSizeBytes: source.byteSize,
+        expectedSha256: source.sha256,
+        ...state,
       });
     }
 
     if (action === "verify") {
       const result = await verifyObject(sourceKey);
+      const verificationMarker = result.ok
+        ? await writeVerificationMarker(sourceKey, {
+            sha256: result.sha256,
+            sizeBytes: result.sizeBytes,
+            header: result.header,
+            etag: result.etag,
+          })
+        : null;
+
       return noStore(
         {
           ...result,
           sourceKey,
           expectedSizeBytes: source.byteSize,
           expectedSha256: source.sha256,
+          verificationMarkerWritten: Boolean(verificationMarker),
         },
         result.status,
       );
