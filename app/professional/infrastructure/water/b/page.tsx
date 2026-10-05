@@ -1,19 +1,15 @@
-import WaterMapBAuthenticClient from "../components/water-map-b-authentic-client";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Pantavion Water Map B — Canonical DWG",
   description:
-    "Protected founder/admin read-only viewer for the authentic canonical Map B DWG.",
+    "Protected derived viewer for the authentic canonical Map B DWG. Raw master remains private.",
 };
 
 export default function WaterBMapPage() {
-  return (
-    <WaterMapBAuthenticClient
-      initialSourceKey="canonical-2026-andreaspap"
-      allowSourceSwitch={false}
-      mapLabel="Map B — ANDREASPAP 2026"
-    />
+  redirect(
+    "/professional/infrastructure/water/master-b-mobile?sourceKey=canonical-2026-andreaspap",
   );
 }
