@@ -1,6 +1,7 @@
 name: Pantavion Water Blob Recovery Inventory
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
