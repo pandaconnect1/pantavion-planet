@@ -9,6 +9,10 @@ import {
   type WaterMapBSourceKey,
 } from "@/core/water/water-map-b-source-candidates";
 import { createAdminClient, hasSupabaseAdminCredential } from "@/lib/supabase/admin";
+import {
+  presignObjectDownload,
+  presignObjectHead,
+} from "@/core/infrastructure/water/s3-compatible-object-storage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -64,6 +68,55 @@ async function callPantavionObjectSigner(
   }
 
   return payload;
+}
+
+function canonicalPrivateObjectKey(
+  source: (typeof WATER_MAP_B_SOURCE_CANDIDATES)[WaterMapBSourceKey],
+) {
+  return `water/canonical/map-${source.mapId.toLowerCase()}/${source.sha256}.dwg`;
+}
+
+async function directPrivateObjectState(
+  source: (typeof WATER_MAP_B_SOURCE_CANDIDATES)[WaterMapBSourceKey],
+) {
+  try {
+    const signed = presignObjectHead(canonicalPrivateObjectKey(source), 120);
+    const response = await fetch(signed.url, {
+      method: "HEAD",
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000),
+    });
+    const contentLength = Number(response.headers.get("content-length") || 0);
+
+    return {
+      configured: true as const,
+      present: response.ok,
+      sizeMatches: response.ok && contentLength === source.byteSize,
+      contentLength,
+    };
+  } catch {
+    return {
+      configured: false as const,
+      present: false,
+      sizeMatches: false,
+      contentLength: 0,
+    };
+  }
+}
+
+async function directPrivateObjectDownload(
+  source: (typeof WATER_MAP_B_SOURCE_CANDIDATES)[WaterMapBSourceKey],
+) {
+  const state = await directPrivateObjectState(source);
+  if (!state.present || !state.sizeMatches) return null;
+
+  return {
+    signedUrl: presignObjectDownload(
+      canonicalPrivateObjectKey(source),
+      900,
+    ).url,
+    contentLength: state.contentLength,
+  };
 }
 
 function privilegedBoundaryDenied(request: Request) {
@@ -253,6 +306,25 @@ export async function POST(request: Request) {
             registry.review_state === "approved"),
       );
 
+      if (!verified) {
+        const privateState = await directPrivateObjectState(source);
+        if (privateState.present && privateState.sizeMatches) {
+          return noStore({
+            ok: true,
+            status: "verified",
+            sourceKey,
+            canonical: source.canonical,
+            verified: true,
+            fileName: source.fileName,
+            sizeBytes: source.byteSize,
+            sha256: source.sha256,
+            versionId: version?.version_id || null,
+            versionStatus: version?.status || null,
+            storageProvider: "pantavion-private-object-storage",
+          });
+        }
+      }
+
       return noStore({
         ok: true,
         status: verified ? "verified" : "missing_or_unverified",
@@ -264,6 +336,7 @@ export async function POST(request: Request) {
         sha256: source.sha256,
         versionId: version?.version_id || null,
         versionStatus: version?.status || null,
+        storageProvider: verified ? "supabase-storage" : null,
       });
     }
 
@@ -483,6 +556,21 @@ export async function POST(request: Request) {
       );
 
       if (!verified) {
+        const privateObject = await directPrivateObjectDownload(source);
+        if (privateObject?.signedUrl) {
+          return noStore({
+            ok: true,
+            status: "ready",
+            sourceKey,
+            canonical: source.canonical,
+            signedUrl: privateObject.signedUrl,
+            fileName: source.fileName,
+            sizeBytes: source.byteSize,
+            sha256: source.sha256,
+            storageProvider: "pantavion-private-object-storage",
+          });
+        }
+
         return noStore(
           { ok: false, error: "water_map_source_not_verified", sourceKey },
           { status: 409 },
@@ -494,6 +582,21 @@ export async function POST(request: Request) {
         .createSignedUrl(source.storagePath, 300);
 
       if (error || !data?.signedUrl) {
+        const privateObject = await directPrivateObjectDownload(source);
+        if (privateObject?.signedUrl) {
+          return noStore({
+            ok: true,
+            status: "ready",
+            sourceKey,
+            canonical: source.canonical,
+            signedUrl: privateObject.signedUrl,
+            fileName: source.fileName,
+            sizeBytes: source.byteSize,
+            sha256: source.sha256,
+            storageProvider: "pantavion-private-object-storage",
+          });
+        }
+
         return noStore(
           { ok: false, error: "water_map_signed_download_failed", sourceKey },
           { status: 404 },
@@ -509,6 +612,7 @@ export async function POST(request: Request) {
         fileName: source.fileName,
         sizeBytes: source.byteSize,
         sha256: source.sha256,
+        storageProvider: "supabase-storage",
       });
     }
 
