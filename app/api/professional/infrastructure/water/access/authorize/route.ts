@@ -2,7 +2,12 @@ import { createHash } from "crypto";
 
 import { NextResponse } from "next/server";
 
-import { getWaterDeviceClaimFromRequest } from "@/core/security/water-device-session";
+import {
+  getWaterDeviceClaimFromRequest,
+  WATER_DEVICE_COOKIE_MAX_AGE_SECONDS,
+  WATER_DEVICE_ID_COOKIE,
+  WATER_DEVICE_TOKEN_COOKIE,
+} from "@/core/security/water-device-session";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
 import { createClient } from "@/lib/supabase/server";
 
@@ -36,6 +41,29 @@ function noStoreJson(body: unknown, init: ResponseInit = {}) {
     ...init,
     headers,
   });
+}
+
+function approvedDeviceJson(
+  body: unknown,
+  deviceId: string,
+  deviceToken: string,
+) {
+  const response = noStoreJson(body);
+
+  if (deviceId && deviceToken) {
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict" as const,
+      path: "/",
+      maxAge: WATER_DEVICE_COOKIE_MAX_AGE_SECONDS,
+    };
+
+    response.cookies.set(WATER_DEVICE_ID_COOKIE, deviceId, cookieOptions);
+    response.cookies.set(WATER_DEVICE_TOKEN_COOKIE, deviceToken, cookieOptions);
+  }
+
+  return response;
 }
 
 export async function POST(request: Request) {
@@ -96,20 +124,24 @@ export async function POST(request: Request) {
       );
     }
 
-    return noStoreJson({
-      ok: true,
-      approved: true,
-      accessMode: "approved-device",
-      approvedAt: approvedDevice.approved_at,
-      holder: {
-        firstName: approvedDevice.first_name,
-        lastName: approvedDevice.last_name,
-        title: approvedDevice.title,
-        phone: approvedDevice.phone,
-        deviceId,
+    return approvedDeviceJson(
+      {
+        ok: true,
+        approved: true,
+        accessMode: "approved-device",
+        approvedAt: approvedDevice.approved_at,
+        holder: {
+          firstName: approvedDevice.first_name,
+          lastName: approvedDevice.last_name,
+          title: approvedDevice.title,
+          phone: approvedDevice.phone,
+          deviceId,
+        },
+        storage: "supabase-rpc",
       },
-      storage: "supabase-rpc",
-    });
+      deviceId,
+      deviceToken,
+    );
   } catch {
     return noStoreJson(
       { ok: false, error: "access_verification_unavailable" },
