@@ -128,7 +128,7 @@ export class CyprusDlsRoadSearchAdapter {
       );
       url.searchParams.set("returnGeometry", "true");
       url.searchParams.set("outSR", "4326");
-      url.searchParams.set("resultRecordCount", "25");
+      url.searchParams.set("resultRecordCount", "250");
       url.searchParams.set("f", "geojson");
 
       const response = await fetch(url, {
@@ -165,16 +165,32 @@ export class CyprusDlsRoadSearchAdapter {
           routeNumber ||
           variant;
 
+        const districtCode =
+          properties.DIST_CODE != null ? String(properties.DIST_CODE) : "";
+        const villageCode =
+          properties.VIL_CODE != null ? String(properties.VIL_CODE) : "";
+        const quarterCode =
+          properties.QRTR_CODE != null ? String(properties.QRTR_CODE) : "";
+        const streetCode =
+          properties.STREET_CODE != null ? String(properties.STREET_CODE) : "";
+
         const secondaryParts = [
           preferGreek ? romanizedName : greekName,
           routeNumber,
-          properties.STREET_CODE != null ? `street ${properties.STREET_CODE}` : "",
+          districtCode ? `D${districtCode}` : "",
+          villageCode ? `V${villageCode}` : "",
+          quarterCode ? `Q${quarterCode}` : "",
+          streetCode ? `street ${streetCode}` : "",
         ].filter((item): item is string => Boolean(item));
 
         const objectId = properties.OBJECTID ?? feature.id ?? index;
+        const officialIdentity =
+          [districtCode, villageCode, quarterCode, streetCode]
+            .filter(Boolean)
+            .join(":") || String(objectId);
 
         return [{
-          resultId: `cyprus-dls-road:${objectId}`,
+          resultId: `cyprus-dls-road:${officialIdentity}`,
           kind: "STREET",
           displayName,
           secondaryLabel:
@@ -183,7 +199,7 @@ export class CyprusDlsRoadSearchAdapter {
               : "Τμήμα Κτηματολογίου και Χωρομετρίας",
           coordinates: point,
           source: "CYPRUS_OFFICIAL",
-          sourceResultId: String(objectId),
+          sourceResultId: officialIdentity,
           confidence: 0.98,
           // Keep official search results session-only until the final DLS
           // production-access/licensing arrangement is formally recorded.
@@ -194,7 +210,9 @@ export class CyprusDlsRoadSearchAdapter {
       if (results.length > 0) {
         const unique = new Map<string, UnifiedPlaceResult>();
         for (const result of results) {
-          const key = `${result.displayName.toLocaleLowerCase()}:${result.coordinates?.lat.toFixed(5)}:${result.coordinates?.lng.toFixed(5)}`;
+          const key =
+            result.sourceResultId ||
+            `${result.displayName.toLocaleLowerCase()}:${result.coordinates?.lat.toFixed(5)}:${result.coordinates?.lng.toFixed(5)}`;
           if (!unique.has(key)) unique.set(key, result);
         }
         return [...unique.values()];
