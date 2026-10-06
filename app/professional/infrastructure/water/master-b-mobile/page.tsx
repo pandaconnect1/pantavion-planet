@@ -178,18 +178,35 @@ export default function MasterBMobilePage() {
   const [sourceKey, setSourceKey] = useState<
     "canonical-2026-andreaspap" | "legacy-george-85m"
   >("canonical-2026-andreaspap");
+  const [viewId, setViewId] = useState<"B" | "C" | "D" | "E">("B");
+
   const sourceLabel =
-    sourceKey === "legacy-george-85m"
-      ? "Map C — GEORGE 85 MB"
-      : "Map B — ANDREASPAP 2026";
+    viewId === "D"
+      ? "Map D — δεύτερη προβολή του Map B"
+      : viewId === "E"
+        ? "Map E — δεύτερη προβολή του Map C"
+        : sourceKey === "legacy-george-85m"
+          ? "Map C — GEORGE 85 MB"
+          : "Map B — ANDREASPAP 2026";
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setSourceKey(
+    const nextSource =
       params.get("sourceKey") === "legacy-george-85m"
         ? "legacy-george-85m"
-        : "canonical-2026-andreaspap",
-    );
+        : "canonical-2026-andreaspap";
+    const requestedView = params.get("viewId");
+    const nextView =
+      requestedView === "D" && nextSource === "canonical-2026-andreaspap"
+        ? "D"
+        : requestedView === "E" && nextSource === "legacy-george-85m"
+          ? "E"
+          : nextSource === "legacy-george-85m"
+            ? "C"
+            : "B";
+
+    setSourceKey(nextSource);
+    setViewId(nextView);
   }, []);
 
   const [manifest, setManifest] = useState<Manifest | null>(null);
@@ -375,7 +392,8 @@ export default function MasterBMobilePage() {
           <p className="mt-3 max-w-3xl text-sm font-semibold leading-7 text-slate-300 md:text-base">
             Φορτώνει derived vector/network tiles από το επιλεγμένο επαληθευμένο DWG.
             Δεν φορτώνει raw DWG στον browser. Τα Map B και Map C παραμένουν
-            ξεχωριστές αυθεντικές πηγές με ανεξάρτητο provenance.
+            οι δύο αυθεντικές πηγές. Τα D/E είναι ξεχωριστές ελεγχόμενες προβολές
+            πάνω στα ίδια canonical masters, χωρίς δεύτερο raw αντίγραφο.
           </p>
         </div>
 
@@ -405,6 +423,26 @@ export default function MasterBMobilePage() {
             }`}
           >
             Map C
+          </a>
+          <a
+            href="/professional/infrastructure/water/d"
+            className={`rounded-xl border px-3 py-2 text-xs font-black ${
+              viewId === "D"
+                ? "border-[#f2c766] bg-[#f2c766] text-black"
+                : "border-slate-600 bg-[#091426] text-slate-200"
+            }`}
+          >
+            Map D
+          </a>
+          <a
+            href="/professional/infrastructure/water/e"
+            className={`rounded-xl border px-3 py-2 text-xs font-black ${
+              viewId === "E"
+                ? "border-[#f2c766] bg-[#f2c766] text-black"
+                : "border-slate-600 bg-[#091426] text-slate-200"
+            }`}
+          >
+            Map E
           </a>
           <a
             href="/professional/infrastructure/water/engineering"
