@@ -74,15 +74,36 @@ function findDeviceFromStoredJson(): DeviceIdentity | null {
 
 function getOrCreateDevice(): DeviceIdentity {
   const jsonDevice = findDeviceFromStoredJson();
-  let deviceId = jsonDevice?.deviceId || readLocalStorageValue(DEVICE_ID_KEYS);
-  let deviceToken =
+  const legacyDeviceId = jsonDevice?.deviceId || readLocalStorageValue(DEVICE_ID_KEYS);
+  const legacyDeviceToken =
     jsonDevice?.deviceToken || readLocalStorageValue(DEVICE_TOKEN_KEYS);
+  const canonicalDeviceId =
+    window.localStorage.getItem("pantavion:water:device-id:v1") || "";
+  const canonicalDeviceToken =
+    window.localStorage.getItem("pantavion:water:device-token:v1") || "";
+  const hasPendingAccessRequest = Boolean(
+    window.localStorage.getItem("pantavion_water_pending_request_id"),
+  );
+
+  // A pending request was created with the legacy access-page identity.
+  // Preserve that exact already-requested/approved identity and make it the
+  // canonical Map A identity. Otherwise prefer the canonical Map A identity.
+  let deviceId = hasPendingAccessRequest
+    ? legacyDeviceId || canonicalDeviceId
+    : canonicalDeviceId || legacyDeviceId;
+  let deviceToken = hasPendingAccessRequest
+    ? legacyDeviceToken || canonicalDeviceToken
+    : canonicalDeviceToken || legacyDeviceToken;
 
   if (!deviceId) deviceId = createId("water-device");
   if (!deviceToken) deviceToken = createId("water-token");
 
+  // Keep every Water surface on one device claim. This prevents the Access
+  // page and Live Map A from generating different identities on one device.
   window.localStorage.setItem("pantavion_water_device_id", deviceId);
   window.localStorage.setItem("pantavion_water_device_token", deviceToken);
+  window.localStorage.setItem("pantavion:water:device-id:v1", deviceId);
+  window.localStorage.setItem("pantavion:water:device-token:v1", deviceToken);
   window.localStorage.setItem(
     "pantavion_water_access_device",
     JSON.stringify({ deviceId, deviceToken }),
@@ -165,7 +186,12 @@ export default function WaterAccessControlClient({ isAdmin = false }: { isAdmin?
       deviceToken: currentDevice.deviceToken,
     });
 
-    setAccessApproved(Boolean(payload.ok || payload.approved));
+    const approved = Boolean(payload.ok || payload.approved);
+    setAccessApproved(approved);
+    if (approved) {
+      window.localStorage.removeItem("pantavion_water_pending_request_id");
+      setPendingRequestId("");
+    }
     setCheckingAccess(false);
   }
 
