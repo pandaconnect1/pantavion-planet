@@ -258,14 +258,110 @@ const TARGET_POINT_MIN_ZOOM = 16;
 const MAX_NETWORK_TILE_ZOOM = 19;
 
 const LEGACY_WATER_DEVICE_APPROVAL_KEY = "pantavion:water:approved-until:v4";
-function clearLegacyWaterDeviceApproval() {
-  if (typeof window === "undefined") return;
-  window.localStorage.removeItem(LEGACY_WATER_DEVICE_APPROVAL_KEY);
-}
-
-
 const PANTAVION_WATER_DEVICE_ID_KEY = "pantavion:water:device-id:v1";
 const PANTAVION_WATER_DEVICE_TOKEN_KEY = "pantavion:water:device-token:v1";
+const PANTAVION_WATER_DEVICE_ID_FALLBACK_COOKIE =
+  "pantavion_water_device_id_fallback";
+const PANTAVION_WATER_DEVICE_TOKEN_FALLBACK_COOKIE =
+  "pantavion_water_device_token_fallback";
+const WATER_DEVICE_FALLBACK_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
+
+function safeLocalStorageGet(key: string) {
+  if (typeof window === "undefined") return null;
+
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeLocalStorageSet(key: string, value: string) {
+  if (typeof window === "undefined") return false;
+
+  try {
+    window.localStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function safeLocalStorageRemove(key: string) {
+  if (typeof window === "undefined") return;
+
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    // Some browsers can deny persistent storage access. Access checks must still render.
+  }
+}
+
+function readFallbackCookie(name: string) {
+  if (typeof document === "undefined") return "";
+
+  try {
+    const prefix = `${encodeURIComponent(name)}=`;
+    const part = document.cookie
+      .split("; ")
+      .find((item) => item.startsWith(prefix));
+
+    return part ? decodeURIComponent(part.slice(prefix.length)) : "";
+  } catch {
+    return "";
+  }
+}
+
+function writeFallbackCookie(name: string, value: string) {
+  if (typeof document === "undefined" || typeof window === "undefined") return;
+
+  try {
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie =
+      `${encodeURIComponent(name)}=${encodeURIComponent(value)}; Max-Age=${WATER_DEVICE_FALLBACK_MAX_AGE_SECONDS}; Path=/; SameSite=Strict${secure}`;
+  } catch {
+    // If cookies are also blocked, the form still renders and can show a clear error.
+  }
+}
+
+function readWaterDeviceValue(storageKey: string, cookieName: string) {
+  return safeLocalStorageGet(storageKey) || readFallbackCookie(cookieName);
+}
+
+function persistWaterDeviceValue(
+  storageKey: string,
+  cookieName: string,
+  value: string,
+) {
+  if (!safeLocalStorageSet(storageKey, value)) {
+    writeFallbackCookie(cookieName, value);
+  }
+}
+
+function portableTimeoutSignal(timeoutMs: number): AbortSignal | undefined {
+  if (
+    typeof AbortSignal !== "undefined" &&
+    typeof (AbortSignal as typeof AbortSignal & {
+      timeout?: (milliseconds: number) => AbortSignal;
+    }).timeout === "function"
+  ) {
+    return (
+      AbortSignal as typeof AbortSignal & {
+        timeout: (milliseconds: number) => AbortSignal;
+      }
+    ).timeout(timeoutMs);
+  }
+
+  if (typeof AbortController === "undefined") return undefined;
+
+  const controller = new AbortController();
+  window.setTimeout(() => controller.abort(), timeoutMs);
+  return controller.signal;
+}
+
+function clearLegacyWaterDeviceApproval() {
+  safeLocalStorageRemove(LEGACY_WATER_DEVICE_APPROVAL_KEY);
+}
 
 function randomWaterDeviceSecret() {
   if (typeof window !== "undefined" && window.crypto?.getRandomValues) {
@@ -299,18 +395,30 @@ function getOrCreateWaterAccessDevice() {
     "waterDeviceToken",
   ];
 
-  let deviceId = window.localStorage.getItem(PANTAVION_WATER_DEVICE_ID_KEY) || "";
-  let deviceToken = window.localStorage.getItem(PANTAVION_WATER_DEVICE_TOKEN_KEY) || "";
+  let deviceId =
+    readWaterDeviceValue(
+      PANTAVION_WATER_DEVICE_ID_KEY,
+      PANTAVION_WATER_DEVICE_ID_FALLBACK_COOKIE,
+    ) || "";
+  let deviceToken =
+    readWaterDeviceValue(
+      PANTAVION_WATER_DEVICE_TOKEN_KEY,
+      PANTAVION_WATER_DEVICE_TOKEN_FALLBACK_COOKIE,
+    ) || "";
 
   // Preserve the exact identity of devices that were already approved before
   // the Railway/Supabase migration. Do not generate a new identity until all
   // known legacy keys have been checked.
   if (!deviceId) {
     for (const key of legacyDeviceIdKeys) {
-      const value = window.localStorage.getItem(key) || "";
+      const value = safeLocalStorageGet(key) || "";
       if (value) {
         deviceId = value;
-        window.localStorage.setItem(PANTAVION_WATER_DEVICE_ID_KEY, value);
+        persistWaterDeviceValue(
+          PANTAVION_WATER_DEVICE_ID_KEY,
+          PANTAVION_WATER_DEVICE_ID_FALLBACK_COOKIE,
+          value,
+        );
         break;
       }
     }
@@ -318,10 +426,14 @@ function getOrCreateWaterAccessDevice() {
 
   if (!deviceToken) {
     for (const key of legacyDeviceTokenKeys) {
-      const value = window.localStorage.getItem(key) || "";
+      const value = safeLocalStorageGet(key) || "";
       if (value) {
         deviceToken = value;
-        window.localStorage.setItem(PANTAVION_WATER_DEVICE_TOKEN_KEY, value);
+        persistWaterDeviceValue(
+          PANTAVION_WATER_DEVICE_TOKEN_KEY,
+          PANTAVION_WATER_DEVICE_TOKEN_FALLBACK_COOKIE,
+          value,
+        );
         break;
       }
     }
@@ -329,12 +441,20 @@ function getOrCreateWaterAccessDevice() {
 
   if (!deviceId) {
     deviceId = `water-device-${Date.now().toString(36)}-${randomWaterDeviceSecret()}`;
-    window.localStorage.setItem(PANTAVION_WATER_DEVICE_ID_KEY, deviceId);
+    persistWaterDeviceValue(
+      PANTAVION_WATER_DEVICE_ID_KEY,
+      PANTAVION_WATER_DEVICE_ID_FALLBACK_COOKIE,
+      deviceId,
+    );
   }
 
   if (!deviceToken) {
     deviceToken = `water-token-${randomWaterDeviceSecret()}-${randomWaterDeviceSecret()}`;
-    window.localStorage.setItem(PANTAVION_WATER_DEVICE_TOKEN_KEY, deviceToken);
+    persistWaterDeviceValue(
+      PANTAVION_WATER_DEVICE_TOKEN_KEY,
+      PANTAVION_WATER_DEVICE_TOKEN_FALLBACK_COOKIE,
+      deviceToken,
+    );
   }
 
   return {
@@ -347,7 +467,7 @@ function getOrCreateWaterAccessDevice() {
 function getInitialLang(): Lang {
   if (typeof window === "undefined") return "el";
 
-  const saved = window.localStorage.getItem("pantavion-language");
+  const saved = safeLocalStorageGet("pantavion-language");
 
   return getSupportedPantavionLanguage(saved)?.code ?? "el";
 }
@@ -654,7 +774,7 @@ export default function ControlledWaterSegmentClient() {
               method: "POST",
               cache: "no-store",
               credentials: "include",
-              signal: AbortSignal.timeout(8000),
+              signal: portableTimeoutSignal(8000),
               headers: {
                 "content-type": "application/json",
               },
@@ -720,7 +840,7 @@ export default function ControlledWaterSegmentClient() {
           method: "POST",
           cache: "no-store",
           credentials: "include",
-          signal: AbortSignal.timeout(8000),
+          signal: portableTimeoutSignal(8000),
           headers: {
             "content-type": "application/json",
           },
@@ -823,7 +943,7 @@ export default function ControlledWaterSegmentClient() {
   }, [accessRequestPending, accessState]);
 
   useEffect(() => {
-    window.localStorage.setItem("pantavion-language", lang);
+    safeLocalStorageSet("pantavion-language", lang);
     document.documentElement.lang = lang;
     const uiLang = getPantavionUiLanguage(lang);
     setMessage(pipeCount === null ? UI[uiLang].ready : `${UI[uiLang].loaded}: ${pipeCount}`);
@@ -1138,9 +1258,9 @@ export default function ControlledWaterSegmentClient() {
     }
 
     const destination = `${selectedTarget.lat.toFixed(6)},${selectedTarget.lng.toFixed(6)}`;
-    // Mobile-safe handoff: same-tab navigation is not blocked as a popup by
-    // Android/WebView browsers. Google Maps can intercept this URL and start
-    // driving guidance from the device's current location.
+    // Cross-device handoff: same-tab navigation avoids popup blocking across
+    // mobile and desktop browsers. A compatible maps app/browser can handle
+    // the destination from the device's current location.
     const navigationUrl =
       `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving&dir_action=navigate`;
     window.location.assign(navigationUrl);
@@ -1153,8 +1273,14 @@ export default function ControlledWaterSegmentClient() {
     }
 
     if (!mapRef.current) {
-      setMessage("Ο χάρτης φορτώνει. Πάτησε ξανά «Το σημείο μου» σε ένα δευτερόλεπτο.");
-      return;
+      setMessage(lang === "el" ? "Ο χάρτης φορτώνει. Περιμένω να είναι έτοιμος..." : "The map is loading. Waiting until it is ready...");
+      for (let attempt = 0; attempt < 30 && !mapRef.current; attempt += 1) {
+        await new Promise<void>((resolve) => window.setTimeout(resolve, 100));
+      }
+      if (!mapRef.current) {
+        setMessage(t.failed);
+        return;
+      }
     }
 
     setMessage(t.locating);
@@ -1194,20 +1320,26 @@ export default function ControlledWaterSegmentClient() {
 
       if (error.code === error.PERMISSION_DENIED) {
         setMessage(
-          "Το iPhone δεν έδωσε άδεια τοποθεσίας. Ρυθμίσεις → Απόρρητο και ασφάλεια → Υπηρεσίες τοποθεσίας → Safari Websites → Κατά τη χρήση και ενεργοποίησε Ακριβής τοποθεσία.",
+          lang === "el"
+            ? "Δεν έχει δοθεί άδεια τοποθεσίας στον browser. Ενεργοποίησε την πρόσβαση τοποθεσίας για αυτή τη σελίδα και δοκίμασε ξανά."
+            : "Location permission is blocked in this browser. Allow location access for this site and try again.",
         );
         return;
       }
 
       if (error.code === error.POSITION_UNAVAILABLE) {
         setMessage(
-          "Το iPhone δεν έδωσε διαθέσιμο στίγμα. Έλεγξε ότι οι Υπηρεσίες τοποθεσίας είναι ενεργές και δοκίμασε ξανά σε ανοικτό χώρο.",
+          lang === "el"
+            ? "Η συσκευή δεν έδωσε διαθέσιμο στίγμα. Έλεγξε ότι η τοποθεσία είναι ενεργή και δοκίμασε ξανά."
+            : "The device did not provide a location. Check that location services are enabled and try again.",
         );
         return;
       }
 
       setMessage(
-        "Το iPhone δεν πρόλαβε να δώσει στίγμα. Πάτησε ξανά «Το σημείο μου».",
+        lang === "el"
+          ? "Η λήψη στίγματος καθυστέρησε. Δοκίμασε ξανά ή επίλεξε σημείο στον χάρτη."
+          : "Location timed out. Try again or select a point on the map.",
       );
     };
 
@@ -1235,9 +1367,9 @@ export default function ControlledWaterSegmentClient() {
           return;
         }
 
-        // iOS/Safari can time out while forcing GPS even though a usable
-        // Wi-Fi/cell-assisted position is available. Retry once without the
-        // high-accuracy requirement so field crews still get an immediate pin.
+        // Some devices/browsers can time out while forcing high-accuracy GPS
+        // even when a usable network-assisted position exists. Retry once with
+        // balanced accuracy so field crews still get a usable pin.
         fallbackToBalancedAccuracy();
       },
       {
@@ -1331,7 +1463,7 @@ export default function ControlledWaterSegmentClient() {
     if (typeof window === "undefined") return [];
 
     const key = "pantavion.water.pending.map.additions.v1";
-    const pending = JSON.parse(window.localStorage.getItem(key) || "[]") as string[];
+    const pending = JSON.parse(safeLocalStorageGet(key) || "[]") as string[];
     const normalizedQuery = normalizeSearchText(query);
 
     return pending.filter((item) =>
@@ -1353,7 +1485,7 @@ export default function ControlledWaterSegmentClient() {
     try {
       const response = await fetch(
         `/api/professional/infrastructure/water/places/search?q=${encodeURIComponent(query)}`,
-        { cache: "no-store", signal: AbortSignal.timeout(10000) },
+        { cache: "no-store", signal: portableTimeoutSignal(10000) },
       );
       const payload = await response.json().catch(() => ({})) as {
         results?: Array<{
@@ -1417,7 +1549,7 @@ export default function ControlledWaterSegmentClient() {
           .join(", ");
         const officialResponse = await fetch(
           `/api/professional/infrastructure/water/places/search?q=${encodeURIComponent(officialQuery)}`,
-          { cache: "no-store", signal: AbortSignal.timeout(10000) },
+          { cache: "no-store", signal: portableTimeoutSignal(10000) },
         );
         const officialPayload = await officialResponse.json().catch(() => ({})) as {
           results?: Array<{
@@ -1457,7 +1589,7 @@ export default function ControlledWaterSegmentClient() {
         : new URLSearchParams({ street, houseNumber: number, area, postalCode: postal });
       const response = await fetch(
         `/api/professional/infrastructure/water/address/search?${params.toString()}`,
-        { cache: "no-store", signal: AbortSignal.timeout(20000) },
+        { cache: "no-store", signal: portableTimeoutSignal(20000) },
       );
       if (!response.ok) throw new Error("address_search_failed");
       const result = await response.json();
@@ -1503,7 +1635,7 @@ export default function ControlledWaterSegmentClient() {
         {
           cache: "no-store",
           credentials: "include",
-          signal: AbortSignal.timeout(8000),
+          signal: portableTimeoutSignal(8000),
           headers: {
             "x-pantavion-water-device-id": device.deviceId,
             "x-pantavion-water-device-token": device.deviceToken,
@@ -1595,7 +1727,7 @@ export default function ControlledWaterSegmentClient() {
           {
             cache: "no-store",
             credentials: "include",
-            signal: AbortSignal.timeout(8000),
+            signal: portableTimeoutSignal(8000),
             headers: {
               "x-pantavion-water-device-id": device.deviceId,
               "x-pantavion-water-device-token": device.deviceToken,
@@ -1607,7 +1739,7 @@ export default function ControlledWaterSegmentClient() {
           {
             cache: "no-store",
             credentials: "include",
-            signal: AbortSignal.timeout(8000),
+            signal: portableTimeoutSignal(8000),
             headers: {
               "x-pantavion-water-device-id": device.deviceId,
               "x-pantavion-water-device-token": device.deviceToken,
