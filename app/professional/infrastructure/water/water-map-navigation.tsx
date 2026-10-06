@@ -7,6 +7,8 @@ const links = [
   { href: "/professional/infrastructure/water/live", label: "Map A", description: "live operational" },
   { href: "/professional/infrastructure/water/b", label: "Map B", description: "canonical DWG" },
   { href: "/professional/infrastructure/water/c", label: "Map C", description: "authentic DWG" },
+  { href: "/professional/infrastructure/water/d", label: "Map D", description: "2η προβολή του B" },
+  { href: "/professional/infrastructure/water/e", label: "Map E", description: "2η προβολή του C" },
   { href: "/professional/infrastructure/water/maps", label: "Maps", description: "πηγές / layers" },
   { href: "/professional/infrastructure/water/infrastructure", label: "Utility Layers", description: "δίκτυα / GPS / field" },
   { href: "/professional/infrastructure/water/engineering", label: "Engineering", description: "intelligence workspace" },
