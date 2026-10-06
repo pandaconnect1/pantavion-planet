@@ -258,14 +258,89 @@ const TARGET_POINT_MIN_ZOOM = 16;
 const MAX_NETWORK_TILE_ZOOM = 19;
 
 const LEGACY_WATER_DEVICE_APPROVAL_KEY = "pantavion:water:approved-until:v4";
-function clearLegacyWaterDeviceApproval() {
-  if (typeof window === "undefined") return;
-  window.localStorage.removeItem(LEGACY_WATER_DEVICE_APPROVAL_KEY);
-}
-
-
 const PANTAVION_WATER_DEVICE_ID_KEY = "pantavion:water:device-id:v1";
 const PANTAVION_WATER_DEVICE_TOKEN_KEY = "pantavion:water:device-token:v1";
+const PANTAVION_WATER_DEVICE_ID_FALLBACK_COOKIE =
+  "pantavion_water_device_id_fallback";
+const PANTAVION_WATER_DEVICE_TOKEN_FALLBACK_COOKIE =
+  "pantavion_water_device_token_fallback";
+const WATER_DEVICE_FALLBACK_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
+
+function safeLocalStorageGet(key: string) {
+  if (typeof window === "undefined") return null;
+
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeLocalStorageSet(key: string, value: string) {
+  if (typeof window === "undefined") return false;
+
+  try {
+    window.localStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function safeLocalStorageRemove(key: string) {
+  if (typeof window === "undefined") return;
+
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    // Safari/iOS can deny storage access. Access checks must still render.
+  }
+}
+
+function readFallbackCookie(name: string) {
+  if (typeof document === "undefined") return "";
+
+  try {
+    const prefix = `${encodeURIComponent(name)}=`;
+    const part = document.cookie
+      .split("; ")
+      .find((item) => item.startsWith(prefix));
+
+    return part ? decodeURIComponent(part.slice(prefix.length)) : "";
+  } catch {
+    return "";
+  }
+}
+
+function writeFallbackCookie(name: string, value: string) {
+  if (typeof document === "undefined" || typeof window === "undefined") return;
+
+  try {
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie =
+      `${encodeURIComponent(name)}=${encodeURIComponent(value)}; Max-Age=${WATER_DEVICE_FALLBACK_MAX_AGE_SECONDS}; Path=/; SameSite=Strict${secure}`;
+  } catch {
+    // If cookies are also blocked, the form still renders and can show an error.
+  }
+}
+
+function readWaterDeviceValue(storageKey: string, cookieName: string) {
+  return safeLocalStorageGet(storageKey) || readFallbackCookie(cookieName);
+}
+
+function persistWaterDeviceValue(
+  storageKey: string,
+  cookieName: string,
+  value: string,
+) {
+  if (!safeLocalStorageSet(storageKey, value)) {
+    writeFallbackCookie(cookieName, value);
+  }
+}
+
+function clearLegacyWaterDeviceApproval() {
+  safeLocalStorageRemove(LEGACY_WATER_DEVICE_APPROVAL_KEY);
+}
 
 function randomWaterDeviceSecret() {
   if (typeof window !== "undefined" && window.crypto?.getRandomValues) {
@@ -299,18 +374,30 @@ function getOrCreateWaterAccessDevice() {
     "waterDeviceToken",
   ];
 
-  let deviceId = window.localStorage.getItem(PANTAVION_WATER_DEVICE_ID_KEY) || "";
-  let deviceToken = window.localStorage.getItem(PANTAVION_WATER_DEVICE_TOKEN_KEY) || "";
+  let deviceId =
+    readWaterDeviceValue(
+      PANTAVION_WATER_DEVICE_ID_KEY,
+      PANTAVION_WATER_DEVICE_ID_FALLBACK_COOKIE,
+    ) || "";
+  let deviceToken =
+    readWaterDeviceValue(
+      PANTAVION_WATER_DEVICE_TOKEN_KEY,
+      PANTAVION_WATER_DEVICE_TOKEN_FALLBACK_COOKIE,
+    ) || "";
 
   // Preserve the exact identity of devices that were already approved before
   // the Railway/Supabase migration. Do not generate a new identity until all
   // known legacy keys have been checked.
   if (!deviceId) {
     for (const key of legacyDeviceIdKeys) {
-      const value = window.localStorage.getItem(key) || "";
+      const value = safeLocalStorageGet(key) || "";
       if (value) {
         deviceId = value;
-        window.localStorage.setItem(PANTAVION_WATER_DEVICE_ID_KEY, value);
+        persistWaterDeviceValue(
+          PANTAVION_WATER_DEVICE_ID_KEY,
+          PANTAVION_WATER_DEVICE_ID_FALLBACK_COOKIE,
+          value,
+        );
         break;
       }
     }
@@ -318,10 +405,14 @@ function getOrCreateWaterAccessDevice() {
 
   if (!deviceToken) {
     for (const key of legacyDeviceTokenKeys) {
-      const value = window.localStorage.getItem(key) || "";
+      const value = safeLocalStorageGet(key) || "";
       if (value) {
         deviceToken = value;
-        window.localStorage.setItem(PANTAVION_WATER_DEVICE_TOKEN_KEY, value);
+        persistWaterDeviceValue(
+          PANTAVION_WATER_DEVICE_TOKEN_KEY,
+          PANTAVION_WATER_DEVICE_TOKEN_FALLBACK_COOKIE,
+          value,
+        );
         break;
       }
     }
@@ -329,12 +420,20 @@ function getOrCreateWaterAccessDevice() {
 
   if (!deviceId) {
     deviceId = `water-device-${Date.now().toString(36)}-${randomWaterDeviceSecret()}`;
-    window.localStorage.setItem(PANTAVION_WATER_DEVICE_ID_KEY, deviceId);
+    persistWaterDeviceValue(
+      PANTAVION_WATER_DEVICE_ID_KEY,
+      PANTAVION_WATER_DEVICE_ID_FALLBACK_COOKIE,
+      deviceId,
+    );
   }
 
   if (!deviceToken) {
     deviceToken = `water-token-${randomWaterDeviceSecret()}-${randomWaterDeviceSecret()}`;
-    window.localStorage.setItem(PANTAVION_WATER_DEVICE_TOKEN_KEY, deviceToken);
+    persistWaterDeviceValue(
+      PANTAVION_WATER_DEVICE_TOKEN_KEY,
+      PANTAVION_WATER_DEVICE_TOKEN_FALLBACK_COOKIE,
+      deviceToken,
+    );
   }
 
   return {
@@ -347,7 +446,7 @@ function getOrCreateWaterAccessDevice() {
 function getInitialLang(): Lang {
   if (typeof window === "undefined") return "el";
 
-  const saved = window.localStorage.getItem("pantavion-language");
+  const saved = safeLocalStorageGet("pantavion-language");
 
   return getSupportedPantavionLanguage(saved)?.code ?? "el";
 }
@@ -823,7 +922,7 @@ export default function ControlledWaterSegmentClient() {
   }, [accessRequestPending, accessState]);
 
   useEffect(() => {
-    window.localStorage.setItem("pantavion-language", lang);
+    safeLocalStorageSet("pantavion-language", lang);
     document.documentElement.lang = lang;
     const uiLang = getPantavionUiLanguage(lang);
     setMessage(pipeCount === null ? UI[uiLang].ready : `${UI[uiLang].loaded}: ${pipeCount}`);
@@ -1331,7 +1430,7 @@ export default function ControlledWaterSegmentClient() {
     if (typeof window === "undefined") return [];
 
     const key = "pantavion.water.pending.map.additions.v1";
-    const pending = JSON.parse(window.localStorage.getItem(key) || "[]") as string[];
+    const pending = JSON.parse(safeLocalStorageGet(key) || "[]") as string[];
     const normalizedQuery = normalizeSearchText(query);
 
     return pending.filter((item) =>
