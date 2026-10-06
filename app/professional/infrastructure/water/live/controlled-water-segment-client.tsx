@@ -293,7 +293,7 @@ function safeLocalStorageRemove(key: string) {
   try {
     window.localStorage.removeItem(key);
   } catch {
-    // Safari/iOS can deny storage access. Access checks must still render.
+    // Some browsers can deny persistent storage access. Access checks must still render.
   }
 }
 
@@ -320,7 +320,7 @@ function writeFallbackCookie(name: string, value: string) {
     document.cookie =
       `${encodeURIComponent(name)}=${encodeURIComponent(value)}; Max-Age=${WATER_DEVICE_FALLBACK_MAX_AGE_SECONDS}; Path=/; SameSite=Strict${secure}`;
   } catch {
-    // If cookies are also blocked, the form still renders and can show an error.
+    // If cookies are also blocked, the form still renders and can show a clear error.
   }
 }
 
@@ -336,6 +336,27 @@ function persistWaterDeviceValue(
   if (!safeLocalStorageSet(storageKey, value)) {
     writeFallbackCookie(cookieName, value);
   }
+}
+
+function portableTimeoutSignal(timeoutMs: number): AbortSignal | undefined {
+  if (
+    typeof AbortSignal !== "undefined" &&
+    typeof (AbortSignal as typeof AbortSignal & {
+      timeout?: (milliseconds: number) => AbortSignal;
+    }).timeout === "function"
+  ) {
+    return (
+      AbortSignal as typeof AbortSignal & {
+        timeout: (milliseconds: number) => AbortSignal;
+      }
+    ).timeout(timeoutMs);
+  }
+
+  if (typeof AbortController === "undefined") return undefined;
+
+  const controller = new AbortController();
+  window.setTimeout(() => controller.abort(), timeoutMs);
+  return controller.signal;
 }
 
 function clearLegacyWaterDeviceApproval() {
@@ -753,7 +774,7 @@ export default function ControlledWaterSegmentClient() {
               method: "POST",
               cache: "no-store",
               credentials: "include",
-              signal: AbortSignal.timeout(8000),
+              signal: portableTimeoutSignal(8000),
               headers: {
                 "content-type": "application/json",
               },
@@ -819,7 +840,7 @@ export default function ControlledWaterSegmentClient() {
           method: "POST",
           cache: "no-store",
           credentials: "include",
-          signal: AbortSignal.timeout(8000),
+          signal: portableTimeoutSignal(8000),
           headers: {
             "content-type": "application/json",
           },
@@ -1237,9 +1258,9 @@ export default function ControlledWaterSegmentClient() {
     }
 
     const destination = `${selectedTarget.lat.toFixed(6)},${selectedTarget.lng.toFixed(6)}`;
-    // Mobile-safe handoff: same-tab navigation is not blocked as a popup by
-    // Android/WebView browsers. Google Maps can intercept this URL and start
-    // driving guidance from the device's current location.
+    // Cross-device handoff: same-tab navigation avoids popup blocking across
+    // mobile and desktop browsers. A compatible maps app/browser can handle
+    // the destination from the device's current location.
     const navigationUrl =
       `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving&dir_action=navigate`;
     window.location.assign(navigationUrl);
@@ -1252,8 +1273,14 @@ export default function ControlledWaterSegmentClient() {
     }
 
     if (!mapRef.current) {
-      setMessage("Ο χάρτης φορτώνει. Πάτησε ξανά «Το σημείο μου» σε ένα δευτερόλεπτο.");
-      return;
+      setMessage(lang === "el" ? "Ο χάρτης φορτώνει. Περιμένω να είναι έτοιμος..." : "The map is loading. Waiting until it is ready...");
+      for (let attempt = 0; attempt < 30 && !mapRef.current; attempt += 1) {
+        await new Promise<void>((resolve) => window.setTimeout(resolve, 100));
+      }
+      if (!mapRef.current) {
+        setMessage(t.failed);
+        return;
+      }
     }
 
     setMessage(t.locating);
@@ -1293,20 +1320,26 @@ export default function ControlledWaterSegmentClient() {
 
       if (error.code === error.PERMISSION_DENIED) {
         setMessage(
-          "Το iPhone δεν έδωσε άδεια τοποθεσίας. Ρυθμίσεις → Απόρρητο και ασφάλεια → Υπηρεσίες τοποθεσίας → Safari Websites → Κατά τη χρήση και ενεργοποίησε Ακριβής τοποθεσία.",
+          lang === "el"
+            ? "Δεν έχει δοθεί άδεια τοποθεσίας στον browser. Ενεργοποίησε την πρόσβαση τοποθεσίας για αυτή τη σελίδα και δοκίμασε ξανά."
+            : "Location permission is blocked in this browser. Allow location access for this site and try again.",
         );
         return;
       }
 
       if (error.code === error.POSITION_UNAVAILABLE) {
         setMessage(
-          "Το iPhone δεν έδωσε διαθέσιμο στίγμα. Έλεγξε ότι οι Υπηρεσίες τοποθεσίας είναι ενεργές και δοκίμασε ξανά σε ανοικτό χώρο.",
+          lang === "el"
+            ? "Η συσκευή δεν έδωσε διαθέσιμο στίγμα. Έλεγξε ότι η τοποθεσία είναι ενεργή και δοκίμασε ξανά."
+            : "The device did not provide a location. Check that location services are enabled and try again.",
         );
         return;
       }
 
       setMessage(
-        "Το iPhone δεν πρόλαβε να δώσει στίγμα. Πάτησε ξανά «Το σημείο μου».",
+        lang === "el"
+          ? "Η λήψη στίγματος καθυστέρησε. Δοκίμασε ξανά ή επίλεξε σημείο στον χάρτη."
+          : "Location timed out. Try again or select a point on the map.",
       );
     };
 
@@ -1334,9 +1367,9 @@ export default function ControlledWaterSegmentClient() {
           return;
         }
 
-        // iOS/Safari can time out while forcing GPS even though a usable
-        // Wi-Fi/cell-assisted position is available. Retry once without the
-        // high-accuracy requirement so field crews still get an immediate pin.
+        // Some devices/browsers can time out while forcing high-accuracy GPS
+        // even when a usable network-assisted position exists. Retry once with
+        // balanced accuracy so field crews still get a usable pin.
         fallbackToBalancedAccuracy();
       },
       {
@@ -1452,7 +1485,7 @@ export default function ControlledWaterSegmentClient() {
     try {
       const response = await fetch(
         `/api/professional/infrastructure/water/places/search?q=${encodeURIComponent(query)}`,
-        { cache: "no-store", signal: AbortSignal.timeout(10000) },
+        { cache: "no-store", signal: portableTimeoutSignal(10000) },
       );
       const payload = await response.json().catch(() => ({})) as {
         results?: Array<{
@@ -1516,7 +1549,7 @@ export default function ControlledWaterSegmentClient() {
           .join(", ");
         const officialResponse = await fetch(
           `/api/professional/infrastructure/water/places/search?q=${encodeURIComponent(officialQuery)}`,
-          { cache: "no-store", signal: AbortSignal.timeout(10000) },
+          { cache: "no-store", signal: portableTimeoutSignal(10000) },
         );
         const officialPayload = await officialResponse.json().catch(() => ({})) as {
           results?: Array<{
@@ -1556,7 +1589,7 @@ export default function ControlledWaterSegmentClient() {
         : new URLSearchParams({ street, houseNumber: number, area, postalCode: postal });
       const response = await fetch(
         `/api/professional/infrastructure/water/address/search?${params.toString()}`,
-        { cache: "no-store", signal: AbortSignal.timeout(20000) },
+        { cache: "no-store", signal: portableTimeoutSignal(20000) },
       );
       if (!response.ok) throw new Error("address_search_failed");
       const result = await response.json();
@@ -1602,7 +1635,7 @@ export default function ControlledWaterSegmentClient() {
         {
           cache: "no-store",
           credentials: "include",
-          signal: AbortSignal.timeout(8000),
+          signal: portableTimeoutSignal(8000),
           headers: {
             "x-pantavion-water-device-id": device.deviceId,
             "x-pantavion-water-device-token": device.deviceToken,
@@ -1694,7 +1727,7 @@ export default function ControlledWaterSegmentClient() {
           {
             cache: "no-store",
             credentials: "include",
-            signal: AbortSignal.timeout(8000),
+            signal: portableTimeoutSignal(8000),
             headers: {
               "x-pantavion-water-device-id": device.deviceId,
               "x-pantavion-water-device-token": device.deviceToken,
@@ -1706,7 +1739,7 @@ export default function ControlledWaterSegmentClient() {
           {
             cache: "no-store",
             credentials: "include",
-            signal: AbortSignal.timeout(8000),
+            signal: portableTimeoutSignal(8000),
             headers: {
               "x-pantavion-water-device-id": device.deviceId,
               "x-pantavion-water-device-token": device.deviceToken,
