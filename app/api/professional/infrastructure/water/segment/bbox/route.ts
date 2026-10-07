@@ -26,7 +26,13 @@ export const maxDuration = 60;
 type WaterSegmentAccessDecision =
   | {
       ok: true;
-      mode: "admin-session" | "approved-device";
+      mode: "admin-session";
+    }
+  | {
+      ok: true;
+      mode: "approved-device";
+      deviceId: string;
+      deviceToken: string;
     }
   | {
       ok: false;
@@ -48,10 +54,10 @@ function waterAdminRpcSecretHash() {
 
 async function authorizeWaterSegmentRequest(request: Request): Promise<WaterSegmentAccessDecision> {
   const cookieClaim = getWaterDeviceClaimFromRequest(request);
-  const deviceId =
-    clean(request.headers.get("x-pantavion-water-device-id")) || cookieClaim.deviceId;
-  const deviceToken =
-    clean(request.headers.get("x-pantavion-water-device-token")) || cookieClaim.deviceToken;
+  const headerClaim = {
+    deviceId: clean(request.headers.get("x-pantavion-water-device-id")),
+    deviceToken: clean(request.headers.get("x-pantavion-water-device-token")),
+  };
 
   if (await hasWaterAdminAuthorization(request)) {
     return {
@@ -60,16 +66,30 @@ async function authorizeWaterSegmentRequest(request: Request): Promise<WaterSegm
     };
   }
 
-  const deviceApproved = await migrateLegacyApprovedDeviceIfPresent(
-    deviceId,
-    hashToken(deviceToken),
+  const candidates = [headerClaim, cookieClaim].filter(
+    (claim, index, all) =>
+      Boolean(claim.deviceId && claim.deviceToken) &&
+      all.findIndex(
+        (item) =>
+          item.deviceId === claim.deviceId &&
+          item.deviceToken === claim.deviceToken,
+      ) === index,
   );
 
-  if (deviceApproved) {
-    return {
-      ok: true,
-      mode: "approved-device",
-    };
+  for (const claim of candidates) {
+    const deviceApproved = await migrateLegacyApprovedDeviceIfPresent(
+      claim.deviceId,
+      hashToken(claim.deviceToken),
+    );
+
+    if (deviceApproved) {
+      return {
+        ok: true,
+        mode: "approved-device",
+        deviceId: claim.deviceId,
+        deviceToken: claim.deviceToken,
+      };
+    }
   }
 
   return {
@@ -110,9 +130,13 @@ export async function GET(request: Request) {
 
     const cookieClaim = getWaterDeviceClaimFromRequest(request);
     const deviceId =
-      clean(request.headers.get("x-pantavion-water-device-id")) || cookieClaim.deviceId;
+      access.mode === "approved-device"
+        ? access.deviceId
+        : clean(request.headers.get("x-pantavion-water-device-id")) || cookieClaim.deviceId;
     const deviceToken =
-      clean(request.headers.get("x-pantavion-water-device-token")) || cookieClaim.deviceToken;
+      access.mode === "approved-device"
+        ? access.deviceToken
+        : clean(request.headers.get("x-pantavion-water-device-token")) || cookieClaim.deviceToken;
 
     // Primary GIS production path: server-authorized PostGIS Feature API.
     // The browser never receives the raw/full master and never sees provider credentials.
