@@ -30,8 +30,8 @@ export function hasSupabaseAdminCredential() {
   );
 }
 
-export function createAdminClient() {
-  const url = firstConfigured(
+export function createAdminClient(options?: { url?: string }) {
+  const url = options?.url?.trim() || firstConfigured(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.SUPABASE_URL,
     CANONICAL_SUPABASE_URL,
