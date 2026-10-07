@@ -91,13 +91,28 @@ assert.match(
 );
 assert.match(
   objectTransferRoute,
-  /authorization === "library_import"[\s\S]*?\["sign-upload", "head", "status", "verify"\]/,
-  "Temporary Library import authorization must be restricted to ingest/verification actions.",
+  /authorization === "library_import"[\s\S]*?libraryImportActionAllowed/,
+  "Temporary Library import authorization must remain explicitly restricted.",
+);
+assert.match(
+  objectTransferRoute,
+  /"sign-chunk-upload", "chunk-status", "verify-chunked"/,
+  "Temporary Library import authorization must support only safe chunk ingest/status/verification actions.",
 );
 assert.doesNotMatch(
   objectTransferRoute,
-  /authorization === "library_import"[\s\S]*?\["sign-upload", "sign-download"/,
+  /libraryImportActionAllowed[\s\S]*?sign-download/,
   "Temporary Library import authorization must never gain raw download capability.",
+);
+assert.match(
+  objectTransferRoute,
+  /pantavion_water_canonical_chunked_verification_v1/,
+  "Chunked B/C canonical representation must persist an exact whole-source verification marker.",
+);
+assert.match(
+  objectTransferRoute,
+  /overallHash\.digest\("hex"\)/,
+  "Chunked B/C verification must hash the reconstructed whole source, not trust chunk presence alone.",
 );
 
 assert.match(
