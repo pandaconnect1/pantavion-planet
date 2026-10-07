@@ -17,6 +17,13 @@ const SOURCES = [
     sha256: "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16",
   },
   {
+    id: "map-c-canonical",
+    title: "Canonical Map C",
+    fileName: "GEORGE_MAP_MASTER_B_C_FINAL (4).dwg",
+    sizeBytes: 85703125,
+    sha256: "038b9bceda2a660296a9162723f5279e5a2d10eb18d499b087d0e8ffa393b800",
+  },
+  {
     id: "map-a-original",
     title: "Map A — authentic original (owner-confirmed)",
     fileName: "GEORGE_MAP_MASTER_B_C_FINAL.dwg",

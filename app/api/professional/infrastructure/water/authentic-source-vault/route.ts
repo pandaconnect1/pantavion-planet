@@ -1,3 +1,5 @@
+import { createSupabaseSignedUpload, verifySupabaseObject, writeSupabaseVerificationMarker } from "@/core/water/authentic-source-upload";
+import { hasSupabaseAdminCredential } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
@@ -25,6 +27,7 @@ const SUPABASE_FUNCTION_URL =
 const ALLOWED_SOURCE_IDS = new Set([
   "map-a-original",
   "map-b-canonical",
+  "map-c-canonical",
   "legacy-map-bc-george",
   "older-2025-master",
 ]);
@@ -34,14 +37,6 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { ok: false, error: "water_admin_session_required" },
       { status: 403, headers: { "Cache-Control": "private, no-store" } },
-    );
-  }
-
-  const bridgeKey = process.env.PANTAVION_WATER_UPLOAD_BRIDGE_KEY?.trim();
-  if (!bridgeKey) {
-    return NextResponse.json(
-      { ok: false, error: "water_upload_bridge_not_configured" },
-      { status: 503, headers: { "Cache-Control": "private, no-store" } },
     );
   }
 
@@ -55,6 +50,50 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { ok: false, error: "unknown_authentic_water_source" },
       { status: 400, headers: { "Cache-Control": "private, no-store" } },
+    );
+  }
+
+  const sourceKey = sourceId === "map-b-canonical"
+    ? "canonical-2026-andreaspap"
+    : sourceId === "map-c-canonical" ? "legacy-george-85m" : null;
+  if (sourceKey) {
+    if (!hasSupabaseAdminCredential()) {
+      return NextResponse.json({ ok: false, error: "water_storage_admin_not_configured" },
+        { status: 503, headers: { "Cache-Control": "private, no-store" } });
+    }
+    try {
+      if (action === "sign") {
+        const signed = await createSupabaseSignedUpload(sourceKey);
+        if (!signed.ok && signed.error === "canonical_object_already_present") {
+          return NextResponse.json({ ok: true, status: "already_present" },
+            { headers: { "Cache-Control": "private, no-store" } });
+        }
+        return NextResponse.json(signed,
+          { status: signed.status, headers: { "Cache-Control": "private, no-store" } });
+      }
+      const result = await verifySupabaseObject(sourceKey);
+      if (result.ok) {
+        await writeSupabaseVerificationMarker(sourceKey, {
+          sha256: result.sha256, sizeBytes: result.sizeBytes,
+          header: result.header, etag: result.etag,
+        });
+      }
+      return NextResponse.json({
+        ...result,
+        actualSizeBytes: "sizeBytes" in result ? result.sizeBytes : undefined,
+        actualSha256: "sha256" in result ? result.sha256 : undefined,
+      }, { status: result.status, headers: { "Cache-Control": "private, no-store" } });
+    } catch {
+      return NextResponse.json({ ok: false, error: "water_private_storage_request_failed" },
+        { status: 502, headers: { "Cache-Control": "private, no-store" } });
+    }
+  }
+
+  const bridgeKey = process.env.PANTAVION_WATER_UPLOAD_BRIDGE_KEY?.trim();
+  if (!bridgeKey) {
+    return NextResponse.json(
+      { ok: false, error: "water_upload_bridge_not_configured" },
+      { status: 503, headers: { "Cache-Control": "private, no-store" } },
     );
   }
 
@@ -78,3 +117,4 @@ export async function POST(request: Request) {
     headers: { "Cache-Control": "private, no-store" },
   });
 }
+
