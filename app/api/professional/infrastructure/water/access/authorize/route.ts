@@ -80,8 +80,20 @@ export async function POST(request: Request) {
 
   const isAdminSession = await hasWaterAdminAuthorization(request);
   const cookieClaim = getWaterDeviceClaimFromRequest(request);
-  const deviceId = clean(body.deviceId) || cookieClaim.deviceId;
-  const deviceToken = clean(body.deviceToken) || cookieClaim.deviceToken;
+  const bodyClaim = {
+    deviceId: clean(body.deviceId),
+    deviceToken: clean(body.deviceToken),
+  };
+  const candidates = [bodyClaim, cookieClaim].filter(
+    (claim, index, all) =>
+      Boolean(claim.deviceId && claim.deviceToken) &&
+      all.findIndex(
+        (item) =>
+          item.deviceId === claim.deviceId &&
+          item.deviceToken === claim.deviceToken,
+      ) === index,
+  );
+  const primaryClaim = candidates[0] || { deviceId: "", deviceToken: "" };
 
   if (isAdminSession) {
     return noStoreJson({
@@ -94,12 +106,12 @@ export async function POST(request: Request) {
         lastName: clean(body.lastName),
         title: clean(body.title),
         phone: "",
-        deviceId,
+        deviceId: primaryClaim.deviceId,
       },
     });
   }
 
-  if (!deviceId || !deviceToken) {
+  if (candidates.length === 0) {
     return noStoreJson(
       { ok: false, error: "missing_device_claim" },
       { status: 400 },
@@ -108,39 +120,41 @@ export async function POST(request: Request) {
 
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase.rpc("pantavion_water_authorize_device", {
-      p_device_id: deviceId,
-      p_token_hash: hashToken(deviceToken),
-    });
 
-    if (error) throw error;
+    for (const claim of candidates) {
+      const { data, error } = await supabase.rpc("pantavion_water_authorize_device", {
+        p_device_id: claim.deviceId,
+        p_token_hash: hashToken(claim.deviceToken),
+      });
 
-    const approvedDevice = Array.isArray(data) ? data[0] : data;
+      if (error) throw error;
 
-    if (!approvedDevice) {
-      return noStoreJson(
-        { ok: false, error: "access_not_approved" },
-        { status: 403 },
+      const approvedDevice = Array.isArray(data) ? data[0] : data;
+      if (!approvedDevice) continue;
+
+      return approvedDeviceJson(
+        {
+          ok: true,
+          approved: true,
+          accessMode: "approved-device",
+          approvedAt: approvedDevice.approved_at,
+          holder: {
+            firstName: approvedDevice.first_name,
+            lastName: approvedDevice.last_name,
+            title: approvedDevice.title,
+            phone: approvedDevice.phone,
+            deviceId: claim.deviceId,
+          },
+          storage: "supabase-rpc",
+        },
+        claim.deviceId,
+        claim.deviceToken,
       );
     }
 
-    return approvedDeviceJson(
-      {
-        ok: true,
-        approved: true,
-        accessMode: "approved-device",
-        approvedAt: approvedDevice.approved_at,
-        holder: {
-          firstName: approvedDevice.first_name,
-          lastName: approvedDevice.last_name,
-          title: approvedDevice.title,
-          phone: approvedDevice.phone,
-          deviceId,
-        },
-        storage: "supabase-rpc",
-      },
-      deviceId,
-      deviceToken,
+    return noStoreJson(
+      { ok: false, error: "access_not_approved" },
+      { status: 403 },
     );
   } catch {
     return noStoreJson(
