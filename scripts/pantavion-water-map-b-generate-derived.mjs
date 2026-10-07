@@ -528,18 +528,6 @@ async function uploadDerived(outputDir, manifest, tileFiles) {
 
   const manifestBody = Buffer.from(JSON.stringify(manifest, null, 2) + "\n", "utf8");
   const manifestPath = `${STORAGE.derivedPrefix}/manifest.json`;
-  const manifestUpload = await admin.storage.from(STORAGE.bucket).upload(
-    manifestPath,
-    manifestBody,
-    { upsert: true, contentType: "application/json", cacheControl: "0" },
-  );
-
-  if (manifestUpload.error) {
-    fail("map_b_derived_manifest_upload_failed", {
-      path: manifestPath,
-      message: manifestUpload.error.message,
-    });
-  }
 
   const concurrency = 8;
   let uploadedTiles = 0;
@@ -569,6 +557,20 @@ async function uploadDerived(outputDir, manifest, tileFiles) {
       }
       uploadedTiles += 1;
     }
+  }
+
+  // Publish readiness only after every referenced tile was uploaded successfully.
+  const manifestUpload = await admin.storage.from(STORAGE.bucket).upload(
+    manifestPath,
+    manifestBody,
+    { upsert: true, contentType: "application/json", cacheControl: "0" },
+  );
+
+  if (manifestUpload.error) {
+    fail("map_b_derived_manifest_upload_failed", {
+      path: manifestPath,
+      message: manifestUpload.error.message,
+    });
   }
 
   return { uploaded: true, manifestPath, uploadedTiles };
