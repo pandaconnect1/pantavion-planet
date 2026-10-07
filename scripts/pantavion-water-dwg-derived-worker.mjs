@@ -10,6 +10,7 @@ const SOURCES = [
   {
     sourceKey: "canonical-2026-andreaspap",
     mapId: "B",
+    byteSize: 205565159,
     sha256: "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16",
     storagePath:
       "water-network-private/source-masters/map-b-original/6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16.dwg",
@@ -17,6 +18,7 @@ const SOURCES = [
   {
     sourceKey: "legacy-george-85m",
     mapId: "C",
+    byteSize: 85703125,
     sha256: "038b9bceda2a660296a9162723f5279e5a2d10eb18d499b087d0e8ffa393b800",
     storagePath:
       "water-network-private/source-masters/map-c-original/038b9bceda2a660296a9162723f5279e5a2d10eb18d499b087d0e8ffa393b800.dwg",
@@ -55,6 +57,35 @@ async function manifestExists(source) {
   return Boolean(data?.some((item) => item.name === "manifest.json"));
 }
 
+// Transfer verification is independent of the older UI ingest catalog.
+// The generator rechecks the actual source bytes before producing any tiles.
+async function verifiedTransferExists(source) {
+  const prefix = `water-network-private/source-masters/chunked/map-${source.mapId.toLowerCase()}/${source.sha256}`;
+  const candidates = [
+    [`${source.storagePath}.verified.json`, "pantavion_water_canonical_object_verification_v1"],
+    [`${prefix}/verified.json`, "pantavion_water_canonical_chunked_verification_v1"],
+  ];
+  for (const [markerPath, markerType] of candidates) {
+    const { data, error } = await admin.storage.from(BUCKET).download(markerPath);
+    if (error) {
+      if (["404", "400"].includes(String(error.statusCode)) &&
+          /not found|does not exist/i.test(error.message || "")) continue;
+      throw new Error("water_transfer_marker_read_failed");
+    }
+    if (!data) continue;
+    let marker;
+    try { marker = JSON.parse(await data.text()); }
+    catch { throw new Error("water_transfer_marker_invalid_json"); }
+    if (marker.marker !== markerType || marker.sourceKey !== source.sourceKey ||
+        marker.sha256 !== source.sha256 || marker.sizeBytes !== source.byteSize ||
+        marker.header !== "AC1032") {
+      throw new Error("water_transfer_marker_identity_mismatch");
+    }
+    return true;
+  }
+  return false;
+}
+
 async function verifiedIngestExists(source) {
   const { data, error } = await admin
     .from("water_map_ingest_catalog")
@@ -75,7 +106,7 @@ async function run() {
   const summary = [];
 
   for (const source of SOURCES) {
-    const verified = await verifiedIngestExists(source);
+    const verified = (await verifiedIngestExists(source)) || (await verifiedTransferExists(source));
     if (!verified) {
       summary.push({
         mapId: source.mapId,
