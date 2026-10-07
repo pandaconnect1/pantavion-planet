@@ -3,6 +3,11 @@ import { WATER_MAP_B_SOURCE_CANDIDATES, type WaterMapBSourceKey } from "@/core/w
 import { createAdminClient } from "@/lib/supabase/admin";
 const SUPABASE_BUCKET = "personal-media";
 const CANONICAL_SUPABASE_PROJECT_REF = "cxhulvwkagzufbjsdwwu";
+const CANONICAL_SUPABASE_URL = `https://${CANONICAL_SUPABASE_PROJECT_REF}.supabase.co`;
+
+function createCanonicalAdminClient() {
+  return createAdminClient({ url: CANONICAL_SUPABASE_URL });
+}
 type VerificationMarker = {
   marker: "pantavion_water_canonical_object_verification_v1";
   sourceKey: WaterMapBSourceKey;
@@ -14,7 +19,7 @@ type VerificationMarker = {
 };
 export async function supabaseObjectState(sourceKey: WaterMapBSourceKey) {
   const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
-  const admin = createAdminClient();
+  const admin = createCanonicalAdminClient();
   const folder = source.storagePath.slice(0, source.storagePath.lastIndexOf("/"));
   const objectName = source.storagePath.slice(source.storagePath.lastIndexOf("/") + 1);
   const { data, error } = await admin.storage
@@ -54,7 +59,7 @@ export async function writeSupabaseVerificationMarker(
   },
 ) {
   const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
-  const admin = createAdminClient();
+  const admin = createCanonicalAdminClient();
   const marker: VerificationMarker = {
     marker: "pantavion_water_canonical_object_verification_v1",
     sourceKey,
@@ -84,7 +89,7 @@ export async function writeSupabaseVerificationMarker(
 
 export async function verifySupabaseObject(sourceKey: WaterMapBSourceKey) {
   const source = WATER_MAP_B_SOURCE_CANDIDATES[sourceKey];
-  const admin = createAdminClient();
+  const admin = createCanonicalAdminClient();
   const { data, error } = await admin.storage
     .from(SUPABASE_BUCKET)
     .createSignedUrl(source.storagePath, 900);
@@ -156,7 +161,7 @@ export async function createSupabaseSignedUpload(sourceKey: WaterMapBSourceKey) 
     };
   }
 
-  const admin = createAdminClient();
+  const admin = createCanonicalAdminClient();
   const { data, error } = await admin.storage
     .from(SUPABASE_BUCKET)
     .createSignedUploadUrl(source.storagePath, { upsert: false });
