@@ -317,6 +317,112 @@ function tableEntries(database, upperName, legacyName) {
   return Array.isArray(legacy) ? legacy : [];
 }
 
+function canonicalChunkPrefix() {
+  return `water-network-private/source-masters/chunked/map-${EXPECTED.mapId.toLowerCase()}/${EXPECTED.sha256}`;
+}
+
+async function loadChunkedCanonical(admin) {
+  const prefix = canonicalChunkPrefix();
+  const manifestPath = `${prefix}/manifest.json`;
+  const { data: manifestBlob, error: manifestError } = await admin.storage
+    .from(STORAGE.bucket)
+    .download(manifestPath);
+
+  if (manifestError || !manifestBlob) {
+    return null;
+  }
+
+  let manifest;
+  try {
+    manifest = JSON.parse(await manifestBlob.text());
+  } catch {
+    fail("map_b_chunked_manifest_invalid_json", { manifestPath });
+  }
+
+  if (
+    manifest?.schemaVersion !== "pantavion-water-chunked-canonical-v1" ||
+    manifest?.representation !== "chunked-private-canonical-v1" ||
+    manifest?.sourceKey !== SOURCE_KEY ||
+    manifest?.sha256 !== EXPECTED.sha256 ||
+    Number(manifest?.sizeBytes) !== EXPECTED.byteSize ||
+    manifest?.header !== EXPECTED.dwgHeader ||
+    !Array.isArray(manifest?.chunks) ||
+    manifest.chunks.length < 1
+  ) {
+    fail("map_b_chunked_manifest_identity_mismatch", {
+      manifestPath,
+      sourceKey: manifest?.sourceKey ?? null,
+      sha256: manifest?.sha256 ?? null,
+      sizeBytes: manifest?.sizeBytes ?? null,
+      header: manifest?.header ?? null,
+      chunkCount: Array.isArray(manifest?.chunks) ? manifest.chunks.length : 0,
+    });
+  }
+
+  const orderedChunks = [...manifest.chunks].sort(
+    (a, b) => Number(a?.index ?? -1) - Number(b?.index ?? -1),
+  );
+  const buffers = [];
+
+  for (let expectedIndex = 0; expectedIndex < orderedChunks.length; expectedIndex += 1) {
+    const item = orderedChunks[expectedIndex];
+    const index = Number(item?.index);
+    const chunkPath = String(item?.path || "");
+
+    if (index !== expectedIndex || !chunkPath.startsWith(`${prefix}/chunks/`)) {
+      fail("map_b_chunked_manifest_order_invalid", {
+        manifestPath,
+        expectedIndex,
+        actualIndex: index,
+        chunkPath,
+      });
+    }
+
+    const { data: blob, error } = await admin.storage
+      .from(STORAGE.bucket)
+      .download(chunkPath);
+
+    if (error || !blob) {
+      fail("map_b_chunk_private_download_failed", {
+        manifestPath,
+        chunkIndex: index,
+        chunkPath,
+        message: error?.message || "missing_private_chunk",
+      });
+    }
+
+    const buffer = Buffer.from(await blob.arrayBuffer());
+    const expectedBytes = Number(item?.sizeBytes);
+    const expectedChunkSha = String(item?.sha256 || "").toLowerCase();
+    const actualChunkSha = sha256(buffer);
+
+    if (
+      !Number.isSafeInteger(expectedBytes) ||
+      buffer.byteLength !== expectedBytes ||
+      !/^[a-f0-9]{64}$/.test(expectedChunkSha) ||
+      actualChunkSha !== expectedChunkSha
+    ) {
+      fail("map_b_chunk_identity_mismatch", {
+        chunkIndex: index,
+        chunkPath,
+        expectedBytes,
+        actualBytes: buffer.byteLength,
+        expectedChunkSha,
+        actualChunkSha,
+      });
+    }
+
+    buffers.push(buffer);
+  }
+
+  const buffer = Buffer.concat(buffers);
+  return {
+    buffer,
+    sourcePath: `supabase://${STORAGE.bucket}/${manifestPath}`,
+    acquisition: "supabase_private_chunked_canonical",
+  };
+}
+
 async function loadSourceBuffer() {
   const configured = process.env.PANTAVION_WATER_MAP_B_DWG_PATH?.trim();
   const localPath = configured ? path.resolve(configured) : "";
@@ -351,21 +457,28 @@ async function loadSourceBuffer() {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
-  const { data, error } = await admin.storage.from(STORAGE.bucket).download(STORAGE.sourcePath);
-  if (error || !data) {
-    fail("map_b_source_private_download_failed", {
-      storageBucket: STORAGE.bucket,
-      storagePath: STORAGE.sourcePath,
-      message: error?.message || "missing_private_object",
-    });
+  const { data, error } = await admin.storage
+    .from(STORAGE.bucket)
+    .download(STORAGE.sourcePath);
+
+  if (!error && data) {
+    const arrayBuffer = await data.arrayBuffer();
+    return {
+      buffer: Buffer.from(arrayBuffer),
+      sourcePath: `supabase://${STORAGE.bucket}/${STORAGE.sourcePath}`,
+      acquisition: "supabase_private_storage",
+    };
   }
 
-  const arrayBuffer = await data.arrayBuffer();
-  return {
-    buffer: Buffer.from(arrayBuffer),
-    sourcePath: `supabase://${STORAGE.bucket}/${STORAGE.sourcePath}`,
-    acquisition: "supabase_private_storage",
-  };
+  const chunked = await loadChunkedCanonical(admin);
+  if (chunked) return chunked;
+
+  fail("map_b_source_private_download_failed", {
+    storageBucket: STORAGE.bucket,
+    storagePath: STORAGE.sourcePath,
+    chunkedManifestPath: `${canonicalChunkPrefix()}/manifest.json`,
+    message: error?.message || "missing_private_object_and_chunked_manifest",
+  });
 }
 
 function verifySource(buffer) {
