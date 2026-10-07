@@ -2,6 +2,11 @@ import { createHash } from "crypto";
 
 import { NextResponse } from "next/server";
 
+import {
+  WATER_DEVICE_COOKIE_MAX_AGE_SECONDS,
+  WATER_DEVICE_ID_COOKIE,
+  WATER_DEVICE_TOKEN_COOKIE,
+} from "@/core/security/water-device-session";
 import { createClient } from "@/lib/supabase/server";
 
 type WaterAccessRequestBody = {
@@ -85,7 +90,7 @@ export async function POST(request: Request) {
     const saved = Array.isArray(data) ? data[0] : data;
     const attemptCount = Number(saved?.attempt_count || 1);
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       ok: true,
       requestId: saved?.id || requestId,
       status: saved?.status || "pending_founder_review",
@@ -94,6 +99,22 @@ export async function POST(request: Request) {
       attemptCount,
       storage: "supabase-rpc",
     });
+
+    // Preserve the exact device claim server-side from the moment the request
+    // is created. This never grants access by itself; approval is still
+    // required by pantavion_water_authorize_device.
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict" as const,
+      path: "/",
+      maxAge: WATER_DEVICE_COOKIE_MAX_AGE_SECONDS,
+    };
+
+    response.cookies.set(WATER_DEVICE_ID_COOKIE, deviceId, cookieOptions);
+    response.cookies.set(WATER_DEVICE_TOKEN_COOKIE, deviceToken, cookieOptions);
+
+    return response;
   } catch (error) {
     return NextResponse.json(
       {
