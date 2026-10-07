@@ -43,9 +43,63 @@ function createId(prefix: string) {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
+const PANTAVION_WATER_DEVICE_ID_FALLBACK_COOKIE =
+  "pantavion_water_device_id_fallback";
+const PANTAVION_WATER_DEVICE_TOKEN_FALLBACK_COOKIE =
+  "pantavion_water_device_token_fallback";
+const WATER_DEVICE_FALLBACK_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
+
+function safeLocalStorageGet(key: string) {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeLocalStorageSet(key: string, value: string) {
+  try {
+    window.localStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function safeLocalStorageRemove(key: string) {
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    // Storage can be unavailable in privacy-restricted browsers/WebViews.
+  }
+}
+
+function readFallbackCookie(name: string) {
+  try {
+    const prefix = `${encodeURIComponent(name)}=`;
+    const part = document.cookie
+      .split("; ")
+      .find((item) => item.startsWith(prefix));
+
+    return part ? decodeURIComponent(part.slice(prefix.length)) : "";
+  } catch {
+    return "";
+  }
+}
+
+function writeFallbackCookie(name: string, value: string) {
+  try {
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie =
+      `${encodeURIComponent(name)}=${encodeURIComponent(value)}; Max-Age=${WATER_DEVICE_FALLBACK_MAX_AGE_SECONDS}; Path=/; SameSite=Strict${secure}`;
+  } catch {
+    // If cookies are blocked too, the request still fails closed.
+  }
+}
+
 function readLocalStorageValue(keys: string[]) {
   for (const key of keys) {
-    const value = window.localStorage.getItem(key);
+    const value = safeLocalStorageGet(key);
     if (value) return value;
   }
 
@@ -53,7 +107,7 @@ function readLocalStorageValue(keys: string[]) {
 }
 
 function findDeviceFromStoredJson(): DeviceIdentity | null {
-  const raw = window.localStorage.getItem("pantavion_water_access_device");
+  const raw = safeLocalStorageGet("pantavion_water_access_device");
   if (!raw) return null;
 
   try {
@@ -78,11 +132,15 @@ function getOrCreateDevice(): DeviceIdentity {
   const legacyDeviceToken =
     jsonDevice?.deviceToken || readLocalStorageValue(DEVICE_TOKEN_KEYS);
   const canonicalDeviceId =
-    window.localStorage.getItem("pantavion:water:device-id:v1") || "";
+    safeLocalStorageGet("pantavion:water:device-id:v1") ||
+    readFallbackCookie(PANTAVION_WATER_DEVICE_ID_FALLBACK_COOKIE) ||
+    "";
   const canonicalDeviceToken =
-    window.localStorage.getItem("pantavion:water:device-token:v1") || "";
+    safeLocalStorageGet("pantavion:water:device-token:v1") ||
+    readFallbackCookie(PANTAVION_WATER_DEVICE_TOKEN_FALLBACK_COOKIE) ||
+    "";
   const hasPendingAccessRequest = Boolean(
-    window.localStorage.getItem("pantavion_water_pending_request_id"),
+    safeLocalStorageGet("pantavion_water_pending_request_id"),
   );
 
   // A pending request was created with the legacy access-page identity.
@@ -100,14 +158,26 @@ function getOrCreateDevice(): DeviceIdentity {
 
   // Keep every Water surface on one device claim. This prevents the Access
   // page and Live Map A from generating different identities on one device.
-  window.localStorage.setItem("pantavion_water_device_id", deviceId);
-  window.localStorage.setItem("pantavion_water_device_token", deviceToken);
-  window.localStorage.setItem("pantavion:water:device-id:v1", deviceId);
-  window.localStorage.setItem("pantavion:water:device-token:v1", deviceToken);
-  window.localStorage.setItem(
+  safeLocalStorageSet("pantavion_water_device_id", deviceId);
+  safeLocalStorageSet("pantavion_water_device_token", deviceToken);
+  const idStored = safeLocalStorageSet("pantavion:water:device-id:v1", deviceId);
+  const tokenStored = safeLocalStorageSet(
+    "pantavion:water:device-token:v1",
+    deviceToken,
+  );
+  safeLocalStorageSet(
     "pantavion_water_access_device",
     JSON.stringify({ deviceId, deviceToken }),
   );
+
+  // Match the protected Map A fallback identity exactly when browser storage
+  // is unavailable, so Access -> approval -> Map A remains one device.
+  if (!idStored) {
+    writeFallbackCookie(PANTAVION_WATER_DEVICE_ID_FALLBACK_COOKIE, deviceId);
+  }
+  if (!tokenStored) {
+    writeFallbackCookie(PANTAVION_WATER_DEVICE_TOKEN_FALLBACK_COOKIE, deviceToken);
+  }
 
   return { deviceId, deviceToken };
 }
@@ -169,7 +239,7 @@ export default function WaterAccessControlClient({ isAdmin = false }: { isAdmin?
 
   useEffect(() => {
     const currentDevice = getOrCreateDevice();
-    const storedRequestId = window.localStorage.getItem(
+    const storedRequestId = safeLocalStorageGet(
       "pantavion_water_pending_request_id",
     );
 
@@ -189,7 +259,7 @@ export default function WaterAccessControlClient({ isAdmin = false }: { isAdmin?
     const approved = Boolean(payload.ok || payload.approved);
     setAccessApproved(approved);
     if (approved) {
-      window.localStorage.removeItem("pantavion_water_pending_request_id");
+      safeLocalStorageRemove("pantavion_water_pending_request_id");
       setPendingRequestId("");
     }
     setCheckingAccess(false);
@@ -223,7 +293,7 @@ export default function WaterAccessControlClient({ isAdmin = false }: { isAdmin?
 
     const requestId = payload.requestId || createId("water-access-request");
     setPendingRequestId(requestId);
-    window.localStorage.setItem("pantavion_water_pending_request_id", requestId);
+    safeLocalStorageSet("pantavion_water_pending_request_id", requestId);
     setRequestMessage(
       `Η αίτηση στάλθηκε και περιμένει έγκριση. Request ID: ${requestId}`,
     );
