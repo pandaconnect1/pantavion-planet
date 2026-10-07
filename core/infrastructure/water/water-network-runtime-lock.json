@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-06T08:21:17.900Z",
+  "lockedAtUtc": "2026-10-07T03:31:40.000Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -18,11 +18,11 @@
   "protectedFiles": {
     ".github/CODEOWNERS": "93789477aca8ffe37c6f179ca004113c8edba37ecc159d1e67dee9f720955e52",
     ".github/workflows/pantavion-water-network-lock.yml": "a29ad4ccb7dff63137151ebd37ed75c316d57678e04991a323524d227765a325",
-    "app/api/professional/infrastructure/water/access/authorize/route.ts": "d4182ca8aecf7e2631af3d31f0afd5ae419bb0095df8f7b319f7036e65c38d6e",
+    "app/api/professional/infrastructure/water/access/authorize/route.ts": "751360c6accd5ce0a63bbc08989ac94003395e9d5f7f189c7de22d3a7938d21b",
     "app/api/professional/infrastructure/water/access/invite/claim/route.ts": "cbdedb6771e0155fbb55b772e8e9e30fb9029060cdb1861d25e25a1dbdc8b16b",
     "app/api/professional/infrastructure/water/admin/session/route.ts": "62ee109cfc6854bd472fa7e7cb6c56b237f2bfa9d4eb2455a562b686fd09f2ab",
     "app/api/professional/infrastructure/water/mapserver/0/query/route.ts": "3d4784ac3af414b1b143588c721fe8bee24d1c98e60b131caaa93b3ab398ae59",
-    "app/api/professional/infrastructure/water/segment/bbox/route.ts": "3b561ad7565cee62412579002cfb1700500900557a10e029b88fa401ae37756a",
+    "app/api/professional/infrastructure/water/segment/bbox/route.ts": "ca3423fdb41ab608b5a255937713750b673618564768f4b3cb53a90ec3c1437e",
     "app/api/professional/infrastructure/water/tiles/mvt/route.ts": "34bea14126f4bcd6c069818d4f0f65599b97f7701ed238f180a0404d541304de",
     "app/professional/infrastructure/water/admin/access/page.tsx": "627e1e1f45a2bdb465acddd8053ffc47306be7adbeb7a3d0489b11cb036dc28b",
     "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "339261a9e0391042723c9242d1c405154ef5b1a8c8d8134fa73bedddc4af589a",
@@ -37,8 +37,8 @@
     "app/api/professional/infrastructure/water/basemap/dls/route.ts": "bf0345a807b51b4b0bcbcb7a3097e4c20453f484317f479858cecdf3ca6fb2f4"
   },
   "refreshEvidence": {
-    "reason": "Universal device compatibility hardening only: guarded browser storage, same-origin Strict fallback cookie when persistent storage is unavailable, portable request timeout, capability-based geolocation fallback, and automatic map-readiness wait. Standard request -> approval -> automatic entry remains unchanged. No Water source truth, geometry, styling, privacy, authorization requirement, or segmented delivery invariant changes.",
-    "sourceCommit": "ef1a8564eab52a4ef098dde663e884815e520d1b",
+    "reason": "Approved-device recovery hardening only: when a browser sends a new unapproved local/header device claim but still holds a previously approved secure HttpOnly device cookie, verify both exact claims and use only the claim that passes server-side approval. No implicit approval, no source truth/geometry/style change, and segmented delivery remains mandatory.",
+    "sourceCommit": "568dff1d202424aa57b8f08acb7533702ecc4891",
     "protectedFileCount": 19,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false
