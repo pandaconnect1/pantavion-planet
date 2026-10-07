@@ -24,8 +24,8 @@ export class PantavionSupabaseAdminConfigurationError extends Error {
 export function hasSupabaseAdminCredential() {
   return Boolean(
     firstConfigured(
-      process.env.SUPABASE_SECRET_KEY,
       process.env.SUPABASE_SERVICE_ROLE_KEY,
+      process.env.SUPABASE_SECRET_KEY,
     ),
   );
 }
