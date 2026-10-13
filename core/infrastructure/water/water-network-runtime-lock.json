@@ -25,7 +25,7 @@
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "ca3423fdb41ab608b5a255937713750b673618564768f4b3cb53a90ec3c1437e",
     "app/api/professional/infrastructure/water/tiles/mvt/route.ts": "34bea14126f4bcd6c069818d4f0f65599b97f7701ed238f180a0404d541304de",
     "app/professional/infrastructure/water/admin/access/page.tsx": "627e1e1f45a2bdb465acddd8053ffc47306be7adbeb7a3d0489b11cb036dc28b",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "0c4e89b58bee475a75e4466fd885bd6f540b291defc0e519f171bd3fe50e796d",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "938d73ef71d7f641c4d3b4ddda9a9f55362f2d86ef1eb1755c2c87b92a5de309",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "828652b8565772b63b8d365fff41542b815dfc25d6cb2ca07912e488a64beff8",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
