@@ -532,6 +532,12 @@ export default function WaterLocationNavigationClient() {
             >
               🚗 Πήγαινέ με
             </button>
+            <a
+              href={`/professional/infrastructure/water/live?lat=${encodeURIComponent(String(destination.latitude))}&lng=${encodeURIComponent(String(destination.longitude))}&from=road-navigation`}
+              className="rounded-2xl border border-cyan-300/60 bg-cyan-300/10 px-5 py-3 font-black text-cyan-100"
+            >
+              🗺️ Άνοιγμα δικτύου στο σημείο
+            </a>
             <span className="self-center text-sm font-bold text-emerald-100">
               {destination.label}
             </span>
