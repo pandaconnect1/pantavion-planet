@@ -1210,8 +1210,11 @@ export default function ControlledWaterSegmentClient() {
     if (!mapReady || !mapRef.current || typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
     if (params.get("from") !== "road-navigation") return;
-    const lat = Number(params.get("lat"));
-    const lng = Number(params.get("lng"));
+    const latRaw = params.get("lat");
+    const lngRaw = params.get("lng");
+    if (latRaw === null || lngRaw === null || !latRaw.trim() || !lngRaw.trim()) return;
+    const lat = Number(latRaw);
+    const lng = Number(lngRaw);
     if (!Number.isFinite(lat) || !Number.isFinite(lng) ||
         lat < -90 || lat > 90 || lng < -180 || lng > 180) return;
 
