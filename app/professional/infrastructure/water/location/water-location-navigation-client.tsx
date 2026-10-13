@@ -208,6 +208,31 @@ export default function WaterLocationNavigationClient() {
       }).addTo(map);
 
       mapRef.current = map;
+      // Reverse handoff: Map A can open road navigation at the same point.
+      // Coordinates are reference-only; this never grants protected network access.
+      const handoff = new URLSearchParams(window.location.search);
+      if (handoff.get("from") === "water-network") {
+        const latRaw = handoff.get("lat");
+        const lngRaw = handoff.get("lng");
+        const lat = latRaw === null ? NaN : Number(latRaw);
+        const lng = lngRaw === null ? NaN : Number(lngRaw);
+        if (Number.isFinite(lat) && Number.isFinite(lng) &&
+            lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+          const candidate: Candidate = {
+            id: `network-handoff-${lat}-${lng}`,
+            source: "pantavion",
+            label: "Σημείο από χάρτη ύδρευσης",
+            latitude: lat,
+            longitude: lng,
+            confidence: "reference",
+          };
+          setDestination(candidate);
+          L.circleMarker([lat, lng], { radius: 9, weight: 3, fillOpacity: 0.9 })
+            .bindTooltip(candidate.label).addTo(map);
+          map.setView([lat, lng], 18);
+          setMessage("Επιλέχθηκε σημείο από το δίκτυο. Πάτησε «Πήγαινέ με» για οδική διαδρομή.");
+        }
+      }
       window.setTimeout(() => map?.invalidateSize(), 300);
     });
 
