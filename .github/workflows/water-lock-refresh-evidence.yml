@@ -44,10 +44,18 @@ jobs:
           echo "water-network-runtime-lock.cjs sha256:"
           sha256sum scripts/pantavion-water-network-runtime-lock.cjs
 
+      - name: Validate application and protected segment behavior before refresh
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run lint
+          npm run typecheck
+          node --experimental-strip-types scripts/water-segment-reader-regression.mjs
+
       - name: Generate guarded refreshed manifest in runner
         env:
           PANTAVION_WATER_LOCK_REFRESH: "YES"
-          PANTAVION_WATER_LOCK_REFRESH_REASON: "Reviewed admin/session, bbox segmented delivery, admin access and controlled viewer changes; source truth and privacy invariants remain unchanged."
+          PANTAVION_WATER_LOCK_REFRESH_REASON: "Founder-authorized, CI-validated protected water navigation changes; immutable source truth and privacy invariants preserved. Review generated manifest diff before commit."
         run: |
           set -euo pipefail
           node scripts/refresh-water-network-runtime-lock.cjs
