@@ -214,8 +214,8 @@ export default function WaterLocationNavigationClient() {
       if (handoff.get("from") === "water-network") {
         const latRaw = handoff.get("lat");
         const lngRaw = handoff.get("lng");
-        const lat = latRaw === null ? NaN : Number(latRaw);
-        const lng = lngRaw === null ? NaN : Number(lngRaw);
+        const lat = latRaw?.trim() ? Number(latRaw) : NaN;
+        const lng = lngRaw?.trim() ? Number(lngRaw) : NaN;
         if (Number.isFinite(lat) && Number.isFinite(lng) &&
             lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
           const candidate: Candidate = {
