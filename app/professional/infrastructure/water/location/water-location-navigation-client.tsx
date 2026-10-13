@@ -208,6 +208,25 @@ export default function WaterLocationNavigationClient() {
       }).addTo(map);
 
       mapRef.current = map;
+      // GPS-free workflow: a tap selects a geographic reference point, not a verified asset.
+      map.on("click", (event: { latlng: { lat: number; lng: number } }) => {
+        const { lat, lng } = event.latlng;
+        const candidate: Candidate = {
+          id: `manual-${lat.toFixed(6)}-${lng.toFixed(6)}`,
+          source: "pantavion",
+          label: "Χειροκίνητο σημείο στον οδικό χάρτη",
+          latitude: lat,
+          longitude: lng,
+          confidence: "reference",
+        };
+        setDestination(candidate);
+        setRoute(null);
+        destinationMarkerRef.current?.remove();
+        destinationMarkerRef.current = L.circleMarker([lat, lng], {
+          radius: 9, weight: 3, fillOpacity: 0.9,
+        }).bindTooltip(candidate.label).addTo(map);
+        setMessage("Επιλέχθηκε σημείο χωρίς GPS. Μπορείς να ανοίξεις το δίκτυο ή να ζητήσεις πλοήγηση.");
+      });
       // Reverse handoff: Map A can open road navigation at the same point.
       // Coordinates are reference-only; this never grants protected network access.
       const handoff = new URLSearchParams(window.location.search);
@@ -353,7 +372,15 @@ export default function WaterLocationNavigationClient() {
     }
 
     const start = currentPosition || (await locate());
-    if (!start) return;
+    if (!start) {
+      // No device position: hand the destination to a navigation app, which can
+      // prompt for a starting point. Never invent a GPS position or route.
+      const destinationCoords = `${destination.latitude},${destination.longitude}`;
+      window.location.assign(
+        `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destinationCoords)}&travelmode=driving`,
+      );
+      return;
+    }
 
     setBusy(true);
     setMessage("Υπολογίζω διαδρομή...");
