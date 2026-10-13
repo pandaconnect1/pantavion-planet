@@ -224,7 +224,7 @@ export default function WaterLocationNavigationClient() {
         destinationMarkerRef.current?.remove();
         destinationMarkerRef.current = L.circleMarker([lat, lng], {
           radius: 9, weight: 3, fillOpacity: 0.9,
-        }).bindTooltip(candidate.label).addTo(map);
+        }).bindTooltip(candidate.label).addTo(event.target);
         setMessage("Επιλέχθηκε σημείο χωρίς GPS. Μπορείς να ανοίξεις το δίκτυο ή να ζητήσεις πλοήγηση.");
       });
       // Reverse handoff: Map A can open road navigation at the same point.
