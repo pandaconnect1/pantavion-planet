@@ -208,6 +208,50 @@ export default function WaterLocationNavigationClient() {
       }).addTo(map);
 
       mapRef.current = map;
+      // GPS-free workflow: a tap selects a geographic reference point, not a verified asset.
+      map.on("click", (event: { latlng: { lat: number; lng: number }; target: LeafletMap }) => {
+        const { lat, lng } = event.latlng;
+        const candidate: Candidate = {
+          id: `manual-${lat.toFixed(6)}-${lng.toFixed(6)}`,
+          source: "pantavion",
+          label: "Χειροκίνητο σημείο στον οδικό χάρτη",
+          latitude: lat,
+          longitude: lng,
+          confidence: "reference",
+        };
+        setDestination(candidate);
+        setRoute(null);
+        destinationMarkerRef.current?.remove();
+        destinationMarkerRef.current = L.circleMarker([lat, lng], {
+          radius: 9, weight: 3, fillOpacity: 0.9,
+        }).bindTooltip(candidate.label).addTo(event.target);
+        setMessage("Επιλέχθηκε σημείο χωρίς GPS. Μπορείς να ανοίξεις το δίκτυο ή να ζητήσεις πλοήγηση.");
+      });
+      // Reverse handoff: Map A can open road navigation at the same point.
+      // Coordinates are reference-only; this never grants protected network access.
+      const handoff = new URLSearchParams(window.location.search);
+      if (handoff.get("from") === "water-network") {
+        const latRaw = handoff.get("lat");
+        const lngRaw = handoff.get("lng");
+        const lat = latRaw?.trim() ? Number(latRaw) : NaN;
+        const lng = lngRaw?.trim() ? Number(lngRaw) : NaN;
+        if (Number.isFinite(lat) && Number.isFinite(lng) &&
+            lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+          const candidate: Candidate = {
+            id: `network-handoff-${lat}-${lng}`,
+            source: "pantavion",
+            label: "Σημείο από χάρτη ύδρευσης",
+            latitude: lat,
+            longitude: lng,
+            confidence: "reference",
+          };
+          setDestination(candidate);
+          L.circleMarker([lat, lng], { radius: 9, weight: 3, fillOpacity: 0.9 })
+            .bindTooltip(candidate.label).addTo(map);
+          map.setView([lat, lng], 18);
+          setMessage("Επιλέχθηκε σημείο από το δίκτυο. Πάτησε «Πήγαινέ με» για οδική διαδρομή.");
+        }
+      }
       window.setTimeout(() => map?.invalidateSize(), 300);
     });
 
@@ -328,7 +372,15 @@ export default function WaterLocationNavigationClient() {
     }
 
     const start = currentPosition || (await locate());
-    if (!start) return;
+    if (!start) {
+      // No device position: hand the destination to a navigation app, which can
+      // prompt for a starting point. Never invent a GPS position or route.
+      const destinationCoords = `${destination.latitude},${destination.longitude}`;
+      window.location.assign(
+        `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destinationCoords)}&travelmode=driving`,
+      );
+      return;
+    }
 
     setBusy(true);
     setMessage("Υπολογίζω διαδρομή...");
@@ -532,6 +584,12 @@ export default function WaterLocationNavigationClient() {
             >
               🚗 Πήγαινέ με
             </button>
+            <a
+              href={`/professional/infrastructure/water/live?lat=${encodeURIComponent(String(destination.latitude))}&lng=${encodeURIComponent(String(destination.longitude))}&from=road-navigation`}
+              className="rounded-2xl border border-cyan-300/60 bg-cyan-300/10 px-5 py-3 font-black text-cyan-100"
+            >
+              🗺️ Άνοιγμα δικτύου στο σημείο
+            </a>
             <span className="self-center text-sm font-bold text-emerald-100">
               {destination.label}
             </span>

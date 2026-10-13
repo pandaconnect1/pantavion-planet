@@ -1205,6 +1205,37 @@ export default function ControlledWaterSegmentClient() {
     }
   }
 
+  // Read-only road-to-network handoff. The protected segment API still enforces access.
+  useEffect(() => {
+    if (!mapReady || !mapRef.current || typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("from") !== "road-navigation") return;
+    const latRaw = params.get("lat");
+    const lngRaw = params.get("lng");
+    if (latRaw === null || lngRaw === null || !latRaw.trim() || !lngRaw.trim()) return;
+    const lat = Number(latRaw);
+    const lng = Number(lngRaw);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng) ||
+        lat < -90 || lat > 90 || lng < -180 || lng > 180) return;
+
+    let cancelled = false;
+    void (async () => {
+      try {
+        await placeCircleMarker({
+          lat, lng, kind: "search",
+          title: "Σημείο από οδική αναζήτηση",
+        });
+        if (cancelled) return;
+        moveMapToPoint(lat, lng);
+        setSelectedTarget({ lat, lng });
+        if (accessApproved) refreshCurrentViewportNow();
+      } catch {
+        if (!cancelled) setMessage("Δεν ήταν δυνατή η εστίαση στο σημείο.");
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [mapReady, accessApproved]);
+
   function moveMapToPoint(lat: number, lng: number) {
     const map = mapRef.current;
 
@@ -2438,6 +2469,15 @@ export default function ControlledWaterSegmentClient() {
             <button type="button" onClick={navigateToSelectedTarget} disabled={!selectedTarget} className="rounded-2xl border border-violet-400/60 bg-violet-400/15 px-5 py-3 text-sm font-black text-violet-100 disabled:opacity-40">
               {lang === "el" ? "Πήγαινέ με" : "Navigate"}
             </button>
+
+            {selectedTarget && (
+              <a
+                href={`/professional/infrastructure/water/location?lat=${encodeURIComponent(String(selectedTarget.lat))}&lng=${encodeURIComponent(String(selectedTarget.lng))}&from=water-network`}
+                className="rounded-2xl border border-cyan-400/60 bg-cyan-400/15 px-5 py-3 text-sm font-black text-cyan-100"
+              >
+                {lang === "el" ? "Οδική πλοήγηση στο σημείο" : "Road navigation to point"}
+              </a>
+            )}
 
             <button type="button" onClick={refreshCurrentViewportNow} disabled={loading} className="rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60">
               {loading ? t.loading : lang === "el" ? "Φόρτωση δικτύου" : "Load network"}

@@ -1,0 +1,29 @@
+name: Pantavion Kernel Ledger Integrity Audit
+on:
+  pull_request:
+    paths:
+      - "core/pantavion-kernel-ledger.ts"
+      - "scripts/pantavion-kernel-ledger-integrity-audit.cjs"
+      - ".github/workflows/pantavion-kernel-ledger-integrity-audit.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ledger-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify audit detects known failure modes
+        run: node scripts/pantavion-kernel-ledger-integrity-audit.cjs --self-test
+      - name: Inspect existing ledger and preserve findings as artifact
+        run: |
+          node scripts/pantavion-kernel-ledger-integrity-audit.cjs > kernel-ledger-integrity.json || echo "Known ledger durability risks detected; review required"
+          cat kernel-ledger-integrity.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kernel-ledger-integrity
+          path: kernel-ledger-integrity.json
