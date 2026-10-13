@@ -217,6 +217,7 @@ export default function MasterBMobilePage() {
   const [error, setError] = useState("");
   const [tileLimit, setTileLimit] = useState(48);
   const [layerQuery, setLayerQuery] = useState("");
+  const [selectedDrawingPoint, setSelectedDrawingPoint] = useState<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -529,9 +530,45 @@ export default function MasterBMobilePage() {
               </div>
             </div>
 
+            <div className="mb-3 rounded-xl border border-slate-700 bg-[#091426] p-3 text-sm text-slate-200">
+              <p className="font-bold">Επιλογή σημείου χωρίς GPS — Map {viewId}</p>
+              <p className="mt-1 text-xs text-slate-400">
+                Πάτησε στο σχέδιο για να σημειώσεις θέση σε συντεταγμένες DWG. Η επιλογή δεν
+                ισοδυναμεί με πραγματικό GPS και δεν αλλάζει το αυθεντικό δίκτυο.
+              </p>
+              {selectedDrawingPoint && (
+                <p className="mt-2 font-mono text-xs">
+                  CAD X: {selectedDrawingPoint.x.toFixed(2)} · Y: {selectedDrawingPoint.y.toFixed(2)}
+                </p>
+              )}
+              {selectedDrawingPoint && manifest?.geographicAlignmentVerified !== true && (
+                <p className="mt-2 text-xs text-amber-300">
+                  Η γεωαναφορά δεν έχει επαληθευτεί. Η οδική πλοήγηση από αυτό το σημείο
+                  παραμένει κλειδωμένη για να μη δοθούν λανθασμένες οδηγίες.
+                </p>
+              )}
+              <a
+                href="/professional/infrastructure/water/location"
+                className="mt-3 inline-block rounded-lg border border-sky-400/60 px-3 py-2 text-xs font-bold text-sky-200"
+              >
+                Άνοιγμα οδικού χάρτη (χωρίς μεταφορά μη επαληθευμένων συντεταγμένων)
+              </a>
+            </div>
             <div className="h-[68vh] min-h-[460px] overflow-hidden rounded-2xl border border-slate-800 bg-white">
               {bounds ? (
                 <svg
+                  onClick={(event) => {
+                    // CAD drawing coordinates only. Never interpret as GPS without verified georeferencing.
+                    const svg = event.currentTarget;
+                    const matrix = svg.getScreenCTM();
+                    if (!matrix) return;
+                    const point = svg.createSVGPoint();
+                    point.x = event.clientX;
+                    point.y = event.clientY;
+                    const local = point.matrixTransform(matrix.inverse());
+                    if (!Number.isFinite(local.x) || !Number.isFinite(local.y)) return;
+                    setSelectedDrawingPoint({ x: local.x, y: bounds.minY + bounds.maxY - local.y });
+                  }}
                   viewBox={viewBox}
                   className="h-full w-full touch-pan-x touch-pan-y"
                   preserveAspectRatio="xMidYMid meet"
@@ -576,6 +613,18 @@ export default function MasterBMobilePage() {
                       </circle>
                     ))}
                   </g>
+
+                  {selectedDrawingPoint && (
+                    <circle
+                      cx={selectedDrawingPoint.x}
+                      cy={bounds.minY + bounds.maxY - selectedDrawingPoint.y}
+                      r="7"
+                      fill="none"
+                      stroke="#ea580c"
+                      strokeWidth="3"
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  )}
 
                   {bounds
                     ? filteredLabels.slice(0, 2000).map(([x, y, layerId, text], index) => (
