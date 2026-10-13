@@ -2470,6 +2470,15 @@ export default function ControlledWaterSegmentClient() {
               {lang === "el" ? "Πήγαινέ με" : "Navigate"}
             </button>
 
+            {selectedTarget && (
+              <a
+                href={`/professional/infrastructure/water/location?lat=${encodeURIComponent(String(selectedTarget.lat))}&lng=${encodeURIComponent(String(selectedTarget.lng))}&from=water-network`}
+                className="rounded-2xl border border-cyan-400/60 bg-cyan-400/15 px-5 py-3 text-sm font-black text-cyan-100"
+              >
+                {lang === "el" ? "Οδική πλοήγηση στο σημείο" : "Road navigation to point"}
+              </a>
+            )}
+
             <button type="button" onClick={refreshCurrentViewportNow} disabled={loading} className="rounded-2xl border border-emerald-500/60 bg-emerald-500/15 px-5 py-3 text-sm font-black text-emerald-100 disabled:opacity-60">
               {loading ? t.loading : lang === "el" ? "Φόρτωση δικτύου" : "Load network"}
             </button>
