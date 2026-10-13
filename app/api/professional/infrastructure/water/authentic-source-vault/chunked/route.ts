@@ -50,7 +50,7 @@ export async function POST(request: Request) {
   }
 
   if (action === "sign-chunk-upload" &&
-      (!Number.isInteger(body?.chunkIndex) || Number(body?.chunkIndex) < 0)) {
+      (typeof body?.chunkIndex !== "number" || !Number.isInteger(body.chunkIndex) || body.chunkIndex < 0)) {
     return response({ ok: false, error: "invalid_chunk_index" }, 400);
   }
 
