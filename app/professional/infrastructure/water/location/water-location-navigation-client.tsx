@@ -209,7 +209,7 @@ export default function WaterLocationNavigationClient() {
 
       mapRef.current = map;
       // GPS-free workflow: a tap selects a geographic reference point, not a verified asset.
-      map.on("click", (event: { latlng: { lat: number; lng: number } }) => {
+      map.on("click", (event: { latlng: { lat: number; lng: number }; target: LeafletMap }) => {
         const { lat, lng } = event.latlng;
         const candidate: Candidate = {
           id: `manual-${lat.toFixed(6)}-${lng.toFixed(6)}`,
