@@ -1205,6 +1205,34 @@ export default function ControlledWaterSegmentClient() {
     }
   }
 
+  // Read-only road-to-network handoff. The protected segment API still enforces access.
+  useEffect(() => {
+    if (!mapReady || !mapRef.current || typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("from") !== "road-navigation") return;
+    const lat = Number(params.get("lat"));
+    const lng = Number(params.get("lng"));
+    if (!Number.isFinite(lat) || !Number.isFinite(lng) ||
+        lat < -90 || lat > 90 || lng < -180 || lng > 180) return;
+
+    let cancelled = false;
+    void (async () => {
+      try {
+        await placeCircleMarker({
+          lat, lng, kind: "search",
+          title: "Σημείο από οδική αναζήτηση",
+        });
+        if (cancelled) return;
+        moveMapToPoint(lat, lng);
+        setSelectedTarget({ lat, lng });
+        if (accessApproved) refreshCurrentViewportNow();
+      } catch {
+        if (!cancelled) setMessage("Δεν ήταν δυνατή η εστίαση στο σημείο.");
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [mapReady, accessApproved]);
+
   function moveMapToPoint(lat: number, lng: number) {
     const map = mapRef.current;
 
