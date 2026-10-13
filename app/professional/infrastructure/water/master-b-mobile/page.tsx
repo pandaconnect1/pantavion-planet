@@ -182,12 +182,12 @@ export default function MasterBMobilePage() {
 
   const sourceLabel =
     viewId === "D"
-      ? "Map D — δεύτερη προβολή του Map B"
+      ? "Map D"
       : viewId === "E"
-        ? "Map E — δεύτερη προβολή του Map C"
+        ? "Map E"
         : sourceKey === "legacy-george-85m"
-          ? "Map C — GEORGE 85 MB"
-          : "Map B — ANDREASPAP 2026";
+          ? "Map C"
+          : "Map B";
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
