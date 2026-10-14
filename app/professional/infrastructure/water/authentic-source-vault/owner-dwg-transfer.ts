@@ -1,8 +1,10 @@
 "use client";
 
-import * as tus from "tus-js-client";
-
-const ENDPOINT = "https://cxhulvwkagzufbjsdwwu.storage.supabase.co/storage/v1/upload/resumable";
+// Each 32 MiB piece is a separate private object. Upload it with Supabase's
+// official signed-object PUT endpoint, not TUS: the latter rejected a valid
+// signed token with "Invalid Compact JWS" before creating a TUS session.
+const SUPABASE_SIGNED_OBJECT_ROOT =
+  "https://cxhulvwkagzufbjsdwwu.supabase.co/storage/v1/object/upload/sign";
 export const PIECE_BYTES = 32 * 1024 * 1024;
 export const MAX_FILE_BYTES = 512 * 1024 * 1024;
 
@@ -63,33 +65,65 @@ export async function hashDwgPieces(file: File, onProgress: (done: number, total
   return hashes;
 }
 
+/**
+ * PUT one independently signed private object, following Supabase's
+ * uploadToSignedUrl wire format: multipart form-data, cacheControl field,
+ * PUT /storage/v1/object/upload/sign/<bucket>/<path>?token=<signed token>.
+ *
+ * No privileged server credentials, new storage policy, browser bearer token,
+ * canonical-map mutation, or raw master disclosure is involved.
+ */
 export async function uploadSignedDwgPiece(
   blob: Blob, requestId: string, index: number, signed: IntakeResult,
   onProgress: (bytes: number) => void,
-) {
-  if (!signed.bucket || !signed.path || !signed.token) throw new Error("water_signed_piece_incomplete");
-  return new Promise<void>((resolve, reject) => {
-    const upload = new tus.Upload(blob, {
-      endpoint: ENDPOINT,
-      chunkSize: 6 * 1024 * 1024,
-      retryDelays: [0, 3000, 5000, 10000, 20000],
-      uploadDataDuringCreation: true,
-      removeFingerprintOnSuccess: true,
-      fingerprint: async () => `pantavion-owner-dwg-${requestId}-${index}`,
-      headers: { "x-signature": signed.token!, "x-upsert": "false" },
-      metadata: {
-        bucketName: signed.bucket!,
-        objectName: signed.path!,
-        contentType: "application/octet-stream",
-        cacheControl: "0",
-      },
-      onProgress: sent => onProgress(sent),
-      onError: reject,
-      onSuccess: () => resolve(),
-    });
-    void upload.findPreviousUploads().then(previous => {
-      if (previous.length) upload.resumeFromPreviousUpload(previous[0]);
-      upload.start();
-    }).catch(reject);
+): Promise<void> {
+  const chunkName = String(index).padStart(3, "0") + ".part";
+  const expectedPathSuffix = `/${requestId}/chunks/${chunkName}`;
+  if (
+    !signed.bucket || signed.bucket !== "personal-media" ||
+    !signed.path ||
+    !signed.path.startsWith("water-network-private/owner-intake/map-") ||
+    !signed.path.endsWith(expectedPathSuffix) ||
+    !signed.token ||
+    signed.expectedChunkSizeBytes !== blob.size
+  ) {
+    throw new Error("water_signed_piece_authorization_mismatch");
+  }
+
+  const target = new URL(
+    `${SUPABASE_SIGNED_OBJECT_ROOT}/${signed.bucket}/${signed.path}`,
+  );
+  target.searchParams.set("token", signed.token);
+
+  const payload = new FormData();
+  payload.append("cacheControl", "0");
+  payload.append("", blob, chunkName);
+
+  // Use XHR here to keep *real* upload-byte progress on mobile. Every 32MiB
+  // piece can be retried/resumed as a whole without re-uploading prior pieces.
+  await new Promise<void>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("PUT", target.toString());
+    xhr.timeout = 10 * 60 * 1000;
+    xhr.setRequestHeader("x-upsert", "false");
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable && event.total > 0) {
+        onProgress(Math.min(blob.size, Math.round(blob.size * event.loaded / event.total)));
+      }
+    };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        onProgress(blob.size);
+        resolve();
+      } else {
+        // Never show or log the signed URL / bearer token in diagnostic text.
+        const text = xhr.responseText?.slice(0, 240) || "storage_rejected";
+        reject(new Error(`water_signed_put_failed_${xhr.status}: ${text}`));
+      }
+    };
+    xhr.onerror = () => reject(new Error("water_signed_put_network_error"));
+    xhr.ontimeout = () => reject(new Error("water_signed_put_timeout"));
+    xhr.onabort = () => reject(new Error("water_signed_put_aborted"));
+    xhr.send(payload);
   });
 }
