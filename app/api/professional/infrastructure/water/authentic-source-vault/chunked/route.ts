@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { POST as internalWaterObjectTransfer } from "@/app/api/internal/water/object-transfer/route";
 import { hasWaterAdminAuthorization } from "@/core/security/water-admin-authorization";
+import { isAllowedWaterVaultOrigin } from "@/core/security/water-vault-origin";
 
 /**
  * Authenticated founder/admin bridge for canonical Water B and C source ingestion.
@@ -30,15 +31,11 @@ export async function POST(request: Request) {
     return response({ ok: false, error: "water_admin_session_required" }, 403);
   }
 
-  const origin = request.headers.get("origin");
-  if (origin) {
-    try {
-      if (new URL(origin).host !== new URL(request.url).host) {
-        return response({ ok: false, error: "water_upload_origin_denied" }, 403);
-      }
-    } catch {
-      return response({ ok: false, error: "water_upload_origin_invalid" }, 403);
-    }
+  // pantavion.com is fronted by Render, whose internal request URL host can
+  // differ from the browser's. Validate Origin against an exact allowlist,
+  // rather than trusting host / x-forwarded-host from the request.
+  if (!isAllowedWaterVaultOrigin(request.headers.get("origin"))) {
+    return response({ ok: false, error: "water_upload_origin_denied" }, 403);
   }
 
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
