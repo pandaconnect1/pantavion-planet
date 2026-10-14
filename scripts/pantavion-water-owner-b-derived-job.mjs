@@ -17,6 +17,18 @@ const admin = createClient(
 
 async function main() {
   if (!process.env.SUPABASE_SECRET_KEY) throw Error("admin_credential_missing");
+  const path = "water-network-private/derived/map-b/" + source.sha256 + "/manifest.json";
+  const existing = await admin.storage.from("personal-media").download(path);
+  if (!existing.error && existing.data) {
+    const manifest = JSON.parse(await existing.data.text());
+    if (manifest.ok !== true || manifest.sourceSha256 !== source.sha256 ||
+        !Array.isArray(manifest.tiles) || manifest.tiles.length === 0 ||
+        manifest.geographicAlignmentVerified !== false) {
+      throw Error("existing_derived_manifest_invalid");
+    }
+    console.log(JSON.stringify({ ok: true, mapId: "B", state: "derived_ready", tiles: manifest.tiles.length }));
+    return;
+  }
   const original = await loadApprovedOwnerDwg(admin, source);
   if (!original) throw Error("approved_exact_original_not_found");
   const work = mkdtempSync(join(tmpdir(), "water-b-"));
@@ -34,7 +46,6 @@ async function main() {
       },
     });
     if (result.error || result.status !== 0) throw Error("derived_generator_failed");
-    const path = "water-network-private/derived/map-b/" + source.sha256 + "/manifest.json";
     const { data, error } = await admin.storage.from("personal-media").download(path);
     if (error || !data) throw Error("derived_manifest_missing");
     const manifest = JSON.parse(await data.text());
