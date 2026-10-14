@@ -40,7 +40,15 @@ jobs:
       - name: Install exact application dependencies
         run: npm ci --no-audit --no-fund
 
+      - name: Restore verified GNU LibreDWG 0.14 native build
+        uses: actions/cache/restore@v4
+        id: native-cache
+        with:
+          path: ${{ runner.temp }}/libredwg
+          key: pantavion-water-libredwg-0.14-ubuntu2404-v1
+
       - name: Build GNU LibreDWG 0.14 native CLI from official source
+        if: steps.native-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -52,9 +60,21 @@ jobs:
           cd "$RUNNER_TEMP/libredwg"
           ./autogen.sh > "$RUNNER_TEMP/libredwg-autogen.log" 2>&1
           ./configure --enable-release --disable-bindings > "$RUNNER_TEMP/libredwg-config.log" 2>&1
-          make -j2 > "$RUNNER_TEMP/libredwg-build.log" 2>&1
+          make -j4 > "$RUNNER_TEMP/libredwg-build.log" 2>&1
           test -x programs/dwg2dxf
-          programs/dwg2dxf --version | head -n 2
+
+      - name: Cache compiled native binary for safe diagnostic retries
+        if: steps.native-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/libredwg
+          key: pantavion-water-libredwg-0.14-ubuntu2404-v1
+
+      - name: Configure isolated native converter
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -x "$RUNNER_TEMP/libredwg/programs/dwg2dxf"
           echo "PANTAVION_NATIVE_DWG2DXF=$RUNNER_TEMP/libredwg/programs/dwg2dxf" >> "$GITHUB_ENV"
           echo "LD_LIBRARY_PATH=$RUNNER_TEMP/libredwg/src" >> "$GITHUB_ENV"
 
