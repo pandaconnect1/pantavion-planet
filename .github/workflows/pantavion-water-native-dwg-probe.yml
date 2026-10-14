@@ -1,0 +1,91 @@
+name: Pantavion Water B Native DWG Diagnostic
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/pantavion-water-native-dwg-probe.yml"
+      - "scripts/pantavion-water-owner-b-native-probe.mjs"
+      - "scripts/pantavion-water-native-dxf-probe.py"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-water-b-native-dwg-probe
+  cancel-in-progress: false
+
+jobs:
+  native-dwg-diagnostic:
+    name: Verify native DWG conversion on approved Map B without publication
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+    steps:
+      - name: Require existing production Supabase binding
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${SUPABASE_ACCESS_TOKEN:-}"
+          test "${SUPABASE_PROJECT_REF:-}" = "cxhulvwkagzufbjsdwwu"
+
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install exact application dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build GNU LibreDWG 0.14 native CLI from official source
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            build-essential automake autoconf libtool libtool-bin pkg-config \
+            texinfo help2man git python3 python3-dev
+          git clone --quiet --branch 0.14 --depth 1 https://github.com/LibreDWG/libredwg.git "$RUNNER_TEMP/libredwg"
+          cd "$RUNNER_TEMP/libredwg"
+          ./autogen.sh > "$RUNNER_TEMP/libredwg-autogen.log" 2>&1
+          ./configure --enable-release --disable-bindings > "$RUNNER_TEMP/libredwg-config.log" 2>&1
+          make -j2 > "$RUNNER_TEMP/libredwg-build.log" 2>&1
+          test -x programs/dwg2dxf
+          programs/dwg2dxf --version | head -n 2
+          echo "PANTAVION_NATIVE_DWG2DXF=$RUNNER_TEMP/libredwg/programs/dwg2dxf" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$RUNNER_TEMP/libredwg/src" >> "$GITHUB_ENV"
+
+      - name: Set up authorized Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Resolve private key in runner without logging value
+        id: supabase-key
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          key_file="$RUNNER_TEMP/pantavion-water-probe-key"
+          json_file="$RUNNER_TEMP/pantavion-water-probe-keys.json"
+          supabase projects api-keys --project-ref "$SUPABASE_PROJECT_REF" --output json > "$json_file"
+          jq -r '[.[] | select((.type == "secret") or (.name == "service_role")) | .api_key][0] // empty' "$json_file" > "$key_file"
+          rm -f "$json_file"
+          key="$(cat "$key_file")"
+          test ${#key} -ge 32
+          echo "::add-mask::$key"
+          echo "key_file=$key_file" >> "$GITHUB_OUTPUT"
+
+      - name: Verify exact original, convert in isolation, inspect output without publishing
+        shell: bash
+        env:
+          KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
+        run: |
+          set -euo pipefail
+          export SUPABASE_SECRET_KEY="$(cat "$KEY_FILE")"
+          node scripts/pantavion-water-owner-b-native-probe.mjs
+          unset SUPABASE_SECRET_KEY
+          rm -f "$KEY_FILE"
