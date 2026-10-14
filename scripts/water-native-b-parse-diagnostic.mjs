@@ -42,7 +42,17 @@ try {
     previewBytes: exists, featurePresent, documentClosed: closed,
     note: "A provisional source-CAD probe, never GIS alignment or live publish",
     errorTail: result.stderr?.slice(-800) }));
-  if (result.status !== 0 || !featurePresent || !closed) process.exitCode = 1;
+  if (result.status !== 0 || !featurePresent || !closed) {
+    throw Error("native_GeoJSON_export_incomplete");
+  }
+  const inspected = spawnSync("python3",
+    ["scripts/water-native-b-geojson-probe.py", geojson],
+    { encoding: "utf8", timeout: 240000, maxBuffer: 1024 * 1024 });
+  console.log(inspected.stdout.slice(-4000));
+  if (inspected.status !== 0) {
+    console.error(inspected.stderr.slice(-1000));
+    throw Error("native_GeoJSON_stream_inspection_failed");
+  }
 } finally {
   rmSync(dir, { recursive: true, force: true });
 }
