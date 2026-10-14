@@ -40,6 +40,11 @@ jobs:
       - name: Install exact application dependencies
         run: npm ci --no-audit --no-fund
 
+      - name: Check native diagnostic scripts before expensive conversion
+        run: |
+          node --check scripts/pantavion-water-owner-b-native-probe.mjs
+          python3 -m py_compile scripts/pantavion-water-native-dxf-probe.py
+
       - name: Restore verified GNU LibreDWG 0.14 native build
         uses: actions/cache/restore@v4
         id: native-cache
