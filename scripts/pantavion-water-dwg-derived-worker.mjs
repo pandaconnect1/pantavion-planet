@@ -107,7 +107,9 @@ async function run() {
   const summary = [];
 
   for (const source of SOURCES) {
-    const verified = (await verifiedIngestExists(source)) || (await verifiedTransferExists(source));
+    const verified = (await verifiedIngestExists(source)) ||
+      (await verifiedTransferExists(source)) ||
+      Boolean(await findApprovedOwnerSource(admin, source));
     if (!verified) {
       summary.push({
         mapId: source.mapId,
