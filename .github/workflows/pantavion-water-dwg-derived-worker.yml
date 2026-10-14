@@ -9,6 +9,10 @@ on:
     paths:
       - "scripts/pantavion-water-dwg-derived-worker.mjs"
       - "scripts/pantavion-water-map-b-generate-derived.mjs"
+      - "scripts/water-approved-owner-source.mjs"
+      - "scripts/water-approved-owner-resolver.mjs"
+      - "scripts/water-approved-owner-dwg-loader.mjs"
+      - "scripts/water-approved-owner-dwg-regression.mjs"
       - "core/water/water-map-b-source-candidates.ts"
       - ".github/workflows/pantavion-water-dwg-derived-worker.yml"
 
@@ -51,6 +55,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
+
+      - name: Verify approved founder-selected DWG is exact and access-controlled
+        run: node scripts/water-approved-owner-dwg-regression.mjs
 
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
