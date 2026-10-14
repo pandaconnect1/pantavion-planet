@@ -12,6 +12,10 @@ on:
       - "scripts/water-approved-owner-source.mjs"
       - "scripts/water-approved-owner-resolver.mjs"
       - "scripts/water-approved-owner-dwg-loader.mjs"
+      - "scripts/pantavion-water-owner-b-derived-job.mjs"
+      - "scripts/water-approved-owner-source.mjs"
+      - "scripts/water-approved-owner-resolver.mjs"
+      - "scripts/water-approved-owner-dwg-loader.mjs"
       - "scripts/water-approved-owner-dwg-regression.mjs"
       - "core/water/water-map-b-source-candidates.ts"
       - ".github/workflows/pantavion-water-dwg-derived-worker.yml"
@@ -93,4 +97,7 @@ jobs:
           export SUPABASE_SECRET_KEY="$(cat "$KEY_FILE")"
           export SUPABASE_URL="https://cxhulvwkagzufbjsdwwu.supabase.co"
           node scripts/pantavion-water-dwg-derived-worker.mjs
+          # Strictly founder-approved exact Map B bytes only; no raw overwrite.
+          # Fail if derived geometry cannot be produced or verified.
+          node scripts/pantavion-water-owner-b-derived-job.mjs
           rm -f "$KEY_FILE"
