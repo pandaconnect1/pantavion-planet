@@ -54,6 +54,9 @@ jobs:
       - name: Verify canonical Water vault upload origin policy
         run: node --no-warnings --experimental-strip-types scripts/water-vault-origin-regression.mjs
 
+      - name: Verify founder-selected DWG private intake and review gates
+        run: node --no-warnings --experimental-strip-types scripts/water-owner-selected-dwg-contract-test.mjs
+
       - name: Pantavion AI audit if present
         run: npm run audit:pantavion --if-present
 

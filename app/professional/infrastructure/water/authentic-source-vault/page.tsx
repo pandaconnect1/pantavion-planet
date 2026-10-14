@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import ChunkedSourceUploader from "./chunked-source-uploader";
+import OwnerSelectedDwgUploader from "./owner-selected-dwg-uploader";
 
 import * as tus from "tus-js-client";
 
@@ -469,21 +469,28 @@ export default function AuthenticSourceVaultPage() {
             Raw originals only
           </h1>
           <p className="mt-3 max-w-4xl text-sm font-semibold leading-7 text-slate-200">
-            NO CONVERSION · NO MERGE · NO GEOMETRY EDIT · NO OVERWRITE.
-            The selected DWG bytes are uploaded unchanged into private storage,
-            then read back and SHA-256 verified against the locked original.
+            Εσύ επιλέγεις ποιο DWG θα αποθηκευτεί για τον Map B ή C.
+            Τα αρχικά δεδομένα παραμένουν ιδιωτικά και αμετάβλητα.
+            Καμία ενεργή γεωμετρία δεν αντικαθίσταται πριν από έλεγχο και έγκριση.
           </p>
         </div>
 
         <div className="mt-6 grid gap-5">
           <KmzNetworkUploader />
-          {SOURCES.map((source) =>
-            source.id === "map-b-canonical" || source.id === "map-c-canonical" ? (
-              <ChunkedSourceUploader key={source.id} source={source} />
-            ) : (
-              <SourceUploader key={source.id} source={source} />
-            ),
-          )}
+          <OwnerSelectedDwgUploader targetMap="B" />
+          <OwnerSelectedDwgUploader targetMap="C" />
+          <a
+            href="/professional/infrastructure/water/admin/map-sources"
+            className="rounded-2xl border border-emerald-500/50 px-5 py-4 font-bold text-emerald-200"
+          >
+            Έλεγχος υποβολών και έγκριση από Founder →
+          </a>
+          <p className="mt-4 text-xs font-bold uppercase tracking-widest text-slate-400">
+            Ιστορικά, κλειδωμένα πρωτότυπα (δεν επηρεάζονται)
+          </p>
+          {SOURCES.filter((source) => source.id !== "map-b-canonical" && source.id !== "map-c-canonical").map((source) => (
+            <SourceUploader key={source.id} source={source} />
+          ))}
         </div>
       </section>
     </main>
