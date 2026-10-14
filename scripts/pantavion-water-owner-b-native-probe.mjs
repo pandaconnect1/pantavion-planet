@@ -38,9 +38,9 @@ async function main() {
     writeFileSync(input, original.buffer, { mode: 0o600, flag: "wx" });
     const run = spawnSync(bin, ["--as", "r2018", "-o", output, input], {
       timeout: 22 * 60 * 1000,
-      maxBuffer: 16 * 1024 * 1024,
+      // Avoid Node spawnSync maxBuffer termination on huge CAD output.
+      stdio: "ignore",
       env: { ...process.env, LIBREDWG_TRACE: "0" },
-      encoding: "utf8",
     });
     const generatedBytes = (() => {
       try { return statSync(output).size; } catch { return 0; }
@@ -51,7 +51,8 @@ async function main() {
       exitCode: run.status,
       signal: run.signal || null,
       outputBytes: generatedBytes,
-      timeout: run.error?.code === "ETIMEDOUT",\n      processErrorCode: run.error?.code || null,
+      timeout: run.error?.code === "ETIMEDOUT",
+      processErrorCode: run.error?.code || null,
     }));
     if (run.error || run.status !== 0 || generatedBytes < 1000) {
       throw new Error("native_probe_conversion_incomplete");
