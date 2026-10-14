@@ -474,6 +474,14 @@ async function loadSourceBuffer() {
   const chunked = await loadChunkedCanonical(admin);
   if (chunked) return chunked;
 
+  // The founder's 7-piece private upload is a different, intentionally
+  // staged representation from the older canonical source-master path.
+  // Accept it ONLY after the founder approved GIS review and both the
+  // stored evidence and the exact original bytes verify against EXPECTED.
+  // The derived output is still a source-CAD preview, not GIS alignment.
+  const ownerApproved = await loadApprovedOwnerDwg(admin, EXPECTED);
+  if (ownerApproved) return ownerApproved;
+
   fail("map_b_source_private_download_failed", {
     storageBucket: STORAGE.bucket,
     storagePath: STORAGE.sourcePath,
