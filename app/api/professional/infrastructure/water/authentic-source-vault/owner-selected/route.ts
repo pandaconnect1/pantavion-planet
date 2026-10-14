@@ -337,8 +337,8 @@ async function verify(row: CandidateRow) {
       return reply({ ok: false, error: "owner_dwg_part_bytes_mismatch", index: part.index }, 409);
     }
     const pieceSha256 = partHash.digest("hex");
-    const expectedChunkHash = Array.isArray(row.metadata?.expectedChunkSha256)
-      ? row.metadata.expectedChunkSha256[part.index] : null;
+    const originalHashes = row.metadata?.expectedChunkSha256;
+    const expectedChunkHash = Array.isArray(originalHashes) ? originalHashes[part.index] : null;
     if (pieceSha256 !== expectedChunkHash) {
       return reply({ ok: false, error: "owner_dwg_original_piece_hash_mismatch", index: part.index }, 409);
     }
