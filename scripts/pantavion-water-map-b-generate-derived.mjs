@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 
 import { createClient } from "@supabase/supabase-js";
 import { Dwg_File_Type, LibreDwg } from "@mlightcad/libredwg-web";
+import { loadApprovedOwnerDwg } from "./water-approved-owner-dwg-loader.mjs";
 
 const SOURCES = {
   "canonical-2026-andreaspap": {
