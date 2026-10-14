@@ -393,6 +393,12 @@ export default function WaterApprovalInboxPage() {
             Αλλαγές δικτύου / φωτογραφίες
           </Link>
           <Link
+            href="/professional/infrastructure/water/admin/map-sources"
+            className="text-sm font-black text-amber-300"
+          >
+            Έγκριση αρχείων DWG (Map B/C)
+          </Link>
+          <Link
             href="/professional/infrastructure/water/admin/alignment"
             className="text-sm font-black text-cyan-300"
           >
