@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import ChunkedSourceUploader from "./chunked-source-uploader";
+
 import * as tus from "tus-js-client";
 
 const SUPABASE_PROJECT_ID = "cxhulvwkagzufbjsdwwu";
@@ -475,9 +477,13 @@ export default function AuthenticSourceVaultPage() {
 
         <div className="mt-6 grid gap-5">
           <KmzNetworkUploader />
-          {SOURCES.map((source) => (
-            <SourceUploader key={source.id} source={source} />
-          ))}
+          {SOURCES.map((source) =>
+            source.id === "map-b-canonical" || source.id === "map-c-canonical" ? (
+              <ChunkedSourceUploader key={source.id} source={source} />
+            ) : (
+              <SourceUploader key={source.id} source={source} />
+            ),
+          )}
         </div>
       </section>
     </main>
