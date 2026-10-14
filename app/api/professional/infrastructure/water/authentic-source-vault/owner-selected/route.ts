@@ -157,6 +157,12 @@ async function begin(body: Record<string, unknown>) {
     header: body.header,
   });
   if (!input) return reply({ ok: false, error: "owner_dwg_invalid_file_or_target" }, 400);
+  const submittedHashes = body.chunkSha256;
+  if (!Array.isArray(submittedHashes) ||
+      submittedHashes.length !== ownerDwgPieceCount(input.fileSize) ||
+      !submittedHashes.every(item => typeof item === "string" && /^[0-9a-f]{64}$/.test(item))) {
+    return reply({ ok: false, error: "owner_dwg_expected_piece_hashes_required" }, 400);
+  }
 
   const admin = createAdminClient();
   const { count, error: countError } = await admin.from(CATALOG)
@@ -191,6 +197,7 @@ async function begin(body: Record<string, unknown>) {
       dwgHeader: input.header,
       chunkSizeBytes: OWNER_DWG_CHUNK_BYTES,
       totalChunks: ownerDwgPieceCount(input.fileSize),
+      expectedChunkSha256: submittedHashes,
       representation: OWNER_DWG_REPRESENTATION,
       rawPreservationRequired: true,
       canonicalMutationAllowed: false,
@@ -234,6 +241,7 @@ async function status(row: CandidateRow) {
     header,
     totalChunks: pieces.length,
     chunks: pieces,
+    expectedChunkSha256: row.metadata?.expectedChunkSha256,
     verified,
     sha256: verified ? row.sha256 : null,
     ingestState: row.ingest_state,
@@ -328,7 +336,13 @@ async function verify(row: CandidateRow) {
     if (partBytes !== part.expectedBytes) {
       return reply({ ok: false, error: "owner_dwg_part_bytes_mismatch", index: part.index }, 409);
     }
-    chunkHashes.push({ index: part.index, path, bytes: partBytes, sha256: partHash.digest("hex") });
+    const pieceSha256 = partHash.digest("hex");
+    const expectedChunkHash = Array.isArray(row.metadata?.expectedChunkSha256)
+      ? row.metadata.expectedChunkSha256[part.index] : null;
+    if (pieceSha256 !== expectedChunkHash) {
+      return reply({ ok: false, error: "owner_dwg_original_piece_hash_mismatch", index: part.index }, 409);
+    }
+    chunkHashes.push({ index: part.index, path, bytes: partBytes, sha256: pieceSha256 });
   }
 
   const header = headerBytes.toString("ascii");
