@@ -51,7 +51,7 @@ async function main() {
       exitCode: run.status,
       signal: run.signal || null,
       outputBytes: generatedBytes,
-      timeout: run.error?.code === "ETIMEDOUT",
+      timeout: run.error?.code === "ETIMEDOUT",\n      processErrorCode: run.error?.code || null,
     }));
     if (run.error || run.status !== 0 || generatedBytes < 1000) {
       throw new Error("native_probe_conversion_incomplete");
