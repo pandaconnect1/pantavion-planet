@@ -69,6 +69,9 @@ jobs:
       - name: Verify Map B derived geometry generator
         run: npm run test:water-map-b-derived-generator
 
+      - name: Verify founder-approved exact DWG ingestion and corruption rejection
+        run: node scripts/water-approved-owner-dwg-regression.mjs
+
       - name: Build
         run: npm run build
 
