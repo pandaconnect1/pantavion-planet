@@ -57,6 +57,9 @@ jobs:
       - name: Verify founder-selected DWG private intake and review gates
         run: node --no-warnings --experimental-strip-types scripts/water-owner-selected-dwg-contract-test.mjs
 
+      - name: Verify signed object PUT upload after TUS authentication failure
+        run: node --no-warnings --experimental-strip-types scripts/water-owner-dwg-signed-put-test.mjs
+
       - name: Pantavion AI audit if present
         run: npm run audit:pantavion --if-present
 
