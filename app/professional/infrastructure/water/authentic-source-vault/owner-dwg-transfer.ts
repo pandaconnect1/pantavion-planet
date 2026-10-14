@@ -82,7 +82,8 @@ export async function uploadSignedDwgPiece(
   if (
     !signed.bucket || signed.bucket !== "personal-media" ||
     !signed.path ||
-    !signed.path.startsWith("water-network-private/owner-intake/map-") ||
+    !(signed.path.startsWith("water-network-private/owner-intake/map-b/") ||
+      signed.path.startsWith("water-network-private/owner-intake/map-c/")) ||
     !signed.path.endsWith(expectedPathSuffix) ||
     !signed.token ||
     signed.expectedChunkSizeBytes !== blob.size
