@@ -40,6 +40,8 @@ jobs:
           sudo ldconfig
           command -v dwgread
           dwgread --version
+      - name: Install streaming GeoJSON parser
+        run: python3 -m pip install --quiet --break-system-packages ijson
       - name: Resolve project-specific secret at runtime without logging it
         uses: supabase/setup-cli@v1
         with:
