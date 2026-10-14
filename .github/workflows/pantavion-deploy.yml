@@ -51,6 +51,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Verify canonical Water vault upload origin policy
+        run: node --no-warnings --experimental-strip-types scripts/water-vault-origin-regression.mjs
+
       - name: Pantavion AI audit if present
         run: npm run audit:pantavion --if-present
 
