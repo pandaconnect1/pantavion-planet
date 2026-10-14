@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { createClient } from "@supabase/supabase-js";
+import { findApprovedOwnerSource } from "./water-approved-owner-resolver.mjs";
 
 const SOURCES = [
   {
