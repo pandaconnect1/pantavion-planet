@@ -66,6 +66,20 @@ async function main() {
     if (check.error || check.status !== 0) {
       throw new Error("native_probe_dxf_geometry_failed");
     }
+    // Geometry extraction is private and diagnostic only: no source, tiles,
+    // or derived manifest are uploaded to the live map by this step.
+    const candidate = spawnSync("python3", [
+      "scripts/water_native_dxf_geometry.py",
+      output,
+      join(work, "read-only-geometry.sqlite3"),
+      join(work, "read-only-geometry-metrics.json"),
+    ], {
+      stdio: "inherit",
+      timeout: 14 * 60 * 1000,
+    });
+    if (candidate.error || candidate.status !== 0) {
+      throw new Error("native_dxf_geometry_candidate_incomplete");
+    }
     console.log(JSON.stringify({ stage: "native_probe_complete", ok: true }));
   } finally {
     rmSync(work, { recursive: true, force: true });
