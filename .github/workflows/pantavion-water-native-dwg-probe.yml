@@ -8,6 +8,7 @@ on:
       - ".github/workflows/pantavion-water-native-dwg-probe.yml"
       - "scripts/pantavion-water-owner-b-native-probe.mjs"
       - "scripts/pantavion-water-native-dxf-probe.py"
+      - "scripts/water_native_dxf_geometry.py"
 
 permissions:
   contents: read
@@ -44,6 +45,7 @@ jobs:
         run: |
           node --check scripts/pantavion-water-owner-b-native-probe.mjs
           python3 -m py_compile scripts/pantavion-water-native-dxf-probe.py
+          python3 -m py_compile scripts/water_native_dxf_geometry.py
 
       - name: Restore verified GNU LibreDWG 0.14 native build
         uses: actions/cache/restore@v4
