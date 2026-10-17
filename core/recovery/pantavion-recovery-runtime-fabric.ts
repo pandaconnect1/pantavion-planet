@@ -44,6 +44,9 @@ export interface PantavionRecoverySemanticRecord {
   provenance?: {
     sourceFile?: unknown;
     sourceFamily?: unknown;
+    sourceProject?: unknown;
+    sourceRepository?: unknown;
+    sourceRef?: unknown;
   };
   classification?: {
     module?: unknown;
@@ -75,6 +78,11 @@ export interface PantavionRecoverySourceLocator {
   batchRecordIndex: number;
   globalOrdinal: number;
   sourceRecordSha256: string;
+  preservationRepository: string;
+  preservationRef: string;
+  preservationPath: string;
+  preservationBlobSha: string;
+  sourceRepository?: string;
 }
 
 export interface PantavionRecoveryWorkUnit {
@@ -89,6 +97,29 @@ export interface PantavionRecoveryWorkUnit {
   };
   source: PantavionRecoverySourceLocator & {
     semanticRecordSha256: string;
+  };
+  accounting: {
+    module: string | null;
+    topic: string | null;
+    subtopic: string | null;
+    artifactType: string | null;
+    status: "ARTIFACT_BOUND";
+    dependencies: string[];
+    targetLocation: string | null;
+    sourceProject: string | null;
+    sourceRepository: string | null;
+    sourceRef: string | null;
+    destinationBinding: {
+      kind: "CANONICAL_TARGET" | "PRESERVATION_TARGET";
+      location: string | null;
+      bound: boolean;
+    };
+    verificationEvidence: {
+      sourceRecordSha256: string;
+      semanticRecordSha256: string;
+      globalOrdinal: number;
+      previousWorkUnitDigest: string | null;
+    };
   };
   route: {
     module: string | null;
@@ -213,6 +244,12 @@ export function materializePantavionRecoveryWorkUnit(input: {
   }
   if (!text(input.locator.batchFile)) throw new Error("recovery_runtime_batch_file_required");
   assertSha256("recovery_runtime_source_record_digest", input.locator.sourceRecordSha256);
+  if (!/^[0-9a-f]{40}$/.test(input.locator.preservationBlobSha)) {
+    throw new Error("recovery_runtime_preservation_blob_sha_must_be_git_sha1");
+  }
+  if (!text(input.locator.preservationRepository) || !text(input.locator.preservationRef) || !text(input.locator.preservationPath)) {
+    throw new Error("recovery_runtime_preservation_binding_required");
+  }
   if (input.previousWorkUnitDigest) {
     assertSha256("recovery_runtime_previous_work_unit_digest", input.previousWorkUnitDigest);
   }
@@ -224,6 +261,8 @@ export function materializePantavionRecoveryWorkUnit(input: {
   const subsystem = text(classification.subsystem);
   const capability = text(classification.capability);
   const canonicalTarget = text(classification.canonicalTarget);
+  const destinationLocation = canonicalTarget ?? text(input.governedDisposition?.canonicalTarget);
+  const semanticRecordSha256 = digestPantavionRecoverySourceRecord(input.record);
 
   if (lane.lane === "CLASSIFIED_CANDIDATE" && (!moduleName || !subsystem || !capability || !canonicalTarget)) {
     throw new Error("classified_candidate_missing_canonical_route");
@@ -265,7 +304,34 @@ export function materializePantavionRecoveryWorkUnit(input: {
     source: {
       ...input.locator,
       batchFile: input.locator.batchFile.trim(),
-      semanticRecordSha256: digestPantavionRecoverySourceRecord(input.record),
+      semanticRecordSha256,
+    },
+    accounting: {
+      module: moduleName,
+      topic: subsystem,
+      subtopic: capability,
+      artifactType: text(classification.artifactType),
+      status: "ARTIFACT_BOUND" as const,
+      dependencies: [
+        `source-record-sha256:${input.locator.sourceRecordSha256}`,
+        `semantic-record-sha256:${semanticRecordSha256}`,
+        ...(input.previousWorkUnitDigest ? [`previous-work-unit-sha256:${input.previousWorkUnitDigest}`] : []),
+      ],
+      targetLocation: destinationLocation,
+      sourceProject: text(input.record.provenance?.sourceProject),
+      sourceRepository: text(input.record.provenance?.sourceRepository) ?? text(input.locator.sourceRepository),
+      sourceRef: text(input.record.provenance?.sourceRef),
+      destinationBinding: {
+        kind: lane.lane === "CLASSIFIED_CANDIDATE" ? "CANONICAL_TARGET" as const : "PRESERVATION_TARGET" as const,
+        location: destinationLocation,
+        bound: Boolean(destinationLocation),
+      },
+      verificationEvidence: {
+        sourceRecordSha256: input.locator.sourceRecordSha256,
+        semanticRecordSha256,
+        globalOrdinal: input.locator.globalOrdinal,
+        previousWorkUnitDigest: input.previousWorkUnitDigest ?? null,
+      },
     },
     route: {
       module: moduleName,
