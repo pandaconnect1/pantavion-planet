@@ -80,6 +80,7 @@ jobs:
           msg=$(sed 's/%/%25/g' probe.txt | sed ':a;N;$!ba;s/\n/%0A/g'); echo "::notice title=probe::$msg"
 
       - name: Survey DWG styles (read-only)
+        if: false
         shell: bash
         env:
           KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
