@@ -6,9 +6,10 @@ import { createAdminClient } from "@/lib/supabase/admin";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// Street names in the drawings are mostly Latin transliterations ("Leoforos
-// Amathountos", "LIMNWN", "AGNOOUMENWN"), some Greek. A search is tried as typed
-// and in the spellings the drawings use, both ways, accents ignored.
+// Street names in the drawings come in Greek capitals or lower case, Latin
+// transliterations ("LIMNWN", "Leoforos Amathountos") and some English
+// ("104th Street Parodos"). Searches meet them on street_key (capitals, no
+// Greek accents), as typed and in the other alphabet's usual spellings.
 const GREEK_DIGRAPHS: Array<[string, string[]]> = [
   ["ΟΥ", ["OU"]], ["ΑΙ", ["AI", "E"]], ["ΕΙ", ["EI", "I"]], ["ΟΙ", ["OI", "I"]],
   ["ΑΥ", ["AV", "AF"]], ["ΕΥ", ["EV", "EF"]], ["ΜΠ", ["MP", "B"]], ["ΝΤ", ["NT", "D"]],
@@ -19,20 +20,33 @@ const GREEK_LETTERS: Record<string, string[]> = {
   Ι: ["I"], Κ: ["K"], Λ: ["L"], Μ: ["M"], Ν: ["N"], Ξ: ["X", "KS"], Ο: ["O"], Π: ["P"],
   Ρ: ["R"], Σ: ["S"], Τ: ["T"], Υ: ["Y", "I"], Φ: ["F", "PH"], Χ: ["CH", "X", "H"], Ψ: ["PS"], Ω: ["O", "W"],
 };
+const LATIN_DIGRAPHS: Array<[string, string[]]> = [
+  ["OU", ["ΟΥ"]], ["TH", ["Θ"]], ["CH", ["Χ"]], ["PS", ["Ψ"]], ["KS", ["Ξ"]], ["PH", ["Φ"]],
+  ["MP", ["ΜΠ"]], ["NT", ["ΝΤ"]], ["TS", ["ΤΣ"]], ["TZ", ["ΤΖ"]], ["AI", ["ΑΙ"]], ["EI", ["ΕΙ"]], ["OI", ["ΟΙ"]],
+];
+const LATIN_LETTERS: Record<string, string[]> = {
+  A: ["Α"], B: ["Β", "ΜΠ"], C: ["Κ"], D: ["Δ", "ΝΤ"], E: ["Ε"], F: ["Φ"], G: ["Γ"], H: ["Η", "Χ"],
+  I: ["Ι", "Η", "Υ"], J: ["ΤΖ"], K: ["Κ"], L: ["Λ"], M: ["Μ"], N: ["Ν"], O: ["Ο", "Ω"], P: ["Π"],
+  Q: ["Κ"], R: ["Ρ"], S: ["Σ"], T: ["Τ"], U: ["ΟΥ"], V: ["Β"], W: ["Ω"], X: ["Ξ", "Χ"], Y: ["Υ", "Γ"], Z: ["Ζ"],
+};
+// Words that only say "street" or "avenue" are left out of the match.
+// (\b is ASCII-only in JavaScript, so word edges are spaces or the ends.)
+const GENERIC_WORDS = /(^|\s)(ΟΔΟΣ|ΟΔ|ΛΕΩΦΟΡΟΣ|ΛΕΩΦ|ODOS|OD|STREET|STR|ST|AVENUE|AVE|LEOFOROS|LEOF|ROAD|RD)\.?(?=\s|$)/g;
 
-function plainUpper(text: string) {
-  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().replace(/Σ|ς/g, "Σ");
+function streetKey(text: string) {
+  return text
+    .replace(/[άέήίόύώϊϋΐΰΆΈΉΊΌΎΏς]/g, (c) => "αεηιουωιυιυΑΕΗΙΟΥΩσ"["άέήίόύώϊϋΐΰΆΈΉΊΌΎΏς".indexOf(c)])
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase();
 }
 
-// A few Latin spellings of a Greek search: the first choice for every letter,
-// then the drawings' common alternatives (Ω→W, Η→H, Υ→I…), one at a time.
-function latinSpellings(greek: string): string[] {
+// The first spelling of every letter, then each common alternative one at a time.
+function spellings(key: string, digraphs: Array<[string, string[]]>, letters: Record<string, string[]>): string[] {
   const parts: string[][] = [];
-  const g = plainUpper(greek);
-  for (let i = 0; i < g.length; ) {
-    const pair = GREEK_DIGRAPHS.find(([k]) => g.startsWith(k, i));
+  for (let i = 0; i < key.length; ) {
+    const pair = digraphs.find(([k]) => key.startsWith(k, i));
     if (pair) { parts.push(pair[1]); i += 2; continue; }
-    parts.push(GREEK_LETTERS[g[i]] ?? [g[i]]);
+    parts.push(letters[key[i]] ?? [key[i]]);
     i += 1;
   }
   const base = parts.map((p) => p[0]);
@@ -40,16 +54,17 @@ function latinSpellings(greek: string): string[] {
   parts.forEach((p, i) => p.slice(1).forEach((alt) => {
     if (out.size < 8) { const v = [...base]; v[i] = alt; out.add(v.join("")); }
   }));
-  // All-alternative variant for words like ΑΓΝΟΟΥΜΕΝΩΝ → AGNOOUMENWN.
-  out.add(parts.map((p) => (p.includes("W") ? "W" : p[0])).join(""));
+  if (parts.some((p) => p.includes("W"))) out.add(parts.map((p) => (p.includes("W") ? "W" : p[0])).join(""));
   return [...out];
 }
 
 function searchTerms(q: string): string[] {
-  // As typed, and without accents ("Σουλίου" → "ΣΟΥΛΙΟΥ" as the drawings write it).
-  const terms = new Set([q, plainUpper(q)]);
-  if (/[\u0370-\u03ff\u1f00-\u1fff]/.test(q)) for (const t of latinSpellings(q)) terms.add(t);
-  return [...terms].slice(0, 10);
+  const full = streetKey(q).replace(/\s+/g, " ").trim();
+  const core = full.replace(GENERIC_WORDS, " ").replace(/\s+/g, " ").trim() || full;
+  const terms = new Set([core]);
+  if (/[\u0370-\u03ff]/.test(core)) for (const t of spellings(core, GREEK_DIGRAPHS, GREEK_LETTERS)) terms.add(t);
+  else if (/[A-Z]/.test(core)) for (const t of spellings(core, LATIN_DIGRAPHS, LATIN_LETTERS)) terms.add(t);
+  return [...terms].filter(Boolean).slice(0, 12);
 }
 
 const KINDS = new Set(["valve", "air_valve", "hydrant", "pressure_reducing_valve", "tank"]);
@@ -101,7 +116,7 @@ export async function GET(request: NextRequest) {
     const q = (params.get("q") || "").trim().replace(/[%,()]/g, " ").slice(0, 60);
     if (q) {
       const clauses = searchTerms(q).flatMap((t) => [
-        `street.ilike.%${t}%`, `name.ilike.%${t}%`,
+        `street_key.ilike.%${t}%`, `name.ilike.%${t}%`,
       ]);
       clauses.push(`number.ilike.%${q}%`, `tag.ilike.%${q}%`);
       query = query.or(clauses.join(","));
