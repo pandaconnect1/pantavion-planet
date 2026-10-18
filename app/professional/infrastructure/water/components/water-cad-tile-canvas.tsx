@@ -234,9 +234,9 @@ export default function WaterCadTileCanvas({
   }, [fetchTile, requestDraw]);
 
   const constrain = useCallback(
-    (view: View): View => {
+    (view: View, limit = deviceBudget().view): View => {
       let v = view;
-      for (let i = 0; i < 60 && visibleFiles(v).segments > deviceBudget().view; i += 1) {
+      for (let i = 0; i < 60 && visibleFiles(v).segments > limit; i += 1) {
         v = { ...v, scale: v.scale * 1.25 };
       }
       return v;
@@ -270,11 +270,13 @@ export default function WaterCadTileCanvas({
     const ky = bestKey >= 0 ? Math.floor(bestKey / grid) : grid / 2;
     const bw = coreBounds.maxX - coreBounds.minX;
     const bh = coreBounds.maxY - coreBounds.minY;
+    // Open close in, like a street map: a third of the line budget fills the
+    // first screen fast and leaves room to prefetch around it.
     viewRef.current = constrain({
       cx: coreBounds.minX + (kx + 0.5) * cellW,
       cy: coreBounds.minY + (ky + 0.5) * cellH,
       scale: Math.min(w / bw, h / bh),
-    });
+    }, deviceBudget().view / 3);
     snapshotRef.current = null;
     requestDraw();
   }, [cellH, cellW, constrain, coreBounds, grid, requestDraw, tiles]);
@@ -365,6 +367,15 @@ export default function WaterCadTileCanvas({
       const tb = meta.get(b) as CadTileIndexItem;
       return Math.hypot(ta.x - cxCell, ta.y - cyCell) - Math.hypot(tb.x - cxCell, tb.y - cyCell);
     });
+    // Then the tiles just beyond each edge, so panning finds them already loaded.
+    const ring = visibleFiles({ ...view, scale: view.scale / 1.6 });
+    let ringSegments = 0;
+    for (const t of ring.files) {
+      if (ringSegments > deviceBudget().view / 2) break;
+      if (meta.has(t.file) || cacheRef.current.has(t.file) || pendingRef.current.has(t.file)) continue;
+      want.push(t.file);
+      ringSegments += t.segmentCount;
+    }
     queueRef.current = want;
     pumpQueue();
 
