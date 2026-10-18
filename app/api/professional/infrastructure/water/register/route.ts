@@ -103,32 +103,36 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    let query = admin
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const filtered = (q0: any) => {
+      let query = q0;
+      const area = params.get("area");
+      if (area) query = area === "none" ? query.is("area_code", null) : query.eq("area_code", area);
+      const kind = params.get("kind");
+      if (kind && KINDS.has(kind)) query = query.eq("kind", kind);
+      const street = params.get("street");
+      if (street) query = query.eq("street", street);
+      const q = (params.get("q") || "").trim().replace(/[%,()]/g, " ").slice(0, 60);
+      if (q) {
+        const clauses = searchTerms(q).flatMap((t) => [
+          `street_key.ilike.%${t}%`, `name.ilike.%${t}%`,
+        ]);
+        clauses.push(`number.ilike.%${q}%`, `tag.ilike.%${q}%`);
+        query = query.or(clauses.join(","));
+      }
+      // Only when all four bounds are sent: Number(null) is 0, and a missing
+      // bound must not turn into a box at the origin that matches nothing.
+      const bboxKeys = ["minX", "minY", "maxX", "maxY"];
+      const bbox = bboxKeys.map((k) => Number(params.get(k)));
+      if (bboxKeys.every((k) => (params.get(k) ?? "").trim() !== "") && bbox.every(Number.isFinite)) {
+        query = query.gte("x", bbox[0]).lte("x", bbox[2]).gte("y", bbox[1]).lte("y", bbox[3]);
+      }
+      return query;
+    };
+
+    const query = filtered(admin
       .from("water_network_assets")
-      .select("number, kind, dn, x, y, layer, area_code, street, street_distance, tag, name, capacity_m3, proposed, origin", { count: "exact" });
-
-    const area = params.get("area");
-    if (area) query = area === "none" ? query.is("area_code", null) : query.eq("area_code", area);
-    const kind = params.get("kind");
-    if (kind && KINDS.has(kind)) query = query.eq("kind", kind);
-    const street = params.get("street");
-    if (street) query = query.eq("street", street);
-    const q = (params.get("q") || "").trim().replace(/[%,()]/g, " ").slice(0, 60);
-    if (q) {
-      const clauses = searchTerms(q).flatMap((t) => [
-        `street_key.ilike.%${t}%`, `name.ilike.%${t}%`,
-      ]);
-      clauses.push(`number.ilike.%${q}%`, `tag.ilike.%${q}%`);
-      query = query.or(clauses.join(","));
-    }
-
-    // Only when all four bounds are sent: Number(null) is 0, and a missing
-    // bound must not turn into a box at the origin that matches nothing.
-    const bboxKeys = ["minX", "minY", "maxX", "maxY"];
-    const bbox = bboxKeys.map((k) => Number(params.get(k)));
-    if (bboxKeys.every((k) => (params.get(k) ?? "").trim() !== "") && bbox.every(Number.isFinite)) {
-      query = query.gte("x", bbox[0]).lte("x", bbox[2]).gte("y", bbox[1]).lte("y", bbox[3]);
-    }
+      .select("number, kind, dn, x, y, layer, area_code, street, street_distance, tag, name, capacity_m3, proposed, origin", { count: "exact" }));
 
     const offset = Math.max(0, Math.min(1_000_000, Number(params.get("offset")) || 0));
     const limit = Math.max(1, Math.min(PAGE * 4, Number(params.get("limit")) || PAGE));
@@ -139,8 +143,28 @@ export async function GET(request: NextRequest) {
       .range(offset, offset + limit - 1);
     if (error) throw error;
 
+    // A street search also says in which areas the street was found, since
+    // the same street name runs through several areas and zones.
+    let byArea: Array<{ area: string | null; streets: string[]; n: number }> | undefined;
+    if ((params.get("q") || "").trim() && offset === 0) {
+      const all = await filtered(admin.from("water_network_assets").select("area_code, street")).limit(5000);
+      if (!all.error) {
+        const m = new Map<string, { area: string | null; streets: Set<string>; n: number }>();
+        for (const r of (all.data ?? []) as Array<{ area_code: string | null; street: string | null }>) {
+          const k = r.area_code ?? "";
+          const e = m.get(k) ?? { area: r.area_code, streets: new Set<string>(), n: 0 };
+          e.n += 1;
+          if (r.street) e.streets.add(r.street);
+          m.set(k, e);
+        }
+        byArea = [...m.values()]
+          .sort((a, b) => b.n - a.n)
+          .map((e) => ({ area: e.area, n: e.n, streets: [...e.streets].slice(0, 4) }));
+      }
+    }
+
     return NextResponse.json(
-      { ok: true, total: count ?? 0, offset, limit, assets: data ?? [] },
+      { ok: true, total: count ?? 0, offset, limit, assets: data ?? [], byArea },
       { headers: { "Cache-Control": "private, max-age=60" } },
     );
   } catch (error) {

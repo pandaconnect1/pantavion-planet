@@ -40,6 +40,7 @@ export default function WaterNetworkRegisterClient() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
+  const [byArea, setByArea] = useState<Array<{ area: string | null; n: number; streets: string[] }> | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error" | "denied">("loading");
 
   useEffect(() => {
@@ -70,6 +71,7 @@ export default function WaterNetworkRegisterClient() {
       if (!j.ok) throw new Error(j.error);
       setAssets(from === 0 ? j.assets : (prev) => [...prev, ...j.assets]);
       setTotal(j.total);
+      if (from === 0) setByArea(j.byArea ?? null);
       setOffset(from + j.assets.length);
       setStatus("idle");
     } catch {
@@ -159,12 +161,37 @@ export default function WaterNetworkRegisterClient() {
           </p>
         </section>
 
+        {byArea && byArea.length > 0 && q.trim() ? (
+          <section className="rounded-3xl border border-amber-300/40 bg-[#091426] p-4">
+            <p className="text-sm font-black text-amber-200">
+              «{q.trim()}» βρέθηκε σε {byArea.length} {byArea.length === 1 ? "περιοχή" : "περιοχές"}: πάτα μία για να δεις μόνο αυτή.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {byArea.map((b) => (
+                <button
+                  key={b.area ?? "none"}
+                  onClick={() => setArea(b.area ?? "none")}
+                  className={`rounded-xl border px-3 py-2 text-left text-sm font-black ${area === (b.area ?? "none") ? "border-amber-300 bg-amber-300 text-black" : "border-slate-600 text-white"}`}
+                >
+                  {b.area ?? "Χωρίς περιοχή"} · {fmt(b.n)}
+                  <span className="block text-xs font-bold opacity-70">{b.streets.join(" · ")}</span>
+                </button>
+              ))}
+              {area ? (
+                <button onClick={() => setArea("")} className="rounded-xl border border-slate-600 px-3 py-2 text-sm font-black text-slate-300">
+                  Όλες οι περιοχές
+                </button>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
+
         {grouped.map((g) => (
           <section key={g.area} className="rounded-3xl border border-slate-700 bg-[#091426] p-4">
-            <h2 className="text-xl font-black text-amber-300">Περιοχή {g.area}</h2>
+            <h2 className="text-xl font-black text-amber-300">Περιοχή / ζώνη {g.area}</h2>
             {g.streets.map((s) => (
               <div key={s.street} className="mt-4">
-                <h3 className="text-sm font-black uppercase tracking-wide text-slate-300">{s.street} · {s.items.length}</h3>
+                <h3 className="text-sm font-black uppercase tracking-wide text-slate-300">{s.street} · περιοχή {g.area} · {s.items.length}</h3>
                 <ul className="mt-2 divide-y divide-slate-800 rounded-2xl border border-slate-800">
                   {s.items.map((a) => (
                     <li key={a.number} className="flex flex-wrap items-center justify-between gap-2 p-3">
