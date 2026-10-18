@@ -637,8 +637,9 @@ export function extractAuthentic(database, options = {}) {
         const ap = num(e.attachmentPoint, 1);
         const h = [0, 0, 1, 2, 0, 1, 2, 0, 1, 2][ap] ?? 0;
         const v = [3, 3, 3, 3, 2, 2, 2, 1, 1, 1][ap] ?? 3;
+        const beforeLen = texts.length;
         addText(p, e.text, layerId, styleId, num(e.textHeight, 1), rot, h, v === 1 ? 1 : v, 1, t, type);
-        texts[texts.length - 1] && (texts[texts.length - 1][12] = 1); // multi-line marker
+        if (texts.length > beforeLen) texts[texts.length - 1][12] = 1; // multi-line marker
         drew();
         return;
       }
