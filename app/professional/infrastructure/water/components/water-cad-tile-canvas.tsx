@@ -85,8 +85,22 @@ export type CanvasStats = {
 
 const BACKGROUND = "#212830"; // AutoCAD 2D model space default
 const COLOR_7 = "#ffffff";
-const MAX_SEGMENTS_IN_VIEW = 700_000;
-const MAX_CACHED_SEGMENTS = 2_500_000;
+// Phones kill a tab that holds millions of parsed segments, and a full redraw of
+// 700k lines blocks touch input. Coarse-pointer or low-memory devices get a
+// smaller budget: fewer lines per screen, a smaller cache and a lower canvas DPR.
+type Budget = { view: number; cache: number; dpr: number };
+let budgetCache: Budget | null = null;
+function deviceBudget(): Budget {
+  if (budgetCache) return budgetCache;
+  if (typeof window === "undefined") return { view: 700_000, cache: 2_500_000, dpr: 2.5 };
+  const coarse = window.matchMedia?.("(pointer: coarse)").matches ?? false;
+  const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
+  const low = coarse || (typeof memory === "number" && memory <= 4);
+  budgetCache = low
+    ? { view: 220_000, cache: 650_000, dpr: 2 }
+    : { view: 700_000, cache: 2_500_000, dpr: 2.5 };
+  return budgetCache;
+}
 const FETCH_CONCURRENCY = 6;
 const MIN_TEXT_PX = 3;
 const MIN_PATTERN_PX = 2.5;
@@ -120,6 +134,7 @@ export default function WaterCadTileCanvas({
   const activeFetchesRef = useRef(0);
   const frameRef = useRef(0);
   const snapshotRef = useRef<{ bitmap: HTMLCanvasElement; view: View } | null>(null);
+  const snapshotCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const interactingRef = useRef(false);
   const settleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const drawListRef = useRef<{ key: string; list: Array<[number, number, unknown]> } | null>(null);
@@ -197,10 +212,10 @@ export default function WaterCadTileCanvas({
           cacheRef.current.set(file, { data, used: performance.now(), segs: data.segments.length });
           let total = 0;
           for (const v of cacheRef.current.values()) total += v.segs;
-          if (total > MAX_CACHED_SEGMENTS) {
+          if (total > deviceBudget().cache) {
             const byAge = [...cacheRef.current.entries()].sort((a, b) => a[1].used - b[1].used);
             for (const [key, v] of byAge) {
-              if (total <= MAX_CACHED_SEGMENTS * 0.8) break;
+              if (total <= deviceBudget().cache * 0.8) break;
               cacheRef.current.delete(key);
               total -= v.segs;
             }
@@ -209,7 +224,9 @@ export default function WaterCadTileCanvas({
         .finally(() => {
           pendingRef.current.delete(file);
           activeFetchesRef.current -= 1;
-          snapshotRef.current = null;
+          // Mid-gesture the last frame keeps moving with the finger; the new
+          // tile is drawn when the gesture settles, never during it.
+          if (!interactingRef.current) snapshotRef.current = null;
           requestDraw();
           pumpQueue();
         });
@@ -219,7 +236,7 @@ export default function WaterCadTileCanvas({
   const constrain = useCallback(
     (view: View): View => {
       let v = view;
-      for (let i = 0; i < 60 && visibleFiles(v).segments > MAX_SEGMENTS_IN_VIEW; i += 1) {
+      for (let i = 0; i < 60 && visibleFiles(v).segments > deviceBudget().view; i += 1) {
         v = { ...v, scale: v.scale * 1.25 };
       }
       return v;
@@ -268,7 +285,7 @@ export default function WaterCadTileCanvas({
     if (!wrap || !canvas) return;
     const resize = () => {
       const rect = wrap.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+      const dpr = Math.min(window.devicePixelRatio || 1, deviceBudget().dpr);
       sizeRef.current = { w: rect.width, h: rect.height, dpr };
       canvas.width = Math.round(rect.width * dpr);
       canvas.height = Math.round(rect.height * dpr);
@@ -529,10 +546,13 @@ export default function WaterCadTileCanvas({
       ctx.restore();
     }
 
-    const bitmap = document.createElement("canvas");
-    bitmap.width = canvas.width;
-    bitmap.height = canvas.height;
-    bitmap.getContext("2d")?.drawImage(canvas, 0, 0);
+    const bitmap = snapshotCanvasRef.current ?? document.createElement("canvas");
+    snapshotCanvasRef.current = bitmap;
+    if (bitmap.width !== canvas.width) bitmap.width = canvas.width;
+    if (bitmap.height !== canvas.height) bitmap.height = canvas.height;
+    const snapCtx = bitmap.getContext("2d");
+    snapCtx?.clearRect(0, 0, bitmap.width, bitmap.height);
+    snapCtx?.drawImage(canvas, 0, 0);
     snapshotRef.current = { bitmap, view: { ...view } };
 
     onStats?.({
@@ -570,7 +590,7 @@ export default function WaterCadTileCanvas({
       const scale = Math.max(1e-6, Math.min(5000, view.scale * factor));
       const next = { scale, cx: wx - (sx - w / 2) / scale, cy: wy + (sy - h / 2) / scale };
       // Zooming out stops where the screen would hold more than can be drawn.
-      viewRef.current = factor < 1 && visibleFiles(next).segments > MAX_SEGMENTS_IN_VIEW ? view : next;
+      viewRef.current = factor < 1 && visibleFiles(next).segments > deviceBudget().view ? view : next;
       interactingRef.current = true;
       requestDraw();
       settle();
