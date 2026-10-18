@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { createClient } from "@supabase/supabase-js";
 import { Dwg_File_Type, LibreDwg } from "@mlightcad/libredwg-web";
 import { loadApprovedOwnerDwg } from "./water-approved-owner-dwg-loader.mjs";
+import { extractAuthentic } from "./water-cad-authentic-extract.mjs";
 
 const SOURCES = {
   "canonical-2026-andreaspap": {
@@ -47,7 +48,7 @@ const STORAGE = {
   derivedPrefix: `water-network-private/derived/map-${EXPECTED.mapId.toLowerCase()}/${EXPECTED.sha256}`,
 };
 
-const GENERATOR_VERSION = "pantavion-map-b-derived-v2";
+const GENERATOR_VERSION = "pantavion-map-b-derived-v3";
 const DEFAULT_GRID = 64;
 const MAX_GRID = 512;
 const TARGET_TILE_SEGMENTS = 40000;
@@ -657,324 +658,44 @@ async function main() {
     const database = result?.database;
     if (!database) fail("map_b_database_conversion_failed");
 
+    const extracted = extractAuthentic(database);
+    const { segments, fills, texts, points, blockRefs, styles, layers, linetypes } = extracted;
     const entities = Array.isArray(database.entities) ? database.entities : [];
-    const layerEntries = tableEntries(database, "LAYER", "layers");
-    const blockRecords = tableEntries(database, "BLOCK_RECORD", "blockRecords");
-    const blockByName = new Map(
-      blockRecords
-        .filter((record) => typeof record?.name === "string")
-        .map((record) => [String(record.name), record]),
-    );
-
-    const layerNames = [];
-    const layerIdByName = new Map();
-
-    function layerId(name) {
-      const clean = String(name || "0").trim() || "0";
-      if (!layerIdByName.has(clean)) {
-        layerIdByName.set(clean, layerNames.length);
-        layerNames.push(clean);
-      }
-      return layerIdByName.get(clean);
-    }
-
-    for (const layer of layerEntries) layerId(layer?.name);
-    layerId("0");
-
-    const segments = [];
-    const points = [];
-    const labels = [];
-    const entityTypeCounts = {};
-    const unsupportedTypeCounts = {};
-    const approximationCounts = {};
-    const layerSegmentCounts = new Map();
-    let nonPlanarEntityCount = 0;
-    let blockInsertCount = 0;
-    let expandedBlockEntityCount = 0;
-
-    function bump(target, key, amount = 1) {
-      target[key] = Number(target[key] || 0) + amount;
-    }
-
-    function effectiveLayer(entity, inheritedLayer) {
-      const own = String(entity?.layer || "").trim();
-      if (!own || own === "0") return inheritedLayer || own || "0";
-      return own;
-    }
-
-    function checkPlanarity(entity) {
-      const extrusion = entity?.extrusionDirection;
-      if (
-        extrusion &&
-        (Math.abs(Number(extrusion.x || 0)) > 1e-9 ||
-          Math.abs(Number(extrusion.y || 0)) > 1e-9 ||
-          Math.abs(Number(extrusion.z ?? 1) - 1) > 1e-9)
-      ) {
-        nonPlanarEntityCount += 1;
-      }
-    }
-
-    function addSegment(a, b, layerName, transform, sourceType, approximate = false) {
-      const p1 = point2(a);
-      const p2 = point2(b);
-      if (!p1 || !p2) return;
-      const ta = applyTransform(p1, transform);
-      const tb = applyTransform(p2, transform);
-      if (![ta.x, ta.y, tb.x, tb.y].every(finite)) return;
-      if (Math.abs(ta.x - tb.x) < 1e-12 && Math.abs(ta.y - tb.y) < 1e-12) return;
-
-      const lid = layerId(layerName);
-      segments.push([ta.x, ta.y, tb.x, tb.y, lid]);
-      layerSegmentCounts.set(lid, Number(layerSegmentCounts.get(lid) || 0) + 1);
-      if (approximate) bump(approximationCounts, sourceType);
-    }
-
-    function addPolyline(rawPoints, layerName, transform, sourceType, approximate = false) {
-      const clean = rawPoints.map(point2).filter(Boolean);
-      for (let i = 1; i < clean.length; i += 1) {
-        addSegment(clean[i - 1], clean[i], layerName, transform, sourceType, approximate);
-      }
-    }
-
-    function addPoint(raw, layerName, transform, entityType, blockName = null) {
-      const p = point2(raw);
-      if (!p) return;
-      const t = applyTransform(p, transform);
-      points.push([t.x, t.y, layerId(layerName), entityType, blockName]);
-    }
-
-    function addLabel(raw, text, layerName, transform, entityType) {
-      const p = point2(raw);
-      const cleanText = stripCadText(text);
-      if (!p || !cleanText) return;
-      const t = applyTransform(p, transform);
-      labels.push([t.x, t.y, layerId(layerName), cleanText, entityType]);
-    }
-
-    function processPolylineVertices(entity, layerName, transform, closedMask, sourceType) {
-      const vertices = Array.isArray(entity?.vertices) ? entity.vertices : [];
-      if (vertices.length < 2) return;
-
-      for (let i = 0; i < vertices.length - 1; i += 1) {
-        const a = point2(vertices[i]);
-        const b = point2(vertices[i + 1]);
-        if (!a || !b) continue;
-        const bulge = Number(vertices[i]?.bulge || 0);
-        const sampled = sampleBulge(a, b, bulge);
-        addPolyline(sampled, layerName, transform, sourceType, Math.abs(bulge) > 1e-12);
-      }
-
-      if ((Number(entity?.flag || 0) & closedMask) !== 0 && vertices.length > 2) {
-        const a = point2(vertices[vertices.length - 1]);
-        const b = point2(vertices[0]);
-        if (a && b) {
-          const bulge = Number(vertices[vertices.length - 1]?.bulge || 0);
-          const sampled = sampleBulge(a, b, bulge);
-          addPolyline(sampled, layerName, transform, sourceType, Math.abs(bulge) > 1e-12);
-        }
-      }
-    }
-
-    function processEntity(entity, transform, inheritedLayer = "0", depth = 0) {
-      if (!entity || depth > 8) return;
-      const type = String(entity.type || "UNKNOWN");
-      bump(entityTypeCounts, type);
-
-      if (entity.isVisible === false) return;
-
-      const layerName = effectiveLayer(entity, inheritedLayer);
-      checkPlanarity(entity);
-
-      if (type === "LINE") {
-        addSegment(entity.startPoint, entity.endPoint, layerName, transform, type);
-        return;
-      }
-
-      if (type === "LWPOLYLINE") {
-        processPolylineVertices(entity, layerName, transform, 512, type);
-        return;
-      }
-
-      if (type === "POLYLINE2D" || type === "POLYLINE3D") {
-        processPolylineVertices(entity, layerName, transform, 1, type);
-        return;
-      }
-
-      if (type === "ARC") {
-        const center = point2(entity.center);
-        const radius = Number(entity.radius);
-        const start = Number(entity.startAngle);
-        const end = Number(entity.endAngle);
-        if (center && finite(radius) && finite(start) && finite(end)) {
-          addPolyline(
-            sampleArc(center, radius, start, normalizeSweep(start, end)),
-            layerName,
-            transform,
-            type,
-            true,
-          );
-        }
-        return;
-      }
-
-      if (type === "CIRCLE") {
-        const center = point2(entity.center);
-        const radius = Number(entity.radius);
-        if (center && finite(radius)) {
-          addPolyline(
-            sampleArc(center, radius, 0, Math.PI * 2),
-            layerName,
-            transform,
-            type,
-            true,
-          );
-        }
-        return;
-      }
-
-      if (type === "ELLIPSE") {
-        const sampled = sampleEllipse(entity);
-        addPolyline(sampled, layerName, transform, type, true);
-        return;
-      }
-
-      if (type === "SPLINE") {
-        const sampled = sampleSpline(entity);
-        if (sampled.length >= 2) {
-          addPolyline(sampled, layerName, transform, type, true);
-        } else {
-          bump(unsupportedTypeCounts, type);
-        }
-        return;
-      }
-
-      if (type === "POINT") {
-        addPoint(entity.position || entity.point, layerName, transform, type);
-        return;
-      }
-
-      if (type === "TEXT") {
-        addLabel(entity.startPoint, entity.text, layerName, transform, type);
-        return;
-      }
-
-      if (type === "MTEXT") {
-        addLabel(entity.insertionPoint, entity.text, layerName, transform, type);
-        return;
-      }
-
-      if (type === "INSERT") {
-        blockInsertCount += 1;
-        addPoint(entity.insertionPoint, layerName, transform, type, String(entity.name || ""));
-
-        const block = blockByName.get(String(entity.name || ""));
-        if (!block || !Array.isArray(block.entities)) {
-          bump(unsupportedTypeCounts, "INSERT_MISSING_BLOCK");
-          return;
-        }
-
-        const columns = clamp(Number(entity.columnCount || 1), 1, 128);
-        const rows = clamp(Number(entity.rowCount || 1), 1, 128);
-
-        for (let row = 0; row < rows; row += 1) {
-          for (let col = 0; col < columns; col += 1) {
-            const local = insertTransform(entity, block, col, row);
-            const nested = composeTransform(transform, local);
-            for (const child of block.entities) {
-              expandedBlockEntityCount += 1;
-              processEntity(child, nested, layerName, depth + 1);
-            }
-          }
-        }
-
-        for (const attrib of Array.isArray(entity.attribs) ? entity.attribs : []) {
-          const text = attrib?.text?.text || attrib?.text || attrib?.attrTag || attrib?.tag;
-          const p = attrib?.text?.startPoint || attrib?.alignmentPoint || entity.insertionPoint;
-          addLabel(p, text, layerName, transform, "ATTRIB");
-        }
-        return;
-      }
-
-      // Decorative/annotation types are counted but do not block a source-CAD network preview.
-      const decorative =
-        type.startsWith("DIMENSION") ||
-        [
-          "HATCH",
-          "LEADER",
-          "MULTILEADER",
-          "SOLID",
-          "3DFACE",
-          "IMAGE",
-          "VIEWPORT",
-          "WIPEOUT",
-          "TABLE",
-          "TOLERANCE",
-          "OLE2FRAME",
-          "OLEFRAME",
-        ].includes(type);
-
-      if (!decorative) bump(unsupportedTypeCounts, type);
-    }
-
-    for (const entity of entities) {
-      processEntity(entity, identityTransform(), "0", 0);
-    }
 
     if (segments.length === 0) {
-      fail("map_b_no_renderable_segments_extracted", {
-        entityTypeCounts,
-        unsupportedTypeCounts,
-      });
+      fail("map_b_no_renderable_segments_extracted", { stats: extracted.stats });
     }
 
     let minX = Infinity;
     let minY = Infinity;
     let maxX = -Infinity;
     let maxY = -Infinity;
-
     function includeXY(x, y) {
       if (!finite(x) || !finite(y)) return;
-      minX = Math.min(minX, x);
-      minY = Math.min(minY, y);
-      maxX = Math.max(maxX, x);
-      maxY = Math.max(maxY, y);
+      if (x < minX) minX = x;
+      if (y < minY) minY = y;
+      if (x > maxX) maxX = x;
+      if (y > maxY) maxY = y;
     }
-
-    for (const [x1, y1, x2, y2] of segments) {
-      includeXY(x1, y1);
-      includeXY(x2, y2);
-    }
-    for (const [x, y] of points) includeXY(x, y);
-    for (const [x, y] of labels) includeXY(x, y);
-
+    for (const s of segments) { includeXY(s[0], s[1]); includeXY(s[2], s[3]); }
+    for (const t of texts) includeXY(t[0], t[1]);
+    for (const p of points) includeXY(p[0], p[1]);
     if (![minX, minY, maxX, maxY].every(finite) || maxX <= minX || maxY <= minY) {
       fail("map_b_derived_bounds_invalid", { minX, minY, maxX, maxY });
     }
 
-    // The grid is laid over the dense core of the drawing, not over its extreme
-    // extents. A few stray entities far from the network (common in CAD files)
-    // otherwise squeeze the whole city into one or two tiles; a single tile then
-    // exceeds the JavaScript string limit and generation fails. Entities outside
-    // the core are still kept: they are clamped into the edge tiles, never dropped.
+    // Grid over the dense core (see robustCoreBounds); geometry outside the core
+    // is clamped into the edge tiles, never dropped.
     const core = robustCoreBounds(segments, { minX, minY, maxX, maxY });
     const coreWidth = core.maxX - core.minX;
     const coreHeight = core.maxY - core.minY;
-
-    function tileAt(x, y, g) {
-      const nx = coreWidth > 0 ? (x - core.minX) / coreWidth : 0;
-      const ny = coreHeight > 0 ? (y - core.minY) / coreHeight : 0;
-      return {
-        x: clamp(Math.floor(nx * g), 0, g - 1),
-        y: clamp(Math.floor(ny * g), 0, g - 1),
-      };
-    }
+    const cellOf = (v, lo, span, g) => clamp(Math.floor(((v - lo) / span) * g), 0, g - 1);
 
     function maxSegmentsPerTile(g) {
       const counts = new Map();
       let max = 0;
-      for (const [x1, y1, x2, y2] of segments) {
-        const t = tileAt((x1 + x2) / 2, (y1 + y2) / 2, g);
-        const key = t.y * g + t.x;
+      for (const s of segments) {
+        const key = cellOf((s[1] + s[3]) / 2, core.minY, coreHeight, g) * g + cellOf((s[0] + s[2]) / 2, core.minX, coreWidth, g);
         const next = (counts.get(key) || 0) + 1;
         counts.set(key, next);
         if (next > max) max = next;
@@ -991,40 +712,41 @@ async function main() {
     }
 
     const tileMap = new Map();
-
     function tileRecord(x, y) {
       const key = tileKey(x, y);
-      if (!tileMap.has(key)) {
-        tileMap.set(key, { x, y, segments: [], points: [], labels: [] });
+      let rec = tileMap.get(key);
+      if (!rec) {
+        rec = { x, y, segments: [], fills: [], texts: [], points: [], blockRefs: [] };
+        tileMap.set(key, rec);
       }
-      return tileMap.get(key);
+      return rec;
     }
+    const range = (lo, hi, min, span) => [cellOf(lo, min, span, grid), cellOf(hi, min, span, grid)];
 
-    let outsideCoreCount = 0;
-    function outsideCore(x, y) {
-      return x < core.minX || x > core.maxX || y < core.minY || y > core.maxY;
+    // A line belongs to every tile its extent touches, so it is drawn whenever any
+    // part of it is on screen. Duplicates across tiles draw on the same pixels.
+    let segmentTileRefs = 0;
+    for (const s of segments) {
+      const [x0, x1] = range(Math.min(s[0], s[2]), Math.max(s[0], s[2]), core.minX, coreWidth);
+      const [y0, y1] = range(Math.min(s[1], s[3]), Math.max(s[1], s[3]), core.minY, coreHeight);
+      for (let ty = y0; ty <= y1; ty += 1) {
+        for (let tx = x0; tx <= x1; tx += 1) { tileRecord(tx, ty).segments.push(s); segmentTileRefs += 1; }
+      }
     }
-
-    for (const segment of segments) {
-      const [x1, y1, x2, y2] = segment;
-      const mx = (x1 + x2) / 2;
-      const my = (y1 + y2) / 2;
-      if (outsideCore(mx, my)) outsideCoreCount += 1;
-      const mid = tileAt(mx, my, grid);
-      tileRecord(mid.x, mid.y).segments.push(segment);
+    let fillTileRefs = 0;
+    for (const f of fills) {
+      let fx0 = Infinity, fy0 = Infinity, fx1 = -Infinity, fy1 = -Infinity;
+      for (const ring of f[3]) for (let i = 0; i < ring.length; i += 2) {
+        fx0 = Math.min(fx0, ring[i]); fx1 = Math.max(fx1, ring[i]);
+        fy0 = Math.min(fy0, ring[i + 1]); fy1 = Math.max(fy1, ring[i + 1]);
+      }
+      const [x0, x1] = range(fx0, fx1, core.minX, coreWidth);
+      const [y0, y1] = range(fy0, fy1, core.minY, coreHeight);
+      for (let ty = y0; ty <= y1; ty += 1) for (let tx = x0; tx <= x1; tx += 1) { tileRecord(tx, ty).fills.push(f); fillTileRefs += 1; }
     }
-
-    for (const point of points) {
-      if (outsideCore(point[0], point[1])) outsideCoreCount += 1;
-      const t = tileAt(point[0], point[1], grid);
-      tileRecord(t.x, t.y).points.push(point);
-    }
-
-    for (const label of labels) {
-      if (outsideCore(label[0], label[1])) outsideCoreCount += 1;
-      const t = tileAt(label[0], label[1], grid);
-      tileRecord(t.x, t.y).labels.push(label);
-    }
+    for (const t of texts) tileRecord(cellOf(t[0], core.minX, coreWidth, grid), cellOf(t[1], core.minY, coreHeight, grid)).texts.push(t);
+    for (const p of points) tileRecord(cellOf(p[0], core.minX, coreWidth, grid), cellOf(p[1], core.minY, coreHeight, grid)).points.push(p);
+    for (const b of blockRefs) tileRecord(cellOf(b[0], core.minX, coreWidth, grid), cellOf(b[1], core.minY, coreHeight, grid)).blockRefs.push(b);
 
     const outputDir = process.env.PANTAVION_WATER_MAP_B_DERIVED_OUT
       ? path.resolve(process.env.PANTAVION_WATER_MAP_B_DERIVED_OUT)
@@ -1034,35 +756,25 @@ async function main() {
 
     const tileIndex = [];
     const tileFiles = [];
-    let writtenSegments = 0;
-    let writtenPoints = 0;
-    let writtenLabels = 0;
+    const written = { segments: 0, fills: 0, texts: 0, points: 0, blockRefs: 0 };
 
     for (const tile of [...tileMap.values()].sort((a, b) => a.y - b.y || a.x - b.x)) {
-      // A tile that is still very dense (one tile can hold a whole block of the
-      // city at the maximum grid) is written as several part files, so no single
-      // file can approach the string limit. Every entity is written exactly once.
       const parts = Math.max(
         1,
         Math.ceil(tile.segments.length / PART_MAX_SEGMENTS),
-        Math.ceil(tile.points.length / PART_MAX_POINTS),
-        Math.ceil(tile.labels.length / PART_MAX_LABELS),
+        Math.ceil(tile.texts.length / PART_MAX_LABELS),
+        Math.ceil((tile.points.length + tile.blockRefs.length) / PART_MAX_POINTS),
+        Math.ceil(tile.fills.length / PART_MAX_LABELS),
       );
       const slice = (list, part) => {
         const size = Math.ceil(list.length / parts);
         return list.slice(part * size, (part + 1) * size);
       };
-
       for (let part = 0; part < parts; part += 1) {
-        const file = part === 0
-          ? `master-b-tile-${tile.x}-${tile.y}.json`
-          : `master-b-tile-${tile.x}-${tile.y}-p${part}.json`;
-        const partSegments = slice(tile.segments, part);
-        const partPoints = slice(tile.points, part);
-        const partLabels = slice(tile.labels, part);
+        const file = part === 0 ? `master-b-tile-${tile.x}-${tile.y}.json` : `master-b-tile-${tile.x}-${tile.y}-p${part}.json`;
         const payload = {
           ok: true,
-          schemaVersion: "pantavion-water-map-b-derived-tile-v1",
+          schemaVersion: "pantavion-water-map-b-derived-tile-v3",
           sourceSha256: EXPECTED.sha256,
           tileX: tile.x,
           tileY: tile.y,
@@ -1071,18 +783,19 @@ async function main() {
           grid,
           rawDwgIncluded: false,
           coordinateSpace: "source_cad",
-          segmentFormat: ["x1", "y1", "x2", "y2", "layerId"],
-          pointFormat: ["x", "y", "layerId", "entityType", "blockName"],
-          labelFormat: ["x", "y", "layerId", "text", "entityType"],
-          segments: partSegments,
-          points: partPoints,
-          labels: partLabels,
+          segmentFormat: ["x1", "y1", "x2", "y2", "layerId", "styleId", "linetypePhase", "drawOrder"],
+          fillFormat: ["layerId", "styleId", "kind(0 fill,1 wipeout)", "rings", "drawOrder"],
+          textFormat: ["x", "y", "layerId", "styleId", "text", "height", "rotation", "hAlign", "vAlign", "widthFactor", "mirrored", "drawOrder", "multiline"],
+          pointFormat: ["x", "y", "layerId", "styleId", "drawOrder"],
+          blockRefFormat: ["x", "y", "layerId", "blockName"],
+          segments: slice(tile.segments, part),
+          fills: slice(tile.fills, part),
+          texts: slice(tile.texts, part),
+          points: slice(tile.points, part),
+          blockRefs: slice(tile.blockRefs, part),
         };
-
         fs.writeFileSync(path.join(tilesDir, file), JSON.stringify(payload), "utf8");
-        writtenSegments += partSegments.length;
-        writtenPoints += partPoints.length;
-        writtenLabels += partLabels.length;
+        for (const k of Object.keys(written)) written[k] += payload[k].length;
         tileFiles.push(file);
         tileIndex.push({
           x: tile.x,
@@ -1090,40 +803,36 @@ async function main() {
           part,
           parts,
           file: `tiles/${file}`,
-          segmentCount: partSegments.length,
-          pointCount: partPoints.length,
-          labelCount: partLabels.length,
+          segmentCount: payload.segments.length,
+          fillCount: payload.fills.length,
+          pointCount: payload.points.length,
+          labelCount: payload.texts.length,
         });
       }
     }
 
-    if (writtenSegments !== segments.length ||
-        writtenPoints !== points.length ||
-        writtenLabels !== labels.length) {
-      fail("map_b_derived_tile_coverage_mismatch", {
-        segments: [segments.length, writtenSegments],
-        points: [points.length, writtenPoints],
-        labels: [labels.length, writtenLabels],
-      });
+    if (written.segments !== segmentTileRefs || written.fills !== fillTileRefs ||
+        written.texts !== texts.length || written.points !== points.length || written.blockRefs !== blockRefs.length) {
+      fail("map_b_derived_tile_coverage_mismatch", { written, segmentTileRefs, fillTileRefs, texts: texts.length, points: points.length });
     }
 
+    const layerSegmentCounts = new Map();
+    for (const s of segments) layerSegmentCounts.set(s[4], (layerSegmentCounts.get(s[4]) || 0) + 1);
     const topLayers = [...layerSegmentCounts.entries()]
-      .map(([id, count]) => ({ layer: layerNames[id] || `layer-${id}`, count }))
+      .map(([id, count]) => ({ layer: layers[id]?.name || `layer-${id}`, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 100);
 
-    const unsupportedCount = Object.values(unsupportedTypeCounts).reduce(
-      (sum, value) => sum + Number(value || 0),
-      0,
-    );
+    const notReproducedCount = Object.values(extracted.stats.notReproduced).reduce((sum, v) => sum + Number(v || 0), 0);
 
     const manifest = {
       ok: true,
-      schemaVersion: "pantavion-water-map-b-derived-manifest-v1",
+      schemaVersion: "pantavion-water-map-b-derived-manifest-v3",
       sourceKey: SOURCE_KEY,
       mapId: EXPECTED.mapId,
       canonical: EXPECTED.canonical,
       generatorVersion: GENERATOR_VERSION,
+      extractorVersion: extracted.version,
       generatedAt: new Date().toISOString(),
       source: `MASTER_${EXPECTED.mapId}_DWG`,
       sourceFileName: EXPECTED.fileName,
@@ -1141,39 +850,47 @@ async function main() {
       canonicalPromotionAllowed: false,
       mobileMustUseDerivedTilesOnly: true,
       grid,
-      segmentFormat: ["x1", "y1", "x2", "y2", "layerId"],
-      pointFormat: ["x", "y", "layerId", "entityType", "blockName"],
-      labelFormat: ["x", "y", "layerId", "text", "entityType"],
+      cadHeader: extracted.header,
+      layers: layers.map((l) => l.name),
+      layerInfo: layers.map((l) => ({ color: l.color, aci: l.aci, off: l.off, frozen: l.frozen, lineType: l.lineType })),
+      styles,
+      linetypes,
+      segmentFormat: ["x1", "y1", "x2", "y2", "layerId", "styleId", "linetypePhase", "drawOrder"],
       totalEntities: entities.length,
       totalLineSegments: segments.length,
       matchedNetworkSegments: segments.length,
+      fillCount: fills.length,
       pointCount: points.length,
-      labelCount: labels.length,
+      labelCount: texts.length,
+      blockRefCount: blockRefs.length,
       writtenTileCount: tileIndex.length,
       overflowSegmentCount: 0,
+      segmentTileRefs,
+      densestTileSegments,
       allBounds: { minX, minY, maxX, maxY },
       coreBounds: core,
-      outsideCoreEntityCount: outsideCoreCount,
-      densestTileSegments,
-      layers: layerNames,
       topLayers,
       tiles: tileIndex,
       coverage: {
-        entityTypeCounts,
-        unsupportedTypeCounts,
-        unsupportedCount,
-        approximationCounts,
+        entityTypeCounts: extracted.stats.entityTypes,
+        drawnTypeCounts: extracted.stats.drawnTypes,
+        notReproduced: extracted.stats.notReproduced,
+        notReproducedCount,
+        firstExtractErrors: extracted.stats.firstErrors || [],
+        hatchPatternTruncated: extracted.stats.hatchPatternTruncated,
+        mtextWithInlineFormatting: extracted.stats.mtextFormattingCodes,
+        ocsTransformedEntities: extracted.stats.ocsTransformed,
+        onHiddenLayers: extracted.stats.hiddenByLayerState,
         unknownEntityCount: Number(result?.stats?.unknownEntityCount || 0),
-        blockInsertCount,
-        expandedBlockEntityCount,
-        nonPlanarEntityCount,
-        sourceCadPreviewGenerated: true,
+        curveChordToleranceUnits: 0.005,
+        shxFontsRenderedWithSystemFont: true,
         geographicAlignmentVerified: false,
         completeEngineeringCoverageClaimed: false,
       },
       truth: {
         sourceBytesModified: false,
         rawMasterExposedToBrowser: false,
+        coloursLinetypesLineweightsFromSource: true,
         sourceCadPreviewIsDerived: true,
         geographicOverlayRequiresSeparateAlignmentEvidence: true,
         unsupportedEntitiesAreCountedNotSilentlyDropped: true,
@@ -1207,12 +924,17 @@ async function main() {
           derived: {
             totalEntities: entities.length,
             segments: segments.length,
+            fills: fills.length,
             points: points.length,
-            labels: labels.length,
+            texts: texts.length,
+            blockRefs: blockRefs.length,
             tiles: tileIndex.length,
-            layers: layerNames.length,
-            unsupportedCount,
-            nonPlanarEntityCount,
+            layers: layers.length,
+            styles: styles.length,
+            densestTileSegments,
+            segmentTileRefs,
+            notReproduced: extracted.stats.notReproduced,
+            ocsTransformed: extracted.stats.ocsTransformed,
             geographicAlignmentVerified: false,
           },
           upload,
@@ -1233,6 +955,7 @@ main().catch((error) => {
         ok: false,
         reason: "map_b_derived_generator_failed",
         message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? String(error.stack || "").split("\n").slice(0, 8) : [],
       },
       null,
       2,

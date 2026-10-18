@@ -3,18 +3,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 /**
- * Viewport-driven canvas viewer for derived CAD tiles.
+ * Viewport-driven canvas viewer for authentic derived CAD tiles.
  *
- * Every line, point and label is drawn at its source CAD coordinate. Nothing is
- * simplified, sampled, rasterised or capped: the viewer only decides WHICH tiles
- * to fetch, from what is on screen. Instead of ever drawing a partial map, it
- * limits how far out the view can go, so every view it shows holds all of the
- * authentic geometry in that area. It opens close in, over the network.
+ * It draws the drawing the way AutoCAD shows it in plan view: every line,
+ * fill, point and text at its source coordinate, with the colour, linetype,
+ * lineweight and draw order resolved from the DWG itself, on AutoCAD's dark
+ * model-space background (colour 7 shows white). Frozen and off layers stay
+ * hidden, as AutoCAD keeps them, unless the user asks to see them.
+ *
+ * Nothing is simplified, sampled, recoloured or capped. The viewer only decides
+ * WHICH tiles to fetch from what is on screen, and never zooms out past the point
+ * where the screen would hold more than it can draw, so every view is complete.
  */
-
-export type CadSegment = [number, number, number, number, number];
-export type CadPointItem = [number, number, number, string, string | null];
-export type CadLabelItem = [number, number, number, string, string];
 
 export type CadTileIndexItem = {
   x: number;
@@ -23,27 +23,52 @@ export type CadTileIndexItem = {
   segmentCount: number;
   pointCount?: number;
   labelCount?: number;
+  fillCount?: number;
   part?: number;
   parts?: number;
 };
 
 export type CadBounds = { minX: number; minY: number; maxX: number; maxY: number };
 
-type TileData = {
-  segments: CadSegment[];
-  points: CadPointItem[];
-  labels: CadLabelItem[];
+export type CadStyle = { c: string; lt: string | null; lw: number; lts: number };
+export type CadLinetypeElement = {
+  len: number;
+  text?: string;
+  scale?: number;
+  rot?: number;
+  ox?: number;
+  oy?: number;
+  absRot?: boolean;
+  shape?: number;
 };
+export type CadLinetype = { total: number; pattern: CadLinetypeElement[] };
+export type CadLayerInfo = { color: string; aci: number | null; off: boolean; frozen: boolean; lineType: string };
 
-type View = { cx: number; cy: number; scale: number }; // scale = CSS px per CAD unit
+// [x1,y1,x2,y2, layerId, styleId, linetypePhase(-1 continuous), drawOrder]
+type Seg = [number, number, number, number, number, number, number, number];
+// [layerId, styleId, kind(0 fill, 1 wipeout), rings, drawOrder]
+type Fill = [number, number, number, number[][], number];
+// [x,y, layerId, styleId, text, height, rotation, hAlign, vAlign, widthFactor, mirrored, drawOrder, multiline?]
+type Txt = [number, number, number, number, string, number, number, number, number, number, number, number, number?];
+// [x,y, layerId, styleId, drawOrder]
+type Pt = [number, number, number, number, number];
+
+export type CadTileData = { segments: Seg[]; fills: Fill[]; texts: Txt[]; points: Pt[] };
+
+type View = { cx: number; cy: number; scale: number }; // scale = CSS px per drawing unit
 
 type Props = {
   tiles: CadTileIndexItem[];
   grid: number;
   coreBounds: CadBounds;
   layers: string[];
+  layerInfo: CadLayerInfo[];
+  styles: CadStyle[];
+  linetypes: Record<string, CadLinetype>;
+  lineweightDisplay: boolean;
+  showHiddenLayers: boolean;
   layerQuery: string;
-  fetchTile: (file: string) => Promise<TileData | null>;
+  fetchTile: (file: string) => Promise<CadTileData | null>;
   onPick?: (point: { x: number; y: number }) => void;
   onStats?: (stats: CanvasStats) => void;
 };
@@ -52,44 +77,34 @@ export type CanvasStats = {
   visibleTileFiles: number;
   loadedTileFiles: number;
   drawnSegments: number;
-  drawnPoints: number;
-  drawnLabels: number;
+  drawnFills: number;
+  drawnTexts: number;
   pendingTileFiles: number;
   atMinZoom: boolean;
 };
 
-// Geometry a phone can redraw smoothly. The view is never allowed to cover more
-// than this, so what is on screen is always complete.
+const BACKGROUND = "#212830"; // AutoCAD 2D model space default
+const COLOR_7 = "#ffffff";
 const MAX_SEGMENTS_IN_VIEW = 700_000;
 const MAX_CACHED_SEGMENTS = 2_500_000;
 const FETCH_CONCURRENCY = 6;
-const MAX_LABELS_DRAWN = 4000;
+const MIN_TEXT_PX = 3;
+const MIN_PATTERN_PX = 2.5;
 
-function isNetworkLayer(name: string) {
-  const n = name.toUpperCase();
-  return (
-    /^W[-_ ]/.test(n) ||
-    /(WATER|PIPE|VALVE|HYDRANT|METER|MAIN|SERVICE|FITTING|FH\b|^FH|UPVC|HDPE|PVC|DUCTILE|ΥΔΡ|ΑΓΩΓ)/.test(n)
-  );
-}
-
-function isBackgroundLayer(name: string) {
-  const n = name.toUpperCase();
-  return /(PARCEL|CONTOUR|XOROTAXIK|ΚΤΗΜΑΤ|ΙΣΟΥΨ|TOPO|CADAST)/.test(n);
-}
-
-function layerColor(name: string, index: number) {
-  if (isNetworkLayer(name)) return "#0550ae";
-  if (isBackgroundLayer(name)) return "#c4cbd4";
-  const hue = (index * 137.508) % 360;
-  return `hsl(${hue.toFixed(0)} 55% 38%)`;
-}
+const colorOf = (c: string) => (c === "aci7" ? COLOR_7 : c);
+// AutoCAD shows lineweights on screen in pixels; 0.25 mm and below is 1 px.
+const lineweightPx = (lw: number, on: boolean) => (on ? Math.max(1, Math.round(lw * 0.0378)) : 1);
 
 export default function WaterCadTileCanvas({
   tiles,
   grid,
   coreBounds,
   layers,
+  layerInfo,
+  styles,
+  linetypes,
+  lineweightDisplay,
+  showHiddenLayers,
   layerQuery,
   fetchTile,
   onPick,
@@ -99,7 +114,7 @@ export default function WaterCadTileCanvas({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const viewRef = useRef<View | null>(null);
   const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
-  const cacheRef = useRef(new Map<string, { data: TileData; used: number; segs: number }>());
+  const cacheRef = useRef(new Map<string, { data: CadTileData; used: number; segs: number }>());
   const pendingRef = useRef(new Set<string>());
   const queueRef = useRef<string[]>([]);
   const activeFetchesRef = useRef(0);
@@ -107,13 +122,18 @@ export default function WaterCadTileCanvas({
   const snapshotRef = useRef<{ bitmap: HTMLCanvasElement; view: View } | null>(null);
   const interactingRef = useRef(false);
   const settleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const drawListRef = useRef<{ key: string; list: Array<[number, number, unknown]> } | null>(null);
   const [tick, setTick] = useState(0);
 
   const query = layerQuery.trim().toUpperCase();
-  const layerColors = useMemo(() => layers.map((name, i) => layerColor(name, i)), [layers]);
   const layerVisible = useMemo(
-    () => layers.map((name) => !query || name.toUpperCase().includes(query)),
-    [layers, query],
+    () =>
+      layers.map((name, i) => {
+        const info = layerInfo[i];
+        if (!showHiddenLayers && info && (info.off || info.frozen)) return false;
+        return !query || name.toUpperCase().includes(query);
+      }),
+    [layerInfo, layers, query, showHiddenLayers],
   );
 
   const tilesByCell = useMemo(() => {
@@ -130,22 +150,16 @@ export default function WaterCadTileCanvas({
   const cellW = (coreBounds.maxX - coreBounds.minX) / grid;
   const cellH = (coreBounds.maxY - coreBounds.minY) / grid;
 
-  // Cells beyond the core are clamped into the edge tiles by the generator, so an
-  // edge tile may hold geometry outside its cell. Treat edge cells as unbounded.
   const visibleFiles = useCallback(
     (view: View) => {
       const { w, h } = sizeRef.current;
       const halfW = w / 2 / view.scale;
       const halfH = h / 2 / view.scale;
-      const x0 = view.cx - halfW;
-      const x1 = view.cx + halfW;
-      const y0 = view.cy - halfH;
-      const y1 = view.cy + halfH;
       const clampCell = (v: number) => Math.max(0, Math.min(grid - 1, v));
-      const tx0 = clampCell(Math.floor((x0 - coreBounds.minX) / cellW));
-      const tx1 = clampCell(Math.floor((x1 - coreBounds.minX) / cellW));
-      const ty0 = clampCell(Math.floor((y0 - coreBounds.minY) / cellH));
-      const ty1 = clampCell(Math.floor((y1 - coreBounds.minY) / cellH));
+      const tx0 = clampCell(Math.floor((view.cx - halfW - coreBounds.minX) / cellW));
+      const tx1 = clampCell(Math.floor((view.cx + halfW - coreBounds.minX) / cellW));
+      const ty0 = clampCell(Math.floor((view.cy - halfH - coreBounds.minY) / cellH));
+      const ty1 = clampCell(Math.floor((view.cy + halfH - coreBounds.minY) / cellH));
       const files: CadTileIndexItem[] = [];
       let segments = 0;
       for (let ty = ty0; ty <= ty1; ty += 1) {
@@ -158,7 +172,7 @@ export default function WaterCadTileCanvas({
           }
         }
       }
-      return { files, segments, tx0, tx1, ty0, ty1 };
+      return { files, segments };
     },
     [cellH, cellW, coreBounds.minX, coreBounds.minY, grid, tilesByCell],
   );
@@ -179,30 +193,29 @@ export default function WaterCadTileCanvas({
       activeFetchesRef.current += 1;
       fetchTile(file)
         .then((data) => {
-          if (data) {
-            cacheRef.current.set(file, { data, used: performance.now(), segs: data.segments.length });
-            let total = 0;
-            for (const v of cacheRef.current.values()) total += v.segs;
-            if (total > MAX_CACHED_SEGMENTS) {
-              const byAge = [...cacheRef.current.entries()].sort((a, b) => a[1].used - b[1].used);
-              for (const [key, v] of byAge) {
-                if (total <= MAX_CACHED_SEGMENTS * 0.8) break;
-                cacheRef.current.delete(key);
-                total -= v.segs;
-              }
+          if (!data) return;
+          cacheRef.current.set(file, { data, used: performance.now(), segs: data.segments.length });
+          let total = 0;
+          for (const v of cacheRef.current.values()) total += v.segs;
+          if (total > MAX_CACHED_SEGMENTS) {
+            const byAge = [...cacheRef.current.entries()].sort((a, b) => a[1].used - b[1].used);
+            for (const [key, v] of byAge) {
+              if (total <= MAX_CACHED_SEGMENTS * 0.8) break;
+              cacheRef.current.delete(key);
+              total -= v.segs;
             }
           }
         })
         .finally(() => {
           pendingRef.current.delete(file);
           activeFetchesRef.current -= 1;
+          snapshotRef.current = null;
           requestDraw();
           pumpQueue();
         });
     }
   }, [fetchTile, requestDraw]);
 
-  // Smallest scale at which the view around (cx, cy) stays within budget.
   const constrain = useCallback(
     (view: View): View => {
       let v = view;
@@ -214,8 +227,8 @@ export default function WaterCadTileCanvas({
     [visibleFiles],
   );
 
-  // Open close in, over the part of the drawing with the most network detail
-  // (fittings, names, valves are points and labels), as far out as the budget allows.
+  // Open close in over the area with the most annotation (fittings, names,
+  // valves), at the widest zoom that is still complete.
   const fit = useCallback(() => {
     const { w, h } = sizeRef.current;
     if (!w || !h || !tiles.length) return;
@@ -230,11 +243,7 @@ export default function WaterCadTileCanvas({
       const kx = key % grid;
       const ky = Math.floor(key / grid);
       let score = 0;
-      for (let dy = -2; dy <= 2; dy += 1) {
-        for (let dx = -2; dx <= 2; dx += 1) {
-          score += weight.get((ky + dy) * grid + (kx + dx)) || 0;
-        }
-      }
+      for (let dy = -2; dy <= 2; dy += 1) for (let dx = -2; dx <= 2; dx += 1) score += weight.get((ky + dy) * grid + (kx + dx)) || 0;
       if (score > bestScore) {
         bestScore = score;
         bestKey = key;
@@ -279,13 +288,15 @@ export default function WaterCadTileCanvas({
     viewRef.current = null;
     cacheRef.current.clear();
     queueRef.current = [];
+    drawListRef.current = null;
     fit();
   }, [tiles, fit]);
 
   useEffect(() => {
     snapshotRef.current = null;
+    drawListRef.current = null;
     requestDraw();
-  }, [query, requestDraw]);
+  }, [layerVisible, lineweightDisplay, requestDraw]);
 
   // ---- drawing -----------------------------------------------------------
   useEffect(() => {
@@ -295,16 +306,14 @@ export default function WaterCadTileCanvas({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const { w, h, dpr } = sizeRef.current;
-
     const toSx = (x: number) => (x - view.cx) * view.scale + w / 2;
     const toSy = (y: number) => h / 2 - (y - view.cy) * view.scale;
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle = BACKGROUND;
     ctx.fillRect(0, 0, w, h);
 
-    // While a finger is moving, re-project the last full frame instead of
-    // redrawing millions of lines; the full redraw happens when it settles.
+    // While a finger moves, re-project the last full frame; redraw when it settles.
     const snap = snapshotRef.current;
     if (interactingRef.current && snap) {
       const k = view.scale / snap.view.scale;
@@ -319,95 +328,207 @@ export default function WaterCadTileCanvas({
     }
 
     const vis = visibleFiles(view);
-    let drawnSegments = 0;
-    let drawnPoints = 0;
-    let drawnLabels = 0;
-    let loaded = 0;
-
-    {
-      const want: string[] = [];
-      const now = performance.now();
-      const byLayer = new Map<number, CadSegment[]>();
-      const points: CadPointItem[] = [];
-      const labels: CadLabelItem[] = [];
-      for (const t of vis.files) {
-        const hit = cacheRef.current.get(t.file);
-        if (!hit) {
-          if (!pendingRef.current.has(t.file)) want.push(t.file);
-          continue;
-        }
-        hit.used = now;
-        loaded += 1;
-        for (const s of hit.data.segments) {
-          if (!layerVisible[s[4]] && layers.length) continue;
-          const list = byLayer.get(s[4]);
-          if (list) list.push(s);
-          else byLayer.set(s[4], [s]);
-        }
-        for (const p of hit.data.points) if (!layers.length || layerVisible[p[2]]) points.push(p);
-        for (const l of hit.data.labels) if (!layers.length || layerVisible[l[2]]) labels.push(l);
+    const want: string[] = [];
+    const now = performance.now();
+    const loadedFiles: string[] = [];
+    for (const t of vis.files) {
+      const hit = cacheRef.current.get(t.file);
+      if (!hit) {
+        if (!pendingRef.current.has(t.file)) want.push(t.file);
+        continue;
       }
-      // Nearest tiles first, so the centre of the screen fills in first.
-      const cxCell = (view.cx - coreBounds.minX) / cellW;
-      const cyCell = (view.cy - coreBounds.minY) / cellH;
-      const meta = new Map(vis.files.map((t) => [t.file, t]));
-      want.sort((a, b) => {
-        const ta = meta.get(a) as CadTileIndexItem;
-        const tb = meta.get(b) as CadTileIndexItem;
-        return Math.hypot(ta.x - cxCell, ta.y - cyCell) - Math.hypot(tb.x - cxCell, tb.y - cyCell);
-      });
-      queueRef.current = want;
-      pumpQueue();
+      hit.used = now;
+      loadedFiles.push(t.file);
+    }
+    const cxCell = (view.cx - coreBounds.minX) / cellW;
+    const cyCell = (view.cy - coreBounds.minY) / cellH;
+    const meta = new Map(vis.files.map((t) => [t.file, t]));
+    want.sort((a, b) => {
+      const ta = meta.get(a) as CadTileIndexItem;
+      const tb = meta.get(b) as CadTileIndexItem;
+      return Math.hypot(ta.x - cxCell, ta.y - cyCell) - Math.hypot(tb.x - cxCell, tb.y - cyCell);
+    });
+    queueRef.current = want;
+    pumpQueue();
 
-      // Background layers first, network last so it stays on top.
-      const order = [...byLayer.keys()].sort((a, b) => {
-        const rank = (id: number) => {
-          const name = layers[id] || "";
-          return isNetworkLayer(name) ? 2 : isBackgroundLayer(name) ? 0 : 1;
-        };
-        return rank(a) - rank(b);
-      });
-      ctx.lineCap = "round";
-      for (const id of order) {
-        const name = layers[id] || "";
-        ctx.strokeStyle = layerColors[id] || "#334155";
-        ctx.lineWidth = isNetworkLayer(name) ? 1.6 : isBackgroundLayer(name) ? 0.6 : 0.9;
-        ctx.beginPath();
-        for (const [x1, y1, x2, y2] of byLayer.get(id) as CadSegment[]) {
-          ctx.moveTo(toSx(x1), toSy(y1));
-          ctx.lineTo(toSx(x2), toSy(y2));
-          drawnSegments += 1;
-        }
-        ctx.stroke();
+    // One list in the drawing's own draw order. Rebuilt only when the set of
+    // loaded tiles changes. Kind: 0 segment, 1 fill, 2 text, 3 point.
+    const key = loadedFiles.join("|");
+    if (!drawListRef.current || drawListRef.current.key !== key) {
+      const list: Array<[number, number, unknown]> = [];
+      for (const file of loadedFiles) {
+        const d = (cacheRef.current.get(file) as { data: CadTileData }).data;
+        for (const s of d.segments) if (layerVisible[s[4]]) list.push([s[7], 0, s]);
+        for (const f of d.fills) if (layerVisible[f[0]]) list.push([f[4], 1, f]);
+        for (const t of d.texts) if (layerVisible[t[2]]) list.push([t[11], 2, t]);
+        for (const p of d.points) if (layerVisible[p[2]]) list.push([p[4], 3, p]);
       }
-
-      ctx.fillStyle = "#dc2626";
-      for (const [x, y] of points) {
-        const sx = toSx(x);
-        const sy = toSy(y);
-        if (sx < -4 || sy < -4 || sx > w + 4 || sy > h + 4) continue;
-        ctx.beginPath();
-        ctx.arc(sx, sy, 2.4, 0, Math.PI * 2);
-        ctx.fill();
-        drawnPoints += 1;
-      }
-
-      // Text only once it is legible; never more than the screen can hold.
-      if (labels.length && view.scale > 0.6) {
-        ctx.fillStyle = "#111827";
-        ctx.font = "11px system-ui, sans-serif";
-        for (const [x, y, , text] of labels) {
-          if (drawnLabels >= MAX_LABELS_DRAWN) break;
-          const sx = toSx(x);
-          const sy = toSy(y);
-          if (sx < -50 || sy < -12 || sx > w + 4 || sy > h + 12) continue;
-          ctx.fillText(String(text).slice(0, 80), sx, sy);
-          drawnLabels += 1;
-        }
-      }
+      list.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+      drawListRef.current = { key, list };
     }
 
-    // Remember this frame for smooth panning.
+    let drawnSegments = 0;
+    let drawnFills = 0;
+    let drawnTexts = 0;
+    let pathStyle = -1;
+    const flush = () => {
+      if (pathStyle >= 0) ctx.stroke();
+      pathStyle = -1;
+    };
+    ctx.lineCap = "butt";
+    ctx.lineJoin = "round";
+
+    const dashPieces = (seg: Seg, style: CadStyle, out: (a: number, b: number) => void) => {
+      const lt = style.lt ? linetypes[style.lt] : null;
+      const period = lt ? lt.total * style.lts : 0;
+      const len = Math.hypot(seg[2] - seg[0], seg[3] - seg[1]);
+      if (!lt || !(period > 0) || seg[6] < 0 || period * view.scale < MIN_PATTERN_PX) {
+        out(0, len);
+        return;
+      }
+      let pos = -(((seg[6] % period) + period) % period);
+      let guard = 0;
+      while (pos < len && guard < 20000) {
+        for (const el of lt.pattern) {
+          const l = Math.abs(el.len) * style.lts;
+          if (el.len > 0) {
+            const a = Math.max(0, pos);
+            const b = Math.min(len, pos + l);
+            if (b > a) out(a, b);
+          } else if (el.len === 0 && !el.text && pos >= 0 && pos <= len) {
+            out(pos, pos + Math.max(1 / view.scale, 1e-9));
+          }
+          pos += l;
+          guard += 1;
+          if (pos >= len) break;
+        }
+      }
+    };
+
+    const linetypeTexts: Array<[number, number, number, string, number, string]> = [];
+
+    for (const [, kind, item] of drawListRef.current.list) {
+      if (kind === 0) {
+        const s = item as Seg;
+        const style = styles[s[5]];
+        if (!style) continue;
+        const sx1 = toSx(s[0]);
+        const sy1 = toSy(s[1]);
+        const sx2 = toSx(s[2]);
+        const sy2 = toSy(s[3]);
+        if ((sx1 < 0 && sx2 < 0) || (sx1 > w && sx2 > w) || (sy1 < 0 && sy2 < 0) || (sy1 > h && sy2 > h)) continue;
+        if (pathStyle !== s[5]) {
+          flush();
+          ctx.strokeStyle = colorOf(style.c);
+          ctx.lineWidth = lineweightPx(style.lw, lineweightDisplay);
+          ctx.beginPath();
+          pathStyle = s[5];
+        }
+        const len = Math.hypot(s[2] - s[0], s[3] - s[1]);
+        const ux = len > 0 ? (sx2 - sx1) / (len * view.scale) : 0;
+        const uy = len > 0 ? (sy2 - sy1) / (len * view.scale) : 0;
+        dashPieces(s, style, (a, b) => {
+          ctx.moveTo(sx1 + ux * a * view.scale, sy1 + uy * a * view.scale);
+          ctx.lineTo(sx1 + ux * b * view.scale, sy1 + uy * b * view.scale);
+        });
+        // Text embedded in complex linetypes (e.g. "U" in UPVC), at its position in the pattern.
+        const lt = style.lt ? linetypes[style.lt] : null;
+        if (lt && s[6] >= 0 && lt.pattern.some((e) => e.text)) {
+          const period = lt.total * style.lts;
+          if (period * view.scale >= 20) {
+            let pos = -(((s[6] % period) + period) % period);
+            while (pos < len) {
+              for (const el of lt.pattern) {
+                if (el.text && pos >= 0 && pos <= len) {
+                  const hPx = (el.scale || 1) * style.lts * view.scale;
+                  if (hPx >= MIN_TEXT_PX) {
+                    const ang = Math.atan2(-(sy2 - sy1), sx2 - sx1);
+                    const bx = sx1 + ux * pos * view.scale;
+                    const by = sy1 + uy * pos * view.scale;
+                    const ox = (el.ox || 0) * style.lts * view.scale;
+                    const oy = (el.oy || 0) * style.lts * view.scale;
+                    linetypeTexts.push([bx + Math.cos(ang) * ox - Math.sin(ang) * oy, by - (Math.sin(ang) * ox + Math.cos(ang) * oy), el.absRot ? -(el.rot || 0) : -ang - (el.rot || 0), el.text, hPx, colorOf(style.c)]);
+                  }
+                }
+                pos += Math.abs(el.len) * style.lts;
+                if (pos >= len) break;
+              }
+            }
+          }
+        }
+        drawnSegments += 1;
+      } else if (kind === 1) {
+        flush();
+        const f = item as Fill;
+        const style = styles[f[1]];
+        ctx.fillStyle = f[2] === 1 ? BACKGROUND : colorOf(style?.c || "aci7");
+        ctx.beginPath();
+        for (const ring of f[3]) {
+          for (let i = 0; i < ring.length; i += 2) {
+            const x = toSx(ring[i]);
+            const y = toSy(ring[i + 1]);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+        }
+        ctx.fill("evenodd");
+        drawnFills += 1;
+      } else if (kind === 2) {
+        const t = item as Txt;
+        const px = t[5] * view.scale;
+        if (px < MIN_TEXT_PX) continue;
+        const x = toSx(t[0]);
+        const y = toSy(t[1]);
+        if (x < -2000 || x > w + 2000 || y < -2000 || y > h + 2000) continue;
+        flush();
+        const style = styles[t[3]];
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(-t[6]);
+        ctx.scale(t[9] || 1, 1);
+        ctx.fillStyle = colorOf(style?.c || "aci7");
+        ctx.font = `${px}px Arial, "Helvetica Neue", sans-serif`;
+        const ha = t[7];
+        ctx.textAlign = ha === 1 || ha === 4 ? "center" : ha === 2 ? "right" : "left";
+        const lines = t[4].split("\n");
+        const va = t[8];
+        const lineGap = px * 1.6667;
+        const block = (lines.length - 1) * lineGap;
+        let y0 = 0;
+        if (t[12]) {
+          // MTEXT: attachment top / middle / bottom of the whole block
+          ctx.textBaseline = va === 3 ? "top" : va === 2 ? "middle" : "bottom";
+          y0 = va === 3 ? 0 : va === 2 ? -block / 2 : -block;
+        } else {
+          ctx.textBaseline = va === 3 ? "top" : va === 2 ? "middle" : va === 1 ? "bottom" : "alphabetic";
+        }
+        lines.forEach((line, i) => ctx.fillText(line, 0, y0 + i * lineGap));
+        ctx.restore();
+        drawnTexts += 1;
+      } else {
+        const p = item as Pt;
+        const x = toSx(p[0]);
+        const y = toSy(p[1]);
+        if (x < 0 || y < 0 || x > w || y > h) continue;
+        flush();
+        ctx.fillStyle = colorOf(styles[p[3]]?.c || "aci7");
+        ctx.fillRect(x - 0.75, y - 0.75, 1.5, 1.5);
+      }
+    }
+    flush();
+
+    for (const [x, y, rot, text, hPx, color] of linetypeTexts) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rot);
+      ctx.fillStyle = color;
+      ctx.font = `${hPx}px Arial, sans-serif`;
+      ctx.textBaseline = "alphabetic";
+      ctx.fillText(text, 0, 0);
+      ctx.restore();
+    }
+
     const bitmap = document.createElement("canvas");
     bitmap.width = canvas.width;
     bitmap.height = canvas.height;
@@ -416,16 +537,16 @@ export default function WaterCadTileCanvas({
 
     onStats?.({
       visibleTileFiles: vis.files.length,
-      loadedTileFiles: loaded,
+      loadedTileFiles: loadedFiles.length,
       drawnSegments,
-      drawnPoints,
-      drawnLabels,
+      drawnFills,
+      drawnTexts,
       pendingTileFiles: pendingRef.current.size + queueRef.current.length,
       atMinZoom: constrain({ ...view, scale: view.scale / 1.25 }).scale > view.scale / 1.25,
     });
     // `tick` drives redraws.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tick, layerVisible]);
+  }, [tick]);
 
   // ---- gestures ----------------------------------------------------------
   const pointers = useRef(new Map<number, { x: number; y: number }>());
@@ -447,14 +568,9 @@ export default function WaterCadTileCanvas({
       const wx = view.cx + (sx - w / 2) / view.scale;
       const wy = view.cy - (sy - h / 2) / view.scale;
       const scale = Math.max(1e-6, Math.min(5000, view.scale * factor));
-      const next = {
-        scale,
-        cx: wx - (sx - w / 2) / scale,
-        cy: wy + (sy - h / 2) / scale,
-      };
+      const next = { scale, cx: wx - (sx - w / 2) / scale, cy: wy + (sy - h / 2) / scale };
       // Zooming out stops where the screen would hold more than can be drawn.
-      viewRef.current =
-        factor < 1 && visibleFiles(next).segments > MAX_SEGMENTS_IN_VIEW ? view : next;
+      viewRef.current = factor < 1 && visibleFiles(next).segments > MAX_SEGMENTS_IN_VIEW ? view : next;
       interactingRef.current = true;
       requestDraw();
       settle();
@@ -469,16 +585,15 @@ export default function WaterCadTileCanvas({
 
   const onPointerDown = (event: React.PointerEvent<HTMLCanvasElement>) => {
     event.currentTarget.setPointerCapture(event.pointerId);
-    pointers.current.set(event.pointerId, localXY(event));
     const p = localXY(event);
+    pointers.current.set(event.pointerId, p);
     const all = [...pointers.current.values()];
     gesture.current = {
-      moved: gesture.current?.moved ?? false,
+      moved: pointers.current.size === 1 ? false : (gesture.current?.moved ?? false),
       startX: p.x,
       startY: p.y,
       dist: all.length === 2 ? Math.hypot(all[0].x - all[1].x, all[0].y - all[1].y) : 0,
     };
-    if (pointers.current.size === 1) gesture.current.moved = false;
   };
 
   const onPointerMove = (event: React.PointerEvent<HTMLCanvasElement>) => {
@@ -488,7 +603,6 @@ export default function WaterCadTileCanvas({
     pointers.current.set(event.pointerId, next);
     const g = gesture.current;
     if (!g) return;
-
     if (pointers.current.size >= 2) {
       const [a, b] = [...pointers.current.values()];
       const dist = Math.hypot(a.x - b.x, a.y - b.y);
@@ -497,7 +611,6 @@ export default function WaterCadTileCanvas({
       g.moved = true;
       return;
     }
-
     const dx = next.x - prev.x;
     const dy = next.y - prev.y;
     if (Math.hypot(next.x - g.startX, next.y - g.startY) > 6) g.moved = true;
@@ -516,10 +629,7 @@ export default function WaterCadTileCanvas({
         const p = localXY(event);
         const { w, h } = sizeRef.current;
         const view = viewRef.current;
-        onPick({
-          x: view.cx + (p.x - w / 2) / view.scale,
-          y: view.cy - (p.y - h / 2) / view.scale,
-        });
+        onPick({ x: view.cx + (p.x - w / 2) / view.scale, y: view.cy - (p.y - h / 2) / view.scale });
       }
       gesture.current = null;
     } else if (g) {
@@ -541,7 +651,7 @@ export default function WaterCadTileCanvas({
   }, [zoomAt]);
 
   return (
-    <div ref={wrapRef} className="relative h-full w-full select-none">
+    <div ref={wrapRef} className="relative h-full w-full select-none" style={{ background: BACKGROUND }}>
       <canvas
         ref={canvasRef}
         className="block h-full w-full"
@@ -561,7 +671,7 @@ export default function WaterCadTileCanvas({
             key={b.label}
             type="button"
             onClick={b.act}
-            className="pointer-events-auto h-11 w-11 rounded-xl border border-slate-300 bg-white/95 text-xl font-black text-slate-800 shadow"
+            className="pointer-events-auto h-11 w-11 rounded-xl border border-slate-500 bg-slate-800/90 text-xl font-black text-white shadow"
           >
             {b.label}
           </button>

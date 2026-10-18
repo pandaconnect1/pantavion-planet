@@ -19,6 +19,9 @@ type TileIndexItem = {
   segmentCount: number;
   pointCount?: number;
   labelCount?: number;
+  fillCount?: number;
+  part?: number;
+  parts?: number;
 };
 
 type DerivedManifest = {
@@ -49,6 +52,14 @@ type DerivedManifest = {
   geographicAlignmentVerified?: boolean;
   cadastralOverlayAllowed?: boolean;
   layers?: string[];
+  layerInfo?: unknown[];
+  styles?: unknown[];
+  linetypes?: Record<string, unknown>;
+  cadHeader?: Record<string, unknown>;
+  fillCount?: number;
+  blockRefCount?: number;
+  extractorVersion?: string;
+  schemaVersion?: string;
   topLayers?: Array<{ layer: string; count: number }>;
   tiles?: TileIndexItem[];
   coverage?: Record<string, unknown>;
@@ -100,6 +111,15 @@ function sanitizeManifest(
     allBounds: manifest.allBounds ?? null,
     coreBounds: manifest.coreBounds ?? null,
     layers: manifest.layers ?? [],
+    // Display properties exactly as resolved from the DWG (v3+).
+    layerInfo: manifest.layerInfo ?? [],
+    styles: manifest.styles ?? [],
+    linetypes: manifest.linetypes ?? {},
+    cadHeader: manifest.cadHeader ?? {},
+    fillCount: manifest.fillCount ?? 0,
+    blockRefCount: manifest.blockRefCount ?? 0,
+    extractorVersion: manifest.extractorVersion ?? null,
+    schemaVersion: manifest.schemaVersion ?? null,
     topLayers: manifest.topLayers ?? [],
     tiles: sortedTiles,
     coverage: manifest.coverage ?? {},

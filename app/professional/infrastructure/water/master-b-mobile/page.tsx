@@ -3,12 +3,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import WaterCadTileCanvas, {
+  type CadLayerInfo,
+  type CadLinetype,
+  type CadStyle,
+  type CadTileData,
   type CanvasStats,
 } from "../components/water-cad-tile-canvas";
 
-type Segment = [number, number, number, number, number];
-type CadPoint = [number, number, number, string, string | null];
-type CadLabel = [number, number, number, string, string];
 
 type TileIndexItem = {
   x: number;
@@ -51,6 +52,11 @@ type Manifest = {
   overflowSegmentCount?: number;
   pointCount?: number;
   labelCount?: number;
+  fillCount?: number;
+  layerInfo?: CadLayerInfo[];
+  styles?: CadStyle[];
+  linetypes?: Record<string, CadLinetype>;
+  cadHeader?: { LWDISPLAY?: number };
   allBounds?: Bounds | null;
   coreBounds?: Bounds | null;
   layers?: string[];
@@ -60,17 +66,6 @@ type Manifest = {
   message?: string;
 };
 
-type TilePayload = {
-  ok?: boolean;
-  tileX?: number;
-  tileY?: number;
-  segmentFormat?: string[];
-  pointFormat?: string[];
-  labelFormat?: string[];
-  segments?: Segment[];
-  points?: CadPoint[];
-  labels?: CadLabel[];
-};
 
 type LoadState = "idle" | "loading" | "ready" | "error";
 
@@ -183,6 +178,8 @@ export default function MasterBMobilePage() {
   const [layerQuery, setLayerQuery] = useState("");
   const [selectedDrawingPoint, setSelectedDrawingPoint] = useState<{ x: number; y: number } | null>(null);
   const [canvasStats, setCanvasStats] = useState<CanvasStats | null>(null);
+  const [showHiddenLayers, setShowHiddenLayers] = useState(false);
+  const [lineweightOverride, setLineweightOverride] = useState<boolean | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -245,12 +242,13 @@ export default function MasterBMobilePage() {
         },
       );
       if (!response.ok) return null;
-      const tileJson = (await response.json()) as TilePayload;
+      const tileJson = (await response.json()) as Partial<CadTileData>;
       return {
         segments: tileJson.segments ?? [],
+        fills: tileJson.fills ?? [],
+        texts: tileJson.texts ?? [],
         points: tileJson.points ?? [],
-        labels: tileJson.labels ?? [],
-      };
+      } as CadTileData;
     },
     [sourceKey],
   );
@@ -259,8 +257,9 @@ export default function MasterBMobilePage() {
 
   const coreBounds = manifest?.coreBounds ?? manifest?.allBounds ?? null;
   const canDraw = Boolean(
-    manifest?.ok && coreBounds && manifest.grid && (manifest.tiles?.length ?? 0) > 0,
+    manifest?.ok && coreBounds && manifest.grid && (manifest.tiles?.length ?? 0) > 0 && manifest.styles?.length,
   );
+  const lineweightDisplay = lineweightOverride ?? (manifest?.cadHeader?.LWDISPLAY ?? 0) !== 0;
 
   const topLayers = manifest?.topLayers?.slice(0, 14) ?? [];
 
@@ -405,6 +404,22 @@ export default function MasterBMobilePage() {
                     ? `Αυθεντικές γραμμές του DWG στις ακριβείς συντεταγμένες · ${formatNumber(canvasStats.loadedTileFiles)}/${formatNumber(canvasStats.visibleTileFiles)} κομμάτια${canvasStats.pendingTileFiles ? " · φορτώνει…" : ""}${canvasStats.atMinZoom ? " · μέγιστο ξεζούμισμα για πλήρη εμφάνιση" : ""}`
                     : "Φορτώνει μόνο ό,τι φαίνεται στην οθόνη, χωρίς καμία απλοποίηση."}
                 </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setLineweightOverride(!lineweightDisplay)}
+                    className={`rounded-lg border px-3 py-1.5 text-xs font-black ${lineweightDisplay ? "border-[#f2c766] bg-[#f2c766] text-black" : "border-slate-600 text-slate-200"}`}
+                  >
+                    LWT · πάχη γραμμών
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowHiddenLayers((v) => !v)}
+                    className={`rounded-lg border px-3 py-1.5 text-xs font-black ${showHiddenLayers ? "border-[#f2c766] bg-[#f2c766] text-black" : "border-slate-600 text-slate-200"}`}
+                  >
+                    {showHiddenLayers ? "Κρυφά επίπεδα: εμφανή" : "Κρυφά επίπεδα (frozen/off): κρυμμένα όπως στο AutoCAD"}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -439,6 +454,11 @@ export default function MasterBMobilePage() {
                   grid={Number(manifest.grid)}
                   coreBounds={coreBounds}
                   layers={layerNames}
+                  layerInfo={manifest.layerInfo ?? []}
+                  styles={manifest.styles ?? []}
+                  linetypes={manifest.linetypes ?? {}}
+                  lineweightDisplay={lineweightDisplay}
+                  showHiddenLayers={showHiddenLayers}
                   layerQuery={layerQuery}
                   fetchTile={fetchTile}
                   onPick={setSelectedDrawingPoint}
@@ -448,6 +468,8 @@ export default function MasterBMobilePage() {
                 <div className="flex h-full items-center justify-center p-6 text-center text-sm font-black text-slate-700">
                   {status === "loading"
                     ? "Φόρτωση Map B…"
+                    : manifest?.ok && !manifest.styles?.length
+                      ? "Ο χάρτης ξαναδημιουργείται με τα αυθεντικά χρώματα, τύπους και πάχη γραμμών του DWG. Δοκίμασε ξανά σε λίγα λεπτά."
                     : "The selected derived geometry layer is not configured/processed yet. Raw DWG remains in the private founder/admin vault. Approved users receive only browser-safe derived geometry after processing, access approval, and audit."}
                 </div>
               )}
