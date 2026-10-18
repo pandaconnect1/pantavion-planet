@@ -1,16 +1,25 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-type Segment = [number, number, number, number, number];
-type CadPoint = [number, number, number, string, string | null];
-type CadLabel = [number, number, number, string, string];
+import WaterCadTileCanvas, {
+  type CadLayerInfo,
+  type CadLinetype,
+  type CadStyle,
+  type CadTileData,
+  type CanvasStats,
+} from "../components/water-cad-tile-canvas";
+
 
 type TileIndexItem = {
   x: number;
   y: number;
   file: string;
   segmentCount: number;
+  pointCount?: number;
+  labelCount?: number;
+  part?: number;
+  parts?: number;
 };
 
 type Bounds = {
@@ -41,6 +50,13 @@ type Manifest = {
   matchedNetworkSegments?: number;
   writtenTileCount?: number;
   overflowSegmentCount?: number;
+  pointCount?: number;
+  labelCount?: number;
+  fillCount?: number;
+  layerInfo?: CadLayerInfo[];
+  styles?: CadStyle[];
+  linetypes?: Record<string, CadLinetype>;
+  cadHeader?: { LWDISPLAY?: number };
   allBounds?: Bounds | null;
   coreBounds?: Bounds | null;
   layers?: string[];
@@ -50,17 +66,6 @@ type Manifest = {
   message?: string;
 };
 
-type TilePayload = {
-  ok?: boolean;
-  tileX?: number;
-  tileY?: number;
-  segmentFormat?: string[];
-  pointFormat?: string[];
-  labelFormat?: string[];
-  segments?: Segment[];
-  points?: CadPoint[];
-  labels?: CadLabel[];
-};
 
 type LoadState = "idle" | "loading" | "ready" | "error";
 
@@ -132,48 +137,6 @@ function formatNumber(value: number | undefined | null): string {
   return new Intl.NumberFormat("el-GR").format(value);
 }
 
-function getDrawingBounds(
-  segments: Segment[],
-  points: CadPoint[],
-  labels: CadLabel[],
-): Bounds | null {
-  if (!segments.length && !points.length && !labels.length) {
-    return null;
-  }
-
-  let minX = Number.POSITIVE_INFINITY;
-  let minY = Number.POSITIVE_INFINITY;
-  let maxX = Number.NEGATIVE_INFINITY;
-  let maxY = Number.NEGATIVE_INFINITY;
-
-  for (const [x1, y1, x2, y2] of segments) {
-    minX = Math.min(minX, x1, x2);
-    minY = Math.min(minY, y1, y2);
-    maxX = Math.max(maxX, x1, x2);
-    maxY = Math.max(maxY, y1, y2);
-  }
-
-  for (const [x, y] of points) {
-    minX = Math.min(minX, x);
-    minY = Math.min(minY, y);
-    maxX = Math.max(maxX, x);
-    maxY = Math.max(maxY, y);
-  }
-
-  for (const [x, y] of labels) {
-    minX = Math.min(minX, x);
-    minY = Math.min(minY, y);
-    maxX = Math.max(maxX, x);
-    maxY = Math.max(maxY, y);
-  }
-
-  if (![minX, minY, maxX, maxY].every(Number.isFinite)) {
-    return null;
-  }
-
-  return { minX, minY, maxX, maxY };
-}
-
 export default function MasterBMobilePage() {
   const [sourceKey, setSourceKey] = useState<
     "canonical-2026-andreaspap" | "legacy-george-85m"
@@ -210,14 +173,13 @@ export default function MasterBMobilePage() {
   }, []);
 
   const [manifest, setManifest] = useState<Manifest | null>(null);
-  const [segments, setSegments] = useState<Segment[]>([]);
-  const [points, setPoints] = useState<CadPoint[]>([]);
-  const [labels, setLabels] = useState<CadLabel[]>([]);
   const [status, setStatus] = useState<LoadState>("idle");
   const [error, setError] = useState("");
-  const [tileLimit, setTileLimit] = useState(48);
   const [layerQuery, setLayerQuery] = useState("");
   const [selectedDrawingPoint, setSelectedDrawingPoint] = useState<{ x: number; y: number } | null>(null);
+  const [canvasStats, setCanvasStats] = useState<CanvasStats | null>(null);
+  const [showHiddenLayers, setShowHiddenLayers] = useState(false);
+  const [lineweightOverride, setLineweightOverride] = useState<boolean | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -225,6 +187,7 @@ export default function MasterBMobilePage() {
     async function load() {
       setStatus("loading");
       setError("");
+      setManifest(null);
 
       try {
         const manifestResponse = await fetch(
@@ -248,64 +211,12 @@ export default function MasterBMobilePage() {
           );
         }
 
-        const selectedTiles = [...(manifestJson.tiles ?? [])]
-          .sort((a, b) => b.segmentCount - a.segmentCount)
-          .slice(0, tileLimit);
-
-        const tileResponses = await Promise.all(
-          selectedTiles.map(async (tile) => {
-            const response = await fetch(
-              `/api/professional/infrastructure/water/master-b/derived/tile?sourceKey=${encodeURIComponent(
-                sourceKey,
-              )}&file=${encodeURIComponent(tile.file)}`,
-              {
-                cache: "no-store",
-                credentials: "include",
-                headers: waterAccessHeaders(),
-              },
-            );
-
-            if (!response.ok) {
-              return {
-                segments: [] as Segment[],
-                points: [] as CadPoint[],
-                labels: [] as CadLabel[],
-              };
-            }
-
-            const tileJson = (await response.json()) as TilePayload;
-            return {
-              segments: tileJson.segments ?? [],
-              points: tileJson.points ?? [],
-              labels: tileJson.labels ?? [],
-            };
-          }),
-        );
-
-        if (cancelled) {
-          return;
-        }
-
+        if (cancelled) return;
         setManifest(manifestJson);
-        setSegments(
-          tileResponses.flatMap((item) => item.segments).slice(0, 70000),
-        );
-        setPoints(
-          tileResponses.flatMap((item) => item.points).slice(0, 12000),
-        );
-        setLabels(
-          tileResponses.flatMap((item) => item.labels).slice(0, 4000),
-        );
         setStatus("ready");
       } catch (loadError) {
-        if (cancelled) {
-          return;
-        }
-
+        if (cancelled) return;
         setManifest(null);
-        setSegments([]);
-        setPoints([]);
-        setLabels([]);
         setError(loadError instanceof Error ? loadError.message : "UNKNOWN_ERROR");
         setStatus("error");
       }
@@ -316,58 +227,39 @@ export default function MasterBMobilePage() {
     return () => {
       cancelled = true;
     };
-  }, [sourceKey, tileLimit]);
+  }, [sourceKey]);
+
+  const fetchTile = useCallback(
+    async (file: string) => {
+      const response = await fetch(
+        `/api/professional/infrastructure/water/master-b/derived/tile?sourceKey=${encodeURIComponent(
+          sourceKey,
+        )}&file=${encodeURIComponent(file)}`,
+        {
+          cache: "force-cache",
+          credentials: "include",
+          headers: waterAccessHeaders(),
+        },
+      );
+      if (!response.ok) return null;
+      const tileJson = (await response.json()) as Partial<CadTileData>;
+      return {
+        segments: tileJson.segments ?? [],
+        fills: tileJson.fills ?? [],
+        texts: tileJson.texts ?? [],
+        points: tileJson.points ?? [],
+      } as CadTileData;
+    },
+    [sourceKey],
+  );
 
   const layerNames = useMemo(() => manifest?.layers ?? [], [manifest?.layers]);
 
-  const filteredSegments = useMemo(() => {
-    const query = layerQuery.trim().toUpperCase();
-
-    if (!query) {
-      return segments;
-    }
-
-    return segments.filter((segment) => {
-      const layerName = layerNames[segment[4]] ?? "";
-      return layerName.toUpperCase().includes(query);
-    });
-  }, [layerNames, layerQuery, segments]);
-
-  const filteredPoints = useMemo(() => {
-    const query = layerQuery.trim().toUpperCase();
-    if (!query) return points;
-    return points.filter((point) =>
-      (layerNames[point[2]] ?? "").toUpperCase().includes(query),
-    );
-  }, [layerNames, layerQuery, points]);
-
-  const filteredLabels = useMemo(() => {
-    const query = layerQuery.trim().toUpperCase();
-    if (!query) return labels;
-    return labels.filter((label) =>
-      (layerNames[label[2]] ?? "").toUpperCase().includes(query),
-    );
-  }, [labels, layerNames, layerQuery]);
-
-  const bounds = useMemo(
-    () => getDrawingBounds(filteredSegments, filteredPoints, filteredLabels),
-    [filteredLabels, filteredPoints, filteredSegments],
+  const coreBounds = manifest?.coreBounds ?? manifest?.allBounds ?? null;
+  const canDraw = Boolean(
+    manifest?.ok && coreBounds && manifest.grid && (manifest.tiles?.length ?? 0) > 0 && manifest.styles?.length,
   );
-
-  const viewBox = useMemo(() => {
-    if (!bounds) {
-      return "0 0 100 100";
-    }
-
-    const width = Math.max(bounds.maxX - bounds.minX, 1);
-    const height = Math.max(bounds.maxY - bounds.minY, 1);
-    const padX = width * 0.04;
-    const padY = height * 0.04;
-
-    return `${bounds.minX - padX} ${bounds.minY - padY} ${width + padX * 2} ${
-      height + padY * 2
-    }`;
-  }, [bounds]);
+  const lineweightDisplay = lineweightOverride ?? (manifest?.cadHeader?.LWDISPLAY ?? 0) !== 0;
 
   const topLayers = manifest?.topLayers?.slice(0, 14) ?? [];
 
@@ -460,9 +352,9 @@ export default function MasterBMobilePage() {
           </div>
 
           <div className="rounded-2xl border border-slate-700 bg-[#091426] p-4">
-            <p className="text-xs font-black uppercase text-slate-400">Network segments</p>
+            <p className="text-xs font-black uppercase text-slate-400">Total lines</p>
             <p className="mt-2 text-xl font-black">
-              {formatNumber(manifest?.matchedNetworkSegments)}
+              {formatNumber(manifest?.totalLineSegments)}
             </p>
           </div>
 
@@ -474,18 +366,18 @@ export default function MasterBMobilePage() {
           </div>
 
           <div className="rounded-2xl border border-slate-700 bg-[#091426] p-4">
-            <p className="text-xs font-black uppercase text-slate-400">Loaded lines</p>
-            <p className="mt-2 text-xl font-black">{formatNumber(filteredSegments.length)}</p>
+            <p className="text-xs font-black uppercase text-slate-400">Lines on screen</p>
+            <p className="mt-2 text-xl font-black">{formatNumber(canvasStats?.drawnSegments)}</p>
           </div>
 
           <div className="rounded-2xl border border-slate-700 bg-[#091426] p-4">
             <p className="text-xs font-black uppercase text-slate-400">CAD points</p>
-            <p className="mt-2 text-xl font-black">{formatNumber(filteredPoints.length)}</p>
+            <p className="mt-2 text-xl font-black">{formatNumber(manifest?.pointCount)}</p>
           </div>
 
           <div className="rounded-2xl border border-slate-700 bg-[#091426] p-4">
             <p className="text-xs font-black uppercase text-slate-400">Labels</p>
-            <p className="mt-2 text-xl font-black">{formatNumber(filteredLabels.length)}</p>
+            <p className="mt-2 text-xl font-black">{formatNumber(manifest?.labelCount)}</p>
           </div>
 
           <div className="rounded-2xl border border-slate-700 bg-[#091426] p-4">
@@ -508,25 +400,26 @@ export default function MasterBMobilePage() {
                   Live vector viewport
                 </p>
                 <p className="mt-1 text-xs font-semibold text-slate-400">
-                  Initial mobile load: densest {tileLimit} tiles.
+                  {canvasStats
+                    ? `Αυθεντικές γραμμές του DWG στις ακριβείς συντεταγμένες · ${formatNumber(canvasStats.loadedTileFiles)}/${formatNumber(canvasStats.visibleTileFiles)} κομμάτια${canvasStats.pendingTileFiles ? " · φορτώνει…" : ""}${canvasStats.atMinZoom ? " · μέγιστο ξεζούμισμα για πλήρη εμφάνιση" : ""}`
+                    : "Φορτώνει μόνο ό,τι φαίνεται στην οθόνη, χωρίς καμία απλοποίηση."}
                 </p>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {[24, 48, 96, 160].map((limit) => (
+                <div className="mt-2 flex flex-wrap gap-2">
                   <button
-                    key={limit}
                     type="button"
-                    onClick={() => setTileLimit(limit)}
-                    className={`rounded-xl border px-3 py-2 text-xs font-black ${
-                      tileLimit === limit
-                        ? "border-[#f2c766] bg-[#f2c766] text-black"
-                        : "border-slate-700 bg-[#091426] text-slate-200"
-                    }`}
+                    onClick={() => setLineweightOverride(!lineweightDisplay)}
+                    className={`rounded-lg border px-3 py-1.5 text-xs font-black ${lineweightDisplay ? "border-[#f2c766] bg-[#f2c766] text-black" : "border-slate-600 text-slate-200"}`}
                   >
-                    {limit} tiles
+                    LWT · πάχη γραμμών
                   </button>
-                ))}
+                  <button
+                    type="button"
+                    onClick={() => setShowHiddenLayers((v) => !v)}
+                    className={`rounded-lg border px-3 py-1.5 text-xs font-black ${showHiddenLayers ? "border-[#f2c766] bg-[#f2c766] text-black" : "border-slate-600 text-slate-200"}`}
+                  >
+                    {showHiddenLayers ? "Κρυφά επίπεδα: εμφανή" : "Κρυφά επίπεδα (frozen/off): κρυμμένα όπως στο AutoCAD"}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -555,97 +448,28 @@ export default function MasterBMobilePage() {
               </a>
             </div>
             <div className="h-[68vh] min-h-[460px] overflow-hidden rounded-2xl border border-slate-800 bg-white">
-              {bounds ? (
-                <svg
-                  onClick={(event) => {
-                    // CAD drawing coordinates only. Never interpret as GPS without verified georeferencing.
-                    const svg = event.currentTarget;
-                    const matrix = svg.getScreenCTM();
-                    if (!matrix) return;
-                    const point = svg.createSVGPoint();
-                    point.x = event.clientX;
-                    point.y = event.clientY;
-                    const local = point.matrixTransform(matrix.inverse());
-                    if (!Number.isFinite(local.x) || !Number.isFinite(local.y)) return;
-                    setSelectedDrawingPoint({ x: local.x, y: bounds.minY + bounds.maxY - local.y });
-                  }}
-                  viewBox={viewBox}
-                  className="h-full w-full touch-pan-x touch-pan-y"
-                  preserveAspectRatio="xMidYMid meet"
-                >
-                  <rect
-                    x={bounds.minX}
-                    y={bounds.minY}
-                    width={Math.max(bounds.maxX - bounds.minX, 1)}
-                    height={Math.max(bounds.maxY - bounds.minY, 1)}
-                    fill="white"
-                  />
-
-                  <g transform={`scale(1,-1) translate(0,${-(bounds.minY + bounds.maxY)})`}>
-                    {filteredSegments.map(([x1, y1, x2, y2], index) => (
-                      <line
-                        key={`${index}-${x1}-${y1}`}
-                        x1={x1}
-                        y1={y1}
-                        x2={x2}
-                        y2={y2}
-                        stroke="#0969da"
-                        strokeWidth="1.2"
-                        vectorEffect="non-scaling-stroke"
-                        strokeLinecap="round"
-                      />
-                    ))}
-
-                    {filteredPoints.map(([x, y, layerId, entityType, blockName], index) => (
-                      <circle
-                        key={`point-${index}-${x}-${y}`}
-                        cx={x}
-                        cy={y}
-                        r="3.2"
-                        fill="#dc2626"
-                        stroke="white"
-                        strokeWidth="1"
-                        vectorEffect="non-scaling-stroke"
-                      >
-                        <title>
-                          {`${blockName || entityType} · ${layerNames[layerId] || "Layer 0"}`}
-                        </title>
-                      </circle>
-                    ))}
-                  </g>
-
-                  {selectedDrawingPoint && (
-                    <circle
-                      cx={selectedDrawingPoint.x}
-                      cy={bounds.minY + bounds.maxY - selectedDrawingPoint.y}
-                      r="7"
-                      fill="none"
-                      stroke="#ea580c"
-                      strokeWidth="3"
-                      vectorEffect="non-scaling-stroke"
-                    />
-                  )}
-
-                  {bounds
-                    ? filteredLabels.slice(0, 2000).map(([x, y, layerId, text], index) => (
-                        <text
-                          key={`label-${index}-${x}-${y}`}
-                          x={x}
-                          y={bounds.minY + bounds.maxY - y}
-                          fontSize="10"
-                          fill="#111827"
-                          vectorEffect="non-scaling-stroke"
-                        >
-                          <title>{layerNames[layerId] || "Layer 0"}</title>
-                          {text}
-                        </text>
-                      ))
-                    : null}
-                </svg>
+              {canDraw && manifest && coreBounds ? (
+                <WaterCadTileCanvas
+                  tiles={manifest.tiles ?? []}
+                  grid={Number(manifest.grid)}
+                  coreBounds={coreBounds}
+                  layers={layerNames}
+                  layerInfo={manifest.layerInfo ?? []}
+                  styles={manifest.styles ?? []}
+                  linetypes={manifest.linetypes ?? {}}
+                  lineweightDisplay={lineweightDisplay}
+                  showHiddenLayers={showHiddenLayers}
+                  layerQuery={layerQuery}
+                  fetchTile={fetchTile}
+                  onPick={setSelectedDrawingPoint}
+                  onStats={setCanvasStats}
+                />
               ) : (
                 <div className="flex h-full items-center justify-center p-6 text-center text-sm font-black text-slate-700">
                   {status === "loading"
-                    ? "Loading selected Map B network tiles..."
+                    ? "Φόρτωση Map B…"
+                    : manifest?.ok && !manifest.styles?.length
+                      ? "Ο χάρτης ξαναδημιουργείται με τα αυθεντικά χρώματα, τύπους και πάχη γραμμών του DWG. Δοκίμασε ξανά σε λίγα λεπτά."
                     : "The selected derived geometry layer is not configured/processed yet. Raw DWG remains in the private founder/admin vault. Approved users receive only browser-safe derived geometry after processing, access approval, and audit."}
                 </div>
               )}

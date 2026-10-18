@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 import { createClient } from "@supabase/supabase-js";
 import { loadApprovedOwnerDwg } from "./water-approved-owner-dwg-loader.mjs";
 
+const CURRENT_GENERATOR = "pantavion-map-b-derived-v3";
 const source = {
   mapId: "B", byteSize: 205565159, dwgHeader: "AC1032",
   sha256: "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16",
@@ -19,8 +20,18 @@ async function main() {
   if (!process.env.SUPABASE_SECRET_KEY) throw Error("admin_credential_missing");
   const path = "water-network-private/derived/map-b/" + source.sha256 + "/manifest.json";
   const existing = await admin.storage.from("personal-media").download(path);
+  // Tiles from an older generator are rebuilt: v3 carries the drawing's own
+  // colours, linetypes, lineweights, fills and text instead of a preview style.
+  let current = null;
   if (!existing.error && existing.data) {
-    const manifest = JSON.parse(await existing.data.text());
+    current = JSON.parse(await existing.data.text());
+    if (current.generatorVersion !== CURRENT_GENERATOR) {
+      console.log(JSON.stringify({ mapId: "B", state: "rebuilding_older_derived", from: current.generatorVersion, to: CURRENT_GENERATOR }));
+      current = null;
+    }
+  }
+  if (current) {
+    const manifest = current;
     if (manifest.ok !== true || manifest.sourceSha256 !== source.sha256 ||
         !Array.isArray(manifest.tiles) || manifest.tiles.length === 0 ||
         manifest.geographicAlignmentVerified !== false) {
