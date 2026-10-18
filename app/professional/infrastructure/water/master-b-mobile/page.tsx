@@ -401,11 +401,9 @@ export default function MasterBMobilePage() {
                   Live vector viewport
                 </p>
                 <p className="mt-1 text-xs font-semibold text-slate-400">
-                  {canvasStats?.overview
-                    ? "Πυκνότητα σχεδίου — κάνε zoom (δύο δάχτυλα ή +) για να φορτώσουν οι αυθεντικές γραμμές."
-                    : canvasStats
-                      ? `Αυθεντικές γραμμές στις συντεταγμένες του DWG · ${formatNumber(canvasStats.loadedTileFiles)}/${formatNumber(canvasStats.visibleTileFiles)} tiles${canvasStats.pendingTileFiles ? " · φορτώνει…" : ""}`
-                      : "Φορτώνει μόνο ό,τι φαίνεται στην οθόνη, χωρίς όριο γραμμών."}
+                  {canvasStats
+                    ? `Αυθεντικές γραμμές του DWG στις ακριβείς συντεταγμένες · ${formatNumber(canvasStats.loadedTileFiles)}/${formatNumber(canvasStats.visibleTileFiles)} κομμάτια${canvasStats.pendingTileFiles ? " · φορτώνει…" : ""}${canvasStats.atMinZoom ? " · μέγιστο ξεζούμισμα για πλήρη εμφάνιση" : ""}`
+                    : "Φορτώνει μόνο ό,τι φαίνεται στην οθόνη, χωρίς καμία απλοποίηση."}
                 </p>
               </div>
             </div>

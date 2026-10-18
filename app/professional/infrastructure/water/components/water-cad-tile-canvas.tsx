@@ -6,10 +6,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
  * Viewport-driven canvas viewer for derived CAD tiles.
  *
  * Every line, point and label is drawn at its source CAD coordinate. Nothing is
- * simplified or capped: the viewer only decides WHICH tiles to fetch, from what
- * is on screen. When the view covers more geometry than a phone can draw, it
- * shows the tile density instead and asks the user to zoom in, rather than
- * silently dropping lines.
+ * simplified, sampled, rasterised or capped: the viewer only decides WHICH tiles
+ * to fetch, from what is on screen. Instead of ever drawing a partial map, it
+ * limits how far out the view can go, so every view it shows holds all of the
+ * authentic geometry in that area. It opens close in, over the network.
  */
 
 export type CadSegment = [number, number, number, number, number];
@@ -55,12 +55,12 @@ export type CanvasStats = {
   drawnPoints: number;
   drawnLabels: number;
   pendingTileFiles: number;
-  overview: boolean;
+  atMinZoom: boolean;
 };
 
-// Geometry a phone can redraw smoothly. Above this, the view shows density and
-// asks for zoom instead of drawing a partial (and therefore misleading) map.
-const MAX_SEGMENTS_IN_VIEW = 1_200_000;
+// Geometry a phone can redraw smoothly. The view is never allowed to cover more
+// than this, so what is on screen is always complete.
+const MAX_SEGMENTS_IN_VIEW = 700_000;
 const MAX_CACHED_SEGMENTS = 2_500_000;
 const FETCH_CONCURRENCY = 6;
 const MAX_LABELS_DRAWN = 4000;
@@ -202,20 +202,56 @@ export default function WaterCadTileCanvas({
     }
   }, [fetchTile, requestDraw]);
 
-  // Fit the core of the drawing on first layout.
+  // Smallest scale at which the view around (cx, cy) stays within budget.
+  const constrain = useCallback(
+    (view: View): View => {
+      let v = view;
+      for (let i = 0; i < 60 && visibleFiles(v).segments > MAX_SEGMENTS_IN_VIEW; i += 1) {
+        v = { ...v, scale: v.scale * 1.25 };
+      }
+      return v;
+    },
+    [visibleFiles],
+  );
+
+  // Open close in, over the part of the drawing with the most network detail
+  // (fittings, names, valves are points and labels), as far out as the budget allows.
   const fit = useCallback(() => {
     const { w, h } = sizeRef.current;
-    if (!w || !h) return;
+    if (!w || !h || !tiles.length) return;
+    const weight = new Map<number, number>();
+    for (const t of tiles) {
+      const key = t.y * grid + t.x;
+      weight.set(key, (weight.get(key) || 0) + (t.pointCount || 0) + (t.labelCount || 0));
+    }
+    let bestKey = -1;
+    let bestScore = -1;
+    for (const [key] of weight) {
+      const kx = key % grid;
+      const ky = Math.floor(key / grid);
+      let score = 0;
+      for (let dy = -2; dy <= 2; dy += 1) {
+        for (let dx = -2; dx <= 2; dx += 1) {
+          score += weight.get((ky + dy) * grid + (kx + dx)) || 0;
+        }
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        bestKey = key;
+      }
+    }
+    const kx = bestKey >= 0 ? bestKey % grid : grid / 2;
+    const ky = bestKey >= 0 ? Math.floor(bestKey / grid) : grid / 2;
     const bw = coreBounds.maxX - coreBounds.minX;
     const bh = coreBounds.maxY - coreBounds.minY;
-    viewRef.current = {
-      cx: (coreBounds.minX + coreBounds.maxX) / 2,
-      cy: (coreBounds.minY + coreBounds.maxY) / 2,
-      scale: Math.min(w / bw, h / bh) * 0.95,
-    };
+    viewRef.current = constrain({
+      cx: coreBounds.minX + (kx + 0.5) * cellW,
+      cy: coreBounds.minY + (ky + 0.5) * cellH,
+      scale: Math.min(w / bw, h / bh),
+    });
     snapshotRef.current = null;
     requestDraw();
-  }, [coreBounds, requestDraw]);
+  }, [cellH, cellW, constrain, coreBounds, grid, requestDraw, tiles]);
 
   useEffect(() => {
     const wrap = wrapRef.current;
@@ -283,35 +319,12 @@ export default function WaterCadTileCanvas({
     }
 
     const vis = visibleFiles(view);
-    const overview = vis.segments > MAX_SEGMENTS_IN_VIEW;
     let drawnSegments = 0;
     let drawnPoints = 0;
     let drawnLabels = 0;
     let loaded = 0;
 
-    if (overview) {
-      // Density of every tile in view, from the manifest only. Honest overview:
-      // it says where geometry is, without pretending to be the drawing.
-      let maxCount = 1;
-      for (const t of vis.files) maxCount = Math.max(maxCount, t.segmentCount);
-      const cellAgg = new Map<number, number>();
-      for (const t of vis.files) {
-        const key = t.y * grid + t.x;
-        cellAgg.set(key, (cellAgg.get(key) || 0) + t.segmentCount);
-      }
-      for (const [key, count] of cellAgg) {
-        const tx = key % grid;
-        const ty = Math.floor(key / grid);
-        const x = coreBounds.minX + tx * cellW;
-        const y = coreBounds.minY + ty * cellH;
-        const a = Math.min(1, 0.15 + Math.log10(1 + count) / Math.log10(1 + maxCount));
-        ctx.fillStyle = `rgba(5, 80, 174, ${a.toFixed(3)})`;
-        const sx = toSx(x);
-        const sy = toSy(y + cellH);
-        ctx.fillRect(sx, sy, cellW * view.scale + 0.5, cellH * view.scale + 0.5);
-      }
-      queueRef.current = [];
-    } else {
+    {
       const want: string[] = [];
       const now = performance.now();
       const byLayer = new Map<number, CadSegment[]>();
@@ -408,7 +421,7 @@ export default function WaterCadTileCanvas({
       drawnPoints,
       drawnLabels,
       pendingTileFiles: pendingRef.current.size + queueRef.current.length,
-      overview,
+      atMinZoom: constrain({ ...view, scale: view.scale / 1.25 }).scale > view.scale / 1.25,
     });
     // `tick` drives redraws.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -434,16 +447,19 @@ export default function WaterCadTileCanvas({
       const wx = view.cx + (sx - w / 2) / view.scale;
       const wy = view.cy - (sy - h / 2) / view.scale;
       const scale = Math.max(1e-6, Math.min(5000, view.scale * factor));
-      viewRef.current = {
+      const next = {
         scale,
         cx: wx - (sx - w / 2) / scale,
         cy: wy + (sy - h / 2) / scale,
       };
+      // Zooming out stops where the screen would hold more than can be drawn.
+      viewRef.current =
+        factor < 1 && visibleFiles(next).segments > MAX_SEGMENTS_IN_VIEW ? view : next;
       interactingRef.current = true;
       requestDraw();
       settle();
     },
-    [requestDraw, settle],
+    [requestDraw, settle, visibleFiles],
   );
 
   const localXY = (event: { clientX: number; clientY: number }) => {
@@ -486,7 +502,7 @@ export default function WaterCadTileCanvas({
     const dy = next.y - prev.y;
     if (Math.hypot(next.x - g.startX, next.y - g.startY) > 6) g.moved = true;
     const view = viewRef.current;
-    viewRef.current = { ...view, cx: view.cx - dx / view.scale, cy: view.cy + dy / view.scale };
+    viewRef.current = constrain({ ...view, cx: view.cx - dx / view.scale, cy: view.cy + dy / view.scale });
     interactingRef.current = true;
     requestDraw();
     settle();
