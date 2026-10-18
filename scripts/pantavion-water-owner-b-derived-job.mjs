@@ -94,8 +94,24 @@ async function main() {
       });
       if (up.error) throw Error("inventory_upload_failed: " + up.error.message);
       const inv = JSON.parse(String(body));
-      // GitHub keeps only 10 notices per step: the boundary and water-layer
-      // findings go first.
+      // GitHub keeps only 10 notices per step: the register, boundary and
+      // water-layer findings go first.
+      const reg = inv.register;
+      if (reg) {
+        annotate("notice", "Register areas", JSON.stringify({
+          areas: reg.areas.length,
+          closed: reg.areas.filter((a) => a.outline === "closed").length,
+          hull: reg.areas.filter((a) => a.outline === "hull").map((a) => a.code),
+          list: reg.areas.map((a) => [a.code, a.outline, a.areaM2, a.centroid.map(Math.round)]),
+        }));
+        annotate("notice", "Register assets per area", JSON.stringify({
+          assets: reg.assets.length, duplicateCopies: reg.duplicateCopies,
+          tagged: reg.assets.filter((a) => a.tag).length,
+          perArea: reg.summary,
+        }));
+        annotate("notice", "Register tanks", JSON.stringify(reg.assets.filter((a) => a.kind === "tank")
+          .map((a) => [a.number, a.name, a.capacityM3, a.proposed ? "proposed" : "", a.area])));
+      }
       annotate("notice", "Inventory pink dashed layers (area/zone boundaries)", JSON.stringify(
         inv.pinkDashedLayers.slice(0, 40).map((l) => [l.layer, l.pinkDashed, l.total, l.top.map((t) => `${t.color}/${t.lineType}:${t.n}`).join(" ")])));
       const water = inv.layers.filter((l) => /^(W-|FH|A\.V|PRV|DEXAMENH|PUMP|AERITHS|DIAKOPTHS)/i.test(l.layer));
