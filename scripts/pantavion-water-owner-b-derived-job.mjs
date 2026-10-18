@@ -1,4 +1,4 @@
-import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir, totalmem } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -8,6 +8,9 @@ import { loadApprovedOwnerDwg } from "./water-approved-owner-dwg-loader.mjs";
 const CURRENT_GENERATOR = "pantavion-map-b-derived-v4";
 // Dry run: generate and verify locally, upload nothing, keep the current manifest.
 const DRY_RUN = process.env.PANTAVION_WATER_DERIVED_DRY_RUN === "YES";
+// Inventory: read the drawing, write what it holds (layers, blocks, tank/valve/
+// area texts) to private storage beside the derived tiles. No tiles change.
+const INVENTORY = process.env.PANTAVION_WATER_NETWORK_INVENTORY === "YES";
 // The v3 extract holds every styled segment, fill and text of a 13M-line drawing
 // at once; the default V8 heap is far smaller than the runner's memory.
 const HEAP_MB = Math.max(4096, Math.floor((totalmem() / 1048576) * 0.8));
@@ -42,7 +45,7 @@ async function main() {
       current = null;
     }
   }
-  if (current && !DRY_RUN) {
+  if (current && !DRY_RUN && !INVENTORY) {
     const manifest = current;
     if (manifest.ok !== true || manifest.sourceSha256 !== source.sha256 ||
         !Array.isArray(manifest.tiles) || manifest.tiles.length === 0 ||
@@ -66,7 +69,9 @@ async function main() {
         ...process.env,
         PANTAVION_WATER_MAP_B_SOURCE_KEY: "canonical-2026-andreaspap",
         PANTAVION_WATER_MAP_B_DWG_PATH: file,
-        PANTAVION_WATER_MAP_B_UPLOAD_DERIVED: DRY_RUN ? "NO" : "YES",
+        PANTAVION_WATER_MAP_B_UPLOAD_DERIVED: DRY_RUN || INVENTORY ? "NO" : "YES",
+        PANTAVION_WATER_MAP_B_INVENTORY: INVENTORY ? "YES" : "NO",
+        PANTAVION_WATER_MAP_B_INVENTORY_OUT: join(work, "inventory.json"),
         PANTAVION_WATER_MAP_B_DERIVED_OUT: join(work, "out"),
       },
     });
@@ -80,6 +85,23 @@ async function main() {
         spawnError: result.error ? String(result.error.message) : null,
       }) + "\n" + err.slice(-5000));
       throw Error("derived_generator_failed");
+    }
+    if (INVENTORY) {
+      const body = readFileSync(join(work, "inventory.json"));
+      const inventoryPath = "water-network-private/derived/map-b/" + source.sha256 + "/inventory.json";
+      const up = await admin.storage.from("personal-media").upload(inventoryPath, body, {
+        upsert: true, contentType: "application/json", cacheControl: "0",
+      });
+      if (up.error) throw Error("inventory_upload_failed: " + up.error.message);
+      const inv = JSON.parse(String(body));
+      annotate("notice", "Network inventory totals", JSON.stringify({ path: inventoryPath, bytes: body.length, ...inv.totals }));
+      annotate("notice", "Inventory keywords", JSON.stringify(Object.fromEntries(
+        Object.entries(inv.keywords).map(([k, v]) => [k, { count: v.count, layers: v.layers, samples: v.samples.slice(0, 6) }]))));
+      annotate("notice", "Inventory blocks (top 120)", JSON.stringify(inv.blocks.slice(0, 120).map((b) => [b.block, b.count, b.layers[0]?.layer])));
+      annotate("notice", "Inventory layers with blocks or texts", JSON.stringify(inv.layers
+        .filter((l) => l.blocks || l.texts).slice(0, 150).map((l) => [l.layer, l.segments, l.blocks, l.texts])));
+      console.log(JSON.stringify({ ok: true, mapId: "B", state: "inventory_written", path: inventoryPath }));
+      return;
     }
     if (DRY_RUN) {
       const summary = out.slice(out.indexOf("{"));

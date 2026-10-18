@@ -62,6 +62,88 @@ const CURVE_STEP_RADIANS = Math.PI / 60; // 3 degrees.
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
 
+// ---- network inventory --------------------------------------------------
+// What the drawing holds, by layer and block name, plus every text that names
+// a tank, valve, hydrant or one of the network's areas. This is the evidence
+// the valve/tank register and the area split are built from; nothing here is
+// guessed, every entry points back to a layer, block or text of the source.
+const INVENTORY_KEYWORDS = {
+  tank: /ΔΕΞΑΜΕΝ|DEXAMEN|TANK|RESERVOIR|ΔΕΞ\./i,
+  valve: /ΒΑΝ[ΑΕΙ]|ΒΑΛΒ|VALVE|VALV|\bBANA|\bG\.?V\b|\bS\.?V\b|ΔΙΚΛΙΔ/i,
+  hydrant: /ΥΔΡΟΣΤΟΜ|ΠΥΡΟΣΒ|HYDRANT|\bF\.?H\b/i,
+  pump: /ΑΝΤΛΙΟΣΤΑΣ|ΑΝΤΛΙ|PUMP/i,
+  meter: /ΜΕΤΡΗΤ|METER/i,
+  borehole: /ΓΕΩΤΡΗΣ|BOREHOLE|ΠΗΓΗ/i,
+  area_amathounta: /ΑΜΑΘΟΥΝΤ|AMATH/i,
+  area_germasogeia: /ΓΕΡΜΑΣΟΓ|YERMAS|GERMAS/i,
+  area_parekklisia: /ΠΑΡΕΚΚΛΗΣ|PAREKKL|PAREKL/i,
+  area_pyrgos: /ΠΥΡΓΟ|PYRGO|PIRGO/i,
+  area_agios_tychonas: /ΤΥΧΩΝ|TYCHON|TIHON|TYHON/i,
+  area_moutagiaka: /ΜΟΥΤΑΓΙΑΚ|MOUTAG|MOUTAY|MOUTAJ/i,
+  area_armenochori: /ΑΡΜΕΝΟΧΩΡ|ARMENOCH|ARMENOX/i,
+  area_agios_athanasios: /ΑΘΑΝΑΣ|ATHANAS/i,
+  area_finikaria: /ΦΟΙΝΙΚΑΡ|FINIKAR|FOINIKAR|PHINIKAR/i,
+  area_akrounta: /ΑΚΡΟΥΝΤ|AKROUNT|AKRUNT/i,
+};
+
+function buildNetworkInventory({ segments, texts, blockRefs, points, layers }) {
+  const layerName = (id) => layers[id]?.name || `layer-${id}`;
+  const byLayer = new Map();
+  const layerRow = (id) => {
+    let r = byLayer.get(id);
+    if (!r) { r = { layer: layerName(id), segments: 0, blocks: 0, texts: 0, points: 0, minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity }; byLayer.set(id, r); }
+    return r;
+  };
+  const grow = (r, x, y) => {
+    if (!finite(x) || !finite(y)) return;
+    if (x < r.minX) r.minX = x; if (y < r.minY) r.minY = y;
+    if (x > r.maxX) r.maxX = x; if (y > r.maxY) r.maxY = y;
+  };
+  for (const s of segments) { const r = layerRow(s[4]); r.segments += 1; grow(r, s[0], s[1]); }
+  for (const t of texts) { const r = layerRow(t[2]); r.texts += 1; grow(r, t[0], t[1]); }
+  for (const p of points) layerRow(p[2]).points += 1;
+
+  const blocks = new Map();
+  for (const b of blockRefs) {
+    const r = layerRow(b[2]); r.blocks += 1; grow(r, b[0], b[1]);
+    const name = String(b[3] || "");
+    let e = blocks.get(name);
+    if (!e) { e = { block: name, count: 0, layers: new Map(), samples: [] }; blocks.set(name, e); }
+    e.count += 1;
+    e.layers.set(b[2], (e.layers.get(b[2]) || 0) + 1);
+    if (e.samples.length < 3) e.samples.push([Math.round(b[0] * 100) / 100, Math.round(b[1] * 100) / 100]);
+  }
+
+  const keywords = {};
+  for (const [key, re] of Object.entries(INVENTORY_KEYWORDS)) keywords[key] = { count: 0, layers: new Map(), samples: [] };
+  for (const t of texts) {
+    const text = String(t[4] || "");
+    // Greek labels carry accents and mixed case ("Αγ. Τύχωνας"): match on the
+    // upper-case text with diacritics removed.
+    const plain = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    for (const [key, re] of Object.entries(INVENTORY_KEYWORDS)) {
+      if (!re.test(plain)) continue;
+      const k = keywords[key];
+      k.count += 1;
+      k.layers.set(t[2], (k.layers.get(t[2]) || 0) + 1);
+      if (k.samples.length < 40) k.samples.push({ text: text.slice(0, 80), layer: layerName(t[2]), x: Math.round(t[0] * 100) / 100, y: Math.round(t[1] * 100) / 100 });
+    }
+  }
+  const topLayers = (m) => [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([id, n]) => ({ layer: layerName(id), n }));
+  const round = (v) => (finite(v) ? Math.round(v) : null);
+
+  return {
+    totals: { segments: segments.length, texts: texts.length, blockRefs: blockRefs.length, points: points.length, layers: layers.length, blockNames: blocks.size },
+    layers: [...byLayer.values()]
+      .map((r) => ({ ...r, minX: round(r.minX), minY: round(r.minY), maxX: round(r.maxX), maxY: round(r.maxY) }))
+      .sort((a, b) => b.blocks + b.texts + b.segments - (a.blocks + a.texts + a.segments)),
+    blocks: [...blocks.values()]
+      .sort((a, b) => b.count - a.count)
+      .map((e) => ({ block: e.block, count: e.count, layers: topLayers(e.layers), samples: e.samples })),
+    keywords: Object.fromEntries(Object.entries(keywords).map(([k, v]) => [k, { count: v.count, layers: topLayers(v.layers), samples: v.samples }])),
+  };
+}
+
 function fail(reason, details = {}) {
   console.error(JSON.stringify({ ok: false, reason, ...details }, null, 2));
   process.exit(1);
@@ -660,6 +742,16 @@ async function main() {
 
     const extracted = extractAuthentic(database);
     const { segments, fills, texts, points, blockRefs, styles, layers, linetypes } = extracted;
+
+    if (process.env.PANTAVION_WATER_MAP_B_INVENTORY === "YES") {
+      const inventory = buildNetworkInventory({ segments, texts, blockRefs, points, layers });
+      const out = process.env.PANTAVION_WATER_MAP_B_INVENTORY_OUT ||
+        path.join(repoRoot, ".pantavion", "water", `map-${EXPECTED.mapId.toLowerCase()}-inventory.json`);
+      fs.mkdirSync(path.dirname(out), { recursive: true });
+      fs.writeFileSync(out, JSON.stringify({ sourceKey: SOURCE_KEY, sourceSha256: verified.sha256, ...inventory }, null, 1) + "\n", "utf8");
+      console.log(JSON.stringify({ ok: true, marker: "pantavion_water_network_inventory_v1", out, ...inventory.totals }, null, 2));
+      return;
+    }
     const entities = Array.isArray(database.entities) ? database.entities : [];
 
     if (segments.length === 0) {
