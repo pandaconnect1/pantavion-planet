@@ -318,7 +318,7 @@ export default function WaterCadTileCanvas({
     if (interactingRef.current && snap) {
       const k = view.scale / snap.view.scale;
       const dx = (snap.view.cx - view.cx) * view.scale;
-      const dy = (view.cy - snap.view.cy) * view.scale;
+      const dy = (snap.view.cy - view.cy) * view.scale;
       ctx.save();
       ctx.translate(w / 2 + dx, h / 2 - dy);
       ctx.scale(k, k);
