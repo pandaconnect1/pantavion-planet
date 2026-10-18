@@ -95,8 +95,15 @@ async function main() {
       if (up.error) throw Error("inventory_upload_failed: " + up.error.message);
       const inv = JSON.parse(String(body));
       annotate("notice", "Network inventory totals", JSON.stringify({ path: inventoryPath, bytes: body.length, ...inv.totals }));
-      annotate("notice", "Inventory keywords", JSON.stringify(Object.fromEntries(
-        Object.entries(inv.keywords).map(([k, v]) => [k, { count: v.count, layers: v.layers, samples: v.samples.slice(0, 6) }]))));
+      // One annotation per category: a combined one is cut at the length limit.
+      for (const [k, v] of Object.entries(inv.keywords)) {
+        annotate("notice", `Inventory ${k} (${v.count})`, JSON.stringify({
+          layers: v.layers.map((l) => [l.layer, l.n]),
+          samples: v.samples.slice(0, 25).map((x) => [x.text.replace(/\s+/g, " "), x.layer, Math.round(x.x), Math.round(x.y)]),
+        }));
+      }
+      const water = inv.layers.filter((l) => /^(W-|FH|A\.V|PRV|DEXAMENH|PUMP|AERITHS|DIAKOPTHS)/i.test(l.layer));
+      annotate("notice", "Inventory water layer extents", JSON.stringify(water.map((l) => [l.layer, l.segments, l.blocks, l.texts, l.minX, l.minY, l.maxX, l.maxY])));
       annotate("notice", "Inventory blocks (top 120)", JSON.stringify(inv.blocks.slice(0, 120).map((b) => [b.block, b.count, b.layers[0]?.layer])));
       annotate("notice", "Inventory layers with blocks or texts", JSON.stringify(inv.layers
         .filter((l) => l.blocks || l.texts).slice(0, 150).map((l) => [l.layer, l.segments, l.blocks, l.texts])));
