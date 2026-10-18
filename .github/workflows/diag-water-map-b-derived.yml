@@ -91,6 +91,14 @@ jobs:
           rm -f "$KEY_FILE"
           echo "::notice title=survey-exit::exit=$code $(tail -c 400 survey.log | tr '\n' ' ' | grep -v SURVEY_JSON)"
           grep '^SURVEY_JSON ' survey.log | sed 's/^SURVEY_JSON //' > survey.json
-          split -b 30000 -d survey.json part_
-          for f in part_*; do msg=$(sed 's/%/%25/g' "$f" | tr -d '\n'); echo "::notice title=survey-$f::$msg"; done
+          wc -c survey.json
+          split -b 3900 -d -a 2 survey.json part_
+          i=0
+          for f in part_*; do
+            kind=notice; [ $i -ge 10 ] && kind=warning; [ $i -ge 20 ] && kind=error
+            msg=$(sed 's/%/%25/g' "$f" | tr -d '\n')
+            echo "::$kind title=survey-$f::$msg"
+            i=$((i+1))
+          done
+          echo "::notice title=survey-count::parts=$i bytes=$(wc -c < survey.json)"
           exit 0
