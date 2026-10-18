@@ -2,6 +2,11 @@ name: Pantavion Water DWG Derived Worker
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Generate and verify Map B tiles without uploading"
+        type: boolean
+        default: false
   schedule:
     - cron: "*/10 * * * *"
   push:
@@ -13,9 +18,7 @@ on:
       - "scripts/water-approved-owner-resolver.mjs"
       - "scripts/water-approved-owner-dwg-loader.mjs"
       - "scripts/pantavion-water-owner-b-derived-job.mjs"
-      - "scripts/water-approved-owner-source.mjs"
-      - "scripts/water-approved-owner-resolver.mjs"
-      - "scripts/water-approved-owner-dwg-loader.mjs"
+      - "scripts/water-cad-authentic-extract.mjs"
       - "scripts/water-approved-owner-dwg-regression.mjs"
       - "core/water/water-map-b-source-candidates.ts"
       - ".github/workflows/pantavion-water-dwg-derived-worker.yml"
@@ -96,6 +99,12 @@ jobs:
           set -euo pipefail
           export SUPABASE_SECRET_KEY="$(cat "$KEY_FILE")"
           export SUPABASE_URL="https://cxhulvwkagzufbjsdwwu.supabase.co"
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            export PANTAVION_WATER_DERIVED_DRY_RUN=YES
+            node scripts/pantavion-water-owner-b-derived-job.mjs
+            rm -f "$KEY_FILE"
+            exit 0
+          fi
           node scripts/pantavion-water-dwg-derived-worker.mjs
           # Strictly founder-approved exact Map B bytes only; no raw overwrite.
           # Fail if derived geometry cannot be produced or verified.

@@ -2,6 +2,7 @@
 
 import { spawnSync } from "node:child_process";
 import path from "node:path";
+import { totalmem } from "node:os";
 import { fileURLToPath } from "node:url";
 
 import { createClient } from "@supabase/supabase-js";
@@ -129,8 +130,10 @@ async function run() {
       continue;
     }
 
-    const result = spawnSync(process.execPath, [generator], {
-      stdio: "inherit",
+    const heapMb = Math.max(4096, Math.floor((totalmem() / 1048576) * 0.8));
+    const result = spawnSync(process.execPath, [`--max-old-space-size=${heapMb}`, generator], {
+      stdio: ["ignore", "inherit", "pipe"],
+      maxBuffer: 64 * 1024 * 1024,
       env: {
         ...process.env,
         PANTAVION_WATER_MAP_B_SOURCE_KEY: source.sourceKey,
@@ -140,7 +143,12 @@ async function run() {
       },
     });
 
+    const stderr = String(result.stderr || "");
+    process.stderr.write(stderr);
     if (result.status !== 0) {
+      const body = (`map ${source.mapId} status=${result.status} signal=${result.signal} heapMb=${heapMb}\n` + stderr.slice(-5000))
+        .replace(/%/g, "%25").replace(/\r/g, "").replace(/\n/g, "%0A");
+      console.log(`::error title=Map ${source.mapId} derived generator failed::${body}`);
       console.error(
         JSON.stringify({
           ok: false,
@@ -174,6 +182,7 @@ async function run() {
 }
 
 run().catch((error) => {
+  console.log(`::error title=Water derived worker failed::${error instanceof Error ? error.message : String(error)}`);
   console.error(
     JSON.stringify({
       ok: false,
