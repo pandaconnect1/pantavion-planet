@@ -214,6 +214,15 @@ function buildNetworkRegister({ segments, texts, blockRefs, layers, styles }) {
       ring: ring.map(([x, y]) => [r2(x), r2(y)]),
     });
   }
+  // Two layers can share a number ("930 (SYKAMINOU 1)", "930 (PANTHEA)"):
+  // those keep the number and add the rest of the layer name.
+  const seen = new Map();
+  for (const a of areas) seen.set(a.code, (seen.get(a.code) || 0) + 1);
+  for (const a of areas) {
+    if (seen.get(a.code) < 2) continue;
+    const rest = a.layer.slice(a.code.length).toUpperCase().replace(/[^A-Z0-9]+/g, "-").replace(/^-|-$/g, "");
+    a.code = rest ? `${a.code}-${rest}` : `${a.code}-${a.layer.length}`;
+  }
   areas.sort((a, b) => a.areaM2 - b.areaM2);
   const areaOf = (x, y) => {
     for (const a of areas) {
