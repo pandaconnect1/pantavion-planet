@@ -256,6 +256,10 @@ const MAX_NETWORK_TILE_CACHE = 160;
 const MIN_NETWORK_TILE_ZOOM = 13;
 const TARGET_POINT_MIN_ZOOM = 16;
 const MAX_NETWORK_TILE_ZOOM = 19;
+// Network tiles are requested at most at this zoom. Closer views reuse them,
+// so zooming in and out never refetches what is already on the phone.
+const NETWORK_FETCH_MAX_ZOOM = 16;
+const NETWORK_TILE_CONCURRENCY = 6;
 
 const LEGACY_WATER_DEVICE_APPROVAL_KEY = "pantavion:water:approved-until:v4";
 const PANTAVION_WATER_DEVICE_ID_KEY = "pantavion:water:device-id:v1";
@@ -602,17 +606,18 @@ function tileYToLat(y: number, z: number) {
   return (180 / Math.PI) * Math.atan(Math.sinh(n));
 }
 
-function visibleNetworkXyzTiles(map: any): NetworkXyzTile[] {
+function visibleNetworkXyzTiles(map: any, pad = 0): NetworkXyzTile[] {
   const bounds = map.getBounds();
   const z = Math.max(
     MIN_NETWORK_TILE_ZOOM,
-    Math.min(MAX_NETWORK_TILE_ZOOM, Math.round(map.getZoom())),
+    Math.min(MAX_NETWORK_TILE_ZOOM, NETWORK_FETCH_MAX_ZOOM, Math.round(map.getZoom())),
   );
   const n = 2 ** z;
-  const minX = Math.max(0, Math.min(n - 1, lngToTileX(bounds.getWest(), z)));
-  const maxX = Math.max(0, Math.min(n - 1, lngToTileX(bounds.getEast(), z)));
-  const minY = Math.max(0, Math.min(n - 1, latToTileY(bounds.getNorth(), z)));
-  const maxY = Math.max(0, Math.min(n - 1, latToTileY(bounds.getSouth(), z)));
+  // pad > 0 adds a ring of tiles around the screen, prefetched for panning.
+  const minX = Math.max(0, Math.min(n - 1, lngToTileX(bounds.getWest(), z) - pad));
+  const maxX = Math.max(0, Math.min(n - 1, lngToTileX(bounds.getEast(), z) + pad));
+  const minY = Math.max(0, Math.min(n - 1, latToTileY(bounds.getNorth(), z) - pad));
+  const maxY = Math.max(0, Math.min(n - 1, latToTileY(bounds.getSouth(), z) + pad));
 
   const tiles: NetworkXyzTile[] = [];
 
@@ -633,7 +638,7 @@ function visibleNetworkXyzTiles(map: any): NetworkXyzTile[] {
     }
   }
 
-  if (tiles.length > MAX_VISIBLE_NETWORK_TILES) {
+  if (pad === 0 && tiles.length > MAX_VISIBLE_NETWORK_TILES) {
     throw new Error("VISIBLE_AREA_TOO_LARGE");
   }
 
@@ -2056,10 +2061,27 @@ export default function ControlledWaterSegmentClient() {
       }
 
       const L = await ensureLeaflet();
-      const visibleKeys = new Set(tiles.map((tile) => tile.key));
+      const onScreenKeys = new Set(tiles.map((tile) => tile.key));
+      // The ring just beyond the screen loads after the visible tiles, so a
+      // pan already finds the network there instead of an empty half map.
+      const ring = tiles.length <= 12
+        ? visibleNetworkXyzTiles(map, 1).filter((tile) => !onScreenKeys.has(tile.key))
+        : [];
+      const loadOrder = [...tiles, ...ring];
+      const visibleKeys = new Set(loadOrder.map((tile) => tile.key));
       let visibleFeatureCount = 0;
 
       async function loadTile(tile: NetworkXyzTile) {
+        if (onScreenKeys.has(tile.key)) return loadTileNow(tile, true);
+        // A prefetch tile must never fail the visible network.
+        try {
+          await loadTileNow(tile, false);
+        } catch (error) {
+          if (controller.signal.aborted) throw error;
+        }
+      }
+
+      async function loadTileNow(tile: NetworkXyzTile, counts: boolean) {
         controller.signal.throwIfAborted();
         const cached = networkTileCacheRef.current.get(tile.key);
 
@@ -2067,7 +2089,7 @@ export default function ControlledWaterSegmentClient() {
           cached.lastUsedAt = Date.now();
           if (!map.hasLayer(cached.layer)) cached.layer.addTo(map);
           cached.layer.bringToFront?.();
-          visibleFeatureCount += cached.featureCount;
+          if (counts) visibleFeatureCount += cached.featureCount;
           return;
         }
 
@@ -2114,21 +2136,21 @@ export default function ControlledWaterSegmentClient() {
           featureCount: features.length,
           lastUsedAt: Date.now(),
         });
-        visibleFeatureCount += features.length;
+        if (counts) visibleFeatureCount += features.length;
       }
 
 
       // Keep mobile/server load bounded while avoiding one round trip per tile.
       let nextTile = 0;
       async function loadTileWorker() {
-        while (nextTile < tiles.length && !accessRevoked) {
+        while (nextTile < loadOrder.length && !accessRevoked) {
           controller.signal.throwIfAborted();
-          const tile = tiles[nextTile++];
+          const tile = loadOrder[nextTile++];
           await loadTile(tile);
         }
       }
       const results = await Promise.allSettled(
-        Array.from({ length: Math.min(3, tiles.length) }, () => loadTileWorker()),
+        Array.from({ length: Math.min(NETWORK_TILE_CONCURRENCY, loadOrder.length) }, () => loadTileWorker()),
       );
       const failure = results.find((result) => result.status === "rejected");
       if (failure?.status === "rejected") throw failure.reason;

@@ -359,9 +359,11 @@ export default function WaterCadTileCanvas({
     if (interactingRef.current && snap) {
       const k = view.scale / snap.view.scale;
       const dx = (snap.view.cx - view.cx) * view.scale;
+      // Screen y grows downward while drawing y grows upward: a larger view.cy
+      // moves the old frame down the screen.
       const dy = (view.cy - snap.view.cy) * view.scale;
       ctx.save();
-      ctx.translate(w / 2 + dx, h / 2 - dy);
+      ctx.translate(w / 2 + dx, h / 2 + dy);
       ctx.scale(k, k);
       ctx.drawImage(snap.bitmap, -w / 2, -h / 2, w, h);
       ctx.restore();
