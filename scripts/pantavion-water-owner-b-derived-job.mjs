@@ -98,6 +98,31 @@ async function main() {
       // water-layer findings go first.
       const reg = inv.register;
       if (reg) {
+        // Rows from the drawing are replaced as a set; rows from the field
+        // (origin other than "drawing") are never touched here.
+        const now = new Date().toISOString();
+        const areaRows = reg.areas.map((a) => ({
+          code: a.code, source_sha256: source.sha256, layer: a.layer, outline: a.outline, area_m2: a.areaM2,
+          centroid_x: a.centroid[0], centroid_y: a.centroid[1], bounds: a.bounds, ring: a.ring, updated_at: now,
+        }));
+        const assetRows = reg.assets.map((a) => ({
+          number: a.number, source_sha256: source.sha256, kind: a.kind, dn: a.dn ?? null, x: a.x, y: a.y,
+          layer: a.layer ?? null, block: a.block ?? null, area_code: a.area ?? null,
+          street: a.street?.name ?? null, street_distance: a.street?.distance ?? null,
+          tag: a.tag?.text ?? null, tag_distance: a.tag?.distance ?? null,
+          name: a.name ?? null, capacity_m3: a.capacityM3 ?? null, proposed: Boolean(a.proposed),
+          origin: "drawing", updated_at: now,
+        }));
+        const del = await admin.from("water_network_assets").delete().eq("source_sha256", source.sha256).eq("origin", "drawing");
+        if (del.error) throw Error("register_assets_clear_failed: " + del.error.message);
+        const areasUp = await admin.from("water_network_areas").upsert(areaRows, { onConflict: "code" });
+        if (areasUp.error) throw Error("register_areas_write_failed: " + areasUp.error.message);
+        for (let i = 0; i < assetRows.length; i += 500) {
+          const up = await admin.from("water_network_assets").upsert(assetRows.slice(i, i + 500), { onConflict: "number" });
+          if (up.error) throw Error("register_assets_write_failed: " + up.error.message);
+        }
+        annotate("notice", "Register written", JSON.stringify({ areas: areaRows.length, assets: assetRows.length,
+          withStreet: assetRows.filter((r) => r.street).length }));
         annotate("notice", "Register areas", JSON.stringify({
           areas: reg.areas.length,
           closed: reg.areas.filter((a) => a.outline === "closed").length,

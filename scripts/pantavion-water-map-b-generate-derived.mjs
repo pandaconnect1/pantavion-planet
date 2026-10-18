@@ -234,6 +234,30 @@ function buildNetworkRegister({ segments, texts, blockRefs, layers, styles }) {
     const l = tags.get(k); const e = { x: t[0], y: t[1], text: String(t[4] || "").replace(/\s+/g, " ").slice(0, 60), layer: ln };
     if (l) l.push(e); else tags.set(k, [e]);
   }
+  // Street: the nearest street-name label of the drawing, with its distance.
+  const streetCell = 80;
+  const streets = new Map();
+  for (const t of texts) {
+    if (!/^(Street_names|TEXT STREET)$/i.test(layerName(t[2]))) continue;
+    if (t[0] > DUPLICATE_COPY_X) continue;
+    const name = String(t[4] || "").replace(/\s+/g, " ").trim();
+    if (!name || /^\d+$/.test(name)) continue;
+    const k = `${Math.floor(t[0] / streetCell)},${Math.floor(t[1] / streetCell)}`;
+    const l = streets.get(k); const e = { x: t[0], y: t[1], name: name.slice(0, 60) };
+    if (l) l.push(e); else streets.set(k, [e]);
+  }
+  const nearestStreet = (x, y, max = 120) => {
+    let best = null, bd = max;
+    const cx = Math.floor(x / streetCell), cy = Math.floor(y / streetCell);
+    for (let dx = -1; dx <= 1; dx += 1) for (let dy = -1; dy <= 1; dy += 1) {
+      for (const e of streets.get(`${cx + dx},${cy + dy}`) || []) {
+        const dd = Math.hypot(e.x - x, e.y - y);
+        if (dd < bd) { bd = dd; best = e; }
+      }
+    }
+    return best ? { name: best.name, distance: Math.round(bd * 10) / 10 } : null;
+  };
+
   const nearestTag = (x, y, max = 15) => {
     let best = null, bd = max;
     const cx = Math.floor(x / tagCell), cy = Math.floor(y / tagCell);
@@ -261,18 +285,19 @@ function buildNetworkRegister({ segments, texts, blockRefs, layers, styles }) {
     else if (/^PRV$/i.test(ln)) kind = "pressure_reducing_valve";
     if (!kind) continue;
     if (b[0] > DUPLICATE_COPY_X) { duplicateCopies += 1; continue; }
-    assets.push({ kind, dn, x: Math.round(b[0] * 100) / 100, y: Math.round(b[1] * 100) / 100, layer: ln, block, area: areaOf(b[0], b[1]), tag: kind === "valve" || kind === "hydrant" ? nearestTag(b[0], b[1]) : null });
+    assets.push({ kind, dn, x: Math.round(b[0] * 100) / 100, y: Math.round(b[1] * 100) / 100, layer: ln, block, area: areaOf(b[0], b[1]), street: nearestStreet(b[0], b[1]), tag: kind === "valve" || kind === "hydrant" ? nearestTag(b[0], b[1]) : null });
   }
   for (const t of texts) {
     const ln = layerName(t[2]);
     const text = String(t[4] || "").replace(/\s+/g, " ");
     const plain = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
     if (!/ΔΕΞΑΜΕΝ|DEXAMEN|ΥΔΑΤΟΠΥΡΓ/.test(plain) && !/^DEXAMENH$/i.test(ln)) continue;
-    if (/^(ΠΡΟΣ|PROS|ΕΞΑΓΩΓΗ|EΞΑΓΩΓΗ)\b/.test(plain)) continue; // pipe labels pointing at a tank
+    // Pipe labels that only point at a tank ("ΕΞΑΓΩΓΗ ΠΡΟΣ … ΔΕΞΑΜΕΝΗ", "ΑΓΩΓΟΣ …") are not tanks.
+    if (/ΑΓΩΓ|ΕΞΑΓΩΓ|EΞΑΓΩΓ|ΕΙΣΑΓΩΓ|\bΠΡΟΣ\b|\bPROS\b|PIPE/.test(plain)) continue;
     if (t[0] > DUPLICATE_COPY_X) { duplicateCopies += 1; continue; }
     const cap = /(\d[\d.,]*)\s*(M3|M³|ΚΥΒ)/.exec(plain);
     assets.push({ kind: "tank", name: text.slice(0, 80), capacityM3: cap ? Number(cap[1].replace(",", ".")) : null,
-      proposed: /ΠΡΟΤΕΙΝΟΜ/.test(plain), x: Math.round(t[0] * 100) / 100, y: Math.round(t[1] * 100) / 100, layer: ln, area: areaOf(t[0], t[1]) });
+      proposed: /ΠΡΟΤΕΙΝΟΜ/.test(plain), x: Math.round(t[0] * 100) / 100, y: Math.round(t[1] * 100) / 100, layer: ln, area: areaOf(t[0], t[1]), street: nearestStreet(t[0], t[1]) });
   }
 
   // Numbers: per area and kind, east to west, then north to south.
