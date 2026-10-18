@@ -103,3 +103,32 @@ jobs:
           done
           echo "::notice title=survey-count::parts=$i bytes=$(wc -c < survey.json)"
           exit 0
+
+      - name: Dry-run Map B derivation v3 (no upload)
+        shell: bash
+        env:
+          KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
+        run: |
+          set +e
+          export SUPABASE_SECRET_KEY="$(cat "$KEY_FILE")"
+          export SUPABASE_URL="https://cxhulvwkagzufbjsdwwu.supabase.co"
+          export PANTAVION_WATER_MAP_B_SOURCE_KEY=canonical-2026-andreaspap
+          export PANTAVION_WATER_MAP_B_DERIVED_OUT="$RUNNER_TEMP/mapb"
+          export NODE_OPTIONS="--stack-trace-limit=40 --max-old-space-size=12288"
+          code=0
+          /usr/bin/time -v node scripts/pantavion-water-map-b-generate-derived.mjs > out.log 2>&1 || code=$?
+          rm -f "$KEY_FILE"
+          {
+            echo "exit=$code"
+            grep -E "Maximum resident|Elapsed" out.log
+            if [ -f "$RUNNER_TEMP/mapb/manifest.json" ]; then
+              jq -c '{grid,totalLineSegments,segmentTileRefs,fillCount,pointCount,labelCount,blockRefCount,writtenTileCount,densestTileSegments,styles:(.styles|length),linetypes:(.linetypes|length),hiddenLayers:([.layerInfo[]|select(.off or .frozen)]|length),coverage:(.coverage|del(.entityTypeCounts))}' "$RUNNER_TEMP/mapb/manifest.json"
+              echo "tiles_dir_size=$(du -sh $RUNNER_TEMP/mapb/tiles | cut -f1) files=$(ls $RUNNER_TEMP/mapb/tiles | wc -l)"
+              echo "largest:"; ls -S -l $RUNNER_TEMP/mapb/tiles | head -3 | awk '{print $5, $9}'
+            else
+              tail -c 2500 out.log
+            fi
+          } > tail.txt
+          msg=$(grep -v -i "secret\|eyJ" tail.txt | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+          echo "::error title=diag-map-b::$msg"
+          exit 0
