@@ -47,9 +47,13 @@ const STORAGE = {
   derivedPrefix: `water-network-private/derived/map-${EXPECTED.mapId.toLowerCase()}/${EXPECTED.sha256}`,
 };
 
-const GENERATOR_VERSION = "pantavion-map-b-derived-v1";
+const GENERATOR_VERSION = "pantavion-map-b-derived-v2";
 const DEFAULT_GRID = 64;
-const MAX_GRID = 256;
+const MAX_GRID = 512;
+const TARGET_TILE_SEGMENTS = 40000;
+const PART_MAX_SEGMENTS = 40000;
+const PART_MAX_POINTS = 20000;
+const PART_MAX_LABELS = 10000;
 const MIN_GRID = 8;
 const MAX_CURVE_SEGMENTS = 256;
 const CURVE_STEP_RADIANS = Math.PI / 60; // 3 degrees.
@@ -509,6 +513,34 @@ function verifySource(buffer) {
   return { size, sha256: actualHash, header };
 }
 
+// Bounds of the dense core of the drawing: the 0.1th to 99.9th percentile of
+// segment midpoints, padded by 2%. Falls back to the full extents when the core
+// would be degenerate. Used only to lay out the tile grid; no geometry changes.
+function robustCoreBounds(segments, all) {
+  const n = segments.length;
+  const step = Math.max(1, Math.floor(n / 2000000));
+  const xs = [];
+  const ys = [];
+  for (let i = 0; i < n; i += step) {
+    const [x1, y1, x2, y2] = segments[i];
+    const x = (x1 + x2) / 2;
+    const y = (y1 + y2) / 2;
+    if (finite(x) && finite(y)) { xs.push(x); ys.push(y); }
+  }
+  if (xs.length < 100) return { ...all };
+  const fx = Float64Array.from(xs).sort();
+  const fy = Float64Array.from(ys).sort();
+  const at = (arr, q) => arr[Math.min(arr.length - 1, Math.max(0, Math.floor(q * (arr.length - 1))))];
+  let minX = at(fx, 0.001), maxX = at(fx, 0.999);
+  let minY = at(fy, 0.001), maxY = at(fy, 0.999);
+  const padX = (maxX - minX) * 0.02;
+  const padY = (maxY - minY) * 0.02;
+  minX = Math.max(all.minX, minX - padX); maxX = Math.min(all.maxX, maxX + padX);
+  minY = Math.max(all.minY, minY - padY); maxY = Math.min(all.maxY, maxY + padY);
+  if (!(maxX > minX) || !(maxY > minY)) return { ...all };
+  return { minX, minY, maxX, maxY };
+}
+
 function tileKey(x, y) {
   return `${x}:${y}`;
 }
@@ -538,7 +570,7 @@ async function uploadDerived(outputDir, manifest, tileFiles) {
   const manifestBody = Buffer.from(JSON.stringify(manifest, null, 2) + "\n", "utf8");
   const manifestPath = `${STORAGE.derivedPrefix}/manifest.json`;
 
-  const concurrency = 8;
+  const concurrency = 16;
   let uploadedTiles = 0;
 
   for (let i = 0; i < tileFiles.length; i += concurrency) {
@@ -547,11 +579,17 @@ async function uploadDerived(outputDir, manifest, tileFiles) {
       batch.map(async (fileName) => {
         const local = path.join(outputDir, "tiles", fileName);
         const remote = `${STORAGE.derivedPrefix}/tiles/${fileName}`;
-        const { error } = await admin.storage.from(STORAGE.bucket).upload(
-          remote,
-          fs.readFileSync(local),
-          { upsert: true, contentType: "application/json", cacheControl: "60" },
-        );
+        const body = fs.readFileSync(local);
+        let error = null;
+        for (let attempt = 1; attempt <= 4; attempt += 1) {
+          ({ error } = await admin.storage.from(STORAGE.bucket).upload(
+            remote,
+            body,
+            { upsert: true, contentType: "application/json", cacheControl: "60" },
+          ));
+          if (!error) break;
+          await new Promise((resolve) => setTimeout(resolve, attempt * 2000));
+        }
         return { fileName, remote, error };
       }),
     );
@@ -913,20 +951,46 @@ async function main() {
       fail("map_b_derived_bounds_invalid", { minX, minY, maxX, maxY });
     }
 
-    const requestedGrid = Number(process.env.PANTAVION_WATER_MAP_B_TILE_GRID || DEFAULT_GRID);
-    const grid = clamp(Number.isInteger(requestedGrid) ? requestedGrid : DEFAULT_GRID, MIN_GRID, MAX_GRID);
-    const width = maxX - minX;
-    const height = maxY - minY;
-    const tileMap = new Map();
+    // The grid is laid over the dense core of the drawing, not over its extreme
+    // extents. A few stray entities far from the network (common in CAD files)
+    // otherwise squeeze the whole city into one or two tiles; a single tile then
+    // exceeds the JavaScript string limit and generation fails. Entities outside
+    // the core are still kept: they are clamped into the edge tiles, never dropped.
+    const core = robustCoreBounds(segments, { minX, minY, maxX, maxY });
+    const coreWidth = core.maxX - core.minX;
+    const coreHeight = core.maxY - core.minY;
 
-    function coordinatesToTile(x, y) {
-      const nx = width > 0 ? (x - minX) / width : 0;
-      const ny = height > 0 ? (y - minY) / height : 0;
+    function tileAt(x, y, g) {
+      const nx = coreWidth > 0 ? (x - core.minX) / coreWidth : 0;
+      const ny = coreHeight > 0 ? (y - core.minY) / coreHeight : 0;
       return {
-        x: clamp(Math.floor(nx * grid), 0, grid - 1),
-        y: clamp(Math.floor(ny * grid), 0, grid - 1),
+        x: clamp(Math.floor(nx * g), 0, g - 1),
+        y: clamp(Math.floor(ny * g), 0, g - 1),
       };
     }
+
+    function maxSegmentsPerTile(g) {
+      const counts = new Map();
+      let max = 0;
+      for (const [x1, y1, x2, y2] of segments) {
+        const t = tileAt((x1 + x2) / 2, (y1 + y2) / 2, g);
+        const key = t.y * g + t.x;
+        const next = (counts.get(key) || 0) + 1;
+        counts.set(key, next);
+        if (next > max) max = next;
+      }
+      return max;
+    }
+
+    const requestedGrid = Number(process.env.PANTAVION_WATER_MAP_B_TILE_GRID || DEFAULT_GRID);
+    let grid = clamp(Number.isInteger(requestedGrid) ? requestedGrid : DEFAULT_GRID, MIN_GRID, MAX_GRID);
+    let densestTileSegments = maxSegmentsPerTile(grid);
+    while (densestTileSegments > TARGET_TILE_SEGMENTS && grid < MAX_GRID) {
+      grid = Math.min(MAX_GRID, grid * 2);
+      densestTileSegments = maxSegmentsPerTile(grid);
+    }
+
+    const tileMap = new Map();
 
     function tileRecord(x, y) {
       const key = tileKey(x, y);
@@ -936,19 +1000,29 @@ async function main() {
       return tileMap.get(key);
     }
 
+    let outsideCoreCount = 0;
+    function outsideCore(x, y) {
+      return x < core.minX || x > core.maxX || y < core.minY || y > core.maxY;
+    }
+
     for (const segment of segments) {
       const [x1, y1, x2, y2] = segment;
-      const mid = coordinatesToTile((x1 + x2) / 2, (y1 + y2) / 2);
+      const mx = (x1 + x2) / 2;
+      const my = (y1 + y2) / 2;
+      if (outsideCore(mx, my)) outsideCoreCount += 1;
+      const mid = tileAt(mx, my, grid);
       tileRecord(mid.x, mid.y).segments.push(segment);
     }
 
     for (const point of points) {
-      const t = coordinatesToTile(point[0], point[1]);
+      if (outsideCore(point[0], point[1])) outsideCoreCount += 1;
+      const t = tileAt(point[0], point[1], grid);
       tileRecord(t.x, t.y).points.push(point);
     }
 
     for (const label of labels) {
-      const t = coordinatesToTile(label[0], label[1]);
+      if (outsideCore(label[0], label[1])) outsideCoreCount += 1;
+      const t = tileAt(label[0], label[1], grid);
       tileRecord(t.x, t.y).labels.push(label);
     }
 
@@ -960,35 +1034,76 @@ async function main() {
 
     const tileIndex = [];
     const tileFiles = [];
+    let writtenSegments = 0;
+    let writtenPoints = 0;
+    let writtenLabels = 0;
 
     for (const tile of [...tileMap.values()].sort((a, b) => a.y - b.y || a.x - b.x)) {
-      const file = `master-b-tile-${tile.x}-${tile.y}.json`;
-      const payload = {
-        ok: true,
-        schemaVersion: "pantavion-water-map-b-derived-tile-v1",
-        sourceSha256: EXPECTED.sha256,
-        tileX: tile.x,
-        tileY: tile.y,
-        grid,
-        rawDwgIncluded: false,
-        coordinateSpace: "source_cad",
-        segmentFormat: ["x1", "y1", "x2", "y2", "layerId"],
-        pointFormat: ["x", "y", "layerId", "entityType", "blockName"],
-        labelFormat: ["x", "y", "layerId", "text", "entityType"],
-        segments: tile.segments,
-        points: tile.points,
-        labels: tile.labels,
+      // A tile that is still very dense (one tile can hold a whole block of the
+      // city at the maximum grid) is written as several part files, so no single
+      // file can approach the string limit. Every entity is written exactly once.
+      const parts = Math.max(
+        1,
+        Math.ceil(tile.segments.length / PART_MAX_SEGMENTS),
+        Math.ceil(tile.points.length / PART_MAX_POINTS),
+        Math.ceil(tile.labels.length / PART_MAX_LABELS),
+      );
+      const slice = (list, part) => {
+        const size = Math.ceil(list.length / parts);
+        return list.slice(part * size, (part + 1) * size);
       };
 
-      fs.writeFileSync(path.join(tilesDir, file), JSON.stringify(payload), "utf8");
-      tileFiles.push(file);
-      tileIndex.push({
-        x: tile.x,
-        y: tile.y,
-        file: `tiles/${file}`,
-        segmentCount: tile.segments.length,
-        pointCount: tile.points.length,
-        labelCount: tile.labels.length,
+      for (let part = 0; part < parts; part += 1) {
+        const file = part === 0
+          ? `master-b-tile-${tile.x}-${tile.y}.json`
+          : `master-b-tile-${tile.x}-${tile.y}-p${part}.json`;
+        const partSegments = slice(tile.segments, part);
+        const partPoints = slice(tile.points, part);
+        const partLabels = slice(tile.labels, part);
+        const payload = {
+          ok: true,
+          schemaVersion: "pantavion-water-map-b-derived-tile-v1",
+          sourceSha256: EXPECTED.sha256,
+          tileX: tile.x,
+          tileY: tile.y,
+          part,
+          parts,
+          grid,
+          rawDwgIncluded: false,
+          coordinateSpace: "source_cad",
+          segmentFormat: ["x1", "y1", "x2", "y2", "layerId"],
+          pointFormat: ["x", "y", "layerId", "entityType", "blockName"],
+          labelFormat: ["x", "y", "layerId", "text", "entityType"],
+          segments: partSegments,
+          points: partPoints,
+          labels: partLabels,
+        };
+
+        fs.writeFileSync(path.join(tilesDir, file), JSON.stringify(payload), "utf8");
+        writtenSegments += partSegments.length;
+        writtenPoints += partPoints.length;
+        writtenLabels += partLabels.length;
+        tileFiles.push(file);
+        tileIndex.push({
+          x: tile.x,
+          y: tile.y,
+          part,
+          parts,
+          file: `tiles/${file}`,
+          segmentCount: partSegments.length,
+          pointCount: partPoints.length,
+          labelCount: partLabels.length,
+        });
+      }
+    }
+
+    if (writtenSegments !== segments.length ||
+        writtenPoints !== points.length ||
+        writtenLabels !== labels.length) {
+      fail("map_b_derived_tile_coverage_mismatch", {
+        segments: [segments.length, writtenSegments],
+        points: [points.length, writtenPoints],
+        labels: [labels.length, writtenLabels],
       });
     }
 
@@ -1037,7 +1152,9 @@ async function main() {
       writtenTileCount: tileIndex.length,
       overflowSegmentCount: 0,
       allBounds: { minX, minY, maxX, maxY },
-      coreBounds: { minX, minY, maxX, maxY },
+      coreBounds: core,
+      outsideCoreEntityCount: outsideCoreCount,
+      densestTileSegments,
       layers: layerNames,
       topLayers,
       tiles: tileIndex,

@@ -37,7 +37,7 @@ async function main() {
     writeFileSync(file, original.buffer, { flag: "wx", mode: 0o600 });
     const result = spawnSync(process.execPath, ["scripts/pantavion-water-map-b-generate-derived.mjs"], {
       stdio: "inherit",
-      timeout: 35 * 60 * 1000,
+      timeout: 100 * 60 * 1000,
       env: {
         ...process.env,
         PANTAVION_WATER_MAP_B_SOURCE_KEY: "canonical-2026-andreaspap",
