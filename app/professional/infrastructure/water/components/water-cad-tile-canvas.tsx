@@ -75,7 +75,15 @@ type Props = {
   fetchTile: (file: string) => Promise<CadTileData | null>;
   onPick?: (point: { x: number; y: number }) => void;
   onStats?: (stats: CanvasStats) => void;
+  /** Register markers drawn over the drawing (valves, tanks…), with their number. */
+  markers?: CadMarker[];
+  /** Open centred on this drawing point (e.g. a register entry), close in. */
+  initialCenter?: { x: number; y: number } | null;
+  /** Called when the view settles, with the visible drawing bounds. */
+  onViewChange?: (bounds: CadBounds, scale: number) => void;
 };
+
+export type CadMarker = { x: number; y: number; label: string; color: string; highlight?: boolean };
 
 export type CanvasStats = {
   visibleTileFiles: number;
@@ -128,6 +136,9 @@ export default function WaterCadTileCanvas({
   fetchTile,
   onPick,
   onStats,
+  markers,
+  initialCenter,
+  onViewChange,
 }: Props) {
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -140,6 +151,7 @@ export default function WaterCadTileCanvas({
   const frameRef = useRef(0);
   const snapshotRef = useRef<{ bitmap: HTMLCanvasElement; view: View } | null>(null);
   const snapshotCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const viewReportedRef = useRef(false);
   const interactingRef = useRef(false);
   const settleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const drawListRef = useRef<{ key: string; list: Array<[number, number, unknown]> } | null>(null);
@@ -294,14 +306,17 @@ export default function WaterCadTileCanvas({
     const bh = coreBounds.maxY - coreBounds.minY;
     // Open close in, like a street map: a third of the line budget fills the
     // first screen fast and leaves room to prefetch around it.
-    viewRef.current = constrain({
-      cx: coreBounds.minX + (kx + 0.5) * cellW,
-      cy: coreBounds.minY + (ky + 0.5) * cellH,
-      scale: Math.min(w / bw, h / bh),
-    }, deviceBudget().view / 3);
+    viewRef.current = initialCenter
+      // A register entry opens about 80 m across, centred on it.
+      ? constrain({ cx: initialCenter.x, cy: initialCenter.y, scale: Math.min(w, h) / 80 })
+      : constrain({
+          cx: coreBounds.minX + (kx + 0.5) * cellW,
+          cy: coreBounds.minY + (ky + 0.5) * cellH,
+          scale: Math.min(w / bw, h / bh),
+        }, deviceBudget().view / 3);
     snapshotRef.current = null;
     requestDraw();
-  }, [cellH, cellW, constrain, coreBounds, grid, requestDraw, tiles]);
+  }, [cellH, cellW, constrain, coreBounds, grid, initialCenter, requestDraw, tiles]);
 
   useEffect(() => {
     const wrap = wrapRef.current;
@@ -338,6 +353,11 @@ export default function WaterCadTileCanvas({
     drawListRef.current = null;
     requestDraw();
   }, [layerVisible, lineweightDisplay, requestDraw]);
+
+  useEffect(() => {
+    snapshotRef.current = null;
+    requestDraw();
+  }, [markers, requestDraw]);
 
   // ---- drawing -----------------------------------------------------------
   useEffect(() => {
@@ -581,6 +601,38 @@ export default function WaterCadTileCanvas({
       ctx.restore();
     }
 
+    // The first full frame also tells the page what is on screen.
+    if (!viewReportedRef.current && onViewChange) {
+      viewReportedRef.current = true;
+      onViewChange({ minX: view.cx - w / 2 / view.scale, maxX: view.cx + w / 2 / view.scale,
+        minY: view.cy - h / 2 / view.scale, maxY: view.cy + h / 2 / view.scale }, view.scale);
+    }
+
+    // Register markers: a ring with the number beside it once there is room.
+    if (markers?.length) {
+      const showLabels = view.scale > 1.2;
+      ctx.font = "bold 11px Arial, sans-serif";
+      ctx.textBaseline = "middle";
+      for (const m of markers) {
+        const x = toSx(m.x);
+        const y = toSy(m.y);
+        if (x < -20 || y < -20 || x > w + 20 || y > h + 20) continue;
+        const r = m.highlight ? 9 : 5;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.lineWidth = m.highlight ? 3 : 2;
+        ctx.strokeStyle = m.color;
+        ctx.stroke();
+        if (showLabels || m.highlight) {
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = BACKGROUND;
+          ctx.strokeText(m.label, x + r + 3, y);
+          ctx.fillStyle = m.highlight ? "#ffd166" : "#ffffff";
+          ctx.fillText(m.label, x + r + 3, y);
+        }
+      }
+    }
+
     const bitmap = snapshotCanvasRef.current ?? document.createElement("canvas");
     snapshotCanvasRef.current = bitmap;
     if (bitmap.width !== canvas.width) bitmap.width = canvas.width;
@@ -612,8 +664,16 @@ export default function WaterCadTileCanvas({
     settleTimerRef.current = setTimeout(() => {
       interactingRef.current = false;
       requestDraw();
+      const view = viewRef.current;
+      if (view && onViewChange) {
+        const { w, h } = sizeRef.current;
+        onViewChange({
+          minX: view.cx - w / 2 / view.scale, maxX: view.cx + w / 2 / view.scale,
+          minY: view.cy - h / 2 / view.scale, maxY: view.cy + h / 2 / view.scale,
+        }, view.scale);
+      }
     }, 140);
-  }, [requestDraw]);
+  }, [onViewChange, requestDraw]);
 
   const zoomAt = useCallback(
     (sx: number, sy: number, factor: number) => {
