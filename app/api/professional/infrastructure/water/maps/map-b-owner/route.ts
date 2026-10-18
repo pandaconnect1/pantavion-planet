@@ -8,6 +8,7 @@ import {
   WATER_MAP_B_SOURCE_CANDIDATES,
   type WaterMapBSourceKey,
 } from "@/core/water/water-map-b-source-candidates";
+import { resolveApprovedOwnerSourceLocation } from "@/core/water/water-approved-owner-source-location";
 import { createAdminClient, hasSupabaseAdminCredential } from "@/lib/supabase/admin";
 import {
   presignObjectDownload,
@@ -211,6 +212,39 @@ async function registryState(
   return data;
 }
 
+/**
+ * Locates the founder-approved authentic master where the owner upload
+ * actually wrote it. The catalog row is the only record that knows the
+ * request id, so it — not a hardcoded path — is the source of truth.
+ */
+async function locateApprovedOwnerSource(
+  admin: ReturnType<typeof createAdminClient>,
+  source: (typeof WATER_MAP_B_SOURCE_CANDIDATES)[WaterMapBSourceKey],
+) {
+  if (source.mapId !== "B" && source.mapId !== "C") return null;
+
+  const { data, error } = await admin
+    .from("water_map_ingest_catalog")
+    .select(
+      "request_id,actor_kind,storage_bucket,storage_path,sha256,file_size_bytes,ingest_state,review_state,metadata",
+    )
+    .eq("sha256", source.sha256)
+    .eq("ingest_state", "uploaded")
+    .eq("review_state", "approved")
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  return resolveApprovedOwnerSourceLocation(data, {
+    mapId: source.mapId,
+    byteSize: source.byteSize,
+    sha256: source.sha256,
+    dwgHeader: source.dwgHeader,
+  });
+}
+
 async function verifyExactObject(
   admin: ReturnType<typeof createAdminClient>,
   source: (typeof WATER_MAP_B_SOURCE_CANDIDATES)[WaterMapBSourceKey],
@@ -367,6 +401,28 @@ export async function POST(request: Request) {
       );
 
       if (!verified) {
+        const approved = await locateApprovedOwnerSource(admin, source);
+        if (approved) {
+          return noStore({
+            ok: true,
+            status: "verified",
+            sourceKey,
+            canonical: source.canonical,
+            verified: true,
+            fileName: source.fileName,
+            sizeBytes: source.byteSize,
+            sha256: source.sha256,
+            versionId: version?.version_id || null,
+            versionStatus: version?.status || null,
+            storageProvider: "supabase-storage",
+            representation: approved.representation,
+            totalChunks: approved.totalChunks,
+            chunkSizeBytes: approved.chunkSizeBytes,
+            requestId: approved.requestId,
+            publishedLive: approved.publishedLive,
+          });
+        }
+
         const privateState = await directPrivateObjectState(source);
         if (privateState.verified) {
           return noStore({
