@@ -9,6 +9,8 @@ import WaterCadTileCanvas, {
   type CadTileData,
   type CadTileIndexItem,
   type CanvasStats,
+  type CadBounds,
+  type CadMarker,
 } from "../components/water-cad-tile-canvas";
 
 
@@ -173,7 +175,17 @@ export default function MasterBMobilePage() {
 
     setSourceKey(nextSource);
     setViewId(nextView);
+    // A register entry opens Map D centred on it (…&x=…&y=…&asset=…).
+    const fx = Number(params.get("x"));
+    const fy = Number(params.get("y"));
+    if (Number.isFinite(fx) && Number.isFinite(fy) && params.get("x") && params.get("y")) {
+      setFocus({ x: fx, y: fy, asset: params.get("asset") || "" });
+    }
   }, []);
+
+  const [focus, setFocus] = useState<{ x: number; y: number; asset: string } | null>(null);
+  const [registerMarkers, setRegisterMarkers] = useState<CadMarker[]>([]);
+  const [registerNote, setRegisterNote] = useState("");
 
   const [manifest, setManifest] = useState<Manifest | null>(null);
   const [status, setStatus] = useState<LoadState>("idle");
@@ -257,6 +269,34 @@ export default function MasterBMobilePage() {
     },
     [sourceKey, manifest?.generatorVersion],
   );
+
+  // Map D is the working map: the network register (valves, hydrants, tanks…)
+  // is drawn over Map B with each entry's number, for what is on screen.
+  const MARKER_COLOR: Record<string, string> = {
+    valve: "#38bdf8", air_valve: "#a3e635", hydrant: "#f87171", pressure_reducing_valve: "#c084fc", tank: "#fbbf24",
+  };
+  const loadRegisterMarkers = useCallback(async (bounds: CadBounds, scale: number) => {
+    if (scale < 0.25) {
+      setRegisterMarkers([]);
+      setRegisterNote("Κάνε ζουμ για να εμφανιστούν οι βάνες και οι αριθμοί τους.");
+      return;
+    }
+    const p = new URLSearchParams({
+      minX: String(bounds.minX), minY: String(bounds.minY), maxX: String(bounds.maxX), maxY: String(bounds.maxY), limit: "2000",
+    });
+    try {
+      const r = await fetch(`/api/professional/infrastructure/water/register?${p}`, { credentials: "include", headers: waterAccessHeaders() });
+      if (!r.ok) { setRegisterNote("Το μητρώο δικτύου δεν είναι διαθέσιμο σε αυτή τη συσκευή."); return; }
+      const j = (await r.json()) as { total: number; assets: Array<{ number: string; kind: string; x: number; y: number }> };
+      setRegisterMarkers(j.assets.map((a) => ({
+        x: a.x, y: a.y, label: a.number, color: MARKER_COLOR[a.kind] ?? "#ffffff", highlight: a.number === focus?.asset,
+      })));
+      setRegisterNote(`Μητρώο: ${j.assets.length}${j.total > j.assets.length ? ` από ${j.total}` : ""} στοιχεία στην οθόνη · μπλε βάνα, κόκκινο υδροστόμιο, πράσινο αεροβαλβίδα, κίτρινο δεξαμενή.`);
+    } catch {
+      setRegisterNote("Το μητρώο δικτύου δεν φορτώθηκε.");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focus?.asset]);
 
   const layerNames = useMemo(() => manifest?.layers ?? [], [manifest?.layers]);
 
@@ -455,6 +495,14 @@ export default function MasterBMobilePage() {
                 Άνοιγμα οδικού χάρτη (χωρίς μεταφορά μη επαληθευμένων συντεταγμένων)
               </a>
             </div>
+            {viewId === "D" ? (
+              <div className="mb-3 rounded-2xl border border-sky-400/40 bg-sky-950/30 p-3 text-sm font-bold text-sky-100">
+                <p>{registerNote || "Χάρτης εργασίας Δ: το μητρώο δικτύου φορτώνει πάνω στον χάρτη Β."}</p>
+                <a href="/professional/infrastructure/water/register" className="mt-1 inline-block font-black text-amber-300">
+                  Μητρώο Δικτύου (λίστα ανά περιοχή και οδό) →
+                </a>
+              </div>
+            ) : null}
             <div className="h-[68vh] min-h-[460px] overflow-hidden rounded-2xl border border-slate-800 bg-white">
               {canDraw && manifest && coreBounds ? (
                 <WaterCadTileCanvas
@@ -472,6 +520,9 @@ export default function MasterBMobilePage() {
                   fetchTile={fetchTile}
                   onPick={setSelectedDrawingPoint}
                   onStats={setCanvasStats}
+                  markers={viewId === "D" ? registerMarkers : undefined}
+                  initialCenter={focus}
+                  onViewChange={viewId === "D" ? loadRegisterMarkers : undefined}
                 />
               ) : (
                 <div className="flex h-full items-center justify-center p-6 text-center text-sm font-black text-slate-700">
