@@ -79,30 +79,18 @@ jobs:
           node -e "const p=require('./node_modules/@mlightcad/libredwg-web/package.json');console.log('libredwg-web',p.version)" >> probe.txt
           msg=$(sed 's/%/%25/g' probe.txt | sed ':a;N;$!ba;s/\n/%0A/g'); echo "::notice title=probe::$msg"
 
-      - name: Dry-run fixed Map B derivation (no upload)
+      - name: Survey DWG styles (read-only)
         shell: bash
         env:
           KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
         run: |
           set +e
           export SUPABASE_SECRET_KEY="$(cat "$KEY_FILE")"
-          export SUPABASE_URL="https://cxhulvwkagzufbjsdwwu.supabase.co"
-          export PANTAVION_WATER_MAP_B_SOURCE_KEY=canonical-2026-andreaspap
-          export PANTAVION_WATER_MAP_B_DERIVED_OUT="$RUNNER_TEMP/mapb"
-          export NODE_OPTIONS="--stack-trace-limit=40 --max-old-space-size=12288"
-          code=0
-          /usr/bin/time -v node scripts/pantavion-water-map-b-generate-derived.mjs > out.log 2>&1 || code=$?
+          export NODE_OPTIONS="--max-old-space-size=12288"
+          node scripts/diag-water-map-b-dwg-style-survey.mjs > survey.log 2>&1; code=$?
           rm -f "$KEY_FILE"
-          {
-            echo "exit=$code"
-            grep -E "Maximum resident|Elapsed" out.log
-            tail -c 3000 out.log | grep -v "Command being\|kbytes\|page faults\|context switches\|Swaps\|File system\|Socket\|Signals\|Page size\|Percent of\|User time\|System time"
-            if [ -f "$RUNNER_TEMP/mapb/manifest.json" ]; then
-              jq -c '{grid,totalEntities,totalLineSegments,pointCount,labelCount,writtenTileCount,densestTileSegments,outsideCoreEntityCount,allBounds,coreBounds,layerCount:(.layers|length),topLayers:(.topLayers[:12]),coverage:(.coverage|{entityTypeCounts,unsupportedTypeCounts,unsupportedCount,blockInsertCount,expandedBlockEntityCount})}' "$RUNNER_TEMP/mapb/manifest.json"
-              echo "tiles_dir_size=$(du -sh $RUNNER_TEMP/mapb/tiles | cut -f1) files=$(ls $RUNNER_TEMP/mapb/tiles | wc -l)"
-              echo "largest_tiles:"; ls -S -l $RUNNER_TEMP/mapb/tiles | head -4 | awk '{print $5, $9}'
-            fi
-          } > tail.txt
-          msg=$(grep -v -i "secret\|eyJ" tail.txt | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
-          echo "::error title=diag-map-b::$msg"
+          echo "::notice title=survey-exit::exit=$code $(tail -c 400 survey.log | tr '\n' ' ' | grep -v SURVEY_JSON)"
+          grep '^SURVEY_JSON ' survey.log | sed 's/^SURVEY_JSON //' > survey.json
+          split -b 30000 -d survey.json part_
+          for f in part_*; do msg=$(sed 's/%/%25/g' "$f" | tr -d '\n'); echo "::notice title=survey-$f::$msg"; done
           exit 0
