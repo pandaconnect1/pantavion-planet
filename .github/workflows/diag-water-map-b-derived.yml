@@ -84,11 +84,11 @@ jobs:
         env:
           KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
         run: |
-          set -uo pipefail
+          set +e
           export SUPABASE_SECRET_KEY="$(cat "$KEY_FILE")"
           export SUPABASE_URL="https://cxhulvwkagzufbjsdwwu.supabase.co"
-          /usr/bin/time -v node scripts/pantavion-water-owner-b-derived-job.mjs > out.log 2>&1
-          code=$?
+          code=0
+          /usr/bin/time -v node scripts/pantavion-water-owner-b-derived-job.mjs > out.log 2>&1 || code=$?
           rm -f "$KEY_FILE"
           echo "exit=$code" >> out.log
           tail -90 out.log | grep -v -i "secret\|eyJ" > tail.txt
