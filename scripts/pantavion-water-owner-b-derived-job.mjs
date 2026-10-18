@@ -87,8 +87,17 @@ async function main() {
       console.log(JSON.stringify({ ok: true, mapId: "B", state: "dry_run_verified", heapMb: HEAP_MB }));
       return;
     }
-    const { data, error } = await admin.storage.from("personal-media").download(path);
-    if (error || !data) throw Error("derived_manifest_missing");
+    // The manifest was just uploaded; storage can lag a moment behind its own
+    // write, so retry before calling it missing, and keep the real reason.
+    let data = null;
+    let lastError = null;
+    for (let attempt = 1; attempt <= 6 && !data; attempt += 1) {
+      const res = await admin.storage.from("personal-media").download(path);
+      if (!res.error && res.data) { data = res.data; break; }
+      lastError = res.error;
+      await new Promise((resolve) => setTimeout(resolve, attempt * 5000));
+    }
+    if (!data) throw Error("derived_manifest_missing: " + (lastError?.message || String(lastError)));
     const manifest = JSON.parse(await data.text());
     if (manifest.ok !== true || manifest.sourceSha256 !== source.sha256 ||
         !Array.isArray(manifest.tiles) || manifest.tiles.length === 0 ||
