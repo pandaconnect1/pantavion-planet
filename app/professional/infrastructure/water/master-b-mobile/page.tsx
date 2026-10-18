@@ -386,8 +386,11 @@ export default function MasterBMobilePage() {
           </div>
 
           <div className="rounded-2xl border border-slate-700 bg-[#091426] p-4">
-            <p className="text-xs font-black uppercase text-slate-400">Raw DWG</p>
-            <p className="mt-2 text-xl font-black text-emerald-300">Blocked</p>
+            <p className="text-xs font-black uppercase text-slate-400">Πρωτότυπο DWG</p>
+            <p className="mt-2 text-xl font-black text-emerald-300">Προστατευμένο</p>
+            <p className="mt-1 text-xs font-bold text-slate-400">
+              Δεν κατεβαίνει στον browser· εδώ φτάνουν μόνο τα κομμάτια του χάρτη.
+            </p>
           </div>
         </div>
 
