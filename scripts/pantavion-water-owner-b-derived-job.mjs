@@ -102,6 +102,8 @@ async function main() {
           samples: v.samples.slice(0, 25).map((x) => [x.text.replace(/\s+/g, " "), x.layer, Math.round(x.x), Math.round(x.y)]),
         }));
       }
+      annotate("notice", "Inventory pink dashed layers (area/zone boundaries)", JSON.stringify(
+        inv.pinkDashedLayers.slice(0, 40).map((l) => [l.layer, l.pinkDashed, l.total, l.top.map((t) => `${t.color}/${t.lineType}:${t.n}`).join(" ")])));
       const water = inv.layers.filter((l) => /^(W-|FH|A\.V|PRV|DEXAMENH|PUMP|AERITHS|DIAKOPTHS)/i.test(l.layer));
       annotate("notice", "Inventory water layer extents", JSON.stringify(water.map((l) => [l.layer, l.segments, l.blocks, l.texts, l.minX, l.minY, l.maxX, l.maxY])));
       annotate("notice", "Inventory blocks (top 120)", JSON.stringify(inv.blocks.slice(0, 120).map((b) => [b.block, b.count, b.layers[0]?.layer])));

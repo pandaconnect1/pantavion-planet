@@ -86,7 +86,20 @@ const INVENTORY_KEYWORDS = {
   area_akrounta: /ΑΚΡΟΥΝΤ|AKROUNT|AKRUNT/i,
 };
 
-function buildNetworkInventory({ segments, texts, blockRefs, points, layers }) {
+// Magenta/pink as drawn: ACI 6, ACI 200-249 (hues 285-360), or an RGB with red
+// high, blue present and green low.
+function isPinkColor(c) {
+  const s = String(c || "");
+  const aci = /^aci(\d+)$/i.exec(s);
+  if (aci) { const n = Number(aci[1]); return n === 6 || (n >= 200 && n <= 249); }
+  const hex = /^#?([0-9a-f]{6})$/i.exec(s);
+  if (!hex) return false;
+  const v = parseInt(hex[1], 16);
+  const r = v >> 16, g = (v >> 8) & 255, b = v & 255;
+  return r >= 170 && b >= 90 && g <= 170 && r - g >= 50;
+}
+
+function buildNetworkInventory({ segments, texts, blockRefs, points, layers, styles = [] }) {
   const layerName = (id) => layers[id]?.name || `layer-${id}`;
   const byLayer = new Map();
   const layerRow = (id) => {
@@ -99,7 +112,13 @@ function buildNetworkInventory({ segments, texts, blockRefs, points, layers }) {
     if (x < r.minX) r.minX = x; if (y < r.minY) r.minY = y;
     if (x > r.maxX) r.maxX = x; if (y > r.maxY) r.maxY = y;
   };
-  for (const s of segments) { const r = layerRow(s[4]); r.segments += 1; grow(r, s[0], s[1]); }
+  const layerStyles = new Map();
+  for (const s of segments) {
+    const r = layerRow(s[4]); r.segments += 1; grow(r, s[0], s[1]);
+    let m = layerStyles.get(s[4]);
+    if (!m) { m = new Map(); layerStyles.set(s[4], m); }
+    m.set(s[5], (m.get(s[5]) || 0) + 1);
+  }
   for (const t of texts) { const r = layerRow(t[2]); r.texts += 1; grow(r, t[0], t[1]); }
   for (const p of points) layerRow(p[2]).points += 1;
 
@@ -132,7 +151,21 @@ function buildNetworkInventory({ segments, texts, blockRefs, points, layers }) {
   const topLayers = (m) => [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([id, n]) => ({ layer: layerName(id), n }));
   const round = (v) => (finite(v) ? Math.round(v) : null);
 
+  // Styles per layer, and the layers drawn mostly in dashed pink: the area and
+  // zone boundaries of the network are drawn that way.
+  const styleRows = [...layerStyles.entries()].map(([id, m]) => {
+    const total = [...m.values()].reduce((a, b) => a + b, 0);
+    const top = [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3)
+      .map(([sid, n]) => ({ color: styles[sid]?.c ?? null, lineType: styles[sid]?.lt ?? null, n }));
+    let pinkDashed = 0;
+    for (const [sid, n] of m) if (styles[sid]?.lt && isPinkColor(styles[sid]?.c)) pinkDashed += n;
+    return { layer: layerName(id), total, pinkDashed, top };
+  });
+  const pinkDashedLayers = styleRows.filter((r) => r.pinkDashed > 0).sort((a, b) => b.pinkDashed - a.pinkDashed);
+
   return {
+    pinkDashedLayers,
+    layerStyles: styleRows.sort((a, b) => b.total - a.total),
     totals: { segments: segments.length, texts: texts.length, blockRefs: blockRefs.length, points: points.length, layers: layers.length, blockNames: blocks.size },
     layers: [...byLayer.values()]
       .map((r) => ({ ...r, minX: round(r.minX), minY: round(r.minY), maxX: round(r.maxX), maxY: round(r.maxY) }))
@@ -744,7 +777,7 @@ async function main() {
     const { segments, fills, texts, points, blockRefs, styles, layers, linetypes } = extracted;
 
     if (process.env.PANTAVION_WATER_MAP_B_INVENTORY === "YES") {
-      const inventory = buildNetworkInventory({ segments, texts, blockRefs, points, layers });
+      const inventory = buildNetworkInventory({ segments, texts, blockRefs, points, layers, styles });
       const out = process.env.PANTAVION_WATER_MAP_B_INVENTORY_OUT ||
         path.join(repoRoot, ".pantavion", "water", `map-${EXPECTED.mapId.toLowerCase()}-inventory.json`);
       fs.mkdirSync(path.dirname(out), { recursive: true });
