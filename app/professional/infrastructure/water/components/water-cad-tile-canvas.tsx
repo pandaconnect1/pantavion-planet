@@ -57,8 +57,12 @@ export type CadTileData = { segments: Seg[]; fills: Fill[]; texts: Txt[]; points
 
 type View = { cx: number; cy: number; scale: number }; // scale = CSS px per drawing unit
 
+export type CadLod = { level: number; grid: number; tiles: CadTileIndexItem[] };
+
 type Props = {
   tiles: CadTileIndexItem[];
+  /** Coarser overview levels (finest first), drawn when the full detail would not fit. */
+  lods?: CadLod[];
   grid: number;
   coreBounds: CadBounds;
   layers: string[];
@@ -85,8 +89,22 @@ export type CanvasStats = {
 
 const BACKGROUND = "#212830"; // AutoCAD 2D model space default
 const COLOR_7 = "#ffffff";
-const MAX_SEGMENTS_IN_VIEW = 700_000;
-const MAX_CACHED_SEGMENTS = 2_500_000;
+// Phones kill a tab that holds millions of parsed segments, and a full redraw of
+// 700k lines blocks touch input. Coarse-pointer or low-memory devices get a
+// smaller budget: fewer lines per screen, a smaller cache and a lower canvas DPR.
+type Budget = { view: number; cache: number; dpr: number };
+let budgetCache: Budget | null = null;
+function deviceBudget(): Budget {
+  if (budgetCache) return budgetCache;
+  if (typeof window === "undefined") return { view: 700_000, cache: 2_500_000, dpr: 2.5 };
+  const coarse = window.matchMedia?.("(pointer: coarse)").matches ?? false;
+  const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
+  const low = coarse || (typeof memory === "number" && memory <= 4);
+  budgetCache = low
+    ? { view: 220_000, cache: 650_000, dpr: 2 }
+    : { view: 700_000, cache: 2_500_000, dpr: 2.5 };
+  return budgetCache;
+}
 const FETCH_CONCURRENCY = 6;
 const MIN_TEXT_PX = 3;
 const MIN_PATTERN_PX = 2.5;
@@ -97,6 +115,7 @@ const lineweightPx = (lw: number, on: boolean) => (on ? Math.max(1, Math.round(l
 
 export default function WaterCadTileCanvas({
   tiles,
+  lods,
   grid,
   coreBounds,
   layers,
@@ -120,6 +139,7 @@ export default function WaterCadTileCanvas({
   const activeFetchesRef = useRef(0);
   const frameRef = useRef(0);
   const snapshotRef = useRef<{ bitmap: HTMLCanvasElement; view: View } | null>(null);
+  const snapshotCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const interactingRef = useRef(false);
   const settleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const drawListRef = useRef<{ key: string; list: Array<[number, number, unknown]> } | null>(null);
@@ -136,16 +156,28 @@ export default function WaterCadTileCanvas({
     [layerInfo, layers, query, showHiddenLayers],
   );
 
-  const tilesByCell = useMemo(() => {
-    const map = new Map<number, CadTileIndexItem[]>();
-    for (const t of tiles) {
-      const key = t.y * grid + t.x;
-      const list = map.get(key);
-      if (list) list.push(t);
-      else map.set(key, [t]);
-    }
-    return map;
-  }, [tiles, grid]);
+  // Level 0 is the full drawing; each overview level is 4x coarser. Like a
+  // street map, the screen always shows the finest level that fits the budget.
+  const levels = useMemo(() => {
+    const all = [{ grid, tiles }, ...[...(lods ?? [])].sort((a, b) => a.level - b.level)];
+    return all
+      .filter((l) => l.grid > 0 && l.tiles.length > 0)
+      .map((l) => {
+        const byCell = new Map<number, CadTileIndexItem[]>();
+        for (const t of l.tiles) {
+          const key = t.y * l.grid + t.x;
+          const list = byCell.get(key);
+          if (list) list.push(t);
+          else byCell.set(key, [t]);
+        }
+        return {
+          grid: l.grid,
+          byCell,
+          cellW: (coreBounds.maxX - coreBounds.minX) / l.grid,
+          cellH: (coreBounds.maxY - coreBounds.minY) / l.grid,
+        };
+      });
+  }, [coreBounds.maxX, coreBounds.maxY, coreBounds.minX, coreBounds.minY, grid, lods, tiles]);
 
   const cellW = (coreBounds.maxX - coreBounds.minX) / grid;
   const cellH = (coreBounds.maxY - coreBounds.minY) / grid;
@@ -155,26 +187,31 @@ export default function WaterCadTileCanvas({
       const { w, h } = sizeRef.current;
       const halfW = w / 2 / view.scale;
       const halfH = h / 2 / view.scale;
-      const clampCell = (v: number) => Math.max(0, Math.min(grid - 1, v));
-      const tx0 = clampCell(Math.floor((view.cx - halfW - coreBounds.minX) / cellW));
-      const tx1 = clampCell(Math.floor((view.cx + halfW - coreBounds.minX) / cellW));
-      const ty0 = clampCell(Math.floor((view.cy - halfH - coreBounds.minY) / cellH));
-      const ty1 = clampCell(Math.floor((view.cy + halfH - coreBounds.minY) / cellH));
-      const files: CadTileIndexItem[] = [];
-      let segments = 0;
-      for (let ty = ty0; ty <= ty1; ty += 1) {
-        for (let tx = tx0; tx <= tx1; tx += 1) {
-          const list = tilesByCell.get(ty * grid + tx);
-          if (!list) continue;
-          for (const t of list) {
-            files.push(t);
-            segments += t.segmentCount;
+      let result = { files: [] as CadTileIndexItem[], segments: 0, cellW, cellH };
+      for (const level of levels) {
+        const clampCell = (v: number) => Math.max(0, Math.min(level.grid - 1, v));
+        const tx0 = clampCell(Math.floor((view.cx - halfW - coreBounds.minX) / level.cellW));
+        const tx1 = clampCell(Math.floor((view.cx + halfW - coreBounds.minX) / level.cellW));
+        const ty0 = clampCell(Math.floor((view.cy - halfH - coreBounds.minY) / level.cellH));
+        const ty1 = clampCell(Math.floor((view.cy + halfH - coreBounds.minY) / level.cellH));
+        const files: CadTileIndexItem[] = [];
+        let segments = 0;
+        for (let ty = ty0; ty <= ty1; ty += 1) {
+          for (let tx = tx0; tx <= tx1; tx += 1) {
+            const list = level.byCell.get(ty * level.grid + tx);
+            if (!list) continue;
+            for (const t of list) {
+              files.push(t);
+              segments += t.segmentCount;
+            }
           }
         }
+        result = { files, segments, cellW: level.cellW, cellH: level.cellH };
+        if (segments <= deviceBudget().view) break;
       }
-      return { files, segments };
+      return result;
     },
-    [cellH, cellW, coreBounds.minX, coreBounds.minY, grid, tilesByCell],
+    [cellH, cellW, coreBounds.minX, coreBounds.minY, levels],
   );
 
   const requestDraw = useCallback(() => {
@@ -197,10 +234,10 @@ export default function WaterCadTileCanvas({
           cacheRef.current.set(file, { data, used: performance.now(), segs: data.segments.length });
           let total = 0;
           for (const v of cacheRef.current.values()) total += v.segs;
-          if (total > MAX_CACHED_SEGMENTS) {
+          if (total > deviceBudget().cache) {
             const byAge = [...cacheRef.current.entries()].sort((a, b) => a[1].used - b[1].used);
             for (const [key, v] of byAge) {
-              if (total <= MAX_CACHED_SEGMENTS * 0.8) break;
+              if (total <= deviceBudget().cache * 0.8) break;
               cacheRef.current.delete(key);
               total -= v.segs;
             }
@@ -209,7 +246,9 @@ export default function WaterCadTileCanvas({
         .finally(() => {
           pendingRef.current.delete(file);
           activeFetchesRef.current -= 1;
-          snapshotRef.current = null;
+          // Mid-gesture the last frame keeps moving with the finger; the new
+          // tile is drawn when the gesture settles, never during it.
+          if (!interactingRef.current) snapshotRef.current = null;
           requestDraw();
           pumpQueue();
         });
@@ -217,9 +256,9 @@ export default function WaterCadTileCanvas({
   }, [fetchTile, requestDraw]);
 
   const constrain = useCallback(
-    (view: View): View => {
+    (view: View, limit = deviceBudget().view): View => {
       let v = view;
-      for (let i = 0; i < 60 && visibleFiles(v).segments > MAX_SEGMENTS_IN_VIEW; i += 1) {
+      for (let i = 0; i < 60 && visibleFiles(v).segments > limit; i += 1) {
         v = { ...v, scale: v.scale * 1.25 };
       }
       return v;
@@ -253,11 +292,13 @@ export default function WaterCadTileCanvas({
     const ky = bestKey >= 0 ? Math.floor(bestKey / grid) : grid / 2;
     const bw = coreBounds.maxX - coreBounds.minX;
     const bh = coreBounds.maxY - coreBounds.minY;
+    // Open close in, like a street map: a third of the line budget fills the
+    // first screen fast and leaves room to prefetch around it.
     viewRef.current = constrain({
       cx: coreBounds.minX + (kx + 0.5) * cellW,
       cy: coreBounds.minY + (ky + 0.5) * cellH,
       scale: Math.min(w / bw, h / bh),
-    });
+    }, deviceBudget().view / 3);
     snapshotRef.current = null;
     requestDraw();
   }, [cellH, cellW, constrain, coreBounds, grid, requestDraw, tiles]);
@@ -268,7 +309,7 @@ export default function WaterCadTileCanvas({
     if (!wrap || !canvas) return;
     const resize = () => {
       const rect = wrap.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+      const dpr = Math.min(window.devicePixelRatio || 1, deviceBudget().dpr);
       sizeRef.current = { w: rect.width, h: rect.height, dpr };
       canvas.width = Math.round(rect.width * dpr);
       canvas.height = Math.round(rect.height * dpr);
@@ -318,9 +359,11 @@ export default function WaterCadTileCanvas({
     if (interactingRef.current && snap) {
       const k = view.scale / snap.view.scale;
       const dx = (snap.view.cx - view.cx) * view.scale;
+      // Screen y grows downward while drawing y grows upward: a larger view.cy
+      // moves the old frame down the screen.
       const dy = (view.cy - snap.view.cy) * view.scale;
       ctx.save();
-      ctx.translate(w / 2 + dx, h / 2 - dy);
+      ctx.translate(w / 2 + dx, h / 2 + dy);
       ctx.scale(k, k);
       ctx.drawImage(snap.bitmap, -w / 2, -h / 2, w, h);
       ctx.restore();
@@ -340,14 +383,23 @@ export default function WaterCadTileCanvas({
       hit.used = now;
       loadedFiles.push(t.file);
     }
-    const cxCell = (view.cx - coreBounds.minX) / cellW;
-    const cyCell = (view.cy - coreBounds.minY) / cellH;
+    const cxCell = (view.cx - coreBounds.minX) / vis.cellW;
+    const cyCell = (view.cy - coreBounds.minY) / vis.cellH;
     const meta = new Map(vis.files.map((t) => [t.file, t]));
     want.sort((a, b) => {
       const ta = meta.get(a) as CadTileIndexItem;
       const tb = meta.get(b) as CadTileIndexItem;
       return Math.hypot(ta.x - cxCell, ta.y - cyCell) - Math.hypot(tb.x - cxCell, tb.y - cyCell);
     });
+    // Then the tiles just beyond each edge, so panning finds them already loaded.
+    const ring = visibleFiles({ ...view, scale: view.scale / 1.6 });
+    let ringSegments = 0;
+    for (const t of ring.files) {
+      if (ringSegments > deviceBudget().view / 2) break;
+      if (meta.has(t.file) || cacheRef.current.has(t.file) || pendingRef.current.has(t.file)) continue;
+      want.push(t.file);
+      ringSegments += t.segmentCount;
+    }
     queueRef.current = want;
     pumpQueue();
 
@@ -529,10 +581,13 @@ export default function WaterCadTileCanvas({
       ctx.restore();
     }
 
-    const bitmap = document.createElement("canvas");
-    bitmap.width = canvas.width;
-    bitmap.height = canvas.height;
-    bitmap.getContext("2d")?.drawImage(canvas, 0, 0);
+    const bitmap = snapshotCanvasRef.current ?? document.createElement("canvas");
+    snapshotCanvasRef.current = bitmap;
+    if (bitmap.width !== canvas.width) bitmap.width = canvas.width;
+    if (bitmap.height !== canvas.height) bitmap.height = canvas.height;
+    const snapCtx = bitmap.getContext("2d");
+    snapCtx?.clearRect(0, 0, bitmap.width, bitmap.height);
+    snapCtx?.drawImage(canvas, 0, 0);
     snapshotRef.current = { bitmap, view: { ...view } };
 
     onStats?.({
@@ -570,7 +625,7 @@ export default function WaterCadTileCanvas({
       const scale = Math.max(1e-6, Math.min(5000, view.scale * factor));
       const next = { scale, cx: wx - (sx - w / 2) / scale, cy: wy + (sy - h / 2) / scale };
       // Zooming out stops where the screen would hold more than can be drawn.
-      viewRef.current = factor < 1 && visibleFiles(next).segments > MAX_SEGMENTS_IN_VIEW ? view : next;
+      viewRef.current = factor < 1 && visibleFiles(next).segments > deviceBudget().view ? view : next;
       interactingRef.current = true;
       requestDraw();
       settle();

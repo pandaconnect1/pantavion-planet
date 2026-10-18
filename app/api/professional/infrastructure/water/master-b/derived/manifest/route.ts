@@ -62,6 +62,7 @@ type DerivedManifest = {
   schemaVersion?: string;
   topLayers?: Array<{ layer: string; count: number }>;
   tiles?: TileIndexItem[];
+  lods?: Array<{ level: number; grid: number; tiles?: TileIndexItem[] }>;
   coverage?: Record<string, unknown>;
   truth?: Record<string, unknown>;
 };
@@ -122,6 +123,10 @@ function sanitizeManifest(
     schemaVersion: manifest.schemaVersion ?? null,
     topLayers: manifest.topLayers ?? [],
     tiles: sortedTiles,
+    // Overview levels for zoomed-out views (finest first); absent before v4.
+    lods: (manifest.lods ?? [])
+      .filter((l) => Number.isInteger(l?.level) && Number.isInteger(l?.grid) && Array.isArray(l?.tiles))
+      .map((l) => ({ level: l.level, grid: l.grid, tiles: l.tiles ?? [] })),
     coverage: manifest.coverage ?? {},
     truth: manifest.truth ?? {},
   };

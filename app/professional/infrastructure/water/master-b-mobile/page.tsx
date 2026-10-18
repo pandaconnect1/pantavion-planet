@@ -7,6 +7,7 @@ import WaterCadTileCanvas, {
   type CadLinetype,
   type CadStyle,
   type CadTileData,
+  type CadTileIndexItem,
   type CanvasStats,
 } from "../components/water-cad-tile-canvas";
 
@@ -45,6 +46,8 @@ type Manifest = {
   mobileMustUseDerivedTilesOnly?: boolean;
   dxfSizeBytes?: number | null;
   grid?: number | null;
+  generatorVersion?: string | null;
+  lods?: Array<{ level: number; grid: number; tiles: CadTileIndexItem[] }>;
   totalEntities?: number;
   totalLineSegments?: number;
   matchedNetworkSegments?: number;
@@ -234,7 +237,9 @@ export default function MasterBMobilePage() {
       const response = await fetch(
         `/api/professional/infrastructure/water/master-b/derived/tile?sourceKey=${encodeURIComponent(
           sourceKey,
-        )}&file=${encodeURIComponent(file)}`,
+        )}&file=${encodeURIComponent(file)}${
+          manifest?.generatorVersion ? `&v=${encodeURIComponent(manifest.generatorVersion)}` : ""
+        }`,
         {
           cache: "force-cache",
           credentials: "include",
@@ -250,7 +255,7 @@ export default function MasterBMobilePage() {
         points: tileJson.points ?? [],
       } as CadTileData;
     },
-    [sourceKey],
+    [sourceKey, manifest?.generatorVersion],
   );
 
   const layerNames = useMemo(() => manifest?.layers ?? [], [manifest?.layers]);
@@ -451,6 +456,7 @@ export default function MasterBMobilePage() {
               {canDraw && manifest && coreBounds ? (
                 <WaterCadTileCanvas
                   tiles={manifest.tiles ?? []}
+                  lods={manifest.lods ?? []}
                   grid={Number(manifest.grid)}
                   coreBounds={coreBounds}
                   layers={layerNames}

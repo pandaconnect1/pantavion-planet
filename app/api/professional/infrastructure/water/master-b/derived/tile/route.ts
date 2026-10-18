@@ -126,7 +126,11 @@ export async function GET(request: NextRequest) {
       },
       {
         headers: {
-          "Cache-Control": "private, max-age=60",
+          // A request that names the generator version gets a long private
+          // cache: a rebuild changes the version and so the URL.
+          "Cache-Control": request.nextUrl.searchParams.get("v")
+            ? "private, max-age=604800, immutable"
+            : "private, max-age=60",
           "X-Pantavion-Source": "map-b-supabase-derived-network-tile",
           "X-Pantavion-Water-Map-B-Source-Key": sourceKey,
           "X-Pantavion-Water-Access-Mode": access.mode,
