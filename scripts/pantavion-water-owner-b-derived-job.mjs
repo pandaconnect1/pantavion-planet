@@ -5,7 +5,7 @@ import { spawnSync } from "node:child_process";
 import { createClient } from "@supabase/supabase-js";
 import { loadApprovedOwnerDwg } from "./water-approved-owner-dwg-loader.mjs";
 
-const CURRENT_GENERATOR = "pantavion-map-b-derived-v3";
+const CURRENT_GENERATOR = "pantavion-map-b-derived-v4";
 // Dry run: generate and verify locally, upload nothing, keep the current manifest.
 const DRY_RUN = process.env.PANTAVION_WATER_DERIVED_DRY_RUN === "YES";
 // The v3 extract holds every styled segment, fill and text of a 13M-line drawing

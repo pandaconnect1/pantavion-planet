@@ -48,7 +48,7 @@ const STORAGE = {
   derivedPrefix: `water-network-private/derived/map-${EXPECTED.mapId.toLowerCase()}/${EXPECTED.sha256}`,
 };
 
-const GENERATOR_VERSION = "pantavion-map-b-derived-v3";
+const GENERATOR_VERSION = "pantavion-map-b-derived-v4";
 const DEFAULT_GRID = 64;
 const MAX_GRID = 512;
 const TARGET_TILE_SEGMENTS = 40000;
@@ -816,6 +816,122 @@ async function main() {
       fail("map_b_derived_tile_coverage_mismatch", { written, segmentTileRefs, fillTileRefs, texts: texts.length, points: points.length });
     }
 
+    // ---- zoom levels (like a street map) ---------------------------------
+    // Each overview level has a grid 4x coarser than the one below. A level is
+    // meant to be drawn with about 256 px per cell, so geometry is snapped to a
+    // 1/256-cell grid: chains of tiny segments collapse onto pixel-sized pieces,
+    // exact duplicates are dropped, and what is too small to see is left out.
+    // The full-detail tiles stay untouched; overviews only add files.
+    const lods = [];
+    const LOD_PX = 256;
+    const LOD_MAX_SEGMENTS = PART_MAX_SEGMENTS;
+    for (let level = 1, g = Math.floor(grid / 4); g >= 2; level += 1, g = Math.floor(g / 4)) {
+      const cw = coreWidth / g;
+      const ch = coreHeight / g;
+      const q = Math.max(cw, ch) / LOD_PX;
+      const snap = (v) => Math.round(v / q);
+      const lodRange = (lo, hi, min, span) => [cellOf(lo, min, span, g), cellOf(hi, min, span, g)];
+      const lodTiles = new Map();
+      const lodTile = (x, y) => {
+        const key = y * g + x;
+        let rec = lodTiles.get(key);
+        if (!rec) { rec = { x, y, segments: [], seen: new Set(), fills: [], texts: [] }; lodTiles.set(key, rec); }
+        return rec;
+      };
+      let lodSegments = 0;
+      for (const s of segments) {
+        const a = snap(s[0]), b = snap(s[1]), c = snap(s[2]), d = snap(s[3]);
+        if (a === c && b === d) continue;
+        const forward = a < c || (a === c && b < d);
+        const key = forward ? `${a},${b},${c},${d},${s[5]},${s[4]}` : `${c},${d},${a},${b},${s[5]},${s[4]}`;
+        const out = [a * q, b * q, c * q, d * q, s[4], s[5], s[6], s[7]];
+        const [x0, x1] = lodRange(Math.min(out[0], out[2]), Math.max(out[0], out[2]), core.minX, coreWidth);
+        const [y0, y1] = lodRange(Math.min(out[1], out[3]), Math.max(out[1], out[3]), core.minY, coreHeight);
+        for (let ty = y0; ty <= y1; ty += 1) {
+          for (let tx = x0; tx <= x1; tx += 1) {
+            const rec = lodTile(tx, ty);
+            if (rec.seen.has(key)) continue;
+            rec.seen.add(key);
+            rec.segments.push(out);
+            lodSegments += 1;
+          }
+        }
+      }
+      for (const f of fills) {
+        let fx0 = Infinity, fy0 = Infinity, fx1 = -Infinity, fy1 = -Infinity;
+        const rings = [];
+        for (const ring of f[3]) {
+          const r = [];
+          for (let i = 0; i < ring.length; i += 2) {
+            fx0 = Math.min(fx0, ring[i]); fx1 = Math.max(fx1, ring[i]);
+            fy0 = Math.min(fy0, ring[i + 1]); fy1 = Math.max(fy1, ring[i + 1]);
+            const x = snap(ring[i]) * q, y = snap(ring[i + 1]) * q;
+            if (r.length >= 2 && r[r.length - 2] === x && r[r.length - 1] === y) continue;
+            r.push(x, y);
+          }
+          if (r.length >= 6) rings.push(r);
+        }
+        if (!rings.length || Math.max(fx1 - fx0, fy1 - fy0) < 2 * q) continue;
+        const out = [f[0], f[1], f[2], rings, f[4]];
+        const [x0, x1] = lodRange(fx0, fx1, core.minX, coreWidth);
+        const [y0, y1] = lodRange(fy0, fy1, core.minY, coreHeight);
+        for (let ty = y0; ty <= y1; ty += 1) for (let tx = x0; tx <= x1; tx += 1) lodTile(tx, ty).fills.push(out);
+      }
+      for (const t of texts) {
+        if (!(Number(t[5]) >= 3 * q)) continue;
+        lodTile(cellOf(t[0], core.minX, coreWidth, g), cellOf(t[1], core.minY, coreHeight, g)).texts.push(t);
+      }
+      const lodIndex = [];
+      let lodWritten = 0;
+      for (const rec of [...lodTiles.values()].sort((a, b) => a.y - b.y || a.x - b.x)) {
+        rec.seen = null;
+        let segs = rec.segments;
+        if (segs.length > LOD_MAX_SEGMENTS) {
+          // Keep the longest lines: they carry the shape of the network at this scale.
+          segs = segs
+            .map((s) => [Math.hypot(s[2] - s[0], s[3] - s[1]), s])
+            .sort((a, b) => b[0] - a[0])
+            .slice(0, LOD_MAX_SEGMENTS)
+            .map((e) => e[1])
+            .sort((a, b) => a[7] - b[7]);
+        }
+        const texts_ = rec.texts.slice(0, PART_MAX_LABELS);
+        const fills_ = rec.fills.slice(0, PART_MAX_LABELS);
+        if (!segs.length && !texts_.length && !fills_.length) continue;
+        const file = `master-b-tile-lod${level}-${rec.x}-${rec.y}.json`;
+        const payload = {
+          ok: true,
+          schemaVersion: "pantavion-water-map-b-derived-tile-v3",
+          sourceSha256: EXPECTED.sha256,
+          lodLevel: level,
+          tileX: rec.x,
+          tileY: rec.y,
+          part: 0,
+          parts: 1,
+          grid: g,
+          snapUnits: q,
+          rawDwgIncluded: false,
+          coordinateSpace: "source_cad",
+          segmentFormat: ["x1", "y1", "x2", "y2", "layerId", "styleId", "linetypePhase", "drawOrder"],
+          fillFormat: ["layerId", "styleId", "kind(0 fill,1 wipeout)", "rings", "drawOrder"],
+          textFormat: ["x", "y", "layerId", "styleId", "text", "height", "rotation", "hAlign", "vAlign", "widthFactor", "mirrored", "drawOrder", "multiline"],
+          segments: segs,
+          fills: fills_,
+          texts: texts_,
+          points: [],
+          blockRefs: [],
+        };
+        fs.writeFileSync(path.join(tilesDir, file), JSON.stringify(payload), "utf8");
+        tileFiles.push(file);
+        lodWritten += segs.length;
+        lodIndex.push({
+          x: rec.x, y: rec.y, part: 0, parts: 1, file: `tiles/${file}`,
+          segmentCount: segs.length, fillCount: fills_.length, pointCount: 0, labelCount: texts_.length,
+        });
+      }
+      lods.push({ level, grid: g, snapUnits: q, pixelsPerCell: LOD_PX, segments: lodWritten, uniqueSnappedSegments: lodSegments, tiles: lodIndex });
+    }
+
     const layerSegmentCounts = new Map();
     for (const s of segments) layerSegmentCounts.set(s[4], (layerSegmentCounts.get(s[4]) || 0) + 1);
     const topLayers = [...layerSegmentCounts.entries()]
@@ -871,6 +987,8 @@ async function main() {
       coreBounds: core,
       topLayers,
       tiles: tileIndex,
+      // Coarser overview levels for zoomed-out views; finest first.
+      lods,
       coverage: {
         entityTypeCounts: extracted.stats.entityTypes,
         drawnTypeCounts: extracted.stats.drawnTypes,
@@ -929,6 +1047,7 @@ async function main() {
             texts: texts.length,
             blockRefs: blockRefs.length,
             tiles: tileIndex.length,
+            lods: lods.map((l) => ({ level: l.level, grid: l.grid, tiles: l.tiles.length, segments: l.segments })),
             layers: layers.length,
             styles: styles.length,
             densestTileSegments,

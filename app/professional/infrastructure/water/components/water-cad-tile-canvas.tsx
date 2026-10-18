@@ -57,8 +57,12 @@ export type CadTileData = { segments: Seg[]; fills: Fill[]; texts: Txt[]; points
 
 type View = { cx: number; cy: number; scale: number }; // scale = CSS px per drawing unit
 
+export type CadLod = { level: number; grid: number; tiles: CadTileIndexItem[] };
+
 type Props = {
   tiles: CadTileIndexItem[];
+  /** Coarser overview levels (finest first), drawn when the full detail would not fit. */
+  lods?: CadLod[];
   grid: number;
   coreBounds: CadBounds;
   layers: string[];
@@ -111,6 +115,7 @@ const lineweightPx = (lw: number, on: boolean) => (on ? Math.max(1, Math.round(l
 
 export default function WaterCadTileCanvas({
   tiles,
+  lods,
   grid,
   coreBounds,
   layers,
@@ -151,16 +156,28 @@ export default function WaterCadTileCanvas({
     [layerInfo, layers, query, showHiddenLayers],
   );
 
-  const tilesByCell = useMemo(() => {
-    const map = new Map<number, CadTileIndexItem[]>();
-    for (const t of tiles) {
-      const key = t.y * grid + t.x;
-      const list = map.get(key);
-      if (list) list.push(t);
-      else map.set(key, [t]);
-    }
-    return map;
-  }, [tiles, grid]);
+  // Level 0 is the full drawing; each overview level is 4x coarser. Like a
+  // street map, the screen always shows the finest level that fits the budget.
+  const levels = useMemo(() => {
+    const all = [{ grid, tiles }, ...[...(lods ?? [])].sort((a, b) => a.level - b.level)];
+    return all
+      .filter((l) => l.grid > 0 && l.tiles.length > 0)
+      .map((l) => {
+        const byCell = new Map<number, CadTileIndexItem[]>();
+        for (const t of l.tiles) {
+          const key = t.y * l.grid + t.x;
+          const list = byCell.get(key);
+          if (list) list.push(t);
+          else byCell.set(key, [t]);
+        }
+        return {
+          grid: l.grid,
+          byCell,
+          cellW: (coreBounds.maxX - coreBounds.minX) / l.grid,
+          cellH: (coreBounds.maxY - coreBounds.minY) / l.grid,
+        };
+      });
+  }, [coreBounds.maxX, coreBounds.maxY, coreBounds.minX, coreBounds.minY, grid, lods, tiles]);
 
   const cellW = (coreBounds.maxX - coreBounds.minX) / grid;
   const cellH = (coreBounds.maxY - coreBounds.minY) / grid;
@@ -170,26 +187,31 @@ export default function WaterCadTileCanvas({
       const { w, h } = sizeRef.current;
       const halfW = w / 2 / view.scale;
       const halfH = h / 2 / view.scale;
-      const clampCell = (v: number) => Math.max(0, Math.min(grid - 1, v));
-      const tx0 = clampCell(Math.floor((view.cx - halfW - coreBounds.minX) / cellW));
-      const tx1 = clampCell(Math.floor((view.cx + halfW - coreBounds.minX) / cellW));
-      const ty0 = clampCell(Math.floor((view.cy - halfH - coreBounds.minY) / cellH));
-      const ty1 = clampCell(Math.floor((view.cy + halfH - coreBounds.minY) / cellH));
-      const files: CadTileIndexItem[] = [];
-      let segments = 0;
-      for (let ty = ty0; ty <= ty1; ty += 1) {
-        for (let tx = tx0; tx <= tx1; tx += 1) {
-          const list = tilesByCell.get(ty * grid + tx);
-          if (!list) continue;
-          for (const t of list) {
-            files.push(t);
-            segments += t.segmentCount;
+      let result = { files: [] as CadTileIndexItem[], segments: 0, cellW, cellH };
+      for (const level of levels) {
+        const clampCell = (v: number) => Math.max(0, Math.min(level.grid - 1, v));
+        const tx0 = clampCell(Math.floor((view.cx - halfW - coreBounds.minX) / level.cellW));
+        const tx1 = clampCell(Math.floor((view.cx + halfW - coreBounds.minX) / level.cellW));
+        const ty0 = clampCell(Math.floor((view.cy - halfH - coreBounds.minY) / level.cellH));
+        const ty1 = clampCell(Math.floor((view.cy + halfH - coreBounds.minY) / level.cellH));
+        const files: CadTileIndexItem[] = [];
+        let segments = 0;
+        for (let ty = ty0; ty <= ty1; ty += 1) {
+          for (let tx = tx0; tx <= tx1; tx += 1) {
+            const list = level.byCell.get(ty * level.grid + tx);
+            if (!list) continue;
+            for (const t of list) {
+              files.push(t);
+              segments += t.segmentCount;
+            }
           }
         }
+        result = { files, segments, cellW: level.cellW, cellH: level.cellH };
+        if (segments <= deviceBudget().view) break;
       }
-      return { files, segments };
+      return result;
     },
-    [cellH, cellW, coreBounds.minX, coreBounds.minY, grid, tilesByCell],
+    [cellH, cellW, coreBounds.minX, coreBounds.minY, levels],
   );
 
   const requestDraw = useCallback(() => {
@@ -359,8 +381,8 @@ export default function WaterCadTileCanvas({
       hit.used = now;
       loadedFiles.push(t.file);
     }
-    const cxCell = (view.cx - coreBounds.minX) / cellW;
-    const cyCell = (view.cy - coreBounds.minY) / cellH;
+    const cxCell = (view.cx - coreBounds.minX) / vis.cellW;
+    const cyCell = (view.cy - coreBounds.minY) / vis.cellH;
     const meta = new Map(vis.files.map((t) => [t.file, t]));
     want.sort((a, b) => {
       const ta = meta.get(a) as CadTileIndexItem;
