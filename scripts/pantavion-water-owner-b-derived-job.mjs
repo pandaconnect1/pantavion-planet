@@ -94,6 +94,15 @@ async function main() {
       });
       if (up.error) throw Error("inventory_upload_failed: " + up.error.message);
       const inv = JSON.parse(String(body));
+      // GitHub keeps only 10 notices per step: the boundary and water-layer
+      // findings go first.
+      annotate("notice", "Inventory pink dashed layers (area/zone boundaries)", JSON.stringify(
+        inv.pinkDashedLayers.slice(0, 40).map((l) => [l.layer, l.pinkDashed, l.total, l.top.map((t) => `${t.color}/${t.lineType}:${t.n}`).join(" ")])));
+      const water = inv.layers.filter((l) => /^(W-|FH|A\.V|PRV|DEXAMENH|PUMP|AERITHS|DIAKOPTHS)/i.test(l.layer));
+      annotate("notice", "Inventory water layer extents", JSON.stringify(water.map((l) => [l.layer, l.segments, l.blocks, l.texts, l.minX, l.minY, l.maxX, l.maxY])));
+      annotate("notice", "Inventory blocks (top 120)", JSON.stringify(inv.blocks.slice(0, 120).map((b) => [b.block, b.count, b.layers[0]?.layer])));
+      annotate("notice", "Inventory layers with blocks or texts", JSON.stringify(inv.layers
+        .filter((l) => l.blocks || l.texts).slice(0, 150).map((l) => [l.layer, l.segments, l.blocks, l.texts])));
       annotate("notice", "Network inventory totals", JSON.stringify({ path: inventoryPath, bytes: body.length, ...inv.totals }));
       // One annotation per category: a combined one is cut at the length limit.
       for (const [k, v] of Object.entries(inv.keywords)) {
@@ -102,13 +111,6 @@ async function main() {
           samples: v.samples.slice(0, 25).map((x) => [x.text.replace(/\s+/g, " "), x.layer, Math.round(x.x), Math.round(x.y)]),
         }));
       }
-      annotate("notice", "Inventory pink dashed layers (area/zone boundaries)", JSON.stringify(
-        inv.pinkDashedLayers.slice(0, 40).map((l) => [l.layer, l.pinkDashed, l.total, l.top.map((t) => `${t.color}/${t.lineType}:${t.n}`).join(" ")])));
-      const water = inv.layers.filter((l) => /^(W-|FH|A\.V|PRV|DEXAMENH|PUMP|AERITHS|DIAKOPTHS)/i.test(l.layer));
-      annotate("notice", "Inventory water layer extents", JSON.stringify(water.map((l) => [l.layer, l.segments, l.blocks, l.texts, l.minX, l.minY, l.maxX, l.maxY])));
-      annotate("notice", "Inventory blocks (top 120)", JSON.stringify(inv.blocks.slice(0, 120).map((b) => [b.block, b.count, b.layers[0]?.layer])));
-      annotate("notice", "Inventory layers with blocks or texts", JSON.stringify(inv.layers
-        .filter((l) => l.blocks || l.texts).slice(0, 150).map((l) => [l.layer, l.segments, l.blocks, l.texts])));
       console.log(JSON.stringify({ ok: true, mapId: "B", state: "inventory_written", path: inventoryPath }));
       return;
     }
