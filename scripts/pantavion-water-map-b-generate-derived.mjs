@@ -302,7 +302,7 @@ function buildNetworkRegister({ segments, texts, blockRefs, layers, styles }) {
     const plain = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
     if (!/ΔΕΞΑΜΕΝ|DEXAMEN|ΥΔΑΤΟΠΥΡΓ/.test(plain) && !/^DEXAMENH$/i.test(ln)) continue;
     // Pipe labels that only point at a tank ("ΕΞΑΓΩΓΗ ΠΡΟΣ … ΔΕΞΑΜΕΝΗ", "ΑΓΩΓΟΣ …") are not tanks.
-    if (/ΑΓΩΓ|ΕΞΑΓΩΓ|EΞΑΓΩΓ|ΕΙΣΑΓΩΓ|\bΠΡΟΣ\b|\bPROS\b|PIPE/.test(plain)) continue;
+    if (/ΑΓΩΓ|ΕΞΑΓΩΓ|EΞΑΓΩΓ|ΕΙΣΑΓΩΓ|\bΠΡΟΣ\b|\bPROS\b|PIPE|AGWG|AGOG|VALVE|ΒΑΝΑ/.test(plain)) continue;
     if (t[0] > DUPLICATE_COPY_X) { duplicateCopies += 1; continue; }
     const cap = /(\d[\d.,]*)\s*(M3|M³|ΚΥΒ)/.exec(plain);
     assets.push({ kind: "tank", name: text.slice(0, 80), capacityM3: cap ? Number(cap[1].replace(",", ".")) : null,
