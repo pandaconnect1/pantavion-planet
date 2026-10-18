@@ -79,7 +79,7 @@ jobs:
           node -e "const p=require('./node_modules/@mlightcad/libredwg-web/package.json');console.log('libredwg-web',p.version)" >> probe.txt
           msg=$(sed 's/%/%25/g' probe.txt | sed ':a;N;$!ba;s/\n/%0A/g'); echo "::notice title=probe::$msg"
 
-      - name: Run Map B derivation with full diagnostics
+      - name: Dry-run fixed Map B derivation (no upload)
         shell: bash
         env:
           KEY_FILE: ${{ steps.supabase-key.outputs.key_file }}
@@ -87,14 +87,22 @@ jobs:
           set +e
           export SUPABASE_SECRET_KEY="$(cat "$KEY_FILE")"
           export SUPABASE_URL="https://cxhulvwkagzufbjsdwwu.supabase.co"
+          export PANTAVION_WATER_MAP_B_SOURCE_KEY=canonical-2026-andreaspap
+          export PANTAVION_WATER_MAP_B_DERIVED_OUT="$RUNNER_TEMP/mapb"
+          export NODE_OPTIONS="--stack-trace-limit=40 --max-old-space-size=12288"
           code=0
-          sed -i 's/message: error instanceof Error ? error.message : String(error),/message: error instanceof Error ? error.stack : String(error),/' scripts/pantavion-water-map-b-generate-derived.mjs
-          grep -c "error.stack" scripts/pantavion-water-map-b-generate-derived.mjs
-          export NODE_OPTIONS="--stack-trace-limit=40"
-          /usr/bin/time -v node scripts/pantavion-water-owner-b-derived-job.mjs > out.log 2>&1 || code=$?
+          /usr/bin/time -v node scripts/pantavion-water-map-b-generate-derived.mjs > out.log 2>&1 || code=$?
           rm -f "$KEY_FILE"
-          echo "exit=$code" >> out.log
-          tail -90 out.log | grep -v -i "secret\|eyJ" > tail.txt
-          msg=$(sed 's/%/%25/g' tail.txt | sed ':a;N;$!ba;s/\n/%0A/g')
+          {
+            echo "exit=$code"
+            grep -E "Maximum resident|Elapsed" out.log
+            tail -c 3000 out.log | grep -v "Command being\|kbytes\|page faults\|context switches\|Swaps\|File system\|Socket\|Signals\|Page size\|Percent of\|User time\|System time"
+            if [ -f "$RUNNER_TEMP/mapb/manifest.json" ]; then
+              jq -c '{grid,totalEntities,totalLineSegments,pointCount,labelCount,writtenTileCount,densestTileSegments,outsideCoreEntityCount,allBounds,coreBounds,layerCount:(.layers|length),topLayers:(.topLayers[:12]),coverage:(.coverage|{entityTypeCounts,unsupportedTypeCounts,unsupportedCount,blockInsertCount,expandedBlockEntityCount})}' "$RUNNER_TEMP/mapb/manifest.json"
+              echo "tiles_dir_size=$(du -sh $RUNNER_TEMP/mapb/tiles | cut -f1) files=$(ls $RUNNER_TEMP/mapb/tiles | wc -l)"
+              echo "largest_tiles:"; ls -S -l $RUNNER_TEMP/mapb/tiles | head -4 | awk '{print $5, $9}'
+            fi
+          } > tail.txt
+          msg=$(grep -v -i "secret\|eyJ" tail.txt | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
           echo "::error title=diag-map-b::$msg"
           exit 0
