@@ -353,16 +353,19 @@ export function extractAuthentic(database, options = {}) {
   function hatchRings(entity, t) {
     const rings = [];
     for (const path of entity.boundaryPaths || []) {
+      if (!path) continue;
       if (Array.isArray(path.vertices)) {
         rings.push(ringFromPolyline(path.vertices, true, t));
         continue;
       }
       const ring = [];
       for (const e of path.edges || []) {
+        if (!e) continue;
         let pts = [];
         if (e.type === 1) pts = [p2(e.start), p2(e.end)];
         else if (e.type === 2) {
           const c = p2(e.center);
+          if (!c) continue;
           const r = num(e.radius);
           let s = num(e.startAngle), en = num(e.endAngle);
           if (e.isCCW === false) { s = -s; en = -en; pts = sampleArc(c, r, s, -ccwSweep(en, s)); }
@@ -370,6 +373,7 @@ export function extractAuthentic(database, options = {}) {
         } else if (e.type === 3) {
           const c = p2(e.center);
           const m = p2(e.end);
+          if (!c || !m) continue;
           const ratio = num(e.lengthOfMinorAxis);
           let s = num(e.startAngle), en = num(e.endAngle);
           const ccw = e.isCCW !== false;
@@ -487,6 +491,18 @@ export function extractAuthentic(database, options = {}) {
 
   function process(e, t, inherited, inheritedLayerId, depth) {
     if (!e || depth > 16) return;
+    try {
+      processUnsafe(e, t, inherited, inheritedLayerId, depth);
+    } catch (error) {
+      // One malformed entity must not hide the rest of the drawing; it is
+      // counted by type and reported in the manifest.
+      bump(stats.notReproduced, `EXTRACT_ERROR_${String(e.type || "UNKNOWN")}`);
+      if (!stats.firstErrors) stats.firstErrors = [];
+      if (stats.firstErrors.length < 5) stats.firstErrors.push(`${e.type}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  function processUnsafe(e, t, inherited, inheritedLayerId, depth) {
     const type = String(e.type || "UNKNOWN");
     bump(stats.entityTypes, type);
     if (e.isVisible === false) return;
