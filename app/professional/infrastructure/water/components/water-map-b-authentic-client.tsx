@@ -40,6 +40,14 @@ type OwnerFunctionPayload = {
   sha256?: string;
   expectedSizeBytes?: number;
   expectedSha256?: string;
+  chunks?: Array<{
+    index: number;
+    signedUrl: string;
+    sizeBytes: number;
+    sha256: string;
+  }>;
+  totalChunks?: number;
+  representation?: string;
 };
 
 type CadRuntimePoint = {
@@ -261,6 +269,10 @@ export default function WaterMapBAuthenticClient({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [viewerState, setViewerState] = useState<ViewerState>("checking");
   const [viewerError, setViewerError] = useState("");
+  const [viewerProgress, setViewerProgress] = useState<{
+    loaded: number;
+    total: number;
+  } | null>(null);
   const [uploadLabel, setUploadLabel] = useState("");
   const [position, setPosition] = useState<PositionState>(null);
   const [locating, setLocating] = useState(false);
@@ -285,7 +297,65 @@ export default function WaterMapBAuthenticClient({
       .slice(0, 20);
   }, [dwgLabels, labelQuery]);
 
-  async function openSignedMapB(signedUrl: string) {
+  /**
+   * Streams the founder-approved master back from its stored parts.
+   *
+   * The authentic DWG is held as immutable chunks exactly as the owner
+   * uploaded it. Parts are fetched in order and checked against the byte
+   * count recorded at upload, so a short or reordered read fails loudly
+   * instead of handing a corrupt drawing to the viewer.
+   */
+  async function openChunkedMapB(
+    chunks: NonNullable<OwnerFunctionPayload["chunks"]>,
+    expectedSizeBytes: number,
+  ) {
+    const ordered = [...chunks].sort((left, right) => left.index - right.index);
+    const parts: Uint8Array[] = [];
+    let assembledBytes = 0;
+
+    for (const part of ordered) {
+      setViewerProgress({
+        loaded: assembledBytes,
+        total: expectedSizeBytes,
+      });
+
+      const response = await fetch(part.signedUrl, {
+        method: "GET",
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`MAP_B_CHUNK_HTTP_${part.index}_${response.status}`);
+      }
+
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      if (bytes.byteLength !== part.sizeBytes) {
+        throw new Error(
+          `MAP_B_CHUNK_SIZE_MISMATCH_${part.index}_${bytes.byteLength}`,
+        );
+      }
+
+      parts.push(bytes);
+      assembledBytes += bytes.byteLength;
+    }
+
+    if (assembledBytes !== expectedSizeBytes) {
+      throw new Error(`MAP_B_SIZE_MISMATCH_${assembledBytes}`);
+    }
+
+    const assembled = new Uint8Array(assembledBytes);
+    let offset = 0;
+    for (const part of parts) {
+      assembled.set(part, offset);
+      offset += part.byteLength;
+    }
+    parts.length = 0;
+
+    setViewerProgress({ loaded: assembledBytes, total: expectedSizeBytes });
+    await openMapBBuffer(assembled.buffer);
+  }
+
+  async function openMapBBuffer(fileContent: ArrayBuffer) {
     if (!cadContainerRef.current) return;
 
     setViewerState("loading");
@@ -308,14 +378,6 @@ export default function WaterMapBAuthenticClient({
     }
     cadManagerRef.current = manager;
 
-    const response = await fetch(signedUrl, {
-      method: "GET",
-      cache: "no-store",
-    });
-
-    if (!response.ok) throw new Error(`MAP_B_DWG_HTTP_${response.status}`);
-
-    const fileContent = await response.arrayBuffer();
     if (fileContent.byteLength !== source.byteSize) {
       throw new Error(`MAP_B_SIZE_MISMATCH_${fileContent.byteLength}`);
     }
@@ -331,13 +393,38 @@ export default function WaterMapBAuthenticClient({
     setSelectedLabel(null);
     setViewerState("ready");
     setViewerError("");
+    setViewerProgress(null);
+  }
+
+  async function openSignedMapB(signedUrl: string) {
+    if (!cadContainerRef.current) return;
+
+    setViewerState("loading");
+    const response = await fetch(signedUrl, {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    if (!response.ok) throw new Error(`MAP_B_DWG_HTTP_${response.status}`);
+
+    await openMapBBuffer(await response.arrayBuffer());
   }
 
   async function loadVerifiedMapB() {
     try {
       setViewerState("checking");
       setViewerError("");
+      setViewerProgress(null);
       const payload = await callOwnerFunction("download", sourceKey);
+
+      if (payload.chunks && payload.chunks.length > 0) {
+        await openChunkedMapB(
+          payload.chunks,
+          Number(payload.sizeBytes) || source.byteSize,
+        );
+        return;
+      }
+
       if (!payload.signedUrl) throw new Error("MAP_B_SIGNED_URL_MISSING");
       await openSignedMapB(payload.signedUrl);
     } catch (error) {
@@ -601,10 +688,28 @@ export default function WaterMapBAuthenticClient({
       ) : null}
 
       {viewerState === "checking" || viewerState === "loading" ? (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black text-sm font-black tracking-wide text-[#f6c85f]">
-          {viewerState === "checking"
-            ? `Έλεγχος ${source.label}…`
-            : `Φόρτωση αυθεντικού ${source.label}…`}
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black px-6 text-center text-sm font-black tracking-wide text-[#f6c85f]">
+          <span>
+            {viewerState === "checking"
+              ? `Έλεγχος ${source.label}…`
+              : `Φόρτωση αυθεντικού ${source.label}…`}
+          </span>
+          {viewerProgress && viewerProgress.total > 0 ? (
+            <>
+              <span className="text-xs font-bold text-white/70">
+                {Math.round(viewerProgress.loaded / 1048576)} από{" "}
+                {Math.round(viewerProgress.total / 1048576)} MB
+              </span>
+              <span className="h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-white/15">
+                <span
+                  className="block h-full rounded-full bg-[#f6c85f] transition-[width] duration-300"
+                  style={{
+                    width: `${Math.min(100, Math.round((viewerProgress.loaded / viewerProgress.total) * 100))}%`,
+                  }}
+                />
+              </span>
+            </>
+          ) : null}
         </div>
       ) : null}
 
