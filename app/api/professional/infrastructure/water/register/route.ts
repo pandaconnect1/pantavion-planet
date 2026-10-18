@@ -55,8 +55,11 @@ export async function GET(request: NextRequest) {
     const q = (params.get("q") || "").trim().replace(/[%,()]/g, " ").slice(0, 60);
     if (q) query = query.or(`number.ilike.%${q}%,street.ilike.%${q}%,tag.ilike.%${q}%,name.ilike.%${q}%`);
 
-    const bbox = ["minX", "minY", "maxX", "maxY"].map((k) => Number(params.get(k)));
-    if (bbox.every(Number.isFinite)) {
+    // Only when all four bounds are sent: Number(null) is 0, and a missing
+    // bound must not turn into a box at the origin that matches nothing.
+    const bboxKeys = ["minX", "minY", "maxX", "maxY"];
+    const bbox = bboxKeys.map((k) => Number(params.get(k)));
+    if (bboxKeys.every((k) => (params.get(k) ?? "").trim() !== "") && bbox.every(Number.isFinite)) {
       query = query.gte("x", bbox[0]).lte("x", bbox[2]).gte("y", bbox[1]).lte("y", bbox[3]);
     }
 
