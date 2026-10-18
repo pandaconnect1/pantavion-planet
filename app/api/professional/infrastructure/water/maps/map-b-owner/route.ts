@@ -672,6 +672,58 @@ export async function POST(request: Request) {
       );
 
       if (!verified) {
+        const approved = await locateApprovedOwnerSource(admin, source);
+        if (approved) {
+          const parts: Array<{
+            index: number;
+            signedUrl: string;
+            sizeBytes: number;
+            sha256: string;
+          }> = [];
+
+          for (let index = 0; index < approved.totalChunks; index += 1) {
+            const { data, error: partError } = await admin.storage
+              .from(BUCKET)
+              .createSignedUrl(approved.chunkPaths[index], 900);
+
+            if (partError || !data?.signedUrl) {
+              return noStore(
+                {
+                  ok: false,
+                  error: "water_map_chunk_signed_download_failed",
+                  sourceKey,
+                  chunkIndex: index,
+                },
+                { status: 502 },
+              );
+            }
+
+            parts.push({
+              index,
+              signedUrl: data.signedUrl,
+              sizeBytes: approved.expectedChunkSizes[index],
+              sha256: approved.expectedChunkSha256[index],
+            });
+          }
+
+          return noStore({
+            ok: true,
+            status: "ready",
+            sourceKey,
+            canonical: source.canonical,
+            signedUrl: null,
+            chunks: parts,
+            totalChunks: approved.totalChunks,
+            chunkSizeBytes: approved.chunkSizeBytes,
+            representation: approved.representation,
+            requestId: approved.requestId,
+            fileName: source.fileName,
+            sizeBytes: source.byteSize,
+            sha256: source.sha256,
+            storageProvider: "supabase-storage",
+          });
+        }
+
         const privateObject = await directPrivateObjectDownload(source);
         if (privateObject?.signedUrl) {
           return noStore({
