@@ -570,7 +570,7 @@ async function uploadDerived(outputDir, manifest, tileFiles) {
   const manifestBody = Buffer.from(JSON.stringify(manifest, null, 2) + "\n", "utf8");
   const manifestPath = `${STORAGE.derivedPrefix}/manifest.json`;
 
-  const concurrency = 8;
+  const concurrency = 16;
   let uploadedTiles = 0;
 
   for (let i = 0; i < tileFiles.length; i += concurrency) {
@@ -579,11 +579,17 @@ async function uploadDerived(outputDir, manifest, tileFiles) {
       batch.map(async (fileName) => {
         const local = path.join(outputDir, "tiles", fileName);
         const remote = `${STORAGE.derivedPrefix}/tiles/${fileName}`;
-        const { error } = await admin.storage.from(STORAGE.bucket).upload(
-          remote,
-          fs.readFileSync(local),
-          { upsert: true, contentType: "application/json", cacheControl: "60" },
-        );
+        const body = fs.readFileSync(local);
+        let error = null;
+        for (let attempt = 1; attempt <= 4; attempt += 1) {
+          ({ error } = await admin.storage.from(STORAGE.bucket).upload(
+            remote,
+            body,
+            { upsert: true, contentType: "application/json", cacheControl: "60" },
+          ));
+          if (!error) break;
+          await new Promise((resolve) => setTimeout(resolve, attempt * 2000));
+        }
         return { fileName, remote, error };
       }),
     );
