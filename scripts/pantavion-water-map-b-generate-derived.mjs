@@ -62,6 +62,359 @@ const CURVE_STEP_RADIANS = Math.PI / 60; // 3 degrees.
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
 
+// ---- network inventory --------------------------------------------------
+// What the drawing holds, by layer and block name, plus every text that names
+// a tank, valve, hydrant or one of the network's areas. This is the evidence
+// the valve/tank register and the area split are built from; nothing here is
+// guessed, every entry points back to a layer, block or text of the source.
+const INVENTORY_KEYWORDS = {
+  tank: /ΔΕΞΑΜΕΝ|DEXAMEN|TANK|RESERVOIR|ΔΕΞ\./i,
+  valve: /ΒΑΝ[ΑΕΙ]|ΒΑΛΒ|VALVE|VALV|\bBANA|\bG\.?V\b|\bS\.?V\b|ΔΙΚΛΙΔ/i,
+  hydrant: /ΥΔΡΟΣΤΟΜ|ΠΥΡΟΣΒ|HYDRANT|\bF\.?H\b/i,
+  pump: /ΑΝΤΛΙΟΣΤΑΣ|ΑΝΤΛΙ|PUMP/i,
+  meter: /ΜΕΤΡΗΤ|METER/i,
+  borehole: /ΓΕΩΤΡΗΣ|BOREHOLE|ΠΗΓΗ/i,
+  area_amathounta: /ΑΜΑΘΟΥΝΤ|AMATH/i,
+  area_germasogeia: /ΓΕΡΜΑΣΟΓ|YERMAS|GERMAS/i,
+  area_parekklisia: /ΠΑΡΕΚΚΛΗΣ|PAREKKL|PAREKL/i,
+  area_pyrgos: /ΠΥΡΓΟ|PYRGO|PIRGO/i,
+  area_agios_tychonas: /ΤΥΧΩΝ|TYCHON|TIHON|TYHON/i,
+  area_moutagiaka: /ΜΟΥΤΑΓΙΑΚ|MOUTAG|MOUTAY|MOUTAJ/i,
+  area_armenochori: /ΑΡΜΕΝΟΧΩΡ|ARMENOCH|ARMENOX/i,
+  area_agios_athanasios: /ΑΘΑΝΑΣ|ATHANAS/i,
+  area_finikaria: /ΦΟΙΝΙΚΑΡ|FINIKAR|FOINIKAR|PHINIKAR/i,
+  area_akrounta: /ΑΚΡΟΥΝΤ|AKROUNT|AKRUNT/i,
+};
+
+// Magenta/pink as drawn: ACI 6, ACI 200-249 (hues 285-360), or an RGB with red
+// high, blue present and green low.
+function isPinkColor(c) {
+  const s = String(c || "");
+  const aci = /^aci(\d+)$/i.exec(s);
+  if (aci) { const n = Number(aci[1]); return n === 6 || (n >= 200 && n <= 249); }
+  const hex = /^#?([0-9a-f]{6})$/i.exec(s);
+  if (!hex) return false;
+  const v = parseInt(hex[1], 16);
+  const r = v >> 16, g = (v >> 8) & 255, b = v & 255;
+  return r >= 170 && b >= 90 && g <= 170 && r - g >= 50;
+}
+
+// ---- network register -----------------------------------------------------
+// Areas: each supply area is a layer named by its number, drawn in dashed pink.
+// Its segments are chained into rings; a ring closes when its ends meet within
+// RING_GAP drawing units. An area whose lines never close falls back to the
+// convex hull of its lines and says so (outline: "hull").
+// Assets: valves (W-DV* blocks, diameter from the layer), air valves, hydrants
+// and tanks, each with its nearest tag text and the area that contains it.
+// Numbering inside an area runs from east to west (then north to south).
+// Copies drawn far outside the network (x > 300000) are kept out and counted.
+const RING_GAP = 5;
+const DUPLICATE_COPY_X = 300000;
+
+function chainRings(segs) {
+  const key = (x, y) => `${Math.round(x * 20)},${Math.round(y * 20)}`;
+  const adj = new Map();
+  const add = (k, i) => { const l = adj.get(k); if (l) l.push(i); else adj.set(k, [i]); };
+  segs.forEach((s, i) => { add(key(s[0], s[1]), i); add(key(s[2], s[3]), i); });
+  const used = new Uint8Array(segs.length);
+  const chains = [];
+  for (let i = 0; i < segs.length; i += 1) {
+    if (used[i]) continue;
+    used[i] = 1;
+    const pts = [[segs[i][0], segs[i][1]], [segs[i][2], segs[i][3]]];
+    for (const dir of [1, 0]) {
+      for (;;) {
+        const end = dir ? pts[pts.length - 1] : pts[0];
+        const next = (adj.get(key(end[0], end[1])) || []).find((j) => !used[j]);
+        if (next === undefined) break;
+        used[next] = 1;
+        const s = segs[next];
+        const forward = key(s[0], s[1]) === key(end[0], end[1]);
+        const far = forward ? [s[2], s[3]] : [s[0], s[1]];
+        if (dir) pts.push(far); else pts.unshift(far);
+      }
+    }
+    chains.push(pts);
+  }
+  // Join chain ends that almost meet, then keep the loops that close.
+  const d = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+  let merged = true;
+  while (merged) {
+    merged = false;
+    for (let a = 0; a < chains.length && !merged; a += 1) {
+      for (let b = a + 1; b < chains.length && !merged; b += 1) {
+        const A = chains[a], B = chains[b];
+        const options = [
+          [d(A[A.length - 1], B[0]), () => A.concat(B)],
+          [d(A[A.length - 1], B[B.length - 1]), () => A.concat([...B].reverse())],
+          [d(A[0], B[B.length - 1]), () => B.concat(A)],
+          [d(A[0], B[0]), () => [...B].reverse().concat(A)],
+        ].sort((x, y) => x[0] - y[0]);
+        if (options[0][0] <= RING_GAP) { chains[a] = options[0][1](); chains.splice(b, 1); merged = true; }
+      }
+    }
+  }
+  return chains.filter((c) => c.length >= 4 && d(c[0], c[c.length - 1]) <= RING_GAP);
+}
+
+function convexHull(points) {
+  const p = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  if (p.length < 3) return p;
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lower = [], upper = [];
+  for (const q of p) { while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], q) <= 0) lower.pop(); lower.push(q); }
+  for (const q of p.reverse()) { while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], q) <= 0) upper.pop(); upper.push(q); }
+  return lower.slice(0, -1).concat(upper.slice(0, -1));
+}
+
+function ringArea(r) {
+  let a = 0;
+  for (let i = 0; i < r.length; i += 1) { const [x1, y1] = r[i], [x2, y2] = r[(i + 1) % r.length]; a += x1 * y2 - x2 * y1; }
+  return Math.abs(a) / 2;
+}
+
+function insideRing(x, y, r) {
+  let inside = false;
+  for (let i = 0, j = r.length - 1; i < r.length; j = i, i += 1) {
+    const [xi, yi] = r[i], [xj, yj] = r[j];
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+function buildNetworkRegister({ segments, texts, blockRefs, layers, styles }) {
+  const layerName = (id) => layers[id]?.name || `layer-${id}`;
+  const areaSegs = new Map();
+  for (const s of segments) {
+    const st = styles[s[5]];
+    if (!st?.lt || !isPinkColor(st.c)) continue;
+    const name = layerName(s[4]);
+    if (!/^\d{3}/.test(name)) continue;
+    if (s[0] > DUPLICATE_COPY_X || s[2] > DUPLICATE_COPY_X) continue;
+    const l = areaSegs.get(name);
+    if (l) l.push(s); else areaSegs.set(name, [s]);
+  }
+  const areas = [];
+  for (const [name, segs] of areaSegs) {
+    let rings = chainRings(segs);
+    let outline = "closed";
+    if (!rings.length) {
+      outline = "hull";
+      rings = [convexHull(segs.flatMap((s) => [[s[0], s[1]], [s[2], s[3]]]))];
+    }
+    rings.sort((a, b) => ringArea(b) - ringArea(a));
+    const ring = rings[0];
+    const xs = ring.map((p) => p[0]), ys = ring.map((p) => p[1]);
+    const r2 = (v) => Math.round(v * 100) / 100;
+    areas.push({
+      code: name.match(/^\d{3}[A-Z]?/)[0], layer: name, outline, segments: segs.length, rings: rings.length,
+      areaM2: Math.round(ringArea(ring)),
+      bounds: [r2(Math.min(...xs)), r2(Math.min(...ys)), r2(Math.max(...xs)), r2(Math.max(...ys))],
+      centroid: [r2(xs.reduce((a, b) => a + b, 0) / xs.length), r2(ys.reduce((a, b) => a + b, 0) / ys.length)],
+      ring: ring.map(([x, y]) => [r2(x), r2(y)]),
+    });
+  }
+  // Two layers can share a number ("930 (SYKAMINOU 1)", "930 (PANTHEA)"):
+  // those keep the number and add the rest of the layer name.
+  const seen = new Map();
+  for (const a of areas) seen.set(a.code, (seen.get(a.code) || 0) + 1);
+  for (const a of areas) {
+    if (seen.get(a.code) < 2) continue;
+    const rest = a.layer.slice(a.code.length).toUpperCase().replace(/[^A-Z0-9]+/g, "-").replace(/^-|-$/g, "");
+    a.code = rest ? `${a.code}-${rest}` : `${a.code}-${a.layer.length}`;
+  }
+  areas.sort((a, b) => a.areaM2 - b.areaM2);
+  const areaOf = (x, y) => {
+    for (const a of areas) {
+      const [x0, y0, x1, y1] = a.bounds;
+      if (x < x0 || x > x1 || y < y0 || y > y1) continue;
+      if (insideRing(x, y, a.ring)) return a.code;
+    }
+    return null;
+  };
+
+  // Tag texts for valves: W-DV-T labels and valve notes, on a coarse grid.
+  const tagCell = 25;
+  const tags = new Map();
+  for (const t of texts) {
+    const ln = layerName(t[2]);
+    if (!/^W-DV-T$|^W-WM$|^F\.H\.TEXT$/i.test(ln)) continue;
+    const k = `${Math.floor(t[0] / tagCell)},${Math.floor(t[1] / tagCell)}`;
+    const l = tags.get(k); const e = { x: t[0], y: t[1], text: String(t[4] || "").replace(/\s+/g, " ").slice(0, 60), layer: ln };
+    if (l) l.push(e); else tags.set(k, [e]);
+  }
+  // Street: the nearest street-name label of the drawing, with its distance.
+  const streetCell = 80;
+  const streets = new Map();
+  for (const t of texts) {
+    if (!/^(Street_names|TEXT STREET)$/i.test(layerName(t[2]))) continue;
+    if (t[0] > DUPLICATE_COPY_X) continue;
+    const name = String(t[4] || "").replace(/\s+/g, " ").trim();
+    if (!name || /^\d+$/.test(name)) continue;
+    const k = `${Math.floor(t[0] / streetCell)},${Math.floor(t[1] / streetCell)}`;
+    const l = streets.get(k); const e = { x: t[0], y: t[1], name: name.slice(0, 60) };
+    if (l) l.push(e); else streets.set(k, [e]);
+  }
+  const nearestStreet = (x, y, max = 120) => {
+    let best = null, bd = max;
+    const cx = Math.floor(x / streetCell), cy = Math.floor(y / streetCell);
+    for (let dx = -1; dx <= 1; dx += 1) for (let dy = -1; dy <= 1; dy += 1) {
+      for (const e of streets.get(`${cx + dx},${cy + dy}`) || []) {
+        const dd = Math.hypot(e.x - x, e.y - y);
+        if (dd < bd) { bd = dd; best = e; }
+      }
+    }
+    return best ? { name: best.name, distance: Math.round(bd * 10) / 10 } : null;
+  };
+
+  const nearestTag = (x, y, max = 15) => {
+    let best = null, bd = max;
+    const cx = Math.floor(x / tagCell), cy = Math.floor(y / tagCell);
+    for (let dx = -1; dx <= 1; dx += 1) for (let dy = -1; dy <= 1; dy += 1) {
+      for (const e of tags.get(`${cx + dx},${cy + dy}`) || []) {
+        const dd = Math.hypot(e.x - x, e.y - y);
+        if (dd < bd) { bd = dd; best = e; }
+      }
+    }
+    return best ? { text: best.text, layer: best.layer, distance: Math.round(bd * 10) / 10 } : null;
+  };
+
+  const assets = [];
+  let duplicateCopies = 0;
+  for (const b of blockRefs) {
+    const ln = layerName(b[2]);
+    const block = String(b[3] || "");
+    let kind = null, dn = null;
+    if (/^W-DV/i.test(ln) || /\$W-DV$|^W-DV$/i.test(block)) {
+      kind = "valve";
+      const m = /S\s*0*(\d{2,4})/i.exec(ln);
+      dn = m ? Number(m[1]) : null;
+    } else if (/^A\.V$/i.test(ln) || /AIR VALVE/i.test(block)) kind = "air_valve";
+    else if (/^FH$/i.test(ln)) kind = "hydrant";
+    else if (/^PRV$/i.test(ln)) kind = "pressure_reducing_valve";
+    if (!kind) continue;
+    if (b[0] > DUPLICATE_COPY_X) { duplicateCopies += 1; continue; }
+    assets.push({ kind, dn, x: Math.round(b[0] * 100) / 100, y: Math.round(b[1] * 100) / 100, layer: ln, block, area: areaOf(b[0], b[1]), street: nearestStreet(b[0], b[1]), tag: kind === "valve" || kind === "hydrant" ? nearestTag(b[0], b[1]) : null });
+  }
+  for (const t of texts) {
+    const ln = layerName(t[2]);
+    const text = String(t[4] || "").replace(/\s+/g, " ");
+    const plain = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    if (!/ΔΕΞΑΜΕΝ|DEXAMEN|ΥΔΑΤΟΠΥΡΓ/.test(plain) && !/^DEXAMENH$/i.test(ln)) continue;
+    // Pipe labels that only point at a tank ("ΕΞΑΓΩΓΗ ΠΡΟΣ … ΔΕΞΑΜΕΝΗ", "ΑΓΩΓΟΣ …") are not tanks.
+    if (/ΑΓΩΓ|ΕΞΑΓΩΓ|EΞΑΓΩΓ|ΕΙΣΑΓΩΓ|\bΠΡΟΣ\b|\bPROS\b|PIPE|AGWG|AGOG|VALVE|ΒΑΝΑ/.test(plain)) continue;
+    if (t[0] > DUPLICATE_COPY_X) { duplicateCopies += 1; continue; }
+    const cap = /(\d[\d.,]*)\s*(M3|M³|ΚΥΒ)/.exec(plain);
+    assets.push({ kind: "tank", name: text.slice(0, 80), capacityM3: cap ? Number(cap[1].replace(",", ".")) : null,
+      proposed: /ΠΡΟΤΕΙΝΟΜ/.test(plain), x: Math.round(t[0] * 100) / 100, y: Math.round(t[1] * 100) / 100, layer: ln, area: areaOf(t[0], t[1]), street: nearestStreet(t[0], t[1]) });
+  }
+
+  // Numbers: per area and kind, east to west, then north to south.
+  const prefix = { valve: "V", air_valve: "AV", hydrant: "FH", pressure_reducing_valve: "PRV", tank: "T" };
+  const groups = new Map();
+  for (const a of assets) {
+    const k = `${a.area || "000"}|${a.kind}`;
+    const l = groups.get(k); if (l) l.push(a); else groups.set(k, [a]);
+  }
+  for (const [k, list] of groups) {
+    const [area] = k.split("|");
+    list.sort((p, q) => q.x - p.x || q.y - p.y);
+    list.forEach((a, i) => { a.number = `${area}-${prefix[a.kind]}${String(i + 1).padStart(4, "0")}`; });
+  }
+
+  const summary = {};
+  for (const a of assets) {
+    const k = a.area || "unassigned";
+    summary[k] = summary[k] || { valve: 0, air_valve: 0, hydrant: 0, pressure_reducing_valve: 0, tank: 0 };
+    summary[k][a.kind] += 1;
+  }
+  return {
+    method: { ringGapUnits: RING_GAP, duplicateCopyX: DUPLICATE_COPY_X, numbering: "area-PREFIXnnnn, east to west then north to south", tagMaxDistance: 15 },
+    duplicateCopies,
+    areas,
+    assets,
+    summary,
+  };
+}
+
+function buildNetworkInventory({ segments, texts, blockRefs, points, layers, styles = [] }) {
+  const layerName = (id) => layers[id]?.name || `layer-${id}`;
+  const byLayer = new Map();
+  const layerRow = (id) => {
+    let r = byLayer.get(id);
+    if (!r) { r = { layer: layerName(id), segments: 0, blocks: 0, texts: 0, points: 0, minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity }; byLayer.set(id, r); }
+    return r;
+  };
+  const grow = (r, x, y) => {
+    if (!finite(x) || !finite(y)) return;
+    if (x < r.minX) r.minX = x; if (y < r.minY) r.minY = y;
+    if (x > r.maxX) r.maxX = x; if (y > r.maxY) r.maxY = y;
+  };
+  const layerStyles = new Map();
+  for (const s of segments) {
+    const r = layerRow(s[4]); r.segments += 1; grow(r, s[0], s[1]);
+    let m = layerStyles.get(s[4]);
+    if (!m) { m = new Map(); layerStyles.set(s[4], m); }
+    m.set(s[5], (m.get(s[5]) || 0) + 1);
+  }
+  for (const t of texts) { const r = layerRow(t[2]); r.texts += 1; grow(r, t[0], t[1]); }
+  for (const p of points) layerRow(p[2]).points += 1;
+
+  const blocks = new Map();
+  for (const b of blockRefs) {
+    const r = layerRow(b[2]); r.blocks += 1; grow(r, b[0], b[1]);
+    const name = String(b[3] || "");
+    let e = blocks.get(name);
+    if (!e) { e = { block: name, count: 0, layers: new Map(), samples: [] }; blocks.set(name, e); }
+    e.count += 1;
+    e.layers.set(b[2], (e.layers.get(b[2]) || 0) + 1);
+    if (e.samples.length < 3) e.samples.push([Math.round(b[0] * 100) / 100, Math.round(b[1] * 100) / 100]);
+  }
+
+  const keywords = {};
+  for (const [key, re] of Object.entries(INVENTORY_KEYWORDS)) keywords[key] = { count: 0, layers: new Map(), samples: [] };
+  for (const t of texts) {
+    const text = String(t[4] || "");
+    // Greek labels carry accents and mixed case ("Αγ. Τύχωνας"): match on the
+    // upper-case text with diacritics removed.
+    const plain = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    for (const [key, re] of Object.entries(INVENTORY_KEYWORDS)) {
+      if (!re.test(plain)) continue;
+      const k = keywords[key];
+      k.count += 1;
+      k.layers.set(t[2], (k.layers.get(t[2]) || 0) + 1);
+      if (k.samples.length < 40) k.samples.push({ text: text.slice(0, 80), layer: layerName(t[2]), x: Math.round(t[0] * 100) / 100, y: Math.round(t[1] * 100) / 100 });
+    }
+  }
+  const topLayers = (m) => [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([id, n]) => ({ layer: layerName(id), n }));
+  const round = (v) => (finite(v) ? Math.round(v) : null);
+
+  // Styles per layer, and the layers drawn mostly in dashed pink: the area and
+  // zone boundaries of the network are drawn that way.
+  const styleRows = [...layerStyles.entries()].map(([id, m]) => {
+    const total = [...m.values()].reduce((a, b) => a + b, 0);
+    const top = [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3)
+      .map(([sid, n]) => ({ color: styles[sid]?.c ?? null, lineType: styles[sid]?.lt ?? null, n }));
+    let pinkDashed = 0;
+    for (const [sid, n] of m) if (styles[sid]?.lt && isPinkColor(styles[sid]?.c)) pinkDashed += n;
+    return { layer: layerName(id), total, pinkDashed, top };
+  });
+  const pinkDashedLayers = styleRows.filter((r) => r.pinkDashed > 0).sort((a, b) => b.pinkDashed - a.pinkDashed);
+
+  return {
+    pinkDashedLayers,
+    layerStyles: styleRows.sort((a, b) => b.total - a.total),
+    totals: { segments: segments.length, texts: texts.length, blockRefs: blockRefs.length, points: points.length, layers: layers.length, blockNames: blocks.size },
+    layers: [...byLayer.values()]
+      .map((r) => ({ ...r, minX: round(r.minX), minY: round(r.minY), maxX: round(r.maxX), maxY: round(r.maxY) }))
+      .sort((a, b) => b.blocks + b.texts + b.segments - (a.blocks + a.texts + a.segments)),
+    blocks: [...blocks.values()]
+      .sort((a, b) => b.count - a.count)
+      .map((e) => ({ block: e.block, count: e.count, layers: topLayers(e.layers), samples: e.samples })),
+    keywords: Object.fromEntries(Object.entries(keywords).map(([k, v]) => [k, { count: v.count, layers: topLayers(v.layers), samples: v.samples }])),
+  };
+}
+
 function fail(reason, details = {}) {
   console.error(JSON.stringify({ ok: false, reason, ...details }, null, 2));
   process.exit(1);
@@ -660,6 +1013,19 @@ async function main() {
 
     const extracted = extractAuthentic(database);
     const { segments, fills, texts, points, blockRefs, styles, layers, linetypes } = extracted;
+
+    if (process.env.PANTAVION_WATER_MAP_B_INVENTORY === "YES") {
+      const inventory = buildNetworkInventory({ segments, texts, blockRefs, points, layers, styles });
+      inventory.register = buildNetworkRegister({ segments, texts, blockRefs, layers, styles });
+      inventory.totals.registerAreas = inventory.register.areas.length;
+      inventory.totals.registerAssets = inventory.register.assets.length;
+      const out = process.env.PANTAVION_WATER_MAP_B_INVENTORY_OUT ||
+        path.join(repoRoot, ".pantavion", "water", `map-${EXPECTED.mapId.toLowerCase()}-inventory.json`);
+      fs.mkdirSync(path.dirname(out), { recursive: true });
+      fs.writeFileSync(out, JSON.stringify({ sourceKey: SOURCE_KEY, sourceSha256: verified.sha256, ...inventory }, null, 1) + "\n", "utf8");
+      console.log(JSON.stringify({ ok: true, marker: "pantavion_water_network_inventory_v1", out, ...inventory.totals }, null, 2));
+      return;
+    }
     const entities = Array.isArray(database.entities) ? database.entities : [];
 
     if (segments.length === 0) {

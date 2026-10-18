@@ -7,6 +7,10 @@ on:
         description: "Generate and verify Map B tiles without uploading"
         type: boolean
         default: false
+      inventory:
+        description: "Write the network inventory (layers, blocks, tank/valve/area texts) without changing tiles"
+        type: boolean
+        default: false
   schedule:
     - cron: "*/10 * * * *"
   push:
@@ -99,6 +103,12 @@ jobs:
           set -euo pipefail
           export SUPABASE_SECRET_KEY="$(cat "$KEY_FILE")"
           export SUPABASE_URL="https://cxhulvwkagzufbjsdwwu.supabase.co"
+          if [ "${{ inputs.inventory }}" = "true" ]; then
+            export PANTAVION_WATER_NETWORK_INVENTORY=YES
+            node scripts/pantavion-water-owner-b-derived-job.mjs
+            rm -f "$KEY_FILE"
+            exit 0
+          fi
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             export PANTAVION_WATER_DERIVED_DRY_RUN=YES
             node scripts/pantavion-water-owner-b-derived-job.mjs

@@ -1,4 +1,4 @@
-import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir, totalmem } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -8,6 +8,9 @@ import { loadApprovedOwnerDwg } from "./water-approved-owner-dwg-loader.mjs";
 const CURRENT_GENERATOR = "pantavion-map-b-derived-v4";
 // Dry run: generate and verify locally, upload nothing, keep the current manifest.
 const DRY_RUN = process.env.PANTAVION_WATER_DERIVED_DRY_RUN === "YES";
+// Inventory: read the drawing, write what it holds (layers, blocks, tank/valve/
+// area texts) to private storage beside the derived tiles. No tiles change.
+const INVENTORY = process.env.PANTAVION_WATER_NETWORK_INVENTORY === "YES";
 // The v3 extract holds every styled segment, fill and text of a 13M-line drawing
 // at once; the default V8 heap is far smaller than the runner's memory.
 const HEAP_MB = Math.max(4096, Math.floor((totalmem() / 1048576) * 0.8));
@@ -42,7 +45,7 @@ async function main() {
       current = null;
     }
   }
-  if (current && !DRY_RUN) {
+  if (current && !DRY_RUN && !INVENTORY) {
     const manifest = current;
     if (manifest.ok !== true || manifest.sourceSha256 !== source.sha256 ||
         !Array.isArray(manifest.tiles) || manifest.tiles.length === 0 ||
@@ -66,7 +69,9 @@ async function main() {
         ...process.env,
         PANTAVION_WATER_MAP_B_SOURCE_KEY: "canonical-2026-andreaspap",
         PANTAVION_WATER_MAP_B_DWG_PATH: file,
-        PANTAVION_WATER_MAP_B_UPLOAD_DERIVED: DRY_RUN ? "NO" : "YES",
+        PANTAVION_WATER_MAP_B_UPLOAD_DERIVED: DRY_RUN || INVENTORY ? "NO" : "YES",
+        PANTAVION_WATER_MAP_B_INVENTORY: INVENTORY ? "YES" : "NO",
+        PANTAVION_WATER_MAP_B_INVENTORY_OUT: join(work, "inventory.json"),
         PANTAVION_WATER_MAP_B_DERIVED_OUT: join(work, "out"),
       },
     });
@@ -80,6 +85,75 @@ async function main() {
         spawnError: result.error ? String(result.error.message) : null,
       }) + "\n" + err.slice(-5000));
       throw Error("derived_generator_failed");
+    }
+    if (INVENTORY) {
+      const body = readFileSync(join(work, "inventory.json"));
+      const inventoryPath = "water-network-private/derived/map-b/" + source.sha256 + "/inventory.json";
+      const up = await admin.storage.from("personal-media").upload(inventoryPath, body, {
+        upsert: true, contentType: "application/json", cacheControl: "0",
+      });
+      if (up.error) throw Error("inventory_upload_failed: " + up.error.message);
+      const inv = JSON.parse(String(body));
+      // GitHub keeps only 10 notices per step: the register, boundary and
+      // water-layer findings go first.
+      const reg = inv.register;
+      if (reg) {
+        // Rows from the drawing are replaced as a set; rows from the field
+        // (origin other than "drawing") are never touched here.
+        const now = new Date().toISOString();
+        const areaRows = reg.areas.map((a) => ({
+          code: a.code, source_sha256: source.sha256, layer: a.layer, outline: a.outline, area_m2: a.areaM2,
+          centroid_x: a.centroid[0], centroid_y: a.centroid[1], bounds: a.bounds, ring: a.ring, updated_at: now,
+        }));
+        const assetRows = reg.assets.map((a) => ({
+          number: a.number, source_sha256: source.sha256, kind: a.kind, dn: a.dn ?? null, x: a.x, y: a.y,
+          layer: a.layer ?? null, block: a.block ?? null, area_code: a.area ?? null,
+          street: a.street?.name ?? null, street_distance: a.street?.distance ?? null,
+          tag: a.tag?.text ?? null, tag_distance: a.tag?.distance ?? null,
+          name: a.name ?? null, capacity_m3: a.capacityM3 ?? null, proposed: Boolean(a.proposed),
+          origin: "drawing", updated_at: now,
+        }));
+        const del = await admin.from("water_network_assets").delete().eq("source_sha256", source.sha256).eq("origin", "drawing");
+        if (del.error) throw Error("register_assets_clear_failed: " + del.error.message);
+        const areasUp = await admin.from("water_network_areas").upsert(areaRows, { onConflict: "code" });
+        if (areasUp.error) throw Error("register_areas_write_failed: " + areasUp.error.message);
+        for (let i = 0; i < assetRows.length; i += 500) {
+          const up = await admin.from("water_network_assets").upsert(assetRows.slice(i, i + 500), { onConflict: "number" });
+          if (up.error) throw Error("register_assets_write_failed: " + up.error.message);
+        }
+        annotate("notice", "Register written", JSON.stringify({ areas: areaRows.length, assets: assetRows.length,
+          withStreet: assetRows.filter((r) => r.street).length }));
+        annotate("notice", "Register areas", JSON.stringify({
+          areas: reg.areas.length,
+          closed: reg.areas.filter((a) => a.outline === "closed").length,
+          hull: reg.areas.filter((a) => a.outline === "hull").map((a) => a.code),
+          list: reg.areas.map((a) => [a.code, a.outline, a.areaM2, a.centroid.map(Math.round)]),
+        }));
+        annotate("notice", "Register assets per area", JSON.stringify({
+          assets: reg.assets.length, duplicateCopies: reg.duplicateCopies,
+          tagged: reg.assets.filter((a) => a.tag).length,
+          perArea: reg.summary,
+        }));
+        annotate("notice", "Register tanks", JSON.stringify(reg.assets.filter((a) => a.kind === "tank")
+          .map((a) => [a.number, a.name, a.capacityM3, a.proposed ? "proposed" : "", a.area])));
+      }
+      annotate("notice", "Inventory pink dashed layers (area/zone boundaries)", JSON.stringify(
+        inv.pinkDashedLayers.slice(0, 40).map((l) => [l.layer, l.pinkDashed, l.total, l.top.map((t) => `${t.color}/${t.lineType}:${t.n}`).join(" ")])));
+      const water = inv.layers.filter((l) => /^(W-|FH|A\.V|PRV|DEXAMENH|PUMP|AERITHS|DIAKOPTHS)/i.test(l.layer));
+      annotate("notice", "Inventory water layer extents", JSON.stringify(water.map((l) => [l.layer, l.segments, l.blocks, l.texts, l.minX, l.minY, l.maxX, l.maxY])));
+      annotate("notice", "Inventory blocks (top 120)", JSON.stringify(inv.blocks.slice(0, 120).map((b) => [b.block, b.count, b.layers[0]?.layer])));
+      annotate("notice", "Inventory layers with blocks or texts", JSON.stringify(inv.layers
+        .filter((l) => l.blocks || l.texts).slice(0, 150).map((l) => [l.layer, l.segments, l.blocks, l.texts])));
+      annotate("notice", "Network inventory totals", JSON.stringify({ path: inventoryPath, bytes: body.length, ...inv.totals }));
+      // One annotation per category: a combined one is cut at the length limit.
+      for (const [k, v] of Object.entries(inv.keywords)) {
+        annotate("notice", `Inventory ${k} (${v.count})`, JSON.stringify({
+          layers: v.layers.map((l) => [l.layer, l.n]),
+          samples: v.samples.slice(0, 25).map((x) => [x.text.replace(/\s+/g, " "), x.layer, Math.round(x.x), Math.round(x.y)]),
+        }));
+      }
+      console.log(JSON.stringify({ ok: true, mapId: "B", state: "inventory_written", path: inventoryPath }));
+      return;
     }
     if (DRY_RUN) {
       const summary = out.slice(out.indexOf("{"));
