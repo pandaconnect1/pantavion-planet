@@ -1,5 +1,5 @@
 /** Read-only adapter for approved spatial valve overlays; never writes CAD. */
-import type { PantavionWaterSpatialChangePatch } from "../infrastructure/water/water-spatial-change-patch-contract";
+import { assertPantavionWaterSpatialPatch, type PantavionWaterSpatialChangePatch } from "../infrastructure/water/water-spatial-change-patch-contract";
 import type { WaterMapKey } from "./water-valve-crossmap-registry";
 
 export type ValveMapOverlay = {
@@ -26,6 +26,14 @@ export function buildApprovedValveOverlays(
   for (const patch of patches) {
     if (patch.assetType !== "valve" || patch.operation !== "create" ||
         !["approved_overlay", "officialized"].includes(patch.status)) continue;
+    try { assertPantavionWaterSpatialPatch(patch); } catch {
+      skipped.push({patchId:patch.patchId,reason:"invalid_patch_or_missing_approval_evidence"});
+      continue;
+    }
+    if (!patch.evidenceRefs.length || !patch.provenance.sourceNetworkVersion) {
+      skipped.push({patchId:patch.patchId,reason:"missing_evidence_or_network_revision"});
+      continue;
+    }
     if (patch.geometry.type !== "Point" || patch.geometry.crs.authority !== "EPSG" ||
         patch.geometry.crs.code !== "4326") {
       skipped.push({patchId:patch.patchId,reason:"verified_wgs84_point_required"});
