@@ -302,7 +302,9 @@ for (const stage of STAGES) {
   if (succeeded !== EXPECTED_PARTITIONS || failed !== 0 || remaining !== 0) throw new Error(`stage_not_terminal:${stage}:${succeeded}:${failed}:${remaining}`);
 }
 
-const finalStatus = await invokeBridge({ action: "status" });
+// The read-only exact count can time out under load after all stages succeed.
+// Retry that verification without replaying stage mutations or weakening totals.
+const finalStatus = await invokeBridgeWithRetry({ action: "status" });
 if (finalStatus.catalogRecords !== EXPECTED_RECORDS) throw new Error(`catalog_total_mismatch:${finalStatus.catalogRecords}`);
 for (const stage of STAGES) {
   if (finalStatus.stages?.[stage]?.succeeded !== EXPECTED_PARTITIONS || finalStatus.stages?.[stage]?.failed !== 0) throw new Error(`final_stage_status_invalid:${stage}`);
