@@ -20,6 +20,15 @@ Status: RECOVERY_SCOPE / NOT VERIFIED_LIVE. This document records founder requir
 - `app/social/social-home-client.tsx`: current Social UX. Any historical Social map/location implementation is out of scope for this product and must not be merged into Social/Chat.
 - Historical donor repository: `pandaconnect1/pantavion-socialhub` (requires full file/commit-level inspection).
 
+## Independent kernel boundaries
+
+- `SocialKernel`: posts, circles, communities, social feed and moderation; never owns private message plaintext or map records.
+- `ChatKernel`: first-party private/direct/group message delivery, receipts, consented inbox orchestration; never owns social feed or maps.
+- `VoiceVideoKernel`: voice/video signalling, sessions, call lifecycle and media transport; separate from Chat and Social data stores.
+- `MapsKernel`: independently owned maps/geospatial systems; zero Social/Chat runtime dependency or implicit data sharing.
+- Shared identity, consent, translation and security services are accessed only through explicitly versioned, least-privilege contracts. Inter-kernel collaboration is controlled, audited and optional, not a database merge.
+- Kernel controls remain founder/admin-only; ordinary users see product experiences, not kernel management.
+
 ## Recovery and implementation order
 
 1. Inventory historical repositories, donor branches, PRs and documents; classify each unique feature CANONICALIZED, SUPERSEDED, ARCHIVED or BLOCKED_WITH_REASON with source link.
