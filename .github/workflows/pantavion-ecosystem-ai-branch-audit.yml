@@ -12,6 +12,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  ecosystem-discovery:
+    name: Discover all product families and static surfaces
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Inventory canonical ecosystem families
+        run: node scripts/pantavion-ecosystem-discovery.cjs
+      - name: Publish full work inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-all-family-work-inventory
+          path: artifacts/ecosystem-discovery/agent-work-inventory.json
+          retention-days: 14
   module-verification:
     name: Verify ${{ matrix.module }}
     runs-on: ubuntu-latest
