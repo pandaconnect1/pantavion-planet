@@ -48,10 +48,11 @@ export default async function SocialDevelopmentPage() {
         </section>
         <section className="rounded-2xl border border-slate-700 bg-slate-900 p-5">
           <h2 className="text-xl font-bold">Τεκμηριωμένη εργασία GitHub</h2>
-          <p className="mt-2 text-sm text-slate-300">Η ανάκτηση και οι αλλαγές κώδικα γίνονται σε ελεγχόμενο development branch. Καμία αυτόματη ανάθεση σε AI ή αλλαγή παραγωγής δεν εκτελείται από αυτή τη σελίδα.</p>
+          <p className="mt-2 text-sm text-slate-300">Η ανάκτηση και οι αλλαγές κώδικα γίνονται σε ελεγχόμενο development branch. Υπάρχει ξεχωριστός read-only audit runner στο GitHub Actions. Οι AI workers δεν εκτελούν ακόμη αυτόνομα εργασίες από αυτή τη σελίδα και δεν γίνονται αλλαγές παραγωγής.</p>
           <div className="mt-4 flex flex-wrap gap-3 text-sm font-bold">
             <a className="text-cyan-300 underline" href="https://github.com/pandaconnect1/pantavion-planet/blob/feat/water-platform-quality-roadmap-20261018/docs/recovery/SOCIAL-CHAT-DONOR-AUDIT-20261020.md">Ανασκαφή Social / Chat</a>
             <a className="text-cyan-300 underline" href="https://github.com/pandaconnect1/pantavion-planet/pull/627">Development PR #627</a>
+            <a className="text-cyan-300 underline" href="https://github.com/pandaconnect1/pantavion-planet/actions/workflows/pantavion-social-chat-autonomy-audit.yml">Social/Chat audit runs · GitHub Actions</a>
             <Link className="text-cyan-300 underline" href="/social">Social UI</Link>
             <Link className="text-cyan-300 underline" href="/messages">Chat UI</Link>
           </div>
