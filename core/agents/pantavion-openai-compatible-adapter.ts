@@ -21,6 +21,9 @@ const MAX_OBJECTIVE_CHARS = 24_000;
 
 function assertEndpoint(endpoint: string): URL {
   const url = new URL(endpoint);
+  if (url.hostname !== "api.openai.com") throw new Error("Model endpoint host is not allowlisted");
+  if (url.pathname !== "/v1/chat/completions" || url.search) throw new Error("Model endpoint path is not allowlisted");
+  if (url.port) throw new Error("Model endpoint port is not allowlisted");
   if (url.protocol !== "https:") throw new Error("Model endpoint must use HTTPS");
   if (url.username || url.password || url.hash) throw new Error("Invalid model endpoint");
   return url;
@@ -72,6 +75,7 @@ export function createOpenAICompatibleAgentAdapter(options: ProviderAdapterOptio
           }),
           signal: controller.signal,
           cache: "no-store",
+          redirect: "error",
         });
         if (!response.ok) {
           // Do not include provider response bodies: they can echo secrets or sensitive data.
