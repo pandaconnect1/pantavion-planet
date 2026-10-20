@@ -19,7 +19,7 @@ export default async function AgentOperationsPage() {
   const admin = createAdminClient();
   const [jobs, alerts] = await Promise.all([
     admin.from("pantavion_agent_jobs")
-      .select("id,kernel_id,role,status,attempts,created_at,updated_at,last_error", { count: "exact" })
+      .select("id,kernel_id,role,status,attempts,created_at,updated_at,last_error,artifact_refs,evidence_refs", { count: "exact" })
       .neq("kernel_id", "water")
       .order("created_at", { ascending: false }).limit(30),
     admin.from("pantavion_founder_alerts")
@@ -47,6 +47,15 @@ export default async function AgentOperationsPage() {
                   <p className="font-semibold">{j.kernel_id} · {j.role} · {j.status}</p>
                   <p className="mt-1 text-xs text-slate-400">Attempts: {j.attempts} · Updated: {j.updated_at}</p>
                   {j.last_error && <p className="mt-1 text-sm text-amber-300">Σφάλμα: {j.last_error}</p>}
+                  {Array.isArray(j.artifact_refs) && j.artifact_refs.map((artifact, index) => {
+                    if (!artifact || typeof artifact !== "object" || Array.isArray(artifact)) return null;
+                    const record = artifact as Record<string, unknown>;
+                    return <div key={index} className="mt-3 rounded-lg border border-slate-600 bg-slate-950 p-3">
+                      <p className="text-xs font-semibold text-cyan-300">Παραδοτέο AI #{index + 1}</p>
+                      <p className="mt-1 whitespace-pre-wrap break-words text-sm">{typeof record.text === "string" ? record.text.slice(0, 16000) : "Υπάρχει καταχώριση παραδοτέου χωρίς κείμενο."}</p>
+                    </div>;
+                  })}
+                  {Array.isArray(j.evidence_refs) && <p className="mt-2 text-xs text-slate-400">Καταχωρίσεις τεκμηρίωσης: {j.evidence_refs.length}</p>}
                 </article>)}</div>
               {(jobs.data ?? []).length === 0 && <p className="mt-3 text-sm text-amber-300">Δεν βρέθηκαν εργασίες εκτός Water στις τελευταίες 30 εγγραφές.</p>}
             </>}
