@@ -88,6 +88,22 @@ export default function PantavionHomeClient() {
             <Link href="/translate" className="rounded-2xl border border-violet-300/20 bg-violet-300/[.06] p-4 text-white no-underline"><p className="text-xs font-black text-violet-200">🌐 UNIVERSAL LANGUAGE</p><h3 className="mt-1 font-black">Language & Translation</h3><p className="mt-1 text-xs text-blue-100/65">Automatic or user-selected language experiences.</p></Link>
           </div>
         </section>
+
+        <section id="pantavion-intelligence" aria-labelledby="pantavion-intelligence-title" className="relative z-20 mt-6 rounded-[1.6rem] border border-cyan-300/20 bg-[#081d38]/90 p-5 sm:p-7">
+          <p className="text-xs font-black uppercase tracking-[.22em] text-cyan-300">PANTAVION INTELLIGENCE</p>
+          <h2 id="pantavion-intelligence-title" className="mt-2 text-2xl font-black">One ecosystem. Specialized intelligence.</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-blue-100/75">Enter through Pantavion AI for text-first assistance. Research, knowledge recovery, kernel governance and independent agent execution are being integrated and verified in stages; this page does not imply that autonomous execution is live.</p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href="/pantaai" className="rounded-xl bg-cyan-400 px-5 py-3 text-sm font-black text-[#04101f] no-underline">Open Pantavion AI · Text first</Link>
+            <Link href="/messages" className="rounded-xl border border-white/20 px-5 py-3 text-sm font-bold text-white no-underline">Messages & communication</Link>
+            <Link href="#all-pantavion" className="rounded-xl border border-white/20 px-5 py-3 text-sm font-bold text-white no-underline">Explore all domains</Link>
+          </div>
+          <div className="mt-6 grid gap-3 md:grid-cols-3">
+            <div className="rounded-xl border border-white/10 p-4"><h3 className="font-bold">Knowledge & excavation</h3><p className="mt-2 text-xs leading-5 text-blue-100/70">Historical evidence, source provenance and capability recovery. Integration under verification.</p></div>
+            <div className="rounded-xl border border-white/10 p-4"><h3 className="font-bold">Kernel leadership</h3><p className="mt-2 text-xs leading-5 text-blue-100/70">Bounded parallel agents, permissions, budget and approval gates. Not yet live at scale.</p></div>
+            <div className="rounded-xl border border-white/10 p-4"><h3 className="font-bold">Continuity & protection</h3><p className="mt-2 text-xs leading-5 text-blue-100/70">Durable job records, backups and recovery checks. Restoration guarantees require testing.</p></div>
+          </div>
+        </section>
       </section>
     </main>
   );

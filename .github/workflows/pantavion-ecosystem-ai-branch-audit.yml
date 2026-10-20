@@ -1,0 +1,88 @@
+name: Pantavion Ecosystem Independent Verification
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-ecosystem-verification-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ecosystem-discovery:
+    name: Discover all product families and static surfaces
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Inventory canonical ecosystem families
+        run: node scripts/pantavion-ecosystem-discovery.cjs
+      - name: Publish full work inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantavion-all-family-work-inventory
+          path: artifacts/ecosystem-discovery/agent-work-inventory.json
+          retention-days: 14
+  module-verification:
+    name: Verify ${{ matrix.module }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - module: kernel
+            command: npm run test:sovereign-kernel-integration
+          - module: recovery
+            command: npm run test:recovery-runtime-fabric
+          - module: intelligence
+            command: npm run audit:intelligence
+          - module: translation
+            command: npm run audit:translation-runtime
+          - module: knowledge-excavation
+            command: npm run knowledge:excavate:v2
+          - module: guardian
+            command: npm run audit:guardian:365
+          - module: typecheck
+            command: npm run typecheck
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Run independent module verification
+        id: verify
+        env:
+          VERIFY_COMMAND: ${{ matrix.command }}
+        run: |
+          echo "Module: ${{ matrix.module }}"
+          echo "Command: $VERIFY_COMMAND"
+          $VERIFY_COMMAND
+      - name: Record module result
+        if: always()
+        env:
+          MODULE: ${{ matrix.module }}
+          RESULT: ${{ steps.verify.outcome }}
+        run: |
+          mkdir -p artifacts/ecosystem-verification
+          printf '{"module":"%s","outcome":"%s","commit":"%s"}\n' "$MODULE" "$RESULT" "$GITHUB_SHA" > "artifacts/ecosystem-verification/$MODULE.json"
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecosystem-${{ matrix.module }}-${{ github.run_id }}
+          path: artifacts/ecosystem-verification/
+          retention-days: 14
+
+# This workflow is read-only with respect to production and authentic maps.
+# A green result proves only the specified check passed, not live readiness.
+# Existing protected water gates and release approvals remain mandatory.

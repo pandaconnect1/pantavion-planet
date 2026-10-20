@@ -107,7 +107,15 @@ async function readBlobJson(blob: BlobListItem) {
 
   if (!response.ok) return null;
 
-  return (await response.json()) as FaultDossier;
+  try {
+    const parsed: unknown = await response.json();
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? (parsed as FaultDossier)
+      : null;
+  } catch {
+    // A corrupt historical record must not break the entire admin inbox.
+    return null;
+  }
 }
 
 function publicFault(item: FaultDossier) {
@@ -168,13 +176,22 @@ export async function GET(request: Request) {
       );
     }
 
-    const result = await list({
-      prefix: "water/private/fault-approval-inbox/founder-admin/",
-      limit: 100,
-    });
-
-    const blobs = (result.blobs || []) as BlobListItem[];
-    const payloads = await Promise.all(blobs.map((blob) => readBlobJson(blob)));
+    const prefix = "water/private/fault-approval-inbox/founder-admin/";
+    const blobs: BlobListItem[] = [];
+    let cursor: string | undefined;
+    // Bound pagination to prevent an unbounded admin request.
+    for (let page = 0; page < 10; page += 1) {
+      const result = await list({ prefix, limit: 100, cursor });
+      blobs.push(...(result.blobs as BlobListItem[]));
+      if (!result.hasMore || !result.cursor) break;
+      cursor = result.cursor;
+    }
+    // Avoid failing the entire list when a single historical blob is corrupt.
+    const payloads: Array<FaultDossier | null> = [];
+    for (let i = 0; i < blobs.length; i += 20) {
+      const batch = await Promise.allSettled(blobs.slice(i, i + 20).map(readBlobJson));
+      payloads.push(...batch.map((entry) => entry.status === "fulfilled" ? entry.value : null));
+    }
 
     const items = payloads
       .filter((item): item is FaultDossier => Boolean(item))
