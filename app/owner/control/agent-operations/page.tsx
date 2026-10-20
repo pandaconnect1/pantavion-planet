@@ -1,34 +1,70 @@
-import { NextResponse } from "next/server";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { requireFounderIdentity } from "@/lib/owner-control/decision-queue";
-export const dynamic="force-dynamic";
-export const revalidate=0;
-export default async function AgentOperationsPage(){
- const db=await createClient();
- const {data:{user}}=await db.auth.getUser();
- if(!user)redirect("/auth/login?next=/owner/control/agent-operations");
- try{requireFounderIdentity(user.id)}catch{redirect("/")}
- const {data:assurance}=await db.auth.mfa.getAuthenticatorAssuranceLevel();
- if(assurance?.currentLevel!=="aal2")redirect("/owner/safety/verify?next=/owner/control/agent-operations");
- // User-session RLS must remain in force. Never use a service-role key in a page.
- // No misleading '0 jobs' if access is denied.
- const [jobs,alerts]=await Promise.all([
-  db.from("pantavion_agent_jobs").select("id,kernel_id,status,created_at",{count:"exact"}).limit(1),
-  db.from("pantavion_founder_alerts").select("id,status,severity,created_at",{count:"exact"}).limit(1)
- ]);
- const rows=[
-  {name:"AI worker jobs",result:jobs},
-  {name:"Founder alerts",result:alerts}
- ];
- return <main className="min-h-screen bg-slate-950 p-6 text-slate-100"><section className="mx-auto max-w-4xl space-y-5">
- <a href="/owner/control" className="text-cyan-300 underline">← Owner Control</a>
- <h1 className="text-3xl font-black">AI Operations · πραγματική κατάσταση</h1>
- <p className="text-slate-300">Founder MFA required. Η πρόσβαση ελέγχεται από RLS· καμία μη διαθέσιμη πληροφορία δεν παρουσιάζεται ως μηδενική δραστηριότητα.</p>
- {rows.map(({name,result})=><article key={name} className="rounded-xl border border-slate-700 p-5">
- <h2 className="font-bold">{name}</h2>
- <p className="mt-2 text-sm">{result.error?"Μη διαθέσιμο στον founder session: "+result.error.message:"Προσβάσιμες εγγραφές: "+String(result.count??"άγνωστο")}</p>
- </article>)}
- <p className="text-amber-300 text-sm">Οι AI workers δεν πιστοποιούνται ως ενεργοί από την παρουσία της ουράς. Απαιτούνται worker heartbeats και end-to-end εκτέλεση.</p>
- </section></main>;
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function AgentOperationsPage() {
+  const session = await createClient();
+  const { data: { user } } = await session.auth.getUser();
+  if (!user) redirect("/auth/login?next=/owner/control/agent-operations");
+  try { requireFounderIdentity(user.id); } catch { redirect("/"); }
+  const { data: assurance, error: mfaError } = await session.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (mfaError || assurance?.currentLevel !== "aal2") redirect("/owner/safety/verify?next=/owner/control/agent-operations");
+
+  // Privileged queries execute only after authenticated founder + aal2 verification.
+  // Admin credentials stay server-side; neither service-role keys nor arbitrary SQL reach the browser.
+  const admin = createAdminClient();
+  const [jobs, alerts] = await Promise.all([
+    admin.from("pantavion_agent_jobs")
+      .select("id,kernel_id,role,status,attempts,created_at,updated_at,last_error", { count: "exact" })
+      .order("created_at", { ascending: false }).limit(30),
+    admin.from("pantavion_founder_alerts")
+      .select("id,kernel_id,severity,status,title,created_at", { count: "exact" })
+      .order("created_at", { ascending: false }).limit(30),
+  ]);
+
+  return (
+    <main className="min-h-screen bg-slate-950 p-6 text-slate-100">
+      <section className="mx-auto max-w-5xl space-y-6">
+        <a href="/owner/control" className="text-cyan-300 underline">← Owner Control</a>
+        <header>
+          <p className="text-xs font-bold uppercase tracking-widest text-cyan-300">Founder only · MFA verified</p>
+          <h1 className="mt-2 text-3xl font-black">Pantavion AI Operations</h1>
+          <p className="mt-2 text-sm text-slate-300">Πραγματικές εγγραφές από την παραγωγική βάση. Εμφανίζονται οι 30 πιο πρόσφατες ανά ενότητα. Δεν περιλαμβάνεται το Water.</p>
+        </header>
+        <section className="rounded-2xl border border-slate-700 p-5">
+          <h2 className="text-xl font-bold">Ανεξάρτητες εργασίες AI</h2>
+          {jobs.error ? <p role="alert" className="mt-3 text-amber-300">Αποτυχία ανάγνωσης εργασιών. Δεν εμφανίζεται πλασματικός αριθμός.</p> :
+            <>
+              <p className="mt-2 text-sm text-slate-300">Σύνολο εγγραφών: {jobs.count ?? "άγνωστο"}</p>
+              <div className="mt-4 space-y-3">{(jobs.data ?? []).filter(j => j.kernel_id !== "water").map(j =>
+                <article key={j.id} className="rounded-xl border border-slate-700 bg-slate-900 p-3">
+                  <p className="font-semibold">{j.kernel_id} · {j.role} · {j.status}</p>
+                  <p className="mt-1 text-xs text-slate-400">Attempts: {j.attempts} · Updated: {j.updated_at}</p>
+                  {j.last_error && <p className="mt-1 text-sm text-amber-300">Σφάλμα: {j.last_error}</p>}
+                </article>)}</div>
+              {(jobs.data ?? []).filter(j => j.kernel_id !== "water").length === 0 && <p className="mt-3 text-sm text-amber-300">Δεν βρέθηκαν εργασίες εκτός Water στις τελευταίες 30 εγγραφές.</p>}
+            </>}
+        </section>
+        <section className="rounded-2xl border border-slate-700 p-5">
+          <h2 className="text-xl font-bold">Founder Alerts</h2>
+          {alerts.error ? <p role="alert" className="mt-3 text-amber-300">Αποτυχία ανάγνωσης ειδοποιήσεων.</p> :
+            <>
+              <p className="mt-2 text-sm text-slate-300">Σύνολο εγγραφών: {alerts.count ?? "άγνωστο"}</p>
+              <div className="mt-4 space-y-3">{(alerts.data ?? []).filter(a => a.kernel_id !== "water").map(a =>
+                <article key={a.id} className="rounded-xl border border-slate-700 bg-slate-900 p-3">
+                  <p className="font-semibold">{a.title}</p>
+                  <p className="mt-1 text-sm text-slate-300">{a.kernel_id} · {a.severity} · {a.status}</p>
+                  <p className="mt-1 text-xs text-slate-400">{a.created_at}</p>
+                </article>)}</div>
+              {(alerts.data ?? []).filter(a => a.kernel_id !== "water").length === 0 && <p className="mt-3 text-sm text-amber-300">Δεν βρέθηκαν ειδοποιήσεις εκτός Water στις τελευταίες 30 εγγραφές.</p>}
+            </>}
+        </section>
+        <p className="text-sm text-amber-300">Η παρουσία εγγραφών δεν αποδεικνύει ενεργούς AI workers. Απαιτείται επαληθευμένη εκτέλεση εργασίας και heartbeat.</p>
+      </section>
+    </main>
+  );
 }
