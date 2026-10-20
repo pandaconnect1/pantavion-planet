@@ -1,0 +1,24 @@
+name: Pantavion Social Chat Autonomous Audit
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 5 * * *'
+permissions:
+  contents: read
+jobs:
+  social-chat-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run bounded Social Chat audit
+        run: node scripts/pantavion-social-chat-autonomy-audit.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pantavion-social-chat-audit
+          path: data/runtime-reports/social-chat/latest-social-chat-audit.json
+          if-no-files-found: warn
