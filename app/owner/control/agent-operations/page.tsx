@@ -20,9 +20,11 @@ export default async function AgentOperationsPage() {
   const [jobs, alerts] = await Promise.all([
     admin.from("pantavion_agent_jobs")
       .select("id,kernel_id,role,status,attempts,created_at,updated_at,last_error", { count: "exact" })
+      .neq("kernel_id", "water")
       .order("created_at", { ascending: false }).limit(30),
     admin.from("pantavion_founder_alerts")
       .select("id,kernel_id,severity,status,title,created_at", { count: "exact" })
+      .neq("kernel_id", "water")
       .order("created_at", { ascending: false }).limit(30),
   ]);
 
@@ -40,13 +42,13 @@ export default async function AgentOperationsPage() {
           {jobs.error ? <p role="alert" className="mt-3 text-amber-300">Αποτυχία ανάγνωσης εργασιών. Δεν εμφανίζεται πλασματικός αριθμός.</p> :
             <>
               <p className="mt-2 text-sm text-slate-300">Σύνολο εγγραφών: {jobs.count ?? "άγνωστο"}</p>
-              <div className="mt-4 space-y-3">{(jobs.data ?? []).filter(j => j.kernel_id !== "water").map(j =>
+              <div className="mt-4 space-y-3">{(jobs.data ?? []).map(j =>
                 <article key={j.id} className="rounded-xl border border-slate-700 bg-slate-900 p-3">
                   <p className="font-semibold">{j.kernel_id} · {j.role} · {j.status}</p>
                   <p className="mt-1 text-xs text-slate-400">Attempts: {j.attempts} · Updated: {j.updated_at}</p>
                   {j.last_error && <p className="mt-1 text-sm text-amber-300">Σφάλμα: {j.last_error}</p>}
                 </article>)}</div>
-              {(jobs.data ?? []).filter(j => j.kernel_id !== "water").length === 0 && <p className="mt-3 text-sm text-amber-300">Δεν βρέθηκαν εργασίες εκτός Water στις τελευταίες 30 εγγραφές.</p>}
+              {(jobs.data ?? []).length === 0 && <p className="mt-3 text-sm text-amber-300">Δεν βρέθηκαν εργασίες εκτός Water στις τελευταίες 30 εγγραφές.</p>}
             </>}
         </section>
         <section className="rounded-2xl border border-slate-700 p-5">
@@ -54,13 +56,13 @@ export default async function AgentOperationsPage() {
           {alerts.error ? <p role="alert" className="mt-3 text-amber-300">Αποτυχία ανάγνωσης ειδοποιήσεων.</p> :
             <>
               <p className="mt-2 text-sm text-slate-300">Σύνολο εγγραφών: {alerts.count ?? "άγνωστο"}</p>
-              <div className="mt-4 space-y-3">{(alerts.data ?? []).filter(a => a.kernel_id !== "water").map(a =>
+              <div className="mt-4 space-y-3">{(alerts.data ?? []).map(a =>
                 <article key={a.id} className="rounded-xl border border-slate-700 bg-slate-900 p-3">
                   <p className="font-semibold">{a.title}</p>
                   <p className="mt-1 text-sm text-slate-300">{a.kernel_id} · {a.severity} · {a.status}</p>
                   <p className="mt-1 text-xs text-slate-400">{a.created_at}</p>
                 </article>)}</div>
-              {(alerts.data ?? []).filter(a => a.kernel_id !== "water").length === 0 && <p className="mt-3 text-sm text-amber-300">Δεν βρέθηκαν ειδοποιήσεις εκτός Water στις τελευταίες 30 εγγραφές.</p>}
+              {(alerts.data ?? []).length === 0 && <p className="mt-3 text-sm text-amber-300">Δεν βρέθηκαν ειδοποιήσεις εκτός Water στις τελευταίες 30 εγγραφές.</p>}
             </>}
         </section>
         <p className="text-sm text-amber-300">Η παρουσία εγγραφών δεν αποδεικνύει ενεργούς AI workers. Απαιτείται επαληθευμένη εκτέλεση εργασίας και heartbeat.</p>
