@@ -1,5 +1,9 @@
-import { describe, expect, it } from "vitest";
 import { traceWaterNetwork, type WaterNetwork } from "./water-network-trace";
+
+// Framework-free regression checks; run via Node's built-in test runner
+// with TypeScript stripping, or through the repository's existing test harness.
+import assert from "node:assert/strict";
+import { test } from "node:test";
 
 const sample: WaterNetwork = {
   nodes: [
@@ -15,30 +19,40 @@ const sample: WaterNetwork = {
   ],
 };
 
-describe("water network tracing (simulation only)", () => {
-  it("traces connected assets with all valves open", () => {
-    const result = traceWaterNetwork(sample, "source");
-    expect(result.reachableNodeIds).toEqual(["customer", "junction", "source", "valve"]);
-    expect(result.reachableEdgeIds).toEqual(["pipe1", "pipe2", "pipe3"]);
-    expect(result.warnings).toEqual([]);
-  });
-  it("stops at a closed valve", () => {
-    const result = traceWaterNetwork(sample, "source", new Set(["valve"]));
-    expect(result.reachableNodeIds).toEqual(["junction", "source"]);
-    expect(result.reachableEdgeIds).toEqual(["pipe1"]);
-    expect(result.blockedValveIds).toEqual(["valve"]);
-  });
-  it("reports a missing starting node", () => {
-    expect(traceWaterNetwork(sample, "missing").warnings).toContain("start_node_missing");
-  });
-  it("reports dangling GIS edges", () => {
-    const network: WaterNetwork = { ...sample, edges: [...sample.edges, { id: "bad", from: "source", to: "unknown" }] };
-    const result = traceWaterNetwork(network, "source");
-    expect(result.warnings).toContain("dangling_edge:bad");
-    expect(result.reachableEdgeIds).not.toContain("bad");
-  });
-  it("does not traverse disabled segments", () => {
-    const network: WaterNetwork = { ...sample, edges: sample.edges.map(e => e.id === "pipe2" ? { ...e, enabled: false } : e) };
-    expect(traceWaterNetwork(network, "source").reachableNodeIds).toEqual(["junction", "source"]);
-  });
+test("connected assets are reachable with valves open", () => {
+  const result = traceWaterNetwork(sample, "source");
+  assert.deepEqual(result.reachableNodeIds, ["customer", "junction", "source", "valve"]);
+  assert.deepEqual(result.reachableEdgeIds, ["pipe1", "pipe2", "pipe3"]);
+  assert.deepEqual(result.warnings, []);
+});
+
+test("closed valves block traversal", () => {
+  const result = traceWaterNetwork(sample, "source", new Set(["valve"]));
+  assert.deepEqual(result.reachableNodeIds, ["junction", "source"]);
+  assert.deepEqual(result.reachableEdgeIds, ["pipe1"]);
+  assert.deepEqual(result.blockedValveIds, ["valve"]);
+});
+
+test("missing starting nodes are reported", () => {
+  assert.ok(traceWaterNetwork(sample, "missing").warnings.includes("start_node_missing"));
+});
+
+test("dangling edges are reported and not traversed", () => {
+  const network: WaterNetwork = {
+    ...sample,
+    edges: [...sample.edges, { id: "bad", from: "source", to: "unknown" }],
+  };
+  const result = traceWaterNetwork(network, "source");
+  assert.ok(result.warnings.includes("dangling_edge:bad"));
+  assert.ok(!result.reachableEdgeIds.includes("bad"));
+});
+
+test("disabled segments are not traversed", () => {
+  const network: WaterNetwork = {
+    ...sample,
+    edges: sample.edges.map((edge) =>
+      edge.id === "pipe2" ? { ...edge, enabled: false } : edge
+    ),
+  };
+  assert.deepEqual(traceWaterNetwork(network, "source").reachableNodeIds, ["junction", "source"]);
 });
