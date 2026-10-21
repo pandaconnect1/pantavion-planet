@@ -66,7 +66,7 @@ async function checkCapability(
   // query cannot distinguish a healthy protected table from an unavailable
   // table. Treat that state as auth-required rather than a production failure.
   if (!authenticated) {
-    return { id, label, ready: true, diagnostic: "auth_required" };
+    return { id, label, ready: false, diagnostic: "auth_required" };
   }
 
   try {
@@ -131,7 +131,10 @@ export async function GET() {
     ),
   ]);
 
-  const ok = capabilities.every((capability) => capability.ready);
+  // HTTP 200 only describes the availability of the Social health endpoint,
+  // never end-to-end posts, reactions, media or contacts working.
+  const schemaAccessVerified = authenticated && capabilities.every((capability) => capability.ready);
+  const ok = true;
 
   return json(
     {
@@ -145,6 +148,12 @@ export async function GET() {
         authenticated,
       },
       capabilities,
+      readiness: {
+        healthEndpointReachable: true,
+        schemaAccessVerified,
+        endToEndVerified: false,
+        verificationRequired: "two_distinct_authenticated_users_and_real_create_read_update_flow",
+      },
     },
     ok ? 200 : 503,
   );
