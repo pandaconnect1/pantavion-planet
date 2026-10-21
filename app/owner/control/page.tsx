@@ -40,6 +40,8 @@ export default async function OwnerControlPage() {
             >
               Live Truth · πραγματικό production verify
             </a>
+            <a href="/owner/control/pantavion-ai" className="rounded-xl border border-cyan-400/50 bg-cyan-400/10 px-4 py-3 text-sm font-black text-cyan-100">Pantavion AI Chat · ιδιωτικό μοντέλο</a>
+            <a href="/owner/control/agent-operations" className="rounded-xl border border-violet-400/50 bg-violet-400/10 px-4 py-3 text-sm font-black text-violet-100">AI Operations · πραγματική κατάσταση</a>
             <a
               href="/owner/control/implementation"
               className="rounded-xl border border-cyan-400/50 bg-cyan-400/10 px-4 py-3 text-sm font-black text-cyan-100"
