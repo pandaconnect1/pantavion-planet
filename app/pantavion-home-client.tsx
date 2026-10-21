@@ -9,7 +9,7 @@ const journeys = [
   ["People", "People, relationships & communities", "/people", "◎"],
   ["Chat", "Messages, voice & connection", "/messages", "◌"],
   ["Social", "Discover, share & connect", "/social", "◈"],
-  ["Interpreter", "Translate & understand", "/translate", "文"],
+  ["Interpreter", "Translate & understand", "/translate", "🌐"],
   ["PantaAI", "Your intelligent Pantavion assistant", "/pantaai", "✦"],
   ["Elite", "Private premium experiences", "/elite", "◇"],
   ["Memory", "Your continuity across Pantavion", "/memory", "∞"],
