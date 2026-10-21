@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { realBackendClaimsRegistry } from "@/core/pantavion/real-backend-claims-registry";
 
 export const metadata = {
   title: "Explore Pantavion | Pantavion One",
@@ -35,6 +36,7 @@ const card = {
 };
 
 export default function EcosystemPage() {
+  const statuses = new Map(realBackendClaimsRegistry.map((item) => [item.route, item.status]));
   return (
     <main style={shell} data-pantavion-static-ui="true">
       <section style={{ width: "min(1180px, calc(100% - 40px))", margin: "0 auto", padding: "48px 0 96px" }}>
@@ -52,13 +54,15 @@ export default function EcosystemPage() {
                 <>
                   <h3 style={{ margin: 0, color: "#f3c454", fontSize: 22 }}>{world.title}</h3>
                   <p style={{ marginBottom: 0, color: "#c7d4df", lineHeight: 1.6 }}>{world.body}</p>
-                  <p style={{ marginBottom: 0, color: "#8fb8dc", fontWeight: 800 }}>{world.href ? "Open →" : "In development"}</p>
+                  <p style={{ marginBottom: 0, color: "#8fb8dc", fontWeight: 800 }}>{world.href && !notReady ? "Open →" : "Unavailable pending verification"}</p>
                 </>
               );
-              return world.href ? (
+              const declared = world.href ? statuses.get(world.href) : undefined;
+              const notReady = !world.href || declared === "doctrine_only" || declared === "static_page";
+              return world.href && !notReady ? (
                 <Link key={world.title} href={world.href} style={{ ...card, color: "inherit", textDecoration: "none" }}>{content}</Link>
               ) : (
-                <article key={world.title} style={card}>{content}</article>
+                <article key={world.title} style={card} aria-label={`${world.title}: not verified operational`}>{content}<p style={{ color: "#ffcf80", fontWeight: 800 }}>Not verified operational — navigation disabled</p></article>
               );
             })}
           </div>
