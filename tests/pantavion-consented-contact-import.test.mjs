@@ -1,0 +1,32 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+
+const sql = readFileSync("supabase/migrations/20261022025500_consented_contact_file_import.sql","utf8");
+const client = readFileSync("app/contacts/contacts-client.tsx","utf8");
+const page = readFileSync("app/contacts/page.tsx","utf8");
+
+assert.match(sql,/INSERT INTO public\.consent_purpose/);
+assert.match(sql,/'contact_import'/);
+assert.match(sql,/REVOKE ALL ON FUNCTION public\.pantavion_import_contacts_batch/);
+assert.match(sql,/REVOKE ALL ON FUNCTION public\.pantavion_import_contacts_consented/);
+assert.match(sql,/TO authenticated/);
+assert.match(sql,/p_confirmed IS DISTINCT FROM true/);
+assert.match(sql,/contact_import_enabled=true/);
+assert.match(sql,/actor uuid := auth\.uid\(\)/);
+assert.match(sql,/count_items < 1 OR count_items > 500/);
+assert.match(sql,/owner_id=actor/);
+assert.match(sql,/purpose,status,source,granted_at,lawful_basis,metadata/);
+assert.match(sql,/consent_record_id,status/);
+assert.match(client,/setPreview\(/);
+assert.match(client,/setConfirmed\(false\)/);
+assert.match(client,/checked=\{confirmed\}/);
+assert.match(client,/disabled=\{!confirmed \|\| busy\}/);
+assert.match(client,/pantavion_import_contacts_consented/);
+assert.match(client,/p_confirmed: true/);
+assert.match(client,/contact_import_enabled: true/);
+assert.match(client,/contact_import_enabled: false/);
+assert.match(client,/const MAX_FILE_BYTES = 1_000_000/);
+assert.match(client,/const MAX_BATCH = 500/);
+assert.doesNotMatch(client,/pantavion_import_contacts_batch/);
+assert.match(page,/currentUserId=\{user\.id\}/);
+console.log("Pantavion owned-contacts CSV/vCard preview+consent+dedup contract: PASS");
