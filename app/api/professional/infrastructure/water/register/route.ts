@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { authorizeWaterMapRequest } from "@/core/security/water-map-request-access";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { waterRegisterNumberCandidates, waterRegisterAlternateStreetOrder } from "@/core/infrastructure/water/water-register-search";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -64,7 +65,14 @@ function searchTerms(q: string): string[] {
   const terms = new Set([core]);
   if (/[\u0370-\u03ff]/.test(core)) for (const t of spellings(core, GREEK_DIGRAPHS, GREEK_LETTERS)) terms.add(t);
   else if (/[A-Z]/.test(core)) for (const t of spellings(core, LATIN_DIGRAPHS, LATIN_LETTERS)) terms.add(t);
-  return [...terms].filter(Boolean).slice(0, 12);
+  // Users often enter the street's family name first instead of the original
+  // DWG order (e.g. "Κυπριανού Σπύρου" vs "Spyrou Kyprianou").
+  const withAlternateOrder = new Set(terms);
+  for (const spelling of terms) {
+    const reversed = waterRegisterAlternateStreetOrder(spelling);
+    if (reversed) withAlternateOrder.add(reversed);
+  }
+  return [...withAlternateOrder].filter(Boolean).slice(0, 28);
 }
 
 const KINDS = new Set(["valve", "air_valve", "hydrant", "pressure_reducing_valve", "tank"]);
@@ -113,12 +121,18 @@ export async function GET(request: NextRequest) {
     if (kind && KINDS.has(kind)) query = query.eq("kind", kind);
     const street = params.get("street");
     if (street) query = query.eq("street", street);
-    const q = (params.get("q") || "").trim().replace(/[%,()]/g, " ").slice(0, 60);
+    const q = (params.get("q") || "")
+      .trim()
+      .replace(/[^\\p{L}\\p{N}\\s_-]/gu, " ")
+      .slice(0, 60);
     if (q) {
       const clauses = searchTerms(q).flatMap((t) => [
         `street_key.ilike.%${t}%`, `name.ilike.%${t}%`,
       ]);
       clauses.push(`number.ilike.%${q}%`, `tag.ilike.%${q}%`);
+      for (const canonicalNumber of waterRegisterNumberCandidates(q)) {
+        clauses.push(`number.eq.${canonicalNumber}`);
+      }
       query = query.or(clauses.join(","));
     }
 
