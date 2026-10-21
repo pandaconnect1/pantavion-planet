@@ -1,0 +1,24 @@
+name: Pantavion Independent LIVE EL-EN Translation Evidence
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/pantavion-independent-live-el-en.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    name: Real live Render EL to EN and EN to EL, not mocks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify live production returns translated content
+        run: node scripts/pantavion-translation-live-proof.mjs
