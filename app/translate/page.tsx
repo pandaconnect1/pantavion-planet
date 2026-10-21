@@ -90,6 +90,7 @@ export default function TranslatePage() {
   const [provider, setProvider] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [publicTextFallbackConsent, setPublicTextFallbackConsent] = useState(false);
   const [listening, setListening] = useState(false);
   const [recording, setRecording] = useState(false);
   const [transcribing, setTranscribing] = useState(false);
@@ -230,6 +231,7 @@ export default function TranslatePage() {
           bidirectional: true,
           mode: "assistive",
           surface: "pantavion-translate",
+          publicProviderConsent: publicTextFallbackConsent,
         }),
       });
 
@@ -594,6 +596,21 @@ export default function TranslatePage() {
               autoFocus
               className="min-h-40 w-full resize-y rounded-2xl border border-white/10 bg-[#0f2b59] p-4 text-lg text-white outline-none placeholder:text-blue-100/45 focus:border-cyan-300/55"
             />
+
+            <label className="mt-3 flex cursor-pointer items-start gap-3 rounded-xl border border-amber-200/25 bg-amber-200/10 px-3 py-3 text-xs font-semibold leading-5 text-amber-50">
+              <input
+                type="checkbox"
+                checked={publicTextFallbackConsent}
+                onChange={(event) => setPublicTextFallbackConsent(event.target.checked)}
+                className="mt-1 h-4 w-4 shrink-0"
+              />
+              <span>
+                Προαιρετική εφεδρική μετάφραση μικρού δημόσιου κειμένου:
+                επιτρέπω να σταλεί το κείμενό μου σε εξωτερικό πάροχο MyMemory.
+                Μην ενεργοποιείς για προσωπικά δεδομένα, συνομιλίες ή έγγραφα.
+                Χωρίς αυτή τη συναίνεση το Pantavion δεν στέλνει κείμενο στη δημόσια εφεδρεία.
+              </span>
+            </label>
 
             <button
               type="button"
