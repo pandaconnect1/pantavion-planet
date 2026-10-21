@@ -16,7 +16,7 @@ export function importFormatFromName(filename:string):ImportProvider|null {
   const name=filename.toLowerCase();
   if(name.endsWith(".eml")) return "email_eml";
   if(name.endsWith(".mbox")) return "email_mbox";
-  if(name.endsWith(".txt")) return "whatsapp_export";
+  if(name.endsWith(".txt")) return "chat_text_export";
   return null;
 }
 function header(text:string,name:string):string|null {
