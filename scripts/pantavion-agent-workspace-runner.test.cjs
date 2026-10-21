@@ -6,7 +6,7 @@ const git=(...args)=>cp.execFileSync("git",args,{cwd:root,stdio:"pipe"});
 try{
  git("init","-q");git("config","user.email","test@example.invalid");git("config","user.name","Pantavion Test");
  fs.writeFileSync(path.join(root,"README.md"),"fixture\n");git("add",".");git("commit","-qm","fixture");git("checkout","-qb","ai-sandbox/test");
- const jobFile=path.join(root,"job.json");
+ const jobFile=path.join(os.tmpdir(),"pantavion-job-"+process.pid+"-"+Date.now()+".json");
  function run(job){fs.writeFileSync(jobFile,JSON.stringify(job));return cp.spawnSync(process.execPath,[runner],{cwd:root,env:{...process.env,PANTAVION_SANDBOX_ROOT:root,PANTAVION_JOB_FILE:jobFile},encoding:"utf8"});}
  const ok=run({risk:"sandbox_code",files:[{path:"app/agent-proof.txt",content:"proof\n"}]});
  assert.equal(ok.status,0,ok.stderr);assert.equal(fs.readFileSync(path.join(root,"app/agent-proof.txt"),"utf8"),"proof\n");
@@ -19,4 +19,4 @@ try{
  const denied=run({risk:"read_only",files:[{path:"app/deny.txt",content:"no"}]});
  assert.notEqual(denied.status,0);
  console.log("PASS: sandbox writes approved file; Water, traversal, .github, secrets and wrong risk rejected");
-}finally{fs.rmSync(root,{recursive:true,force:true});}
+}finally{fs.rmSync(root,{recursive:true,force:true});fs.rmSync(jobFile,{force:true});}
