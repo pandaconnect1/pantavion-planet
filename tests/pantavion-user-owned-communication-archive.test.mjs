@@ -1,0 +1,44 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { previewUserExport,importFormatFromName } from "../core/pantavion/user-owned-message-export.ts";
+const eml="From: alice@example.com\nTo: bob@example.com\nSubject: Hello\nContent-Type: text/plain\n\nThis is the user-owned message.";
+const one=previewUserExport("mail.eml",eml);
+assert.equal(one.provider,"email_eml");
+assert.equal(one.records.length,1);
+assert.equal(one.records[0].kind,"email");
+assert.equal(one.records[0].sender,"alice@example.com");
+assert.equal(one.records[0].text,"This is the user-owned message.");
+const mbox=previewUserExport("mail.mbox",
+  "From alice Fri Oct 22 2026\n"+eml+"\nFrom bob Fri Oct 22 2026\n"+eml+"\n");
+assert.equal(mbox.records.length,2);
+assert.equal(importFormatFromName("chat.txt"),"chat_text_export");
+const chat=previewUserExport("chat.txt",
+  "[01/12/2026, 17:02:11] Alice: Hello world\n[01/12/2026, 17:04:00] Bob: Thank you!");
+assert.equal(chat.records.length,2);
+assert.equal(chat.records[0].sender,"Alice");
+assert.equal(chat.records[1].text,"Thank you!");
+assert.throws(()=>previewUserExport("unknown.zip","test"),/Επιτρέπονται/);
+assert.throws(()=>previewUserExport("private.eml","Content-Type: multipart/mixed\n\nsecret"),/Δεν αναγνωρίστηκε/);
+assert.throws(()=>previewUserExport("chat.txt","[01/12/2026, 17:02:11] Alice: hi\n".repeat(51)),/50 μηνύματα/);
+assert.throws(()=>previewUserExport("mail.eml","a".repeat(500_001)),/500 KB/);
+
+const sql=readFileSync("supabase/migrations/20261022040000_private_communications_file_archive.sql","utf8");
+assert.match(sql,/ENABLE ROW LEVEL SECURITY/);
+assert.match(sql,/owner_id=\(SELECT auth\.uid\(\)\)/);
+assert.match(sql,/REVOKE ALL ON TABLE public\.imported_communication_records FROM PUBLIC,anon,authenticated/);
+assert.match(sql,/GRANT SELECT,DELETE ON TABLE public\.imported_communication_records TO authenticated/);
+assert.match(sql,/p_confirmed IS DISTINCT FROM TRUE/);
+assert.match(sql,/count\(fingerprint\)/);
+assert.match(sql,/ON CONFLICT \(owner_id,fingerprint\) DO NOTHING/);
+const api=readFileSync("app/api/pantavion/import-archive/route.ts","utf8");
+assert.match(api,/supabase\.auth\.getUser\(\)/);
+assert.match(api,/pantavion_import_communication_archive/);
+assert.match(api,/pantavion_revoke_communications_archive_import/);
+assert.match(api,/\.delete\(\)\.eq\("owner_id",data\.user\.id\)/);
+const ui=readFileSync("app/move-to-pantavion/move-client.tsx","utf8");
+assert.match(ui,/checked=\{consent\}/);
+assert.match(ui,/previewUserExport\(file\.name,await file\.text\(\)\)/);
+assert.match(ui,/confirmed:true/);
+assert.match(ui,/importSelected/);
+assert.match(ui,/deleteOwnArchive/);
+console.log("USER-OWNED EMAIL/CHAT PREVIEW + RLS + CONSENT + REVOKE CONTRACT: PASS");
