@@ -34,7 +34,8 @@ CREATE INDEX IF NOT EXISTS imported_communication_records_owner_idx
 
 ALTER TABLE public.imported_communication_records ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON TABLE public.imported_communication_records FROM PUBLIC,anon,authenticated;
-GRANT SELECT,DELETE ON TABLE public.imported_communication_records TO authenticated;
+-- No direct REST/GraphQL access; use narrow owner-bound RPCs below.
+-- RLS remains enabled as defense in depth.
 DROP POLICY IF EXISTS imported_comm_owner_read ON public.imported_communication_records;
 DROP POLICY IF EXISTS imported_comm_owner_delete ON public.imported_communication_records;
 CREATE POLICY imported_comm_owner_read ON public.imported_communication_records
@@ -151,4 +152,46 @@ REVOKE ALL ON FUNCTION public.pantavion_revoke_communications_archive_import()
  FROM PUBLIC,anon;
 GRANT EXECUTE ON FUNCTION public.pantavion_revoke_communications_archive_import()
  TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.pantavion_list_imported_communication_archive(
+ p_limit integer DEFAULT 100
+) RETURNS jsonb LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path TO ''
+AS $function$
+DECLARE actor uuid:=auth.uid(); output jsonb;
+BEGIN
+ IF actor IS NULL THEN RAISE EXCEPTION 'authentication_required'; END IF;
+ IF p_limit < 1 OR p_limit > 300 THEN RAISE EXCEPTION 'invalid_list_limit'; END IF;
+ SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY t.imported_at DESC),'[]'::jsonb)
+ INTO output FROM (
+   SELECT id,source_provider,record_kind,original_sender,original_subject,
+     left(original_text,600) AS original_text,sent_at,imported_at
+   FROM public.imported_communication_records
+   WHERE owner_id=actor ORDER BY imported_at DESC LIMIT p_limit
+ ) AS t;
+ RETURN output;
+END
+$function$;
+REVOKE ALL ON FUNCTION public.pantavion_list_imported_communication_archive(integer)
+ FROM PUBLIC,anon;
+GRANT EXECUTE ON FUNCTION public.pantavion_list_imported_communication_archive(integer)
+ TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.pantavion_delete_imported_communication_archive()
+RETURNS integer LANGUAGE plpgsql SECURITY DEFINER SET search_path TO ''
+AS $function$
+DECLARE actor uuid:=auth.uid(); removed integer;
+BEGIN
+ IF actor IS NULL THEN RAISE EXCEPTION 'authentication_required'; END IF;
+ DELETE FROM public.imported_communication_records WHERE owner_id=actor;
+ GET DIAGNOSTICS removed=ROW_COUNT;
+ RETURN removed;
+END
+$function$;
+REVOKE ALL ON FUNCTION public.pantavion_delete_imported_communication_archive()
+ FROM PUBLIC,anon;
+GRANT EXECUTE ON FUNCTION public.pantavion_delete_imported_communication_archive()
+ TO authenticated;
+
+REVOKE SELECT,DELETE,INSERT,UPDATE ON public.imported_communication_records
+ FROM PUBLIC,anon,authenticated;
 COMMIT;
