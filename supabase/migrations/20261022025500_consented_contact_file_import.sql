@@ -58,9 +58,17 @@ BEGIN
   END IF;
 
   INSERT INTO public.consent_records
-    (user_id,purpose,status,source,granted_at,lawful_basis,metadata)
+    (user_id,purpose,status,source,granted_at,revoked_at,lawful_basis,metadata)
   VALUES (actor,'contact_import','granted','explicit_user_file_import',now(),
-          'consent',jsonb_build_object('format',kind,'count',count_items))
+          NULL,'consent',jsonb_build_object('format',kind,'count',count_items))
+  ON CONFLICT (user_id,purpose) DO UPDATE SET
+    status='granted',
+    source='explicit_user_file_import',
+    granted_at=now(),
+    revoked_at=NULL,
+    lawful_basis='consent',
+    metadata=EXCLUDED.metadata,
+    updated_at=now()
   RETURNING id INTO consent_id;
 
   INSERT INTO public.contact_sources
