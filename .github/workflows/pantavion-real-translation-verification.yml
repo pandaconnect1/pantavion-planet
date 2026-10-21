@@ -4,7 +4,18 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - 'app/api/pantavion/translate/**'
+      - 'core/translation/pantavion-consented-public-text-fallback.ts'
+      - 'app/translate/page.tsx'
       - 'scripts/pantavion-translation-live-proof.mjs'
+      - 'tests/pantavion-consented-translation.test.mjs'
+      - '.github/workflows/pantavion-real-translation-verification.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/api/pantavion/translate/**'
+      - 'core/translation/pantavion-consented-public-text-fallback.ts'
+      - 'app/translate/page.tsx'
       - '.github/workflows/pantavion-real-translation-verification.yml'
   workflow_dispatch:
   schedule:
@@ -14,8 +25,9 @@ permissions:
   contents: read
 
 jobs:
-  verify:
-    name: Translation must actually change Greek and English text
+  contract:
+    name: Prove fallback never receives private or unconsented text
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -23,5 +35,35 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Verify bidirectional translated output from live Render deployment
+      - run: node --no-warnings --experimental-strip-types tests/pantavion-consented-translation.test.mjs
+
+  live-proof:
+    name: Prove two real translation responses from the live production service
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Require deployed commit matches pushed main
+        if: github.event_name == 'push'
+        run: |
+          node --input-type=module <<'NODE'
+          const expected = process.env.GITHUB_SHA;
+          let verified = false;
+          for (let i = 0; i < 36; i++) {
+            try {
+              const response = await fetch("https://pantavion.com/api/social/health", {
+                signal: AbortSignal.timeout(12000), cache: "no-store",
+              });
+              const body = await response.json();
+              if (response.ok && body.revision === expected) { verified = true; break; }
+            } catch {}
+            await new Promise(resolve => setTimeout(resolve, 10000));
+          }
+          if (!verified) throw Error("Render production revision did not match this main commit.");
+          NODE
+      - name: Translate in both directions, with explicit opt-in
         run: node scripts/pantavion-translation-live-proof.mjs
