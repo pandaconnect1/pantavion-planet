@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { translateExplicitPublicText } from "@/core/translation/pantavion-consented-public-text-fallback";
 import { generateText } from "ai";
 import {
   pantavionUniversalTranslationContract,
@@ -398,6 +399,7 @@ export async function POST(request: Request) {
   );
   const text = asString(body.text).trim();
   const sessionId = asString(body.sessionId) || null;
+  const publicProviderConsent = body.publicProviderConsent === true && body.surface === "pantavion-translate";
 
   if (!text) {
     return NextResponse.json({ ok: false, error: "Missing text." }, { status: 400 });
@@ -427,6 +429,32 @@ export async function POST(request: Request) {
     tone: asString(body.tone, "natural") as PantavionTranslationRequest["tone"],
     bidirectional: Boolean(body.bidirectional ?? true),
   };
+
+  // Only the public translator UI can explicitly request this third-party
+  // fallback, after a person opts in to sending their short TEXT to the service.
+  // Never enable for private chat, Water or other automated integrations.
+  if (publicProviderConsent) {
+    const publicFallback = await translateExplicitPublicText({
+      text,
+      sourceLanguage,
+      targetLanguage,
+      consent: true,
+    });
+    if (publicFallback) {
+      return NextResponse.json({
+        ok: true,
+        status: "translated",
+        contract: pantavionUniversalTranslationContract,
+        translatedText: publicFallback.translatedText,
+        sourceLanguage,
+        targetLanguage,
+        provider: publicFallback.provider,
+        publicProvider: true,
+        externalTransferConsented: true,
+        generatedAt: new Date().toISOString(),
+      });
+    }
+  }
 
   const gateway = await translateWithGateway(translationRequest);
   if (gateway.result) return NextResponse.json(gateway.result);
