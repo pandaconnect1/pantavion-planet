@@ -21,7 +21,7 @@ function validateFile(file){
 }
 function git(...args){return cp.execFileSync("git",args,{cwd:root,encoding:"utf8",timeout:15000}).trim();}
 async function main(){
- if(!root||root===path.parse(root).root||!fs.existsSync(path.join(root,".git")))reject("isolated_git_checkout_required");
+ if(!process.env.PANTAVION_SANDBOX_ROOT||root===path.parse(root).root||!fs.existsSync(path.join(root,".git")))reject("isolated_git_checkout_required");
  if(!git("branch","--show-current").startsWith("ai-sandbox/"))reject("sandbox_branch_required");
  if(git("status","--porcelain"))reject("sandbox_must_be_clean");
  if(!objective||objective.length>4000)reject("objective_required");
