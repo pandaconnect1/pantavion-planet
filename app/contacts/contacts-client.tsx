@@ -188,8 +188,7 @@ export default function ContactsClient({
   async function disableImports() {
     if (busy) return;
     setBusy(true);
-    const { error } = await supabase.from("user_privacy_settings")
-      .update({ contact_import_enabled: false }).eq("user_id", currentUserId);
+    const { error } = await supabase.rpc("pantavion_revoke_contact_import");
     setBusy(false);
     setMessage(error
       ? "Δεν έγινε απενεργοποίηση. Έλεγξε τις ρυθμίσεις ιδιωτικότητας."
