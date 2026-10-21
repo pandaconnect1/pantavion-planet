@@ -15,7 +15,7 @@ assert.match(sql,/contact_import_enabled=true/);
 assert.match(sql,/actor uuid := auth\.uid\(\)/);
 assert.match(sql,/count_items < 1 OR count_items > 500/);
 assert.match(sql,/owner_id=actor/);
-assert.match(sql,/purpose,status,source,granted_at,lawful_basis,metadata/);
+assert.match(sql,/purpose,status,source,granted_at,revoked_at,lawful_basis,metadata/);
 assert.match(sql,/consent_record_id,status/);
 assert.match(client,/setPreview\(/);
 assert.match(client,/setConfirmed\(false\)/);
