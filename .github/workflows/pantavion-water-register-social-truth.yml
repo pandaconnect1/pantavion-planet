@@ -1,0 +1,24 @@
+name: Pantavion Water Register and Social Truth Checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Test water search and verified Social semantics
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test numeric register lookup and Social readiness
+        run: node --no-warnings --experimental-strip-types tests/pantavion-water-register-search.test.mjs
