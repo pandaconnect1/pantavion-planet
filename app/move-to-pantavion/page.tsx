@@ -12,11 +12,7 @@ export default async function MoveToPantavionPage() {
   const {data:auth}=await supabase.auth.getUser();
   if(!auth.user) redirect("/auth/login?next=/move-to-pantavion");
 
-  const {data, error}=await supabase.from("imported_communication_records")
-    .select("id,source_provider,record_kind,original_sender,original_subject,original_text,sent_at,imported_at")
-    .eq("owner_id",auth.user.id)
-    .order("imported_at",{ascending:false})
-    .limit(300);
+  const {data, error}=await supabase.rpc("pantavion_list_imported_communication_archive",{p_limit:300});
 
   return (
     <main className="min-h-screen bg-[#f5f9fd] px-4 py-8 text-slate-950 sm:px-8">
@@ -35,7 +31,7 @@ export default async function MoveToPantavionPage() {
         </p>
         <MoveToPantavionClient
           ready={!error}
-          initialRecords={data??[]}
+          initialRecords={Array.isArray(data)?data:[]}
         />
       </div>
     </main>
