@@ -1,0 +1,24 @@
+name: Pantavion User-Owned Message and Email Migration
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    name: Verify file parsing, account isolation, consent and no fake sync
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify honest owner-controlled migration
+        run: node --no-warnings --experimental-strip-types tests/pantavion-user-owned-communication-archive.test.mjs
