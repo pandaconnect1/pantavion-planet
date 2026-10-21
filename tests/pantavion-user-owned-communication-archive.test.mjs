@@ -28,7 +28,7 @@ assert.match(sql,/owner_id=\(SELECT auth\.uid\(\)\)/);
 assert.match(sql,/REVOKE ALL ON TABLE public\.imported_communication_records FROM PUBLIC,anon,authenticated/);
 assert.match(sql,/GRANT SELECT,DELETE ON TABLE public\.imported_communication_records TO authenticated/);
 assert.match(sql,/p_confirmed IS DISTINCT FROM TRUE/);
-assert.match(sql,/count\(fingerprint\)/);
+assert.match(sql,/fingerprint text NOT NULL/);
 assert.match(sql,/ON CONFLICT \(owner_id,fingerprint\) DO NOTHING/);
 const api=readFileSync("app/api/pantavion/import-archive/route.ts","utf8");
 assert.match(api,/supabase\.auth\.getUser\(\)/);
