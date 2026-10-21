@@ -63,8 +63,7 @@ export async function DELETE(request:Request) {
   if(raw!=='{"deleteAllImportedCommunications":true}') {
     return noCache({ok:false,error:"explicit_delete_confirmation_required"},400);
   }
-  const result=await supabase.from("imported_communication_records")
-    .delete().eq("owner_id",data.user.id);
+  const result=await supabase.rpc("pantavion_delete_imported_communication_archive");
   if(result.error) return noCache({ok:false,error:"delete_failed"},400);
   return noCache({ok:true,status:"own_archive_deleted"},200);
 }
