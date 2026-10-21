@@ -121,8 +121,8 @@ export default function SocialHomeClient({ userId, profile, initialPosts, author
   return <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
     <div className="space-y-4">
       <section className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-        <div><strong>Social Live</strong><p className="text-xs text-slate-500">Posts, reactions και comments ενημερώνονται μέσω Supabase Realtime.</p></div>
-        <span className={`rounded-full px-3 py-1 text-xs font-black ${realtimeState === "live" ? "bg-emerald-100 text-emerald-800" : realtimeState === "error" ? "bg-red-100 text-red-800" : "bg-amber-100 text-amber-800"}`}>{realtimeState === "live" ? "LIVE" : realtimeState === "error" ? "ERROR" : "CONNECTING"}</span>
+        <div><strong>Social · Δημοσιεύσεις</strong><p className="text-xs text-slate-500">Η ένδειξη δείχνει μόνο τη σύνδεση Realtime. Η δημοσίευση, η ανάγνωση, τα σχόλια και οι αντιδράσεις επαληθεύονται ξεχωριστά.</p></div>
+        <span className={`rounded-full px-3 py-1 text-xs font-black ${realtimeState === "live" ? "bg-emerald-100 text-emerald-800" : realtimeState === "error" ? "bg-red-100 text-red-800" : "bg-amber-100 text-amber-800"}`}>{realtimeState === "live" ? "ΣΥΝΔΕΔΕΜΕΝΟ" : realtimeState === "error" ? "ERROR" : "CONNECTING"}</span>
       </section>
 
       {unavailable.length > 0 ? <section className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950"><strong>Το Social λειτουργεί μερικώς αυτή τη στιγμή.</strong><p className="mt-1 text-xs">Ό,τι είναι διαθέσιμο δουλεύει κανονικά. Τα υπόλοιπα ενεργοποιούνται μόλις ολοκληρωθεί το αντίστοιχο backend.</p><div className="mt-3 flex flex-wrap gap-2">{capabilityLabels.map(([key, label]) => <span key={key} className={`rounded-full px-2.5 py-1 text-xs font-black ${capabilities[key] ? "bg-emerald-100 text-emerald-800" : "bg-white text-amber-900"}`}>{capabilities[key] ? "✓" : "—"} {label}</span>)}</div></section> : null}
