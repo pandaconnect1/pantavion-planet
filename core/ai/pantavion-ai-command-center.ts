@@ -108,7 +108,7 @@ export function canUsePantaAiAssistant(
     return false;
   }
   const assistant = PANTAVION_AI_ASSISTANTS[assistantKey as PantaAiAssistantKey];
-  if (!assistant.visibleToPublic || assistant.audience === "internal") return false;
+  if (!assistant.visibleToPublic) return false;
   if (assistant.audience === "user") return isAuthenticated;
   return true;
 }
