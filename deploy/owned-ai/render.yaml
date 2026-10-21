@@ -1,0 +1,32 @@
+# Explicit opt-in Blueprint for NEW private AI service only.
+# Deliberately not placed at repo root so it cannot reconfigure the live Pantavion web service.
+services:
+  - type: pserv
+    name: pantavion-owned-ai
+    runtime: docker
+    repo: https://github.com/pandaconnect1/pantavion-planet
+    branch: main
+    region: frankfurt
+    plan: 2c-8g
+    dockerfilePath: ./deploy/owned-ai/Dockerfile
+    dockerContext: .
+    numInstances: 1
+    disk:
+      name: pantavion-ai-model-weights
+      mountPath: /models
+      sizeGB: 25
+    envVars:
+      - key: LLAMA_API_KEY
+        sync: false
+      - key: LLAMA_ARG_HOST
+        value: 0.0.0.0
+      - key: LLAMA_ARG_PORT
+        value: "10000"
+      - key: LLAMA_ARG_MODEL
+        value: /models/pantavion.gguf
+      - key: LLAMA_ARG_ALIAS
+        value: pantavion-local
+      - key: LLAMA_ARG_CTX_SIZE
+        value: "4096"
+      - key: LLAMA_ARG_N_PARALLEL
+        value: "1"
