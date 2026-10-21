@@ -26,7 +26,7 @@ const sql=readFileSync("supabase/migrations/20261022040000_private_communication
 assert.match(sql,/ENABLE ROW LEVEL SECURITY/);
 assert.match(sql,/owner_id=\(SELECT auth\.uid\(\)\)/);
 assert.match(sql,/REVOKE ALL ON TABLE public\.imported_communication_records FROM PUBLIC,anon,authenticated/);
-assert.match(sql,/REVOKE SELECT,DELETE,INSERT,UPDATE ON public\\.imported_communication_records/);
+assert.match(sql,/REVOKE SELECT,DELETE,INSERT,UPDATE ON public\.imported_communication_records/);
 assert.match(sql,/p_confirmed IS DISTINCT FROM TRUE/);
 assert.match(sql,/fingerprint text NOT NULL/);
 assert.match(sql,/ON CONFLICT \(owner_id,fingerprint\) DO NOTHING/);
