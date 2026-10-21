@@ -1,0 +1,24 @@
+name: Pantavion Consented Contacts Import
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Owner-only contact import opt-in and provenance
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check contact importer and explicit consent boundary
+        run: node tests/pantavion-consented-contact-import.test.mjs

@@ -28,7 +28,7 @@ export default async function ContactsPage() {
           <h1 className="mt-2 text-4xl font-black tracking-[-0.04em] text-[#173f72]">Οι άνθρωποι που έχεις φέρει μαζί σου.</h1>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Οι εισαγμένες επαφές είναι δικές σου και ιδιωτικές. Όταν μια επαφή συνδεθεί με πραγματικό λογαριασμό Pantavion, εμφανίζεται καθαρά ως «Στο Pantavion».</p>
         </header>
-        <ContactsClient initialContacts={contacts ?? []} backendReady={!error} />
+        <ContactsClient currentUserId={user.id} initialContacts={contacts ?? []} backendReady={!error} />
       </section>
     </main>
   );
