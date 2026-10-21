@@ -14,7 +14,7 @@ export const pantavionGlobalDistributionLedger = {
   title: "Pantavion Global Distribution + Dynamic Readiness Gate v1",
   status: "foundation_ready" as PantavionDistributionGateStatus,
   primaryDomainTarget: "https://pantavion.com",
-  currentDeploymentFallback: "https://pantavion-planet.vercel.app",
+  currentDeploymentFallback: "https://pantavion-planet.onrender.com",
   doctrine:
     "Pantavion must become discoverable across search, social, mobile and future app ecosystems without exposing private data or making fake-live claims.",
   publicSignals: [
@@ -33,7 +33,7 @@ export const pantavionGlobalDistributionLedger = {
   platforms: pantavionPlatformDiscoveryMatrix,
   claims: pantavionPublicClaimsRegistry,
   manualActions: [
-    "Connect pantavion.com as the canonical production domain in Vercel.",
+    "Confirm pantavion.com resolves to the production Render service and has valid TLS.",
     "Verify pantavion.com in Google Search Console.",
     "Submit https://pantavion.com/sitemap.xml in Google Search Console.",
     "Verify pantavion.com in Bing Webmaster Tools.",
