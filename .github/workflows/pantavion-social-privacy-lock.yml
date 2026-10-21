@@ -1,0 +1,24 @@
+name: Pantavion Social Private-Post RLS Guard
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  policy:
+    name: Verify private social visibility policy and DB test contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify policy and rollback-only social test
+        run: node tests/pantavion-social-privacy-contract.test.mjs
