@@ -21,7 +21,7 @@ type DiscoveryMatch = {
 };
 type ImportPreview = {
   filename: string;
-  source: "csv" | "vcard";
+  source: "csv" | "vcard" | "device";
   contacts: ParsedContact[];
 };
 const MAX_FILE_BYTES = 1_000_000;
@@ -155,6 +155,42 @@ export default function ContactsClient({
     }
   }
 
+  async function pickDeviceContacts() {
+    setConfirmed(false);
+    setPreview(null);
+    const contactManager=(navigator as Navigator & {
+      contacts?: {
+        select:(fields:string[],options:{multiple:boolean})=>Promise<Array<{
+          name?:string[]; email?:string[]; tel?:string[];
+        }>>;
+      };
+    }).contacts;
+    if (!contactManager) {
+      setMessage("Αυτή η συσκευή ή ο browser δεν διαθέτει επιλογή επαφών. Εξήγαγε .vcf ή .csv και επίλεξέ το παρακάτω.");
+      return;
+    }
+    try {
+      // The OS prompt is triggered by this explicit button click. It is never
+      // invoked on page load or in the background.
+      const picked=await contactManager.select(["name","email","tel"],{multiple:true});
+      const records:ParsedContact[]=picked.slice(0,MAX_BATCH).map(x=>({
+        display_name:x.name?.[0]?.trim()?.slice(0,200)||null,
+        email:x.email?.[0]?.trim()?.slice(0,320)||null,
+        phone:x.tel?.[0]?.trim()?.slice(0,64)||null,
+      })).filter(x=>x.display_name||x.email||x.phone);
+      if(!records.length){
+        setMessage("Δεν επιλέχθηκαν επαφές. Δεν αποθηκεύτηκε τίποτα.");return;
+      }
+      if(picked.length>MAX_BATCH){
+        setMessage("Μπορείς να επιλέξεις έως 500 επαφές κάθε φορά.");return;
+      }
+      setPreview({filename:"device-contacts-selected",source:"device",contacts:records});
+      setMessage(`Επέλεξες ${records.length} επαφές από τη συσκευή. Δεν έχουν μεταφερθεί ακόμη — έλεγξε την προεπισκόπηση.`);
+    } catch {
+      setMessage("Η επιλογή επαφών ακυρώθηκε ή δεν υποστηρίζεται. Δεν μεταφέρθηκε τίποτα.");
+    }
+  }
+
   async function importApproved() {
     if (!preview || !confirmed || busy || !backendReady) return;
     setBusy(true); setMessage("");
@@ -233,6 +269,15 @@ export default function ContactsClient({
           <p className="mt-2 text-sm text-slate-600">
             Επίλεξε προσωπικό αρχείο .vcf ή .csv. Θα δεις πρώτα τα ονόματα και θα αποφασίσεις
             εσύ αν θα εισαχθούν. Καμία επαφή δεν αποστέλλεται όταν απλώς διαλέγεις το αρχείο.
+          </p>
+          <button type="button" onClick={pickDeviceContacts}
+            disabled={busy||!backendReady}
+            className="mt-3 w-full rounded-full border border-[#2467aa] px-4 py-3 text-xs font-bold text-[#173f72] disabled:opacity-40">
+            Επίλεξε επαφές απευθείας από το κινητό μου (όπου υποστηρίζεται)
+          </button>
+          <p className="mt-2 text-xs text-slate-500">
+            Το λειτουργικό σύστημα ζητά από εσένα ποιες επαφές θα μοιραστείς.
+            Η άδεια δεν είναι μόνιμη. Αν ο browser δεν το υποστηρίζει, επίλεξε .vcf ή .csv.
           </p>
           <input className="mt-3 block w-full text-xs" type="file" accept=".vcf,.csv,text/vcard,text/csv"
             disabled={busy || !backendReady} onChange={inspectImport} />
