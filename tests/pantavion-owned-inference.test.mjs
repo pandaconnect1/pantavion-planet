@@ -12,6 +12,10 @@ const config = getOwnedInferenceConfig(env);
 assert.ok(config);
 assert.equal(config.endpoint, "http://pantavion-model.internal:8080/v1/chat/completions");
 assert.equal(config.model, "pantavion-approved-model");
+assert.equal(
+  getOwnedInferenceConfig({ ...env, PANTAVION_OWNED_AI_BASE_URL: "http://pantavion-inference-a1b2:8080" })?.endpoint,
+  "http://pantavion-inference-a1b2:8080/v1/chat/completions",
+);
 assert.equal(config.bearerToken, "");
 
 for (const badUrl of [
