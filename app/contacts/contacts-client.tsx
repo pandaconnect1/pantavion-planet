@@ -164,14 +164,22 @@ export default function ContactsClient({
         .from("user_privacy_settings")
         .upsert({ user_id: currentUserId, contact_import_enabled: true }, { onConflict: "user_id" });
       if (permissionError) { setMessage("Δεν ενεργοποιήθηκε η επιλογή εισαγωγής επαφών."); return; }
-      const { data, error } = await supabase.rpc("pantavion_import_contacts_consented", {
-        p_source_type: preview.source,
-        p_filename: preview.filename,
-        p_contacts: preview.contacts,
-        p_confirmed: true,
+      const response = await fetch("/api/contacts/import", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          sourceType: preview.source,
+          filename: preview.filename,
+          contacts: preview.contacts,
+          confirmed: true,
+        }),
       });
-      if (error) { setMessage("Δεν ολοκληρώθηκε η εισαγωγή. Έλεγξε τα δικαιώματα και τη μορφή αρχείου."); return; }
-      setMessage(`Εισήχθησαν ${Number(data ?? 0)} νέες ιδιωτικές επαφές. Τυχόν διπλότυπα παραλείφθηκαν.`);
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.ok !== true) {
+        setMessage("Δεν ολοκληρώθηκε η εισαγωγή. Έλεγξε τα δικαιώματα και τη μορφή αρχείου.");
+        return;
+      }
+      setMessage(`Εισήχθησαν ${Number(result.importedCount ?? 0)} νέες ιδιωτικές επαφές. Τυχόν διπλότυπα παραλείφθηκαν.`);
       setPreview(null); setConfirmed(false);
       await refresh();
     } finally { setBusy(false); }
