@@ -26,7 +26,7 @@ const sql=readFileSync("supabase/migrations/20261022040000_private_communication
 assert.match(sql,/ENABLE ROW LEVEL SECURITY/);
 assert.match(sql,/owner_id=\(SELECT auth\.uid\(\)\)/);
 assert.match(sql,/REVOKE ALL ON TABLE public\.imported_communication_records FROM PUBLIC,anon,authenticated/);
-assert.match(sql,/GRANT SELECT,DELETE ON TABLE public\.imported_communication_records TO authenticated/);
+assert.match(sql,/REVOKE SELECT,DELETE,INSERT,UPDATE ON public\\.imported_communication_records/);
 assert.match(sql,/p_confirmed IS DISTINCT FROM TRUE/);
 assert.match(sql,/fingerprint text NOT NULL/);
 assert.match(sql,/ON CONFLICT \(owner_id,fingerprint\) DO NOTHING/);
@@ -34,7 +34,7 @@ const api=readFileSync("app/api/pantavion/import-archive/route.ts","utf8");
 assert.match(api,/supabase\.auth\.getUser\(\)/);
 assert.match(api,/pantavion_import_communication_archive/);
 assert.match(api,/pantavion_revoke_communications_archive_import/);
-assert.match(api,/\.delete\(\)\.eq\("owner_id",data\.user\.id\)/);
+assert.match(api,/pantavion_delete_imported_communication_archive/);
 const ui=readFileSync("app/move-to-pantavion/move-client.tsx","utf8");
 assert.match(ui,/checked=\{consent\}/);
 assert.match(ui,/previewUserExport\(file\.name,await file\.text\(\)\)/);
