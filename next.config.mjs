@@ -61,6 +61,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/auth/signup",
+        destination: "/auth/register",
+        permanent: false,
+      },
+      {
         source: "/:path*",
         has: [{ type: "host", value: "www.pantavion.com" }],
         destination: `${canonicalOrigin}/:path*`,

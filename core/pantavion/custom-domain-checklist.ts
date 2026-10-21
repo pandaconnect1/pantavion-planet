@@ -4,11 +4,11 @@
   status: "ready-after-route-stability",
   priority: "high",
   summary:
-    "pantavion-planet.vercel.app is public testing. Serious launch requires pantavion.com or official Pantavion domain connected to Vercel.",
+    "The production application is hosted on Render at pantavion-planet.onrender.com. Validate pantavion.com and www.pantavion.com against the Render service before declaring domain readiness.",
   gates: [
     "Confirm registrar account.",
-    "Add pantavion.com and www.pantavion.com in Vercel project domains.",
-    "Add DNS records exactly as Vercel instructs.",
+    "Confirm pantavion.com and www.pantavion.com are registered on the Render production service.",
+    "Validate registrar DNS records against Render custom domain requirements.",
     "Wait for SSL and domain Ready status.",
     "Set NEXT_PUBLIC_SITE_URL to production domain.",
     "Redeploy.",

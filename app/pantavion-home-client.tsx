@@ -9,7 +9,7 @@ const journeys = [
   ["People", "People, relationships & communities", "/people", "◎"],
   ["Chat", "Messages, voice & connection", "/messages", "◌"],
   ["Social", "Discover, share & connect", "/social", "◈"],
-  ["Interpreter", "Translate & understand", "/translate", "文"],
+  ["Interpreter", "Translate & understand", "/translate", "🌐"],
   ["PantaAI", "Your intelligent Pantavion assistant", "/pantaai", "✦"],
   ["Elite", "Private premium experiences", "/elite", "◇"],
   ["Memory", "Your continuity across Pantavion", "/memory", "∞"],
@@ -60,7 +60,7 @@ export default function PantavionHomeClient() {
             <h1 className="mt-4 text-[2.75rem] font-black leading-[.98] tracking-[-.045em] sm:text-6xl lg:text-7xl">{PANTAVION_MISSION}</h1>
             <p className="mt-5 max-w-xl text-base leading-7 text-blue-100/80 sm:text-lg">Connect. Communicate. Discover. Learn. Work. Get help. One intelligent human ecosystem, designed to reveal what you need when you need it.</p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <Link href="/auth/signup" className="rounded-xl bg-gradient-to-r from-blue-500 to-violet-600 px-6 py-3 text-sm font-black text-white no-underline shadow-[0_12px_38px_rgba(61,102,255,.28)]">Join Pantavion</Link>
+              <Link href="/auth/register" className="rounded-xl bg-gradient-to-r from-blue-500 to-violet-600 px-6 py-3 text-sm font-black text-white no-underline shadow-[0_12px_38px_rgba(61,102,255,.28)]">Join Pantavion</Link>
               <Link href="/social" className="rounded-xl border border-cyan-300/35 bg-white/5 px-6 py-3 text-sm font-black text-white no-underline backdrop-blur">Explore</Link>
             </div>
             <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-xs font-bold text-blue-100/70"><span>◉ One Identity</span><span>◇ Trust & Safety</span><span>◎ Human Centric</span><span>✦ AI-assisted</span></div>
