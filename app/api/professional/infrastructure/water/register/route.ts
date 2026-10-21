@@ -123,7 +123,7 @@ export async function GET(request: NextRequest) {
     if (street) query = query.eq("street", street);
     const q = (params.get("q") || "")
       .trim()
-      .replace(/[^\\p{L}\\p{N}\\s_-]/gu, " ")
+      .replace(/[^\p{L}\p{N}\s_-]/gu, " ")
       .slice(0, 60);
     if (q) {
       const clauses = searchTerms(q).flatMap((t) => [
