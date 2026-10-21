@@ -1,0 +1,27 @@
+name: Pantavion Production REAL Text Translation Verification
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/pantavion-translation-live-proof.mjs'
+      - '.github/workflows/pantavion-real-translation-verification.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '11 8 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Translation must actually change Greek and English text
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify bidirectional translated output from live Render deployment
+        run: node scripts/pantavion-translation-live-proof.mjs
