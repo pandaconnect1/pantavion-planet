@@ -27,7 +27,8 @@ export function getOwnedInferenceConfig(
     hostname === "localhost" ||
     hostname === "127.0.0.1" ||
     hostname === "[::1]" ||
-    hostname.endsWith(".internal");
+    hostname.endsWith(".internal") ||
+    (hostname.startsWith("pantavion-") && /^[a-z0-9-]+$/.test(hostname) && !hostname.includes("."));
   const ownedTlsHost = hostname === "ai.pantavion.com" && url.protocol === "https:";
   const allowed = (privateHost && (url.protocol === "http:" || url.protocol === "https:")) || ownedTlsHost;
 
