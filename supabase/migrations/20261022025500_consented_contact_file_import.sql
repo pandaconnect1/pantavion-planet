@@ -122,4 +122,32 @@ REVOKE ALL ON FUNCTION public.pantavion_import_contacts_consented(text,text,json
 FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.pantavion_import_contacts_consented(text,text,jsonb,boolean)
 TO authenticated;
+
+-- Revoking an import preference also withdraws its current consent and stops
+-- previously authorized source sync. Existing contacts remain until a separate
+-- explicit deletion; nothing is silently removed.
+CREATE OR REPLACE FUNCTION public.pantavion_revoke_contact_import()
+RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path TO ''
+AS $revoke$
+DECLARE actor uuid := auth.uid();
+BEGIN
+  IF actor IS NULL THEN RAISE EXCEPTION 'authentication required'; END IF;
+  UPDATE public.user_privacy_settings
+    SET contact_import_enabled=false,updated_at=now() WHERE user_id=actor;
+  UPDATE public.consent_records
+    SET status='revoked',revoked_at=now(),updated_at=now()
+    WHERE user_id=actor AND purpose='contact_import' AND status='granted';
+  UPDATE public.contact_sources
+    SET status='revoked',updated_at=now()
+    WHERE owner_id=actor AND consent_record_id IN (
+      SELECT id FROM public.consent_records
+      WHERE user_id=actor AND purpose='contact_import'
+    ) AND status='active';
+END;
+$revoke$;
+REVOKE ALL ON FUNCTION public.pantavion_revoke_contact_import()
+FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.pantavion_revoke_contact_import()
+TO authenticated;
+
 COMMIT;
