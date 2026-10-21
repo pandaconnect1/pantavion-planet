@@ -93,7 +93,7 @@ export default async function SocialPage() {
         .limit(50)
     : Promise.resolve({ data: [] });
 
-  const [{ data: profile }, { data: personalMedia }, { data: basePosts }] = await Promise.all([
+  const [{ data: profile }, { data: personalMedia }, { data: basePosts, error: postsLoadError }] = await Promise.all([
     profilePromise,
     mediaLibraryPromise,
     postsPromise,
@@ -151,13 +151,14 @@ export default async function SocialPage() {
           </nav>
         </header>
 
+        {postsLoadError ? <section role="alert" className="mb-4 rounded-xl border border-red-300 bg-red-50 p-4 text-red-900"><strong>Αδυναμία φόρτωσης δημοσιεύσεων.</strong><p>Δεν εμφανίζουμε άδειο feed σαν να μην υπάρχουν δημοσιεύσεις. Δοκίμασε ξανά αργότερα.</p></section> : null}
         <SocialHomeClient
           userId={user.id}
           profile={profile ?? { id: user.id, username: null, display_name: null, avatar_url: null }}
           initialPosts={hydratedPosts}
           authors={authors ?? []}
           personalMedia={personalMedia ?? []}
-          capabilities={capabilities}
+          capabilities={{ ...capabilities, posts: capabilities.posts && !postsLoadError }}
         />
       </section>
     </main>
