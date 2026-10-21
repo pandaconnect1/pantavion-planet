@@ -1,0 +1,24 @@
+name: Pantavion Public AI Privilege Boundary
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Reject internal Guardian access and unauthenticated personal AI
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify personal and internal AI boundary
+        run: node --no-warnings --experimental-strip-types tests/pantavion-public-ai-boundary.test.mjs

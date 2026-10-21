@@ -94,6 +94,25 @@ export function buildPantaAiSystemInstruction(assistantKey: string): string {
   ].join("\n");
 }
 
+/**
+ * Authorization boundary for the public PantaAI HTTP endpoint.
+ * Visibility in a catalog is not permission to use private or Kernel personas.
+ * Logged-in personal access is distinct from public unauthenticated access.
+ */
+export function canUsePantaAiAssistant(
+  assistantKey: unknown,
+  isAuthenticated: boolean,
+): boolean {
+  if (typeof assistantKey !== "string" ||
+      !Object.prototype.hasOwnProperty.call(PANTAVION_AI_ASSISTANTS, assistantKey)) {
+    return false;
+  }
+  const assistant = PANTAVION_AI_ASSISTANTS[assistantKey as PantaAiAssistantKey];
+  if (!assistant.visibleToPublic) return false;
+  if (assistant.audience === "user") return isAuthenticated;
+  return true;
+}
+
 export function listVisiblePantaAiAssistants() {
   return Object.values(PANTAVION_AI_ASSISTANTS).filter((assistant) => assistant.visibleToPublic);
 }
