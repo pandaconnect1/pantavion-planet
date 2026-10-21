@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   const sourceType = payload.sourceType;
   const filename = payload.filename;
   const contacts = payload.contacts;
-  if (!confirmed || (sourceType !== "vcard" && sourceType !== "csv") ||
+  if (!confirmed || (sourceType !== "vcard" && sourceType !== "csv" && sourceType !== "device") ||
       typeof filename !== "string" || filename.length > 120 ||
       !Array.isArray(contacts) || contacts.length === 0 || contacts.length > 500) {
     return NextResponse.json({ ok: false, error: "confirmation_or_file_invalid" }, { status: 400 });
