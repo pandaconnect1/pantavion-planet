@@ -1,43 +1,27 @@
-﻿# Pantavion Deployment Spine v1
+# Pantavion production deployment — Render
 
-## Goal
-Automatic flow:
+## Source and active service
+- Source of truth for app code: `pandaconnect1/pantavion-planet`, branch `main`.
+- Public application: `https://pantavion.com`.
+- Render production service: `pantavion-planet` (ID `srv-datmlvg93c1s73b80ekg`), Frankfurt.
+- GitHub Actions are CI/verification only; they **never deploy to Vercel**.
+- Render is the only supported application deployment target.
 
-VS Code -> GitHub -> GitHub Actions -> Vercel -> AWS
+## Safe release procedure
+1. Run GitHub CI, including Water Network Lock, Privileged Session Security, Runtime Safety and production core availability checks.
+2. Validate schema migrations against actual Supabase migration history. Migrations must be reviewed and applied separately; no automatic destructive schema deployment.
+3. Merge a reviewed pull request to `main`; check Render automatically detected the new commit.
+4. If Render did not auto-deploy, use its service-specific deployment action with the exact reviewed commit, without concurrent deployments.
+5. Check the new Render deployment reports `live` and the commit SHA matches `main`.
+6. Verify `/`, legacy `/auth/signup` redirect, `/auth/register`, `/social`, and fail-closed Water access on the live domain.
+7. Roll back the deployment if the real production checks fail.
 
-## What this workflow does
-- On push / PR:
-  - install
-  - lint (if present)
-  - typecheck (if present)
-  - test (if present)
-  - build
-- On pull request:
-  - deploys Vercel preview
-- On push to main/master:
-  - deploys Vercel production
-  - optionally triggers AWS sync/invalidation
+## Data preservation and remaining dependencies
+- The Water source/map integrity lock must not be bypassed. Never change protected geometry or authorization just to make CI green.
+- Production signup can only open after the separate verified-live registration gate approves it. Correcting the route does not authorize public account creation.
+- Vercel Blob data, old OIDC bridge integrations and third-party inference paths require **independently verified replacements** before Vercel projects or credentials can be deleted.
+- Keep verified object inventories, cryptographic checksums, off-provider backups, and restore-test evidence. Do not treat a new file path as proof of a migrated object.
+- An own-hosted Pantavion AI must pass inference health and content checks before its private endpoint is enabled; it must not silently fall back to a third-party AI provider.
 
-## Required GitHub Secrets
-
-### Vercel
-- VERCEL_TOKEN
-- VERCEL_ORG_ID
-- VERCEL_PROJECT_ID
-
-### AWS (optional)
-- AWS_ROLE_TO_ASSUME
-- AWS_REGION
-- AWS_S3_BUCKET
-- AWS_CLOUDFRONT_DISTRIBUTION_ID
-
-## Recommended branch policy
-- develop = working branch
-- main = production branch
-
-## Safe rule
-Do not allow destructive DB migrations automatically unless separately approved.
-
-## Notes
-This is the deployment spine.
-If the app build is still red, GitHub Actions will stop before deployment, which is correct behavior.
+## Do not confuse hosting with app design
+Hosting on Render does not alter the appearance of the Pantavion website. The same site can run on a different infrastructure provider.
