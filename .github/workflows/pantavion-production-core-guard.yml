@@ -1,0 +1,33 @@
+name: Pantavion Production Core Availability Guard
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/pantavion-production-core-smoke.mjs'
+      - '.github/workflows/pantavion-production-core-guard.yml'
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '5,35 * * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pantavion-production-core-guard-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify production signup, Social, Water safety
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Probe actual canonical production
+        run: node scripts/pantavion-production-core-smoke.mjs
