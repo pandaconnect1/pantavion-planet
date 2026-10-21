@@ -10,7 +10,7 @@ for (const item of cases) {
   const response = await fetch(`${base}/api/pantavion/translate`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...item, surface: "pantavion-live-translation-verification" }),
+    body: JSON.stringify({ ...item, surface: "pantavion-translate", publicProviderConsent: true }),
     signal: AbortSignal.timeout(45000),
     cache: "no-store",
   });
