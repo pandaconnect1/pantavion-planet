@@ -5,7 +5,7 @@ import { pantavionWaterApprovedDeviceHeaders } from "@/core/water/water-approved
 
 type Item={ref:string;category:string;label:string;x:number;y:number;layer:string;off:boolean;frozen:boolean;beyondPriorCutoff:boolean;registerNumbers:string[]};
 type Report={layers:{id:number;name:string;off:boolean;frozen:boolean;segments:number;texts:number;blocks:number}[];items:Item[];total:number;summary:{evidence:number;hiddenEvidence:number;unmatchedEvidence:number;categories:Record<string,number>};extractorStats:{notReproduced?:Record<string,number>};createdAt:string};
-const labels:Record<string,string>={tank:"Δεξαμενές / ντεπόζιτα",valve:"Βάνες / βαλβίδες",street:"Οδοί",area:"Περιοχές / ζώνες",pump:"Αντλιοστάσια",borehole:"Γεωτρήσεις / πηγές",hydrant:"Υδροστόμια",meter:"Μετρητές",flow:"Ροή / τροφοδοσία",unclassified_block:"Μη ταξινομημένα σύμβολα"};
+const labels:Record<string,string>={tank:"Δεξαμενές / ντεπόζιτα",valve:"Βάνες / βαλβίδες",street:"Οδοί",area:"Περιοχές / ζώνες",pump:"Αντλιοστάσια",borehole:"Γεωτρήσεις / πηγές",hydrant:"Υδροστόμια",meter:"Μετρητές",flow:"Ροή / τροφοδοσία",leader:"Γραμμές υπόδειξης / αιχμές βελών",unclassified_block:"Μη ταξινομημένα σύμβολα"};
 export default function WaterDrawingDiscovery({initialCategory="",queryValue,onQueryChange}:{initialCategory?:string;queryValue?:string;onQueryChange?:(value:string)=>void}){
  const [q,setQ]=useState("");const [category,setCategory]=useState(initialCategory);const [hidden,setHidden]=useState(false);const [unmatched,setUnmatched]=useState(false);
  const query=queryValue??q;
