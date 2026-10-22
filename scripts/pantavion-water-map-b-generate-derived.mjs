@@ -1037,7 +1037,7 @@ async function main() {
         path.join(repoRoot, ".pantavion", "water", `map-${EXPECTED.mapId.toLowerCase()}-inventory.json`);
       fs.mkdirSync(path.dirname(out), { recursive: true });
       fs.writeFileSync(out, JSON.stringify({ sourceKey: SOURCE_KEY, sourceSha256: verified.sha256, ...inventory }, null, 1) + "\n", "utf8");
-      const discovery = buildWaterNetworkDiscovery({ texts, blockRefs, segments, layers, register: inventory.register, stats: extracted.stats, duplicateCutoff: DUPLICATE_COPY_X });
+      const discovery = buildWaterNetworkDiscovery({ texts, blockRefs, segments, layers, register: inventory.register, leaders: extracted.leaders, stats: extracted.stats, duplicateCutoff: DUPLICATE_COPY_X });
       fs.writeFileSync(out + ".discovery.json", JSON.stringify({ sourceKey: SOURCE_KEY, sourceSha256: verified.sha256, ...discovery }), "utf8");
       console.log(JSON.stringify({ ok: true, marker: "pantavion_water_network_inventory_v1", out, ...inventory.totals }, null, 2));
       return;
