@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { collectWaterRegisterPrintRows } from "@/core/infrastructure/water/water-register-print";
 
 type Area = { code: string; outline: "closed" | "hull"; area_m2: number; centroid_x: number; centroid_y: number; group_name: string | null };
 type Count = { area_code: string | null; kind: string; n: number; streets: number };
@@ -38,6 +39,13 @@ export default function WaterNetworkRegisterClient() {
   const [area, setArea] = useState<string>("");
   const [kind, setKind] = useState<string>("valve");
   const [q, setQ] = useState("");
+  const [sv, setSv] = useState("");
+  const [street, setStreet] = useState("");
+  const [printRows, setPrintRows] = useState<Asset[] | null>(null);
+  const [printTitle, setPrintTitle] = useState("");
+  const [printStatus, setPrintStatus] = useState("");
+  const [printing, setPrinting] = useState(false);
+  const printAbortRef = useRef<AbortController | null>(null);
   const [zone, setZone] = useState("");
   const [sort, setSort] = useState("area");
   const requestRef = useRef<AbortController | null>(null);
@@ -73,6 +81,8 @@ export default function WaterNetworkRegisterClient() {
     if (area) p.set("area", area);
     if (kind) p.set("kind", kind);
     if (q.trim()) p.set("q", q.trim());
+    if (sv.trim()) p.set("sv", sv.trim());
+    if (street.trim()) p.set("street", street.trim());
     try {
       const r = await fetch(`/api/professional/infrastructure/water/register?${p}`, { credentials: "include", headers: waterAccessHeaders(), signal: controller.signal });
       if (controller.signal.aborted) return;
@@ -89,12 +99,52 @@ export default function WaterNetworkRegisterClient() {
       setAssets([]); setTotal(0); setOffset(0);
       setStatus("error");
     }
-  }, [area, kind, q, zone, sort]);
+  }, [area, kind, q, zone, sort, sv, street]);
 
   useEffect(() => {
     const t = setTimeout(() => void load(0), 250);
     return () => { clearTimeout(t); requestRef.current?.abort(); };
   }, [load]);
+
+  useEffect(() => () => { printAbortRef.current?.abort(); }, []);
+
+  useEffect(() => {
+    if (printRows === null) return;
+    const clear = () => { setPrintRows(null); setPrinting(false); };
+    window.addEventListener("afterprint", clear);
+    let second = 0;
+    const first = requestAnimationFrame(() => { second = requestAnimationFrame(() => window.print()); });
+    return () => { cancelAnimationFrame(first); cancelAnimationFrame(second); window.removeEventListener("afterprint", clear); };
+  }, [printRows]);
+
+  async function preparePrint(all: boolean) {
+    if (printing) return;
+    const controller = new AbortController();
+    printAbortRef.current = controller;
+    setPrinting(true); setPrintRows(null); setPrintStatus("Προετοιμασία όλων των σελίδων…");
+    const p = new URLSearchParams({ limit: "500", sort, kind: all ? "valve" : kind });
+    if (!all) {
+      for (const [key, value] of Object.entries({ q, sv, street, area, zone })) if (value.trim()) p.set(key, value.trim());
+    }
+    const title = all ? "Πλήρης κατάλογος καταγεγραμμένων βανών" : `Επιλεγμένες καταγραφές · ${[sv, street, area, zone, q].filter(Boolean).join(" · ") || "όλα τα φίλτρα"}`;
+    try {
+      const rows = await collectWaterRegisterPrintRows<Asset>(async (from) => {
+        p.set("offset", String(from));
+        const response = await fetch(`/api/professional/infrastructure/water/register?${p}`, {
+          credentials: "include", headers: waterAccessHeaders(), signal: controller.signal, cache: "no-store",
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error("print_read_failed");
+        return data;
+      });
+      if (controller.signal.aborted) return;
+      if (!rows.length) { setPrintStatus("Δεν υπάρχουν εγγραφές για εκτύπωση."); setPrinting(false); return; }
+      setPrintTitle(title); setPrintStatus(`Έτοιμες ${fmt(rows.length)} εγγραφές.`); setPrintRows(rows);
+    } catch {
+      if (!controller.signal.aborted) setPrintStatus("Η εκτύπωση δεν προετοιμάστηκε πλήρως. Δοκιμάστε ξανά.");
+      setPrinting(false);
+    }
+  }
 
   const areaTotals = useMemo(() => {
     const m = new Map<string, Record<string, number>>();
@@ -118,7 +168,7 @@ export default function WaterNetworkRegisterClient() {
 
   return (
     <main className="min-h-screen bg-[#050b16] px-4 py-6 text-white">
-      <div className="mx-auto max-w-5xl space-y-5">
+      <div className="mx-auto max-w-5xl space-y-5 print:hidden">
         <header className="rounded-3xl border border-amber-300/30 bg-[#091426] p-5">
           <a href="/professional/infrastructure/water" className="text-sm font-black text-amber-300">← Πίσω στην Ύδρευση</a>
           <p className="mt-3 text-xs font-black uppercase tracking-[0.3em] text-amber-300">Pantavion Water · Μητρώο Δικτύου</p>
@@ -159,8 +209,14 @@ export default function WaterNetworkRegisterClient() {
               {Object.entries(KIND_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
           </label>
+          <label className="text-xs font-black uppercase text-slate-400">Αριθμός SV
+            <input value={sv} onChange={(e) => setSv(e.target.value)} placeholder="Μόνο αριθμός ή SV 123" className="mt-1 w-full rounded-xl border border-slate-600 bg-[#050b16] p-3 text-base text-white" />
+          </label>
+          <label className="text-xs font-black uppercase text-slate-400">Οδός
+            <input value={street} onChange={(e) => setStreet(e.target.value)} placeholder="Όνομα οδού" className="mt-1 w-full rounded-xl border border-slate-600 bg-[#050b16] p-3 text-base text-white" />
+          </label>
           <label className="text-xs font-black uppercase text-slate-400">
-            Αναζήτηση
+            Πρόσθετη αναζήτηση
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="SV, αριθμός, οδός, περιοχή ή ζώνη" className="mt-1 w-full rounded-xl border border-slate-600 bg-[#050b16] p-3 text-base font-bold text-white" />
           </label>
           <label className="text-xs font-black uppercase text-slate-400">Ζώνη
@@ -177,12 +233,18 @@ export default function WaterNetworkRegisterClient() {
               <option value="number">Αριθμός μητρώου</option>
             </select>
           </label>
-          <button type="button" onClick={() => { setQ(""); setArea(""); setZone(""); setKind("valve"); setSort("area"); }} className="self-end rounded-xl border border-slate-600 p-3">Καθαρισμός φίλτρων</button>
+          <button type="button" onClick={() => { setQ(""); setSv(""); setStreet(""); setArea(""); setZone(""); setKind("valve"); setSort("area"); }} className="self-end rounded-xl border border-slate-600 p-3">Καθαρισμός φίλτρων</button>
           <p role="status" aria-live="polite" className="text-sm font-bold text-slate-300 sm:col-span-3">
             {status === "loading" ? "Φόρτωση…" : status === "error" ? "Το μητρώο δεν φορτώθηκε. Δοκίμασε ξανά." : `${fmt(total)} στοιχεία · εμφανίζονται ${fmt(assets.length)}`}
           </p>
         </section>
 
+        <section className="flex flex-wrap gap-3" aria-label="Εκτύπωση καταλόγου">
+          <button type="button" disabled={printing} onClick={() => void preparePrint(false)} className="rounded-xl border border-sky-400 p-3 disabled:opacity-50">Εκτύπωση αποτελεσμάτων</button>
+          <button type="button" disabled={printing} onClick={() => void preparePrint(true)} className="rounded-xl border border-amber-300 p-3 disabled:opacity-50">Εκτύπωση όλων των βανών</button>
+          {printing ? <button type="button" onClick={() => { printAbortRef.current?.abort(); setPrintRows(null); setPrinting(false); setPrintStatus("Ακυρώθηκε."); }} className="rounded-xl border p-3">Ακύρωση</button> : null}
+          <p role="status" aria-live="polite" className="w-full text-sm">{printStatus}</p>
+        </section>
         {status === "idle" && !assets.length ? <p className="rounded-2xl border border-slate-700 p-4">Δεν βρέθηκαν καταγραφές με αυτά τα φίλτρα.</p> : null}
         {status === "error" ? <button type="button" onClick={() => void load(0)} className="rounded-xl border border-amber-300 p-3">Επανάληψη φόρτωσης</button> : null}
         {assets.length > 0 ? <section className="overflow-x-auto rounded-3xl border border-slate-700 bg-[#091426] p-4" aria-label="Μητρώο βανών και εξαρτημάτων">
@@ -206,6 +268,12 @@ export default function WaterNetworkRegisterClient() {
           </button>
         ) : null}
       </div>
+      {printRows !== null ? <section className="hidden print:block" aria-label="Εκτυπώσιμος κατάλογος">
+        <h1>{printTitle}</h1><p>{new Date().toLocaleDateString("el-GR", { timeZone: "Asia/Nicosia" })} · {printRows.length} εγγραφές</p>
+        <table><thead><tr>{["Αριθμός μητρώου", "Ετικέτα SV", "Οδός", "Περιοχή", "Ζώνη", "Είδος / DN"].map((v) => <th scope="col" key={v}>{v}</th>)}</tr></thead>
+        <tbody>{printRows.map((a) => <tr key={a.number}><td>{a.number}</td><td>{a.tag || "—"}</td><td>{a.street || "Χωρίς ονομασία"}</td><td>{a.area_code || "—"}</td><td>{areaByCode.get(a.area_code || "")?.group_name || "Μη καταγεγραμμένη"}</td><td>{KIND_LABEL[a.kind] || a.kind}{a.dn ? ` DN${a.dn}` : ""}</td></tr>)}</tbody></table>
+      </section> : null}
+      <style>{`@media print { @page { size: A4 landscape; margin: 12mm; } body, main { background: white !important; color: black !important; } main table { width: 100%; border-collapse: collapse; font-size: 10pt; } main th, main td { border: 1px solid #888; padding: 4px; text-align: left; } main thead { display: table-header-group; } main tr { break-inside: avoid; } }`}</style>
     </main>
   );
 }
