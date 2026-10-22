@@ -7,6 +7,7 @@ on:
     paths:
       - ".github/workflows/pantavion-water-hidden-layer-audit.yml"
       - "scripts/pantavion-water-map-b-generate-derived.mjs"
+      - "scripts/water-network-discovery.mjs"
   push:
     branches: [fix/limassol-register-coverage-20261022]
     paths:
