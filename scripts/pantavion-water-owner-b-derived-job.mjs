@@ -96,6 +96,18 @@ async function main() {
       const inv = JSON.parse(String(body));
       // GitHub keeps only 10 notices per step: the register, boundary and
       // water-layer findings go first.
+      if (process.env.PANTAVION_WATER_INVENTORY_READ_ONLY === "YES") {
+        annotate("notice", "Read-only hidden layer and flow audit", JSON.stringify({
+          sourceSha256: source.sha256,
+          layers: inv.layers.length,
+          hiddenLayers: inv.layers.filter((l) => l.sourceOff || l.sourceFrozen).length,
+          flowLabels: inv.flowEvidence?.labelCandidates?.length ?? 0,
+          flowSymbols: inv.flowEvidence?.symbolCandidates?.length ?? 0,
+          tankCandidates: inv.register?.assets?.filter((a) => a.kind === "tank").length ?? 0,
+          waterFlowVerified: false, databaseAssetsChanged: false,
+        }));
+        return;
+      }
       const reg = inv.register;
       if (reg) {
         // Rows from the drawing are replaced as a set; rows from the field
@@ -176,3 +188,4 @@ async function main() {
   }
 }
 main().catch(e => { annotate("error", "Map B derived job failed", e.message); console.error(e.message); process.exitCode = 1; });
+
