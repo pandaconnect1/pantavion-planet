@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { readWaterDiscoveryPage } from "@/core/infrastructure/water/water-discovery-stream";
 
 import { authorizeWaterMapRequest } from "@/core/security/water-map-request-access";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -97,26 +98,15 @@ export async function GET(request: NextRequest) {
   try {
     if (view === "discovery") {
       const sourceSha256 = "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16";
-      const file = await admin.storage.from("personal-media").download(`water-network-private/derived/map-b/${sourceSha256}/discovery.json`);
+      const file = await admin.storage.from("personal-media").download(`water-network-private/derived/map-b/${sourceSha256}/discovery.jsonl.gz`);
       if (file.error || !file.data) throw new Error("discovery_unavailable");
-      const report = JSON.parse(await file.data.text());
-      if (report.sourceSha256 !== sourceSha256) throw new Error("discovery_source_mismatch");
-      const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleUpperCase("el-GR");
-      const tokens = normalize((params.get("q") || "").slice(0, 120)).split(/\s+/).filter(Boolean);
-      const category = (params.get("category") || "").slice(0, 50);
-      type EvidenceRow = { category: string; label: string; layer: string; ref: string; off: boolean; frozen: boolean; registerNumbers: string[] };
-      const rows = (report.items ?? []).filter((row: EvidenceRow) =>
-        (!category || row.category === category) &&
-        (params.get("hidden") !== "1" || row.off || row.frozen) &&
-        (params.get("unmatched") !== "1" || !row.registerNumbers.length) &&
-        tokens.every((token) => normalize([row.label,row.layer,row.ref,...row.registerNumbers].join(" ")).includes(token)),
-      );
-      const offset = Math.max(0, Math.floor(Number(params.get("offset")) || 0));
-      const limit = Math.max(1, Math.min(200, Math.floor(Number(params.get("limit")) || 100)));
-      return NextResponse.json({ ok:true, sourceSha256, createdAt:report.createdAt, truth:report.truth,
-        summary:report.summary, extractorStats:report.extractorStats, layers:report.layers,
-        sykamCandidateRefs:report.sykamCandidateRefs, total:rows.length,offset,items:rows.slice(offset,offset+limit),
-      }, { headers:{"Cache-Control":"private, no-store"} });
+      const page = await readWaterDiscoveryPage(file.data,{
+        sourceSha256,q:(params.get("q")||"").slice(0,120),category:(params.get("category")||"").slice(0,50),
+        hidden:params.get("hidden")==="1",unmatched:params.get("unmatched")==="1",
+        offset:Math.max(0,Math.floor(Number(params.get("offset"))||0)),
+        limit:Math.max(1,Math.min(200,Math.floor(Number(params.get("limit"))||100))),signal:request.signal,
+      });
+      return NextResponse.json(page,{headers:{"Cache-Control":"private, no-store"}});
     }
 
     if (view === "supply-evidence") {
