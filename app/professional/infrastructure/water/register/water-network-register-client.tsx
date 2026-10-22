@@ -174,6 +174,7 @@ export default function WaterNetworkRegisterClient() {
           <a href="/professional/infrastructure/water" className="text-sm font-black text-amber-300">← Πίσω στην Ύδρευση</a>
           <p className="mt-3 text-xs font-black uppercase tracking-[0.3em] text-amber-300">Pantavion Water · Μητρώο Δικτύου</p>
           <a href="/professional/infrastructure/water/register/streets" target="_blank" rel="noopener noreferrer" className="mt-3 inline-block rounded-xl border border-sky-400 p-3 text-sky-200">Κατάλογος όλων των καταγεγραμμένων οδών ↗</a>
+          <a href="/professional/infrastructure/water/register/supply" target="_blank" rel="noopener noreferrer" className="ml-3 mt-3 inline-block rounded-xl border border-cyan-400 p-3 text-cyan-200">Δεξαμενές και στοιχεία τροφοδοσίας ↗</a>
           <h1 className="mt-2 text-3xl font-black">Μητρώο βανών SV και εξαρτημάτων</h1>
           <p className="mt-2 text-sm font-bold text-slate-300">
             Καταγραφές από το DWG Β. Ο αριθμός μητρώου και η αρχική ετικέτα SV εμφανίζονται χωριστά.
