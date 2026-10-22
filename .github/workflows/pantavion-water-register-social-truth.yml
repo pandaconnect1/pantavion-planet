@@ -31,3 +31,6 @@ jobs:
 
       - name: Test hidden layer and flow evidence audit
         run: node tests/water-hidden-layer-audit.test.mjs
+
+      - name: Test network evidence discovery
+        run: node tests/water-network-discovery.test.mjs
