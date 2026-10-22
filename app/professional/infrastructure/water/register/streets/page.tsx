@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 type Street = {
   id: string; name_el: string | null; name_lat: string | null;
@@ -55,7 +56,7 @@ export default function WaterStreetDirectoryPage() {
         <p className="mt-2 text-slate-300">Δήμος / κοινότητα → περιοχή → ζώνη → οδός. Περιλαμβάνει καταγεγραμμένες οδούς ανεξάρτητα από την ύπαρξη βάνας.</p>
         <p className="mt-2 text-amber-200">Η πληρότητα του καταλόγου δεν έχει ακόμη επιβεβαιωθεί. Κενά στοιχεία περιοχής ή ζώνης εμφανίζονται ως μη καταγεγραμμένα.</p>
       </header>
-      <a href="/professional/infrastructure/water/field/road" className="inline-block rounded-xl border border-emerald-400 p-3">+ Προσθήκη οδού σε νέα ή υπάρχουσα περιοχή</a>
+      <Link href="/professional/infrastructure/water/field/road" className="inline-block rounded-xl border border-emerald-400 p-3">+ Προσθήκη οδού σε νέα ή υπάρχουσα περιοχή</Link>
       <label className="block">Περιοχή / δήμος / χωριό
         <input value={locality} onChange={(e) => { setOffset(0); setLocality(e.target.value); }} placeholder="Όνομα περιοχής ή χωριού" className="mt-2 w-full rounded-xl border border-slate-600 bg-[#091426] p-3" />
       </label>
