@@ -22,6 +22,7 @@ function waterAccessHeaders(): Record<string, string> {
 
 export default function WaterStreetDirectoryPage() {
   const [q, setQ] = useState("");
+  const [locality, setLocality] = useState("");
   const [rows, setRows] = useState<Street[]>([]);
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
@@ -33,7 +34,7 @@ export default function WaterStreetDirectoryPage() {
     setRows([]); setTotal(0); setStatus("loading");
     const timer = setTimeout(async () => {
       try {
-        const p = new URLSearchParams({ view: "streets", q, offset: String(offset), limit: "200" });
+        const p = new URLSearchParams({ view: "streets", q, locality, offset: String(offset), limit: "200" });
         const response = await fetch(`/api/professional/infrastructure/water/register?${p}`, {
           credentials: "include", headers: waterAccessHeaders(), signal: controller.signal,
         });
@@ -44,16 +45,20 @@ export default function WaterStreetDirectoryPage() {
       } catch { if (!controller.signal.aborted) setStatus("error"); }
     }, 250);
     return () => { clearTimeout(timer); controller.abort(); };
-  }, [q, offset, version]);
+  }, [q, locality, offset, version]);
 
   return <main className="min-h-screen bg-[#050b16] p-4 text-white">
     <section className="mx-auto max-w-6xl space-y-5">
       <header className="rounded-3xl border border-slate-700 bg-[#091426] p-5">
         <a href="/professional/infrastructure/water/register" className="text-sky-200">← Μητρώο βανών SV</a>
-        <h1 className="mt-4 text-3xl font-bold">Αλφαβητικός κατάλογος οδών</h1>
+        <h1 className="mt-4 text-3xl font-bold">Οδοί επαρχίας Λεμεσού</h1>
         <p className="mt-2 text-slate-300">Δήμος / κοινότητα → περιοχή → ζώνη → οδός. Περιλαμβάνει καταγεγραμμένες οδούς ανεξάρτητα από την ύπαρξη βάνας.</p>
         <p className="mt-2 text-amber-200">Η πληρότητα του καταλόγου δεν έχει ακόμη επιβεβαιωθεί. Κενά στοιχεία περιοχής ή ζώνης εμφανίζονται ως μη καταγεγραμμένα.</p>
       </header>
+      <a href="/professional/infrastructure/water/field/road" className="inline-block rounded-xl border border-emerald-400 p-3">+ Προσθήκη οδού σε νέα ή υπάρχουσα περιοχή</a>
+      <label className="block">Περιοχή / δήμος / χωριό
+        <input value={locality} onChange={(e) => { setOffset(0); setLocality(e.target.value); }} placeholder="Όνομα περιοχής ή χωριού" className="mt-2 w-full rounded-xl border border-slate-600 bg-[#091426] p-3" />
+      </label>
       <label className="block">Αναζήτηση οδού, δήμου, περιοχής ή ζώνης
         <input value={q} onChange={(e) => { setOffset(0); setQ(e.target.value); }} placeholder="Γράψε όνομα οδού ή περιοχής" className="mt-2 w-full rounded-xl border border-slate-600 bg-[#091426] p-3" />
       </label>
