@@ -14,7 +14,7 @@ function category(text, layer, block = false) {
   if (/ZONE|AREA|ΠΕΡΙΟΧ|ΖΩΝΗ|ΣΥΚΑΜ|SYKAM|SIKAM|ΑΘΑΝΑΣ|ATHANAS/.test(s)) return "area";
   return block ? "unclassified_block" : null;
 }
-export function buildWaterNetworkDiscovery({ texts = [], blockRefs = [], segments = [], layers = [], register = {}, stats = {}, duplicateCutoff = Infinity }) {
+export function buildWaterNetworkDiscovery({ texts = [], blockRefs = [], segments = [], leaders = [], layers = [], register = {}, stats = {}, duplicateCutoff = Infinity }) {
   const registered = new Map();
   const position = (x,y,layer) => `${Number(x).toFixed(2)}|${Number(y).toFixed(2)}|${layer}`;
   for (const a of register.assets ?? []) {
@@ -31,6 +31,13 @@ export function buildWaterNetworkDiscovery({ texts = [], blockRefs = [], segment
   };
   texts.forEach((t,i) => { const c=category(t[4],layers[t[2]]?.name); if(c) add(c,`text:${i}`,t[0],t[1],t[2],t[4]); });
   blockRefs.forEach((b,i) => add(category(b[3],layers[b[2]]?.name,true),`block:${i}`,b[0],b[1],b[2],b[3],{drawingOrientation:b[4] ?? null}));
+  leaders.forEach((leader,i) => {
+    const p=leader.vertices?.[0];
+    if(p) add("leader",`leader:${i}`,p[0],p[1],leader.layerId,"LEADER",{
+      sourceHandle:leader.sourceHandle,vertices:leader.vertices,arrowheadEnabled:leader.arrowheadEnabled,
+      hydraulicDirectionVerified:false,
+    });
+  });
   const layerCounts = layers.map((l,id) => ({ id, name:l.name,off:Boolean(l.off),frozen:Boolean(l.frozen),segments:0,texts:0,blocks:0 }));
   for (const s of segments) if(layerCounts[s[4]]) layerCounts[s[4]].segments++;
   for (const t of texts) if(layerCounts[t[2]]) layerCounts[t[2]].texts++;
@@ -40,7 +47,7 @@ export function buildWaterNetworkDiscovery({ texts = [], blockRefs = [], segment
   const sykam = items.filter(r=>/ΣΥΚΑΜ|ΣΗΚΑΜ|SYKAM|SIKAM|ΑΝΔΡΕΑ.*ΠΑΠΑΔΟΠΟΥΛ|ANDREA.*PAPADOPOUL/.test(key(`${r.label} ${r.layer}`))).map(r=>r.ref);
   return {schemaVersion:"water-network-discovery-v1",createdAt:new Date().toISOString(),
     truth:{sourceEvidenceOnly:true,geographicAlignmentVerified:false,hydraulicConnectivityVerified:false,canonicalMutation:false,physicalAssetCountsVerified:false},
-    summary:{sourceTexts:texts.length,sourceBlocks:blockRefs.length,layers:layers.length,evidence:items.length,categories:counts,
+    summary:{sourceTexts:texts.length,sourceBlocks:blockRefs.length,sourceLeaders:leaders.length,layers:layers.length,evidence:items.length,categories:counts,
       hiddenEvidence:items.filter(r=>r.off||r.frozen).length,beyondPriorCutoff:items.filter(r=>r.beyondPriorCutoff).length,
       unmatchedEvidence:items.filter(r=>!r.registerNumbers.length).length},
     extractorStats:stats, layers:layerCounts, sykamCandidateRefs:sykam,items};
