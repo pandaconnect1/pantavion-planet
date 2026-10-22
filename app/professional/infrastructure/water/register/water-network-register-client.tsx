@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import WaterFieldAdditions from "./water-field-additions";
 import { collectWaterRegisterPrintRows } from "@/core/infrastructure/water/water-register-print";
 
 type Area = { code: string; outline: "closed" | "hull"; area_m2: number; centroid_x: number; centroid_y: number; group_name: string | null };
@@ -186,6 +187,8 @@ export default function WaterNetworkRegisterClient() {
             Το μητρώο είναι διαθέσιμο μόνο σε εγκεκριμένες συσκευές Ύδρευσης.
           </p>
         ) : null}
+
+        <WaterFieldAdditions />
 
         {areaError ? <p role="alert" className="text-amber-200">Ο κατάλογος περιοχών και ζωνών δεν φορτώθηκε. Ανανεώστε τη σελίδα για επανάληψη.</p> : null}
 
