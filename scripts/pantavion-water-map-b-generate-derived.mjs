@@ -68,6 +68,7 @@ const repoRoot = path.resolve(__dirname, "..");
 // the valve/tank register and the area split are built from; nothing here is
 // guessed, every entry points back to a layer, block or text of the source.
 const INVENTORY_KEYWORDS = {
+  flow_reference: /ΡΟΗ|ΚΑΤΕΥΘΥΝ|ΤΡΟΦΟΔ|ΥΔΡΟΔΟΤ|ΕΙΣΑΓΩΓ|ΕΞΑΓΩΓ|FLOW|DIRECTION|SUPPLY|INLET|OUTLET|FEED/i,
   tank: /ΔΕΞΑΜΕΝ|DEXAMEN|TANK|RESERVOIR|ΔΕΞ\./i,
   valve: /ΒΑΝ[ΑΕΙ]|ΒΑΛΒ|VALVE|VALV|\bBANA|\bG\.?V\b|\bS\.?V\b|ΔΙΚΛΙΔ/i,
   hydrant: /ΥΔΡΟΣΤΟΜ|ΠΥΡΟΣΒ|HYDRANT|\bF\.?H\b/i,
@@ -342,7 +343,7 @@ function buildNetworkInventory({ segments, texts, blockRefs, points, layers, sty
   const byLayer = new Map();
   const layerRow = (id) => {
     let r = byLayer.get(id);
-    if (!r) { r = { layer: layerName(id), segments: 0, blocks: 0, texts: 0, points: 0, minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity }; byLayer.set(id, r); }
+    if (!r) { r = { layer: layerName(id), sourceOff: layers[id]?.off ?? null, sourceFrozen: layers[id]?.frozen ?? null, segments: 0, blocks: 0, texts: 0, points: 0, minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity }; byLayer.set(id, r); }
     return r;
   };
   const grow = (r, x, y) => {
@@ -402,6 +403,18 @@ function buildNetworkInventory({ segments, texts, blockRefs, points, layers, sty
   const pinkDashedLayers = styleRows.filter((r) => r.pinkDashed > 0).sort((a, b) => b.pinkDashed - a.pinkDashed);
 
   return {
+    coverage: {
+      hiddenLayersIncluded: true,
+      unrepresentedLayers: layers.filter((_, id) => !byLayer.has(id)).map((l) => ({ name: l.name, off: l.off ?? null, frozen: l.frozen ?? null })),
+      directionOfWaterFlowVerified: false,
+      supplyAreasVerified: false,
+    },
+    flowEvidence: {
+      labelCandidates: texts.filter((t) => INVENTORY_KEYWORDS.flow_reference.test(String(t[4] || "").normalize("NFD").replace(/[\u0300-\u036f]/g, ""))).map((t) => ({ text: String(t[4]), layer: layerName(t[2]), x: t[0], y: t[1] })),
+      symbolCandidates: blockRefs.filter((b) => /ARROW|FLOW|DIRECTION|ΒΕΛΟΣ|ΡΟΗ/i.test(String(b[3] || ""))).map((b) => ({ block: b[3], layer: layerName(b[2]), x: b[0], y: b[1] })),
+      verifiedConnections: [],
+      candidateSymbolOrientationIsNotVerifiedWaterFlow: true,
+    },
     pinkDashedLayers,
     layerStyles: styleRows.sort((a, b) => b.total - a.total),
     totals: { segments: segments.length, texts: texts.length, blockRefs: blockRefs.length, points: points.length, layers: layers.length, blockNames: blocks.size },
@@ -1448,3 +1461,4 @@ main().catch((error) => {
   );
   process.exit(1);
 });
+
