@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { pantavionWaterApprovedDeviceHeaders } from "@/core/water/water-approved-device-client";
 
 type Addition = { patch_id: string; asset_type: string; street_name: string | null; area: string | null; status: string; created_at: string; attributes?: { zone?: string; officialAssetId?: string } };
@@ -33,7 +34,7 @@ export default function WaterFieldAdditions() {
     .sort((a, b) => [a.area, a.street_name, a.patch_id].join(" ").localeCompare([b.area, b.street_name, b.patch_id].join(" "), "el"));
   return <section className="space-y-3 rounded-2xl border border-slate-700 p-4">
     <h2 className="text-xl font-bold">Προσθήκες πεδίου</h2>
-    <div className="flex flex-wrap gap-3">{[["road", "Νέα οδός"], ["network-extension", "Νέο δίκτυο"], ["valve", "Νέα βάνα"]].map(([path, label]) => <a key={path} href={`/professional/infrastructure/water/field/${path}`} className="rounded-xl border border-emerald-400 p-3">+ {label}</a>)}</div>
+    <div className="flex flex-wrap gap-3">{[["road", "Νέα οδός"], ["network-extension", "Νέο δίκτυο"], ["valve", "Νέα βάνα"]].map(([path, label]) => <Link key={path} href={`/professional/infrastructure/water/field/${path}`} className="rounded-xl border border-emerald-400 p-3">+ {label}</Link>)}</div>
     <p>Επιτρέπεται ελεύθερη καταχώριση περιοχής, χωριού, ζώνης και οδού. Κάθε προσθήκη παίρνει μοναδικό αριθμό καταγραφής. Ο επίσημος SV δηλώνεται χωριστά, αν είναι γνωστός.</p>
     <button type="button" aria-expanded={open} onClick={() => setOpen(!open)} className="rounded-xl border p-3">Πρόσφατες διαθέσιμες προσθήκες {open ? "▴" : "▾"}</button>
     {open ? <>
