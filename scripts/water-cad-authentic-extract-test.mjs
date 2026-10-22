@@ -50,3 +50,6 @@ console.log(JSON.stringify(r.stats));
 
 const orientation = r.blockRefs[0]?.[4];
 assert(orientation && Math.abs(orientation.worldXAxis[0]) < 1e-9 && Math.abs(orientation.worldXAxis[1] - 2) < 1e-9 && orientation.waterFlowVerified === false, "block axis preserved as evidence without claiming hydraulic direction");
+
+const leaderResult = extractAuthentic({header:{},tables:{},entities:[{type:"LEADER",layer:"0",vertices:[{x:1,y:2},{x:3,y:4}],isArrowheadEnabled:true,handle:"AB"}]});
+assert(leaderResult.leaders.length === 1 && leaderResult.leaders[0].sourceHandle === "AB" && leaderResult.leaders[0].vertices[1][0] === 3 && leaderResult.leaders[0].waterFlowVerified === false, "LEADER vertices and arrowhead flag preserved without hydraulic claim");
