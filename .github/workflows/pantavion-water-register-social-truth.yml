@@ -34,3 +34,6 @@ jobs:
 
       - name: Test network evidence discovery
         run: node tests/water-network-discovery.test.mjs
+
+      - name: Test full streamed drawing catalogue
+        run: node --no-warnings --experimental-strip-types tests/water-discovery-stream.test.mjs
