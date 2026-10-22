@@ -145,7 +145,19 @@ export async function GET(request: NextRequest) {
     const kind = params.get("kind");
     if (kind && KINDS.has(kind)) query = query.eq("kind", kind);
     const street = params.get("street");
-    if (street) query = query.eq("street", street);
+    if (street) {
+      const cleanedStreet = street.replace(/[^\p{L}\p{N}\s-]/gu, " ").trim().slice(0, 60);
+      if (cleanedStreet) query = query.or(searchTerms(cleanedStreet).map((t) => `street_key.ilike.%${t}%`).join(","));
+    }
+    const sv = (params.get("sv") || "").replace(/[^\p{L}\p{N}\s-]/gu, " ").trim().slice(0, 60);
+    if (sv) {
+      const rawNumber = sv.replace(/^SV[\s-]*/i, "");
+      const tags = [...new Set([sv, rawNumber, `SV${rawNumber}`, `SV ${rawNumber}`, `SV-${rawNumber}`])];
+      const clauses = tags.map((tag) => `tag.ilike.${tag}`);
+      clauses.push(`number.ilike.${sv}`);
+      for (const candidate of waterRegisterNumberCandidates(sv)) clauses.push(`number.eq.${candidate}`);
+      query = query.or(clauses.join(","));
+    }
     const q = (params.get("q") || "")
       .trim()
       .replace(/[^\p{L}\p{N}\s_-]/gu, " ")
