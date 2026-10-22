@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import WaterDrawingDiscovery from "../water-drawing-discovery";
 
 type Street = {
   id: string; name_el: string | null; name_lat: string | null;
@@ -22,6 +23,7 @@ function waterAccessHeaders(): Record<string, string> {
 
 
 export default function WaterStreetDirectoryPage() {
+  const [showDiscovery, setShowDiscovery] = useState(false);
   const [q, setQ] = useState("");
   const [locality, setLocality] = useState("");
   const [rows, setRows] = useState<Street[]>([]);
@@ -63,6 +65,8 @@ export default function WaterStreetDirectoryPage() {
       <label className="block">Αναζήτηση οδού, δήμου, περιοχής ή ζώνης
         <input value={q} onChange={(e) => { setOffset(0); setQ(e.target.value); }} placeholder="Γράψε όνομα οδού ή περιοχής" className="mt-2 w-full rounded-xl border border-slate-600 bg-[#091426] p-3" />
       </label>
+      <button type="button" aria-expanded={showDiscovery} onClick={() => setShowDiscovery(v => !v)} className="rounded-xl border border-emerald-400 p-3">Οδοί από το DWG {showDiscovery ? "▴" : "▾"}</button>
+      {showDiscovery ? <WaterDrawingDiscovery initialCategory="street" queryValue={q} onQueryChange={setQ} /> : null}
       <p role="status" aria-live="polite">{status === "loading" ? "Φόρτωση…" : status === "denied" ? "Απαιτείται εγκεκριμένη πρόσβαση Ύδρευσης." : status === "error" ? "Ο κατάλογος δεν φορτώθηκε." : `${total} καταγεγραμμένες οδοί · ${rows.length ? offset + 1 : 0}–${offset + rows.length}`}</p>
       {status === "error" ? <button type="button" onClick={() => setVersion((v) => v + 1)} className="rounded-xl border p-3">Επανάληψη</button> : null}
       {status === "ready" && !rows.length ? <p>Δεν βρέθηκαν καταγεγραμμένες οδοί με αυτή την αναζήτηση.</p> : null}
