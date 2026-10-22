@@ -19,3 +19,6 @@ await assert.rejects(()=>readWaterDiscoveryPage(new Blob([gzipSync('invalid-json
 const controller=new AbortController();controller.abort();
 await assert.rejects(()=>readWaterDiscoveryPage(file(),{...options,signal:controller.signal}),/aborted/);
 console.log('PASS: bounded page collection, exact global counts, Greek accent search, hidden/unmatched filters, wrong source and incomplete/corrupt records rejected');
+
+result=await readWaterDiscoveryPage(file([{recordType:'item',ref:'street:1',category:'street',label:'Andrea Papadopoulou',layer:'Street_names',off:false,frozen:false,registerNumbers:[]}],{sourceSha256:sha,summary:{evidence:1},recordType:'metadata'}),{...options,offset:0,q:'Ανδρέα Παπαδοπούλου',matchTerms:[['ΑΝΔΡΕΑ','ANDREA'],['ΠΑΠΑΔΟΠΟΥΛΟΥ','PAPADOPOULOU']]});
+assert.equal(result.total,1,'Greek search alternatives must match Latin drawing labels');
