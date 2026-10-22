@@ -30,7 +30,7 @@ function builder(table) {
 globalThis.__waterRegisterTest={
   NextResponse:{json:(body,options={})=>({body,status:options.status||200})},
   authorize:async()=>allowed?{ok:true}:{ok:false,error:'denied'},
-  admin:()=>({from:builder,rpc:async()=>({data:[],error:null}),storage:{from:()=>({download:async()=>({data:{text:async()=>JSON.stringify({sourceSha256:inventorySha,register:{assets:[{kind:'tank',number:'T1'},{kind:'valve',number:'V1'}]},layers:[{layer:'hidden',sourceOff:true},{layer:'visible',sourceOff:false}],flowEvidence:{labelCandidates:[],symbolCandidates:[]},rawPrivateField:'not exposed'})},error:null})})}}),
+  admin:()=>({from:builder,rpc:async()=>({data:[],error:null}),storage:{from:()=>({download:async()=>({data:{text:async()=>JSON.stringify({sourceSha256:inventorySha,register:{assets:[{kind:'tank',number:'T1'},{kind:'valve',number:'V1'}]},layers:[{layer:'hidden',sourceOff:true},{layer:'visible',sourceOff:false}],flowEvidence:{labelCandidates:[],symbolCandidates:[]},items:[{category:'street',label:'ALPHA',layer:'ROAD',ref:'text:0',off:true,frozen:false,registerNumbers:[]},{category:'valve',label:'V',layer:'V',ref:'block:0',off:false,frozen:false,registerNumbers:['V1']}],summary:{evidence:2},rawPrivateField:'not exposed'})},error:null})})}}),
 };
 let source=readFileSync('app/api/professional/infrastructure/water/register/route.ts','utf8')
   .replace(/import \{ NextRequest, NextResponse \} from "next\/server";/,'const {NextResponse}=globalThis.__waterRegisterTest;')
@@ -82,6 +82,10 @@ assert.equal(r.body.tanks.length,1);
 assert.equal(r.body.hiddenLayers.length,1);
 assert.equal(r.body.rawPrivateField,undefined,'return selected evidence only');
 assert.equal(r.body.fullCoverageVerified,false);
+r=await GET(request('view=discovery&category=street&hidden=1&unmatched=1&q=ALPHA'));
+assert.equal(r.body.items.length,1);
+assert.equal(r.body.total,1);
+assert.equal(r.body.rawPrivateField,undefined);
 inventorySha='wrong-source';
 assert.equal((await GET(request('view=supply-evidence'))).status,500,'mismatched drawing inventory must not be exposed');
 fail=true;
