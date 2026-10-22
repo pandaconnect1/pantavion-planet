@@ -2505,6 +2505,10 @@ export default function ControlledWaterSegmentClient() {
               {loading ? t.loading : lang === "el" ? "Φόρτωση δικτύου" : "Load network"}
             </button>
 
+            <a href="/professional/infrastructure/water/register" target="_blank" rel="noopener noreferrer" className="rounded-2xl border border-sky-400/60 bg-sky-400/15 px-5 py-3 text-sm font-black text-sky-100">
+              {lang === "el" ? "Μητρώο SV ↗" : "SV register ↗"}
+            </a>
+
             <button type="button" onClick={() => setWorkPanelOpen((value) => !value)} className="rounded-2xl border border-amber-400/60 bg-amber-400/15 px-5 py-3 text-sm font-black text-amber-100">
               {lang === "el" ? "Εργασία" : "Work"}
             </button>
