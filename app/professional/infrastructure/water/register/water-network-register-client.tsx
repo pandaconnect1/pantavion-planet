@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import WaterFieldAdditions from "./water-field-additions";
+import WaterDrawingDiscovery from "./water-drawing-discovery";
 import { collectWaterRegisterPrintRows } from "@/core/infrastructure/water/water-register-print";
 
 type Area = { code: string; outline: "closed" | "hull"; area_m2: number; centroid_x: number; centroid_y: number; group_name: string | null };
@@ -34,6 +35,7 @@ function waterAccessHeaders(): Record<string, string> {
 const fmt = (v: number) => new Intl.NumberFormat("el-GR").format(v);
 
 export default function WaterNetworkRegisterClient() {
+  const [showDiscovery, setShowDiscovery] = useState(false);
   const [areas, setAreas] = useState<Area[]>([]);
   const [areaError, setAreaError] = useState(false);
   const [counts, setCounts] = useState<Count[]>([]);
@@ -190,6 +192,8 @@ export default function WaterNetworkRegisterClient() {
         ) : null}
 
         <WaterFieldAdditions />
+        <button type="button" aria-expanded={showDiscovery} onClick={() => setShowDiscovery(v => !v)} className="rounded-xl border border-emerald-400 p-3">Στοιχεία DWG και έλεγχος παραλείψεων {showDiscovery ? "▴" : "▾"}</button>
+        {showDiscovery ? <WaterDrawingDiscovery queryValue={q || street || sv} onQueryChange={value => { setQ(value); setStreet(""); setSv(""); }} /> : null}
 
         {areaError ? <p role="alert" className="text-amber-200">Ο κατάλογος περιοχών και ζωνών δεν φορτώθηκε. Ανανεώστε τη σελίδα για επανάληψη.</p> : null}
 
