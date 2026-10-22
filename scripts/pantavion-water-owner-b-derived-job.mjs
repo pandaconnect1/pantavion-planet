@@ -102,6 +102,10 @@ async function main() {
       );
       if (discoveryUpload.error) throw Error("discovery_upload_failed: " + discoveryUpload.error.message);
       annotate("notice", "Full drawing evidence discovery", JSON.stringify({ ...discovery.summary, sykamCandidates: discovery.sykamCandidateRefs.length, notReproduced: discovery.extractorStats.notReproduced }));
+      const sykamRefs = new Set(discovery.sykamCandidateRefs);
+      annotate("notice", "Sykaminou text-match candidates (not verified site identification)", JSON.stringify(
+        discovery.items.filter((item) => sykamRefs.has(item.ref)).map((item) => ({ ref:item.ref, category:item.category, label:item.label, layer:item.layer, registerNumbers:item.registerNumbers })),
+      ));
 
       // GitHub keeps only 10 notices per step: the register, boundary and
       // water-layer findings go first.
