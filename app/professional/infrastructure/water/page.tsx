@@ -134,6 +134,7 @@ export default function WaterControlCenterPage() {
   return (
     <>
       <WaterMapNavigation title="Water Professional Control Center" />
+      <nav aria-label="Μητρώο βανών" className="bg-[#06101f] px-4 py-3 text-white print:hidden"><a href="/professional/infrastructure/water/register" target="_blank" rel="noopener noreferrer" className="inline-block rounded-xl border border-sky-400 px-4 py-3 font-bold text-sky-200">Μητρώο βανών SV · Αναζήτηση και εκτύπωση ↗</a></nav>
 
       <main className="min-h-screen bg-[#06101f] px-3 py-5 text-white sm:px-4 sm:py-6">
         <section className="mx-auto max-w-7xl rounded-[2rem] border border-[#d8b45f]/40 bg-[#0a1629] p-5 shadow-2xl shadow-black/40 md:p-8">
