@@ -193,7 +193,7 @@ export default function MasterBMobilePage() {
   const [layerQuery, setLayerQuery] = useState("");
   const [selectedDrawingPoint, setSelectedDrawingPoint] = useState<{ x: number; y: number } | null>(null);
   const [canvasStats, setCanvasStats] = useState<CanvasStats | null>(null);
-  const [showHiddenLayers, setShowHiddenLayers] = useState(false);
+  const [showHiddenLayers, setShowHiddenLayers] = useState(true);
   const [lineweightOverride, setLineweightOverride] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -465,7 +465,7 @@ export default function MasterBMobilePage() {
                     onClick={() => setShowHiddenLayers((v) => !v)}
                     className={`rounded-lg border px-3 py-1.5 text-xs font-black ${showHiddenLayers ? "border-[#f2c766] bg-[#f2c766] text-black" : "border-slate-600 text-slate-200"}`}
                   >
-                    {showHiddenLayers ? "Κρυφά επίπεδα: εμφανή" : "Κρυφά επίπεδα (frozen/off): κρυμμένα όπως στο AutoCAD"}
+                    {showHiddenLayers ? "Παγωμένα / σβηστά επίπεδα: ανοικτά" : "Παγωμένα / σβηστά επίπεδα: κρυμμένα"}
                   </button>
                 </div>
               </div>
