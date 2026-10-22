@@ -3,7 +3,7 @@ import { createGunzip } from "node:zlib";
 import { createInterface } from "node:readline";
 
 type DiscoveryRow = {ref:string;category:string;label:string;layer:string;off:boolean;frozen:boolean;registerNumbers:string[]} & Record<string,unknown>;
-type Options = {sourceSha256:string;q:string;category:string;hidden:boolean;unmatched:boolean;offset:number;limit:number;signal?:AbortSignal};
+type Options = {sourceSha256:string;q:string;category:string;hidden:boolean;unmatched:boolean;offset:number;limit:number;matchTerms?:string[][];signal?:AbortSignal};
 const normalized=(value:string)=>value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleUpperCase("el-GR");
 export async function readWaterDiscoveryPage(blob:Blob, options:Options) {
   const input=Readable.fromWeb(blob.stream() as Parameters<typeof Readable.fromWeb>[0]);
@@ -13,7 +13,7 @@ export async function readWaterDiscoveryPage(blob:Blob, options:Options) {
   let metadata:Record<string,unknown>|null=null;
   const items:DiscoveryRow[]=[];
   let total=0, seen=0;
-  const tokens=normalized(options.q).split(/\s+/).filter(Boolean);
+  const terms=options.matchTerms??normalized(options.q).split(/\s+/).filter(Boolean).map(t=>[t]);
   try {
     for await(const line of lines) {
       if(options.signal?.aborted) throw new Error("discovery_read_aborted");
@@ -27,7 +27,7 @@ export async function readWaterDiscoveryPage(blob:Blob, options:Options) {
       if(options.category&&row.category!==options.category)continue;
       if(options.hidden&&!row.off&&!row.frozen)continue;
       if(options.unmatched&&row.registerNumbers.length)continue;
-      if(tokens.length&&!tokens.every(t=>normalized([row.label,row.layer,row.ref,...row.registerNumbers].join(" ")).includes(t)))continue;
+      if(terms.length){const searchable=normalized([row.label,row.layer,row.ref,...row.registerNumbers].join(" "));if(!terms.every(group=>group.some(t=>searchable.includes(normalized(t)))))continue;}
       if(total>=options.offset&&items.length<options.limit)items.push(row);
       total++;
     }
