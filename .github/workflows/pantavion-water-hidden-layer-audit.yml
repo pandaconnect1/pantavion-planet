@@ -8,6 +8,7 @@ on:
       - ".github/workflows/pantavion-water-hidden-layer-audit.yml"
       - "scripts/pantavion-water-map-b-generate-derived.mjs"
       - "scripts/water-network-discovery.mjs"
+      - "scripts/water-sykaminou-public-evidence.py"
   push:
     branches: [fix/limassol-register-coverage-20261022]
     paths:
@@ -22,6 +23,20 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  published-sykaminou-location:
+    name: Decode published Sykaminou invitation location QR
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install public-image QR decoder
+        run: python -m pip install pillow zxing-cpp
+      - name: Read public invitation QR without claiming verified georeference
+        run: python scripts/water-sykaminou-public-evidence.py
+
   derive-authentic-water-maps:
     name: Audit all Map B layers without changing network assets
     runs-on: ubuntu-latest
