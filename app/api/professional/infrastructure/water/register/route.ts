@@ -95,6 +95,25 @@ export async function GET(request: NextRequest) {
   const admin = createAdminClient();
 
   try {
+    if (view === "supply-evidence") {
+      const sourceSha256 = "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16";
+      const file = await admin.storage.from("personal-media").download(
+        `water-network-private/derived/map-b/${sourceSha256}/inventory.json`,
+      );
+      if (file.error || !file.data) throw new Error("supply_inventory_unavailable");
+      const inventory = JSON.parse(await file.data.text());
+      if (inventory.sourceSha256 !== sourceSha256) throw new Error("supply_inventory_source_mismatch");
+      return NextResponse.json({
+        ok: true, sourceSha256,
+        totals: inventory.totals,
+        coverage: inventory.coverage ?? { directionOfWaterFlowVerified: false, supplyAreasVerified: false },
+        hiddenLayers: (inventory.layers ?? []).filter((l: { sourceOff?: boolean; sourceFrozen?: boolean }) => l.sourceOff || l.sourceFrozen),
+        tanks: (inventory.register?.assets ?? []).filter((a: { kind: string }) => a.kind === "tank"),
+        flowEvidence: inventory.flowEvidence ?? { labelCandidates: [], symbolCandidates: [], verifiedConnections: [] },
+        fullCoverageVerified: false,
+      }, { headers: { "Cache-Control": "private, no-store" } });
+    }
+
     if (view === "streets") {
       const offset = Math.max(0, Math.floor(Number(params.get("offset")) || 0));
       const limit = Math.max(1, Math.min(500, Math.floor(Number(params.get("limit")) || 200)));
