@@ -5,6 +5,7 @@ on:
       - 'core/pantavion/route-status-registry.ts'
       - 'core/pantavion/product-family-taxonomy.ts'
       - 'tests/pantavion-route-registry-integrity.test.mjs'
+      - 'tests/pantavion-sensitive-route-release-safety.test.mjs'
       - '.github/workflows/pantavion-route-registry-integrity.yml'
   workflow_dispatch:
 jobs:
@@ -18,4 +19,6 @@ jobs:
         with:
           node-version: '22'
       - name: Validate registry links (not production readiness)
-        run: node tests/pantavion-route-registry-integrity.test.mjs
+        run: |
+          node tests/pantavion-route-registry-integrity.test.mjs
+          node tests/pantavion-sensitive-route-release-safety.test.mjs
