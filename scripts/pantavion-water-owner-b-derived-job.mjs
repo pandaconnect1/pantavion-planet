@@ -94,6 +94,15 @@ async function main() {
       });
       if (up.error) throw Error("inventory_upload_failed: " + up.error.message);
       const inv = JSON.parse(String(body));
+      const discoveryBody = readFileSync(join(work, "inventory.json.discovery.json"));
+      const discovery = JSON.parse(String(discoveryBody));
+      const discoveryUpload = await admin.storage.from("personal-media").upload(
+        "water-network-private/derived/map-b/" + source.sha256 + "/discovery.json", discoveryBody,
+        { upsert: true, contentType: "application/json", cacheControl: "0" },
+      );
+      if (discoveryUpload.error) throw Error("discovery_upload_failed: " + discoveryUpload.error.message);
+      annotate("notice", "Full drawing evidence discovery", JSON.stringify({ ...discovery.summary, sykamCandidates: discovery.sykamCandidateRefs.length, notReproduced: discovery.extractorStats.notReproduced }));
+
       // GitHub keeps only 10 notices per step: the register, boundary and
       // water-layer findings go first.
       if (process.env.PANTAVION_WATER_INVENTORY_READ_ONLY === "YES") {
