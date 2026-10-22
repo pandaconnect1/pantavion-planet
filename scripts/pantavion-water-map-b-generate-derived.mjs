@@ -411,7 +411,7 @@ function buildNetworkInventory({ segments, texts, blockRefs, points, layers, sty
     },
     flowEvidence: {
       labelCandidates: texts.filter((t) => INVENTORY_KEYWORDS.flow_reference.test(String(t[4] || "").normalize("NFD").replace(/[\u0300-\u036f]/g, ""))).map((t) => ({ text: String(t[4]), layer: layerName(t[2]), x: t[0], y: t[1] })),
-      symbolCandidates: blockRefs.filter((b) => /ARROW|FLOW|DIRECTION|ΒΕΛΟΣ|ΡΟΗ/i.test(String(b[3] || ""))).map((b) => ({ block: b[3], layer: layerName(b[2]), x: b[0], y: b[1] })),
+      symbolCandidates: blockRefs.filter((b) => /ARROW|FLOW|DIRECTION|ΒΕΛΟΣ|ΡΟΗ/i.test(String(b[3] || ""))).map((b) => ({ block: b[3], layer: layerName(b[2]), x: b[0], y: b[1], drawingOrientation: b[4] ?? null })),
       verifiedConnections: [],
       candidateSymbolOrientationIsNotVerifiedWaterFlow: true,
     },
