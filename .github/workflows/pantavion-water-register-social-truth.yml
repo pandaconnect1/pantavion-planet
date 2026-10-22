@@ -22,3 +22,9 @@ jobs:
           node-version: 22
       - name: Test numeric register lookup and Social readiness
         run: node --no-warnings --experimental-strip-types tests/pantavion-water-register-search.test.mjs
+
+      - name: Test register API behavior
+        run: node --no-warnings --experimental-strip-types tests/water-register-api-behavior.test.mjs
+
+      - name: Test complete and filtered print collection
+        run: node --no-warnings --experimental-strip-types tests/water-register-print.test.mjs
