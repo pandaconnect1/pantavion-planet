@@ -46,3 +46,7 @@ assert(tx && tx[5] === 1.5 && Math.abs(tx[6] - 0.3) < 1e-9 && r.styles[tx[3]].c 
 const mt = r.texts.find((t) => t[4].includes("\n"));
 assert(mt && mt[4] === "A\nB", "MTEXT keeps line break, strips font code: " + JSON.stringify(mt && mt[4]));
 console.log(JSON.stringify(r.stats));
+
+
+const orientation = r.blockRefs[0]?.[4];
+assert(orientation && Math.abs(orientation.worldXAxis[0]) < 1e-9 && Math.abs(orientation.worldXAxis[1] - 2) < 1e-9 && orientation.waterFlowVerified === false, "block axis preserved as evidence without claiming hydraulic direction");

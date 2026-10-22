@@ -28,3 +28,6 @@ jobs:
 
       - name: Test complete and filtered print collection
         run: node --no-warnings --experimental-strip-types tests/water-register-print.test.mjs
+
+      - name: Test hidden layer and flow evidence audit
+        run: node tests/water-hidden-layer-audit.test.mjs

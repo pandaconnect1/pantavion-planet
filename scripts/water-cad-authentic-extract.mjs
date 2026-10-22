@@ -646,7 +646,21 @@ export function extractAuthentic(database) {
         const block = blocks.get(String(e.name || ""));
         if (type === "INSERT") {
           const ip = p2(e.insertionPoint);
-          if (ip) { const w = apply(withOcs(t, e, 0), ip); blockRefs.push([w.x, w.y, layerId, String(e.name || "")]); }
+          if (ip) {
+            const transform = withOcs(t, e, 0);
+            const w = apply(transform, ip);
+            const rotation = num(e.rotation);
+            const sx = num(e.xScale, 1) || 1;
+            // Preserve the transformed block X axis as drawing evidence only.
+            // The block's legend must establish which axis represents flow.
+            const ux = Math.cos(rotation) * sx, uy = Math.sin(rotation) * sx;
+            blockRefs.push([w.x, w.y, layerId, String(e.name || ""), {
+              sourceHandle: e.handle == null ? null : String(e.handle),
+              rotationRadians: rotation,
+              worldXAxis: [transform.a * ux + transform.c * uy, transform.b * ux + transform.d * uy],
+              waterFlowVerified: false,
+            }]);
+          }
         }
         if (!block || !Array.isArray(block.entities)) { bump(stats.notReproduced, `${type}_MISSING_BLOCK`); return; }
         const childInherit = { color: r.color, lineType: r.lineType, lw: r.lw, ltsFactor: inherited.ltsFactor };
@@ -708,3 +722,4 @@ export function extractAuthentic(database) {
     stats,
   };
 }
+

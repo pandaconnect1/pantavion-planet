@@ -6,6 +6,7 @@ import { stripTypeScriptTypes } from 'node:module';
 const calls = [];
 let allowed = true;
 let fail = false;
+let inventorySha = "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16";
 const rows = [
   {number:'224-V0002',area_code:'224',street:'ΒΗΤΑ',tag:'SV 2'},
   {number:'123-V0001',area_code:'123',street:'ΑΛΦΑ',tag:'SV 1'},
@@ -29,7 +30,7 @@ function builder(table) {
 globalThis.__waterRegisterTest={
   NextResponse:{json:(body,options={})=>({body,status:options.status||200})},
   authorize:async()=>allowed?{ok:true}:{ok:false,error:'denied'},
-  admin:()=>({from:builder,rpc:async()=>({data:[],error:null})}),
+  admin:()=>({from:builder,rpc:async()=>({data:[],error:null}),storage:{from:()=>({download:async()=>({data:{text:async()=>JSON.stringify({sourceSha256:inventorySha,register:{assets:[{kind:'tank',number:'T1'},{kind:'valve',number:'V1'}]},layers:[{layer:'hidden',sourceOff:true},{layer:'visible',sourceOff:false}],flowEvidence:{labelCandidates:[],symbolCandidates:[]},rawPrivateField:'not exposed'})},error:null})})}}),
 };
 let source=readFileSync('app/api/professional/infrastructure/water/register/route.ts','utf8')
   .replace(/import \{ NextRequest, NextResponse \} from "next\/server";/,'const {NextResponse}=globalThis.__waterRegisterTest;')
@@ -72,6 +73,17 @@ assert(expressions.some(c=>c.includes('tag.ilike.SV 123')));
 assert(!expressions.some(c=>c.includes('tag.ilike.%123%')),'SV must be an exact tag, not a substring');
 assert(expressions.some(c=>c.includes('street_key.ilike.')));
 assert(calls.some(c=>c[1]==='eq'&&c[2]==='area_code'&&c[3]==='224'));
+calls.length=0;
+await GET(request('view=streets&q='+encodeURIComponent('Αθηνών Ύψωνας')+'&locality='+encodeURIComponent('Ύψωνας')));
+assert(calls.some(c=>c[0]==='pantavion_cyprus_streets'&&c[1]==='in'&&c[2]==='district_name'&&c[3].includes('Lemesos')));
+assert(calls.filter(c=>c[1]==='or').length===3,'street and locality tokens form separate required groups');
+r=await GET(request('view=supply-evidence'));
+assert.equal(r.body.tanks.length,1);
+assert.equal(r.body.hiddenLayers.length,1);
+assert.equal(r.body.rawPrivateField,undefined,'return selected evidence only');
+assert.equal(r.body.fullCoverageVerified,false);
+inventorySha='wrong-source';
+assert.equal((await GET(request('view=supply-evidence'))).status,500,'mismatched drawing inventory must not be exposed');
 fail=true;
 assert.equal((await GET(request('q=SV'))).status,500);
 console.log('PASS: authorization, global sorting across pages, sort allowlist, zone filter, area search, database failure');

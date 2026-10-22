@@ -5,7 +5,7 @@ import * as tus from "tus-js-client";
 
 import { pantavionWaterApprovedDeviceHeaders } from "@/core/water/water-approved-device-client";
 
-export type SpatialKind = "valve" | "network-extension" | "photo" | "note";
+export type SpatialKind = "valve" | "network-extension" | "road" | "photo" | "note";
 
 type Props = {
   kind: SpatialKind;
@@ -51,6 +51,7 @@ function headers(json = true): Record<string, string> {
 }
 
 function finiteCoordinate(value: string, min: number, max: number) {
+  if (!value.trim()) return null;
   const number = Number(value);
   return Number.isFinite(number) && number >= min && number <= max
     ? number
@@ -193,6 +194,10 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
   const [gpsAccuracy, setGpsAccuracy] = useState<number | null>(null);
   const [usedGps, setUsedGps] = useState(false);
   const [streetName, setStreetName] = useState("");
+  const [area, setArea] = useState("");
+  const [zone, setZone] = useState("");
+  const [officialAssetId, setOfficialAssetId] = useState("");
+  const isLine = kind === "network-extension" || kind === "road";
   const [note, setNote] = useState("");
   const [diameterMm, setDiameterMm] = useState("");
   const [material, setMaterial] = useState("");
@@ -209,7 +214,9 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
       ? "Νέα / πιθανή βάνα"
       : kind === "network-extension"
         ? "Νέα επέκταση δικτύου"
-        : kind === "photo"
+        : kind === "road"
+          ? "Προσθήκη οδού σε οποιαδήποτε περιοχή"
+          : kind === "photo"
           ? "Φωτογραφία πεδίου"
           : "Σημείωση στον χάρτη";
 
@@ -219,7 +226,7 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
       return;
     }
 
-    setMessage("Εντοπισμός ακριβούς θέσης…");
+    setMessage("Εντοπισμός θέσης…");
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -337,7 +344,7 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
           clientMutationId,
           mapId: source.mapId,
           sourceKey: source.sourceKey,
-          assetType: kind === "valve" ? "valve" : "network_extension",
+          assetType: kind === "valve" ? "valve" : kind === "road" ? "road_reference" : "network_extension",
           operation: "create",
           geometry,
           location: {
@@ -349,8 +356,11 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
               : "estimated",
             accuracyMeters: usedGps ? gpsAccuracy : null,
             streetName: streetName.trim() || null,
+            area: area.trim() || null,
           },
           attributes: {
+            zone: zone.trim() || null,
+            officialAssetId: officialAssetId.trim() || null,
             note: note.trim() || null,
             material: material.trim() || null,
             diameterMm: diameter,
@@ -393,19 +403,27 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
     let endLat: number | null = null;
     let endLng: number | null = null;
 
-    if (kind === "network-extension") {
+    if (isLine) {
       endLat = finiteCoordinate(endLatitude, -90, 90);
       endLng = finiteCoordinate(endLongitude, -180, 180);
       if (endLat === null || endLng === null) {
-        setMessage("Η επέκταση χρειάζεται έγκυρο σημείο αρχής και τέλους.");
+        setMessage("Η οδός / το δίκτυο χρειάζεται έγκυρο σημείο αρχής και τέλους.");
         return;
       }
       if (lat === endLat && lng === endLng) {
-        setMessage("Αρχή και τέλος της επέκτασης δεν μπορούν να είναι το ίδιο σημείο.");
+        setMessage("Αρχή και τέλος δεν μπορούν να είναι το ίδιο σημείο.");
         return;
       }
     }
 
+    if ((kind === "road" || kind === "valve" || isLine) && !area.trim()) {
+      setMessage("Γράψε περιοχή, δήμο ή χωριό. Επιτρέπεται και νέα περιοχή.");
+      return;
+    }
+    if (kind === "road" && !streetName.trim()) {
+      setMessage("Γράψε ονομασία οδού ή περιγραφή ανώνυμης οδού.");
+      return;
+    }
     setBusy(true);
     setProgress(0);
     setMessage("Αποθήκευση…");
@@ -414,7 +432,7 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
       const artifactRefs: string[] = [];
 
       if (file) {
-        setMessage("Private resumable upload του τεκμηρίου…");
+        setMessage("Ανέβασμα φωτογραφίας / αρχείου…");
         const completion = await uploadFieldArtifact(file, setProgress);
         if (completion.artifactRef) artifactRefs.push(completion.artifactRef);
       }
@@ -444,11 +462,11 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
         const patch = await createPatch(geometry, artifactRefs);
 
         const pinX =
-          kind === "network-extension"
+          isLine
             ? (lng + (endLng as number)) / 2
             : lng;
         const pinY =
-          kind === "network-extension"
+          isLine
             ? (lat + (endLat as number)) / 2
             : lat;
 
@@ -457,7 +475,7 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
         }
 
         setMessage(
-          `Η αλλαγή αποθηκεύτηκε ως spatial patch · ${patch.status || "pending_review"}. Δεν άλλαξε το master πριν από έγκριση.`,
+          `Αποθηκεύτηκε · αριθμός καταγραφής ${patch.patch_id} · σε αναμονή ελέγχου. Μπορείς να τη βρεις στις δικές σου προσθήκες στον κατάλογο.`,
         );
       }
 
@@ -477,12 +495,11 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
     <section className="mt-6 grid gap-4">
       <div className="rounded-2xl border border-emerald-400/25 bg-emerald-950/20 p-4">
         <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-300">
-          Spatial field change
+          Καταγραφή πεδίου
         </p>
         <h2 className="mt-2 text-2xl font-black text-white">{title}</h2>
         <p className="mt-2 text-sm leading-6 text-slate-300">
-          Η καταχώρηση αποθηκεύεται στο Pantavion με θέση, provenance και
-          review status. Δεν γράφει απευθείας στο master δίκτυο.
+          Γράψε ελεύθερα περιοχή και οδό, ακόμη κι αν δεν υπάρχουν στον κατάλογο. Η θέση και η ακρίβεια του GPS αποθηκεύονται μαζί με τα στοιχεία και τις φωτογραφίες.
         </p>
       </div>
 
@@ -538,7 +555,7 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
         📍 Χρήση θέσης κινητού
       </button>
 
-      {kind === "network-extension" ? (
+      {isLine ? (
         <>
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="grid gap-2">
@@ -577,8 +594,19 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
         </>
       ) : null}
 
+      <div className="grid gap-3 sm:grid-cols-2">
+        <label className="grid gap-2">Περιοχή / δήμος / χωριό
+          <input value={area} onChange={(e) => setArea(e.target.value)} maxLength={500} placeholder="Υπάρχουσα ή νέα περιοχή" className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white" />
+        </label>
+        <label className="grid gap-2">Ζώνη (προαιρετικά)
+          <input value={zone} onChange={(e) => setZone(e.target.value)} maxLength={200} placeholder="Υπάρχουσα ή νέα ζώνη" className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white" />
+        </label>
+      </div>
+      {kind === "valve" ? <label className="grid gap-2">Υφιστάμενος αριθμός SV (αν είναι γνωστός)
+        <input value={officialAssetId} onChange={(e) => setOfficialAssetId(e.target.value)} maxLength={100} placeholder="π.χ. SV 123 — αφήστε κενό αν δεν υπάρχει" className="rounded-2xl border border-slate-700 bg-[#07111f] px-4 py-3 text-white" />
+      </label> : null}
       <label className="grid gap-2">
-        <span className="text-sm font-black text-[#f2c766]">Οδός</span>
+        <span className="text-sm font-black text-[#f2c766]">Οδός / ανώνυμη οδός</span>
         <input
           value={streetName}
           onChange={(event) => setStreetName(event.target.value)}
@@ -687,3 +715,4 @@ export default function WaterFieldSpatialClient({ kind }: Props) {
     </section>
   );
 }
+

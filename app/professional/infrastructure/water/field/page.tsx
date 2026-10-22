@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 const FIELD_ACTIONS = [
+  { href: "/professional/infrastructure/water/field/road", label: "Προσθήκη οδού", description: "Νέα ή ανώνυμη οδός σε οποιαδήποτε περιοχή ή χωριό." },
   {
     href: "/professional/infrastructure/water/field/arrival",
     label: "Άφιξη",

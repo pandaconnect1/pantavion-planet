@@ -24,6 +24,7 @@ type FieldActionConfig = {
 };
 
 const ACTIONS: FieldActionConfig[] = [
+  { route: "road", type: "new_road", title: "Νέα οδός", heading: "Προσθήκη οδού", descriptionPlaceholder: "Οδός και περιοχή" },
   {
     route: "arrival",
     type: "note",
@@ -154,6 +155,7 @@ export default function WaterFieldActionPage() {
   }
 
   const spatialKinds: SpatialKind[] = [
+    "road",
     "valve",
     "network-extension",
     "photo",
