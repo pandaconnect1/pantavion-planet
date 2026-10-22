@@ -95,6 +95,23 @@ export async function GET(request: NextRequest) {
   const admin = createAdminClient();
 
   try {
+    if (view === "streets") {
+      const offset = Math.max(0, Math.floor(Number(params.get("offset")) || 0));
+      const limit = Math.max(1, Math.min(500, Math.floor(Number(params.get("limit")) || 200)));
+      let streets = admin.from("pantavion_cyprus_streets")
+        .select("id, name_el, name_lat, district_name, municipality_or_community, area_or_parish, zone_or_section, source, status", { count: "exact" });
+      const q = (params.get("q") || "").replace(/[^\p{L}\p{N}\s-]/gu, " ").trim().slice(0, 60);
+      if (q) streets = streets.or(["name_el", "name_lat", "municipality_or_community", "area_or_parish", "zone_or_section"]
+        .map((column) => `${column}.ilike.%${q}%`).join(","));
+      const result = await streets.order("municipality_or_community", { nullsFirst: false })
+        .order("area_or_parish", { nullsFirst: false }).order("zone_or_section", { nullsFirst: false })
+        .order("name_el", { nullsFirst: false }).order("name_lat", { nullsFirst: false }).order("id")
+        .range(offset, offset + limit - 1);
+      if (result.error) throw result.error;
+      return NextResponse.json({ ok: true, streets: result.data ?? [], total: result.count ?? 0, offset,
+        coverage: "recorded_only", fullCoverageVerified: false }, { headers: { "Cache-Control": "private, no-store" } });
+    }
+
     if (view === "areas") {
       const withRing = params.get("ring") === "1";
       const { data, error } = await admin
