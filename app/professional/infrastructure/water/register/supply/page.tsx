@@ -40,6 +40,10 @@ export default function WaterSupplyEvidencePage() {
       <p className="mt-3">Ονομασίες, χωρητικότητες, κείμενα και σύμβολα από το σχέδιο Β, με το επίπεδο και τη θέση της πηγής. Οι εγγραφές δεξαμενών προέρχονται από επιγραφές και μπορεί να αναφέρονται στην ίδια εγκατάσταση ή σε μελλοντικό έργο.</p>
       <p className="mt-3 text-amber-200 print:text-black">Δεν έχει επαληθευτεί ακόμη ποια δεξαμενή τροφοδοτεί κάθε περιοχή. Τα βέλη και τα κείμενα παρουσιάζονται ως στοιχεία προς αντιστοίχιση με τους συνδεδεμένους αγωγούς.</p>
     </header>
+    <section className="rounded-xl border border-cyan-700 p-4"><h2 className="text-xl font-bold">Δεξαμενή Συκαμίνου — δημοσιευμένα στοιχεία</h2>
+      <p>Ο ΕΟΑ αναφέρει ολοκληρωμένη δεξαμενή 2.000 m³ στον Άγιο Αθανάσιο. Η δημοσίευση εγκαινίων δίνει οδό Ανδρέα Παπαδόπουλου, Τ.Κ. 4108, και Παρασκευή 23/10/2026, 10:30. Η θέση και η αντιστοίχιση με συγκεκριμένο στοιχείο DWG δεν έχουν επαληθευτεί.</p>
+      <p className="mt-2"><a href="https://eoalemesos.org.cy/el/news-details/ανέγερση-υδατοδεξαμενών" target="_blank" rel="noopener noreferrer" className="text-sky-200">ΕΟΑ: στοιχεία έργου ↗</a> · <a href="https://www.elemesos.com/egkainia-tis-ydatodexamenis-sykaminou-ston-agio-athanasio-apo-ton-eoa-lemesou/" target="_blank" rel="noopener noreferrer" className="text-sky-200">Δημοσίευση εγκαινίων ↗</a></p>
+    </section>
     <label className="block print:hidden">Αναζήτηση ονομασίας, περιοχής, αριθμού ή επιπέδου<input value={query} onChange={(e) => setQuery(e.target.value)} className="mt-2 w-full rounded-xl border border-slate-600 bg-[#091426] p-3" /></label>
     <p role="status">{status === "loading" ? "Φόρτωση απογραφής…" : status === "denied" ? "Απαιτείται εγκεκριμένη πρόσβαση Ύδρευσης." : status === "error" ? "Η απογραφή δεν φορτώθηκε." : `${data?.totals.layers ?? 0} επίπεδα σχεδίου · ${data?.hiddenLayers.length ?? 0} σβηστά / παγωμένα επίπεδα με περιεχόμενο`}</p>
     {status === "error" ? <button onClick={() => setVersion((v) => v + 1)} className="rounded-xl border p-3">Επανάληψη</button> : null}
