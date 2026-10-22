@@ -117,6 +117,14 @@ export async function GET(request: NextRequest) {
 
     const area = params.get("area");
     if (area) query = area === "none" ? query.is("area_code", null) : query.eq("area_code", area);
+    const zone = (params.get("zone") || "").trim().slice(0, 100);
+    if (zone) {
+      const zoneAreas = await admin.from("water_network_areas").select("code").eq("group_name", zone).limit(1000);
+      if (zoneAreas.error) throw zoneAreas.error;
+      const codes = (zoneAreas.data ?? []).map((row: { code: string }) => row.code);
+      if (!codes.length) return NextResponse.json({ ok: true, total: 0, offset: 0, limit: PAGE, assets: [] }, { headers: { "Cache-Control": "no-store" } });
+      query = query.in("area_code", codes);
+    }
     const kind = params.get("kind");
     if (kind && KINDS.has(kind)) query = query.eq("kind", kind);
     const street = params.get("street");
@@ -129,7 +137,14 @@ export async function GET(request: NextRequest) {
       const clauses = searchTerms(q).flatMap((t) => [
         `street_key.ilike.%${t}%`, `name.ilike.%${t}%`,
       ]);
-      clauses.push(`number.ilike.%${q}%`, `tag.ilike.%${q}%`);
+      clauses.push(`number.ilike.%${q}%`, `tag.ilike.%${q}%`, `area_code.ilike.%${q}%`);
+      const matchingAreas = await admin.from("water_network_areas").select("code")
+        .ilike("group_name", `%${q}%`).limit(1000);
+      if (matchingAreas.error) throw matchingAreas.error;
+      for (const row of matchingAreas.data ?? []) {
+        // Only safe codes may enter the raw PostgREST OR expression.
+        if (/^[\p{L}\p{N}-]+$/u.test(row.code)) clauses.push(`area_code.eq.${row.code}`);
+      }
       for (const canonicalNumber of waterRegisterNumberCandidates(q)) {
         clauses.push(`number.eq.${canonicalNumber}`);
       }
@@ -146,11 +161,13 @@ export async function GET(request: NextRequest) {
 
     const offset = Math.max(0, Math.min(1_000_000, Number(params.get("offset")) || 0));
     const limit = Math.max(1, Math.min(PAGE * 4, Number(params.get("limit")) || PAGE));
-    const { data, error, count } = await query
-      .order("area_code", { ascending: true, nullsFirst: false })
-      .order("street", { ascending: true, nullsFirst: false })
-      .order("number", { ascending: true })
-      .range(offset, offset + limit - 1);
+    // Order before pagination; number is the unique, stable tie breaker.
+    const sort = params.get("sort");
+    const columns = sort === "number" ? ["number"]
+      : sort === "street" ? ["street", "area_code", "number"]
+      : ["area_code", "street", "number"];
+    for (const column of columns) query = query.order(column, { ascending: true, nullsFirst: false });
+    const { data, error, count } = await query.range(offset, offset + limit - 1);
     if (error) throw error;
 
     return NextResponse.json(
@@ -164,3 +181,4 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
