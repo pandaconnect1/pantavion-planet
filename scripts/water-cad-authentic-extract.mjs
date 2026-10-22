@@ -284,6 +284,7 @@ export function extractAuthentic(database) {
   const fills = []; // [layerId, styleId, kind(0 fill,1 wipeout), rings(flat [x,y,...][]), order]
   const texts = []; // [x,y, layerId, styleId, text, height, rotation, hAlign, vAlign, widthFactor, mirroredX, order]
   const points = []; // [x,y, layerId, styleId, order]
+  const leaders = [];
   const blockRefs = []; // [x,y, layerId, blockName] for picking only (not drawn)
   let order = 0;
 
@@ -564,6 +565,12 @@ export function extractAuthentic(database) {
       }
       case "LEADER": {
         const pts = (e.vertices || []).map(p2).filter(Boolean);
+        const worldVertices = pts.map((p) => apply(t, p));
+        if (worldVertices.length) leaders.push({
+          layerId, sourceHandle:e.handle == null ? null : String(e.handle),
+          vertices:worldVertices.map((p) => [p.x,p.y]), arrowheadEnabled:Boolean(e.isArrowheadEnabled),
+          waterFlowVerified:false,
+        });
         if (pts.length >= 2) { chain(pts.map((p) => apply(t, p)), layerId, styleId, true); drew(); }
         if (e.isArrowheadEnabled) bump(stats.notReproduced, "LEADER_ARROWHEAD");
         return;
@@ -719,6 +726,7 @@ export function extractAuthentic(database) {
     texts,
     points,
     blockRefs,
+    leaders,
     stats,
   };
 }
