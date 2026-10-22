@@ -29,7 +29,7 @@ export function buildWaterNetworkDiscovery({ texts = [], blockRefs = [], segment
       off:Boolean(l.off), frozen:Boolean(l.frozen), beyondPriorCutoff:x>duplicateCutoff,
       registerNumbers:registered.get(position(x,y,l.name)) ?? [], verifiedAsset:false, ...extra });
   };
-  texts.forEach((t,i) => { const c=category(t[4],layers[t[2]]?.name); if(c) add(c,`text:${i}`,t[0],t[1],t[2],t[4]); });
+  texts.forEach((t,i) => { const c=category(t[4],layers[t[2]]?.name); add(c ?? "unclassified_text",`text:${i}`,t[0],t[1],t[2],t[4]); });
   blockRefs.forEach((b,i) => add(category(b[3],layers[b[2]]?.name,true),`block:${i}`,b[0],b[1],b[2],b[3],{drawingOrientation:b[4] ?? null}));
   leaders.forEach((leader,i) => {
     const p=leader.vertices?.[0];
