@@ -94,19 +94,15 @@ async function main() {
       });
       if (up.error) throw Error("inventory_upload_failed: " + up.error.message);
       const inv = JSON.parse(String(body));
-      const discoveryBody = readFileSync(join(work, "inventory.json.discovery.json"));
-      const discovery = JSON.parse(String(discoveryBody));
+      const discoveryBody = readFileSync(join(work, "inventory.json.discovery.jsonl.gz"));
+      const discovery = JSON.parse(String(readFileSync(join(work, "inventory.json.discovery-summary.json"))));
       const discoveryUpload = await admin.storage.from("personal-media").upload(
-        "water-network-private/derived/map-b/" + source.sha256 + "/discovery.json", discoveryBody,
-        { upsert: true, contentType: "application/json", cacheControl: "0" },
+        "water-network-private/derived/map-b/" + source.sha256 + "/discovery.jsonl.gz", discoveryBody,
+        { upsert: true, contentType: "application/gzip", cacheControl: "0" },
       );
       if (discoveryUpload.error) throw Error("discovery_upload_failed: " + discoveryUpload.error.message);
       annotate("notice", "Full drawing evidence discovery", JSON.stringify({ ...discovery.summary, sykamCandidates: discovery.sykamCandidateRefs.length, notReproduced: discovery.extractorStats.notReproduced }));
-      const sykamRefs = new Set(discovery.sykamCandidateRefs);
-      annotate("notice", "Sykaminou text-match candidates (not verified site identification)", JSON.stringify(
-        discovery.items.filter((item) => sykamRefs.has(item.ref)).map((item) => ({ ref:item.ref, category:item.category, label:item.label, layer:item.layer, registerNumbers:item.registerNumbers })),
-      ));
-
+      annotate("notice", "Sykaminou text-match candidates (not verified site identification)", JSON.stringify(discovery.sykamCandidates));
       // GitHub keeps only 10 notices per step: the register, boundary and
       // water-layer findings go first.
       if (process.env.PANTAVION_WATER_INVENTORY_READ_ONLY === "YES") {
