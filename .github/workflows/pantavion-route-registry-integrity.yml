@@ -1,0 +1,24 @@
+name: Pantavion Route Registry Integrity
+on:
+  pull_request:
+    paths:
+      - 'core/pantavion/route-status-registry.ts'
+      - 'core/pantavion/product-family-taxonomy.ts'
+      - 'tests/pantavion-route-registry-integrity.test.mjs'
+      - 'tests/pantavion-sensitive-route-release-safety.test.mjs'
+      - '.github/workflows/pantavion-route-registry-integrity.yml'
+  workflow_dispatch:
+jobs:
+  registry-integrity:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate registry links (not production readiness)
+        run: |
+          node tests/pantavion-route-registry-integrity.test.mjs
+          node tests/pantavion-sensitive-route-release-safety.test.mjs

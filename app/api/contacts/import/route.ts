@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   const headerSize = Number(request.headers.get("content-length") || "0");
-  if (headerSize > 1_200_000) {
+  if (!Number.isSafeInteger(headerSize) || headerSize < 0 || headerSize > 1_200_000) {
     return NextResponse.json({ ok: false, error: "file_too_large" }, { status: 413 });
   }
 
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   }
 
   const text = await request.text().catch(() => "");
-  if (!text || text.length > 1_200_000) {
+  if (!text || new TextEncoder().encode(text).byteLength > 1_200_000) {
     return NextResponse.json({ ok: false, error: "invalid_or_oversized_body" }, { status: 413 });
   }
 
