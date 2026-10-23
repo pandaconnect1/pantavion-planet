@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import WaterMapDrawingTools, { useWaterMapDrawing } from "../components/water-map-drawing-tools";
 import WaterLeafletDrawingOverlay from "../components/water-leaflet-drawing-overlay";
 import { WATER_MATERIAL_SAMPLE_CATALOG } from "@/core/water/water-material-catalog";
@@ -248,6 +248,146 @@ const UI = {
     chunks: "screen chunks",
   },
 };
+
+
+type MapView = { lat: number; lng: number; zoom: number };
+
+function WaterMapWorkspace({ map, drawing, measuring, onMeasuringChange, lang, children }: {
+  map: any;
+  drawing: ReturnType<typeof useWaterMapDrawing>;
+  measuring: boolean;
+  onMeasuringChange: (value: boolean) => void;
+  lang: Lang;
+  children: ReactNode;
+}) {
+  const root = useRef<HTMLDivElement>(null);
+  const controls = useRef<HTMLDivElement>(null);
+  const [expanded, setExpanded] = useState(false);
+  const [menu, setMenu] = useState(false);
+  const [points, setPoints] = useState<Array<[number, number]>>([]);
+  const history = useRef<MapView[]>([]);
+  const cursor = useRef(-1);
+  const restoring = useRef(false);
+  const [, refreshHistory] = useState(0);
+  const greek = getPantavionUiLanguage(lang) === "el";
+  const label = (el: string, en: string) => greek ? el : en;
+  const button = "min-h-[44px] rounded-lg border border-slate-500 bg-[#0d1a2d] px-3 py-2 text-sm font-bold text-white disabled:opacity-40";
+
+  useEffect(() => {
+    if (!map) return;
+    const remember = () => {
+      if (restoring.current) return;
+      const center = map.getCenter();
+      const view = { lat: center.lat, lng: center.lng, zoom: map.getZoom() };
+      const previous = history.current[cursor.current];
+      if (previous && previous.lat === view.lat && previous.lng === view.lng && previous.zoom === view.zoom) return;
+      history.current = [...history.current.slice(0, cursor.current + 1), view].slice(-50);
+      cursor.current = history.current.length - 1;
+      refreshHistory((n) => n + 1);
+    };
+    history.current = []; cursor.current = -1;
+    remember(); map.on("moveend", remember);
+    const containers = [map.zoomControl?.getContainer(), map.getContainer().querySelector(".leaflet-control-layers")].filter(Boolean) as HTMLElement[];
+    const original = containers.map((element) => ({ element, parent: element.parentNode, next: element.nextSibling }));
+    containers.forEach((element) => controls.current?.appendChild(element));
+    return () => {
+      map.off("moveend", remember);
+      original.forEach(({ element, parent, next }) => {
+        if (parent) parent.insertBefore(element, next?.parentNode === parent ? next : null);
+      });
+    };
+  }, [map]);
+
+  useEffect(() => {
+    if (!map || !root.current) return;
+    const observer = new ResizeObserver(() => map.invalidateSize({ pan: false }));
+    observer.observe(root.current);
+    observer.observe(map.getContainer());
+    return () => observer.disconnect();
+  }, [map]);
+
+  useEffect(() => {
+    const changed = () => { if (!document.fullscreenElement) setExpanded(false); };
+    const escape = (event: KeyboardEvent) => { if (event.key === "Escape") setExpanded(false); };
+    document.addEventListener("fullscreenchange", changed);
+    document.addEventListener("keydown", escape);
+    return () => { document.removeEventListener("fullscreenchange", changed); document.removeEventListener("keydown", escape); };
+  }, []);
+
+  useEffect(() => {
+    if (!expanded) return;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = overflow; };
+  }, [expanded]);
+
+  useEffect(() => {
+    if (drawing.tool !== "navigate") onMeasuringChange(false);
+  }, [drawing.tool, onMeasuringChange]);
+
+  useEffect(() => {
+    if (!map || !measuring) return;
+    const pick = (event: { latlng: { lat: number; lng: number } }) => setPoints((old) => [...old, [event.latlng.lat, event.latlng.lng]]);
+    map.on("click", pick);
+    return () => map.off("click", pick);
+  }, [map, measuring]);
+
+  useEffect(() => {
+    if (!map || !window.L || !points.length) return;
+    const L = window.L;
+    const layer = L.layerGroup().addTo(map);
+    L.polyline(points, { color: "#f59e0b", weight: 3, interactive: false }).addTo(layer);
+    points.forEach((point) => L.circleMarker(point, { radius: 5, color: "#f59e0b", fillOpacity: 1, interactive: false }).addTo(layer));
+    return () => { layer.remove(); };
+  }, [map, points]);
+
+  function travel(direction: number) {
+    const next = cursor.current + direction;
+    const view = history.current[next];
+    if (!map || !view) return;
+    cursor.current = next;
+    restoring.current = true;
+    try { map.setView([view.lat, view.lng], view.zoom, { animate: false }); }
+    finally { restoring.current = false; }
+    refreshHistory((n) => n + 1);
+  }
+
+  async function fullscreen() {
+    if (expanded) {
+      if (document.fullscreenElement === root.current) await document.exitFullscreen().catch(() => {});
+      setExpanded(false);
+    } else {
+      setExpanded(true);
+      // Fixed viewport remains available on mobile browsers without Fullscreen API.
+      await root.current?.requestFullscreen?.().catch(() => {});
+    }
+  }
+
+  let distance = 0;
+  if (map) for (let i = 1; i < points.length; i++) distance += map.distance(points[i - 1], points[i]);
+
+  return <div ref={root} className={expanded ? "fixed inset-0 z-[10000] flex h-[100dvh] flex-col bg-[#06111f] text-white" : "flex flex-col bg-[#06111f] text-white"}>
+    <nav aria-label={label("Μενού χάρτη", "Map menu")} className="flex shrink-0 flex-wrap items-center gap-2 border-b border-slate-700 p-2">
+      <button type="button" className={button} disabled={cursor.current <= 0} onClick={() => travel(-1)} aria-label={label("Προηγούμενη προβολή χάρτη", "Previous map view")}>←</button>
+      <button type="button" className={button} disabled={cursor.current >= history.current.length - 1} onClick={() => travel(1)} aria-label={label("Επόμενη προβολή χάρτη", "Next map view")}>→</button>
+      <button type="button" className={button} aria-expanded={menu} aria-controls="water-map-tools-menu" onClick={() => setMenu(!menu)}>☰ {label("Μενού", "Menu")}</button>
+      <button type="button" className={button} aria-pressed={measuring} onClick={() => { drawing.changeTool("navigate"); onMeasuringChange(!measuring); }}>{label("Χάρακας", "Ruler")}</button>
+      <button type="button" className={button} aria-pressed={expanded} onClick={() => void fullscreen()}>{expanded ? label("Έξοδος πλήρους οθόνης", "Exit fullscreen") : label("Πλήρης οθόνη", "Fullscreen")}</button>
+      <div ref={controls} className="flex items-center gap-2 [&_.leaflet-control]:!m-0 [&_.leaflet-control]:!float-none" />
+    </nav>
+    {menu ? <div id="water-map-tools-menu" className="max-h-[35dvh] shrink-0 overflow-y-auto p-2">
+      <WaterMapDrawingTools drawing={drawing} />
+    </div> : null}
+    {measuring || points.length ? <div role="status" className="flex shrink-0 flex-wrap items-center gap-2 px-3 py-2 text-sm text-amber-100">
+      <span>{label("Απόσταση", "Distance")}: {distance < 1000 ? distance.toFixed(1) + " m" : (distance / 1000).toFixed(3) + " km"}</span>
+      {measuring ? <span>{label("Πάτησε διαδοχικά σημεία στον χάρτη.", "Tap successive points on the map.")}</span> : null}
+      <button type="button" className={button} disabled={!points.length} onClick={() => setPoints((old) => old.slice(0, -1))}>{label("Αναίρεση σημείου", "Undo point")}</button>
+      <button type="button" className={button} disabled={!points.length} onClick={() => setPoints([])}>{label("Καθαρισμός", "Clear")}</button>
+      {measuring ? <button type="button" className={button} onClick={() => onMeasuringChange(false)}>{label("Τέλος μέτρησης", "Finish measuring")}</button> : null}
+    </div> : null}
+    <div className={expanded ? "relative min-h-0 flex-1" : "relative h-[70vh] min-h-[420px] sm:min-h-[560px]"}>{children}</div>
+  </div>;
+}
 
 const MAX_FEATURES_PER_TILE = 1200;
 const MAX_RECURSIVE_TILE_DEPTH = 6;
@@ -717,6 +857,9 @@ export default function ControlledWaterSegmentClient() {
   const [approvedChangeCount, setApprovedChangeCount] = useState(0);
   const [approvedEvidenceCount, setApprovedEvidenceCount] = useState(0);
   const [mapReady, setMapReady] = useState(false);
+  const [measuring, setMeasuring] = useState(false);
+  const measuringRef = useRef(false);
+  measuringRef.current = measuring;
   const [basemapState, setBasemapState] = useState<"loading" | "pantavion" | "fallback">("loading");
   const [workPanelOpen, setWorkPanelOpen] = useState(false);
   const [workStage, setWorkStage] = useState("FAULT");
@@ -1084,6 +1227,7 @@ export default function ControlledWaterSegmentClient() {
 
         mapRef.current = map;
         map.on("click", (event: { latlng: { lat: number; lng: number } }) => {
+          if (measuringRef.current) return;
           if (drawingRef.current.tool !== "navigate") {
             drawingRef.current.pick({ x: event.latlng.lng, y: event.latlng.lat });
             return;
@@ -2595,11 +2739,10 @@ export default function ControlledWaterSegmentClient() {
             </span>
           </div>
 
-          <div className="relative">
-            <div ref={mapEl} className="h-[70vh] min-h-[420px] w-full bg-slate-200 sm:min-h-[560px]" />
+          <WaterMapWorkspace map={mapReady ? mapRef.current : null} drawing={drawing} measuring={measuring} onMeasuringChange={setMeasuring} lang={lang}>
+            <div ref={mapEl} className="h-full w-full bg-slate-200" />
             <WaterLeafletDrawingOverlay map={mapReady ? mapRef.current : null} shapes={drawing.shapes} />
-            <div className="absolute left-2 top-2 z-[500] max-h-[45vh] w-[min(400px,calc(100%-60px))] overflow-y-auto"><WaterMapDrawingTools drawing={drawing} /></div>
-          </div>
+          </WaterMapWorkspace>
         </section>
       </section>
     </main>
