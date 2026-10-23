@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { readWaterDiscoveryPage } from "@/core/infrastructure/water/water-discovery-stream";
 
 import { authorizeWaterMapRequest } from "@/core/security/water-map-request-access";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -95,6 +96,20 @@ export async function GET(request: NextRequest) {
   const admin = createAdminClient();
 
   try {
+    if (view === "discovery") {
+      const sourceSha256 = "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16";
+      const file = await admin.storage.from("personal-media").download(`water-network-private/derived/map-b/${sourceSha256}/discovery.jsonl.gz`);
+      if (file.error || !file.data) throw new Error("discovery_unavailable");
+      const page = await readWaterDiscoveryPage(file.data,{
+        matchTerms:(params.get("q")||"").slice(0,120).split(/\s+/).filter(Boolean).map(searchTerms),
+        sourceSha256,q:(params.get("q")||"").slice(0,120),category:(params.get("category")||"").slice(0,50),
+        hidden:params.get("hidden")==="1",unmatched:params.get("unmatched")==="1",
+        offset:Math.max(0,Math.floor(Number(params.get("offset"))||0)),
+        limit:Math.max(1,Math.min(200,Math.floor(Number(params.get("limit"))||100))),signal:request.signal,
+      });
+      return NextResponse.json(page,{headers:{"Cache-Control":"private, no-store"}});
+    }
+
     if (view === "supply-evidence") {
       const sourceSha256 = "6d05c02b350ed21ba8bb03632a3aa47f138fd8d7b5ff85c540ecd8b33c016f16";
       const file = await admin.storage.from("personal-media").download(

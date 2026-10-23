@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {stripTypeScriptTypes} from 'node:module';
+import {gzipSync} from 'node:zlib';
+const source=readFileSync('core/infrastructure/water/water-discovery-stream.ts','utf8');
+const {readWaterDiscoveryPage}=await import('data:text/javascript;base64,'+Buffer.from(stripTypeScriptTypes(source)).toString('base64'));
+const sha='verified-source';
+const rows=Array.from({length:350},(_,i)=>({recordType:'item',ref:`text:${i}`,category:i%2?'street':'valve',label:i%2?'Αθηνών':'Βάνα',layer:'Hidden',off:i%3===0,frozen:false,registerNumbers:i%5?[]:['V1']}));
+const file=(values=rows,metadata={sourceSha256:sha,summary:{evidence:350},recordType:'metadata'})=>new Blob([gzipSync([JSON.stringify(metadata),...values.map(r=>JSON.stringify(r))].join('\n')+'\n')]);
+const options={sourceSha256:sha,q:'',category:'',hidden:false,unmatched:false,offset:100,limit:100};
+let result=await readWaterDiscoveryPage(file(),options);
+assert.equal(result.total,350);assert.equal(result.items.length,100);assert.equal(result.items[0].ref,'text:100');
+result=await readWaterDiscoveryPage(file(),{...options,q:'αθηνων',category:'street',hidden:true,unmatched:true,offset:0});
+const expected=rows.filter(r=>r.category==='street'&&r.off&&!r.registerNumbers.length);
+assert.equal(result.total,expected.length);assert.equal(result.items.length,expected.length);
+await assert.rejects(()=>readWaterDiscoveryPage(file(rows.slice(0,300)),options),/discovery_incomplete/);
+await assert.rejects(()=>readWaterDiscoveryPage(file(),{...options,sourceSha256:'wrong-source'}),/discovery_source_mismatch/);
+await assert.rejects(()=>readWaterDiscoveryPage(new Blob([gzipSync('invalid-json\n')]),options));
+const controller=new AbortController();controller.abort();
+await assert.rejects(()=>readWaterDiscoveryPage(file(),{...options,signal:controller.signal}),/aborted/);
+console.log('PASS: bounded page collection, exact global counts, Greek accent search, hidden/unmatched filters, wrong source and incomplete/corrupt records rejected');
+
+result=await readWaterDiscoveryPage(file([{recordType:'item',ref:'street:1',category:'street',label:'Andrea Papadopoulou',layer:'Street_names',off:false,frozen:false,registerNumbers:[]}],{sourceSha256:sha,summary:{evidence:1},recordType:'metadata'}),{...options,offset:0,q:'Ανδρέα Παπαδοπούλου',matchTerms:[['ΑΝΔΡΕΑ','ANDREA'],['ΠΑΠΑΔΟΠΟΥΛΟΥ','PAPADOPOULOU']]});
+assert.equal(result.total,1,'Greek search alternatives must match Latin drawing labels');

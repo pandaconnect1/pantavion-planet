@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { stripTypeScriptTypes } from 'node:module';
+import { gzipSync } from 'node:zlib';
+const helperSource=readFileSync('core/infrastructure/water/water-discovery-stream.ts','utf8');
+const {readWaterDiscoveryPage}=await import('data:text/javascript;base64,'+Buffer.from(stripTypeScriptTypes(helperSource)).toString('base64'));
+
 
 // Execute the real route against a recording database double. No network or keys.
 const calls = [];
@@ -30,9 +34,15 @@ function builder(table) {
 globalThis.__waterRegisterTest={
   NextResponse:{json:(body,options={})=>({body,status:options.status||200})},
   authorize:async()=>allowed?{ok:true}:{ok:false,error:'denied'},
-  admin:()=>({from:builder,rpc:async()=>({data:[],error:null}),storage:{from:()=>({download:async()=>({data:{text:async()=>JSON.stringify({sourceSha256:inventorySha,register:{assets:[{kind:'tank',number:'T1'},{kind:'valve',number:'V1'}]},layers:[{layer:'hidden',sourceOff:true},{layer:'visible',sourceOff:false}],flowEvidence:{labelCandidates:[],symbolCandidates:[]},rawPrivateField:'not exposed'})},error:null})})}}),
+  readWaterDiscoveryPage,
+  admin:()=>({from:builder,rpc:async()=>({data:[],error:null}),storage:{from:()=>({download:async(path)=>{
+    const report={sourceSha256:inventorySha,recordType:'metadata',register:{assets:[{kind:'tank',number:'T1'},{kind:'valve',number:'V1'}]},layers:[{layer:'hidden',sourceOff:true},{layer:'visible',sourceOff:false}],flowEvidence:{labelCandidates:[],symbolCandidates:[]},summary:{evidence:2},rawPrivateField:'not exposed'};
+    if(path.endsWith('.gz')) return {data:new Blob([gzipSync([JSON.stringify(report),JSON.stringify({recordType:'item',category:'street',label:'ALPHA',layer:'ROAD',ref:'text:0',off:true,frozen:false,registerNumbers:[]}),JSON.stringify({recordType:'item',category:'valve',label:'V',layer:'V',ref:'block:0',off:false,frozen:false,registerNumbers:['V1']})].join('\n')+'\n')]),error:null};
+    return {data:{text:async()=>JSON.stringify(report)},error:null};
+  }})}}),
 };
 let source=readFileSync('app/api/professional/infrastructure/water/register/route.ts','utf8')
+  .replace(/import \{ readWaterDiscoveryPage \}[^;]+;/,'const readWaterDiscoveryPage=globalThis.__waterRegisterTest.readWaterDiscoveryPage;')
   .replace(/import \{ NextRequest, NextResponse \} from "next\/server";/,'const {NextResponse}=globalThis.__waterRegisterTest;')
   .replace(/import \{ authorizeWaterMapRequest \}[^;]+;/,'const authorizeWaterMapRequest=globalThis.__waterRegisterTest.authorize;')
   .replace(/import \{ createAdminClient \}[^;]+;/,'const createAdminClient=globalThis.__waterRegisterTest.admin;')
@@ -82,6 +92,10 @@ assert.equal(r.body.tanks.length,1);
 assert.equal(r.body.hiddenLayers.length,1);
 assert.equal(r.body.rawPrivateField,undefined,'return selected evidence only');
 assert.equal(r.body.fullCoverageVerified,false);
+r=await GET(request('view=discovery&category=street&hidden=1&unmatched=1&q=ALPHA'));
+assert.equal(r.body.items.length,1);
+assert.equal(r.body.total,1);
+assert.equal(r.body.rawPrivateField,undefined);
 inventorySha='wrong-source';
 assert.equal((await GET(request('view=supply-evidence'))).status,500,'mismatched drawing inventory must not be exposed');
 fail=true;

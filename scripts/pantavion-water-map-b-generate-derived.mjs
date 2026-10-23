@@ -3,12 +3,16 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
+import { createGzip } from "node:zlib";
 import { fileURLToPath } from "node:url";
 
 import { createClient } from "@supabase/supabase-js";
 import { Dwg_File_Type, LibreDwg } from "@mlightcad/libredwg-web";
 import { loadApprovedOwnerDwg } from "./water-approved-owner-dwg-loader.mjs";
 import { extractAuthentic } from "./water-cad-authentic-extract.mjs";
+import { buildWaterNetworkDiscovery } from "./water-network-discovery.mjs";
 
 const SOURCES = {
   "canonical-2026-andreaspap": {
@@ -1036,6 +1040,16 @@ async function main() {
         path.join(repoRoot, ".pantavion", "water", `map-${EXPECTED.mapId.toLowerCase()}-inventory.json`);
       fs.mkdirSync(path.dirname(out), { recursive: true });
       fs.writeFileSync(out, JSON.stringify({ sourceKey: SOURCE_KEY, sourceSha256: verified.sha256, ...inventory }, null, 1) + "\n", "utf8");
+      const discovery = buildWaterNetworkDiscovery({ texts, blockRefs, segments, layers, register: inventory.register, leaders: extracted.leaders, stats: extracted.stats, duplicateCutoff: DUPLICATE_COPY_X });
+      const {items, ...metadata} = discovery;
+      const fullMetadata = {sourceKey:SOURCE_KEY,sourceSha256:verified.sha256,...metadata};
+      const sykamRefs = new Set(discovery.sykamCandidateRefs);
+      fs.writeFileSync(out + ".discovery-summary.json", JSON.stringify({...fullMetadata,sykamCandidates:items.filter(item=>sykamRefs.has(item.ref)).map(({ref,category,label,layer,registerNumbers})=>({ref,category,label,layer,registerNumbers}))}), "utf8");
+      function* discoveryLines(){
+        yield JSON.stringify({recordType:"metadata",...fullMetadata})+"\n";
+        for(const item of items)yield JSON.stringify({recordType:"item",...item})+"\n";
+      }
+      await pipeline(Readable.from(discoveryLines()),createGzip(),fs.createWriteStream(out+".discovery.jsonl.gz"));
       console.log(JSON.stringify({ ok: true, marker: "pantavion_water_network_inventory_v1", out, ...inventory.totals }, null, 2));
       return;
     }
