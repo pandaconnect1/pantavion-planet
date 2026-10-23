@@ -14,7 +14,7 @@ assert(official.some(r=>r.municipality_or_community==='Όμοδος (το)'));
 assert(official.every(r=>r.name_el&&r.name_lat&&r.locality_lat&&!r.zone_or_section));
 assert.equal(new Set(official.map(r=>r.id)).size,official.length);
 const options={q:'',locality:'',source:'',offset:0,limit:500};
-for(const [a,b] of [['Ύψωνας','Ypsonas'],['Αθηνών','Athinwn'],['Κυπριανού','Kyprianou'],['Λεμεσός','Limassol']])assert.equal(streetSearchKey(a),streetSearchKey(b));
+for(const [a,b] of [['Ύψωνας','Ypsonas'],['Αθηνών','Athinwn'],['Αθηνών','A8hnwn'],['Κυπριανού','Kyprianou'],['Κυπριανού','Kyprianoy'],['Ελευθερίου','Eleytheriou'],['Λεμεσός','Limassol']])assert.equal(streetSearchKey(a),streetSearchKey(b));
 const greek=streetDirectoryPage(official,{...options,q:'Αθηνών Ύψωνας'});
 const latin=streetDirectoryPage(official,{...options,q:'Athinwn Ypsonas'});
 assert(greek.total>0);assert.deepEqual(greek.streets.map(r=>r.id),latin.streets.map(r=>r.id));

@@ -19,7 +19,8 @@ const letters: Record<string, string> = { Α:"A", Β:"V", Γ:"G", Δ:"D", Ε:"E"
 export function streetSearchKey(value: string) {
   let key = streetNameKey(value);
   for (const [from, to] of [["ΟΥ","OU"],["ΑΙ","AI"],["ΕΙ","EI"],["ΟΙ","OI"],["ΑΥ","AV"],["ΕΥ","EV"],["ΜΠ","MP"],["ΝΤ","NT"],["ΓΚ","GK"],["ΓΓ","NG"]]) key = key.replaceAll(from, to);
-  const result = key.replace(/[Α-Ω]/g, (c) => letters[c] || c).replace(/PH/g,"F").replace(/CH|KH/g,"X")
+  const result = key.replace(/[Α-Ω]/g, (c) => letters[c] || c).replace(/(?<=[A-Z])8(?=[A-Z])/g,"TH")
+    .replace(/PH/g,"F").replace(/CH|KH/g,"X").replace(/(?<!T)H/g,"I").replace(/OY/g,"OU").replace(/EY|EF/g,"EV").replace(/AY|AF/g,"AV")
     .replace(/MP/g,"B").replace(/NT/g,"D").replace(/GK/g,"G").replace(/AI/g,"E").replace(/EI|OI/g,"I")
     .replace(/Y/g,"I").replace(/W/g,"O").replace(/[^A-Z0-9]/g,"");
   return result === "LIMASSOL" ? "LEMESOS" : result;
