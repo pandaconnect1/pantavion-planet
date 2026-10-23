@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import WaterMapDrawingTools, { useWaterMapDrawing } from "../components/water-map-drawing-tools";
 
 import WaterCadTileCanvas, {
   type CadLayerInfo,
@@ -147,6 +148,7 @@ export default function MasterBMobilePage() {
     "canonical-2026-andreaspap" | "legacy-george-85m"
   >("canonical-2026-andreaspap");
   const [viewId, setViewId] = useState<"B" | "C" | "D" | "E">("B");
+  const drawing = useWaterMapDrawing(viewId, sourceKey);
 
   const sourceLabel =
     viewId === "D"
@@ -503,7 +505,8 @@ export default function MasterBMobilePage() {
                 </a>
               </div>
             ) : null}
-            <div className="h-[68vh] min-h-[460px] overflow-hidden rounded-2xl border border-slate-800 bg-white">
+            <div className="relative h-[68vh] min-h-[460px] overflow-hidden rounded-2xl border border-slate-800 bg-white">
+              <div className="absolute left-2 top-2 z-20 max-h-[45vh] w-[min(400px,calc(100%-60px))] overflow-y-auto"><WaterMapDrawingTools drawing={drawing} localCad /></div>
               {canDraw && manifest && coreBounds ? (
                 <WaterCadTileCanvas
                   tiles={manifest.tiles ?? []}
@@ -518,7 +521,8 @@ export default function MasterBMobilePage() {
                   showHiddenLayers={showHiddenLayers}
                   layerQuery={layerQuery}
                   fetchTile={fetchTile}
-                  onPick={setSelectedDrawingPoint}
+                  onPick={(point) => { setSelectedDrawingPoint(point); drawing.pick(point); }}
+                  annotations={drawing.shapes}
                   onStats={setCanvasStats}
                   markers={viewId === "D" ? registerMarkers : undefined}
                   initialCenter={focus}
@@ -567,3 +571,4 @@ export default function MasterBMobilePage() {
     </main>
   );
 }
+

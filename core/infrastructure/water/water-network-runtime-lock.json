@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-21T20:31:31.886Z",
+  "lockedAtUtc": "2026-10-23T05:43:42.223407Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -25,7 +25,7 @@
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "ca3423fdb41ab608b5a255937713750b673618564768f4b3cb53a90ec3c1437e",
     "app/api/professional/infrastructure/water/tiles/mvt/route.ts": "34bea14126f4bcd6c069818d4f0f65599b97f7701ed238f180a0404d541304de",
     "app/professional/infrastructure/water/admin/access/page.tsx": "627e1e1f45a2bdb465acddd8053ffc47306be7adbeb7a3d0489b11cb036dc28b",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "a88f3861afc171ec3503168722b46933056aa6911d3f86519ad859ebe7c7a4f8",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "3b7a50940f9085b6229a311e703175b5b843509ebe26796613afed52e7cb3fd6",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "828652b8565772b63b8d365fff41542b815dfc25d6cb2ca07912e488a64beff8",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
@@ -37,8 +37,8 @@
     "app/api/professional/infrastructure/water/basemap/dls/route.ts": "bf0345a807b51b4b0bcbcb7a3097e4c20453f484317f479858cecdf3ca6fb2f4"
   },
   "refreshEvidence": {
-    "reason": "2026-10-21 controlled retrospective integrity review for live Render commit 4219a13: exactly one of 19 protected file hashes drifted. Compared c70d0e8 to 4219a13: map UI tile zoom cap, prefetch/cache, concurrency and navigation link only; no access-control or source-of-truth change. Water and map source files were not edited by this refresh. Founder requested full safe repair; CI must validate all protected hashes before production release.",
-    "sourceCommit": "4219a13e834c05f2376a19b9af5711ca6be4f63a",
+    "reason": "Founder explicitly requested live map drawing tools and confirmed all recording must happen on the existing map (2026-10-23). Reviewed Map A delta against protected original hash: imports, drawing hook, click branch for active tool, separate annotation canvas and toolbar, skip duplicate drawing overlay only. Canonical geometry, tile/segment delivery, source truth and access checks unchanged. Only Map A UI hash refreshed; CI verifies all other protected hashes.",
+    "sourceCommit": "556bf4aec714b0467ce3c20fd1b9b5dec2832d2f",
     "protectedFileCount": 19,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false

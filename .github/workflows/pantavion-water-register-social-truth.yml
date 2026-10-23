@@ -26,6 +26,12 @@ jobs:
       - name: Test register API behavior
         run: node --no-warnings --experimental-strip-types tests/water-register-api-behavior.test.mjs
 
+      - name: Test map drawing geometry and source isolation
+        run: node --no-warnings --experimental-strip-types tests/water-map-drawing.test.mjs
+
+      - name: Test drawing API authorization and shared work overlays
+        run: node --no-warnings --experimental-strip-types tests/water-drawing-api.test.mjs
+
       - name: Test complete and filtered print collection
         run: node --no-warnings --experimental-strip-types tests/water-register-print.test.mjs
 
@@ -37,3 +43,4 @@ jobs:
 
       - name: Test full streamed drawing catalogue
         run: node --no-warnings --experimental-strip-types tests/water-discovery-stream.test.mjs
+
