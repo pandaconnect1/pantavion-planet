@@ -113,7 +113,8 @@ export default function WaterChangeReviewClient() {
       if (!seen.current) seen.current = new Set();
       ids.forEach((id) => seen.current!.add(id));
       if (added) {
-        const text = `${added} ${added === 1 ? "νέα καταγραφή περιμένει" : "νέες καταγραφές περιμένουν"} την έγκρισή σου στο δίκτυο ύδρευσης.`;
+        const newest = pending[0];
+        const text = `${added} ${added === 1 ? "νέα καταγραφή περιμένει" : "νέες καταγραφές περιμένουν"} την έγκρισή σου στο δίκτυο ύδρευσης.${newest ? ` Πιο πρόσφατη: ${newest.street_name || "χωρίς οδό"}, από ${newest.created_by}.` : ""}`;
         setNotice(text);
         if (soundRef.current && "speechSynthesis" in window) {
           window.speechSynthesis.cancel();
@@ -355,7 +356,7 @@ export default function WaterChangeReviewClient() {
                       const g = patch.geometry as { type?: string; coordinates?: unknown; crs?: { authority?: string; code?: string } };
                       const point = g?.type === "Point" ? g.coordinates : g?.type === "LineString" ? (g.coordinates as unknown[])?.[0] : (g?.coordinates as unknown[][])?.[0]?.[0];
                       if (g?.crs?.authority === "LOCAL" && patch.source_key && Array.isArray(point)) return `/professional/infrastructure/water/master-b-mobile?sourceKey=${encodeURIComponent(patch.source_key)}&viewId=${patch.source_key === "canonical-2026-andreaspap" ? "D" : "E"}&x=${point[0]}&y=${point[1]}&asset=${patch.patch_id}`;
-                      if (g?.crs?.authority === "EPSG" && g.crs.code === "4326" && Array.isArray(point)) return `/professional/infrastructure/water/maps/live-gis?map=A&lng=${point[0]}&lat=${point[1]}`;
+                      if (g?.crs?.authority === "EPSG" && g.crs.code === "4326" && Array.isArray(point)) return `/professional/infrastructure/water/live?from=road-navigation&lng=${point[0]}&lat=${point[1]}`;
                       return "/professional/infrastructure/water/maps";
                     })()}>Στον χάρτη</Link>
                     <button

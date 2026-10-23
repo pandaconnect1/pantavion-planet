@@ -2,8 +2,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import WaterMapDrawingTools, { useWaterMapDrawing } from "../../components/water-map-drawing-tools";
-import { drawWaterAnnotation } from "@/core/infrastructure/water/water-map-drawing";
 import {
   waterAuthenticLineColorExpression,
   waterAuthenticLineOpacityExpression,
@@ -118,12 +116,6 @@ export default function WaterLiveGisClient({
   const watchRef = useRef<number | null>(null);
 
   const [activeMap, setActiveMap] = useState<MapId>(initialMap);
-  const activeMapRef = useRef(initialMap);
-  activeMapRef.current = activeMap;
-  const drawing = useWaterMapDrawing("A", null);
-  const drawingRef = useRef(drawing);
-  drawingRef.current = drawing;
-  const annotationCanvas = useRef<HTMLCanvasElement | null>(null);
   const [status, setStatus] = useState(mapStatus(initialMap));
   const [ready, setReady] = useState(false);
   const [gpsStatus, setGpsStatus] = useState("GPS: δεν ζητήθηκε ακόμη");
@@ -138,14 +130,10 @@ export default function WaterLiveGisClient({
       const maplibregl = await ensureMapLibre();
       if (disposed || !mapEl.current || mapRef.current) return;
 
-      const params = new URLSearchParams(window.location.search);
-      const lng = Number(params.get("lng"));
-      const lat = Number(params.get("lat"));
-      const hasFocus = Boolean(params.get("lng") && params.get("lat")) && Number.isFinite(lng) && Number.isFinite(lat) && Math.abs(lng) <= 180 && Math.abs(lat) <= 90;
       const map = new maplibregl.Map({
         container: mapEl.current,
-        center: hasFocus ? [lng, lat] : LIMASSOL_CENTER,
-        zoom: hasFocus ? 19 : 14,
+        center: LIMASSOL_CENTER,
+        zoom: 14,
         maxZoom: 22,
         attributionControl: true,
         transformRequest: (url: string) => {
@@ -261,20 +249,6 @@ export default function WaterLiveGisClient({
         mapRef.current = map;
         setReady(true);
       });
-      map.on("click", (event: any) => { if (activeMapRef.current === "A") drawingRef.current.pick({ x: event.lngLat.lng, y: event.lngLat.lat }); });
-      map.on("render", () => {
-        const canvas = annotationCanvas.current;
-        if (!canvas) return;
-        const rect = map.getCanvas().getBoundingClientRect();
-        const ratio = window.devicePixelRatio || 1;
-        if (canvas.width !== Math.round(rect.width * ratio)) canvas.width = Math.round(rect.width * ratio);
-        if (canvas.height !== Math.round(rect.height * ratio)) canvas.height = Math.round(rect.height * ratio);
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-        ctx.clearRect(0, 0, rect.width, rect.height);
-        if (activeMapRef.current === "A") for (const shape of drawingRef.current.shapes) drawWaterAnnotation(ctx, shape, (point) => { const p = map.project(point); return [p.x, p.y]; });
-      });
     }
 
     void boot();
@@ -291,8 +265,6 @@ export default function WaterLiveGisClient({
       mapRef.current = null;
     };
   }, []);
-
-  useEffect(() => { if (ready) mapRef.current?.triggerRepaint(); }, [drawing.shapes, ready, activeMap]);
 
   function selectMap(mapId: MapId) {
     setActiveMap(mapId);
@@ -432,16 +404,11 @@ export default function WaterLiveGisClient({
           </button>
         </div>
 
-        {activeMap === "A" ? <WaterMapDrawingTools drawing={drawing} /> : null}
-        <div className="relative">
         <div
           ref={mapEl}
           className="h-[calc(100dvh-150px)] min-h-[560px] w-full overflow-hidden rounded-2xl border border-[#d8b45f]/25 bg-slate-900"
         />
-        <canvas ref={annotationCanvas} aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full" />
-        </div>
       </section>
     </main>
   );
 }
-
