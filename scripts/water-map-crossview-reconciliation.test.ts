@@ -21,4 +21,16 @@ const differentCrs = compareWaterMapObservations([
 assert(!differentCrs.some((difference) => difference.kind === "conflicting_geometry"), "different CRS must not produce a false geometry conflict");
 assert(differentCrs.some((difference) => difference.kind === "unverified_position"), "different CRS requires georeferencing review");
 
+
+const duplicate = compareWaterMapObservations([
+  { mapId: "A", assetId: "SV-DUP", geometryFingerprint: "p1", sourceKey: "EPSG:4326", verifiedPosition: true, approved: true },
+  { mapId: "A", assetId: "SV-DUP", geometryFingerprint: "p1", sourceKey: "EPSG:4326", verifiedPosition: true, approved: true },
+]);
+assert(duplicate.some((difference) => difference.kind === "duplicate_asset_id" && difference.requiresHumanApproval));
+
+const missingGeometry = compareWaterMapObservations([
+  { mapId: "B", assetId: "PIPE-UNKNOWN", geometryFingerprint: "", sourceKey: "EPSG:4326", verifiedPosition: true, approved: true },
+]);
+assert(missingGeometry.some((difference) => difference.kind === "unverified_position"));
+
 console.log("PASS: read-only A/B/D reconciliation requires human approval");
