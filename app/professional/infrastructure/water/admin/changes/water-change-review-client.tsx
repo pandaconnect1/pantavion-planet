@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 
 type Patch = {
   patch_id: string;
@@ -69,8 +70,15 @@ export default function WaterChangeReviewClient() {
   const [message, setMessage] = useState("Φόρτωση pending αλλαγών…");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [decisionNote, setDecisionNote] = useState("");
+  const [sound, setSound] = useState(false);
+  const [notice, setNotice] = useState("");
+  const soundRef = useRef(false);
+  const seen = useRef<Set<string> | null>(null);
+  const loading = useRef(false);
 
   const load = useCallback(async () => {
+    if (loading.current) return;
+    loading.current = true;
     try {
       const [patchResponse, pinResponse] = await Promise.all([
         fetch("/api/professional/infrastructure/water/changes/patches?limit=300", {
@@ -98,6 +106,22 @@ export default function WaterChangeReviewClient() {
 
       setPatches(patchBody.patches || []);
       setPins(pinBody.pins || []);
+      const pending = (patchBody.patches || []).filter((p) => ["local_only", "pending_review", "conflict"].includes(p.status));
+      const pendingEvidence = (pinBody.pins || []).filter((p) => p.review_state === "pending");
+      const ids = [...pending.map((p) => p.patch_id), ...pendingEvidence.map((p) => p.pin_id)];
+      const added = seen.current ? ids.filter((id) => !seen.current!.has(id)).length : ids.length;
+      if (!seen.current) seen.current = new Set();
+      ids.forEach((id) => seen.current!.add(id));
+      if (added) {
+        const text = `${added} ${added === 1 ? "νέα καταγραφή περιμένει" : "νέες καταγραφές περιμένουν"} την έγκρισή σου στο δίκτυο ύδρευσης.`;
+        setNotice(text);
+        if (soundRef.current && "speechSynthesis" in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = "el-GR";
+          window.speechSynthesis.speak(utterance);
+        }
+      }
       setMessage("Η λίστα ενημερώθηκε.");
     } catch (error) {
       setMessage(
@@ -105,11 +129,17 @@ export default function WaterChangeReviewClient() {
           ? error.message
           : "Δεν φορτώθηκαν οι αλλαγές.",
       );
+    } finally {
+      loading.current = false;
     }
   }, []);
 
   useEffect(() => {
     void load();
+    const timer = window.setInterval(() => { if (!document.hidden) void load(); }, 20000);
+    const refresh = () => void load();
+    window.addEventListener("focus", refresh);
+    return () => { clearInterval(timer); window.removeEventListener("focus", refresh); window.speechSynthesis?.cancel(); };
   }, [load]);
 
   const pendingPatches = useMemo(
@@ -277,6 +307,17 @@ export default function WaterChangeReviewClient() {
           />
         </label>
 
+        <div className="mt-4 space-y-2 rounded-xl border border-cyan-400/30 p-3">
+          <button type="button" aria-pressed={sound} onClick={() => {
+            if (!("speechSynthesis" in window)) { setMessage("Η εκφώνηση δεν υποστηρίζεται σε αυτή τη συσκευή."); return; }
+            const enabled = !sound; setSound(enabled); soundRef.current = enabled;
+            window.speechSynthesis.cancel();
+            if (enabled) { const speech = new SpeechSynthesisUtterance(notice || "Οι ηχητικές ειδοποιήσεις εγκρίσεων ενεργοποιήθηκαν."); speech.lang = "el-GR"; window.speechSynthesis.speak(speech); }
+          }} className="rounded-xl border border-cyan-400 px-3 py-2 font-bold">{sound ? "Ηχητικές ειδοποιήσεις: ενεργές" : "Ενεργοποίηση ηχητικών ειδοποιήσεων"}</button>
+          <p role="status" className="font-bold text-cyan-100">{notice || "Δεν έχουν εντοπιστεί νέες καταγραφές."}</p>
+          <p className="text-xs text-slate-300">Έλεγχος ανά 20 δευτερόλεπτα όσο η σελίδα είναι ανοικτή και ορατή. Η εκφώνηση εξαρτάται από τις φωνές και τις ρυθμίσεις ήχου της συσκευής. Δεν αποστέλλεται ακόμη ειδοποίηση όταν η εφαρμογή είναι κλειστή.</p>
+        </div>
+
         <p className="mt-3 rounded-2xl border border-white/10 bg-black/20 p-3 text-sm font-bold text-slate-300">
           {message}
         </p>
@@ -310,6 +351,13 @@ export default function WaterChangeReviewClient() {
                   </div>
 
                   <div className="flex gap-2">
+                    <Link className="rounded-xl border border-cyan-400 px-3 py-2 text-xs font-bold" href={(() => {
+                      const g = patch.geometry as { type?: string; coordinates?: unknown; crs?: { authority?: string; code?: string } };
+                      const point = g?.type === "Point" ? g.coordinates : g?.type === "LineString" ? (g.coordinates as unknown[])?.[0] : (g?.coordinates as unknown[][])?.[0]?.[0];
+                      if (g?.crs?.authority === "LOCAL" && patch.source_key && Array.isArray(point)) return `/professional/infrastructure/water/master-b-mobile?sourceKey=${encodeURIComponent(patch.source_key)}&viewId=${patch.source_key === "canonical-2026-andreaspap" ? "D" : "E"}&x=${point[0]}&y=${point[1]}&asset=${patch.patch_id}`;
+                      if (g?.crs?.authority === "EPSG" && g.crs.code === "4326" && Array.isArray(point)) return `/professional/infrastructure/water/maps/live-gis?map=A&lng=${point[0]}&lat=${point[1]}`;
+                      return "/professional/infrastructure/water/maps";
+                    })()}>Στον χάρτη</Link>
                     <button
                       type="button"
                       disabled={busyId === patch.patch_id}
@@ -440,3 +488,4 @@ export default function WaterChangeReviewClient() {
     </div>
   );
 }
+

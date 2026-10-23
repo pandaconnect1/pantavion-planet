@@ -59,7 +59,7 @@ export interface PantavionWaterPatchGeometry {
     | Array<[number, number]>
     | Array<Array<[number, number]>>;
   crs: {
-    authority: "EPSG" | "ESRI";
+    authority: "EPSG" | "ESRI" | "LOCAL";
     code: string;
   };
 }
@@ -141,6 +141,8 @@ export function assertPantavionWaterPatchGeometry(
   if (!geometry?.crs?.code || !geometry?.crs?.authority) {
     throw new Error("water_patch_crs_required");
   }
+  if (!["EPSG", "ESRI", "LOCAL"].includes(geometry.crs.authority)) throw new Error("water_patch_crs_invalid");
+  if (!["Point", "LineString", "Polygon"].includes(geometry.type)) throw new Error("water_patch_geometry_type_invalid");
 
   if (geometry.type === "Point") {
     const pair = geometry.coordinates as [number, number];
@@ -258,3 +260,4 @@ export function getPantavionWaterSpatialPatchContract() {
     ],
   };
 }
+

@@ -179,6 +179,11 @@ export async function POST(request: Request) {
 
     const geometry = body.geometry as PantavionWaterPatchGeometry;
     assertPantavionWaterPatchGeometry(geometry);
+    if (geometry.crs.authority === "LOCAL") {
+      const validSource = sourceKey === "canonical-2026-andreaspap" || sourceKey === "legacy-george-85m";
+      const validMap = sourceKey === "canonical-2026-andreaspap" ? ["B", "D"].includes(mapId) : ["C", "E"].includes(mapId);
+      if (!validSource || !validMap || geometry.crs.code !== sourceKey) throw new Error("water_patch_local_source_mismatch");
+    }
     const bbox = geometryBounds(geometry);
     const fingerprint = mutationFingerprint({
       actorRef: access.actorRef, clientMutationId, mapId, sourceKey,
@@ -249,6 +254,9 @@ export async function GET(request: Request) {
     const mapId = clean(url.searchParams.get("mapId"), 100);
     const sourceKey = clean(url.searchParams.get("sourceKey"), 160) || undefined;
     const mine = url.searchParams.get("mine") === "1";
+    // Shared work overlays are explicitly visible to approved water users.
+    // Review/mutation rights remain admin-only in the separate PATCH route.
+    const shared = !mine && url.searchParams.get("shared") === "1";
     const limit = Math.min(1000, Math.max(1, Number(url.searchParams.get("limit") || 200)));
 
     const values = ["minX", "minY", "maxX", "maxY"].map((key) => {
@@ -265,7 +273,7 @@ export async function GET(request: Request) {
       sourceKey,
       actorRef: access.actorRef,
       mine,
-      admin: access.mode === "admin-session",
+      admin: access.mode === "admin-session" || shared,
       limit,
       minX: hasBbox ? minX : null,
       minY: hasBbox ? minY : null,
@@ -276,7 +284,7 @@ export async function GET(request: Request) {
     if (!result.ok) throw new Error("water_spatial_patch_read_failed");
 
     return NextResponse.json(
-      { ok: true, accessMode: access.mode, mine, patches: result.patches ?? [] },
+      { ok: true, accessMode: access.mode, mine, patches: shared ? (result.patches ?? []).filter((p) => ["pending_review", "approved_overlay", "officialization_candidate", "officialized"].includes(String((p as Record<string, unknown>).status))) : result.patches ?? [] },
       { headers: { "Cache-Control": "private, no-store" } },
     );
   } catch (error) {
@@ -286,3 +294,4 @@ export async function GET(request: Request) {
     );
   }
 }
+

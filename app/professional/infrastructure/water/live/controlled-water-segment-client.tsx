@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import WaterMapDrawingTools, { useWaterMapDrawing } from "../components/water-map-drawing-tools";
+import WaterLeafletDrawingOverlay from "../components/water-leaflet-drawing-overlay";
 import { WATER_MATERIAL_SAMPLE_CATALOG } from "@/core/water/water-material-catalog";
 import {
   PANTAVION_LANGUAGE_CATALOG,
@@ -736,6 +738,9 @@ export default function ControlledWaterSegmentClient() {
 
   const mapEl = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
+  const drawing = useWaterMapDrawing("A", null, accessState === "approved");
+  const drawingRef = useRef(drawing);
+  drawingRef.current = drawing;
   const networkTileCacheRef = useRef<
     Map<string, { layer: any; featureCount: number; lastUsedAt: number }>
   >(new Map());
@@ -1079,6 +1084,10 @@ export default function ControlledWaterSegmentClient() {
 
         mapRef.current = map;
         map.on("click", (event: { latlng: { lat: number; lng: number } }) => {
+          if (drawingRef.current.tool !== "navigate") {
+            drawingRef.current.pick({ x: event.latlng.lng, y: event.latlng.lat });
+            return;
+          }
           void selectMapPointRef.current(event);
         });
         setMapReady(true);
@@ -1836,6 +1845,7 @@ export default function ControlledWaterSegmentClient() {
       const nextLayer = L.layerGroup();
 
       for (const patch of patches) {
+        if (patch.attributes?.drawing) continue;
         let layer = null;
 
         if (patch.geometry_type === "Point") {
@@ -2585,7 +2595,11 @@ export default function ControlledWaterSegmentClient() {
             </span>
           </div>
 
-          <div ref={mapEl} className="h-[70vh] min-h-[420px] w-full bg-slate-200 sm:min-h-[560px]" />
+          <div className="relative">
+            <div ref={mapEl} className="h-[70vh] min-h-[420px] w-full bg-slate-200 sm:min-h-[560px]" />
+            <WaterLeafletDrawingOverlay map={mapReady ? mapRef.current : null} shapes={drawing.shapes} />
+            <div className="absolute left-2 top-2 z-[500] max-h-[45vh] w-[min(400px,calc(100%-60px))] overflow-y-auto"><WaterMapDrawingTools drawing={drawing} /></div>
+          </div>
         </section>
       </section>
     </main>

@@ -82,7 +82,7 @@ function sourceTruth(choice: SourceChoice) {
   };
 }
 
-async function uploadFieldArtifact(
+export async function uploadFieldArtifact(
   file: File,
   onProgress: (value: number) => void,
 ) {

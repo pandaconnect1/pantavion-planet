@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { drawWaterAnnotation, type DrawingShape } from "@/core/infrastructure/water/water-map-drawing";
 
 /**
  * Viewport-driven canvas viewer for authentic derived CAD tiles.
@@ -77,6 +78,7 @@ type Props = {
   onStats?: (stats: CanvasStats) => void;
   /** Register markers drawn over the drawing (valves, tanks…), with their number. */
   markers?: CadMarker[];
+  annotations?: DrawingShape[];
   /** Open centred on this drawing point (e.g. a register entry), close in. */
   initialCenter?: { x: number; y: number } | null;
   /** Called when the view settles, with the visible drawing bounds. */
@@ -137,6 +139,7 @@ export default function WaterCadTileCanvas({
   onPick,
   onStats,
   markers,
+  annotations,
   initialCenter,
   onViewChange,
 }: Props) {
@@ -357,7 +360,7 @@ export default function WaterCadTileCanvas({
   useEffect(() => {
     snapshotRef.current = null;
     requestDraw();
-  }, [markers, requestDraw]);
+  }, [markers, annotations, requestDraw]);
 
   // ---- drawing -----------------------------------------------------------
   useEffect(() => {
@@ -633,6 +636,10 @@ export default function WaterCadTileCanvas({
       }
     }
 
+    for (const annotation of annotations ?? []) {
+      drawWaterAnnotation(ctx, annotation, ([x, y]) => [toSx(x), toSy(y)]);
+    }
+
     const bitmap = snapshotCanvasRef.current ?? document.createElement("canvas");
     snapshotCanvasRef.current = bitmap;
     if (bitmap.width !== canvas.width) bitmap.width = canvas.width;
@@ -795,3 +802,4 @@ export default function WaterCadTileCanvas({
     </div>
   );
 }
+
