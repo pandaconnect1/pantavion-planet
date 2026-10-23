@@ -1,0 +1,40 @@
+name: Pantavion External Road Source Check
+on:
+  push:
+    branches: [feat/limassol-external-road-check]
+    paths:
+      - scripts/water-external-road-source.py
+      - .github/workflows/pantavion-water-external-road-source.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install osmium==4.2.0
+      - name: Download public sources without accessing private water data
+        run: python scripts/water-external-road-source.py
+      - name: Preserve read-only source check on feature branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          GH_BRANCH: ${{ github.ref_name }}
+        run: |
+          python - <<'PY'
+          import base64,json,os,urllib.request,urllib.error
+          path='data/water/external-road-source-probe.json'
+          url='https://api.github.com/repos/'+os.environ['GH_REPO']+'/contents/'+path
+          headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'}
+          body={'message':'Preserve external road source access check','branch':os.environ['GH_BRANCH'],'content':base64.b64encode(open(path,'rb').read()).decode()}
+          try:
+            with urllib.request.urlopen(urllib.request.Request(url+'?ref='+os.environ['GH_BRANCH'],headers=headers)) as r: body['sha']=json.load(r)['sha']
+          except urllib.error.HTTPError as e:
+            if e.code!=404: raise
+          with urllib.request.urlopen(urllib.request.Request(url,data=json.dumps(body).encode(),headers=headers,method='PUT')) as r: print('Saved source check:',json.load(r)['commit']['sha'])
+          PY
