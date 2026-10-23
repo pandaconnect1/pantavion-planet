@@ -287,20 +287,19 @@ function WaterMapWorkspace({ map, drawing, measuring, onMeasuringChange, lang, c
     };
     history.current = []; cursor.current = -1;
     remember(); map.on("moveend", remember);
-    const containers = [map.zoomControl?.getContainer(), map.getContainer().querySelector(".leaflet-control-layers")].filter(Boolean) as HTMLElement[];
-    const original = containers.map((element) => ({ element, parent: element.parentNode, next: element.nextSibling }));
-    containers.forEach((element) => controls.current?.appendChild(element));
+    // Keep Leaflet-owned control elements in their original DOM hierarchy.
+    // Moving them into React's toolbar can break Leaflet teardown and crash hydration.
     return () => {
       map.off("moveend", remember);
-      original.forEach(({ element, parent, next }) => {
-        if (parent) parent.insertBefore(element, next?.parentNode === parent ? next : null);
-      });
     };
   }, [map]);
 
   useEffect(() => {
     if (!map || !root.current) return;
-    const observer = new ResizeObserver(() => map.invalidateSize({ pan: false }));
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => {
+      try { map.invalidateSize({ pan: false }); } catch { /* Map may have been removed during navigation. */ }
+    });
     observer.observe(root.current);
     observer.observe(map.getContainer());
     return () => observer.disconnect();
