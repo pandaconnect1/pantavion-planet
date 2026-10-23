@@ -37,11 +37,14 @@ export function compareWaterMapObservations(
     if (missing.length) {
       differences.push({ assetId, kind: "missing_in_view", mapIds: [...missing], requiresHumanApproval: true });
     }
-    const geometry = new Set(records.map((record) => record.sourceKey + ":" + record.geometryFingerprint));
-    if (geometry.size > 1) {
+    // Fingerprints from different coordinate systems are not directly comparable.
+    // Flag them for georeferencing rather than declaring a geometry conflict.
+    const crs = new Set(records.map((record) => record.sourceKey));
+    const geometry = new Set(records.map((record) => record.geometryFingerprint));
+    if (crs.size === 1 && geometry.size > 1) {
       differences.push({ assetId, kind: "conflicting_geometry", mapIds: [...seen], requiresHumanApproval: true });
     }
-    if (records.some((record) => !record.verifiedPosition || !record.approved)) {
+    if (crs.size > 1 || records.some((record) => !record.verifiedPosition || !record.approved)) {
       differences.push({ assetId, kind: "unverified_position", mapIds: [...seen], requiresHumanApproval: true });
     }
   }
