@@ -29,6 +29,9 @@ jobs:
       - name: Test map drawing geometry and source isolation
         run: node --no-warnings --experimental-strip-types tests/water-map-drawing.test.mjs
 
+      - name: Test complete Limassol streets and unified catalogue API
+        run: node --no-warnings --experimental-strip-types tests/water-street-directory.test.mjs && node --no-warnings --experimental-strip-types tests/water-street-directory-api.test.mjs
+
       - name: Test drawing API authorization and shared work overlays
         run: node --no-warnings --experimental-strip-types tests/water-drawing-api.test.mjs
 

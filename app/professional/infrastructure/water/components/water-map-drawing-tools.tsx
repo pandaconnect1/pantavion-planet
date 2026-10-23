@@ -17,6 +17,8 @@ export function useWaterMapDrawing(mapId: string, sourceKey: string | null, enab
   const [rows, setRows] = useState<DrawingShape[]>([]);
   const [area, setArea] = useState("");
   const [street, setStreet] = useState("");
+  const [zone, setZone] = useState("");
+  const [lineAssetType, setLineAssetType] = useState<"pipe" | "road_reference">("pipe");
   const [assetId, setAssetId] = useState("");
   const [action, setAction] = useState("create");
   const [note, setNote] = useState("");
@@ -69,6 +71,7 @@ export function useWaterMapDrawing(mapId: string, sourceKey: string | null, enab
       const geometry = drawingGeometry(tool, points, sourceKey);
       if (!area.trim()) throw new Error("Συμπλήρωσε περιοχή / χωριό.");
       if (tool === "text" && !style.text.trim()) throw new Error("Γράψε το κείμενο της σημείωσης.");
+      if (tool === "line" && lineAssetType === "road_reference" && !street.trim()) throw new Error("Δήλωσε ονομασία ή περιγραφή ανώνυμης οδού.");
       if (["replace", "close", "open", "isolate", "restore", "retire"].includes(action) && !assetId.trim()) throw new Error("Δήλωσε το αναγνωριστικό της υπάρχουσας βάνας / αγωγού.");
       if (["close", "open"].includes(action) && (tool !== "symbol" || style.symbol !== "valve")) throw new Error("Για άνοιγμα / κλείσιμο επίλεξε σύμβολο βάνας.");
       if (["isolate", "restore"].includes(action) && tool !== "line") throw new Error("Για απομόνωση / επαναφορά επίλεξε γραμμή αγωγού.");
@@ -83,13 +86,13 @@ export function useWaterMapDrawing(mapId: string, sourceKey: string | null, enab
         artifactRefs.push(uploaded.current!.ref);
       }
       const operation = ["create", "replace", "retire"].includes(action) ? action : "annotate";
-      const assetType = tool === "symbol" && style.symbol !== "tank" ? style.symbol : tool === "line" ? "pipe" : "general_update";
-      const signature = JSON.stringify({ mapId, sourceKey, tool, points, style, area, street, assetId, action, note, artifactRefs });
+      const assetType = tool === "symbol" && style.symbol !== "tank" ? style.symbol : tool === "line" ? lineAssetType : "general_update";
+      const signature = JSON.stringify({ mapId, sourceKey, tool, points, style, area, street, zone, lineAssetType, assetId, action, note, artifactRefs });
       if (!mutation.current || mutationSignature.current !== signature) { mutation.current = crypto.randomUUID(); mutationSignature.current = signature; }
       const response = await fetch("/api/professional/infrastructure/water/changes/patches", { method: "POST", cache: "no-store", credentials: "include", headers: { "content-type": "application/json", ...pantavionWaterApprovedDeviceHeaders() }, body: JSON.stringify({
         clientMutationId: mutation.current, mapId, sourceKey, assetType, operation, geometry,
         location: { source: "manual_map", accuracyState: "estimated", streetName: street.trim() || null, area: area.trim(), snappedAssetId: assetId.trim() || null },
-        attributes: { drawing: { tool, style }, fieldAction: action, officialAssetId: assetId.trim() || null, note: note.trim() || null, reportedStateOnly: ["close", "open", "isolate", "restore"].includes(action), verifiedWaterFlow: false },
+        attributes: { drawing: { tool, style }, zone: zone.trim() || null, fieldAction: action, officialAssetId: assetId.trim() || null, note: note.trim() || null, reportedStateOnly: ["close", "open", "isolate", "restore"].includes(action), verifiedWaterFlow: false },
         evidenceRefs: [], artifactRefs, relatedJobIds: [], relatedReportIds: [],
       }) });
       const body = await response.json();
@@ -104,7 +107,7 @@ export function useWaterMapDrawing(mapId: string, sourceKey: string | null, enab
   }
 
   const shapes = useMemo<DrawingShape[]>(() => [...rows, ...(points.length && tool !== "navigate" ? [{ id: "draft", tool, points, style, status: "draft" }] : [])], [rows, points, tool, style]);
-  return { tool, changeTool, points, style, changeStyle, area, setArea, street, setStreet, assetId, setAssetId, action, setAction, note, setNote, file, setFile, busy, message, shapes, pick,
+  return { tool, changeTool, points, style, changeStyle, area, setArea, street, setStreet, zone, setZone, lineAssetType, setLineAssetType, assetId, setAssetId, action, setAction, note, setNote, file, setFile, busy, message, shapes, pick,
     undo: () => { setPoints((old) => old.slice(0, -1)); mutation.current = null; }, clear: () => { setPoints([]); mutation.current = null; }, submit,
     refresh: () => void reload().catch((error) => setMessage(error.message)),
   };
@@ -119,6 +122,7 @@ export default function WaterMapDrawingTools({ drawing, localCad = false }: { dr
       <fieldset disabled={d.busy} className="mt-3 space-y-3 disabled:opacity-60">
         <legend className="sr-only">Εργαλεία και στοιχεία εργασίας</legend>
         <div className="flex flex-wrap gap-2">{tools.map(([value, label]) => <button type="button" key={value} aria-pressed={d.tool === value} onClick={() => d.changeTool(value)} className={`${input} ${d.tool === value ? "ring-2 ring-cyan-300" : ""}`}>{label}</button>)}</div>
+        {d.tool === "line" ? <label className="grid gap-1">Είδος γραμμής<select className={input} value={d.lineAssetType} onChange={(e) => d.setLineAssetType(e.target.value as "pipe" | "road_reference")}><option value="pipe">Αγωγός δικτύου</option><option value="road_reference">Νέα οδός / επέκταση οδού</option></select></label> : null}
         <p>Επίλεξε εργαλείο και πάτησε διαδοχικά σημεία στον χάρτη. Σύρε για μετακίνηση.</p>
         <div className="flex flex-wrap items-center gap-3">
           <label>Χρώμα <input aria-label="Χρώμα σχεδίασης" type="color" value={d.style.color} onChange={(e) => d.changeStyle({ ...d.style, color: e.target.value })} /></label>
@@ -129,6 +133,7 @@ export default function WaterMapDrawingTools({ drawing, localCad = false }: { dr
         {d.tool === "symbol" ? <label className="grid gap-1">Σύμβολο<select className={input} value={d.style.symbol} onChange={(e) => d.changeStyle({ ...d.style, symbol: e.target.value })}>{Object.entries({ valve: "Βάνα", hydrant: "Υδροστόμιο", meter: "Μετρητής", tank: "Δεξαμενή", fault: "Βλάβη", repair: "Επισκευή" }).map(([key, label]) => <option key={key} value={key}>{WATER_DRAWING_SYMBOLS[key]} {label}</option>)}</select></label> : null}
         <div className="grid gap-2 sm:grid-cols-2"><label className="grid gap-1">Περιοχή / χωριό<input className={input} maxLength={500} value={d.area} onChange={(e) => d.setArea(e.target.value)} /></label><label className="grid gap-1">Οδός / ανώνυμη θέση<input className={input} maxLength={500} value={d.street} onChange={(e) => d.setStreet(e.target.value)} /></label></div>
         <label className="grid gap-1">Εργασία<select className={input} value={d.action} onChange={(e) => d.setAction(e.target.value)}>{actions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+        <label className="grid gap-1">Ζώνη (αν είναι γνωστή)<input className={input} maxLength={200} value={d.zone} onChange={(e) => d.setZone(e.target.value)} /></label>
         <label className="grid gap-1">Υφιστάμενος αριθμός SV / αναγνωριστικό αγωγού<input className={input} maxLength={200} value={d.assetId} onChange={(e) => d.setAssetId(e.target.value)} /></label>
         <label className="grid gap-1">Τι έγινε / υλικά / διάμετρος<textarea className={input} maxLength={2000} value={d.note} onChange={(e) => d.setNote(e.target.value)} /></label>
         <label className="grid gap-1">Φωτογραφία εργασίας<input className={input} type="file" accept="image/*" capture="environment" onChange={(e) => d.setFile(e.target.files?.[0] || null)} />{d.file ? <span>{d.file.name}</span> : null}</label>

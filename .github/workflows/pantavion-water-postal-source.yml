@@ -1,0 +1,41 @@
+name: Pantavion Limassol Postal Source Import
+on:
+  push:
+    branches: [feat/unified-limassol-streets]
+    paths:
+      - scripts/water-postal-source-inspect.py
+      - .github/workflows/pantavion-water-postal-source.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download and inspect the official licensed workbook
+        run: python scripts/water-postal-source-inspect.py
+      - name: Preserve inspected source rows on the feature branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          GH_BRANCH: ${{ github.ref_name }}
+        run: |
+          python - <<'PY'
+          import base64,json,os,urllib.request
+          path='data/water/limassol-postal-source-2024.json'
+          url='https://api.github.com/repos/'+os.environ['GH_REPO']+'/contents/'+path
+          headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'}
+          body={'message':'Import licensed Cyprus Post 2024 source rows for Limassol validation','branch':os.environ['GH_BRANCH'],'content':base64.b64encode(open(path,'rb').read()).decode()}
+          request=urllib.request.Request(url+'?ref='+os.environ['GH_BRANCH'],headers=headers)
+          try:
+            with urllib.request.urlopen(request) as response: body['sha']=json.load(response)['sha']
+          except urllib.error.HTTPError as error:
+            if error.code!=404: raise
+          request=urllib.request.Request(url,data=json.dumps(body).encode(),headers=headers,method='PUT')
+          with urllib.request.urlopen(request) as response: print('Source rows preserved:',json.load(response)['commit']['sha'])
+          PY

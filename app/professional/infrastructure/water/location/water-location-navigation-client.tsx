@@ -230,6 +230,8 @@ export default function WaterLocationNavigationClient() {
       // Reverse handoff: Map A can open road navigation at the same point.
       // Coordinates are reference-only; this never grants protected network access.
       const handoff = new URLSearchParams(window.location.search);
+      const catalogueQuery = handoff.get("q")?.trim().slice(0, 200);
+      if (catalogueQuery) { setQuery(catalogueQuery); setMessage("Οδός από τον κατάλογο: πάτησε αναζήτηση και επίλεξε το σωστό αποτέλεσμα πριν ανοίξεις το δίκτυο."); }
       if (handoff.get("from") === "water-network") {
         const latRaw = handoff.get("lat");
         const lngRaw = handoff.get("lng");
@@ -692,3 +694,4 @@ export default function WaterLocationNavigationClient() {
     </div>
   );
 }
+
