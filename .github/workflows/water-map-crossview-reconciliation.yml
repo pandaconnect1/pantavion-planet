@@ -1,0 +1,30 @@
+name: Water Map Crossview Reconciliation
+
+on:
+  pull_request:
+    paths:
+      - "core/infrastructure/water/water-map-crossview-reconciliation.ts"
+      - "core/infrastructure/water/road-address-coverage-audit.ts"
+      - "scripts/water-map-crossview-reconciliation.test.ts"
+      - "scripts/road-address-coverage-audit.test.ts"
+      - ".github/workflows/water-map-crossview-reconciliation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reconciliation-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Compare map A B D observations
+        run: node --no-warnings --experimental-strip-types scripts/water-map-crossview-reconciliation.test.ts
+      - name: Audit road and building number source permissions
+        run: node --no-warnings --experimental-strip-types scripts/road-address-coverage-audit.test.ts
+      - name: Verify protected water source truth
+        run: npm run audit:water:network-lock
