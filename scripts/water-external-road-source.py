@@ -62,7 +62,10 @@ for wid,t,c in e.ways:
     covering=sorted([a for a in local if a[3].covers(p)],key=lambda a:(-a[0],a[3].area))
     place=None
     if covering:
-        a=covering[0]\n        parents=[v for v in covering if v[0]<=8]\n        parent=parents[0][2] if parents else {}\n        place=(a[1],a[2].get("name:el") or a[2].get("name") or "",a[2].get("name:en") or "",a[0],parent.get("name:el") or parent.get("name") or "",parent.get("name:en") or "")
+        a=covering[0]
+        parents=[v for v in covering if v[0]<=8]
+        parent=parents[0][2] if parents else {}
+        place=(a[1],a[2].get("name:el") or a[2].get("name") or "",a[2].get("name:en") or "",a[0],parent.get("name:el") or parent.get("name") or "",parent.get("name:en") or "")
     placeid=-1
     if place:
         if place not in pi: pi[place]=len(places); places.append(list(place))
