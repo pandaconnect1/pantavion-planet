@@ -261,7 +261,6 @@ function WaterMapWorkspace({ map, drawing, measuring, onMeasuringChange, lang, c
   children: ReactNode;
 }) {
   const root = useRef<HTMLDivElement>(null);
-  const controls = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
   const [menu, setMenu] = useState(false);
   const [points, setPoints] = useState<Array<[number, number]>>([]);
@@ -287,20 +286,19 @@ function WaterMapWorkspace({ map, drawing, measuring, onMeasuringChange, lang, c
     };
     history.current = []; cursor.current = -1;
     remember(); map.on("moveend", remember);
-    const containers = [map.zoomControl?.getContainer(), map.getContainer().querySelector(".leaflet-control-layers")].filter(Boolean) as HTMLElement[];
-    const original = containers.map((element) => ({ element, parent: element.parentNode, next: element.nextSibling }));
-    containers.forEach((element) => controls.current?.appendChild(element));
+    // Keep Leaflet-owned control elements in their original DOM hierarchy.
+    // Moving them into React's toolbar can break Leaflet teardown and crash hydration.
     return () => {
       map.off("moveend", remember);
-      original.forEach(({ element, parent, next }) => {
-        if (parent) parent.insertBefore(element, next?.parentNode === parent ? next : null);
-      });
     };
   }, [map]);
 
   useEffect(() => {
     if (!map || !root.current) return;
-    const observer = new ResizeObserver(() => map.invalidateSize({ pan: false }));
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => {
+      try { map.invalidateSize({ pan: false }); } catch { /* Map may have been removed during navigation. */ }
+    });
     observer.observe(root.current);
     observer.observe(map.getContainer());
     return () => observer.disconnect();
@@ -373,7 +371,6 @@ function WaterMapWorkspace({ map, drawing, measuring, onMeasuringChange, lang, c
       <button type="button" className={button} aria-expanded={menu} aria-controls="water-map-tools-menu" onClick={() => setMenu(!menu)}>☰ {label("Μενού", "Menu")}</button>
       <button type="button" className={button} aria-pressed={measuring} onClick={() => { drawing.changeTool("navigate"); onMeasuringChange(!measuring); }}>{label("Χάρακας", "Ruler")}</button>
       <button type="button" className={button} aria-pressed={expanded} onClick={() => void fullscreen()}>{expanded ? label("Έξοδος πλήρους οθόνης", "Exit fullscreen") : label("Πλήρης οθόνη", "Fullscreen")}</button>
-      <div ref={controls} className="flex items-center gap-2 [&_.leaflet-control]:!m-0 [&_.leaflet-control]:!float-none" />
     </nav>
     {menu ? <div id="water-map-tools-menu" className="max-h-[35dvh] shrink-0 overflow-y-auto p-2">
       <WaterMapDrawingTools drawing={drawing} />
