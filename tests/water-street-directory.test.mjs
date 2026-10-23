@@ -1,0 +1,47 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {postalDirectoryRows,postalDatabaseRecords,streetSearchKey,drawingStreetRows,fieldStreetRows,mergeStreetSources,streetDirectoryPage} from '../core/infrastructure/water/water-street-directory.ts';
+const data=JSON.parse(readFileSync('data/water/limassol-postal-source-2024.json','utf8'));
+const official=postalDirectoryRows(data);
+assert.equal(data.sha256,'5e89b5768cb914af3a22e2df0438532bbfd69a5f8556e1cc2ec87d665a96db04');
+assert.equal(data.rows.length,8978);
+assert.equal(official.length,8800);
+assert.equal(official.reduce((n,r)=>n+r.source_refs.length,0),8978,'Every original postal row is retained within its street/locality group');
+assert.equal(new Set(official.map(r=>r.municipality_or_community)).size,143);
+assert(official.some(r=>r.municipality_or_community==='Ύψωνας'));
+assert(official.some(r=>r.municipality_or_community==='Παρεκκλησιά'));
+assert(official.some(r=>r.municipality_or_community==='Όμοδος (το)'));
+assert(official.every(r=>r.name_el&&r.name_lat&&r.locality_lat&&!r.zone_or_section));
+assert.equal(new Set(official.map(r=>r.id)).size,official.length);
+const options={q:'',locality:'',source:'',offset:0,limit:500};
+for(const [a,b] of [['Ύψωνας','Ypsonas'],['Αθηνών','Athinwn'],['Κυπριανού','Kyprianou'],['Λεμεσός','Limassol']])assert.equal(streetSearchKey(a),streetSearchKey(b));
+const greek=streetDirectoryPage(official,{...options,q:'Αθηνών Ύψωνας'});
+const latin=streetDirectoryPage(official,{...options,q:'Athinwn Ypsonas'});
+assert(greek.total>0);assert.deepEqual(greek.streets.map(r=>r.id),latin.streets.map(r=>r.id));
+const homonyms=official.filter(r=>r.name_el==='1ης Απριλίου');
+assert(new Set(homonyms.map(r=>r.municipality_or_community)).size>10,'Homonymous roads in different villages are retained');
+const drawing=drawingStreetRows([
+ {category:'street',ref:'text:1',label:'Athinon',layer:'STREET',x:10,y:10,off:true},
+ {category:'street',ref:'text:2',label:'Athinon',layer:'STREET',x:10,y:10},
+ {category:'street',ref:'text:3',label:'Athinon',layer:'STREET',x:100,y:100},
+], [{code:'ZONE-A',outline:'hull',ring:[[0,0],[20,0],[20,20],[0,20],[0,0]]}]);
+assert.equal(drawing.length,2,'Only exact position/layer/name duplicates are grouped');
+assert.equal(drawing[0].source_refs.length,2);
+assert.equal(drawing[0].municipality_or_community,null);
+assert.match(drawing[0].zone_basis,/προσέγγιση/);
+assert.match(drawing[0].map_href,/x=10&y=10/);
+assert.equal(drawing[1].zone_or_section,null);
+const example=official[0];
+const merged=mergeStreetSources(official,[{id:'legacy',name_lat:example.name_lat,municipality_or_community:example.locality_lat,source:'CYPRUS_POST',postal_codes:['4760']},{id:'unknown',name_lat:example.name_lat,source:'CYPRUS_POST'}],drawing,[]);
+assert.equal(merged.length,official.length+drawing.length+1,'Unknown locality is never merged on street name alone');
+assert.equal(streetDirectoryPage(merged,{...options,source:'drawing_label'}).total,2);
+const all=streetDirectoryPage(merged,{...options,limit:100000});
+const pages=[];for(let offset=0;offset<all.total;offset+=200)pages.push(...streetDirectoryPage(merged,{...options,offset,limit:200}).streets);
+assert.deepEqual(pages.map(r=>r.id),all.streets.map(r=>r.id),'Global ordering and pagination cover every source record');
+const records=postalDatabaseRecords(data);
+assert.equal(records.length,8800);
+assert(records.every(r=>r.district_name==='Lemesos'&&r.source==='CYPRUS_POST'&&!('center' in r)&&!('geometry' in r)));
+assert.equal(mergeStreetSources(official,[{...records[0],id:'database-copy'}],[],[]).length,8800);
+const field=fieldStreetRows([{asset_type:'road_reference',patch_id:'p1',status:'pending_review',street_name:'Νέα οδός',area:'Νέο χωριό',geometry:{type:'LineString',coordinates:[[33,34],[33.01,34.01]],crs:{authority:'EPSG',code:'4326'}}}]);
+assert.equal(field[0].status,'pending_review');assert.match(field[0].map_href,/from=road-navigation/);
+console.log(JSON.stringify({ok:true,sourceRows:data.rows.length,streetLocalityPairs:official.length,streetLocalities:143,homonymLocalities:new Set(homonyms.map(r=>r.municipality_or_community)).size,tests:'bilingual search, homonyms, source isolation, complete pagination, safe database records'}));

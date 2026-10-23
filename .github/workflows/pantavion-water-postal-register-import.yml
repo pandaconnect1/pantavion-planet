@@ -1,0 +1,47 @@
+name: Pantavion Complete Limassol Street Register
+on:
+  push:
+    branches: [feat/unified-limassol-streets]
+    paths:
+      - scripts/water-postal-source-import.mjs
+      - .github/workflows/pantavion-water-postal-register-import.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pantavion-postal-register-import
+  cancel-in-progress: false
+jobs:
+  import-verified-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Test complete source, homonyms and cross-alphabet lookup before import
+        run: node --no-warnings --experimental-strip-types tests/water-street-directory.test.mjs
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Import official names without replacing existing streets or network geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$SUPABASE_PROJECT_REF" = "cxhulvwkagzufbjsdwwu"
+          key_file="$RUNNER_TEMP/pantavion-postal-api-keys.json"
+          umask 077
+          trap 'rm -f "$key_file"' EXIT
+          supabase projects api-keys --project-ref "$SUPABASE_PROJECT_REF" --output json > "$key_file"
+          key=$(jq -r '[.[] | select((.name == "service_role") or (.type == "secret")) | .api_key][0] // empty' "$key_file")
+          test ${#key} -ge 32
+          echo "::add-mask::$key"
+          export SUPABASE_SECRET_KEY="$key"
+          export SUPABASE_URL="https://cxhulvwkagzufbjsdwwu.supabase.co"
+          node --no-warnings --experimental-strip-types scripts/water-postal-source-import.mjs
