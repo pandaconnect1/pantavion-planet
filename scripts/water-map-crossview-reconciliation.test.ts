@@ -13,4 +13,12 @@ assert(differences.some((difference) => difference.assetId === "SV-42" && differ
 assert(differences.some((difference) => difference.assetId === "PIPE-9" && difference.kind === "missing_in_view" && difference.mapIds.includes("A")));
 assert(differences.every((difference) => difference.requiresHumanApproval === true));
 assert.deepEqual(compareWaterMapObservations([]), []);
+
+const differentCrs = compareWaterMapObservations([
+  { mapId: "A", assetId: "SV-CRS", geometryFingerprint: "10,20", sourceKey: "EPSG:4326", verifiedPosition: true, approved: true },
+  { mapId: "D", assetId: "SV-CRS", geometryFingerprint: "1000,2000", sourceKey: "LOCAL-DWG", verifiedPosition: true, approved: true },
+]);
+assert(!differentCrs.some((difference) => difference.kind === "conflicting_geometry"), "different CRS must not produce a false geometry conflict");
+assert(differentCrs.some((difference) => difference.kind === "unverified_position"), "different CRS requires georeferencing review");
+
 console.log("PASS: read-only A/B/D reconciliation requires human approval");
