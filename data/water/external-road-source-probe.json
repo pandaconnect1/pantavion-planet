@@ -1,0 +1,1282 @@
+{
+  "checkedAt": "2026-10-23T07:14:05.869404+00:00",
+  "services": {
+    "TN_TransportNetwork/MapServer": {
+      "url": "https://eservices.dls.moi.gov.cy/inspire/rest/services/INSPIRE/TN_TransportNetwork/MapServer?f=pjson",
+      "ok": true,
+      "data": {
+        "currentVersion": 10.91,
+        "serviceDescription": "Transport networks",
+        "mapName": "Layers",
+        "description": "",
+        "copyrightText": "",
+        "supportsDynamicLayers": false,
+        "layers": [
+          {
+            "id": 0,
+            "name": "Generic Transport Node",
+            "parentLayerId": -1,
+            "defaultVisibility": true,
+            "subLayerIds": null,
+            "minScale": 0,
+            "maxScale": 0,
+            "type": "Feature Layer",
+            "geometryType": "esriGeometryPoint"
+          },
+          {
+            "id": 1,
+            "name": "Road Link",
+            "parentLayerId": -1,
+            "defaultVisibility": true,
+            "subLayerIds": null,
+            "minScale": 50000,
+            "maxScale": 0,
+            "type": "Feature Layer",
+            "geometryType": "esriGeometryPolyline"
+          },
+          {
+            "id": 2,
+            "name": "Generic Transport Link",
+            "parentLayerId": -1,
+            "defaultVisibility": true,
+            "subLayerIds": null,
+            "minScale": 250000,
+            "maxScale": 0,
+            "type": "Feature Layer",
+            "geometryType": "esriGeometryPolyline"
+          }
+        ],
+        "tables": [
+          {
+            "id": 3,
+            "name": "inspire.ESRI.LayerInfo",
+            "type": "Table"
+          },
+          {
+            "id": 4,
+            "name": "inspire.ESRI.RelationshipInfo",
+            "type": "Table"
+          },
+          {
+            "id": 5,
+            "name": "inspire.ESRI.SubtypesInfo",
+            "type": "Table"
+          },
+          {
+            "id": 6,
+            "name": "inspire.ESRI.SpatialObjectTypeInfo",
+            "type": "Table"
+          },
+          {
+            "id": 7,
+            "name": "inspire.ESRI.A4I_INFO",
+            "type": "Table"
+          }
+        ],
+        "spatialReference": {
+          "wkid": 4258,
+          "latestWkid": 4258
+        },
+        "singleFusedMapCache": false,
+        "initialExtent": {
+          "xmin": 31.28722775300271,
+          "ymin": 35.058001329185245,
+          "xmax": 35.35500323627713,
+          "ymax": 36.43143359371237,
+          "spatialReference": {
+            "wkid": 4258,
+            "latestWkid": 4258
+          }
+        },
+        "fullExtent": {
+          "xmin": 32.26936538000007,
+          "ymin": 34.54181136400007,
+          "xmax": 34.586218993000045,
+          "ymax": 35.69465510600003,
+          "spatialReference": {
+            "wkid": 4258,
+            "latestWkid": 4258
+          }
+        },
+        "minScale": 0,
+        "maxScale": 0,
+        "units": "esriDecimalDegrees",
+        "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+        "documentInfo": {
+          "Title": "",
+          "Author": "",
+          "Comments": "Transport networks",
+          "Subject": "Transport networks",
+          "Category": "",
+          "AntialiasingMode": "None",
+          "TextAntialiasingMode": "Force",
+          "Keywords": "Transport networks"
+        },
+        "capabilities": "Data,Map,Query",
+        "supportedQueryFormats": "JSON, geoJSON",
+        "exportTilesAllowed": false,
+        "referenceScale": 0,
+        "supportsDatumTransformation": true,
+        "maxRecordCount": 1000,
+        "maxImageHeight": 4096,
+        "maxImageWidth": 4096,
+        "supportedExtensions": "InspireFeatureDownload, InspireView, WMSServer"
+      }
+    },
+    "AD_Addresses/MapServer": {
+      "url": "https://eservices.dls.moi.gov.cy/inspire/rest/services/INSPIRE/AD_Addresses/MapServer?f=pjson",
+      "ok": true,
+      "data": {
+        "currentVersion": 10.91,
+        "serviceDescription": "Addresses",
+        "mapName": "Layers",
+        "description": "",
+        "copyrightText": "",
+        "supportsDynamicLayers": true,
+        "layers": [
+          {
+            "id": 0,
+            "name": "Addresses",
+            "parentLayerId": -1,
+            "defaultVisibility": true,
+            "subLayerIds": null,
+            "minScale": 50000,
+            "maxScale": 0,
+            "type": "Feature Layer",
+            "geometryType": "esriGeometryPoint"
+          }
+        ],
+        "tables": [
+          {
+            "id": 1,
+            "name": "inspire.ESRI.adAddress_buildingOO",
+            "type": "Table"
+          },
+          {
+            "id": 2,
+            "name": "inspire.ESRI.adAddress_componentOO",
+            "type": "Table"
+          },
+          {
+            "id": 3,
+            "name": "inspire.ESRI.adAddress_locator_designator",
+            "type": "Table"
+          },
+          {
+            "id": 4,
+            "name": "inspire.ESRI.adAddress_locator_name_name",
+            "type": "Table"
+          },
+          {
+            "id": 5,
+            "name": "inspire.ESRI.adAddress_locator_name",
+            "type": "Table"
+          },
+          {
+            "id": 6,
+            "name": "inspire.ESRI.adAddress_locator",
+            "type": "Table"
+          },
+          {
+            "id": 7,
+            "name": "inspire.ESRI.adAddress_parcelOS",
+            "type": "Table"
+          },
+          {
+            "id": 8,
+            "name": "inspire.ESRI.adAddress",
+            "type": "Table"
+          },
+          {
+            "id": 9,
+            "name": "inspire.ESRI.LayerInfo",
+            "type": "Table"
+          },
+          {
+            "id": 10,
+            "name": "inspire.ESRI.RelationshipInfo",
+            "type": "Table"
+          },
+          {
+            "id": 11,
+            "name": "inspire.ESRI.SubtypesInfo",
+            "type": "Table"
+          },
+          {
+            "id": 12,
+            "name": "inspire.ESRI.SpatialObjectTypeInfo",
+            "type": "Table"
+          },
+          {
+            "id": 13,
+            "name": "inspire.ESRI.A4I_INFO",
+            "type": "Table"
+          }
+        ],
+        "spatialReference": {
+          "wkid": 4258,
+          "latestWkid": 4258
+        },
+        "singleFusedMapCache": false,
+        "initialExtent": {
+          "xmin": 31.869921324556355,
+          "ymin": 35.4226161361696,
+          "xmax": 35.13902291851538,
+          "ymax": 36.28408754333305,
+          "spatialReference": {
+            "wkid": 4258,
+            "latestWkid": 4258
+          }
+        },
+        "fullExtent": {
+          "xmin": 32.33781864700006,
+          "ymin": 34.63696474100004,
+          "xmax": 34.067221877000065,
+          "ymax": 35.20031755700006,
+          "spatialReference": {
+            "wkid": 4258,
+            "latestWkid": 4258
+          }
+        },
+        "minScale": 50000,
+        "maxScale": 0,
+        "units": "esriDecimalDegrees",
+        "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+        "documentInfo": {
+          "Title": "",
+          "Author": "",
+          "Comments": "Addresses",
+          "Subject": "Addresses",
+          "Category": "",
+          "AntialiasingMode": "None",
+          "TextAntialiasingMode": "Force",
+          "Keywords": "Addresses"
+        },
+        "capabilities": "Map,Query,Data",
+        "supportedQueryFormats": "JSON, geoJSON",
+        "exportTilesAllowed": false,
+        "referenceScale": 0,
+        "supportsDatumTransformation": true,
+        "maxRecordCount": 1000,
+        "maxImageHeight": 4096,
+        "maxImageWidth": 4096,
+        "supportedExtensions": "InspireFeatureDownload, InspireView, WMSServer"
+      }
+    },
+    "AU_AdministrativeUnit/MapServer": {
+      "url": "https://eservices.dls.moi.gov.cy/inspire/rest/services/INSPIRE/AU_AdministrativeUnit/MapServer?f=pjson",
+      "ok": false,
+      "data": {
+        "error": {
+          "code": 404,
+          "message": "Service INSPIRE/AU_AdministrativeUnit/MapServer not found ",
+          "details": []
+        }
+      }
+    }
+  },
+  "osm": {
+    "ok": true,
+    "url": "https://download.geofabrik.de/europe/cyprus-latest.osm.pbf",
+    "bytes": 37732048,
+    "sha256": "e7c8261f1ce5dbbe9a8384fe3b7c5ce457fe88c97ece2026e7070628d519f634",
+    "boundaries": [
+      {
+        "id": 533386,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Πάφου",
+          "name:ar": "بافوس",
+          "name:de": "Paphos",
+          "name:el": "Δήμος Πάφου",
+          "name:en": "Paphos Municipality",
+          "name:he": "פאפוס",
+          "name:it": "Pafo",
+          "name:pl": "Pafos",
+          "name:ru": "муниципалитет Пафос",
+          "name:tr": "Baf",
+          "name:uk": "Пафос",
+          "start_date": "2024-07-01",
+          "type": "boundary",
+          "wikidata": "Q180918",
+          "wikipedia": "en:Paphos"
+        }
+      },
+      {
+        "id": 2087229,
+        "tags": {
+          "ISO3166-2": "CY-03",
+          "admin_level": "5",
+          "boundary": "administrative",
+          "description": "This fomal district is partitioned between two governing states. The Greek Cypriot-controlled part is shown here.",
+          "name": "Επαρχία Λάρνακας",
+          "name:ar": "منطقة لرنقة",
+          "name:de": "Bezirk Larnaka",
+          "name:el": "Επαρχία Λάρνακας",
+          "name:en": "Larnaca District",
+          "name:fr": "district de Lárnaca",
+          "name:he": "מחוז לרנקה",
+          "name:lt": "Larnakos apygarda",
+          "name:pl": "Dystrykt Larnaka",
+          "name:ru": "район Ларнака",
+          "name:sl": "Eparhija Larnaka",
+          "name:tr": "Larnaka kazası",
+          "name:uk": "р-н. Ларнака",
+          "name:ur": "ضلع لارناکا",
+          "official_name": "Επαρχία Λάρνακας - Larnaka kazası",
+          "official_name:ar": "منطقة لرنقة",
+          "official_name:el": "Επαρχία Λάρνακας",
+          "official_name:en": "Larnaca District",
+          "official_name:fr": "District de Larnaca",
+          "official_name:tr": "Larnaka kazası",
+          "official_name:ur": "ضلع لارناکا",
+          "ref": "03",
+          "type": "boundary",
+          "wikidata": "Q59153",
+          "wikipedia": "el:Επαρχία Λάρνακας"
+        }
+      },
+      {
+        "id": 2087230,
+        "tags": {
+          "ISO3166-2": "CY-02",
+          "admin_level": "5",
+          "alt_name": "Lemesos",
+          "alt_name:ru": "Лемессос",
+          "alt_name:tr": "Leymosun",
+          "boundary": "administrative",
+          "int_name": "Limassol",
+          "name": "Επαρχία Λεμεσού",
+          "name:ar": "منطقة ليماسول",
+          "name:el": "Επαρχία Λεμεσού",
+          "name:en": "Limassol District",
+          "name:fr": "District de Limassol",
+          "name:hy": "Լիմասոլի շրջան",
+          "name:ru": "район Лимасол",
+          "name:tr": "Limasol kazası",
+          "name:uk": "р-н. Лімасол",
+          "official_name": "Επαρχία Λεμεσού - Limasol kazası",
+          "official_name:ar": "منطقة ليماسول",
+          "official_name:el": "Επαρχία Λεμεσού",
+          "official_name:en": "Limassol District",
+          "official_name:fr": "District de Limassol",
+          "official_name:tr": "Limasol kazası",
+          "ref": "02",
+          "type": "boundary",
+          "wikidata": "Q59150",
+          "wikipedia": "en:Limassol District"
+        }
+      },
+      {
+        "id": 3263729,
+        "tags": {
+          "ISO3166-2": "CY-05",
+          "admin_level": "5",
+          "alt_name": "Baf",
+          "alt_name:tr": "Gazibaf",
+          "boundary": "administrative",
+          "int_name": "Paphos",
+          "name": "Επαρχία Πάφου",
+          "name:ar": "منطقة بافوس",
+          "name:de": "Bezirk Paphos",
+          "name:el": "Επαρχία Πάφου",
+          "name:en": "Paphos District",
+          "name:fr": "District de Paphos",
+          "name:lt": "Pafoso apygarda",
+          "name:pl": "Dystrykt Pafos",
+          "name:ru": "район Пафос",
+          "name:sl": "Eparhija Pafos",
+          "name:tr": "Baf kazası",
+          "name:uk": "р-н. Пафос",
+          "official_name": "Επαρχία Πάφου - Baf kazası",
+          "official_name:ar": "منطقة بافوس",
+          "official_name:de": "Bezirk Paphos",
+          "official_name:el": "Επαρχία Πάφου",
+          "official_name:en": "Paphos District",
+          "official_name:fr": "District de Paphos",
+          "official_name:tr": "Baf kazası",
+          "ref": "05",
+          "type": "boundary",
+          "wikidata": "Q59133",
+          "wikipedia": "en:Paphos District"
+        }
+      },
+      {
+        "id": 3264382,
+        "tags": {
+          "ISO3166-2": "CY-01",
+          "admin_level": "5",
+          "alt_name:ar": "الأفقوسية;منطقة الأفقوسية",
+          "alt_name:grc": "Λήδρα;Καλληνίκησις;Λευκοθέον",
+          "alt_name:ru": "Левкосия",
+          "boundary": "administrative",
+          "description": "This fomal district is partitioned between two governing states. The Greek Cypriot-controlled part is shown here.",
+          "int_name": "Nicosia",
+          "name": "Επαρχία Λευκωσίας",
+          "name:af": "Nicosia",
+          "name:am": "ሌፍኮዚያ",
+          "name:an": "Nicosia",
+          "name:ar": "منطقة نيقوسيا",
+          "name:arz": "نيكوسيا",
+          "name:az": "Nikosiya",
+          "name:az-Arab": "لفکوشا",
+          "name:azb": "لفکوشا",
+          "name:be": "Нікасія",
+          "name:bg": "Никозия",
+          "name:bn": "নিকোসিয়া",
+          "name:bo": "ནེ་ཁོ་ཤི་ཡ།",
+          "name:br": "Nikozia",
+          "name:bs": "Nikozija",
+          "name:ca": "Nicòsia",
+          "name:ckb": "نیکۆسیا",
+          "name:crh": "Lefkoşa",
+          "name:cs": "Nikósie",
+          "name:cy": "Nicosia",
+          "name:da": "Nicosia",
+          "name:de": "Nikosia",
+          "name:el": "Επαρχία Λευκωσίας",
+          "name:en": "Nicosia District",
+          "name:eo": "Nikozio",
+          "name:es": "Distrito de Nicosia",
+          "name:fa": "لفکوشای",
+          "name:fr": "District de Nicosie",
+          "name:ga": "An Leafcóis",
+          "name:gag": "Lefkoşa",
+          "name:gd": "Nicosia",
+          "name:gl": "Nicosia",
+          "name:grc": "Λευκωσία",
+          "name:gv": "Lefkosia",
+          "name:he": "ניקוסיה",
+          "name:hi": "निकोसिया",
+          "name:hr": "Nikozija",
+          "name:ht": "Nikozi",
+          "name:hu": "Nicosia",
+          "name:hy": "Նիկոսիա",
+          "name:hyw": "Նիկոսիա",
+          "name:is": "Nikósía",
+          "name:it": "Nicosia",
+          "name:ja": "ニコシア",
+          "name:ka": "ნიქოზია",
+          "name:kaa": "Arqa Nikosiya",
+          "name:kk": "Никосия",
+          "name:kk-Arab": "لەفكوسىييا",
+          "name:kl": "Nicosia",
+          "name:ko": "니코시아",
+          "name:ky": "Лефкоша",
+          "name:la": "Nicosia",
+          "name:lad": "Nikosiya",
+          "name:lij": "Nicosia",
+          "name:lmo": "Nicoséa",
+          "name:lt": "Nikosija",
+          "name:lv": "Nikosija",
+          "name:mdf": "Никосия",
+          "name:mi": "Nicosia",
+          "name:mk": "Левкозија",
+          "name:mr": "निकोसिया",
+          "name:ms": "Nicosia",
+          "name:mzn": "نیکوزیا",
+          "name:nah": "Nicosia",
+          "name:nan": "Nicosia",
+          "name:nap": "Nicosìa",
+          "name:nl": "Nicosia",
+          "name:oc": "Nicosia",
+          "name:os": "Никоси",
+          "name:pl": "Nikozja",
+          "name:pms": "Nicosìa",
+          "name:pnb": "نیکوسیا",
+          "name:pnt": "Λευκωσίαν",
+          "name:ps": "نیکوزیا",
+          "name:pt": "Nicósia",
+          "name:ro": "Nicosia",
+          "name:ru": "район Никосия",
+          "name:rw": "Nikosiya",
+          "name:sah": "Никосия",
+          "name:sco": "Nicosia",
+          "name:sh": "Nikozija",
+          "name:sk": "Nikózia",
+          "name:sl": "Nikozija",
+          "name:sq": "Nicosia",
+          "name:sr": "Никозија",
+          "name:stq": "Nicosia",
+          "name:sv": "Nicosia",
+          "name:ta": "நிக்கோசியா",
+          "name:tg": "Никосия",
+          "name:th": "นิโคเซีย",
+          "name:tl": "Nicosia",
+          "name:tr": "Lefkoşa kazası",
+          "name:tt": "Никосия",
+          "name:udm": "Никосия",
+          "name:ug": "نىكوسىيە",
+          "name:uk": "р-н. Нікосія",
+          "name:ur": "ضلع نیکوسیا",
+          "name:vep": "Nikosii",
+          "name:vi": "Nicosia",
+          "name:war": "Nicosia",
+          "name:yi": "ניקאסיע",
+          "name:yo": "Nicosia",
+          "name:zh": "尼科西亚",
+          "official_name": "Επαρχία Λευκωσίας - Lefkoşa kazası",
+          "official_name:ar": "منطقة نيقوسيا",
+          "official_name:de": "Bezirk Nikosia",
+          "official_name:el": "Επαρχία Λευκωσίας",
+          "official_name:en": "Nicosia District",
+          "official_name:es": "Distrito de Nicosia",
+          "official_name:fr": "District de Nicosie",
+          "official_name:tr": "Lefkoşa kazası",
+          "official_name:ur": "ضلع نیکوسیا",
+          "ref": "01",
+          "source:name:oc": "ieo-bdtopoc",
+          "type": "boundary",
+          "wikidata": "Q59147",
+          "wikipedia": "el:Επαρχία Λευκωσίας"
+        }
+      },
+      {
+        "id": 3264447,
+        "tags": {
+          "ISO3166-2": "CY-04",
+          "admin_level": "5",
+          "alt_name:ar": "فاماغوستا;منطقة فاماغوستا",
+          "alt_name:tr": "Gazimağusa",
+          "boundary": "administrative",
+          "description": "This fomal district is partitioned between two governing states. The Greek Cypriot-controlled part is shown here.",
+          "int_name": "Famagusta",
+          "name": "Επαρχία Αμμοχώστου",
+          "name:ar": "منطقة الماغوصة",
+          "name:ca": "Famagusta",
+          "name:da": "Famagusta",
+          "name:de": "Famagusta",
+          "name:el": "Επαρχία Αμμοχώστου",
+          "name:en": "Famagusta District",
+          "name:fr": "District de Famagouste",
+          "name:he": "פמגוסטה",
+          "name:it": "Famagosta",
+          "name:oc": "Famagosta",
+          "name:pl": "Famagusta",
+          "name:ru": "район Фамагуста",
+          "name:tr": "Mağusa kazası",
+          "name:uk": "р-н. Фамагуста",
+          "name:zh": "法马古斯塔区",
+          "official_name": "Επαρχία Αμμοχώστου - Mağusa kazası",
+          "official_name:ar": "منطقة الماغوصة",
+          "official_name:el": "Επαρχία Αμμοχώστου",
+          "official_name:en": "Famagusta District",
+          "official_name:fr": "District de Famagouste",
+          "official_name:tr": "Mağusa kazası",
+          "ref": "04",
+          "source:name:oc": "ieo-bdtopoc",
+          "type": "boundary",
+          "wikidata": "Q59148",
+          "wikipedia": "en:Famagusta District"
+        }
+      },
+      {
+        "id": 3264494,
+        "tags": {
+          "ISO3166-2": "CY-06",
+          "admin_level": "5",
+          "alt_name": "Kyrenia District",
+          "alt_name:tr": "Girne kazası",
+          "boundary": "administrative",
+          "int_name": "Kyrenia",
+          "name": "Girne ilçesi",
+          "name:ar": "غرنة",
+          "name:el": "Κερύνεια",
+          "name:en": "Girne District",
+          "name:fr": "Kyrenia",
+          "name:ru": "Кирения",
+          "name:tr": "Girne ilçesi",
+          "name:uk": "р-н. Кіренія",
+          "name:zh": "凯里尼亚区",
+          "official_name": "Girne kazası - Επαρχία Κερύνειας",
+          "official_name:el": "Επαρχία Κερύνειας",
+          "official_name:fr": "District de Kyrenia",
+          "official_name:tr": "Girne kazası",
+          "ref": "06",
+          "type": "boundary",
+          "wikidata": "Q59146",
+          "wikipedia": "en:Kyrenia District"
+        }
+      },
+      {
+        "id": 3267302,
+        "tags": {
+          "admin_level": "6",
+          "alt_name:ar": "قاعدة السيادة الغربية",
+          "alt_name:en": "Western Sovereign Base Area",
+          "alt_name:fr": "Base souveraine occidentale",
+          "boundary": "administrative",
+          "name": "Akrotiri Sovereign Base Area",
+          "name:ar": "أكروتيري",
+          "name:cs": "Akrotiri",
+          "name:el": "Ακρωτήρι",
+          "name:en": "Akrotiri British Sovereign Base Area",
+          "name:fr": "Akrotiri",
+          "name:mk": "Акротири",
+          "name:pl": "Akrotiri",
+          "name:ru": "Акротири",
+          "name:tr": "Ağrotur",
+          "name:uk": "Суверенна військова база Акротирі",
+          "official_name": "Akrotiri Sovereign Base Area",
+          "official_name:ar": "قاعدة السيادة أكروتيري",
+          "official_name:cs": "Západní svrchovaná základna Akrotiri",
+          "official_name:el": "Περιοχές Κυρίαρχων Βάσεων Ακρωτηρίου",
+          "official_name:en": "Akrotiri Sovereign Base Area",
+          "official_name:fr": "Base souveraine d'Akrotiri",
+          "official_name:ru": "Военные базы Акротири",
+          "official_name:tr": "Ağrotur Egemen İngiliz Üssü",
+          "place": "county",
+          "short_name:en": "WSBA",
+          "type": "boundary",
+          "wikidata": "Q9143535"
+        }
+      },
+      {
+        "id": 3267303,
+        "tags": {
+          "admin_level": "6",
+          "alt_name:ar": "قاعدة السيادة الشرقية",
+          "alt_name:cs": "Východní svrchovaná základna Dekelia",
+          "alt_name:en": "Eastern Sovereign Base Area",
+          "alt_name:fr": "Base souveraine orientale",
+          "boundary": "administrative",
+          "name": "Dhekelia",
+          "name:ar": "دكليا",
+          "name:cs": "Dekelia",
+          "name:de": "Dekelia",
+          "name:el": "Δεκέλεια",
+          "name:en": "Dhekelia",
+          "name:fr": "Dhekelia",
+          "name:mk": "Декелија",
+          "name:ru": "Декелия",
+          "name:tr": "Dikelya",
+          "name:uk": "Декелія",
+          "official_name": "Dhekelia British Sovereign Base Area",
+          "official_name:ar": "قاعدة السيادة دكليا",
+          "official_name:el": "Περιοχές Κυρίαρχων Βάσεων Δεκέλειας",
+          "official_name:en": "Dhekelia Sovereign Base Area",
+          "official_name:fr": "Base souveraine de Dhekelia",
+          "official_name:ru": "Военные базы Декелия",
+          "official_name:tr": "Dikelya Egemen İngiliz Üssü",
+          "place": "county",
+          "short_name:en": "ESBA",
+          "type": "boundary",
+          "wikidata": "Q9206745"
+        }
+      },
+      {
+        "id": 10090475,
+        "tags": {
+          "admin_level": "5",
+          "boundary": "administrative",
+          "name": "İskele ilçesi",
+          "name:el": "Επαρχία Ισκελέ",
+          "name:en": "İskele District",
+          "name:tr": "İskele ilçesi",
+          "type": "boundary",
+          "wikidata": "Q556070",
+          "wikipedia": "en:İskele District"
+        }
+      },
+      {
+        "id": 10090538,
+        "tags": {
+          "admin_level": "5",
+          "boundary": "administrative",
+          "name": "Güzelyurt ilçesi",
+          "name:el": "Επαρχία Γκιουζέλγιουρτ",
+          "name:en": "Güzelyurt District",
+          "name:tr": "Güzelyurt ilçesi",
+          "type": "boundary",
+          "wikidata": "Q554666",
+          "wikipedia": "en:Güzelyurt District"
+        }
+      },
+      {
+        "id": 10090539,
+        "tags": {
+          "admin_level": "5",
+          "boundary": "administrative",
+          "name": "Lefke ilçesi",
+          "name:el": "Επαρχία Λέφκε",
+          "name:en": "Lefke District",
+          "name:tr": "Lefke ilçesi",
+          "type": "boundary",
+          "wikidata": "Q28221946",
+          "wikipedia": "en:Lefke District"
+        }
+      },
+      {
+        "id": 11974176,
+        "tags": {
+          "admin_level": "5",
+          "alt_name:el": "Επαρχία Γκαζιμαγούσα",
+          "boundary": "administrative",
+          "name": "Gazimağusa ilçesi",
+          "name:el": "Επαρχία Αμμοχώστου",
+          "name:en": "Gazimağusa District",
+          "name:tr": "Gazimağusa ilçesi",
+          "name:zh": "法马古斯塔",
+          "type": "boundary",
+          "wikidata": "Q554671",
+          "wikipedia": "en:Gazimağusa District"
+        }
+      },
+      {
+        "id": 11974267,
+        "tags": {
+          "admin_level": "5",
+          "boundary": "administrative",
+          "name": "Lefkoşa ilçesi",
+          "name:el": "Επαρχία Λεφκόσα",
+          "name:en": "Lefkoşa District",
+          "name:tr": "Lefkoşa ilçesi",
+          "name:zh": "尼科西亚区",
+          "type": "boundary",
+          "wikidata": "Q556055",
+          "wikipedia": "en:Lefkoşa District"
+        }
+      },
+      {
+        "id": 17716182,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Λευκωσίας",
+          "name:el": "Δήμος Λευκωσίας",
+          "name:en": "Nicosia Muncipality",
+          "name:tr": "Lefkoşa Belediyesi",
+          "start_date": "2024-07-01",
+          "type": "boundary",
+          "wikidata": "Q56037497"
+        }
+      },
+      {
+        "id": 17716599,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Λακατάμειας",
+          "name:en": "Lakatameia Municipality",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17716600,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Λατσιών - Γερίου",
+          "name:en": "Latsia - Geri Municipality",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17716601,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Νότιας Λευκωσίας - ιδαλίου",
+          "name:en": "South Nicosia - Dali Municipality",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17716602,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Ανατολικής Λεμεσού",
+          "name:en": "East Limassol Municiplaity",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17716603,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Λεμεσού",
+          "name:en": "Limassol Municipality",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17716604,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Πολεμιδιών",
+          "name:el": "Δήμος Πολεμιδιών",
+          "name:en": "Polemidia Municipality",
+          "name:tr": "Polemidya Belediyesi",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17716605,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Κουρίου",
+          "name:ar": "بلدية كوريو",
+          "name:el": "Δήμος Κουρίου",
+          "name:en": "Kourio Municipality",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17716606,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Αθηένου",
+          "name:en": "Athienou Municipality",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17716607,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Αραδίππου",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17728783,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Αγίας Νάπας",
+          "name:el": "Δήμος Αγίας Νάπας",
+          "name:en": "Agia Napa Municipality",
+          "name:tr": "Aya Napa Belediyesi",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17728784,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Παραλιμνίου - Δερύνειας",
+          "name:el": "Δήμος Παραλιμνίου - Δερύνειας",
+          "name:en": "Paralimni - Deyneia Municipality",
+          "name:tr": "Paralimni - Derinya Belediyesi",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17728785,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Ανατολικής Πάφου",
+          "name:el": "Δήμος Ανατολικής Πάφου",
+          "name:en": "East Paphos Municipality",
+          "name:tr": "Doğu Baf Belediyesi",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17728786,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Ακάμα",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17728787,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Πόλις Χρυσοχούς",
+          "name:el": "Δήμος Πόλις Χρυσοχούς",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17728788,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Λάρνακας",
+          "name:ar": "بلدية لرنقة",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17728789,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Δρομολαξιάς - Μενεού",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17728790,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Λεύκαρών",
+          "name:ar": "بلدية لفكارا",
+          "name:el": "Δήμος Λεύκαρών",
+          "name:en": "Lefkara Municipality",
+          "name:tr": "Lefkara Belediyesi",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 17732262,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Δήμος Στροβόλου",
+          "name:en": "Strovolos Municipality",
+          "start_date": "2024-07-01",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 18005944,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Εξάπολις",
+          "name:en": "Exapolis Community Cluster",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λευκωσίας Στ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 18006219,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Ταμασού",
+          "name:en": "Tamasos Community Cluster",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λευκωσίας Β",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 18006220,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Μαχαιρά",
+          "name:el": "Μαχαιράς",
+          "name:en": "Machairas",
+          "name:tr": "Maşera",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λευκωσίας Α",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 18006221,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Ορεινής",
+          "name:en": "Oreini Community Cluster",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λευκωσίας Γ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 18006222,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Μαδαρής-Παπουτσάς",
+          "name:el": "Μαδαρή-Παπουτσά",
+          "name:en": "Madari-Papoutsa",
+          "name:tr": "Madari-Babutsa",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λευκωσίας Δ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 18006223,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Μόρφου",
+          "name:en": "Morphou Community Cluster",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λευκωσίας Ε",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 18006224,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Σολέας",
+          "name:el": "Σολέα",
+          "name:en": "Solea",
+          "name:tr": "Solea",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λευκωσίας Ζ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 18006225,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Βόρειας Μαραθάσας",
+          "name:el": "Βόρεια Μαραθάσα",
+          "name:en": "North Marathasa",
+          "name:tr": "Kuzey Maratasa",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λευκωσίας Η",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 18006226,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Τηλλυρίας",
+          "name:en": "Telliria Community Cluster",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λευκωσίας Θ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 18006454,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Δεκέλειας",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λάρνακας Α",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19730648,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Νότια Σταρυροβουνίου",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λάρνακας Β",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19730649,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Τρέμιθου Ποταμού",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19730650,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Ορεινής Λάρνακας",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λάρνακας Δ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19730651,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Βασιλικού-Πεντάσχοινου",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λάρνακας Ε",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19730857,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Ανατολικής Λεμεσού",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λεμεσού Α",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19730858,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Αμαθός",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λεμεσού Β",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19730859,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Ημιορεινής Λεμεσού",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λεμεσού Γ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19730860,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Κούρη & Ξυλορίκου",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λεμεσού Δ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19730861,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Δυτικής Λεμεσού",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λεμεσού Ε",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19730862,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Κασοχωρίων",
+          "official_name": "Σύμπλεγμα Κοινοτήτων λεμεσού Στ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19730863,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Τροόδους",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λεμεσού Ζ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19730864,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Κάτω Μύλου",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Λεμεσού Η",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19733355,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Άγιος Αρίστων",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Πάφου Α",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19733356,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Δρυνιάς",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Πάφου Β",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19733357,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Έζουσας",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Πάφου Γ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19733358,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Ορεινής Πάφου",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Πάφου Δ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19733359,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Αφροδίτη Πάφου",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Πάφου Ε",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19733360,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Αγίου Νεοφύτου Πάφου",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Πάφου Στ",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19733361,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Δυτικής Πάφου",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Πάφου Η",
+          "type": "boundary"
+        }
+      },
+      {
+        "id": 19733362,
+        "tags": {
+          "admin_level": "6",
+          "boundary": "administrative",
+          "name": "Σύμπλεγμα Κοινοτήτων Διαρίζου και Ξεροπόταμου",
+          "official_name": "Σύμπλεγμα Κοινοτήτων Πάφου Ζ",
+          "type": "boundary"
+        }
+      }
+    ],
+    "namedHighways": 44718
+  }
+}
