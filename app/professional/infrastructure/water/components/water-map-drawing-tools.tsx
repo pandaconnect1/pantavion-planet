@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { uploadFieldArtifact } from "../field/water-field-spatial-client";
 import { pantavionWaterApprovedDeviceHeaders } from "@/core/water/water-approved-device-client";
@@ -28,15 +28,17 @@ export function useWaterMapDrawing(mapId: string, sourceKey: string | null, enab
   const mutationSignature = useRef("");
   const scope = `${mapId}:${sourceKey || "EPSG:4326"}`;
   const latestScope = useRef(scope);
+  const requestSequence = useRef(0);
   latestScope.current = scope;
 
   const reload = useCallback(async (signal?: AbortSignal) => {
+    const sequence = ++requestSequence.current;
     const params = new URLSearchParams({ limit: "1000", shared: "1" });
     if (sourceKey) params.set("sourceKey", sourceKey);
     const response = await fetch(`/api/professional/infrastructure/water/changes/patches?${params}`, { cache: "no-store", credentials: "include", headers: pantavionWaterApprovedDeviceHeaders(), signal });
     const body = await response.json();
     if (!response.ok || !body.ok) throw new Error("Δεν φορτώθηκαν οι καταγραφές. Ελέγξτε την πρόσβαση και δοκιμάστε ανανέωση.");
-    if (signal?.aborted || latestScope.current !== scope) return;
+    if (signal?.aborted || latestScope.current !== scope || sequence !== requestSequence.current) return;
     setRows((body.patches || []).filter((p: Record<string, unknown>) => ["pending_review", "approved_overlay", "officialization_candidate", "officialized"].includes(String(p.status))).map((p: Record<string, unknown>) => patchDrawing(p, sourceKey)).filter(Boolean));
     if (body.patches?.length >= 1000) setMessage("Εμφανίζονται οι 1.000 πρόσφατες καταγραφές· ο κατάλογος ελέγχου περιέχει περισσότερες.");
   }, [scope, sourceKey]);
@@ -101,7 +103,7 @@ export function useWaterMapDrawing(mapId: string, sourceKey: string | null, enab
     finally { setBusy(false); }
   }
 
-  const shapes: DrawingShape[] = [...rows, ...(points.length && tool !== "navigate" ? [{ id: "draft", tool, points, style, status: "draft" }] : [])];
+  const shapes = useMemo<DrawingShape[]>(() => [...rows, ...(points.length && tool !== "navigate" ? [{ id: "draft", tool, points, style, status: "draft" }] : [])], [rows, points, tool, style]);
   return { tool, changeTool, points, style, changeStyle, area, setArea, street, setStreet, assetId, setAssetId, action, setAction, note, setNote, file, setFile, busy, message, shapes, pick,
     undo: () => { setPoints((old) => old.slice(0, -1)); mutation.current = null; }, clear: () => { setPoints([]); mutation.current = null; }, submit,
     refresh: () => void reload().catch((error) => setMessage(error.message)),
