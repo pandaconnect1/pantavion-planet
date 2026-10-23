@@ -261,7 +261,6 @@ function WaterMapWorkspace({ map, drawing, measuring, onMeasuringChange, lang, c
   children: ReactNode;
 }) {
   const root = useRef<HTMLDivElement>(null);
-  const controls = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
   const [menu, setMenu] = useState(false);
   const [points, setPoints] = useState<Array<[number, number]>>([]);
@@ -372,7 +371,6 @@ function WaterMapWorkspace({ map, drawing, measuring, onMeasuringChange, lang, c
       <button type="button" className={button} aria-expanded={menu} aria-controls="water-map-tools-menu" onClick={() => setMenu(!menu)}>☰ {label("Μενού", "Menu")}</button>
       <button type="button" className={button} aria-pressed={measuring} onClick={() => { drawing.changeTool("navigate"); onMeasuringChange(!measuring); }}>{label("Χάρακας", "Ruler")}</button>
       <button type="button" className={button} aria-pressed={expanded} onClick={() => void fullscreen()}>{expanded ? label("Έξοδος πλήρους οθόνης", "Exit fullscreen") : label("Πλήρης οθόνη", "Fullscreen")}</button>
-      <div ref={controls} className="flex items-center gap-2 [&_.leaflet-control]:!m-0 [&_.leaflet-control]:!float-none" />
     </nav>
     {menu ? <div id="water-map-tools-menu" className="max-h-[35dvh] shrink-0 overflow-y-auto p-2">
       <WaterMapDrawingTools drawing={drawing} />
