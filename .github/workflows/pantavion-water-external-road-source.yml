@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install osmium==4.2.0
+      - run: pip install osmium==4.2.0 shapely==2.1.2
       - name: Download public sources without accessing private water data
         run: python scripts/water-external-road-source.py
       - name: Preserve read-only source check on feature branch
@@ -28,13 +28,13 @@ jobs:
         run: |
           python - <<'PY'
           import base64,json,os,urllib.request,urllib.error
-          path='data/water/external-road-source-probe.json'
-          url='https://api.github.com/repos/'+os.environ['GH_REPO']+'/contents/'+path
-          headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'}
-          body={'message':'Preserve external road source access check','branch':os.environ['GH_BRANCH'],'content':base64.b64encode(open(path,'rb').read()).decode()}
-          try:
-            with urllib.request.urlopen(urllib.request.Request(url+'?ref='+os.environ['GH_BRANCH'],headers=headers)) as r: body['sha']=json.load(r)['sha']
-          except urllib.error.HTTPError as e:
-            if e.code!=404: raise
-          with urllib.request.urlopen(urllib.request.Request(url,data=json.dumps(body).encode(),headers=headers,method='PUT')) as r: print('Saved source check:',json.load(r)['commit']['sha'])
+          for path in ['data/water/external-road-source-probe.json','data/water/limassol-osm-roads.json']:
+              url='https://api.github.com/repos/'+os.environ['GH_REPO']+'/contents/'+path
+              headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'}
+              body={'message':'Preserve independent ODbL Limassol road source','branch':os.environ['GH_BRANCH'],'content':base64.b64encode(open(path,'rb').read()).decode()}
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(url+'?ref='+os.environ['GH_BRANCH'],headers=headers)) as r: body['sha']=json.load(r)['sha']
+              except urllib.error.HTTPError as error:
+                  if error.code!=404: raise
+              with urllib.request.urlopen(urllib.request.Request(url,data=json.dumps(body).encode(),headers=headers,method='PUT')) as r: print('Saved source:',json.load(r)['commit']['sha'])
           PY
