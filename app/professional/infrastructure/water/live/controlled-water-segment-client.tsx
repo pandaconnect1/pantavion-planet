@@ -302,6 +302,7 @@ function WaterMapWorkspace({ map, drawing, measuring, onMeasuringChange, lang, c
     if (!map || !root.current) return;
     const observer = new ResizeObserver(() => map.invalidateSize({ pan: false }));
     observer.observe(root.current);
+    observer.observe(map.getContainer());
     return () => observer.disconnect();
   }, [map]);
 
