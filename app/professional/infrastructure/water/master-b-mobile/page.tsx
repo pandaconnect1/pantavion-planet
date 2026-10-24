@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { WaterMapRenderer } from "../components/water-map-renderer";
+import { useWaterSync } from "../hooks/useWaterSync";
 
 interface MapView {
   id: "A" | "B" | "D";
@@ -36,6 +37,18 @@ export default function WaterMapsPage() {
   const searchParams = useSearchParams();
   const [activeView, setActiveView] = useState<"A" | "B" | "D">("A");
   const [loading, setLoading] = useState(true);
+  const [syncStatus, setSyncStatus] = useState("Αποσυνδεδεμένο");
+
+  // Use WebSocket sync
+  const { isConnected } = useWaterSync(activeView, (message) => {
+    setSyncStatus(`Συγχρονισμός από Χάρτη ${message.sourceMap}`);
+    // Force re-render or update map data
+    setTimeout(() => setSyncStatus("Συγχρονισμένο"), 2000);
+  });
+
+  useEffect(() => {
+    setSyncStatus(isConnected ? "Συγχρονισμένο" : "Αποσυνδεδεμένο");
+  }, [isConnected]);
 
   useEffect(() => {
     const viewId = searchParams.get("viewId") as "A" | "B" | "D" | null;
@@ -56,8 +69,18 @@ export default function WaterMapsPage() {
       {/* Header */}
       <header className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-6">
-          <h1 className="text-3xl font-bold">🗺️ Δίκτυο Νερού Λεμεσού</h1>
-          <p className="text-blue-100 mt-2">Διαδραστικοί χάρτες A, B, D</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold">🗺️ Δίκτυο Νερού Λεμεσού</h1>
+              <p className="text-blue-100 mt-2">Διαδραστικοί χάρτες A, B, D</p>
+            </div>
+            <div className="text-right">
+              <div className="flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-lg">
+                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
+                <span className="text-sm font-medium">{syncStatus}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
