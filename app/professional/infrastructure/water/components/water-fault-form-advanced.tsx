@@ -5,7 +5,7 @@ import { useState, useRef } from "react";
 interface Material {
   id: string;
   name: string;
-  type: "pipe" | "valve" | "tank" | "soil";
+  type: "pipe" | "valve" | "tank" | "soil" | "coupling";
   unit: string;
   quantity: number;
   condition: "good" | "damaged" | "broken";
@@ -31,7 +31,12 @@ export function WaterFaultFormAdvanced() {
     street: "",
     area_code: "",
     description: "",
-    severity: "major" as "minor" | "major" | "critical",
+    severity: "high" as "low" | "medium" | "high" | "critical",
+  });
+
+  const [crew, setCrew] = useState({
+    names: "",
+    permit_number: "",
   });
 
   const [materials, setMaterials] = useState<Material[]>([]);
@@ -44,6 +49,8 @@ export function WaterFaultFormAdvanced() {
   });
 
   const [photos, setPhotos] = useState<Array<{ url: string; type: string }>>([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const calculateVolume = () => {
@@ -51,6 +58,96 @@ export function WaterFaultFormAdvanced() {
       (excavation.width_cm * excavation.length_cm * excavation.depth_cm) /
       1000000; // Convert cm³ to m³
     setExcavation((prev) => ({ ...prev, volume_m3: volume }));
+  };
+
+  const handleSubmit = async () => {
+    if (!fault.asset_number || !fault.street || !fault.area_code) {
+      setMessage({ type: "error", text: "Ελλιπή δεδομένα τοποθεσίας" });
+      return;
+    }
+
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      const payload = {
+        action: "submit_advanced",
+        submission: {
+          location: {
+            asset_number: fault.asset_number,
+            street: fault.street,
+            area_code: fault.area_code,
+            severity: fault.severity as "low" | "medium" | "high" | "critical",
+          },
+          damage: fault.description,
+          materials: materials.map((m) => ({
+            type: m.type,
+            name: m.name,
+            quantity: m.quantity,
+            unit: m.unit,
+            condition: m.condition,
+          })),
+          excavation: {
+            width_cm: excavation.width_cm,
+            length_cm: excavation.length_cm,
+            depth_cm: excavation.depth_cm,
+            soil_type: excavation.soil_type,
+            volume_m3: excavation.volume_m3,
+          },
+          photos: photos.map((p) => ({
+            url: p.url,
+            type: p.type as "excavation" | "damage" | "material" | "before" | "after",
+          })),
+          crew: crew.names ? crew : undefined,
+        },
+      };
+
+      const response = await fetch("/api/professional/infrastructure/water/faults", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Σφάλμα υποβολής");
+      }
+
+      setMessage({
+        type: "success",
+        text: `✅ Η βλάβη ${result.fault_id} καταγράφηκε επιτυχώς`,
+      });
+
+      // Reset form
+      setTimeout(() => {
+        setFault({
+          asset_number: "",
+          street: "",
+          area_code: "",
+          description: "",
+          severity: "high",
+        });
+        setCrew({ names: "", permit_number: "" });
+        setMaterials([]);
+        setPhotos([]);
+        setExcavation({
+          width_cm: 0,
+          length_cm: 0,
+          depth_cm: 0,
+          soil_type: "soil",
+          volume_m3: 0,
+        });
+        setActiveSection("location");
+      }, 2000);
+    } catch (error) {
+      setMessage({
+        type: "error",
+        text: `❌ ${error instanceof Error ? error.message : "Σφάλμα συνδέσμου"}`,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const addMaterial = () => {
@@ -175,6 +272,22 @@ export function WaterFaultFormAdvanced() {
                 <option value="major">🔴 Μεγάλη</option>
                 <option value="critical">🔥 Κρίσιμη</option>
               </select>
+            </div>
+            <div className="space-y-3 mt-4">
+              <input
+                type="text"
+                placeholder="Ονόματα συνεργείου (προαιρετικό)"
+                value={crew.names}
+                onChange={(e) => setCrew({ ...crew, names: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="text"
+                placeholder="Αριθμός δελτίου εκσκαφής (προαιρετικό)"
+                value={crew.permit_number}
+                onChange={(e) => setCrew({ ...crew, permit_number: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
             <button
               onClick={() => setActiveSection("damage")}
@@ -476,6 +589,19 @@ export function WaterFaultFormAdvanced() {
         {activeSection === "review" && (
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-gray-900">✅ Ανασκόπηση</h3>
+
+            {message && (
+              <div
+                className={`p-4 rounded-lg ${
+                  message.type === "success"
+                    ? "bg-green-50 text-green-800 border border-green-200"
+                    : "bg-red-50 text-red-800 border border-red-200"
+                }`}
+              >
+                {message.text}
+              </div>
+            )}
+
             <div className="bg-gray-50 p-6 rounded-lg space-y-3">
               <h4 className="font-bold">📍 Θέση</h4>
               <p className="text-sm text-gray-600">
@@ -485,30 +611,55 @@ export function WaterFaultFormAdvanced() {
               <h4 className="font-bold mt-4">⚠️ Σοβαρότητα</h4>
               <p className="text-sm text-gray-600">{fault.severity}</p>
 
+              <h4 className="font-bold mt-4">👷 Συνεργείο</h4>
+              <p className="text-sm text-gray-600">
+                {crew.names || "(δεν καθορίστηκε)"} • Δελτίο: {crew.permit_number || "(δεν καθορίστηκε)"}
+              </p>
+
+              <h4 className="font-bold mt-4">⚠️ Περιγραφή</h4>
+              <p className="text-sm text-gray-600">{fault.description || "(δεν καθορίστηκε)"}</p>
+
               <h4 className="font-bold mt-4">🔧 Υλικά ({materials.length})</h4>
               <div className="text-sm text-gray-600 space-y-1">
-                {materials.map((m) => (
-                  <p key={m.id}>
-                    • {m.name} - {m.quantity} {m.unit} ({m.condition})
-                  </p>
-                ))}
+                {materials.length > 0 ? (
+                  materials.map((m) => (
+                    <p key={m.id}>
+                      • {m.name} - {m.quantity} {m.unit} ({m.condition})
+                    </p>
+                  ))
+                ) : (
+                  <p>(δεν προστέθηκαν υλικά)</p>
+                )}
               </div>
 
               <h4 className="font-bold mt-4">🪓 Εκσκαφή</h4>
               <p className="text-sm text-gray-600">
-                {excavation.width_cm}cm × {excavation.length_cm}cm ×{" "}
-                {excavation.depth_cm}cm = {excavation.volume_m3.toFixed(2)} m³ ({excavation.soil_type})
+                {excavation.width_cm}cm × {excavation.length_cm}cm × {excavation.depth_cm}cm = {excavation.volume_m3.toFixed(2)} m³ ({excavation.soil_type})
               </p>
 
               <h4 className="font-bold mt-4">📸 Φωτογραφίες</h4>
               <p className="text-sm text-gray-600">{photos.length} φωτογραφίες ανεβασμένες</p>
             </div>
 
-            <button
-              className="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 font-bold text-lg"
-            >
-              ✅ Αποθήκευση Πλήρους Καταγραφής
-            </button>
+            <div className="flex gap-2 pt-4">
+              <button
+                onClick={() => setActiveSection("photos")}
+                className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500"
+              >
+                ← Πίσω
+              </button>
+              <button
+                onClick={handleSubmit}
+                disabled={loading}
+                className={`flex-1 px-6 py-3 rounded-lg font-bold text-lg transition ${
+                  loading
+                    ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                    : "bg-green-600 text-white hover:bg-green-700"
+                }`}
+              >
+                {loading ? "⏳ Ανέβασμα..." : "✅ Αποθήκευση Πλήρους Καταγραφής"}
+              </button>
+            </div>
           </div>
         )}
       </div>

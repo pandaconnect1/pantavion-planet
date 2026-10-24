@@ -7,13 +7,48 @@ import { createClient } from "@/lib/supabase/server";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+// Advanced water fault form submission
+interface WaterFaultSubmission {
+  location: {
+    asset_number: string;
+    street: string;
+    area_code: string;
+    severity: 'low' | 'medium' | 'high' | 'critical';
+  };
+  damage: string;
+  materials: Array<{
+    type: 'pipe' | 'valve' | 'tank' | 'soil' | 'coupling';
+    name: string;
+    quantity: number;
+    unit: string;
+    condition: 'good' | 'damaged' | 'broken';
+  }>;
+  excavation: {
+    width_cm: number;
+    length_cm: number;
+    depth_cm: number;
+    soil_type: 'asphalt' | 'concrete' | 'soil' | 'rock' | 'mixed';
+    volume_m3: number;
+  };
+  photos: Array<{
+    url: string;
+    type: 'excavation' | 'damage' | 'material' | 'before' | 'after';
+  }>;
+  crew?: {
+    names: string;
+    permit_number?: string;
+  };
+}
+
+// Legacy fault body for backward compatibility
 type FaultActionBody = {
-  action?: "list" | "create" | "status";
+  action?: "list" | "create" | "status" | "submit_advanced";
   deviceId?: string;
   deviceToken?: string;
   fault?: Record<string, unknown>;
   id?: string;
   status?: string;
+  submission?: WaterFaultSubmission;
 };
 
 function clean(value: unknown, maxLength = 1000) {
@@ -140,6 +175,105 @@ export async function POST(request: Request) {
         fault: toClientFault(row),
         storage: "supabase",
       });
+    }
+
+    // Advanced water fault form submission (new)
+    if (action === "submit_advanced") {
+      const submission = body.submission as WaterFaultSubmission;
+
+      if (!submission?.location?.asset_number || !submission?.location?.street || !submission?.location?.area_code) {
+        return noStoreJson({ ok: false, error: "location_required" }, 400);
+      }
+
+      // Generate fault ID
+      const faultId = `FAULT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+      // 1. Insert main fault record
+      const { data: faultData, error: faultError } = await supabase
+        .from('water_fault_records')
+        .insert({
+          id: faultId,
+          asset_number: submission.location.asset_number,
+          street: submission.location.street,
+          area_code: submission.location.area_code,
+          severity: submission.location.severity,
+          description: submission.damage,
+          excavation_width_cm: submission.excavation.width_cm,
+          excavation_length_cm: submission.excavation.length_cm,
+          excavation_depth_cm: submission.excavation.depth_cm,
+          excavation_volume_m3: submission.excavation.volume_m3,
+          soil_type: submission.excavation.soil_type,
+          crew_names: submission.crew?.names || null,
+          permit_number: submission.crew?.permit_number || null,
+          created_at: new Date().toISOString(),
+          status: 'recorded',
+        })
+        .select()
+        .single();
+
+      if (faultError) {
+        throw new Error(`fault_insert_error: ${faultError.message}`);
+      }
+
+      // 2. Insert materials
+      if (submission.materials && submission.materials.length > 0) {
+        const materialsData = submission.materials.map((m) => ({
+          fault_id: faultId,
+          material_name: m.name,
+          material_type: m.type,
+          quantity: m.quantity,
+          unit: m.unit,
+          condition: m.condition,
+          created_at: new Date().toISOString(),
+        }));
+
+        const { error: materialsError } = await supabase
+          .from('water_fault_materials')
+          .insert(materialsData);
+
+        if (materialsError) {
+          console.error('Materials insert error:', materialsError);
+        }
+      }
+
+      // 3. Insert photos
+      if (submission.photos && submission.photos.length > 0) {
+        const photosData = submission.photos.map((p) => ({
+          fault_id: faultId,
+          photo_url: p.url,
+          photo_type: p.type,
+          latitude: null,
+          longitude: null,
+          uploaded_at: new Date().toISOString(),
+        }));
+
+        const { error: photosError } = await supabase
+          .from('water_fault_photos')
+          .insert(photosData);
+
+        if (photosError) {
+          console.error('Photos insert error:', photosError);
+        }
+      }
+
+      // Get isolation hints for this fault
+      const { data: isolationData } = await supabase.rpc('get_isolation_hints', {
+        asset_number: submission.location.asset_number,
+        street: submission.location.street,
+        area_code: submission.location.area_code,
+      });
+
+      return noStoreJson(
+        {
+          ok: true,
+          fault_id: faultId,
+          message: 'Η βλάβη καταγράφηκε επιτυχώς',
+          isolation_hints: isolationData,
+          timestamp: new Date().toISOString(),
+          storage: "supabase",
+        },
+        201
+      );
     }
 
     return noStoreJson({ ok: false, error: "unknown_action" }, 400);
