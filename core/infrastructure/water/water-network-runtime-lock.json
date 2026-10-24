@@ -1,7 +1,7 @@
 {
   "marker": "pantavion_water_network_runtime_lock_v1",
   "version": 1,
-  "lockedAtUtc": "2026-10-23T06:37:34.826Z",
+  "lockedAtUtc": "2026-10-24T05:43:26.296Z",
   "purpose": "Fail closed when the protected Pantavion water pipes, map, private source, or access runtime changes without a deliberate lock refresh and founder review.",
   "sourceTruth": {
     "placemarks": 122857,
@@ -21,11 +21,12 @@
     "app/api/professional/infrastructure/water/access/authorize/route.ts": "751360c6accd5ce0a63bbc08989ac94003395e9d5f7f189c7de22d3a7938d21b",
     "app/api/professional/infrastructure/water/access/invite/claim/route.ts": "cbdedb6771e0155fbb55b772e8e9e30fb9029060cdb1861d25e25a1dbdc8b16b",
     "app/api/professional/infrastructure/water/admin/session/route.ts": "62ee109cfc6854bd472fa7e7cb6c56b237f2bfa9d4eb2455a562b686fd09f2ab",
+    "app/api/professional/infrastructure/water/basemap/dls/route.ts": "bf0345a807b51b4b0bcbcb7a3097e4c20453f484317f479858cecdf3ca6fb2f4",
     "app/api/professional/infrastructure/water/mapserver/0/query/route.ts": "3d4784ac3af414b1b143588c721fe8bee24d1c98e60b131caaa93b3ab398ae59",
     "app/api/professional/infrastructure/water/segment/bbox/route.ts": "ca3423fdb41ab608b5a255937713750b673618564768f4b3cb53a90ec3c1437e",
     "app/api/professional/infrastructure/water/tiles/mvt/route.ts": "34bea14126f4bcd6c069818d4f0f65599b97f7701ed238f180a0404d541304de",
     "app/professional/infrastructure/water/admin/access/page.tsx": "627e1e1f45a2bdb465acddd8053ffc47306be7adbeb7a3d0489b11cb036dc28b",
-    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "7fcf4a9517db548fe7673f07b90f204d775ca55a9634d642fe949444b19f8d9d",
+    "app/professional/infrastructure/water/live/controlled-water-segment-client.tsx": "0e0c1c3fd9899885ae5a74fdd3afb776767cf6188aae20f317dd2dbc997886ca",
     "app/professional/infrastructure/water/live/page.tsx": "931283b065af67e5618f2672a3cc1a8e0fac41b871e0c5b5e7f307f00d4b228e",
     "core/infrastructure/water/controlled-water-segment-index-provider.ts": "828652b8565772b63b8d365fff41542b815dfc25d6cb2ca07912e488a64beff8",
     "core/infrastructure/water/private-water-segment-reader.ts": "51b9b3eaaa01d70cb0edfa0459539e93d55448c5ca3adc5433f5be337403d89d",
@@ -33,12 +34,11 @@
     "core/security/water-admin-session.ts": "df9e9d7cbd5edfa2659068d817d60e03886e0e761ff6657ab7cb8e9b9417d2f3",
     "scripts/pantavion-water-network-runtime-lock.cjs": "0df1627215062bbb3c1e5bb91118591fd896197300cf81090d373f757fa2d5d3",
     "scripts/water-guardian-production-smoke.cjs": "2109e96821887077bc3854083d19c0f6cf7d2a464d8876458672ccb97c0667e0",
-    "scripts/water-segment-reader-regression.mjs": "001ec02d01a74958f5ab1e6982642b8a84f7eedfc04c1b2214d6de4454c8c15d",
-    "app/api/professional/infrastructure/water/basemap/dls/route.ts": "bf0345a807b51b4b0bcbcb7a3097e4c20453f484317f479858cecdf3ca6fb2f4"
+    "scripts/water-segment-reader-regression.mjs": "001ec02d01a74958f5ab1e6982642b8a84f7eedfc04c1b2214d6de4454c8c15d"
   },
   "refreshEvidence": {
-    "reason": "Founder explicitly requested moving Water A tools outside the map, a distance ruler, fullscreen and back/forward/menu (2026-10-23). Reviewed UI-only delta: external controls and drawing menu, temporary measurement overlay, viewport history, fullscreen and resize handling. Source geometry/styles, private source, segmented delivery and authorization remain unchanged. CI Water Lock Refresh Evidence run 39912510853 passed lint, typecheck, private segment regression and refreshed manifest verification; its independently calculated SHA-256 is recorded here. Only the Map A client hash was refreshed.",
-    "sourceCommit": "d4e81c87cb85f2016d10212cb1b3420f19610b47",
+    "reason": "Founder-approved refresh (2026-10-24) for the Map A client after the registry street search change in commit 62bf4c2. Hash check before refresh: 18 of 19 protected files unchanged, only the Map A client changed. The Map B drawing bar and full-screen change (4d1fd99) touches no protected file. Segment regression and lint passed before refresh. CI Water Lock Refresh Evidence runs on PRs to main for independent confirmation.",
+    "sourceCommit": "4d1fd99a1d316ab7154a60cb12079cd95b0df28d",
     "protectedFileCount": 19,
     "invariantMutationAllowed": false,
     "sourceTruthMutationAllowed": false

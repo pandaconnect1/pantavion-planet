@@ -878,6 +878,12 @@ export default function ControlledWaterSegmentClient() {
     displayName: string;
     coordinates: { lat: number; lng: number };
   }>>([]);
+  // Registry streets with no map coordinates yet; the user places each one by clicking the map.
+  const [unplacedStreets, setUnplacedStreets] = useState<Array<{
+    streetRegistryId: string;
+    label: string;
+    locality: string;
+  }>>([]);
 
   const mapEl = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
@@ -893,6 +899,8 @@ export default function ControlledWaterSegmentClient() {
   const approvedOverlayRef = useRef<RemovableWaterLayer | null>(null);
   const autoLoadTimerRef = useRef<number | null>(null);
   const loadInProgressRef = useRef(false);
+  // A street chosen from the registry waits here until the next map click places it.
+  const pendingStreetPlacementRef = useRef<{ label: string; doneMessage: string } | null>(null);
   const networkLoadAbortRef = useRef<AbortController | null>(null);
   const reloadQueuedRef = useRef(false);
   const scheduleViewportReloadRef = useRef<(() => void) | null>(null);
@@ -1232,7 +1240,13 @@ export default function ControlledWaterSegmentClient() {
             drawingRef.current.pick({ x: event.latlng.lng, y: event.latlng.lat });
             return;
           }
-          void selectMapPointRef.current(event);
+          const pendingStreet = pendingStreetPlacementRef.current;
+          pendingStreetPlacementRef.current = null;
+          void selectMapPointRef.current(event).then(() => {
+            if (!pendingStreet) return;
+            setStreet(pendingStreet.label);
+            setMessage(pendingStreet.doneMessage);
+          });
         });
         setMapReady(true);
         window.setTimeout(() => map.invalidateSize(), 300);
@@ -1670,6 +1684,8 @@ export default function ControlledWaterSegmentClient() {
 
     setSearchLoading(true);
     setAddressCandidates([]);
+    setUnplacedStreets([]);
+    pendingStreetPlacementRef.current = null;
     setMessage(t.loading);
     try {
       const response = await fetch(
@@ -1717,6 +1733,63 @@ export default function ControlledWaterSegmentClient() {
     }
   }
 
+  // Registry streets come from the verified Limassol postal register. They carry no
+  // coordinates, so they are listed by name and placed only by a map click. The endpoint
+  // requires approved access; a device without it gets no registry suggestions.
+  async function loadUnplacedStreets(query: string) {
+    const clean = query.trim();
+    if (clean.length < 2) return [];
+    try {
+      const device = getOrCreateWaterAccessDevice();
+      const response = await fetch(
+        `/api/professional/infrastructure/water/streets?q=${encodeURIComponent(clean)}&limit=8`,
+        {
+          cache: "no-store",
+          credentials: "include",
+          signal: portableTimeoutSignal(8000),
+          headers: {
+            "x-pantavion-water-device-id": device.deviceId,
+            "x-pantavion-water-device-token": device.deviceToken,
+          },
+        },
+      );
+      if (!response.ok) return [];
+      const payload = await response.json().catch(() => ({})) as {
+        streets?: Array<{
+          streetRegistryId: string;
+          nameEl?: string | null;
+          nameEn?: string | null;
+          municipalityOrCommunity?: string | null;
+          areaOrParish?: string | null;
+        }>;
+      };
+      return (payload.streets ?? []).flatMap((street) => {
+        const label = street.nameEl || street.nameEn;
+        if (!label) return [];
+        const locality = [street.municipalityOrCommunity, street.areaOrParish]
+          .filter((part): part is string => Boolean(part))
+          .join(" · ");
+        return [{ streetRegistryId: street.streetRegistryId, label, locality }];
+      });
+    } catch {
+      return [];
+    }
+  }
+
+  function beginUnplacedStreetPlacement(street: { label: string; locality: string }) {
+    const where = street.locality ? `${street.label}, ${street.locality}` : street.label;
+    pendingStreetPlacementRef.current = {
+      label: street.label,
+      doneMessage: lang === "el"
+        ? `Σημείο ορίστηκε για την οδό ${street.label}. Έλεγξε τη θέση στον χάρτη.`
+        : `Point set for ${street.label}. Check its position on the map.`,
+    };
+    setUnplacedStreets([]);
+    setMessage(lang === "el"
+      ? `Κάνε κλικ στον χάρτη στο σημείο της οδού ${where}.`
+      : `Click the map where ${where} is.`);
+  }
+
   async function searchAddressMarker(queryOverride?: string) {
     const map = mapRef.current;
     const override = queryOverride?.trim() || "";
@@ -1727,6 +1800,8 @@ export default function ControlledWaterSegmentClient() {
     }
     setSearchLoading(true);
     setAddressCandidates([]);
+    setUnplacedStreets([]);
+    pendingStreetPlacementRef.current = null;
     setMessage(t.loading);
     try {
       // Approved field users search the Cyprus official road registry first.
@@ -1797,6 +1872,16 @@ export default function ControlledWaterSegmentClient() {
         return;
       }
       const pendingMatches = readPendingLocalAddressMatches(queries[0] || "");
+      // No placed match: verified registry streets are offered so one can be placed on the map.
+      const unplaced = await loadUnplacedStreets(override || street.trim());
+      if (mapRef.current !== map) return;
+      if (unplaced.length > 0) {
+        setUnplacedStreets(unplaced);
+        setMessage(lang === "el"
+          ? "Βρέθηκαν οδοί χωρίς σημείο στον χάρτη. Επίλεξε μία και κάνε κλικ στο σημείο της."
+          : "Streets were found without a map point. Pick one, then click its location.");
+        return;
+      }
       setMessage(pendingMatches.length > 0
         ? `Προσωρινή καταχώρηση χωρίς εγκεκριμένες συντεταγμένες: ${pendingMatches[0]}`
         : t.searchNotFound);
@@ -2486,6 +2571,22 @@ export default function ControlledWaterSegmentClient() {
             </div>
           ) : null}
 
+          {unplacedStreets.length > 0 ? (
+            <div className="mt-3 grid gap-2">
+              {unplacedStreets.map((street) => (
+                <button key={street.streetRegistryId} type="button"
+                  onClick={() => beginUnplacedStreetPlacement(street)}
+                  className="rounded-xl border border-dashed border-amber-400/60 px-4 py-3 text-left text-sm text-amber-100">
+                  <span className="font-bold">{street.label}</span>
+                  <span className="block text-xs text-slate-300">
+                    {lang === "el" ? "Χωρίς σημείο στον χάρτη" : "No map point yet"}
+                    {street.locality ? ` · ${street.locality}` : ""}
+                  </span>
+                </button>
+              ))}
+            </div>
+          ) : null}
+
 
         <div className="mt-4 overflow-hidden rounded-3xl border border-slate-700 bg-[#0d1a2d]">
           <div className="border-b border-slate-700 px-4 py-3 text-sm font-black text-[#f2c766]">
@@ -2715,6 +2816,22 @@ export default function ControlledWaterSegmentClient() {
                   }}
                   className="rounded-xl border border-sky-400/40 px-4 py-3 text-left text-sm text-sky-100">
                   {candidate.displayName}
+                </button>
+              ))}
+            </div>
+          ) : null}
+
+          {unplacedStreets.length > 0 ? (
+            <div className="mt-3 grid gap-2">
+              {unplacedStreets.map((street) => (
+                <button key={street.streetRegistryId} type="button"
+                  onClick={() => beginUnplacedStreetPlacement(street)}
+                  className="rounded-xl border border-dashed border-amber-400/60 px-4 py-3 text-left text-sm text-amber-100">
+                  <span className="font-bold">{street.label}</span>
+                  <span className="block text-xs text-slate-300">
+                    {lang === "el" ? "Χωρίς σημείο στον χάρτη" : "No map point yet"}
+                    {street.locality ? ` · ${street.locality}` : ""}
+                  </span>
                 </button>
               ))}
             </div>
