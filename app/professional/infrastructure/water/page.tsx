@@ -16,14 +16,14 @@ export default function WaterInfrastructurePage() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold">💧 Pantavion Water Network</h1>
+              <h1 className="text-4xl font-bold">💧 Δίκτυο Νερού Pantavion</h1>
               <p className="text-blue-100 mt-2">
-                Professional Water Distribution Infrastructure Management
+                Επαγγελματική Διαχείριση Υποδομών Διανομής Νερού
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-blue-100">Limassol, Cyprus</p>
-              <p className="text-xs text-blue-200">10,270 network assets • 53,551 nodes</p>
+              <p className="text-sm text-blue-100">Λεμεσός, Κύπρος</p>
+              <p className="text-xs text-blue-200">10.270 στοιχεία δικτύου • 53.551 κόμβοι</p>
             </div>
           </div>
         </div>
@@ -45,11 +45,11 @@ export default function WaterInfrastructurePage() {
                     : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
               >
-                {tab === "overview" && "📊 Overview"}
-                {tab === "maps" && "🗺️ Maps"}
-                {tab === "register" && "📋 Register"}
-                {tab === "faults" && "⚠️ Faults"}
-                {tab === "analytics" && "📈 Analytics"}
+                {tab === "overview" && "📊 Επισκόπηση"}
+                {tab === "maps" && "🗺️ Χάρτες"}
+                {tab === "register" && "📋 Μητρώο"}
+                {tab === "faults" && "⚠️ Βλάβες"}
+                {tab === "analytics" && "📈 Ανάλυση"}
               </button>
             ))}
           </div>
@@ -65,25 +65,25 @@ export default function WaterInfrastructurePage() {
               {/* Stat Cards */}
               {[
                 {
-                  title: "Network Valves",
+                  title: "Ρέγουλες Δικτύου",
                   value: "8,972",
                   icon: "🚰",
                   color: "blue",
                 },
                 {
-                  title: "Hydrants",
+                  title: "Υδροστόμια",
                   value: "1,018",
                   icon: "🔴",
                   color: "red",
                 },
                 {
-                  title: "Air Valves",
+                  title: "Αερικές Βάνες",
                   value: "195",
                   icon: "💨",
                   color: "cyan",
                 },
                 {
-                  title: "Tanks",
+                  title: "Δεξαμενές",
                   value: "83",
                   icon: "🏭",
                   color: "amber",
@@ -104,32 +104,32 @@ export default function WaterInfrastructurePage() {
             {/* System Status */}
             <div className="bg-white rounded-lg shadow p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                System Status
+                Κατάσταση Συστήματος
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <p className="text-gray-600 text-sm mb-2">Map A (Live Network)</p>
+                  <p className="text-gray-600 text-sm mb-2">Χάρτης A (Ζώντας Δίκτυο)</p>
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="font-medium text-green-700">Operational</span>
+                    <span className="font-medium text-green-700">Λειτουργικό</span>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">53,551 nodes • 20,000+ pipes</p>
+                  <p className="text-xs text-gray-500 mt-1">53.551 κόμβοι • 20.000+ αγωγοί</p>
                 </div>
                 <div>
-                  <p className="text-gray-600 text-sm mb-2">Map B/D (Register)</p>
+                  <p className="text-gray-600 text-sm mb-2">Χάρτης B/D (Μητρώο)</p>
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="font-medium text-green-700">Synced</span>
+                    <span className="font-medium text-green-700">Συγχρονισμένο</span>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">10,270 assets catalogued</p>
+                  <p className="text-xs text-gray-500 mt-1">10.270 στοιχεία καταγεγραμμένα</p>
                 </div>
                 <div>
-                  <p className="text-gray-600 text-sm mb-2">Isolation Analysis</p>
+                  <p className="text-gray-600 text-sm mb-2">Ανάλυση Απομόνωσης</p>
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
-                    <span className="font-medium text-yellow-700">In Progress</span>
+                    <span className="font-medium text-yellow-700">Σε Εξέλιξη</span>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">Computing valve sets...</p>
+                  <p className="text-xs text-gray-500 mt-1">Υπολογισμός συνόλων ρέγουλας...</p>
                 </div>
               </div>
             </div>
@@ -137,38 +137,38 @@ export default function WaterInfrastructurePage() {
             {/* Features */}
             <div className="bg-white rounded-lg shadow p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Professional Features
+                Επαγγελματικές Λειτουργίες
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
                   {
-                    title: "Network Mapping",
-                    description: "Authentic DWG-derived tiles with valve numbering",
+                    title: "Χαρτογραφία Δικτύου",
+                    description: "Αυθεντικό DWG με αριθμημένες ρέγουλες και στοιχεία",
                     icon: "🗺️",
                   },
                   {
-                    title: "Asset Register",
-                    description: "10,270 valves, hydrants, tanks searchable by street/area",
+                    title: "Μητρώο Στοιχείων",
+                    description: "10.270 ρέγουλες, υδροστόμια, δεξαμενές αναζητήσιμα",
                     icon: "📋",
                   },
                   {
-                    title: "Fault Management",
-                    description: "Record damage with excavation metrics, crew names, permits",
+                    title: "Διαχείριση Βλαβών",
+                    description: "Καταγραφή με μετρήσεις εκσκαφής, ονόματα συνεργείου",
                     icon: "⚠️",
                   },
                   {
-                    title: "Isolation Analysis",
-                    description: "Automatic valve closure suggestions per fault location",
+                    title: "Ανάλυση Απομόνωσης",
+                    description: "Αυτόματες προτάσεις κλεισίματος ρέγουλας ανά θέση",
                     icon: "🔐",
                   },
                   {
-                    title: "Hydraulic Modeling",
-                    description: "EPANET-based pressure & demand analysis with upgrades",
+                    title: "Υδραυλικό Μοντέλο",
+                    description: "Ανάλυση πίεσης, ζήτησης με προτάσεις αναβάθμισης",
                     icon: "📊",
                   },
                   {
-                    title: "Zone Management",
-                    description: "DMA boundaries, leakage tracking, water balance",
+                    title: "Διαχείριση Ζωνών",
+                    description: "Όρια DMA, παρακολούθηση διαρροών, ισοζύγιο νερού",
                     icon: "🎯",
                   },
                 ].map((feature) => (
@@ -189,15 +189,15 @@ export default function WaterInfrastructurePage() {
         {activeTab === "maps" && (
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow p-8">
-              <h2 className="text-2xl font-bold mb-6">Network Maps</h2>
+              <h2 className="text-2xl font-bold mb-6">Χάρτες Δικτύου</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Link
                   href="/professional/infrastructure/water/master-b-mobile?viewId=A"
                   className="block p-6 border-2 border-blue-300 rounded-lg hover:border-blue-600 hover:shadow-lg transition"
                 >
-                  <h3 className="text-xl font-bold text-blue-600">📡 Map A - Live Network</h3>
+                  <h3 className="text-xl font-bold text-blue-600">📡 Χάρτης A - Ζώντας Δίκτυο</h3>
                   <p className="text-gray-600 mt-2">
-                    Real-time network from database (53,551 nodes, segments)
+                    Πραγματικό δίκτυο από τη Βάση (53.551 κόμβοι)
                   </p>
                 </Link>
 
@@ -205,9 +205,9 @@ export default function WaterInfrastructurePage() {
                   href="/professional/infrastructure/water/master-b-mobile?viewId=B"
                   className="block p-6 border-2 border-cyan-300 rounded-lg hover:border-cyan-600 hover:shadow-lg transition"
                 >
-                  <h3 className="text-xl font-bold text-cyan-600">🗺️ Map B - Authentic</h3>
+                  <h3 className="text-xl font-bold text-cyan-600">🗺️ Χάρτης B - Αυθεντικό</h3>
                   <p className="text-gray-600 mt-2">
-                    DWG-derived tiles (v4 LOD levels for fast loading)
+                    Δεδομένα DWG (Oceanos 3.4 - Πλήρης ανάλυση)
                   </p>
                 </Link>
 
@@ -215,9 +215,9 @@ export default function WaterInfrastructurePage() {
                   href="/professional/infrastructure/water/master-b-mobile?viewId=D"
                   className="block p-6 border-2 border-green-300 rounded-lg hover:border-green-600 hover:shadow-lg transition"
                 >
-                  <h3 className="text-xl font-bold text-green-600">🎯 Map D - Register</h3>
+                  <h3 className="text-xl font-bold text-green-600">🎯 Χάρτης D - Μητρώο</h3>
                   <p className="text-gray-600 mt-2">
-                    Valve markers with numbering & isolation data
+                    Αριθμημένες ρέγουλες & υδροστόμια με δεδομένα απομόνωσης
                   </p>
                 </Link>
 
@@ -225,9 +225,9 @@ export default function WaterInfrastructurePage() {
                   href="/professional/infrastructure/water/register"
                   className="block p-6 border-2 border-purple-300 rounded-lg hover:border-purple-600 hover:shadow-lg transition"
                 >
-                  <h3 className="text-xl font-bold text-purple-600">📑 Register</h3>
+                  <h3 className="text-xl font-bold text-purple-600">📑 Μητρώο</h3>
                   <p className="text-gray-600 mt-2">
-                    Search assets by street, area, or number
+                    Αναζήτηση 10.270 στοιχείων ανά οδό, περιοχή, αριθμό
                   </p>
                 </Link>
               </div>
@@ -238,15 +238,15 @@ export default function WaterInfrastructurePage() {
         {/* Register Tab */}
         {activeTab === "register" && (
           <div className="bg-white rounded-lg shadow p-8">
-            <h2 className="text-2xl font-bold mb-6">Asset Register</h2>
+            <h2 className="text-2xl font-bold mb-6">Μητρώο Στοιχείων</h2>
             <p className="text-gray-600 mb-4">
-              Complete catalog of 10,270 water network assets
+              Πλήρης κατάλογος 10.270 στοιχείων δικτύου νερού
             </p>
             <Link
               href="/professional/infrastructure/water/register"
               className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium"
             >
-              🔍 View Full Register
+              🔍 Προβολή Πλήρους Μητρώου
             </Link>
           </div>
         )}
@@ -261,36 +261,36 @@ export default function WaterInfrastructurePage() {
         {/* Analytics Tab */}
         {activeTab === "analytics" && (
           <div className="bg-white rounded-lg shadow p-8">
-            <h2 className="text-2xl font-bold mb-6">Analytics & Reports</h2>
+            <h2 className="text-2xl font-bold mb-6">Ανάλυση & Αναφορές</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="p-6 bg-blue-50 rounded-lg">
                 <h3 className="font-bold text-gray-900 mb-2">
-                  📊 Hydraulic Model
+                  📊 Υδραυλικό Μοντέλο
                 </h3>
                 <p className="text-sm text-gray-600">
-                  Pressure, demand, leakage analysis with upgrade proposals
+                  Ανάλυση πίεσης, ζήτησης, διαρροών με προτάσεις αναβάθμισης
                 </p>
               </div>
               <div className="p-6 bg-blue-50 rounded-lg">
-                <h3 className="font-bold text-gray-900 mb-2">🎯 Zone Analysis</h3>
+                <h3 className="font-bold text-gray-900 mb-2">🎯 Ανάλυση Ζωνών</h3>
                 <p className="text-sm text-gray-600">
-                  DMA boundaries, water balance (IWA framework)
-                </p>
-              </div>
-              <div className="p-6 bg-blue-50 rounded-lg">
-                <h3 className="font-bold text-gray-900 mb-2">
-                  📈 Performance Metrics
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Non-revenue water, fault history, response times
+                  Όρια DMA, ισοζύγιο νερού (πλαίσιο IWA)
                 </p>
               </div>
               <div className="p-6 bg-blue-50 rounded-lg">
                 <h3 className="font-bold text-gray-900 mb-2">
-                  🔐 Isolation Analysis
+                  📈 Μετρικές Απόδοσης
                 </h3>
                 <p className="text-sm text-gray-600">
-                  Auto-computed valve closure sets per segment
+                  Μη έσοδο νερό, ιστορικό βλαβών, χρόνοι απόκρισης
+                </p>
+              </div>
+              <div className="p-6 bg-blue-50 rounded-lg">
+                <h3 className="font-bold text-gray-900 mb-2">
+                  🔐 Ανάλυση Απομόνωσης
+                </h3>
+                <p className="text-sm text-gray-600">
+                  Αυτόματα υπολογισμένα σύνολα κλεισίματος ρέγουλας
                 </p>
               </div>
             </div>
@@ -302,10 +302,10 @@ export default function WaterInfrastructurePage() {
       <footer className="bg-gray-900 text-white mt-16 py-8">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <p className="text-gray-400">
-            Professional Water Infrastructure Management • Pantavion 2026
+            Επαγγελματική Διαχείριση Υποδομών Νερού • Pantavion 2026
           </p>
           <p className="text-xs text-gray-500 mt-2">
-            Built with EPANET • PostGIS • International Standards
+            Κατασκευή με EPANET • PostGIS • Διεθνή Πρότυπα
           </p>
         </div>
       </footer>
