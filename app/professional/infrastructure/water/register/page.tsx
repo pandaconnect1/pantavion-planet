@@ -22,25 +22,37 @@ export default function WaterRegisterPage() {
   const [sortBy, setSortBy] = useState<"area" | "street" | "number">("area");
 
   useEffect(() => {
-    // Fetch assets from API (will be implemented)
     const fetchAssets = async () => {
       try {
+        const params = new URLSearchParams({
+          limit: "1000",
+          sort_by: sortBy === "area" ? "area_code" : sortBy,
+        });
+
+        if (filterArea) params.append("area_code", filterArea);
+        if (filterType) params.append("kind", filterType);
+        if (searchTerm) params.append("search", searchTerm);
+
         const response = await fetch(
-          "/api/professional/infrastructure/water/faults?action=list_assets"
+          `/api/professional/infrastructure/water/assets?${params}`,
+          { cache: "no-store" }
         );
-        // For now, use mock data
-        // const data = await response.json();
-        // setAssets(data.assets || []);
-        setAssets([]);
+
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const data = await response.json();
+        setAssets(data.assets || []);
       } catch (error) {
         console.error("Failed to fetch assets:", error);
+        setAssets([]);
       } finally {
         setLoading(false);
       }
     };
 
+    setLoading(true);
     fetchAssets();
-  }, []);
+  }, [searchTerm, filterArea, filterType, sortBy]);
 
   // Filter and sort assets
   let filteredAssets = assets
