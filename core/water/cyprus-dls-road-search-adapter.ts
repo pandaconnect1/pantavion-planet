@@ -1,4 +1,5 @@
 import type { UnifiedPlaceResult } from "./water-unified-place-search-contract";
+import { roadNameRoots } from "./street-name-roots.ts";
 
 export type CyprusDlsRoadSearchConfig = {
   baseUrl?: string;
@@ -93,7 +94,7 @@ function linePoint(coordinates: unknown): { lat: number; lng: number } | null {
   return { lat, lng };
 }
 
-function buildWhere(value: string) {
+export function buildWhere(value: string) {
   const raw = value.toLocaleUpperCase("el-CY");
   const stripped = stripDiacritics(raw);
   const variants = Array.from(new Set([raw, stripped]))
@@ -106,11 +107,22 @@ function buildWhere(value: string) {
     clauses.push(`ROADNAMERMN LIKE '%${variant}%'`);
     clauses.push(`ROUTENUMBER LIKE '%${variant}%'`);
   }
+  // Order-independent, declension-tolerant match: every root must appear in the same name field.
+  const roots = roadNameRoots(stripped).map(escapeArcGisSqlLiteral).filter(Boolean);
+  if (roots.length) {
+    for (const field of ["ROADNAMEGR", "ROADNAMERMN"]) {
+      clauses.push(`(${roots.map((root) => `${field} LIKE '%${root}%'`).join(" AND ")})`);
+    }
+  }
   return clauses.length ? `(${clauses.join(" OR ")})` : "1=0";
 }
 
 export class CyprusDlsRoadSearchAdapter {
-  constructor(private readonly config: CyprusDlsRoadSearchConfig = {}) {}
+  private readonly config: CyprusDlsRoadSearchConfig;
+
+  constructor(config: CyprusDlsRoadSearchConfig = {}) {
+    this.config = config;
+  }
 
   async search(query: string): Promise<UnifiedPlaceResult[]> {
     const variants = searchVariants(query);

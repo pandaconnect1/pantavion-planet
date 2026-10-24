@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { CyprusDlsRoadSearchAdapter } from "../core/water/cyprus-dls-road-search-adapter";
+import { CyprusDlsRoadSearchAdapter, buildWhere } from "../core/water/cyprus-dls-road-search-adapter.ts";
 
 const originalFetch = globalThis.fetch;
 
@@ -85,6 +85,14 @@ try {
   const latin = await adapter.search("Anexartisias 25, Limassol");
   assert.equal(latin.length, 2);
   assert.equal(latin[0].displayName, "ANEXARTISIAS");
+
+  // Declension and word-order tolerance: nominative and genitive forms share roots.
+  assert.match(buildWhere("Άγιος Τύχωνας"), /ROADNAMEGR LIKE '%ΑΓΙΟ%' AND ROADNAMEGR LIKE '%ΤΥΧΩΝ%'/);
+  assert.match(buildWhere("Αγίου Τύχωνα"), /ROADNAMEGR LIKE '%ΑΓΙΟ%' AND ROADNAMEGR LIKE '%ΤΥΧΩ%'/);
+  assert.match(buildWhere("Τύχωνα Αγίου"), /ROADNAMEGR LIKE '%ΤΥΧΩ%' AND ROADNAMEGR LIKE '%ΑΓΙΟ%'/);
+  // Generic road words and house numbers never become search roots.
+  assert.doesNotMatch(buildWhere("Οδός Αγίου Τύχωνα"), /'%ΟΔ%'/);
+  assert.doesNotMatch(buildWhere("Ανεξαρτησίας"), /25/);
 
   console.log("Cyprus DLS road search adapter: PASS");
 } finally {

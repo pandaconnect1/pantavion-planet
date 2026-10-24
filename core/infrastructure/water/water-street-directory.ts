@@ -136,15 +136,19 @@ export function streetDirectoryPage(rows: DirectoryStreet[], options: { q: strin
   const generic = new Set(["ODOS","OD","STREET","ST","ROAD","RD","AVENUE","AVE","LEOFOROS","LEOF"]);
   const tokens = (s: string) => s.split(/\s+/).map(streetSearchKey).filter((t) => t && !generic.has(t));
   const query = tokens(options.q); const locality = tokens(options.locality);
+  let drawingLabelsHiddenByLocality = 0;
   const filtered = rows.filter((r) => {
     if (options.source && r.record_kind !== options.source) return false;
     const places = [r.municipality_or_community,r.locality_lat,r.area_or_parish,r.zone_or_section].filter(Boolean).map((v) => streetSearchKey(String(v)));
     const search = [...places, ...[r.name_el,r.name_lat,r.layer,r.id,...r.postal_codes].filter(Boolean).map((v) => streetSearchKey(String(v)))];
-    return query.every((t) => search.some((v) => v.includes(t))) && locality.every((t) => places.some((v) => v.includes(t)));
+    const textMatch = query.every((t) => search.some((v) => v.includes(t)));
+    const placeMatch = locality.every((t) => places.some((v) => v.includes(t)));
+    if (textMatch && !placeMatch && r.record_kind === "drawing_label") drawingLabelsHiddenByLocality++;
+    return textMatch && placeMatch;
   });
   const compare = (a: string | null, b: string | null) => a && b ? a.localeCompare(b,"el",{numeric:true}) : a ? -1 : b ? 1 : 0;
   filtered.sort((a,b) => compare(a.municipality_or_community,b.municipality_or_community) || compare(a.area_or_parish,b.area_or_parish) || compare(a.zone_or_section,b.zone_or_section) || compare(a.name_el || a.name_lat,b.name_el || b.name_lat) || a.id.localeCompare(b.id));
   const counts = { postal: 0, drawing_label: 0, field: 0, legacy: 0 };
   for (const r of filtered) counts[r.record_kind]++;
-  return { streets: filtered.slice(options.offset,options.offset+options.limit), total: filtered.length, offset: options.offset, counts };
+  return { streets: filtered.slice(options.offset,options.offset+options.limit), total: filtered.length, offset: options.offset, counts, drawingLabelsHiddenByLocality };
 }

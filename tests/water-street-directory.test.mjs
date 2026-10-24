@@ -44,4 +44,8 @@ assert(records.every(r=>r.district_name==='Lemesos'&&r.source==='CYPRUS_POST'&&!
 assert.equal(mergeStreetSources(official,[{...records[0],id:'database-copy'}],[],[]).length,8800);
 const field=fieldStreetRows([{asset_type:'road_reference',patch_id:'p1',status:'pending_review',street_name:'Νέα οδός',area:'Νέο χωριό',geometry:{type:'LineString',coordinates:[[33,34],[33.01,34.01]],crs:{authority:'EPSG',code:'4326'}}}]);
 assert.equal(field[0].status,'pending_review');assert.match(field[0].map_href,/from=road-navigation/);
+const hiddenLabels=streetDirectoryPage(merged,{...options,q:'Athinon',locality:'Ypsonas',limit:500});
+assert.equal(hiddenLabels.drawingLabelsHiddenByLocality,2,'Unplaced drawing labels are counted when a locality filter hides them');
+assert(hiddenLabels.streets.every(r=>r.record_kind!=='drawing_label'),'Unplaced drawing labels never pass a locality filter');
+assert.equal(streetDirectoryPage(merged,{...options,q:'Athinon',limit:500}).drawingLabelsHiddenByLocality,0,'No hidden count without a locality filter');
 console.log(JSON.stringify({ok:true,sourceRows:data.rows.length,streetLocalityPairs:official.length,streetLocalities:143,homonymLocalities:new Set(homonyms.map(r=>r.municipality_or_community)).size,tests:'bilingual search, homonyms, source isolation, complete pagination, safe database records'}));
