@@ -71,6 +71,7 @@
   },
   "dependencies": {
     "@ai-sdk/gateway": "4.0.28",
+    "@google-cloud/vision": "^6.2.0",
     "@mlightcad/cad-simple-viewer": "^1.5.5",
     "@mlightcad/cad-viewer": "^1.5.5",
     "@mlightcad/libredwg-web": "^0.7.4",
