@@ -55,7 +55,7 @@ export default function WaterRegisterPage() {
   }, [searchTerm, filterArea, filterType, sortBy]);
 
   // Filter and sort assets
-  let filteredAssets = assets
+  const filteredAssets = assets
     .filter(
       (a) =>
         (a.street.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -104,7 +104,7 @@ export default function WaterRegisterPage() {
               />
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
+                onChange={(e) => setSortBy(e.target.value as "area" | "street" | "number")}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="area">📍 Ταξινόμηση: Περιοχή</option>

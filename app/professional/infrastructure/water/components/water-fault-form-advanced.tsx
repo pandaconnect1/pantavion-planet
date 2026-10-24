@@ -263,7 +263,7 @@ export function WaterFaultFormAdvanced() {
                 onChange={(e) =>
                   setFault({
                     ...fault,
-                    severity: e.target.value as any,
+                    severity: e.target.value as "low" | "medium" | "high" | "critical",
                   })
                 }
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -351,7 +351,14 @@ export function WaterFaultFormAdvanced() {
                     <select
                       value={mat.type}
                       onChange={(e) =>
-                        updateMaterial(mat.id, { type: e.target.value as any })
+                        updateMaterial(mat.id, {
+                          type: e.target.value as
+                            | "pipe"
+                            | "valve"
+                            | "tank"
+                            | "soil"
+                            | "coupling",
+                        })
                       }
                       className="px-3 py-2 border border-gray-300 rounded text-sm"
                     >
@@ -385,7 +392,12 @@ export function WaterFaultFormAdvanced() {
                     <select
                       value={mat.condition}
                       onChange={(e) =>
-                        updateMaterial(mat.id, { condition: e.target.value as any })
+                        updateMaterial(mat.id, {
+                          condition: e.target.value as
+                            | "good"
+                            | "damaged"
+                            | "broken",
+                        })
                       }
                       className="px-3 py-2 border border-gray-300 rounded text-sm"
                     >
@@ -491,7 +503,12 @@ export function WaterFaultFormAdvanced() {
                   onChange={(e) =>
                     setExcavation({
                       ...excavation,
-                      soil_type: e.target.value as any,
+                      soil_type: e.target.value as
+                        | "asphalt"
+                        | "concrete"
+                        | "soil"
+                        | "rock"
+                        | "mixed",
                     })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg"

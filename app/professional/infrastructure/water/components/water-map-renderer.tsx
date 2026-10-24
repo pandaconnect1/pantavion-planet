@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { WaterMarkers, getMarkerByType } from "./water-markers";
+import { getMarkerByType } from "./water-markers";
+import type { WaterAsset, WaterGeoFeature } from "../types/water";
 
 // Dynamic import to avoid SSR issues
 const MapContainer = dynamic(() => import("react-leaflet").then(m => m.MapContainer), { ssr: false });
@@ -16,6 +17,10 @@ interface MapRendererProps {
   zoom?: number;
   showAssets?: boolean;
   showNodes?: boolean;
+  /** Asset numbers to highlight in red as affected by an isolation */
+  isolatedAssets?: string[];
+  /** Fired when a marker is clicked */
+  onAssetSelect?: (assetNumber: string) => void;
 }
 
 export function WaterMapRenderer({
@@ -24,27 +29,58 @@ export function WaterMapRenderer({
   zoom = 13,
   showAssets = true,
   showNodes = false,
+  isolatedAssets = [],
+  onAssetSelect,
 }: MapRendererProps) {
-  const [assets, setAssets] = useState<any[]>([]);
+  const [assets, setAssets] = useState<WaterAsset[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch assets for this map view
-    const fetchAssets = async () => {
+    // Load assets from API or mock data
+    const loadAssets = async () => {
       try {
+        // Try real API first
         const response = await fetch(
           `/api/professional/infrastructure/water/assets?limit=500`
         );
-        const data = await response.json();
-        setAssets(data.assets || []);
+
+        if (response.ok) {
+          const data = await response.json();
+          setAssets(data.assets || []);
+        } else {
+          // Fall back to mock data
+          const { MOCK_WATER_ASSETS } = await import("@/lib/mock-water-data");
+          const features = MOCK_WATER_ASSETS.features.map((f: WaterGeoFeature) => ({
+            number: f.properties.number,
+            street: f.properties.street,
+            area_code: f.properties.area_code,
+            kind: f.properties.kind,
+            latitude: f.geometry.coordinates[1],
+            longitude: f.geometry.coordinates[0],
+            name: f.properties.name,
+          }));
+          setAssets(features);
+        }
       } catch (error) {
-        console.error("Failed to load assets:", error);
+        console.error("Failed to load assets, using mock data:", error);
+        // Load mock data
+        const { MOCK_WATER_ASSETS } = await import("@/lib/mock-water-data");
+        const features = MOCK_WATER_ASSETS.features.map((f: WaterGeoFeature) => ({
+          number: f.properties.number,
+          street: f.properties.street,
+          area_code: f.properties.area_code,
+          kind: f.properties.kind,
+          latitude: f.geometry.coordinates[1],
+          longitude: f.geometry.coordinates[0],
+          name: f.properties.name,
+        }));
+        setAssets(features);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAssets();
+    loadAssets();
   }, []);
 
   // Determine tile provider based on map type
@@ -101,15 +137,19 @@ export function WaterMapRenderer({
         
         {showAssets && assets.length > 0 && (
           assets.slice(0, 100).map((asset, idx) => {
-            const markerType = getMarkerByType(asset.kind);
+            const isIsolated = isolatedAssets.includes(asset.number);
+            const markerType = getMarkerByType(asset.kind, isIsolated);
             return (
               <Marker
-                key={idx}
+                key={asset.number ?? idx}
                 position={[
-                  parseFloat(asset.latitude || "34.6749"),
-                  parseFloat(asset.longitude || "33.0382"),
+                  Number(asset.latitude ?? 34.6749),
+                  Number(asset.longitude ?? 33.0382),
                 ]}
                 icon={markerType.icon}
+                eventHandlers={{
+                  click: () => onAssetSelect?.(asset.number),
+                }}
               >
                 <Popup>
                   <div className="text-sm">
@@ -119,6 +159,13 @@ export function WaterMapRenderer({
                     <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
                       <p className="font-semibold">📍 {markerType.name}</p>
                     </div>
+                    {isIsolated && (
+                      <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-xs">
+                        <p className="font-semibold text-red-700">
+                          ⚠️ Επηρεάζεται από απομόνωση
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </Popup>
               </Marker>

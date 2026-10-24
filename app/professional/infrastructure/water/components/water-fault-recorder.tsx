@@ -34,7 +34,7 @@ export function WaterFaultRecorder() {
   const [success, setSuccess] = useState(false);
 
   const handleInputChange = useCallback(
-    (key: keyof FaultRecord, value: any) => {
+    <K extends keyof FaultRecord>(key: K, value: FaultRecord[K]) => {
       setFault((prev) => ({ ...prev, [key]: value }));
       setError("");
     },

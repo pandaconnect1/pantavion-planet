@@ -1,9 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { WaterMapRenderer } from "../components/water-map-renderer";
+import dynamicImport from "next/dynamic";
+
+const WaterMapRenderer = dynamicImport(
+  () =>
+    import("../components/water-map-renderer").then((m) => m.WaterMapRenderer),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-full flex items-center justify-center bg-gray-100">
+        <p className="text-gray-600">Φόρτωση χάρτη...</p>
+      </div>
+    ),
+  }
+);
 import { useWaterSync } from "../hooks/useWaterSync";
+import { IsolationHints } from "../components/isolation-hints";
 
 interface MapView {
   id: "A" | "B" | "D";
@@ -33,11 +47,13 @@ const mapViews: MapView[] = [
   },
 ];
 
-export default function WaterMapsPage() {
+function WaterMapsView() {
   const searchParams = useSearchParams();
   const [activeView, setActiveView] = useState<"A" | "B" | "D">("A");
   const [loading, setLoading] = useState(true);
   const [syncStatus, setSyncStatus] = useState("Αποσυνδεδεμένο");
+  const [selectedAsset, setSelectedAsset] = useState<string | undefined>();
+  const [isolatedAssets, setIsolatedAssets] = useState<string[]>([]);
 
   // Use WebSocket sync
   const { isConnected } = useWaterSync(activeView, (message) => {
@@ -116,18 +132,24 @@ export default function WaterMapsPage() {
             <p className="text-gray-600">{currentView.description}</p>
           </div>
 
-          {/* Map Canvas */}
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="relative w-full aspect-video bg-gray-100">
-              <WaterMapRenderer
-                mapType={activeView}
-                showAssets={true}
-                showNodes={activeView === "A"}
-              />
-            </div>
+          {/* Map Canvas + Isolation Panel */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-3 bg-white rounded-lg shadow overflow-hidden">
+              <div className="relative w-full aspect-video bg-gray-100">
+                <WaterMapRenderer
+                  mapType={activeView}
+                  showAssets={true}
+                  showNodes={activeView === "A"}
+                  isolatedAssets={isolatedAssets}
+                  onAssetSelect={(assetNumber) => {
+                    setSelectedAsset(assetNumber);
+                    setIsolatedAssets([]);
+                  }}
+                />
+              </div>
 
-            {/* Map Controls */}
-            <div className="bg-gray-50 border-t border-gray-200 p-4 flex gap-2">
+              {/* Map Controls */}
+              <div className="bg-gray-50 border-t border-gray-200 p-4 flex gap-2">
               <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium">
                 🔍 Μεγέθυνση
               </button>
@@ -140,6 +162,15 @@ export default function WaterMapsPage() {
               <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm font-medium">
                 💾 Εξαγωγή
               </button>
+              </div>
+            </div>
+
+            {/* Isolation Hints Sidebar */}
+            <div className="lg:col-span-1">
+              <IsolationHints
+                selectedAsset={selectedAsset}
+                onHintSelect={(affected) => setIsolatedAssets(affected)}
+              />
             </div>
           </div>
 
@@ -198,5 +229,19 @@ export default function WaterMapsPage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function WaterMapsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100">
+          <p className="text-gray-600">Φόρτωση χαρτών...</p>
+        </div>
+      }
+    >
+      <WaterMapsView />
+    </Suspense>
   );
 }

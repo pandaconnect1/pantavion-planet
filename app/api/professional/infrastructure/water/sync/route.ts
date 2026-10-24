@@ -1,19 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-interface SyncMessage {
-  type: 'update' | 'delete' | 'create';
-  sourceMap: 'A' | 'B' | 'D';
-  assetNumber: string;
-  data: {
-    latitude?: number;
-    longitude?: number;
-    street?: string;
-    kind?: string;
-    area_code?: string;
-    [key: string]: any;
-  };
-  timestamp: number;
-}
+import type { WaterSyncMessage } from '@/app/professional/infrastructure/water/types/water';
+
+type SyncMessage = WaterSyncMessage;
 
 // In-memory store for sync events (cleared on server restart)
 // For production, use Redis or Supabase real-time channels

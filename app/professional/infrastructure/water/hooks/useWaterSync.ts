@@ -1,19 +1,16 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 
-interface SyncMessage {
-  type: 'update' | 'delete' | 'create';
-  sourceMap: 'A' | 'B' | 'D';
-  assetNumber: string;
-  data: {
-    [key: string]: any;
-  };
-  timestamp: number;
-}
+import type {
+  WaterSyncMessage,
+  WaterSyncPayload,
+} from '../types/water';
+
+type SyncMessage = WaterSyncMessage;
 
 export function useWaterSync(currentMap: 'A' | 'B' | 'D', onSync?: (message: SyncMessage) => void) {
   const [isConnected, setIsConnected] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState(Date.now());
-  const pollIntervalRef = useRef<NodeJS.Timeout>();
+  const pollIntervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Poll for sync events
   const pollSyncEvents = useCallback(async () => {
@@ -41,7 +38,11 @@ export function useWaterSync(currentMap: 'A' | 'B' | 'D', onSync?: (message: Syn
 
   // Send sync event
   const sendSync = useCallback(
-    async (type: 'update' | 'delete' | 'create', assetNumber: string, data: any) => {
+    async (
+      type: 'update' | 'delete' | 'create',
+      assetNumber: string,
+      data: WaterSyncPayload
+    ) => {
       try {
         const response = await fetch('/api/professional/infrastructure/water/sync', {
           method: 'POST',

@@ -1,10 +1,18 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+/** Created per-request so a missing env var never breaks the build. */
+function getSupabase() {
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Supabase credentials are not configured');
+  }
+  return createClient(supabaseUrl, supabaseKey);
+}
+
+export const dynamic = 'force-dynamic';
 
 interface PhotoUploadRequest {
   faultId: string;
@@ -25,6 +33,7 @@ interface PhotoUploadRequest {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = getSupabase();
     const body: PhotoUploadRequest = await request.json();
     const {
       faultId,
@@ -113,6 +122,7 @@ export async function POST(request: NextRequest) {
 // GET photos for a fault
 export async function GET(request: NextRequest) {
   try {
+    const supabase = getSupabase();
     const faultId = request.nextUrl.searchParams.get('faultId');
 
     if (!faultId) {
@@ -151,6 +161,7 @@ export async function GET(request: NextRequest) {
 // DELETE a photo
 export async function DELETE(request: NextRequest) {
   try {
+    const supabase = getSupabase();
     const photoId = request.nextUrl.searchParams.get('photoId');
     const filePath = request.nextUrl.searchParams.get('filePath');
 
