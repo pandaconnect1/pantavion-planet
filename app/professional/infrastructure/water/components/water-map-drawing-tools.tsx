@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { uploadFieldArtifact } from "../field/water-field-spatial-client";
 import { pantavionWaterApprovedDeviceHeaders } from "@/core/water/water-approved-device-client";
@@ -113,17 +113,47 @@ export function useWaterMapDrawing(mapId: string, sourceKey: string | null, enab
   };
 }
 
-export default function WaterMapDrawingTools({ drawing, localCad = false }: { drawing: ReturnType<typeof useWaterMapDrawing>; localCad?: boolean }) {
+/** Thin tool bar placed above the map, outside it, so the map keeps the whole surface. */
+export function WaterMapDrawingBar({
+  drawing,
+  panelOpen,
+  onTogglePanel,
+  fullscreen,
+  onToggleFullscreen,
+  children,
+}: {
+  drawing: ReturnType<typeof useWaterMapDrawing>;
+  panelOpen: boolean;
+  onTogglePanel: () => void;
+  fullscreen: boolean;
+  onToggleFullscreen: () => void;
+  children?: ReactNode;
+}) {
+  const d = drawing;
+  const off = "border-slate-600 bg-[#091426] text-slate-200";
+  const on = "border-[#f2c766] bg-[#f2c766] text-black";
+  const chip = "whitespace-nowrap rounded-lg border px-2.5 py-1.5 text-xs font-black";
+  return <div role="group" aria-label="Εργαλεία χάρτη" className="flex flex-wrap items-center gap-1.5 rounded-xl border border-cyan-400/40 bg-[#071426] p-2 text-white">
+    {tools.map(([value, label]) => <button type="button" key={value} aria-pressed={d.tool === value} disabled={d.busy} onClick={() => d.changeTool(value)} className={`${chip} ${d.tool === value ? on : off}`}>{label}</button>)}
+    {d.points.length ? <button type="button" onClick={d.undo} className={`${chip} ${off}`}>Αναίρεση σημείου ({d.points.length})</button> : null}
+    <button type="button" aria-expanded={panelOpen} aria-controls="water-map-drawing-panel" onClick={onTogglePanel} className={`${chip} ${panelOpen ? on : off} sm:ml-auto`}>{panelOpen ? "Κλείσιμο στοιχείων" : "Στοιχεία εργασίας"}</button>
+    <button type="button" aria-pressed={fullscreen} onClick={onToggleFullscreen} className={`${chip} ${fullscreen ? on : off}`}>{fullscreen ? "Έξοδος πλήρους οθόνης" : "Πλήρης οθόνη"}</button>
+    {children}
+    {!panelOpen && d.message ? <p role="status" className="w-full break-words text-xs text-amber-200">{d.message}</p> : null}
+  </div>;
+}
+
+export default function WaterMapDrawingTools({ drawing, localCad = false, inBar = false }: { drawing: ReturnType<typeof useWaterMapDrawing>; localCad?: boolean; inBar?: boolean }) {
   const d = drawing;
   const input = "rounded-lg border border-slate-600 bg-[#091426] p-2 text-white";
-  return <section aria-label="Εργαλεία καταγραφής στον χάρτη" className="space-y-3 rounded-xl border border-cyan-400/40 bg-[#071426] p-3 text-sm text-white">
-    <details>
-      <summary className="cursor-pointer font-bold text-cyan-200">Σχεδίαση / καταγραφή εργασίας στον χάρτη</summary>
+  return <section id={inBar ? "water-map-drawing-panel" : undefined} aria-label={inBar ? "Στοιχεία εργασίας στον χάρτη" : "Εργαλεία καταγραφής στον χάρτη"} className={`space-y-3 rounded-xl border border-cyan-400/40 bg-[#071426] p-3 text-sm text-white${inBar ? " max-h-[45dvh] overflow-y-auto" : ""}`}>
+    <details open={inBar}>
+      <summary className={inBar ? "hidden" : "cursor-pointer font-bold text-cyan-200"}>Σχεδίαση / καταγραφή εργασίας στον χάρτη</summary>
       <fieldset disabled={d.busy} className="mt-3 space-y-3 disabled:opacity-60">
         <legend className="sr-only">Εργαλεία και στοιχεία εργασίας</legend>
-        <div className="flex flex-wrap gap-2">{tools.map(([value, label]) => <button type="button" key={value} aria-pressed={d.tool === value} onClick={() => d.changeTool(value)} className={`${input} ${d.tool === value ? "ring-2 ring-cyan-300" : ""}`}>{label}</button>)}</div>
+        {inBar ? null : <div className="flex flex-wrap gap-2">{tools.map(([value, label]) => <button type="button" key={value} aria-pressed={d.tool === value} onClick={() => d.changeTool(value)} className={`${input} ${d.tool === value ? "ring-2 ring-cyan-300" : ""}`}>{label}</button>)}</div>}
         {d.tool === "line" ? <label className="grid gap-1">Είδος γραμμής<select className={input} value={d.lineAssetType} onChange={(e) => d.setLineAssetType(e.target.value as "pipe" | "road_reference")}><option value="pipe">Αγωγός δικτύου</option><option value="road_reference">Νέα οδός / επέκταση οδού</option></select></label> : null}
-        <p>Επίλεξε εργαλείο και πάτησε διαδοχικά σημεία στον χάρτη. Σύρε για μετακίνηση.</p>
+        <p>{inBar ? "Επίλεξε εργαλείο από τη μπάρα πάνω από τον χάρτη και πάτησε διαδοχικά σημεία στον χάρτη. Σύρε για μετακίνηση." : "Επίλεξε εργαλείο και πάτησε διαδοχικά σημεία στον χάρτη. Σύρε για μετακίνηση."}</p>
         <div className="flex flex-wrap items-center gap-3">
           <label>Χρώμα <input aria-label="Χρώμα σχεδίασης" type="color" value={d.style.color} onChange={(e) => d.changeStyle({ ...d.style, color: e.target.value })} /></label>
           <label>Πάχος <input className={`${input} w-16`} type="number" min={1} max={10} value={d.style.width} onChange={(e) => d.changeStyle({ ...d.style, width: Math.max(1, Math.min(10, Number(e.target.value) || 1)) })} /></label>

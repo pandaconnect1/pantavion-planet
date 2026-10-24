@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import WaterMapDrawingTools, { useWaterMapDrawing } from "../components/water-map-drawing-tools";
+import WaterMapDrawingTools, { WaterMapDrawingBar, useWaterMapDrawing } from "../components/water-map-drawing-tools";
 
 import WaterCadTileCanvas, {
   type CadLayerInfo,
@@ -197,6 +197,8 @@ export default function MasterBMobilePage() {
   const [canvasStats, setCanvasStats] = useState<CanvasStats | null>(null);
   const [showHiddenLayers, setShowHiddenLayers] = useState(true);
   const [lineweightOverride, setLineweightOverride] = useState<boolean | null>(null);
+  const [drawingPanelOpen, setDrawingPanelOpen] = useState(false);
+  const [mapFullscreen, setMapFullscreen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -301,6 +303,13 @@ export default function MasterBMobilePage() {
   }, [focus?.asset]);
 
   const layerNames = useMemo(() => manifest?.layers ?? [], [manifest?.layers]);
+  const hiddenLayers = useMemo(() => {
+    const infos = manifest?.layerInfo ?? [];
+    return layerNames.flatMap((name, index) => {
+      const info = infos[index];
+      return info && (info.off || info.frozen) ? [{ name, off: info.off, frozen: info.frozen }] : [];
+    });
+  }, [layerNames, manifest?.layerInfo]);
 
   const coreBounds = manifest?.coreBounds ?? manifest?.allBounds ?? null;
   const canDraw = Boolean(
@@ -454,22 +463,6 @@ export default function MasterBMobilePage() {
                     ? `Αυθεντικές γραμμές του DWG στις ακριβείς συντεταγμένες · ${formatNumber(canvasStats.loadedTileFiles)}/${formatNumber(canvasStats.visibleTileFiles)} κομμάτια${canvasStats.pendingTileFiles ? " · φορτώνει…" : ""}${canvasStats.atMinZoom ? " · μέγιστο ξεζούμισμα για πλήρη εμφάνιση" : ""}`
                     : "Φορτώνει μόνο ό,τι φαίνεται στην οθόνη, χωρίς καμία απλοποίηση."}
                 </p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setLineweightOverride(!lineweightDisplay)}
-                    className={`rounded-lg border px-3 py-1.5 text-xs font-black ${lineweightDisplay ? "border-[#f2c766] bg-[#f2c766] text-black" : "border-slate-600 text-slate-200"}`}
-                  >
-                    LWT · πάχη γραμμών
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowHiddenLayers((v) => !v)}
-                    className={`rounded-lg border px-3 py-1.5 text-xs font-black ${showHiddenLayers ? "border-[#f2c766] bg-[#f2c766] text-black" : "border-slate-600 text-slate-200"}`}
-                  >
-                    {showHiddenLayers ? "Παγωμένα / σβηστά επίπεδα: ανοικτά" : "Παγωμένα / σβηστά επίπεδα: κρυμμένα"}
-                  </button>
-                </div>
               </div>
             </div>
 
@@ -505,8 +498,33 @@ export default function MasterBMobilePage() {
                 </a>
               </div>
             ) : null}
-            <div className="relative h-[68vh] min-h-[460px] overflow-hidden rounded-2xl border border-slate-800 bg-white">
-              <div className="absolute left-2 top-2 z-20 max-h-[45vh] w-[min(400px,calc(100%-60px))] overflow-y-auto"><WaterMapDrawingTools drawing={drawing} localCad /></div>
+            <div className={mapFullscreen ? "fixed inset-0 z-[10000] flex flex-col gap-2 bg-[#020814] p-2" : "flex flex-col gap-2"}>
+              <WaterMapDrawingBar
+                drawing={drawing}
+                panelOpen={drawingPanelOpen}
+                onTogglePanel={() => setDrawingPanelOpen((open) => !open)}
+                fullscreen={mapFullscreen}
+                onToggleFullscreen={() => setMapFullscreen((full) => !full)}
+              >
+                <button
+                  type="button"
+                  aria-pressed={lineweightDisplay}
+                  onClick={() => setLineweightOverride(!lineweightDisplay)}
+                  className={`whitespace-nowrap rounded-lg border px-2.5 py-1.5 text-xs font-black ${lineweightDisplay ? "border-[#f2c766] bg-[#f2c766] text-black" : "border-slate-600 bg-[#091426] text-slate-200"}`}
+                >
+                  LWT · πάχη γραμμών
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={showHiddenLayers}
+                  onClick={() => setShowHiddenLayers((v) => !v)}
+                  className={`whitespace-nowrap rounded-lg border px-2.5 py-1.5 text-xs font-black ${showHiddenLayers ? "border-[#f2c766] bg-[#f2c766] text-black" : "border-slate-600 bg-[#091426] text-slate-200"}`}
+                >
+                  {showHiddenLayers ? "Παγωμένα / σβηστά: ανοικτά" : "Παγωμένα / σβηστά: κρυμμένα"}
+                </button>
+              </WaterMapDrawingBar>
+              {drawingPanelOpen ? <WaterMapDrawingTools drawing={drawing} localCad inBar /> : null}
+              <div className={mapFullscreen ? "relative min-h-0 flex-1 overflow-hidden rounded-2xl border border-slate-800 bg-white" : "relative h-[68vh] min-h-[460px] overflow-hidden rounded-2xl border border-slate-800 bg-white"}>
               {canDraw && manifest && coreBounds ? (
                 <WaterCadTileCanvas
                   tiles={manifest.tiles ?? []}
@@ -538,6 +556,7 @@ export default function MasterBMobilePage() {
                 </div>
               )}
             </div>
+            </div>
           </div>
 
           <aside className="rounded-3xl border border-slate-700 bg-[#091426] p-4">
@@ -552,6 +571,34 @@ export default function MasterBMobilePage() {
               className="mt-4 w-full rounded-2xl border border-slate-700 bg-[#061120] px-4 py-3 text-sm font-bold text-white outline-none focus:border-[#f2c766]"
             />
 
+            {hiddenLayers.length ? (
+              <details open className="mt-4 rounded-2xl border border-slate-700 bg-[#061120] p-3">
+                <summary className="cursor-pointer text-xs font-black uppercase tracking-[0.18em] text-[#f2c766]">
+                  Σβηστά / παγωμένα επίπεδα ({formatNumber(hiddenLayers.length)})
+                </summary>
+                <p className="mt-2 text-xs font-semibold text-slate-400">
+                  {showHiddenLayers
+                    ? "Εμφανίζονται στον χάρτη. Πάτησε όνομα για να δεις μόνο εκείνο το επίπεδο."
+                    : "Κρυμμένα στον χάρτη. Άνοιξέ τα με το κουμπί «Παγωμένα / σβηστά» πάνω από τον χάρτη."}
+                </p>
+                <ul className="mt-3 max-h-72 space-y-1 overflow-y-auto">
+                  {hiddenLayers.map((item) => (
+                    <li key={item.name}>
+                      <button
+                        type="button"
+                        onClick={() => setLayerQuery(item.name)}
+                        className="block w-full truncate rounded-lg px-2 py-1.5 text-left text-xs font-bold text-slate-300 hover:bg-slate-800"
+                      >
+                        <span className="text-[#f2c766]">{item.name}</span>{" "}
+                        <span className="text-slate-500">
+                          {[item.off ? "σβηστό" : "", item.frozen ? "παγωμένο" : ""].filter(Boolean).join(" · ")}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ) : null}
             <div className="mt-4 space-y-2">
               {topLayers.map((item) => (
                 <button
