@@ -1,0 +1,62 @@
+name: Pantavion Water - Spatial Link Nodes to Assets
+
+on:
+  workflow_dispatch:
+    inputs:
+      batch_size:
+        description: "Batch size for linking"
+        required: false
+        default: "100"
+      dry_run:
+        description: "Dry run (no writes)"
+        required: false
+        default: "false"
+
+env:
+  NODE_ENV: production
+
+jobs:
+  spatial-link:
+    runs-on: ubuntu-latest
+    name: Link network nodes to assets
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci --prefer-offline
+
+      - name: 🌍 Load environment
+        run: |
+          cat > .env.local << EOF
+          SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}
+          EOF
+
+      - name: 🔗 Run spatial link job
+        run: |
+          node --max-old-space-size=2048 scripts/spatial-link-nodes-assets.mjs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          BATCH_SIZE: ${{ github.event.inputs.batch_size }}
+
+      - name: 📊 Verify results
+        run: |
+          echo "✅ Spatial link job completed"
+          echo "Check Supabase water_network_node_asset_links table for results"
+        if: success()
+
+      - name: 📢 Notify on failure
+        if: failure()
+        run: |
+          echo "::error::Spatial link job failed"
+          echo "Check logs above for details"

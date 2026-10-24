@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { WaterFaultRecorder } from "./components/water-fault-recorder";
+import { WaterFaultFormAdvanced } from "./components/water-fault-form-advanced";
 
 export default function WaterInfrastructurePage() {
   const [activeTab, setActiveTab] = useState<
@@ -254,13 +254,7 @@ export default function WaterInfrastructurePage() {
         {/* Faults Tab */}
         {activeTab === "faults" && (
           <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-8">
-              <h2 className="text-2xl font-bold mb-6">Fault Management</h2>
-              <p className="text-gray-600 mb-6">
-                Record and track water distribution network damage events
-              </p>
-            </div>
-            <WaterFaultRecorder />
+            <WaterFaultFormAdvanced />
           </div>
         )}
 
