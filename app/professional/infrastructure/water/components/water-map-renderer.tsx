@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { WaterMarkers, getMarkerByType } from "./water-markers";
 
 // Dynamic import to avoid SSR issues
 const MapContainer = dynamic(() => import("react-leaflet").then(m => m.MapContainer), { ssr: false });
@@ -99,23 +100,30 @@ export function WaterMapRenderer({
         {getTileLayer()}
         
         {showAssets && assets.length > 0 && (
-          assets.slice(0, 100).map((asset, idx) => (
-            <Marker
-              key={idx}
-              position={[
-                parseFloat(asset.latitude || "34.6749"),
-                parseFloat(asset.longitude || "33.0382"),
-              ]}
-            >
-              <Popup>
-                <div className="text-sm">
-                  <p className="font-bold">{asset.number}</p>
-                  <p>{asset.street}</p>
-                  <p className="text-xs text-gray-600">{asset.kind}</p>
-                </div>
-              </Popup>
-            </Marker>
-          ))
+          assets.slice(0, 100).map((asset, idx) => {
+            const markerType = getMarkerByType(asset.kind);
+            return (
+              <Marker
+                key={idx}
+                position={[
+                  parseFloat(asset.latitude || "34.6749"),
+                  parseFloat(asset.longitude || "33.0382"),
+                ]}
+                icon={markerType.icon}
+              >
+                <Popup>
+                  <div className="text-sm">
+                    <p className="font-bold text-gray-900">{asset.number}</p>
+                    <p className="text-gray-700">{asset.street}</p>
+                    <p className="text-xs text-gray-600">{asset.kind}</p>
+                    <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
+                      <p className="font-semibold">📍 {markerType.name}</p>
+                    </div>
+                  </div>
+                </Popup>
+              </Marker>
+            );
+          })
         )}
       </MapContainer>
     </div>
