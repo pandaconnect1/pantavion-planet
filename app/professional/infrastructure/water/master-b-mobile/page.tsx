@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { WaterMapRenderer } from "../components/water-map-renderer";
 
 interface MapView {
   id: "A" | "B" | "D";
@@ -94,26 +95,12 @@ export default function WaterMapsPage() {
 
           {/* Map Canvas */}
           <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="relative w-full aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-              {loading ? (
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                  <p className="text-gray-600 font-medium">
-                    Φόρτωση χάρτη {activeView}...
-                  </p>
-                </div>
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50">
-                  <p className="text-gray-500 text-lg mb-4">
-                    🗺️ Χάρτης {activeView} - Εδώ θα εμφανίζεται ο διαδραστικός χάρτης
-                  </p>
-                  <p className="text-sm text-gray-400 max-w-md text-center">
-                    {activeView === "A" && "Πραγματικό δίκτυο με κόμβους και αγωγούς από τη Βάση Δεδομένων"}
-                    {activeView === "B" && "Αυθεντικό σχέδιο DWG της Λεμεσού με πλήρη ανάλυση"}
-                    {activeView === "D" && "Αριθμημένες ρέγουλες και υδροστόμια με δεδομένα register"}
-                  </p>
-                </div>
-              )}
+            <div className="relative w-full aspect-video bg-gray-100">
+              <WaterMapRenderer
+                mapType={activeView}
+                showAssets={true}
+                showNodes={activeView === "A"}
+              />
             </div>
 
             {/* Map Controls */}
